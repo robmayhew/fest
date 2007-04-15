@@ -15,6 +15,8 @@
  */
 package com.jtuzi.fest.fixture;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 import com.jtuzi.fest.RobotFixture;
@@ -29,6 +31,7 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -46,6 +49,10 @@ public class FrameFixtureTest {
     frameFixture = new FrameFixture(new RobotFixture(), new JFrame());
     frame = frameFixture.targetCastedTo(JFrame.class);
     frameFixture.show();
+  }
+
+  @BeforeMethod public void init() {
+    frame.setSize(new Dimension(200, 100));
   }
 
   @Test public void shouldPassIfWindowHasMatchingSize() {
