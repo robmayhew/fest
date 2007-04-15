@@ -45,9 +45,9 @@ public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
 
-  private final Robot robot;
+  private Robot robot;
   
-  private final WindowTracker windowTracker;
+  private WindowTracker windowTracker;
 
   /** Provides access to all the components in the hierarchy. */
   private final Hierarchy hierarchy;
@@ -184,6 +184,8 @@ public final class RobotFixture {
   public void cleanUp() {
     disposeWindows();
     mouseRelease();
+    robot = null;
+    windowTracker = null;
   }
 
   private void disposeWindows() {
