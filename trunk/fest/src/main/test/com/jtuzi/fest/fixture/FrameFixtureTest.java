@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import javax.swing.JFrame;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.fixture.FrameFixture;
 
 import static java.awt.Frame.ICONIFIED;
@@ -43,7 +43,7 @@ public class FrameFixtureTest {
   private JFrame frame;
   
   @BeforeClass public void setUp() {
-    frameFixture = new FrameFixture(new AbbotFixture(), new JFrame());
+    frameFixture = new FrameFixture(new RobotFixture(), new JFrame());
     frame = frameFixture.targetCastedTo(JFrame.class);
     frameFixture.show();
   }

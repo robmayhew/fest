@@ -23,7 +23,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.fixture.JMenuItemFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
@@ -65,27 +65,27 @@ public class JMenuItemFixtureTest {
   }
   
   private CustomWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   
   @BeforeClass public void setUp() {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new CustomWindow();
-    abbot.showWindow(window);
+    robot.showWindow(window);
   }
   
   @Test public void shouldFindMenuByName() {
-    JMenuItemFixture fixture = new JMenuItemFixture(abbot, "new");
+    JMenuItemFixture fixture = new JMenuItemFixture(robot, "new");
     assertThat(fixture.target).isSameAs(window.newMenu);
   }
   
   @Test(dependsOnMethods = "shouldFindMenuByName")
   public void shouldSelectMenu() {
-    JMenuItemFixture fixture = new JMenuItemFixture(abbot, "new");
+    JMenuItemFixture fixture = new JMenuItemFixture(robot, "new");
     fixture.select();
     assertTrue(window.newMenuSelected);
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

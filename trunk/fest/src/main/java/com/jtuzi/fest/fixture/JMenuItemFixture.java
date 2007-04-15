@@ -18,7 +18,7 @@ package com.jtuzi.fest.fixture;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 
 /**
@@ -30,31 +30,31 @@ public class JMenuItemFixture extends AbstractComponentFixture<JMenuItem> {
 
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>JMenuItem</code>.
+   * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param menuItemName the name of the menu item to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public JMenuItemFixture(AbbotFixture abbot, String menuItemName) {
-    super(abbot, menuItemName, JMenuItem.class);
+  public JMenuItemFixture(RobotFixture robot, String menuItemName) {
+    super(robot, menuItemName, JMenuItem.class);
   }
   
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>. It uses the given <code>{@link Action}</code> to create a new 
    * <code>{@link JMenuItem}</code> as the target menu item.
-   * @param abbot allows simulation of user events on the target menu item.
+   * @param robot allows simulation of user events on the target menu item.
    * @param action the <code>Action</code> to assign to the created menu.
    */
-  public JMenuItemFixture(AbbotFixture abbot, Action action) {
-    this(abbot, new JMenuItem(action));
+  public JMenuItemFixture(RobotFixture robot, Action action) {
+    this(robot, new JMenuItem(action));
   }
   
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>.
-   * @param abbot allows simulation of user events on the target menu item.
+   * @param robot allows simulation of user events on the target menu item.
    * @param target the target menu item.
    */
-  public JMenuItemFixture(AbbotFixture abbot, JMenuItem target) {
-    super(abbot, target);
+  public JMenuItemFixture(RobotFixture robot, JMenuItem target) {
+    super(robot, target);
   }
   
   /**
@@ -62,7 +62,7 @@ public class JMenuItemFixture extends AbstractComponentFixture<JMenuItem> {
    * @return this fixture.
    */
   public final JMenuItemFixture select() {
-    abbot.robot.selectMenuItem(target);
+    robot.selectMenuItem(target);
     return this;
   }
 

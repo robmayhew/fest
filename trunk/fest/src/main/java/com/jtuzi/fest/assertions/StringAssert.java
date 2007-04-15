@@ -46,7 +46,7 @@ public final class StringAssert {
   }
   
   public StringAssert containsText(String expected) {
-    if (actual.indexOf(expected) == -1) fail("the String " + quote(actual) + " should contain " + quote(expected));
+    if (actual.indexOf(expected) == -1) fail("the String " + quote(actual) + " should contain the String " + quote(expected));
     return this;
   }
 }

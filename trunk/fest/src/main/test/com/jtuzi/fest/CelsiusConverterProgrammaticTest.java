@@ -19,7 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import abbot.tester.ComponentTester;
 
@@ -37,11 +37,11 @@ import org.testng.annotations.Test;
  */
 public class CelsiusConverterProgrammaticTest {
 
-  private AbbotFixture abbotFixture;  
+  private RobotFixture robot;  
   
   @BeforeMethod public void setUp() {
-    abbotFixture = new AbbotFixture();
-    abbotFixture.showWindow(new CelsiusConverter());
+    robot = new RobotFixture();
+    robot.showWindow(new CelsiusConverter());
   }
  
   @Test public void shouldBeAbleToConvertNegativeNumber() {
@@ -57,21 +57,21 @@ public class CelsiusConverterProgrammaticTest {
   private void convertToFarenheit(String celsius) {
     ComponentTester tester = tester();
     tester.actionKeyString(celsius);
-    Component convertButton = abbotFixture.findByName("convertButton");
+    Component convertButton = robot.findByName("convertButton");
     tester.actionClick(convertButton);
   }
 
   private ComponentTester tester() {
-    Component celsiusTextInput = abbotFixture.findByName("celsiusTextInput");
+    Component celsiusTextInput = robot.findByName("celsiusTextInput");
     return ComponentTester.getTester(celsiusTextInput);
   }
   
   private void assertMatchingResult(String expected) {
-    JLabel fahrenheitLabel = abbotFixture.findByName("fahrenheitLabel", JLabel.class);
+    JLabel fahrenheitLabel = robot.findByName("fahrenheitLabel", JLabel.class);
     assertEquals(fahrenheitLabel.getText(), expected);
   }
 
   @AfterMethod public void tearDown() {
-    abbotFixture.cleanUp();
+    robot.cleanUp();
   }
 }

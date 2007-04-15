@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import javax.swing.JTabbedPane;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import abbot.tester.JTabbedPaneLocation;
 import abbot.tester.JTabbedPaneTester;
@@ -33,21 +33,21 @@ public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPa
 
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>JTabbedPane</code>.
+   * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
    * @param tabbedPaneName the name of the tabbed pane to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public JTabbedPaneFixture(AbbotFixture abbot, String tabbedPaneName) {
-    super(abbot, tabbedPaneName, JTabbedPane.class);
+  public JTabbedPaneFixture(RobotFixture robot, String tabbedPaneName) {
+    super(robot, tabbedPaneName, JTabbedPane.class);
   }
   
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.
-   * @param abbot performs simulation of user events on the given tabbed pane.
+   * @param robot performs simulation of user events on the given tabbed pane.
    * @param target the target tabbed pane.
    */
-  public JTabbedPaneFixture(AbbotFixture abbot, JTabbedPane target) {
-    super(abbot, target);
+  public JTabbedPaneFixture(RobotFixture robot, JTabbedPane target) {
+    super(robot, target);
   }
 
   /**

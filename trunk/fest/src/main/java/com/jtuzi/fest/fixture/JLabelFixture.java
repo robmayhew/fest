@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import javax.swing.JLabel;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
 
@@ -31,21 +31,21 @@ public class JLabelFixture extends AbstractComponentFixture<JLabel> implements T
   
   /**
    * Creates a new </code>{@link JLabelFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>JLabel</code>.
+   * @param robot performs simulation of user events on a <code>JLabel</code>.
    * @param labelName the name of the label to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public JLabelFixture(AbbotFixture abbot, String labelName) {
-    super(abbot, labelName, JLabel.class);
+  public JLabelFixture(RobotFixture robot, String labelName) {
+    super(robot, labelName, JLabel.class);
   }
   
   /**
    * Creates a new </code>{@link JLabelFixture}</code>.
-   * @param abbot performs simulation of user events on the given label.
+   * @param robot performs simulation of user events on the given label.
    * @param target the target label.
    */
-  public JLabelFixture(AbbotFixture abbot, JLabel target) {
-    super(abbot, target);
+  public JLabelFixture(RobotFixture robot, JLabel target) {
+    super(robot, target);
   }
   
   /** {@inheritDoc} */

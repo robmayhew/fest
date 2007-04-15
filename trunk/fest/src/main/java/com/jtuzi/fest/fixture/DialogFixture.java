@@ -18,7 +18,7 @@ package com.jtuzi.fest.fixture;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
 
@@ -32,21 +32,21 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
 
   /**
    * Creates a new </code>{@link DialogFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>Dialog</code>.
+   * @param robot performs simulation of user events on a <code>Dialog</code>.
    * @param dialogName the name of the dialog to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public DialogFixture(AbbotFixture abbot, String dialogName) {
-    super(abbot, dialogName, Dialog.class);
+  public DialogFixture(RobotFixture robot, String dialogName) {
+    super(robot, dialogName, Dialog.class);
   }
   
   /**
    * Creates a new </code>{@link DialogFixture}</code>.
-   * @param abbot performs simulation of user events on the given dialog.
+   * @param robot performs simulation of user events on the given dialog.
    * @param target the target dialog.
    */
-  public DialogFixture(AbbotFixture abbot, Dialog target) {
-    super(abbot, target);
+  public DialogFixture(RobotFixture robot, Dialog target) {
+    super(robot, target);
   }
 
   /** {@inheritDoc} */

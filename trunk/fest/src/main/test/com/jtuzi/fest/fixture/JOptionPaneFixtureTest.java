@@ -25,7 +25,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.ComponentLookupException;
 import com.jtuzi.fest.fixture.JButtonFixture;
 import com.jtuzi.fest.fixture.JOptionPaneFixture;
@@ -131,12 +131,12 @@ public class JOptionPaneFixtureTest {
   }
 
   private CustomWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   
   @BeforeMethod public void setUp() {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new CustomWindow();
-    abbot.showWindow(window);
+    robot.showWindow(window);
   }
   
   @Test public void shouldFindOptionPane() throws Exception {
@@ -364,10 +364,10 @@ public class JOptionPaneFixtureTest {
   }
   
   private JOptionPaneFixture fixture() {
-    return new JOptionPaneFixture(abbot);
+    return new JOptionPaneFixture(robot);
   }
 
   @AfterMethod public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

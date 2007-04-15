@@ -23,15 +23,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import com.jtuzi.fest.AbbotFixture;
-import com.jtuzi.fest.fixture.JTextComponentFixture;
-
-import abbot.script.Condition;
-
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
+
+import com.jtuzi.fest.Condition;
+import com.jtuzi.fest.RobotFixture;
+
 import static java.awt.GridBagConstraints.HORIZONTAL;
-
-
 
 import static org.testng.Assert.assertTrue;
 
@@ -91,14 +88,14 @@ public class JTextComponentFixtureTest {
   }
 
   private MainWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   private JTextComponentFixture fixtureForSecondTextField;
   
   @BeforeClass public void setUp() throws Exception {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new MainWindow();
-    abbot.showWindow(window);
-    fixtureForSecondTextField = new JTextComponentFixture(abbot, "secondTextField");
+    robot.showWindow(window);
+    fixtureForSecondTextField = new JTextComponentFixture(robot, "secondTextField");
   }
   
   @Test public void shouldHaveFoundTextField() {
@@ -114,7 +111,7 @@ public class JTextComponentFixtureTest {
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
   public void shouldGiveFocusToTextField() {
     window.firstTextField.requestFocusInWindow();
-    abbot.robot.wait(new Condition() {
+    robot.wait(new Condition("text field has focus") {
       public boolean test() {
         return window.firstTextField.hasFocus();
       }
@@ -183,6 +180,6 @@ public class JTextComponentFixtureTest {
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

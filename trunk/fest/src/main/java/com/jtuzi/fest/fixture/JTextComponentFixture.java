@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import javax.swing.text.JTextComponent;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import abbot.tester.JTextComponentTester;
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
@@ -36,21 +36,21 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
 
   /**
    * Creates a new </code>{@link JTextComponentFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>JTextComponent</code>.
+   * @param robot performs simulation of user events on a <code>JTextComponent</code>.
    * @param textComponentName the name of the text component to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public JTextComponentFixture(AbbotFixture abbot, String textComponentName) {
-    super(abbot, textComponentName, JTextComponent.class);
+  public JTextComponentFixture(RobotFixture robot, String textComponentName) {
+    super(robot, textComponentName, JTextComponent.class);
   }
   
   /**
    * Creates a new </code>{@link JTextComponentFixture}</code>.
-   * @param abbot performs simulation of user events on the given text component.
+   * @param robot performs simulation of user events on the given text component.
    * @param target the target text component.
    */
-  public JTextComponentFixture(AbbotFixture abbot, JTextComponent target) {
-    super(abbot, target);
+  public JTextComponentFixture(RobotFixture robot, JTextComponent target) {
+    super(robot, target);
   }
 
   /** {@inheritDoc} */

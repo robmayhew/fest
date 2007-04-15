@@ -20,7 +20,7 @@ import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.fixture.JComboBoxFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
@@ -60,14 +60,14 @@ public class JComboBoxFixtureTest {
   }
   
   private MainWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   private JComboBoxFixture fixture;
   
   @BeforeClass public void setUp() {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new MainWindow();
-    abbot.showWindow(window);
-    fixture = new JComboBoxFixture(abbot, "comboBox");
+    robot.showWindow(window);
+    fixture = new JComboBoxFixture(robot, "comboBox");
   }
 
   @Test public void shouldHaveFoundComboBox() {
@@ -92,6 +92,6 @@ public class JComboBoxFixtureTest {
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

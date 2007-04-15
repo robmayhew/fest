@@ -21,7 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.fixture.JTabbedPaneFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
@@ -63,14 +63,14 @@ public class JTabbedPaneFixtureTest {
   }
   
   private MainWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   private JTabbedPaneFixture fixture;
   
   @BeforeClass public void setUp() {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new MainWindow();
-    abbot.showWindow(window);
-    fixture = new JTabbedPaneFixture(abbot, "tabbedPane");
+    robot.showWindow(window);
+    fixture = new JTabbedPaneFixture(robot, "tabbedPane");
   }
   
   @Test public void shouldHaveFoundTabbedPane() {
@@ -105,6 +105,6 @@ public class JTabbedPaneFixtureTest {
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

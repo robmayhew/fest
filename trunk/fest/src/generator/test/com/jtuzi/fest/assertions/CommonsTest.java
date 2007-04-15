@@ -31,13 +31,13 @@ import org.testng.annotations.Test;
 public class CommonsTest {
 
   @Test public void shouldReturnPathFromGivenPackageName() {
-    String expected = "org" + separator + "testng" + separator + "abbot" + separator;
-    assertThat(Commons.packageNameAsPath("org.testng.abbot")).isEqualTo(expected);
+    String expected = "com" + separator + "jtuzi" + separator + "fest" + separator;
+    assertThat(Commons.packageNameAsPath("com.jtuzi.fest")).isEqualTo(expected);
   }
   
   @Test public void shouldReturnPathFromPackageOfGivenClass() {
     Class<?> c = getClass();
-    String expected = "org" + separator + "testng" + separator + "abbot" + separator + "assertions" + separator;
+    String expected = "com" + separator + "jtuzi" + separator + "fest" + separator + "assertions" + separator;
     assertThat(Commons.packageNameAsPathFrom(c)).isEqualTo(expected);
   }
 }

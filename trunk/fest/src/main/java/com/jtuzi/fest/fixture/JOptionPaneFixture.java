@@ -22,7 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.ComponentLookupException;
 
 import abbot.finder.Matcher;
@@ -45,10 +45,10 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
 
   /**
    * Creates a new </code>{@link JOptionPaneFixture}</code>.
-   * @param abbot performs simulation of user events on the target <code>JOptionPane</code>.
+   * @param robot performs simulation of user events on the target <code>JOptionPane</code>.
    */
-  public JOptionPaneFixture(AbbotFixture abbot) {
-    super(abbot, JOptionPane.class);
+  public JOptionPaneFixture(RobotFixture robot) {
+    super(robot, JOptionPane.class);
   }
 
   /** {@inheritDoc} */
@@ -103,19 +103,19 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @return a fixture wrapping a button containing the given text, or <code>null</code> if none if found.
    */
   public final JButtonFixture findButtonWithText(final String text) {
-    Component component = abbot.find(target, new Matcher() {
+    Component component = robot.find(target, new Matcher() {
       public boolean matches(Component c) {
         if (!(c instanceof JButton)) return false;
         return areEqual(text, ((JButton)c).getText());
       }
     });
     if (component == null) return null;
-    return new JButtonFixture(abbot, (JButton)component);
+    return new JButtonFixture(robot, (JButton)component);
   }
   
   /** @return a fixture wrapping a button contained in the given dialog. */
   public JButtonFixture findButton() {
-    return new JButtonFixture(abbot, abbot.findByType(target, JButton.class));
+    return new JButtonFixture(robot, robot.findByType(target, JButton.class));
   }
   
   /**
@@ -124,8 +124,8 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @throws ComponentLookupException if the message type is not input and hence does not contain a text component.
    */
   public final JTextComponentFixture findTextComponent() throws ComponentLookupException {
-    JTextComponent textComponent = abbot.findByType(target, JTextComponent.class);
-    return new JTextComponentFixture(abbot, textComponent);
+    JTextComponent textComponent = robot.findByType(target, JTextComponent.class);
+    return new JTextComponentFixture(robot, textComponent);
   }
   
   /**

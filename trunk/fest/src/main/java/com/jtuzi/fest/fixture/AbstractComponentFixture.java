@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import java.awt.Component;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import abbot.tester.ComponentTester;
 
@@ -34,39 +34,39 @@ import static com.jtuzi.fest.assertions.Assertions.assertThat;
 public abstract class AbstractComponentFixture<T extends Component> implements ComponentFixture<T> {
 
   /** Performs simulation of user events on <code>{@link #target}</code> */
-  public final AbbotFixture abbot;
+  public final RobotFixture robot;
   
   /** The target component. */
   public final T target;
   
   /**
    * Creates a new </code>{@link AbstractComponentFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>Component</code>.
+   * @param robot performs simulation of user events on a <code>Component</code>.
    * @param type the type of <code>Component</code> to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public AbstractComponentFixture(AbbotFixture abbot, Class<? extends T> type) {
-    this(abbot, abbot.findByType(type));
+  public AbstractComponentFixture(RobotFixture robot, Class<? extends T> type) {
+    this(robot, robot.findByType(type));
   }
 
   /**
    * Creates a new </code>{@link AbstractComponentFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>Component</code>.
+   * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of the <code>Component</code> to find using the given <code>AbbotFixture</code>.
    * @param type the type of <code>Component</code> to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public AbstractComponentFixture(AbbotFixture abbot, String name, Class<? extends T> type) {
-    this(abbot, abbot.findByName(name, type));
+  public AbstractComponentFixture(RobotFixture robot, String name, Class<? extends T> type) {
+    this(robot, robot.findByName(name, type));
   }
   
   /**
    * Creates a new </code>{@link AbstractComponentFixture}</code>.
-   * @param abbot performs simulation of user events on the given component.
+   * @param robot performs simulation of user events on the given component.
    * @param target the component under test.
    */
-  public AbstractComponentFixture(AbbotFixture abbot, T target) {
-    this.abbot = abbot;
+  public AbstractComponentFixture(RobotFixture robot, T target) {
+    this.robot = robot;
     this.target = target;
   }
   
@@ -116,7 +116,7 @@ public abstract class AbstractComponentFixture<T extends Component> implements C
    * Gives the keyboard focus to the target component.
    */
   protected final void doFocus() {
-    abbot.robot.focus(target);
+    robot.focus(target);
   }
   
   /**

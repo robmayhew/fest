@@ -21,6 +21,8 @@ import java.awt.EventQueue;
 import java.awt.Window;
 import java.util.Collection;
 
+import javax.swing.JMenuItem;
+
 import abbot.finder.BasicFinder;
 import abbot.finder.ComponentFinder;
 import abbot.finder.Hierarchy;
@@ -39,12 +41,13 @@ import static java.lang.System.currentTimeMillis;
  * 
  * @author Alex Ruiz
  */
-public final class AbbotFixture {
+public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
 
-  public final Robot robot;
-  public final WindowTracker windowTracker;
+  private final Robot robot;
+  
+  private final WindowTracker windowTracker;
 
   /** Provides access to all the components in the hierarchy. */
   private final Hierarchy hierarchy;
@@ -52,16 +55,11 @@ public final class AbbotFixture {
   /** Looks up <code>{@link java.awt.Component}</code>s. */
   private final ComponentFinder finder;
 
-  public AbbotFixture() {
-    hierarchy = newHierarchy();
+  public RobotFixture() {
+    hierarchy = new TestHierarchy();
     finder = new BasicFinder(hierarchy);
     windowTracker = WindowTracker.getTracker();
     robot = newRobot();
-  }
-
-  /** @return a new <code>Hierarchy</code>. */
-  public Hierarchy newHierarchy() {
-    return new TestHierarchy();
   }
 
   private Robot newRobot() {
@@ -171,6 +169,18 @@ public final class AbbotFixture {
     }
   }
 
+  public void focus(Component c) {
+    robot.focus(c);
+  }
+  
+  public void wait(Condition condition) {
+    robot.wait(condition);
+  }
+  
+  public void invokeLater(Component context, Runnable action) {
+    robot.invokeLater(context, action);
+  }
+  
   public void cleanUp() {
     disposeWindows();
     mouseRelease();
@@ -189,5 +199,9 @@ public final class AbbotFixture {
     if (robot == null) return;
     int buttons = Robot.getState().getButtons();
     if (buttons != 0) robot.mouseRelease(buttons);
+  }
+
+  public void selectMenuItem(JMenuItem target) {
+    robot.selectMenuItem(target);
   }
 }

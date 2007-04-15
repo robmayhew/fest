@@ -22,7 +22,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.fixture.JLabelFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
@@ -80,14 +80,14 @@ public class JLabelFixtureTest {
   }
   
   private MainWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   private JLabelFixture fixtureForSecondLabel;
   
   @BeforeClass public void setUp() {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new MainWindow();
-    abbot.showWindow(window);
-    fixtureForSecondLabel = new JLabelFixture(abbot, "secondLabel");
+    robot.showWindow(window);
+    fixtureForSecondLabel = new JLabelFixture(robot, "secondLabel");
   }
   
   @Test public void shouldHaveFoundLabel() {
@@ -123,7 +123,7 @@ public class JLabelFixtureTest {
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 
 }

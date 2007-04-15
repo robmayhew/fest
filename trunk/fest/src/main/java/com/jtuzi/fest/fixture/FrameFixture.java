@@ -18,9 +18,9 @@ package com.jtuzi.fest.fixture;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.Condition;
+import com.jtuzi.fest.RobotFixture;
 
-import abbot.script.Condition;
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
 import static java.awt.Frame.ICONIFIED;
@@ -38,11 +38,11 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
 
   /**
    * Creates a new </code>{@link FrameFixture}</code>.
-   * @param abbot performs user events on the given window and verifies expected output.
+   * @param robot performs user events on the given window and verifies expected output.
    * @param target the window to test.
    */
-  public FrameFixture(AbbotFixture abbot, Frame target) {
-    super(abbot, target);
+  public FrameFixture(RobotFixture robot, Frame target) {
+    super(robot, target);
   }
   
   /** {@inheritDoc} */
@@ -75,7 +75,7 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
    */
   public final FrameFixture iconify() {
     frameTester().iconify(target);
-    abbot.robot.wait(new AbstractCondition("frame being iconified") {
+    robot.wait(new Condition("frame being iconified") {
       public boolean test() {
         return target.getExtendedState() == ICONIFIED;
       }
@@ -89,7 +89,7 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
    */
   public final FrameFixture deiconify() {
     frameTester().deiconify(target);
-    abbot.robot.wait(new AbstractCondition("frame being deiconified") {
+    robot.wait(new Condition("frame being deiconified") {
       public boolean test() {
         return target.getExtendedState() != ICONIFIED;
       }
@@ -103,7 +103,7 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
    */
   public final FrameFixture maximize() {
     frameTester().maximize(target);
-    abbot.robot.wait(new AbstractCondition("frame being maximized") {
+    robot.wait(new Condition("frame being maximized") {
       public boolean test() {
         return (target.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
       }
@@ -116,13 +116,13 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
    * @return this fixture.
    */
   public final FrameFixture normalize() {
-    abbot.robot.invokeLater(target, new Runnable() {
+    robot.invokeLater(target, new Runnable() {
       public void run() {
         target.setExtendedState(NORMAL);
         if (Bugs.hasFrameDeiconifyBug()) target.setVisible(true);
       }
     });
-    abbot.robot.wait(new AbstractCondition("frame being normalized") {
+    robot.wait(new Condition("frame being normalized") {
       public boolean test() {
         return target.getExtendedState() == NORMAL;
       }
@@ -130,14 +130,6 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
     return this;
   }
 
-  private static abstract class AbstractCondition implements Condition {
-    private final String description;
-    
-    AbstractCondition(String description) { this.description = description; }
-    
-    @Override public final String toString() {  return description; }
-  }
-  
   private FrameTester frameTester() {
     return testerCastedTo(FrameTester.class);
   }

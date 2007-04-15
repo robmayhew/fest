@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import javax.swing.JButton;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
 
@@ -31,21 +31,21 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
 
   /**
    * Creates a new </code>{@link JButtonFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>JButton</code>.
+   * @param robot performs simulation of user events on a <code>JButton</code>.
    * @param buttonName the name of the button to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public JButtonFixture(AbbotFixture abbot, String buttonName) {
-    super(abbot, buttonName, JButton.class);
+  public JButtonFixture(RobotFixture robot, String buttonName) {
+    super(robot, buttonName, JButton.class);
   }
   
   /**
    * Creates a new </code>{@link JButtonFixture}</code>.
-   * @param abbot performs simulation of user events on the given button.
+   * @param robot performs simulation of user events on the given button.
    * @param target the target button.
    */
-  public JButtonFixture(AbbotFixture abbot, JButton target) {
-    super(abbot, target);
+  public JButtonFixture(RobotFixture robot, JButton target) {
+    super(robot, target);
   }
 
   /** {@inheritDoc} */

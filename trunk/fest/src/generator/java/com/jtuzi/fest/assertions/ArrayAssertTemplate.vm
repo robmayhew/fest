@@ -13,15 +13,15 @@
  * 
  * Copyright @$date.get('yyyy') the original author or authors.
  */
-package org.testng.abbot.assertions;
+package com.jtuzi.fest.assertions;
 
 import java.util.Arrays;
 
-import static org.testng.abbot.assertions.Fail.fail;
-import static org.testng.abbot.assertions.Fail.failIfNotNull;
-import static org.testng.abbot.assertions.Fail.failIfNull;
-import static org.testng.abbot.assertions.Fail.errorMessageIfEqual;
-import static org.testng.abbot.assertions.Fail.errorMessageIfNotEqual;
+import static com.jtuzi.fest.assertions.Fail.fail;
+import static com.jtuzi.fest.assertions.Fail.failIfNotNull;
+import static com.jtuzi.fest.assertions.Fail.failIfNull;
+import static com.jtuzi.fest.assertions.Fail.errorMessageIfEqual;
+import static com.jtuzi.fest.assertions.Fail.errorMessageIfNotEqual;
 
 /**
  * Understands assertions for <code>${arrayType}</code> arrays. 

@@ -17,7 +17,7 @@ package com.jtuzi.fest.fixture;
 
 import javax.swing.JComboBox;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 import abbot.tester.JComboBoxTester;
 
@@ -32,21 +32,21 @@ public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
   
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>JComboBox</code>.
+   * @param robot performs simulation of user events on a <code>JComboBox</code>.
    * @param comboBoxName the name of the combo box to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public JComboBoxFixture(AbbotFixture abbot, String comboBoxName) {
-    super(abbot, comboBoxName, JComboBox.class);
+  public JComboBoxFixture(RobotFixture robot, String comboBoxName) {
+    super(robot, comboBoxName, JComboBox.class);
   }
   
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
-   * @param abbot performs simulation of user events on the given combobox.
+   * @param robot performs simulation of user events on the given combobox.
    * @param target the target combo box.
    */
-  public JComboBoxFixture(AbbotFixture abbot, JComboBox target) {
-    super(abbot, target);
+  public JComboBoxFixture(RobotFixture robot, JComboBox target) {
+    super(robot, target);
   }
   
   /**

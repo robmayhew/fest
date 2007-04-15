@@ -18,7 +18,7 @@ package com.jtuzi.fest.fixture;
 import java.awt.Dimension;
 import java.awt.Window;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.RobotFixture;
 
 
 import abbot.tester.WindowTester;
@@ -36,41 +36,41 @@ public abstract class AbstractWindowFixture<T extends Window> extends AbstractCo
 
   /**
    * Creates a new </code>{@link AbstractWindowFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>Window</code>.
+   * @param robot performs simulation of user events on a <code>Window</code>.
    * @param type the type of <code>Window</code> to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public AbstractWindowFixture(AbbotFixture abbot, Class<T> type) {
-    super(abbot, type);
+  public AbstractWindowFixture(RobotFixture robot, Class<T> type) {
+    super(robot, type);
   }
 
   /**
    * Creates a new </code>{@link AbstractWindowFixture}</code>.
-   * @param abbot performs simulation of user events on a <code>Window</code>.
+   * @param robot performs simulation of user events on a <code>Window</code>.
    * @param name the name of the <code>Window</code> to find using the given <code>AbbotFixture</code>.
    * @param type the type of <code>Window</code> to find using the given <code>AbbotFixture</code>.
-   * @see AbbotFixture#findByName(String, Class)
+   * @see RobotFixture#findByName(String, Class)
    */
-  public AbstractWindowFixture(AbbotFixture abbot, String name, Class<T> type) {
-    super(abbot, name, type);
+  public AbstractWindowFixture(RobotFixture robot, String name, Class<T> type) {
+    super(robot, name, type);
   }
 
   /**
    * Creates a new </code>{@link AbstractWindowFixture}</code>.
-   * @param abbot performs simulation of user events on the given window.
+   * @param robot performs simulation of user events on the given window.
    * @param target the window under test.
    */
-  public AbstractWindowFixture(AbbotFixture abbot, T target) {
-    super(abbot, target);
+  public AbstractWindowFixture(RobotFixture robot, T target) {
+    super(robot, target);
   }
 
   protected final void doShow() {
-    abbot.showWindow(target);
+    robot.showWindow(target);
     assertIsVisible();
   }
   
   protected final void doShow(Dimension size) {
-    abbot.showWindow(target, size);
+    robot.showWindow(target, size);
     assertIsVisible();
   }
 
@@ -96,6 +96,6 @@ public abstract class AbstractWindowFixture<T extends Window> extends AbstractCo
   }
   
   public final void cleanUp() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

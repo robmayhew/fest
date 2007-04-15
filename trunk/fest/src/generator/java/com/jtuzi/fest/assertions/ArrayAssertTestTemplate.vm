@@ -13,7 +13,7 @@
  * 
  * Copyright @$date.get('yyyy') the original author or authors.
  */
-package org.testng.abbot.assertions;
+package com.jtuzi.fest.assertions;
 
 import org.testng.annotations.Test;
 

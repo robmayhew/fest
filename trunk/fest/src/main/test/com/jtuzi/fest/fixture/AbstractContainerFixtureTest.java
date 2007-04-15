@@ -30,20 +30,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import com.jtuzi.fest.AbbotFixture;
-import com.jtuzi.fest.fixture.AbstractContainerFixture;
-import com.jtuzi.fest.fixture.ComponentFixture;
-import com.jtuzi.fest.fixture.DialogFixture;
-import com.jtuzi.fest.fixture.JButtonFixture;
-import com.jtuzi.fest.fixture.JLabelFixture;
-import com.jtuzi.fest.fixture.JMenuItemFixture;
-import com.jtuzi.fest.fixture.JOptionPaneFixture;
-import com.jtuzi.fest.fixture.JTextComponentFixture;
-
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
+
+import com.jtuzi.fest.RobotFixture;
+
 import static java.awt.GridBagConstraints.HORIZONTAL;
-
-
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -100,13 +91,13 @@ public class AbstractContainerFixtureTest {
     }
   }
   
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   private AbstractContainerFixture<CustomWindow> containerFixture;
   private CustomWindow window;
   
   @BeforeClass public void setUp() {
-    abbot = new AbbotFixture();
-    containerFixture = new AbstractContainerFixture<CustomWindow>(abbot, new CustomWindow()) {
+    robot = new RobotFixture();
+    containerFixture = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {
 
       public ComponentFixture<CustomWindow> click() {
         return null;
@@ -124,7 +115,7 @@ public class AbstractContainerFixtureTest {
         return null;
       }};
     window = containerFixture.target;
-    abbot.showWindow(window);
+    robot.showWindow(window);
   }
 
   @Test public void shouldFindLabelWithGivenName() throws Exception {
@@ -169,6 +160,6 @@ public class AbstractContainerFixtureTest {
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }

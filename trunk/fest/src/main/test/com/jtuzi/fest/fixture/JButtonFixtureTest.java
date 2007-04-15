@@ -22,13 +22,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.jtuzi.fest.AbbotFixture;
+import com.jtuzi.fest.Condition;
+import com.jtuzi.fest.RobotFixture;
 import com.jtuzi.fest.fixture.JButtonFixture;
 
-import abbot.script.Condition;
-
 import static com.jtuzi.fest.assertions.Assertions.assertThat;
-
 
 import static org.testng.Assert.assertTrue;
 
@@ -82,14 +80,14 @@ public class JButtonFixtureTest {
   }
   
   private MainWindow window;
-  private AbbotFixture abbot;
+  private RobotFixture robot;
   private JButtonFixture fixtureForSecondButton;
   
   @BeforeClass public void setUp() {
-    abbot = new AbbotFixture();
+    robot = new RobotFixture();
     window = new MainWindow();
-    abbot.showWindow(window);
-    fixtureForSecondButton = new JButtonFixture(abbot, "secondButton");
+    robot.showWindow(window);
+    fixtureForSecondButton = new JButtonFixture(robot, "secondButton");
   }
   
   @Test public void shouldHaveFoundButton() {
@@ -105,7 +103,7 @@ public class JButtonFixtureTest {
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldGiveFocusToButton() {
     window.firstButton.requestFocusInWindow();
-    abbot.robot.wait(new Condition() {
+    robot.wait(new Condition("button has focus") {
       public boolean test() {
         return window.firstButton.hasFocus();
       }
@@ -131,6 +129,6 @@ public class JButtonFixtureTest {
   }
   
   @AfterClass public void tearDown() {
-    abbot.cleanUp();
+    robot.cleanUp();
   }
 }
