@@ -90,9 +90,8 @@ public abstract class AbstractWindowFixture<T extends Window> extends AbstractCo
     return testerCastedTo(WindowTester.class);
   }
 
-  protected final AbstractContainerFixture<T> assertEqualSize(Dimension size) {
+  protected final void assertEqualSize(Dimension size) {
     assertThat(target.getSize()).isEqualTo(size);
-    return this;
   }
   
   public final void cleanUp() {
