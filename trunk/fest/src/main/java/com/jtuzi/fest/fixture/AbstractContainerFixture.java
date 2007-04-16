@@ -20,9 +20,11 @@ import java.awt.Container;
 import java.awt.Dialog;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.text.JTextComponent;
 
 import com.jtuzi.fest.RobotFixture;
@@ -135,5 +137,23 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    */
   public final JTextComponentFixture findTextComponent(String name) {
     return new JTextComponentFixture(robot, robot.findByName(target, name, JTextComponent.class));
+  }
+
+  /**
+   * Finds a <code>{@link JComboBox}</code> in the target container having the given name.
+   * @param name the name to match.
+   * @return a fixture wrapping the found component.
+   */
+  public final JComboBoxFixture findComboBox(String name) {
+    return new JComboBoxFixture(robot, robot.findByName(target, name, JComboBox.class));
+  }
+
+  /**
+   * Finds a <code>{@link JTabbedPane}</code> in the target container having the given name.
+   * @param name the name to match.
+   * @return a fixture wrapping the found component.
+   */
+  public final JTabbedPaneFixture findTabbedPane(String name) {
+    return new JTabbedPaneFixture(robot, robot.findByName(target, name, JTabbedPane.class));
   }
 }
