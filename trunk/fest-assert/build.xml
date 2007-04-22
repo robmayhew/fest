@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<project name="fest-assert" default="all" basedir=".">
+
+  <property file="build.properties" />
+
+  <tstamp>
+    <format property="time.stamp" pattern="MMddyy"/>
+  </tstamp>
+  
+  <target name="all" depends="compile, test, dist" />
+
+  <target name="compile" depends="compile.main, compile.tests" />
+
+  <target name="compile.main" depends="init">
+    <javac compiler="${compiler}"
+           destdir="${target.classes.dir}"
+           debug="${compiler.debug}"
+           deprecation="${compiler.deprecation}"
+           optimize="${compiler.optimize}"
+           source="${compiler.javac.source}"
+           target="${compiler.javac.target}">
+      <src path="${src.java.main.dir}" />
+      <classpath refid="compile.classpath" />
+    </javac>
+  </target>
+
+  <target name="init">
+    <delete dir="${target.dir}" failonerror="false" />
+    <mkdir dir="${target.dir}" />
+    <mkdir dir="${target.classes.dir}" />
+    <mkdir dir="${target.testresults.dir}" />
+    <mkdir dir="${target.testclasses.dir}" />
+    <mkdir dir="${target.dist.dir}" />
+
+    <path id="compile.classpath">
+      <fileset dir="${lib.dir}">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+  </target>
+
+  <target name="compile.tests">
+    <javac compiler="${compiler}"
+           destdir="${target.testclasses.dir}"
+           debug="${compiler.debug}"
+           deprecation="${compiler.deprecation}"
+           optimize="${compiler.optimize}"
+           source="${compiler.javac.source}"
+           target="${compiler.javac.target}">
+      <src path="${src.java.test.dir}" />
+      <classpath>
+        <pathelement location="${target.classes.dir}" />
+      </classpath>
+      <classpath refid="compile.classpath" />
+    </javac>
+  </target>
+
+  <target name="test" depends="compile">
+    <taskdef resource="testngtasks" classpathref="compile.classpath"/>
+    <property name="reports.dir" value="${target.testresults.dir}" />
+    <mkdir dir="${reports.dir}" />
+    <testng outputDir="${reports.dir}" haltOnFailure="true" verbose="2">
+      <classfileset dir="${target.testclasses.dir}" includes="**/*Test.class" />
+      <classpath location="${target.testclasses.dir}" />
+      <classpath location="${target.classes.dir}" />
+      <classpath refid="compile.classpath" />
+    </testng>
+  </target>
+
+  <target name="dist.jar" depends="test">
+    <jar destfile="${target.dist.dir}/${project.name}-${time.stamp}.jar" update="true">
+      <fileset dir="${target.classes.dir}" />
+    </jar>
+  </target>
+
+  <target name="dist" depends="dist.jar">
+    <zip destfile="${target.dist.dir}/${project.name}-${time.stamp}.zip">
+      <zipfileset dir="${src.dir}" prefix="src" />
+      <fileset dir="${target.dist.dir}" includes="*.jar"/>
+    </zip>
+  </target>
+
+</project>
