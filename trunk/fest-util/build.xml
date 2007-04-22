@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="fest-swing" default="all" basedir=".">
+<project name="fest-util" default="all" basedir=".">
 
   <property file="build.properties" />
 
