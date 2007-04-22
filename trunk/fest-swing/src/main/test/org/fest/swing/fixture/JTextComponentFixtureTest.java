@@ -31,7 +31,7 @@ import org.fest.swing.fixture.JTextComponentFixture;
 
 import static java.awt.GridBagConstraints.HORIZONTAL;
 
-import static org.fest.swing.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import static org.testng.Assert.assertTrue;
 

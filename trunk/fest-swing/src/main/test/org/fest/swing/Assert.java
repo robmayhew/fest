@@ -19,8 +19,9 @@ import org.fest.swing.script.ScriptFailure;
 
 
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import static org.fest.swing.Files.absolutePath;
-import static org.fest.swing.assertions.Assertions.assertThat;
 
 
 /**

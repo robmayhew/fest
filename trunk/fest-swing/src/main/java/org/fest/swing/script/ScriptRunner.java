@@ -14,9 +14,9 @@
  */
 package org.fest.swing.script;
 
-import static org.fest.swing.util.Files.*;
-import static org.fest.swing.util.Objects.*;
-import static org.fest.swing.util.Strings.quote;
+import static org.fest.util.Files.*;
+import static org.fest.util.Objects.*;
+import static org.fest.util.Strings.quote;
 
 import java.io.File;
 import java.util.ArrayList;

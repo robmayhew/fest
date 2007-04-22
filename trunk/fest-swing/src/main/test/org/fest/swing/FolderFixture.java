@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 import static java.io.File.separator;
 
 
-import static org.fest.swing.util.Objects.isEmpty;
-import static org.fest.swing.util.Strings.quote;
+import static org.fest.util.Objects.isEmpty;
+import static org.fest.util.Strings.quote;
 
 import static org.testng.Assert.assertTrue;
 

@@ -53,8 +53,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
-import static org.fest.swing.assertions.Assertions.assertThat;
-import static org.fest.swing.util.Objects.*;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.util.Objects.*;
 
 /**
  * Unit tests for <code>{@link AbstractContainerFixture}</code>.

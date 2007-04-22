@@ -28,7 +28,7 @@ import org.fest.swing.fixture.JLabelFixture;
 
 
 
-import static org.fest.swing.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import static org.testng.Assert.assertTrue;
 

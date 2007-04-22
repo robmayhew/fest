@@ -21,7 +21,7 @@ import java.awt.Dimension;
 import org.fest.swing.RobotFixture;
 
 
-import static org.fest.swing.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 
 /**

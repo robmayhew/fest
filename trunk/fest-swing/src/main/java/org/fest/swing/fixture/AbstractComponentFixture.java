@@ -22,7 +22,7 @@ import org.fest.swing.RobotFixture;
 
 import abbot.tester.ComponentTester;
 
-import static org.fest.swing.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 
 /**

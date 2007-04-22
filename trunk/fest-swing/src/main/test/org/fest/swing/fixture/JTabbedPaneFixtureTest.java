@@ -25,7 +25,7 @@ import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.JTabbedPaneFixture;
 
 
-import static org.fest.swing.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 
 

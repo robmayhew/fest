@@ -28,8 +28,9 @@ import org.fest.swing.RobotFixture;
 
 import abbot.finder.Matcher;
 
-import static org.fest.swing.assertions.Assertions.assertThat;
-import static org.fest.swing.util.Objects.areEqual;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.util.Objects.areEqual;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;

@@ -14,7 +14,7 @@
  */
 package org.fest.swing.script;
 
-import static org.fest.swing.util.Strings.quote;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands a wrapper for <code>Throwable</code>s thrown when running a script.

@@ -18,7 +18,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.fest.swing.util.Objects.isEmpty;
+import static org.fest.util.Objects.isEmpty;
 
 /**
  * Understands a <code>{@link ScriptApprover}</code> that approves a file only if its name is in a list of approved

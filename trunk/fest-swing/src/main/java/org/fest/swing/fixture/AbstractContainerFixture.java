@@ -34,8 +34,9 @@ import abbot.finder.Matcher;
 import abbot.finder.matchers.JMenuItemMatcher;
 
 
-import static org.fest.swing.assertions.Assertions.assertThat;
-import static org.fest.swing.util.Strings.join;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.util.Strings.join;
 
 
 /**

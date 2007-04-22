@@ -32,8 +32,9 @@ import org.fest.swing.fixture.JOptionPaneFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 
 
-import static org.fest.swing.assertions.Assertions.assertThat;
-import static org.fest.swing.util.Objects.array;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.util.Objects.array;
 
 import abbot.tester.ComponentTester;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
