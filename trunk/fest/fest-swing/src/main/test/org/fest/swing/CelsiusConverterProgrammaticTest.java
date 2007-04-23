@@ -20,12 +20,11 @@ import java.awt.Component;
 import javax.swing.JLabel;
 
 import abbot.tester.ComponentTester;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.fest.assertions.Assertions.*;
 
 /**
  * Understands programmatic Abbot unit tests for <code>{@link CelsiusConverter}</code>.
