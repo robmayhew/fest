@@ -11,8 +11,8 @@
 	<classpathentry kind="lib" path="lib/main/MRJToolkitStubs.zip"/>
 	<classpathentry kind="lib" path="lib/main/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/main/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/main/fest-util-0.1-042207.jar"/>
 	<classpathentry kind="lib" path="lib/test/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/main/fest-assert-0.1-042207.jar"/>
+	<classpathentry kind="lib" path="lib/main/fest-util-0.1-042307.jar" sourcepath="lib/main/fest-util-0.1-042307-src.zip"/>
+	<classpathentry kind="lib" path="lib/main/fest-assert-0.1-042307.jar" sourcepath="lib/main/fest-assert-0.1-042307-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
