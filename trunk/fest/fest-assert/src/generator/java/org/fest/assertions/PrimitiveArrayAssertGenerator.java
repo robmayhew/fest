@@ -30,32 +30,32 @@ import static org.fest.util.Strings.join;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-final class PrimitiveTypeArrayAssertGenerator extends VelocityCodeGenerator {
+final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
 
   private final Template javaFileTemplate;
   private final Template testFileTemplate;
   
-  PrimitiveTypeArrayAssertGenerator() throws Exception {
+  PrimitiveArrayAssertGenerator() throws Exception {
     javaFileTemplate = Velocity.getTemplate(packageNameAsPath + "ArrayAssertTemplate.vm");
     testFileTemplate = Velocity.getTemplate(packageNameAsPath + "ArrayAssertTestTemplate.vm");
   }
   
   void generate() throws Exception {
-    generate(boolean.class, array("true", "false"), array("false", "true"));
-    generate(char.class, array("'a'", "'b'"), array("'c'", "'d'"));
-    generate(byte.class, array("(byte)8", "(byte)6"), array("(byte)8"));
-    generate(short.class, array("(short)43", "(short)68"), array("(short)98"));
-    generate(int.class, array("459", "23"), array("90, 82"));
-    generate(long.class, array("43l", "53l"), array("434l"));
-    generate(float.class, array("34.90f"), array("88.43f"));
-    generate(double.class, array("55.03", "4345.91"), array("5323.2"));
+    generate(boolean.class, new TestArrays(array("true", "false"), array("false", "true")));
+    generate(char.class, new TestArrays(array("'a'", "'b'"), array("'c'", "'d'")));
+    generate(byte.class, new TestArrays(array("(byte)8", "(byte)6"), array("(byte)8")));
+    generate(short.class, new TestArrays(array("(short)43", "(short)68"), array("(short)98")));
+    generate(int.class, new TestArrays(array("459", "23"), array("90, 82")));
+    generate(long.class, new TestArrays(array("43l", "53l"), array("434l")));
+    generate(float.class, new TestArrays(array("34.90f"), array("88.43f")));
+    generate(double.class, new TestArrays(array("55.03", "4345.91"), array("5323.2")));
   }
 
   private String array(String...elements) {
     return join(", ", elements);
   }
 
-  private void generate(Class<?> arrayType, String firstArray, String secondArray) throws Exception {
+  private void generate(Class<?> arrayType, TestArrays testArrays) throws Exception {
     String arrayTypeName = arrayType.getSimpleName();
     String className = capitalizeFirstLetter(arrayTypeName) + "ArrayAssert";
     String testName = className + "Test";
@@ -64,8 +64,8 @@ final class PrimitiveTypeArrayAssertGenerator extends VelocityCodeGenerator {
     context.put("className", className);
     context.put("testName", testName);
     context.put("classToTest", className);
-    context.put("firstArray", firstArray);
-    context.put("secondArray", secondArray);
+    context.put("firstArray", testArrays.first);
+    context.put("secondArray", testArrays.second);
     context.put("date", new DateTool());
     generateJavaFile(className, context); 
     generateTestFile(testName, context);
@@ -75,9 +75,19 @@ final class PrimitiveTypeArrayAssertGenerator extends VelocityCodeGenerator {
 
   @Override Template testFileTemplate() { return testFileTemplate; }
   
+  private static class TestArrays {
+    final String first;
+    final String second;
+
+    TestArrays(String first, String second) {
+      this.first = first;
+      this.second = second;
+    }
+  }
+  
   public static void main(String[] args) {
     try {
-      new PrimitiveTypeArrayAssertGenerator().generate();
+      new PrimitiveArrayAssertGenerator().generate();
     } catch (Exception e) {
       logger.log(SEVERE, "Unable to generate code", e);
     }

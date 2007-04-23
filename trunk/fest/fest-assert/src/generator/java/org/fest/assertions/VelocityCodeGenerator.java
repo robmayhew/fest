@@ -63,6 +63,8 @@ abstract class VelocityCodeGenerator {
     Velocity.init(p);
   }
 
+  abstract void generate() throws Exception;
+  
   final void generateJavaFile(String className, VelocityContext context) throws Exception {
     String javaFilePath = SourceFolders.JAVA + filePathFor(className);
     generateFile(javaFilePath, javaFileTemplate(), context);

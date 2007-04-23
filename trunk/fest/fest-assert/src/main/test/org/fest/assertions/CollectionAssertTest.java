@@ -17,12 +17,11 @@ package org.fest.assertions;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.fest.assertions.CollectionAssert;
-
-
+import java.util.logging.Logger;
 
 import org.testng.annotations.Test;
+
+import static java.util.logging.Level.INFO;
 
 /**
  * Unit tests for <code>{@link CollectionAssert}</code>.
@@ -31,13 +30,20 @@ import org.testng.annotations.Test;
  */
 public class CollectionAssertTest {
 
-  @Test(expectedExceptions = AssertionError.class) 
+  private static Logger logger = Logger.getAnonymousLogger();
+  
+  @Test() 
   public void shouldFailIfCollectionHasDuplicates() {
     List<String> withDuplicates = new ArrayList<String>();
     withDuplicates.add("Luke");
     withDuplicates.add("Yoda");
     withDuplicates.add("Luke");
-    new CollectionAssert<String>(withDuplicates).doesNotHaveDuplicates();
+    try {
+      new CollectionAssert<String>(withDuplicates).doesNotHaveDuplicates();
+    } catch (AssertionError e) {
+      logger.log(INFO, e.getMessage());
+      new StringAssert(e.getMessage()).containsText("Luke");
+    }
   }
   
   @Test public void shouldSucceedIfCollectionDoesNotHaveDuplicates() {
@@ -51,7 +57,7 @@ public class CollectionAssertTest {
     new CollectionAssert<String>(new ArrayList<String>()).doesNotHaveDuplicates();
   }
 
-  @Test public void shouldSucceedIfCollectionIsEqualToNull() {
+  @Test public void shouldSucceedIfCollectionIsNull() {
     new CollectionAssert<String>(null).doesNotHaveDuplicates();
   }
 }

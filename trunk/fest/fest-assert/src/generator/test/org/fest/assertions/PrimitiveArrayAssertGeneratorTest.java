@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fest.assertions.PrimitiveTypeArrayAssertGenerator;
+import org.fest.assertions.PrimitiveArrayAssertGenerator;
 
 
 
@@ -37,17 +37,17 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link PrimitiveTypeArrayAssertGenerator}</code>.
+ * Unit tests for <code>{@link PrimitiveArrayAssertGenerator}</code>.
  *
  * @author Alex Ruiz
  */
-public class PrimitiveTypeArrayAssertGeneratorTest {
+public class PrimitiveArrayAssertGeneratorTest {
 
   private static final String JAVA_PACKAGE_PATH = fullPathFor(join(separator, mainFolder(), "java"));
   private static final String TEST_PACKAGE_PATH = fullPathFor(join(separator, mainFolder(), "test"));
 
   private static String fullPathFor(String sourceFolder) {
-    return join(separator, sourceFolder, packageNameAsPathFrom(PrimitiveTypeArrayAssertGeneratorTest.class));
+    return join(separator, sourceFolder, packageNameAsPathFrom(PrimitiveArrayAssertGeneratorTest.class));
   }
   
   private static String mainFolder() {
@@ -64,32 +64,40 @@ public class PrimitiveTypeArrayAssertGeneratorTest {
 
   private static final List<String> EXPECTED_GENERATED_JAVA_FILES = new ArrayList<String>();
   static {
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "BooleanArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "CharArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "ByteArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "ShortArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "IntArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "LongArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "FloatArrayAssert.java");
-    EXPECTED_GENERATED_JAVA_FILES.add(JAVA_PACKAGE_PATH + "DoubleArrayAssert.java");
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("BooleanArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("CharArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("ByteArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("ShortArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("IntArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("LongArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("FloatArrayAssert.java"));
+    EXPECTED_GENERATED_JAVA_FILES.add(javaFilePath("DoubleArrayAssert.java"));
+  }
+  
+  private static String javaFilePath(String javaFileName) {
+    return JAVA_PACKAGE_PATH + javaFileName;
   }
   
   private static final List<String> EXPECTED_GENERATED_TEST_FILES = new ArrayList<String>();
   static {
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "BooleanArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "CharArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "ByteArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "ShortArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "IntArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "LongArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "FloatArrayAssertTest.java");
-    EXPECTED_GENERATED_TEST_FILES.add(TEST_PACKAGE_PATH + "DoubleArrayAssertTest.java");
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("BooleanArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("CharArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("ByteArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("ShortArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("IntArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("LongArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("FloatArrayAssertTest.java"));
+    EXPECTED_GENERATED_TEST_FILES.add(testFilePath("DoubleArrayAssertTest.java"));
   }
   
-  private PrimitiveTypeArrayAssertGenerator generator;
+  private static String testFilePath(String javaFileName) {
+    return TEST_PACKAGE_PATH + javaFileName;
+  }
+  
+  private PrimitiveArrayAssertGenerator generator;
   
   @BeforeClass public void setUp() throws Exception {
-    generator = new PrimitiveTypeArrayAssertGenerator();
+    generator = new PrimitiveArrayAssertGenerator();
   }
   
   @Test public void shouldGenerateArrayAssertFiles() throws Exception {
