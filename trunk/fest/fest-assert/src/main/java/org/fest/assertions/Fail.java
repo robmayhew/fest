@@ -22,13 +22,13 @@ import static org.fest.util.Objects.areEqual;
  *
  * @author Alex Ruiz
  */
-final class Fail {
+public final class Fail {
 
   /**
    * Fails with no message.
    * @throws AssertionError without any message.
    */
-  static void fail() {
+  public static void fail() {
     fail(null);
   }
 
@@ -38,7 +38,7 @@ final class Fail {
    * @param message error message.
    * @param realCause cause of the error.
    */
-  static void fail(String message, Throwable realCause) {
+  public static void fail(String message, Throwable realCause) {
     AssertionError error = new AssertionError(message);
     error.initCause(realCause);
     throw error;
@@ -107,7 +107,7 @@ final class Fail {
    * @param message error message.
    * @throws AssertionError with the given message.
    */
-  static void fail(String message) {
+  public static void fail(String message) {
     throw new AssertionError(message);
   }
 
