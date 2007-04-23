@@ -15,9 +15,9 @@
  */
 package org.fest.assertions;
 
-import org.fest.assertions.ObjectAssert;
-
 import org.testng.annotations.Test;
+
+import static org.fest.util.Objects.areEqual;
 
 /**
  * Unit tests for <code>{@link ObjectAssert}</code>.
@@ -46,12 +46,10 @@ public class ObjectAssertTest {
     @Override public boolean equals(Object obj) {
       if (this == obj) return true;
       if (obj == null) return false;
-      if (getClass() != obj.getClass()) return false;
-      final Person other = (Person) obj;
-      if (age != other.age) return false;
-      if (name == null) {
-        if (other.name != null) return false;
-      } else if (!name.equals(other.name)) return false;
+      if (!(obj instanceof Person)) return false;
+      Person other = (Person) obj;
+      if (!areEqual(age, other.age)) return false;
+      if (!areEqual(name, other.name)) return false;
       return true;
     }
   }
