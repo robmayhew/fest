@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Understands programmatic Abbot unit tests for <code>{@link CelsiusConverter}</code>.
+ * Understands programmatic GUI tests for <code>{@link CelsiusConverter}</code>.
  *
  * @author Alex Ruiz
  */
