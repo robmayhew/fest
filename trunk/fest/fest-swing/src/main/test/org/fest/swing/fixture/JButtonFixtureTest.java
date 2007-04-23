@@ -22,15 +22,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import org.fest.swing.Condition;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JButtonFixture;
-
-
-
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.testng.Assert.assertTrue;
+import org.fest.swing.Condition;
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -83,23 +78,23 @@ public class JButtonFixtureTest {
   
   private MainWindow window;
   private RobotFixture robot;
-  private JButtonFixture fixtureForSecondButton;
+  private JButtonFixture secondButtonFixture;
   
   @BeforeClass public void setUp() {
     robot = new RobotFixture();
     window = new MainWindow();
     robot.showWindow(window);
-    fixtureForSecondButton = new JButtonFixture(robot, "secondButton");
+    secondButtonFixture = new JButtonFixture(robot, "secondButton");
   }
   
   @Test public void shouldHaveFoundButton() {
-    assertThat(fixtureForSecondButton.target).isSameAs(window.secondButton);
+    assertThat(secondButtonFixture.target).isSameAs(window.secondButton);
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldClickButton() {
-    fixtureForSecondButton.click();
-    assertTrue(window.secondButton.wasClicked());
+    secondButtonFixture.click();
+    assertThat(window.secondButton.wasClicked()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
@@ -110,24 +105,24 @@ public class JButtonFixtureTest {
         return window.firstButton.hasFocus();
       }
     });
-    fixtureForSecondButton.focus();
-    assertTrue(window.secondButton.hasFocus());
+    secondButtonFixture.focus();
+    assertThat(window.secondButton.hasFocus()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldPassIfButtonHasMatchingText() {
-    fixtureForSecondButton.shouldHaveThisText("Second Button");
+    secondButtonFixture.shouldHaveThisText("Second Button");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundButton", "shouldPassIfButtonHasMatchingText"},
         expectedExceptions = AssertionError.class) 
   public void shouldFailIfButtonHasNotMatchingText() {
-    fixtureForSecondButton.shouldHaveThisText("A Button");
+    secondButtonFixture.shouldHaveThisText("A Button");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldReturnButtonText() {
-    assertThat(fixtureForSecondButton.text()).isEqualTo("Second Button");
+    assertThat(secondButtonFixture.text()).isEqualTo("Second Button");
   }
   
   @AfterClass public void tearDown() {

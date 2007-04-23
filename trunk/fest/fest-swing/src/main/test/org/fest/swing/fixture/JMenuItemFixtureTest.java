@@ -23,15 +23,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JMenuItemFixture;
-
-
-
-
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.testng.Assert.assertTrue;
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -84,7 +78,7 @@ public class JMenuItemFixtureTest {
   public void shouldSelectMenu() {
     JMenuItemFixture fixture = new JMenuItemFixture(robot, "new");
     fixture.select();
-    assertTrue(window.newMenuSelected);
+    assertThat(window.newMenuSelected).isTrue();
   }
   
   @AfterClass public void tearDown() {

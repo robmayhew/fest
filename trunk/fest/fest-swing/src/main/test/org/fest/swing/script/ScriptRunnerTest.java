@@ -16,21 +16,14 @@ package org.fest.swing.script;
 
 import java.io.File;
 
-import org.fest.swing.script.FileNameMatchScriptApprover;
-import org.fest.swing.script.ScriptApprover;
-import org.fest.swing.script.ScriptFailure;
-import org.fest.swing.script.ScriptRunner;
-
-
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.Assert.assertScriptFailed;
 import static org.fest.swing.Files.absolutePath;
 import static org.fest.swing.script.Scripts.MUST_BE_SUCCESSFUL;
 import static org.fest.swing.script.Scripts.MUST_FAIL;
 import static org.fest.swing.script.Scripts.ROOT_FOLDER;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
 
 import org.testng.annotations.Test;
 
@@ -66,13 +59,13 @@ public class ScriptRunnerTest {
     } catch (ScriptFailure failure) {
       assertScriptFailed(failure, ROOT_FOLDER, MUST_FAIL); 
     }
-    assertEquals(runner.successfulScripts().length, 0);
+    assertThat(runner.successfulScripts().length).isEqualTo(0);
   }
 
   private void assertOneSuccess(ScriptRunner runner, String dirName, String fileName) {
     String[] successfulScripts = runner.successfulScripts();
-    assertEquals(successfulScripts.length, 1);
-    assertEquals(successfulScripts[0], absolutePath(dirName, fileName));
+    assertThat(successfulScripts.length).isEqualTo(1);
+    assertThat(successfulScripts[0]).isEqualTo(absolutePath(dirName, fileName));
   }
 
   @Test(expectedExceptions = { IllegalStateException.class }) 

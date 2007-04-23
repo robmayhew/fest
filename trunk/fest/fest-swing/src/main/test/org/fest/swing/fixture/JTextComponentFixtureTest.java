@@ -23,17 +23,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import org.fest.swing.Condition;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JTextComponentFixture;
-
-
-
 import static java.awt.GridBagConstraints.HORIZONTAL;
-
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.testng.Assert.assertTrue;
+import org.fest.swing.Condition;
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -108,7 +102,7 @@ public class JTextComponentFixtureTest {
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
   public void shouldClickSecondTextField() {
     fixtureForSecondTextField.click();
-    assertTrue(window.secondTextField.wasClicked());
+    assertThat(window.secondTextField.wasClicked()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
@@ -120,7 +114,7 @@ public class JTextComponentFixtureTest {
       }
     });
     fixtureForSecondTextField.focus();
-    assertTrue(window.secondTextField.hasFocus());
+    assertThat(window.secondTextField.hasFocus()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 

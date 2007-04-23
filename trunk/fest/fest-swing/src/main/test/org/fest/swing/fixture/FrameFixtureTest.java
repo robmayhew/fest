@@ -19,16 +19,12 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.FrameFixture;
-
-
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
+import static org.fest.assertions.Assertions.assertThat;
 
-
-import static org.testng.Assert.assertTrue;
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -89,26 +85,27 @@ public class FrameFixtureTest {
   
   @Test public void shouldIconifyFrame() {
     frameFixture.iconify();
-    assertTrue((frameFixture.target.getExtendedState() == ICONIFIED));
+    assertThat(frameFixture.target.getExtendedState()).isEqualTo(ICONIFIED);
   }
   
   @Test(dependsOnMethods = "shouldIconifyFrame") 
   public void shouldDeiconifyFrame() {
     frameFixture.iconify();
     frameFixture.deiconify();
-    assertTrue((frameFixture.target.getExtendedState() == NORMAL));
+    assertThat(frameFixture.target.getExtendedState()).isEqualTo(NORMAL);
   }
   
   @Test public void shouldMaximizeFrame() {
     frameFixture.maximize();
-    assertTrue((frameFixture.target.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH);
+    int frameState = frameFixture.target.getExtendedState() & MAXIMIZED_BOTH;
+    assertThat(frameState).isEqualTo(MAXIMIZED_BOTH);
   }
 
   @Test(dependsOnMethods = "shouldMaximizeFrame") 
   public void shouldNormalizeFrame() {
     frameFixture.maximize();
     frameFixture.normalize();
-    assertTrue((frameFixture.target.getExtendedState() == NORMAL));
+    assertThat(frameFixture.target.getExtendedState()).isEqualTo(NORMAL);
   }
   
   private FluentDimension windowSize() {

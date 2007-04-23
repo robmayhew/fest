@@ -16,11 +16,7 @@ package org.fest.swing.script;
 
 import java.io.File;
 
-import org.fest.swing.script.FileNameMatchScriptApprover;
-
-
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -39,14 +35,14 @@ public class FileNameMatchScriptApproverTest {
   }
 
   @Test public void shouldAcceptFileIfInListOfApprovedFiles() {
-    assertTrue(approver.approve(new File("myFile.xml")));
+    assertThat(approver.approve(new File("myFile.xml"))).isTrue();
   }
 
   @Test public void shouldNotAcceptFileIfNotInListOfApprovedFiles() {
-    assertFalse(approver.approve(new File("yourFile.xml")));
+    assertThat(approver.approve(new File("yourFile.xml"))).isFalse();
   }
 
   @Test public void shouldNotAcceptFileIfFileIsNull() {
-    assertFalse(approver.approve(null));
+    assertThat(approver.approve(null)).isFalse();
   }
 }

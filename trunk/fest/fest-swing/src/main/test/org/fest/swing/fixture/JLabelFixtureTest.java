@@ -22,15 +22,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JLabelFixture;
-
-
-
-
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.testng.Assert.assertTrue;
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -83,45 +77,45 @@ public class JLabelFixtureTest {
   
   private MainWindow window;
   private RobotFixture robot;
-  private JLabelFixture fixtureForSecondLabel;
+  private JLabelFixture secondLabelFixture;
   
   @BeforeClass public void setUp() {
     robot = new RobotFixture();
     window = new MainWindow();
     robot.showWindow(window);
-    fixtureForSecondLabel = new JLabelFixture(robot, "secondLabel");
+    secondLabelFixture = new JLabelFixture(robot, "secondLabel");
   }
   
   @Test public void shouldHaveFoundLabel() {
-    assertThat(fixtureForSecondLabel.target).isSameAs(window.secondLabel);
+    assertThat(secondLabelFixture.target).isSameAs(window.secondLabel);
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 
   public void shouldClickLabel() {
-    fixtureForSecondLabel.click();
-    assertTrue(window.secondLabel.wasClicked());
+    secondLabelFixture.click();
+    assertThat(window.secondLabel.wasClicked()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 
   public void shouldGiveFocusToLabel() {
-    fixtureForSecondLabel.focus();
-    assertTrue(window.secondLabel.hasFocus());
+    secondLabelFixture.focus();
+    assertThat(window.secondLabel.hasFocus()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 
   public void shouldPassIfLabelHasMatchingText() {
-    fixtureForSecondLabel.shouldHaveThisText("Second Label");
+    secondLabelFixture.shouldHaveThisText("Second Label");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundLabel", "shouldPassIfLabelHasMatchingText"},
         expectedExceptions = AssertionError.class) 
   public void shouldFailIfLabelHasNotMatchingText() {
-    fixtureForSecondLabel.shouldHaveThisText("A Label");
+    secondLabelFixture.shouldHaveThisText("A Label");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 
   public void shouldReturnLabelText() {
-    assertThat(fixtureForSecondLabel.text()).isEqualTo("Second Label");
+    assertThat(secondLabelFixture.text()).isEqualTo("Second Label");
   }
   
   @AfterClass public void tearDown() {

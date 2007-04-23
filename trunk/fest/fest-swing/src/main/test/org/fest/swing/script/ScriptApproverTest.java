@@ -16,12 +16,9 @@ package org.fest.swing.script;
 
 import java.io.File;
 
-import org.fest.swing.script.ScriptApprover;
-
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 /**
  * Unit tests for <code>{@link ScriptApprover#DEFAULT_APPROVER}</code>.
@@ -31,18 +28,18 @@ import static org.testng.Assert.*;
 public class ScriptApproverTest {
 
   @Test public void shouldRejectFileWithNameStartingWithDotPound() {
-    assertFalse(ScriptApprover.DEFAULT_APPROVER.approve(new File(".#sm")));
+    assertThat(ScriptApprover.DEFAULT_APPROVER.approve(new File(".#sm"))).isFalse();
   }
 
   @Test public void shouldRejectFileWithNameEndingWithTilde() {
-    assertFalse(ScriptApprover.DEFAULT_APPROVER.approve(new File("myFile~")));
+    assertThat(ScriptApprover.DEFAULT_APPROVER.approve(new File("myFile~"))).isFalse();
   }
 
   @Test public void shouldRejectFileWithNameEndingWithDotBak() {
-    assertFalse(ScriptApprover.DEFAULT_APPROVER.approve(new File("myFile.bak")));
+    assertThat(ScriptApprover.DEFAULT_APPROVER.approve(new File("myFile.bak"))).isFalse();
   }
 
   @Test public void shouldAcceptFileWithNameNotStartingWithDotPoundAndNotEndingWithTildeOrDotBak() {
-    assertTrue(ScriptApprover.DEFAULT_APPROVER.approve(new File("myScript.xml")));
+    assertThat(ScriptApprover.DEFAULT_APPROVER.approve(new File("myScript.xml"))).isTrue();
   }
 }

@@ -19,17 +19,13 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 
-import org.fest.swing.RobotFixture;
-
-
 import abbot.tester.ComponentTester;
-
-
-import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.*;
 
 /**
  * Understands programmatic Abbot unit tests for <code>{@link CelsiusConverter}</code>.
@@ -69,7 +65,7 @@ public class CelsiusConverterProgrammaticTest {
   
   private void assertMatchingResult(String expected) {
     JLabel fahrenheitLabel = robot.findByName("fahrenheitLabel", JLabel.class);
-    assertEquals(fahrenheitLabel.getText(), expected);
+    assertThat(fahrenheitLabel.getText()).isEqualTo(expected);
   }
 
   @AfterMethod public void tearDown() {
