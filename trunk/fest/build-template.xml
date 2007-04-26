@@ -25,6 +25,8 @@
 	<property name="compiler.javac.source" value="1.5"/>
 	<property name="compiler.javac.target" value="1.5"/>
 
+	<taskdef resource="testngtasks" classpathref="compile.classpath"/>
+
 	<tstamp>
 		<format property="time.stamp" pattern="MMddyy"/>
 	</tstamp>
@@ -52,6 +54,7 @@
 		<mkdir dir="${target.classes.dir}" />
 		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.test.classes.dir}" />
+		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.dist.dir}" />
 
 		<path id="compile.classpath">
@@ -77,12 +80,8 @@
 		</javac>
 	</target>
 
-	<taskdef resource="testngtasks" classpathref="compile.classpath"/>
-
 	<target name="test" depends="compile">
-		<property name="reports.dir" value="${target.test.results.dir}" />
-		<mkdir dir="${reports.dir}" />
-		<testng outputDir="${reports.dir}" haltOnFailure="true" verbose="2">
+		<testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2">
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.classes.dir}" />
@@ -97,7 +96,7 @@
 		<cobertura-instrument todir="${target.instrumented.dir}">
 			<fileset dir="${target.classes.dir}" />
 		</cobertura-instrument>
-		<testng outputDir="${reports.dir}" haltOnFailure="true" verbose="2">
+		<testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2">
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.instrumented.dir}" />
