@@ -6,6 +6,9 @@
 	<property name="src.java.test.dir" value="${src.dir}/test/java"/>
 
 	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="lib.main.dir" value="${lib.dir}/main"/>
+  <property name="lib.test.dir" value="${lib.dir}/test"/>
+	<property name="lib.cobertura.dir" value="${lib.dir}/cobertura"/>
 
 	<property name="target.dir" value="${basedir}/target"/>
 	<property name="target.classes.dir" value="${target.dir}/classes"/>
@@ -25,7 +28,7 @@
 	<property name="compiler.javac.source" value="1.5"/>
 	<property name="compiler.javac.target" value="1.5"/>
 
-	<taskdef resource="testngtasks" classpathref="compile.classpath"/>
+	<taskdef resource="testngtasks" classpathref="test.classpath"/>
 
 	<tstamp>
 		<format property="time.stamp" pattern="MMddyy"/>
@@ -44,7 +47,7 @@
            source="${compiler.javac.source}"
            target="${compiler.javac.target}">
 			<src path="${src.java.main.dir}" />
-			<classpath refid="compile.classpath" />
+			<classpath refid="main.classpath" />
 		</javac>
 	</target>
 
@@ -57,12 +60,21 @@
 		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.dist.dir}" />
 
-		<path id="compile.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="**/*.jar" />
-			</fileset>
+		<path id="main.classpath">
+			<fileset dir="${lib.main.dir}" includes="*.jar,*.zip" />
 		</path>
-	</target>
+
+		<path id="test.classpath">
+			<fileset dir="${lib.main.dir}" includes="*.jar,*.zip" />
+			<fileset dir="${lib.test.dir}" includes="*.jar" />
+		</path>
+
+		<path id="cobertura.classpath">
+			<fileset dir="${lib.main.dir}" includes="*.jar,*.zip" />
+			<fileset dir="${lib.test.dir}" includes="*.jar" />
+			<fileset dir="${lib.cobertura.dir}" includes="*.jar" />
+		</path>
+  </target>
 
 	<target name="compile.tests">
 		<javac compiler="${compiler}"
@@ -76,7 +88,7 @@
 			<classpath>
 				<pathelement location="${target.classes.dir}" />
 			</classpath>
-			<classpath refid="compile.classpath" />
+			<classpath refid="test.classpath" />
 		</javac>
 	</target>
 
@@ -85,12 +97,12 @@
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.classes.dir}" />
-			<classpath refid="compile.classpath" />
+			<classpath refid="test.classpath" />
 		</testng>
 	</target>
 
 	<target name="coverage" depends="compile">
-		<taskdef resource="tasks.properties" classpathref="compile.classpath" />
+		<taskdef resource="tasks.properties" classpathref="cobertura.classpath" />
 		<delete file="${basedir}/cobertura.ser" />
 		<mkdir dir="${target.instrumented.dir}" />
 		<cobertura-instrument todir="${target.instrumented.dir}">
@@ -100,7 +112,7 @@
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.instrumented.dir}" />
-			<classpath refid="compile.classpath" />
+			<classpath refid="cobertura.classpath" />
 		</testng>
 		<mkdir dir="${coverage.report.dir}" />
 		<cobertura-report format="html" datafile="${basedir}/cobertura.ser" destdir="${coverage.report.dir}" 
