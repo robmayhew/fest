@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 
+import static java.io.File.*;
+
 import static org.fest.util.Objects.asList;
 import static org.fest.util.Strings.quote;
 
@@ -49,13 +51,27 @@ public class FilesTest {
     root.delete();
   }
   
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionWhenGettingFilesNameInNotExistingDirectory() {
+    String path = "root" + separator + "not_existing_dir";
+    Files.fileNamesIn(path, false);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionWhenGettingFilesNameAndGivenPathIsNotDirectory() throws Exception {
+    String fileName = "file_1";
+    root.addFiles(fileName);
+    String path = "root" + separator + fileName;
+    Files.fileNamesIn(path, false);
+  }
+
   @Test public void shouldReturnNamesOfFilesInGivenDirectoryWithoutLookingInSubdirectories() {
-    String path = "root" + File.separator + "dir_1";
+    String path = "root" + separator + "dir_1";
     assertContainsFiles(Files.fileNamesIn(path, false), asList("file_1_1", "file_1_2"));
   }
   
   @Test public void shouldReturnNamesOfFilesInGivenDirectoryAndItsSubdirectories() {
-    String path = "root" + File.separator + "dir_1";
+    String path = "root" + separator + "dir_1";
     assertContainsFiles(Files.fileNamesIn(path, true), asList("file_1_1", "file_1_2", "file_1_1_1"));
   }
 

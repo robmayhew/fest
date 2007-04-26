@@ -30,6 +30,7 @@ public final class Objects {
   }
 
   public static <T> List<T> asList(T... elements) {
+    if (elements == null) return null;
     return new ArrayList<T>(Arrays.asList(elements));
   }
   
