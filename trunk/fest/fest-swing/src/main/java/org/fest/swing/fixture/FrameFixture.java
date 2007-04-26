@@ -38,6 +38,15 @@ import static java.awt.Frame.NORMAL;
 public class FrameFixture extends AbstractWindowFixture<Frame> {
 
   /**
+   * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * containing the current AWT hierarchy.
+   * @param target the window to test.
+   */
+  public FrameFixture(Frame target) {
+    super(target);
+  }
+
+  /**
    * Creates a new </code>{@link FrameFixture}</code>.
    * @param robot performs user events on the given window and verifies expected output.
    * @param target the window to test.

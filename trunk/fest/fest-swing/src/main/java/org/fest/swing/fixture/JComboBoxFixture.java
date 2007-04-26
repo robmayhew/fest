@@ -34,7 +34,7 @@ public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JComboBox</code>.
-   * @param comboBoxName the name of the combo box to find using the given <code>AbbotFixture</code>.
+   * @param comboBoxName the name of the combo box to find using the given <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
   public JComboBoxFixture(RobotFixture robot, String comboBoxName) {

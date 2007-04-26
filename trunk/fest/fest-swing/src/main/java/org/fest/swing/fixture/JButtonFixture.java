@@ -33,7 +33,7 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
   /**
    * Creates a new </code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JButton</code>.
-   * @param buttonName the name of the button to find using the given <code>AbbotFixture</code>.
+   * @param buttonName the name of the button to find using the given <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
   public JButtonFixture(RobotFixture robot, String buttonName) {

@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import javax.swing.JMenuItem;
 
+import abbot.finder.AWTHierarchy;
 import abbot.finder.BasicFinder;
 import abbot.finder.ComponentFinder;
 import abbot.finder.Hierarchy;
@@ -43,6 +44,22 @@ import static java.lang.System.currentTimeMillis;
  */
 public final class RobotFixture {
 
+  /**
+   * Understands an AWT hierarchy.
+   */
+  public abstract static class AwtHierarchy { 
+    
+    abstract Hierarchy hierarchy();
+    
+    public static final AwtHierarchy NEW_AWT_HIERARCHY = new AwtHierarchy() {
+      @Override Hierarchy hierarchy() { return new TestHierarchy(); }
+    };
+    
+    public static final AwtHierarchy CURRENT_AWT_HIERARCHY = new AwtHierarchy() {
+      @Override Hierarchy hierarchy() { return new AWTHierarchy(); }
+    };
+  }
+  
   private static final int WINDOW_DELAY = 20000;
 
   private Robot robot;
@@ -55,8 +72,23 @@ public final class RobotFixture {
   /** Looks up <code>{@link java.awt.Component}</code>s. */
   private final ComponentFinder finder;
 
+  /**
+   * Creates a new </code>{@link RobotFixture}</code> using a new AWT component hierarchy.
+   * <p>
+   * Calling this constructor is similar to call <code>{@link #RobotFixture(RobotFixture.AwtHierarchy)}</code> passing
+   * <code>{@link AwtHierarchy#NEW_AWT_HIERARCHY}</code> as argument.
+   * </p>
+   */
   public RobotFixture() {
-    hierarchy = new TestHierarchy();
+    this(null);
+  }
+  
+  /**
+   * Creates a new </code>{@link RobotFixture}</code>.
+   * @param awtHierarchy the AWT component hierarchy to use.
+   */
+  public RobotFixture(AwtHierarchy awtHierarchy) {
+    hierarchy = (awtHierarchy != null) ? awtHierarchy.hierarchy() : AwtHierarchy.NEW_AWT_HIERARCHY.hierarchy();
     finder = new BasicFinder(hierarchy);
     windowTracker = WindowTracker.getTracker();
     robot = newRobot();
@@ -107,21 +139,17 @@ public final class RobotFixture {
         w.setVisible(true);
       }
     });
-    waitForWindow(w, true);
+    waitForWindow(w);
   }
 
-  private void waitForWindow(Window w, boolean visible) {
+  private void waitForWindow(Window w) {
     long start = currentTimeMillis();
-    while (windowTracker.isWindowReady(w) != visible)
-      checkWindowVisibility(w, visible, start);
-  }
-
-  private void checkWindowVisibility(Window w, boolean visible, long startTime) {
-    long elapsed = currentTimeMillis() - startTime;
-    if (elapsed > WINDOW_DELAY)
-      throw new RuntimeException("Timed out waiting for Window to " + (visible ? "open" : "close")
-          + " (" + elapsed + "ms)");
-    robot.sleep();
+    while ((Robot.getEventMode() == Robot.EM_ROBOT && !windowTracker.isWindowReady(w)) || w.isShowing() != true) {
+      long elapsed = currentTimeMillis() - start;
+      if (elapsed > WINDOW_DELAY) 
+        throw new RuntimeException("Timed out waiting for Window to open (" + elapsed + "ms)");
+      robot.sleep();
+    }
   }
   
   private void packAndEnsureSafePosition(Window w) {

@@ -32,7 +32,7 @@ public class JMenuItemFixture extends AbstractComponentFixture<JMenuItem> {
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
-   * @param menuItemName the name of the menu item to find using the given <code>AbbotFixture</code>.
+   * @param menuItemName the name of the menu item to find using the given <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
   public JMenuItemFixture(RobotFixture robot, String menuItemName) {

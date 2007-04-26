@@ -36,26 +36,56 @@ import static org.fest.assertions.Assertions.assertThat;
 public abstract class AbstractWindowFixture<T extends Window> extends AbstractContainerFixture<T> implements WindowFixture<T> {
 
   /**
-   * Creates a new </code>{@link AbstractWindowFixture}</code>.
-   * @param robot performs simulation of user events on a <code>Window</code>.
-   * @param type the type of <code>Window</code> to find using the given <code>AbbotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * Creates a new </code>{@link AbstractWindowFixture}</code>. This constructor creates a new 
+   * <code>{@link RobotFixture}</code> containing the current AWT hierarchy.
+   * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
+   * @see RobotFixture#findByType(Class)
    */
-  public AbstractWindowFixture(RobotFixture robot, Class<T> type) {
-    super(robot, type);
+  public AbstractWindowFixture(Class<? extends T> type) {
+    this(robotWithCurrentAwtHierarchy(), type);
   }
 
   /**
    * Creates a new </code>{@link AbstractWindowFixture}</code>.
    * @param robot performs simulation of user events on a <code>Window</code>.
-   * @param name the name of the <code>Window</code> to find using the given <code>AbbotFixture</code>.
-   * @param type the type of <code>Window</code> to find using the given <code>AbbotFixture</code>.
+   * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
+   * @see RobotFixture#findByType(Class)
+   */
+  public AbstractWindowFixture(RobotFixture robot, Class<? extends T> type) {
+    super(robot, type);
+  }
+
+  /**
+   * Creates a new </code>{@link AbstractWindowFixture}</code>. This constructor creates a new 
+   * <code>{@link RobotFixture}</code> containing the current AWT hierarchy.
+   * @param name the name of the <code>Window</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
-  public AbstractWindowFixture(RobotFixture robot, String name, Class<T> type) {
+  public AbstractWindowFixture(String name, Class<? extends T> type) {
+    this(robotWithCurrentAwtHierarchy(), name, type);
+  }
+  
+  /**
+   * Creates a new </code>{@link AbstractWindowFixture}</code>.
+   * @param robot performs simulation of user events on a <code>Window</code>.
+   * @param name the name of the <code>Window</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
+   * @see RobotFixture#findByName(String, Class)
+   */
+  public AbstractWindowFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, name, type);
   }
 
+  /**
+   * Creates a new </code>{@link AbstractWindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * containing the current AWT hierarchy.
+   * @param target the window under test.
+   */
+  public AbstractWindowFixture(T target) {
+    this(robotWithCurrentAwtHierarchy(), target);
+  }
+  
   /**
    * Creates a new </code>{@link AbstractWindowFixture}</code>.
    * @param robot performs simulation of user events on the given window.
@@ -65,6 +95,10 @@ public abstract class AbstractWindowFixture<T extends Window> extends AbstractCo
     super(robot, target);
   }
 
+  private static RobotFixture robotWithCurrentAwtHierarchy() {
+    return new RobotFixture(RobotFixture.AwtHierarchy.CURRENT_AWT_HIERARCHY);
+  }
+  
   protected final void doShow() {
     robot.showWindow(target);
     assertIsVisible();

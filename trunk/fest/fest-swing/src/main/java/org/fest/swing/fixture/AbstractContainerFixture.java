@@ -1,15 +1,14 @@
 /*
  * Created on Apr 10, 2007
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  * 
  * Copyright @2007 the original author or authors.
  */
@@ -29,19 +28,16 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.RobotFixture;
 
-
 import abbot.finder.Matcher;
 import abbot.finder.matchers.JMenuItemMatcher;
-
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.util.Strings.join;
 
-
 /**
- * @param <T> the type of container handled by this fixture. 
- *
+ * @param <T> the type of container handled by this fixture.
+ * 
  * @author Alex Ruiz
  */
 public abstract class AbstractContainerFixture<T extends Container> extends AbstractComponentFixture<T> {
@@ -49,8 +45,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
   /**
    * Creates a new </code>{@link AbstractContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
-   * @param type the type of <code>Container</code> to find using the given <code>AbbotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
+   * @see RobotFixture#findByType(Class)
    */
   public AbstractContainerFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, robot.findByType(type));
@@ -59,14 +55,14 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
   /**
    * Creates a new </code>{@link AbstractContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param name the name of Container <code>Component</code> to find using the given <code>AbbotFixture</code>.
-   * @param type the type of <code>Container</code> to find using the given <code>AbbotFixture</code>.
+   * @param name the name of Container <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
   public AbstractContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, robot.findByName(name, type));
   }
-  
+
   /**
    * Creates a new </code>{@link AbstractContainerFixture}</code>.
    * @param robot performs simulation of user events on the given component.
@@ -118,11 +114,11 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    *          menu "File", we shoul call <code>findMenuItem("File", "Menu")</code>.
    * @return a fixture wrapping the found component.
    */
-  public final JMenuItemFixture findMenuItem(String...path) {
+  public final JMenuItemFixture findMenuItem(String... path) {
     Matcher m = new JMenuItemMatcher(join("|", path));
     Component item = robot.find(target, m);
     assertThat(item).isInstanceOf(JMenuItem.class);
-    return new JMenuItemFixture(robot, (JMenuItem)item);
+    return new JMenuItemFixture(robot, (JMenuItem) item);
   }
 
   /**

@@ -24,8 +24,6 @@ import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.RobotFixture;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -43,7 +41,7 @@ public class FrameFixtureTest {
   private JFrame frame;
   
   @BeforeClass public void setUp() {
-    frameFixture = new FrameFixture(new RobotFixture(), new JFrame());
+    frameFixture = new FrameFixture(new JFrame());
     frame = frameFixture.targetCastedTo(JFrame.class);
     frameFixture.show();
   }

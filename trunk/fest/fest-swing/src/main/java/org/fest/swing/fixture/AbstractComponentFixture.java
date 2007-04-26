@@ -43,8 +43,8 @@ public abstract class AbstractComponentFixture<T extends Component> implements C
   /**
    * Creates a new </code>{@link AbstractComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param type the type of <code>Component</code> to find using the given <code>AbbotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @param type the type of <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @see RobotFixture#findByType(Class)
    */
   public AbstractComponentFixture(RobotFixture robot, Class<? extends T> type) {
     this(robot, robot.findByType(type));
@@ -53,8 +53,8 @@ public abstract class AbstractComponentFixture<T extends Component> implements C
   /**
    * Creates a new </code>{@link AbstractComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param name the name of the <code>Component</code> to find using the given <code>AbbotFixture</code>.
-   * @param type the type of <code>Component</code> to find using the given <code>AbbotFixture</code>.
+   * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
   public AbstractComponentFixture(RobotFixture robot, String name, Class<? extends T> type) {

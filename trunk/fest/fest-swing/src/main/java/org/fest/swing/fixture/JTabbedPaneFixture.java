@@ -35,7 +35,7 @@ public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPa
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
-   * @param tabbedPaneName the name of the tabbed pane to find using the given <code>AbbotFixture</code>.
+   * @param tabbedPaneName the name of the tabbed pane to find using the given <code>RobotFixture</code>.
    * @see RobotFixture#findByName(String, Class)
    */
   public JTabbedPaneFixture(RobotFixture robot, String tabbedPaneName) {
