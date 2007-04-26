@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project name="fest-template" default="all" basedir=".">
 
-  <property name="src.dir" value="${basedir}/src/main"/>
-  <property name="src.java.main.dir" value="${src.dir}/java"/>
-  <property name="src.java.test.dir" value="${src.dir}/test"/>
+  <property name="src.dir" value="${basedir}/src"/>
+  <property name="src.java.main.dir" value="${src.dir}/main/java"/>
+  <property name="src.java.test.dir" value="${src.dir}/test/java"/>
 
   <property name="lib.dir" value="${basedir}/lib"/>
 
@@ -102,6 +102,7 @@
  	<target name="dist" depends="dist.src">
     <zip destfile="${target.dist.dir}/${project.name}-${time.stamp}.zip">
       <zipfileset dir="${src.dir}" prefix="src" />
+      <zipfileset dir="${lib.dir}" prefix="lib" />
       <fileset dir="${target.dist.dir}" includes="*.jar"/>
       <fileset dir="${target.dist.dir}" includes="*.zip"/>
     </zip>
