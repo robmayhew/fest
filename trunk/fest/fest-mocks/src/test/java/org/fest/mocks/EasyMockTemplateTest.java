@@ -51,6 +51,31 @@ public class EasyMockTemplateTest {
     client = new Client(server);
   }
   
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfArrayOfMocksIsNull() {
+    new EasyMockTemplate(new Object[0]) {
+      @Override protected void codeToTest() {}
+      @Override protected void expectations() {}
+    };
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfArrayOfMocksContainsNull() {
+    Object[] mocks = new Object[] { server, null };
+    new EasyMockTemplate(mocks) {
+      @Override protected void codeToTest() {}
+      @Override protected void expectations() {}
+    };
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfArrayOfMocksIsEmpty() {
+    new EasyMockTemplate((Object[])null) {
+      @Override protected void codeToTest() {}
+      @Override protected void expectations() {}
+    };    
+  }
+  
   @Test public void shouldSetAndVerifyExpectations() {
     final String arg = "name";
     EasyMockTemplate template = new EasyMockTemplate(server) {
