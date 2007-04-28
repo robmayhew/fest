@@ -38,13 +38,8 @@ public class Files {
    */
   public static List<String> fileNamesIn(String dirName, boolean recurse) {
     File dir = new File(dirName);
-    if (!isDirectory(dir))
-      throw new IllegalArgumentException(quote(dirName) + " is not a directory or does not exist");
+    if (!dir.isDirectory()) throw new IllegalArgumentException(quote(dirName) + " is not a directory or does not exist");
     return fileNamesIn(dir, recurse);
-  }
-
-  private static boolean isDirectory(File dir) {
-    return dir.exists() && dir.isDirectory();
   }
 
   /**
