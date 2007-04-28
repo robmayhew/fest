@@ -15,11 +15,13 @@
  */
 package org.fest.mocks;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import net.sf.cglib.proxy.Enhancer;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 /**
  * Understands a template for usage of <a href="http://www.easymock.org/" target="_blank">EasyMock</a> mocks.
@@ -33,17 +35,24 @@ public abstract class EasyMockTemplate {
     
   /**
    * Constructor.
-   * @param mocks the mock objects this template will manage.
-   * @throws IllegalArgumentException if the list of mock objects is null or empty.
-   * @throws IllegalArgumentException if the list of mock objects contains a null value.
+   * @param mocks the mocks for this template to manage.
+   * @throws IllegalArgumentException if the list of mock objects is <code>null</code> or empty.
+   * @throws IllegalArgumentException if any of the given mocks is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given mocks is not a mock.
    */ 
   public EasyMockTemplate(Object... mocks) {
     if (mocks == null) throw new IllegalArgumentException("The list of mock objects should not be null");
     if (mocks.length == 0) throw new IllegalArgumentException("The list of mock objects should not be empty");
     for (Object mock : mocks) {
       if (mock == null) throw new IllegalArgumentException("The list of mocks should not include null values");
-      this.mocks.add(mock);
+      this.mocks.add(checkAndReturnMock(mock));
     }
+  }
+  
+  private Object checkAndReturnMock(Object mock) {
+    if (Enhancer.isEnhanced(mock.getClass())) return mock;
+    if (Proxy.isProxyClass(mock.getClass())) return mock;
+    throw new IllegalArgumentException(mock + " is not a mock");
   }
    
   /**

@@ -19,7 +19,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.easymock.EasyMock.createMock;
-
+import static org.testng.Assert.*;
 /**
  * Unit tests for <code>{@link EasyMockTemplate}</code>.
  *
@@ -76,18 +76,59 @@ public class EasyMockTemplateTest {
     };    
   }
   
-  @Test public void shouldSetAndVerifyExpectations() {
-    final String arg = "name";
-    EasyMockTemplate template = new EasyMockTemplate(server) {
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfGivenObjectIsNotMock() {
+    new EasyMockTemplate(server, "Not a mock") {
+      @Override protected void codeToTest() {}
+      @Override protected void expectations() {}
+    };    
+  }
 
+  @Test public void shouldCompleteMockUsageCycle() {
+    final String arg = "name";
+    EasyMockTemplateStub template = new EasyMockTemplateStub(server) {
+      
       @Override protected void expectations() {
+        super.expectations();
         server.process(arg);  
       }
       
       @Override protected void codeToTest() {
+        super.codeToTest();
         client.delegateProcessToServer(arg);
       }
     };
     template.run();
+    assertEquals(template.setUpCallOrder, 1);
+    assertEquals(template.expectationsCallOrder, 2);
+    assertEquals(template.codeToTestCallOrder, 3);
   }
+
+  /**
+   * <code>{@link EasyMockTemplate}</code> that tracks the order in which its methods are called.
+   */
+  private static class EasyMockTemplateStub extends EasyMockTemplate {
+    int setUpCallOrder;
+    int expectationsCallOrder;
+    int codeToTestCallOrder;
+
+    int methodCallOrder;
+    
+    public EasyMockTemplateStub(Object... mocks) {
+      super(mocks);
+    }
+
+    @Override protected void setUp() {
+      setUpCallOrder = ++methodCallOrder;
+    }
+
+    @Override protected void expectations() {
+      expectationsCallOrder = ++methodCallOrder;
+    }
+    
+    @Override protected void codeToTest() {
+      codeToTestCallOrder = ++methodCallOrder;     
+    }
+  }
+
 }
