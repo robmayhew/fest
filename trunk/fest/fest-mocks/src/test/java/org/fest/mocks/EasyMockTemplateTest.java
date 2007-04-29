@@ -19,7 +19,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.easymock.EasyMock.createMock;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+
 /**
  * Unit tests for <code>{@link EasyMockTemplate}</code>.
  *
@@ -130,5 +131,4 @@ public class EasyMockTemplateTest {
       codeToTestCallOrder = ++methodCallOrder;     
     }
   }
-
 }
