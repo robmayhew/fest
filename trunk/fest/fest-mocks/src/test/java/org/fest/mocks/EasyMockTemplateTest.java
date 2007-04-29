@@ -16,6 +16,7 @@
 package org.fest.mocks;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.easymock.EasyMock.createMock;
@@ -77,12 +78,22 @@ public class EasyMockTemplateTest {
     };    
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldThrowExceptionIfGivenObjectIsNotMock() {
-    new EasyMockTemplate(server, "Not a mock") {
+  @Test(expectedExceptions = IllegalArgumentException.class, dataProvider = "notMocksProvider")
+  public void shouldThrowExceptionIfGivenObjectIsNotMock(Object[] mocks) {
+    new EasyMockTemplate(mocks) {
       @Override protected void codeToTest() {}
       @Override protected void expectations() {}
     };    
+  }
+
+  @DataProvider(name = "notMocksProvider")
+  public Object[][] notMocksProvider() {
+   return new Object[][] { 
+       { new Object[] { server, "Not a mock" } }, 
+       { new Object[] { "Not a mock" } }, 
+       { new Object[] { "Not a mock", "Not a mock either" } }, 
+       { new Object[] { "Not a mock", server } } 
+   };
   }
 
   @Test public void shouldCompleteMockUsageCycle() {
