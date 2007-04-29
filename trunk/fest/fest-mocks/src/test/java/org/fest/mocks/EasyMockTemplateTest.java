@@ -46,11 +46,11 @@ public class EasyMockTemplateTest {
   }
   
   private Client client;
-  private Server server;
+  private Server mockServer;
   
   @BeforeMethod public void setUp() {
-    server = createMock(Server.class);
-    client = new Client(server);
+    mockServer = createMock(Server.class);
+    client = new Client(mockServer);
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -63,7 +63,7 @@ public class EasyMockTemplateTest {
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfArrayOfMocksContainsNull() {
-    Object[] mocks = new Object[] { server, null };
+    Object[] mocks = new Object[] { mockServer, null };
     new EasyMockTemplate(mocks) {
       @Override protected void codeToTest() {}
       @Override protected void expectations() {}
@@ -89,20 +89,20 @@ public class EasyMockTemplateTest {
   @DataProvider(name = "notMocksProvider")
   public Object[][] notMocksProvider() {
    return new Object[][] { 
-       { new Object[] { server, "Not a mock" } }, 
+       { new Object[] { mockServer, "Not a mock" } }, 
        { new Object[] { "Not a mock" } }, 
        { new Object[] { "Not a mock", "Not a mock either" } }, 
-       { new Object[] { "Not a mock", server } } 
+       { new Object[] { "Not a mock", mockServer } } 
    };
   }
 
   @Test public void shouldCompleteMockUsageCycle() {
     final String arg = "name";
-    EasyMockTemplateStub template = new EasyMockTemplateStub(server) {
+    EasyMockTemplateStub template = new EasyMockTemplateStub(mockServer) {
       
       @Override protected void expectations() {
         super.expectations();
-        server.process(arg);  
+        mockServer.process(arg);  
       }
       
       @Override protected void codeToTest() {
@@ -111,18 +111,19 @@ public class EasyMockTemplateTest {
       }
     };
     template.run();
-    assertEquals(template.setUpCallOrder, 1);
-    assertEquals(template.expectationsCallOrder, 2);
-    assertEquals(template.codeToTestCallOrder, 3);
+    assertMethodCallOrder(template.setUp, template.expectations, template.codeToTest);
   }
 
-  /**
-   * <code>{@link EasyMockTemplate}</code> that tracks the order in which its methods are called.
-   */
+  private void assertMethodCallOrder(int... callOrders) {
+    int expected = 0;
+    for (int callOrder : callOrders) assertEquals(callOrder, ++expected);
+  }
+  
+  /** <code>{@link EasyMockTemplate}</code> that tracks the order in which its methods are called. */
   private static class EasyMockTemplateStub extends EasyMockTemplate {
-    int setUpCallOrder;
-    int expectationsCallOrder;
-    int codeToTestCallOrder;
+    int setUp;
+    int expectations;
+    int codeToTest;
 
     int methodCallOrder;
     
@@ -131,15 +132,15 @@ public class EasyMockTemplateTest {
     }
 
     @Override protected void setUp() {
-      setUpCallOrder = ++methodCallOrder;
+      setUp = ++methodCallOrder;
     }
 
     @Override protected void expectations() {
-      expectationsCallOrder = ++methodCallOrder;
+      expectations = ++methodCallOrder;
     }
     
     @Override protected void codeToTest() {
-      codeToTestCallOrder = ++methodCallOrder;     
+      codeToTest = ++methodCallOrder;     
     }
   }
 }
