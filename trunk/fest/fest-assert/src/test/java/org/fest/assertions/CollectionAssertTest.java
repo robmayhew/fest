@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 import static java.util.logging.Level.INFO;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Objects.asList;
 
 /**
  * Unit tests for <code>{@link CollectionAssert}</code>.
@@ -36,10 +37,9 @@ public class CollectionAssertTest {
   
   @Test() 
   public void shouldFailIfCollectionHasDuplicates() {
-    List<String> withDuplicates = collectionWithoutDuplicates();
-    withDuplicates.add("Luke");
+    List<String> list = asList("Luke", "Yoda", "Luke");
     try {
-      new CollectionAssert<String>(withDuplicates).doesNotHaveDuplicates();
+      new CollectionAssert<String>(list).doesNotHaveDuplicates();
       fail("Should have failed");
     } catch (AssertionError e) {
       String message = e.getMessage();
@@ -49,7 +49,7 @@ public class CollectionAssertTest {
   }
   
   @Test public void shouldSucceedIfCollectionDoesNotHaveDuplicates() {
-    new CollectionAssert<String>(collectionWithoutDuplicates()).doesNotHaveDuplicates();
+    new CollectionAssert<String>(asList("Luke", "Yoda")).doesNotHaveDuplicates();
   }
 
   @Test public void shouldSucceedIfCollectionIsEmpty() {
@@ -62,7 +62,7 @@ public class CollectionAssertTest {
   
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfCollectionIsNotEmpty() {
-    new CollectionAssert<String>(collectionWithoutDuplicates()).isEmpty();
+    new CollectionAssert<String>(asList("Yoda")).isEmpty();
   }
   
   @Test public void shouldPassIfCollectionIsEmpty() {
@@ -72,12 +72,5 @@ public class CollectionAssertTest {
   @Test public void shouldPassIfCollectionIsNull() {
     List<String> nullList = null;
     new CollectionAssert<String>(nullList).isEmpty();
-  }
-
-  private List<String> collectionWithoutDuplicates() {
-    List<String> withoutDuplicates = new ArrayList<String>();
-    withoutDuplicates.add("Luke");
-    withoutDuplicates.add("Yoda");
-    return withoutDuplicates;
   }
 }
