@@ -44,7 +44,7 @@ public class CollectionAssertTest {
     } catch (AssertionError e) {
       String message = e.getMessage();
       logger.log(INFO, message);
-      new StringAssert(message).containsText("Luke");
+      new StringAssert(message).constainsString("Luke");
     }
   }
   

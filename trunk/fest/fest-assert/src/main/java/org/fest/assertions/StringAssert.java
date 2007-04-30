@@ -23,6 +23,7 @@ import static org.fest.assertions.Fail.failIfNotEqual;
 
 import static org.fest.util.Strings.quote;
 
+import static org.fest.util.Strings.*;
 
 /**
  * Understands constraints on Strings.
@@ -38,7 +39,7 @@ public final class StringAssert {
   }
   
   public StringAssert isEmpty() {
-    if (!Strings.isEmpty(actual)) fail("the String " + quote(actual) + " should be empty");
+    if (!Strings.isEmpty(actual)) fail(concat("the String ", quote(actual), " should be empty"));
     return this;
   }
   
@@ -47,8 +48,9 @@ public final class StringAssert {
     return this;
   }
   
-  public StringAssert containsText(String expected) {
-    if (actual.indexOf(expected) == -1) fail("the String " + quote(actual) + " should contain the String " + quote(expected));
+  public StringAssert constainsString(String expected) {
+    if (actual.indexOf(expected) == -1) 
+      fail(concat("the String ", quote(actual), " should contain the String ", quote(expected)));
     return this;
   }
 }

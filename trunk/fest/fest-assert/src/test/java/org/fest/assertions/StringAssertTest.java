@@ -49,11 +49,11 @@ public class StringAssertTest {
   } 
 
   @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfStringDoesNotContainGivenText() {
-    new StringAssert("Luke").containsText("Yoda");
+  public void shouldFailIfStringDoesNotContainGivenString() {
+    new StringAssert("Luke").constainsString("Yoda");
   }
 
-  @Test public void shouldSucceedIfStringContainsGivenText() {
-    new StringAssert("Anakin").containsText("akin");
+  @Test public void shouldSucceedIfStringContainsGivenString() {
+    new StringAssert("Anakin").constainsString("akin");
   } 
 }

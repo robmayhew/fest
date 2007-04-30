@@ -17,15 +17,14 @@ package org.fest.assertions;
 
 import java.util.Arrays;
 
-
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfEqual;
 import static org.fest.assertions.Fail.failIfNotEqual;
 import static org.fest.assertions.Fail.failIfNotNull;
 import static org.fest.assertions.Fail.failIfNotSame;
 import static org.fest.assertions.Fail.failIfNull;
-
 import static org.fest.util.Objects.namesOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands constraints on objects.
@@ -44,7 +43,7 @@ public final class ObjectAssert {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
     if (!type.isAssignableFrom(current))
-      fail("expected instance of:<" + type.getName() + "> but was instance of:<" + current.getName() + ">");
+      fail(concat("expected instance of:<", type.getName(), "> but was instance of:<", current.getName(), ">"));
     return this;
   }
   
@@ -52,8 +51,8 @@ public final class ObjectAssert {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
     for (Class<?> type : types) if (type.isAssignableFrom(current)) return this;
-    fail("expected instance of any:<" + Arrays.toString(namesOf(types)) + "> but was instance of:<" + current.getName()
-        + ">");   
+    fail(concat("expected instance of any:<", Arrays.toString(namesOf(types)), "> but was instance of:<", 
+        current.getName(), ">"));   
     return this;
   }
   
