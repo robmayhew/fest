@@ -16,6 +16,7 @@
 package org.fest.assertions;
 
 import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands failure methods.
@@ -79,7 +80,7 @@ public final class Fail {
    * @throws AssertionError if the given object is not <code>null</code>.
    */
   static void failIfNotNull(Object o) {
-    if (o != null) fail("<" + o + "> should not be null");
+    if (o != null) fail(concat("<", o, "> should not be null"));
   }
 
   /**
@@ -89,7 +90,7 @@ public final class Fail {
    * @throws AssertionError if the given objects are the same instance.
    */
   static void failIfSame(Object first, Object second) {
-    if (first == second) fail("same objects:<" + first + ">");
+    if (first == second) fail(concat("same objects:<", first, ">"));
   }
   
   /**
@@ -99,7 +100,7 @@ public final class Fail {
    * @throws AssertionError if the given objects are not the same instance.
    */
   static void failIfNotSame(Object actual, Object expected) {
-    if (actual != expected) fail("expected same with:<" + expected + "> but was:<" + actual + ">");
+    if (actual != expected) fail(concat("expected same with:<", expected, "> but was:<", actual, ">"));
   }
   
   /**
@@ -118,7 +119,7 @@ public final class Fail {
    * @return an error message to be used when two objects that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(Object actual, Object expected) {
-    return "expected:<" + expected + "> but was:<" + actual + ">";
+    return concat("expected:<", expected, "> but was:<", actual, ">");
   }
   
   /**
@@ -128,7 +129,7 @@ public final class Fail {
    * @return an error message to be used when two objects that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(Object first, Object second) {
-    return "<" + first + "> should not be equal to <" + second + ">";
+    return concat("<", first, "> should not be equal to <", second, ">");
   }
   
   private Fail() {}

@@ -15,16 +15,12 @@
  */
 package org.fest.assertions;
 
+import org.testng.annotations.Test;
+
 import static java.io.File.separator;
 
-import org.fest.assertions.Commons;
-
-
-
 import static org.fest.assertions.Assertions.assertThat;
-
-
-import org.testng.annotations.Test;
+import static org.fest.util.Strings.concat;
 
 /**
  * Unit tests for <code>{@link Commons}</code>.
@@ -34,13 +30,13 @@ import org.testng.annotations.Test;
 public class CommonsTest {
 
   @Test public void shouldReturnPathFromGivenPackageName() {
-    String expected = "org" + separator + "fest" + separator + "assertions" + separator;
+    String expected = concat("org", separator, "fest", separator, "assertions", separator);
     assertThat(Commons.packageNameAsPath("org.fest.assertions")).isEqualTo(expected);
   }
   
   @Test public void shouldReturnPathFromPackageOfGivenClass() {
     Class<?> c = getClass();
-    String expected = "org" + separator + "fest" + separator + "assertions" + separator;
+    String expected = concat("org", separator, "fest", separator, "assertions", separator);
     assertThat(Commons.packageNameAsPathFrom(c)).isEqualTo(expected);
   }
 }

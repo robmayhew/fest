@@ -1,5 +1,5 @@
 /*
- * Created on Apr 22, 2007
+ * Created on Apr 29, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -22,6 +22,7 @@ import static org.fest.assertions.Fail.failIfNotNull;
 import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands assertions for <code>byte</code> arrays. 
@@ -48,7 +49,7 @@ public final class ByteArrayAssert {
   }
   
   public ByteArrayAssert isEmpty() {
-    if (actual.length > 0) fail("expecting empty array, but was <" + Arrays.toString(actual) + ">");
+    if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
     return this;
   }
 

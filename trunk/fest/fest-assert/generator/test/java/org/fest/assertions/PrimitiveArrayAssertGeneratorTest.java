@@ -16,25 +16,18 @@
 package org.fest.assertions;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fest.assertions.PrimitiveArrayAssertGenerator;
-
-
-
-import static java.io.File.separator;
-
-
-import static org.fest.assertions.Commons.packageNameAsPathFrom;
-
-import static org.fest.util.Strings.*;
-
-import static org.testng.Assert.assertTrue;
-
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
+import static org.fest.assertions.SourceFolders.TEST_FOLDER;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
+import static org.testng.Assert.assertTrue;
 
 /**
  * Unit tests for <code>{@link PrimitiveArrayAssertGenerator}</code>.
@@ -42,25 +35,6 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  */
 public class PrimitiveArrayAssertGeneratorTest {
-
-  private static final String JAVA_PACKAGE_PATH = fullPathFor(join(separator, mainFolder(), "java"));
-  private static final String TEST_PACKAGE_PATH = fullPathFor(join(separator, mainFolder(), "test"));
-
-  private static String fullPathFor(String sourceFolder) {
-    return join(separator, sourceFolder, packageNameAsPathFrom(PrimitiveArrayAssertGeneratorTest.class));
-  }
-  
-  private static String mainFolder() {
-    return join(separator, currentFolder(), "src", "main");
-  }
-
-  private static String currentFolder() {
-    try {
-      return new File(".").getCanonicalPath();
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to get the path of current folder", e);
-    }
-  }
 
   private static final List<String> EXPECTED_GENERATED_JAVA_FILES = new ArrayList<String>();
   static {
@@ -75,7 +49,7 @@ public class PrimitiveArrayAssertGeneratorTest {
   }
   
   private static String javaFilePath(String javaFileName) {
-    return JAVA_PACKAGE_PATH + javaFileName;
+    return concat(MAIN_FOLDER.packageNameAsAbsolutePath(), javaFileName);
   }
   
   private static final List<String> EXPECTED_GENERATED_TEST_FILES = new ArrayList<String>();
@@ -91,7 +65,7 @@ public class PrimitiveArrayAssertGeneratorTest {
   }
   
   private static String testFilePath(String javaFileName) {
-    return TEST_PACKAGE_PATH + javaFileName;
+    return concat(TEST_FOLDER.packageNameAsAbsolutePath(), javaFileName);
   }
   
   private PrimitiveArrayAssertGenerator generator;
@@ -109,7 +83,7 @@ public class PrimitiveArrayAssertGeneratorTest {
   private void assertThatFileExists(String filePath) {
     File file = new File(filePath);
     String absolutePath = file.getAbsolutePath();
-    assertTrue(file.exists(), "file " + quote(absolutePath) + "should exist");
+    assertTrue(file.exists(), concat("file ", quote(absolutePath), "should exist"));
     assertTrue(file.isFile());
     assertTrue(file.getTotalSpace() > 0);
   }

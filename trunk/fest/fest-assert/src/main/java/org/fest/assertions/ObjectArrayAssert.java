@@ -22,6 +22,7 @@ import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfNotNull;
 import static org.fest.assertions.Fail.failIfNull;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands assertions for <code>Object</code> arrays. 
@@ -48,7 +49,7 @@ public final class ObjectArrayAssert {
   }
   
   public ObjectArrayAssert isEmpty() {
-    if (actual.length > 0) fail("expecting empty array, but was <" + Arrays.toString(actual) + ">");
+    if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
     return this;
   }
 

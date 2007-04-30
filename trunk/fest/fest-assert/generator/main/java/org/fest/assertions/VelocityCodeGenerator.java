@@ -28,11 +28,12 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
-import static org.fest.assertions.Commons.packageNameAsPathFrom;
 
-import static java.io.File.separator;
+import static org.fest.assertions.Commons.packageNameAsPathFrom;
+import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
+import static org.fest.assertions.SourceFolders.TEST_FOLDER;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a template for code generators using Apache Velocity.
@@ -43,12 +44,6 @@ abstract class VelocityCodeGenerator {
 
   static final Logger logger = Logger.getAnonymousLogger();
   
-  static class SourceFolders {
-    static final String ROOT = "src" + separator + "main" + separator;
-    static final String JAVA = ROOT + "java" + separator;
-    static final String TEST = ROOT + "test" + separator;
-  }
-
   final String packageNameAsPath;
 
   public VelocityCodeGenerator() throws Exception {
@@ -59,29 +54,25 @@ abstract class VelocityCodeGenerator {
   private void setUpVelocity() throws Exception {
     Properties p = new Properties();
     p.setProperty(RESOURCE_LOADER, "classpath");
-    p.setProperty("classpath." + RESOURCE_LOADER + ".class", ClasspathResourceLoader.class.getName());
+    p.setProperty(concat("classpath.", RESOURCE_LOADER, ".class"), ClasspathResourceLoader.class.getName());
     Velocity.init(p);
   }
 
   abstract void generate() throws Exception;
   
-  final void generateJavaFile(String className, VelocityContext context) throws Exception {
-    String javaFilePath = SourceFolders.JAVA + filePathFor(className);
+  final void generateJavaFile(String javaClassName, VelocityContext context) throws Exception {
+    String javaFilePath = MAIN_FOLDER.filePathFor(javaClassName);
     generateFile(javaFilePath, javaFileTemplate(), context);
   }
 
   abstract Template javaFileTemplate();
 
-  final void generateTestFile(String testName, VelocityContext context) throws Exception {
-    String testFilePath = SourceFolders.TEST + filePathFor(testName);
+  final void generateTestFile(String testClassName, VelocityContext context) throws Exception {
+    String testFilePath = TEST_FOLDER.filePathFor(testClassName);
     generateFile(testFilePath, testFileTemplate(), context);
   }
   
   abstract Template testFileTemplate();
-
-  private String filePathFor(String className) {
-    return packageNameAsPath + className + ".java";
-  }
 
   private void generateFile(String fileToGeneratePath, Template template, VelocityContext context) throws Exception {
     Writer writer = null;
@@ -101,7 +92,7 @@ abstract class VelocityCodeGenerator {
   }
   
   private void logFileCreated(String fileName) {
-    logger.info("File " + fileName + " generated!");
+    logger.info(concat("File ", fileName, " generated!"));
   }
   
   private void flushAndClose(Writer writer) {

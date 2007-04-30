@@ -21,8 +21,9 @@ import org.apache.velocity.tools.generic.DateTool;
 
 import static java.util.logging.Level.SEVERE;
 import static org.apache.velocity.util.StringUtils.capitalizeFirstLetter;
-import static org.fest.util.Strings.join;
 
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.join;
 
 /**
  * Understands generation of assertion methods for arrays of primitives.
@@ -36,8 +37,8 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
   private final Template testFileTemplate;
   
   PrimitiveArrayAssertGenerator() throws Exception {
-    javaFileTemplate = Velocity.getTemplate(packageNameAsPath + "ArrayAssertTemplate.vm");
-    testFileTemplate = Velocity.getTemplate(packageNameAsPath + "ArrayAssertTestTemplate.vm");
+    javaFileTemplate = Velocity.getTemplate(concat(packageNameAsPath, "ArrayAssertTemplate.vm"));
+    testFileTemplate = Velocity.getTemplate(concat(packageNameAsPath, "ArrayAssertTestTemplate.vm"));
   }
   
   void generate() throws Exception {
@@ -57,8 +58,8 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
 
   private void generate(Class<?> arrayType, TestArrays testArrays) throws Exception {
     String arrayTypeName = arrayType.getSimpleName();
-    String className = capitalizeFirstLetter(arrayTypeName) + "ArrayAssert";
-    String testName = className + "Test";
+    String className = concat(capitalizeFirstLetter(arrayTypeName), "ArrayAssert");
+    String testName = concat(className, "Test");
     VelocityContext context = new VelocityContext();
     context.put("arrayType", arrayTypeName);
     context.put("className", className);

@@ -17,6 +17,8 @@ package org.fest.assertions;
 
 import static java.io.File.separator;
 
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands common utility methods.
  *
@@ -29,7 +31,7 @@ public final class Commons {
   }
   
   public static String packageNameAsPath(String packageName) {
-    return packageName.replace(".", separator) + separator;
+    return concat(packageName.replace(".", separator), separator);
   }
   
   private Commons() {}
