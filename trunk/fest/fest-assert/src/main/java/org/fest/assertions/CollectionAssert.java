@@ -15,13 +15,13 @@
  */
 package org.fest.assertions;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+
+import org.fest.util.Collections;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Collections.duplicatesFrom;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands assertions for collections.
@@ -38,16 +38,13 @@ public final class CollectionAssert<T> {
   }
 
   public CollectionAssert doesNotHaveDuplicates() {
-    if (actual == null || actual.isEmpty()) return this;
-    HashSet<T> withoutDuplicates = new HashSet<T>();
-    List<T> duplicates = new ArrayList<T>();
-    for (T element : actual) if (!withoutDuplicates.add(element)) duplicates.add(element);
+    Collection<T> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty()) fail(concat("The collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
   }
 
-  public void isEmpty() {
-    if (actual == null || actual.isEmpty()) return;
-    fail(concat("The collection ", actual, " is not empty"));
+  public CollectionAssert isEmpty() {
+    if (!Collections.isEmpty(actual)) fail(concat("The collection ", actual, " is not empty"));
+    return this;
   }
 }
