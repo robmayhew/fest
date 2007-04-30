@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands assertions for collections.
@@ -41,7 +42,12 @@ public final class CollectionAssert<T> {
     HashSet<T> withoutDuplicates = new HashSet<T>();
     List<T> duplicates = new ArrayList<T>();
     for (T element : actual) if (!withoutDuplicates.add(element)) duplicates.add(element);
-    if (!duplicates.isEmpty()) fail("The collection " + actual + " contains duplicates (" + duplicates + ")");
+    if (!duplicates.isEmpty()) fail(concat("The collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
+  }
+
+  public void isEmpty() {
+    if (actual == null || actual.isEmpty()) return;
+    fail(concat("The collection ", actual, " is not empty"));
   }
 }

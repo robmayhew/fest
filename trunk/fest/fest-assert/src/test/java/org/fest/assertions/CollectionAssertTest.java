@@ -23,6 +23,8 @@ import org.testng.annotations.Test;
 
 import static java.util.logging.Level.INFO;
 
+import static org.fest.assertions.Fail.fail;
+
 /**
  * Unit tests for <code>{@link CollectionAssert}</code>.
  *
@@ -34,23 +36,20 @@ public class CollectionAssertTest {
   
   @Test() 
   public void shouldFailIfCollectionHasDuplicates() {
-    List<String> withDuplicates = new ArrayList<String>();
-    withDuplicates.add("Luke");
-    withDuplicates.add("Yoda");
+    List<String> withDuplicates = collectionWithoutDuplicates();
     withDuplicates.add("Luke");
     try {
       new CollectionAssert<String>(withDuplicates).doesNotHaveDuplicates();
+      fail("Should have failed");
     } catch (AssertionError e) {
-      logger.log(INFO, e.getMessage());
-      new StringAssert(e.getMessage()).containsText("Luke");
+      String message = e.getMessage();
+      logger.log(INFO, message);
+      new StringAssert(message).containsText("Luke");
     }
   }
   
   @Test public void shouldSucceedIfCollectionDoesNotHaveDuplicates() {
-    List<String> withoutDuplicates = new ArrayList<String>();
-    withoutDuplicates.add("Luke");
-    withoutDuplicates.add("Yoda");
-    new CollectionAssert<String>(withoutDuplicates).doesNotHaveDuplicates();
+    new CollectionAssert<String>(collectionWithoutDuplicates()).doesNotHaveDuplicates();
   }
 
   @Test public void shouldSucceedIfCollectionIsEmpty() {
@@ -59,5 +58,26 @@ public class CollectionAssertTest {
 
   @Test public void shouldSucceedIfCollectionIsNull() {
     new CollectionAssert<String>(null).doesNotHaveDuplicates();
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfCollectionIsNotEmpty() {
+    new CollectionAssert<String>(collectionWithoutDuplicates()).isEmpty();
+  }
+  
+  @Test public void shouldPassIfCollectionIsEmpty() {
+    new CollectionAssert<String>(new ArrayList<String>()).isEmpty();
+  }
+  
+  @Test public void shouldPassIfCollectionIsNull() {
+    List<String> nullList = null;
+    new CollectionAssert<String>(nullList).isEmpty();
+  }
+
+  private List<String> collectionWithoutDuplicates() {
+    List<String> withoutDuplicates = new ArrayList<String>();
+    withoutDuplicates.add("Luke");
+    withoutDuplicates.add("Yoda");
+    return withoutDuplicates;
   }
 }

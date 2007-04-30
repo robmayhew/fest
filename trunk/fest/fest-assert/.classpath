@@ -10,6 +10,5 @@
 	<classpathentry kind="lib" path="lib/generator/velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/generator/velocity-tools-generic-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/generator/velocity-dep-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/main/fest-util-0.1-042907.jar" sourcepath="lib/main/fest-util-0.1-042907-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
