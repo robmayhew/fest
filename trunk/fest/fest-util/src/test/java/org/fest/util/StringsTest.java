@@ -74,7 +74,7 @@ public class StringsTest {
   }
   
   @Test public void shouldReturnNullIfArrayOfStringsToConcatenateIsNull() {
-    assertNull(Strings.concat((String[])null));
+    assertNull(Strings.concat((Object[])null));
   }
   
   @Test public void shouldConcatenateGivenStrings() {

@@ -46,10 +46,10 @@ public final class Strings {
     return b.toString();
   }
   
-  public static String concat(String... strings) {
-    if (Objects.isEmpty(strings)) return null;
+  public static String concat(Object... objects) {
+    if (Objects.isEmpty(objects)) return null;
     StringBuilder b = new StringBuilder();
-    for (String s : strings) b.append(s);
+    for (Object o : objects) b.append(o);
     return b.toString();
   }
   
