@@ -46,5 +46,12 @@ public final class Strings {
     return b.toString();
   }
   
+  public static String concat(String... strings) {
+    if (Objects.isEmpty(strings)) return null;
+    StringBuilder b = new StringBuilder();
+    for (String s : strings) b.append(s);
+    return b.toString();
+  }
+  
   private Strings() {}
 }

@@ -72,4 +72,12 @@ public class StringsTest {
   @Test public void shouldJoinArrayUsingDelimeter() {
     assertEquals(Strings.join("|", "Luke", "Leia", "Han"), "Luke|Leia|Han");
   }
+  
+  @Test public void shouldReturnNullIfArrayOfStringsToConcatenateIsNull() {
+    assertNull(Strings.concat((String[])null));
+  }
+  
+  @Test public void shouldConcatenateGivenStrings() {
+    assertEquals(Strings.concat("One", "Two", "Three"), "OneTwoThree");
+  }
 }
