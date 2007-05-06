@@ -53,7 +53,7 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
   }
 
   private String array(String...elements) {
-    return join(", ", elements);
+    return join(elements).with(", ");
   }
 
   private void generate(Class<?> arrayType, TestArrays testArrays) throws Exception {
