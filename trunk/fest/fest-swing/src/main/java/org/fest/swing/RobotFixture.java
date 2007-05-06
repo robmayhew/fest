@@ -36,6 +36,8 @@ import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 import static java.lang.System.currentTimeMillis;
 
+import static org.fest.util.Strings.*;
+
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code> and check the output. Useful for 
  * creation of programmatic tests with Abbot and TestNG (or JUnit 4).
@@ -147,7 +149,7 @@ public final class RobotFixture {
     while ((Robot.getEventMode() == Robot.EM_ROBOT && !windowTracker.isWindowReady(w)) || w.isShowing() != true) {
       long elapsed = currentTimeMillis() - start;
       if (elapsed > WINDOW_DELAY) 
-        throw new RuntimeException("Timed out waiting for Window to open (" + elapsed + "ms)");
+        throw new RuntimeException(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
       robot.sleep();
     }
   }

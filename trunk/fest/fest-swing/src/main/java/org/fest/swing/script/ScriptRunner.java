@@ -14,10 +14,6 @@
  */
 package org.fest.swing.script;
 
-import static org.fest.util.Files.*;
-import static org.fest.util.Objects.*;
-import static org.fest.util.Strings.quote;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +24,10 @@ import abbot.finder.Hierarchy;
 import abbot.script.Script;
 import abbot.script.StepRunner;
 import abbot.util.AWTFixtureHelper;
-
+import static org.fest.util.Files.fileNamesIn;
+import static org.fest.util.Objects.isEmpty;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands how to run one or more Abbot scripts.
@@ -116,14 +115,14 @@ public final class ScriptRunner {
     StepRunner runner = new StepRunner(new AWTFixtureHelper());
     AWTHierarchy.setDefault(runner.getHierarchy());
     Script script = new Script(scriptName, DUMMY_HIERARCHY);
-    logger.info("Running " + quote(script));
+    logger.info(concat("Running ", quote(script)));
     try {
       runner.run(script);
       successfulScripts.add(scriptName);
     } catch (Throwable t) {
       throw new ScriptFailure(scriptName, t);
     } finally {
-      logger.info(quote(scriptName) + " finished");
+      logger.info(concat(quote(scriptName), " finished"));
     }
   }
 

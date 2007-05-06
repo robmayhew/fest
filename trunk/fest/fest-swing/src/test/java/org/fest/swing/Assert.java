@@ -32,6 +32,6 @@ import static org.fest.swing.Files.absolutePath;
 public final class Assert {
 
   public static void assertScriptFailed(ScriptFailure failure, String dirName, String fileName) {
-    assertThat(failure.getMessage()).containsText(absolutePath(dirName, fileName));
+    assertThat(failure.getMessage()).constainsString(absolutePath(dirName, fileName));
   }
 }

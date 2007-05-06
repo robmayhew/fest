@@ -27,7 +27,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import static java.io.File.separator;
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
 
 import org.testng.ITestContext;
@@ -59,7 +61,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   
   @Override public void onStart(ITestContext context) {
     output = context.getOutputDirectory();
-    logger.info("TestNG output directory: " + quote(output));
+    logger.info(concat("TestNG output directory: ", quote(output)));
     ready = !isEmpty(output) && robot != null;
   }
 
@@ -68,14 +70,14 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
     String screenshotFileName = takeScreenshotAndReturnFileName(result);
     if (isEmpty(screenshotFileName)) return;
     Reporter.setCurrentTestResult(result);
-    Reporter.log("<a href=\"" + screenshotFileName +"\">Screenshot</a>");
+    Reporter.log(concat("<a href=\"", screenshotFileName, "\">Screenshot</a>"));
   }
 
   private String takeScreenshotAndReturnFileName(ITestResult result) {
     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
     BufferedImage screenshot = robot.createScreenCapture(screen);
-    String name = result.getTestClass().getName() + "." + result.getMethod().getMethodName() + "." + IMAGE_FILE_EXTENSION;
-    File imageFile = new File(output + separator + name);
+    String name = join(".", result.getTestClass().getName(), result.getMethod().getMethodName(), IMAGE_FILE_EXTENSION);
+    File imageFile = new File(concat(output, separator, name));
     try {
       ImageIO.write(screenshot, IMAGE_FILE_EXTENSION, imageFile);
     } catch (IOException e) {

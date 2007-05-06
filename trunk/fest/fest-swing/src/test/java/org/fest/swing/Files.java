@@ -18,6 +18,7 @@ package org.fest.swing;
 import java.io.File;
 
 import static java.io.File.separator;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands file-related utility methods to be used for testing.
@@ -27,7 +28,7 @@ import static java.io.File.separator;
 public final class Files {
 
   public static String absolutePath(String dirName, String fileName) {
-    return new File(dirName + separator + fileName).getAbsolutePath();
+    return new File(concat(dirName, separator, fileName)).getAbsolutePath();
   }
   
   private Files() {}

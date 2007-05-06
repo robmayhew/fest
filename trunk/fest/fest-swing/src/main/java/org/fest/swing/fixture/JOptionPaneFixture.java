@@ -22,22 +22,18 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.RobotFixture;
-
-
 import abbot.finder.Matcher;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.util.Objects.areEqual;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.concat;
 
-
+import org.fest.swing.ComponentLookupException;
+import org.fest.swing.RobotFixture;
 
 /**
  * Understands simulation of user events and state verification of a <code>{@link JOptionPane}</code>.
@@ -182,7 +178,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
     if (messageType == WARNING_MESSAGE) return "Warning Message";
     if (messageType == QUESTION_MESSAGE) return "Question Message";
     if (messageType == PLAIN_MESSAGE) return "Plain Message";
-    throw new IllegalArgumentException("The message type <" + messageType + "> is not valid");
+    throw new IllegalArgumentException(concat("The message type <", messageType, "> is not valid"));
   }
 
   /** {@inheritDoc} */
