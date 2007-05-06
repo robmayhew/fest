@@ -115,7 +115,7 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @return a fixture wrapping the found component.
    */
   public final JMenuItemFixture findMenuItem(String... path) {
-    Matcher m = new JMenuItemMatcher(join("|", path));
+    Matcher m = new JMenuItemMatcher(join(path).with("|"));
     Component item = robot.find(target, m);
     assertThat(item).isInstanceOf(JMenuItem.class);
     return new JMenuItemFixture(robot, (JMenuItem) item);
