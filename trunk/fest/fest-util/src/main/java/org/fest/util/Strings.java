@@ -33,24 +33,36 @@ public final class Strings {
     return o instanceof String ? quote(o.toString()) : o;
   }
 
-  public static String join(String delimeter, String...strings) {
-    if (delimeter == null) throw new IllegalArgumentException("Delimiter should not be null");
-    if (Objects.isEmpty(strings)) return "";
-    StringBuilder b = new StringBuilder();
-    int stringCount = strings.length;
-    for (int i = 0; i < stringCount; i++) {
-      String s = strings[i];
-      b.append(s != null ? s : "");
-      if (i < stringCount - 1) b.append(delimeter);
-    }
-    return b.toString();
-  }
-  
   public static String concat(Object... objects) {
     if (Objects.isEmpty(objects)) return null;
     StringBuilder b = new StringBuilder();
     for (Object o : objects) b.append(o);
     return b.toString();
+  }
+  
+  public static StringsToJoin join(String...strings) {
+    return new StringsToJoin(strings);
+  }
+  
+  public static class StringsToJoin {
+    private final String[] strings;
+
+    StringsToJoin(String...strings) {
+      this.strings = strings;
+    }
+    
+    public String with(String delimeter) {
+      if (delimeter == null) throw new IllegalArgumentException("Delimiter should not be null");
+      if (Objects.isEmpty(strings)) return "";
+      StringBuilder b = new StringBuilder();
+      int stringCount = strings.length;
+      for (int i = 0; i < stringCount; i++) {
+        String s = strings[i];
+        b.append(s != null ? s : "");
+        if (i < stringCount - 1) b.append(delimeter);
+      }
+      return b.toString();
+    }
   }
   
   private Strings() {}

@@ -62,15 +62,15 @@ public class StringsTest {
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfDelimeterIsNull() {
-    Strings.join(null, "Uno", "Dos");
+    Strings.join(null, "Uno", "Dos").with(null);
   }
   
   @Test public void shouldReturnEmptyStringIfArrayToJoinIsNull() {
-    assertEquals(Strings.join("|", (String[])null), "");
+    assertEquals(Strings.join((String[])null).with("|"), "");
   }
   
   @Test public void shouldJoinArrayUsingDelimeter() {
-    assertEquals(Strings.join("|", "Luke", "Leia", "Han"), "Luke|Leia|Han");
+    assertEquals(Strings.join("Luke", "Leia", "Han").with("|"), "Luke|Leia|Han");
   }
   
   @Test public void shouldReturnNullIfArrayOfStringsToConcatenateIsNull() {
