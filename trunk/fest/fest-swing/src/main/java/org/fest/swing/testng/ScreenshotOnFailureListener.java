@@ -76,7 +76,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   private String takeScreenshotAndReturnFileName(ITestResult result) {
     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
     BufferedImage screenshot = robot.createScreenCapture(screen);
-    String name = join(result.getTestClass().getName(), result.getMethod().getMethodName(), IMAGE_FILE_EXTENSION).with(".");
+    String name = join(classNameFrom(result), methodNameFrom(result), IMAGE_FILE_EXTENSION).with(".");
     File imageFile = new File(concat(output, separator, name));
     try {
       ImageIO.write(screenshot, IMAGE_FILE_EXTENSION, imageFile);
@@ -85,5 +85,13 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
       return null;
     }
     return name;
+  }
+
+  private String methodNameFrom(ITestResult result) {
+    return result.getMethod().getMethodName();
+  }
+
+  private String classNameFrom(ITestResult result) {
+    return result.getTestClass().getName();
   }
 }
