@@ -122,7 +122,7 @@ public class JButtonFixtureTest {
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldReturnButtonText() {
-    assertThat(secondButtonFixture.text()).isEqualTo("1Second Button");
+    assertThat(secondButtonFixture.text()).isEqualTo("Second Button");
   }
   
   @AfterClass public void tearDown() {
