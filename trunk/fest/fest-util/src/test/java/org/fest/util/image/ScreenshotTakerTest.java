@@ -28,14 +28,14 @@ public class ScreenshotTakerTest {
 
   @Test(expectedExceptions = ImageException.class) 
   public void shouldThrowErrorIfRobotCannotBeCreated() {
-    boolean headless = Boolean.valueOf(System.getProperty(JAVA_AWT_HEADLESS));
-    updateHeadlessProperty(true);
+    String headless = System.getProperty(JAVA_AWT_HEADLESS);
+    updateHeadlessProperty(String.valueOf(true));
     new ScreenshotTaker();
     updateHeadlessProperty(headless);
   }
 
-  private void updateHeadlessProperty(boolean value) {
-    System.setProperty(JAVA_AWT_HEADLESS, String.valueOf(value));
+  private void updateHeadlessProperty(String value) {
+    System.setProperty(JAVA_AWT_HEADLESS, value);
   }
   
   @Test(expectedExceptions = ImageException.class, dependsOnMethods = "shouldThrowErrorIfRobotCannotBeCreated")
