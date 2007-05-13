@@ -1,5 +1,5 @@
 /*
- * Created on Apr 29, 2007
+ * Created on May 13, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -25,7 +25,7 @@ import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertions for <code>boolean</code> arrays. 
+ * Understands assertion methods for <code>boolean</code> arrays. 
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz

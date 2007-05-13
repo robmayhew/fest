@@ -1,5 +1,5 @@
 /*
- * Created on Apr 29, 2007
+ * Created on May 13, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -18,7 +18,7 @@ package org.fest.assertions;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{DoubleArrayAssert}</code>.
+ * Tests for <code>{DoubleArrayAssert}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz

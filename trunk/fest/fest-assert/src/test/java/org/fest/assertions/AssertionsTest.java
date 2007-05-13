@@ -30,7 +30,7 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link Assertions}</code>.
+ * Tests for <code>{@link Assertions}</code>.
  *
  * @author Yvonne Wang
  */

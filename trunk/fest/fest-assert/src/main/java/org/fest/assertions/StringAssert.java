@@ -26,7 +26,7 @@ import static org.fest.util.Strings.quote;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands constraints on Strings.
+ * Understands assertion methods for <code>String</code>s.
  *
  * @author Yvonne Wang
  */
@@ -48,7 +48,7 @@ public final class StringAssert {
     return this;
   }
   
-  public StringAssert constainsString(String expected) {
+  public StringAssert contains(String expected) {
     if (actual.indexOf(expected) == -1) 
       fail(concat("the String ", quote(actual), " should contain the String ", quote(expected)));
     return this;

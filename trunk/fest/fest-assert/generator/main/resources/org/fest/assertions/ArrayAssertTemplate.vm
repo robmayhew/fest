@@ -25,7 +25,7 @@ import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertions for <code>${arrayType}</code> arrays. 
+ * Understands assertion methods for <code>${arrayType}</code> arrays. 
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz

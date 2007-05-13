@@ -23,7 +23,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.concat;
 
 /**
- * Unit tests for <code>{@link Commons}</code>.
+ * Tests for <code>{@link Commons}</code>.
  *
  * @author Alex Ruiz
  */

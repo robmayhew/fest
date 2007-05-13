@@ -20,7 +20,7 @@ import org.fest.assertions.ObjectArrayAssert;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link ObjectArrayAssert}</code>.
+ * Tests for <code>{@link ObjectArrayAssert}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz

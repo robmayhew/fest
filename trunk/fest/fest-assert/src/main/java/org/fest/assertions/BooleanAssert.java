@@ -19,7 +19,7 @@ import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
 
 /**
- * Understands assertions for <code>boolean</code> values.
+ * Understands assertion methods for <code>boolean</code> values.
  *
  * @author Alex Ruiz
  */

@@ -30,7 +30,7 @@ import static org.fest.util.Strings.quote;
 import static org.testng.Assert.assertTrue;
 
 /**
- * Unit tests for <code>{@link PrimitiveArrayAssertGenerator}</code>.
+ * Tests for <code>{@link PrimitiveArrayAssertGenerator}</code>.
  *
  * @author Alex Ruiz
  */

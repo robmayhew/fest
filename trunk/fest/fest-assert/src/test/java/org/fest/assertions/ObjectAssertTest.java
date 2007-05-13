@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import static org.fest.util.Objects.areEqual;
 
 /**
- * Unit tests for <code>{@link ObjectAssert}</code>.
+ * Tests for <code>{@link ObjectAssert}</code>.
  *
  * @author Yvonne Wang
  */

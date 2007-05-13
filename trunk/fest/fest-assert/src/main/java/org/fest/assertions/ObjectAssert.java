@@ -27,7 +27,7 @@ import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands constraints on objects.
+ * Understands assertion methods for objects.
  *
  * @author Yvonne Wang
  */

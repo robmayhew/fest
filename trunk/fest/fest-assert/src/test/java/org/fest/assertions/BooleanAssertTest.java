@@ -20,7 +20,7 @@ import org.fest.assertions.BooleanAssert;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link BooleanAssert}</code>.
+ * Tests for <code>{@link BooleanAssert}</code>.
  *
  * @author Alex Ruiz
  */

@@ -20,7 +20,7 @@ import org.fest.assertions.StringAssert;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link StringAssert}</code>.
+ * Tests for <code>{@link StringAssert}</code>.
  *
  * @author Yvonne Wang
  */
@@ -50,10 +50,10 @@ public class StringAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfStringDoesNotContainGivenString() {
-    new StringAssert("Luke").constainsString("Yoda");
+    new StringAssert("Luke").contains("Yoda");
   }
 
   @Test public void shouldSucceedIfStringContainsGivenString() {
-    new StringAssert("Anakin").constainsString("akin");
+    new StringAssert("Anakin").contains("akin");
   } 
 }
