@@ -53,12 +53,14 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
     }
   }
   
+  /** {@inheritDoc} */
   @Override public void onStart(ITestContext context) {
     output = context.getOutputDirectory();
     logger.info(concat("TestNG output directory: ", quote(output)));
     ready = !isEmpty(output) && screenshotTaker != null;
   }
 
+  /** {@inheritDoc} */
   @Override public void onTestFailure(ITestResult result) {
     if (!ready) return;
     String screenshotFileName = takeScreenshotAndReturnFileName(result);
