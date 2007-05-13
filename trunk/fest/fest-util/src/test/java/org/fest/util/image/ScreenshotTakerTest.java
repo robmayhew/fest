@@ -15,7 +15,23 @@
  */
 package org.fest.swing.util;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
+import javax.imageio.ImageIO;
+
+import static org.fest.util.Files.temporaryFolderPath;
+import static org.fest.util.Strings.concat;
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.*;
 
 /**
  * Tests for <code>{@link ScreenshotTaker}</code>.
@@ -24,35 +40,45 @@ import org.testng.annotations.Test;
  */
 public class ScreenshotTakerTest {
 
-  private static final String JAVA_AWT_HEADLESS = "java.awt.headless";
+  private ScreenshotTaker taker;
 
-  @Test(expectedExceptions = ImageException.class) 
-  public void shouldThrowErrorIfRobotCannotBeCreated() {
-    String headless = System.getProperty(JAVA_AWT_HEADLESS);
-    updateHeadlessProperty(String.valueOf(true));
-    new ScreenshotTaker();
-    updateHeadlessProperty(headless);
+  @BeforeMethod public void setUp() {
+    taker = new ScreenshotTaker();
   }
 
-  private void updateHeadlessProperty(String value) {
-    System.setProperty(JAVA_AWT_HEADLESS, value);
-  }
-  
-  @Test(expectedExceptions = ImageException.class, dependsOnMethods = "shouldThrowErrorIfRobotCannotBeCreated")
+  @Test(expectedExceptions = ImageException.class)
   public void shouldThrowErrorIfFilePathIsNull() {
-    ScreenshotTaker taker = new ScreenshotTaker();
     taker.saveDesktopAsPng(null);
   }
   
-  @Test(expectedExceptions = ImageException.class, dependsOnMethods = "shouldThrowErrorIfRobotCannotBeCreated")
+  @Test(expectedExceptions = ImageException.class)
   public void shouldThrowErrorIfFilePathIsEmpty() {
-    ScreenshotTaker taker = new ScreenshotTaker();
     taker.saveDesktopAsPng("");
   }
   
-  @Test(expectedExceptions = ImageException.class, dependsOnMethods = "shouldThrowErrorIfRobotCannotBeCreated")
+  @Test(expectedExceptions = ImageException.class)
   public void shouldThrowErrorIfFilePathNotEndingWithPng() {
-    ScreenshotTaker taker = new ScreenshotTaker();
     taker.saveDesktopAsPng("somePathWithoutPng");
+  }
+  
+  @Test public void shouldTakeScreenshotAndSaveItInGivenPath() throws Exception {
+    String imagePath = concat(temporaryFolderPath(), imageFileName());
+    taker.saveDesktopAsPng(imagePath);
+    ensureFileNotExisting(imagePath);
+  }
+  
+  private String imageFileName() {
+    String timestamp = new SimpleDateFormat("yyMMdd.hhmmss").format(new GregorianCalendar().getTime());
+    return concat(timestamp, ".png");
+  }
+  
+  private void ensureFileNotExisting(String path) throws IOException {
+    File imageFile = new File(path);
+    assertThat(imageFile.isFile()).isTrue();
+    assertThat(imageFile.getTotalSpace() > 0).isTrue();
+    BufferedImage image = ImageIO.read(imageFile);
+    Dimension expectedImageSize = Toolkit.getDefaultToolkit().getScreenSize();
+    assertThat(image.getWidth()).isEqualTo(expectedImageSize.width);
+    assertThat(image.getHeight()).isEqualTo(expectedImageSize.height);
   }
 }
