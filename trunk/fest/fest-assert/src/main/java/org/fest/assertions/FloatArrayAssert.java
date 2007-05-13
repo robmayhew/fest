@@ -17,11 +17,11 @@ package org.fest.assertions;
 
 import java.util.Arrays;
 
+import static org.fest.assertions.Fail.errorMessageIfEqual;
+import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfNotNull;
 import static org.fest.assertions.Fail.failIfNull;
-import static org.fest.assertions.Fail.errorMessageIfEqual;
-import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**

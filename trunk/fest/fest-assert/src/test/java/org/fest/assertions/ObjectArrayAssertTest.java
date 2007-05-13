@@ -15,8 +15,6 @@
  */
 package org.fest.assertions;
 
-import org.fest.assertions.ObjectArrayAssert;
-
 import org.testng.annotations.Test;
 
 /**

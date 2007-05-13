@@ -15,8 +15,6 @@
  */
 package org.fest.assertions;
 
-import org.fest.assertions.BooleanAssert;
-
 import org.testng.annotations.Test;
 
 /**

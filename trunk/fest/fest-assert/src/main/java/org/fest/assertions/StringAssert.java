@@ -17,13 +17,10 @@ package org.fest.assertions;
 
 import org.fest.util.Strings;
 
-
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfNotEqual;
-
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands assertion methods for <code>String</code>s.

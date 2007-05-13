@@ -17,17 +17,9 @@ package org.fest.assertions;
 
 import java.util.ArrayList;
 
-import org.fest.assertions.Assertions;
-import org.fest.assertions.CollectionAssert;
-import org.fest.assertions.ObjectArrayAssert;
-import org.fest.assertions.ObjectAssert;
-import org.fest.assertions.StringAssert;
-
-
+import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Assertions}</code>.
