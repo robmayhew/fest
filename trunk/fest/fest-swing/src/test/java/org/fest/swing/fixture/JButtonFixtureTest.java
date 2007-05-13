@@ -32,7 +32,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JButtonFixture}</code>.
+ * Tests for <code>{@link JButtonFixture}</code>.
  *
  * @author Yvonne Wang
  */
@@ -111,13 +111,13 @@ public class JButtonFixtureTest {
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldPassIfButtonHasMatchingText() {
-    secondButtonFixture.shouldHaveThisText("Second Button");
+    secondButtonFixture.requireText("Second Button");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundButton", "shouldPassIfButtonHasMatchingText"},
         expectedExceptions = AssertionError.class) 
   public void shouldFailIfButtonHasNotMatchingText() {
-    secondButtonFixture.shouldHaveThisText("A Button");
+    secondButtonFixture.requireText("A Button");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 

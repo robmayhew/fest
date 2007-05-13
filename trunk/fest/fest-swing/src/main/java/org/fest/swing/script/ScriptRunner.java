@@ -24,8 +24,8 @@ import abbot.finder.Hierarchy;
 import abbot.script.Script;
 import abbot.script.StepRunner;
 import abbot.util.AWTFixtureHelper;
+import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Files.fileNamesIn;
-import static org.fest.util.Objects.isEmpty;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 

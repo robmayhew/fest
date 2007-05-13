@@ -32,33 +32,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.AbstractContainerFixture;
-import org.fest.swing.fixture.ComponentFixture;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.JButtonFixture;
-import org.fest.swing.fixture.JComboBoxFixture;
-import org.fest.swing.fixture.JLabelFixture;
-import org.fest.swing.fixture.JMenuItemFixture;
-import org.fest.swing.fixture.JOptionPaneFixture;
-import org.fest.swing.fixture.JTabbedPaneFixture;
-import org.fest.swing.fixture.JTextComponentFixture;
-
-
-
 import static java.awt.GridBagConstraints.HORIZONTAL;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
+
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.util.Objects.*;
-
 /**
- * Unit tests for <code>{@link AbstractContainerFixture}</code>.
+ * Tests for <code>{@link AbstractContainerFixture}</code>.
  *
  * @author Alex Ruiz
  */
@@ -132,11 +117,11 @@ public class AbstractContainerFixtureTest {
         return null;
       }
 
-      public ComponentFixture<CustomWindow> shouldBeVisible() {
+      public ComponentFixture<CustomWindow> requireVisible() {
         return null;
       }
 
-      public ComponentFixture<CustomWindow> shouldNotBeVisible() {
+      public ComponentFixture<CustomWindow> requireNotVisible() {
         return null;
       }};
     window = containerFixture.target;

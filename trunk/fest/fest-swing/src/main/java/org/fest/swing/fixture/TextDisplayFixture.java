@@ -34,6 +34,6 @@ public interface TextDisplayFixture<T extends Component> extends ComponentFixtur
    * @return this fixture.
    * @throws AssertionError if the text of the target component is not equal to the given one.
    */
-  TextDisplayFixture<T> shouldHaveThisText(String expected);
+  TextDisplayFixture<T> requireText(String expected);
 
 }

@@ -17,10 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JLabel;
 
-import org.fest.swing.RobotFixture;
-
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.RobotFixture;
 
 
 /**
@@ -50,7 +49,7 @@ public class JLabelFixture extends AbstractComponentFixture<JLabel> implements T
   }
   
   /** {@inheritDoc} */
-  public final JLabelFixture shouldHaveThisText(String expected) {
+  public final JLabelFixture requireText(String expected) {
     assertThat(text()).isEqualTo(expected);
     return this;
   }
@@ -71,13 +70,13 @@ public class JLabelFixture extends AbstractComponentFixture<JLabel> implements T
   }
 
   /** {@inheritDoc} */
-  public final JLabelFixture shouldBeVisible() {
+  public final JLabelFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public final JLabelFixture shouldNotBeVisible() {
+  public final JLabelFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }

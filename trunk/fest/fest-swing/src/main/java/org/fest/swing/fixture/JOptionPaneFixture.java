@@ -68,7 +68,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if the target dialog does not have the given title.
    */
-  public JOptionPaneFixture shouldHaveThisTitle(String title) {
+  public JOptionPaneFixture requireTitle(String title) {
     String actualTitle = ((Dialog)target.getRootPane().getParent()).getTitle();
     assertThat(actualTitle).isEqualTo(title);
     return this;
@@ -80,7 +80,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if the target dialog does not show the given message.
    */
-  public final JOptionPaneFixture shouldHaveThisMessage(Object message) {
+  public final JOptionPaneFixture requireMessage(Object message) {
     assertThat(target.getMessage()).isEqualTo(message);
     return this;
   }
@@ -91,7 +91,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if the target dialog does not have the given options.
    */
-  public final JOptionPaneFixture shouldHaveTheseOptions(Object[] options) {
+  public final JOptionPaneFixture requireOptions(Object[] options) {
     assertThat(target.getOptions()).isEqualTo(options);
     return this;
   }
@@ -131,7 +131,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * Asserts that the target dialog is displaying an error message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture shouldShowErrorMessage() {
+  public final JOptionPaneFixture requireErrorMessage() {
     return assertEqualMessageType(ERROR_MESSAGE);
   }
   
@@ -139,7 +139,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * Asserts that the target dialog is displaying an information message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture shouldShowInformationMessage() {
+  public final JOptionPaneFixture requireInformationMessage() {
     return assertEqualMessageType(INFORMATION_MESSAGE);
   }
 
@@ -147,7 +147,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * Asserts that the target dialog is displaying a warning message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture shouldShowWarningMessage() {
+  public final JOptionPaneFixture requireWarningMessage() {
     return assertEqualMessageType(WARNING_MESSAGE);
   }
   
@@ -155,7 +155,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * Asserts that the target dialog is displaying a question.
    * @return this fixture.
    */
-  public final JOptionPaneFixture shouldShowQuestionMessage() {
+  public final JOptionPaneFixture requireQuestionMessage() {
     return assertEqualMessageType(QUESTION_MESSAGE);
   }
   
@@ -163,7 +163,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * Asserts that the target dialog is displaying a plain message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture shouldShowPlainMessage() {
+  public final JOptionPaneFixture requirePlainMessage() {
     return assertEqualMessageType(PLAIN_MESSAGE);
   }
 
@@ -182,13 +182,13 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture shouldBeVisible() {
+  public final JOptionPaneFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture shouldNotBeVisible() {
+  public final JOptionPaneFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }

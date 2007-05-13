@@ -21,7 +21,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link ScriptApprover#DEFAULT_APPROVER}</code>.
+ * Tests for <code>{@link ScriptApprover#DEFAULT_APPROVER}</code>.
  * 
  * @author Alex Ruiz
  */

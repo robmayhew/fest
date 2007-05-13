@@ -17,11 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.RobotFixture;
-
-
 import abbot.tester.JTabbedPaneLocation;
 import abbot.tester.JTabbedPaneTester;
+
+import org.fest.swing.RobotFixture;
 
 
 /**
@@ -98,13 +97,13 @@ public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPa
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture shouldBeVisible() {
+  public final JTabbedPaneFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture shouldNotBeVisible() {
+  public final JTabbedPaneFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }

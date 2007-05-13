@@ -35,8 +35,7 @@ import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 import static java.lang.System.currentTimeMillis;
-
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code> and check the output. Useful for 

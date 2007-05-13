@@ -42,12 +42,12 @@ public interface ComponentFixture<T extends Component> {
    * @return this fixture.
    * @throws AssertionError if the target component is not visible.
    */
-  ComponentFixture<T> shouldBeVisible();
+  ComponentFixture<T> requireVisible();
   
   /**
    * Asserts that the target component is not visible.
    * @return this fixture.
    * @throws AssertionError if the target component is visible.
    */
-  ComponentFixture<T> shouldNotBeVisible();
+  ComponentFixture<T> requireNotVisible();
 }

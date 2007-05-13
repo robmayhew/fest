@@ -15,10 +15,10 @@
 package org.fest.swing.script;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.fest.util.Objects.isEmpty;
+import static org.fest.util.Arrays.isEmpty;
+import static org.fest.util.Collections.list;
 
 /**
  * Understands a <code>{@link ScriptApprover}</code> that approves a file only if its name is in a list of approved
@@ -38,7 +38,7 @@ public final class FileNameMatchScriptApprover implements ScriptApprover {
   public FileNameMatchScriptApprover(String... fileNamesToMatch) {
     if (isEmpty(fileNamesToMatch))
       throw new IllegalArgumentException("There should be at least one file name to match");
-    this.fileNamesToMatch = Arrays.asList(fileNamesToMatch);
+    this.fileNamesToMatch = list(fileNamesToMatch);
   }
 
   /**

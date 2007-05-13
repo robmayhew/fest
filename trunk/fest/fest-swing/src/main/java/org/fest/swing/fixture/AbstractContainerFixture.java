@@ -26,14 +26,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.RobotFixture;
-
 import abbot.finder.Matcher;
 import abbot.finder.matchers.JMenuItemMatcher;
-
 import static org.fest.assertions.Assertions.assertThat;
-
 import static org.fest.util.Strings.join;
+
+import org.fest.swing.RobotFixture;
 
 /**
  * @param <T> the type of container handled by this fixture.

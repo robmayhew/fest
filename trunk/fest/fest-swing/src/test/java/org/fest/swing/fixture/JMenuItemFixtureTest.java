@@ -32,7 +32,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JMenuItemFixture}</code>.
+ * Tests for <code>{@link JMenuItemFixture}</code>.
  *
  * @author Alex Ruiz
  */

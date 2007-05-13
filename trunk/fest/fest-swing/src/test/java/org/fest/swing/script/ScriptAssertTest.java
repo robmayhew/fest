@@ -18,15 +18,10 @@ import static org.fest.swing.Assert.assertScriptFailed;
 import static org.fest.swing.script.Scripts.MUST_FAIL;
 import static org.fest.swing.script.Scripts.ROOT_FOLDER;
 
-import org.fest.swing.script.FileNameMatchScriptApprover;
-import org.fest.swing.script.ScriptAssert;
-import org.fest.swing.script.ScriptFailure;
-
-
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link ScriptAssert}</code>.
+ * Tests for <code>{@link ScriptAssert}</code>.
  * 
  * @author Alex Ruiz
  */

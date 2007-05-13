@@ -31,7 +31,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JLabelFixture}</code>.
+ * Tests for <code>{@link JLabelFixture}</code>.
  *
  * @author Yvonne Wang
  */
@@ -104,13 +104,13 @@ public class JLabelFixtureTest {
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 
   public void shouldPassIfLabelHasMatchingText() {
-    secondLabelFixture.shouldHaveThisText("Second Label");
+    secondLabelFixture.requireText("Second Label");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundLabel", "shouldPassIfLabelHasMatchingText"},
         expectedExceptions = AssertionError.class) 
   public void shouldFailIfLabelHasNotMatchingText() {
-    secondLabelFixture.shouldHaveThisText("A Label");
+    secondLabelFixture.requireText("A Label");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 

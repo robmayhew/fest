@@ -22,7 +22,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link FileNameMatchScriptApprover}</code>.
+ * Tests for <code>{@link FileNameMatchScriptApprover}</code>.
  * 
  * @author Yvonne Wang
  */

@@ -21,13 +21,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JTabbedPaneFixture;
-
-
 import static org.fest.assertions.Assertions.assertThat;
 
-
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -35,7 +31,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JTabbedPaneFixture}</code>.
+ * Tests for <code>{@link JTabbedPaneFixture}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

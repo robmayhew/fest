@@ -25,17 +25,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JButtonFixture;
-import org.fest.swing.fixture.JOptionPaneFixture;
-import org.fest.swing.fixture.JTextComponentFixture;
-
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.util.Objects.array;
-
 import abbot.tester.ComponentTester;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
@@ -46,15 +35,18 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.showInputDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showOptionDialog;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
-
+import org.fest.swing.ComponentLookupException;
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JOptionPaneFixture}</code>.
+ * Tests for <code>{@link JOptionPaneFixture}</code>.
  *
  * @author Alex Ruiz
  */
@@ -182,7 +174,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfMatchingTitle() {
     showMessageWithTitle("Star Wars");
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveThisTitle("Star Wars");
+    fixture.requireTitle("Star Wars");
     fixture.findButton().click();
   }
   
@@ -191,7 +183,7 @@ public class JOptionPaneFixtureTest {
     window.setUpManuallyCreatedOptionPaneWithTitle("Jedi");
     clickWindowButton();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveThisTitle("Jedi");
+    fixture.requireTitle("Jedi");
     fixture.findButton().click();
   }
   
@@ -200,7 +192,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfNotMatchingTitle() {
     showMessageWithTitle("Yoda");
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveThisTitle("Darth Vader");
+    fixture.requireTitle("Darth Vader");
     fixture.findButton().click();
   }
 
@@ -208,7 +200,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfMatchingOptions() {
     showMessageWithOptions(array("First", "Second"));
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveTheseOptions(array("First", "Second"));
+    fixture.requireOptions(array("First", "Second"));
     fixture.findButton().click();
   }
 
@@ -217,7 +209,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfNotMatchingOptions() {
     showMessageWithOptions(array("First", "Second"));
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveTheseOptions(array("Third"));
+    fixture.requireOptions(array("Third"));
     fixture.findButton().click();
   }
 
@@ -225,7 +217,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfMatchingMessage() {
     showMessageWithText("Leia");
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveThisMessage("Leia");
+    fixture.requireMessage("Leia");
     fixture.findButton().click();
   }
   
@@ -234,7 +226,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfNotMatchingMessage() {
     showMessageWithText("Palpatine");
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldHaveThisMessage("Anakin");
+    fixture.requireMessage("Anakin");
     fixture.findButton().click();
   }
   
@@ -242,7 +234,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfExpectedAndActualMessageTypeIsError() {
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowErrorMessage();
+    fixture.requireErrorMessage();
     fixture.findButton().click();
   }
 
@@ -251,7 +243,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfExpectedMessageTypeIsErrorAndActualIsNot() {
     showInformationMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowErrorMessage();
+    fixture.requireErrorMessage();
     fixture.findButton().click();
   }
 
@@ -259,7 +251,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
     showInformationMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowInformationMessage();
+    fixture.requireInformationMessage();
     fixture.findButton().click();
   }
 
@@ -268,7 +260,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfExpectedMessageTypeIsInformationAndActualIsNot() {
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowInformationMessage();
+    fixture.requireInformationMessage();
     fixture.findButton().click();
   }
 
@@ -276,7 +268,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
     showWarningMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowWarningMessage();
+    fixture.requireWarningMessage();
     fixture.findButton().click();
   }
   
@@ -285,14 +277,14 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfExpectedMessageTypeIsWarningAndActualIsNot() {
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowWarningMessage();
+    fixture.requireWarningMessage();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
   public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
     showQuestionMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowQuestionMessage();
+    fixture.requireQuestionMessage();
     fixture.findButton().click();
   }
   
@@ -301,7 +293,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfExpectedMessageTypeIsQuestionAndActualIsNot() {
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowQuestionMessage();
+    fixture.requireQuestionMessage();
     fixture.findButton().click();
   }
 
@@ -309,7 +301,7 @@ public class JOptionPaneFixtureTest {
   public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
     showPlainMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowPlainMessage();
+    fixture.requirePlainMessage();
     fixture.findButton().click();
   }
   
@@ -318,7 +310,7 @@ public class JOptionPaneFixtureTest {
   public void shouldFailIfExpectedMessageTypeIsPlainAndActualIsNot() {
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.shouldShowPlainMessage();
+    fixture.requirePlainMessage();
     fixture.findButton().click();
   }
 

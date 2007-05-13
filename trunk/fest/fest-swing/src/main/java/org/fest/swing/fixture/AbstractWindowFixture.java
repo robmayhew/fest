@@ -18,13 +18,10 @@ package org.fest.swing.fixture;
 import java.awt.Dimension;
 import java.awt.Window;
 
-import org.fest.swing.RobotFixture;
-
-
-
 import abbot.tester.WindowTester;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.RobotFixture;
 
 
 /**

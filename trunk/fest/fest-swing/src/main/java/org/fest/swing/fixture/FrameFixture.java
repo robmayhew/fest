@@ -18,15 +18,14 @@ package org.fest.swing.fixture;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import org.fest.swing.Condition;
-import org.fest.swing.RobotFixture;
-
-
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
+
+import org.fest.swing.Condition;
+import org.fest.swing.RobotFixture;
 
 
 /**
@@ -163,19 +162,19 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture shouldHaveThisSize(Dimension size) {
+  public final FrameFixture requireSize(Dimension size) {
     assertEqualSize(size);
     return this;
   }
 
   /** {@inheritDoc} */
-  public FrameFixture shouldBeVisible() {
+  public FrameFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public FrameFixture shouldNotBeVisible() {
+  public FrameFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }

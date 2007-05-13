@@ -17,10 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JButton;
 
-import org.fest.swing.RobotFixture;
-
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.RobotFixture;
 
 
 /**
@@ -62,7 +61,7 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
   }
 
   /** {@inheritDoc} */
-  public final JButtonFixture shouldHaveThisText(String expected) {
+  public final JButtonFixture requireText(String expected) {
     assertThat(text()).isEqualTo(expected);
     return this;
   }
@@ -73,13 +72,13 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
   }
 
   /** {@inheritDoc} */
-  public JButtonFixture shouldBeVisible() {
+  public JButtonFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public JButtonFixture shouldNotBeVisible() {
+  public JButtonFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }

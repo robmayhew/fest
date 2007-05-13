@@ -17,16 +17,13 @@ package org.fest.swing.fixture;
 
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.RobotFixture;
-
-
 import abbot.tester.JTextComponentTester;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.util.Strings.isEmpty;
 import static java.awt.event.KeyEvent.VK_BACK_SPACE;
 import static java.awt.event.KeyEvent.VK_DELETE;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.isEmpty;
+
+import org.fest.swing.RobotFixture;
 
 
 
@@ -69,7 +66,7 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture shouldHaveThisText(String expected) {
+  public final JTextComponentFixture requireText(String expected) {
     assertThat(text()).isEqualTo(expected);
     return this;
   }
@@ -114,13 +111,13 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture shouldBeVisible() { 
+  public final JTextComponentFixture requireVisible() { 
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture shouldNotBeVisible() { 
+  public final JTextComponentFixture requireNotVisible() { 
     assertIsNotVisible();
     return this;
   }
@@ -130,7 +127,7 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
    * @return this fixture.
    * @throws AssertionError if the target text component is not empty.
    */
-  public final JTextComponentFixture shouldBeEmpty() {
+  public final JTextComponentFixture requireEmpty() {
     assertThat(text()).isEmpty();
     return this;
   }

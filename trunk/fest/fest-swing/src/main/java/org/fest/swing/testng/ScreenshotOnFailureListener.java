@@ -14,23 +14,17 @@
  */
 package org.fest.swing.testng;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 
 import static java.io.File.separator;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
+
+import org.fest.swing.util.ImageException;
+import org.fest.swing.util.ScreenshotTaker;
 
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -47,22 +41,22 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   
   private static Logger logger = Logger.getAnonymousLogger();
 
+  private ScreenshotTaker screenshotTaker;
   private String output;
-  private Robot robot;
   private boolean ready;
   
   public ScreenshotOnFailureListener() {
     try {
-      robot = new Robot();
-    } catch (AWTException e) {
-      logger.log(Level.SEVERE, "Unable to create AWT Robot.", e);
+      screenshotTaker = new ScreenshotTaker();
+    } catch (ImageException e) {
+      logger.log(Level.SEVERE, "Unable to create ScreenshotTaker", e);
     }
   }
   
   @Override public void onStart(ITestContext context) {
     output = context.getOutputDirectory();
     logger.info(concat("TestNG output directory: ", quote(output)));
-    ready = !isEmpty(output) && robot != null;
+    ready = !isEmpty(output) && screenshotTaker != null;
   }
 
   @Override public void onTestFailure(ITestResult result) {
@@ -74,17 +68,14 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   }
 
   private String takeScreenshotAndReturnFileName(ITestResult result) {
-    Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-    BufferedImage screenshot = robot.createScreenCapture(screen);
-    String name = join(classNameFrom(result), methodNameFrom(result), IMAGE_FILE_EXTENSION).with(".");
-    File imageFile = new File(concat(output, separator, name));
+    String imageName = join(classNameFrom(result), methodNameFrom(result), IMAGE_FILE_EXTENSION).with(".");
+    String imagePath = concat(output, separator, imageName);
     try {
-      ImageIO.write(screenshot, IMAGE_FILE_EXTENSION, imageFile);
-    } catch (IOException e) {
-      logger.log(Level.SEVERE, "Unable to take screenshot", e);
+      screenshotTaker.saveDesktopAsPng(imagePath);
+    } catch (ImageException e) {
       return null;
     }
-    return name;
+    return imageName;
   }
 
   private String methodNameFrom(ITestResult result) {

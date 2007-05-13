@@ -17,12 +17,10 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import org.fest.swing.RobotFixture;
-
-
 import abbot.tester.ComponentTester;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.RobotFixture;
 
 
 /**

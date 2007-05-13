@@ -20,22 +20,17 @@ import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
-import org.fest.swing.RobotFixture;
-import org.fest.swing.fixture.JComboBoxFixture;
-
-
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
-import static org.fest.util.Objects.array;
-
-
+import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JComboBoxFixture}</code>.
+ * Tests for <code>{@link JComboBoxFixture}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

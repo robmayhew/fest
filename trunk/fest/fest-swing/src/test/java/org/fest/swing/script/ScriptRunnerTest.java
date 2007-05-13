@@ -28,7 +28,7 @@ import static org.fest.swing.script.Scripts.ROOT_FOLDER;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link ScriptRunner}</code>.
+ * Tests for <code>{@link ScriptRunner}</code>.
  * 
  * @author Alex Ruiz
  */

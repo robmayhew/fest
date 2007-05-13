@@ -17,10 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.RobotFixture;
-
-
 import abbot.tester.JComboBoxTester;
+
+import org.fest.swing.RobotFixture;
 
 
 /**
@@ -105,13 +104,13 @@ public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
   }
 
   /** {@inheritDoc} */
-  public final JComboBoxFixture shouldBeVisible() {
+  public final JComboBoxFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public final JComboBoxFixture shouldNotBeVisible() {
+  public final JComboBoxFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }

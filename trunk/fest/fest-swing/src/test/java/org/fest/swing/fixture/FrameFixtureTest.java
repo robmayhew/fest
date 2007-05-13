@@ -30,7 +30,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link FrameFixture}</code>.
+ * Tests for <code>{@link FrameFixture}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -51,34 +51,34 @@ public class FrameFixtureTest {
   }
 
   @Test public void shouldPassIfWindowHasMatchingSize() {
-    frameFixture.shouldHaveThisSize(frame.getSize());
+    frameFixture.requireSize(frame.getSize());
   }
   
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize", expectedExceptions = AssertionError.class)
   public void shouldFailIfWindowHasNotMatchingSize() {
     FluentDimension wrongSize = windowSize().addToWidth(50).addToHeight(30);
-    frameFixture.shouldHaveThisSize(wrongSize);
+    frameFixture.requireSize(wrongSize);
   }
 
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public void shouldResizeWindowToGivenSize() {
     FluentDimension newSize = windowSize().addToWidth(20).addToHeight(40);
     frameFixture.resizeTo(newSize);
-    frameFixture.shouldHaveThisSize(newSize);
+    frameFixture.requireSize(newSize);
   }
   
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public void shouldResizeToGivenWidth() {
     FluentDimension newSize = windowSize().addToWidth(50);
     frameFixture.resizeWidthTo(newSize.width);
-    frameFixture.shouldHaveThisSize(newSize);
+    frameFixture.requireSize(newSize);
   }
 
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public void shouldResizeToGivenHeight() {
     FluentDimension newSize = windowSize().addToHeight(50);
     frameFixture.resizeHeightTo(newSize.height);
-    frameFixture.shouldHaveThisSize(newSize);
+    frameFixture.requireSize(newSize);
   }
   
   @Test public void shouldIconifyFrame() {

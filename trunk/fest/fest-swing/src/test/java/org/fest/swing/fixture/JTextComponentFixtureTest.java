@@ -34,7 +34,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Unit tests for <code>{@link JTextComponentFixture}</code>.
+ * Tests for <code>{@link JTextComponentFixture}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -120,13 +120,13 @@ public class JTextComponentFixtureTest {
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
   public void shouldPassIfTextFieldHasMatchingText() {
     window.secondTextField.setText("Second Text Field");
-    fixtureForSecondTextField.shouldHaveThisText("Second Text Field");
+    fixtureForSecondTextField.requireText("Second Text Field");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundTextField", "shouldPassIfTextFieldHasMatchingText"}, 
         expectedExceptions = AssertionError.class)  
   public void shouldFailIfTextFieldHasNotMatchingText() {
-    fixtureForSecondTextField.shouldHaveThisText("A Text Field");
+    fixtureForSecondTextField.requireText("A Text Field");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
@@ -138,14 +138,14 @@ public class JTextComponentFixtureTest {
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
   public void shouldPassIfTextFieldIsEmpty() {
     window.secondTextField.setText("");
-    fixtureForSecondTextField.shouldBeEmpty();
+    fixtureForSecondTextField.requireEmpty();
   }
 
   @Test(dependsOnMethods = { "shouldHaveFoundTextField", "shouldPassIfTextFieldIsEmpty" }, 
         expectedExceptions = AssertionError.class) 
   public void shouldFailIfTextFieldIsNotEmpty() {
     window.secondTextField.setText("Some text");
-    fixtureForSecondTextField.shouldBeEmpty();
+    fixtureForSecondTextField.requireEmpty();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 

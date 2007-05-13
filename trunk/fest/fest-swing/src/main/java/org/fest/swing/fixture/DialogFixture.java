@@ -18,10 +18,9 @@ package org.fest.swing.fixture;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
-import org.fest.swing.RobotFixture;
-
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.RobotFixture;
 
 
 /**
@@ -112,19 +111,19 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture shouldHaveThisSize(Dimension size) {
+  public final DialogFixture requireSize(Dimension size) {
     assertEqualSize(size);
     return this;
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture shouldBeVisible() {
+  public final DialogFixture requireVisible() {
     assertIsVisible();
     return this;
   }
   
   /** {@inheritDoc} */
-  public final DialogFixture shouldNotBeVisible() {
+  public final DialogFixture requireNotVisible() {
     assertIsNotVisible();
     return this;
   }
@@ -134,7 +133,7 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
    * @return a reference to this fixture.
    * @throws AssertionError if the target dialog is not modal.
    */
-  public final DialogFixture shouldBeModal() {
+  public final DialogFixture requireModal() {
     assertThat(target.isModal()).isTrue();
     return this;
   }

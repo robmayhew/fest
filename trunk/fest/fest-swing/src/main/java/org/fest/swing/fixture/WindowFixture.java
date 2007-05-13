@@ -45,7 +45,7 @@ public interface WindowFixture<T extends Window> extends ComponentFixture<T> {
    * @return this fixture.
    * @throws AssertionError if the size of the target window is not equal to the given size. 
    */
-  WindowFixture<T> shouldHaveThisSize(Dimension size);
+  WindowFixture<T> requireSize(Dimension size);
 
   /**
    * Simulates a user resizing the target window horizontally.

@@ -15,13 +15,11 @@
 package org.fest.swing;
 
 
-import org.fest.swing.script.ScriptFailure;
-
-
-
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.Files.absolutePath;
+
+import org.fest.swing.script.ScriptFailure;
 
 
 /**
@@ -32,6 +30,6 @@ import static org.fest.swing.Files.absolutePath;
 public final class Assert {
 
   public static void assertScriptFailed(ScriptFailure failure, String dirName, String fileName) {
-    assertThat(failure.getMessage()).constainsString(absolutePath(dirName, fileName));
+    assertThat(failure.getMessage()).contains(absolutePath(dirName, fileName));
   }
 }
