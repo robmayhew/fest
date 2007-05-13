@@ -14,19 +14,15 @@
  */
 package org.fest.util;
 
+import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
-import org.fest.util.Strings;
-
-
-
-import org.testng.annotations.Test;
-
 /**
- * Unit tests for <code>{@link Strings}</code>.
+ * Tests for <code>{@link Strings}</code>.
  * 
  * @author Alex Ruiz
  */
@@ -79,5 +75,13 @@ public class StringsTest {
   
   @Test public void shouldConcatenateGivenStrings() {
     assertEquals(Strings.concat("One", "Two", "Three"), "OneTwoThree");
+  }
+  
+  @Test public void shouldAppendStringIfNotPresent() {
+    assertEquals(Strings.append("c").to("ab"), "abc");
+  }
+  
+  @Test public void shouldNotAppendStringIfPresent() {
+    assertEquals(Strings.append("c").to("abc"), "abc");
   }
 }

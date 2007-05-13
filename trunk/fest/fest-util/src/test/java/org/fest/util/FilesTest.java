@@ -19,20 +19,22 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 
-import static java.io.File.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import static org.fest.util.Objects.asList;
+import static java.io.File.separator;
+
+import static org.fest.util.Collections.list;
+import static org.fest.util.Strings.append;
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
 /**
- * Unit tests for <code>{@link Files}</code>.
+ * Tests for <code>{@link Files}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -53,7 +55,7 @@ public class FilesTest {
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionWhenGettingFilesNameInNotExistingDirectory() {
-    String path = "root" + separator + "not_existing_dir";
+    String path = concat("root", separator, "not_existing_dir");
     Files.fileNamesIn(path, false);
   }
   
@@ -61,32 +63,46 @@ public class FilesTest {
   public void shouldThrowExceptionWhenGettingFilesNameAndGivenPathIsNotDirectory() throws Exception {
     String fileName = "file_1";
     root.addFiles(fileName);
-    String path = "root" + separator + fileName;
+    String path = concat("root", separator, fileName);
     Files.fileNamesIn(path, false);
   }
 
   @Test public void shouldReturnNamesOfFilesInGivenDirectoryWithoutLookingInSubdirectories() {
-    String path = "root" + separator + "dir_1";
-    assertContainsFiles(Files.fileNamesIn(path, false), asList("file_1_1", "file_1_2"));
+    String path = concat("root", separator, "dir_1");
+    assertContainsFiles(Files.fileNamesIn(path, false), list("file_1_1", "file_1_2"));
   }
   
   @Test public void shouldReturnNamesOfFilesInGivenDirectoryAndItsSubdirectories() {
-    String path = "root" + separator + "dir_1";
-    assertContainsFiles(Files.fileNamesIn(path, true), asList("file_1_1", "file_1_2", "file_1_1_1"));
+    String path = concat("root", separator, "dir_1");
+    assertContainsFiles(Files.fileNamesIn(path, true), list("file_1_1", "file_1_2", "file_1_1_1"));
   }
 
   private void assertContainsFiles(List<String> actualFiles, List<String> expectedFiles) {
     assertNoDuplicates(actualFiles);
     for (String fileName : actualFiles) {
       String name = new File(fileName).getName();
-      assertTrue(expectedFiles.remove(name), "The file " + quote(name) + " should not be in the list");
+      assertTrue(expectedFiles.remove(name), concat("The file ", quote(name), " should not be in the list"));
     }
-    assertTrue(expectedFiles.isEmpty(), "Actual list of files should contain " + expectedFiles);
+    assertTrue(expectedFiles.isEmpty(), concat("Actual list of files should contain ", expectedFiles));
   }
   
   private void assertNoDuplicates(List<String> actualFiles) {
     if (actualFiles == null || actualFiles.isEmpty()) return;
     HashSet<String> withoutDuplicates = new HashSet<String>(actualFiles);
-    assertEquals(actualFiles.size(), withoutDuplicates.size(), actualFiles + " contains duplicates");
+    assertEquals(actualFiles.size(), withoutDuplicates.size(), concat(actualFiles, " contains duplicates"));
+  }
+  
+  @Test public void shouldFindTemporaryFolderPath() {
+    String actualPath = Files.temporaryFolderPath();
+    String expectedPath = append(separator).to(System.getProperty("java.io.tmpdir"));
+    assertEquals(actualPath, expectedPath);
+  }
+  
+  @Test(dependsOnMethods = "shouldFindTemporaryFolderPath")
+  public void shouldFindTemporaryFolder() {
+    File temporaryFolder = Files.temporaryFolder();
+    assertTrue(temporaryFolder.isDirectory());
+    String actualPath = append(separator).to(temporaryFolder.getAbsolutePath());
+    assertEquals(actualPath, Files.temporaryFolderPath());  
   }
 }

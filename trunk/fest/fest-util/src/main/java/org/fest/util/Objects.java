@@ -14,29 +14,17 @@
  */
 package org.fest.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands utility methods.
+ * Understands utility methods related to objects.
  * 
  * @author Alex Ruiz
  */
 public final class Objects {
 
-  public static <T> boolean isEmpty(T[] array) {
-    return array == null || array.length == 0;
-  }
-
-  public static <T> List<T> asList(T... elements) {
-    if (elements == null) return null;
-    return new ArrayList<T>(Arrays.asList(elements));
-  }
-  
   /**
    * Returns <code>true</code> if the given objects are equal or if both objects are <code>null</code>.
-   * 
    * @param o1 one of the objects to compare.
    * @param o2 one of the objects to compare.
    * @return <code>true</code> if the given objects are equal or if both objects are <code>null</code>.
@@ -46,6 +34,11 @@ public final class Objects {
     return o1.equals(o2);
   }
   
+  /**
+   * Returns an array containing the names of the given types.
+   * @param types the given types.
+   * @return the names of the given types stored in an array.
+   */
   public static String[] namesOf(Class<?>... types) {
     if (isEmpty(types)) return new String[0];
     String[] names = new String[types.length];
@@ -53,7 +46,15 @@ public final class Objects {
     return names;
   }
   
-  public static <T> T[] array(T... values) { return values; }
+  /**
+   * Returns the hash code for the given object. If the object is <code>null</code>, this method returns zero. Otherwise
+   * calls the method <code>hashCode</code> of the given object.
+   * @param o the given object.
+   * @return the hash code for the given object
+   */
+  public static int hashCodeFor(Object o) {
+    return o != null ? o.hashCode() : 0;
+  }
 
   private Objects() {}
 }

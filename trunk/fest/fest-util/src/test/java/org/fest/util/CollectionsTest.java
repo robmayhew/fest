@@ -20,17 +20,27 @@ import java.util.Collection;
 
 import org.testng.annotations.Test;
 
-import static org.fest.util.Objects.asList;
-
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 /**
- * Unit tests for <code>{@link Collections}</code>.
+ * Tests for <code>{@link Collections}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class CollectionsTest {
 
+  @Test public void shouldReturnNullIfArrayToConvertToListIsNull() {
+    assertNull(Collections.list((Object[])null));
+  }
+  
+  @Test public void shouldReturnEmptyListIfArrayIsEmpty() {
+    assertTrue(Collections.list(new Object[0]).isEmpty());
+  }
+  
   @Test public void shouldReturnTrueIfCollectionIsEmpty() {
     assertTrue(Collections.isEmpty(new ArrayList<String>()));
   }
@@ -40,17 +50,17 @@ public class CollectionsTest {
   }
   
   @Test public void shouldReturnFalseIfCollectionHasElements() {
-    assertFalse(Collections.isEmpty(asList("Frodo")));
+    assertFalse(Collections.isEmpty(Collections.list("Frodo")));
   }
   
   @Test public void shouldReturnDuplicatesIfTheyExist() {
-    Collection<String> duplicates = Collections.duplicatesFrom(asList("Frodo", "Sam", "Frodo"));
+    Collection<String> duplicates = Collections.duplicatesFrom(Collections.list("Frodo", "Sam", "Frodo"));
     assertEquals(duplicates.size(), 1);
     assertTrue(duplicates.contains("Frodo"));
   }
   
   @Test public void shouldNotReturnDuplicatesIfTheyDoNotExist() {
-    Collection<String> duplicates = Collections.duplicatesFrom(asList("Frodo", "Sam", "Gandalf"));
+    Collection<String> duplicates = Collections.duplicatesFrom(Collections.list("Frodo", "Sam", "Gandalf"));
     assertTrue(duplicates.isEmpty());
   }
   

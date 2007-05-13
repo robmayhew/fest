@@ -15,17 +15,39 @@
  */
 package org.fest.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Understands utility methods for Collections.
+ * Understands utility methods related to collections.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public final class Collections {
   
+  /**
+   * Creates a list containing the given elements.
+   * @param <T> the type of elements of the list to create.
+   * @param elements the elements to store in the list.
+   * @return a list containing the given elements.
+   */
+  public static <T> List<T> list(T... elements) {
+    if (elements == null) return null;
+    return new ArrayList<T>(Arrays.asList(elements));
+  }
+   
+  /**
+   * Returns any duplicate elements from the given collection.
+   * @param <T> the generic type of the given collection.
+   * @param c the given collection that might have duplicate elements.
+   * @return a collection containing the duplicate elements of the given one. If no duplicates are found, an empty
+   *          collection is returned.
+   */
   public static <T> Collection<T> duplicatesFrom(Collection<T> c) {
     Set<T> duplicates = new HashSet<T>();
     if (isEmpty(c)) return duplicates;
@@ -40,6 +62,11 @@ public final class Collections {
     return duplicates;
   }
 
+  /**
+   * Returns <code>true</code> if the given collection is <code>null</code> or empty.
+   * @param c the collection to check.
+   * @return <code>true</code> if the given collection is <code>null</code> or empty, otherwise <code>false</code>.
+   */ 
   public static boolean isEmpty(Collection<?> c) {
     return c == null || c.isEmpty();
   }

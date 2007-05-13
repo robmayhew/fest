@@ -18,38 +18,20 @@ import java.util.Arrays;
 
 import org.testng.annotations.Test;
 
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 /**
- * Unit tests for {@link Objects}.
+ * Tests for {@link Objects}.
  * 
  * @author Yvonne Wang
  */
 public class ObjectTest {
 
-  @Test public void shouldReturnIsEmptyIfArrayIsEmpty() {
-    assertTrue(Objects.isEmpty(new String[0]));
-  }
-
-  @Test public void shouldReturnIsEmptyIfArrayIsNull() {
-    assertTrue(Objects.isEmpty(null));
-  }
-
-  @Test public void shouldReturnIsNotEmptyIfArrayHasElements() {
-    assertFalse(Objects.isEmpty(new String[] { "Tuzi" }));
-  }
-  
-  @Test public void shouldReturnNullIfArrayToConvertToListIsNull() {
-    assertNull(Objects.asList((Object[])null));
-  }
-  
-  @Test public void shouldReturnEmptyListIfArrayIsEmpty() {
-    assertTrue(Objects.asList(new Object[0]).isEmpty());
-  }
-  
   @Test public void shouldReturnAreEqualIfBothObjectsAreNull() {
     assertTrue(Objects.areEqual(null, null));
   }
@@ -81,14 +63,23 @@ public class ObjectTest {
   @Test public void shouldReturnClassNames() {
     String[] expected = { String.class.getName(), Integer.class.getName() };
     String[] actual = Objects.namesOf(String.class, Integer.class);
-    assertTrue(Arrays.equals(expected, actual), "expected:<" + Arrays.toString(expected) + "> actual:<"
-        + Arrays.toString(actual) + ">");
+    assertTrue(Arrays.equals(expected, actual), concat("expected:<", Arrays.toString(expected), "> actual:<", 
+        Arrays.toString(actual), ">"));
   }
   
   @Test public void shouldReturnSameArrayAsTheOnePassed() {
-    String[] array = Objects.array("Yoda", "Luke");
+    String[] array = array("Yoda", "Luke");
     assertEquals(array.length, 2);
     assertEquals(array[0], "Yoda");
     assertEquals(array[1], "Luke");
+  }
+
+  @Test public void shouldReturnHashCodeFromObjectIfObjectIsNotNull() {
+    String s = "Yoda";
+    assertEquals(Objects.hashCodeFor(s), s.hashCode());
+  }
+  
+  @Test public void shouldReturnZeroIfObjectIsNull() {
+    assertEquals(Objects.hashCodeFor(null), 0);
   }
 }

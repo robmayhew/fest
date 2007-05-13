@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import static java.io.File.separator;
 
-
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 import static org.testng.Assert.assertTrue;
@@ -51,21 +51,21 @@ public final class FileFixture {
     String path = relativePath();
     file = new File(path);
     if (!file.exists()) {
-      assertTrue(file.createNewFile(), "Unable to create file " + quote(path));
-      logger.info("Created file " + quote(path));
+      assertTrue(file.createNewFile(), concat("Unable to create file ", quote(path)));
+      logger.info(concat("Created file ", quote(path)));
     }
-    assertTrue(file.isFile(), "The file " + quote(path) + " should be a file");
-    logger.info("The file " + quote(path) + " exists");
+    assertTrue(file.isFile(), concat("The file ", quote(path), " should be a file"));
+    logger.info(concat("The file ", quote(path), " exists"));
   }
 
   public void delete() {
     String path = relativePath();
-    assertTrue(file.delete(), "Unable to delete file " + quote(path));
-    logger.info("The file " + quote(path) + " was deleted");
+    assertTrue(file.delete(), concat("Unable to delete file ", quote(path)));
+    logger.info(concat("The file ", quote(path), " was deleted"));
   }
 
   String relativePath() {
-    return parent != null ? parent.relativePath() + separator + name : name;
+    return parent != null ? concat(parent.relativePath(), separator, name) : name;
   }
   
   String absolutePath() {

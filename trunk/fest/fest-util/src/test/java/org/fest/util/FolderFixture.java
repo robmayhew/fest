@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 
 import static java.io.File.separator;
 
-
-import static org.fest.util.Objects.isEmpty;
+import static org.fest.util.Arrays.isEmpty;
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 import static org.testng.Assert.assertTrue;
@@ -61,12 +61,12 @@ public final class FolderFixture {
     String path = relativePath();
     dir = new File(path);
     if (!dir.exists()) {
-      assertTrue(dir.mkdir(), "Unable to create directory " + quote(path));
-      logger.info("Created directory " + quote(path));
+      assertTrue(dir.mkdir(), concat("Unable to create directory ", quote(path)));
+      logger.info(concat("Created directory ", quote(path)));
       return;
     }
-    assertTrue(dir.isDirectory(), "The file " + quote(path) + " should be a directory");
-    logger.info("The directory " + quote(path) + " already exists");
+    assertTrue(dir.isDirectory(), concat("The file ", quote(path), " should be a directory"));
+    logger.info(concat("The directory ", quote(path), " already exists"));
   }
   
   public FolderFixture addFolder(String name) {
@@ -84,12 +84,12 @@ public final class FolderFixture {
     for (FolderFixture folder : folders) folder.delete();
     for (FileFixture file : files) file.delete();
     String path = relativePath();
-    assertTrue(dir.delete(), "Unable to delete directory " + quote(path));
-    logger.info("The directory " + quote(path) + " was deleted");
+    assertTrue(dir.delete(), concat("Unable to delete directory ", quote(path)));
+    logger.info(concat("The directory ", quote(path), " was deleted"));
   }
   
   String relativePath() {
-    return parent != null ? parent.relativePath() + separator + name : name;
+    return parent != null ? concat(parent.relativePath(), separator, name) : name;
   }
 
   public FolderFixture folder(String path) {
