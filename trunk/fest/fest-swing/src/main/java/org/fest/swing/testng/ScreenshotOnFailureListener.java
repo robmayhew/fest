@@ -23,8 +23,8 @@ import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
 
-import org.fest.swing.image.ImageException;
-import org.fest.swing.image.ScreenshotTaker;
+import org.fest.swing.util.ImageException;
+import org.fest.swing.util.ScreenshotTaker;
 
 import org.testng.ITestContext;
 import org.testng.ITestResult;
