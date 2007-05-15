@@ -102,7 +102,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @return a fixture wrapping a button containing the given text, or <code>null</code> if none if found.
    */
   public final JButtonFixture findButtonWithText(final String text) {
-    Component component = robot.find(target, new Matcher() {
+    Component component = robot.finder().find(target, new Matcher() {
       public boolean matches(Component c) {
         if (!(c instanceof JButton)) return false;
         return areEqual(text, ((JButton)c).getText());
@@ -114,7 +114,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
   
   /** @return a fixture wrapping a button contained in the given dialog. */
   public JButtonFixture findButton() {
-    return new JButtonFixture(robot, robot.findByType(target, JButton.class));
+    return new JButtonFixture(robot, robot.finder().findByType(target, JButton.class));
   }
   
   /**
@@ -123,7 +123,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @throws ComponentLookupException if the message type is not input and hence does not contain a text component.
    */
   public final JTextComponentFixture findTextComponent() throws ComponentLookupException {
-    JTextComponent textComponent = robot.findByType(target, JTextComponent.class);
+    JTextComponent textComponent = robot.finder().findByType(target, JTextComponent.class);
     return new JTextComponentFixture(robot, textComponent);
   }
   

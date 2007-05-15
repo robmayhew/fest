@@ -36,6 +36,9 @@ import static javax.swing.JOptionPane.showInputDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showOptionDialog;
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.ComponentLookupException;
@@ -129,7 +132,7 @@ public class JOptionPaneFixtureTest {
   private RobotFixture robot;
   
   @BeforeMethod public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new CustomWindow();
     robot.showWindow(window);
   }

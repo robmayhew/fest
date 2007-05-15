@@ -34,7 +34,7 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
    * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param dialogName the name of the dialog to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
@@ -44,7 +44,7 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
    * Creates a new </code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
    * @param dialogName the name of the dialog to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public DialogFixture(RobotFixture robot, String dialogName) {
     super(robot, dialogName, Dialog.class);

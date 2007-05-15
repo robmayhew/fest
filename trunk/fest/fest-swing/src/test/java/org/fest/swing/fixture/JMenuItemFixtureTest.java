@@ -25,6 +25,8 @@ import javax.swing.JMenuItem;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -64,7 +66,7 @@ public class JMenuItemFixtureTest {
   private RobotFixture robot;
   
   @BeforeClass public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new CustomWindow();
     robot.showWindow(window);
   }

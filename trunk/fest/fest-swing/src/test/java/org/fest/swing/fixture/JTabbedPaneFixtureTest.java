@@ -23,6 +23,8 @@ import javax.swing.JTabbedPane;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -65,7 +67,7 @@ public class JTabbedPaneFixtureTest {
   private JTabbedPaneFixture fixture;
   
   @BeforeClass public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
     fixture = new JTabbedPaneFixture(robot, "tabbedPane");

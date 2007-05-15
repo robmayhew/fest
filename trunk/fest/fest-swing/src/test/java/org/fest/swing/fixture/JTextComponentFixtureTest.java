@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
 
@@ -89,7 +91,7 @@ public class JTextComponentFixtureTest {
   private JTextComponentFixture fixtureForSecondTextField;
   
   @BeforeClass public void setUp() throws Exception {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
     fixtureForSecondTextField = new JTextComponentFixture(robot, "secondTextField");

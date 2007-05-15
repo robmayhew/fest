@@ -44,10 +44,10 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * Creates a new </code>{@link AbstractContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByType(Class)
+   * @see org.fest.swing.ComponentFinder#findByType(Class)
    */
   public AbstractContainerFixture(RobotFixture robot, Class<? extends T> type) {
-    super(robot, robot.findByType(type));
+    super(robot, robot.finder().findByType(type));
   }
 
   /**
@@ -55,10 +55,10 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of Container <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public AbstractContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
-    super(robot, robot.findByName(name, type));
+    super(robot, robot.finder().findByName(name, type));
   }
 
   /**
@@ -75,8 +75,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final JLabelFixture findLabel(String name) {
-    return new JLabelFixture(robot, robot.findByName(target, name, JLabel.class));
+  public final JLabelFixture label(String name) {
+    return new JLabelFixture(robot, robot.finder().findByName(target, name, JLabel.class));
   }
 
   /**
@@ -84,8 +84,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final JButtonFixture findButton(String name) {
-    return new JButtonFixture(robot, robot.findByName(target, name, JButton.class));
+  public final JButtonFixture button(String name) {
+    return new JButtonFixture(robot, robot.finder().findByName(target, name, JButton.class));
   }
 
   /**
@@ -93,8 +93,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final DialogFixture findDialog(String name) {
-    return new DialogFixture(robot, robot.findByName(target, name, Dialog.class));
+  public final DialogFixture dialog(String name) {
+    return new DialogFixture(robot, robot.finder().findByName(target, name, Dialog.class));
   }
 
   /**
@@ -102,8 +102,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final JMenuItemFixture findMenuItem(String name) {
-    return new JMenuItemFixture(robot, robot.findByName(target, name, JMenuItem.class));
+  public final JMenuItemFixture menuItem(String name) {
+    return new JMenuItemFixture(robot, robot.finder().findByName(target, name, JMenuItem.class));
   }
 
   /**
@@ -112,9 +112,9 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    *          menu "File", we shoul call <code>findMenuItem("File", "Menu")</code>.
    * @return a fixture wrapping the found component.
    */
-  public final JMenuItemFixture findMenuItem(String... path) {
+  public final JMenuItemFixture menuItem(String... path) {
     Matcher m = new JMenuItemMatcher(join(path).with("|"));
-    Component item = robot.find(target, m);
+    Component item = robot.finder().find(target, m);
     assertThat(item).isInstanceOf(JMenuItem.class);
     return new JMenuItemFixture(robot, (JMenuItem) item);
   }
@@ -123,7 +123,7 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * Finds a <code>{@link JOptionPane}</code> in the target container
    * @return a fixture wrapping the found component.
    */
-  public final JOptionPaneFixture findOptionPane() {
+  public final JOptionPaneFixture optionPane() {
     return new JOptionPaneFixture(robot);
   }
 
@@ -132,8 +132,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final JTextComponentFixture findTextComponent(String name) {
-    return new JTextComponentFixture(robot, robot.findByName(target, name, JTextComponent.class));
+  public final JTextComponentFixture textBox(String name) {
+    return new JTextComponentFixture(robot, robot.finder().findByName(target, name, JTextComponent.class));
   }
 
   /**
@@ -141,8 +141,8 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final JComboBoxFixture findComboBox(String name) {
-    return new JComboBoxFixture(robot, robot.findByName(target, name, JComboBox.class));
+  public final JComboBoxFixture comboBox(String name) {
+    return new JComboBoxFixture(robot, robot.finder().findByName(target, name, JComboBox.class));
   }
 
   /**
@@ -150,7 +150,7 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    * @param name the name to match.
    * @return a fixture wrapping the found component.
    */
-  public final JTabbedPaneFixture findTabbedPane(String name) {
-    return new JTabbedPaneFixture(robot, robot.findByName(target, name, JTabbedPane.class));
+  public final JTabbedPaneFixture tabbedPane(String name) {
+    return new JTabbedPaneFixture(robot, robot.finder().findByName(target, name, JTabbedPane.class));
   }
 }

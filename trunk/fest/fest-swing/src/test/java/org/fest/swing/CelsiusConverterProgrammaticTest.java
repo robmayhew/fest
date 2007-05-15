@@ -22,6 +22,8 @@ import javax.swing.JLabel;
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -36,7 +38,7 @@ public class CelsiusConverterProgrammaticTest {
   private RobotFixture robot;  
   
   @BeforeMethod public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     robot.showWindow(new CelsiusConverter());
   }
  
@@ -53,17 +55,17 @@ public class CelsiusConverterProgrammaticTest {
   private void convertToFarenheit(String celsius) {
     ComponentTester tester = tester();
     tester.actionKeyString(celsius);
-    Component convertButton = robot.findByName("convertButton");
+    Component convertButton = robot.finder().findByName("convertButton");
     tester.actionClick(convertButton);
   }
 
   private ComponentTester tester() {
-    Component celsiusTextInput = robot.findByName("celsiusTextInput");
+    Component celsiusTextInput = robot.finder().findByName("celsiusTextInput");
     return ComponentTester.getTester(celsiusTextInput);
   }
   
   private void assertMatchingResult(String expected) {
-    JLabel fahrenheitLabel = robot.findByName("fahrenheitLabel", JLabel.class);
+    JLabel fahrenheitLabel = robot.finder().findByName("fahrenheitLabel", JLabel.class);
     assertThat(fahrenheitLabel.getText()).isEqualTo(expected);
   }
 

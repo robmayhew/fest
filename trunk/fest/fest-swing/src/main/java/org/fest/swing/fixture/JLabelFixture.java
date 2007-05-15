@@ -33,7 +33,7 @@ public class JLabelFixture extends AbstractComponentFixture<JLabel> implements T
    * Creates a new </code>{@link JLabelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JLabel</code>.
    * @param labelName the name of the label to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public JLabelFixture(RobotFixture robot, String labelName) {
     super(robot, labelName, JLabel.class);

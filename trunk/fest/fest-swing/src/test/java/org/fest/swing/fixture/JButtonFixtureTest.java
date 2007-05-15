@@ -24,6 +24,8 @@ import javax.swing.JFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
 
@@ -78,22 +80,22 @@ public class JButtonFixtureTest {
   
   private MainWindow window;
   private RobotFixture robot;
-  private JButtonFixture secondButtonFixture;
+  private JButtonFixture fixture;
   
   @BeforeClass public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
-    secondButtonFixture = new JButtonFixture(robot, "secondButton");
+    fixture = new JButtonFixture(robot, "secondButton");
   }
   
   @Test public void shouldHaveFoundButton() {
-    assertThat(secondButtonFixture.target).isSameAs(window.secondButton);
+    assertThat(fixture.target).isSameAs(window.secondButton);
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldClickButton() {
-    secondButtonFixture.click();
+    fixture.click();
     assertThat(window.secondButton.wasClicked()).isTrue();
   }
   
@@ -105,24 +107,24 @@ public class JButtonFixtureTest {
         return window.firstButton.hasFocus();
       }
     });
-    secondButtonFixture.focus();
+    fixture.focus();
     assertThat(window.secondButton.hasFocus()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldPassIfButtonHasMatchingText() {
-    secondButtonFixture.requireText("Second Button");
+    fixture.requireText("Second Button");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundButton", "shouldPassIfButtonHasMatchingText"},
         expectedExceptions = AssertionError.class) 
   public void shouldFailIfButtonHasNotMatchingText() {
-    secondButtonFixture.requireText("A Button");
+    fixture.requireText("A Button");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldReturnButtonText() {
-    assertThat(secondButtonFixture.text()).isEqualTo("Second Button");
+    assertThat(fixture.text()).isEqualTo("Second Button");
   }
   
   @AfterClass public void tearDown() {

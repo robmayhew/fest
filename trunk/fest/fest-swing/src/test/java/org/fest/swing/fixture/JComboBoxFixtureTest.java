@@ -21,6 +21,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.RobotFixture;
@@ -62,7 +65,7 @@ public class JComboBoxFixtureTest {
   private JComboBoxFixture fixture;
   
   @BeforeClass public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
     fixture = new JComboBoxFixture(robot, "comboBox");

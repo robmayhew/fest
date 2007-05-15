@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -80,7 +82,7 @@ public class JLabelFixtureTest {
   private JLabelFixture secondLabelFixture;
   
   @BeforeClass public void setUp() {
-    robot = new RobotFixture();
+    robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
     secondLabelFixture = new JLabelFixture(robot, "secondLabel");

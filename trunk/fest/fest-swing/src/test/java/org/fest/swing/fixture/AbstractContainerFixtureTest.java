@@ -34,6 +34,9 @@ import javax.swing.JTextField;
 
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.RobotFixture;
@@ -102,12 +105,12 @@ public class AbstractContainerFixtureTest {
   }
   
   private RobotFixture robot;
-  private AbstractContainerFixture<CustomWindow> containerFixture;
+  private AbstractContainerFixture<CustomWindow> container;
   private CustomWindow window;
   
   @BeforeClass public void setUp() {
-    robot = new RobotFixture();
-    containerFixture = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {
+    robot = robotWithNewAwtHierarchy();
+    container = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {
 
       public ComponentFixture<CustomWindow> click() {
         return null;
@@ -124,58 +127,58 @@ public class AbstractContainerFixtureTest {
       public ComponentFixture<CustomWindow> requireNotVisible() {
         return null;
       }};
-    window = containerFixture.target;
+    window = container.target;
     robot.showWindow(window);
   }
 
   @Test public void shouldFindComboBoxWithGivenName() {
-    JComboBoxFixture fixture = containerFixture.findComboBox("comboBox");
-    assertThat(fixture.target).isSameAs(window.comboBox);
+    JComboBoxFixture comboBox = container.comboBox("comboBox");
+    assertThat(comboBox.target).isSameAs(window.comboBox);
   }
   
   @Test public void shouldFindTabbedPaneWithGivenName() {
-    JTabbedPaneFixture fixture = containerFixture.findTabbedPane("tabbedPane");
-    assertThat(fixture.target).isSameAs(window.tabbedPane);
+    JTabbedPaneFixture tabbedPane = container.tabbedPane("tabbedPane");
+    assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
   }
   
   @Test public void shouldFindLabelWithGivenName() {
-    JLabelFixture fixture = containerFixture.findLabel("label");
-    assertThat(fixture.target).isSameAs(window.label);
+    JLabelFixture label = container.label("label");
+    assertThat(label.target).isSameAs(window.label);
   }
 
   @Test public void shouldFindButtonWithGivenName() {
-    JButtonFixture fixture = findButton();
-    assertThat(fixture.target).isSameAs(window.button);
+    JButtonFixture button = findButton();
+    assertThat(button.target).isSameAs(window.button);
   }
 
   @Test public void shouldFindDialogWithGivenName() {
-    DialogFixture fixture = containerFixture.findDialog("dialog");
-    assertThat(fixture.target).isSameAs(window.dialog);
+    DialogFixture dialog = container.dialog("dialog");
+    assertThat(dialog.target).isSameAs(window.dialog);
   }
   
   @Test public void shouldFindMenuWithGivenName() {
-    JMenuItemFixture fixture = containerFixture.findMenuItem("menu");
+    JMenuItemFixture fixture = container.menuItem("menu");
     assertThat(fixture.target).isSameAs(window.menu);
   }
   
   @Test public void shouldFindMenuWithGivenPath() {
-    JMenuItemFixture fixture = containerFixture.findMenuItem("A Menu", "A Submenu");
+    JMenuItemFixture fixture = container.menuItem("A Menu", "A Submenu");
     assertThat(fixture.target).isSameAs(window.subMenu);
   }
   
   @Test(dependsOnMethods = "shouldFindButtonWithGivenName") 
   public void shouldFindOptionPane() {
     findButton().click();
-    JOptionPaneFixture fixture = containerFixture.findOptionPane();
+    JOptionPaneFixture fixture = container.optionPane();
     assertThat(fixture.target.getMessage()).isEqualTo("A Message");
   }
 
   private JButtonFixture findButton() {
-    return containerFixture.findButton("button");
+    return container.button("button");
   }
 
   @Test public void shouldFindTextComponentWithGivenName() {
-    JTextComponentFixture fixture = containerFixture.findTextComponent("textField");
+    JTextComponentFixture fixture = container.textBox("textField");
     assertThat(fixture.target).isSameAs(window.textField);
   }
   

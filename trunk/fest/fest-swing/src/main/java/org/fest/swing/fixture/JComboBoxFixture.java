@@ -29,12 +29,12 @@ import org.fest.swing.RobotFixture;
  * @author Yvonne Wang
  */
 public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
-  
+
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JComboBox</code>.
    * @param comboBoxName the name of the combo box to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public JComboBoxFixture(RobotFixture robot, String comboBoxName) {
     super(robot, comboBoxName, JComboBox.class);

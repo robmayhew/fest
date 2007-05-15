@@ -38,7 +38,7 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
    * Creates a new </code>{@link JTextComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTextComponent</code>.
    * @param textComponentName the name of the text component to find using the given <code>RobotFixture</code>.
-   * @see RobotFixture#findByName(String, Class)
+   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public JTextComponentFixture(RobotFixture robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);
