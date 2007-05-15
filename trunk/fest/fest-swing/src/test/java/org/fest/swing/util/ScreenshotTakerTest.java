@@ -25,16 +25,12 @@ import java.util.GregorianCalendar;
 
 import javax.imageio.ImageIO;
 
-import org.fest.swing.image.ImageException;
-import org.fest.swing.image.ScreenshotTaker;
-
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.fest.assertions.Assertions.*;
 
 /**
  * Tests for <code>{@link ScreenshotTaker}</code>.
