@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.image;
+package org.fest.swing.util;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
