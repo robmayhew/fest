@@ -28,6 +28,7 @@ import static java.io.File.separator;
 import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.append;
 import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
 
 import static org.testng.Assert.assertEquals;
@@ -104,5 +105,22 @@ public class FilesTest {
     assertTrue(temporaryFolder.isDirectory());
     String actualPath = append(separator).to(temporaryFolder.getAbsolutePath());
     assertEquals(actualPath, Files.temporaryFolderPath());  
+  }
+  
+  @Test(expectedExceptions = FilesException.class)
+  public void shouldThrowErrorIfNewFilePathIsNonEmptyDirectory() {
+    Files.newFileFrom("root");
+  }
+
+  @Test(expectedExceptions = FilesException.class)
+  public void shouldThrowErrorIfNewFilePathIsExistingFile() {
+    String path = join("root", "dir_1", "file_1_1").with(separator);
+    Files.newFileFrom(path);
+  }
+  
+  @Test public void shouldCreateNewFile() {
+    File newFile = Files.newFileFrom("file");
+    assertTrue(newFile.isFile());
+    assertTrue(newFile.delete());
   }
 }

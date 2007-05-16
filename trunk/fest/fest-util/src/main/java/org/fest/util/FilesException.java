@@ -1,5 +1,5 @@
 /*
- * Created on May 6, 2007
+ * Created on May 16, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,31 +13,31 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.util;
 
 /**
- * Understands an exception thrown by member of this package.
+ * Understands an exception thrown by <code>{@link Files}</code>.
  *
- * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public final class ImageException extends RuntimeException {
+public final class FilesException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
-  
+
   /**
-   * Creates a new </code>{@link ImageException}</code>.
+   * Creates a new </code>{@link FilesException}</code>.
    * @param message the detail message.
    */
-  public ImageException(String message) {
+  public FilesException(String message) {
     super(message);
   }
 
   /**
-   * Creates a new </code>{@link ImageException}</code>.
+   * Creates a new </code>{@link FilesException}</code>.
    * @param message the detail message.
    * @param cause the cause of the error.
    */
-  public ImageException(String message, Throwable cause) {
+  public FilesException(String message, Throwable cause) {
     super(message, cause);
   }
 }

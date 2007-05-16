@@ -15,6 +15,7 @@
 package org.fest.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,11 +71,11 @@ public class Files {
 
   /**
    * @return the system's temporary folder. 
-   * @throws RuntimeException if this method cannot find or create the system's temporary folder.
+   * @throws FilesException if this method cannot find or create the system's temporary folder.
    */
   public static File temporaryFolder() {
     File temp = new File(temporaryFolderPath());
-    if (!temp.isDirectory()) throw new RuntimeException("Unable to find temporary folder");
+    if (!temp.isDirectory()) throw new FilesException("Unable to find temporary folder");
     return temp;
   }
   
@@ -84,6 +85,40 @@ public class Files {
    */
   public static String temporaryFolderPath() {
     return append(separator).to(System.getProperty("java.io.tmpdir"));
+  }
+
+  /**
+   * Creates a new file from the given path.
+   * @param path the path of the new file.
+   * @return the new created file.
+   * @throws FilesException if the path belongs to an existing non-empty directory.
+   * @throws FilesException if the path belongs to an existing file.
+   */
+  public static File newFileFrom(String path) {
+    File file = new File(path);
+    if (file.isDirectory() && !isEmpty(file.list()))
+      throw cannotCreateNewFile(path, "a non-empty directory was found with the same path");
+    try {
+      if (!file.createNewFile()) throw cannotCreateNewFile(path, "a file was found with the same path");
+    } catch (IOException e) {
+      throw cannotCreateNewFile(path, e);
+    }
+    return file;
+  }
+
+  private static FilesException cannotCreateNewFile(String path, String reason) {
+    throw cannotCreateNewFile(path, reason, null);
+  }
+
+  private static FilesException cannotCreateNewFile(String path, Exception cause) {
+    throw cannotCreateNewFile(path, null, cause);
+  }
+
+  private static FilesException cannotCreateNewFile(String path, String reason, Exception cause) {
+    String message = concat("Unable to create the new file ", quote(path));
+    if (!Strings.isEmpty(reason)) message = concat(message, ": ", reason);
+    if (cause != null) throw new FilesException(message, cause);
+    throw new FilesException(message);
   }
   
   private Files() {}
