@@ -109,17 +109,17 @@ public class FilesTest {
   
   @Test(expectedExceptions = FilesException.class)
   public void shouldThrowErrorIfNewFilePathIsNonEmptyDirectory() {
-    Files.newFileFrom("root");
+    Files.newFile("root");
   }
 
   @Test(expectedExceptions = FilesException.class)
   public void shouldThrowErrorIfNewFilePathIsExistingFile() {
     String path = join("root", "dir_1", "file_1_1").with(separator);
-    Files.newFileFrom(path);
+    Files.newFile(path);
   }
   
   @Test public void shouldCreateNewFile() {
-    File newFile = Files.newFileFrom("file");
+    File newFile = Files.newFile("file");
     assertTrue(newFile.isFile());
     assertTrue(newFile.delete());
   }

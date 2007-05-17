@@ -88,13 +88,13 @@ public class Files {
   }
 
   /**
-   * Creates a new file from the given path.
+   * Creates a new file using the given path.
    * @param path the path of the new file.
    * @return the new created file.
    * @throws FilesException if the path belongs to an existing non-empty directory.
    * @throws FilesException if the path belongs to an existing file.
    */
-  public static File newFileFrom(String path) {
+  public static File newFile(String path) {
     File file = new File(path);
     if (file.isDirectory() && !isEmpty(file.list()))
       throw cannotCreateNewFile(path, "a non-empty directory was found with the same path");
