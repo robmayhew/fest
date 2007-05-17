@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<project name="fest-reflect" default="all" basedir=".">
+
+  <property file="ant-build.properties" />
+	<import file="../build-template.xml"/>
+
+</project>
