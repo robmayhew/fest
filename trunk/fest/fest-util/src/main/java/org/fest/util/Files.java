@@ -93,6 +93,7 @@ public class Files {
    * @return the new created file.
    * @throws FilesException if the path belongs to an existing non-empty directory.
    * @throws FilesException if the path belongs to an existing file.
+   * @throws FilesException if any I/O error is thrown when creating the new file.
    */
   public static File newFile(String path) {
     File file = new File(path);
