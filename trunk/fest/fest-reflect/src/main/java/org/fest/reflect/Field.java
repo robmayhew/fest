@@ -14,10 +14,18 @@
  */
 package org.fest.reflect;
 
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 /**
  * Understands the use of reflection to access a field from an object.
+ * <p>
+ * The following is an example of proper usage of this class:
+ * <pre>
+ *   String name = Reflection.field("name").ofType(String.class).in(person).get();
+ *   Reflection.field("name").ofType(String.class).in(person).set("Yoda");
+ * </pre>
+ * </p>
  * @param <T> the declared type for the field represented by this <code>Field</code> object.
  * 
  * @author Alex Ruiz
@@ -41,7 +49,7 @@ public final class Field<T> {
       if (field != null) break;
       type = type.getSuperclass();
     }
-    if (field == null) throw new ReflectionError("Unable to find field " + quote(fieldName) + " in class " + type);
+    if (field == null) throw new ReflectionError(concat("Unable to find field ", quote(fieldName), " in class ", type));
     return field;
   }
 
@@ -58,14 +66,15 @@ public final class Field<T> {
   void assertIsType(Class<T> expected) {
     Class<?> fieldType = field.getType();
     if (!expected.isAssignableFrom(fieldType))
-      throw new ReflectionError("The field " + quote(field.getName()) + " should to be of type " + expected.getName());
+      throw new ReflectionError(concat("The field ", quote(field.getName()), " should be of type <", expected.getName(),
+          "> but was <", fieldType.getName(), ">"));
   }
 
   public void set(T value) {
     try {
       field.set(target, value);
     } catch (Exception e) {
-      throw new ReflectionError("Unable to update the value in field " + quote(field.getName()));
+      throw new ReflectionError(concat("Unable to update the value in field ", quote(field.getName())), e);
     }
   }
 
@@ -73,7 +82,7 @@ public final class Field<T> {
     try {
       return (T) field.get(target);
     } catch (Exception e) {
-      throw new ReflectionError("Unable to obtain the value in field " + quote(field.getName()));
+      throw new ReflectionError(concat("Unable to obtain the value in field " + quote(field.getName())), e);
     }
   }
 
@@ -86,10 +95,6 @@ public final class Field<T> {
 
     public <T> FieldType<T> ofType(Class<T> type) {
       return new FieldType<T>(type, this);
-    }
-
-    public Field<Object> in(Object target) {
-      return new Field<Object>(value, target);
     }
   }
 

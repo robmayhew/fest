@@ -28,13 +28,11 @@ import static org.fest.util.Strings.concat;
  *   Reflection.constructor().withParameterTypes(String.class).in(Person.class).newInstance("Yoda");
  * </pre>
  * </p>
- * @see TargetType
- * @see ParameterTypes
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class Constructor<T> {
+public abstract class Constructor<T> {
 
   private final java.lang.reflect.Constructor<T> constructor;
 
@@ -49,25 +47,11 @@ public final class Constructor<T> {
       return c;
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to find constructor in type ", target.getName(),
-          " with parameter types ", Arrays.toString(parameterTypes)));
+          " with parameter types ", Arrays.toString(parameterTypes)), e);
     }
   }
 
-  /**
-   * Creates a new instance of the class specified as the generic type of this <code>{@link Constructor}</code>.
-   * @return the created instance.
-   */
-  public T newInstance() {
-    return newInstance(new Object[0]);
-  }
-
-  /**
-   * Creates a new instance of the class specified as the generic type of this <code>{@link Constructor}</code>, using
-   * the specified arguments.
-   * @param args the arguments to use to create a new instance.
-   * @return the created instance.
-   */
-  public T newInstance(Object... args) {
+  T newInstance(Object... args) {
     try {
       return constructor.newInstance(args);
     } catch (Exception e) {
@@ -75,59 +59,43 @@ public final class Constructor<T> {
     }
   }
 
-  /**
-   * Understands how to create a new <code>{@link Constructor}</code> for a specific data type.
-   * @see Reflection#constructor()
-   */
-  public static class TargetType {
-
-    TargetType() {}
-
-    /**
-     * Creates a <code>{@link Constructor}</code> for the given class.
-     * @param <T> the generic type of the given class.
-     * @param target the class to create a constructor for.
-     * @return the created constructor.
-     */
-    public <T> Constructor<T> in(Class<T> target) {
-      return new Constructor<T>(target);
+  public static class Default<T> extends Constructor<T> {
+    Default(Class<T> target) { super(target, new Class<?>[0]); }
+    
+    public T newInstance() {
+      return super.newInstance();
     }
+  }
+  
+  public static class WithArgs<T> extends Constructor<T> {
+    WithArgs(Class<T> target, Class<?>[] parameterTypes) { super(target, parameterTypes); }
 
-    /**
-     * Creates an intermediate object that knows how to specify parameter types for a constructor.
-     * @param <T> the generic type of the class to create a constructor for.
-     * @param parameterTypes the given parameter types for the constructor.
-     * @return the created parameter types.
-     */
-    public <T> ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
-      return new ParameterTypes<T>(parameterTypes);
+    @Override public T newInstance(Object... args) {
+      return super.newInstance(args);
     }
   }
 
-  /**
-   * Understands how to specify parameter types for a constructor.
-   * @see TargetType
-   */
-  public static class ParameterTypes<T> {
+  public static class TargetType {
+    TargetType() {}
+
+    public <T> Constructor.Default<T> in(Class<T> target) {
+      return new Constructor.Default<T>(target);
+    }
+
+    public ParameterTypes withParameterTypes(Class<?>... parameterTypes) {
+      return new ParameterTypes(parameterTypes);
+    }
+  }
+
+  public static class ParameterTypes {
     private final Class<?>[] parameterTypes;
 
-    /**
-     * Creates a new </code>{@link ParameterTypes}</code>.
-     * @param parameterTypes the parameter types for the constructor to create.
-     */
     ParameterTypes(Class<?>[] parameterTypes) {
       this.parameterTypes = parameterTypes;
     }
 
-    /**
-     * Creates a <code>{@link Constructor}</code> for the given class, using the parameter types specifies during 
-     * creation.
-     * @param <T> the generic type of the given class.
-     * @param target the class to create a constructor for.
-     * @return the created constructor.
-     */
-    public Constructor<T> in(Class<T> target) {
-      return new Constructor<T>(target, parameterTypes);
+    public <T> Constructor.WithArgs<T> in(Class<T> target) {
+      return new Constructor.WithArgs<T>(target, parameterTypes);
     }
   }
 }

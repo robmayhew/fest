@@ -15,11 +15,39 @@
  */
 package org.fest.reflect;
 
+import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+
 /**
- * Understands SOMETHING DUMMY.
+ * Tests for <code>{@link Constructor}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class ConstructorTest {
 
+  @Test public void shouldCreateNewInstanceWithDefaultConstructor() {
+    Person person = new Constructor.TargetType().in(Person.class).newInstance();
+    assertThat(person).isNotNull();
+    assertThat(person.getName()).isEmpty();
+  }
+  
+  @Test public void shouldCreateNewInstanceUsingGivenConstructorParameters() {
+    Person person = new Constructor.TargetType().withParameterTypes(String.class).in(Person.class).newInstance("Yoda");
+    assertThat(person).isNotNull();
+    assertThat(person.getName()).isEqualTo("Yoda");
+  }
+  
+  @Test(expectedExceptions = ReflectionError.class)
+  public void shouldThrowErrorIfConstructorNotFound() {
+    Class<Integer> illegalType = Integer.class;
+    new Constructor.TargetType().withParameterTypes(illegalType).in(Person.class);
+  }
+  
+  @Test(expectedExceptions = ReflectionError.class)
+  public void shouldThrowErrorIfInstanceNotCreated() {
+    int illegalArg = 8;
+    new Constructor.TargetType().withParameterTypes(String.class).in(Person.class).newInstance(illegalArg);
+  }
 }

@@ -16,13 +16,14 @@ package org.fest.reflect;
 
 import java.util.Arrays;
 
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 /**
  * Understands the use of reflection to access a method from an object.
  * @param <T> the return type of the method invocation.
  * 
- * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class Method<T> {
 
@@ -40,8 +41,8 @@ public final class Method<T> {
       method.setAccessible(true);
       return method;
     } catch (Exception e) {
-      throw new ReflectionError("Unable to find method with name " + quote(methodName) + " in type " + type.getName()
-          + " with parameter types " + Arrays.toString(parameterTypes));
+      throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
+          type.getName(), " with parameter types ", Arrays.toString(parameterTypes)));
     }
   }
 
@@ -53,8 +54,8 @@ public final class Method<T> {
     try {
       return (T) method.invoke(target, args);
     } catch (Exception e) {
-      throw new ReflectionError("Unable to invoke method " + quote(method.getName()) + " with arguments "
-          + Arrays.toString(args));
+      throw new ReflectionError(concat("Unable to invoke method ", quote(method.getName()), " with arguments ",
+          Arrays.toString(args)));
     }
   }
 
@@ -67,6 +68,11 @@ public final class Method<T> {
 
     public <T> ReturnType<T> withReturnType(Class<T> type) {
       return new ReturnType<T>(type, this);
+    }
+
+    public ParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
+      ReturnType<Void> returnType = new ReturnType<Void>(Void.class, this);
+      return new ParameterTypes<Void>(parameterTypes, returnType);
     }
   }
 
@@ -81,7 +87,7 @@ public final class Method<T> {
       return new Method<T>(fieldName.value, target);
     }
 
-    public ParameterTypes<T> andParameterTypes(Class<?>... parameterTypes) {
+    public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
       return new ParameterTypes<T>(parameterTypes, this);
     }
   }

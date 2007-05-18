@@ -19,9 +19,10 @@ import org.fest.reflect.Field.FieldName;
 import org.fest.reflect.Method.MethodName;
 
 /**
- * Understands Java reflection.
+ * Understands and API for simplified Java reflection.
  * 
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class Reflection {
 
