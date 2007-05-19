@@ -39,7 +39,6 @@ public class MethodTest {
   }
   
   @Test public void shouldCallMethod() {
-    //person.setName("Luke");
     String personName = new Method.MethodName("getName").withReturnType(String.class).in(person).invoke();
     assertThat(personName).isEqualTo("Luke");
   }
