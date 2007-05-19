@@ -35,16 +35,16 @@ import static org.fest.util.Strings.concat;
 public abstract class Constructor<T> {
 
   private final java.lang.reflect.Constructor<T> constructor;
-
+  private final boolean accessible;
+  
   Constructor(Class<T> target, Class<?>... parameterTypes) {
     this.constructor = constructor(target, parameterTypes);
+    this.accessible = constructor.isAccessible();
   }
 
   private java.lang.reflect.Constructor<T> constructor(Class<T> target, Class<?>... parameterTypes) {
     try {
-      java.lang.reflect.Constructor<T> c = target.getDeclaredConstructor(parameterTypes);
-      c.setAccessible(true);
-      return c;
+      return target.getDeclaredConstructor(parameterTypes);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to find constructor in type ", target.getName(),
           " with parameter types ", Arrays.toString(parameterTypes)), e);
@@ -53,7 +53,10 @@ public abstract class Constructor<T> {
 
   T newInstance(Object... args) {
     try {
-      return constructor.newInstance(args);
+      constructor.setAccessible(true);
+      T newInstance = constructor.newInstance(args);
+      constructor.setAccessible(accessible);
+      return newInstance;
     } catch (Exception e) {
       throw new ReflectionError("Unable to create a new object from the enclosed constructor", e);
     }

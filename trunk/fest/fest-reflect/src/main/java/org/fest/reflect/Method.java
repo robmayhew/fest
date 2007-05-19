@@ -29,17 +29,17 @@ public final class Method<T> {
 
   private final Object target;
   private final java.lang.reflect.Method method;
+  private final boolean accessible;
 
   Method(String methodName, Object target, Class<?>... parameterTypes) {
     this.target = target;
-    this.method = method(methodName, target.getClass(), parameterTypes);
+    method = method(methodName, target.getClass(), parameterTypes);
+    accessible = method.isAccessible();
   }
 
   private static java.lang.reflect.Method method(String methodName, Class<?> type, Class<?>[] parameterTypes) {
     try {
-      java.lang.reflect.Method method = type.getDeclaredMethod(methodName, parameterTypes);
-      method.setAccessible(true);
-      return method;
+      return type.getDeclaredMethod(methodName, parameterTypes);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
           type.getName(), " with parameter types ", Arrays.toString(parameterTypes)));
@@ -52,10 +52,13 @@ public final class Method<T> {
 
   @SuppressWarnings("unchecked") public T invokeWithArgs(Object... args) {
     try {
+      method.setAccessible(true);
       return (T) method.invoke(target, args);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to invoke method ", quote(method.getName()), " with arguments ",
           Arrays.toString(args)));
+    } finally {
+      method.setAccessible(accessible);
     }
   }
 

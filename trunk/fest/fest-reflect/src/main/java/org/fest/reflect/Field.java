@@ -34,11 +34,13 @@ public final class Field<T> {
 
   private final Object target;
   private final java.lang.reflect.Field field;
+  private final boolean accessible;
 
   Field(String fieldName, Object target) {
     this.target = target;
     Class<?> type = target.getClass();
-    this.field = lookupInClassHierarchy(fieldName, type);
+    field = lookupInClassHierarchy(fieldName, type);
+    accessible = field.isAccessible();
   }
 
   private java.lang.reflect.Field lookupInClassHierarchy(String fieldName, Class<?> targetType) {
@@ -55,42 +57,49 @@ public final class Field<T> {
 
   private static java.lang.reflect.Field field(String fieldName, Class<?> targetType) {
     try {
-      java.lang.reflect.Field f = targetType.getDeclaredField(fieldName);
-      f.setAccessible(true);
-      return f;
+      return targetType.getDeclaredField(fieldName);
     } catch (Exception e) {
       return null;
     }
   }
 
-  void assertIsType(Class<T> expected) {
+  private void assertIsInstanceOf(Class<T> expected, String fieldName) {
+    field.setAccessible(true);
     Class<?> fieldType = field.getType();
-    if (!expected.isAssignableFrom(fieldType))
-      throw new ReflectionError(concat("The field ", quote(field.getName()), " should be of type <", expected.getName(),
+    if (!expected.isAssignableFrom(fieldType)) {
+      throw new ReflectionError(concat("The field ", quote(fieldName), " should be of type <", expected.getName(), 
           "> but was <", fieldType.getName(), ">"));
+    }
+    field.setAccessible(accessible);
   }
 
   public void set(T value) {
     try {
+      field.setAccessible(true);
       field.set(target, value);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to update the value in field ", quote(field.getName())), e);
+    } finally {
+      field.setAccessible(accessible);
     }
   }
 
   @SuppressWarnings("unchecked") public T get() {
     try {
+      field.setAccessible(true);
       return (T) field.get(target);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to obtain the value in field " + quote(field.getName())), e);
+    } finally {
+      field.setAccessible(accessible);
     }
   }
 
   public static class FieldName {
-    private final String value;
+    private final String name;
 
     FieldName(String name) {
-      this.value = name;
+      this.name = name;
     }
 
     public <T> FieldType<T> ofType(Class<T> type) {
@@ -99,17 +108,17 @@ public final class Field<T> {
   }
 
   public static class FieldType<T> {
-    private final Class<T> value;
+    private final Class<T> type;
     private final FieldName fieldName;
 
     FieldType(Class<T> type, FieldName fieldName) {
-      this.value = type;
+      this.type = type;
       this.fieldName = fieldName;
     }
 
     public Field<T> in(Object target) {
-      Field<T> field = new Field<T>(fieldName.value, target);
-      field.assertIsType(value);
+      Field<T> field = new Field<T>(fieldName.name, target);
+      field.assertIsInstanceOf(type, fieldName.name);
       return field;
     }
   }

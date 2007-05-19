@@ -15,7 +15,7 @@
  */
 package org.fest.reflect;
 
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -29,19 +29,19 @@ public class MethodTest {
 
   private Person person;
   
-  @BeforeTest public void setUp() {
+  @BeforeMethod public void setUp() {
     person = new Person("Luke");
   }
 
-  @Test public void shouldCallMethod() {
-    person.setName("Luke");
-    String personName = new Method.MethodName("getName").withReturnType(String.class).in(person).invoke();
-    assertThat(personName).isEqualTo("Luke");
-  }
-  
   @Test public void shouldCallMethodWithArgs() {
     new Method.MethodName("setName").withParameterTypes(String.class).in(person).invokeWithArgs("Leia");
     assertThat(person.getName()).isEqualTo("Leia");
+  }
+  
+  @Test public void shouldCallMethod() {
+    //person.setName("Luke");
+    String personName = new Method.MethodName("getName").withReturnType(String.class).in(person).invoke();
+    assertThat(personName).isEqualTo("Luke");
   }
   
   @Test(expectedExceptions = ReflectionError.class) 
