@@ -34,7 +34,7 @@ public class MethodTest {
   }
 
   @Test public void shouldCallMethodWithArgs() {
-    new Method.MethodName("setName").withParameterTypes(String.class).in(person).invokeWithArgs("Leia");
+    new Method.MethodName("setName").withParameterTypes(String.class).in(person).invoke("Leia");
     assertThat(person.getName()).isEqualTo("Leia");
   }
   
@@ -52,12 +52,12 @@ public class MethodTest {
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfInvalidArgs() {
     int invalidArg = 8;
-    new Method.MethodName("setName").withParameterTypes(String.class).in(person).invokeWithArgs(invalidArg);
+    new Method.MethodName("setName").withParameterTypes(String.class).in(person).invoke(invalidArg);
   }
   
   @Test public void shouldCallMethodWithReturnTypeAndArgs() {
     Jedi jedi = new Jedi("Yoda");
-    new Method.MethodName("addPower").withReturnType(Boolean.class).withParameterTypes(String.class).in(jedi).invokeWithArgs("Heal");
+    new Method.MethodName("addPower").withReturnType(Boolean.class).withParameterTypes(String.class).in(jedi).invoke("Heal");
     assertThat(jedi.powerCount()).isEqualTo(1);
     assertThat(jedi.powerAt(0)).isEqualTo("Heal");
   }

@@ -46,11 +46,7 @@ public final class Method<T> {
     }
   }
 
-  @SuppressWarnings("unchecked") public T invoke() {
-    return invokeWithArgs();
-  }
-
-  @SuppressWarnings("unchecked") public T invokeWithArgs(Object... args) {
+  @SuppressWarnings("unchecked") public T invoke(Object... args) {
     try {
       method.setAccessible(true);
       return (T) method.invoke(target, args);

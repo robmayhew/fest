@@ -32,7 +32,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public abstract class Constructor<T> {
+public final class Constructor<T> {
 
   private final java.lang.reflect.Constructor<T> constructor;
   private final boolean accessible;
@@ -51,7 +51,7 @@ public abstract class Constructor<T> {
     }
   }
 
-  T newInstance(Object... args) {
+  public T newInstance(Object... args) {
     try {
       constructor.setAccessible(true);
       T newInstance = constructor.newInstance(args);
@@ -62,27 +62,11 @@ public abstract class Constructor<T> {
     }
   }
 
-  public static class Default<T> extends Constructor<T> {
-    Default(Class<T> target) { super(target, new Class<?>[0]); }
-    
-    public T newInstance() {
-      return super.newInstance();
-    }
-  }
-  
-  public static class WithArgs<T> extends Constructor<T> {
-    WithArgs(Class<T> target, Class<?>[] parameterTypes) { super(target, parameterTypes); }
-
-    @Override public T newInstance(Object... args) {
-      return super.newInstance(args);
-    }
-  }
-
   public static class TargetType {
     TargetType() {}
 
-    public <T> Constructor.Default<T> in(Class<T> target) {
-      return new Constructor.Default<T>(target);
+    public <T> Constructor<T> in(Class<T> target) {
+      return new Constructor<T>(target);
     }
 
     public ParameterTypes withParameterTypes(Class<?>... parameterTypes) {
@@ -97,8 +81,8 @@ public abstract class Constructor<T> {
       this.parameterTypes = parameterTypes;
     }
 
-    public <T> Constructor.WithArgs<T> in(Class<T> target) {
-      return new Constructor.WithArgs<T>(target, parameterTypes);
+    public <T> Constructor<T> in(Class<T> target) {
+      return new Constructor<T>(target, parameterTypes);
     }
   }
 }
