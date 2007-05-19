@@ -26,25 +26,25 @@ import org.testng.ITestResult;
  */
 public abstract class AbstractTestListener implements ITestListener {
 
-  /** @see org.testng.ITestListener#onFinish(org.testng.ITestContext) */
+  /** {@inheritDoc} */
   public void onFinish(ITestContext context) {}
 
-  /** @see org.testng.ITestListener#onStart(org.testng.ITestContext) */
+  /** {@inheritDoc} */
   public void onStart(ITestContext context) {}
 
-  /** @see org.testng.ITestListener#onTestFailedButWithinSuccessPercentage(org.testng.ITestResult) */
+  /** {@inheritDoc} */
   public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
 
-  /** @see org.testng.ITestListener#onTestFailure(org.testng.ITestResult) */
+  /** {@inheritDoc} */
   public void onTestFailure(ITestResult result) {}
 
-  /** @see org.testng.ITestListener#onTestSkipped(org.testng.ITestResult) */
+  /** {@inheritDoc} */
   public void onTestSkipped(ITestResult result) {}
 
-  /** @see org.testng.ITestListener#onTestStart(org.testng.ITestResult) */
+  /** {@inheritDoc} */
   public void onTestStart(ITestResult result) {}
 
-  /** @see org.testng.ITestListener#onTestSuccess(org.testng.ITestResult) */
+  /** {@inheritDoc} */
   public void onTestSuccess(ITestResult result) {}
 
 }

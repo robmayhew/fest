@@ -45,6 +45,9 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   private String output;
   private boolean ready;
   
+  /**
+   * Creates a new </code>{@link ScreenshotOnFailureListener}</code>.
+   */
   public ScreenshotOnFailureListener() {
     try {
       screenshotTaker = new ScreenshotTaker();
@@ -52,15 +55,23 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
       logger.log(Level.SEVERE, "Unable to create ScreenshotTaker", e);
     }
   }
-  
-  /** {@inheritDoc} */
+
+  /**
+   * Gets the output directory from the given context after the test class is instantiated and before any configuration 
+   * method is called.
+   * @param context the given method context.
+   */
   @Override public void onStart(ITestContext context) {
     output = context.getOutputDirectory();
     logger.info(concat("TestNG output directory: ", quote(output)));
     ready = !isEmpty(output) && screenshotTaker != null;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * When a test fails, this method takes a screenshot of the desktop and adds an hyperlink to the screenshot it in the 
+   * HTML test report.
+   * @param result contains information about the failing test.
+   */
   @Override public void onTestFailure(ITestResult result) {
     if (!ready) return;
     String screenshotFileName = takeScreenshotAndReturnFileName(result);

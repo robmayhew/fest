@@ -20,11 +20,11 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import static org.fest.util.Files.newFile;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.quote;
@@ -56,14 +56,15 @@ public final class ScreenshotTaker {
    * @param imageFilePath the path of the file to save the screentshot to.
    * @throws ImageException if the given file path is <code>null</code> or empty.
    * @throws ImageException if the given file path does not end with ".png".
-   * @throws ImageException if an I/O error prevents the image to be saved as a file.
+   * @throws ImageException if the given file path belongs to a non-empty directory.
+   * @throws ImageException if an I/O error prevents the image from being saved as a file.
    */
   public void saveDesktopAsPng(String imageFilePath) {
     validate(imageFilePath);
     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
     BufferedImage screenshot = robot.createScreenCapture(screen);
     try {
-      ImageIO.write(screenshot, PNG_EXTENSION, new File(imageFilePath));
+      ImageIO.write(screenshot, PNG_EXTENSION, newFile(imageFilePath));
     } catch (IOException e) {
       throw new ImageException(concat("Unable to save screenshot as ", quote(imageFilePath)), e);
     }

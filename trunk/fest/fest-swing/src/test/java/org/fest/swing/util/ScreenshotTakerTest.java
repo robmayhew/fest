@@ -15,17 +15,11 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
-import javax.imageio.ImageIO;
+import static org.fest.swing.util.ImageAssert.assertScreenshotTaken;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 
@@ -63,21 +57,11 @@ public class ScreenshotTakerTest {
   @Test public void shouldTakeScreenshotAndSaveItInGivenPath() throws Exception {
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveDesktopAsPng(imagePath);
-    ensureFileNotExisting(imagePath);
+    assertScreenshotTaken(imagePath);
   }
   
   private String imageFileName() {
     String timestamp = new SimpleDateFormat("yyMMdd.hhmmss").format(new GregorianCalendar().getTime());
     return concat(timestamp, ".png");
-  }
-  
-  private void ensureFileNotExisting(String path) throws IOException {
-    File imageFile = new File(path);
-    assertThat(imageFile.isFile()).isTrue();
-    assertThat(imageFile.getTotalSpace() > 0).isTrue();
-    BufferedImage image = ImageIO.read(imageFile);
-    Dimension expectedImageSize = Toolkit.getDefaultToolkit().getScreenSize();
-    assertThat(image.getWidth()).isEqualTo(expectedImageSize.width);
-    assertThat(image.getHeight()).isEqualTo(expectedImageSize.height);
   }
 }

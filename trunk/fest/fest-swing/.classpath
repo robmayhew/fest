@@ -11,8 +11,14 @@
 	<classpathentry kind="lib" path="lib/main/MRJToolkitStubs.zip"/>
 	<classpathentry kind="lib" path="lib/main/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/main/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/main/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/main/fest-util-0.2-051307.jar" sourcepath="lib/main/fest-util-0.2-051307-src.zip"/>
+	<classpathentry kind="lib" path="lib/main/testng-5.5-jdk15.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://testng.org/javadocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/main/fest-assert-0.2-051307.jar" sourcepath="lib/main/fest-assert-0.2-051307-src.zip"/>
+	<classpathentry kind="lib" path="lib/main/junit-4.3.1.jar" sourcepath="lib/main/junit-4.3.1-src.jar"/>
+	<classpathentry kind="lib" path="lib/main/fest-util-0.2-051607.jar"/>
+	<classpathentry kind="lib" path="lib/test/fest-reflect-0.1-051807.jar" sourcepath="lib/test/fest-reflect-0.1-051807.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
