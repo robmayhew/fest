@@ -23,7 +23,7 @@ import java.util.List;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
-import static org.fest.swing.util.ImageAssert.assertScreenshotTaken;
+import static org.fest.swing.util.ImageAssert.assertDesktopScreenshotTaken;
 
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
@@ -68,7 +68,7 @@ public class ScreenshotOnFailureListenerTest {
     listener.onTestFailure(testNG.testResult);
     String imageFileName = join(className, methodName, "png").with(".");
     String screenshotPath = concat(outputFolder, imageFileName);
-    assertScreenshotTaken(screenshotPath);
+    assertDesktopScreenshotTaken(screenshotPath);
     List<String> reporterOutput = Reporter.getOutput();
     assertThat(reporterOutput.size()).isEqualTo(1);
     assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
