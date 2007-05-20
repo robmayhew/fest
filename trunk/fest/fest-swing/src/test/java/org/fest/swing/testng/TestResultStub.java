@@ -15,8 +15,6 @@
  */
 package org.fest.swing.testng;
 
-import org.testng.IClass;
-import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
 /**
@@ -28,8 +26,8 @@ public class TestResultStub implements ITestResult {
 
   private static final long serialVersionUID = 1L;
   
-  private IClass testClass;
-  private ITestNGMethod method;
+  private ClassStub testClass = new ClassStub();
+  private TestNGMethodStub method = new TestNGMethodStub();
 
   /** @see org.testng.ITestResult#getEndMillis() */
   public long getEndMillis() {
@@ -42,12 +40,8 @@ public class TestResultStub implements ITestResult {
   }
 
   /** @see org.testng.ITestResult#getMethod() */
-  public ITestNGMethod getMethod() {
+  public TestNGMethodStub getMethod() {
     return method;
-  }
-
-  public void setMethod(ITestNGMethod method) {
-    this.method = method;
   }
 
   /** @see org.testng.ITestResult#getName() */
@@ -71,12 +65,8 @@ public class TestResultStub implements ITestResult {
   }
 
   /** @see org.testng.ITestResult#getTestClass() */
-  public IClass getTestClass() {
+  public ClassStub getTestClass() {
     return testClass;
-  }
-
-  public void setTestClass(IClass testClass) {
-    this.testClass = testClass;
   }
 
   /** @see org.testng.ITestResult#getThrowable() */

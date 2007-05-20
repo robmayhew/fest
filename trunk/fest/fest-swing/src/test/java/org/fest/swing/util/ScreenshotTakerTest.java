@@ -18,7 +18,7 @@ package org.fest.swing.util;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
-import static org.fest.swing.util.ImageAssert.assertDesktopScreenshotTaken;
+import static org.fest.swing.util.ImageAssert.assertScreenshotOfDesktopTaken;
 
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
@@ -57,7 +57,7 @@ public class ScreenshotTakerTest {
   @Test public void shouldTakeScreenshotAndSaveItInGivenPath() throws Exception {
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveDesktopAsPng(imagePath);
-    assertDesktopScreenshotTaken(imagePath);
+    assertScreenshotOfDesktopTaken(imagePath);
   }
   
   private String imageFileName() {

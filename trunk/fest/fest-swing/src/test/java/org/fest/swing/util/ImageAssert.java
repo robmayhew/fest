@@ -37,7 +37,7 @@ public final class ImageAssert {
    * @param path the path of the screenshot to verify.
    * @throws IOException any I/O error thrown when reading the image file.
    */
-  public static void assertDesktopScreenshotTaken(String path) throws IOException {
+  public static void assertScreenshotOfDesktopTaken(String path) throws IOException {
     File imageFile = new File(path);
     assertThat(imageFile.isFile()).isTrue();
     assertThat(imageFile.getTotalSpace() > 0).isTrue();

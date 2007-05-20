@@ -23,7 +23,7 @@ import java.util.List;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
-import static org.fest.swing.util.ImageAssert.assertDesktopScreenshotTaken;
+import static org.fest.swing.util.ImageAssert.assertScreenshotOfDesktopTaken;
 
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
@@ -40,18 +40,21 @@ import org.testng.annotations.Test;
  */
 public class ScreenshotOnFailureListenerTest {
 
-  private TestNGFixture testNG;
+  private TestContextStub testContext;
+  private TestResultStub testResult;
+
   private ScreenshotOnFailureListener listener;
   
   @BeforeMethod public void setUp() {
-    testNG = new TestNGFixture();
+    testContext = new TestContextStub();
+    testResult = new TestResultStub();
     listener = new ScreenshotOnFailureListener();
   }
 
   @Test public void shouldGetOutputFolderOnStart() {
     String outputFolder = "output";
-    testNG.testContext.setOutputDirectory(outputFolder);
-    listener.onStart(testNG.testContext);
+    testContext.setOutputDirectory(outputFolder);
+    listener.onStart(testContext);
     String actualOutputFolder = field("output").ofType(String.class).in(listener).get();
     assertThat(actualOutputFolder).isEqualTo(outputFolder);
   }
@@ -61,32 +64,16 @@ public class ScreenshotOnFailureListenerTest {
     Date now = new GregorianCalendar().getTime();
     String className = new SimpleDateFormat("yyMMdd").format(now);
     String methodName = new SimpleDateFormat("hhmmss").format(now);
-    testNG.testContext.setOutputDirectory(outputFolder);
-    testNG.testClass.setName(className);
-    testNG.testMethod.setMethodName(methodName);
-    listener.onStart(testNG.testContext);
-    listener.onTestFailure(testNG.testResult);
+    testContext.setOutputDirectory(outputFolder);
+    testResult.getTestClass().setName(className);
+    testResult.getMethod().setMethodName(methodName);
+    listener.onStart(testContext);
+    listener.onTestFailure(testResult);
     String imageFileName = join(className, methodName, "png").with(".");
     String screenshotPath = concat(outputFolder, imageFileName);
-    assertDesktopScreenshotTaken(screenshotPath);
+    assertScreenshotOfDesktopTaken(screenshotPath);
     List<String> reporterOutput = Reporter.getOutput();
     assertThat(reporterOutput.size()).isEqualTo(1);
     assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
-  }
-
-  private static class TestNGFixture {
-    final TestContextStub testContext;
-    final ClassStub testClass;
-    final TestNGMethodStub testMethod;
-    final TestResultStub testResult;
-    
-    TestNGFixture() {
-      testContext = new TestContextStub();
-      testClass = new ClassStub();
-      testMethod = new TestNGMethodStub();
-      testResult = new TestResultStub();
-      testResult.setTestClass(testClass);
-      testResult.setMethod(testMethod);
-    }
-  }
+  } 
 }
