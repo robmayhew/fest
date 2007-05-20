@@ -59,21 +59,28 @@ public class ScreenshotOnFailureListenerTest {
     assertThat(actualOutputFolder).isEqualTo(outputFolder);
   }
   
-  @Test public void shouldTakeScreenshotOnTestFailure() throws Exception {
-    String outputFolder = temporaryFolderPath();
-    Date now = new GregorianCalendar().getTime();
-    String className = new SimpleDateFormat("yyMMdd").format(now);
-    String methodName = new SimpleDateFormat("hhmmss").format(now);
-    testContext.setOutputDirectory(outputFolder);
-    testResult.getTestClass().setName(className);
-    testResult.getMethod().setMethodName(methodName);
+  @Test public void shouldTakeScreenshotOfDesktopOnTestFailure() throws Exception {
+    setUpStubsForScreenshot();
     listener.onStart(testContext);
     listener.onTestFailure(testResult);
-    String imageFileName = join(className, methodName, "png").with(".");
-    String screenshotPath = concat(outputFolder, imageFileName);
+    String imageFileName = screenshotFileName();
+    String screenshotPath = concat(testContext.getOutputDirectory(), imageFileName);
     assertScreenshotOfDesktopTaken(screenshotPath);
     List<String> reporterOutput = Reporter.getOutput();
     assertThat(reporterOutput.size()).isEqualTo(1);
     assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
   } 
+  
+  private void setUpStubsForScreenshot() {
+    Date now = new GregorianCalendar().getTime();
+    testContext.setOutputDirectory(temporaryFolderPath());
+    testResult.getTestClass().setName(new SimpleDateFormat("yyMMdd").format(now));
+    testResult.getMethod().setMethodName(new SimpleDateFormat("hhmmss").format(now));
+  }
+  
+  private String screenshotFileName() {
+    String className = testResult.getTestClass().getName();
+    String methodName = testResult.getMethod().getMethodName();
+    return join(className, methodName, "png").with(".");
+  }
 }
