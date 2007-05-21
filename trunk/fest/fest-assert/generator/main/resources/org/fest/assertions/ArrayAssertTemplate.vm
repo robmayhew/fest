@@ -38,9 +38,8 @@ public final class ${className} {
     this.actual = actual;
   }
 
-  public ${className} isNull() {
+  public void isNull() {
     failIfNotNull(actual);
-    return this;
   }
 
   public ${className} isNotNull() {
@@ -48,9 +47,8 @@ public final class ${className} {
     return this;
   }
   
-  public ${className} isEmpty() {
+  public void isEmpty() {
     if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
-    return this;
   }
 
   public ${className} isNotEmpty() {

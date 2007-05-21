@@ -31,8 +31,8 @@ public final class StringAssert {
 
   private final String actual;
 
-  StringAssert(String target) {
-    this.actual = target;
+  StringAssert(String actual) {
+    this.actual = actual;
   }
   
   public StringAssert isEmpty() {

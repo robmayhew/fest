@@ -29,18 +29,22 @@ import static org.testng.Assert.assertEquals;
 public class AssertionsTest {
 
   @Test public void shouldReturnObjectAssertIfArgumentIsObject() {
-    assertEquals(Assertions.assertThat(new Object()).getClass(), ObjectAssert.class);
+    assertIsInstanceOf(Assertions.assertThat(new Object()), ObjectAssert.class);
   }
   
   @Test public void shouldReturnStringAssertIfArgumentIsString() {
-    assertEquals(Assertions.assertThat("").getClass(), StringAssert.class);
+    assertIsInstanceOf(Assertions.assertThat(""), StringAssert.class);
   }
 
   @Test public void shouldReturnObjectArrayAssertIfArgumentIsObjectArray() {
-    assertEquals(Assertions.assertThat(new String[] { "One" }).getClass(), ObjectArrayAssert.class);
+    assertIsInstanceOf(Assertions.assertThat(new String[] { "One" }), ObjectArrayAssert.class);
   }
 
   @Test public void shouldReturnCollectionAssertIfArgumentIsCollection() {
-    assertEquals(Assertions.assertThat(new ArrayList<Object>()).getClass(), CollectionAssert.class);
+    assertIsInstanceOf(Assertions.assertThat(new ArrayList<Object>()), CollectionAssert.class);
+  }
+  
+  private void assertIsInstanceOf(Object target, Class<?> expectedType) {
+    assertEquals(target.getClass(), expectedType);
   }
 }

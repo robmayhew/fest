@@ -66,6 +66,16 @@ public final class Fail {
   }
   
   /**
+   * Fails if the given integers are not equal.
+   * @param actual the value to check against <code>expected</code>.
+   * @param expected expected value.
+   * @throws AssertionError if the given objects are not equal.
+   */
+  static void failIfNotEqual(int actual, int expected) {
+    if (actual != expected) fail(errorMessageIfNotEqual(String.valueOf(actual), String.valueOf(expected)));
+  }
+  
+  /**
    * Fails if the given object is <code>null</code>.
    * @param o the object to check.
    * @throws AssertionError if the given object is <code>null</code>.

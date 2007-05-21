@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Fail.failIfNotEqual;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
@@ -39,12 +40,31 @@ public final class CollectionAssert<T> {
 
   public CollectionAssert doesNotHaveDuplicates() {
     Collection<T> duplicates = duplicatesFrom(actual);
-    if (!duplicates.isEmpty()) fail(concat("The collection ", actual, " contains duplicates (", duplicates, ")"));
+    if (!duplicates.isEmpty()) fail(concat("the collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
   }
 
-  public CollectionAssert isEmpty() {
-    if (!Collections.isEmpty(actual)) fail(concat("The collection ", actual, " is not empty"));
+  public void isNull() {
+    if (actual != null) fail("the collection is not null");
+  }
+  
+  public CollectionAssert isNotNull() {
+    if (actual == null) fail ("the collection is null");
+    return this;
+  }
+  
+  public void isEmpty() {
+    if (!Collections.isEmpty(actual)) fail(concat("the collection ", actual, " is not empty"));
+  }
+  
+  public CollectionAssert isNotEmpty() {
+    if (Collections.isEmpty(actual)) fail("the collection is null or empty");
+    return this;
+  }
+  
+  public CollectionAssert hasSize(int size) {
+    if (actual == null) fail("the collection is null");
+    failIfNotEqual(actual.size(), size);
     return this;
   }
 }

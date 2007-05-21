@@ -61,16 +61,52 @@ public class CollectionAssertTest {
   }
   
   @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsNotEmpty() {
+  public void shouldFailIfCollectionIsNotEmptyAndExpectingEmpty() {
     new CollectionAssert<String>(list("Yoda")).isEmpty();
   }
   
-  @Test public void shouldPassIfCollectionIsEmpty() {
+  @Test public void shouldPassIfCollectionIsEmptyAndExpectingEmpty() {
     new CollectionAssert<String>(new ArrayList<String>()).isEmpty();
   }
   
-  @Test public void shouldPassIfCollectionIsNull() {
+  @Test public void shouldPassIfCollectionIsNullAndExpectingEmpty() {
     List<String> nullList = null;
     new CollectionAssert<String>(nullList).isEmpty();
+  }
+  
+  @Test public void shouldPassIfCollectionHasExpectedSize() {
+    List<String> names = list("Gandalf", "Frodo", "Sam");
+    new CollectionAssert<String>(names).hasSize(3);
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfCollectionDoesNotHaveExpectedSize() {
+    List<String> names = list("Frodo");
+    new CollectionAssert<String>(names).hasSize(2);
+  }
+  
+  @Test(expectedExceptions = AssertionError.class) 
+  public void shouldFailIfCollectionIsNullAndExpectingSomeSize() {
+    new CollectionAssert<String>(null).hasSize(0);
+  }
+  
+  @Test public void shouldPassIfCollectionIsNotEmptyAndExpectingNotEmpty() {
+    List<String> names = list("Frodo", "Sam");
+    new CollectionAssert<String>(names).isNotEmpty();
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfCollectionIsNotEmptyAndExpectingNotEmpty() {
+    List<String> names = new ArrayList<String>();
+    new CollectionAssert<String>(names).isNotEmpty();
+  }
+  
+  @Test public void shouldPassIfCollectionIsNullAndExpectingNull() {
+    new CollectionAssert<String>(null).isNull();
+  }
+  
+  @Test(expectedExceptions = AssertionError.class) 
+  public void shouldFailIfCollectionIsNotNullAndExpectingNull() {
+    new CollectionAssert<String>(new ArrayList<String>()).isNull();
   }
 }

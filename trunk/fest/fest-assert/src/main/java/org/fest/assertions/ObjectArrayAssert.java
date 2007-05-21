@@ -38,9 +38,8 @@ public final class ObjectArrayAssert {
     this.actual = actual;
   }
 
-  public ObjectArrayAssert isNull() {
+  public void isNull() {
     failIfNotNull(actual);
-    return this;
   }
 
   public ObjectArrayAssert isNotNull() {
@@ -48,9 +47,8 @@ public final class ObjectArrayAssert {
     return this;
   }
   
-  public ObjectArrayAssert isEmpty() {
+  public void isEmpty() {
     if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
-    return this;
   }
 
   public ObjectArrayAssert isNotEmpty() {

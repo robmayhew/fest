@@ -1,5 +1,5 @@
 /*
- * Created on May 13, 2007
+ * Created on May 21, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -38,9 +38,8 @@ public final class IntArrayAssert {
     this.actual = actual;
   }
 
-  public IntArrayAssert isNull() {
+  public void isNull() {
     failIfNotNull(actual);
-    return this;
   }
 
   public IntArrayAssert isNotNull() {
@@ -48,9 +47,8 @@ public final class IntArrayAssert {
     return this;
   }
   
-  public IntArrayAssert isEmpty() {
+  public void isEmpty() {
     if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
-    return this;
   }
 
   public IntArrayAssert isNotEmpty() {
