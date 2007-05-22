@@ -26,6 +26,7 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import static org.fest.util.Arrays.array;
 
+import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -38,7 +39,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxFixtureTest {
+@GUITest public class JComboBoxFixtureTest {
 
   private static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;

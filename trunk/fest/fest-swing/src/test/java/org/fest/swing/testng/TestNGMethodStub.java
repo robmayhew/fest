@@ -29,7 +29,9 @@ import org.testng.ITestNGMethod;
 public class TestNGMethodStub implements ITestNGMethod {
 
   private static final long serialVersionUID = 1L;
+  
   private String methodName;
+  private Method method;
 
   /** @see org.testng.ITestNGMethod#addMethodDependedUpon(java.lang.String) */
   public void addMethodDependedUpon(String methodName) {}
@@ -96,7 +98,11 @@ public class TestNGMethodStub implements ITestNGMethod {
 
   /** @see org.testng.ITestNGMethod#getMethod() */
   public Method getMethod() {
-    return null;
+    return method;
+  }
+  
+  public void setMethod(Method method) {
+    this.method = method;
   }
 
   /** @see org.testng.ITestNGMethod#getMethodName() */

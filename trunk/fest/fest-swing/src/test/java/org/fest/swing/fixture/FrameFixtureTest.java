@@ -19,6 +19,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import org.fest.swing.GUITest;
+
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
@@ -35,7 +37,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class FrameFixtureTest {
+@GUITest public class FrameFixtureTest {
 
   private FrameFixture frameFixture;
   private JFrame frame;

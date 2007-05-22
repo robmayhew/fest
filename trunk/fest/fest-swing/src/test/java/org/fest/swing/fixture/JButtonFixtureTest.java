@@ -27,6 +27,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import org.fest.swing.Condition;
+import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -38,7 +39,7 @@ import org.testng.annotations.Test;
  *
  * @author Yvonne Wang
  */
-public class JButtonFixtureTest {
+@GUITest public class JButtonFixtureTest {
 
   private static class CustomButton extends JButton {
     private static final long serialVersionUID = 1L;

@@ -42,6 +42,7 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterMethod;
@@ -53,7 +54,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class JOptionPaneFixtureTest {
+@GUITest public class JOptionPaneFixtureTest {
 
   private static class CustomWindow extends JFrame {
     private static final long serialVersionUID = 1L;

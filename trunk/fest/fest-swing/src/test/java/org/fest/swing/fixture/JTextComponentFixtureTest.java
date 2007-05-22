@@ -29,6 +29,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import org.fest.swing.Condition;
+import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -41,7 +42,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTextComponentFixtureTest {
+@GUITest public class JTextComponentFixtureTest {
 
   private static class CustomTextField extends JTextField {
     private static final long serialVersionUID = 1L;

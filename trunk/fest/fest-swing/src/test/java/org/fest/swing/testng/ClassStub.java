@@ -27,6 +27,7 @@ public class ClassStub implements IClass {
   private static final long serialVersionUID = 1L;
   
   private String name;
+  private Class<?> realClass;
 
   /** @see org.testng.IClass#addInstance(java.lang.Object) */
   public void addInstance(Object instance) {}
@@ -56,8 +57,11 @@ public class ClassStub implements IClass {
   }
 
   /** @see org.testng.IClass#getRealClass() */
-  public Class getRealClass() {
-    return null;
+  public Class<?> getRealClass() {
+    return realClass;
   }
 
+  public void setRealClass(Class<?> realClass) {
+    this.realClass = realClass;
+  }
 }

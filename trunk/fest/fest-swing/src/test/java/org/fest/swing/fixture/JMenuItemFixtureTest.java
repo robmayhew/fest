@@ -27,6 +27,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
+import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -38,7 +39,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixtureTest {
+@GUITest public class JMenuItemFixtureTest {
 
   private static class CustomWindow extends JFrame {
     private static final long serialVersionUID = 1L;
