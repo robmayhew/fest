@@ -20,8 +20,6 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotNull;
-import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -30,43 +28,54 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ObjectArrayAssert {
-
-  private final Object[] actual;
+public final class ObjectArrayAssert extends GroupAssert<Object[]> {
 
   ObjectArrayAssert(Object... actual) {
-    this.actual = actual;
+    super(actual);
   }
 
-  public void isNull() {
-    failIfNotNull(actual);
-  }
-
-  public ObjectArrayAssert isNotNull() {
-    failIfNull(actual);
+  @Override public ObjectArrayAssert isNotNull() {
+    super.isNotNull();
     return this;
   }
   
   public void isEmpty() {
-    if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
+    if (actualGroupSize() > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
   }
 
   public ObjectArrayAssert isNotEmpty() {
-    if (actual.length == 0) fail("expecting a non-empty array");
+    if (actualGroupSize() == 0) fail("expecting a non-empty array");
     return this;
   }
 
-  public ObjectArrayAssert isEqualTo(Object... expected) {
+  @Override public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected)) 
       fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
-  public ObjectArrayAssert isNotEqualTo(Object... array) {
+  @Override public ObjectArrayAssert isNotEqualTo(Object[] array) {
     if (Arrays.equals(actual, array)) 
       fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
     return this;
   }
+
+  int actualGroupSize() {
+    return actual.length;
+  }
+
+  @Override public ObjectArrayAssert hasSize(int expected) {
+    super.hasSize(expected);
+    return this;
+  }
   
-  
+  @Override public ObjectArrayAssert isSameAs(Object[] expected) {
+    super.isSameAs(expected);
+    return this;
+  }
+
+  @Override public ObjectArrayAssert isNotSameAs(Object[] expected) {
+    super.isNotSameAs(expected);
+    return this;
+  }
 }

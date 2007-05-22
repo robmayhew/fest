@@ -16,6 +16,7 @@
 package org.fest.assertions;
 
 import org.testng.annotations.Test;
+import static org.fest.util.Arrays.*;
 
 /**
  * Tests for <code>{@link ObjectArrayAssert}</code>.
@@ -62,20 +63,20 @@ public class ObjectArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ObjectArrayAssert("Luke", "Leia").isEqualTo("Luke", "Leia");
+    new ObjectArrayAssert("Luke", "Leia").isEqualTo(array("Luke", "Leia"));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ObjectArrayAssert("Luke", "Leia").isEqualTo("Anakin");
+    new ObjectArrayAssert("Luke", "Leia").isEqualTo(array("Anakin"));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ObjectArrayAssert("Luke", "Leia").isNotEqualTo("Yoda");
+    new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Yoda"));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ObjectArrayAssert("Luke", "Leia").isNotEqualTo("Luke", "Leia");
+    new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Luke", "Leia"));
   }
 }
