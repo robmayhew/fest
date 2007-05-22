@@ -39,7 +39,7 @@ public class CollectionAssertTest {
   public void shouldFailIfCollectionHasDuplicates() {
     List<String> list = list("Luke", "Yoda", "Luke");
     try {
-      new CollectionAssert<String>(list).doesNotHaveDuplicates();
+      new CollectionAssert(list).doesNotHaveDuplicates();
       fail("Should have failed");
     } catch (AssertionError e) {
       String message = e.getMessage();
@@ -49,64 +49,63 @@ public class CollectionAssertTest {
   }
   
   @Test public void shouldSucceedIfCollectionDoesNotHaveDuplicates() {
-    new CollectionAssert<String>(list("Luke", "Yoda")).doesNotHaveDuplicates();
+    new CollectionAssert(list("Luke", "Yoda")).doesNotHaveDuplicates();
   }
 
   @Test public void shouldSucceedIfCollectionIsEmpty() {
-    new CollectionAssert<String>(new ArrayList<String>()).doesNotHaveDuplicates();
+    new CollectionAssert(new ArrayList<String>()).doesNotHaveDuplicates();
   }
 
   @Test public void shouldSucceedIfCollectionIsNull() {
-    new CollectionAssert<String>(null).doesNotHaveDuplicates();
+    new CollectionAssert(null).doesNotHaveDuplicates();
   }
   
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfCollectionIsNotEmptyAndExpectingEmpty() {
-    new CollectionAssert<String>(list("Yoda")).isEmpty();
+    new CollectionAssert(list("Yoda")).isEmpty();
   }
   
   @Test public void shouldPassIfCollectionIsEmptyAndExpectingEmpty() {
-    new CollectionAssert<String>(new ArrayList<String>()).isEmpty();
+    new CollectionAssert(new ArrayList<String>()).isEmpty();
   }
   
   @Test public void shouldPassIfCollectionIsNullAndExpectingEmpty() {
     List<String> nullList = null;
-    new CollectionAssert<String>(nullList).isEmpty();
+    new CollectionAssert(nullList).isEmpty();
   }
   
   @Test public void shouldPassIfCollectionHasExpectedSize() {
     List<String> names = list("Gandalf", "Frodo", "Sam");
-    new CollectionAssert<String>(names).hasSize(3);
+    new CollectionAssert(names).hasSize(3);
   }
   
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfCollectionDoesNotHaveExpectedSize() {
     List<String> names = list("Frodo");
-    new CollectionAssert<String>(names).hasSize(2);
+    new CollectionAssert(names).hasSize(2);
   }
   
   @Test(expectedExceptions = AssertionError.class) 
   public void shouldFailIfCollectionIsNullAndExpectingSomeSize() {
-    new CollectionAssert<String>(null).hasSize(0);
+    new CollectionAssert(null).hasSize(0);
   }
   
   @Test public void shouldPassIfCollectionIsNotEmptyAndExpectingNotEmpty() {
     List<String> names = list("Frodo", "Sam");
-    new CollectionAssert<String>(names).isNotEmpty();
+    new CollectionAssert(names).isNotEmpty();
   }
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfCollectionIsNotEmptyAndExpectingNotEmpty() {
-    List<String> names = new ArrayList<String>();
-    new CollectionAssert<String>(names).isNotEmpty();
+    new CollectionAssert(new ArrayList<String>()).isNotEmpty();
   }
   
   @Test public void shouldPassIfCollectionIsNullAndExpectingNull() {
-    new CollectionAssert<String>(null).isNull();
+    new CollectionAssert(null).isNull();
   }
   
   @Test(expectedExceptions = AssertionError.class) 
   public void shouldFailIfCollectionIsNotNullAndExpectingNull() {
-    new CollectionAssert<String>(new ArrayList<String>()).isNull();
+    new CollectionAssert(new ArrayList<String>()).isNull();
   }
 }

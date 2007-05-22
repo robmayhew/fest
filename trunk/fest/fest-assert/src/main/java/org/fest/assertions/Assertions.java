@@ -73,8 +73,8 @@ public final class Assertions {
     return new ObjectArrayAssert(actual);
   }
 
-  public static <T> CollectionAssert assertThat(Collection<T> actual) {
-    return new CollectionAssert<T>(actual);
+  public static CollectionAssert assertThat(Collection<?> actual) {
+    return new CollectionAssert(actual);
   }
   
   private Assertions() {}

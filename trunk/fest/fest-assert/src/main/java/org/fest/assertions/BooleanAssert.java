@@ -31,13 +31,11 @@ public final class BooleanAssert {
     this.actual = actual;
   }
   
-  public BooleanAssert isTrue() {
+  public void isTrue() {
     if (!actual) fail(errorMessageIfNotEqual(Boolean.FALSE, Boolean.TRUE));
-    return this;
   }
 
-  public BooleanAssert isFalse() {
+  public void isFalse() {
     if (actual) fail(errorMessageIfNotEqual(Boolean.TRUE, Boolean.FALSE));
-    return this;
   }
 }

@@ -81,7 +81,7 @@ public final class Fail {
    * @throws AssertionError if the given object is <code>null</code>.
    */
   static void failIfNull(Object o) {
-    if (o == null) fail("the given object should not be null");
+    if (o == null) fail(concat("the given object, ", o, " should not be null"));
   }
   
   /**

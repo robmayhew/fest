@@ -18,11 +18,6 @@ package org.fest.assertions;
 import java.util.Arrays;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfEqual;
-import static org.fest.assertions.Fail.failIfNotEqual;
-import static org.fest.assertions.Fail.failIfNotNull;
-import static org.fest.assertions.Fail.failIfNotSame;
-import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
 
@@ -31,12 +26,10 @@ import static org.fest.util.Strings.concat;
  *
  * @author Yvonne Wang
  */
-public final class ObjectAssert {
-
-  private final Object actual;
+public final class ObjectAssert extends Assert<Object> {
 
   ObjectAssert(Object actual) {
-    this.actual = actual;
+    super(actual);
   }
   
   public ObjectAssert isInstanceOf(Class<?> type) {
@@ -56,28 +49,28 @@ public final class ObjectAssert {
     return this;
   }
   
-  public ObjectAssert isNull() {
-    failIfNotNull(actual);
-    return this;
-  }
-
-  public ObjectAssert isNotNull() {
-    failIfNull(actual);
+  @Override public ObjectAssert isNotNull() {
+    super.isNotNull();
     return this;
   }
   
-  public ObjectAssert isSameAs(Object expected) {
-    failIfNotSame(actual, expected);
+  @Override public ObjectAssert isSameAs(Object expected) {
+    super.isSameAs(expected);
     return this;
   }
   
-  public ObjectAssert isEqualTo(Object expected) {
-    failIfNotEqual(actual, expected);
+  @Override public ObjectAssert isNotSameAs(Object other) {
+    super.isNotSameAs(other);
     return this;
   }
 
-  public ObjectAssert isNotEqualTo(Object obj) {
-    failIfEqual(actual, obj);
+  @Override public ObjectAssert isEqualTo(Object expected) {
+    super.isEqualTo(expected);
+    return this;
+  }
+
+  @Override public ObjectAssert isNotEqualTo(Object other) {
+    super.isNotEqualTo(other);
     return this;
   }
 }

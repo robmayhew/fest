@@ -20,7 +20,6 @@ import java.util.Collection;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotEqual;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
@@ -30,25 +29,19 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @param <T> the parameterized type of the collection.
  */
-public final class CollectionAssert<T> {
+public final class CollectionAssert extends GroupAssert<Collection<?>> {
 
-  private final Collection<T> actual;
-
-  CollectionAssert(Collection<T> actual) {
-    this.actual = actual;
+  CollectionAssert(Collection<?> actual) {
+    super(actual);
   }
 
   public CollectionAssert doesNotHaveDuplicates() {
-    Collection<T> duplicates = duplicatesFrom(actual);
+    Collection<?> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty()) fail(concat("the collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
   }
 
-  public void isNull() {
-    if (actual != null) fail("the collection is not null");
-  }
-  
-  public CollectionAssert isNotNull() {
+  @Override public CollectionAssert isNotNull() {
     if (actual == null) fail ("the collection is null");
     return this;
   }
@@ -62,9 +55,32 @@ public final class CollectionAssert<T> {
     return this;
   }
   
-  public CollectionAssert hasSize(int size) {
-    if (actual == null) fail("the collection is null");
-    failIfNotEqual(actual.size(), size);
+  @Override public CollectionAssert hasSize(int expected) {
+    super.hasSize(expected);
+    return this;
+  }
+
+  int actualGroupSize() {
+    return actual.size();
+  }
+
+  @Override public CollectionAssert isEqualTo(Collection<?> expected) {
+    super.isEqualTo(expected);
+    return this;
+  }
+
+  @Override public CollectionAssert isNotEqualTo(Collection<?> obj) {
+    super.isNotEqualTo(obj);
+    return this;
+  }
+  
+  @Override public CollectionAssert isSameAs(Collection<?> expected) {
+    super.isSameAs(expected);
+    return this;
+  }
+
+  @Override public CollectionAssert isNotSameAs(Collection<?> expected) {
+    super.isNotSameAs(expected);
     return this;
   }
 }
