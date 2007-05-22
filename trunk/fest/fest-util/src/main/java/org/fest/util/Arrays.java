@@ -32,13 +32,23 @@ public class Arrays {
     return array == null || array.length == 0;
   }
 
-  /**
-   * Returns an array containing the given arguments.
-   * @param <T> the type of the array to return.
-   * @param values the values to store in the array.
-   * @return an array containing the given arguments.
-   */
   public static <T> T[] array(T... values) { return values; }
 
+  public static boolean[] array(boolean... values) { return values; }
+
+  public static char[] array(char... values) { return values; }
+
+  public static byte[] array(byte... values) { return values; }
+  
+  public static short[] array(short... values) { return values; }
+  
+  public static int[] array(int... values) { return values; }
+
+  public static long[] array(long... values) { return values; }
+  
+  public static float[] array(float... values) { return values; }
+  
+  public static double[] array(double... values) { return values; }
+  
   private Arrays() {}
 }

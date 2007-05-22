@@ -18,7 +18,7 @@ package org.fest.util;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link Arrays}</code>.
@@ -37,5 +37,50 @@ public class ArraysTest {
 
   @Test public void shouldReturnIsNotEmptyIfArrayHasElements() {
     assertFalse(Arrays.isEmpty(new String[] { "Tuzi" }));
+  }
+  
+  @Test public void shouldReturnObjectArrayArgument() {
+    Object[] array = { "one", "two" };
+    assertSame(Arrays.array(array), array);
+  }
+  
+  @Test public void shouldReturnBooleanArrayArgument() {
+    boolean[] array = { true, false };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnCharArrayArgument() {
+    char[] array = { 'a', 'b' };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnByteArrayArgument() {
+    byte[] array = { (byte)8 };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnShortArrayArgument() {
+    short[] array = { (short)6 };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnIntArrayArgument() {
+    int[] array = { 8, 5, 68 };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnLongArrayArgument() {
+    long[] array = { 76l, 903l };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnFloatArrayArgument() {
+    float[] array = { 6.8f };
+    assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldReturnDoubleArrayArgument() {
+    double[] array = { 8987.68 };
+    assertSame(Arrays.array(array), array);
   }
 }
