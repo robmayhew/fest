@@ -77,7 +77,7 @@ public class JComboBoxFixtureTest {
  
   @Test(dependsOnMethods = "shouldHaveFoundComboBox")
   public void shouldReturnComboBoxContents() {
-    assertThat(fixture.contents()).isEqualTo("first", "second", "third");
+    assertThat(fixture.contents()).isEqualTo(array("first", "second", "third"));
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundComboBox")

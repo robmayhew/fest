@@ -25,6 +25,8 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
+import static org.fest.util.Arrays.array;
+
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterClass;
@@ -101,7 +103,7 @@ public class JTabbedPaneFixtureTest {
 
   @Test(dependsOnMethods = "shouldHaveFoundTabbedPane")
   public void shouldReturnAllTabs() {
-    assertThat(fixture.tabTitles()).isEqualTo("First", "Second");
+    assertThat(fixture.tabTitles()).isEqualTo(array("First", "Second"));
   }
   
   @AfterClass public void tearDown() {

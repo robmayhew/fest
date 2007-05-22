@@ -59,7 +59,8 @@ public class ScreenshotOnFailureListenerTest {
     assertThat(actualOutputFolder).isEqualTo(outputFolder);
   }
   
-  @Test public void shouldTakeScreenshotOfDesktopOnTestFailure() throws Exception {
+  @Test(dependsOnMethods = "shouldGetOutputFolderOnStart")
+  public void shouldTakeScreenshotOfDesktopOnTestFailure() throws Exception {
     setUpStubsForScreenshot();
     listener.onStart(testContext);
     listener.onTestFailure(testResult);
@@ -67,7 +68,7 @@ public class ScreenshotOnFailureListenerTest {
     String screenshotPath = concat(testContext.getOutputDirectory(), imageFileName);
     assertScreenshotOfDesktopTaken(screenshotPath);
     List<String> reporterOutput = Reporter.getOutput();
-    assertThat(reporterOutput.size()).isEqualTo(1);
+    assertThat(reporterOutput).hasSize(1);
     assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
   } 
   
