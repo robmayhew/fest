@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class BooleanArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new BooleanArrayAssert(true, false).isEqualTo(true, false);
+    new BooleanArrayAssert(true, false).isEqualTo(new boolean[] { true, false });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new BooleanArrayAssert(true, false).isEqualTo(false, true);
+    new BooleanArrayAssert(true, false).isEqualTo(new boolean[] { false, true });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new BooleanArrayAssert(true, false).isNotEqualTo(false, true);
+    new BooleanArrayAssert(true, false).isNotEqualTo(new boolean[] { false, true });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new BooleanArrayAssert(true, false).isNotEqualTo(true, false);
+    new BooleanArrayAssert(true, false).isNotEqualTo(new boolean[] { true, false });
   }
 }

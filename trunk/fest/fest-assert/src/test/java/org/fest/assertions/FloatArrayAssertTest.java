@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class FloatArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new FloatArrayAssert(34.90f).isEqualTo(34.90f);
+    new FloatArrayAssert(34.90f).isEqualTo(new float[] { 34.90f });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new FloatArrayAssert(34.90f).isEqualTo(88.43f);
+    new FloatArrayAssert(34.90f).isEqualTo(new float[] { 88.43f });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new FloatArrayAssert(34.90f).isNotEqualTo(88.43f);
+    new FloatArrayAssert(34.90f).isNotEqualTo(new float[] { 88.43f });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new FloatArrayAssert(34.90f).isNotEqualTo(34.90f);
+    new FloatArrayAssert(34.90f).isNotEqualTo(new float[] { 34.90f });
   }
 }

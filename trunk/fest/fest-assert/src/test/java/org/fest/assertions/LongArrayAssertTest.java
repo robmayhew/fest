@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class LongArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new LongArrayAssert(43l, 53l).isEqualTo(43l, 53l);
+    new LongArrayAssert(43l, 53l).isEqualTo(new long[] { 43l, 53l });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new LongArrayAssert(43l, 53l).isEqualTo(434l);
+    new LongArrayAssert(43l, 53l).isEqualTo(new long[] { 434l });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new LongArrayAssert(43l, 53l).isNotEqualTo(434l);
+    new LongArrayAssert(43l, 53l).isNotEqualTo(new long[] { 434l });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new LongArrayAssert(43l, 53l).isNotEqualTo(43l, 53l);
+    new LongArrayAssert(43l, 53l).isNotEqualTo(new long[] { 43l, 53l });
   }
 }

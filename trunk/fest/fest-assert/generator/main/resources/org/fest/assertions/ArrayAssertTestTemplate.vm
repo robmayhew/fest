@@ -62,20 +62,20 @@ public class ${testName} {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ${classToTest}(${firstArray}).isEqualTo(${firstArray});
+    new ${classToTest}(${firstArray}).isEqualTo(new ${arrayType}[] { ${firstArray} });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ${classToTest}(${firstArray}).isEqualTo(${secondArray});
+    new ${classToTest}(${firstArray}).isEqualTo(new ${arrayType}[] { ${secondArray} });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ${classToTest}(${firstArray}).isNotEqualTo(${secondArray});
+    new ${classToTest}(${firstArray}).isNotEqualTo(new ${arrayType}[] { ${secondArray} });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ${classToTest}(${firstArray}).isNotEqualTo(${firstArray});
+    new ${classToTest}(${firstArray}).isNotEqualTo(new ${arrayType}[] { ${firstArray} });
   }
 }

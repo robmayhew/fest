@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,8 +20,6 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotNull;
-import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -30,20 +28,14 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class LongArrayAssert {
-
-  private final long[] actual;
+public final class LongArrayAssert extends GroupAssert<long[]> {
 
   LongArrayAssert(long... actual) {
-    this.actual = actual;
+    super(actual);
   }
 
-  public void isNull() {
-    failIfNotNull(actual);
-  }
-
-  public LongArrayAssert isNotNull() {
-    failIfNull(actual);
+  @Override public LongArrayAssert isNotNull() {
+    super.isNotNull();
     return this;
   }
   
@@ -56,15 +48,34 @@ public final class LongArrayAssert {
     return this;
   }
 
-  public LongArrayAssert isEqualTo(long... expected) {
+  @Override public LongArrayAssert isEqualTo(long[] expected) {
     if (!Arrays.equals(actual, expected)) 
       fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
-  public LongArrayAssert isNotEqualTo(long... array) {
+  @Override public LongArrayAssert isNotEqualTo(long[] array) {
     if (Arrays.equals(actual, array)) 
       fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
+    return this;
+  }
+
+  int actualGroupSize() {
+    return actual.length;
+  }
+
+  @Override public LongArrayAssert hasSize(int expected) {
+    super.hasSize(expected);
+    return this;
+  }
+  
+  @Override public LongArrayAssert isSameAs(long[] expected) {
+    super.isSameAs(expected);
+    return this;
+  }
+
+  @Override public LongArrayAssert isNotSameAs(long[] expected) {
+    super.isNotSameAs(expected);
     return this;
   }
 }

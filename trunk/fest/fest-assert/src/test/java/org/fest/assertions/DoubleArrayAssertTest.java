@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class DoubleArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(55.03, 4345.91);
+    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(new double[] { 55.03, 4345.91 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(5323.2);
+    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(new double[] { 5323.2 });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(5323.2);
+    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(new double[] { 5323.2 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(55.03, 4345.91);
+    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(new double[] { 55.03, 4345.91 });
   }
 }

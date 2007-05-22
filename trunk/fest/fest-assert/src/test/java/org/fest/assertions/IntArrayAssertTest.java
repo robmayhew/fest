@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class IntArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new IntArrayAssert(459, 23).isEqualTo(459, 23);
+    new IntArrayAssert(459, 23).isEqualTo(new int[] { 459, 23 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new IntArrayAssert(459, 23).isEqualTo(90, 82);
+    new IntArrayAssert(459, 23).isEqualTo(new int[] { 90, 82 });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new IntArrayAssert(459, 23).isNotEqualTo(90, 82);
+    new IntArrayAssert(459, 23).isNotEqualTo(new int[] { 90, 82 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new IntArrayAssert(459, 23).isNotEqualTo(459, 23);
+    new IntArrayAssert(459, 23).isNotEqualTo(new int[] { 459, 23 });
   }
 }

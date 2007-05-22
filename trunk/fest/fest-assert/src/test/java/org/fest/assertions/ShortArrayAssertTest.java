@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class ShortArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isEqualTo((short)43, (short)68);
+    new ShortArrayAssert((short)43, (short)68).isEqualTo(new short[] { (short)43, (short)68 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isEqualTo((short)98);
+    new ShortArrayAssert((short)43, (short)68).isEqualTo(new short[] { (short)98 });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isNotEqualTo((short)98);
+    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(new short[] { (short)98 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isNotEqualTo((short)43, (short)68);
+    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(new short[] { (short)43, (short)68 });
   }
 }

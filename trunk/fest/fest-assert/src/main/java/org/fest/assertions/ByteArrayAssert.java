@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,8 +20,6 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotNull;
-import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -30,20 +28,14 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ByteArrayAssert {
-
-  private final byte[] actual;
+public final class ByteArrayAssert extends GroupAssert<byte[]> {
 
   ByteArrayAssert(byte... actual) {
-    this.actual = actual;
+    super(actual);
   }
 
-  public void isNull() {
-    failIfNotNull(actual);
-  }
-
-  public ByteArrayAssert isNotNull() {
-    failIfNull(actual);
+  @Override public ByteArrayAssert isNotNull() {
+    super.isNotNull();
     return this;
   }
   
@@ -56,15 +48,34 @@ public final class ByteArrayAssert {
     return this;
   }
 
-  public ByteArrayAssert isEqualTo(byte... expected) {
+  @Override public ByteArrayAssert isEqualTo(byte[] expected) {
     if (!Arrays.equals(actual, expected)) 
       fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
-  public ByteArrayAssert isNotEqualTo(byte... array) {
+  @Override public ByteArrayAssert isNotEqualTo(byte[] array) {
     if (Arrays.equals(actual, array)) 
       fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
+    return this;
+  }
+
+  int actualGroupSize() {
+    return actual.length;
+  }
+
+  @Override public ByteArrayAssert hasSize(int expected) {
+    super.hasSize(expected);
+    return this;
+  }
+  
+  @Override public ByteArrayAssert isSameAs(byte[] expected) {
+    super.isSameAs(expected);
+    return this;
+  }
+
+  @Override public ByteArrayAssert isNotSameAs(byte[] expected) {
+    super.isNotSameAs(expected);
     return this;
   }
 }

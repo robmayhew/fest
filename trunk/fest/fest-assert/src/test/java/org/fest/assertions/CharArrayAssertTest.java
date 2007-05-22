@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new CharArrayAssert('a', 'b').isEqualTo('a', 'b');
+    new CharArrayAssert('a', 'b').isEqualTo(new char[] { 'a', 'b' });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new CharArrayAssert('a', 'b').isEqualTo('c', 'd');
+    new CharArrayAssert('a', 'b').isEqualTo(new char[] { 'c', 'd' });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new CharArrayAssert('a', 'b').isNotEqualTo('c', 'd');
+    new CharArrayAssert('a', 'b').isNotEqualTo(new char[] { 'c', 'd' });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new CharArrayAssert('a', 'b').isNotEqualTo('a', 'b');
+    new CharArrayAssert('a', 'b').isNotEqualTo(new char[] { 'a', 'b' });
   }
 }

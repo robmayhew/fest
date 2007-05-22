@@ -20,8 +20,6 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotNull;
-import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -30,20 +28,14 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ${className} {
-
-  private final ${arrayType}[] actual;
+public final class ${className} extends GroupAssert<${arrayType}[]> {
 
   ${className}(${arrayType}... actual) {
-    this.actual = actual;
+    super(actual);
   }
 
-  public void isNull() {
-    failIfNotNull(actual);
-  }
-
-  public ${className} isNotNull() {
-    failIfNull(actual);
+  @Override public ${className} isNotNull() {
+    super.isNotNull();
     return this;
   }
   
@@ -56,15 +48,34 @@ public final class ${className} {
     return this;
   }
 
-  public ${className} isEqualTo(${arrayType}... expected) {
+  @Override public ${className} isEqualTo(${arrayType}[] expected) {
     if (!Arrays.equals(actual, expected)) 
       fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
-  public ${className} isNotEqualTo(${arrayType}... array) {
+  @Override public ${className} isNotEqualTo(${arrayType}[] array) {
     if (Arrays.equals(actual, array)) 
       fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
+    return this;
+  }
+
+  int actualGroupSize() {
+    return actual.length;
+  }
+
+  @Override public ${className} hasSize(int expected) {
+    super.hasSize(expected);
+    return this;
+  }
+  
+  @Override public ${className} isSameAs(${arrayType}[] expected) {
+    super.isSameAs(expected);
+    return this;
+  }
+
+  @Override public ${className} isNotSameAs(${arrayType}[] expected) {
+    super.isNotSameAs(expected);
     return this;
   }
 }

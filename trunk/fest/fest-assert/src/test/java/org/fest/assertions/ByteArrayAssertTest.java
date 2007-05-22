@@ -1,5 +1,5 @@
 /*
- * Created on May 21, 2007
+ * Created on May 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,20 +62,20 @@ public class ByteArrayAssertTest {
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isEqualTo((byte)8, (byte)6);
+    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(new byte[] { (byte)8, (byte)6 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isEqualTo((byte)8);
+    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(new byte[] { (byte)8 });
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo((byte)8);
+    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(new byte[] { (byte)8 });
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo((byte)8, (byte)6);
+    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(new byte[] { (byte)8, (byte)6 });
   }
 }
