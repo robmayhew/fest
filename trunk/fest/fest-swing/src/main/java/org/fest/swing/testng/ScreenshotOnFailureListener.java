@@ -30,6 +30,8 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
+import static org.fest.swing.testng.TestNG.*;
+
 /**
  * Understands a TestNG listener that takes a screenshot when a test fails.
  * 
@@ -73,7 +75,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
    * @param result contains information about the failing test.
    */
   @Override public void onTestFailure(ITestResult result) {
-    if (!ready) return;
+    if (!ready || !isGUITest(result)) return;
     String screenshotFileName = takeScreenshotAndReturnFileName(result);
     if (isEmpty(screenshotFileName)) return;
     logger.info(concat("Screenshot of desktop saved as: ", quote(screenshotFileName)));
