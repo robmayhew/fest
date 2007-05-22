@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
 
 import abbot.finder.Matcher;
@@ -152,5 +153,14 @@ public abstract class AbstractContainerFixture<T extends Container> extends Abst
    */
   public final JTabbedPaneFixture tabbedPane(String name) {
     return new JTabbedPaneFixture(robot, robot.finder().findByName(target, name, JTabbedPane.class));
+  }
+
+  /**
+   * Finds a <code>{@link JTree}</code> in the target container having the given name.
+   * @param name the name to match.
+   * @return a fixture wrapping the found component.
+   */
+  public final JTreeFixture tree(String name) {
+    return new JTreeFixture(robot, robot.finder().findByName(target, name, JTree.class));
   }
 }
