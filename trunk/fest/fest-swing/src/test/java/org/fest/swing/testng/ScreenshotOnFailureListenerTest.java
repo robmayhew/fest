@@ -69,7 +69,6 @@ public class ScreenshotOnFailureListenerTest {
   @Test(dependsOnMethods = "shouldGetOutputFolderOnStart")
   public void shouldTakeScreenshotOfDesktopOnTestFailure() throws Exception {
     setUpStubsForScreenshot();
-    listener.onStart(testContext);
     listener.onTestFailure(testResult);
     String imageFileName = screenshotFileName();
     String screenshotPath = concat(testContext.getOutputDirectory(), imageFileName);
