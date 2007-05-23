@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class BooleanArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new BooleanArrayAssert((boolean[])null).isNull();
+    new BooleanArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new BooleanArrayAssert(new boolean[0]).isNull();
+    new BooleanArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new BooleanArrayAssert(new boolean[0]).isNotNull();
+    new BooleanArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new BooleanArrayAssert((boolean[])null).isNotNull();
+    new BooleanArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new BooleanArrayAssert(new boolean[0]).isEmpty();
+    new BooleanArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class BooleanArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new BooleanArrayAssert(new boolean[0]).isNotEmpty();
+    new BooleanArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new BooleanArrayAssert(true, false).isEqualTo(new boolean[] { true, false });
+    new BooleanArrayAssert(true, false).isEqualTo(array(true, false));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new BooleanArrayAssert(true, false).isEqualTo(new boolean[] { false, true });
+    new BooleanArrayAssert(true, false).isEqualTo(array(false, true));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new BooleanArrayAssert(true, false).isNotEqualTo(new boolean[] { false, true });
+    new BooleanArrayAssert(true, false).isNotEqualTo(array(false, true));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new BooleanArrayAssert(true, false).isNotEqualTo(new boolean[] { true, false });
+    new BooleanArrayAssert(true, false).isNotEqualTo(array(true, false));
   }
+  
+  private boolean[] nullArray() { return null; }
+
+  private boolean[] emptyArray() { return new boolean[0]; }
+  
+  private boolean[] array(boolean... args) { return args; }
 }

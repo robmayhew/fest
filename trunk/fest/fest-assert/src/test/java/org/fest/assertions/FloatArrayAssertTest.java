@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class FloatArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new FloatArrayAssert((float[])null).isNull();
+    new FloatArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new FloatArrayAssert(new float[0]).isNull();
+    new FloatArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new FloatArrayAssert(new float[0]).isNotNull();
+    new FloatArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new FloatArrayAssert((float[])null).isNotNull();
+    new FloatArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new FloatArrayAssert(new float[0]).isEmpty();
+    new FloatArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class FloatArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new FloatArrayAssert(new float[0]).isNotEmpty();
+    new FloatArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new FloatArrayAssert(34.90f).isEqualTo(new float[] { 34.90f });
+    new FloatArrayAssert(34.90f).isEqualTo(array(34.90f));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new FloatArrayAssert(34.90f).isEqualTo(new float[] { 88.43f });
+    new FloatArrayAssert(34.90f).isEqualTo(array(88.43f));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new FloatArrayAssert(34.90f).isNotEqualTo(new float[] { 88.43f });
+    new FloatArrayAssert(34.90f).isNotEqualTo(array(88.43f));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new FloatArrayAssert(34.90f).isNotEqualTo(new float[] { 34.90f });
+    new FloatArrayAssert(34.90f).isNotEqualTo(array(34.90f));
   }
+  
+  private float[] nullArray() { return null; }
+
+  private float[] emptyArray() { return new float[0]; }
+  
+  private float[] array(float... args) { return args; }
 }

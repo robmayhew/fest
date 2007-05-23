@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class LongArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new LongArrayAssert((long[])null).isNull();
+    new LongArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new LongArrayAssert(new long[0]).isNull();
+    new LongArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new LongArrayAssert(new long[0]).isNotNull();
+    new LongArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new LongArrayAssert((long[])null).isNotNull();
+    new LongArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new LongArrayAssert(new long[0]).isEmpty();
+    new LongArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class LongArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new LongArrayAssert(new long[0]).isNotEmpty();
+    new LongArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new LongArrayAssert(43l, 53l).isEqualTo(new long[] { 43l, 53l });
+    new LongArrayAssert(43l, 53l).isEqualTo(array(43l, 53l));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new LongArrayAssert(43l, 53l).isEqualTo(new long[] { 434l });
+    new LongArrayAssert(43l, 53l).isEqualTo(array(434l));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new LongArrayAssert(43l, 53l).isNotEqualTo(new long[] { 434l });
+    new LongArrayAssert(43l, 53l).isNotEqualTo(array(434l));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new LongArrayAssert(43l, 53l).isNotEqualTo(new long[] { 43l, 53l });
+    new LongArrayAssert(43l, 53l).isNotEqualTo(array(43l, 53l));
   }
+  
+  private long[] nullArray() { return null; }
+
+  private long[] emptyArray() { return new long[0]; }
+  
+  private long[] array(long... args) { return args; }
 }

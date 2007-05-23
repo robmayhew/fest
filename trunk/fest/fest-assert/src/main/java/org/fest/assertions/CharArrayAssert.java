@@ -17,6 +17,8 @@ package org.fest.assertions;
 
 import java.util.Arrays;
 
+import javax.annotation.Generated;
+
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
@@ -28,6 +30,9 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTemplate.vm")
 public final class CharArrayAssert extends GroupAssert<char[]> {
 
   CharArrayAssert(char... actual) {

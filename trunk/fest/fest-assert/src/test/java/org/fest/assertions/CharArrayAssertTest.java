@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class CharArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new CharArrayAssert((char[])null).isNull();
+    new CharArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new CharArrayAssert(new char[0]).isNull();
+    new CharArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new CharArrayAssert(new char[0]).isNotNull();
+    new CharArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new CharArrayAssert((char[])null).isNotNull();
+    new CharArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new CharArrayAssert(new char[0]).isEmpty();
+    new CharArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class CharArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new CharArrayAssert(new char[0]).isNotEmpty();
+    new CharArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new CharArrayAssert('a', 'b').isEqualTo(new char[] { 'a', 'b' });
+    new CharArrayAssert('a', 'b').isEqualTo(array('a', 'b'));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new CharArrayAssert('a', 'b').isEqualTo(new char[] { 'c', 'd' });
+    new CharArrayAssert('a', 'b').isEqualTo(array('c', 'd'));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new CharArrayAssert('a', 'b').isNotEqualTo(new char[] { 'c', 'd' });
+    new CharArrayAssert('a', 'b').isNotEqualTo(array('c', 'd'));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new CharArrayAssert('a', 'b').isNotEqualTo(new char[] { 'a', 'b' });
+    new CharArrayAssert('a', 'b').isNotEqualTo(array('a', 'b'));
   }
+  
+  private char[] nullArray() { return null; }
+
+  private char[] emptyArray() { return new char[0]; }
+  
+  private char[] array(char... args) { return args; }
 }

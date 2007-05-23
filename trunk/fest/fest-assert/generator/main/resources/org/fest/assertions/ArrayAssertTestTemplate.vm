@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "${generator}", 
+           date = "${generated}", 
+           comments = "Generated using Velocity template ${testFileTemplatePath}")
 public class ${testName} {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new ${classToTest}((${arrayType}[])null).isNull();
+    new ${classToTest}(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new ${classToTest}(new ${arrayType}[0]).isNull();
+    new ${classToTest}(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new ${classToTest}(new ${arrayType}[0]).isNotNull();
+    new ${classToTest}(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new ${classToTest}((${arrayType}[])null).isNotNull();
+    new ${classToTest}(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new ${classToTest}(new ${arrayType}[0]).isEmpty();
+    new ${classToTest}(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class ${testName} {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new ${classToTest}(new ${arrayType}[0]).isNotEmpty();
+    new ${classToTest}(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ${classToTest}(${firstArray}).isEqualTo(new ${arrayType}[] { ${firstArray} });
+    new ${classToTest}(${firstArray}).isEqualTo(array(${firstArray}));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ${classToTest}(${firstArray}).isEqualTo(new ${arrayType}[] { ${secondArray} });
+    new ${classToTest}(${firstArray}).isEqualTo(array(${secondArray}));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ${classToTest}(${firstArray}).isNotEqualTo(new ${arrayType}[] { ${secondArray} });
+    new ${classToTest}(${firstArray}).isNotEqualTo(array(${secondArray}));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ${classToTest}(${firstArray}).isNotEqualTo(new ${arrayType}[] { ${firstArray} });
+    new ${classToTest}(${firstArray}).isNotEqualTo(array(${firstArray}));
   }
+  
+  private ${arrayType}[] nullArray() { return null; }
+
+  private ${arrayType}[] emptyArray() { return new ${arrayType}[0]; }
+  
+  private ${arrayType}[] array(${arrayType}... args) { return args; }
 }

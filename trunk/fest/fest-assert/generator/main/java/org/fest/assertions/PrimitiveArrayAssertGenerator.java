@@ -14,9 +14,7 @@
  */
 package org.fest.assertions;
 
-import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.tools.generic.DateTool;
 
 import static java.util.logging.Level.SEVERE;
@@ -33,12 +31,12 @@ import static org.fest.util.Strings.join;
  */
 final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
 
-  private final Template javaFileTemplate;
-  private final Template testFileTemplate;
+  private final String javaFileTemplatePath;
+  private final String testFileTemplatePath;
   
   PrimitiveArrayAssertGenerator() throws Exception {
-    javaFileTemplate = Velocity.getTemplate(concat(packageNameAsPath, "ArrayAssertTemplate.vm"));
-    testFileTemplate = Velocity.getTemplate(concat(packageNameAsPath, "ArrayAssertTestTemplate.vm"));
+    javaFileTemplatePath = concat(packageNameAsPath, "ArrayAssertTemplate.vm");
+    testFileTemplatePath = concat(packageNameAsPath, "ArrayAssertTestTemplate.vm");
   }
   
   void generate() throws Exception {
@@ -61,6 +59,7 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
     String className = concat(capitalizeFirstLetter(arrayTypeName), "ArrayAssert");
     String testName = concat(className, "Test");
     VelocityContext context = new VelocityContext();
+    addGeneratorInfoTo(context);
     context.put("arrayType", arrayTypeName);
     context.put("className", className);
     context.put("testName", testName);
@@ -72,9 +71,9 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
     generateTestFile(testName, context);
   }
 
-  @Override Template javaFileTemplate() { return javaFileTemplate; }
+  @Override String javaFileTemplatePath() { return javaFileTemplatePath; }
 
-  @Override Template testFileTemplate() { return testFileTemplate; }
+  @Override String testFileTemplatePath() { return testFileTemplatePath; }
   
   private static class TestArrays {
     final String first;

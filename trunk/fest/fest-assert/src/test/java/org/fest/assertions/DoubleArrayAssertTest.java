@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:19", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class DoubleArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new DoubleArrayAssert((double[])null).isNull();
+    new DoubleArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new DoubleArrayAssert(new double[0]).isNull();
+    new DoubleArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new DoubleArrayAssert(new double[0]).isNotNull();
+    new DoubleArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new DoubleArrayAssert((double[])null).isNotNull();
+    new DoubleArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new DoubleArrayAssert(new double[0]).isEmpty();
+    new DoubleArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class DoubleArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new DoubleArrayAssert(new double[0]).isNotEmpty();
+    new DoubleArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(new double[] { 55.03, 4345.91 });
+    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(array(55.03, 4345.91));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(new double[] { 5323.2 });
+    new DoubleArrayAssert(55.03, 4345.91).isEqualTo(array(5323.2));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(new double[] { 5323.2 });
+    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(array(5323.2));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(new double[] { 55.03, 4345.91 });
+    new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(array(55.03, 4345.91));
   }
+  
+  private double[] nullArray() { return null; }
+
+  private double[] emptyArray() { return new double[0]; }
+  
+  private double[] array(double... args) { return args; }
 }

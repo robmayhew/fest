@@ -19,6 +19,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +36,8 @@ import static org.fest.assertions.Commons.packageNameAsPathFrom;
 import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
 import static org.fest.assertions.SourceFolders.TEST_FOLDER;
 import static org.fest.util.Strings.concat;
+
+import static java.io.File.separator;
 
 /**
  * Understands a template for code generators using Apache Velocity.
@@ -60,20 +64,33 @@ abstract class VelocityCodeGenerator {
 
   abstract void generate() throws Exception;
   
+  final void addGeneratorInfoTo(VelocityContext context) {
+    context.put("generator", getClass().getName());
+    context.put("generated", dateInISO8601Format());
+  }
+  
   final void generateJavaFile(String javaClassName, VelocityContext context) throws Exception {
     String javaFilePath = MAIN_FOLDER.filePathFor(javaClassName);
-    generateFile(javaFilePath, javaFileTemplate(), context);
+    String javaFileTemplatePath = javaFileTemplatePath();
+    context.put("javaFileTemplatePath", pathAsPackageName(javaFileTemplatePath));
+    generateFile(javaFilePath, Velocity.getTemplate(javaFileTemplatePath), context);
   }
 
-  abstract Template javaFileTemplate();
+  abstract String javaFileTemplatePath();
 
   final void generateTestFile(String testClassName, VelocityContext context) throws Exception {
     String testFilePath = TEST_FOLDER.filePathFor(testClassName);
-    generateFile(testFilePath, testFileTemplate(), context);
+    String testFileTemplatePath = testFileTemplatePath();
+    context.put("testFileTemplatePath", pathAsPackageName(testFileTemplatePath));
+    generateFile(testFilePath, Velocity.getTemplate(testFileTemplatePath), context);
   }
   
-  abstract Template testFileTemplate();
+  abstract String testFileTemplatePath();
 
+  private String pathAsPackageName(String path) {
+    return path.replace(separator, ".");
+  }
+  
   private void generateFile(String fileToGeneratePath, Template template, VelocityContext context) throws Exception {
     Writer writer = null;
     try {
@@ -83,6 +100,11 @@ abstract class VelocityCodeGenerator {
     } finally {
       flushAndClose(writer);
     }    
+  }
+  
+  final String dateInISO8601Format() {
+    String result = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz").format(new Date());
+    return concat(result.substring(0, 19), result.substring(22, result.length()));
   }
   
   private Writer fileWriter(String filePath) throws Exception {

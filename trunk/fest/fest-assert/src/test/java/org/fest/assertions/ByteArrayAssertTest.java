@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class ByteArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new ByteArrayAssert((byte[])null).isNull();
+    new ByteArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new ByteArrayAssert(new byte[0]).isNull();
+    new ByteArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new ByteArrayAssert(new byte[0]).isNotNull();
+    new ByteArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new ByteArrayAssert((byte[])null).isNotNull();
+    new ByteArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new ByteArrayAssert(new byte[0]).isEmpty();
+    new ByteArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class ByteArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new ByteArrayAssert(new byte[0]).isNotEmpty();
+    new ByteArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(new byte[] { (byte)8, (byte)6 });
+    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(array((byte)8, (byte)6));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(new byte[] { (byte)8 });
+    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(array((byte)8));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(new byte[] { (byte)8 });
+    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(array((byte)8));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(new byte[] { (byte)8, (byte)6 });
+    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(array((byte)8, (byte)6));
   }
+  
+  private byte[] nullArray() { return null; }
+
+  private byte[] emptyArray() { return new byte[0]; }
+  
+  private byte[] array(byte... args) { return args; }
 }

@@ -15,6 +15,8 @@
  */
 package org.fest.assertions;
 
+import javax.annotation.Generated;
+
 import org.testng.annotations.Test;
 
 /**
@@ -23,28 +25,31 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
+           date = "2007-05-22T23:41:18", 
+           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
 public class ShortArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
-    new ShortArrayAssert((short[])null).isNull();
+    new ShortArrayAssert(nullArray()).isNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNotNull() {
-    new ShortArrayAssert(new short[0]).isNull();
+    new ShortArrayAssert(emptyArray()).isNull();
   }
 
   @Test public void shouldPassIfArrayIsNotNull() {
-    new ShortArrayAssert(new short[0]).isNotNull();
+    new ShortArrayAssert(emptyArray()).isNotNull();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsNull() {
-    new ShortArrayAssert((short[])null).isNotNull();
+    new ShortArrayAssert(nullArray()).isNotNull();
   }
 
   @Test public void shouldPassIfArrayIsEmpty() {
-    new ShortArrayAssert(new short[0]).isEmpty();
+    new ShortArrayAssert(emptyArray()).isEmpty();
   }
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
@@ -58,24 +63,30 @@ public class ShortArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfArrayIsEmpty() {
-    new ShortArrayAssert(new short[0]).isNotEmpty();
+    new ShortArrayAssert(emptyArray()).isNotEmpty();
   }
 
   @Test public void shouldPassIfEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isEqualTo(new short[] { (short)43, (short)68 });
+    new ShortArrayAssert((short)43, (short)68).isEqualTo(array((short)43, (short)68));
   }
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isEqualTo(new short[] { (short)98 });
+    new ShortArrayAssert((short)43, (short)68).isEqualTo(array((short)98));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(new short[] { (short)98 });
+    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(array((short)98));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(new short[] { (short)43, (short)68 });
+    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(array((short)43, (short)68));
   }
+  
+  private short[] nullArray() { return null; }
+
+  private short[] emptyArray() { return new short[0]; }
+  
+  private short[] array(short... args) { return args; }
 }
