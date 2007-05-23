@@ -25,12 +25,14 @@ import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.util.ImageAssert.assertScreenshotOfDesktopTaken;
 
+import org.fest.swing.GUITest;
+
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.join;
 
 import org.testng.Reporter;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -40,19 +42,24 @@ import org.testng.annotations.Test;
  */
 public class ScreenshotOnFailureListenerTest {
 
+  @GUITest public static class SomeGUITestClass {
+    @GUITest public void someGUITestMethod() {}
+    public void someNonGUITestMethod() {}
+  }
+
   private TestContextStub testContext;
   private TestResultStub testResult;
 
   private ScreenshotOnFailureListener listener;
   
-  @BeforeMethod public void setUp() {
+  @BeforeClass public void setUp() {
     testContext = new TestContextStub();
     testResult = new TestResultStub();
     listener = new ScreenshotOnFailureListener();
   }
 
   @Test public void shouldGetOutputFolderOnStart() {
-    String outputFolder = "output";
+    String outputFolder = temporaryFolderPath();
     testContext.setOutputDirectory(outputFolder);
     listener.onStart(testContext);
     String actualOutputFolder = field("output").ofType(String.class).in(listener).get();
@@ -67,15 +74,14 @@ public class ScreenshotOnFailureListenerTest {
     String imageFileName = screenshotFileName();
     String screenshotPath = concat(testContext.getOutputDirectory(), imageFileName);
     assertScreenshotOfDesktopTaken(screenshotPath);
-    List<String> reporterOutput = Reporter.getOutput();
-    assertThat(reporterOutput).hasSize(1);
-    assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
-  } 
+    assertScreenshotHyperlinkAddedToReport(imageFileName);
+  }
   
   private void setUpStubsForScreenshot() {
     Date now = new GregorianCalendar().getTime();
-    testContext.setOutputDirectory(temporaryFolderPath());
-    testResult.getTestClass().setName(new SimpleDateFormat("yyMMdd").format(now));
+    ClassStub testClass = testResult.getTestClass();
+    testClass.setName(new SimpleDateFormat("yyMMdd").format(now));
+    testClass.setRealClass(SomeGUITestClass.class);
     testResult.getMethod().setMethodName(new SimpleDateFormat("hhmmss").format(now));
   }
   
@@ -84,4 +90,10 @@ public class ScreenshotOnFailureListenerTest {
     String methodName = testResult.getMethod().getMethodName();
     return join(className, methodName, "png").with(".");
   }
+
+  private void assertScreenshotHyperlinkAddedToReport(String imageFileName) {
+    List<String> reporterOutput = Reporter.getOutput();
+    assertThat(reporterOutput).hasSize(1);
+    assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
+  } 
 }
