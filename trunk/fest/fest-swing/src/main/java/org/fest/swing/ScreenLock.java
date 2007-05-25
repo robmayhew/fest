@@ -28,11 +28,18 @@ public final class ScreenLock {
   private boolean locked;
   private Object owner;
   
-  public synchronized boolean acquire(Object owner) {
-    while (locked) acquire(owner);
+  public synchronized void acquire(Object owner) {
+    while (locked) {
+      try {
+        wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      acquire(owner);
+      notifyAll();
+    }
     locked = true;
     this.owner = owner;
-    return true;
   }
   
   public synchronized void release(Object owner) {
