@@ -19,15 +19,14 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import org.fest.swing.GUITest;
-
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.fest.swing.GUITest;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -42,13 +41,10 @@ import org.testng.annotations.Test;
   private FrameFixture frameFixture;
   private JFrame frame;
   
-  @BeforeClass public void setUp() {
+  @BeforeMethod public void init() {
     frameFixture = new FrameFixture(new JFrame());
     frame = frameFixture.targetCastedTo(JFrame.class);
     frameFixture.show();
-  }
-
-  @BeforeMethod public void init() {
     frame.setSize(new Dimension(200, 100));
   }
 
@@ -83,14 +79,9 @@ import org.testng.annotations.Test;
     frameFixture.requireSize(newSize);
   }
   
-  @Test public void shouldIconifyFrame() {
+  @Test public void shouldIconifyAndDeiconifyFrame() {
     frameFixture.iconify();
     assertThat(frameFixture.target.getExtendedState()).isEqualTo(ICONIFIED);
-  }
-  
-  @Test(dependsOnMethods = "shouldIconifyFrame") 
-  public void shouldDeiconifyFrame() {
-    frameFixture.iconify();
     frameFixture.deiconify();
     assertThat(frameFixture.target.getExtendedState()).isEqualTo(NORMAL);
   }
@@ -112,7 +103,7 @@ import org.testng.annotations.Test;
     return new FluentDimension(frame.getSize());
   }
   
-  @AfterClass public void tearDown() {
+  @AfterMethod public void tearDown() {
     frameFixture.cleanUp();
   }
 }

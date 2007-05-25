@@ -42,8 +42,8 @@ import static org.fest.util.Arrays.array;
 import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -109,7 +109,7 @@ import org.testng.annotations.Test;
   private AbstractContainerFixture<CustomWindow> container;
   private CustomWindow window;
   
-  @BeforeClass public void setUp() {
+  @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     container = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {
 
@@ -183,7 +183,7 @@ import org.testng.annotations.Test;
     assertThat(fixture.target).isSameAs(window.textField);
   }
   
-  @AfterClass public void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 }

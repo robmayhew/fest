@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.fest.swing.ScreenLock;
+
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.script.Script;
@@ -41,7 +43,6 @@ public final class ScriptRunner {
   private static Logger logger = Logger.getLogger(ScriptRunner.class.getName());
 
   private final List<String> scriptNames = new ArrayList<String>();
-
   private final List<String> successfulScripts = new ArrayList<String>();
 
   /**
@@ -112,6 +113,7 @@ public final class ScriptRunner {
   }
 
   private void runScript(String scriptName) {
+    ScreenLock.instance().acquire(this);
     StepRunner runner = new StepRunner(new AWTFixtureHelper());
     AWTHierarchy.setDefault(runner.getHierarchy());
     Script script = new Script(scriptName, DUMMY_HIERARCHY);
@@ -123,6 +125,7 @@ public final class ScriptRunner {
       throw new ScriptFailure(scriptName, t);
     } finally {
       logger.info(concat(quote(scriptName), " finished"));
+      ScreenLock.instance().release(this);
     }
   }
 

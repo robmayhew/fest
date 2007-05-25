@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="lib/main/MRJToolkitStubs.zip"/>
 	<classpathentry kind="lib" path="lib/main/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/main/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/main/testng-5.5-jdk15.jar">
+	<classpathentry kind="lib" path="lib/main/testng-5.5-jdk15.jar" sourcepath="lib/main/testng-5.5-jdk15-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="http://testng.org/javadocs/"/>
 		</attributes>

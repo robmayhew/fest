@@ -43,7 +43,7 @@ public final class RobotFixture {
 
   private Robot robot;
   private WindowTracker windowTracker;
-
+  
   /** Provides access to all the components in the hierarchy. */
   private final Hierarchy hierarchy;
 
@@ -63,6 +63,7 @@ public final class RobotFixture {
    * @param hierarchy the AWT component hierarchy to use.
    */
   private RobotFixture(Hierarchy hierarchy) {
+    ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     finder = new ComponentFinder(this.hierarchy);
     windowTracker = WindowTracker.getTracker();
@@ -151,10 +152,14 @@ public final class RobotFixture {
     mouseRelease();
     robot = null;
     windowTracker = null;
+    ScreenLock.instance().release(this);
   }
 
   private void disposeWindows() {
-    for (Window w : roots()) hierarchy.dispose(w);
+    for (Window w : roots()) {
+      hierarchy.dispose(w);
+      w.setVisible(false);
+    }
   }
   
   @SuppressWarnings("unchecked") 

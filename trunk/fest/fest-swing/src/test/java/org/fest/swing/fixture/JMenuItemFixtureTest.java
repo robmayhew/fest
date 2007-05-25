@@ -30,8 +30,8 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -66,7 +66,7 @@ import org.testng.annotations.Test;
   private CustomWindow window;
   private RobotFixture robot;
   
-  @BeforeClass public void setUp() {
+  @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new CustomWindow();
     robot.showWindow(window);
@@ -84,7 +84,7 @@ import org.testng.annotations.Test;
     assertThat(window.newMenuSelected).isTrue();
   }
   
-  @AfterClass public void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 }

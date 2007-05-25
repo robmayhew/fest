@@ -30,8 +30,8 @@ import static org.fest.util.Arrays.array;
 import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -69,7 +69,7 @@ import org.testng.annotations.Test;
   private RobotFixture robot;
   private JTabbedPaneFixture fixture;
   
-  @BeforeClass public void setUp() {
+  @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
@@ -107,7 +107,7 @@ import org.testng.annotations.Test;
     assertThat(fixture.tabTitles()).isEqualTo(array("First", "Second"));
   }
   
-  @AfterClass public void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 }

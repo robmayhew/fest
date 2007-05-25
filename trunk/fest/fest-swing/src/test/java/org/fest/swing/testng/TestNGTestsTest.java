@@ -25,11 +25,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link TestNG}</code>.
+ * Tests for <code>{@link TestNGTests}</code>.
  *
  * @author Alex Ruiz
  */
-public class TestNGTest {
+public class TestNGTestsTest {
 
   @GUITest public static class SomeGUITestClass {
     @GUITest public void someGUITestMethod() {}
@@ -48,22 +48,22 @@ public class TestNGTest {
   
   @Test public void shouldReturnIsGUITestIfClassHasGUITestAnnotation() {
     testResult.getTestClass().setRealClass(SomeGUITestClass.class);
-    assertThat(TestNG.isGUITest(testResult)).isTrue();
+    assertThat(TestNGTests.isGUITest(testResult)).isTrue();
   }
 
   @Test public void shouldReturnIsGUITestIfMethodHasGUITestAnnotation() throws Exception {
     setUpStubs(SomeNonGUITestClass.class, "someGUITestMethod");
-    assertThat(TestNG.isGUITest(testResult)).isTrue();
+    assertThat(TestNGTests.isGUITest(testResult)).isTrue();
   }
 
   @Test public void shouldReturnIsGUITestIfBothClassAndMethodHaveGUITestAnnotation() throws Exception {
     setUpStubs(SomeGUITestClass.class, "someGUITestMethod");
-    assertThat(TestNG.isGUITest(testResult)).isTrue();
+    assertThat(TestNGTests.isGUITest(testResult)).isTrue();
   }
   
   @Test public void shouldReturnIsNotGUITestIfClassAndMethodDoNotHaveGUITestAnnotation() throws Exception {
     setUpStubs(String.class, "concat", String.class);
-    assertThat(TestNG.isGUITest(testResult)).isFalse();
+    assertThat(TestNGTests.isGUITest(testResult)).isFalse();
   }
 
   private void setUpStubs(Class<?> realClass, String methodName, Class<?>... parameterTypes) throws Exception {

@@ -28,7 +28,7 @@ import org.testng.ITestResult;
  *
  * @author Alex Ruiz
  */
-public final class TestNG {
+public final class TestNGTests {
 
   public static boolean isGUITest(ITestResult testResult) {
     if (isGUITest(testResult.getTestClass())) return true;
@@ -49,5 +49,5 @@ public final class TestNG {
     return annotation != null;
   }
   
-  private TestNG() {}
+  private TestNGTests() {}
 }

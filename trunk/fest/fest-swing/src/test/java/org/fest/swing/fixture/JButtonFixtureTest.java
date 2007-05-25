@@ -30,8 +30,8 @@ import org.fest.swing.Condition;
 import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -83,7 +83,7 @@ import org.testng.annotations.Test;
   private RobotFixture robot;
   private JButtonFixture fixture;
   
-  @BeforeClass public void setUp() {
+  @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
@@ -128,7 +128,7 @@ import org.testng.annotations.Test;
     assertThat(fixture.text()).isEqualTo("Second Button");
   }
   
-  @AfterClass public void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 }

@@ -30,7 +30,7 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
-import static org.fest.swing.testng.TestNG.*;
+import static org.fest.swing.testng.TestNGTests.*;
 
 /**
  * Understands a TestNG listener that takes a screenshot when a test fails.
