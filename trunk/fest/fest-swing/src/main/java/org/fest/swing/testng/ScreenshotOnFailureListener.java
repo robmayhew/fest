@@ -33,7 +33,11 @@ import org.testng.Reporter;
 import static org.fest.swing.testng.TestNGTests.*;
 
 /**
- * Understands a TestNG listener that takes a screenshot when a test fails.
+ * Understands a TestNG listener that takes a screenshot when a GUI test fails.
+ * <p>
+ * <strong>Note:</strong> A test is consider a GUI test if it is marked with the annotation
+ * <code>{@link org.fest.swing.GUITest}</code>.
+ * </p>
  * 
  * @author Alex Ruiz
  */
