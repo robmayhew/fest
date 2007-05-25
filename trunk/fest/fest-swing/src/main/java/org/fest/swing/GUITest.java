@@ -22,12 +22,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Understands an annotation that identify GUI tests. GUI tests:
- * <ul>
- * <li>should be executed sequentially, otherwise they will display their GUIs on top of each other</li>
- * <li>should have a screenshot of the desktop, in case of a failure due to an environment conditon</li>
- * </ul>
- *
+ * Understands an annotation that identify GUI tests. GUI tests should have a screenshot of the desktop, in case of a
+ * failure due to an environment conditon.
+ * 
  * @author Alex Ruiz
  */
 @Retention(RetentionPolicy.RUNTIME)
