@@ -68,7 +68,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if the target dialog does not have the given title.
    */
-  public JOptionPaneFixture requireTitle(String title) {
+  public final JOptionPaneFixture requireTitle(String title) {
     String actualTitle = ((Dialog)target.getRootPane().getParent()).getTitle();
     assertThat(actualTitle).isEqualTo(title);
     return this;
@@ -113,7 +113,7 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
   }
   
   /** @return a fixture wrapping a button contained in the given dialog. */
-  public JButtonFixture findButton() {
+  public final JButtonFixture findButton() {
     return new JButtonFixture(robot, robot.finder().findByType(target, JButton.class));
   }
   
@@ -190,6 +190,18 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
   /** {@inheritDoc} */
   public final JOptionPaneFixture requireNotVisible() {
     assertIsNotVisible();
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  public final JOptionPaneFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JOptionPaneFixture requireDisabled() {
+    assertIsDisabled();
     return this;
   }
 }

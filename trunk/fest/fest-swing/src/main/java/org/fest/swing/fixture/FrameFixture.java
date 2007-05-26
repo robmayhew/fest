@@ -27,7 +27,6 @@ import static java.awt.Frame.NORMAL;
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
 
-
 /**
  * Understands simulation of user events and state verification of a <code>{@link Frame}</code>.
  *
@@ -168,14 +167,26 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
   }
 
   /** {@inheritDoc} */
-  public FrameFixture requireVisible() {
+  public final FrameFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public FrameFixture requireNotVisible() {
+  public final FrameFixture requireNotVisible() {
     assertIsNotVisible();
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  public final FrameFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final FrameFixture requireDisabled() {
+    assertIsDisabled();
     return this;
   }
 }

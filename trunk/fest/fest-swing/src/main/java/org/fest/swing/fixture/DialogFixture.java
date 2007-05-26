@@ -128,6 +128,18 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
     return this;
   }
 
+  /** {@inheritDoc} */
+  public final DialogFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final DialogFixture requireDisabled() {
+    assertIsDisabled();
+    return this;
+  }
+
   /**
    * Asserts that the target dialog is modal.
    * @return a reference to this fixture.

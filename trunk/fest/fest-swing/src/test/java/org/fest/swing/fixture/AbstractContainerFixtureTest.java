@@ -127,6 +127,14 @@ import org.testng.annotations.Test;
 
       public ComponentFixture<CustomWindow> requireNotVisible() {
         return null;
+      }
+
+      public ComponentFixture<CustomWindow> requireDisabled() {
+        return null;
+      }
+
+      public ComponentFixture<CustomWindow> requireEnabled() {
+        return null;
       }};
     window = container.target;
     robot.showWindow(window);

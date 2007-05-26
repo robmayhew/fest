@@ -90,4 +90,16 @@ public class JMenuItemFixture extends AbstractComponentFixture<JMenuItem> {
     assertIsNotVisible();
     return this;
   }
+
+  /** {@inheritDoc} */
+  public final JMenuItemFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JMenuItemFixture requireDisabled() {
+    assertIsDisabled();
+    return this;
+  }
 }

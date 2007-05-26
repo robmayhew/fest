@@ -54,7 +54,7 @@ public class JTreeFixture extends AbstractComponentFixture<JTree> {
    * @param row the index of the row to select.
    * @return this fixture.
    */
-  public JTreeFixture selectRow(int row) {
+  public final JTreeFixture selectRow(int row) {
     treeTester().actionSelectRow(target, new JTreeLocation(row));
     return this;
   }
@@ -64,7 +64,7 @@ public class JTreeFixture extends AbstractComponentFixture<JTree> {
    * @param row the index of the row to select.
    * @return this fixture.
    */
-  public JTreeFixture toggleRow(int row) {
+  public final JTreeFixture toggleRow(int row) {
     treeTester().actionToggleRow(target, new JTreeLocation(row));
     return this;
   }
@@ -76,7 +76,7 @@ public class JTreeFixture extends AbstractComponentFixture<JTree> {
    * @param treePath A path comprising an array of Strings that match the toString()'s of the path nodes
    * @return this fixture.
    */
-  public JTreeFixture selectPath(TreePath treePath) {
+  public final JTreeFixture selectPath(TreePath treePath) {
     treeTester().actionSelectPath(target, treePath);
     return this;
   }
@@ -109,4 +109,15 @@ public class JTreeFixture extends AbstractComponentFixture<JTree> {
     return this;
   }
 
+  /** {@inheritDoc} */
+  public final JTreeFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JTreeFixture requireDisabled() {
+    assertIsDisabled();
+    return this;
+  }
 }

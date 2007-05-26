@@ -114,4 +114,15 @@ public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
     assertIsNotVisible();
     return this;
   }
+  /** {@inheritDoc} */
+  public final JComboBoxFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JComboBoxFixture requireDisabled() {
+    assertIsDisabled();
+    return this;
+  }
 }

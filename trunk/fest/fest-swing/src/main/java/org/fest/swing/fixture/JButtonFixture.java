@@ -72,14 +72,26 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
   }
 
   /** {@inheritDoc} */
-  public JButtonFixture requireVisible() {
+  public final JButtonFixture requireVisible() {
     assertIsVisible();
     return this;
   }
 
   /** {@inheritDoc} */
-  public JButtonFixture requireNotVisible() {
+  public final JButtonFixture requireNotVisible() {
     assertIsNotVisible();
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  public final JButtonFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JButtonFixture requireDisabled() {
+    assertIsDisabled();
     return this;
   }
 }

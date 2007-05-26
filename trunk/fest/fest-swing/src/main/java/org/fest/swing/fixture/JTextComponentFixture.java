@@ -131,4 +131,16 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
     assertThat(text()).isEmpty();
     return this;
   }
+
+  /** {@inheritDoc} */
+  public final JTextComponentFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JTextComponentFixture requireDisabled() {
+    assertIsDisabled();
+    return this;
+  }
 }

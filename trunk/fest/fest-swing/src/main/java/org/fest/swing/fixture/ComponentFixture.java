@@ -50,4 +50,18 @@ public interface ComponentFixture<T extends Component> {
    * @throws AssertionError if the target component is visible.
    */
   ComponentFixture<T> requireNotVisible();
+  
+  /**
+   * Asserts that the target component is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the target component is not enabled.
+   */
+  ComponentFixture<T> requireEnabled();
+  
+  /**
+   * Asserts that the target component is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the target component is enabled.
+   */
+  ComponentFixture<T> requireDisabled();
 }

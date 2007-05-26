@@ -29,7 +29,7 @@ import org.fest.swing.RobotFixture;
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
-public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPane> {
+public class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPane> {
 
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.
@@ -55,7 +55,7 @@ public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPa
    * @param tabIndex the index of the tab to select.
    * @return this fixture.
    */
-  public JTabbedPaneFixture selectTab(int tabIndex) {
+  public final JTabbedPaneFixture selectTab(int tabIndex) {
     selectTab(new JTabbedPaneLocation(tabIndex));
     return this;
   }
@@ -65,18 +65,18 @@ public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPa
    * @param tabText the given text to match.
    * @return this fixture.
    */
-  public JTabbedPaneFixture selectTab(String tabText) {
+  public final JTabbedPaneFixture selectTab(String tabText) {
     selectTab(new JTabbedPaneLocation(tabText));
     return this;
   }
 
-  private JTabbedPaneFixture selectTab(JTabbedPaneLocation tabLocation) {
+  private final JTabbedPaneFixture selectTab(JTabbedPaneLocation tabLocation) {
     tabbedPaneTester().actionSelectTab(target, tabLocation);
     return this;
   }
   
   /** @return the titles of all the tabs. */
-  public String[] tabTitles() {
+  public final String[] tabTitles() {
     return tabbedPaneTester().getTabs(target);
   }
   
@@ -105,6 +105,18 @@ public final class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPa
   /** {@inheritDoc} */
   public final JTabbedPaneFixture requireNotVisible() {
     assertIsNotVisible();
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  public final JTabbedPaneFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JTabbedPaneFixture requireDisabled() {
+    assertIsDisabled();
     return this;
   }
 }

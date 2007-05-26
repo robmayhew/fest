@@ -80,4 +80,16 @@ public class JLabelFixture extends AbstractComponentFixture<JLabel> implements T
     assertIsNotVisible();
     return this;
   }
+
+  /** {@inheritDoc} */
+  public final JLabelFixture requireEnabled() {
+    assertIsEnabled();
+    return this;
+  }
+  
+  /** {@inheritDoc} */  
+  public final JLabelFixture requireDisabled() {
+    assertIsDisabled();
+    return this;
+  }
 }

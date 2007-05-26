@@ -134,6 +134,22 @@ public abstract class AbstractComponentFixture<T extends Component> implements C
     assertThat(target.isVisible()).isFalse();
   }
 
+  /**
+   * Asserts that the target component is enabled.
+   * @throws AssertionError if the target component is not enabled.
+   */
+  protected final void assertIsEnabled() {
+    assertThat(target.isEnabled()).isTrue();
+  }
+  
+  /**
+   * Asserts that the target component is disabled.
+   * @throws AssertionError if the target component is enabled.
+   */
+  protected final void assertIsDisabled() {
+    assertThat(target.isEnabled()).isFalse();
+  }
+
   /** @return a tester for the target component */
   protected final ComponentTester tester() { return ComponentTester.getTester(target); }
 }
