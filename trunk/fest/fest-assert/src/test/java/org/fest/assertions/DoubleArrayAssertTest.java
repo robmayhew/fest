@@ -1,5 +1,5 @@
 /*
- * Created on May 22, 2007
+ * Created on May 27, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -26,8 +26,8 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  */
 @Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
-           date = "2007-05-22T23:41:19", 
-           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTestTemplate.vm")
+           date = "2007-05-27T04:44:16", 
+           comments = "Generated using Velocity template 'org/fest/assertions/ArrayAssertTestTemplate.vm'")
 public class DoubleArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {

@@ -65,17 +65,14 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
 
   @Override public ObjectArrayAssert hasSize(int expected) {
-    super.hasSize(expected);
-    return this;
+    return (ObjectArrayAssert)super.hasSize(expected);
   }
   
   @Override public ObjectArrayAssert isSameAs(Object[] expected) {
-    super.isSameAs(expected);
-    return this;
+    return (ObjectArrayAssert)super.isSameAs(expected);
   }
 
   @Override public ObjectArrayAssert isNotSameAs(Object[] expected) {
-    super.isNotSameAs(expected);
-    return this;
+    return (ObjectArrayAssert)super.isNotSameAs(expected);
   }
 }

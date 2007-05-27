@@ -50,27 +50,22 @@ public final class ObjectAssert extends Assert<Object> {
   }
   
   @Override public ObjectAssert isNotNull() {
-    super.isNotNull();
-    return this;
+    return (ObjectAssert)super.isNotNull();
   }
   
   @Override public ObjectAssert isSameAs(Object expected) {
-    super.isSameAs(expected);
-    return this;
+    return (ObjectAssert)super.isSameAs(expected);
   }
   
   @Override public ObjectAssert isNotSameAs(Object other) {
-    super.isNotSameAs(other);
-    return this;
+    return (ObjectAssert)super.isNotSameAs(other);
   }
 
   @Override public ObjectAssert isEqualTo(Object expected) {
-    super.isEqualTo(expected);
-    return this;
+    return (ObjectAssert)super.isEqualTo(expected);
   }
 
   @Override public ObjectAssert isNotEqualTo(Object other) {
-    super.isNotEqualTo(other);
-    return this;
+    return (ObjectAssert)super.isNotEqualTo(other);
   }
 }

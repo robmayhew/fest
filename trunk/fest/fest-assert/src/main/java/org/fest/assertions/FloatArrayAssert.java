@@ -1,5 +1,5 @@
 /*
- * Created on May 22, 2007
+ * Created on May 27, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -31,8 +31,8 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 @Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
-           date = "2007-05-22T23:41:18", 
-           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTemplate.vm")
+           date = "2007-05-27T04:44:16", 
+           comments = "Generated using Velocity template 'org/fest/assertions/ArrayAssertTemplate.vm'")
 public final class FloatArrayAssert extends GroupAssert<float[]> {
 
   FloatArrayAssert(float... actual) {
@@ -40,8 +40,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
   }
 
   @Override public FloatArrayAssert isNotNull() {
-    super.isNotNull();
-    return this;
+    return (FloatArrayAssert)super.isNotNull();
   }
   
   public void isEmpty() {
@@ -70,17 +69,14 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
   }
 
   @Override public FloatArrayAssert hasSize(int expected) {
-    super.hasSize(expected);
-    return this;
+    return (FloatArrayAssert)super.hasSize(expected);
   }
   
   @Override public FloatArrayAssert isSameAs(float[] expected) {
-    super.isSameAs(expected);
-    return this;
+    return (FloatArrayAssert)super.isSameAs(expected);
   }
 
   @Override public FloatArrayAssert isNotSameAs(float[] expected) {
-    super.isNotSameAs(expected);
-    return this;
+    return (FloatArrayAssert)super.isNotSameAs(expected);
   }
 }

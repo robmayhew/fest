@@ -1,5 +1,5 @@
 /*
- * Created on May 22, 2007
+ * Created on May 27, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -31,8 +31,8 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 @Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
-           date = "2007-05-22T23:41:18", 
-           comments = "Generated using Velocity template org.fest.assertions.ArrayAssertTemplate.vm")
+           date = "2007-05-27T04:44:16", 
+           comments = "Generated using Velocity template 'org/fest/assertions/ArrayAssertTemplate.vm'")
 public final class LongArrayAssert extends GroupAssert<long[]> {
 
   LongArrayAssert(long... actual) {
@@ -40,8 +40,7 @@ public final class LongArrayAssert extends GroupAssert<long[]> {
   }
 
   @Override public LongArrayAssert isNotNull() {
-    super.isNotNull();
-    return this;
+    return (LongArrayAssert)super.isNotNull();
   }
   
   public void isEmpty() {
@@ -70,17 +69,14 @@ public final class LongArrayAssert extends GroupAssert<long[]> {
   }
 
   @Override public LongArrayAssert hasSize(int expected) {
-    super.hasSize(expected);
-    return this;
+    return (LongArrayAssert)super.hasSize(expected);
   }
   
   @Override public LongArrayAssert isSameAs(long[] expected) {
-    super.isSameAs(expected);
-    return this;
+    return (LongArrayAssert)super.isSameAs(expected);
   }
 
   @Override public LongArrayAssert isNotSameAs(long[] expected) {
-    super.isNotSameAs(expected);
-    return this;
+    return (LongArrayAssert)super.isNotSameAs(expected);
   }
 }

@@ -19,7 +19,7 @@ import java.util.Collection;
 
 import org.fest.util.Collections;
 
-import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Fail.*;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
@@ -56,8 +56,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
   
   @Override public CollectionAssert hasSize(int expected) {
-    super.hasSize(expected);
-    return this;
+    return (CollectionAssert)super.hasSize(expected);
   }
 
   int actualGroupSize() {
@@ -65,22 +64,18 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
 
   @Override public CollectionAssert isEqualTo(Collection<?> expected) {
-    super.isEqualTo(expected);
-    return this;
+    return (CollectionAssert)super.isEqualTo(expected);
   }
 
   @Override public CollectionAssert isNotEqualTo(Collection<?> obj) {
-    super.isNotEqualTo(obj);
-    return this;
+    return (CollectionAssert)super.isNotEqualTo(obj);
   }
   
   @Override public CollectionAssert isSameAs(Collection<?> expected) {
-    super.isSameAs(expected);
-    return this;
+    return (CollectionAssert)super.isSameAs(expected);
   }
 
   @Override public CollectionAssert isNotSameAs(Collection<?> expected) {
-    super.isNotSameAs(expected);
-    return this;
+    return (CollectionAssert)super.isNotSameAs(expected);
   }
 }

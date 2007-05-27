@@ -30,14 +30,14 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import static java.io.File.separator;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
 
 import static org.fest.assertions.Commons.packageNameAsPathFrom;
 import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
 import static org.fest.assertions.SourceFolders.TEST_FOLDER;
 import static org.fest.util.Strings.concat;
-
-import static java.io.File.separator;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands a template for code generators using Apache Velocity.
@@ -47,6 +47,8 @@ import static java.io.File.separator;
 abstract class VelocityCodeGenerator {
 
   static final Logger logger = Logger.getAnonymousLogger();
+  
+  private static final String STANDARD_PATH_SEPARATOR = "/";
   
   final String packageNameAsPath;
 
@@ -72,7 +74,7 @@ abstract class VelocityCodeGenerator {
   final void generateJavaFile(String javaClassName, VelocityContext context) throws Exception {
     String javaFilePath = MAIN_FOLDER.filePathFor(javaClassName);
     String javaFileTemplatePath = javaFileTemplatePath();
-    context.put("javaFileTemplatePath", pathAsPackageName(javaFileTemplatePath));
+    context.put("javaFileTemplatePath", standardPath(javaFileTemplatePath));
     generateFile(javaFilePath, Velocity.getTemplate(javaFileTemplatePath), context);
   }
 
@@ -81,14 +83,15 @@ abstract class VelocityCodeGenerator {
   final void generateTestFile(String testClassName, VelocityContext context) throws Exception {
     String testFilePath = TEST_FOLDER.filePathFor(testClassName);
     String testFileTemplatePath = testFileTemplatePath();
-    context.put("testFileTemplatePath", pathAsPackageName(testFileTemplatePath));
+    context.put("testFileTemplatePath", standardPath(testFileTemplatePath));
     generateFile(testFilePath, Velocity.getTemplate(testFileTemplatePath), context);
   }
   
   abstract String testFileTemplatePath();
 
-  private String pathAsPackageName(String path) {
-    return path.replace(separator, ".");
+  private String standardPath(String path) {
+    if (separator.equals(STANDARD_PATH_SEPARATOR)) return quote(path);
+    return quote(path.replace(separator, STANDARD_PATH_SEPARATOR));
   }
   
   private void generateFile(String fileToGeneratePath, Template template, VelocityContext context) throws Exception {

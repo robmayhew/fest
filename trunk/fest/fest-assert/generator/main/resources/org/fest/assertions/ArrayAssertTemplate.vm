@@ -40,8 +40,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
   }
 
   @Override public ${className} isNotNull() {
-    super.isNotNull();
-    return this;
+    return (${className})super.isNotNull();
   }
   
   public void isEmpty() {
@@ -70,17 +69,14 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
   }
 
   @Override public ${className} hasSize(int expected) {
-    super.hasSize(expected);
-    return this;
+    return (${className})super.hasSize(expected);
   }
   
   @Override public ${className} isSameAs(${arrayType}[] expected) {
-    super.isSameAs(expected);
-    return this;
+    return (${className})super.isSameAs(expected);
   }
 
   @Override public ${className} isNotSameAs(${arrayType}[] expected) {
-    super.isNotSameAs(expected);
-    return this;
+    return (${className})super.isNotSameAs(expected);
   }
 }

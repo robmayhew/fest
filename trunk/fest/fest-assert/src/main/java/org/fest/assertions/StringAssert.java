@@ -42,33 +42,27 @@ public final class StringAssert extends GroupAssert<String> {
   }
   
   @Override public StringAssert isEqualTo(String expected) {
-    super.isEqualTo(expected);
-    return this;
+    return (StringAssert)super.isEqualTo(expected);
   }
   
   @Override public StringAssert isNotEqualTo(String obj) {
-    super.isNotEqualTo(obj);
-    return this;
+    return (StringAssert)super.isNotEqualTo(obj);
   }
 
   @Override public StringAssert isNotNull() {
-    super.isNotNull();
-    return this;
+    return (StringAssert)super.isNotNull();
   }
 
   @Override public StringAssert isNotSameAs(String expected) {
-    super.isNotSameAs(expected);
-    return this;
+    return (StringAssert)super.isNotSameAs(expected);
   }
 
   @Override public StringAssert isSameAs(String expected) {
-    super.isSameAs(expected);
-    return this;
+    return (StringAssert)super.isSameAs(expected);
   }
 
   @Override public StringAssert hasSize(int expected) {
-    super.hasSize(expected);
-    return this;
+    return (StringAssert)super.hasSize(expected);
   }
 
   int actualGroupSize() {
