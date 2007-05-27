@@ -29,6 +29,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.apache.velocity.tools.generic.DateTool;
 
 import static java.io.File.separator;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
@@ -66,9 +67,13 @@ abstract class VelocityCodeGenerator {
 
   abstract void generate() throws Exception;
   
-  final void addGeneratorInfoTo(VelocityContext context) {
+  /** @return a new Velocity context containing information about this code generator and the current date. */
+  final VelocityContext newContext() {
+    VelocityContext context = new VelocityContext();
     context.put("generator", getClass().getName());
     context.put("generated", dateInISO8601Format());
+    context.put("date", new DateTool());
+    return context;
   }
   
   final void generateJavaFile(String javaClassName, VelocityContext context) throws Exception {

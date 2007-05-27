@@ -15,7 +15,6 @@
 package org.fest.assertions;
 
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.tools.generic.DateTool;
 
 import static java.util.logging.Level.SEVERE;
 import static org.apache.velocity.util.StringUtils.capitalizeFirstLetter;
@@ -58,15 +57,13 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
     String arrayTypeName = arrayType.getSimpleName();
     String className = concat(capitalizeFirstLetter(arrayTypeName), "ArrayAssert");
     String testName = concat(className, "Test");
-    VelocityContext context = new VelocityContext();
-    addGeneratorInfoTo(context);
+    VelocityContext context = newContext();
     context.put("arrayType", arrayTypeName);
     context.put("className", className);
     context.put("testName", testName);
     context.put("classToTest", className);
     context.put("firstArray", testArrays.first);
     context.put("secondArray", testArrays.second);
-    context.put("date", new DateTool());
     generateJavaFile(className, context); 
     generateTestFile(testName, context);
   }
