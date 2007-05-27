@@ -39,6 +39,14 @@ public class ConstructorTest {
     assertThat(person.getName()).isEqualTo("Yoda");
   }
   
+  @Test public void shouldReturnConstructorInfo() {
+    java.lang.reflect.Constructor<Person> constructor = new Constructor.TargetType().withParameterTypes(String.class).in(Person.class).info();
+    assertThat(constructor).isNotNull();
+    Class<?>[] parameterTypes = constructor.getParameterTypes();
+    assertThat(parameterTypes).hasSize(1);
+    assertThat(parameterTypes[0]).isEqualTo(String.class);
+  }
+  
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfConstructorNotFound() {
     Class<Integer> illegalType = Integer.class;

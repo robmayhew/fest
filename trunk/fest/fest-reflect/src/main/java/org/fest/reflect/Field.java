@@ -95,6 +95,10 @@ public final class Field<T> {
     }
   }
 
+  public java.lang.reflect.Field info() {
+    return field;
+  }
+  
   public static class FieldName {
     private final String name;
 

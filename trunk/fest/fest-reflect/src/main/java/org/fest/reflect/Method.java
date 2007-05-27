@@ -57,6 +57,10 @@ public final class Method<T> {
       method.setAccessible(accessible);
     }
   }
+  
+  public java.lang.reflect.Method info() {
+    return method;
+  }
 
   public static class MethodName {
     private final String value;

@@ -62,6 +62,10 @@ public final class Constructor<T> {
     }
   }
 
+  public java.lang.reflect.Constructor<T> info() {
+    return constructor;
+  }
+  
   public static class TargetType {
     TargetType() {}
 

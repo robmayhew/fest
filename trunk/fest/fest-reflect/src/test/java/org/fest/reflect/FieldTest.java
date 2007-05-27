@@ -43,6 +43,13 @@ public class FieldTest {
     assertThat(person.getName()).isEqualTo("Leia");
   }
   
+  @Test public void shouldReturnFieldInfo() {
+    java.lang.reflect.Field field = new Field.FieldName("name").ofType(String.class).in(person).info();
+    assertThat(field).isNotNull();
+    assertThat(field.getName()).isEqualTo("name");
+    assertThat(field.getType()).isEqualTo(String.class);
+  }
+  
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfWrongTypeSpecified() {
     Class<Integer> invalidType = Integer.class;

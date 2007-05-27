@@ -43,6 +43,15 @@ public class MethodTest {
     assertThat(personName).isEqualTo("Luke");
   }
   
+  @Test public void shouldReturnMethodInfo() {
+    java.lang.reflect.Method method = new Method.MethodName("setName").withParameterTypes(String.class).in(person).info();
+    assertThat(method).isNotNull();
+    assertThat(method.getName()).isEqualTo("setName");
+    Class<?>[] parameterTypes = method.getParameterTypes();
+    assertThat(parameterTypes).hasSize(1);
+    assertThat(parameterTypes[0]).isEqualTo(String.class);
+  }
+  
   @Test(expectedExceptions = ReflectionError.class) 
   public void shouldThrowErrorIfInvalidMethodName() {
     String invalidName = "getAge";
