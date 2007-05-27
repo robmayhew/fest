@@ -23,7 +23,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.RobotFixture;
 
 /**
- * Template for implementations of <code>{@link ComponentFixture}</code>
+ * Understands simulation of user events and state verification of a <code>{@link Component}</code>.
  * @param <T> the type of component handled by this fixture. 
  *
  * @author Alex Ruiz

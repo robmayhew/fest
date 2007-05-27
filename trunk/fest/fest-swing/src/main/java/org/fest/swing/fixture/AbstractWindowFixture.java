@@ -26,7 +26,7 @@ import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
 import org.fest.swing.RobotFixture;
 
 /**
- * Template for implementations of <code>{@link WindowFixture}</code>
+ * Understands simulation of user events and state verification of a <code>{@link Window}</code>.
  * @param <T> the type of window handled by this fixture. 
  *
  * @author Alex Ruiz
