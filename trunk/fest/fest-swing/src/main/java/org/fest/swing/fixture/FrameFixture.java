@@ -33,7 +33,7 @@ import org.fest.swing.RobotFixture;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class FrameFixture extends AbstractWindowFixture<Frame> {
+public class FrameFixture extends WindowFixture<Frame> {
 
   /**
    * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>

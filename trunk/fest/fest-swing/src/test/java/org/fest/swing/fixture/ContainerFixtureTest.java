@@ -47,11 +47,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link AbstractContainerFixture}</code>.
+ * Tests for <code>{@link ContainerFixture}</code>.
  *
  * @author Alex Ruiz
  */
-@GUITest public class AbstractContainerFixtureTest {
+@GUITest public class ContainerFixtureTest {
 
   private static class CustomWindow extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -106,12 +106,12 @@ import org.testng.annotations.Test;
   }
   
   private RobotFixture robot;
-  private AbstractContainerFixture<CustomWindow> container;
+  private ContainerFixture<CustomWindow> container;
   private CustomWindow window;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    container = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {};
+    container = new ContainerFixture<CustomWindow>(robot, new CustomWindow()) {};
     window = container.target;
     robot.showWindow(window);
   }

@@ -32,7 +32,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public class JTextComponentFixture extends AbstractComponentFixture<JTextComponent> implements TextInputFixture<JTextComponent> {
+public class JTextComponentFixture extends ComponentFixture<JTextComponent> implements TextInputFixture<JTextComponent> {
 
   /**
    * Creates a new </code>{@link JTextComponentFixture}</code>.

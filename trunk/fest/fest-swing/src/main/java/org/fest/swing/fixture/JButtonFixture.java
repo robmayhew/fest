@@ -27,7 +27,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Yvonne Wang
  */
-public class JButtonFixture extends AbstractComponentFixture<JButton> implements TextDisplayFixture<JButton> {
+public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture<JButton> {
 
   /**
    * Creates a new </code>{@link JButtonFixture}</code>.

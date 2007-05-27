@@ -27,7 +27,7 @@ import org.fest.swing.RobotFixture;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
+public class JComboBoxFixture extends ComponentFixture<JComboBox> {
 
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.

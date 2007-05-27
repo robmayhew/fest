@@ -27,7 +27,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixture extends AbstractComponentFixture<JMenuItem> {
+public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
 
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>.

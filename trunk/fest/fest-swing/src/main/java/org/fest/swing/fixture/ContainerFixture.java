@@ -39,35 +39,35 @@ import org.fest.swing.RobotFixture;
  * 
  * @author Alex Ruiz
  */
-public abstract class AbstractContainerFixture<T extends Container> extends AbstractComponentFixture<T> {
+public abstract class ContainerFixture<T extends Container> extends ComponentFixture<T> {
 
   /**
-   * Creates a new </code>{@link AbstractContainerFixture}</code>.
+   * Creates a new </code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.ComponentFinder#findByType(Class)
    */
-  public AbstractContainerFixture(RobotFixture robot, Class<? extends T> type) {
+  public ContainerFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, robot.finder().findByType(type));
   }
 
   /**
-   * Creates a new </code>{@link AbstractContainerFixture}</code>.
+   * Creates a new </code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of Container <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
-  public AbstractContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
+  public ContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, robot.finder().findByName(name, type));
   }
 
   /**
-   * Creates a new </code>{@link AbstractContainerFixture}</code>.
+   * Creates a new </code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on the given component.
    * @param target the component under test.
    */
-  public AbstractContainerFixture(RobotFixture robot, T target) {
+  public ContainerFixture(RobotFixture robot, T target) {
     super(robot, target);
   }
 

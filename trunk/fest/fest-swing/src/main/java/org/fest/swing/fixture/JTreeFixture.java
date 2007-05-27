@@ -29,7 +29,7 @@ import org.fest.swing.RobotFixture;
  * @author Keith Coughtrey
  * @author Alex Ruiz
  */
-public class JTreeFixture extends AbstractComponentFixture<JTree> {
+public class JTreeFixture extends ComponentFixture<JTree> {
 
   /**
    * Creates a new </code>{@link JTreeFixture}</code>.

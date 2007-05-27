@@ -28,7 +28,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public class DialogFixture extends AbstractWindowFixture<Dialog> {
+public class DialogFixture extends WindowFixture<Dialog> {
 
   /**
    * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>

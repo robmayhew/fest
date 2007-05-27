@@ -27,7 +27,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public class JLabelFixture extends AbstractComponentFixture<JLabel> implements TextDisplayFixture<JLabel> {
+public class JLabelFixture extends ComponentFixture<JLabel> implements TextDisplayFixture<JLabel> {
   
   /**
    * Creates a new </code>{@link JLabelFixture}</code>.

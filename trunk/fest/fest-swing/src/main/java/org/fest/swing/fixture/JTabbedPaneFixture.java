@@ -29,7 +29,7 @@ import org.fest.swing.RobotFixture;
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
-public class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPane> {
+public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
 
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.

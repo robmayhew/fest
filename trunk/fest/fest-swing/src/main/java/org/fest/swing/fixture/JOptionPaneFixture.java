@@ -40,7 +40,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
+public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
 
   /**
    * Creates a new </code>{@link JOptionPaneFixture}</code>.
