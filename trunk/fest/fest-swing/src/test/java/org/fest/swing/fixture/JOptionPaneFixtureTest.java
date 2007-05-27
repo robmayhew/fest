@@ -142,17 +142,17 @@ import org.testng.annotations.Test;
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
     assertThat(fixture.target).isNotNull();
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = "shouldFindOptionPane")
   public void shouldFindButtonWithGivenTextInOptionPane() {
     showMessageWithOptions(array("First", "Second"));
     JOptionPaneFixture fixture = fixture();
-    JButtonFixture button = fixture.findButtonWithText("Second");
+    JButtonFixture button = fixture.buttonWithText("Second");
     assertThat(button).isNotNull();
     assertThat(button.target.getText()).isEqualTo("Second");
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -160,9 +160,9 @@ import org.testng.annotations.Test;
     window.setUpInputMessage();
     clickWindowButton();
     JOptionPaneFixture fixture = fixture();
-    JTextComponentFixture textComponentFixture = fixture.findTextComponent();
+    JTextComponentFixture textComponentFixture = fixture.textBox();
     assertThat(textComponentFixture).isNotNull();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldFindTextComponentInOptionPane" },
@@ -170,8 +170,8 @@ import org.testng.annotations.Test;
   public void shouldNotFindTextComponentInOptionPaneIfNotInputMessage() {
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
-    fixture.findTextComponent();
-    fixture.findButton().click();
+    fixture.textBox();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -179,7 +179,7 @@ import org.testng.annotations.Test;
     showMessageWithTitle("Star Wars");
     JOptionPaneFixture fixture = fixture();
     fixture.requireTitle("Star Wars");
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -188,7 +188,7 @@ import org.testng.annotations.Test;
     clickWindowButton();
     JOptionPaneFixture fixture = fixture();
     fixture.requireTitle("Jedi");
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfMatchingTitle" },
@@ -197,7 +197,7 @@ import org.testng.annotations.Test;
     showMessageWithTitle("Yoda");
     JOptionPaneFixture fixture = fixture();
     fixture.requireTitle("Darth Vader");
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -205,7 +205,7 @@ import org.testng.annotations.Test;
     showMessageWithOptions(array("First", "Second"));
     JOptionPaneFixture fixture = fixture();
     fixture.requireOptions(array("First", "Second"));
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfMatchingOptions" },
@@ -214,7 +214,7 @@ import org.testng.annotations.Test;
     showMessageWithOptions(array("First", "Second"));
     JOptionPaneFixture fixture = fixture();
     fixture.requireOptions(array("Third"));
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -222,7 +222,7 @@ import org.testng.annotations.Test;
     showMessageWithText("Leia");
     JOptionPaneFixture fixture = fixture();
     fixture.requireMessage("Leia");
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfMatchingMessage" },
@@ -231,7 +231,7 @@ import org.testng.annotations.Test;
     showMessageWithText("Palpatine");
     JOptionPaneFixture fixture = fixture();
     fixture.requireMessage("Anakin");
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -239,7 +239,7 @@ import org.testng.annotations.Test;
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireErrorMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsError" },
@@ -248,7 +248,7 @@ import org.testng.annotations.Test;
     showInformationMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireErrorMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -256,7 +256,7 @@ import org.testng.annotations.Test;
     showInformationMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireInformationMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsInformation" },
@@ -265,7 +265,7 @@ import org.testng.annotations.Test;
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireInformationMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -273,7 +273,7 @@ import org.testng.annotations.Test;
     showWarningMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireWarningMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsWarning" },
@@ -289,7 +289,7 @@ import org.testng.annotations.Test;
     showQuestionMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireQuestionMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsWarning" },
@@ -298,7 +298,7 @@ import org.testng.annotations.Test;
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requireQuestionMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   @Test(dependsOnMethods = "shouldFindOptionPane")
@@ -306,7 +306,7 @@ import org.testng.annotations.Test;
     showPlainMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requirePlainMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
   
   @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsWarning" },
@@ -315,7 +315,7 @@ import org.testng.annotations.Test;
     showErrorMessage();
     JOptionPaneFixture fixture = fixture();
     fixture.requirePlainMessage();
-    fixture.findButton().click();
+    fixture.button().click();
   }
 
   private void showMessageWithTitle(String title) {
