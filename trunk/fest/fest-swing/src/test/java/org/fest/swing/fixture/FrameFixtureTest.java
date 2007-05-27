@@ -38,10 +38,10 @@ import org.testng.annotations.Test;
  */
 @GUITest public class FrameFixtureTest {
 
-  private FrameFixture frameFixture;
-  private JFrame frame;
+  FrameFixture frameFixture;
+  JFrame frame;
   
-  @BeforeMethod public void init() {
+  @BeforeMethod public void setUp() {
     frameFixture = new FrameFixture(new JFrame());
     frame = frameFixture.targetCastedTo(JFrame.class);
     frameFixture.show();
@@ -99,7 +99,7 @@ import org.testng.annotations.Test;
     assertThat(frameFixture.target.getExtendedState()).isEqualTo(NORMAL);
   }
   
-  private FluentDimension windowSize() {
+  FluentDimension windowSize() {
     return new FluentDimension(frame.getSize());
   }
   

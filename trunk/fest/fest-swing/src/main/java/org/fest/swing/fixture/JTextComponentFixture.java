@@ -54,15 +54,13 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture click() { 
-    doClick();
-    return this;
+  @Override public final JTextComponentFixture click() { 
+    return (JTextComponentFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture focus() { 
-    doFocus();
-    return this;
+  @Override public final JTextComponentFixture focus() { 
+    return (JTextComponentFixture)super.focus();
   }
 
   /** {@inheritDoc} */
@@ -73,7 +71,7 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
   
   /** {@inheritDoc} */
   public final JTextComponentFixture enterText(String text) {
-    doFocus();
+    focus();
     tester().actionKeyString(text);
     return this;
   }
@@ -111,15 +109,13 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture requireVisible() { 
-    assertIsVisible();
-    return this;
+  @Override public final JTextComponentFixture requireVisible() { 
+    return (JTextComponentFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture requireNotVisible() { 
-    assertIsNotVisible();
-    return this;
+  @Override public final JTextComponentFixture requireNotVisible() { 
+    return (JTextComponentFixture)super.requireNotVisible();
   }
 
   /**
@@ -133,14 +129,12 @@ public class JTextComponentFixture extends AbstractComponentFixture<JTextCompone
   }
 
   /** {@inheritDoc} */
-  public final JTextComponentFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JTextComponentFixture requireEnabled() {
+    return (JTextComponentFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JTextComponentFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JTextComponentFixture requireDisabled() {
+    return (JTextComponentFixture)super.requireDisabled();
   }
 }

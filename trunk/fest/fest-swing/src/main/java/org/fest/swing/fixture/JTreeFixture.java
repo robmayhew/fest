@@ -27,6 +27,7 @@ import org.fest.swing.RobotFixture;
  * Understands simulation of user events on a <code>{@link JTree}</code> and output verification.
  * 
  * @author Keith Coughtrey
+ * @author Alex Ruiz
  */
 public class JTreeFixture extends AbstractComponentFixture<JTree> {
 
@@ -86,38 +87,32 @@ public class JTreeFixture extends AbstractComponentFixture<JTree> {
   }
 
   /** {@inheritDoc} */
-  public final JTreeFixture click() {
-    doClick();
-    return this;
+  @Override public final JTreeFixture click() {
+    return (JTreeFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JTreeFixture focus() {
-    doFocus();
-    return this;
+  @Override public final JTreeFixture focus() {
+    return (JTreeFixture)super.focus();
   }
 
   /** {@inheritDoc} */
-  public final JTreeFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JTreeFixture requireVisible() {
+    return (JTreeFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JTreeFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JTreeFixture requireNotVisible() {
+    return (JTreeFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final JTreeFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JTreeFixture requireEnabled() {
+    return (JTreeFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JTreeFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JTreeFixture requireDisabled() {
+    return (JTreeFixture)super.requireDisabled();
   }
 }

@@ -49,15 +49,13 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
   }
 
   /** {@inheritDoc} */
-  public final JButtonFixture click() {
-    doClick();
-    return this;
+  @Override public final JButtonFixture click() {
+    return (JButtonFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JButtonFixture focus() {
-    doFocus();
-    return this;
+  @Override public final JButtonFixture focus() {
+    return (JButtonFixture)super.focus();
   }
 
   /** {@inheritDoc} */
@@ -72,26 +70,22 @@ public class JButtonFixture extends AbstractComponentFixture<JButton> implements
   }
 
   /** {@inheritDoc} */
-  public final JButtonFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JButtonFixture requireVisible() {
+    return (JButtonFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JButtonFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JButtonFixture requireNotVisible() {
+    return (JButtonFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final JButtonFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JButtonFixture requireEnabled() {
+    return (JButtonFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JButtonFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JButtonFixture requireDisabled() {
+    return (JButtonFixture)super.requireDisabled();
   }
 }

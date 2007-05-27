@@ -85,38 +85,32 @@ public class JTabbedPaneFixture extends AbstractComponentFixture<JTabbedPane> {
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture click() {
-    doClick();
-    return this;
+  @Override public final JTabbedPaneFixture click() {
+    return (JTabbedPaneFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture focus() {
-    doFocus();
-    return this;
+  @Override public final JTabbedPaneFixture focus() {
+    return (JTabbedPaneFixture)super.focus();
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JTabbedPaneFixture requireVisible() {
+    return (JTabbedPaneFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JTabbedPaneFixture requireNotVisible() {
+    return (JTabbedPaneFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final JTabbedPaneFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JTabbedPaneFixture requireEnabled() {
+    return (JTabbedPaneFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JTabbedPaneFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JTabbedPaneFixture requireDisabled() {
+    return (JTabbedPaneFixture)super.requireDisabled();
   }
 }

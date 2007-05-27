@@ -22,7 +22,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.RobotFixture;
 
-
 /**
  * Template for implementations of <code>{@link ComponentFixture}</code>
  * @param <T> the type of component handled by this fixture. 
@@ -30,7 +29,7 @@ import org.fest.swing.RobotFixture;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public abstract class AbstractComponentFixture<T extends Component> implements ComponentFixture<T> {
+public abstract class AbstractComponentFixture<T extends Component> {
 
   /** Performs simulation of user events on <code>{@link #target}</code> */
   public final RobotFixture robot;
@@ -79,14 +78,24 @@ public abstract class AbstractComponentFixture<T extends Component> implements C
     assertThat(target).isInstanceOf(type);
     return type.cast(target);
   }
-  
+
   /**
    * Simulates a user clicking the target component.
-   * @throws AssertionError if the given fixture is not <code>this</code>.
+   * @return this fixture.
    */
-  protected final void doClick() {
-    doFocus();
+  public AbstractComponentFixture<T> click() {
+    focus();
     tester().actionClick(target);
+    return this;
+  }
+  
+  /**
+   * Gives the focus to the target component.
+   * @return this fixture.
+   */
+  public AbstractComponentFixture<T> focus() {
+    robot.focus(target);
+    return this;
   }
 
   /**
@@ -106,48 +115,49 @@ public abstract class AbstractComponentFixture<T extends Component> implements C
    * @param keyCodes one or more codes of the keys to press.
    */
   protected final void doPressKeys(int...keyCodes) {
-    doFocus();
+    focus();
     ComponentTester tester = tester();
     for (int keyCode : keyCodes) tester.actionKeyPress(keyCode);
   }
-  
-  /**
-   * Gives the keyboard focus to the target component.
-   */
-  protected final void doFocus() {
-    robot.focus(target);
-  }
-  
+
   /**
    * Asserts that the target component is visible.
+   * @return this fixture.
    * @throws AssertionError if the target component is not visible.
    */
-  protected final void assertIsVisible() {
+  public AbstractComponentFixture<T> requireVisible() {
     assertThat(target.isVisible()).isTrue();
+    return this;
   }
 
   /**
    * Asserts that the target component is not visible.
+   * @return this fixture.
    * @throws AssertionError if the target component is visible.
    */
-  protected final void assertIsNotVisible() {
+  public AbstractComponentFixture<T> requireNotVisible() {
     assertThat(target.isVisible()).isFalse();
+    return this;
   }
 
   /**
    * Asserts that the target component is enabled.
-   * @throws AssertionError if the target component is not enabled.
+   * @return this fixture.
+   * @throws AssertionError is the target component is not enabled.
    */
-  protected final void assertIsEnabled() {
+  public AbstractComponentFixture<T> requireEnabled() {
     assertThat(target.isEnabled()).isTrue();
+    return this;
   }
   
   /**
    * Asserts that the target component is disabled.
-   * @throws AssertionError if the target component is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the target component is enabled.
    */
-  protected final void assertIsDisabled() {
+  public AbstractComponentFixture<T> requireDisabled() {
     assertThat(target.isEnabled()).isFalse();
+    return this;
   }
 
   /** @return a tester for the target component */

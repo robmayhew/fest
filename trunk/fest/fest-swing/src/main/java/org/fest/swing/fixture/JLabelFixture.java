@@ -58,38 +58,32 @@ public class JLabelFixture extends AbstractComponentFixture<JLabel> implements T
   public final String text() { return target.getText(); }
   
   /** {@inheritDoc} */
-  public final JLabelFixture click() {
-    doClick();
-    return this; 
+  @Override public final JLabelFixture click() {
+    return (JLabelFixture)super.click(); 
   }
 
   /** {@inheritDoc} */
-  public final JLabelFixture focus() {
-    doFocus();
-    return this;
+  @Override public final JLabelFixture focus() {
+    return (JLabelFixture)super.focus();
   }
 
   /** {@inheritDoc} */
-  public final JLabelFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JLabelFixture requireVisible() {
+    return (JLabelFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JLabelFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JLabelFixture requireNotVisible() {
+    return (JLabelFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final JLabelFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JLabelFixture requireEnabled() {
+    return (JLabelFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JLabelFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JLabelFixture requireDisabled() {
+    return (JLabelFixture)super.requireDisabled();
   }
 }

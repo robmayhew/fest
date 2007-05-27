@@ -68,38 +68,32 @@ public class JMenuItemFixture extends AbstractComponentFixture<JMenuItem> {
   }
 
   /** {@inheritDoc} */
-  public final JMenuItemFixture click() {
-    doClick();
-    return this;
+  @Override public final JMenuItemFixture click() {
+    return (JMenuItemFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JMenuItemFixture focus() {
-    doFocus();
-    return this;
+  @Override public final JMenuItemFixture focus() {
+    return (JMenuItemFixture)super.focus();
   }
 
   /** {@inheritDoc} */
-  public final JMenuItemFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JMenuItemFixture requireVisible() {
+    return (JMenuItemFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JMenuItemFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JMenuItemFixture requireNotVisible() {
+    return (JMenuItemFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final JMenuItemFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JMenuItemFixture requireEnabled() {
+    return (JMenuItemFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JMenuItemFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JMenuItemFixture requireDisabled() {
+    return (JMenuItemFixture)super.requireDisabled();
   }
 }

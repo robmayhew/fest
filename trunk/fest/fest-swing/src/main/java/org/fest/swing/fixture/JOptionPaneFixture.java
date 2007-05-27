@@ -51,15 +51,13 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture click() {
-    doClick();
-    return this;
+  @Override public final JOptionPaneFixture click() {
+    return (JOptionPaneFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture focus() {
-    doFocus();
-    return this;
+  @Override public final JOptionPaneFixture focus() {
+    return (JOptionPaneFixture)super.focus();
   }
 
   /**
@@ -182,26 +180,22 @@ public class JOptionPaneFixture extends AbstractComponentFixture<JOptionPane> {
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JOptionPaneFixture requireVisible() {
+    return (JOptionPaneFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JOptionPaneFixture requireNotVisible() {
+    return (JOptionPaneFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final JOptionPaneFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JOptionPaneFixture requireEnabled() {
+    return (JOptionPaneFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JOptionPaneFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JOptionPaneFixture requireDisabled() {
+    return (JOptionPaneFixture)super.requireDisabled();
   }
 }

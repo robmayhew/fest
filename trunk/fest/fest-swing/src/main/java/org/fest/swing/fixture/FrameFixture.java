@@ -54,27 +54,23 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
   }
   
   /** {@inheritDoc} */
-  public final FrameFixture show() {
-    doShow();
-    return this;
+  @Override public final FrameFixture show() {
+    return (FrameFixture)super.show();
   }
   
   /** {@inheritDoc} */
-  public final FrameFixture show(Dimension size) {
-    doShow(size);
-    return this;
+  @Override public final FrameFixture show(Dimension size) {
+    return (FrameFixture)super.show(size);
   }
 
   /** {@inheritDoc} */
-  public FrameFixture click() {
-    doClick();
-    return this;
+  @Override public FrameFixture click() {
+    return (FrameFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public FrameFixture focus() {
-    doFocus();
-    return this;
+  @Override public FrameFixture focus() {
+    return (FrameFixture)super.focus();
   }
 
   /**
@@ -143,50 +139,42 @@ public class FrameFixture extends AbstractWindowFixture<Frame> {
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture resizeWidthTo(int width) {
-    doResizeWidthTo(width);
-    return this;
+  @Override public final FrameFixture resizeWidthTo(int width) {
+    return (FrameFixture)super.resizeWidthTo(width);
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture resizeHeightTo(int height) {
-    doResizeHeightTo(height);
-    return this;
+  @Override public final FrameFixture resizeHeightTo(int height) {
+    return (FrameFixture)super.resizeHeightTo(height);
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture resizeTo(Dimension size) {
-    doResizeTo(size);
-    return this;
+  @Override public final FrameFixture resizeTo(Dimension size) {
+    return (FrameFixture)super.resizeTo(size);
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture requireSize(Dimension size) {
-    assertEqualSize(size);
-    return this;
+  @Override public final FrameFixture requireSize(Dimension size) {
+    return (FrameFixture)super.requireSize(size);
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final FrameFixture requireVisible() {
+    return (FrameFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final FrameFixture requireNotVisible() {
+    return (FrameFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final FrameFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final FrameFixture requireEnabled() {
+    return (FrameFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final FrameFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final FrameFixture requireDisabled() {
+    return (FrameFixture)super.requireDisabled();
   }
 }

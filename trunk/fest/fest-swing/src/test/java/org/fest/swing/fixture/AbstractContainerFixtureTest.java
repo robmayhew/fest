@@ -111,31 +111,7 @@ import org.testng.annotations.Test;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    container = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {
-
-      public ComponentFixture<CustomWindow> click() {
-        return null;
-      }
-
-      public ComponentFixture<CustomWindow> focus() {
-        return null;
-      }
-
-      public ComponentFixture<CustomWindow> requireVisible() {
-        return null;
-      }
-
-      public ComponentFixture<CustomWindow> requireNotVisible() {
-        return null;
-      }
-
-      public ComponentFixture<CustomWindow> requireDisabled() {
-        return null;
-      }
-
-      public ComponentFixture<CustomWindow> requireEnabled() {
-        return null;
-      }};
+    container = new AbstractContainerFixture<CustomWindow>(robot, new CustomWindow()) {};
     window = container.target;
     robot.showWindow(window);
   }

@@ -23,7 +23,7 @@ import java.awt.Component;
  *
  * @author Alex Ruiz
  */
-public interface TextDisplayFixture<T extends Component> extends ComponentFixture<T> {
+public interface TextDisplayFixture<T extends Component> {
 
   /** @return the text of the target component. */
   String text();
@@ -35,5 +35,4 @@ public interface TextDisplayFixture<T extends Component> extends ComponentFixtur
    * @throws AssertionError if the text of the target component is not equal to the given one.
    */
   TextDisplayFixture<T> requireText(String expected);
-
 }

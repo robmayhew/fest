@@ -21,7 +21,6 @@ import abbot.tester.JComboBoxTester;
 
 import org.fest.swing.RobotFixture;
 
-
 /**
  * Understands simulation of user events on a <code>{@link JComboBox}</code> and output verification.
  *
@@ -88,9 +87,8 @@ public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
   }
 
   /** {@inheritDoc} */
-  public final JComboBoxFixture focus() {
-    super.doFocus();
-    return this;
+  @Override public final JComboBoxFixture focus() {
+    return (JComboBoxFixture)super.focus();
   }
 
   private JComboBoxTester comboBoxTester() {
@@ -98,31 +96,27 @@ public class JComboBoxFixture extends AbstractComponentFixture<JComboBox> {
   }
 
   /** {@inheritDoc} */
-  public final JComboBoxFixture click() {
-    doClick();
-    return this;
+  @Override public final JComboBoxFixture click() {
+    return (JComboBoxFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final JComboBoxFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final JComboBoxFixture requireVisible() {
+    return (JComboBoxFixture)super.requireVisible();
   }
 
   /** {@inheritDoc} */
-  public final JComboBoxFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final JComboBoxFixture requireNotVisible() {
+    return (JComboBoxFixture)super.requireNotVisible();
   }
+  
   /** {@inheritDoc} */
-  public final JComboBoxFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final JComboBoxFixture requireEnabled() {
+    return (JComboBoxFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final JComboBoxFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final JComboBoxFixture requireDisabled() {
+    return (JComboBoxFixture)super.requireDisabled();
   }
 }

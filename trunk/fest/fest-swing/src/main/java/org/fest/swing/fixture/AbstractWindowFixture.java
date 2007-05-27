@@ -31,7 +31,7 @@ import org.fest.swing.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public abstract class AbstractWindowFixture<T extends Window> extends AbstractContainerFixture<T> implements WindowFixture<T> {
+public abstract class AbstractWindowFixture<T extends Window> extends AbstractContainerFixture<T> {
 
   /**
    * Creates a new </code>{@link AbstractWindowFixture}</code>. This constructor creates a new 
@@ -93,36 +93,72 @@ public abstract class AbstractWindowFixture<T extends Window> extends AbstractCo
     super(robot, target);
   }
 
-  protected final void doShow() {
+  /**
+   * Shows the target window.
+   * @return this fixture.
+   */
+  public AbstractWindowFixture<T> show() {
     robot.showWindow(target);
-    assertIsVisible();
+    return requireVisible();
   }
   
-  protected final void doShow(Dimension size) {
+  /**
+   * Shows the target window, resized to the given size.
+   * @param size the given size.
+   * @return this fixture.
+   */
+  public AbstractWindowFixture<T> show(Dimension size) {
     robot.showWindow(target, size);
-    assertIsVisible();
-  }
-
-  protected final void doResizeWidthTo(int width) {
-    doResizeTo(new Dimension(width, target.getHeight()));
-  }
-
-  protected final void doResizeHeightTo(int height) {
-    doResizeTo(new Dimension(target.getWidth(), height));
-  }
-
-  protected final void doResizeTo(Dimension size) {
-    windowTester().resize(target, size.width, size.height);
+    return requireVisible();
   }
   
+  /**
+   * Simulates a user resizing the target window horizontally.
+   * @param width the width that the target window should have after being resized.
+   * @return this fixture.
+   */
+  public AbstractWindowFixture<T> resizeWidthTo(int width) {
+    return resizeTo(new Dimension(width, target.getHeight()));
+  }
+
+  /**
+   * Simulates a user resizing the target window vertically.
+   * @param height the height that the target window should have after being resized.
+   * @return this fixture.
+   */
+  public AbstractWindowFixture<T> resizeHeightTo(int height) {
+    return resizeTo(new Dimension(target.getWidth(), height));
+  }
+
+  /**
+   * Simulates a user resizing the target window horizontally and/or vertically.
+   * @param size the size (height and width) that the target window should have after being resized.
+   * @return this fixture.
+   */
+  public AbstractWindowFixture<T> resizeTo(Dimension size) {
+    windowTester().resize(target, size.width, size.height);
+    return this;
+  }
+
+  /**
+   * Asserts that the size of the target window is equal to given one. 
+   * @param size the given size to match.
+   * @return this fixture.
+   * @throws AssertionError if the size of the target window is not equal to the given size. 
+   */
+  public AbstractWindowFixture<T> requireSize(Dimension size) {
+    assertThat(target.getSize()).isEqualTo(size);
+    return this;
+  }
+
   protected final WindowTester windowTester() {
     return testerCastedTo(WindowTester.class);
   }
 
-  protected final void assertEqualSize(Dimension size) {
-    assertThat(target.getSize()).isEqualTo(size);
+  @Override public AbstractWindowFixture<T> requireVisible() {
+    return (AbstractWindowFixture<T>)super.requireVisible();
   }
-  
+
   public final void cleanUp() {
     robot.cleanUp();
   }

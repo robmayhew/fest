@@ -69,75 +69,63 @@ public class DialogFixture extends AbstractWindowFixture<Dialog> {
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture show() {
-    doShow();
-    return this;
+  @Override public final DialogFixture show() {
+    return (DialogFixture)super.show();
   }
   
   /** {@inheritDoc} */
-  public final DialogFixture show(Dimension size) {
-    doShow(size);
-    return this;
+  @Override public final DialogFixture show(Dimension size) {
+    return (DialogFixture)super.show(size);
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture click() {
-    doClick();
-    return this;
+  @Override public final DialogFixture click() {
+    return (DialogFixture)super.click();
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture focus() {
-    doFocus();
-    return this;
+  @Override public final DialogFixture focus() {
+    return (DialogFixture)super.focus();
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture resizeWidthTo(int width) {
-    doResizeWidthTo(width);
-    return this;
+  @Override public final DialogFixture resizeWidthTo(int width) {
+    return (DialogFixture)super.resizeWidthTo(width);
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture resizeHeightTo(int height) {
-    doResizeHeightTo(height);
-    return this;
+  @Override public final DialogFixture resizeHeightTo(int height) {
+    return (DialogFixture)super.resizeHeightTo(height);
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture resizeTo(Dimension size) {
-    doResizeTo(size);
-    return this;
+  @Override public final DialogFixture resizeTo(Dimension size) {
+    return (DialogFixture)super.resizeTo(size);
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture requireSize(Dimension size) {
-    assertEqualSize(size);
-    return this;
+  @Override public final DialogFixture requireSize(Dimension size) {
+    return (DialogFixture)super.requireSize(size);
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture requireVisible() {
-    assertIsVisible();
-    return this;
+  @Override public final DialogFixture requireVisible() {
+    return (DialogFixture)super.requireVisible();
   }
   
   /** {@inheritDoc} */
-  public final DialogFixture requireNotVisible() {
-    assertIsNotVisible();
-    return this;
+  @Override public final DialogFixture requireNotVisible() {
+    return (DialogFixture)super.requireNotVisible();
   }
 
   /** {@inheritDoc} */
-  public final DialogFixture requireEnabled() {
-    assertIsEnabled();
-    return this;
+  @Override public final DialogFixture requireEnabled() {
+    return (DialogFixture)super.requireEnabled();
   }
   
   /** {@inheritDoc} */  
-  public final DialogFixture requireDisabled() {
-    assertIsDisabled();
-    return this;
+  @Override public final DialogFixture requireDisabled() {
+    return (DialogFixture)super.requireDisabled();
   }
 
   /**
