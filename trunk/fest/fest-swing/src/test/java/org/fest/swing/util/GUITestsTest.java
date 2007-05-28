@@ -63,28 +63,28 @@ public class GUITestsTest {
   
   @Test public void shouldReturnIsGUITestIfClassHasGUITestAnnotation() {
     Class<? extends GUITestClass> guiTestType = guiTest.getClass();
-    Method guiTestMethod = method("guiTestMethodWithoutAnnotation").withReturnType(Void.class).in(guiTest).info();
+    Method guiTestMethod = method("guiTestMethodWithoutAnnotation").in(guiTest).info();
     boolean isGUITest = GUITests.isGUITest(guiTestType, guiTestMethod);
     assertThat(isGUITest).isTrue();
   }
   
   @Test public void shouldReturnIsGUITestIfOnlyMethodHasGUITestAnnotation() {
     Class<? extends NonGUITestClass> nonGUITestType = nonGUITest.getClass();
-    Method guiTestMethod = method("guiTestMethod").withReturnType(Void.class).in(nonGUITest).info();
+    Method guiTestMethod = method("guiTestMethod").in(nonGUITest).info();
     boolean isGUITest = GUITests.isGUITest(nonGUITestType, guiTestMethod);
     assertThat(isGUITest).isTrue();
   }
   
   @Test public void shouldReturnIsGUITestIfSuperclassIsGUITest() {
     Class<? extends GUITestSubclass> guiTestSubtype = guiTestSubclass.getClass();
-    Method guiTestMethod = method("guiTestMethodWithoutAnnotation").withReturnType(Void.class).in(guiTest).info();
+    Method guiTestMethod = method("guiTestMethodWithoutAnnotation").in(guiTest).info();
     boolean isGUITest = GUITests.isGUITest(guiTestSubtype, guiTestMethod);
     assertThat(isGUITest).isTrue();
   }
   
   @Test public void shouldReturnIsGUITestIfOverridenMethodIsGUITest() {
     Class<? extends NonGUITestSubclass> nonGUITestSubtype = nonGUITestSubclass.getClass();
-    Method guiTestMethod = method("guiTestMethod").withReturnType(Void.class).in(nonGUITestSubclass).info();
+    Method guiTestMethod = method("guiTestMethod").in(nonGUITestSubclass).info();
     boolean isGUITest = GUITests.isGUITest(nonGUITestSubtype, guiTestMethod);
     assertThat(isGUITest).isTrue();
   }
