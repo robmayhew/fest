@@ -88,5 +88,10 @@ public class GUITestsTest {
     boolean isGUITest = GUITests.isGUITest(nonGUITestSubtype, guiTestMethod);
     assertThat(isGUITest).isTrue();
   }
-   
+  
+  @Test public void shouldReturnIsNotGUITestIfNotContainingGUITestAnnotation() {
+    String s = "Yoda";
+    Method concat = method("concat").withReturnType(String.class).withParameterTypes(String.class).in(s).info();
+    assertThat(GUITests.isGUITest(s.getClass(), concat)).isFalse();
+  }
 }
