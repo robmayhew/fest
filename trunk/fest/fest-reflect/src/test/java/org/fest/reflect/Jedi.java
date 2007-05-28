@@ -26,6 +26,7 @@ import java.util.List;
 public class Jedi extends Person {
 
   private List<String> powers = new ArrayList<String>();
+  private boolean master;
   
   public Jedi(String name) {
     super(name);
@@ -42,4 +43,10 @@ public class Jedi extends Person {
   public String powerAt(int index) {
     return powers.get(index);
   }
+  
+  public void makeMaster() {
+    master = true;
+  }
+  
+  public boolean isMaster() { return master; }
 }

@@ -51,6 +51,13 @@ public class MethodTest {
     assertThat(parameterTypes).hasSize(1);
     assertThat(parameterTypes[0]).isEqualTo(String.class);
   }
+
+  @Test public void shouldNotHaveToSpecifyReturnTypeIfVoidAndNoParameters() {
+    Jedi jedi = new Jedi("Obi Wan");
+    assertThat(jedi.isMaster()).isFalse();
+    new Method.MethodName("makeMaster").in(jedi).invoke();
+    assertThat(jedi.isMaster()).isTrue();
+  }
   
   @Test(expectedExceptions = ReflectionError.class) 
   public void shouldThrowErrorIfInvalidMethodName() {

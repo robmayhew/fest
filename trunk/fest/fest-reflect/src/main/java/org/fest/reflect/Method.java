@@ -63,10 +63,10 @@ public final class Method<T> {
   }
 
   public static class MethodName {
-    private final String value;
+    private final String name;
 
     MethodName(String name) {
-      this.value = name;
+      this.name = name;
     }
 
     public <T> ReturnType<T> withReturnType(Class<T> type) {
@@ -76,6 +76,10 @@ public final class Method<T> {
     public ParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
       ReturnType<Void> returnType = new ReturnType<Void>(Void.class, this);
       return new ParameterTypes<Void>(parameterTypes, returnType);
+    }
+
+    public Method in(Object target) {
+      return new Method<Void>(name, target);
     }
   }
 
@@ -87,7 +91,7 @@ public final class Method<T> {
     }
 
     public Method<T> in(Object target) {
-      return new Method<T>(fieldName.value, target);
+      return new Method<T>(fieldName.name, target);
     }
 
     public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
@@ -105,7 +109,7 @@ public final class Method<T> {
     }
 
     public Method<T> in(Object target) {
-      return new Method<T>(returnType.fieldName.value, target, values);
+      return new Method<T>(returnType.fieldName.name, target, values);
     }
   }
 }
