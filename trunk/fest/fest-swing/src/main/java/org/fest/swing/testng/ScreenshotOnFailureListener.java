@@ -14,6 +14,7 @@
  */
 package org.fest.swing.testng;
 
+import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,14 +24,13 @@ import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
 
+import org.fest.swing.util.GUITests;
 import org.fest.swing.util.ImageException;
 import org.fest.swing.util.ScreenshotTaker;
 
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
-
-import static org.fest.swing.testng.TestNGTests.*;
 
 /**
  * Understands a TestNG listener that takes a screenshot when a GUI test fails.
@@ -87,6 +87,12 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
     Reporter.log(concat("<a href=\"", screenshotFileName, "\">Screenshot</a>"));
   }
 
+  private static boolean isGUITest(ITestResult testResult) {
+    Class<?> realClass = testResult.getTestClass().getRealClass();
+    Method testMethod = testResult.getMethod().getMethod();
+    return GUITests.isGUITest(realClass, testMethod);
+  }
+  
   private String takeScreenshotAndReturnFileName(ITestResult result) {
     String imageName = join(classNameFrom(result), methodNameFrom(result), IMAGE_FILE_EXTENSION).with(".");
     String imagePath = concat(output, separator, imageName);

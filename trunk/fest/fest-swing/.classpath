@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="lib/main/junit-4.3.1.jar" sourcepath="lib/main/junit-4.3.1-src.jar"/>
 	<classpathentry kind="lib" path="lib/main/fest-assert-0.2-052207.jar" sourcepath="lib/main/fest-assert-0.2-052207-src.zip"/>
 	<classpathentry kind="lib" path="lib/main/fest-util-0.2-052207.jar" sourcepath="lib/main/fest-util-0.2-052207-src.zip"/>
-	<classpathentry kind="lib" path="lib/test/fest-reflect-0.1-052207.jar" sourcepath="lib/test/fest-reflect-0.1-052207-src.zip"/>
+	<classpathentry kind="lib" path="lib/test/fest-reflect-0.1-052707.jar" sourcepath="lib/test/fest-reflect-0.1-052707-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
