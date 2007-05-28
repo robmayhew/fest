@@ -68,9 +68,9 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
     generateTestFile(testName, context);
   }
 
-  @Override String javaFileTemplatePath() { return javaFileTemplatePath; }
+  String javaFileTemplatePath() { return javaFileTemplatePath; }
 
-  @Override String testFileTemplatePath() { return testFileTemplatePath; }
+  String testFileTemplatePath() { return testFileTemplatePath; }
   
   private static class TestArrays {
     final String first;
