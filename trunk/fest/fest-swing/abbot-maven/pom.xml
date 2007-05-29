@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="htt//maven.apache.org/POM/4.0.0"
+	xmlns:xsi="htt//www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="htt//maven.apache.org/POM/4.0.0 htt//maven.apache.org/maven-v4_0_0.xsd ">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>abbot</groupId>
+	<artifactId>abbot</artifactId>
+	<version>1.0.0.rc5</version>
+	<dependencies>
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>mrj</groupId>
+			<artifactId>MRJToolkitStubs</artifactId>
+			<version>1.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>gnu-regexp</groupId>
+			<artifactId>gnu-regexp</artifactId>
+			<version>1.1.4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.3.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xerces</artifactId>
+			<version>2.4.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xmlParserAPIs</artifactId>
+			<version>2.2.1</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+</project>
