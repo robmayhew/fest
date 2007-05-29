@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/main/easymock-2.2.jar" sourcepath="lib/main/easymock-2.2-src.zip"/>
-	<classpathentry kind="lib" path="lib/test/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/main/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="lib/main/easymockclassextension-2.2.jar" sourcepath="lib/main/easymockclassextension-2.2-src.zip"/>
+	<classpathentry kind="lib" path="lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/easymock-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/easymockclassextension-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
