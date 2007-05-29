@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/test/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/main/fest-assert-0.2-052207.jar" sourcepath="lib/main/fest-assert-0.2-052207-src.zip"/>
-	<classpathentry kind="lib" path="lib/main/fest-util-0.2-052207.jar" sourcepath="lib/main/fest-util-0.2-052207-src.zip"/>
+	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-0.2-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
