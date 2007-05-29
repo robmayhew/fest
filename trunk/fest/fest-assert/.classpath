@@ -6,11 +6,13 @@
 	<classpathentry kind="src" path="generator/main/resources"/>
 	<classpathentry kind="src" path="generator/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/test/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/generator/velocity-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/generator/velocity-tools-generic-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/generator/velocity-dep-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/main/fest-util-0.2-052207.jar" sourcepath="lib/main/fest-util-0.2-052207-src.zip"/>
-	<classpathentry kind="lib" path="lib/main/jsr250-api.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/jsr250-api-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-tools-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
