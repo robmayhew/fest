@@ -1,57 +1,80 @@
 <?xml version="1.0"?>
-<project name="fest-template" default="all" basedir=".">
+<project name="fest-template" default="all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
 
-	<property name="src.dir" value="${basedir}/src"/>
-	<property name="src.java.main.dir" value="${src.dir}/main/java"/>
-	<property name="src.java.test.dir" value="${src.dir}/test/java"/>
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="src.java.main.dir" value="${src.dir}/main/java" />
+	<property name="src.java.test.dir" value="${src.dir}/test/java" />
 
-	<property name="lib.dir" value="${basedir}/lib"/>
-	<property name="lib.main.dir" value="${lib.dir}/main"/>
-  <property name="lib.test.dir" value="${lib.dir}/test"/>
-	<property name="lib.cobertura.dir" value="${lib.dir}/cobertura"/>
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="lib.cobertura.dir" value="${lib.dir}/cobertura" />
 
-	<property name="target.dir" value="${basedir}/target"/>
-	<property name="target.classes.dir" value="${target.dir}/classes"/>
+	<property name="target.dir" value="${basedir}/target" />
+	<property name="target.classes.dir" value="${target.dir}/classes" />
 	<property name="target.instrumented.dir" value="${target.dir}/instrumented" />
-	<property name="target.test.classes.dir" value="${target.dir}/test-classes"/>
-	<property name="target.test.results.dir" value="${target.dir}/test-reports"/>
-	<property name="coverage.report.dir" value="${target.dir}/coverage-reports"/>
-	<property name="target.dist.dir" value="${target.dir}/dist"/>
+	<property name="target.test.classes.dir" value="${target.dir}/test-classes" />
+	<property name="target.test.results.dir" value="${target.dir}/test-reports" />
+	<property name="coverage.report.dir" value="${target.dir}/coverage-reports" />
+	<property name="target.dist.dir" value="${target.dir}/dist" />
 
-	<property name="test.includes" value="**/*Test.class"/>
-	<property name="test.excludes" value="**/*TestCase.class"/>
+	<property name="test.includes" value="**/*Test.class" />
+	<property name="test.excludes" value="**/*TestCase.class" />
 
-	<property name="compiler" value="javac1.5"/>
-	<property name="compiler.optimize" value="true"/>
-	<property name="compiler.debug" value="true"/>
-	<property name="compiler.deprecation" value="true"/>
-	<property name="compiler.javac.source" value="1.5"/>
-	<property name="compiler.javac.target" value="1.5"/>
+	<property name="compiler" value="javac1.5" />
+	<property name="compiler.optimize" value="true" />
+	<property name="compiler.debug" value="true" />
+	<property name="compiler.deprecation" value="true" />
+	<property name="compiler.javac.source" value="1.5" />
+	<property name="compiler.javac.target" value="1.5" />
 
-	<taskdef resource="testngtasks" classpathref="test.classpath"/>
-
-	<tstamp>
-		<format property="time.stamp" pattern="MMddyy"/>
-	</tstamp>
-
+  <property name="maven.repository.local" value="../m2/repository" />
+  
 	<target name="all" depends="compile, test, dist" />
 
-	<target name="compile" depends="compile.main, compile.tests" />
+	<target name="compile" depends="compile.main, compile.tests"/>
 
 	<target name="compile.main" depends="init">
 		<javac compiler="${compiler}"
-           destdir="${target.classes.dir}"
-           debug="${compiler.debug}"
-           deprecation="${compiler.deprecation}"
-           optimize="${compiler.optimize}"
-           source="${compiler.javac.source}"
-           target="${compiler.javac.target}">
+		       destdir="${target.classes.dir}"
+		       debug="${compiler.debug}"
+		       deprecation="${compiler.deprecation}"
+		       optimize="${compiler.optimize}"
+		       source="${compiler.javac.source}"
+		       target="${compiler.javac.target}">
 			<src path="${src.java.main.dir}" />
-			<classpath refid="main.classpath" />
+			<classpath refid="dependency.classpath" />
 		</javac>
 	</target>
 
-	<target name="init">
+	<target name="init-maven">
+		<path id="maven.classpath">
+			<pathelement location="../maven/maven-ant-tasks-2.0.6.jar" />
+		</path>
+
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant">
+			<classpath refid="maven.classpath" />
+		</typedef>
+
+		<artifact:pom file="pom.xml" id="maven.project" />
+		<echo>Building project '${maven.project.artifactId}' v. ${maven.project.version}</echo>
+
+		<artifact:dependencies verbose="true"
+		                       filesetId="dependency.fileset"
+		                       pathId="dependency.classpath"
+		                       settingsFile="../settings.xml"
+		                       pomRefId="maven.project" />
+	</target>
+
+  <target name="init-classpath" depends="init-maven">
+    <copy todir="${lib.dir}">
+      <fileset refid="dependency.fileset" />
+      <mapper type="flatten" />
+    </copy>
+    <path id="lib.classpath">
+      <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
+    </path>
+  </target> 
+  
+	<target name="init" depends="init-classpath">
 		<delete dir="${target.dir}" failonerror="false" />
 		<mkdir dir="${target.dir}" />
 		<mkdir dir="${target.classes.dir}" />
@@ -59,36 +82,22 @@
 		<mkdir dir="${target.test.classes.dir}" />
 		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.dist.dir}" />
-
-		<path id="main.classpath">
-			<fileset dir="${lib.main.dir}" includes="*.jar,*.zip" />
-		</path>
-
-		<path id="test.classpath">
-			<fileset dir="${lib.main.dir}" includes="*.jar,*.zip" />
-			<fileset dir="${lib.test.dir}" includes="*.jar" />
-		</path>
-
-		<path id="cobertura.classpath">
-			<fileset dir="${lib.main.dir}" includes="*.jar,*.zip" />
-			<fileset dir="${lib.test.dir}" includes="*.jar" />
-			<fileset dir="${lib.cobertura.dir}" includes="*.jar" />
-		</path>
-  </target>
+    <taskdef resource="testngtasks" classpathref="lib.classpath" />
+	</target>
 
 	<target name="compile.tests">
 		<javac compiler="${compiler}"
-           destdir="${target.test.classes.dir}"
-           debug="${compiler.debug}"
-           deprecation="${compiler.deprecation}"
-           optimize="${compiler.optimize}"
-           source="${compiler.javac.source}"
-           target="${compiler.javac.target}">
+		       destdir="${target.test.classes.dir}"
+		       debug="${compiler.debug}"
+		       deprecation="${compiler.deprecation}"
+		       optimize="${compiler.optimize}"
+		       source="${compiler.javac.source}"
+		       target="${compiler.javac.target}">
 			<src path="${src.java.test.dir}" />
 			<classpath>
 				<pathelement location="${target.classes.dir}" />
 			</classpath>
-			<classpath refid="test.classpath" />
+			<classpath refid="dependency.classpath" />
 		</javac>
 	</target>
 
@@ -97,45 +106,52 @@
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.classes.dir}" />
-			<classpath refid="test.classpath" />
+			<classpath refid="dependency.classpath" />
 		</testng>
 	</target>
 
 	<target name="coverage" depends="compile">
-		<taskdef resource="tasks.properties" classpathref="cobertura.classpath" />
+		<taskdef resource="tasks.properties" classpathref="lib.classpath" />
 		<delete file="${basedir}/cobertura.ser" />
 		<mkdir dir="${target.instrumented.dir}" />
 		<cobertura-instrument todir="${target.instrumented.dir}">
 			<fileset dir="${target.classes.dir}" />
 		</cobertura-instrument>
-		<testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2">
+		<testng outputDir="${target.test.results.dir}" haltOnFailure="false" verbose="2">
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.instrumented.dir}" />
-			<classpath refid="cobertura.classpath" />
+			<classpath refid="lib.classpath" />
 		</testng>
 		<mkdir dir="${coverage.report.dir}" />
-		<cobertura-report format="html" datafile="${basedir}/cobertura.ser" destdir="${coverage.report.dir}" 
-			srcdir="${src.java.main.dir}" />
+		<cobertura-report format="html"
+		                  datafile="${basedir}/cobertura.ser"
+		                  destdir="${coverage.report.dir}"
+		                  srcdir="${src.java.main.dir}" />
 	</target>
 
 	<target name="dist" depends="dist.src">
-		<zip destfile="${target.dist.dir}/${project.name}-${time.stamp}.zip">
+		<zip destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.zip">
 			<zipfileset dir="${src.dir}" prefix="src" />
 			<zipfileset dir="${lib.dir}" prefix="lib" />
-			<fileset dir="${target.dist.dir}" includes="*.jar"/>
-			<fileset dir="${target.dist.dir}" includes="*.zip"/>
+			<fileset dir="${target.dist.dir}" includes="*.jar" />
+			<fileset dir="${target.dist.dir}" includes="*.zip" />
 		</zip>
+
+		<artifact:install file="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.jar">
+			<pom refid="maven.project" />
+			<artifact:localRepository id="local.repository" location="${maven.repository.local}" layout="default" />
+		</artifact:install>
 	</target>
 
 	<target name="dist.src" depends="dist.jar">
-		<zip destfile="${target.dist.dir}/${project.name}-${time.stamp}-src.zip">
-			<fileset dir="${src.java.main.dir}" includes="**/*.java"/>
+		<zip destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}-src.zip">
+			<fileset dir="${src.java.main.dir}" includes="**/*.java" />
 		</zip>
 	</target>
 
 	<target name="dist.jar" depends="test">
-		<jar destfile="${target.dist.dir}/${project.name}-${time.stamp}.jar" update="true">
+		<jar destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.jar" update="true">
 			<fileset dir="${target.classes.dir}" />
 		</jar>
 	</target>
