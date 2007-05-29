@@ -121,6 +121,7 @@
 			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
 			<classpath location="${target.test.classes.dir}" />
 			<classpath location="${target.instrumented.dir}" />
+      <classpath location="${target.classes.dir}" />
 			<classpath refid="lib.classpath" />
 		</testng>
 		<mkdir dir="${coverage.report.dir}" />
