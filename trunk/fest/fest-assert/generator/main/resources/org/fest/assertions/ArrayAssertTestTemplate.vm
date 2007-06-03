@@ -15,8 +15,6 @@
  */
 package org.fest.assertions;
 
-import javax.annotation.Generated;
-
 import org.testng.annotations.Test;
 
 /**
@@ -25,9 +23,6 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Generated(value = "${generator}", 
-           date = "${generated}", 
-           comments = "Generated using Velocity template ${testFileTemplatePath}")
 public class ${testName} {
 
   @Test public void shouldPassIfArrayIsNull() {

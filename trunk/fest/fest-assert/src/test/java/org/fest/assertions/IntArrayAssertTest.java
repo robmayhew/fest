@@ -1,5 +1,5 @@
 /*
- * Created on May 30, 2007
+ * Created on Jun 2, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,6 @@
  */
 package org.fest.assertions;
 
-import javax.annotation.Generated;
-
 import org.testng.annotations.Test;
 
 /**
@@ -25,9 +23,6 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Generated(value = "org.fest.assertions.PrimitiveArrayAssertGenerator", 
-           date = "2007-05-30T23:28:11", 
-           comments = "Generated using Velocity template 'org/fest/assertions/ArrayAssertTestTemplate.vm'")
 public class IntArrayAssertTest {
 
   @Test public void shouldPassIfArrayIsNull() {
