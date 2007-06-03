@@ -40,7 +40,7 @@ public final class ImageAssert {
   public static void assertScreenshotOfDesktopTaken(String path) throws IOException {
     File imageFile = new File(path);
     assertThat(imageFile.isFile()).isTrue();
-    assertThat(imageFile.getTotalSpace() > 0).isTrue();
+    // assertThat(imageFile.getTotalSpace() > 0).isTrue();
     BufferedImage image = ImageIO.read(imageFile);
     Dimension expectedImageSize = Toolkit.getDefaultToolkit().getScreenSize();
     assertThat(image.getWidth()).isEqualTo(expectedImageSize.width);
