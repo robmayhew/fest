@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 	<dependencies>
 		<dependency>
 			<groupId>abbot</groupId>
