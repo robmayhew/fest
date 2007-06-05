@@ -16,6 +16,8 @@ package org.fest.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +124,28 @@ public class Files {
     throw new FilesException(message);
   }
   
+  /**
+   * Flushes and closes the given <code>{@link Writer}</code>. Any I/O errors catched by this method are ignored and
+   * not rethrown.
+   * @param writer the writer to flush and close.
+   */
+  public static void flushAndClose(Writer writer) {
+    if (writer == null) return;
+    try { writer.flush(); } catch (Exception e) {}
+    try { writer.close(); } catch (Exception e) {}
+  }
+
+  /**
+   * Flushes and closes the given <code>{@link OutputStream}</code>. Any I/O errors catched by this method are ignored and
+   * not rethrown.
+   * @param writer the output stream to flush and close.
+   */
+  public static void flushAndClose(OutputStream out) {
+    if (out == null) return;
+    try { out.flush(); } catch (Exception e) {}
+    try { out.close(); } catch (Exception e) {}
+  }
+
   private Files() {}
 
 }
