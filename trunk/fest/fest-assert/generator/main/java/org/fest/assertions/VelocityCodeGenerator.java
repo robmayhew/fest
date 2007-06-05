@@ -37,6 +37,7 @@ import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
 import static org.fest.assertions.Commons.packageNameAsPathFrom;
 import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
 import static org.fest.assertions.SourceFolders.TEST_FOLDER;
+import static org.fest.util.Files.flushAndClose;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
@@ -123,12 +124,6 @@ abstract class VelocityCodeGenerator {
   
   private void logFileCreated(String fileName) {
     logger.info(concat("File ", fileName, " generated!"));
-  }
-  
-  private void flushAndClose(Writer writer) {
-    if (writer == null) return;
-    try { writer.flush(); } catch (Exception e) { logSevere("Unable to flush writer", e); }
-    try { writer.close(); } catch (Exception e) { logSevere("Unable to close writer", e); }
   }
   
   final void logSevere(String message, Exception e) {
