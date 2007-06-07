@@ -38,7 +38,11 @@ import org.fest.swing.util.ImageException;
 import org.fest.swing.util.ScreenshotTaker;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands a JUnit XML report formatter that takes a screenshot when a GUI test fails.
+ * <p>
+ * <strong>Note:</strong> A test is consider a GUI test if it is marked with the annotation
+ * <code>{@link org.fest.swing.GUITest}</code>.
+ * </p>
  * 
  * @author Alex Ruiz
  */
