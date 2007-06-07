@@ -36,7 +36,8 @@ import static org.fest.util.Strings.quote;
  */
 public final class ScreenshotTaker {
 
-  private static final String PNG_EXTENSION = "png";
+  public static final String PNG_EXTENSION = "png";
+  
   private final Robot robot;
   
   /**

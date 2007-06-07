@@ -15,10 +15,13 @@
 package org.fest.swing.testng;
 
 import java.lang.reflect.Method;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.io.File.separator;
+import static java.util.logging.Level.SEVERE;
+
+import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
+
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
@@ -43,8 +46,6 @@ import org.testng.Reporter;
  */
 public class ScreenshotOnFailureListener extends AbstractTestListener {
 
-  private static final String IMAGE_FILE_EXTENSION = "png";
-  
   private static Logger logger = Logger.getAnonymousLogger();
 
   private ScreenshotTaker screenshotTaker;
@@ -58,7 +59,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
     try {
       screenshotTaker = new ScreenshotTaker();
     } catch (ImageException e) {
-      logger.log(Level.SEVERE, "Unable to create ScreenshotTaker", e);
+      logger.log(SEVERE, "Unable to create ScreenshotTaker", e);
     }
   }
 
@@ -94,11 +95,12 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   }
   
   private String takeScreenshotAndReturnFileName(ITestResult result) {
-    String imageName = join(classNameFrom(result), methodNameFrom(result), IMAGE_FILE_EXTENSION).with(".");
+    String imageName = join(classNameFrom(result), methodNameFrom(result), PNG_EXTENSION).with(".");
     String imagePath = concat(output, separator, imageName);
     try {
       screenshotTaker.saveDesktopAsPng(imagePath);
     } catch (ImageException e) {
+      logger.log(SEVERE, e.getMessage(), e);
       return null;
     }
     return imageName;
