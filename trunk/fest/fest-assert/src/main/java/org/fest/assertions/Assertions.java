@@ -15,6 +15,7 @@
  */
 package org.fest.assertions;
 
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 /**
@@ -75,6 +76,10 @@ public final class Assertions {
 
   public static CollectionAssert assertThat(Collection<?> actual) {
     return new CollectionAssert(actual);
+  }
+  
+  public static ImageAssert assertThat(BufferedImage actual) {
+    return new ImageAssert(actual);
   }
   
   private Assertions() {}
