@@ -3,15 +3,6 @@
 
 	<import file="../build-template.xml"/>
 
-	<target name="test" depends="compile">
-		<testng listeners="org.fest.swing.testng.ScreenshotOnFailureListener" outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2">
-			<classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
-			<classpath location="${target.test.classes.dir}" />
-			<classpath location="${target.classes.dir}" />
-			<classpath refid="dependency.classpath" />
-		</testng>
-	</target>
-
 	<target name="install-abbot">
 		<property name="abbot.maven.dir" value="${basedir}/abbot-maven"/>
 
