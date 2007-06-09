@@ -18,14 +18,10 @@ package org.fest.swing.fixture;
 import javax.swing.text.JTextComponent;
 
 import abbot.tester.JTextComponentTester;
-import static java.awt.event.KeyEvent.VK_BACK_SPACE;
-import static java.awt.event.KeyEvent.VK_DELETE;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.isEmpty;
 
 import org.fest.swing.RobotFixture;
-
-
 
 /**
  * Understands simulation of user events and state verification of a <code>{@link JTextComponent}</code>.
@@ -78,7 +74,8 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   
   /** {@inheritDoc} */
   public final JTextComponentFixture deleteText() {
-    return selectAll().pressKeys(VK_BACK_SPACE, VK_DELETE);
+    target.setText("");
+    return this;
   }
   
   /** {@inheritDoc} */
