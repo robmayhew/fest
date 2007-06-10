@@ -15,16 +15,10 @@
 package org.fest.swing.junit;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
-
-import javax.imageio.ImageIO;
 
 import junit.framework.Test;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 import org.w3c.dom.Element;
 
@@ -37,7 +31,7 @@ import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.t
 import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
 
 import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
-import static org.fest.util.Files.flushAndClose;
+import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
 
 /**
@@ -86,8 +80,8 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
     String className = testClassName(test);
     String methodName = testMethodName(test);
     if (!isGUITest(className, methodName)) return;
-    byte[] image = takeScreenshotAndReturnEncoded();
-    if (image == null || image.length == 0) return;
+    String image = takeScreenshotAndReturnEncoded();
+    if (isEmpty(image)) return;
     String imageFileName = join(className, methodName, PNG_EXTENSION).with(".");
     writeScreenshotFileName(image, imageFileName, errorElement);
   }
@@ -102,29 +96,15 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
     }
   }
 
-  private byte[] takeScreenshotAndReturnEncoded() {
+  private String takeScreenshotAndReturnEncoded() {
     BufferedImage image = screenshotTaker.takeDesktopScreenshot();
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    try {
-      ImageIO.write(image, PNG_EXTENSION, out);
-      return Base64.encodeBase64(out.toByteArray());
-    } catch (IOException e) {
-      return null;
-    } finally {
-      flushAndClose(out);
-    }
+    return ImageHandler.encodeBase64(image);
   }
   
-  private void writeScreenshotFileName(byte[] encodedImage, String imageFileName, Element errorElement) {
+  private void writeScreenshotFileName(String encodedImage, String imageFileName, Element errorElement) {
     Element screenshotElement = document().createElement(SCREENSHOT_ELEMENT);
     screenshotElement.setAttribute(SCREENSHOT_FILE_ATTRIBUTE, imageFileName);
-    String data;
-    try {
-      data = new String(encodedImage, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      data = new String(encodedImage);
-    }
-    writeText(data, screenshotElement);
+    writeText(encodedImage, screenshotElement);
     errorElement.appendChild(screenshotElement);
   }
 }
