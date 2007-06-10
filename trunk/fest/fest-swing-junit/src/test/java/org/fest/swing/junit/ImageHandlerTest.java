@@ -15,7 +15,6 @@
  */
 package org.fest.swing.junit;
 
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
 import org.testng.annotations.BeforeClass;
@@ -39,11 +38,11 @@ public class ImageHandlerTest {
   }
   
   @Test public void shouldEncodeAndDecodeImage() {
-    BufferedImage toEncode = screenshotTaker.takeDesktopScreenshot();
-    String encoded = ImageHandler.encodeBase64(toEncode);
+    BufferedImage imageToEncode = screenshotTaker.takeDesktopScreenshot();
+    String encoded = ImageHandler.encodeBase64(imageToEncode);
     assertThat(encoded).isNotEmpty();
-    BufferedImage decoded = ImageHandler.decodeBase64(encoded);
-    assertThat(decoded).hasSize(Toolkit.getDefaultToolkit().getScreenSize());
+    BufferedImage decodedImage = ImageHandler.decodeBase64(encoded);
+    assertThat(decodedImage).isNotNull().isEqualTo(imageToEncode);
   }
   
 }

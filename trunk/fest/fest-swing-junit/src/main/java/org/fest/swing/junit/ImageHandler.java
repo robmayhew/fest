@@ -57,7 +57,7 @@ public final class ImageHandler {
     ByteArrayInputStream in = null;
     try {
       byte[] toDecode = encoded.getBytes("UTF-8");
-      in = new ByteArrayInputStream(toDecode);
+      in = new ByteArrayInputStream(Base64.decodeBase64(toDecode));
       return ImageIO.read(in);
     } catch (IOException e) {
       logger.log(SEVERE, "Unable to decode image", e);
