@@ -31,8 +31,9 @@ import static org.fest.util.Strings.quote;
  * Understands assertion methods for images.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public final class ImageAssert {
+public class ImageAssert extends Assert<BufferedImage> {
 
   public static BufferedImage read(String imageFilePath) {
     File imageFile = new File(imageFilePath);
@@ -45,15 +46,46 @@ public final class ImageAssert {
     }
   }
   
-  private final BufferedImage actual;
-
   public ImageAssert(BufferedImage actual) {
-    this.actual = actual;
+    super(actual);
+  }
+  
+  @Override public final ImageAssert isEqualTo(BufferedImage expected) {
+    if (!areEqual(actual, expected)) fail("Images are not equal");
+    return this;
   }
 
-  public void hasSize(Dimension expected) {
-    if (expected == null) throw new IllegalArgumentException("The expected dimension should not be null");
-    failIfNotEqual(actual.getWidth(), expected.width);
-    failIfNotEqual(actual.getHeight(), expected.height);
+  @Override public final ImageAssert isNotEqualTo(BufferedImage image) {
+    if (areEqual(actual, image)) fail("Images not equal");
+    return this;
+  }
+
+  private static boolean areEqual(BufferedImage first, BufferedImage second) {
+    if (first == null) return second == null;
+    int width = first.getWidth();
+    int height = first.getHeight();
+    if (width != second.getWidth()) return false;
+    if (height != second.getHeight()) return false;
+    for (int x = 0; x < width; x++)
+      for (int y = 0; y < height; y++)
+        if (first.getRGB(x, y) != second.getRGB(x, y)) return false;
+    return true;
+  }
+  
+  @Override public final ImageAssert isNotNull() {
+    return (ImageAssert)super.isNotNull();
+  }
+
+  @Override public final ImageAssert isNotSameAs(BufferedImage expected) {
+    return (ImageAssert)super.isNotSameAs(expected);
+  }
+
+  @Override public final ImageAssert isSameAs(BufferedImage expected) {
+    return (ImageAssert)super.isSameAs(expected);
+  }
+
+  public final void hasSize(Dimension expected) {
+    Dimension actual = new Dimension(this.actual.getWidth(), this.actual.getHeight());
+    failIfNotEqual(actual, expected);
   }
 }
