@@ -198,9 +198,9 @@ public class XmlJUnitResultFormatter implements JUnitResultFormatter {
 
   private Element createAndAddCurrentTest(Test test) {
     Element currentTest = document.createElement(TESTCASE);
-    String methodName = JUnitVersionHelper2.getTestCaseName(test);
+    String methodName = JUnitVersionHelper2.testMethodName(test);
     currentTest.setAttribute(ATTR_NAME, methodName == null ? UNKNOWN : methodName);
-    currentTest.setAttribute(ATTR_CLASSNAME, JUnitVersionHelper2.getTestCaseClassName(test));
+    currentTest.setAttribute(ATTR_CLASSNAME, JUnitVersionHelper2.testClassName(test));
     rootElement.appendChild(currentTest);
     testElements.put(test, currentTest);    
     return currentTest;

@@ -14,28 +14,31 @@
  */
 package org.fest.swing.junit;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+
+import javax.imageio.ImageIO;
 
 import junit.framework.Test;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 import org.w3c.dom.Element;
-
-import static java.io.File.separator;
-import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.getTestCaseClassName;
-import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.getTestCaseName;
-import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
-
-import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
-
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.join;
-import static org.fest.util.Strings.quote;
 
 import org.fest.swing.util.GUITests;
 import org.fest.swing.util.ImageException;
 import org.fest.swing.util.ScreenshotTaker;
+
+import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testClassName;
+import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testMethodName;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
+
+import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
+import static org.fest.util.Files.flushAndClose;
+import static org.fest.util.Strings.join;
 
 /**
  * Understands a JUnit XML report formatter that takes a screenshot when a GUI test fails.
@@ -48,15 +51,11 @@ import org.fest.swing.util.ScreenshotTaker;
  */
 public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultFormatter {
 
-  private static final String SCREENSHOT_FOLDER_PROPERTY_NAME = "fest.screenshot.dir";
-  
-  private static final String FEST_ELEMENT = "fest";
   private static final String SCREENSHOT_ELEMENT = "screenshot";
   private static final String SCREENSHOT_FILE_ATTRIBUTE = "file";
   
   private ScreenshotTaker screenshotTaker;
   private boolean ready;
-  private String output;
 
   private ImageException couldNotCreateScreenshotTaker;
   
@@ -70,13 +69,10 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
   }
 
   @Override protected void onStartTestSuite(JUnitTest suite) {
-    if (couldNotCreateScreenshotTaker != null) {
-      writeCouldNotCreateScreenshotTakerError();
-      couldNotCreateScreenshotTaker = null;
-      return;
-    }
-    output = screenshotOutputFrom(suite);
-    logScreenshotFolder();
+    if (couldNotCreateScreenshotTaker == null) return;
+    writeCouldNotCreateScreenshotTakerError();
+    couldNotCreateScreenshotTaker = null;
+    return;
   }
 
   private void writeCouldNotCreateScreenshotTakerError() {
@@ -85,39 +81,15 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
     rootElement().appendChild(errorElement);
   }
 
-  private String screenshotOutputFrom(JUnitTest suite) {
-    return suite.getProperties().getProperty(SCREENSHOT_FOLDER_PROPERTY_NAME);
-  }
-
-  private void logScreenshotFolder() {
-    if (isEmpty(output)) {
-      logEmptyScreenshotFolderName();
-      return;
-    } 
-    logScreenshotFolderNameFound();
-  }
-  
-  private void logEmptyScreenshotFolderName() {
-    Element logElement = document().createElement(FEST_ELEMENT);
-    writeText(concat("Unable to find property '", SCREENSHOT_FOLDER_PROPERTY_NAME,
-        ",' which indicates where to store desktop screenshots"), logElement);    
-    rootElement().appendChild(logElement);
-  }
-  
-  private void logScreenshotFolderNameFound() {
-    Element logElement = document().createElement(FEST_ELEMENT);
-    writeText(concat("FEST output is ", quote(output)), logElement);
-    rootElement().appendChild(logElement);
-  }
-
   @Override protected void onFailureOrError(Test test, Throwable error, Element errorElement) {
     if (!ready) return;
-    String className = getTestCaseClassName(test);
-    String methodName = getTestCaseName(test);
+    String className = testClassName(test);
+    String methodName = testMethodName(test);
     if (!isGUITest(className, methodName)) return;
-    String screenshotFileName = takeScreenshotAndReturnFileName(className, methodName);
-    if (isEmpty(screenshotFileName)) return;
-    writeScreenshotFileName(screenshotFileName, errorElement);
+    byte[] image = takeScreenshotAndReturnEncoded();
+    if (image == null || image.length == 0) return;
+    String imageFileName = join(className, methodName, PNG_EXTENSION).with(".");
+    writeScreenshotFileName(image, imageFileName, errorElement);
   }
 
   private boolean isGUITest(String className, String methodName) {
@@ -130,20 +102,29 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
     }
   }
 
-  private String takeScreenshotAndReturnFileName(String className, String methodName) {
-    String imageName = join(className,methodName, PNG_EXTENSION).with(".");
-    String imagePath = concat(output, separator, imageName);
+  private byte[] takeScreenshotAndReturnEncoded() {
+    BufferedImage image = screenshotTaker.takeDesktopScreenshot();
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
     try {
-      screenshotTaker.saveDesktopAsPng(imagePath);
-    } catch (ImageException e) {
+      ImageIO.write(image, PNG_EXTENSION, out);
+      return Base64.encodeBase64(out.toByteArray());
+    } catch (IOException e) {
       return null;
+    } finally {
+      flushAndClose(out);
     }
-    return imageName;
   }
   
-  private void writeScreenshotFileName(String screenshotFileName, Element errorElement) {
+  private void writeScreenshotFileName(byte[] encodedImage, String imageFileName, Element errorElement) {
     Element screenshotElement = document().createElement(SCREENSHOT_ELEMENT);
-    screenshotElement.setAttribute(SCREENSHOT_FILE_ATTRIBUTE, screenshotFileName);
+    screenshotElement.setAttribute(SCREENSHOT_FILE_ATTRIBUTE, imageFileName);
+    String data;
+    try {
+      data = new String(encodedImage, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      data = new String(encodedImage);
+    }
+    writeText(data, screenshotElement);
     errorElement.appendChild(screenshotElement);
   }
 }
