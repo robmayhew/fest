@@ -17,5 +17,7 @@
 	<classpathentry kind="lib" path="lib/MRJToolkitStubs-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
