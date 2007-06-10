@@ -62,13 +62,18 @@ public final class ScreenshotTaker {
    */
   public void saveDesktopAsPng(String imageFilePath) {
     validate(imageFilePath);
-    Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-    BufferedImage screenshot = robot.createScreenCapture(screen);
+    BufferedImage screenshot = takeDesktopScreenshot();
     try {
       ImageIO.write(screenshot, PNG_EXTENSION, newFile(imageFilePath));
     } catch (IOException e) {
       throw new ImageException(concat("Unable to save screenshot as ", quote(imageFilePath)), e);
     }
+  }
+
+  /** @return the screenshot of the destop. */
+  public BufferedImage takeDesktopScreenshot() {
+    Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+    return robot.createScreenCapture(screen);
   }
   
   private void validate(String imageFilePath) {
