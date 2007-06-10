@@ -21,29 +21,4 @@
 		</artifact:install>
 	</target>
 
-	<target name="junit-test" depends="compile">
-		<property name="target.junit.results.dir" value="${target.dir}/junit-results" />
-		<property name="target.junit.report.dir" value="${target.dir}/junit-report" />
-		<property name="fest.screenshot.dir" value="${target.junit.results.dir}/screenshots" />
-		<mkdir dir="${target.junit.results.dir}"/>
-		<mkdir dir="${target.junit.report.dir}"/>
-		<junit forkmode="perBatch" printsummary="yes" haltonfailure="no" haltonerror="no">
-			<classpath refid="lib.classpath" />
-			<classpath location="${target.test.classes.dir}" />
-			<classpath location="${target.classes.dir}" />
-			<formatter classname="org.fest.swing.junit.ScreenshotOnFailureResultFormatter" extension=".xml" />
-			<batchtest fork="yes" todir="${target.junit.results.dir}">
-				<fileset dir="${target.classes.dir}" includes="**/*DummyTest*.class" />
-			</batchtest>
-		</junit>
-		<junitreport todir="${target.junit.report.dir}">
-			<fileset dir="${target.junit.results.dir}">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report format="frames"
-			        styledir="${src.java.main.dir}/org/fest/swing/junit"
-			        todir="${target.junit.report.dir}/html" />
-		</junitreport>
-	</target>
-
 </project>
