@@ -105,6 +105,6 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
     Element screenshotElement = document().createElement(SCREENSHOT_ELEMENT);
     screenshotElement.setAttribute(SCREENSHOT_FILE_ATTRIBUTE, imageFileName);
     writeText(encodedImage, screenshotElement);
-    errorElement.appendChild(screenshotElement);
+    errorElement.getParentNode().appendChild(screenshotElement);
   }
 }

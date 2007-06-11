@@ -25,10 +25,13 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 
+import static java.io.File.separator;
 import static java.util.logging.Level.SEVERE;
 
 import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
 import static org.fest.util.Files.flushAndClose;
+import static org.fest.util.Files.newFile;
+import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands base64 encoding and decoding of an image.
@@ -38,6 +41,8 @@ import static org.fest.util.Files.flushAndClose;
 public final class ImageHandler {
 
   private static Logger logger = Logger.getAnonymousLogger();
+  
+  private static final String IMAGE_FILE_NOT_CREATED = "";
   
   public static String encodeBase64(BufferedImage image) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -63,6 +68,19 @@ public final class ImageHandler {
       logger.log(SEVERE, "Unable to decode image", e);
       return null;
     } 
+  }
+  
+  public static String decodeBase64AndSaveAsPng(String encoded, String imageFilePath) {
+    if (isEmpty(encoded)) return IMAGE_FILE_NOT_CREATED;
+    if (isEmpty(imageFilePath)) return IMAGE_FILE_NOT_CREATED;
+    String realPath = imageFilePath.replace("/", separator);
+    BufferedImage image = decodeBase64(encoded);
+      try {
+      ImageIO.write(image, PNG_EXTENSION, newFile(realPath));
+    } catch (Exception e) {
+      return IMAGE_FILE_NOT_CREATED;
+    }
+    return imageFilePath;
   }
   
   private ImageHandler() {}

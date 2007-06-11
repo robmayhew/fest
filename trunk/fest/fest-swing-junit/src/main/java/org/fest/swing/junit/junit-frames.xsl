@@ -1,6 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:lxslt="http://xml.apache.org/xslt"
     xmlns:redirect="http://xml.apache.org/xalan/redirect"
+    xmlns:java="http://xml.apache.org/xslt/java"
     xmlns:stringutils="xalan://org.apache.tools.ant.util.StringUtils"
     extension-element-prefixes="redirect">
 <xsl:output method="html" indent="yes" encoding="US-ASCII"/>
@@ -363,13 +364,19 @@ h6 {
                 </xsl:if>
 		<xsl:choose>
 		    <xsl:when test="$type = 'fails'">
-			<xsl:apply-templates select="./testcase[failure]" mode="print.test"/>
+			<xsl:apply-templates select="./testcase[failure]" mode="print.test">
+			  <xsl:with-param name="package.name" select="$package.name" />
+			</xsl:apply-templates>
 		    </xsl:when>
 		    <xsl:when test="$type = 'errors'">
-			<xsl:apply-templates select="./testcase[error]" mode="print.test"/>
+			<xsl:apply-templates select="./testcase[error]" mode="print.test">
+			  <xsl:with-param name="package.name" select="$package.name" />
+			</xsl:apply-templates>
 		    </xsl:when>
 		    <xsl:otherwise>
-			<xsl:apply-templates select="./testcase" mode="print.test"/>
+			<xsl:apply-templates select="./testcase" mode="print.test">
+			  <xsl:with-param name="package.name" select="$package.name" />
+			</xsl:apply-templates>
 		    </xsl:otherwise>
 		</xsl:choose>
             </table>
@@ -768,6 +775,7 @@ h6 {
 </xsl:template>
 
 <xsl:template match="testcase" mode="print.test">
+    <xsl:param name="package.name" />
     <xsl:param name="show.class" select="''"/>
     <tr valign="top">
         <xsl:attribute name="class">
@@ -799,16 +807,18 @@ h6 {
                 <td>Failure</td>
                 <td>
                   <xsl:apply-templates select="failure"/>
-			            <br/>
-			            <a href="http://theserverside.com">TheServerSide</a>
+                  <xsl:apply-templates select="screenshot">
+                      <xsl:with-param name="package.name" select="$package.name" />
+                  </xsl:apply-templates>
                 </td>
             </xsl:when>
             <xsl:when test="error">
                 <td>Error</td>
                 <td>
                   <xsl:apply-templates select="error"/>
-			            <br/>
-			            <a href="http://theserverside.com">TheServerSide</a>
+                  <xsl:apply-templates select="screenshot">
+                      <xsl:with-param name="package.name" select="$package.name" />
+                  </xsl:apply-templates>
                 </td>
             </xsl:when>
             <xsl:otherwise>
@@ -828,11 +838,11 @@ h6 {
 <!-- Note : the below template error and failure are the same style
             so just call the same style store in the toolkit template -->
 <xsl:template match="failure">
-    <xsl:call-template name="display-failures"/>
+    <xsl:call-template name="display-failures" />
 </xsl:template>
 
 <xsl:template match="error">
-    <xsl:call-template name="display-failures"/>
+    <xsl:call-template name="display-failures" />
 </xsl:template>
 
 <!-- Style for the error and failure in the testcase template -->
@@ -852,6 +862,31 @@ h6 {
     </code>
     <!-- the latter is better but might be problematic for non-21" monitors... -->
     <!--pre><xsl:value-of select="."/></pre-->
+</xsl:template>
+
+<xsl:template match="screenshot">
+    <xsl:param name="package.name"/>
+    <xsl:variable name="package.dir">
+        <xsl:if test="not($package.name = '')">
+            <xsl:value-of select="translate($package.name,'.','/')"/>
+        </xsl:if>
+        <xsl:if test="$package.name = ''">.</xsl:if>
+    </xsl:variable>
+    <xsl:variable name="screenshot.path">
+    	<xsl:value-of select="@file" />
+    </xsl:variable>
+    <xsl:variable name="screenshot.fullpath">
+        <xsl:value-of select="$output.dir" /><xsl:text>/</xsl:text><xsl:value-of select="$package.dir" /><xsl:text>/</xsl:text><xsl:value-of select="$screenshot.path" />
+    </xsl:variable>
+    <xsl:variable name="encoded.image">
+        <xsl:value-of select="."/>   
+    </xsl:variable>
+    <xsl:value-of select="java:org.fest.swing.junit.ImageHandler.decodeBase64AndSaveAsPng(string($encoded.image), string($screenshot.fullpath))"/>
+    <br/><span>Image... <xsl:value-of select="$encoded.image" /> and file: <xsl:value-of select="$screenshot.fullpath" /></span>
+</xsl:template>
+
+<xsl:template name="screenshot-link">
+    <xsl:param name="filepath" />
 </xsl:template>
 
 <xsl:template name="JS-escape">
