@@ -19,6 +19,7 @@ import java.awt.Container;
 import java.awt.Dialog;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -162,5 +163,14 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    */
   public final JTreeFixture tree(String name) {
     return new JTreeFixture(robot, robot.finder().findByName(target, name, JTree.class));
+  }
+  
+  /**
+   * Finds a <code>{@link JCheckBox}</code> in the target container having the given name.
+   * @param name the name to match.
+   * @return a fixture wrapping the found component.
+   */
+  public final JCheckBoxFixture checkBox(String name) {
+    return new JCheckBoxFixture(robot, robot.finder().findByName(target, name, JCheckBox.class));
   }
 }

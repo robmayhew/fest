@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -63,7 +64,8 @@ import org.testng.annotations.Test;
     final JButton button = new JButton("A Button");
     final JDialog dialog = new JDialog(this, "A Dialog");
     final JTextField textField = new JTextField(10);
-    final JTabbedPane tabbedPane = new JTabbedPane() ;
+    final JTabbedPane tabbedPane = new JTabbedPane();
+    final JCheckBox checkBox = new JCheckBox();
     
     CustomWindow() {
       setLayout(new GridBagLayout());
@@ -85,6 +87,7 @@ import org.testng.annotations.Test;
       dialog.setName("dialog");
       textField.setName("textField");
       tabbedPane.setName("tabbedPane");
+      checkBox.setName("checkBox");
     }
     
     private void addComponents() {
@@ -102,6 +105,8 @@ import org.testng.annotations.Test;
       add(button, c);
       c.gridy++;
       add(tabbedPane, c);
+      c.gridy++;
+      add(checkBox, c);
     }
   }
   
@@ -165,6 +170,11 @@ import org.testng.annotations.Test;
   @Test public void shouldFindTextComponentWithGivenName() {
     JTextComponentFixture fixture = container.textBox("textField");
     assertThat(fixture.target).isSameAs(window.textField);
+  }
+  
+  @Test public void shouldFindCheckBoxWithGivenName() {
+    JCheckBoxFixture fixture = container.checkBox("checkBox");
+    assertThat(fixture.target).isSameAs(window.checkBox);
   }
   
   @AfterMethod public void tearDown() {
