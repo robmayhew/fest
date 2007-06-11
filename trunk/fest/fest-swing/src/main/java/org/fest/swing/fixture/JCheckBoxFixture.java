@@ -45,11 +45,19 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
     super(robot, target);
   }
 
+  /**
+   * Checks (or selects) the target checkbox only it is not already checked.
+   * @return this fixture.
+   */
   public final JCheckBoxFixture check() {
     if (target.isSelected()) return this;
     return click();
   }
 
+  /**
+   * Unchecks the target checkbox only if it is checked.
+   * @return this fixture.
+   */
   public final JCheckBoxFixture uncheck() {
     if (!target.isSelected()) return this;
     return click();
