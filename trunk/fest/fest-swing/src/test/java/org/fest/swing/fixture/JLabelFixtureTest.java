@@ -16,8 +16,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,26 +38,14 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JLabelFixtureTest {
 
-  private static class CustomLabel extends JLabel {
-    private static final long serialVersionUID = 1L;
-
-    private boolean wasClicked;
-    
-    CustomLabel(String text) {
-      super(text);
-      addMouseListener(new MouseAdapter() {
-        @Override public void mouseClicked(MouseEvent e) { wasClicked = true; }
-      });      
-    }
-    
-    boolean wasClicked() { return wasClicked; }
-  }
   
   private static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
 
     final JLabel firstLabel = new JLabel("First Label");
-    final CustomLabel secondLabel = new CustomLabel("Second Label");
+    final JLabel secondLabel = new JLabel("Second Label");
+    
+    final ComponentEvents secondLabelEvents = ComponentEvents.attachTo(secondLabel);
     
     MainWindow() {
       setLayout(new FlowLayout());
@@ -96,7 +82,7 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 
   public void shouldClickLabel() {
     secondLabelFixture.click();
-    assertThat(window.secondLabel.wasClicked()).isTrue();
+    assertThat(window.secondLabelEvents.clicked()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundLabel") 

@@ -33,7 +33,7 @@ public final class ScreenLock {
       try {
         wait();
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        break;
       }
       acquire(owner);
       notifyAll();
@@ -43,8 +43,8 @@ public final class ScreenLock {
   }
   
   public synchronized void release(Object owner) {
-    if (!locked) throw new RuntimeException("No lock to release");
-    if (this.owner != owner) throw new RuntimeException(concat(owner, " is not the lock owner"));
+    if (!locked) throw new ScreenLockException("No lock to release");
+    if (this.owner != owner) throw new ScreenLockException(concat(owner, " is not the lock owner"));
     locked = false;
     this.owner = null;
   }

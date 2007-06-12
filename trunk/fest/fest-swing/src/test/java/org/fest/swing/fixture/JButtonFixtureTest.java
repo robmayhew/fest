@@ -16,8 +16,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,26 +39,12 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JButtonFixtureTest {
 
-  private static class CustomButton extends JButton {
-    private static final long serialVersionUID = 1L;
-
-    private boolean wasClicked;
-    
-    CustomButton(String text) {
-      super(text);
-      addMouseListener(new MouseAdapter() {
-        @Override public void mouseClicked(MouseEvent e) { wasClicked = true; }
-      });      
-    }
-    
-    boolean wasClicked() { return wasClicked; }
-  }
-  
   private static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
 
     final JButton firstButton = new JButton("First Button");
-    final CustomButton secondButton = new CustomButton("Second Button");
+    final JButton secondButton = new JButton("Second Button");
+    final ComponentEvents secondButtonEvents = ComponentEvents.attachTo(secondButton);
     
     MainWindow() {
       setLayout(new FlowLayout());
@@ -97,7 +81,7 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldClickButton() {
     fixture.click();
-    assertThat(window.secondButton.wasClicked()).isTrue();
+    assertThat(window.secondButtonEvents.clicked()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 

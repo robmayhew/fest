@@ -17,8 +17,6 @@ package org.fest.swing.fixture;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -44,25 +42,13 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JTextComponentFixtureTest {
 
-  private static class CustomTextField extends JTextField {
-    private static final long serialVersionUID = 1L;
-
-    private boolean wasClicked;
-    
-    CustomTextField() {
-      addMouseListener(new MouseAdapter() {
-        @Override public void mouseClicked(MouseEvent e) { wasClicked = true; }
-      });      
-    }
-    
-    boolean wasClicked() { return wasClicked; }
-  }
-  
   private static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
 
     final JTextField firstTextField = new JTextField();
-    final CustomTextField secondTextField = new CustomTextField();
+    final JTextField secondTextField = new JTextField();
+    
+    final ComponentEvents secondTextFieldEvents = ComponentEvents.attachTo(secondTextField);
     
     MainWindow() {
       setLayout(new GridBagLayout());
@@ -105,7 +91,7 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
   public void shouldClickSecondTextField() {
     fixtureForSecondTextField.click();
-    assertThat(window.secondTextField.wasClicked()).isTrue();
+    assertThat(window.secondTextFieldEvents.clicked()).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
