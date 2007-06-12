@@ -6,7 +6,7 @@
 	<property name="src.java.test.dir" value="${src.dir}/test/java" />
 
 	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="lib.cobertura.dir" value="${lib.dir}/cobertura" />
+	<property name="lib.cobertura.dir" value="../cobertura" />
 
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.classes.dir" value="${target.dir}/classes" />
@@ -72,6 +72,9 @@
     <path id="lib.classpath">
       <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
     </path>
+    <path id="cobertura.classpath">
+      <fileset dir="${lib.cobertura.dir}" includes="**/*.jar,**/*.zip" />
+    </path>
   </target> 
   
 	<target name="init" depends="init-classpath">
@@ -111,7 +114,7 @@
 	</target>
 
 	<target name="coverage" depends="compile">
-		<taskdef resource="tasks.properties" classpathref="lib.classpath" />
+		<taskdef resource="tasks.properties" classpathref="cobertura.classpath" />
 		<delete file="${basedir}/cobertura.ser" />
 		<mkdir dir="${target.instrumented.dir}" />
 		<cobertura-instrument todir="${target.instrumented.dir}">
@@ -123,6 +126,7 @@
 			<classpath location="${target.instrumented.dir}" />
       <classpath location="${target.classes.dir}" />
 			<classpath refid="lib.classpath" />
+		  <classpath refid="cobertura.classpath" />
 		</testng>
 		<mkdir dir="${coverage.report.dir}" />
 		<cobertura-report format="html"
