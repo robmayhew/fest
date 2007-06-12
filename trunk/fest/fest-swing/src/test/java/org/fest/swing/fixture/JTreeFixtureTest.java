@@ -68,7 +68,7 @@ import org.testng.annotations.Test;
     }
 
     private void addComponents() {
-      getContentPane().add(new JScrollPane(tree));
+      add(new JScrollPane(tree));
     }
   }
 

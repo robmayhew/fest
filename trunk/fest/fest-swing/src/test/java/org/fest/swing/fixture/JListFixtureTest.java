@@ -1,5 +1,5 @@
 /*
- * Created on Apr 9, 2007
+ * Created on Jun 12, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,8 +17,8 @@ package org.fest.swing.fixture;
 
 import java.awt.FlowLayout;
 
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JList;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -26,7 +26,6 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterMethod;
@@ -34,68 +33,67 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link JComboBoxFixture}</code>.
+ * Tests for <code>{@link JListFixture}</code>.
  *
- * @author Alex Ruiz
- * @author Yvonne Wang
+ * @author Alex Ruiz 
  */
-@GUITest public class JComboBoxFixtureTest {
+public class JListFixtureTest {
 
   private static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
-   
-    final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
+
+    final JList list = new JList(array("one", "two", "three"));
     
-    public MainWindow() {
+    MainWindow() {
       setLayout(new FlowLayout());
       setUpComponents();
       addComponents();
     }
-
+    
     private void setUpComponents() {
-      comboBox.setName("comboBox");
+      list.setName("list");
     }
     
     private void addComponents() {
-      add(comboBox);
+      add(list);
     }
   }
   
   private MainWindow window;
   private RobotFixture robot;
-  private JComboBoxFixture fixture;
-  
+  private JListFixture fixture;
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     robot.showWindow(window);
-    fixture = new JComboBoxFixture(robot, "comboBox");
+    fixture = new JListFixture(robot, "list");
   }
 
-  @Test public void shouldHaveFoundComboBox() {
-    assertThat(fixture.target).isSameAs(window.comboBox);
+  @Test public void shouldHaveFoundList() {
+    assertThat(fixture.target).isSameAs(window.list);
   }
- 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldReturnComboBoxContents() {
-    assertThat(fixture.contents()).isEqualTo(array("first", "second", "third"));
+
+  @Test(dependsOnMethods = "shouldHaveFoundList")
+  public void shouldReturnListContents() {
+    assertThat(fixture.contents()).isEqualTo(array("one", "two", "three"));
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
+  @Test(dependsOnMethods = "shouldHaveFoundList")
   public void shouldSelectItemAtGivenIndex() {
     fixture.selectItemAt(2);
-    assertThat(window.comboBox.getSelectedItem()).equals("third");
+    assertThat(window.list.getSelectedValue()).equals("three");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
+  @Test(dependsOnMethods = "shouldHaveFoundList")
   public void shouldSelectItemWithGivenText() {
-    fixture.selectItemWithText("second");
-    assertThat(window.comboBox.getSelectedItem()).equals("second");
+    fixture.selectItemWithText("two");
+    assertThat(window.list.getSelectedValue()).equals("two");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
+  @Test(dependsOnMethods = "shouldHaveFoundList")
   public void shouldReturnValueAtGivenIndex() {
-    assertThat(fixture.valueAt(2)).isEqualTo("third");
+    assertThat(fixture.valueAt(2)).isEqualTo("three");
   }
   
   @AfterMethod public void tearDown() {

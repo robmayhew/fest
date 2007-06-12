@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import javax.swing.JComboBox;
+import javax.swing.JList;
 
 import abbot.tester.JComboBoxTester;
 
@@ -27,7 +28,7 @@ import org.fest.swing.RobotFixture;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxFixture extends ComponentFixture<JComboBox> {
+public class JComboBoxFixture extends ComponentFixture<JComboBox> implements ItemGroupFixture<JComboBox> {
 
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
@@ -48,33 +49,35 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> {
     super(robot, target);
   }
   
-  /**
-   * @return the elements in the managed combobox.
-   */
+  /** ${@inheritDoc} */
   public final String[] contents() {
     return comboBoxTester().getContents(target);
   }
   
-  /**
-   * Simulates a user selecting the item located at the given index. 
-   * @param index the given index to match.
-   * @return this fixture.
-   */
+  /** ${@inheritDoc} */
   public final JComboBoxFixture selectItemAt(int index) {
     comboBoxTester().actionSelectIndex(target, index);
     return this;
   }
 
-  /**
-   * Simulates a user selecting the item that contains the given text. 
-   * @param text the given text to match.
-   * @return this fixture.
-   */
+  /** ${@inheritDoc} */
   public final JComboBoxFixture selectItemWithText(String text) {
     comboBoxTester().actionSelectItem(target, text);
     return this;
   }
 
+  /** ${@inheritDoc} */
+  public String valueAt(int index) {
+    Object value = target.getItemAt(index);
+    return comboBoxTester().getValueAsString(target, list(), value, index);
+  }
+  
+  /** @return <code>JList</code> in the popup raised by the managed combo box. */
+  public JList list() {
+    target.showPopup();
+    return comboBoxTester().findComboList(target);
+  }
+  
   /**
    * Enters the specified text in the managed combobox.
    * @param text the text to enter.
@@ -86,13 +89,13 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> {
     return this;
   }
 
+  private JComboBoxTester comboBoxTester() {
+    return testerCastedTo(JComboBoxTester.class);
+  }
+
   /** {@inheritDoc} */
   @Override public final JComboBoxFixture focus() {
     return (JComboBoxFixture)super.focus();
-  }
-
-  private JComboBoxTester comboBoxTester() {
-    return testerCastedTo(JComboBoxTester.class);
   }
 
   /** {@inheritDoc} */
