@@ -83,7 +83,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @param text the text to enter.
    * @return this fixture.
    */
-  public final JComboBoxFixture enterText(String text) {
+  public final JComboBoxFixture enter(String text) {
     focus();
     tester().actionKeyString(text);
     return this;
