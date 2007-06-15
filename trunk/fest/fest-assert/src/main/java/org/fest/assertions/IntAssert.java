@@ -47,7 +47,7 @@ public class IntAssert{
   }
   
   public void isLessThan(int bigger) {
-    if(bigger <= actual)
+    if (bigger <= actual)
       fail(concat(toString(actual), " should be less than ", toString(bigger)));
   }
   
