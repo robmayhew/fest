@@ -82,5 +82,9 @@ public final class Assertions {
     return new ImageAssert(actual);
   }
   
+  public static IntAssert assertThat(int actual) {
+    return new IntAssert(actual);
+  }
+  
   private Assertions() {}
 }

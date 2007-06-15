@@ -15,8 +15,8 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotEqual;
 
 /**
  * Understands a template for assertion methods related to arrays or collections.
@@ -40,7 +40,7 @@ abstract class GroupAssert<T> extends Assert<T> {
   
   GroupAssert<T> hasSize(int expected) {
     if (actual == null) fail("the object to verify is null");
-    failIfNotEqual(actualGroupSize(), expected);
+    if (actualGroupSize() != expected) fail(errorMessageIfNotEqual(String.valueOf(actual), String.valueOf(expected)));
     return this;
   }
 

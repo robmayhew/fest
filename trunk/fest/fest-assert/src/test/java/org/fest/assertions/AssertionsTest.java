@@ -44,6 +44,10 @@ public class AssertionsTest {
     assertIsInstanceOf(Assertions.assertThat(new ArrayList<Object>()), CollectionAssert.class);
   }
   
+  @Test public void shouldReturnIntAssertIfArgumentIsInt() {
+    assertIsInstanceOf(Assertions.assertThat(8), IntAssert.class);
+  }
+  
   private void assertIsInstanceOf(Object target, Class<?> expectedType) {
     assertEquals(target.getClass(), expectedType);
   }
