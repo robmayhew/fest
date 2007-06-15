@@ -42,24 +42,16 @@ public class IntAssert{
   }
   
   public void isGreaterThan(int smaller) {
-    if (smaller >= actual)
-      fail(concat(toString(actual), " should be greater than ", toString(smaller)));
+    if (smaller >= actual) fail(concat(toString(actual), " should be greater than ", toString(smaller)));
   }
   
   public void isLessThan(int bigger) {
-    if (bigger <= actual)
-      fail(concat(toString(actual), " should be less than ", toString(bigger)));
+    if (bigger <= actual) fail(concat(toString(actual), " should be less than ", toString(bigger)));
   }
   
-  public void isPositive() {
-    isGreaterThan(0);
-  }
+  public void isPositive() { isGreaterThan(0); }
   
-  public void isNegative() {
-    isLessThan(0);
-  }
+  public void isNegative() { isLessThan(0); }
   
-  private String toString(int value) {
-    return valueOf(value);
-  }
+  private String toString(int value) { return valueOf(value); }
 }
