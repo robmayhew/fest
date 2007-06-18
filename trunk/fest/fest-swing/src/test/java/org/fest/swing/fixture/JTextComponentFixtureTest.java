@@ -140,8 +140,8 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
   public void shouldEnterTextInTextField() {
     window.secondTextField.setText("");
-    fixtureForSecondTextField.enterText("Text entered by Abbot");
-    assertThat(window.secondTextField.getText()).isEqualTo("Text entered by Abbot");
+    fixtureForSecondTextField.enterText("Text entered by FEST");
+    assertThat(window.secondTextField.getText()).isEqualTo("Text entered by FEST");
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundTextField") 
@@ -163,6 +163,13 @@ import org.testng.annotations.Test;
     window.secondTextField.setText("");
     fixtureForSecondTextField.selectAll();
     assertThat(window.secondTextField.getSelectedText()).isEmpty();
+  }
+  
+  @Test(dependsOnMethods = "shouldHaveFoundTextField") 
+  public void shouldSelectOnlyGivenText() {
+    fixtureForSecondTextField.enterText("FEST is typing this");
+    fixtureForSecondTextField.select("is typing");
+    assertThat(window.secondTextField.getSelectedText()).isEqualTo("is typing");
   }
   
   @AfterMethod public void tearDown() {

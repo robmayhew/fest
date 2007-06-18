@@ -93,6 +93,12 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   public final JTextComponentFixture selectAll() {
     return selectText(0, target.getDocument().getLength());
   }
+  
+  public final JTextComponentFixture select(String text) {
+    int indexFound = text().indexOf(text);
+    if (indexFound == -1) return this;
+    return selectText(indexFound, indexFound + text.length());
+  }
 
   /** {@inheritDoc} */
   public final JTextComponentFixture selectText(int start, int end) {
@@ -100,7 +106,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
     textComponentTester().actionSelectText(target, start, end);
     return this;
   }
-  
+
   private JTextComponentTester textComponentTester() {
     return testerCastedTo(JTextComponentTester.class);
   }
