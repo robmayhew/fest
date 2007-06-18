@@ -19,6 +19,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -97,7 +98,23 @@ import org.testng.annotations.Test;
   public void shouldReturnValueAtGivenIndex() {
     assertThat(fixture.valueAt(2)).isEqualTo("third");
   }
+
+  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
+  public void shouldEnterTextInEditableComboBox() {
+    window.comboBox.setEditable(true);
+    fixture.enter("Text entered by FEST");
+    JTextField editorComponent = (JTextField)window.comboBox.getEditor().getEditorComponent();
+    assertThat(editorComponent.getText()).contains("Text entered by FEST");
+  }
   
+  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
+  public void shouldNotEnterTextInNonEditableComboBox() {
+    window.comboBox.setEditable(false);
+    fixture.enter("Text entered by FEST");
+    JTextField editorComponent = (JTextField)window.comboBox.getEditor().getEditorComponent();
+    assertThat(editorComponent.getText()).isEmpty();
+  }
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
