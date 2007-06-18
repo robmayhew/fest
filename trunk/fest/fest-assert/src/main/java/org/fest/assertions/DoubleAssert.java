@@ -22,16 +22,16 @@ public class DoubleAssert {
   }
 
   public DoubleAssert isGreaterThan(double smaller) {
-    if (Double.compare(actual, smaller) <= 0) fail("should be greater than", smaller);
+    if (Double.compare(actual, smaller) <= 0) compareFailed("should be greater than", smaller);
     return this;
   }
 
   public DoubleAssert isLessThan(double bigger) {
-    if (Double.compare(actual, bigger) >= 0) fail("should be less than",  bigger);
+    if (Double.compare(actual, bigger) >= 0) compareFailed("should be less than",  bigger);
     return this;
   }
   
-  private void fail(String reason, double expected) {
+  private void compareFailed(String reason, double expected) {
     fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
   }
 

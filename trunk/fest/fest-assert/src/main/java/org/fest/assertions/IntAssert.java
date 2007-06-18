@@ -44,16 +44,16 @@ public final class IntAssert{
   }
   
   public IntAssert isGreaterThan(int smaller) {
-    if (smaller >= actual) fail("should be greater than", smaller);
+    if (smaller >= actual) compareFailed("should be greater than", smaller);
     return this;
   }
   
   public IntAssert isLessThan(int bigger) {
-    if (bigger <= actual) fail("should be less than", bigger);
+    if (bigger <= actual) compareFailed("should be less than", bigger);
     return this;
   }
   
-  private void fail(String reason, int expected) {
+  private void compareFailed(String reason, int expected) {
     fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
   }
 
