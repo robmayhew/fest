@@ -97,4 +97,13 @@ public class IntAssertTest {
   public void shouldFailIfGreaterToZeroAndExpectedNegative() {
     new IntAssert(8).isNegative();
   }
+  
+  @Test public void shouldPassIfZeroAndExpectedZero() {
+    new IntAssert(0).isZero();
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfNotZeroAndExpectedZero() {
+    new IntAssert(9).isZero();
+  }
 }
