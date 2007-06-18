@@ -26,32 +26,40 @@ import static org.fest.util.Strings.concat;
  *
  * @author Yvonne Wang
  */
-public class IntAssert{
+public final class IntAssert{
   private int actual;
 
   IntAssert(int actual) {
     this.actual = actual;
   }
   
-  public void isEqualTo(int expected) {
-    if (actual != expected) fail(errorMessageIfNotEqual(toString(actual), toString(expected)));
+  public IntAssert isEqualTo(int expected) {
+    if (actual != expected) fail(errorMessageIfNotEqual(valueOf(actual), valueOf(expected)));
+    return this;
   }
   
-  public void isNotEqualTo(int other) {
-    if (actual == other) fail(errorMessageIfEqual(toString(actual), toString(other)));
+  public IntAssert isNotEqualTo(int other) {
+    if (actual == other) fail(errorMessageIfEqual(valueOf(actual), valueOf(other)));
+    return this;
   }
   
-  public void isGreaterThan(int smaller) {
-    if (smaller >= actual) fail(concat(toString(actual), " should be greater than ", toString(smaller)));
+  public IntAssert isGreaterThan(int smaller) {
+    if (smaller >= actual) fail("should be greater than", smaller);
+    return this;
   }
   
-  public void isLessThan(int bigger) {
-    if (bigger <= actual) fail(concat(toString(actual), " should be less than ", toString(bigger)));
+  public IntAssert isLessThan(int bigger) {
+    if (bigger <= actual) fail("should be less than", bigger);
+    return this;
   }
   
-  public void isPositive() { isGreaterThan(0); }
+  private void fail(String reason, int expected) {
+    fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
+  }
+
+  public IntAssert isPositive() { return isGreaterThan(0); }
+
+  public IntAssert isNegative() { return isLessThan(0); }
   
-  public void isNegative() { isLessThan(0); }
-  
-  private String toString(int value) { return valueOf(value); }
+  public IntAssert isZero() { return isEqualTo(0); }
 }
