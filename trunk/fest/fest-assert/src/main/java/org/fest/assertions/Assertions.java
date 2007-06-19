@@ -53,6 +53,7 @@ public final class Assertions {
   public static ByteAssert assertThat(byte actual) {
     return new ByteAssert(actual);
   }
+  
   public static ByteArrayAssert assertThat(byte[] actual) {
     return new ByteArrayAssert(actual);
   }
@@ -76,6 +77,7 @@ public final class Assertions {
   public static LongAssert assertThat(long actual) {
     return new LongAssert(actual);
   }
+  
   public static LongArrayAssert assertThat(long[] actual) {
     return new LongArrayAssert(actual);
   }
