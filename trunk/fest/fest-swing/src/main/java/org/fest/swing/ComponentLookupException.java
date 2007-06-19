@@ -16,7 +16,7 @@
 package org.fest.swing;
 
 /**
- * Understands an error thrown when looking up a component using <code>{@link abbot.finder.ComponentFinder}</code>.
+ * Understands an error thrown when looking up a component using <code>{@link ComponentFinder}</code>.
  *
  * @author Alex Ruiz
  */
