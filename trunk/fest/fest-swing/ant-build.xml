@@ -20,28 +20,4 @@
       <artifact:localRepository id="local.repository" location="${maven.repository.local}" layout="default" />
     </artifact:install>
   </target>
-
-  <target name="javadoc" depends="init" description="Create the API documentation">
-    <mkdir dir="${target.javadocs.dir}" />
-    <property name="copyright" value="Copyright &#169; 2007. All Rights Reserved." />
-    <javadoc destdir="${target.javadocs.dir}"
-             author="true"
-             version="true"
-             windowtitle="${maven.project.artifactId} v. ${maven.project.version} API"
-             doctitle="${maven.project.artifactId} v. ${maven.project.version}"
-             bottom="${copyright}">
-      <classpath>
-        <pathelement location="${target.classes.dir}" />
-        <pathelement location="${target.test.classes.dir}" />
-        <pathelement path="${lib.classpath}" />
-      </classpath>
-      <sourcepath>
-        <pathelement location="${src.java.main.dir}" />
-      </sourcepath>
-      <packageset dir="${src.java.main.dir}">
-        <include name="**/*" />
-      </packageset>
-      <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
-    </javadoc>
-  </target>
 </project>
