@@ -15,7 +15,7 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.*;
+import static java.lang.String.valueOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 

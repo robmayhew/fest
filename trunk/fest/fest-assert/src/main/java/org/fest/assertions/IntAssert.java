@@ -16,9 +16,10 @@
 package org.fest.assertions;
 
 import static java.lang.String.valueOf;
-import static org.fest.assertions.Fail.errorMessageIfEqual;
-import static org.fest.assertions.Fail.errorMessageIfNotEqual;
+
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.PrimitiveFail.failIfEqual;
+import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -34,12 +35,12 @@ public final class IntAssert{
   }
   
   public IntAssert isEqualTo(int expected) {
-    if (actual != expected) fail(errorMessageIfNotEqual(actual, expected));
+    failIfNotEqual(actual, expected);
     return this;
   }
   
   public IntAssert isNotEqualTo(int other) {
-    if (actual == other) fail(errorMessageIfEqual(actual, other));
+    failIfEqual(actual, other);
     return this;
   }
   

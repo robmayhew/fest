@@ -14,9 +14,9 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.failIfNotEqual;
-import static org.fest.assertions.Fail.failIfEqual;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.PrimitiveFail.failIfEqual;
+import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**

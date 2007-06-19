@@ -15,9 +15,10 @@
 package org.fest.assertions;
 
 import static java.lang.String.valueOf;
+
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfEqual;
-import static org.fest.assertions.Fail.failIfNotEqual;
+import static org.fest.assertions.PrimitiveFail.failIfEqual;
+import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -40,8 +41,8 @@ public class FloatAssert {
     return this;
   }
 
-  public FloatAssert isNotEqualTo(float expected) {
-    failIfEqual(actual, expected);
+  public FloatAssert isNotEqualTo(float other) {
+    failIfEqual(actual, other);
     return this;
   }
 

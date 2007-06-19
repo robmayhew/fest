@@ -15,8 +15,8 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
 
 /**
  * Understands assertion methods for <code>boolean</code> values.
@@ -32,10 +32,10 @@ public final class BooleanAssert {
   }
   
   public void isTrue() {
-    if (!actual) fail(errorMessageIfNotEqual(Boolean.FALSE, Boolean.TRUE));
+    if (!actual) fail(errorMessageIfNotEqual(actual, true));
   }
 
   public void isFalse() {
-    if (actual) fail(errorMessageIfNotEqual(Boolean.TRUE, Boolean.FALSE));
+    if (actual) fail(errorMessageIfNotEqual(actual, false));
   }
 }

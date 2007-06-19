@@ -15,10 +15,9 @@
 package org.fest.assertions;
 
 import static java.lang.String.valueOf;
-
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfEqual;
-import static org.fest.assertions.Fail.failIfNotEqual;
+import static org.fest.assertions.PrimitiveFail.failIfEqual;
+import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -39,8 +38,8 @@ public class CharAssert {
     return this;
   }
 
-  public CharAssert isNotEqualTo(char expected) {
-    failIfEqual(actual, expected);
+  public CharAssert isNotEqualTo(char other) {
+    failIfEqual(actual, other);
     return this;
   }
 

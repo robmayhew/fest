@@ -1,0 +1,91 @@
+/*
+ * Created on $date.get('MMM d, yyyy')
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * Copyright @$date.get('yyyy') the original author or authors.
+ */
+package org.fest.assertions;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Strings.concat;
+
+/**
+ * Understands failure methods for primitive types. 
+ * 
+ * @author Yvonne Wang
+ */
+public final class ${className} {
+
+#foreach($type in $types)
+  /**
+   * Fails if the given $<code>$type</code>s are equal.
+   * @param first the value to check against <code>second</code>.
+   * @param second second value.
+   * @throws AssertionError if the given <code>$type</code>s are equal.
+   */
+  static void failIfEqual($type first, $type second) {
+#if ($type == "double")    
+    if (Double.compare(first, second) == 0) fail(errorMessageIfEqual(first, second));
+#elseif ($type == "float")
+    if (Float.compare(first, second) == 0) fail(errorMessageIfEqual(first, second));
+#else
+    if (first == second) fail(errorMessageIfEqual(first, second)); 
+#end
+  }
+  
+#end
+#foreach($type in $types)
+  /**
+   * Fails if the given <code>$type</code>s are not equal.
+   * @param actual the value to check against <code>expected</code>.
+   * @param expected expected value.
+   * @throws AssertionError if the given <code>$type</code>s are not equal.
+   */
+  static void failIfNotEqual($type actual, $type expected) {
+#if ($type == "double")    
+    if (Double.compare(actual, expected) != 0) fail(errorMessageIfNotEqual(actual, expected));
+#elseif ($type == "float")
+    if (Float.compare(actual, expected) != 0) fail(errorMessageIfNotEqual(actual, expected));
+#else
+    if (actual != expected) fail(errorMessageIfNotEqual(actual, expected));
+#end
+  }
+  
+#end
+#foreach($type in $types)
+  /**
+   * Returns an error message to be used when two <code>$type</code>s that are expected to be equal aren't. 
+   * @param actual the value checked against <code>expected</code>.
+   * @param expected expected value.
+   * @return an error message to be used when two <code>$type</code>s that are expected to be equal aren't. 
+   */
+  static String errorMessageIfNotEqual($type actual, $type expected) {
+    return concat("expected:<", valueOf(expected), "> but was:<", valueOf(actual), ">");
+  }
+  
+#end
+#foreach($type in $types)
+  /**
+   * Returns an error message to be used when two <code>$type</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>$type</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual($type first, $type second) {
+    return concat("<", first, "> should not be equal to <", second, ">");
+  }
+  
+#end
+  private ${className}() {}
+}

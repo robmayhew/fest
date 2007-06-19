@@ -1,11 +1,12 @@
 package org.fest.assertions;
 
-
+import static java.lang.Math.abs;
 import static java.lang.String.valueOf;
-import static org.fest.assertions.Fail.errorMessageIfNotEqual;
+
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfEqual;
-import static org.fest.assertions.Fail.failIfNotEqual;
+import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
+import static org.fest.assertions.PrimitiveFail.failIfEqual;
+import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -24,8 +25,8 @@ public class DoubleAssert {
     return this;
   }
 
-  public DoubleAssert isNotEqualTo(double expected) {
-    failIfEqual(actual, expected);
+  public DoubleAssert isNotEqualTo(double other) {
+    failIfEqual(actual, other);
     return this;
   }
 
@@ -68,7 +69,7 @@ public class DoubleAssert {
     
     public DoubleAssert isEqualTo(double expected) {
       if (Double.compare(expected, actual) == 0) return doubleAssert;
-      if (!(Math.abs(expected - actual) <= delta)) fail(errorMessageIfNotEqual(valueOf(actual), valueOf(expected)));
+      if (!(abs(expected - actual) <= delta)) fail(errorMessageIfNotEqual(actual, expected));
       return doubleAssert;
     }
   }
