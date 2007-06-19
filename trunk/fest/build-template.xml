@@ -14,6 +14,7 @@
 	<property name="target.test.classes.dir" value="${target.dir}/test-classes" />
 	<property name="target.test.results.dir" value="${target.dir}/test-reports" />
 	<property name="coverage.report.dir" value="${target.dir}/coverage-reports" />
+  <property name="target.javadocs.dir" value="${target.dir}/javadocs" />
 	<property name="target.dist.dir" value="${target.dir}/dist" />
 
 	<property name="test.includes" value="**/*Test.class" />
@@ -161,4 +162,27 @@
 		</jar>
 	</target>
 
+  <target name="javadoc" depends="init" description="Create the API documentation">
+    <mkdir dir="${target.javadocs.dir}" />
+    <property name="copyright" value="Copyright &#169; 2007. All Rights Reserved." />
+    <javadoc destdir="${target.javadocs.dir}"
+             author="true"
+             version="true"
+             windowtitle="${maven.project.artifactId} v. ${maven.project.version} API"
+             doctitle="${maven.project.artifactId} v. ${maven.project.version}"
+             bottom="${copyright}">
+      <classpath>
+        <pathelement location="${target.classes.dir}" />
+        <pathelement location="${target.test.classes.dir}" />
+        <pathelement path="${lib.classpath}" />
+      </classpath>
+      <sourcepath>
+        <pathelement location="${src.java.main.dir}" />
+      </sourcepath>
+      <packageset dir="${src.java.main.dir}">
+        <include name="**/*" />
+      </packageset>
+      <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+    </javadoc>
+  </target>
 </project>
