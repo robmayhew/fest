@@ -15,9 +15,12 @@
 package org.fest.assertions;
 
 import static java.lang.String.valueOf;
+
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
+import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
+import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -44,12 +47,12 @@ public class CharAssert {
   }
 
   public CharAssert isGreaterThan(char smaller) {
-    if (actual <= smaller) failed("should be greater than", smaller);
+    failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
   public CharAssert isLessThan(char bigger) {
-    if (actual >= bigger) failed("should be less than", bigger);
+    failIfNotLessThan(actual, bigger);
     return this;
   }
 
@@ -61,9 +64,5 @@ public class CharAssert {
   public CharAssert isLowerCase() {
     if (!Character.isLowerCase(actual)) fail(concat(valueOf(actual), " should be a lowercase character"));
     return this;
-  }
-
-  private void failed(String reason, int expected) {
-    fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
   }
 }

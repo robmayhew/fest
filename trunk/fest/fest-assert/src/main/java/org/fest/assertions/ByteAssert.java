@@ -14,11 +14,10 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.util.Strings.concat;
+import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
+import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
  * Understands assertion methods for <code>byte</code>s.
@@ -46,17 +45,13 @@ public final class ByteAssert {
   }
 
   public ByteAssert isGreaterThan(byte smaller) {
-    if (actual <= smaller) failed("should be greater than", smaller);
+    failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
   public ByteAssert isLessThan(byte bigger) {
-    if (actual >= bigger) failed("should be less than", bigger);
+    failIfNotLessThan(actual, bigger);
     return this;
-  }
-
-  private void failed(String reason, int expected) {
-    fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
   }
 
   public ByteAssert isPositive() { return isGreaterThan(ZERO); }

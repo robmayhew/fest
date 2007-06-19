@@ -14,10 +14,10 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.util.Strings.concat;
+import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
+import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
  * Understands assertion methods for <code>long</code>s.
@@ -45,17 +45,13 @@ public class LongAssert {
   }
 
   public LongAssert isGreaterThan(long smaller) {
-    if (actual <= smaller) failed("should be greater than", smaller);
+    failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
   public LongAssert isLessThan(long bigger) {
-    if (actual >= bigger) failed("should be less than", bigger);
+    failIfNotLessThan(actual, bigger);
     return this;
-  }
-
-  private void failed(String reason, long expected) { 
-    fail(concat(actual, " ", reason, " ", expected));
   }
 
   public LongAssert isPositive() { return isGreaterThan(ZERO); }

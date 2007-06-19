@@ -1,13 +1,13 @@
 package org.fest.assertions;
 
 import static java.lang.Math.abs;
-import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.util.Strings.concat;
+import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
+import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
  * Understands Assertion methods for <code>Double</code>.
@@ -16,6 +16,9 @@ import static org.fest.util.Strings.concat;
  */
 
 public class DoubleAssert {
+  
+  private static final double ZERO = 0.0;
+  
   private final double actual;
 
   DoubleAssert(double actual) { this.actual = actual; }
@@ -31,24 +34,20 @@ public class DoubleAssert {
   }
 
   public DoubleAssert isGreaterThan(double smaller) {
-    if (Double.compare(actual, smaller) <= 0) failed("should be greater than", smaller);
+    failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
   public DoubleAssert isLessThan(double bigger) {
-    if (Double.compare(actual, bigger) >= 0) failed("should be less than",  bigger);
+    failIfNotLessThan(actual, bigger);
     return this;
   }
   
-  private void failed(String reason, double expected) {
-    fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
-  }
+  public DoubleAssert isPositive() { return isGreaterThan(ZERO); }
 
-  public DoubleAssert isPositive() { return isGreaterThan(0.0); }
+  public DoubleAssert isNegative() { return isLessThan(ZERO); }
 
-  public DoubleAssert isNegative() { return isLessThan(0.0); }
-
-  public DoubleAssert isZero() { return isEqualTo(0.0); }
+  public DoubleAssert isZero() { return isEqualTo(ZERO); }
 
   public DoubleAssert isNaN() { return isEqualTo(Double.NaN); }
   

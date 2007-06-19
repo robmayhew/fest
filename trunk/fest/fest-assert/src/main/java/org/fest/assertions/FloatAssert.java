@@ -14,12 +14,10 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.util.Strings.concat;
+import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
+import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
  * Understands assertion methods for <code>float</code>s.
@@ -51,22 +49,18 @@ public class FloatAssert {
   }
 
   public FloatAssert isGreaterThan(float smaller) {
-    if (Float.compare(actual, smaller) <= 0) failed("should be greater than", smaller);
+    failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
   public FloatAssert isLessThan(float bigger) {
-    if (Float.compare(actual, bigger) >= 0) failed("should be less than", bigger);
+    failIfNotLessThan(actual, bigger);
     return this;
-  }
-
-  public void failed(String reason, float expected) {
-    fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
   }
 
   public FloatAssert isNaN() { return isEqualTo(Float.NaN); }
 
-  public FloatAssert isPositive() { return isGreaterThan(0.0F); }
+  public FloatAssert isPositive() { return isGreaterThan(ZERO); }
 
-  public FloatAssert isNegative() { return isLessThan(0.0F); }
+  public FloatAssert isNegative() { return isLessThan(ZERO); }
 }

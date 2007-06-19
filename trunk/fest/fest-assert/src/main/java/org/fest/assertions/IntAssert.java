@@ -15,12 +15,10 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.util.Strings.concat;
+import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
+import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
  * Understands assert method for <code>int</code>s.
@@ -45,19 +43,15 @@ public final class IntAssert{
   }
   
   public IntAssert isGreaterThan(int smaller) {
-    if (smaller >= actual) compareFailed("should be greater than", smaller);
+    failIfNotGreaterThan(actual, smaller);
     return this;
   }
   
   public IntAssert isLessThan(int bigger) {
-    if (bigger <= actual) compareFailed("should be less than", bigger);
+    failIfNotLessThan(actual, bigger);
     return this;
   }
   
-  private void compareFailed(String reason, int expected) {
-    fail(concat(valueOf(actual), " ", reason, " ", valueOf(expected)));
-  }
-
   public IntAssert isPositive() { return isGreaterThan(0); }
 
   public IntAssert isNegative() { return isLessThan(0); }

@@ -108,6 +108,86 @@ public final class PrimitiveFail {
   }
   
   /**
+   * Returns an error message to be used when two <code>boolean</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>boolean</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(boolean first, boolean second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>char</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>char</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(char first, char second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>byte</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>byte</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(byte first, byte second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>short</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>short</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(short first, short second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>int</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>int</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(int first, int second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>long</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>long</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(long first, long second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>float</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>float</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(float first, float second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
+   * Returns an error message to be used when two <code>double</code>s that are not expected to be equal are. 
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two <code>double</code>s that are not expected to be equal are. 
+   */
+  static String errorMessageIfEqual(double first, double second) {
+    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  }
+  
+  /**
    * Fails if the given <code>boolean</code>s are not equal.
    * @param actual the value to check against <code>expected</code>.
    * @param expected expected value.
@@ -268,83 +348,283 @@ public final class PrimitiveFail {
   }
   
   /**
-   * Returns an error message to be used when two <code>boolean</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>boolean</code>s that are not expected to be equal are. 
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
    */
-  static String errorMessageIfEqual(boolean first, boolean second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static void failIfNotLessThan(char first, char second) {
+    if (first >= second) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
+   */
+  static void failIfNotLessThan(byte first, byte second) {
+    if (first >= second) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
+   */
+  static void failIfNotLessThan(short first, short second) {
+    if (first >= second) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
+   */
+  static void failIfNotLessThan(int first, int second) {
+    if (first >= second) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
+   */
+  static void failIfNotLessThan(long first, long second) {
+    if (first >= second) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
+   */
+  static void failIfNotLessThan(float first, float second) {
+    if (Float.compare(first, second) >= 0) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not less than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not less than the second value.
+   */
+  static void failIfNotLessThan(double first, double second) {
+    if (Double.compare(first, second) >= 0) fail(errorMessageIfNotLessThan(first, second));
+  }
+
+  /**
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
+   */
+  static String errorMessageIfNotLessThan(char first, char second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>char</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>char</code>s that are not expected to be equal are. 
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfEqual(char first, char second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfNotLessThan(byte first, byte second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>byte</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>byte</code>s that are not expected to be equal are. 
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfEqual(byte first, byte second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfNotLessThan(short first, short second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>short</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>short</code>s that are not expected to be equal are. 
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfEqual(short first, short second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfNotLessThan(int first, int second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>int</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>int</code>s that are not expected to be equal are. 
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfEqual(int first, int second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfNotLessThan(long first, long second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>long</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>long</code>s that are not expected to be equal are. 
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfEqual(long first, long second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfNotLessThan(float first, float second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>float</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>float</code>s that are not expected to be equal are. 
+   * Returns an error message to be used when the first value is not less than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfEqual(float first, float second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfNotLessThan(double first, double second) {
+    return concat(valueOf(first), " should be less than ", valueOf(second));
   }
   
   /**
-   * Returns an error message to be used when two <code>double</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>double</code>s that are not expected to be equal are. 
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
    */
-  static String errorMessageIfEqual(double first, double second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static void failIfNotGreaterThan(char first, char second) {
+    if (first <= second) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
+   */
+  static void failIfNotGreaterThan(byte first, byte second) {
+    if (first <= second) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
+   */
+  static void failIfNotGreaterThan(short first, short second) {
+    if (first <= second) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
+   */
+  static void failIfNotGreaterThan(int first, int second) {
+    if (first <= second) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
+   */
+  static void failIfNotGreaterThan(long first, long second) {
+    if (first <= second) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
+   */
+  static void failIfNotGreaterThan(float first, float second) {
+    if (Float.compare(first, second) <= 0) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Fails if the first value is not greater than the second value.
+   * @param first the first value.
+   * @param second the second value.
+   * @throws AssertionError if the first value is not greater than the second value.
+   */
+  static void failIfNotGreaterThan(double first, double second) {
+    if (Double.compare(first, second) <= 0) fail(errorMessageIfNotGreaterThan(first, second));
+  }
+
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(char first, char second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  }
+  
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(byte first, byte second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  }
+  
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(short first, short second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  }
+  
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(int first, int second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  }
+  
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(long first, long second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  }
+  
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(float first, float second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  }
+  
+  /**
+   * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param first the first value.
+   * @param second the second value.
+   * @return an error message to be used when the first value is not greater than the second value. 
+   */
+  static String errorMessageIfNotGreaterThan(double first, double second) {
+    return concat(valueOf(first), " should be greater than ", valueOf(second));
   }
   
   private PrimitiveFail() {}
