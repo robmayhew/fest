@@ -2,6 +2,11 @@ package org.fest.assertions;
 
 import org.testng.annotations.Test;
 
+/**
+ * Test for <code>{@link DoubleAssert}</code>.
+ *
+ * @author Yvonne Wang
+ */
 public class DoubleAssertTest {
 
   @Test public void shouldPassIfEqualAndExpectedEqual() {
@@ -10,7 +15,7 @@ public class DoubleAssertTest {
 
   @Test(expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualAndExpectedEqual() {
-    new DoubleAssert(8.88).isEqualTo(8.68);
+    new DoubleAssert(0.0).isEqualTo(-0.0);
   }
 
   @Test public void shouldPassIfNotEqualAndExpectedNotEqual() {
@@ -23,7 +28,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldPassIfGreaterThanAndExpectedGreaterThan() {
-    new DoubleAssert(8.88).isGreaterThan(8.68);
+    new DoubleAssert(0.00).isGreaterThan(-0.00);
   }
 
   @Test(expectedExceptions = AssertionError.class) 
@@ -32,7 +37,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldPassIfLessThanAndExpectedLessThan() {
-    new DoubleAssert(8.68).isLessThan(8.88);
+    new DoubleAssert(-0.0).isLessThan(0.0);
   }
 
   @Test(expectedExceptions = AssertionError.class) 

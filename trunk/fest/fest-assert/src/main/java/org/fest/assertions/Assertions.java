@@ -42,30 +42,56 @@ public final class Assertions {
     return new BooleanArrayAssert(actual);
   }
 
+  public static CharAssert assertThat(char actual) {
+    return new CharAssert(actual);
+  }
+  
   public static CharArrayAssert assertThat(char[] actual) {
     return new CharArrayAssert(actual);
   }
 
+  public static ByteAssert assertThat(byte actual) {
+    return new ByteAssert(actual);
+  }
   public static ByteArrayAssert assertThat(byte[] actual) {
     return new ByteArrayAssert(actual);
   }
 
+  public static ShortAssert assertThat(short actual) {
+    return new ShortAssert(actual);
+  }
+  
   public static ShortArrayAssert assertThat(short[] actual) {
     return new ShortArrayAssert(actual);
+  }
+
+  public static IntAssert assertThat(int actual) {
+    return new IntAssert(actual);
   }
 
   public static IntArrayAssert assertThat(int[] actual) {
     return new IntArrayAssert(actual);
   }
 
+  public static LongAssert assertThat(long actual) {
+    return new LongAssert(actual);
+  }
   public static LongArrayAssert assertThat(long[] actual) {
     return new LongArrayAssert(actual);
+  }
+  
+  public static FloatAssert assertThat(float actual) {
+    return new FloatAssert(actual);
   }
 
   public static FloatArrayAssert assertThat(float[] actual) {
     return new FloatArrayAssert(actual);
   }
 
+  public static DoubleAssert assertThat(double actual) {
+    return new DoubleAssert(actual);
+  }
+  
   public static DoubleArrayAssert assertThat(double[] actual) {
     return new DoubleArrayAssert(actual);
   }
@@ -80,10 +106,6 @@ public final class Assertions {
   
   public static ImageAssert assertThat(BufferedImage actual) {
     return new ImageAssert(actual);
-  }
-  
-  public static IntAssert assertThat(int actual) {
-    return new IntAssert(actual);
   }
   
   private Assertions() {}

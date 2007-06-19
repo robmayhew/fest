@@ -34,12 +34,12 @@ public final class IntAssert{
   }
   
   public IntAssert isEqualTo(int expected) {
-    if (actual != expected) fail(errorMessageIfNotEqual(valueOf(actual), valueOf(expected)));
+    if (actual != expected) fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
   
   public IntAssert isNotEqualTo(int other) {
-    if (actual == other) fail(errorMessageIfEqual(valueOf(actual), valueOf(other)));
+    if (actual == other) fail(errorMessageIfEqual(actual, other));
     return this;
   }
   
