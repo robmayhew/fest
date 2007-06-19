@@ -15,6 +15,8 @@
  */
 package org.fest.swing;
 
+import java.awt.Component;
+
 import abbot.finder.Matcher;
 
 /**
@@ -22,4 +24,8 @@ import abbot.finder.Matcher;
  * 
  * @author Alex Ruiz
  */
-public interface ComponentMatcher extends Matcher {}
+public interface ComponentMatcher extends Matcher {
+  
+  /** @return whether the given <code>Component</code> matches some lookup criteria. */
+  boolean matches(Component c);
+}

@@ -15,6 +15,8 @@
  */
 package org.fest.swing;
 
+import java.awt.Component;
+
 import abbot.finder.matchers.ClassMatcher;
 
 /**
@@ -41,4 +43,11 @@ public final class TypeMatcher extends ClassMatcher implements ComponentMatcher 
     super(type, requireShowing);
   }
 
+  /**
+   * @return whether the type and visibility of the given <code>Component</code> matches the values specified in this
+   *         matcher.
+   */
+  @Override public boolean matches(Component c) {
+    return super.matches(c);
+  }
 }

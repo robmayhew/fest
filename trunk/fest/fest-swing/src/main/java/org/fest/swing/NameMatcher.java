@@ -15,6 +15,8 @@
  */
 package org.fest.swing;
 
+import java.awt.Component;
+
 /**
  * Understands matching of <code>{@link java.awt.Component}</code>s by name.
  *
@@ -28,5 +30,10 @@ public final class NameMatcher extends abbot.finder.matchers.NameMatcher impleme
    */
   public NameMatcher(String name) {
     super(name);
+  }
+
+  /** @return whether the name of the given <code>Component</code> matches the one specified in this matcher. */
+  @Override public boolean matches(Component c) {
+    return super.matches(c);
   }
 }
