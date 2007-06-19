@@ -15,7 +15,6 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.valueOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
@@ -114,16 +113,6 @@ public final class Fail {
   }
 
   /**
-   * Returns an error message to be used when two <code>int</code>s that are expected to be equal aren't. 
-   * @param actual the value checked against <code>expected</code>.
-   * @param expected expected value.
-   * @return an error message to be used when two <code>int</code>s that are expected to be equal aren't. 
-   */
-  static String errorMessageIfNotEqual(int actual, int expected) {
-    return concat("expected:<", valueOf(expected), "> but was:<", valueOf(actual), ">");
-  }
-
-  /**
    * Returns an error message to be used when two objects that are expected to be equal aren't. 
    * @param actual the value checked against <code>expected</code>.
    * @param expected expected value.
@@ -133,16 +122,6 @@ public final class Fail {
     return concat("expected:<", expected, "> but was:<", actual, ">");
   }
   
-  /**
-   * Returns an error message to be used when two <code>int</code>s that are not expected to be equal are. 
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
-   * @return an error message to be used when two <code>int</code>s that are not expected to be equal are. 
-   */
-  static String errorMessageIfEqual(int first, int second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
-  }
-
   /**
    * Returns an error message to be used when two objects that are not expected to be equal are. 
    * @param first the value checked against <code>second</code>.
