@@ -28,11 +28,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
 
-import abbot.finder.Matcher;
-import abbot.finder.matchers.JMenuItemMatcher;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.join;
 
+import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -115,7 +114,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @return a fixture wrapping the found component.
    */
   public final JMenuItemFixture menuItem(String... path) {
-    Matcher m = new JMenuItemMatcher(join(path).with("|"));
+    ComponentMatcher m = new JMenuItemMatcher(join(path).with("|"));
     Component item = robot.finder().find(target, m);
     assertThat(item).isInstanceOf(JMenuItem.class);
     return new JMenuItemFixture(robot, (JMenuItem) item);
@@ -172,5 +171,11 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    */
   public final JCheckBoxFixture checkBox(String name) {
     return new JCheckBoxFixture(robot, robot.finder().findByName(target, name, JCheckBox.class));
+  }
+  
+  private static class JMenuItemMatcher extends abbot.finder.matchers.JMenuItemMatcher implements ComponentMatcher {
+    public JMenuItemMatcher(String label) {
+      super(label);
+    }
   }
 }

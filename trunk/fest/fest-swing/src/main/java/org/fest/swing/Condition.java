@@ -16,8 +16,9 @@
 package org.fest.swing;
 
 /**
- * Understand a condition that has to be met.
- *
+ * Understand a condition that has to be met. Useful when making a <code>{@link RobotFixture}</code> wait for some
+ * condition to be <code>true</code>.
+ * 
  * @author Yvonne Wang
  */
 public abstract class Condition implements abbot.script.Condition {

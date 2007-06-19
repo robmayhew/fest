@@ -1,5 +1,5 @@
 /*
- * Created on May 22, 2007
+ * Created on Jun 18, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,19 +15,11 @@
  */
 package org.fest.swing;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import abbot.finder.Matcher;
 
 /**
- * Understands an annotation that identify GUI tests. GUI tests should have a screenshot of the desktop, in case of a
- * failure due to an environment conditon.
+ * Understands an indication whether a <code>{@link java.awt.Component}</code> matches some desired criteria.
  * 
  * @author Alex Ruiz
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.TYPE })
-@Documented
-public @interface GUITest {}
+public interface ComponentMatcher extends Matcher {}

@@ -28,6 +28,10 @@ public final class ScreenLock {
   private boolean locked;
   private Object owner;
   
+  /**
+   * Acquires the lock.
+   * @param owner the new owner of the lock.
+   */
   public synchronized void acquire(Object owner) {
     while (locked) {
       try {
@@ -42,6 +46,12 @@ public final class ScreenLock {
     this.owner = owner;
   }
   
+  /**
+   * Releases the lock.
+   * @param owner the current owner of the lock.
+   * @throws ScreenLockException if the lock has not been previously acquired.
+   * @throws ScreenLockException if the given owner is not the same as the current owner of the lock. 
+   */
   public synchronized void release(Object owner) {
     if (!locked) throw new ScreenLockException("No lock to release");
     if (this.owner != owner) throw new ScreenLockException(concat(owner, " is not the lock owner"));
@@ -49,6 +59,7 @@ public final class ScreenLock {
     this.owner = null;
   }
   
+  /** @return the singleton instance of this lock. */
   public static ScreenLock instance() { return ScreenLockHolder.instance; }
   
   private static class ScreenLockHolder {

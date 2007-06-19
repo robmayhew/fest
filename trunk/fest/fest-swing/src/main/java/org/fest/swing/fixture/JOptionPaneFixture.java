@@ -22,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import abbot.finder.Matcher;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
@@ -33,6 +32,7 @@ import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -100,7 +100,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return a fixture wrapping a button containing the given text, or <code>null</code> if none if found.
    */
   public final JButtonFixture buttonWithText(final String text) {
-    Component component = robot.finder().find(target, new Matcher() {
+    Component component = robot.finder().find(target, new ComponentMatcher() {
       public boolean matches(Component c) {
         if (!(c instanceof JButton)) return false;
         return areEqual(text, ((JButton)c).getText());

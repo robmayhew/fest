@@ -32,8 +32,8 @@ import static java.lang.System.currentTimeMillis;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands simulation of user events on a GUI <code>{@link Component}</code> and check the output. Useful for 
- * creation of programmatic tests with Abbot and TestNG (or JUnit 4).
+ * Understands simulation of user events on a GUI <code>{@link Component}</code> and validation of the output. Useful
+ * for creation of programmatic tests with JUnit 4 and/or TestNG.
  * 
  * @author Alex Ruiz
  */
@@ -43,17 +43,25 @@ public final class RobotFixture {
 
   private Robot robot;
   private WindowTracker windowTracker;
-  
+
   /** Provides access to all the components in the hierarchy. */
   private final Hierarchy hierarchy;
 
   /** Looks up <code>{@link java.awt.Component}</code>s. */
   private final ComponentFinder finder;
 
+  /**
+   * Creates a new <code>{@link RobotFixture}</code> that only sees the GUI components created after it is created.
+   * @return the created robot fixture.
+   */
   public static RobotFixture robotWithNewAwtHierarchy() {
     return new RobotFixture(new TestHierarchy());
   }
-  
+
+  /**
+   * Creates a new <code>{@link RobotFixture}</code> that has access to all the GUI components in the AWT hierarchy.
+   * @return the created robot fixture.
+   */
   public static RobotFixture robotWithCurrentAwtHierarchy() {
     return new RobotFixture(new AWTHierarchy());
   }
@@ -77,8 +85,11 @@ public final class RobotFixture {
     return robot;
   }
 
-  public ComponentFinder finder() { return finder; }
-  
+  /** @return the object capable of finding GUI components. */
+  public ComponentFinder finder() {
+    return finder;
+  }
+
   /**
    * Safely display a window with proper EDT synchronization. This method blocks until the <code>{@link Window}</code>
    * is showing and ready for input.
@@ -124,29 +135,47 @@ public final class RobotFixture {
     long start = currentTimeMillis();
     while ((Robot.getEventMode() == Robot.EM_ROBOT && !windowTracker.isWindowReady(w)) || w.isShowing() != true) {
       long elapsed = currentTimeMillis() - start;
-      if (elapsed > WINDOW_DELAY) 
+      if (elapsed > WINDOW_DELAY)
         throw new RuntimeException(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
       robot.sleep();
     }
   }
-  
+
   private void packAndEnsureSafePosition(Window w) {
     w.pack();
     w.setLocation(100, 100);
   }
 
+  /**
+   * Gives input focus to the given component.
+   * @param c the given component.
+   */
   public void focus(Component c) {
     robot.focus(c);
   }
-  
+
+  /**
+   * Waits until the given condition is <code>true</code>.
+   * @param condition the condition to verify.
+   */
   public void wait(Condition condition) {
     robot.wait(condition);
   }
-  
+
+  /**
+   * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
+   * on the event dispatch thread.
+   * @param context the component which event queue will be used.
+   * @param action the <code>Runnable</code> to post in the event queue.
+   */
   public void invokeLater(Component context, Runnable action) {
     robot.invokeLater(context, action);
   }
-  
+
+  /** 
+   * Cleans up any used resources (keyboard, mouse, open windows and <code>{@link ScreenLock}</code>) used by this 
+   * robot.
+   */
   public void cleanUp() {
     disposeWindows();
     mouseRelease();
@@ -161,18 +190,21 @@ public final class RobotFixture {
       w.setVisible(false);
     }
   }
-  
-  @SuppressWarnings("unchecked") 
-  private Collection<Window> roots() {
+
+  @SuppressWarnings("unchecked") private Collection<Window> roots() {
     return hierarchy.getRoots();
   }
-  
+
   private void mouseRelease() {
     if (robot == null) return;
     int buttons = Robot.getState().getButtons();
     if (buttons != 0) robot.mouseRelease(buttons);
   }
 
+  /**
+   * Selects the given <code>{@link JMenuItem}</code>.
+   * @param target the menu item to select.
+   */  
   public void selectMenuItem(JMenuItem target) {
     robot.selectMenuItem(target);
   }

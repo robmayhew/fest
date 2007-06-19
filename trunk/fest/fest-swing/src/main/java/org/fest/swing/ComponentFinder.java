@@ -20,9 +20,6 @@ import java.awt.Container;
 
 import abbot.finder.BasicFinder;
 import abbot.finder.Hierarchy;
-import abbot.finder.Matcher;
-import abbot.finder.matchers.ClassMatcher;
-import abbot.finder.matchers.NameMatcher;
 
 /**
  * Understands GUI component lookup.
@@ -41,23 +38,58 @@ public class ComponentFinder {
     finder = new BasicFinder(hierarchy);
   }
 
+  /**
+   * Finds a <code>{@link Component}</code> by type.
+   * @param <T> the parameterized type of the component to find.
+   * @param type the type of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a component of the given type could not be found.
+   */
   public <T extends Component> T findByType(Class<T> type) {
-    return type.cast(find(new ClassMatcher(type)));
+    return type.cast(find(new TypeMatcher(type)));
   }
 
+  /**
+   * Finds a <code>{@link Component}</code> by type in the hierarchy under the given root.
+   * @param <T> the parameterized type of the component to find.
+   * @param root the root used as the starting point of the search.
+   * @param type the type of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a component of the given type could not be found.
+   */
   public <T extends Component> T findByType(Container root, Class<T> type) {
-    return type.cast(find(root, new ClassMatcher(type)));
+    return type.cast(find(root, new TypeMatcher(type)));
   }
 
+  /**
+   * Finds a <code>{@link Component}</code> by name and type.
+   * @param <T> the parameterized type of the component to find.
+   * @param name the name of the component to find.
+   * @param type the type of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a component with the given name and of the given type could not be found.
+   */
   public <T extends Component> T findByName(String name, Class<T> type) {
     return type.cast(findByName(name));
   }
   
+  /**
+   * Finds a <code>{@link Component}</code> by name.
+   * @param name the name of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a component with the given name could not be found.
+   */
   public Component findByName(String name) {
     return find(new NameMatcher(name));
   }
 
-  public Component find(Matcher m) {
+  /**
+   * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>.
+   * @param m the matcher to use to find the component of interest.
+   * @return the found component.
+   * @throws ComponentLookupException if a component matching the given criteria could not be found.
+   */
+  public Component find(ComponentMatcher m) {
     try {
       return finder.find(m);
     } catch (Exception e) {
@@ -65,20 +97,43 @@ public class ComponentFinder {
     }
   }
   
+  /**
+   * Finds a <code>{@link Component}</code> by name and type in the hierarchy under the given root.
+   * @param <T> the parameterized type of the component to find.
+   * @param root the root used as the starting point of the search.
+   * @param name the name of the component to find.
+   * @param type the type of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a component with the given name and of the given type could not be found.
+   */
   public <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return type.cast(findByName(root, name));
   }
   
+  /**
+   * Finds a <code>{@link Component}</code> by name in the hierarchy under the given root.
+   * @param root the root used as the starting point of the search.
+   * @param name the name of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a component with the given name could not be found.
+   */
   public Component findByName(Container root, String name) {
     return find(root, new NameMatcher(name));
   }
 
-  public Component find(Container root, Matcher m) {
+  /**
+   * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code> in the hierarchy
+   * under the given root.
+   * @param root the root used as the starting point of the search.
+   * @param m the matcher to use to find the component.
+   * @return the found component.
+   * @throws ComponentLookupException if a component matching the given criteria could not be found.
+   */
+  public Component find(Container root, ComponentMatcher m) {
     try {
       return finder.find(root, m);
     } catch (Exception e) {
       throw new ComponentLookupException(e);
     }
   }
-
 }
