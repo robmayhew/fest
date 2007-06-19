@@ -164,18 +164,19 @@
 
   <target name="javadoc" depends="init" description="Create the API documentation">
     <mkdir dir="${target.javadocs.dir}" />
-    <property name="copyright" value="Copyright &#169; 2007. All Rights Reserved." />
+    <property name="copyright" value="Copyright &#169; 2006-2007. All Rights Reserved." />
     <javadoc destdir="${target.javadocs.dir}"
              author="true"
              version="true"
+             access="public"
              windowtitle="${maven.project.artifactId} v. ${maven.project.version} API"
              doctitle="${maven.project.artifactId} v. ${maven.project.version}"
              bottom="${copyright}">
       <classpath>
         <pathelement location="${target.classes.dir}" />
         <pathelement location="${target.test.classes.dir}" />
-        <pathelement path="${lib.classpath}" />
       </classpath>
+			<classpath refid="lib.classpath" />
       <sourcepath>
         <pathelement location="${src.java.main.dir}" />
       </sourcepath>
@@ -183,6 +184,8 @@
         <include name="**/*" />
       </packageset>
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+      <link href="http://testng.org/javadocs" />
+      <link href="http://www.junit.org/junit/javadoc/4.3" />
     </javadoc>
   </target>
 </project>
