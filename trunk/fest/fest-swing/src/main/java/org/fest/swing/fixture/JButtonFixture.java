@@ -23,7 +23,8 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Simulates user events on a <code>{@link JButton}</code> and verifies the state of such <code>{@link JButton}</code>.
+ * Understands simulation of user events on a <code>{@link JButton}</code> and verification of the state of such 
+ * <code>{@link JButton}</code>.
  * 
  * @author Yvonne Wang
  */

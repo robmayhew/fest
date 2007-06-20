@@ -18,8 +18,8 @@ package org.fest.swing.fixture;
 import java.awt.Component;
 
 /**
- * Simulates user events on a <code>{@link Component}</code> that contains a group of items, and verifies the state of
- * such <code>{@link Component}</code>.
+ * Understands simulation of user events on a <code>{@link Component}</code> that contains or displays a group of items,
+ * and verification of the state of such <code>{@link Component}</code>.
  * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
  * 
  * @author Alex Ruiz

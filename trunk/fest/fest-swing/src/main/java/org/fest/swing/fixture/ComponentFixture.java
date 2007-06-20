@@ -24,7 +24,7 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Simulates user events on a <code>{@link Component}</code> and verifies the state of such
+ * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
  * <code>{@link Component}</code>.
  * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
  * 

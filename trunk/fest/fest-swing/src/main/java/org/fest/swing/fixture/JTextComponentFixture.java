@@ -24,7 +24,7 @@ import static org.fest.util.Strings.isEmpty;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events and state verification of a <code>{@link JTextComponent}</code>.
+ * Understands simulation of user events and verification of the state of a <code>{@link JTextComponent}</code>.
  *
  * @author Alex Ruiz
  */

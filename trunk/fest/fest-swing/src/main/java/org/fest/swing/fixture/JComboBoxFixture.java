@@ -20,10 +20,12 @@ import javax.swing.JList;
 
 import abbot.tester.JComboBoxTester;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events on a <code>{@link JComboBox}</code> and output verification.
+ * Understands simulation of user events on a <code>{@link JComboBox}</code> and verification of the state of such
+ * <code>{@link JComboBox}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -33,8 +35,8 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JComboBox</code>.
-   * @param comboBoxName the name of the combo box to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param comboBoxName the name of the button to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JComboBox</code> could not be found.
    */
   public JComboBoxFixture(RobotFixture robot, String comboBoxName) {
     super(robot, comboBoxName, JComboBox.class);
@@ -42,44 +44,64 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
-   * @param robot performs simulation of user events on the given combobox.
-   * @param target the target combo box.
+   * @param robot performs simulation of user events on the given <code>JComboBox</code>.
+   * @param target the <code>JComboBox</code> to be managed by this fixture.
    */
   public JComboBoxFixture(RobotFixture robot, JComboBox target) {
     super(robot, target);
   }
   
-  /** ${@inheritDoc} */
+  /**
+   * Returns the elements in the <code>{@link JComboBox}</code> managed by this fixture as <code>String</code>s.
+   * @return the elements in the managed <code>JComboBox</code>.
+   */
   public final String[] contents() {
     return comboBoxTester().getContents(target);
   }
   
-  /** ${@inheritDoc} */
+  /**
+   * Simulates a user selecting an item in the <code>{@link JComboBox}</code> managed by this fixture. 
+   * @param index the index of the item to select.
+   * @return this fixture.
+   */
   public final JComboBoxFixture selectItemAt(int index) {
     comboBoxTester().actionSelectIndex(target, index);
     return this;
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Simulates a user selecting an item in the <code>{@link JComboBox}</code> managed by this fixture. 
+   * @param text the text of the item to select.
+   * @return this fixture.
+   */
   public final JComboBoxFixture selectItemWithText(String text) {
     comboBoxTester().actionSelectItem(target, text);
     return this;
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Returns the <code>String</code> representation of an item in the <code>{@link JComboBox}</code> managed by this 
+   * fixture. If such <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * @param index the index of the item to return.
+   * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
+   */
   public String valueAt(int index) {
     Object value = target.getItemAt(index);
     return comboBoxTester().getValueAsString(target, list(), value, index);
   }
   
-  /** @return <code>JList</code> in the popup raised by the managed combo box. */
+  /** 
+   * Finds and returns the {@link JList} in the popup raised by the <code>{@link JComboBox}</code> managed by this 
+   * fixture.
+   * @return the <code>JList</code> in the popup raised by the managed <code>JComboBox</code>. 
+   */
   public JList list() {
     target.showPopup();
     return comboBoxTester().findComboList(target);
   }
   
   /**
-   * Enters the specified text in the managed combobox only if it is editable.
+   * Enters the specified text in the <code>{@link JComboBox}</code> managed by this fixture only if it is editable.
    * @param text the text to enter.
    * @return this fixture.
    */
@@ -94,32 +116,54 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
     return testerCastedTo(JComboBoxTester.class);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JComboBox}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JComboBoxFixture focus() {
     return (JComboBoxFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JComboBoxFixture click() {
     return (JComboBoxFixture)super.click();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JComboBox</code> is not visible.
+   */
   @Override public final JComboBoxFixture requireVisible() {
     return (JComboBoxFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JComboBox</code> is visible.
+   */
   @Override public final JComboBoxFixture requireNotVisible() {
     return (JComboBoxFixture)super.requireNotVisible();
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JComboBox</code> is disabled.
+   */
   @Override public final JComboBoxFixture requireEnabled() {
     return (JComboBoxFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JComboBox</code> is enabled.
+   */
   @Override public final JComboBoxFixture requireDisabled() {
     return (JComboBoxFixture)super.requireDisabled();
   }

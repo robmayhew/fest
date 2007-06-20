@@ -24,7 +24,8 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Simulates user events on a <code>{@link Dialog}</code> and verifies the state of such <code>{@link Dialog}</code>.
+ * Understands simulation of user events on a <code>{@link Dialog}</code> and verification of the state of such
+ * <code>{@link Dialog}</code>.
  * 
  * @author Alex Ruiz
  */

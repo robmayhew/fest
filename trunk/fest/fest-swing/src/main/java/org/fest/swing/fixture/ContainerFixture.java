@@ -36,7 +36,7 @@ import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understand lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
+ * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
  * @param <T> the type of container handled by this fixture.
  * 
  * @author Alex Ruiz

@@ -18,8 +18,8 @@ package org.fest.swing.fixture;
 import java.awt.Component;
 
 /**
- * Simulates user events on a <code>{@link Component}</code> that accepts text from the user, and verifies the state
- * of such <code>{@link Component}</code>.
+ * Understands simulation of user events on a <code>{@link Component}</code> that accepts text input from the user, and 
+ * verification of the state of such <code>{@link Component}</code>.
  * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
  * 
  * @author Alex Ruiz

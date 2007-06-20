@@ -23,7 +23,7 @@ import org.fest.swing.RobotFixture;
 
 
 /**
- * Understands simulation of user events and state verification of a <code>{@link JMenuItem}</code>.
+ * Understands simulation of user events and verification of the state of a <code>{@link JMenuItem}</code>.
  *
  * @author Alex Ruiz
  */

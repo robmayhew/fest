@@ -28,7 +28,8 @@ import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
 
 /**
- * Simulates user events on a <code>{@link Frame}</code> and verifies the state of such <code>{@link Frame}</code>.
+ * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such
+ * <code>{@link Frame}</code>.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz
