@@ -28,8 +28,8 @@ import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events and state verification of a <code>{@link Frame}</code>.
- *
+ * Simulates user events on a <code>{@link Frame}</code> and verifies the state of such <code>{@link Frame}</code>.
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -38,7 +38,8 @@ public class FrameFixture extends WindowFixture<Frame> {
   /**
    * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param target the window to test.
+   * @param target the <code>Frame</code> to be managed by this fixture.
+   * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public FrameFixture(Frame target) {
     super(target);
@@ -47,34 +48,47 @@ public class FrameFixture extends WindowFixture<Frame> {
   /**
    * Creates a new </code>{@link FrameFixture}</code>.
    * @param robot performs user events on the given window and verifies expected output.
-   * @param target the window to test.
+   * @param target the <code>Frame</code> to be managed by this fixture.
    */
   public FrameFixture(RobotFixture robot, Frame target) {
     super(robot, target);
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Shows the <code>{@link Frame}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final FrameFixture show() {
     return (FrameFixture)super.show();
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Shows the <code>{@link Frame}</code> managed by this fixture, resized to the given size.
+   * @param size the size to resize the managed <code>Frame</code> to.
+   * @return this fixture.
+   */
   @Override public final FrameFixture show(Dimension size) {
     return (FrameFixture)super.show(size);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link Frame}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public FrameFixture click() {
     return (FrameFixture)super.click();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link Frame}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public FrameFixture focus() {
     return (FrameFixture)super.focus();
   }
 
   /**
-   * Simulates a user iconifying the target frame.
+   * Simulates a user iconifying the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
   public final FrameFixture iconify() {
@@ -88,7 +102,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user deiconifying the target frame.
+   * Simulates a user deiconifying the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
   public final FrameFixture deiconify() {
@@ -102,7 +116,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user maximizing the target frame.
+   * Simulates a user maximizing the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
   public final FrameFixture maximize() {
@@ -116,7 +130,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user normalizing the target frame.
+   * Simulates a user normalizing the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
   public final FrameFixture normalize() {
@@ -138,42 +152,75 @@ public class FrameFixture extends WindowFixture<Frame> {
     return testerCastedTo(FrameTester.class);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user resizing horizontally the <code>{@link Frame}</code> managed by this fixture.
+   * @param width the width that the managed <code>Frame</code> should have after being resized.
+   * @return this fixture.
+   */
   @Override public final FrameFixture resizeWidthTo(int width) {
     return (FrameFixture)super.resizeWidthTo(width);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user resizing vertically the <code>{@link Frame}</code> managed by this fixture.
+   * @param height the height that the managed <code>Frame</code> should have after being resized.
+   * @return this fixture.
+   */
   @Override public final FrameFixture resizeHeightTo(int height) {
     return (FrameFixture)super.resizeHeightTo(height);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user resizing the <code>{@link Frame}</code> managed by this fixture.
+   * @param size the size that the target window should have after being resized.
+   * @return this fixture.
+   */
   @Override public final FrameFixture resizeTo(Dimension size) {
     return (FrameFixture)super.resizeTo(size);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the size of the <code>{@link Frame}</code> managed by this fixture is equal to given one. 
+   * @param size the given size to match.
+   * @return this fixture.
+   * @throws AssertionError if the size of the managed <code>Frame</code> is not equal to the given size. 
+   */
   @Override public final FrameFixture requireSize(Dimension size) {
     return (FrameFixture)super.requireSize(size);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link Frame}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Frame</code> is not visible.
+   */
   @Override public final FrameFixture requireVisible() {
     return (FrameFixture)super.requireVisible();
   }
-
-  /** {@inheritDoc} */
+  
+  /**
+   * Asserts that the <code>{@link Frame}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Frame</code> is visible.
+   */
   @Override public final FrameFixture requireNotVisible() {
     return (FrameFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link Frame}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Frame</code> is disabled.
+   */
   @Override public final FrameFixture requireEnabled() {
     return (FrameFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link Frame}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Frame</code> is enabled.
+   */
   @Override public final FrameFixture requireDisabled() {
     return (FrameFixture)super.requireDisabled();
   }

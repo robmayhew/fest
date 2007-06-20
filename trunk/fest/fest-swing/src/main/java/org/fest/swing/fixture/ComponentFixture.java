@@ -24,10 +24,10 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Simulates user events on a given <code>{@link Component}</code> and verifies the state of 
- * such <code>{@link Component}</code>.
- * @param <T> the type of <code>{@link Component}</code> that this fixture can manage. 
- *
+ * Simulates user events on a <code>{@link Component}</code> and verifies the state of such
+ * <code>{@link Component}</code>.
+ * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */

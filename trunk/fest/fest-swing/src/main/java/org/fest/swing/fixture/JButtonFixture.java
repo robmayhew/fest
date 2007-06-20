@@ -19,12 +19,12 @@ import javax.swing.JButton;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
-
 /**
- * Understands simulation of user events and state verification of a <code>{@link JButton}</code>.
- *
+ * Simulates user events on a <code>{@link JButton}</code> and verifies the state of such <code>{@link JButton}</code>.
+ * 
  * @author Yvonne Wang
  */
 public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture<JButton> {
@@ -33,7 +33,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * Creates a new </code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JButton</code>.
    * @param buttonName the name of the button to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @throws ComponentLookupException if a matching <code>JButton</code> could not be found.
    */
   public JButtonFixture(RobotFixture robot, String buttonName) {
     super(robot, buttonName, JButton.class);
@@ -41,50 +41,81 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   
   /**
    * Creates a new </code>{@link JButtonFixture}</code>.
-   * @param robot performs simulation of user events on the given button.
-   * @param target the target button.
+   * @param robot performs simulation of user events on the given <code>JButton</code>.
+   * @param target the <code>JButton</code> to be managed by this fixture.
    */
   public JButtonFixture(RobotFixture robot, JButton target) {
     super(robot, target);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JButton}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JButtonFixture click() {
     return (JButtonFixture)super.click();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JButton}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JButtonFixture focus() {
     return (JButtonFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the text of the <code>{@link JButton}</code> managed by this fixture is equal to the specified 
+   * <code>String</code>. 
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target JButton is not equal to the given one.
+   */
   public final JButtonFixture requireText(String expected) {
     assertThat(text()).isEqualTo(expected);
     return this;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Returns the text of the <code>{@link JButton}</code> managed by this fixture. 
+   * @return the text of the managed <code>JButton</code>. 
+   */
   public final String text() {
     return target.getText();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JButton}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JButton</code> is not visible.
+   */
   @Override public final JButtonFixture requireVisible() {
     return (JButtonFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JButton}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JButton</code> is visible.
+   */
   @Override public final JButtonFixture requireNotVisible() {
     return (JButtonFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JButton}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JButton</code> is disabled.
+   */
   @Override public final JButtonFixture requireEnabled() {
     return (JButtonFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JButton}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JButton</code> is enabled.
+   */
   @Override public final JButtonFixture requireDisabled() {
     return (JButtonFixture)super.requireDisabled();
   }

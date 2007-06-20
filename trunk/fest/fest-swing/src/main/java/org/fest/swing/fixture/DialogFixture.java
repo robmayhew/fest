@@ -24,8 +24,7 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Simulates user events on a given <code>{@link Dialog}</code> and verifies the state of such
- * <code>{@link Dialog}</code>.
+ * Simulates user events on a <code>{@link Dialog}</code> and verifies the state of such <code>{@link Dialog}</code>.
  * 
  * @author Alex Ruiz
  */
@@ -81,7 +80,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   
   /**
    * Shows the <code>{@link Dialog}</code> managed by this fixture, resized to the given size.
-   * @param size the given size.
+   * @param size the size to resize the managed <code>Dialog</code> to.
    * @return this fixture.
    */
   @Override public final DialogFixture show(Dimension size) {
