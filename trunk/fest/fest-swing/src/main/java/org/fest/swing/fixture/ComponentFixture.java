@@ -23,8 +23,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events and state verification of a <code>{@link Component}</code>.
- * @param <T> the type of component handled by this fixture. 
+ * Simulates user events on a given <code>{@link Component}</code> and verifies the state of 
+ * such <code>{@link Component}</code>.
+ * @param <T> the type of <code>{@link Component}</code> that this fixture can manage. 
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -34,13 +35,13 @@ public abstract class ComponentFixture<T extends Component> {
   /** Performs simulation of user events on <code>{@link #target}</code> */
   public final RobotFixture robot;
   
-  /** The target component. */
+  /** The <code>{@link Component}</code> managed by this fixture. */
   public final T target;
   
   /**
    * Creates a new </code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param type the type of <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.ComponentFinder#findByType(Class)
    */
   public ComponentFixture(RobotFixture robot, Class<? extends T> type) {
@@ -51,7 +52,7 @@ public abstract class ComponentFixture<T extends Component> {
    * Creates a new </code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @param type the type of <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public ComponentFixture(RobotFixture robot, String name, Class<? extends T> type) {
@@ -60,8 +61,8 @@ public abstract class ComponentFixture<T extends Component> {
   
   /**
    * Creates a new </code>{@link ComponentFixture}</code>.
-   * @param robot performs simulation of user events on the given component.
-   * @param target the component under test.
+   * @param robot performs simulation of user events on the given <code>Component</code>.
+   * @param target the <code>Component</code> to be managed by this fixture.
    */
   public ComponentFixture(RobotFixture robot, T target) {
     this.robot = robot;
@@ -69,10 +70,10 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Returns the target component of this fixture casted to the given type.
-   * @param <C> enforces the given type to be a subsubtype of the target component.
-   * @param type the type the target component will be casted to.
-   * @return the target component of this fixture casted to the given type.
+   * Returns the <code>{@link Component}</code> managed of this fixture casted to the given subtype.
+   * @param <C> enforces that the given type is a subsubtype of the managed <code>Component</code>.
+   * @param type the type that the managed <code>Component</code> will be casted to.
+   * @return the <code>Component</code> managed by this fixture casted to the given subtype.
    */
   public final <C extends T> C targetCastedTo(Class<C> type) {
     assertThat(target).isInstanceOf(type);
@@ -80,7 +81,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user clicking the target component.
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
   public ComponentFixture<T> click() {
@@ -90,7 +91,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Gives the focus to the target component.
+   * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
   public ComponentFixture<T> focus() {
@@ -111,8 +112,9 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Simulates a user pressing the given keys on the managed text component.
+   * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
+   * @see java.awt.event.KeyEvent
    */
   protected final void doPressKeys(int...keyCodes) {
     focus();
@@ -121,9 +123,9 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Asserts that the target component is visible.
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
    * @return this fixture.
-   * @throws AssertionError if the target component is not visible.
+   * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
   public ComponentFixture<T> requireVisible() {
     assertThat(target.isVisible()).isTrue();
@@ -131,9 +133,9 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Asserts that the target component is not visible.
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
    * @return this fixture.
-   * @throws AssertionError if the target component is visible.
+   * @throws AssertionError if the managed <code>Component</code> is visible.
    */
   public ComponentFixture<T> requireNotVisible() {
     assertThat(target.isVisible()).isFalse();
@@ -141,9 +143,9 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Asserts that the target component is enabled.
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the target component is not enabled.
+   * @throws AssertionError is the managed <code>Component</code> is not enabled.
    */
   public ComponentFixture<T> requireEnabled() {
     assertThat(target.isEnabled()).isTrue();
@@ -151,9 +153,9 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Asserts that the target component is disabled.
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
    * @return this fixture.
-   * @throws AssertionError is the target component is enabled.
+   * @throws AssertionError is the managed <code>Component</code> is enabled.
    */
   public ComponentFixture<T> requireDisabled() {
     assertThat(target.isEnabled()).isFalse();

@@ -18,18 +18,22 @@ package org.fest.swing.fixture;
 import java.awt.Component;
 
 /**
- * Understands simulation of user events and state verification of a <code>{@link Component}</code> that displays text.
- * @param <T> the type of component handled by this fixture. 
+ * Understands state verification of a <code>{@link Component}</code> that displays text.
+ * @param <T> the type of <code>{@link Component}</code> that this fixture can manage. 
  *
  * @author Alex Ruiz
  */
 public interface TextDisplayFixture<T extends Component> {
 
-  /** @return the text of the target component. */
+  /**
+   * Returns the text of the <code>{@link Component}</code> managed by this fixture. 
+   * @return the text of the managed <code>Component</code>. 
+   */
   String text();
 
   /**
-   * Asserts that the text of the target component is equal to the given one. 
+   * Asserts that the text of the <code>{@link Component}</code> managed by this fixture is equal to the specified 
+   * <code>String</code>. 
    * @param expected the text to match.
    * @return this fixture.
    * @throws AssertionError if the text of the target component is not equal to the given one.

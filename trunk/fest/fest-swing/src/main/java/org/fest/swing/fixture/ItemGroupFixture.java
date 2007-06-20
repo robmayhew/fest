@@ -18,38 +18,39 @@ package org.fest.swing.fixture;
 import java.awt.Component;
 
 /**
- * Understands simulation of user events and state verification of a <code>{@link Component}</code> that contains a 
- * group of items.
- * @param <T> the type of component handled by this fixture. 
+ * Simulates user events on a given <code>{@link Component}</code> that contains a group of items, and verifies the 
+ * state of such <code>{@link Component}</code>.
+ * @param <T> the type of <code>{@link Component}</code> that this fixture can manage. 
  *
  * @author Alex Ruiz 
  */
 public interface ItemGroupFixture<T extends Component> {
 
   /**
-   * @return the elements in the managed component.
+   * Returns the elements in the <code>{@link Component}</code> managed by this fixture as <code>String</code>s.
+   * @return the elements in the managed <code>Component</code>.
    */
   String[] contents();
 
   /**
-   * Simulates a user selecting the item located at the given index. 
-   * @param index the given index to match.
+   * Simulates a user selecting an item in the <code>{@link Component}</code> managed by this fixture. 
+   * @param index the index of the item to select.
    * @return this fixture.
    */
   ItemGroupFixture<T> selectItemAt(int index);
 
   /**
-   * Simulates a user selecting the item that contains the given text. 
-   * @param text the given text to match.
+   * Simulates a user selecting an item in the <code>{@link Component}</code> managed by this fixture. 
+   * @param text the text of the item to select.
    * @return this fixture.
    */
   ItemGroupFixture<T> selectItemWithText(String text);
 
   /**
-   * Returns the String representation of the item under the given index. If such representation is not meaningful, this
-   * method will return <code>null</code>.
-   * @param index the given index.
-   * @return the String reprentation of the item uder the given index, or <code>null</code> if nothing meaningful.
+   * Returns the <code>String</code> representation of an item in the <code>{@link Component}</code> managed by this 
+   * fixture. If such <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * @param index the index of the item to return.
+   * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
   String valueAt(int index);
 }

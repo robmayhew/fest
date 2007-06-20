@@ -31,10 +31,12 @@ import javax.swing.text.JTextComponent;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.join;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 
 /**
+ * Understand lookup of <code>{@link Component}</code>s contained in a given <code>{@link Container}</code>.
  * @param <T> the type of container handled by this fixture.
  * 
  * @author Alex Ruiz
@@ -44,7 +46,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   /**
    * Creates a new </code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
-   * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.ComponentFinder#findByType(Class)
    */
   public ContainerFixture(RobotFixture robot, Class<? extends T> type) {
@@ -53,9 +55,9 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
 
   /**
    * Creates a new </code>{@link ContainerFixture}</code>.
-   * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param name the name of Container <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @param type the type of <code>Container</code> to find using the given <code>RobotFixture</code>.
+   * @param robot performs simulation of user events on a <code>Container</code>.
+   * @param name the name of the <code>Container</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.ComponentFinder#findByName(String, Class)
    */
   public ContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
@@ -64,26 +66,30 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
 
   /**
    * Creates a new </code>{@link ContainerFixture}</code>.
-   * @param robot performs simulation of user events on the given component.
-   * @param target the component under test.
+   * @param robot performs simulation of user events on the given <code>Container</code>.
+   * @param target the <code>Container</code> to be managed by this fixture.
    */
   public ContainerFixture(RobotFixture robot, T target) {
     super(robot, target);
   }
 
   /**
-   * Finds a <code>{@link JLabel}</code> in the target container having the given name.
+   * Finds a <code>{@link JLabel}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JLabel</code> found.
+   * @throws ComponentLookupException if a <code>JLabel</code> having a matching name could not be found.
    */
   public final JLabelFixture label(String name) {
     return new JLabelFixture(robot, robot.finder().findByName(target, name, JLabel.class));
   }
 
   /**
-   * Finds a <code>{@link JButton}</code> in the target container having the given name.
+   * Finds a <code>{@link JButton}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JButton</code> found.
+   * @throws ComponentLookupException if a <code>JButton</code> having a matching name could not be found.
    */
   public final JButtonFixture button(String name) {
     return new JButtonFixture(robot, robot.finder().findByName(target, name, JButton.class));
@@ -110,7 +116,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   /**
    * Finds a <code>{@link JMenuItem}</code> in the target container, which path matches the given one.
    * @param path the path of the menu to find. For example, if we are looking for the submenu "New" contained in the
-   *          menu "File", we shoul call <code>findMenuItem("File", "Menu")</code>.
+   *          menu "File", we should call <code>findMenuItem("File", "Menu")</code>.
    * @return a fixture wrapping the found component.
    */
   public final JMenuItemFixture menuItem(String... path) {
