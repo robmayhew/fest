@@ -164,7 +164,7 @@
 
   <target name="javadoc" depends="init" description="Create the API documentation">
     <mkdir dir="${target.javadocs.dir}" />
-    <property name="copyright" value="Copyright &#169; 2006-2007. All Rights Reserved." />
+    <property name="copyright" value="Copyright &#169; 2006-2007 the original author or authors. All Rights Reserved." />
     <javadoc destdir="${target.javadocs.dir}"
              author="true"
              version="true"
