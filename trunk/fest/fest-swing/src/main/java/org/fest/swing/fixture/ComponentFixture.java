@@ -71,7 +71,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Returns the <code>{@link Component}</code> managed of this fixture casted to the given subtype.
+   * Returns the <code>{@link Component}</code> managed by this fixture casted to the given subtype.
    * @param <C> enforces that the given type is a subsubtype of the managed <code>Component</code>.
    * @param type the type that the managed <code>Component</code> will be casted to.
    * @return the <code>Component</code> managed by this fixture casted to the given subtype.
