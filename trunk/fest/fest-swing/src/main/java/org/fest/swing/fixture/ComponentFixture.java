@@ -147,7 +147,7 @@ public abstract class ComponentFixture<T extends Component> {
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is not enabled.
+   * @throws AssertionError is the managed <code>Component</code> is disabled.
    */
   public ComponentFixture<T> requireEnabled() {
     assertThat(target.isEnabled()).isTrue();

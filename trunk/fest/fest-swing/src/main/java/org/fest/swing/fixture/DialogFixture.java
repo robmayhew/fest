@@ -20,12 +20,13 @@ import java.awt.Dimension;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
-
 /**
- * Understands simulation of user events and state verification of a <code>{@link Dialog}</code>.
- *
+ * Simulates user events on a given <code>{@link Dialog}</code> and verifies the state of such
+ * <code>{@link Dialog}</code>.
+ * 
  * @author Alex Ruiz
  */
 public class DialogFixture extends WindowFixture<Dialog> {
@@ -33,8 +34,9 @@ public class DialogFixture extends WindowFixture<Dialog> {
   /**
    * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param dialogName the name of the dialog to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found. 
+   * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
@@ -43,8 +45,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
   /**
    * Creates a new </code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
-   * @param dialogName the name of the dialog to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a dialog having a matching name could not be found. 
    */
   public DialogFixture(RobotFixture robot, String dialogName) {
     super(robot, dialogName, Dialog.class);
@@ -53,7 +55,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
   /**
    * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param target the target dialog.
+   * @param target the <code>Dialog</code> to be managed by this fixture.
+   * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(Dialog target) {
     super(target);
@@ -61,77 +64,123 @@ public class DialogFixture extends WindowFixture<Dialog> {
   
   /**
    * Creates a new </code>{@link DialogFixture}</code>.
-   * @param robot performs simulation of user events on the given dialog.
-   * @param target the target dialog.
+   * @param robot performs simulation of user events on the given <code>Dialog</code>.
+   * @param target the <code>Dialog</code> to be managed by this fixture.
    */
   public DialogFixture(RobotFixture robot, Dialog target) {
     super(robot, target);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Shows the <code>{@link Dialog}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final DialogFixture show() {
     return (DialogFixture)super.show();
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Shows the <code>{@link Dialog}</code> managed by this fixture, resized to the given size.
+   * @param size the given size.
+   * @return this fixture.
+   */
   @Override public final DialogFixture show(Dimension size) {
     return (DialogFixture)super.show(size);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final DialogFixture click() {
     return (DialogFixture)super.click();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link Dialog}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final DialogFixture focus() {
     return (DialogFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user resizing horizontally the <code>{@link Dialog}</code> managed by this fixture.
+   * @param width the width that the managed <code>Dialog</code> should have after being resized.
+   * @return this fixture.
+   */
   @Override public final DialogFixture resizeWidthTo(int width) {
     return (DialogFixture)super.resizeWidthTo(width);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user resizing vertically the <code>{@link Dialog}</code> managed by this fixture.
+   * @param height the height that the managed <code>Dialog</code> should have after being resized.
+   * @return this fixture.
+   */
   @Override public final DialogFixture resizeHeightTo(int height) {
     return (DialogFixture)super.resizeHeightTo(height);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user resizing the <code>{@link Dialog}</code> managed by this fixture.
+   * @param size the size that the target window should have after being resized.
+   * @return this fixture.
+   */
   @Override public final DialogFixture resizeTo(Dimension size) {
     return (DialogFixture)super.resizeTo(size);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the size of the <code>{@link Dialog}</code> managed by this fixture is equal to given one. 
+   * @param size the given size to match.
+   * @return this fixture.
+   * @throws AssertionError if the size of the managed <code>Dialog</code> is not equal to the given size. 
+   */
   @Override public final DialogFixture requireSize(Dimension size) {
     return (DialogFixture)super.requireSize(size);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Dialog</code> is not visible.
+   */
   @Override public final DialogFixture requireVisible() {
     return (DialogFixture)super.requireVisible();
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Dialog</code> is visible.
+   */
   @Override public final DialogFixture requireNotVisible() {
     return (DialogFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Dialog</code> is disabled.
+   */
   @Override public final DialogFixture requireEnabled() {
     return (DialogFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Dialog</code> is enabled.
+   */
   @Override public final DialogFixture requireDisabled() {
     return (DialogFixture)super.requireDisabled();
   }
 
   /**
-   * Asserts that the target dialog is modal.
-   * @return a reference to this fixture.
-   * @throws AssertionError if the target dialog is not modal.
+   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is modal.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Dialog</code> is not modal.
    */
   public final DialogFixture requireModal() {
     assertThat(target.isModal()).isTrue();
