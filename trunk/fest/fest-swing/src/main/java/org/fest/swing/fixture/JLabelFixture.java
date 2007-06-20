@@ -19,11 +19,12 @@ import javax.swing.JLabel;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
-
 /**
- * Understands simulation of user events and state verification of a <code>{@link JLabel}</code>.
+ * Understands simulation of user events on a <code>{@link JLabel}</code> and verification of the state of such
+ * <code>{@link JLabel}</code>.
  *
  * @author Alex Ruiz
  */
@@ -32,8 +33,8 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   /**
    * Creates a new </code>{@link JLabelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JLabel</code>.
-   * @param labelName the name of the label to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param labelName the name of the button to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JLabel</code> could not be found.
    */
   public JLabelFixture(RobotFixture robot, String labelName) {
     super(robot, labelName, JLabel.class);
@@ -41,48 +42,79 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   
   /**
    * Creates a new </code>{@link JLabelFixture}</code>.
-   * @param robot performs simulation of user events on the given label.
-   * @param target the target label.
+   * @param robot performs simulation of user events on the given <code>JLabel</code>.
+   * @param target the <code>JLabel</code> to be managed by this fixture.
    */
   public JLabelFixture(RobotFixture robot, JLabel target) {
     super(robot, target);
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the text of the <code>{@link JLabel}</code> managed by this fixture is equal to the specified 
+   * <code>String</code>. 
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target component is not equal to the given one.
+   */
   public final JLabelFixture requireText(String expected) {
     assertThat(text()).isEqualTo(expected);
     return this;
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Returns the text of the <code>{@link JLabel}</code> managed by this fixture. 
+   * @return the text of the managed <code>JLabel</code>. 
+   */
   public final String text() { return target.getText(); }
   
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JLabelFixture click() {
     return (JLabelFixture)super.click(); 
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JLabel}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JLabelFixture focus() {
     return (JLabelFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JLabel</code> is not visible.
+   */
   @Override public final JLabelFixture requireVisible() {
     return (JLabelFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JLabel</code> is visible.
+   */
   @Override public final JLabelFixture requireNotVisible() {
     return (JLabelFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JLabel</code> is disabled.
+   */
   @Override public final JLabelFixture requireEnabled() {
     return (JLabelFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JLabel</code> is enabled.
+   */
   @Override public final JLabelFixture requireDisabled() {
     return (JLabelFixture)super.requireDisabled();
   }
