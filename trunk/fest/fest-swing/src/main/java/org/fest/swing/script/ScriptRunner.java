@@ -32,7 +32,7 @@ import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 /**
- * Understands how to run one or more Abbot scripts.
+ * Understands how to run one or more <a href="http://abbot.sourceforge.net" target="_blank">Abbot<a/> scripts.
  * 
  * @author Alex Ruiz
  */
@@ -129,6 +129,10 @@ public final class ScriptRunner {
     }
   }
 
+  /**
+   * Returns the names of the scripts that were executed successfully.
+   * @return the names of the scripts that were executed successfully.
+   */
   public String[] successfulScripts() {
     return successfulScripts.toArray(new String[successfulScripts.size()]);
   }

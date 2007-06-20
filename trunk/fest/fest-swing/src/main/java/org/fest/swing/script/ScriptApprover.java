@@ -17,7 +17,7 @@ package org.fest.swing.script;
 import java.io.File;
 
 /**
- * Implementations approve or reject the execution of a given script file.
+ * Understands approval or rejection of execution of a given script file.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz
@@ -44,7 +44,7 @@ public interface ScriptApprover {
   /**
    * Approves or rejects the execution of the given script file.
    * @param toApprove the script file to approve.
-   * @return <code>true</code> if the given file can be executed. Otherwise returns <code>false</code>,
+   * @return <code>true</code> if the given file can be executed, otherwise <code>false</code>.
    */
   boolean approve(File toApprove);
 }

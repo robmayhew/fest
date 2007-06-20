@@ -16,8 +16,7 @@
 package org.fest.swing;
 
 /**
- * Understand a condition that has to be met. Useful when making a <code>{@link RobotFixture}</code> wait for some
- * condition to be <code>true</code>.
+ * Understands a condition to verify, usually used in the method <code>{@link RobotFixture#wait(Condition)}</code>.
  * 
  * @author Yvonne Wang
  */
@@ -33,9 +32,15 @@ public abstract class Condition implements abbot.script.Condition {
     this.description = description; 
   }
   
-  /** @return if the condition has been satisfied or not. */
+  /**
+   * Checks if the condition has been satisfied. 
+   * @return <code>true</code> if the condition has been satisfied, otherwise <code>false</code>. 
+   */
   public abstract boolean test();
   
-  /** @return the description of this condition. */
+  /**
+   * Returns the <code>String</code> representation of this condition, which is its description. 
+   * @return the description of this condition. 
+   */
   @Override public final String toString() {  return description; }
 }

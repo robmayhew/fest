@@ -18,7 +18,7 @@ package org.fest.swing;
 import java.awt.Component;
 
 /**
- * Understands matching of <code>{@link java.awt.Component}</code>s by name.
+ * Understands <code>{@link java.awt.Component}</code> matching by name.
  *
  * @author Alex Ruiz
  */
@@ -32,7 +32,12 @@ public final class NameMatcher extends abbot.finder.matchers.NameMatcher impleme
     super(name);
   }
 
-  /** @return whether the name of the given <code>Component</code> matches the one specified in this matcher. */
+  /** 
+   * Verifies that the name of the given <code>{@link Component}</code> matches the one specified in this matcher.
+   * @param c the <code>Component</code> to verify.
+   * @return <code>true</code> if the name of the given <code>Component</code> matches the one specified in this 
+   * matcher, otherwise <code>false</code>. 
+   */
   @Override public boolean matches(Component c) {
     return super.matches(c);
   }

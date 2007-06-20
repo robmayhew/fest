@@ -16,8 +16,7 @@
 package junit.framework;
 
 /**
- * Copy of original {@code AssertionFailedError} from JUnit. Created in order to run Abbot without having JUnit in the 
- * classpath.
+ * Copy of original {@code AssertionFailedError} from JUnit.
  */
 public class AssertionFailedError extends Error {
 

@@ -20,12 +20,17 @@ import java.awt.Component;
 import abbot.finder.Matcher;
 
 /**
- * Understands an indication whether a <code>{@link java.awt.Component}</code> matches some desired criteria.
+ * Understands an indication whether a <code>{@link Component}</code> matches some desired criteria.
  * 
  * @author Alex Ruiz
  */
 public interface ComponentMatcher extends Matcher {
   
-  /** @return whether the given <code>Component</code> matches some lookup criteria. */
+  /**
+   * Verifies that the given <code>{@link Component}</code> matches some lookup criteria.
+   * @param c the <code>Component</code> to verify. 
+   * @return <code>true</code> if the given <code>Component</code> matches some lookup criteria, otherwise 
+   * <code>false</code>. 
+   */
   boolean matches(Component c);
 }

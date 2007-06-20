@@ -22,7 +22,7 @@ import abbot.finder.BasicFinder;
 import abbot.finder.Hierarchy;
 
 /**
- * Understands GUI component lookup.
+ * Understands GUI <code>{@link java.awt.Component}</code> lookup.
  *
  * @author Alex Ruiz
  */
@@ -39,50 +39,91 @@ public class ComponentFinder {
   }
 
   /**
-   * Finds a <code>{@link Component}</code> by type.
+   * Finds a <code>{@link Component}</code> by type. For example:
+   * <pre>
+   * JTextField textbox = finder.findByType(JTextField.class);
+   * </pre>
    * @param <T> the parameterized type of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws ComponentLookupException if a component of the given type could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public <T extends Component> T findByType(Class<T> type) {
     return type.cast(find(new TypeMatcher(type)));
   }
 
   /**
+   * <p>
    * Finds a <code>{@link Component}</code> by type in the hierarchy under the given root.
+   * </p>
+   * <p>
+   * Let's assume we have the following <code>{@link javax.swing.JFrame}</code> containing a 
+   * <code>{@link javax.swing.JTextField}</code>:
+   * <pre>
+   * JFrame myFrame = new JFrame();
+   * myFrame.add(new JTextField());
+   * </pre>
+   * </p>
+   * <p>
+   * If we want to get a reference to the <code>{@link javax.swing.JTextField}</code> in that particular 
+   * <code>{@link javax.swing.JFrame}</code> without going through the whole AWT component hierarchy, we could simply
+   * specify:
+   * <pre>
+   * JTextField textbox = finder.findByType(myFrame, JTextField.class);
+   * </pre>
+   * </p>
    * @param <T> the parameterized type of the component to find.
    * @param root the root used as the starting point of the search.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws ComponentLookupException if a component of the given type could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public <T extends Component> T findByType(Container root, Class<T> type) {
     return type.cast(find(root, new TypeMatcher(type)));
   }
 
   /**
+   * <p>
+   * Finds a <code>{@link Component}</code> by name.
+   * </p>
+   * <p>
+   * Let's assume we have the <code>{@link javax.swing.JTextField}</code> with name "myTextBox";
+   * <pre>
+   * JTextField textbox = new JTextField();
+   * textBox.setName("myTextBox");
+   * </pre>
+   * </p>
+   * <p>
+   * To get a reference to this <code>{@link javax.swing.JTextField}</code> by its name, we can specify:
+   * <pre>
+   * JTextField textBox = (JTextField)finder.findByName("myTextBox");
+   * </pre>
+   * </p>
+   * <p>
+   * Please note that you need to cast the result of the lookup to the right type. To avoid casting, please use
+   * <code>{@link #findByName(String, Class)}</code> or <code>{@link #findByName(Container, String, Class)}</code>.
+   * </p>
+   * @param name the name of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   */
+  public Component findByName(String name) {
+    return find(new NameMatcher(name));
+  }
+  
+  /**
    * Finds a <code>{@link Component}</code> by name and type.
    * @param <T> the parameterized type of the component to find.
    * @param name the name of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws ComponentLookupException if a component with the given name and of the given type could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @see #findByName(String)
    */
   public <T extends Component> T findByName(String name, Class<T> type) {
     return type.cast(findByName(name));
   }
   
-  /**
-   * Finds a <code>{@link Component}</code> by name.
-   * @param name the name of the component to find.
-   * @return the found component.
-   * @throws ComponentLookupException if a component with the given name could not be found.
-   */
-  public Component findByName(String name) {
-    return find(new NameMatcher(name));
-  }
-
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>.
    * @param m the matcher to use to find the component of interest.
@@ -104,7 +145,9 @@ public class ComponentFinder {
    * @param name the name of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws ComponentLookupException if a component with the given name and of the given type could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @see #findByName(String)
+   * @see #findByType(Container, Class)
    */
   public <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return type.cast(findByName(root, name));
@@ -115,7 +158,9 @@ public class ComponentFinder {
    * @param root the root used as the starting point of the search.
    * @param name the name of the component to find.
    * @return the found component.
-   * @throws ComponentLookupException if a component with the given name could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @see #findByName(String)
+   * @see #findByName(Container, String, Class)
    */
   public Component findByName(Container root, String name) {
     return find(root, new NameMatcher(name));
@@ -127,7 +172,7 @@ public class ComponentFinder {
    * @param root the root used as the starting point of the search.
    * @param m the matcher to use to find the component.
    * @return the found component.
-   * @throws ComponentLookupException if a component matching the given criteria could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public Component find(Container root, ComponentMatcher m) {
     try {

@@ -32,8 +32,9 @@ import static java.lang.System.currentTimeMillis;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands simulation of user events on a GUI <code>{@link Component}</code> and validation of the output. Useful
- * for creation of programmatic tests with JUnit 4 and/or TestNG.
+ * Understands simulation of user events on a GUI <code>{@link Component}</code>. Useful for creation of programmatic 
+ * GUI tests with <a href="http://www.junit.org" target="_blank">JUnit 4</a> and/or 
+ * <a href="http://testng.org" target="_blank">TestNG</a>.
  * 
  * @author Alex Ruiz
  */
@@ -51,7 +52,8 @@ public final class RobotFixture {
   private final ComponentFinder finder;
 
   /**
-   * Creates a new <code>{@link RobotFixture}</code> that only sees the GUI components created after it is created.
+   * Creates a new <code>{@link RobotFixture}</code> with a new AWT hierarchy. <code>{@link Component}</code>s created
+   * before the created <code>{@link RobotFixture}</code> cannot be accessed by such <code>{@link RobotFixture}</code>.
    * @return the created robot fixture.
    */
   public static RobotFixture robotWithNewAwtHierarchy() {
@@ -85,7 +87,10 @@ public final class RobotFixture {
     return robot;
   }
 
-  /** @return the object capable of finding GUI components. */
+  /**
+   * Returns the <code>{@link ComponentFinder}</code> used by this fixture.
+   * @return the object responsible for GUI component lookup. 
+   */
   public ComponentFinder finder() {
     return finder;
   }
@@ -118,7 +123,8 @@ public final class RobotFixture {
    * Modal dialogs may be shown with this method without blocking.
    * @param w the window to display.
    * @param size the size of the window to display.
-   * @param pack flag that indicates if the window should be packed or not.
+   * @param pack flag that indicates if the window should be packed or not. By packed we mean calling 
+   * <code>w.pack()</code>.
    */
   public void showWindow(final Window w, final Dimension size, final boolean pack) {
     EventQueue.invokeLater(new Runnable() {
@@ -147,8 +153,8 @@ public final class RobotFixture {
   }
 
   /**
-   * Gives input focus to the given component.
-   * @param c the given component.
+   * Gives input focus to the given <code>{@link Component}</code>.
+   * @param c the component to give focus to.
    */
   public void focus(Component c) {
     robot.focus(c);

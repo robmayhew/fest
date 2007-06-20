@@ -22,8 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Understands an annotation that identifies GUI tests. GUI tests should have a screenshot of the desktop, in case of a
- * failure due to an environment conditon.
+ * Understands an annotation that identifies GUI tests. FEST only takes screenshots of failing tests that has been
+ * marked with this annotation.
  * 
  * @author Alex Ruiz
  */

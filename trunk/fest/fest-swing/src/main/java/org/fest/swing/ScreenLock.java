@@ -18,7 +18,8 @@ package org.fest.swing;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands a lock that each GUI test should acquire before being executed to prevent blocking GUI tests.
+ * Understands a lock that each GUI test should acquire before being executed, to guarantee sequential execution of
+ * GUI tests and to prevent GUI tests from blocking each other.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
@@ -59,7 +60,10 @@ public final class ScreenLock {
     this.owner = null;
   }
   
-  /** @return the singleton instance of this lock. */
+  /**
+   * Returns the singleton instance of this class. 
+   * @return the singleton instance of this class. 
+   */
   public static ScreenLock instance() { return ScreenLockHolder.instance; }
   
   private static class ScreenLockHolder {

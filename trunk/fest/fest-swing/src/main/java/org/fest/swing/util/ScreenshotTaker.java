@@ -36,6 +36,7 @@ import static org.fest.util.Strings.quote;
  */
 public final class ScreenshotTaker {
 
+  /** Extension of the image files containing the screenshots taken by instances of this class (png). */
   public static final String PNG_EXTENSION = "png";
   
   private final Robot robot;
@@ -70,7 +71,10 @@ public final class ScreenshotTaker {
     }
   }
 
-  /** @return the screenshot of the destop. */
+  /**
+   * Takes a screenshot of the desktop. 
+   * @return the screenshot of the desktop. 
+   */
   public BufferedImage takeDesktopScreenshot() {
     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
     return robot.createScreenCapture(screen);

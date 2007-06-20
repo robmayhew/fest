@@ -20,7 +20,7 @@ import java.awt.Component;
 import abbot.finder.matchers.ClassMatcher;
 
 /**
- * Understands matching of <code>{@link java.awt.Component}</code>s by type.
+ * Understands <code>{@link java.awt.Component}</code> matching by type.
  *
  * @author Alex Ruiz 
  */

@@ -18,7 +18,8 @@ import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 /**
- * Understands a wrapper for <code>Throwable</code>s thrown when running a script.
+ * Understands a wrapper for <code>{@link Throwable}</code>s thrown while running an
+ * <a href="http://abbot.sourceforge.net" target="_blank">Abbot<a/> script.
  * 
  * @author Alex Ruiz
  */

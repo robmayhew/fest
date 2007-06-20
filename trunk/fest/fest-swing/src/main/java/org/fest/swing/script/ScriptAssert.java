@@ -16,13 +16,15 @@ package org.fest.swing.script;
 
 
 /**
- * Understands assert methods related to execution of Abbot test scripts.
+ * Understands assert methods related to execution of <a href="http://abbot.sourceforge.net" target="_blank">Abbot<a/> 
+ * test scripts.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
 public final class ScriptAssert {
 
+  /** Platform-dependent line separator. */
   public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
   /**

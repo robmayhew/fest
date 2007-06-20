@@ -16,7 +16,8 @@
 package org.fest.swing.util;
 
 /**
- * Understands an exception thrown by member of this package.
+ * Understands an exception thrown by <code>{@link ScreenshotTaker}</code> when, for some reason, a screenshot of the 
+ * desktop cannot be taken.
  *
  * @author Alex Ruiz
  */
