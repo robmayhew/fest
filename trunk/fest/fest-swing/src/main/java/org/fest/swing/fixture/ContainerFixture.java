@@ -96,28 +96,41 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   /**
-   * Finds a <code>{@link Dialog}</code> in the target container having the given name.
+   * Finds a <code>{@link Dialog}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>Dialog</code> found.
+   * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
    */
   public final DialogFixture dialog(String name) {
     return new DialogFixture(robot, robot.finder().findByName(target, name, Dialog.class));
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code> in the target container having the given name.
+   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
    */
   public final JMenuItemFixture menuItem(String name) {
     return new JMenuItemFixture(robot, robot.finder().findByName(target, name, JMenuItem.class));
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code> in the target container, which path matches the given one.
-   * @param path the path of the menu to find. For example, if we are looking for the submenu "New" contained in the
-   *          menu "File", we should call <code>findMenuItem("File", "Menu")</code>.
-   * @return a fixture wrapping the found component.
+   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which path matches the given one. 
+   * <p>
+   * For example, if we are looking for the menu with text "New" contained under the menu with text "File", we can 
+   * simply call
+   * <pre>
+   * JMenuItemFixture menuItem = container.<strong>findMenuItem("File", "Menu")</strong>;
+   * </pre>
+   * </p>
+   * @param path the path of the menu to find.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> under the given path could not be found.
+   * @throws AssertionError if the <code>Component</code> found under the given path is not a <code>JMenuItem</code>.
    */
   public final JMenuItemFixture menuItem(String... path) {
     ComponentMatcher m = new JMenuItemMatcher(join(path).with("|"));
@@ -127,53 +140,64 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   /**
-   * Finds a <code>{@link JOptionPane}</code> in the target container
-   * @return a fixture wrapping the found component.
+   * Finds a <code>{@link JOptionPane}</code>.
+   * @return a fixture that manages the <code>JOptionPane</code> found.
+   * @throws ComponentLookupException if a <code>JOptionPane</code> could not be found.
    */
   public final JOptionPaneFixture optionPane() {
     return new JOptionPaneFixture(robot);
   }
 
   /**
-   * Finds a <code>{@link JTextComponent}</code> in the target container having the given name.
+   * Finds a <code>{@link JTextComponent}</code>, contained in the <code>{@link Container}</code> managed by this 
+   * fixture, which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JTextComponent</code> found.
+   * @throws ComponentLookupException if a <code>JTextComponent</code> having a matching name could not be found.
    */
   public final JTextComponentFixture textBox(String name) {
     return new JTextComponentFixture(robot, robot.finder().findByName(target, name, JTextComponent.class));
   }
 
   /**
-   * Finds a <code>{@link JComboBox}</code> in the target container having the given name.
+   * Finds a <code>{@link JComboBox}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JComboBox</code> found.
+   * @throws ComponentLookupException if a <code>JComboBox</code> having a matching name could not be found.
    */
   public final JComboBoxFixture comboBox(String name) {
     return new JComboBoxFixture(robot, robot.finder().findByName(target, name, JComboBox.class));
   }
 
   /**
-   * Finds a <code>{@link JTabbedPane}</code> in the target container having the given name.
+   * Finds a <code>{@link JTabbedPane}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JTabbedPane</code> found.
+   * @throws ComponentLookupException if a <code>JTabbedPane</code> having a matching name could not be found.
    */
   public final JTabbedPaneFixture tabbedPane(String name) {
     return new JTabbedPaneFixture(robot, robot.finder().findByName(target, name, JTabbedPane.class));
   }
 
   /**
-   * Finds a <code>{@link JTree}</code> in the target container having the given name.
+   * Finds a <code>{@link JTree}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JTree</code> found.
+   * @throws ComponentLookupException if a <code>JTree</code> having a matching name could not be found.
    */
   public final JTreeFixture tree(String name) {
     return new JTreeFixture(robot, robot.finder().findByName(target, name, JTree.class));
   }
   
   /**
-   * Finds a <code>{@link JCheckBox}</code> in the target container having the given name.
+   * Finds a <code>{@link JCheckBox}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
    * @param name the name to match.
-   * @return a fixture wrapping the found component.
+   * @return a fixture that manages the <code>JCheckBox</code> found.
+   * @throws ComponentLookupException if a <code>JCheckBox</code> having a matching name could not be found.
    */
   public final JCheckBoxFixture checkBox(String name) {
     return new JCheckBoxFixture(robot, robot.finder().findByName(target, name, JCheckBox.class));

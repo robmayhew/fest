@@ -20,6 +20,7 @@ import java.awt.Component;
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -42,7 +43,7 @@ public abstract class ComponentFixture<T extends Component> {
    * Creates a new </code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByType(Class)
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public ComponentFixture(RobotFixture robot, Class<? extends T> type) {
     this(robot, robot.finder().findByType(type));
@@ -53,7 +54,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public ComponentFixture(RobotFixture robot, String name, Class<? extends T> type) {
     this(robot, robot.finder().findByName(name, type));
@@ -74,6 +75,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param <C> enforces that the given type is a subsubtype of the managed <code>Component</code>.
    * @param type the type that the managed <code>Component</code> will be casted to.
    * @return the <code>Component</code> managed by this fixture casted to the given subtype.
+   * @throws AssertionError if the <code>Component</code> managed by this fixture is not an instance of the given type.
    */
   public final <C extends T> C targetCastedTo(Class<C> type) {
     assertThat(target).isInstanceOf(type);
