@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Understands an annotation that identify GUI tests. GUI tests should have a screenshot of the desktop, in case of a
+ * Understands an annotation that identifies GUI tests. GUI tests should have a screenshot of the desktop, in case of a
  * failure due to an environment conditon.
  * 
  * @author Alex Ruiz
