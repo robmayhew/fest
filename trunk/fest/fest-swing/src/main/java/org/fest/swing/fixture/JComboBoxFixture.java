@@ -35,7 +35,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   /**
    * Creates a new </code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JComboBox</code>.
-   * @param comboBoxName the name of the button to find using the given <code>RobotFixture</code>.
+   * @param comboBoxName the name of the <code>JComboBox</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JComboBox</code> could not be found.
    */
   public JComboBoxFixture(RobotFixture robot, String comboBoxName) {

@@ -31,7 +31,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
   /**
    * Creates a new </code>{@link JCheckBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JCheckBox</code>.
-   * @param checkBoxName the name of the button to find using the given <code>RobotFixture</code>.
+   * @param checkBoxName the name of the <code>JCheckBox</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JCheckBox</code> could not be found.
    */
   public JCheckBoxFixture(RobotFixture robot, String checkBoxName) {

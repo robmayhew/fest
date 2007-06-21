@@ -19,10 +19,12 @@ import javax.swing.JList;
 
 import abbot.tester.JListTester;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events on a <code>{@link JList}</code> and output verification.
+ * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
+ * <code>{@link JList}</code>.
  *
  * @author Alex Ruiz
  */
@@ -31,8 +33,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   /**
    * Creates a new </code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on a <code>JList</code>.
-   * @param listName the name of the list to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param listName the name of the <code>JList</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JList</code> could not be found.
    */
   public JListFixture(RobotFixture robot, String listName) {
     super(robot, listName, JList.class);
@@ -40,31 +42,47 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   
   /**
    * Creates a new </code>{@link JListFixture}</code>.
-   * @param robot performs simulation of user events on the given list.
-   * @param target the target list.
+   * @param robot performs simulation of user events on the given <code>JList</code>.
+   * @param target the <code>JList</code> to be managed by this fixture.
    */
   public JListFixture(RobotFixture robot, JList target) {
     super(robot, target);
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Returns the elements in the <code>{@link JList}</code> managed by this fixture as <code>String</code>s.
+   * @return the elements in the managed <code>JList</code>.
+   */
   public String[] contents() {
     return listTester().getContents(target);
   }
   
-  /** ${@inheritDoc} */
+  /**
+   * Simulates a user selecting an item in the <code>{@link JList}</code> managed by this fixture. 
+   * @param index the index of the item to select.
+   * @return this fixture.
+   */
   public final JListFixture selectItemAt(int index) {
     listTester().actionSelectIndex(target, index);
     return this;
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Simulates a user selecting an item in the <code>{@link JList}</code> managed by this fixture. 
+   * @param text the text of the item to select.
+   * @return this fixture.
+   */
   public final JListFixture selectItemWithText(String text) {
     listTester().actionSelectValue(target, text);
     return null;
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Returns the <code>String</code> representation of an item in the <code>{@link JList}</code> managed by this 
+   * fixture. If such <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * @param index the index of the item to return.
+   * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
+   */
   public String valueAt(int index) {
     return JListTester.valueToString(target, index);
   }
@@ -73,33 +91,55 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
     return testerCastedTo(JListTester.class);
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JListFixture click() {
     return (JListFixture)super.click();
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JList}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JListFixture focus() {
     return (JListFixture)super.focus();
   }
-
-  /** ${@inheritDoc} */
-  @Override public final JListFixture requireDisabled() {
-    return (JListFixture)super.requireDisabled();
+  
+  /**
+   * Asserts that the <code>{@link JList}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JList</code> is not visible.
+   */
+  @Override public final JListFixture requireVisible() {
+    return (JListFixture)super.requireVisible();
   }
-
-  /** ${@inheritDoc} */
+  
+  /**
+   * Asserts that the <code>{@link JList}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JList</code> is visible.
+   */
+  @Override public final JListFixture requireNotVisible() {
+    return (JListFixture)super.requireNotVisible();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JList}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JList</code> is disabled.
+   */
   @Override public final JListFixture requireEnabled() {
     return (JListFixture)super.requireEnabled();
   }
 
-  /** ${@inheritDoc} */
-  @Override public final JListFixture requireNotVisible() {
-    return (JListFixture)super.requireNotVisible();
-  }
-
-  /** ${@inheritDoc} */
-  @Override public final JListFixture requireVisible() {
-    return (JListFixture)super.requireVisible();
+  /**
+   * Asserts that the <code>{@link JList}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JList</code> is enabled.
+   */
+  @Override public final JListFixture requireDisabled() {
+    return (JListFixture)super.requireDisabled();
   }
 }
