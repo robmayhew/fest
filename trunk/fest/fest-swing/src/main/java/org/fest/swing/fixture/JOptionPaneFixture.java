@@ -34,6 +34,7 @@ import static org.fest.util.Strings.concat;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TypeMatcher;
 
 /**
  * Understands simulation of user events and verification of the state of a <code>{@link JOptionPane}</code>.
@@ -47,7 +48,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @param robot performs simulation of user events on the target <code>JOptionPane</code>.
    */
   public JOptionPaneFixture(RobotFixture robot) {
-    super(robot, JOptionPane.class);
+    super(robot, (JOptionPane)robot.finder().find(new TypeMatcher(JOptionPane.class, true)));
   }
 
   /** {@inheritDoc} */

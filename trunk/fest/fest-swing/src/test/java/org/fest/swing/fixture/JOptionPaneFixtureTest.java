@@ -56,7 +56,7 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JOptionPaneFixtureTest {
 
-  private static class CustomWindow extends JFrame {
+  public static class CustomWindow extends JFrame {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("Click me");
@@ -75,7 +75,7 @@ import org.testng.annotations.Test;
     }
     
     void setUpMessageWithOptions(final Object[] options) {
-      setUpMessage(new MouseAdapter() {
+      addMouseListenerToButton(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showOptionDialog(CustomWindow.this, "Message", "Title", YES_NO_OPTION, QUESTION_MESSAGE, null, options,
               options[0]); 
@@ -84,7 +84,7 @@ import org.testng.annotations.Test;
     }
 
     void setUpInputMessage() {
-      setUpMessage(new MouseAdapter() {
+      addMouseListenerToButton(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showInputDialog(CustomWindow.this, "Message"); 
         }
@@ -102,7 +102,7 @@ import org.testng.annotations.Test;
     }
     
     private void setUpMessage(final String text, final String title, final int messageType) {
-      setUpMessage(new MouseAdapter() {
+      addMouseListenerToButton(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showMessageDialog(CustomWindow.this, text, title, messageType);
         }
@@ -110,7 +110,7 @@ import org.testng.annotations.Test;
     }
     
     void setUpManuallyCreatedOptionPaneWithTitle(final String title) {
-      setUpMessage(new MouseAdapter() {
+      addMouseListenerToButton(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           JOptionPane optionPane = new JOptionPane("Manually Created");
           JDialog dialog = optionPane.createDialog(CustomWindow.this, title);
@@ -119,13 +119,13 @@ import org.testng.annotations.Test;
       });
     }
 
-    private void setUpMessage(MouseListener messageLauncher) {
+    void addMouseListenerToButton(MouseListener l) {
       removeAllMouseListeners();
-      button.addMouseListener(messageLauncher);
+      button.addMouseListener(l);
     }
     
     private void removeAllMouseListeners() {
-      for (MouseListener l : getMouseListeners()) removeMouseListener(l);
+      for (MouseListener l : button.getMouseListeners()) button.removeMouseListener(l);
     }
   }
 
@@ -317,7 +317,7 @@ import org.testng.annotations.Test;
     fixture.requirePlainMessage();
     fixture.button().click();
   }
-
+  
   private void showMessageWithTitle(String title) {
     window.setUpMessageWithTitle(title);
     clickWindowButton();

@@ -194,6 +194,7 @@ public final class RobotFixture {
     for (Window w : roots()) {
       hierarchy.dispose(w);
       w.setVisible(false);
+      w.dispose();
     }
   }
 
