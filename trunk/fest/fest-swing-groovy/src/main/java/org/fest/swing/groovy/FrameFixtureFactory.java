@@ -17,7 +17,9 @@ package org.fest.swing.groovy;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.util.Map;
 
 import org.fest.swing.fixture.FrameFixture;
 
@@ -43,7 +45,17 @@ public class FrameFixtureFactory implements FixtureFactory<Frame, FrameFixture> 
 
   private boolean shown(FrameFixture fixture, Context context) {
     if (!"show".equals(context.name)) return false;
-    fixture.show();
+    Dimension size = sizeFrom(context.attributes);
+    if (size == null) fixture.show(); 
+    else fixture.show(new Dimension(size));
     return true;
+  }
+  
+  private Dimension sizeFrom(Map<Object, Object> attributes) {
+    if (attributes == null) return null;
+    Integer width = (Integer)attributes.get("width");
+    Integer height = (Integer)attributes.get("height");
+    if (width == null || height == null) return null;
+    return new Dimension(width, height);
   }
 }

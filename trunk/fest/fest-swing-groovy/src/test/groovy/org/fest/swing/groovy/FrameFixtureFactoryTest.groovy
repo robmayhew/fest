@@ -1,10 +1,10 @@
 package org.fest.swing.groovy;
 
+import javax.swing.JFrame
+
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.Test
-
-import javax.swing.JFrame
 
 import org.fest.swing.RobotFixture
 
@@ -20,13 +20,22 @@ class FrameFixtureFactoryTest {
     frame = new JFrame()
   } 
   
-  @Test public void shouldCreateShowFrame() throws Exception {
+  @Test public void shouldShowFrame() {
     fixture.frame(frame) {
-      show 
+      show()
+      assert frame.visible
     } 
-    Thread.sleep(5000)
   }
-
+  
+  @Test public void shouldShowFrameWithGivenSize() {
+    fixture.frame(frame) {
+      show(width: 400, height: 200)
+      assert frame.visible
+      assert frame.width == 400
+      assert frame.height == 200
+    }
+  }
+  
   @AfterMethod public void tearDown() {
 	robot.cleanUp()    
   }

@@ -45,6 +45,7 @@ public final class SwingFixtureBuilder extends BuilderSupport {
   }
   
   @Override public Object getProperty(String property) {
+    if ("show".equals(property)) return currentFixture;
     return super.getProperty(property);
   }
 
