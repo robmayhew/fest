@@ -21,10 +21,12 @@ import abbot.tester.JTextComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.isEmpty;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events and verification of the state of a <code>{@link JTextComponent}</code>.
+ * Understands simulation of user events on a <code>{@link JTextComponent}</code> and verification of the state of such
+ * <code>{@link JTextComponent}</code>.
  *
  * @author Alex Ruiz
  */
@@ -33,8 +35,9 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   /**
    * Creates a new </code>{@link JTextComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTextComponent</code>.
-   * @param textComponentName the name of the text component to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param textComponentName the name of the <code>JTextComponent</code> to find using the given 
+   * <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JTextComponent</code> could not be found.
    */
   public JTextComponentFixture(RobotFixture robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);
@@ -42,65 +45,108 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   
   /**
    * Creates a new </code>{@link JTextComponentFixture}</code>.
-   * @param robot performs simulation of user events on the given text component.
-   * @param target the target text component.
+   * @param robot performs simulation of user events on the given <code>JTextComponent</code>.
+   * @param target the <code>JTextComponent</code> to be managed by this fixture.
    */
   public JTextComponentFixture(RobotFixture robot, JTextComponent target) {
     super(robot, target);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JTextComponentFixture click() { 
     return (JTextComponentFixture)super.click();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JTextComponentFixture focus() { 
     return (JTextComponentFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the text of the <code>{@link JTextComponent}</code> managed by this fixture is equal to the specified 
+   * <code>String</code>. 
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target component is not equal to the given one.
+   */
   public final JTextComponentFixture requireText(String expected) {
     assertThat(text()).isEqualTo(expected);
     return this;
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user entering the given text in the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @param text the text to enter.
+   * @return this fixture.
+   */
   public final JTextComponentFixture enterText(String text) {
     focus();
     tester().actionKeyString(text);
     return this;
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user deleting all the text in the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @return this fixture.
+   */
   public final JTextComponentFixture deleteText() {
     target.setText("");
     return this;
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user pressing the given keys in the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @param keyCodes the codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
   public final JTextComponentFixture pressKeys(int...keyCodes) {
     doPressKeys(keyCodes);
     return this;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Returns the text of the <code>{@link JTextComponent}</code> managed by this fixture. 
+   * @return the text of the managed <code>JTextComponent</code>. 
+   */
   public final String text() {
     return target.getText();
   }
   
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user selecting all the text contained in the <code>{@link JTextComponent}</code> managed by this 
+   * fixture. 
+   * @return this fixture.
+   */
   public final JTextComponentFixture selectAll() {
     return selectText(0, target.getDocument().getLength());
   }
   
+  /**
+   * Simulates a user selecting the given text contained in the <code>{@link JTextComponent}</code> managed by this 
+   * fixture.
+   * @param text the text to select.
+   * @return this fixture.
+   */
   public final JTextComponentFixture select(String text) {
     int indexFound = text().indexOf(text);
     if (indexFound == -1) return this;
     return selectText(indexFound, indexFound + text.length());
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user selecting a portion of the text contained in the <code>{@link JTextComponent}</code> managed by 
+   * this fixture.
+   * @param start index where selection should start.
+   * @param end index where selection should end.
+   * @return this fixture.
+   */
   public final JTextComponentFixture selectText(int start, int end) {
     if (isEmpty(text())) return this;
     textComponentTester().actionSelectText(target, start, end);
@@ -111,12 +157,20 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
     return testerCastedTo(JTextComponentTester.class);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Component</code> is not visible.
+   */
   @Override public final JTextComponentFixture requireVisible() { 
     return (JTextComponentFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Component</code> is visible.
+   */
   @Override public final JTextComponentFixture requireNotVisible() { 
     return (JTextComponentFixture)super.requireNotVisible();
   }
@@ -131,12 +185,20 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
     return this;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   */
   @Override public final JTextComponentFixture requireEnabled() {
     return (JTextComponentFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   */
   @Override public final JTextComponentFixture requireDisabled() {
     return (JTextComponentFixture)super.requireDisabled();
   }

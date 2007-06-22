@@ -28,7 +28,7 @@ public interface TextInputFixture<T extends Component> extends TextDisplayFixtur
 
   /**
    * Simulates a user entering the given text in the <code>{@link Component}</code> managed by this fixture.
-   * @param text the text to ener.
+   * @param text the text to enter.
    * @return this fixture.
    */
   TextInputFixture<T> enterText(String text);
@@ -63,7 +63,7 @@ public interface TextInputFixture<T extends Component> extends TextDisplayFixtur
   TextInputFixture<T> selectText(int start, int end);
   
   /**
-   * Simulate a user selecting the given text contained in the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user selecting the given text contained in the <code>{@link Component}</code> managed by this fixture.
    * @param text the text to select.
    * @return this fixture.
    */

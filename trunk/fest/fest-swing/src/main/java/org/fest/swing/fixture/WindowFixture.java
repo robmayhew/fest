@@ -23,10 +23,13 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.ScreenLock;
 
 /**
- * Understands simulation of user events and verification of the state of a <code>{@link Window}</code>.
+ * Understands simulation of user events on a <code>{@link Window}</code> and verification of the state of such
+ * <code>{@link Window}</code>.
  * @param <T> the type of window handled by this fixture. 
  *
  * @author Alex Ruiz
@@ -34,10 +37,11 @@ import org.fest.swing.RobotFixture;
 public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> {
 
   /**
-   * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new 
-   * <code>{@link RobotFixture}</code> containing the current AWT hierarchy.
+   * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * containing the current AWT hierarchy.
    * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByType(Class)
+   * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found. 
+   * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(Class<? extends T> type) {
     this(robotWithCurrentAwtHierarchy(), type);
@@ -47,18 +51,19 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new </code>{@link WindowFixture}</code>.
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByType(Class)
+   * @throws ComponentLookupException if a dialog having a matching name could not be found. 
    */
   public WindowFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, type);
   }
 
   /**
-   * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new 
-   * <code>{@link RobotFixture}</code> containing the current AWT hierarchy.
+   * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * containing the current AWT hierarchy.
    * @param name the name of the <code>Window</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found. 
+   * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(String name, Class<? extends T> type) {
     this(robotWithCurrentAwtHierarchy(), name, type);
@@ -69,7 +74,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param name the name of the <code>Window</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @throws ComponentLookupException if a dialog having a matching name could not be found. 
    */
   public WindowFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, name, type);
@@ -78,7 +83,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   /**
    * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param target the window under test.
+   * @param target the <code>Window</code> to be managed by this fixture.
    */
   public WindowFixture(T target) {
     this(robotWithCurrentAwtHierarchy(), target);
@@ -86,15 +91,15 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   
   /**
    * Creates a new </code>{@link WindowFixture}</code>.
-   * @param robot performs simulation of user events on the given window.
-   * @param target the window under test.
+   * @param robot performs simulation of user events on the given <code>Window</code>.
+   * @param target the <code>Window</code> to be managed by this fixture.
    */
   public WindowFixture(RobotFixture robot, T target) {
     super(robot, target);
   }
 
   /**
-   * Shows the target window.
+   * Shows the <code>{@link Window}</code> managed by this fixture.
    * @return this fixture.
    */
   public WindowFixture<T> show() {
@@ -103,8 +108,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
   
   /**
-   * Shows the target window, resized to the given size.
-   * @param size the given size.
+   * Shows the <code>{@link Window}</code> managed by this fixture, resized to the given size.
+   * @param size the size to resize the managed <code>Window</code> to.
    * @return this fixture.
    */
   public WindowFixture<T> show(Dimension size) {
@@ -113,8 +118,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
   
   /**
-   * Simulates a user resizing the target window horizontally.
-   * @param width the width that the target window should have after being resized.
+   * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
+   * @param width the width that the managed <code>Window</code> should have after being resized.
    * @return this fixture.
    */
   public WindowFixture<T> resizeWidthTo(int width) {
@@ -122,8 +127,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Simulates a user resizing the target window vertically.
-   * @param height the height that the target window should have after being resized.
+   * Simulates a user resizing vertically the <code>{@link Window}</code> managed by this fixture.
+   * @param height the height that the managed <code>Window</code> should have after being resized.
    * @return this fixture.
    */
   public WindowFixture<T> resizeHeightTo(int height) {
@@ -131,8 +136,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Simulates a user resizing the target window horizontally and/or vertically.
-   * @param size the size (height and width) that the target window should have after being resized.
+   * Simulates a user resizing the <code>{@link Window}</code> managed by this fixture.
+   * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
   public WindowFixture<T> resizeTo(Dimension size) {
@@ -141,10 +146,10 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Asserts that the size of the target window is equal to given one. 
+   * Asserts that the size of the <code>{@link Window}</code> managed by this fixture is equal to given one. 
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of the target window is not equal to the given size. 
+   * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
    */
   public WindowFixture<T> requireSize(Dimension size) {
     assertThat(target.getSize()).isEqualTo(size);
@@ -155,10 +160,19 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
     return testerCastedTo(WindowTester.class);
   }
 
+  /**
+   * Asserts that the <code>{@link Window}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Window</code> is not visible.
+   */
   @Override public WindowFixture<T> requireVisible() {
     return (WindowFixture<T>)super.requireVisible();
   }
 
+  /** 
+   * Cleans up any used resources (keyboard, mouse, open windows and <code>{@link ScreenLock}</code>) used by this 
+   * robot.
+   */  
   public final void cleanUp() {
     robot.cleanUp();
   }

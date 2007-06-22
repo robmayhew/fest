@@ -20,11 +20,12 @@ import javax.swing.JTabbedPane;
 import abbot.tester.JTabbedPaneLocation;
 import abbot.tester.JTabbedPaneTester;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
-
 /**
- * Understands simulation of user events on a <code>{@link JTabbedPane}</code> and output verification.
+ * Understands simulation of user events on a <code>{@link JTabbedPane}</code> and verification of the state of such
+ * <code>{@link JTabbedPane}</code>.
  *
  * @author Alex Ruiz 
  * @author Yvonne Wang
@@ -34,8 +35,8 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
-   * @param tabbedPaneName the name of the tabbed pane to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param tabbedPaneName the name of the <code>JTabbedPane</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JTabbedPane</code> could not be found.
    */
   public JTabbedPaneFixture(RobotFixture robot, String tabbedPaneName) {
     super(robot, tabbedPaneName, JTabbedPane.class);
@@ -43,8 +44,8 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   
   /**
    * Creates a new </code>{@link JTabbedPaneFixture}</code>.
-   * @param robot performs simulation of user events on the given tabbed pane.
-   * @param target the target tabbed pane.
+   * @param robot performs simulation of user events on the given <code>JTabbedPane</code>.
+   * @param target the <code>JTabbedPane</code> to be managed by this fixture.
    */
   public JTabbedPaneFixture(RobotFixture robot, JTabbedPane target) {
     super(robot, target);
@@ -75,7 +76,10 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
     return this;
   }
   
-  /** @return the titles of all the tabs. */
+  /** 
+   * Returns the titles of all the tabs in the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * @return the titles of all the tabs. 
+   */
   public final String[] tabTitles() {
     return tabbedPaneTester().getTabs(target);
   }
@@ -84,32 +88,54 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
     return testerCastedTo(JTabbedPaneTester.class);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JTabbedPaneFixture click() {
-    return (JTabbedPaneFixture)super.click();
+    return (JTabbedPaneFixture)super.click(); 
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JTabbedPaneFixture focus() {
     return (JTabbedPaneFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JTabbedPane</code> is not visible.
+   */
   @Override public final JTabbedPaneFixture requireVisible() {
     return (JTabbedPaneFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JTabbedPane</code> is visible.
+   */
   @Override public final JTabbedPaneFixture requireNotVisible() {
     return (JTabbedPaneFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JTabbedPane</code> is disabled.
+   */
   @Override public final JTabbedPaneFixture requireEnabled() {
     return (JTabbedPaneFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JTabbedPane</code> is enabled.
+   */
   @Override public final JTabbedPaneFixture requireDisabled() {
     return (JTabbedPaneFixture)super.requireDisabled();
   }

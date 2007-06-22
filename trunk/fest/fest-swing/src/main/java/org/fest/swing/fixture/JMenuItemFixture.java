@@ -18,12 +18,12 @@ package org.fest.swing.fixture;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
-
-
 /**
- * Understands simulation of user events and verification of the state of a <code>{@link JMenuItem}</code>.
+ * Understands simulation of user events on a <code>{@link JMenuItem}</code> and verification of the state of such
+ * <code>{@link JMenuItem}</code>.
  *
  * @author Alex Ruiz
  */
@@ -32,8 +32,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
-   * @param menuItemName the name of the menu item to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param menuItemName the name of the <code>JMenuItem</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JMenuItem</code> could not be found.
    */
   public JMenuItemFixture(RobotFixture robot, String menuItemName) {
     super(robot, menuItemName, JMenuItem.class);
@@ -42,8 +42,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>. It uses the given <code>{@link Action}</code> to create a new 
    * <code>{@link JMenuItem}</code> as the target menu item.
-   * @param robot allows simulation of user events on the target menu item.
-   * @param action the <code>Action</code> to assign to the created menu.
+   * @param robot performs simulation of user events on a <code>JMenuItem</code>.
+   * @param action the <code>Action</code> to assign to the created <code>JMenuItem</code>.
    */
   public JMenuItemFixture(RobotFixture robot, Action action) {
     this(robot, new JMenuItem(action));
@@ -51,15 +51,15 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   
   /**
    * Creates a new </code>{@link JMenuItemFixture}</code>.
-   * @param robot allows simulation of user events on the target menu item.
-   * @param target the target menu item.
+   * @param robot performs simulation of user events on the given <code>JMenuItem</code>.
+   * @param target the <code>JMenuItem</code> to be managed by this fixture.
    */
   public JMenuItemFixture(RobotFixture robot, JMenuItem target) {
     super(robot, target);
   }
   
   /**
-   * Selects the target menu item.
+   * Simulates a user selecting the <code>{@link JMenuItem}</code> managed by this fixture.
    * @return this fixture.
    */
   public final JMenuItemFixture select() {
@@ -67,32 +67,54 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
     return this;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JMenuItem}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JMenuItemFixture click() {
-    return (JMenuItemFixture)super.click();
+    return (JMenuItemFixture)super.click(); 
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JMenuItem}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JMenuItemFixture focus() {
     return (JMenuItemFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JMenuItem}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JMenuItem</code> is not visible.
+   */
   @Override public final JMenuItemFixture requireVisible() {
     return (JMenuItemFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JMenuItem}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JMenuItem</code> is visible.
+   */
   @Override public final JMenuItemFixture requireNotVisible() {
     return (JMenuItemFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JMenuItem}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JMenuItem</code> is disabled.
+   */
   @Override public final JMenuItemFixture requireEnabled() {
     return (JMenuItemFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JMenuItem}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JMenuItem</code> is enabled.
+   */
   @Override public final JMenuItemFixture requireDisabled() {
     return (JMenuItemFixture)super.requireDisabled();
   }

@@ -21,10 +21,12 @@ import javax.swing.tree.TreePath;
 import abbot.tester.JTreeLocation;
 import abbot.tester.JTreeTester;
 
+import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
 /**
- * Understands simulation of user events on a <code>{@link JTree}</code> and output verification.
+ * Understands simulation of user events on a <code>{@link JTree}</code> and verification of the state of such
+ * <code>{@link JTree}</code>.
  * 
  * @author Keith Coughtrey
  * @author Alex Ruiz
@@ -34,8 +36,8 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   /**
    * Creates a new </code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTree</code>.
-   * @param treeName the name of the tree to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @param treeName the name of the <code>JTree</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>JTree</code> could not be found.
    */
   public JTreeFixture(RobotFixture robot, String treeName) {
     super(robot, treeName, JTree.class);
@@ -43,8 +45,8 @@ public class JTreeFixture extends ComponentFixture<JTree> {
 
   /**
    * Creates a new </code>{@link JTreeFixture}</code>.
-   * @param robot performs simulation of user events on the given tree.
-   * @param target the target tree.
+   * @param robot performs simulation of user events on the given <code>JTree</code>.
+   * @param target the <code>JTree</code> to be managed by this fixture.
    */
   public JTreeFixture(RobotFixture robot, JTree target) {
     super(robot, target);
@@ -72,8 +74,9 @@ public class JTreeFixture extends ComponentFixture<JTree> {
 
   /**
    * Select the given path, expanding parent nodes if necessary. TreePath must consist of usable String representations
-   * that can be used in later comparisons. The default &ltclassname&gt;@&lt;hashcode&gt; returned by
-   * {@link Object#toString()} is not usable; if that is all that is available, refer to the row number instead.
+   * that can be used in later comparisons. The default &lt;classname&gt;@&lt;hashcode&gt; returned by
+   * <code>{@link Object#toString()}</code> is not usable; if that is all that is available, refer to the row number 
+   * instead.
    * @param treePath A path comprising an array of Strings that match the toString()'s of the path nodes
    * @return this fixture.
    */
@@ -86,32 +89,54 @@ public class JTreeFixture extends ComponentFixture<JTree> {
     return testerCastedTo(JTreeTester.class);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Simulates a user clicking the <code>{@link JTree}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JTreeFixture click() {
-    return (JTreeFixture)super.click();
+    return (JTreeFixture)super.click(); 
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Gives input focus to the <code>{@link JTree}</code> managed by this fixture.
+   * @return this fixture.
+   */
   @Override public final JTreeFixture focus() {
     return (JTreeFixture)super.focus();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTree}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JTree</code> is not visible.
+   */
   @Override public final JTreeFixture requireVisible() {
     return (JTreeFixture)super.requireVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTree}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JTree</code> is visible.
+   */
   @Override public final JTreeFixture requireNotVisible() {
     return (JTreeFixture)super.requireNotVisible();
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Asserts that the <code>{@link JTree}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JTree</code> is disabled.
+   */
   @Override public final JTreeFixture requireEnabled() {
     return (JTreeFixture)super.requireEnabled();
   }
   
-  /** {@inheritDoc} */  
+  /**
+   * Asserts that the <code>{@link JTree}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JTree</code> is enabled.
+   */
   @Override public final JTreeFixture requireDisabled() {
     return (JTreeFixture)super.requireDisabled();
   }
