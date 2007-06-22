@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="fest-swing-groovy">
-  <test verbose="2" name="org.fest.swing.groovy" annotations="JDK5">
-    <packages>
-      <package name="org.fest.swing.groovy"/>
-    </packages>
-  </test>
-</suite>
