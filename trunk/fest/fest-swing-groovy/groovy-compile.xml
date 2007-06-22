@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<project basedir="." name="groovy-eclipse" default="compile.groovy.test">
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="src.test.groovy.dir" value="${src.dir}/test/groovy" />
+
+	<property name="classes.dir" value="${basedir}/bin" />
+	<property name="lib.dir" value="${basedir}/lib" />
+
+	<target name="compile.groovy.test">
+		<path id="lib.classpath">
+			<fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
+		</path>
+		<taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
+			<classpath refid="lib.classpath" />
+		</taskdef>
+		<groovyc destdir="${classes.dir}" srcdir="${src.test.groovy.dir}" listfiles="true">
+			<classpath refid="lib.classpath" />
+			<classpath>
+				<pathelement location="${classes.dir}" />
+			</classpath>
+		</groovyc>
+	</target>
+</project>

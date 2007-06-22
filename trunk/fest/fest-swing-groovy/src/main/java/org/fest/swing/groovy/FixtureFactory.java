@@ -16,7 +16,6 @@
 package org.fest.swing.groovy;
 
 import java.awt.Component;
-import java.util.Map;
 
 import org.fest.swing.fixture.ComponentFixture;
 
@@ -31,13 +30,10 @@ public interface FixtureFactory<C extends Component, F extends ComponentFixture<
 
   /**
    * Creates a new FEST fixture.
-   * @param builder the <code>GUITestBuilder</code> being used.
-   * @param name the name of the fixture to create.
-   * @param value the value given to the builder.
-   * @param properties the properties for the fixture to create.
+   * @param context necessary information to create a <code>ComponentFixture</code>.
    * @return the created FEST fixture.
    */
-  F newInstance(GUITestBuilder builder, Object name, Object value, Map<Object, Object> properties);
-  
-  boolean subnodeHandled(ComponentFixture<?> fixture, GUITestBuilder builder, Object name, Object value, Map properties);
+  F newInstance(Context context);
+
+  boolean fixtureSettingCreated(Context context);
 }

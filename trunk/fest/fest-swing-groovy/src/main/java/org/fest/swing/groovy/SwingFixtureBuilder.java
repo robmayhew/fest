@@ -21,35 +21,46 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.fest.swing.RobotFixture;
+import org.fest.swing.fixture.ComponentFixture;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
+
+import static org.fest.swing.groovy.Context.*;
 
 /**
  * Understands SOMETHING DUMMY.
  *
  * @author Alex Ruiz
  */
-public class GUITestBuilder extends BuilderSupport {
+public final class SwingFixtureBuilder extends BuilderSupport {
 
   final RobotFixture robot;
 
+  private ComponentFixture<?> currentFixture;
+  
   private static final Map<Object, FixtureFactory> factoryMap = new LinkedHashMap<Object, FixtureFactory>();
   static {
     factoryMap.put("frame", new FrameFixtureFactory());
   }
   
+  @Override public Object getProperty(String property) {
+    return super.getProperty(property);
+  }
+
+  @Override public void setProperty(String property, Object newValue) {
+    super.setProperty(property, newValue);
+  }
+
   /** 
-   * Creates a new </code>{@link GUITestBuilder}</code>. 
+   * Creates a new </code>{@link SwingFixtureBuilder}</code>. 
    * @param robot the robot to use with this builder.
    */
-  public GUITestBuilder(RobotFixture robot) {
+  public SwingFixtureBuilder(RobotFixture robot) {
     this.robot = robot;
   }
 
-  protected void setParent(Object parent, Object child) {
-    
-  }
+  protected void setParent(Object parent, Object child) {}
   
   protected Object createNode(Object name) {
     return createNode(name, null);
@@ -65,9 +76,18 @@ public class GUITestBuilder extends BuilderSupport {
 
   @SuppressWarnings("unchecked") 
   protected Object createNode(Object name, Map attributes, Object value) {
-    if (factoryMap.containsKey(name)) return factoryMap.get(name).newInstance(this, name, value, attributes);
+    if (factoryMap.containsKey(name)) {
+      currentFixture = factoryMap.get(name).newInstance(context(this, name, value, attributes));
+      return currentFixture;
+    }
+    if (fixtureSettingCreated(name, attributes, value)) return null;
     throw new IllegalArgumentException(concat(quote(name), " is not a valid node name"));
   }
 
-    
+  private boolean fixtureSettingCreated(Object name, Map<Object, Object> attributes, Object value) {
+    if (currentFixture == null) return false;
+    for (Map.Entry<Object, FixtureFactory> entry : factoryMap.entrySet()) 
+      if (entry.getValue().fixtureSettingCreated(context(this, currentFixture, name, value, attributes))) return true;
+    return false;
+  }
 }

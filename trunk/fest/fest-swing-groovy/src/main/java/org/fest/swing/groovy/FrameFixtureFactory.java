@@ -15,13 +15,11 @@
  */
 package org.fest.swing.groovy;
 
-import java.awt.Frame;
-import java.util.Map;
-
-import org.fest.swing.fixture.ComponentFixture;
-import org.fest.swing.fixture.FrameFixture;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import java.awt.Frame;
+
+import org.fest.swing.fixture.FrameFixture;
 
 /**
  * Understands SOMETHING DUMMY.
@@ -30,15 +28,22 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class FrameFixtureFactory implements FixtureFactory<Frame, FrameFixture> {
 
-  public FrameFixture newInstance(GUITestBuilder builder, Object name, Object value, Map<Object, Object> properties) {
-    assertThat(value).isInstanceOf(Frame.class);
-    FrameFixture fixture = new FrameFixture(builder.robot, (Frame)value);
+  public FrameFixture newInstance(Context context) {
+    assertThat(context.value).isInstanceOf(Frame.class);
+    FrameFixture fixture = new FrameFixture(context.builder.robot, (Frame)context.value);
     return fixture;
   }
 
-  public boolean subnodeHandled(ComponentFixture<?> fixture, GUITestBuilder builder, Object name, Object value, Map properties) {
-    // TODO Auto-generated method stub
+  public boolean fixtureSettingCreated(Context context) {
+    if (!(context.currentFixture instanceof FrameFixture)) return false;
+    FrameFixture fixture = (FrameFixture)context.currentFixture;
+    if (shown(fixture, context)) return true;
     return false;
   }
 
+  private boolean shown(FrameFixture fixture, Context context) {
+    if (!"show".equals(context.name)) return false;
+    fixture.show();
+    return true;
+  }
 }
