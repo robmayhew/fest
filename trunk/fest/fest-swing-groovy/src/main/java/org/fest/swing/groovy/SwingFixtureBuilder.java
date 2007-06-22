@@ -82,7 +82,7 @@ public final class SwingFixtureBuilder extends BuilderSupport {
       return currentFixture;
     }
     if (fixtureSettingCreated(name, attributes, value)) return null;
-    throw new IllegalArgumentException(concat(quote(name), " is not a valid node name"));
+    throw new IllegalArgumentException(concat("Unable to create node ", quote(name)));
   }
 
   private boolean fixtureSettingCreated(Object name, Map<Object, Object> attributes, Object value) {

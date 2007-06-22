@@ -40,6 +40,7 @@ public class FrameFixtureFactory implements FixtureFactory<Frame, FrameFixture> 
     if (!(context.currentFixture instanceof FrameFixture)) return false;
     FrameFixture fixture = (FrameFixture)context.currentFixture;
     if (shown(fixture, context)) return true;
+    if (maximized(fixture, context)) return true;
     return false;
   }
 
@@ -57,5 +58,11 @@ public class FrameFixtureFactory implements FixtureFactory<Frame, FrameFixture> 
     Integer height = (Integer)attributes.get("height");
     if (width == null || height == null) return null;
     return new Dimension(width, height);
+  }
+  
+  private boolean maximized(FrameFixture fixture, Context context) {
+    if (!"maximize".equals(context.name)) return false;
+    fixture.maximize();
+    return true;
   }
 }

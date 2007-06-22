@@ -1,5 +1,6 @@
 package org.fest.swing.groovy;
 
+import java.awt.Frame
 import javax.swing.JFrame
 
 import org.testng.annotations.BeforeMethod
@@ -33,6 +34,14 @@ class FrameFixtureFactoryTest {
       assert frame.visible
       assert frame.width == 400
       assert frame.height == 200
+    }
+  }
+  
+  @Test public void shouldMaximizeFrame() {
+    fixture.frame(frame) {
+      show()
+      maximize()
+      assert (frame.extendedState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
     }
   }
   
