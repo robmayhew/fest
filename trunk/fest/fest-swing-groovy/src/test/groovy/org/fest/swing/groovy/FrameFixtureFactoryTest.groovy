@@ -13,47 +13,47 @@ class FrameFixtureFactoryTest {
 
   private RobotFixture robot
   private SwingFixtureBuilder fixture
-  private JFrame frame
+  private JFrame myFrame
    
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy()
     fixture = new SwingFixtureBuilder(robot)
-    frame = new JFrame()
+    myFrame = new JFrame()
   } 
   
   @Test public void shouldShowFrame() {
-    fixture.frame(frame) {
+    fixture.frame(myFrame) {
       show()
-      assert frame.visible
+      assert myFrame.visible
     } 
   }
   
   @Test public void shouldShowFrameWithGivenSize() {
-    fixture.frame(frame) {
+    fixture.frame(myFrame) {
       show(width: 400, height: 200)
-      assert frame.visible
-      assert frame.width == 400
-      assert frame.height == 200
     }
+    assert myFrame.visible
+    assert myFrame.width == 400
+    assert myFrame.height == 200
   }
   
   @Test(dependsOnMethods = ['shouldShowFrame'])
   public void shouldMaximizeFrame() {
-    fixture.frame(frame) {
+    fixture.frame(myFrame) {
       show()
       maximize()
-      assert (frame.extendedState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
     }
+    assert (myFrame.extendedState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
   }
   
   @Test(dependsOnMethods = ['shouldShowFrame', 'shouldMaximizeFrame'])
   public void shouldNormalizeFrame() {
-    fixture.frame(frame) {
+    fixture.frame(myFrame) {
       show()
       maximize()
       normalize()
-      assert frame.extendedState == Frame.NORMAL
     }
+    assert myFrame.extendedState.equals(Frame.NORMAL)
   }
   
   @AfterMethod public void tearDown() {
