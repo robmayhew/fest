@@ -37,11 +37,22 @@ class FrameFixtureFactoryTest {
     }
   }
   
-  @Test public void shouldMaximizeFrame() {
+  @Test(dependsOnMethods = ['shouldShowFrame'])
+  public void shouldMaximizeFrame() {
     fixture.frame(frame) {
       show()
       maximize()
       assert (frame.extendedState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
+    }
+  }
+  
+  @Test(dependsOnMethods = ['shouldShowFrame', 'shouldMaximizeFrame'])
+  public void shouldNormalizeFrame() {
+    fixture.frame(frame) {
+      show()
+      maximize()
+      normalize()
+      assert frame.extendedState == Frame.NORMAL
     }
   }
   

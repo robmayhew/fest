@@ -24,7 +24,7 @@ import java.util.Map;
 import org.fest.swing.fixture.FrameFixture;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands a factory of <code>{@link FrameFixture}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -41,6 +41,7 @@ public class FrameFixtureFactory implements FixtureFactory<Frame, FrameFixture> 
     FrameFixture fixture = (FrameFixture)context.currentFixture;
     if (shown(fixture, context)) return true;
     if (maximized(fixture, context)) return true;
+    if (normalized(fixture, context)) return true;
     return false;
   }
 
@@ -63,6 +64,12 @@ public class FrameFixtureFactory implements FixtureFactory<Frame, FrameFixture> 
   private boolean maximized(FrameFixture fixture, Context context) {
     if (!"maximize".equals(context.name)) return false;
     fixture.maximize();
+    return true;
+  }
+  
+  private boolean normalized(FrameFixture fixture, Context context) {
+    if (!"normalize".equals(context.name)) return false;
+    fixture.normalize();
     return true;
   }
 }
