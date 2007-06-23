@@ -24,8 +24,8 @@ class FrameFixtureFactoryTest {
   @Test public void shouldShowFrame() {
     fixture.frame(myFrame) {
       show()
-      assert myFrame.visible
     } 
+    assert myFrame.visible
   }
   
   @Test public void shouldShowFrameWithGivenSize() {
@@ -33,8 +33,8 @@ class FrameFixtureFactoryTest {
       show(width: 400, height: 200)
     }
     assert myFrame.visible
-    assert myFrame.width == 400
-    assert myFrame.height == 200
+    assert myFrame.width.equals(400)
+    assert myFrame.height.equals(200)
   }
   
   @Test(dependsOnMethods = ['shouldShowFrame'])
@@ -43,7 +43,7 @@ class FrameFixtureFactoryTest {
       show()
       maximize()
     }
-    assert (myFrame.extendedState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
+    assert (myFrame.extendedState & Frame.MAXIMIZED_BOTH).equals(Frame.MAXIMIZED_BOTH)
   }
   
   @Test(dependsOnMethods = ['shouldShowFrame', 'shouldMaximizeFrame'])
