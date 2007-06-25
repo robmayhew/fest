@@ -29,7 +29,7 @@ import static org.fest.util.Strings.quote;
 import static org.fest.swing.groovy.Context.*;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands a Groovy Builder that creates FEST fixtures.
  *
  * @author Alex Ruiz
  */
@@ -44,15 +44,6 @@ public final class SwingFixtureBuilder extends BuilderSupport {
     factoryMap.put("frame", new FrameFixtureFactory());
   }
   
-  @Override public Object getProperty(String property) {
-    if ("show".equals(property)) return currentFixture;
-    return super.getProperty(property);
-  }
-
-  @Override public void setProperty(String property, Object newValue) {
-    super.setProperty(property, newValue);
-  }
-
   /** 
    * Creates a new </code>{@link SwingFixtureBuilder}</code>. 
    * @param robot the robot to use with this builder.
