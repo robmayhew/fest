@@ -37,14 +37,14 @@ public interface ItemGroupFixture<T extends Component> {
    * @param index the index of the item to select.
    * @return this fixture.
    */
-  ItemGroupFixture<T> selectItemAt(int index);
+  ItemGroupFixture<T> selectItem(int index);
 
   /**
    * Simulates a user selecting an item in the <code>{@link Component}</code> managed by this fixture. 
    * @param text the text of the item to select.
    * @return this fixture.
    */
-  ItemGroupFixture<T> selectItemWithText(String text);
+  ItemGroupFixture<T> selectItem(String text);
 
   /**
    * Returns the <code>String</code> representation of an item in the <code>{@link Component}</code> managed by this 

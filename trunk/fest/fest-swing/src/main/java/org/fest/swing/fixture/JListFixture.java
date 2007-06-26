@@ -62,7 +62,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param index the index of the item to select.
    * @return this fixture.
    */
-  public final JListFixture selectItemAt(int index) {
+  public final JListFixture selectItem(int index) {
     listTester().actionSelectIndex(target, index);
     return this;
   }
@@ -72,7 +72,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param text the text of the item to select.
    * @return this fixture.
    */
-  public final JListFixture selectItemWithText(String text) {
+  public final JListFixture selectItem(String text) {
     listTester().actionSelectValue(target, text);
     return null;
   }

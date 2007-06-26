@@ -84,13 +84,13 @@ import org.testng.annotations.Test;
   
   @Test(dependsOnMethods = "shouldHaveFoundComboBox")
   public void shouldSelectItemAtGivenIndex() {
-    fixture.selectItemAt(2);
+    fixture.selectItem(2);
     assertThat(window.comboBox.getSelectedItem()).equals("third");
   }
 
   @Test(dependsOnMethods = "shouldHaveFoundComboBox")
   public void shouldSelectItemWithGivenText() {
-    fixture.selectItemWithText("second");
+    fixture.selectItem("second");
     assertThat(window.comboBox.getSelectedItem()).equals("second");
   }
 

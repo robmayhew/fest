@@ -81,13 +81,13 @@ public class JListFixtureTest {
   
   @Test(dependsOnMethods = "shouldHaveFoundList")
   public void shouldSelectItemAtGivenIndex() {
-    fixture.selectItemAt(2);
+    fixture.selectItem(2);
     assertThat(window.list.getSelectedValue()).equals("three");
   }
 
   @Test(dependsOnMethods = "shouldHaveFoundList")
   public void shouldSelectItemWithGivenText() {
-    fixture.selectItemWithText("two");
+    fixture.selectItem("two");
     assertThat(window.list.getSelectedValue()).equals("two");
   }
 

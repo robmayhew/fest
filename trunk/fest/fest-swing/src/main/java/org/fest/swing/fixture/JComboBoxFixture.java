@@ -64,7 +64,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @param index the index of the item to select.
    * @return this fixture.
    */
-  public final JComboBoxFixture selectItemAt(int index) {
+  public final JComboBoxFixture selectItem(int index) {
     comboBoxTester().actionSelectIndex(target, index);
     return this;
   }
@@ -74,7 +74,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @param text the text of the item to select.
    * @return this fixture.
    */
-  public final JComboBoxFixture selectItemWithText(String text) {
+  public final JComboBoxFixture selectItem(String text) {
     comboBoxTester().actionSelectItem(target, text);
     return this;
   }
