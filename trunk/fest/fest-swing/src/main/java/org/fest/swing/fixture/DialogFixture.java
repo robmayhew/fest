@@ -34,7 +34,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   /**
    * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
+   * @param dialogName the name of the <code>Dialog</code> to find.
    * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found. 
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */

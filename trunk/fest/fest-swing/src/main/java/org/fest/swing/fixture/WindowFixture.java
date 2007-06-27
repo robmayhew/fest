@@ -60,7 +60,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   /**
    * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param name the name of the <code>Window</code> to find using the given <code>RobotFixture</code>.
+   * @param name the name of the <code>Window</code> to find.
    * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found. 
    * @see RobotFixture#robotWithCurrentAwtHierarchy()

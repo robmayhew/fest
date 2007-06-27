@@ -39,6 +39,24 @@ public class FrameFixture extends WindowFixture<Frame> {
   /**
    * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
+   * @param name the name of the <code>Frame</code> to find.
+   */
+  public FrameFixture(String name) {
+    super(name, Frame.class);
+  }
+
+  /**
+   * Creates a new </code>{@link FrameFixture}</code>.
+   * @param robot performs user events on the given window and verifies expected output.
+   * @param name the name of the <code>Frame</code> to find using the given <code>RobotFixture</code>.
+   */
+  public FrameFixture(RobotFixture robot, String name) {
+    super(robot, name, Frame.class);
+  }
+
+  /**
+   * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * containing the current AWT hierarchy.
    * @param target the <code>Frame</code> to be managed by this fixture.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
