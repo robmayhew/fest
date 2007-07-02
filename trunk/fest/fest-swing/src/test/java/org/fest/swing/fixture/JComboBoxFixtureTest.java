@@ -102,7 +102,7 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldHaveFoundComboBox")
   public void shouldEnterTextInEditableComboBox() {
     window.comboBox.setEditable(true);
-    fixture.enter("Text entered by FEST");
+    fixture.enterText("Text entered by FEST");
     JTextField editorComponent = (JTextField)window.comboBox.getEditor().getEditorComponent();
     assertThat(editorComponent.getText()).contains("Text entered by FEST");
   }
@@ -110,7 +110,7 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldHaveFoundComboBox")
   public void shouldNotEnterTextInNonEditableComboBox() {
     window.comboBox.setEditable(false);
-    fixture.enter("Text entered by FEST");
+    fixture.enterText("Text entered by FEST");
     JTextField editorComponent = (JTextField)window.comboBox.getEditor().getEditorComponent();
     assertThat(editorComponent.getText()).isEmpty();
   }

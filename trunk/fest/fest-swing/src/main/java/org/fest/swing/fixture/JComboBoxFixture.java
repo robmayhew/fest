@@ -101,11 +101,12 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Enters the specified text in the <code>{@link JComboBox}</code> managed by this fixture only if it is editable.
+   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code> managed by this fixture only
+   * if it is editable.
    * @param text the text to enter.
    * @return this fixture.
    */
-  public final JComboBoxFixture enter(String text) {
+  public final JComboBoxFixture enterText(String text) {
     if (!target.isEditable()) return this;
     focus();
     tester().actionKeyString(text);
