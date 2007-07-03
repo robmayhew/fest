@@ -32,10 +32,6 @@ import org.testng.annotations.Test;
 
   private JButtonFixture fixture;
   
-  protected void afterSetUp() {
-    fixture = (JButtonFixture)fixture();
-  }
-  
   @Test public void shouldPassIfButtonHasMatchingText() {
     fixture.requireText("Target");
   }
@@ -47,6 +43,10 @@ import org.testng.annotations.Test;
   
   @Test public void shouldReturnButtonText() {
     assertThat(fixture.text()).isEqualTo("Target");
+  }
+  
+  protected void afterSetUp() {
+    fixture = (JButtonFixture)fixture();
   }
   
   protected ComponentFixture<JButton> createFixture() { 
