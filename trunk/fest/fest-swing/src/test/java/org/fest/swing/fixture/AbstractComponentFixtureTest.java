@@ -59,14 +59,18 @@ public abstract class AbstractComponentFixtureTest<T extends Component> {
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
-    afterSetUp();
+    T target = createTarget();
+    window.add(target);
     robot().showWindow(window);
-    fixture = fixture(); 
+    fixture = createFixture(); 
     giveFocusTo(window.button);
+    assertThat(fixture.target).isSameAs(target);
+    afterSetUp();
   }
 
+  protected abstract T createTarget();
   protected abstract void afterSetUp();
-  protected abstract ComponentFixture<T> fixture();
+  protected abstract ComponentFixture<T> createFixture();
   
   @Test public final void shouldClickComponent() {
     ComponentEvents events = ComponentEvents.attachTo(fixture.target);
@@ -117,5 +121,5 @@ public abstract class AbstractComponentFixtureTest<T extends Component> {
   }
   
   protected final RobotFixture robot() { return robot; }
-  protected final MainWindow window() { return window; }
+  protected final ComponentFixture<T> fixture() { return fixture; }
 }

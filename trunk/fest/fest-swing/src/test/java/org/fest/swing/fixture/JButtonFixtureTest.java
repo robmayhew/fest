@@ -30,35 +30,32 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JButtonFixtureTest extends AbstractComponentFixtureTest<JButton> {
 
-  private JButton target;
   private JButtonFixture fixture;
   
-  public void afterSetUp() {
-    target = new JButton("Target");
-    target.setName("target");
-    window().add(target);
-    fixture = new JButtonFixture(robot(), "target");
+  protected void afterSetUp() {
+    fixture = (JButtonFixture)fixture();
   }
   
-  @Test public void shouldHaveFoundButton() {
-    assertThat(fixture.target).isSameAs(target);
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveFoundButton") 
-  public void shouldPassIfButtonHasMatchingText() {
+  @Test public void shouldPassIfButtonHasMatchingText() {
     fixture.requireText("Target");
   }
   
-  @Test(dependsOnMethods = {"shouldHaveFoundButton", "shouldPassIfButtonHasMatchingText"},
-        expectedExceptions = AssertionError.class) 
+  @Test(dependsOnMethods = "shouldPassIfButtonHasMatchingText", expectedExceptions = AssertionError.class) 
   public void shouldFailIfButtonHasNotMatchingText() {
     fixture.requireText("A Button");
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundButton") 
-  public void shouldReturnButtonText() {
+  @Test public void shouldReturnButtonText() {
     assertThat(fixture.text()).isEqualTo("Target");
   }
   
-  protected ComponentFixture<JButton> fixture() { return fixture; }
+  protected ComponentFixture<JButton> createFixture() { 
+    return new JButtonFixture(robot(), "target"); 
+  }
+
+  protected JButton createTarget() { 
+    JButton target = new JButton("Target");
+    target.setName("target");    
+    return target;
+  }
 }
