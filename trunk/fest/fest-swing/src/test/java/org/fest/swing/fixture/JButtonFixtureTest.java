@@ -15,21 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
-import org.fest.swing.Condition;
 import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -37,68 +28,25 @@ import org.testng.annotations.Test;
  *
  * @author Yvonne Wang
  */
-@GUITest public class JButtonFixtureTest {
+@GUITest public class JButtonFixtureTest extends AbstractComponentFixtureTest<JButton> {
 
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-
-    final JButton firstButton = new JButton("First Button");
-    final JButton secondButton = new JButton("Second Button");
-    final ComponentEvents secondButtonEvents = ComponentEvents.attachTo(secondButton);
-    
-    MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-    
-    private void setUpComponents() {
-      firstButton.setName("firstButton");
-      secondButton.setName("secondButton");
-    }
-    
-    private void addComponents() {
-      add(firstButton);
-      add(secondButton);
-    }
-  }
-  
-  private MainWindow window;
-  private RobotFixture robot;
+  private JButton target;
   private JButtonFixture fixture;
   
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    fixture = new JButtonFixture(robot, "secondButton");
+  public void afterSetUp() {
+    target = new JButton("Target");
+    target.setName("target");
+    window().add(target);
+    fixture = new JButtonFixture(robot(), "target");
   }
   
   @Test public void shouldHaveFoundButton() {
-    assertThat(fixture.target).isSameAs(window.secondButton);
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveFoundButton") 
-  public void shouldClickButton() {
-    fixture.click();
-    assertThat(window.secondButtonEvents.clicked()).isTrue();
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveFoundButton") 
-  public void shouldGiveFocusToButton() {
-    window.firstButton.requestFocusInWindow();
-    robot.wait(new Condition("button has focus") {
-      public boolean test() {
-        return window.firstButton.hasFocus();
-      }
-    });
-    fixture.focus();
-    assertThat(window.secondButton.hasFocus()).isTrue();
+    assertThat(fixture.target).isSameAs(target);
   }
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldPassIfButtonHasMatchingText() {
-    fixture.requireText("Second Button");
+    fixture.requireText("Target");
   }
   
   @Test(dependsOnMethods = {"shouldHaveFoundButton", "shouldPassIfButtonHasMatchingText"},
@@ -109,10 +57,8 @@ import org.testng.annotations.Test;
   
   @Test(dependsOnMethods = "shouldHaveFoundButton") 
   public void shouldReturnButtonText() {
-    assertThat(fixture.text()).isEqualTo("Second Button");
+    assertThat(fixture.text()).isEqualTo("Target");
   }
   
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
-  }
+  protected ComponentFixture<JButton> fixture() { return fixture; }
 }
