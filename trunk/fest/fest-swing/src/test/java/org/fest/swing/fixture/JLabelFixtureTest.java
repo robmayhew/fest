@@ -15,20 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
 import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -36,79 +28,35 @@ import org.testng.annotations.Test;
  *
  * @author Yvonne Wang
  */
-@GUITest public class JLabelFixtureTest {
+@GUITest public class JLabelFixtureTest extends AbstractComponentFixtureTest<JLabel> {
 
+  private JLabelFixture fixture;
   
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-
-    final JLabel firstLabel = new JLabel("First Label");
-    final JLabel secondLabel = new JLabel("Second Label");
-    
-    final ComponentEvents secondLabelEvents = ComponentEvents.attachTo(secondLabel);
-    
-    MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-    
-    private void setUpComponents() {
-      firstLabel.setName("firstLabel");
-      secondLabel.setName("secondLabel");
-    }
-    
-    private void addComponents() {
-      add(firstLabel);
-      add(secondLabel);
-    }
+  @Test public void shouldPassIfLabelHasMatchingText() {
+    fixture.requireText("Target");
   }
   
-  private MainWindow window;
-  private RobotFixture robot;
-  private JLabelFixture secondLabelFixture;
-  
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    secondLabelFixture = new JLabelFixture(robot, "secondLabel");
-  }
-  
-  @Test public void shouldHaveFoundLabel() {
-    assertThat(secondLabelFixture.target).isSameAs(window.secondLabel);
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveFoundLabel") 
-  public void shouldClickLabel() {
-    secondLabelFixture.click();
-    assertThat(window.secondLabelEvents.clicked()).isTrue();
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveFoundLabel") 
-  public void shouldGiveFocusToLabel() {
-    secondLabelFixture.focus();
-    assertThat(window.secondLabel.hasFocus()).isTrue();
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveFoundLabel") 
-  public void shouldPassIfLabelHasMatchingText() {
-    secondLabelFixture.requireText("Second Label");
-  }
-  
-  @Test(dependsOnMethods = {"shouldHaveFoundLabel", "shouldPassIfLabelHasMatchingText"},
-        expectedExceptions = AssertionError.class) 
+  @Test(dependsOnMethods = "shouldPassIfLabelHasMatchingText", expectedExceptions = AssertionError.class) 
   public void shouldFailIfLabelHasNotMatchingText() {
-    secondLabelFixture.requireText("A Label");
+    fixture.requireText("A Label");
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundLabel") 
-  public void shouldReturnLabelText() {
-    assertThat(secondLabelFixture.text()).isEqualTo("Second Label");
-  }
-  
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+  @Test public void shouldReturnLabelText() {
+    assertThat(fixture.text()).isEqualTo("Target");
   }
 
+  protected void afterSetUp() {
+    fixture = (JLabelFixture)fixture();
+  }
+
+  protected ComponentFixture<JLabel> createFixture() {
+    return new JLabelFixture(robot(), "target");
+  }
+
+  protected JLabel createTarget() {
+    JLabel target = new JLabel("Target");
+    target.setName("target");
+    return target;
+  }
+  
 }
