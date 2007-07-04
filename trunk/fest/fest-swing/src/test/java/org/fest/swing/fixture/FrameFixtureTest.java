@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 
 import javax.swing.JFrame;
 
@@ -26,8 +27,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.GUITest;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -36,74 +35,43 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class FrameFixtureTest {
+@GUITest public class FrameFixtureTest extends WindowFixtureTestCase<Frame> {
 
-  FrameFixture frameFixture;
-  JFrame frame;
-  
-  @BeforeMethod public void setUp() {
-    frameFixture = new FrameFixture(new JFrame());
-    frame = frameFixture.targetCastedTo(JFrame.class);
-    frameFixture.show();
-    frame.setSize(new Dimension(200, 100));
-  }
-
-  @Test public void shouldPassIfWindowHasMatchingSize() {
-    frameFixture.requireSize(frame.getSize());
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize", expectedExceptions = AssertionError.class)
-  public void shouldFailIfWindowHasNotMatchingSize() {
-    FluentDimension wrongSize = windowSize().addToWidth(50).addToHeight(30);
-    frameFixture.requireSize(wrongSize);
-  }
-
-  @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
-  public void shouldResizeWindowToGivenSize() {
-    FluentDimension newSize = windowSize().addToWidth(20).addToHeight(40);
-    frameFixture.resizeTo(newSize);
-    frameFixture.requireSize(newSize);
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
-  public void shouldResizeToGivenWidth() {
-    FluentDimension newSize = windowSize().addToWidth(50);
-    frameFixture.resizeWidthTo(newSize.width);
-    frameFixture.requireSize(newSize);
-  }
-
-  @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
-  public void shouldResizeToGivenHeight() {
-    FluentDimension newSize = windowSize().addToHeight(50);
-    frameFixture.resizeHeightTo(newSize.height);
-    frameFixture.requireSize(newSize);
-  }
+  private FrameFixture fixture;
+  private JFrame target;
   
   @Test public void shouldIconifyAndDeiconifyFrame() {
-    frameFixture.iconify();
-    assertThat(frameFixture.target.getExtendedState()).isEqualTo(ICONIFIED);
-    frameFixture.deiconify();
-    assertThat(frameFixture.target.getExtendedState()).isEqualTo(NORMAL);
+    fixture.iconify();
+    assertThat(fixture.target.getExtendedState()).isEqualTo(ICONIFIED);
+    fixture.deiconify();
+    assertThat(fixture.target.getExtendedState()).isEqualTo(NORMAL);
   }
   
   @Test public void shouldMaximizeFrame() {
-    frameFixture.maximize();
-    int frameState = frameFixture.target.getExtendedState() & MAXIMIZED_BOTH;
+    fixture.maximize();
+    int frameState = fixture.target.getExtendedState() & MAXIMIZED_BOTH;
     assertThat(frameState).isEqualTo(MAXIMIZED_BOTH);
   }
 
   @Test(dependsOnMethods = "shouldMaximizeFrame") 
   public void shouldNormalizeFrame() {
-    frameFixture.maximize();
-    frameFixture.normalize();
-    assertThat(frameFixture.target.getExtendedState()).isEqualTo(NORMAL);
+    fixture.maximize();
+    fixture.normalize();
+    assertThat(fixture.target.getExtendedState()).isEqualTo(NORMAL);
   }
-  
-  FluentDimension windowSize() {
-    return new FluentDimension(frame.getSize());
+
+  protected void afterSetUp() {
+    fixture.show();
+    target.setSize(new Dimension(600, 400));
   }
-  
-  @AfterMethod public void tearDown() {
-    frameFixture.cleanUp();
+
+  protected ComponentFixture<Frame> createFixture() {
+    fixture = new FrameFixture(robot(), target);
+    return fixture;
+  }
+
+  protected Frame createTarget() {
+    target = new JFrame();
+    return target;
   }
 }

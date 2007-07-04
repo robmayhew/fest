@@ -15,23 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -41,46 +32,11 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class JTabbedPaneFixtureTest {
+@GUITest public class JTabbedPaneFixtureTest extends ComponentFixtureTestCase<JTabbedPane> {
 
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-   
-    final JTabbedPane tabbedPane = new JTabbedPane();
-    
-    public MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-
-    private void setUpComponents() {
-      tabbedPane.setName("tabbedPane");
-      tabbedPane.addTab("First", new JPanel());
-      tabbedPane.addTab("Second", new JPanel());
-    }
-    
-    private void addComponents() {
-      add(tabbedPane);
-    }
-  }
-  
-  private MainWindow window;
-  private RobotFixture robot;
   private JTabbedPaneFixture fixture;
   
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    fixture = new JTabbedPaneFixture(robot, "tabbedPane");
-  }
-  
-  @Test public void shouldHaveFoundTabbedPane() {
-    assertThat(fixture.target).isSameAs(window.tabbedPane);
-  }
-
-  @Test(dependsOnMethods = "shouldHaveFoundTabbedPane", dataProvider = "tabIndexProvider") 
+  @Test(dataProvider = "tabIndexProvider") 
   public void shouldSelectTabWithGivenIndex(int index) {
     fixture.selectTab(index);
     assertThat(fixture.target.getSelectedIndex()).isEqualTo(index);
@@ -91,7 +47,7 @@ import org.testng.annotations.Test;
    return new Object[][] { { 0 }, { 1 } };
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundTabbedPane", dataProvider = "tabTextProvider") 
+  @Test(dataProvider = "tabTextProvider") 
   public void shouldSelectTabWithGivenText(String tabName, int expectedIndex) {
     fixture.selectTab(tabName);
     assertThat(fixture.target.getSelectedIndex()).isEqualTo(expectedIndex);
@@ -102,12 +58,20 @@ import org.testng.annotations.Test;
    return new Object[][] { { "First", 0 }, { "Second", 1 } };
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundTabbedPane")
-  public void shouldReturnAllTabs() {
+  @Test public void shouldReturnAllTabs() {
     assertThat(fixture.tabTitles()).isEqualTo(array("First", "Second"));
   }
-  
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+
+  protected ComponentFixture<JTabbedPane> createFixture() {
+    fixture = new JTabbedPaneFixture(robot(), "target");
+    return fixture;
+  }
+
+  protected JTabbedPane createTarget() {
+    JTabbedPane target = new JTabbedPane();
+    target.setName("target");
+    target.addTab("First", new JPanel());
+    target.addTab("Second", new JPanel());
+    return target;
   }
 }

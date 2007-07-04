@@ -17,9 +17,13 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
+import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+
+import abbot.tester.ComponentTester;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -38,12 +42,12 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public abstract class AbstractComponentFixtureTest<T extends Component> {
+public abstract class ComponentFixtureTestCase<T extends Component> {
 
   protected static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    final JButton button = new JButton("Some Button");
+    public final JButton button = new JButton("Some Button");
     
     MainWindow() {
       setLayout(new FlowLayout());
@@ -60,16 +64,33 @@ public abstract class AbstractComponentFixtureTest<T extends Component> {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
     T target = createTarget();
-    window.add(target);
+    addToWindow(target);
     robot().showWindow(window);
     fixture = createFixture(); 
-    giveFocusTo(window.button);
+    giveFocusToButton();
     assertThat(fixture.target).isSameAs(target);
     afterSetUp();
+    moveToUnblockMainWindow(target);
   }
 
+  private void addToWindow(T target) {
+    if (!isWindow(target)) window.add(target);
+  }
+
+  private void moveToUnblockMainWindow(T target) {
+    if (!isWindow(target)) return;
+    Rectangle mainWindowBounds = window.getBounds();
+    Rectangle targetBounds = target.getBounds();
+    targetBounds.y = mainWindowBounds.y + mainWindowBounds.height + 10;
+    target.setBounds(targetBounds);
+  }
+
+  private boolean isWindow(T target) {
+    return target instanceof Window;
+  }
+  
   protected abstract T createTarget();
-  protected abstract void afterSetUp();
+  protected void afterSetUp() {}
   protected abstract ComponentFixture<T> createFixture();
   
   @Test public final void shouldClickComponent() {
@@ -80,9 +101,14 @@ public abstract class AbstractComponentFixtureTest<T extends Component> {
   
   @Test public final void shouldGiveFocusToComponent() {
     T target = fixture.target;
-    assertThat(target.hasFocus()).isFalse();
+    if (target.hasFocus()) giveFocusToButton();
     fixture.focus();
     assertThat(target.hasFocus()).isTrue();
+  }
+
+  private void giveFocusToButton() {
+    if (isWindow(fixture.target)) new ComponentTester().click(window.button);
+    giveFocusTo(window.button);
   }
 
   protected final void giveFocusTo(final Component c) {
@@ -121,5 +147,6 @@ public abstract class AbstractComponentFixtureTest<T extends Component> {
   }
   
   protected final RobotFixture robot() { return robot; }
+  protected final MainWindow window() { return window; }
   protected final ComponentFixture<T> fixture() { return fixture; }
 }

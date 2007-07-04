@@ -15,21 +15,11 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JList;
 
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.RobotFixture;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -37,66 +27,36 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz 
  */
-public class JListFixtureTest {
+public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
 
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-
-    final JList list = new JList(array("one", "two", "three"));
-    
-    MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-    
-    private void setUpComponents() {
-      list.setName("list");
-    }
-    
-    private void addComponents() {
-      add(list);
-    }
-  }
-  
-  private MainWindow window;
-  private RobotFixture robot;
   private JListFixture fixture;
 
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    fixture = new JListFixture(robot, "list");
-  }
-
-  @Test public void shouldHaveFoundList() {
-    assertThat(fixture.target).isSameAs(window.list);
-  }
-
-  @Test(dependsOnMethods = "shouldHaveFoundList")
-  public void shouldReturnListContents() {
+  @Test public void shouldReturnListContents() {
     assertThat(fixture.contents()).isEqualTo(array("one", "two", "three"));
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundList")
-  public void shouldSelectItemAtGivenIndex() {
+  @Test public void shouldSelectItemAtGivenIndex() {
     fixture.selectItem(2);
-    assertThat(window.list.getSelectedValue()).equals("three");
+    assertThat(fixture.target.getSelectedValue()).equals("three");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundList")
-  public void shouldSelectItemWithGivenText() {
+  @Test public void shouldSelectItemWithGivenText() {
     fixture.selectItem("two");
-    assertThat(window.list.getSelectedValue()).equals("two");
+    assertThat(fixture.target.getSelectedValue()).equals("two");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundList")
-  public void shouldReturnValueAtGivenIndex() {
+  @Test public void shouldReturnValueAtGivenIndex() {
     assertThat(fixture.valueAt(2)).isEqualTo("three");
   }
-  
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+
+  protected ComponentFixture<JList> createFixture() {
+    fixture = new JListFixture(robot(), "target");
+    return fixture;
+  }
+
+  protected JList createTarget() {
+    JList target = new JList(array("one", "two", "three"));
+    target.setName("target");
+    return target;
   }
 }

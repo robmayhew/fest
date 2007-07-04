@@ -15,25 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
 import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -41,57 +31,15 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link JTreeFixture}</code>.
  * 
  * @author Keith Coughtrey
+ * @author Alex Ruiz
  */
-@GUITest public class JTreeFixtureTest {
+@GUITest public class JTreeFixtureTest extends ComponentFixtureTestCase<JTree> {
   
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-
-    final JTree tree = new JTree();
-
-    private TreeModel treeModel;
-
-    public MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-
-    private void setUpComponents() {
-      tree.setName("tree");
-      DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
-      DefaultMutableTreeNode branch1 = new DefaultMutableTreeNode("branch1");
-      root.add(branch1);
-      branch1.add(new DefaultMutableTreeNode("branch1.1"));
-      branch1.add(new DefaultMutableTreeNode("branch1.2"));
-      root.add(new DefaultMutableTreeNode("branch2"));
-      treeModel = new DefaultTreeModel(root);
-      tree.setModel(treeModel);
-    }
-
-    private void addComponents() {
-      add(new JScrollPane(tree));
-    }
-  }
-
-  private MainWindow window;
-  private RobotFixture robot;
   private JTreeFixture fixture;
 
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    fixture = new JTreeFixture(robot, "tree");
-  }
-
-  @Test public void shouldHaveFoundTree() {
-    assertThat(fixture.target).isSameAs(window.tree);
-  }
-
-  @Test(dependsOnMethods = "shouldHaveFoundTree") public void shouldSelectNodeByRow() {
+  @Test public void shouldSelectNodeByRow() {
     fixture.target.clearSelection();
-    assertThat(fixture.target.getSelectionRows()).isEqualTo(null);
+    assertThat(fixture.target.getSelectionRows()).isNull();
     fixture.selectRow(0);
     assertThat(fixture.target.getSelectionRows()).isEqualTo(new int[] { 0 });
     fixture.selectRow(1);
@@ -100,7 +48,7 @@ import org.testng.annotations.Test;
     assertThat(fixture.target.getSelectionRows()).isEqualTo(new int[] { 0 });
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundTree") public void shouldToggleNodeByRow() {
+  @Test public void shouldToggleNodeByRow() {
     assertThat(fixture.target.isExpanded(1)).isFalse();
     fixture.toggleRow(1);
     assertThat(fixture.target.isExpanded(1)).isTrue();
@@ -108,7 +56,7 @@ import org.testng.annotations.Test;
     assertThat(fixture.target.isExpanded(1)).isFalse();
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundTree", dataProvider = "selectionPathProvider") 
+  @Test(dataProvider = "selectionPathProvider") 
   public void shouldSelectNodeByPath(TreePath treePath) {
     fixture.target.clearSelection();
     assertThat(fixture.target.getSelectionRows()).isEqualTo(null);
@@ -125,7 +73,27 @@ import org.testng.annotations.Test;
     };
   }
 
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+  @Override protected void afterSetUp() {
+    MainWindow window = window();
+    FluentDimension size = new FluentDimension(window.getSize());
+    window.setSize(size.addToHeight(50));
+  }
+
+  protected ComponentFixture<JTree> createFixture() {
+    fixture = new JTreeFixture(robot(), "target");
+    return fixture;
+  }
+
+  protected JTree createTarget() {
+    JTree target = new JTree();
+    target.setName("target");
+    DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+    DefaultMutableTreeNode branch1 = new DefaultMutableTreeNode("branch1");
+    root.add(branch1);
+    branch1.add(new DefaultMutableTreeNode("branch1.1"));
+    branch1.add(new DefaultMutableTreeNode("branch1.2"));
+    root.add(new DefaultMutableTreeNode("branch2"));
+    target.setModel(new DefaultTreeModel(root));
+    return target;
   }
 }

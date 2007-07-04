@@ -165,6 +165,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @return this fixture.
    * @throws AssertionError if the managed <code>Window</code> is not visible.
    */
+  @SuppressWarnings("unchecked") 
   @Override public WindowFixture<T> requireVisible() {
     return (WindowFixture<T>)super.requireVisible();
   }

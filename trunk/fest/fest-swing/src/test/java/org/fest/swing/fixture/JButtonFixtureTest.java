@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Yvonne Wang
  */
-@GUITest public class JButtonFixtureTest extends AbstractComponentFixtureTest<JButton> {
+@GUITest public class JButtonFixtureTest extends ComponentFixtureTestCase<JButton> {
 
   private JButtonFixture fixture;
   
@@ -45,12 +45,9 @@ import org.testng.annotations.Test;
     assertThat(fixture.text()).isEqualTo("Target");
   }
   
-  protected void afterSetUp() {
-    fixture = (JButtonFixture)fixture();
-  }
-  
   protected ComponentFixture<JButton> createFixture() { 
-    return new JButtonFixture(robot(), "target"); 
+    fixture = new JButtonFixture(robot(), "target");
+    return fixture;
   }
 
   protected JButton createTarget() { 

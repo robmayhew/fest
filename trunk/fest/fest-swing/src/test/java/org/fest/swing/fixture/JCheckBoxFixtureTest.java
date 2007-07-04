@@ -15,19 +15,10 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
-import org.fest.swing.RobotFixture;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -35,64 +26,42 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest {
+public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
 
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-   
-    final JCheckBox checkBox = new JCheckBox("A checkbox");
-    
-    public MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-
-    private void setUpComponents() {
-      checkBox.setName("checkBox");
-    }
-    
-    private void addComponents() {
-      add(checkBox);
-    }
-  }
-
-  private MainWindow window;
-  private RobotFixture robot;
   private JCheckBoxFixture fixture;
   
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    fixture = new JCheckBoxFixture(robot, "checkBox");
-  }
-  
   @Test public void shouldSelectCheckBoxIfNotSelected() {
-    window.checkBox.setSelected(false);
+    fixture.target.setSelected(false);
     fixture.check();
-    assertThat(window.checkBox.isSelected()).isTrue();
+    assertThat(fixture.target.isSelected()).isTrue();
   }
   
   @Test public void shouldNotSelectCheckboxIfAlreadySelected() {
-    window.checkBox.setSelected(true);
+    fixture.target.setSelected(true);
     fixture.check();
-    assertThat(window.checkBox.isSelected()).isTrue();
+    assertThat(fixture.target.isSelected()).isTrue();
   }
   
   @Test public void shouldUnselectCheckBoxIfSelected() {
-    window.checkBox.setSelected(true);
+    fixture.target.setSelected(true);
     fixture.uncheck();
-    assertThat(window.checkBox.isSelected()).isFalse();
+    assertThat(fixture.target.isSelected()).isFalse();
   }
   
   @Test public void shouldNotUnselectCheckboxIfAlreadyUnselected() {
-    window.checkBox.setSelected(false);
+    fixture.target.setSelected(false);
     fixture.uncheck();
-    assertThat(window.checkBox.isSelected()).isFalse();
+    assertThat(fixture.target.isSelected()).isFalse();
   }
 
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+  protected ComponentFixture<JCheckBox> createFixture() {
+    fixture = new JCheckBoxFixture(robot(), "target");
+    return fixture;
+  }
+
+  protected JCheckBox createTarget() {
+    JCheckBox target = new JCheckBox("A checkbox");
+    target.setName("target");
+    return target;
   }
 }

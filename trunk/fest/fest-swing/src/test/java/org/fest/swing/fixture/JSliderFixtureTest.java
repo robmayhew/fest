@@ -1,5 +1,5 @@
 /*
- * Created on Feb 9, 2007
+ * Created on Jul 1, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,45 +15,46 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JLabel;
+import javax.swing.JSlider;
 
+import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
-
-import org.fest.swing.GUITest;
 
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link JLabelFixture}</code>.
+ * Tests for <code>{@link JSliderFixture}</code>.
  *
  * @author Yvonne Wang
  */
-@GUITest public class JLabelFixtureTest extends ComponentFixtureTestCase<JLabel> {
+public class JSliderFixtureTest extends ComponentFixtureTestCase<JSlider> {
+  
+  private JSliderFixture fixture;
 
-  private JLabelFixture fixture;
-  
-  @Test public void shouldPassIfLabelHasMatchingText() {
-    fixture.requireText("Target");
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfLabelHasMatchingText", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfLabelHasNotMatchingText() {
-    fixture.requireText("A Label");
-  }
-  
-  @Test public void shouldReturnLabelText() {
-    assertThat(fixture.text()).isEqualTo("Target");
+  @Test public void shouldIncrementValue() {
+    fixture.increment();
+    assertThat(fixture.target.getValue()).isEqualTo(16);
   }
 
-  protected ComponentFixture<JLabel> createFixture() {
-    fixture = new JLabelFixture(robot(), "target");
+  @Test public void shouldDecrementValue() {
+    fixture.decrement();
+    assertThat(fixture.target.getValue()).isEqualTo(14);
+  }
+
+  protected ComponentFixture<JSlider> createFixture() {
+    fixture = new JSliderFixture(robot(), "target");
     return fixture;
   }
 
-  protected JLabel createTarget() {
-    JLabel target = new JLabel("Target");
+  protected JSlider createTarget() {
+    JSlider target = new JSlider();
     target.setName("target");
+    target.setOrientation(HORIZONTAL);
+    target.setMinimum(0);
+    target.setMaximum(30);
+    target.setValue(15);
     return target;
   }
-  
+
+
 }

@@ -15,23 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -40,82 +31,52 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class JComboBoxFixtureTest {
+@GUITest public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
 
-  private static class MainWindow extends JFrame {
-    private static final long serialVersionUID = 1L;
-   
-    final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
-    
-    public MainWindow() {
-      setLayout(new FlowLayout());
-      setUpComponents();
-      addComponents();
-    }
-
-    private void setUpComponents() {
-      comboBox.setName("comboBox");
-    }
-    
-    private void addComponents() {
-      add(comboBox);
-    }
-  }
-  
-  private MainWindow window;
-  private RobotFixture robot;
   private JComboBoxFixture fixture;
   
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    robot.showWindow(window);
-    fixture = new JComboBoxFixture(robot, "comboBox");
-  }
-
-  @Test public void shouldHaveFoundComboBox() {
-    assertThat(fixture.target).isSameAs(window.comboBox);
-  }
- 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldReturnComboBoxContents() {
+  @Test public void shouldReturnComboBoxContents() {
     assertThat(fixture.contents()).isEqualTo(array("first", "second", "third"));
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldSelectItemAtGivenIndex() {
+  @Test public void shouldSelectItemAtGivenIndex() {
     fixture.selectItem(2);
-    assertThat(window.comboBox.getSelectedItem()).equals("third");
+    assertThat(fixture.target.getSelectedItem()).equals("third");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldSelectItemWithGivenText() {
+  @Test public void shouldSelectItemWithGivenText() {
     fixture.selectItem("second");
-    assertThat(window.comboBox.getSelectedItem()).equals("second");
+    assertThat(fixture.target.getSelectedItem()).equals("second");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldReturnValueAtGivenIndex() {
+  @Test public void shouldReturnValueAtGivenIndex() {
     assertThat(fixture.valueAt(2)).isEqualTo("third");
   }
 
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldEnterTextInEditableComboBox() {
-    window.comboBox.setEditable(true);
+  @Test public void shouldEnterTextInEditableComboBox() {
+    fixture.target.setEditable(true);
     fixture.enterText("Text entered by FEST");
-    JTextField editorComponent = (JTextField)window.comboBox.getEditor().getEditorComponent();
-    assertThat(editorComponent.getText()).contains("Text entered by FEST");
+    assertThat(targetEditor().getText()).contains("Text entered by FEST");
   }
   
-  @Test(dependsOnMethods = "shouldHaveFoundComboBox")
-  public void shouldNotEnterTextInNonEditableComboBox() {
-    window.comboBox.setEditable(false);
+  @Test public void shouldNotEnterTextInNonEditableComboBox() {
+    fixture.target.setEditable(false);
     fixture.enterText("Text entered by FEST");
-    JTextField editorComponent = (JTextField)window.comboBox.getEditor().getEditorComponent();
-    assertThat(editorComponent.getText()).isEmpty();
+    assertThat(targetEditor().getText()).isEmpty();
   }
 
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+  private JTextField targetEditor() {
+    return (JTextField)fixture.target.getEditor().getEditorComponent();
+  }
+
+  protected ComponentFixture<JComboBox> createFixture() {
+    fixture = new JComboBoxFixture(robot(), "target");
+    return fixture;
+  }
+
+  protected JComboBox createTarget() {
+    JComboBox target = new JComboBox(array("first", "second", "third"));
+    target.setName("target");
+    return target;
   }
 }
