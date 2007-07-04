@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,9 +34,15 @@ final class ComponentEvents extends MouseAdapter {
   private boolean clicked;
   
   private ComponentEvents(Component target) {
-    target.addMouseListener(this);
+    attach(this, target);
   }
 
+  private static void attach(ComponentEvents events, Component target) {
+    target.addMouseListener(events);
+    if (!(target instanceof Container)) return;
+    for (Component c : ((Container)target).getComponents()) attach(events, c);
+  }
+  
   @Override public void mouseClicked(MouseEvent e) {
     clicked = true;
   }
