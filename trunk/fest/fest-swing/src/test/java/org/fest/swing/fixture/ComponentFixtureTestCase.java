@@ -141,6 +141,28 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     fixture.target.setVisible(true);
     fixture.requireNotVisible();
   }
+  
+  @Test public final void shouldPassIfComponentIsEnabledAndExpectingEnabled() {
+    fixture.target.setEnabled(true);
+    fixture.requireEnabled();
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public final void shouldFailIfComponentIsDisabledAndExpectingEnabled() {
+    fixture.target.setEnabled(false);
+    fixture.requireEnabled();
+  }
+  
+  @Test public final void shouldPassIfComponentIsDisabledAndExpectingDisabled() {
+    fixture.target.setEnabled(false);
+    fixture.requireDisabled();
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public final void shouldFailIfComponentIsEnabledAndExpectingDisabled() {
+    fixture.target.setEnabled(true);
+    fixture.requireDisabled();
+  }
 
   @AfterMethod public final void tearDown() {
     robot.cleanUp();
