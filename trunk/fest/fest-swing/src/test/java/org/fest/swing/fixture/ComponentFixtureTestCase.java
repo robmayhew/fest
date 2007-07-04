@@ -22,9 +22,9 @@ import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 import abbot.tester.ComponentTester;
-
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
@@ -53,6 +53,14 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       setLayout(new FlowLayout());
       button.setName("button");
       add(button);
+      setTitle("Testing with FEST");
+      lookNative();
+    }
+    
+    private void lookNative() {
+      try {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      } catch (Exception ignored) {}
     }
   }
 
