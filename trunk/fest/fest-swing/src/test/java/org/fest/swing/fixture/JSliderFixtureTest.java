@@ -20,6 +20,7 @@ import javax.swing.JSlider;
 import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -40,7 +41,35 @@ public class JSliderFixtureTest extends ComponentFixtureTestCase<JSlider> {
     fixture.decrement();
     assertThat(fixture.target.getValue()).isLessThan(15);
   }
+  
+  @Test(dataProvider = "valueProvider")
+  public void shouldSlideToValue(int value) {
+    fixture.slideTo(value);
+    assertThat(fixture.target.getValue()).isEqualTo(value);
+  }
 
+  @DataProvider(name = "valueProvider")
+  public Object[][] valueProvider() {
+    return new Object[][] { 
+        { 5 }, 
+        { 10 },
+        { 28 },
+        { 20 }
+    };
+  }
+  
+  @Test public void shouldSlideToMaximum() {
+    fixture.slideToMax();
+    JSlider slider = fixture.target;
+    assertThat(slider.getValue()).isEqualTo(slider.getMaximum());
+  }
+  
+  @Test public void shouldSlideToMinimum() {
+    fixture.slideToMin();
+    JSlider slider = fixture.target;
+    assertThat(slider.getValue()).isEqualTo(slider.getMinimum());
+  }
+  
   protected ComponentFixture<JSlider> createFixture() {
     fixture = new JSliderFixture(robot(), "target");
     return fixture;
