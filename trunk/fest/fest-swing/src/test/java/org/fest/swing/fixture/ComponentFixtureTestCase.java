@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -73,7 +74,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     window = new MainWindow();
     T target = createTarget();
     addToWindow(target);
-    robot().showWindow(window);
+    robot().showWindow(window, new Dimension(300, 200));
     fixture = createFixture(); 
     giveFocusToButton();
     assertThat(fixture.target).isSameAs(target);

@@ -74,12 +74,6 @@ import org.testng.annotations.Test;
     };
   }
 
-  @Override protected void afterSetUp() {
-    MainWindow window = window();
-    FluentDimension size = new FluentDimension(window.getSize());
-    window.setSize(size.addToHeight(50));
-  }
-
   protected ComponentFixture<JTree> createFixture() {
     fixture = new JTreeFixture(robot(), "target");
     return fixture;
