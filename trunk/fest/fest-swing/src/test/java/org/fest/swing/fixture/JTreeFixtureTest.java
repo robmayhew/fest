@@ -21,6 +21,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GUITest;
 
@@ -67,9 +68,9 @@ import org.testng.annotations.Test;
   @DataProvider(name = "selectionPathProvider") 
   public Object[][] selectionPathProvider() {
     return new Object[][] { 
-        { new TreePath(new String[] { "root", "branch1" }) },
-        { new TreePath(new String[] { "root", "branch1", "branch1.2" }) },
-        { new TreePath(new String[] { "root" }) } 
+        { new TreePath(array("root", "branch1")) },
+        { new TreePath(array("root", "branch1", "branch1.2")) },
+        { new TreePath(array("root")) } 
     };
   }
 
