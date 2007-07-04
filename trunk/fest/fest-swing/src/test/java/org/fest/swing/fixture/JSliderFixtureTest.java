@@ -33,12 +33,12 @@ public class JSliderFixtureTest extends ComponentFixtureTestCase<JSlider> {
 
   @Test public void shouldIncrementValue() {
     fixture.increment();
-    assertThat(fixture.target.getValue()).isEqualTo(16);
+    assertThat(fixture.target.getValue()).isGreaterThan(15);
   }
 
   @Test public void shouldDecrementValue() {
     fixture.decrement();
-    assertThat(fixture.target.getValue()).isEqualTo(14);
+    assertThat(fixture.target.getValue()).isLessThan(15);
   }
 
   protected ComponentFixture<JSlider> createFixture() {
