@@ -1,0 +1,14 @@
+#summary Start testing Swing GUIs.
+
+== Introduction ==
+
+FEST (Fixtures for Easy Software Testing) is an open source project (Apache 2.0 license) which aims at making software testing easier. This guide explains how to get started with FEST's Swing module, which makes creation and maintain robust GUI functional tests easy.
+
+== Creating your first test ==
+
+  # Download the latest version of the Swing module from the project's [http://code.google.com/p/fest/downloads/list download page]. The filename should be similar to _fest-swing-VERSION.zip_.
+
+  # Include the file fest-swing-VERSION.jar and its dependencies (included in the downloaded  zip file) in your classpath.
+
+
+
