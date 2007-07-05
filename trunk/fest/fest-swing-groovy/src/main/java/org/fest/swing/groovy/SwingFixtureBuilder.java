@@ -39,7 +39,7 @@ public final class SwingFixtureBuilder extends BuilderSupport {
 
   private ComponentFixture<?> currentFixture;
   
-  private static final Map<Object, FixtureFactory> factoryMap = new LinkedHashMap<Object, FixtureFactory>();
+  private static final Map<Object, FixtureFactory<?, ?>> factoryMap = new LinkedHashMap<Object, FixtureFactory<?, ?>>();
   static {
     factoryMap.put("frame", new FrameFixtureFactory());
   }
@@ -62,6 +62,7 @@ public final class SwingFixtureBuilder extends BuilderSupport {
     return createNode(name, null, value);
   }
 
+  @SuppressWarnings("unchecked") 
   protected Object createNode(Object name, Map attributes) {
     return createNode(name, attributes, null);
   }
@@ -78,7 +79,7 @@ public final class SwingFixtureBuilder extends BuilderSupport {
 
   private boolean fixtureSettingCreated(Object name, Map<Object, Object> attributes, Object value) {
     if (currentFixture == null) return false;
-    for (Map.Entry<Object, FixtureFactory> entry : factoryMap.entrySet()) 
+    for (Map.Entry<Object, FixtureFactory<?, ?>> entry : factoryMap.entrySet()) 
       if (entry.getValue().fixtureSettingCreated(context(this, currentFixture, name, value, attributes))) return true;
     return false;
   }
