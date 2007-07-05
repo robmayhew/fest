@@ -78,7 +78,7 @@ public final class Method<T> {
       return new ParameterTypes<Void>(parameterTypes, returnType);
     }
 
-    public Method in(Object target) {
+    public Method<Void> in(Object target) {
       return new Method<Void>(name, target);
     }
   }
