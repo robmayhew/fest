@@ -130,7 +130,7 @@ public class TestNGMethodStub implements ITestNGMethod {
   }
 
   /** @see org.testng.ITestNGMethod#getRealClass() */
-  public Class getRealClass() {
+  public Class<?> getRealClass() {
     return null;
   }
 
