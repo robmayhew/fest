@@ -10,4 +10,23 @@ FEST (Fixtures for Easy Software Testing) is an open source project (Apache 2.0 
   # Include the file fest-swing-VERSION.jar and its dependencies (jar/zip files, located in the 'lib' folder in the downloaded zip file) in your classpath.
   # Use the fixtures in the package `org.fest.swing.fixture`. Although you can work directly with the FEST Robot (`org.fest.swing.RobotFixture`,) it is too low-level. It is a lot easier to work with the provided fixtures.
 
+GUI Tests that use FEST can be written with either [http://junit.org JUnit] or [http://testng.org TestNG]. The following is an example of a test that verifies that the text in the `JLabel` changes to the text in the `JTextField` when the `JButton` is clicked:
 
+{{{
+  private FrameFixture window;  
+
+  @BeforeMethod public void setUp() {
+    window = new FrameFixture(new MyFrame());
+    window.show();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.cleanUp();
+  }
+  
+  @Test public void shouldCopyTextInLabelWhenClickingButton() {
+    window.textBox("textToCopy").enterText("Some random text");
+    window.button("copyButton").click();
+    window.label("copiedText").requireText("Some random text");    
+  }
+}}}
