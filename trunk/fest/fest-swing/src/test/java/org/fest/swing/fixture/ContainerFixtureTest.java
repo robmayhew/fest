@@ -15,11 +15,11 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -30,10 +30,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import static java.awt.GridBagConstraints.HORIZONTAL;
+import static javax.swing.BoxLayout.Y_AXIS;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
@@ -65,10 +66,10 @@ import org.testng.annotations.Test;
     final JDialog dialog = new JDialog(this, "A Dialog");
     final JTextField textField = new JTextField(10);
     final JTabbedPane tabbedPane = new JTabbedPane();
-    final JCheckBox checkBox = new JCheckBox();
+    final JCheckBox checkBox = new JCheckBox("A CheckBox");
     
     CustomWindow() {
-      setLayout(new GridBagLayout());
+      setLayout(new BoxLayout(getContentPane(), Y_AXIS));
       setUpComponents();
       addComponents();
     }
@@ -87,26 +88,18 @@ import org.testng.annotations.Test;
       dialog.setName("dialog");
       textField.setName("textField");
       tabbedPane.setName("tabbedPane");
+      tabbedPane.addTab("A Tab", new JPanel());
       checkBox.setName("checkBox");
     }
     
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      GridBagConstraints c = new GridBagConstraints();
-      c.gridx = c.gridy = 0;
-      c.fill = HORIZONTAL;
-      add(label, c);
-      c.gridy++;
-      add(comboBox, c);
-      c.gridy++;
-      add(textField, c);
-      c.gridy++;
-      add(button, c);
-      c.gridy++;
-      add(tabbedPane, c);
-      c.gridy++;
-      add(checkBox, c);
+      addComponents(label, comboBox, textField, button, tabbedPane, checkBox);
+    }
+    
+    private void addComponents(Component... components) {
+      for (Component c : components) add(c);
     }
   }
   

@@ -58,6 +58,10 @@ public abstract class WindowFixtureTestCase<T extends Window> extends ComponentF
     windowFixture().requireSize(newSize);
   }
   
+  @Override protected boolean addTargetToWindow() { return false; }
+
+  @Override protected boolean targetBlocksMainWindow() { return true; }
+
   protected final FluentDimension windowSize() {
     return new FluentDimension(windowFixture().target.getSize());
   }

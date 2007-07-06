@@ -19,7 +19,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
-import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -49,6 +48,8 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     private static final long serialVersionUID = 1L;
 
     public final JButton button = new JButton("Some Button");
+
+    private final ComponentTester tester;
     
     MainWindow() {
       setLayout(new FlowLayout());
@@ -56,12 +57,17 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       add(button);
       setTitle("Testing with FEST");
       lookNative();
+      tester = new ComponentTester();
     }
     
     private void lookNative() {
       try {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       } catch (Exception ignored) {}
+    }
+    
+    public void clickButton() {
+      tester.click(button);      
     }
   }
 
@@ -83,21 +89,19 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   private void addToWindow(T target) {
-    if (!isWindow(target)) window.add(target);
+    if (addTargetToWindow()) window.add(target);
   }
 
+  protected boolean addTargetToWindow() { return true; }
+  
   private void moveToUnblockMainWindow(T target) {
-    if (!isWindow(target)) return;
+    if (!targetBlocksMainWindow()) return;
     Rectangle mainWindowBounds = window.getBounds();
     Rectangle targetBounds = target.getBounds();
     targetBounds.y = mainWindowBounds.y + mainWindowBounds.height + 10;
     target.setBounds(targetBounds);
   }
 
-  private boolean isWindow(T target) {
-    return target instanceof Window;
-  }
-  
   protected abstract T createTarget();
   protected void afterSetUp() {}
   protected abstract ComponentFixture<T> createFixture();
@@ -116,10 +120,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   private void giveFocusToButton() {
-    if (isWindow(fixture.target)) new ComponentTester().click(window.button);
+    if (targetBlocksMainWindow()) window.clickButton();
     giveFocusTo(window.button);
   }
 
+  protected boolean targetBlocksMainWindow() { return false; }
+  
   protected final void giveFocusTo(final Component c) {
     c.requestFocusInWindow();
     robot().wait(new Condition("component has focus") {
