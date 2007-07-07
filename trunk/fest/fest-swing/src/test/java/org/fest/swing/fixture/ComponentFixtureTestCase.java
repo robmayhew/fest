@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
+import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,6 +32,7 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
+import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -82,10 +84,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     addToWindow(target);
     robot().showWindow(window, new Dimension(300, 200));
     fixture = createFixture(); 
-    giveFocusToButton();
     assertThat(fixture.target).isSameAs(target);
     afterSetUp();
     moveToUnblockMainWindow(target);
+    giveFocusToButton();
   }
 
   private void addToWindow(T target) {
@@ -97,11 +99,17 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   private void moveToUnblockMainWindow(T target) {
     if (!targetBlocksMainWindow()) return;
     Rectangle mainWindowBounds = window.getBounds();
-    Rectangle targetBounds = target.getBounds();
+    Window targetWindow = windowAncestorOf(target);
+    Rectangle targetBounds = targetWindow.getBounds();
     targetBounds.y = mainWindowBounds.y + mainWindowBounds.height + 10;
-    target.setBounds(targetBounds);
+    targetWindow.setBounds(targetBounds);
   }
 
+  private Window windowAncestorOf(T target) {
+    if (target instanceof Window) return (Window)target;
+    return getWindowAncestor(target);
+  }
+  
   protected abstract T createTarget();
   protected void afterSetUp() {}
   protected abstract ComponentFixture<T> createFixture();
