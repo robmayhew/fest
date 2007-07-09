@@ -24,7 +24,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
 
@@ -201,6 +204,39 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    */
   public final JCheckBoxFixture checkBox(String name) {
     return new JCheckBoxFixture(robot, robot.finder().findByName(target, name, JCheckBox.class));
+  }
+  
+  /**
+   * Finds a <code>{@link JSpinner}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JSpinner</code> found.
+   * @throws ComponentLookupException if a <code>JSpinner</code> having a matching name could not be found.
+   */
+  public final JSpinnerFixture spinner(String name) {
+    return new JSpinnerFixture(robot, robot.finder().findByName(target, name, JSpinner.class));
+  }
+  
+  /**
+   * Finds a <code>{@link JSlider}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JSlider</code> found.
+   * @throws ComponentLookupException if a <code>JSlider</code> having a matching name could not be found.
+   */
+  public final JSliderFixture slider(String name) {
+    return new JSliderFixture(robot, robot.finder().findByName(target, name, JSlider.class));
+  }
+  
+  /**
+   * Finds a <code>{@link JToolBar}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JToolBar</code> found.
+   * @throws ComponentLookupException if a <code>JToolBar</code> having a matching name could not be found.
+   */
+  public final JToolBarFixture toolBar(String name) {
+    return new JToolBarFixture(robot, robot.finder().findByName(target, name, JToolBar.class));
   }
   
   private static class JMenuItemMatcher extends abbot.finder.matchers.JMenuItemMatcher implements ComponentMatcher {
