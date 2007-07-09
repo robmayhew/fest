@@ -188,8 +188,11 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   @AfterMethod public final void tearDown() {
+    beforeTearDown();
     robot.cleanUp();
   }
+  
+  protected void beforeTearDown() {}
   
   protected final RobotFixture robot() { return robot; }
   protected final MainWindow window() { return window; }
