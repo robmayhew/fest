@@ -30,6 +30,14 @@ import javax.swing.JToolBar;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.EAST;
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.NORTH;
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.SOUTH;
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.WEST;
+
+import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
+
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -48,11 +56,10 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
       super(name);
       Action action = new AbstractAction() {
         private static final long serialVersionUID = 1L;
-        public void actionPerformed(ActionEvent e) {
-          
-        }
+        public void actionPerformed(ActionEvent e) {}
       };
       button = add(action);
+      button.setName("button");
       button.setText("A Button");
     }
   }
@@ -62,33 +69,52 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   private MyToolBar target;
 
   @Test public void shouldFloatToolbar() {
-    Window originalParent = getWindowAncestor(fixture.target);
-    Point originalParentLocation = originalParent.getLocation();
-    Point newLocation = new Point(originalParentLocation.x + 200, originalParentLocation.y + 100);
-    fixture.floatTo(newLocation);
-    Window newParent = getWindowAncestor(fixture.target);
-    assertThat(newParent).isNotSameAs(originalParent);
-    Point newParentLocation = newParent.getLocation();
-    assertThat(newParentLocation.x).isGreaterThan(originalParentLocation.x);
-    assertThat(newParentLocation.y).isGreaterThan(originalParentLocation.y);
+    Window oldAncestor = toolbarAncestor();
+    Point oldAncestorLocation = oldAncestor.getLocation();
+    fixture.floatTo(new FluentPoint(oldAncestorLocation).addToX(200).addToY(100));
+    Window newAncestor = toolbarAncestor();
+    assertThat(newAncestor).isNotSameAs(oldAncestor);
+    Point newAncestorLocation = newAncestor.getLocation();
+    assertThat(newAncestorLocation.x).isGreaterThan(oldAncestorLocation.x);
+    assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
   }
 
   @Test(dependsOnMethods = "shouldFloatToolbar")
   public void shouldUnfloatToolbar() {
-    Window originalParent = getWindowAncestor(fixture.target);
+    Window oldAncestor = toolbarAncestor();
     fixture.floatTo(new Point(200, 200));
     fixture.unfloat();
-    assertThat(getWindowAncestor(fixture.target)).isSameAs(originalParent);
+    assertThat(toolbarAncestor()).isSameAs(oldAncestor);
   }
   
-  @Test(dependsOnMethods = "shouldFloatToolbar")
-  public void shouldUnfloatToolbarToGivenPosition() {
-    Window originalParent = getWindowAncestor(fixture.target);
+  @Test(dependsOnMethods = "shouldFloatToolbar", dataProvider = "unfloatConstraints")
+  public void shouldUnfloatToolbarToGivenPosition(UnfloatConstraint constraint) {
+    Window originalParent = toolbarAncestor();
     fixture.floatTo(new Point(200, 200));
-    fixture.unfloat(JToolBarFixture.UnfloatConstraint.SOUTH);
-    assertThat(getWindowAncestor(fixture.target)).isSameAs(originalParent);
+    fixture.unfloat(constraint);
+    assertThat(toolbarAncestor()).isSameAs(originalParent);
   }
 
+  @DataProvider(name = "unfloatConstraints")
+  public Object[][] unfloatConstraints() {
+    return new Object[][] { 
+        { NORTH }, 
+        { EAST },
+        { SOUTH },
+        { WEST }
+    };  
+  }
+  
+  private Window toolbarAncestor() {
+    return getWindowAncestor(fixture.target);
+  }
+  
+  @Test public void shouldFindToolbarSubcomponents() {
+    ComponentEvents events = ComponentEvents.attachTo(target.button);
+    fixture.button("button").click();
+    assertThat(events.clicked());
+  }
+  
   @Override protected boolean targetBlocksMainWindow() { return true; }
   @Override protected boolean addTargetToWindow() { return false; }
   
