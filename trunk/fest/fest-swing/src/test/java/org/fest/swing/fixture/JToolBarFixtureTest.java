@@ -65,6 +65,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   }
   
   private JFrame toolbarFrame;
+  private BorderLayout borderLayout;
   private JToolBarFixture fixture;
   private MyToolBar target;
 
@@ -93,6 +94,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
     fixture.floatTo(new Point(200, 200));
     fixture.unfloat(constraint);
     assertThat(toolbarAncestor()).isSameAs(originalParent);
+    assertThat(borderLayout.getLayoutComponent(constraint.value)).isSameAs(target);
   }
 
   @DataProvider(name = "unfloatConstraints")
@@ -132,7 +134,8 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
 
   private void showToolbarFrame() {
     toolbarFrame = new JFrame();
-    toolbarFrame.setLayout(new BorderLayout());
+    borderLayout = new BorderLayout();
+    toolbarFrame.setLayout(borderLayout);
     toolbarFrame.add(target, BorderLayout.NORTH);
     robot().showWindow(toolbarFrame, new Dimension(300, 200));
   }
