@@ -125,6 +125,11 @@ import org.testng.annotations.Test;
       removeAllMouseListeners();
       button.addMouseListener(l);
       clickButton();
+      try {
+        Thread.sleep(200);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
     }
     
     private void removeAllMouseListeners() {
@@ -138,6 +143,7 @@ import org.testng.annotations.Test;
 
   private CustomWindow window;
   private RobotFixture robot;
+  private JOptionPaneFixture fixture;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -145,186 +151,149 @@ import org.testng.annotations.Test;
     robot.showWindow(window);
   }
   
-  @Test public void shouldFindOptionPane() throws Exception {
-    window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
-    assertThat(fixture.target).isNotNull();
-    fixture.button().click();
-  }
-  
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldFindButtonWithGivenTextInOptionPane() {
+  @Test public void shouldFindButtonWithGivenTextInOptionPane() {
     window.showMessageWithOptions(array("First", "Second"));
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     JButtonFixture button = fixture.buttonWithText("Second");
     assertThat(button).isNotNull();
     assertThat(button.target.getText()).isEqualTo("Second");
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldFindTextComponentInOptionPane() {
+  @Test public void shouldFindTextComponentInOptionPane() {
     window.showInputMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     JTextComponentFixture textComponentFixture = fixture.textBox();
     assertThat(textComponentFixture).isNotNull();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldFindTextComponentInOptionPane" },
-        expectedExceptions = ComponentLookupException.class)
+  @Test(dependsOnMethods = "shouldFindTextComponentInOptionPane", expectedExceptions = ComponentLookupException.class)
   public void shouldNotFindTextComponentInOptionPaneIfNotInputMessage() {
     window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.textBox();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfMatchingTitle() {
+  @Test public void shouldPassIfMatchingTitle() {
     window.showMessageWithTitle("Star Wars");
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireTitle("Star Wars");
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
+  @Test public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
     window.showManuallyCreatedOptionPaneWithTitle("Jedi");
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireTitle("Jedi");
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfMatchingTitle" },
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfMatchingTitle", expectedExceptions = AssertionError.class)
   public void shouldFailIfNotMatchingTitle() {
     window.showMessageWithTitle("Yoda");
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireTitle("Darth Vader");
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfMatchingOptions() {
+  @Test public void shouldPassIfMatchingOptions() {
     window.showMessageWithOptions(array("First", "Second"));
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireOptions(array("First", "Second"));
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfMatchingOptions" },
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfMatchingOptions", expectedExceptions = AssertionError.class)
   public void shouldFailIfNotMatchingOptions() {
     window.showMessageWithOptions(array("First", "Second"));
     JOptionPaneFixture fixture = fixture();
     fixture.requireOptions(array("Third"));
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfMatchingMessage() {
+  @Test public void shouldPassIfMatchingMessage() {
     window.showMessageWithText("Leia");
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireMessage("Leia");
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfMatchingMessage" },
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfMatchingMessage", expectedExceptions = AssertionError.class)
   public void shouldFailIfNotMatchingMessage() {
     window.showMessageWithText("Palpatine");
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireMessage("Anakin");
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfExpectedAndActualMessageTypeIsError() {
+  @Test public void shouldPassIfExpectedAndActualMessageTypeIsError() {
     window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireErrorMessage();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsError" },
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsError", expectedExceptions = AssertionError.class)
   public void shouldFailIfExpectedMessageTypeIsErrorAndActualIsNot() {
     window.showInformationMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireErrorMessage();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
+  @Test public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
     window.showInformationMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireInformationMessage();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsInformation" },
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsInformation", 
         expectedExceptions = AssertionError.class)
   public void shouldFailIfExpectedMessageTypeIsInformationAndActualIsNot() {
     window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireInformationMessage();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
+  @Test public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
     window.showWarningMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireWarningMessage();
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsWarning" },
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning", 
         expectedExceptions = AssertionError.class)
   public void shouldFailIfExpectedMessageTypeIsWarningAndActualIsNot() {
     window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireWarningMessage();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
+  @Test public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
     window.showQuestionMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireQuestionMessage();
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsWarning" },
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning",
         expectedExceptions = AssertionError.class)
   public void shouldFailIfExpectedMessageTypeIsQuestionAndActualIsNot() {
     window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requireQuestionMessage();
-    fixture.button().click();
   }
 
-  @Test(dependsOnMethods = "shouldFindOptionPane")
-  public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
+  @Test public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
     window.showPlainMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requirePlainMessage();
-    fixture.button().click();
   }
   
-  @Test(dependsOnMethods = { "shouldFindOptionPane", "shouldPassIfExpectedAndActualMessageTypeIsWarning" },
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning",
         expectedExceptions = AssertionError.class)
   public void shouldFailIfExpectedMessageTypeIsPlainAndActualIsNot() {
     window.showErrorMessage();
-    JOptionPaneFixture fixture = fixture();
+    createFixture();
     fixture.requirePlainMessage();
-    fixture.button().click();
   }
   
   private JOptionPaneFixture fixture() {
     return new JOptionPaneFixture(robot);
+  }
+  
+  private void createFixture() {
+    fixture = new JOptionPaneFixture(robot);
+    assertThat(fixture.target).isNotNull();
   }
 
   @AfterMethod public void tearDown() {

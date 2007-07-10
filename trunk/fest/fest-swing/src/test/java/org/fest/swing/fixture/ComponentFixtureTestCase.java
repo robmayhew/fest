@@ -51,7 +51,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
     public final JButton button = new JButton("Some Button");
 
-    private final ComponentTester tester;
+    private final ComponentTester tester = new ComponentTester();
     
     MainWindow() {
       setLayout(new FlowLayout());
@@ -59,7 +59,6 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       add(button);
       setTitle("Testing with FEST");
       lookNative();
-      tester = new ComponentTester();
     }
     
     private void lookNative() {

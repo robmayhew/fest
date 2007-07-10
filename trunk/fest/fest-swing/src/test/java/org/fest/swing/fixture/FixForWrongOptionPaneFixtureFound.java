@@ -58,7 +58,7 @@ public class FixForWrongOptionPaneFixtureFound {
   }
 
   private void showMessageWithText(String text) {
-    window.setUpMessageWithText(text);
+    window.showMessageWithText(text);
     clickWindowButton();
   }
 
