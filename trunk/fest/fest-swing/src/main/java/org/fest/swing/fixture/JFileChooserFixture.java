@@ -64,11 +64,22 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
     super(robot, target);
   }
 
+  /**
+   * Simulates a user pressing the "Cancel" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return this fixture.
+   * @throws ComponentLookupException if the "Cancel" button cannot be found.
+   * @throws AssertionError if the "Cancel" button is disabled.
+   */
   public final JFileChooserFixture cancel() {
-    cancelButton().click();
+    cancelButton().requireEnabled().click();
     return this;
   }
   
+  /**
+   * Finds the "Cancel" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return the found "Cancel" button.
+   * @throws ComponentLookupException if the "Cancel" button cannot be found.
+   */
   public JButtonFixture cancelButton() {
     return new JButtonFixture(robot, findButton(UIManager.getString("FileChooser.cancelButtonText")));
   }
