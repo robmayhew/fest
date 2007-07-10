@@ -21,8 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
-import abbot.tester.JFileChooserTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
@@ -64,6 +62,11 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
     super(robot, target);
   }
 
+  public final JFileChooserFixture cancel() {
+    cancelButton().click();
+    return this;
+  }
+  
   public JButtonFixture cancelButton() {
     return new JButtonFixture(robot, findButton(UIManager.getString("FileChooser.cancelButtonText")));
   }
@@ -75,14 +78,5 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
       }
     });
     return button;
-  }
-
-  public final JFileChooserFixture cancel() {
-    fileChooserTester().actionCancel(target);
-    return this;
-  }
-  
-  protected final JFileChooserTester fileChooserTester() {
-    return (JFileChooserTester)tester();
   }
 }
