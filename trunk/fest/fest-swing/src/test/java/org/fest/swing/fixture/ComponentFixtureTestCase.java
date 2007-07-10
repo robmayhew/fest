@@ -79,15 +79,24 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
+    window.setSize(new Dimension(300, 200));
     T target = createTarget();
     addToWindow(target);
-    robot().showWindow(window, new Dimension(300, 200));
-    fixture = createFixture(); 
-    assertThat(fixture.target).isSameAs(target);
+    robot().showWindow(window);
+    createFixture(target); 
     afterSetUp();
     moveToUnblockMainWindow(target);
     giveFocusToButton();
   }
+  
+  protected abstract T createTarget();
+
+  private void createFixture(T target) {
+    fixture = createFixture(); 
+    assertThat(fixture.target).isSameAs(target);
+  }
+  
+  protected abstract ComponentFixture<T> createFixture();
 
   private void addToWindow(T target) {
     if (addTargetToWindow()) window.add(target);
@@ -109,9 +118,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     return getWindowAncestor(target);
   }
   
-  protected abstract T createTarget();
   protected void afterSetUp() {}
-  protected abstract ComponentFixture<T> createFixture();
   
   @Test public final void shouldClickComponent() {
     ComponentEvents events = ComponentEvents.attachTo(fixture.target);
