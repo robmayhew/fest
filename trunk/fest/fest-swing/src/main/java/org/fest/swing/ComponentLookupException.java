@@ -26,6 +26,14 @@ public class ComponentLookupException extends RuntimeException {
 
   /**
    * Creates a new </code>{@link ComponentLookupException}</code>.
+   * @param message the detail message.
+   */
+  public ComponentLookupException(String message) {
+    super(message);
+  }
+
+  /**
+   * Creates a new </code>{@link ComponentLookupException}</code>.
    * @param cause the cause of the error.
    */
   public ComponentLookupException(Throwable cause) {

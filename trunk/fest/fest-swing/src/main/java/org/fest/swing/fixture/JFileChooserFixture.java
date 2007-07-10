@@ -25,6 +25,8 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 
+import static org.fest.util.Strings.*;
+
 /**
  * Understands simulation of user events on a <code>{@link JFileChooser}</code> and verification of the state of such
  * <code>{@link JFileChooser}</code>.
@@ -77,6 +79,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
         return (c instanceof JButton && text.equals(((JButton) c).getText()));
       }
     });
+    if (button == null)
+      throw new ComponentLookupException(concat("Unable to find a JButton with the text ", quote(text)));
     return button;
   }
 }
