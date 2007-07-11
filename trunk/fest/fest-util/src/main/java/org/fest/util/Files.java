@@ -72,6 +72,7 @@ public class Files {
   }
 
   /**
+   * Returns the system's temporary folder.
    * @return the system's temporary folder. 
    * @throws FilesException if this method cannot find or create the system's temporary folder.
    */
@@ -82,13 +83,26 @@ public class Files {
   }
   
   /**
-   * @return the path of the system's temporary folder. This method appends the system's file separator at the end of
-   *          the returned path.
+   * Returns the path of the system's temporary folder. This method appends the system's file separator at the end of
+   * the path.
+   * @return the path of the system's temporary folder.
    */
   public static String temporaryFolderPath() {
     return append(separator).to(System.getProperty("java.io.tmpdir"));
   }
 
+  /**
+   * Creates a new file in the system's temporary folder. The name of the file will be the result of:
+   * <pre>
+   * concat(String.valueOf(System.currentTimeMillis()), ".txt");
+   * </pre>
+   * @return the created file.
+   */
+  public static File newTemporaryFile() {
+    String tempFileName = concat(String.valueOf(System.currentTimeMillis()), ".txt");
+    return newFile(concat(temporaryFolderPath(), tempFileName));
+  }
+  
   /**
    * Creates a new file using the given path.
    * @param path the path of the new file.

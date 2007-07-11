@@ -107,6 +107,13 @@ public class FilesTest {
     assertEquals(actualPath, Files.temporaryFolderPath());  
   }
   
+  @Test(dependsOnMethods = "shouldFindTemporaryFolderPath")
+  public void shouldCreateNewTemporaryFile() {
+    File temporaryFile = Files.newTemporaryFile();
+    assertTrue(temporaryFile.isFile());
+    temporaryFile.delete();
+  }
+  
   @Test(expectedExceptions = FilesException.class)
   public void shouldThrowErrorIfNewFilePathIsNonEmptyDirectory() {
     Files.newFile("root");
