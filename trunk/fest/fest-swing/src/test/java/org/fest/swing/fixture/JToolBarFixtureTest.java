@@ -78,6 +78,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
     Window newAncestor = toolbarAncestor();
     assertThat(newAncestor).isNotSameAs(oldAncestor);
     Point newAncestorLocation = newAncestor.getLocation();
+    // TODO add a inBetween(int, int) to IntAssert.
     assertThat(newAncestorLocation.x).isGreaterThan(oldAncestorLocation.x);
     assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
   }
