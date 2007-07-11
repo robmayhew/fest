@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 
@@ -44,6 +45,7 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link JToolBarFixture}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
 
@@ -83,7 +85,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   @Test(dependsOnMethods = "shouldFloatToolbar")
   public void shouldUnfloatToolbar() {
     Window oldAncestor = toolbarAncestor();
-    fixture.floatTo(new Point(200, 200));
+    fixture.floatTo(whereToUnfloat());
     fixture.unfloat();
     assertThat(toolbarAncestor()).isSameAs(oldAncestor);
   }
@@ -91,12 +93,20 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   @Test(dependsOnMethods = "shouldFloatToolbar", dataProvider = "unfloatConstraints")
   public void shouldUnfloatToolbarToGivenPosition(UnfloatConstraint constraint) {
     Window originalParent = toolbarAncestor();
-    fixture.floatTo(new Point(200, 200));
+    fixture.floatTo(whereToUnfloat());
     fixture.unfloat(constraint);
     assertThat(toolbarAncestor()).isSameAs(originalParent);
     assertThat(borderLayout.getLayoutComponent(constraint.value)).isSameAs(target);
   }
 
+  private Point whereToUnfloat() {
+    Rectangle bounds = toolbarAncestor().getBounds();
+    int delta = 10;
+    int x = bounds.x + bounds.width + delta;
+    int y = bounds.y + bounds.height + delta;
+    return new Point(x, y);
+  }
+  
   @DataProvider(name = "unfloatConstraints")
   public Object[][] unfloatConstraints() {
     return new Object[][] { 
