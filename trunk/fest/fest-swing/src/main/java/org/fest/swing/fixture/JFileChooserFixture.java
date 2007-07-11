@@ -21,11 +21,12 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.*;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JFileChooser}</code> and verification of the state of such
@@ -66,13 +67,11 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
 
   /**
    * Simulates a user pressing the "Cancel" button in the <code>{@link JFileChooser}</code> managed by this fixture.
-   * @return this fixture.
    * @throws ComponentLookupException if the "Cancel" button cannot be found.
    * @throws AssertionError if the "Cancel" button is disabled.
    */
-  public final JFileChooserFixture cancel() {
+  public final void cancel() {
     cancelButton().requireEnabled().click();
-    return this;
   }
   
   /**
@@ -80,8 +79,38 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @return the found "Cancel" button.
    * @throws ComponentLookupException if the "Cancel" button cannot be found.
    */
-  public JButtonFixture cancelButton() {
-    return new JButtonFixture(robot, findButton(UIManager.getString("FileChooser.cancelButtonText")));
+  public final JButtonFixture cancelButton() {
+    String buttonText = UIManager.getString("FileChooser.cancelButtonText");
+    JButton cancelButton = findButton(buttonText);
+    if (cancelButton == null) throw cannotFindButton("Cancel", buttonText);
+    return new JButtonFixture(robot, cancelButton);
+  }
+
+  /**
+   * Simulates a user pressing the "Approve" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @throws ComponentLookupException if the "Approve" button cannot be found.
+   * @throws AssertionError if the "Approve" button is disabled.
+   */
+  public final void approve() {
+    approveButton().requireEnabled().click();
+  }
+  
+  /**
+   * Finds the "Approve" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return the found "Approve" button.
+   * @throws ComponentLookupException if the "Approve" button cannot be found.
+   */
+  public final JButtonFixture approveButton() {
+    String buttonText = approveButtonText();
+    JButton approveButton = findButton(buttonText);
+    if (approveButton == null) throw cannotFindButton("Approve", buttonText);
+    return new JButtonFixture(robot, approveButton);
+  }
+
+  private String approveButtonText() {
+    String text = target.getApproveButtonText();
+    if (isEmpty(text)) text = target.getUI().getApproveButtonText(target);
+    return text;
   }
 
   private JButton findButton(final String text) {
@@ -90,8 +119,10 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
         return (c instanceof JButton && text.equals(((JButton) c).getText()));
       }
     });
-    if (button == null)
-      throw new ComponentLookupException(concat("Unable to find a JButton with the text ", quote(text)));
     return button;
+  }
+  
+  private ComponentLookupException cannotFindButton(String name, String text) {
+    throw new ComponentLookupException(concat("Unable to find ", quote(name), " button with text ", quote(text)));
   }
 }

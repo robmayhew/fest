@@ -20,6 +20,8 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Files.*;
+import static org.fest.util.Strings.isEmpty;
 
 import org.testng.annotations.Test;
 
@@ -39,16 +41,38 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
   }
   
   @Test(dependsOnMethods = "shouldFindCancelButton")
-  public void shouldCancelFileSelection() throws InterruptedException {
+  public void shouldCancelFileSelection() {
     JButton cancelButton = fixture.cancelButton().target;
     ComponentEvents events = ComponentEvents.attachTo(cancelButton);
     fixture.cancel();
     assertThat(events.clicked()).isTrue();
   }
   
+  @Test public void shouldFindApproveButton() {
+    JButtonFixture approveButton = fixture.approveButton();
+    assertThat(approveButton.target).isNotNull();
+    approveButton.requireText(approveButtonText());
+  }
+  
+  @Test(dependsOnMethods = "shouldFindApproveButton")
+  public void shouldApproveFileSelection() {
+    JButton approveButton = fixture.approveButton().target;
+    ComponentEvents events = ComponentEvents.attachTo(approveButton);
+    fixture.approve();
+    assertThat(events.clicked()).isTrue();
+  }
+
+  private String approveButtonText() {
+    JFileChooser fileChooser = fixture.target;
+    String text = fileChooser.getApproveButtonText();
+    if (!isEmpty(text)) return text;
+    return fileChooser.getUI().getApproveButtonText(fileChooser);
+  }
+  
   protected JFileChooser createTarget() {
     JFileChooser target = new JFileChooser();
     target.setName("target");
+    target.setCurrentDirectory(temporaryFolder());
     return target;
   }
 
