@@ -16,13 +16,18 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
+import static javax.swing.JFileChooser.FILES_ONLY;
 import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.quote;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
@@ -63,6 +68,52 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    */
   public JFileChooserFixture(RobotFixture robot, JFileChooser target) {
     super(robot, target);
+  }
+
+  /**
+   * Selects the given file in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @param file the file to select.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JFileChooser</code> can select directories only and the file to
+   *           select is not a directory.
+   * @throws AssertionError if the managed <code>JFileChooser</code> cannot select directories and the file to select
+   *           is a directory.
+   */
+  public final JFileChooserFixture selectFile(final File file) {
+    int mode = target.getFileSelectionMode();
+    boolean isFolder = file.isDirectory();
+    if (mode == FILES_ONLY && isFolder) throw new AssertionError("The file chooser cannot open directories");
+    if (mode == DIRECTORIES_ONLY && !isFolder) throw new AssertionError("The file chooser can only open directories");
+    robot.invokeAndWait(null, new Runnable() {
+      public void run() {
+        target.setSelectedFile(file);
+      }
+    });
+    return this;
+  }
+
+  /**
+   * Sets the current diretory of the <code>{@link JFileChooser}</code> managed by this fixture to the given one.
+   * @param dir the directory to set as current.
+   * @return this fixture.
+   */
+  public final JFileChooserFixture setCurrentDirectory(final File dir) {
+    robot.invokeAndWait(null, new Runnable() {
+      public void run() {
+        target.setCurrentDirectory(dir);
+      }
+    });
+    return this;
+  }
+
+  /**
+   * Returns a fixture that manages the text field where the user can enter the name of the file to select in the 
+   * <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return the created fixture.
+   * @throws ComponentLookupException if a matching text field could not be found.
+   */
+  public final JTextComponentFixture fileNameTextBox() {
+    return new JTextComponentFixture(robot, robot.finder().findByType(target, JTextField.class));
   }
 
   /**

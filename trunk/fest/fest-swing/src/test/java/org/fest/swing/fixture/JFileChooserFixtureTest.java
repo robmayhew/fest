@@ -15,12 +15,18 @@
  */
 package org.fest.swing.fixture;
 
+import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
+import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
+import static javax.swing.JFileChooser.FILES_ONLY;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Files.*;
+import static org.fest.util.Files.newTemporaryFile;
+import static org.fest.util.Files.newTemporaryFolder;
+import static org.fest.util.Files.temporaryFolder;
 import static org.fest.util.Strings.isEmpty;
 
 import org.testng.annotations.Test;
@@ -48,18 +54,43 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     assertThat(events.clicked()).isTrue();
   }
   
+  @Test public void shouldSelectFile() {
+    File temporaryFile = newTemporaryFile();
+    fixture.selectFile(temporaryFile);
+    assertThat(fixture.target.getSelectedFile()).isSameAs(temporaryFile);
+    temporaryFile.delete();
+  }
+  
+  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = AssertionError.class)
+  public void shouldFailIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
+    File temporaryFile = newTemporaryFile();
+    fixture.target.setFileSelectionMode(DIRECTORIES_ONLY);
+    fixture.selectFile(temporaryFile);
+    temporaryFile.delete();
+  }
+  
+  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = AssertionError.class)
+  public void shouldFailIfChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
+    File temporaryFolder = newTemporaryFolder();
+    fixture.target.setFileSelectionMode(FILES_ONLY);
+    fixture.selectFile(temporaryFolder);
+    temporaryFolder.delete();
+  }
+  
   @Test public void shouldFindApproveButton() {
     JButtonFixture approveButton = fixture.approveButton();
     assertThat(approveButton.target).isNotNull();
     approveButton.requireText(approveButtonText());
   }
   
-  @Test(dependsOnMethods = "shouldFindApproveButton")
+  @Test(dependsOnMethods = { "shouldSelectFile", "shouldFindApproveButton" })
   public void shouldApproveFileSelection() {
+    File temporaryFile = newTemporaryFile();
     JButton approveButton = fixture.approveButton().target;
     ComponentEvents events = ComponentEvents.attachTo(approveButton);
-    fixture.approve();
+    fixture.selectFile(temporaryFile).approve();
     assertThat(events.clicked()).isTrue();
+    temporaryFile.delete();
   }
 
   private String approveButtonText() {
@@ -67,6 +98,20 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     String text = fileChooser.getApproveButtonText();
     if (!isEmpty(text)) return text;
     return fileChooser.getUI().getApproveButtonText(fileChooser);
+  }
+  
+  @Test public void shouldFindFileNameTextBox() {
+    JTextComponentFixture fileNameTextBox = fixture.fileNameTextBox();
+    assertThat(fileNameTextBox).isNotNull();
+  }
+  
+  @Test public void shouldSetCurrentDirectory() {
+    String homePath = System.getProperty("user.home");
+    File userHome = new File(homePath);
+    assertThat(userHome.isDirectory()).isTrue();
+    assertThat(userHome.getAbsolutePath()).isNotEqualTo(fixture.target.getCurrentDirectory().getAbsolutePath());
+    fixture.setCurrentDirectory(userHome);
+    assertThat(userHome.getAbsolutePath()).isEqualTo(fixture.target.getCurrentDirectory().getAbsolutePath());
   }
   
   protected JFileChooser createTarget() {

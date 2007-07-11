@@ -171,11 +171,20 @@ public final class RobotFixture {
   /**
    * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
    * on the event dispatch thread.
-   * @param context the component which event queue will be used.
+   * @param c the component which event queue will be used.
    * @param action the <code>Runnable</code> to post in the event queue.
    */
-  public void invokeLater(Component context, Runnable action) {
-    robot.invokeLater(context, action);
+  public void invokeLater(Component c, Runnable action) {
+    robot.invokeLater(c, action);
+  }
+  
+  /**
+   * Post a runnable on the given component's event queue and wait for it to finish.
+   * @param c the component which event queue will be used.
+   * @param action the <code>Runnable</code> to post in the event queue.
+   */
+  public void invokeAndWait(Component c, Runnable action) {
+    robot.invokeAndWait(c, action);
   }
 
   /** 
