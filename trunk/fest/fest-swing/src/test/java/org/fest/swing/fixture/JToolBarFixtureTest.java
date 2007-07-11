@@ -73,12 +73,16 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
 
   @Test public void shouldFloatToolbar() {
     Window oldAncestor = toolbarAncestor();
-    Point oldAncestorLocation = oldAncestor.getLocation();
-    fixture.floatTo(whereToFloat());
+    fixture.floatTo(whereToFloatTo());
+    assertToolBarIsFloating(oldAncestor);
+  }
+  
+  private void assertToolBarIsFloating(Window oldAncestor) {
     Window newAncestor = toolbarAncestor();
     assertThat(newAncestor).isNotSameAs(oldAncestor);
     Point newAncestorLocation = newAncestor.getLocation();
     // TODO add a inBetween(int, int) to IntAssert.
+    Point oldAncestorLocation = oldAncestor.getLocation();
     assertThat(newAncestorLocation.x).isGreaterThan(oldAncestorLocation.x);
     assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
   }
@@ -86,7 +90,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   @Test(dependsOnMethods = "shouldFloatToolbar")
   public void shouldUnfloatToolbar() {
     Window oldAncestor = toolbarAncestor();
-    fixture.floatTo(whereToFloat());
+    fixture.floatTo(whereToFloatTo());
     fixture.unfloat();
     assertThat(toolbarAncestor()).isSameAs(oldAncestor);
   }
@@ -94,17 +98,16 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   @Test(dependsOnMethods = "shouldFloatToolbar", dataProvider = "unfloatConstraints")
   public void shouldUnfloatToolbarToGivenPosition(UnfloatConstraint constraint) {
     Window originalParent = toolbarAncestor();
-    fixture.floatTo(whereToFloat());
+    fixture.floatTo(whereToFloatTo());
     fixture.unfloat(constraint);
     assertThat(toolbarAncestor()).isSameAs(originalParent);
     assertThat(borderLayout.getLayoutComponent(constraint.value)).isSameAs(target);
   }
 
-  private Point whereToFloat() {
+  private Point whereToFloatTo() {
     Rectangle bounds = toolbarAncestor().getBounds();
-    int delta = 10;
-    int x = bounds.x + bounds.width + delta;
-    int y = bounds.y + bounds.height + delta;
+    int x = bounds.x + bounds.width + 10;
+    int y = bounds.y + bounds.height + 10;
     return new Point(x, y);
   }
   
