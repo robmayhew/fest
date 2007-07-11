@@ -104,6 +104,18 @@ public class Files {
   }
   
   /**
+   * Creates a new folder in the system's temporary folder. The name of the folder will be the result of:
+   * <pre>
+   * System.currentTimeMillis();
+   * </pre>
+   * @return the created file.
+   */
+  public static File newTemporaryFolder() {
+    String tempFileName = String.valueOf(System.currentTimeMillis());
+    return newFolder(concat(temporaryFolderPath(), tempFileName));
+  }
+  
+  /**
    * Creates a new file using the given path.
    * @param path the path of the new file.
    * @return the new created file.
@@ -118,6 +130,26 @@ public class Files {
     try {
       if (!file.createNewFile()) throw cannotCreateNewFile(path, "a file was found with the same path");
     } catch (IOException e) {
+      throw cannotCreateNewFile(path, e);
+    }
+    return file;
+  }
+  
+  /**
+   * Creates a new folder using the given path.
+   * @param path the path of the new folder.
+   * @return the new created folder.
+   * @throws FilesException if the path belongs to an existing non-empty directory.
+   * @throws FilesException if the path belongs to an existing file.
+   * @throws FilesException if any I/O error is thrown when creating the new folder.
+   */
+  public static File newFolder(String path) {
+    File file = new File(path);
+    if (file.isDirectory() && !isEmpty(file.list()))
+      throw cannotCreateNewFile(path, "a non-empty directory was found with the same path");
+    try {
+      if (!file.mkdir()) throw cannotCreateNewFile(path, "a file was found with the same path");
+    } catch (Exception e) {
       throw cannotCreateNewFile(path, e);
     }
     return file;

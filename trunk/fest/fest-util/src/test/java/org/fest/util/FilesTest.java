@@ -114,6 +114,13 @@ public class FilesTest {
     temporaryFile.delete();
   }
   
+  @Test(dependsOnMethods = "shouldFindTemporaryFolderPath")
+  public void shouldCreateNewTemporaryFolder() {
+    File temporaryFolder = Files.newTemporaryFolder();
+    assertTrue(temporaryFolder.isDirectory());
+    temporaryFolder.delete();
+  }
+
   @Test(expectedExceptions = FilesException.class)
   public void shouldThrowErrorIfNewFilePathIsNonEmptyDirectory() {
     Files.newFile("root");
@@ -129,5 +136,11 @@ public class FilesTest {
     File newFile = Files.newFile("file");
     assertTrue(newFile.isFile());
     assertTrue(newFile.delete());
+  }
+  
+  @Test public void shouldCreateNewFolder() {
+    File newFolder = Files.newFolder("folder");
+    assertTrue(newFolder.isDirectory());
+    assertTrue(newFolder.delete());
   }
 }
