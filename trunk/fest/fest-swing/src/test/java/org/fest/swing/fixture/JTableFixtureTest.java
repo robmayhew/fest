@@ -78,8 +78,8 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   }
   
   private void assertThatCellIsSelected(int row, int column) {
-    assertThat(fixture.target.getSelectedRow()).isEqualTo(row);
-    assertThat(fixture.target.getSelectedColumn()).isEqualTo(column);
+    assertThat(fixture.target.isRowSelected(row)).isTrue();
+    assertThat(fixture.target.isColumnSelected(column)).isTrue();
   }
   
   @Test public void shouldReturnNullIfNoSelectedCell() {
