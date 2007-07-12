@@ -20,12 +20,15 @@ import java.awt.Component;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.fixture.JTableFixture.cell;
+
+import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import static org.fest.assertions.Assertions.*;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -42,10 +45,9 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   @Test(dataProvider = "cellsToSelect") 
   public void shouldSelectCell(int row, int column) {
     fixture.selectCell(row, column);
-    assertThat(fixture.target.getSelectedRow()).isEqualTo(row);
-    assertThat(fixture.target.getSelectedColumn()).isEqualTo(column);
+    assertThatCellIsSelected(row, column);
   }
-  
+
   @Test(dataProvider = "cellsToSelect") 
   public void shouldReturnValueOfGivenCell(int row, int column) {
     assertThat(fixture.contentsAt(row, column)).isEqualTo(cellValue(row, column));
@@ -65,6 +67,19 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
         { 8, 3 },
         { 5, 2 }
     };
+  }
+  
+  @Test public void shouldSelectMultipleRows() {
+    JTableFixture.Cell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));
+    fixture.selectCells(cells);
+    assertThat(fixture.target.getSelectedRowCount()).isEqualTo(cells.length);
+    for (JTableFixture.Cell c : cells)
+      assertThatCellIsSelected(c.row, c.column);
+  }
+  
+  private void assertThatCellIsSelected(int row, int column) {
+    assertThat(fixture.target.getSelectedRow()).isEqualTo(row);
+    assertThat(fixture.target.getSelectedColumn()).isEqualTo(column);
   }
   
   @Test public void shouldReturnNullIfNoSelectedCell() {

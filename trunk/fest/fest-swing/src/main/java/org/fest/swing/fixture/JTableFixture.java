@@ -22,6 +22,8 @@ import abbot.tester.JTableTester;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
+import static java.awt.event.KeyEvent.*;
+
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
  * <code>{@link JTable}</code>.
@@ -62,6 +64,13 @@ public class JTableFixture extends ComponentFixture<JTable> {
     return this;
   }
 
+  public final JTableFixture selectCells(Cell... cells) {
+    tableTester().actionKeyPress(VK_CONTROL);
+    for (Cell c : cells) selectCell(c.row, c.column);
+    tableTester().actionKeyRelease(VK_CONTROL);
+    return this;
+  }
+
   /**
    * Returns the value of the selected cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
    * <code>String</code> representation. Returns <code>null</code> if one can not be obtained or if the
@@ -86,5 +95,33 @@ public class JTableFixture extends ComponentFixture<JTable> {
   
   protected final JTableTester tableTester() {
     return (JTableTester)tester();
+  }
+
+  /**
+   * Creates a new representation of a <code>{@link JTable}</code> cell.
+   * @param row the row of the cell.
+   * @param column the column of the cell.
+   * @return the created cell.
+   */
+  public static Cell cell(int row, int column) {
+    return new Cell(row, column);
+  }
+  
+  /**
+   * Understands a cell in a <code>{@link JTable}</code>.
+   */
+  public static class Cell {
+    public final int row;
+    public final int column;
+
+    /**
+     * Creates a new </code>{@link Cell}</code>.
+     * @param row the row of the cell.
+     * @param column the column of the cell.
+     */
+    public Cell(int row, int column) {
+      this.row = row;
+      this.column = column;
+    }
   }
 }
