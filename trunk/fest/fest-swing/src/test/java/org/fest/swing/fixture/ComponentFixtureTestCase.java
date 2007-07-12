@@ -99,10 +99,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   protected abstract ComponentFixture<T> createFixture();
 
   private void addToWindow(T target) {
-    if (addTargetToWindow()) window.add(target);
+    if (addTargetToWindow()) window.add(decorateBeforeAddingToWindow(target));
   }
 
   protected boolean addTargetToWindow() { return true; }
+  
+  protected Component decorateBeforeAddingToWindow(T target) { return target; }
   
   private void moveToUnblockMainWindow(T target) {
     if (!targetBlocksMainWindow()) return;

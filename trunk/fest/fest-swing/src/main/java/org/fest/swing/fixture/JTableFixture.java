@@ -50,9 +50,38 @@ public class JTableFixture extends ComponentFixture<JTable> {
     super(robot, target);
   }
 
+  /**
+   * Simulates a user selecting the given cell (row and column) of the <code>{@link JTable}</code> managed by this 
+   * fixture.
+   * @param row the row to select.
+   * @param column the column to select.
+   * @return this fixture.
+   */
   public final JTableFixture selectCell(int row, int column) {
     tableTester().actionSelectCell(target, row, column);
     return this;
+  }
+
+  /**
+   * Returns the value of the selected cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
+   * <code>String</code> representation. Returns <code>null</code> if one can not be obtained or if the
+   * <code>{@link JTable}</code> does not have any selected cell.
+   * @return the value of the selected cell.
+   */
+  public final String contents() {
+    if (target.getSelectedRowCount() == 0) return null;
+    return contentsAt(target.getSelectedRow(), target.getSelectedColumn());
+  }
+
+  /**
+   * Returns the value of the given cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
+   * <code>String</code> representation, or <code>null</code> if one can not be obtained.
+   * @param row the row of the given cell.
+   * @param column the column of the given cell.
+   * @return the value of the given cell.
+   */
+  public final String contentsAt(int row, int column) {
+    return JTableTester.valueToString(target, row, column);
   }
   
   protected final JTableTester tableTester() {

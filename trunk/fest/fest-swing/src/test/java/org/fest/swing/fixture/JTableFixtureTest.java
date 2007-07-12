@@ -46,6 +46,17 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     assertThat(fixture.target.getSelectedColumn()).isEqualTo(column);
   }
   
+  @Test(dataProvider = "cellsToSelect") 
+  public void shouldReturnValueOfGivenCell(int row, int column) {
+    assertThat(fixture.contentsAt(row, column)).isEqualTo(cellValue(row, column));
+  }
+  
+  @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
+  public void shouldReturnValueOfSelectedCell(int row, int column) {
+    fixture.selectCell(row, column);
+    assertThat(fixture.contents()).isEqualTo(cellValue(row, column));
+  }
+  
   @DataProvider(name = "cellsToSelect")
   public Object[][] cellsToSelect() {
     return new Object[][] {
@@ -54,6 +65,11 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
         { 8, 3 },
         { 5, 2 }
     };
+  }
+  
+  @Test public void shouldReturnNullIfNoSelectedCell() {
+    assertThat(fixture.target.getSelectedRowCount()).isZero();
+    assertThat(fixture.contents()).isNull();
   }
   
   protected ComponentFixture<JTable> createFixture() {
@@ -78,8 +94,12 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     Object[][] data = new Object[ROW_COUNT][COLUMN_COUNT];
     for (int i = 0; i < ROW_COUNT; i++)
       for (int j = 0; j < COLUMN_COUNT; j++)
-        data[i][j] = concat(String.valueOf(i), "-", String.valueOf(j)); 
+        data[i][j] = cellValue(i, j); 
     return data;
+  }
+
+  private String cellValue(int row, int column) {
+    return concat(String.valueOf(row), "-", String.valueOf(column));
   }
 
   @Override protected Component decorateBeforeAddingToWindow(JTable target) {
