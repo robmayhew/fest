@@ -70,7 +70,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   }
   
   @Test public void shouldSelectMultipleRows() {
-    JTableFixture.Cell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));
+    JTableFixture.Cell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));    
     fixture.selectCells(cells);
     assertThat(fixture.target.getSelectedRowCount()).isEqualTo(cells.length);
     for (JTableFixture.Cell c : cells)
@@ -118,7 +118,6 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   }
 
   @Override protected Component decorateBeforeAddingToWindow(JTable target) {
-    target.setFillsViewportHeight(true);
     return new JScrollPane(target);
   }
 

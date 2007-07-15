@@ -17,12 +17,13 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
+import abbot.Platform;
 import abbot.tester.JTableTester;
+import static java.awt.event.KeyEvent.VK_CONTROL;
+import static java.awt.event.KeyEvent.VK_META;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
-
-import static java.awt.event.KeyEvent.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -65,9 +66,10 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   public final JTableFixture selectCells(Cell... cells) {
-    tableTester().actionKeyPress(VK_CONTROL);
+    int multipleSelectionKey = Platform.isOSX() ? VK_META : VK_CONTROL;
+    tableTester().actionKeyPress(multipleSelectionKey);
     for (Cell c : cells) selectCell(c.row, c.column);
-    tableTester().actionKeyRelease(VK_CONTROL);
+    tableTester().actionKeyRelease(multipleSelectionKey);
     return this;
   }
 
