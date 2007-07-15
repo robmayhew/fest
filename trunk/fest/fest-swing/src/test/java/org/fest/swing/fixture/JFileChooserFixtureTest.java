@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 
 import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
 import static javax.swing.JFileChooser.FILES_ONLY;
+import static javax.swing.JFileChooser.OPEN_DIALOG;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Files.newTemporaryFile;
 import static org.fest.util.Files.newTemporaryFolder;
@@ -86,9 +87,10 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
   @Test(dependsOnMethods = { "shouldSelectFile", "shouldFindApproveButton" })
   public void shouldApproveFileSelection() {
     File temporaryFile = newTemporaryFile();
+    fixture.selectFile(temporaryFile);
     JButton approveButton = fixture.approveButton().target;
     ComponentEvents events = ComponentEvents.attachTo(approveButton);
-    fixture.selectFile(temporaryFile).approve();
+    fixture.approve();
     assertThat(events.clicked()).isTrue();
     temporaryFile.delete();
   }
@@ -118,6 +120,7 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     JFileChooser target = new JFileChooser();
     target.setName("target");
     target.setCurrentDirectory(temporaryFolder());
+    target.setDialogType(OPEN_DIALOG);
     return target;
   }
 
