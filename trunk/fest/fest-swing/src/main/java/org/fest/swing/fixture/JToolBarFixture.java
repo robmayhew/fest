@@ -34,6 +34,9 @@ import org.fest.swing.RobotFixture;
  */
 public class JToolBarFixture extends ContainerFixture<JToolBar> {
 
+  /**
+   * Understands constraints used to unfloat a floating <code>{@link JToolBar}</code>.
+   */
   public enum UnfloatConstraint {
     NORTH(BorderLayout.NORTH), EAST(BorderLayout.EAST), SOUTH(BorderLayout.SOUTH), WEST(BorderLayout.WEST);
     

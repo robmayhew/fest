@@ -28,6 +28,61 @@ requires, in our opinion, too much code. FEST fixtures can simplify creation and
 </ol>
 </p>
 <p>
+The following example shows how easy is to use FEST fixtures. The test verifies that an error message is displayed if
+the user enters her username but forgets to enter her password.
+<pre>
+<code>
+  private {@link org.fest.swing.fixture.FrameFixture} window;  
+
+  @BeforeMethod public void setUp() {
+    window = new FrameFixture(new LoginWindow());
+    window.show();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.cleanUp();
+  }
+  
+  @Test public void shouldCopyTextInLabelWhenClickingButton() {
+    window.textBox("username").enterText("some.user");
+    window.button("login").click();
+    window.optionPane().requireErrorMessage().requireMessage("Please enter your password");    
+  }
+</code>
+</pre>
+</p>
+<p>
+The test uses a <code>{@link org.fest.swing.fixture.FrameFixture}</code> to launch the GUI to test 
+(<code>LoginWindow</code>) and find the GUI components in such window. This is the recommended way to use FEST. We
+could also use individual fixtures to simulate user events, but it would result in more code to write and maintain:
+<pre>
+<code>
+  private {@link org.fest.swing.RobotFixture} robot;
+
+  @BeforeMethod public void setUp() {
+    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot.showWindow(new LoginWindow());
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+  
+  @Test public void shouldCopyTextInLabelWhenClickingButton() {
+    new {@link org.fest.swing.fixture.JTextComponentFixture}(robot, "username").enterText("some.user");
+    new {@link org.fest.swing.fixture.JButtonFixture}(robot, "login").click();
+    new {@link org.fest.swing.fixture.JOptionPaneFixture}(robot).requireErrorMessage().requireMessage("Please enter your password");    
+  }
+</code>
+</pre>
+</p>
+<p>
+<strong>Note:</strong> It is very important to clean up resources used by FEST (keyboard, mouse and opened windows) after
+each test; otherwise, the FEST robot will keep control of them and can make your computer pretty much unusable. To clean
+up resources call the method 'cleanUp' from <code>{@link org.fest.swing.RobotFixture}</code>, 
+<code>{@link org.fest.swing.fixture.FrameFixture}</code> or <code>{@link org.fest.swing.fixture.DialogFixture}</code>.
+</p>
+<p>
 Each fixture has the name of the GUI component it can control plus the word &quot;Fixture&quot; at the end. For example, 
 <code>{@link org.fest.swing.fixture.JButtonFixture}</code> can simulate user events on 
 <code>{@link javax.swing.JButton}</code>s.
