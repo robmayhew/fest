@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing-testng</artifactId>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.4</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-swing</artifactId>
-			<version>0.3.1-SNAPSHOT</version>
+			<version>0.4</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

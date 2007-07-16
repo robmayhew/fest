@@ -6,14 +6,18 @@
 	<classpathentry kind="lib" path="lib/abbot-1.0.0.rc5.jar"/>
 	<classpathentry kind="lib" path="lib/fest-assert-0.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fest-reflect-0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/fest-swing-0.3.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fest-util-0.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/gnu-regexp-1.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/MRJToolkitStubs-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar" sourcepath="lib/testng-5.5-jdk15-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="http://testng.org/javadocs"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-swing-0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
