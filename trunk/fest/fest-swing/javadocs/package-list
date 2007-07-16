@@ -1,0 +1,5 @@
+junit.framework
+org.fest.swing
+org.fest.swing.fixture
+org.fest.swing.script
+org.fest.swing.util
