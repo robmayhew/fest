@@ -44,9 +44,9 @@ the user enters her username but forgets to enter her password.
   }
   
   &#64;Test public void shouldCopyTextInLabelWhenClickingButton() {
-    window.textBox("username").enterText("some.user");
-    window.button("login").click();
-    window.optionPane().requireErrorMessage().requireMessage("Please enter your password");    
+    window.textBox(&quot;username&quot;).enterText(&quot;some.user&quot;);
+    window.button(&quot;login&quot;).click();
+    window.optionPane().requireErrorMessage().requireMessage(&quot;Please enter your password&quot;);    
   }
 </code>
 </pre>
@@ -69,9 +69,9 @@ could also use individual fixtures to simulate user events, but it would result 
   }
   
   &#64;Test public void shouldCopyTextInLabelWhenClickingButton() {
-    new {@link org.fest.swing.fixture.JTextComponentFixture}(robot, "username").enterText("some.user");
-    new {@link org.fest.swing.fixture.JButtonFixture}(robot, "login").click();
-    new {@link org.fest.swing.fixture.JOptionPaneFixture}(robot).requireErrorMessage().requireMessage("Please enter your password");    
+    new {@link org.fest.swing.fixture.JTextComponentFixture}(robot, &quot;username&quot;).enterText(&quot;some.user&quot;);
+    new {@link org.fest.swing.fixture.JButtonFixture}(robot, &quot;login&quot;).click();
+    new {@link org.fest.swing.fixture.JOptionPaneFixture}(robot).requireErrorMessage().requireMessage(&quot;Please enter your password&quot;);    
   }
 </code>
 </pre>
