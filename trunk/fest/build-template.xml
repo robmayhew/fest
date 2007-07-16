@@ -169,6 +169,7 @@
              author="true"
              version="true"
              access="public"
+             overview="${basedir}/docs/overview.html"
              windowtitle="${maven.project.artifactId} v. ${maven.project.version} API"
              doctitle="${maven.project.artifactId} v. ${maven.project.version}"
              bottom="${copyright}">
