@@ -34,16 +34,16 @@ the user enters her username but forgets to enter her password.
 <code>
   private {@link org.fest.swing.fixture.FrameFixture} window;  
 
-  @BeforeMethod public void setUp() {
+  &#64;BeforeMethod public void setUp() {
     window = new FrameFixture(new LoginWindow());
     window.show();
   }
 
-  @AfterMethod public void tearDown() {
+  &#64;AfterMethod public void tearDown() {
     window.cleanUp();
   }
   
-  @Test public void shouldCopyTextInLabelWhenClickingButton() {
+  &#64;Test public void shouldCopyTextInLabelWhenClickingButton() {
     window.textBox("username").enterText("some.user");
     window.button("login").click();
     window.optionPane().requireErrorMessage().requireMessage("Please enter your password");    
@@ -59,16 +59,16 @@ could also use individual fixtures to simulate user events, but it would result 
 <code>
   private {@link org.fest.swing.RobotFixture} robot;
 
-  @BeforeMethod public void setUp() {
+  &#64;BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     robot.showWindow(new LoginWindow());
   }
 
-  @AfterMethod public void tearDown() {
+  &#64;AfterMethod public void tearDown() {
     robot.cleanUp();
   }
   
-  @Test public void shouldCopyTextInLabelWhenClickingButton() {
+  &#64;Test public void shouldCopyTextInLabelWhenClickingButton() {
     new {@link org.fest.swing.fixture.JTextComponentFixture}(robot, "username").enterText("some.user");
     new {@link org.fest.swing.fixture.JButtonFixture}(robot, "login").click();
     new {@link org.fest.swing.fixture.JOptionPaneFixture}(robot).requireErrorMessage().requireMessage("Please enter your password");    
