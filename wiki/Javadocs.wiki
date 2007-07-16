@@ -1,6 +1,6 @@
 #summary Links to the javadocs for each FEST Module.
 
-== FEST Swing Module ==
+=== FEST Swing Module ===
 
   * [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html Main Module]
   * [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG-specific extension]
