@@ -41,6 +41,21 @@ import org.testng.Reporter;
  * <strong>Note:</strong> A test is consider a GUI test if it is marked with the annotation
  * <code>{@link org.fest.swing.GUITest}</code>.
  * </p>
+ * <p>
+ * The following is an example using Ant:
+ * <pre>
+ * &lt;testng <strong>listeners=&quot;org.fest.swing.testng.ScreenshotOnFailureListener&quot;</strong> outputDir=&quot;${target.test.results.dir}&quot; haltOnFailure=&quot;true&quot; verbose=&quot;2&quot;&gt;
+ *   &lt;classfileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;&#42;&#42;/&#42;Test.class&quot; /&gt;
+ *   &lt;classpath location=&quot;${target.test.classes.dir}&quot; /&gt;
+ *   &lt;classpath location=&quot;${target.classes.dir}&quot; /&gt;
+ *   &lt;classpath refid=&quot;test.classpath&quot; /&gt;
+ * &lt;/testng&gt; 
+ * </pre>
+ * </p>
+ * <p>
+ * You can find more information 
+ * <a href="http://www.jroller.com/page/alexRuiz?entry=screenshots_of_failures_in_test" target="_blank">here</a>.
+ * </p>
  * 
  * @author Alex Ruiz
  */
