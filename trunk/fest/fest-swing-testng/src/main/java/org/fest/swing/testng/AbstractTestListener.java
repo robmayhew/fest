@@ -26,25 +26,47 @@ import org.testng.ITestResult;
  */
 public abstract class AbstractTestListener implements ITestListener {
 
-  /** {@inheritDoc} */
+  /**
+   * Invoked after the test class is instantiated and before any configuration method is called.
+   * @param context test context containing all the information for a given test run.
+   */
+  public void onStart(ITestContext context) {}
+  
+  /**
+   * Invoked after all the tests have run and all their Configuration methods have been called.
+   * @param context test context containing all the information for a given test run.
+   */
   public void onFinish(ITestContext context) {}
 
-  /** {@inheritDoc} */
-  public void onStart(ITestContext context) {}
-
-  /** {@inheritDoc} */
+  /**
+   * Invoked each time a method fails but has been annotated with successPercentage and this failure still keeps it
+   * within the success percentage requested.
+   * @param result contains information about the run test.
+   */
   public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
 
-  /** {@inheritDoc} */
+  /**
+   * Invoked each time before a test will be invoked. The <code>{@link ITestResult}</code> is only partially filled
+   * with the references to class, method, start millis and status.
+   * @param result the partially filled test result.
+   */
+  public void onTestStart(ITestResult result) {}
+  
+  /**
+   * Invoked each time a test succeeds.
+   * @param result contains information about the run test.
+   */
+  public void onTestSuccess(ITestResult result) {}
+  
+  /**
+   * Invoked each time a test fails.
+   * @param result contains information about the run test.
+   */
   public void onTestFailure(ITestResult result) {}
 
-  /** {@inheritDoc} */
+  /**
+   * Invoked each time a test is skipped.
+   * @param result contains information about the run test.
+   */
   public void onTestSkipped(ITestResult result) {}
-
-  /** {@inheritDoc} */
-  public void onTestStart(ITestResult result) {}
-
-  /** {@inheritDoc} */
-  public void onTestSuccess(ITestResult result) {}
-
 }
