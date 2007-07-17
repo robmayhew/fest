@@ -1,4 +1,5 @@
 #summary Links to the javadocs for each FEST Module.
+#labels Featured
 
 === FEST Swing Module ===
 
