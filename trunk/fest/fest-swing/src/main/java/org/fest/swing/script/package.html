@@ -19,7 +19,8 @@ Copyright @2007 the original author or authors.
 <body bgcolor="white">
 <p>
 Allows execution of <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a> (actually, Costello) scripts without 
-<a href="http://www.junit.org" target="_blank">JUnit</a>.
+<a href="http://www.junit.org" target="_blank">JUnit 3.8</a> (for example, with 
+<a href="http://www.junit.org" target="_blank">JUnit 4</a> or <a href="http://testng.org" target="_blank">TestNG</a>.)
 </p>
 <p>
 Example:
@@ -28,7 +29,7 @@ Example:
 public class SomeScriptsTest {
 
   &#64;Test public void shouldExecuteScripts() {
-    ScriptRunner runner = new ScriptRunner(&quot;c:\\scriptFolder&quot;);
+    {@link org.fest.swing.script.ScriptRunner} runner = new ScriptRunner(&quot;c:\\scriptFolder&quot;);
     runner.runScripts();
   }
   
