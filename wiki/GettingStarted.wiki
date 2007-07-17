@@ -66,7 +66,7 @@ The following table shows the dependencies of the Swing module:
 || xercesImpl-2.4.0.jar || || abbot || Compile ||
 || xmlParserAPIs-2.2.1 || || abbot || Compile ||
 
-The following table shows the dependencies of the [http://testng.org TestNG] extension for the Swing module
+The following table shows the dependencies of the [http://testng.org TestNG] extension for the Swing module:
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-testng-0.4.jar || TestNG extension for the Swing module || _N/A_ || _N/A_ ||
