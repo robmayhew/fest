@@ -54,14 +54,15 @@ If you have any questions or comments, please post them at [http://groups.google
 == Dependencies ==
 The following table shows the dependencies of the Swing module:
 
-|| *Dependency* || *Description* || *Required By* ||
-|| fest-swing-0.4.jar || FEST Swing module || _N/A_ ||
-|| fest-util-0.2-SNAPSHOT.jar || Utility methods || fest-swing ||
-|| fest-assert-0.2-SNAPSHOT.jar || Fluent assertions || fest-swing ||
-|| abbot-1.0.0.rc5.jar || Abbot || fest-swing ||
-|| gnu-regexp-1.1.4.jar || || abbot ||
-|| jdom-1.0.jar || || abbot ||
-|| MRJToolketStubs-1.0.jar || || abbot ||
-|| xercesImpl-2.4.0.jar || || abbot ||
-|| xmlParserAPIs-2.2.1 || || abbot ||
+|| *Dependency* || *Description* || *Required By* || *Scope* ||
+|| fest-swing-0.4.jar || FEST Swing module || _N/A_ || _N/A_ ||
+|| fest-reflect-0.1-SNAPSHOT.jar || Fluent Java reflection || fest-swing || Test ||
+|| fest-assert-0.2-SNAPSHOT.jar || Fluent assertions || fest-swing, fest-reflect || Compile ||
+|| fest-util-0.2-SNAPSHOT.jar || Utility methods || fest-swing, fest-reflect, fest-assert || Compile ||
+|| abbot-1.0.0.rc5.jar || Abbot || fest-swing || Compile ||
+|| gnu-regexp-1.1.4.jar || || abbot || Compile ||
+|| jdom-1.0.jar || || abbot || Compile ||
+|| MRJToolketStubs-1.0.jar || || abbot || Compile ||
+|| xercesImpl-2.4.0.jar || || abbot || Compile ||
+|| xmlParserAPIs-2.2.1 || || abbot || Compile ||
 
