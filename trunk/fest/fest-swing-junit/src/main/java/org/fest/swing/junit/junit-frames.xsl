@@ -881,8 +881,13 @@ h6 {
     <xsl:variable name="encoded.image">
         <xsl:value-of select="."/>   
     </xsl:variable>
-    <xsl:value-of select="java:org.fest.swing.junit.ImageHandler.decodeBase64AndSaveAsPng(string($encoded.image), string($screenshot.fullpath))"/>
-    <br/><span>Image... <xsl:value-of select="$encoded.image" /> and file: <xsl:value-of select="$screenshot.fullpath" /></span>
+     <xsl:value-of select="java:org.fest.swing.junit.ImageHandler.decodeBase64AndSaveAsPng(string($encoded.image), string($screenshot.fullpath))"/>
+    <div>
+    <br/>
+    <img>
+    	<xsl:attribute name="src"><xsl:value-of select="$screenshot.path"/></xsl:attribute>
+    </img>
+    </div>
 </xsl:template>
 
 <xsl:template name="screenshot-link">

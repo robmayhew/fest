@@ -40,16 +40,18 @@ import static org.fest.util.Strings.isEmpty;
  */
 public final class ImageHandler {
 
+  private static final String UTF_8 = "UTF-8";
+  private static final String EMPTY_STRING = "";
+
   private static Logger logger = Logger.getAnonymousLogger();
   
-  private static final String IMAGE_FILE_NOT_CREATED = "";
   
   public static String encodeBase64(BufferedImage image) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     try {
       ImageIO.write(image, PNG_EXTENSION, out);
       byte[] encoded = Base64.encodeBase64(out.toByteArray());
-      return new String(encoded, "UTF-8");
+      return new String(encoded, UTF_8);
     } catch (IOException e) {
       logger.log(SEVERE, "Unable to encode image", e);
       return null;
@@ -61,7 +63,7 @@ public final class ImageHandler {
   public static BufferedImage decodeBase64(String encoded) {
     ByteArrayInputStream in = null;
     try {
-      byte[] toDecode = encoded.getBytes("UTF-8");
+      byte[] toDecode = encoded.getBytes(UTF_8);
       in = new ByteArrayInputStream(Base64.decodeBase64(toDecode));
       return ImageIO.read(in);
     } catch (IOException e) {
@@ -71,16 +73,14 @@ public final class ImageHandler {
   }
   
   public static String decodeBase64AndSaveAsPng(String encoded, String imageFilePath) {
-    if (isEmpty(encoded)) return IMAGE_FILE_NOT_CREATED;
-    if (isEmpty(imageFilePath)) return IMAGE_FILE_NOT_CREATED;
+    if (isEmpty(encoded)) return EMPTY_STRING;
+    if (isEmpty(imageFilePath)) return EMPTY_STRING;
     String realPath = imageFilePath.replace("/", separator);
     BufferedImage image = decodeBase64(encoded);
       try {
       ImageIO.write(image, PNG_EXTENSION, newFile(realPath));
-    } catch (Exception e) {
-      return IMAGE_FILE_NOT_CREATED;
-    }
-    return imageFilePath;
+    } catch (Exception e) {}
+    return EMPTY_STRING;
   }
   
   private ImageHandler() {}

@@ -17,8 +17,8 @@ package org.apache.tools.ant.taskdefs.optional.junit;
 import junit.framework.Test;
 
 /**
- * Understands a hack to make the method <code>getTestCaseClassName</code> from
- * <code>{@link JUnitVersionHelper}</code> public.
+ * Understands a hack to make public the package-protected method <code>getTestCaseClassName</code> from
+ * <code>{@link JUnitVersionHelper}</code>.
  * 
  * @author Alex Ruiz
  */
