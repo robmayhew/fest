@@ -36,7 +36,7 @@ public class JUnitReportTask extends XMLResultAggregator {
   @SuppressWarnings("unchecked") 
   @Override public AggregateTransformer createReport() {
     ReportTransformer transformer = new ReportTransformer(this);
-    transformer.setClasspath(classpath);
+    transformer.setClasspath(createClasspath());
     transformers.addElement(transformer);
     return transformer;
   }
