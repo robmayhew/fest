@@ -25,6 +25,48 @@ import static org.easymock.classextension.EasyMock.verify;
 
 /**
  * Understands a template for usage of <a href="http://www.easymock.org/" target="_blank">EasyMock</a> mocks.
+ * <p>
+ * Here is an small example that uses <a href="http://www.easymock.org/" target="_blank">EasyMock</a> to verify that 
+ * <code>EmployeeBO</code> uses a <code>EmployeeDAO</code> to store employee information in the database:
+ * <pre>
+ * <code>
+ * &#64;Test public void shouldAddNewEmployee() {
+ *   mockEmployeeDao.insert(employee);
+ *   replay(mockEmployeeDao);
+ *   employeeBo.addNewEmployee(employee);
+ *   verify(mockEmployeeDao);    
+ * }
+ * </code>
+ * </pre>
+ * </p>
+ * <p>
+ * In this example, it is easy to distinguish the expectations made on the mock object (<code>mockEmployeeDao</code>).
+ * But in a more complex scenario, that distinction could be more difficult to spot. We can use the 
+ * <code>EasyMockTemplate</code> to separate the code to be tested from the mock expectations:
+ * <pre>
+ * <code>
+ * &#64;Test public void shouldAddNewEmployee() {
+ *   EasyMockTemplate t = new EasyMockTemplate(mockEmployeeDao) {
+ *     &#64;Override protected void expectations() {
+ *       mockEmployeeDao.insert(employee);
+ *     }
+ *
+ *     &#64;Override protected void codeToTest() {
+ *       employeeBo.addNewEmployee(employee);
+ *     }
+ *   };
+ *   t.run();    
+ * }
+ * </code>
+ * </pre>
+ * </p>
+ * <p>
+ * The benefits of <code>EasyMockTemplate</code> are:
+ * <ul>
+ * <li>Clear separation of mock expectations and code to test</li> 
+ * <li>Less code duplication (we don't have to call <code>replay</code> and <code>verify</code> anymore)</li> 
+ * </ul>
+ * </p>
  * 
  * @author Alex Ruiz
  */
@@ -56,7 +98,7 @@ public abstract class EasyMockTemplate {
   }
    
   /**
-   * Encapsulates the common pattern followed when using EasyMock.
+   * Encapsulates EasyMock's behavior pattern.
    * <ol>
    * <li>Set up expectations on the mock objects</li>
    * <li>Set the state of the mock controls to "replay"</li>
