@@ -16,18 +16,19 @@
 package org.fest.swing.junit;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.optional.junit.AggregateTransformer;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.resources.Union;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.util.Files.*;
+import static org.fest.reflect.Reflection.field;
+import static org.fest.util.Files.temporaryFolder;
 
 /**
  * Tests for <code>{@link JUnitReportTask}</code>.
@@ -50,19 +51,31 @@ public class JUnitReportTaskTest {
     assertThat(classpath.getProject()).isSameAs(project);
   }
   
-//  @Test(dependsOnMethods = "shouldCreateClassPathUsingProject")
-//  public void shouldCreateTransformerWithCurrentClasspath() {
-//    File temporaryFolder = temporaryFolder();
-//    FileSet fileSet = new FileSet();
-//    fileSet.setDir(temporaryFolder);
-//    fileSet.setIncludes("*.*");
-//    Path cp = task.createClasspath();
-//    cp.addFileset(fileSet);
-//    AggregateTransformer transformer = task.createReport();
-//    assertThat(transformer).isInstanceOf(ReportTransformer.class);
-//    ReportTransformer reportTransformer = (ReportTransformer)transformer;
-//    System.out.println(Arrays.toString(temporaryFolder.list()));
-//    System.out.println(Arrays.toString(reportTransformer.createClasspath().list()));
-//    ///assertThat(reportTransformer.createClasspath().list()).isEqualTo(temporaryFolder.list());
-//  }
+  @Test(dependsOnMethods = "shouldCreateClassPathUsingProject")
+  public void shouldCreateTransformerWithCurrentClasspath() {
+    File temporaryFolder = temporaryFolder();
+    task.createClasspath().addFileset(allFilesIn(temporaryFolder));
+    AggregateTransformer transformer = task.createReport();
+    assertThat(transformer).isInstanceOf(ReportTransformer.class);
+    Path expected = field("classpath").ofType(Path.class).in(task).get();
+    assertClasspathAdded((ReportTransformer)transformer, expected);
+  }
+  
+  private FileSet allFilesIn(File temporaryFolder) {
+    FileSet fileSet = new FileSet();
+    fileSet.setDir(temporaryFolder);
+    fileSet.setIncludes("*.*");
+    return fileSet;
+  }
+
+  private void assertClasspathAdded(ReportTransformer target, Path expected) {
+    Path targetPath = field("classpath").ofType(Path.class).in(target).get();
+    Union union = field("union").ofType(Union.class).in(targetPath).get();
+    List<?> list = field("rc").ofType(List.class).in(union).get();
+    assertThat(list).hasSize(1);
+    Object mayBePath = list.get(0);
+    assertThat(mayBePath).isInstanceOf(Path.class);
+    Path actual = (Path)mayBePath;
+    assertThat(actual.list()).isEqualTo(expected.list());
+  }
 }
