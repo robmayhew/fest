@@ -38,6 +38,7 @@ public final class Field<T> {
 
   Field(String fieldName, Object target) {
     this.target = target;
+    if (target == null) throw new IllegalArgumentException("Target should not be null");
     Class<?> type = target.getClass();
     field = lookupInClassHierarchy(fieldName, type);
     accessible = field.isAccessible();
@@ -51,7 +52,8 @@ public final class Field<T> {
       if (field != null) break;
       type = type.getSuperclass();
     }
-    if (field == null) throw new ReflectionError(concat("Unable to find field ", quote(fieldName), " in class ", type));
+    if (field == null) 
+      throw new ReflectionError(concat("Unable to find field ", quote(fieldName), " in class ", targetType.getName()));
     return field;
   }
 
