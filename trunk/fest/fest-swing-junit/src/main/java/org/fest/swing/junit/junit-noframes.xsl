@@ -1,5 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
         xmlns:lxslt="http://xml.apache.org/xslt"
+        xmlns:java="http://xml.apache.org/xslt/java"
         xmlns:stringutils="xalan://org.apache.tools.ant.util.StringUtils">
 <xsl:output method="html" indent="yes" encoding="US-ASCII"
   doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
@@ -29,6 +30,9 @@
  e-mail or such.
 
 -->
+
+<xsl:param name="output.dir" select="'.'"/>
+
 <xsl:template match="testsuites">
     <html>
         <head>
@@ -231,7 +235,7 @@
                         <td colspan="4"><xsl:apply-templates select="./error"/></td>
                     </tr>
                 </xsl:if>
-                <xsl:apply-templates select="./testcase" mode="print.test"/>
+								<xsl:apply-templates select="./testcase" mode="print.test" />
             </table>
             <div class="Properties">
                 <a>
@@ -387,11 +391,17 @@
         <xsl:choose>
             <xsl:when test="failure">
                 <td>Failure</td>
-                <td><xsl:apply-templates select="failure"/></td>
+                <td>
+                	<xsl:apply-templates select="failure"/>
+                  <xsl:apply-templates select="screenshot" />
+                </td>
             </xsl:when>
             <xsl:when test="error">
                 <td>Error</td>
-                <td><xsl:apply-templates select="error"/></td>
+                <td>
+                	<xsl:apply-templates select="error"/>
+                  <xsl:apply-templates select="screenshot" />
+                </td>
             </xsl:when>
             <xsl:otherwise>
                 <td>Success</td>
@@ -432,6 +442,26 @@
     </code>
     <!-- the later is better but might be problematic for non-21" monitors... -->
     <!--pre><xsl:value-of select="."/></pre-->
+</xsl:template>
+
+<xsl:template match="screenshot">
+    <xsl:variable name="screenshot.path">
+    	<xsl:value-of select="@file" />
+    </xsl:variable>
+    <xsl:variable name="screenshot.fullpath">
+        <xsl:value-of select="$output.dir" /><xsl:text>/</xsl:text><xsl:value-of select="$screenshot.path" />
+    </xsl:variable>
+    <xsl:variable name="encoded.image">
+        <xsl:value-of select="."/>   
+    </xsl:variable>
+    <xsl:value-of select="java:org.fest.swing.junit.ImageHandler.decodeBase64AndSaveAsPng(string($encoded.image), string($screenshot.fullpath))"/>
+    <div>
+    <br/>
+    <a>
+    	<xsl:attribute name="href"><xsl:value-of select="$screenshot.path"/></xsl:attribute>
+    	<xsl:text>Screenshot</xsl:text>
+    </a>
+    </div>
 </xsl:template>
 
 <xsl:template name="JS-escape">

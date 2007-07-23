@@ -79,7 +79,9 @@ public final class ImageHandler {
     BufferedImage image = decodeBase64(encoded);
       try {
       ImageIO.write(image, PNG_EXTENSION, newFile(realPath));
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     return EMPTY_STRING;
   }
   

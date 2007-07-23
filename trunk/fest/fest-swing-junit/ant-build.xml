@@ -30,7 +30,7 @@
       <fileset dir="${target.junit.results.dir}">
         <include name="TEST-*.xml" />
       </fileset>
-      <report format="frames"
+      <report format="noframes"
               styledir="${src.java.main.dir}/org/fest/swing/junit"
               todir="${target.junit.report.dir}/html" />
     </festreport>

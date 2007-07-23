@@ -891,10 +891,6 @@ h6 {
     </div>
 </xsl:template>
 
-<xsl:template name="screenshot-link">
-    <xsl:param name="filepath" />
-</xsl:template>
-
 <xsl:template name="JS-escape">
     <xsl:param name="string"/>
     <xsl:param name="tmp1" select="stringutils:replace(string($string),'\','\\')"/>
