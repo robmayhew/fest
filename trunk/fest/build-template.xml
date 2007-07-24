@@ -48,8 +48,7 @@
 		<antcall target="after.compile.main" />
 	</target>
 
-	<target name="after.compile.main">
-	</target>
+	<target name="after.compile.main" />
 		
 	<target name="init-maven">
 		<path id="maven.classpath">
