@@ -7,6 +7,7 @@
 		<copy todir="${target.classes.dir}">
 			<fileset dir="${src.resources.main.dir}">
 				<include name="**/*.xsl" />
+				<include name="festunittasks" />
 			</fileset>
 		</copy>
 	</target>

@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/abbot-1.0.0.rc5.jar"/>
 	<classpathentry kind="lib" path="lib/ant-1.7.0.jar" sourcepath="C:/Java/apache-ant-1.7.0/src/main"/>

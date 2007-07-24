@@ -15,6 +15,7 @@
 package org.fest.swing.junit;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,6 +30,9 @@ import org.apache.tools.ant.taskdefs.optional.junit.AggregateTransformer;
 import org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
+import org.apache.tools.ant.types.Resource;
+import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.resources.URLResource;
 import org.apache.tools.ant.util.FileUtils;
 
 import static org.fest.util.Strings.concat;
@@ -101,6 +105,25 @@ public class ReportTransformer extends AggregateTransformer {
     xsltTask.setXslResource(getStylesheet());
     xsltTask.setIn(((XMLResultAggregator) task).getDestinationFile());
     return xsltTask;
+  }
+
+  /**
+   * access the stylesheet to be used as a resource.
+   * @return stylesheet as a resource
+   */
+  @Override protected Resource getStylesheet() {
+    String xslname = "junit-frames.xsl";
+    if (NOFRAMES.equals(format)) xslname = "junit-noframes.xsl";
+    if (styleDir == null) {
+      URLResource stylesheet = new URLResource();
+      URL stylesheetURL = getClass().getClassLoader().getResource(concat("org/fest/swing/junit/", xslname));
+      stylesheet.setURL(stylesheetURL);
+      return stylesheet;
+    }
+    FileResource stylesheet = new FileResource();
+    File stylesheetFile = new File(styleDir, xslname);
+    stylesheet.setFile(stylesheetFile);
+    return stylesheet;
   }
 
   private TempFile tempFileTask() {

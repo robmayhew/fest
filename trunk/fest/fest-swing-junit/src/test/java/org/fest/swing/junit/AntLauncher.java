@@ -18,11 +18,14 @@ package org.fest.swing.junit;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.Vector;
 
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
+
+import static java.util.Arrays.asList;
 
 /**
  * Understands programmatic execution of a Ant task.
@@ -43,11 +46,11 @@ public final class AntLauncher {
   }
 
   public String executeDefaultTarget() {
-    return executeTarget(project.getDefaultTarget());
+    return execute(project.getDefaultTarget());
   }
   
-  public String executeTarget(String targetName) {
-    project.executeTarget(targetName);
+  public String execute(String... targetNames) {
+    project.executeTargets(new Vector<String>(asList(targetNames)));
     return out.toString();
   }
   
