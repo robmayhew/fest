@@ -1,39 +1,14 @@
 <?xml version="1.0"?>
 <project name="fest-swing-junit" default="all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
 
-  <import file="../build-template.xml"/>
+	<import file="../build-template.xml" />
 
-  <target name="junit-test" depends="compile">
-    <taskdef name="festreport" classname="org.fest.swing.junit.JUnitReportTask">
-      <classpath refid="lib.classpath" />
-      <classpath location="${target.test.classes.dir}" />
-      <classpath location="${target.classes.dir}" />
-    </taskdef>  
-    <property name="target.junit.results.dir" value="${target.dir}/junit-results" />
-    <property name="target.junit.report.dir" value="${target.dir}/junit-report" />
-    <property name="fest.screenshot.dir" value="${target.junit.results.dir}/screenshots" />
-    <mkdir dir="${target.junit.results.dir}"/>
-    <mkdir dir="${target.junit.report.dir}"/>
-    <junit forkmode="perBatch" printsummary="yes" haltonfailure="no" haltonerror="no">
-      <classpath refid="lib.classpath" />
-      <classpath location="${target.test.classes.dir}" />
-      <classpath location="${target.classes.dir}" />
-      <formatter classname="org.fest.swing.junit.ScreenshotOnFailureResultFormatter" extension=".xml" />
-      <batchtest fork="yes" todir="${target.junit.results.dir}">
-        <fileset dir="${target.classes.dir}" includes="**/*DummyTest*.class" />
-      </batchtest>
-    </junit>
-    <festreport todir="${target.junit.report.dir}">
-      <classpath refid="lib.classpath" />
-      <classpath location="${target.test.classes.dir}" />
-      <classpath location="${target.classes.dir}" />
-      <fileset dir="${target.junit.results.dir}">
-        <include name="TEST-*.xml" />
-      </fileset>
-      <report format="noframes"
-              styledir="${src.java.main.dir}/org/fest/swing/junit"
-              todir="${target.junit.report.dir}/html" />
-    </festreport>
-  </target>
+	<target name="after.compile.main">
+		<copy todir="${target.classes.dir}">
+			<fileset dir="${src.resources.test.dir}">
+				<include name="**/*.xsl" />
+			</fileset>
+		</copy>
+	</target>
 
 </project>
