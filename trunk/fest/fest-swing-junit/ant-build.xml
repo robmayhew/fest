@@ -5,7 +5,7 @@
 
 	<target name="after.compile.main">
 		<copy todir="${target.classes.dir}">
-			<fileset dir="${src.resources.test.dir}">
+			<fileset dir="${src.resources.main.dir}">
 				<include name="**/*.xsl" />
 			</fileset>
 		</copy>
