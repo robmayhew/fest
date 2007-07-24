@@ -3,6 +3,7 @@
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="src.java.main.dir" value="${src.dir}/main/java" />
+	<property name="src.resources.main.dir" value="${src.dir}/main/resources" />
 	<property name="src.java.test.dir" value="${src.dir}/test/java" />
 
 	<property name="lib.dir" value="${basedir}/lib" />
@@ -44,8 +45,12 @@
 			<src path="${src.java.main.dir}" />
 			<classpath refid="dependency.classpath" />
 		</javac>
+		<antcall target="after.compile.main" />
 	</target>
 
+	<target name="after.compile.main">
+	</target>
+		
 	<target name="init-maven">
 		<path id="maven.classpath">
 			<pathelement location="../maven/maven-ant-tasks-2.0.6.jar" />
