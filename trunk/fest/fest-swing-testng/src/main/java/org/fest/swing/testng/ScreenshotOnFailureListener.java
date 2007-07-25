@@ -36,13 +36,14 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 
 /**
- * Understands a TestNG listener that takes a screenshot when a GUI test fails.
+ * Understands a <a href="http://testng.org" target="_blank">TestNG</a> listener that takes a screenshot when a GUI test 
+ * fails.
  * <p>
  * <strong>Note:</strong> A test is consider a GUI test if it is marked with the annotation
  * <code>{@link org.fest.swing.GUITest}</code>.
  * </p>
  * <p>
- * The following is an example using Ant:
+ * To use this listener, we just need to make TestNG aware of it. The following is an example using Ant:
  * <pre>
  * &lt;testng <strong>listeners=&quot;org.fest.swing.testng.ScreenshotOnFailureListener&quot;</strong> outputDir=&quot;${target.test.results.dir}&quot; haltOnFailure=&quot;true&quot; verbose=&quot;2&quot;&gt;
  *   &lt;classfileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;&#42;&#42;/&#42;Test.class&quot; /&gt;
