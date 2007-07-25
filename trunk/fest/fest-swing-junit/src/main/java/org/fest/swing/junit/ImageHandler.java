@@ -18,6 +18,7 @@ package org.fest.swing.junit;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -27,6 +28,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import static java.io.File.separator;
 import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 
 import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
 import static org.fest.util.Files.flushAndClose;
@@ -44,7 +46,6 @@ public final class ImageHandler {
   private static final String EMPTY_STRING = "";
 
   private static Logger logger = Logger.getAnonymousLogger();
-  
   
   public static String encodeBase64(BufferedImage image) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -77,10 +78,13 @@ public final class ImageHandler {
     if (isEmpty(imageFilePath)) return EMPTY_STRING;
     String realPath = imageFilePath.replace("/", separator);
     BufferedImage image = decodeBase64(encoded);
-      try {
-      ImageIO.write(image, PNG_EXTENSION, newFile(realPath));
-    } catch (Exception e) {
-      e.printStackTrace();
+    File newFile = new File(realPath);
+    if (newFile.exists()) return EMPTY_STRING;
+    try {
+      newFile = newFile(realPath);
+      ImageIO.write(image, PNG_EXTENSION, newFile);
+    } catch (Exception ignored) {
+      logger.log(WARNING, ignored.getMessage());
     }
     return EMPTY_STRING;
   }
