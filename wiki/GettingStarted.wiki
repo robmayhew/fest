@@ -9,7 +9,7 @@ FEST (Fixtures for Easy Software Testing) is an open source project (Apache 2.0 
 
   # Download the latest version of the Swing module from the project's [http://code.google.com/p/fest/downloads/list download page]. The filename should be similar to _fest-swing-VERSION.zip_.
   # Include the file fest-swing-VERSION.jar and its dependencies (jar/zip files, located in the 'lib' folder in the downloaded zip file) in your classpath.
-  # Use the fixtures in the package `org.fest.swing.fixture`. Although you can work directly with the FEST Robot (`org.fest.swing.RobotFixture`,) it is too low-level. It is a lot easier to work with the provided fixtures.
+  # Use the fixtures in the package [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/fixture/package-summary.html org.fest.swing.fixture]. Although you can work directly with the FEST Robot ([http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/RobotFixture.html org.fest.swing.RobotFixture],) it is too low-level. It is a lot easier to work with the provided fixtures.
 
 GUI Tests that use FEST can be written with either [http://junit.org JUnit] or [http://testng.org TestNG]. The following is an example of a test that verifies that the text in the `JLabel` changes to the text in the `JTextField` when the `JButton` is clicked:
 
@@ -83,4 +83,5 @@ The following table shows the dependencies of the [http://http://www.junit.org J
 || ant-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 || ant-junit-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 || ant-launcher-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
+
 
