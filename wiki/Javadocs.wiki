@@ -4,5 +4,5 @@
   * FEST Swing Module
     # [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html Main Module]
     # [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG-specific extension]
+    # [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html JUnit-specific extension]
   * [http://fest.googlecode.com/svn/trunk/fest/fest-mocks/javadocs/index.html FEST Mocks Module]
-
