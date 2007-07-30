@@ -18,8 +18,10 @@ package org.fest.swing;
 import java.awt.Component;
 import java.awt.Container;
 
+import abbot.finder.AWTHierarchy;
 import abbot.finder.BasicFinder;
 import abbot.finder.Hierarchy;
+import abbot.finder.TestHierarchy;
 
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.
@@ -29,6 +31,25 @@ import abbot.finder.Hierarchy;
 public class ComponentFinder {
 
   private final abbot.finder.ComponentFinder finder;
+
+  /**
+   * Creates a new <code>{@link ComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
+   * created before the created <code>{@link ComponentFinder}</code> cannot be accessed by the created
+   * <code>{@link ComponentFinder}</code>.
+   * @return the created finder.
+   */
+  public static ComponentFinder robotWithNewAwtHierarchy() {
+    return new ComponentFinder(new TestHierarchy());
+  }
+
+  /**
+   * Creates a new <code>{@link ComponentFinder}</code> that has access to all the GUI components in the AWT
+   * hierarchy.
+   * @return the created finder.
+   */
+  public static ComponentFinder robotWithCurrentAwtHierarchy() {
+    return new ComponentFinder(new AWTHierarchy());
+  }
 
   /**
    * Creates a new </code>{@link ComponentFinder}</code>.
@@ -48,7 +69,7 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
    */
-  public <T extends Component> T findByType(Class<T> type) {
+  public final <T extends Component> T findByType(Class<T> type) {
     return type.cast(find(new TypeMatcher(type)));
   }
 
@@ -78,7 +99,7 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
    */
-  public <T extends Component> T findByType(Container root, Class<T> type) {
+  public final <T extends Component> T findByType(Container root, Class<T> type) {
     return type.cast(find(root, new TypeMatcher(type)));
   }
 
@@ -107,7 +128,7 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
    */
-  public Component findByName(String name) {
+  public final Component findByName(String name) {
     return find(new NameMatcher(name));
   }
   
@@ -120,7 +141,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String)
    */
-  public <T extends Component> T findByName(String name, Class<T> type) {
+  public final <T extends Component> T findByName(String name, Class<T> type) {
     return type.cast(findByName(name));
   }
   
@@ -130,7 +151,7 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
-  public Component find(ComponentMatcher m) {
+  public final Component find(ComponentMatcher m) {
     try {
       return finder.find(m);
     } catch (Exception e) {
@@ -149,7 +170,7 @@ public class ComponentFinder {
    * @see #findByName(String)
    * @see #findByType(Container, Class)
    */
-  public <T extends Component> T findByName(Container root, String name, Class<T> type) {
+  public final <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return type.cast(findByName(root, name));
   }
   
