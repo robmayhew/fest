@@ -60,9 +60,7 @@ public final class WindowFinder {
       ComponentFinder finder = robot.finder();
       ComponentMatcher matcher = frameMatcher();
       long start = currentTimeMillis();
-      int i = 0;
       while (true) {
-        System.out.println(++i);
         Component c = null;
         try {
           c = finder.find(matcher);
