@@ -44,17 +44,41 @@ public class WindowFinderTest {
     login.cleanUp();
   }
   
-  @Test public void shouldFindMainWindowAfterLogin() {
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfFrameNameIsNull() {
+    WindowFinder.findFrame((String)null);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfFrameNameIsEmpty() {
+    WindowFinder.findFrame("");
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfFrameTimeoutIsNegative() {
+    WindowFinder.findFrame("main").timeout(-20);
+  }
+  
+  @Test(expectedExceptions = ComponentLookupException.class) 
+  public void shouldTimeOut() {
+    loginWindow.loginTime(5000);
+    login.button("login").click();
+    WindowFinder.findFrame("main").timeout(10).with(login.robot);
+  }
+  
+  @Test(dependsOnMethods = "shouldTimeOut")
+  public void shouldFindMainFrameByNameAfterLogin() {
     loginWindow.loginTime(500);
     login.button("login").click();
     FrameFixture main = WindowFinder.findFrame("main").with(login.robot);
     assertThat(main.target).isInstanceOf(MainWindow.class);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldTimeOut() {
-    loginWindow.loginTime(2000);
+  @Test(dependsOnMethods = "shouldTimeOut")
+  public void shouldFindMainFrameByTypeAfterLogin() {
+    loginWindow.loginTime(500);
     login.button("login").click();
-    WindowFinder.findFrame("main").timeout(1000).with(login.robot);
+    FrameFixture main = WindowFinder.findFrame(MainWindow.class).with(login.robot);
+    assertThat(main.target).isInstanceOf(MainWindow.class);
   }
 }
