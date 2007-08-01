@@ -32,13 +32,15 @@ public class LoginWindow extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
-  private static final int LOGIN_EXECUTION_TIME = 10000;
+  private static final int DEFAULT_SLEEP_TIME = 10000;
 
-  private long loginTime = LOGIN_EXECUTION_TIME;
+  private long loginTime = DEFAULT_SLEEP_TIME;
+  private long showSettingsTime = DEFAULT_SLEEP_TIME;
   
   public LoginWindow() {
     setLayout(new FlowLayout());
     add(loginButton());
+    add(settingsButton());
   }
 
   private JButton loginButton() {
@@ -65,19 +67,51 @@ public class LoginWindow extends JFrame {
       }
 
       @Override protected void done() {
-        showMain();
+        MainWindow mainWindow = new MainWindow();
+        mainWindow.pack();
+        mainWindow.setVisible(true);
       }
     };
     swingWorker.execute();
   }
 
-  private void showMain() {
-    MainWindow mainWindow = new MainWindow();
-    mainWindow.pack();
-    mainWindow.setVisible(true);
+  private JButton settingsButton() {
+    JButton button = new JButton("Settings");
+    button.setName("showSettings");
+    button.addMouseListener(new MouseAdapter() {
+      @Override public void mousePressed(MouseEvent e) {
+        setVisible(false);
+        showSettings();
+      }
+    });
+    return button;
+  }
+  
+  private void showSettings() {
+    SwingWorker<Void, Void> swingWorker = new SwingWorker<Void, Void>() {
+      @Override protected Void doInBackground() {
+        try {
+          Thread.sleep(showSettingsTime);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+        }
+        return null;
+      }
+
+      @Override protected void done() {
+        SettingsDialog settingsDialog = new SettingsDialog();
+        settingsDialog.pack();
+        settingsDialog.setVisible(true);
+      }
+    };
+    swingWorker.execute();
   }
 
   public void loginTime(long loginTime) {
     this.loginTime = loginTime;
+  }
+
+  public void showSettingsTime(long showSettingsTime) {
+    this.showSettingsTime = showSettingsTime;
   }
 }

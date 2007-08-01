@@ -15,31 +15,21 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Dialog;
-import java.awt.Frame;
+import java.awt.FlowLayout;
+
+import javax.swing.JDialog;
 
 /**
- * Understands lookup of <code>{@link Frame}</code>s and <code>{@link Dialog}</code>s.
+ * Understands a <code>{@link JDialog}</code> that simulates a &quot;login settings&quot; dialog.
  *
- * @author Alex Ruiz
+ * @author Alex Ruiz 
  */
-public final class WindowFinder {
- 
-  private WindowFinder() {}
+public class SettingsDialog extends JDialog {
 
-  public static FrameFinder findFrame(String frameName) {
-    return new FrameFinder(frameName);
-  }
+  private static final long serialVersionUID = 1L;
 
-  public static FrameFinder findFrame(Class<? extends Frame> frameType) {
-    return new FrameFinder(frameType);
-  }
-
-  public static DialogFinder findDialog(String dialogName) {
-    return new DialogFinder(dialogName);
-  }
-
-  public static DialogFinder findDialog(Class<? extends Dialog> dialogType) {
-    return new DialogFinder(dialogType);
+  public SettingsDialog() {
+    setLayout(new FlowLayout());
+    setName("settings");
   }
 }
