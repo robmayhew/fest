@@ -61,19 +61,19 @@ abstract class WindowFinderTemplate<T extends Window> {
    * @param timeout the number of milliseconds before stopping the search.
    * @return this finder.
    */
-  public WindowFinderTemplate timeout(long timeout) {
+  public final WindowFinderTemplate withTimeout(long timeout) {
     if (timeout < 0) throw new IllegalArgumentException("Timeout cannot be a negative number");
     this.timeout = timeout;
     return this;
   }
 
   /**
-   * Finds a window by name or type.
+   * Finds a window by name or type using the given robot.
    * @param robot contains the underlying finding to delegate the search to.
    * @return a fixture capable of managing the found window.
    * @throws ComponentLookupException if a window with the given name or of the given type could not be found.
    */
-  public abstract WindowFixture<T> with(RobotFixture robot);
+  public abstract WindowFixture<T> using(RobotFixture robot);
 
   /**
    * Finds the window using either by name or type.

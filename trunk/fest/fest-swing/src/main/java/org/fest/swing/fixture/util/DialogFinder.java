@@ -47,7 +47,7 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
    * @throws ComponentLookupException if a <code>Dialog</code> with the given name or of the given type could not be
   *           found.
    */
-  public DialogFixture with(RobotFixture robot) {
+  public DialogFixture using(RobotFixture robot) {
     return new DialogFixture(robot, findWindowWith(robot));
   }
   

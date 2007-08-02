@@ -47,7 +47,7 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
    * @throws ComponentLookupException if a <code>Frame</code> with the given name or of the given type could not be
   *           found.
    */
-  public FrameFixture with(RobotFixture robot) {
+  public FrameFixture using(RobotFixture robot) {
     return new FrameFixture(robot, findWindowWith(robot));
   }
   
