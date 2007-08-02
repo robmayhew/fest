@@ -19,26 +19,67 @@ import java.awt.Dialog;
 import java.awt.Frame;
 
 /**
- * Understands lookup of <code>{@link Frame}</code>s and <code>{@link Dialog}</code>s.
- *
+ * <p>
+ * Understands lookup of <code>{@link Frame}</code>s and <code>{@link Dialog}</code>s. Lookups are performed till the
+ * window of interest is found, or until the given time to perform the lookup is over. The default lookup time is 5 
+ * seconds.
+ * </p>
+ * <p>
+ * <code>{@link WindowFinder}</code> is the &quot;entry point&quot; of a fluent interface to lookup frames and dialogs.
+ * This example illustrates finding a <code>{@link Frame}</code> by name, using the default lookup time (5 seconds):
+ * <pre>
+ * FrameFixture someFrame = WindowFinder.findFrame(&quot;someFrame&quot;).with(robot);
+ * </pre>
+ * </p>
+ * <p>
+ * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.RobotFixture}</code>.
+ * </p>
+ * <p>
+ * This example shows how to find a <code>{@link Dialog}</code> by type using a lookup time of 10 seconds:
+ * <pre>
+ * DialogFixture someFrame = WindowFinder.findDialog(MyDialog.class).timeout(10000).with(robot);
+ * </pre>
+ * </p>
+ * 
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class WindowFinder {
  
   private WindowFinder() {}
 
+  /**
+   * Creates a new <code>{@link FrameFinder}</code> to lookup a <code>{@link Frame}</code> by name.
+   * @param frameName the name of the frame to find.
+   * @return the created finder.
+   */
   public static FrameFinder findFrame(String frameName) {
     return new FrameFinder(frameName);
   }
 
+  /**
+   * Creates a new <code>{@link FrameFinder}</code> to lookup a <code>{@link Frame}</code> by type.
+   * @param frameType the type of the frame to find.
+   * @return the created finder.
+   */
   public static FrameFinder findFrame(Class<? extends Frame> frameType) {
     return new FrameFinder(frameType);
   }
 
+  /**
+   * Creates a new <code>{@link DialogFinder}</code> to lookup a <code>{@link Dialog}</code> by name.
+   * @param dialogName the name of the dialog to find.
+   * @return the created finder.
+   */
   public static DialogFinder findDialog(String dialogName) {
     return new DialogFinder(dialogName);
   }
 
+  /**
+   * Creates a new <code>{@link DialogFinder}</code> to lookup a <code>{@link Dialog}</code> by type.
+   * @param dialogType the type of the dialog to find.
+   * @return the created finder.
+   */
   public static DialogFinder findDialog(Class<? extends Dialog> dialogType) {
     return new DialogFinder(dialogType);
   }

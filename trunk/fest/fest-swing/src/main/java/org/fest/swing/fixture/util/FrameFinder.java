@@ -24,7 +24,8 @@ import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.FrameFixture;
 
 /**
- * Understands a finder for <code>{@link Frame}</code>s.
+ * Understands a finder for <code>{@link Frame}</code>s. This class cannot be used directly, please see 
+ * <code>{@link WindowFinder}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang 

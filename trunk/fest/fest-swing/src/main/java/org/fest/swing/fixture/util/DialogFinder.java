@@ -24,7 +24,8 @@ import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.DialogFixture;
 
 /**
- * Understands a finder for <code>{@link Dialog}</code>s.
+ * Understands a finder for <code>{@link Dialog}</code>s. This class cannot be used directly, please see 
+ * <code>{@link WindowFinder}</code>.
  *
  * @author Yvonne Wang 
  * @author Alex Ruiz
