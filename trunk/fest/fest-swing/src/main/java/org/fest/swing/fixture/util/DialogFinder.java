@@ -17,6 +17,7 @@ package org.fest.swing.fixture.util;
 
 import java.awt.Component;
 import java.awt.Dialog;
+import java.util.concurrent.TimeUnit;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
@@ -39,6 +40,26 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
   DialogFinder(Class<? extends Dialog> dialogType) {
     super(dialogType);
   }
+
+  /**
+   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * @param timeout the number of milliseconds before stopping the search.
+   * @return this finder.
+   */
+  @Override public DialogFinder withTimeout(long timeout) {
+    return (DialogFinder)super.withTimeout(timeout);
+  }
+
+  /**
+   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * @param timeout the number of milliseconds before stopping the search.
+   * @param unit the time unit for the timeout.
+   * @return this finder.
+   */
+  @Override public DialogFinder withTimeout(long timeout, TimeUnit unit) {
+    return (DialogFinder)super.withTimeout(timeout, unit);
+  }
+
 
   /**
    * Finds a <code>{@link Dialog}</code> by name or type.

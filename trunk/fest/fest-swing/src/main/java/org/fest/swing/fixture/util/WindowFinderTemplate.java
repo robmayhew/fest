@@ -17,6 +17,7 @@ package org.fest.swing.fixture.util;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.currentTimeMillis;
 import static org.fest.util.Strings.concat;
@@ -56,17 +57,17 @@ abstract class WindowFinderTemplate<T extends Window> {
       throw new IllegalArgumentException("The type of window to find should not be null");
   }
 
-  /**
-   * Sets the timeout for this finder. The window to search should be found within the given time period. 
-   * @param timeout the number of milliseconds before stopping the search.
-   * @return this finder.
-   */
-  public final WindowFinderTemplate withTimeout(long timeout) {
+  WindowFinderTemplate withTimeout(long timeout) {
     if (timeout < 0) throw new IllegalArgumentException("Timeout cannot be a negative number");
     this.timeout = timeout;
     return this;
   }
 
+  WindowFinderTemplate withTimeout(long timeout, TimeUnit unit) {
+    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
+    return withTimeout(unit.toMillis(timeout));
+  }
+  
   /**
    * Finds a window by name or type using the given robot.
    * @param robot contains the underlying finding to delegate the search to.

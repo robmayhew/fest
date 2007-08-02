@@ -15,10 +15,11 @@
  */
 package org.fest.swing.fixture.util;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Dialog;
 import java.awt.Frame;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.fixture.DialogFixture;
@@ -80,6 +81,14 @@ public class WindowFinderTest {
     loginWindow.loginTime(500);
     login.button("login").click();
     FrameFixture main = WindowFinder.findFrame("main").using(login.robot);
+    assertThat(main.target).isInstanceOf(MainWindow.class);
+  }
+  
+  @Test(dependsOnMethods = "shouldTimeOutIfMainFrameNotFound")
+  public void shouldFindMainFrameByNameAfterLoginUsingTimeUnit() {
+    loginWindow.loginTime(500);
+    login.button("login").click();
+    FrameFixture main = WindowFinder.findFrame("main").withTimeout(2, SECONDS).using(login.robot);
     assertThat(main.target).isInstanceOf(MainWindow.class);
   }
   

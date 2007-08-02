@@ -17,6 +17,7 @@ package org.fest.swing.fixture.util;
 
 import java.awt.Component;
 import java.awt.Frame;
+import java.util.concurrent.TimeUnit;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
@@ -38,6 +39,25 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
 
   FrameFinder(Class<? extends Frame> frameType) {
     super(frameType);
+  }
+
+  /**
+   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * @param timeout the number of milliseconds before stopping the search.
+   * @return this finder.
+   */
+  @Override public FrameFinder withTimeout(long timeout) {
+    return (FrameFinder)super.withTimeout(timeout);
+  }
+
+  /**
+   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * @param timeout the number of milliseconds before stopping the search.
+   * @param unit the time unit for the timeout.
+   * @return this finder.
+   */
+  @Override public FrameFinder withTimeout(long timeout, TimeUnit unit) {
+    return (FrameFinder)super.withTimeout(timeout, unit);
   }
 
   /**

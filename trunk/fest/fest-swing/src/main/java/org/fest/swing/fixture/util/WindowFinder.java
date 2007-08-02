@@ -28,7 +28,7 @@ import java.awt.Frame;
  * <code>{@link WindowFinder}</code> is the &quot;entry point&quot; of a fluent interface to lookup frames and dialogs.
  * This example illustrates finding a <code>{@link Frame}</code> by name, using the default lookup time (5 seconds):
  * <pre>
- * FrameFixture someFrame = WindowFinder.findFrame(&quot;someFrame&quot;).using(robot);
+ * FrameFixture frame = WindowFinder.findFrame(&quot;someFrame&quot;).using(robot);
  * </pre>
  * </p>
  * <p>
@@ -37,7 +37,11 @@ import java.awt.Frame;
  * <p>
  * This example shows how to find a <code>{@link Dialog}</code> by type using a lookup time of 10 seconds:
  * <pre>
- * DialogFixture someFrame = WindowFinder.findDialog(MyDialog.class).withTimeout(10000).using(robot);
+ * DialogFixture dialog = WindowFinder.findDialog(MyDialog.class).withTimeout(10000).using(robot);
+ * </pre>
+ * We can also specify the time unit:
+ * <pre>
+ * DialogFixture dialog = WindowFinder.findDialog(MyDialog.class).withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
  * </pre>
  * </p>
  * 
