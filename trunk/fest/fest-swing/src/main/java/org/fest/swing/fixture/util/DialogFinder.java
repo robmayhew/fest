@@ -51,9 +51,9 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
   }
 
   /**
-   * Sets the timeout for this finder. The window to search should be found within the given time period. 
-   * @param timeout the number of milliseconds before stopping the search.
-   * @param unit the time unit for the timeout.
+   * Sets the timeout for this finder. The window to search should be found within the given time period.
+   * @param timeout the value for the timeout.
+   * @param unit the time unit for the <code>timeout</code>.
    * @return this finder.
    */
   @Override public DialogFinder withTimeout(long timeout, TimeUnit unit) {

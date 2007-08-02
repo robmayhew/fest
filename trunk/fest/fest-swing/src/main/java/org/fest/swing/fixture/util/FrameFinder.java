@@ -52,8 +52,8 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
 
   /**
    * Sets the timeout for this finder. The window to search should be found within the given time period. 
-   * @param timeout the number of milliseconds before stopping the search.
-   * @param unit the time unit for the timeout.
+   * @param timeout the value for the timeout.
+   * @param unit the time unit for the <code>timeout</code>.
    * @return this finder.
    */
   @Override public FrameFinder withTimeout(long timeout, TimeUnit unit) {
