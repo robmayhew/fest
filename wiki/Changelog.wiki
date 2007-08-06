@@ -13,7 +13,7 @@
   # Some bug fixes.
 
 ===[06/04/07] FEST Swing 0.3===
-  # Fixed [http://code.google.com/p/fest/issues/detail?id=1&can=1&q= Issue 1] by adding class `ScreenLock` to guarantee real sequential execution of GUI tests, regardless of the testing framework being used ([http://www.junit.org JUnit] or [http://testng.org TestNG].)
+  # Fixed Issue 1 by adding class `ScreenLock` to guarantee real sequential execution of GUI tests, regardless of the testing framework being used ([http://www.junit.org JUnit] or [http://testng.org TestNG].)
   # Added capability to add a screenshot of the desktop to a TestNG HTML test report when a test fails (support for JUnit coming soon.) Click [http://jroller.com/page/alexRuiz?entry=screenshots_of_failures_in_test here] for more details.
   # Created annotation `@GUITest` to identify GUI tests (either at class or method level). Only screenshots of failing tests marked with this annotation are added to the test report.
   # Added support for testing `JTrees`. Many thanks to Keith Coughtrey.
@@ -29,7 +29,6 @@
         method("setName").withParameterTypes(String.class).in(person).invoke("Luke");
         field("name").ofType(String.class).in(person).set("Anakin");
 }}}
-
 
 
 
