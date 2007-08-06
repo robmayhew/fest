@@ -1,0 +1,36 @@
+#labels Featured
+=Changelog=
+
+===[08/06/07] FEST Swing 0.5 SNAPSHOT===
+  # Fixed Issue 15. Now it is possible to [http://www.jroller.com/alexRuiz/entry/following_frames_with_fest_or follow frames] with FEST.  
+  # Swing module and the extensions for [http://testng.org TestNG] and [http://www.junit.org JUnit] are included in one zip file.
+
+===[07/17/07] FEST Swing 0.4===
+  # Added support for more Swing components: `JTable`, `JSpinner`, `JSlider` and `JFileChooser`.
+  # Separated the [http://testng.org TestNG] and [http://www.junit.org JUnit] extensions (screenshots of failing tests) into their own separate projects.
+  # [http://code.google.com/p/fest/wiki/Javadocs Javadocs].
+  # A "[http://code.google.com/p/fest/wiki/GettingStarted Getting Started]" guide.
+  # Some bug fixes.
+
+===[06/04/07] FEST Swing 0.3===
+  # Fixed [http://code.google.com/p/fest/issues/detail?id=1&can=1&q= Issue 1] by adding class `ScreenLock` to guarantee real sequential execution of GUI tests, regardless of the testing framework being used ([http://www.junit.org JUnit] or [http://testng.org TestNG].)
+  # Added capability to add a screenshot of the desktop to a TestNG HTML test report when a test fails (support for JUnit coming soon.) Click [http://jroller.com/page/alexRuiz?entry=screenshots_of_failures_in_test here] for more details.
+  # Created annotation `@GUITest` to identify GUI tests (either at class or method level). Only screenshots of failing tests marked with this annotation are added to the test report.
+  # Added support for testing `JTrees`. Many thanks to Keith Coughtrey.
+  # Replaced prefix "should" with "require" in fixture assertions to make API more concise (e.g. the method "shouldBeVisible" is now "requireVisible.") Many thanks to Jeff Bay.
+  # Renamed method "shouldHaveThisText" to "requireText" in interface `TextDisplayFixture`. Many thanks to Jeff Bay.
+  # Removed prefix "find" from methods in `ContainerFixture` (e.g. the method "findLabel" is now "label.") Many thanks to Jeff Bay.
+  # Added Maven 2 tasks for Ant for dependency management.
+  # Created a Maven 2 pom.xml file for Abbot.
+  # Created a Maven 2 local repository containing all FEST dependencies. This way, it is not necessary to download any dependency from a remote Maven repository when building FEST.
+  # Added module fest-reflect, which provides a "fluent interface" that simplifies the usage of Java reflection:
+{{{
+        Person person = constructor().withParameterTypes(String.class).in(Person.class).newInstance("Yoda");
+        method("setName").withParameterTypes(String.class).in(person).invoke("Luke");
+        field("name").ofType(String.class).in(person).set("Anakin");
+}}}
+
+
+
+
+
