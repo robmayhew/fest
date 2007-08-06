@@ -1,5 +1,5 @@
+#summary Summary of changes between releases.
 #labels Featured
-=Changelog=
 
 ===[08/06/07] FEST Swing 0.5 SNAPSHOT===
   # Fixed Issue 15. Now it is possible to [http://www.jroller.com/alexRuiz/entry/following_frames_with_fest_or follow frames] with FEST.  
@@ -29,7 +29,6 @@
         method("setName").withParameterTypes(String.class).in(person).invoke("Luke");
         field("name").ofType(String.class).in(person).set("Anakin");
 }}}
-
 
 
 
