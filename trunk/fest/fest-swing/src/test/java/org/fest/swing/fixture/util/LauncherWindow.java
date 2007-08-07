@@ -61,11 +61,11 @@ public class LauncherWindow extends JFrame {
   }
   
   private void launchFrame() {
-    new Timer(frameLaunchDelay, new ActionListener() {
+    start(new Timer(frameLaunchDelay, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         showWindow(new FrameToLaunch());
       }
-    }).start();
+    }));
   }
 
   private JButton dialogLaunchButton() {
@@ -81,11 +81,16 @@ public class LauncherWindow extends JFrame {
   }
   
   private void launchDialog() {
-    new Timer(dialogLaunchDelay, new ActionListener() {
+    start(new Timer(dialogLaunchDelay, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         showWindow(new DialogToLaunch());
       }
-    }).start();
+    }));
+  }
+  
+  private void start(Timer timer) {
+    timer.setRepeats(false);
+    timer.start();
   }
 
   private void showWindow(Window window) {
