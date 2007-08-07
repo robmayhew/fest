@@ -20,7 +20,7 @@ import java.awt.Component;
 import abbot.finder.Matcher;
 
 /**
- * Understands an indication whether a <code>{@link Component}</code> matches some desired criteria.
+ * Understands whether a <code>{@link Component}</code> matches some desired criteria.
  * 
  * @author Alex Ruiz
  */
