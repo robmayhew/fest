@@ -2,7 +2,7 @@
 #labels Featured
 
 ====Swing module====
-fest-swing-0.5-SNAPSHOT.jar
+fest-swing-0.5-SNAPSHOT.jar - [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html Javadocs]
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-reflect-0.1-SNAPSHOT.jar || Fluent Java reflection || fest-swing || Test ||
@@ -18,7 +18,7 @@ fest-swing-0.5-SNAPSHOT.jar
 === ===
 === ===
 ====[http://http://www.junit.org JUnit] extension for the Swing module====
-fest-swing-junit-0.5-SNAPSHOT.jar
+fest-swing-junit-0.5-SNAPSHOT.jar - [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html Javadocs]
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-junit || Compile ||
@@ -30,7 +30,7 @@ fest-swing-junit-0.5-SNAPSHOT.jar
 === ===
 === ===
 ====[http://testng.org TestNG] extension for the Swing module====
-fest-swing-testng-0.5-SNAPSHOT.jar
+fest-swing-testng-0.5-SNAPSHOT.jar - [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html Javadocs]
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-testng || Compile ||
