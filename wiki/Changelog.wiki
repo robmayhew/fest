@@ -5,6 +5,10 @@
   # Fixed Issue 15. Now it is possible to [http://www.jroller.com/alexRuiz/entry/following_frames_with_fest_or follow frames] with FEST.  
   # Swing module and the extensions for [http://testng.org TestNG] and [http://www.junit.org JUnit] are included in one zip file.
 
+===[07/25/07] FEST Swing 0.4 - JUnit Extension===
+  # Fixed Issue 3. Now it is possible to embed screenshots of failing GUI tests in JUnit's HTML report. For more details please click [http://jroller.com/alexRuiz/entry/screenshots_of_failing_gui_tests here].
+  # JUnit extension released as [http://fest.googlecode.com/files/fest-swing-junit-0.4.zip   fest-swing-junit-0.4.zip].
+
 ===[07/17/07] FEST Swing 0.4===
   # Added support for more Swing components: `JTable`, `JSpinner`, `JSlider` and `JFileChooser`.
   # Separated the [http://testng.org TestNG] and [http://www.junit.org JUnit] extensions (screenshots of failing tests) into their own separate projects.
