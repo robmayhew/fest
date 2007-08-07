@@ -16,17 +16,22 @@
 package org.fest.swing.fixture.util;
 
 import java.awt.FlowLayout;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.SwingWorker;
+
+import org.fest.swing.GuiExecutor;
 
 /**
  * Understands a <code>{@link JFrame}</code> that simulates a login window.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class LoginWindow extends JFrame {
 
@@ -49,30 +54,10 @@ public class LoginWindow extends JFrame {
     button.addMouseListener(new MouseAdapter() {
       @Override public void mousePressed(MouseEvent e) {
         setVisible(false);
-        login();
+        showWindow(new MainWindow(), loginTime);
       }
     });
     return button;
-  }
-  
-  private void login() {
-    SwingWorker<Void, Void> swingWorker = new SwingWorker<Void, Void>() {
-      @Override protected Void doInBackground() {
-        try {
-          Thread.sleep(loginTime);
-        } catch (InterruptedException e) {
-          Thread.currentThread().interrupt();
-        }
-        return null;
-      }
-
-      @Override protected void done() {
-        MainWindow mainWindow = new MainWindow();
-        mainWindow.pack();
-        mainWindow.setVisible(true);
-      }
-    };
-    swingWorker.execute();
   }
 
   private JButton settingsButton() {
@@ -81,30 +66,29 @@ public class LoginWindow extends JFrame {
     button.addMouseListener(new MouseAdapter() {
       @Override public void mousePressed(MouseEvent e) {
         setVisible(false);
-        showSettings();
+        showWindow(new SettingsDialog(), showSettingsTime);
       }
     });
     return button;
   }
   
-  private void showSettings() {
-    SwingWorker<Void, Void> swingWorker = new SwingWorker<Void, Void>() {
-      @Override protected Void doInBackground() {
+  private void showWindow(final Window window, final long delay) {
+    GuiExecutor.instance().execute(new Runnable() {
+      public void run() {
         try {
-          Thread.sleep(showSettingsTime);
+          Thread.sleep(delay);
         } catch (InterruptedException e) {
           Thread.currentThread().interrupt();
         }
-        return null;
+        window.pack();
+        window.setVisible(true);
       }
-
-      @Override protected void done() {
-        SettingsDialog settingsDialog = new SettingsDialog();
-        settingsDialog.pack();
-        settingsDialog.setVisible(true);
-      }
-    };
-    swingWorker.execute();
+    });
+//    Executor background = Executors.newCachedThreadPool();
+//    background.execute(new Runnable() {
+//      public void run() {
+//      }
+//    });
   }
 
   public void loginTime(long loginTime) {
