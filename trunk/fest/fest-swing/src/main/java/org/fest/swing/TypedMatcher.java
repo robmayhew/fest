@@ -27,8 +27,8 @@ import java.awt.Component;
 public abstract class TypedMatcher<T extends Component> implements ComponentMatcher {
 
   /**
-   * Verifies that the given <code>{@link Component}</code> is of the specified type in this matcher and matches some 
-   * search criteria.
+   * Verifies that the given <code>{@link Component}</code> is an instance of the specified type in this matcher and 
+   * matches some search criteria.
    * @param c the <code>Component</code> to verify. 
    * @return <code>true</code> if the given <code>Component</code> matches some search criteria, otherwise 
    * <code>false</code>. 
