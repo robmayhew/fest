@@ -1,7 +1,7 @@
 #summary Dependencies of each FEST module.
 #labels Featured
 
-===Swing module===
+====Swing module====
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || _N/A_ || _N/A_ ||
@@ -17,7 +17,7 @@
 
 === ===
 === ===
-===[http://http://www.junit.org JUnit] extension for the Swing module==
+====[http://http://www.junit.org JUnit] extension for the Swing module====
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-junit-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html JUnit extension for the Swing module] || _N/A_ || _N/A_ ||
@@ -29,7 +29,7 @@
 
 === ===
 === ===
-===[http://testng.org TestNG] extension for the Swing module===
+====[http://testng.org TestNG] extension for the Swing module====
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-testng-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG extension for the Swing module] || _N/A_ || _N/A_ ||
