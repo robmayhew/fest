@@ -104,6 +104,19 @@ public class ComponentFinder {
   }
 
   /**
+   * Finds a <code>{@link Component}</code> by name and type.
+   * @param <T> the parameterized type of the component to find.
+   * @param name the name of the component to find.
+   * @param type the type of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @see #findByName(String)
+   */
+  public final <T extends Component> T findByName(String name, Class<T> type) {
+    return type.cast(findByName(name));
+  }
+  
+  /**
    * <p>
    * Finds a <code>{@link Component}</code> by name.
    * </p>
@@ -130,19 +143,6 @@ public class ComponentFinder {
    */
   public final Component findByName(String name) {
     return find(new NameMatcher(name));
-  }
-  
-  /**
-   * Finds a <code>{@link Component}</code> by name and type.
-   * @param <T> the parameterized type of the component to find.
-   * @param name the name of the component to find.
-   * @param type the type of the component to find.
-   * @return the found component.
-   * @throws ComponentLookupException if a matching component could not be found.
-   * @see #findByName(String)
-   */
-  public final <T extends Component> T findByName(String name, Class<T> type) {
-    return type.cast(findByName(name));
   }
   
   /**
