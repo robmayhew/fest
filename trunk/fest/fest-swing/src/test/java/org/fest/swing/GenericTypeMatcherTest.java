@@ -22,14 +22,14 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.*;
 
 /**
- * Tests for <code>{@link TypedMatcher}</code>.
+ * Tests for <code>{@link GenericTypeMatcher}</code>.
  *
  * @author Yvonne Wang
  */
-public class TypedMatcherTest {
+public class GenericTypeMatcherTest {
   
   @Test public void shouldReturnTrueIfTypeAndSearchCriteriaMatch() {
-    TypedMatcher<JButton> matcher = new TypedMatcher<JButton>() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }
@@ -38,7 +38,7 @@ public class TypedMatcherTest {
   }
   
   @Test public void shouldReturnFalseIfTypeMatchesButNotSearchCriteria() {
-    TypedMatcher<JButton> matcher = new TypedMatcher<JButton>() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {
         return false;
       }
@@ -47,7 +47,7 @@ public class TypedMatcherTest {
   }
 
   @Test public void shouldReturnFalseIfSearchCriteriaMatchesButNotType() {
-    TypedMatcher<JButton> matcher = new TypedMatcher<JButton>() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }
@@ -56,7 +56,7 @@ public class TypedMatcherTest {
   }
 
   @Test public void shouldReturnFalseIfSearchCriteriaAndTypeNotMatching() {
-    TypedMatcher<JButton> matcher = new TypedMatcher<JButton>() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {
         return false;
       }

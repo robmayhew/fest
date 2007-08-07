@@ -18,20 +18,23 @@ package org.fest.swing;
 import java.awt.Component;
 
 /**
- * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some
+ * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 
  * custom search criteria.
  * @param <T> the type of <code>Component</code> supported by this matcher. 
  *
  * @author Yvonne Wang
  */
-public abstract class TypedMatcher<T extends Component> implements ComponentMatcher {
+public abstract class GenericTypeMatcher<T extends Component> implements ComponentMatcher {
 
   /**
-   * Verifies that the given <code>{@link Component}</code> is an instance of the specified type in this matcher and 
-   * matches some search criteria.
+   * Verifies that the given <code>{@link Component}</code>:
+   * <ol>
+   * <li>Is an instance of the generic type specified in this <code>{@link ComponentMatcher}</code></li> 
+   * <li>Matches some search criteria</li>
+   * </ol>
    * @param c the <code>Component</code> to verify. 
-   * @return <code>true</code> if the given <code>Component</code> matches some search criteria, otherwise 
-   * <code>false</code>. 
+   * @return <code>true</code> if the given <code>Component</code> is an instance of the generic type of this matcher 
+   * and matches some search criteria. Otherwise, <code>false</code>. 
    */
   @SuppressWarnings("unchecked") 
   public final boolean matches(Component c) {
@@ -46,7 +49,7 @@ public abstract class TypedMatcher<T extends Component> implements ComponentMatc
   /**
    * Verifies that the given component matches some search criteria.
    * @param component the <code>Component</code> to verify.
-   * @return <code>true</code> if the given component matches the defined search criteria; otherwise <code>false</code>.
+   * @return <code>true</code> if the given component matches the defined search criteria; otherwise, <code>false</code>.
    */
   protected abstract boolean isMatching(T component);
 }
