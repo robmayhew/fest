@@ -16,6 +16,7 @@
 || xmlParserAPIs-2.2.1 || || abbot || Compile ||
 
 === ===
+=== ===
 ===[http://http://www.junit.org JUnit] extension for the Swing module==
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
@@ -26,6 +27,7 @@
 || ant-junit-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 || ant-launcher-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 
+=== ===
 === ===
 ===[http://testng.org TestNG] extension for the Swing module===
 
