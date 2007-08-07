@@ -1,6 +1,7 @@
 #summary Dependencies of each FEST module.
+#labels Featured
 
-The following table shows the dependencies of the Swing module:
+===Dependencies of the Swing module===
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || _N/A_ || _N/A_ ||
@@ -14,15 +15,8 @@ The following table shows the dependencies of the Swing module:
 || xercesImpl-2.4.0.jar || || abbot || Compile ||
 || xmlParserAPIs-2.2.1 || || abbot || Compile ||
 
-The following table shows the dependencies of the [http://testng.org TestNG] extension for the Swing module:
 
-|| *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-swing-testng-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG extension for the Swing module] || _N/A_ || _N/A_ ||
-|| fest-swing-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-testng || Compile ||
-|| testng-5.5-jdk15.jar || TestNG || fest-swing-testng || Compile ||
-
-
-The following table shows the dependencies of the [http://http://www.junit.org JUnit] extension for the Swing module:
+===[http://http://www.junit.org JUnit] extension for the Swing module==
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
 || fest-swing-junit-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html JUnit extension for the Swing module] || _N/A_ || _N/A_ ||
@@ -31,4 +25,13 @@ The following table shows the dependencies of the [http://http://www.junit.org J
 || ant-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 || ant-junit-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 || ant-launcher-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
+
+
+===[http://testng.org TestNG] extension for the Swing module===
+
+|| *Dependency* || *Description* || *Required By* || *Scope* ||
+|| fest-swing-testng-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG extension for the Swing module] || _N/A_ || _N/A_ ||
+|| fest-swing-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-testng || Compile ||
+|| testng-5.5-jdk15.jar || TestNG || fest-swing-testng || Compile ||
+
 
