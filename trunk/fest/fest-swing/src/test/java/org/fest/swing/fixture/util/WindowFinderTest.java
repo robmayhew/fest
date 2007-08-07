@@ -24,6 +24,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.util.LauncherWindow.DialogToLaunch;
+import org.fest.swing.fixture.util.LauncherWindow.FrameToLaunch;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -33,20 +35,21 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link WindowFinder}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class WindowFinderTest {
 
-  private FrameFixture login;
-  private LoginWindow loginWindow;
+  private FrameFixture launcher;
+  private LauncherWindow launcherWindow;
   
   @BeforeMethod public void setUp() {
-    loginWindow = new LoginWindow();
-    login = new FrameFixture(loginWindow);
-    login.show();
+    launcherWindow = new LauncherWindow();
+    launcher = new FrameFixture(launcherWindow);
+    launcher.show();
   }
   
   @AfterMethod public void tearDown() {
-    login.cleanUp();
+    launcher.cleanUp();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -66,38 +69,38 @@ public class WindowFinderTest {
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameSearchTimeoutIsNegative() {
-    WindowFinder.findFrame("main").withTimeout(-20);
+    WindowFinder.findFrame("frame").withTimeout(-20);
   }
   
   @Test(expectedExceptions = ComponentLookupException.class) 
   public void shouldTimeOutIfMainFrameNotFound() {
-    loginWindow.loginTime(5000);
-    login.button("login").click();
-    WindowFinder.findFrame("main").withTimeout(10).using(login.robot);
+    launcherWindow.frameLaunchDelay(5000);
+    launcher.button("launchFrame").click();
+    WindowFinder.findFrame("frame").withTimeout(10).using(launcher.robot);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfMainFrameNotFound")
   public void shouldFindMainFrameByNameAfterLogin() {
-    loginWindow.loginTime(500);
-    login.button("login").click();
-    FrameFixture main = WindowFinder.findFrame("main").using(login.robot);
-    assertThat(main.target).isInstanceOf(MainWindow.class);
+    launcherWindow.frameLaunchDelay(500);
+    launcher.button("launchFrame").click();
+    FrameFixture frame = WindowFinder.findFrame("frame").using(launcher.robot);
+    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfMainFrameNotFound")
   public void shouldFindMainFrameByNameAfterLoginUsingTimeUnit() {
-    loginWindow.loginTime(500);
-    login.button("login").click();
-    FrameFixture main = WindowFinder.findFrame("main").withTimeout(2, SECONDS).using(login.robot);
-    assertThat(main.target).isInstanceOf(MainWindow.class);
+    launcherWindow.frameLaunchDelay(500);
+    launcher.button("launchFrame").click();
+    FrameFixture frame = WindowFinder.findFrame("frame").withTimeout(2, SECONDS).using(launcher.robot);
+    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfMainFrameNotFound")
   public void shouldFindMainFrameByTypeAfterLogin() {
-    loginWindow.loginTime(500);
-    login.button("login").click();
-    FrameFixture main = WindowFinder.findFrame(MainWindow.class).using(login.robot);
-    assertThat(main.target).isInstanceOf(MainWindow.class);
+    launcherWindow.frameLaunchDelay(500);
+    launcher.button("launchFrame").click();
+    FrameFixture frame = WindowFinder.findFrame(FrameToLaunch.class).using(launcher.robot);
+    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -117,30 +120,29 @@ public class WindowFinderTest {
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogSearchTimeoutIsNegative() {
-    WindowFinder.findDialog("settings").withTimeout(-20);
+    WindowFinder.findDialog("dialog").withTimeout(-20);
   }
   
   @Test(expectedExceptions = ComponentLookupException.class) 
   public void shouldTimeOutIfSettingsDialogNotFound() {
-    loginWindow.showSettingsTime(5000);
-    login.button("showSettings").click();
-    WindowFinder.findDialog("settings").withTimeout(10).using(login.robot);
+    launcherWindow.dialogLaunchDelay(5000);
+    launcher.button("launchDialog").click();
+    WindowFinder.findDialog("dialog").withTimeout(10).using(launcher.robot);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfSettingsDialogNotFound")
   public void shouldFindSettingsDialogByNameAfterLoadingSettings() {
-    loginWindow.showSettingsTime(500);
-    login.button("showSettings").click();
-    DialogFixture settings = WindowFinder.findDialog("settings").using(login.robot);
-    assertThat(settings.target).isInstanceOf(SettingsDialog.class);
+    launcherWindow.dialogLaunchDelay(500);
+    launcher.button("launchDialog").click();
+    DialogFixture dialog = WindowFinder.findDialog("dialog").using(launcher.robot);
+    assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfSettingsDialogNotFound")
   public void shouldFindSettingsDialogByTypeAfterLoadingSettings() {
-    loginWindow.showSettingsTime(500);
-    login.button("showSettings").click();
-    DialogFixture settings = WindowFinder.findDialog(SettingsDialog.class).using(login.robot);
-    assertThat(settings.target).isInstanceOf(SettingsDialog.class);
+    launcherWindow.dialogLaunchDelay(500);
+    launcher.button("launchDialog").click();
+    DialogFixture dialog = WindowFinder.findDialog(DialogToLaunch.class).using(launcher.robot);
+    assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
   }
-
 }
