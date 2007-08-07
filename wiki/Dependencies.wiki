@@ -4,7 +4,7 @@
 ===Swing module===
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-swing-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || _N/A_ || _N/A_ ||
+|| fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || _N/A_ || _N/A_ ||
 || fest-reflect-0.1-SNAPSHOT.jar || Fluent Java reflection || fest-swing || Test ||
 || fest-assert-0.2-SNAPSHOT.jar || Fluent assertions || fest-swing, fest-reflect || Compile ||
 || fest-util-0.2-SNAPSHOT.jar || Utility methods || fest-swing, fest-reflect, fest-assert || Compile ||
@@ -19,8 +19,8 @@
 ===[http://http://www.junit.org JUnit] extension for the Swing module==
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-swing-junit-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html JUnit extension for the Swing module] || _N/A_ || _N/A_ ||
-|| fest-swing-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-junit || Compile ||
+|| fest-swing-junit-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html JUnit extension for the Swing module] || _N/A_ || _N/A_ ||
+|| fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-junit || Compile ||
 || junit-4.3.1.jar || JUnit || fest-swing-junit || Compile ||
 || ant-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
 || ant-junit-1.7.0.jar || Apache Ant || fest-swing-junit || Compile ||
@@ -30,7 +30,6 @@
 ===[http://testng.org TestNG] extension for the Swing module===
 
 || *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-swing-testng-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG extension for the Swing module] || _N/A_ || _N/A_ ||
-|| fest-swing-0.4.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-testng || Compile ||
+|| fest-swing-testng-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html TestNG extension for the Swing module] || _N/A_ || _N/A_ ||
+|| fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-testng || Compile ||
 || testng-5.5-jdk15.jar || TestNG || fest-swing-testng || Compile ||
-
