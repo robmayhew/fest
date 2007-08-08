@@ -1,7 +1,7 @@
 #summary Dependencies of each FEST module.
 #labels Featured
 
-*All required dependencies are included in each release.*
+===All required dependencies are included with each release===
 
 *1. Swing module* (fest-swing)
 
