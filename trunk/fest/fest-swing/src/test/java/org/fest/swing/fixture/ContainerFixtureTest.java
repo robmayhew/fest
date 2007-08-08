@@ -24,8 +24,10 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -33,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import static javax.swing.BoxLayout.Y_AXIS;
 import static org.fest.assertions.Assertions.assertThat;
@@ -67,11 +70,14 @@ import org.testng.annotations.Test;
     final JTextField textField = new JTextField(10);
     final JTabbedPane tabbedPane = new JTabbedPane();
     final JCheckBox checkBox = new JCheckBox("A CheckBox");
+    final JList list = new JList();
+    final JFileChooser fileChooser = new JFileChooser();
     
     CustomWindow() {
       setLayout(new BoxLayout(getContentPane(), Y_AXIS));
       setUpComponents();
       addComponents();
+      lookNative();
     }
     
     private void setUpComponents() {
@@ -90,16 +96,24 @@ import org.testng.annotations.Test;
       tabbedPane.setName("tabbedPane");
       tabbedPane.addTab("A Tab", new JPanel());
       checkBox.setName("checkBox");
+      list.setName("list");
+      fileChooser.setName("fileChooser");
     }
     
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      addComponents(label, comboBox, textField, button, tabbedPane, checkBox);
+      addComponents(label, comboBox, textField, button, tabbedPane, checkBox, list, fileChooser);
     }
     
     private void addComponents(Component... components) {
       for (Component c : components) add(c);
+    }
+    
+    private void lookNative() {
+      try {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      } catch (Exception ignored) {}
     }
   }
   
@@ -168,6 +182,16 @@ import org.testng.annotations.Test;
   @Test public void shouldFindCheckBoxWithGivenName() {
     JCheckBoxFixture fixture = container.checkBox("checkBox");
     assertThat(fixture.target).isSameAs(window.checkBox);
+  }
+  
+  @Test public void shouldFindListWithGivenName() {
+    JListFixture fixture = container.list("list");
+    assertThat(fixture.target).isSameAs(window.list);
+  }
+  
+  @Test public void shouldFindFileChooserWithGivenName() {
+    JFileChooserFixture fixture = container.fileChooser("fileChooser");
+    assertThat(fixture.target).isSameAs(window.fileChooser);
   }
   
   @AfterMethod public void tearDown() {

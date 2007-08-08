@@ -21,7 +21,9 @@ import java.awt.Dialog;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
@@ -127,6 +129,17 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   /**
+   * Finds a <code>{@link JFileChooser}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JFileChooser</code> found.
+   * @throws ComponentLookupException if a <code>JFileChooser</code> having a matching name could not be found.
+   */
+  public final JFileChooserFixture fileChooser(String name) {
+    return new JFileChooserFixture(robot, robot.finder().findByName(target, name, JFileChooser.class));
+  }
+
+  /**
    * Finds a <code>{@link JLabel}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which name matches the specified one.
    * @param name the name to match.
@@ -135,6 +148,17 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    */
   public final JLabelFixture label(String name) {
     return new JLabelFixture(robot, robot.finder().findByName(target, name, JLabel.class));
+  }
+
+  /**
+   * Finds a <code>{@link JList}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JList</code> found.
+   * @throws ComponentLookupException if a <code>JList</code> having a matching name could not be found.
+   */
+  public final JListFixture list(String name) {
+    return new JListFixture(robot, robot.finder().findByName(target, name, JList.class));
   }
 
   /**
