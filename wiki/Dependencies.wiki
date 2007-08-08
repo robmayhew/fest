@@ -3,6 +3,11 @@
 
 *All required dependencies are included in each release.*
 
-*Swing module* (fest-swing)
+*1. Swing module* (fest-swing)
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing.jpg
+
+
+*2. JUnit extension for the Swing module* (fest-swing-junit)
+
+http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing-junit.jpg
