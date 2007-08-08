@@ -7,14 +7,12 @@
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing.jpg
 
-= =
-= =
 *2. JUnit extension for the Swing module* (fest-swing-junit)
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing-junit.jpg
 
-= =
-= =
 *3. TestNG extension for the Swing module* (fest-swing-testng)
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing-testng.jpg
+
+Dependency graphs created with [http://www.jfrog.org/sites/dep-analyzer/1.0/ Dependency Analyzer]
