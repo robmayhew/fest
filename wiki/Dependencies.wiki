@@ -1,37 +1,9 @@
 #summary Dependencies of each FEST module.
 #labels Featured
 
+*All required dependencies are included in each release.*
+
 ====Swing module====
-fest-swing-0.5-SNAPSHOT.jar - [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html Javadocs]
+(fest-swing-0.5-SNAPSHOT)
 
-|| *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-reflect-0.1-SNAPSHOT.jar || Fluent Java reflection || fest-swing || Test ||
-|| fest-assert-0.2-SNAPSHOT.jar || Fluent assertions || fest-swing, fest-reflect || Compile ||
-|| fest-util-0.2-SNAPSHOT.jar || Utility methods || fest-swing, fest-reflect, fest-assert || Compile ||
-|| abbot-1.0.0.rc5.jar || [http://abbot.sourceforge.net Abbot] || fest-swing || Compile ||
-|| gnu-regexp-1.1.4.jar || [http://savannah.gnu.org/projects/gnu-regexp/ Regular Expressions for Java] || abbot || Compile ||
-|| jdom-1.0.jar || [http://www.jdom.org/ JDOM] || abbot || Compile ||
-|| MRJToolkitStubs-1.0.jar || [http://developer.apple.com/samplecode/MRJToolkitStubs/index.html MRJToolkit from Apple's J2SE 1.3.1] || abbot || Compile ||
-|| xercesImpl-2.4.0.jar || [http://xerces.apache.org/xerces-j/ Xerces]  || abbot || Compile ||
-|| xmlParserAPIs-2.2.1 || [http://xerces.apache.org/xerces-j/ Xerces] || abbot || Compile ||
-
-=== ===
-=== ===
-====[http://http://www.junit.org JUnit] extension for the Swing module====
-fest-swing-junit-0.5-SNAPSHOT.jar - [http://fest.googlecode.com/svn/trunk/fest/fest-swing-junit/javadocs/index.html Javadocs]
-
-|| *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-junit || Compile ||
-|| junit-4.3.1.jar || [http://http://www.junit.org JUnit] || fest-swing-junit || Compile ||
-|| ant-1.7.0.jar || [http://ant.apache.org/ Apache Ant] || fest-swing-junit || Compile ||
-|| ant-junit-1.7.0.jar || [http://ant.apache.org/ Apache Ant] || fest-swing-junit || Compile ||
-|| ant-launcher-1.7.0.jar || [http://ant.apache.org/ Apache Ant] || fest-swing-junit || Compile ||
-
-=== ===
-=== ===
-====[http://testng.org TestNG] extension for the Swing module====
-fest-swing-testng-0.5-SNAPSHOT.jar - [http://fest.googlecode.com/svn/trunk/fest/fest-swing-testng/javadocs/index.html Javadocs]
-
-|| *Dependency* || *Description* || *Required By* || *Scope* ||
-|| fest-swing-0.5-SNAPSHOT.jar || [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/index.html FEST Swing module] || fest-swing-testng || Compile ||
-|| testng-5.5-jdk15.jar || [http://testng.org TestNG] || fest-swing-testng || Compile ||
+http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing.jpg
