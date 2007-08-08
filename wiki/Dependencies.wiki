@@ -3,7 +3,6 @@
 
 *All required dependencies are included in each release.*
 
-====Swing module====
-(fest-swing-0.5-SNAPSHOT)
+*Swing module* (fest-swing)
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing.jpg
