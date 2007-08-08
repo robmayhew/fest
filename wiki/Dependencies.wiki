@@ -7,7 +7,7 @@
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing.jpg
 
-
+= =
 *2. JUnit extension for the Swing module* (fest-swing-junit)
 
 http://fest.googlecode.com/svn/trunk/fest/dependencies/fest-swing-junit.jpg
