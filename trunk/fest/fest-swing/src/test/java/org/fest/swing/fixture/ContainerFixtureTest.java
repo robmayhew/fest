@@ -45,6 +45,7 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GUITest;
+import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
 
 import org.testng.annotations.AfterMethod;
@@ -61,43 +62,23 @@ import org.testng.annotations.Test;
   private static class CustomWindow extends JFrame {
     private static final long serialVersionUID = 1L;
     
+    final JButton button = new JButton("A Button");
+    final JCheckBox checkBox = new JCheckBox("A CheckBox");
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
+    final JDialog dialog = new JDialog(this, "A Dialog");
+    final JFileChooser fileChooser = new JFileChooser();
+    final JLabel label = new JLabel("A Label");
+    final JList list = new JList();
     final JMenu menu = new JMenu("A Menu");
     final JMenuItem subMenu = new JMenu("A Submenu");
-    final JLabel label = new JLabel("A Label");
-    final JButton button = new JButton("A Button");
-    final JDialog dialog = new JDialog(this, "A Dialog");
-    final JTextField textField = new JTextField(10);
     final JTabbedPane tabbedPane = new JTabbedPane();
-    final JCheckBox checkBox = new JCheckBox("A CheckBox");
-    final JList list = new JList();
-    final JFileChooser fileChooser = new JFileChooser();
+    final JTextField textField = new JTextField(10);
     
     CustomWindow() {
       setLayout(new BoxLayout(getContentPane(), Y_AXIS));
       setUpComponents();
       addComponents();
       lookNative();
-    }
-    
-    private void setUpComponents() {
-      comboBox.setName("comboBox");
-      menu.setName("menu");
-      menu.add(subMenu);
-      label.setName("label");
-      button.setName("button");
-      button.addMouseListener(new MouseAdapter() {
-        @Override public void mousePressed(MouseEvent e) {
-          JOptionPane.showMessageDialog(CustomWindow.this, "A Message");
-        }
-      });
-      dialog.setName("dialog");
-      textField.setName("textField");
-      tabbedPane.setName("tabbedPane");
-      tabbedPane.addTab("A Tab", new JPanel());
-      checkBox.setName("checkBox");
-      list.setName("list");
-      fileChooser.setName("fileChooser");
     }
     
     private void addComponents() {
@@ -115,17 +96,71 @@ import org.testng.annotations.Test;
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       } catch (Exception ignored) {}
     }
+    
+    private void setUpComponents() {
+      button.setName("button");
+      button.addMouseListener(new MouseAdapter() {
+        @Override public void mousePressed(MouseEvent e) {
+          JOptionPane.showMessageDialog(CustomWindow.this, "A Message");
+        }
+      });
+      checkBox.setName("checkBox");
+      comboBox.setName("comboBox");
+      dialog.setName("dialog");
+      fileChooser.setName("fileChooser");
+      label.setName("label");
+      list.setName("list");
+      menu.setName("menu");
+      menu.add(subMenu);
+      textField.setName("textField");
+      tabbedPane.setName("tabbedPane");
+      tabbedPane.addTab("A Tab", new JPanel());
+    }
   }
   
-  private RobotFixture robot;
   private ContainerFixture<CustomWindow> container;
+  private RobotFixture robot;
   private CustomWindow window;
   
+  private JButtonFixture findButton() {
+    return container.button("button");
+  }
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     container = new ContainerFixture<CustomWindow>(robot, new CustomWindow()) {};
     window = container.target;
     robot.showWindow(window);
+  }
+  
+  @Test public void shouldFindButtonWithGivenMatcher() {
+    GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
+      protected boolean isMatching(JButton button) {
+        return "A Button".equals(button.getText());
+      }
+    };
+    JButtonFixture button = container.button(textMatcher);
+    assertThat(button.target).isSameAs(window.button);
+  }
+  
+  @Test public void shouldFindButtonWithGivenName() {
+    JButtonFixture button = findButton();
+    assertThat(button.target).isSameAs(window.button);
+  }
+
+  @Test public void shouldFindCheckBoxWithGivenName() {
+    JCheckBoxFixture checkBox = container.checkBox("checkBox");
+    assertThat(checkBox.target).isSameAs(window.checkBox);
+  }
+  
+  @Test public void shouldFindCheckBoxWithGivenMatcher() {
+    GenericTypeMatcher<JCheckBox> textMatcher = new GenericTypeMatcher<JCheckBox>() {
+      @Override protected boolean isMatching(JCheckBox checkBox) {
+        return "A CheckBox".equals(checkBox.getText());
+      }
+    };
+    JCheckBoxFixture checkbox = container.checkbox(textMatcher);
+    assertThat(checkbox.target).isSameAs(window.checkBox);
   }
 
   @Test public void shouldFindComboBoxWithGivenName() {
@@ -133,31 +168,31 @@ import org.testng.annotations.Test;
     assertThat(comboBox.target).isSameAs(window.comboBox);
   }
   
-  @Test public void shouldFindTabbedPaneWithGivenName() {
-    JTabbedPaneFixture tabbedPane = container.tabbedPane("tabbedPane");
-    assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
+  @Test public void shouldFindDialogWithGivenName() {
+    DialogFixture dialog = container.dialog("dialog");
+    assertThat(dialog.target).isSameAs(window.dialog);
+  }
+  
+  @Test public void shouldFindFileChooserWithGivenName() {
+    JFileChooserFixture fixture = container.fileChooser("fileChooser");
+    assertThat(fixture.target).isSameAs(window.fileChooser);
   }
   
   @Test public void shouldFindLabelWithGivenName() {
     JLabelFixture label = container.label("label");
     assertThat(label.target).isSameAs(window.label);
   }
-
-  @Test public void shouldFindButtonWithGivenName() {
-    JButtonFixture button = findButton();
-    assertThat(button.target).isSameAs(window.button);
-  }
-
-  @Test public void shouldFindDialogWithGivenName() {
-    DialogFixture dialog = container.dialog("dialog");
-    assertThat(dialog.target).isSameAs(window.dialog);
-  }
   
+  @Test public void shouldFindListWithGivenName() {
+    JListFixture fixture = container.list("list");
+    assertThat(fixture.target).isSameAs(window.list);
+  }
+
   @Test public void shouldFindMenuWithGivenName() {
     JMenuItemFixture fixture = container.menuItem("menu");
     assertThat(fixture.target).isSameAs(window.menu);
   }
-  
+
   @Test public void shouldFindMenuWithGivenPath() {
     JMenuItemFixture fixture = container.menuItem("A Menu", "A Submenu");
     assertThat(fixture.target).isSameAs(window.subMenu);
@@ -169,29 +204,15 @@ import org.testng.annotations.Test;
     JOptionPaneFixture fixture = container.optionPane();
     assertThat(fixture.target.getMessage()).isEqualTo("A Message");
   }
-
-  private JButtonFixture findButton() {
-    return container.button("button");
+  
+  @Test public void shouldFindTabbedPaneWithGivenName() {
+    JTabbedPaneFixture tabbedPane = container.tabbedPane("tabbedPane");
+    assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
   }
-
+  
   @Test public void shouldFindTextComponentWithGivenName() {
     JTextComponentFixture fixture = container.textBox("textField");
     assertThat(fixture.target).isSameAs(window.textField);
-  }
-  
-  @Test public void shouldFindCheckBoxWithGivenName() {
-    JCheckBoxFixture fixture = container.checkBox("checkBox");
-    assertThat(fixture.target).isSameAs(window.checkBox);
-  }
-  
-  @Test public void shouldFindListWithGivenName() {
-    JListFixture fixture = container.list("list");
-    assertThat(fixture.target).isSameAs(window.list);
-  }
-  
-  @Test public void shouldFindFileChooserWithGivenName() {
-    JFileChooserFixture fixture = container.fileChooser("fileChooser");
-    assertThat(fixture.target).isSameAs(window.fileChooser);
   }
   
   @AfterMethod public void tearDown() {

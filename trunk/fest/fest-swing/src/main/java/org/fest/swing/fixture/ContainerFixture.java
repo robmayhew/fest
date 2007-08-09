@@ -36,8 +36,10 @@ import javax.swing.text.JTextComponent;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.join;
 
+import org.fest.swing.ComponentFinder;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
+import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -92,9 +94,20 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JButton</code> having a matching name could not be found.
    */
   public final JButtonFixture button(String name) {
-    return new JButtonFixture(robot, robot.finder().findByName(target, name, JButton.class));
+    return new JButtonFixture(robot, finder().findByName(target, name, JButton.class));
   }
 
+  /**
+   * Finds a <code>{@link JButton}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JButton</code>.
+   * @return a fixture that manages the <code>JButton</code> found.
+   * @throws ComponentLookupException if a <code>JButton</code> that matches the given search criteria could not be found.
+   */
+  public final JButtonFixture button(GenericTypeMatcher<JButton> matcher) {
+    return new JButtonFixture(robot, finder().find(matcher));
+  }
+  
   /**
    * Finds a <code>{@link JCheckBox}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which name matches the specified one.
@@ -103,9 +116,20 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JCheckBox</code> having a matching name could not be found.
    */
   public final JCheckBoxFixture checkBox(String name) {
-    return new JCheckBoxFixture(robot, robot.finder().findByName(target, name, JCheckBox.class));
+    return new JCheckBoxFixture(robot, finder().findByName(target, name, JCheckBox.class));
   }
-
+  
+  /**
+   * Finds a <code>{@link JCheckBox}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JCheckBox</code>.
+   * @return a fixture that manages the <code>JCheckBox</code> found.
+   * @throws ComponentLookupException if a <code>JCheckBox</code> that matches the given search criteria could not be found.
+   */
+  public final JCheckBoxFixture checkbox(GenericTypeMatcher<JCheckBox> matcher) {
+    return new JCheckBoxFixture(robot, finder().find(matcher));
+  }
+  
   /**
    * Finds a <code>{@link JComboBox}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which name matches the specified one.
@@ -114,9 +138,20 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JComboBox</code> having a matching name could not be found.
    */
   public final JComboBoxFixture comboBox(String name) {
-    return new JComboBoxFixture(robot, robot.finder().findByName(target, name, JComboBox.class));
+    return new JComboBoxFixture(robot, finder().findByName(target, name, JComboBox.class));
   }
 
+  /**
+   * Finds a <code>{@link JComboBox}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JComboBox</code>.
+   * @return a fixture that manages the <code>JComboBox</code> found.
+   * @throws ComponentLookupException if a <code>JComboBox</code> that matches the given search criteria could not be found.
+   */
+  public final JComboBoxFixture comboBox(GenericTypeMatcher<JComboBox> matcher) {
+    return new JComboBoxFixture(robot, finder().find(matcher));
+  }
+  
   /**
    * Finds a <code>{@link Dialog}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which name matches the specified one.
@@ -125,7 +160,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
    */
   public final DialogFixture dialog(String name) {
-    return new DialogFixture(robot, robot.finder().findByName(target, name, Dialog.class));
+    return new DialogFixture(robot, finder().findByName(target, name, Dialog.class));
   }
 
   /**
@@ -136,7 +171,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JFileChooser</code> having a matching name could not be found.
    */
   public final JFileChooserFixture fileChooser(String name) {
-    return new JFileChooserFixture(robot, robot.finder().findByName(target, name, JFileChooser.class));
+    return new JFileChooserFixture(robot, finder().findByName(target, name, JFileChooser.class));
   }
 
   /**
@@ -147,7 +182,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JLabel</code> having a matching name could not be found.
    */
   public final JLabelFixture label(String name) {
-    return new JLabelFixture(robot, robot.finder().findByName(target, name, JLabel.class));
+    return new JLabelFixture(robot, finder().findByName(target, name, JLabel.class));
   }
 
   /**
@@ -158,7 +193,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JList</code> having a matching name could not be found.
    */
   public final JListFixture list(String name) {
-    return new JListFixture(robot, robot.finder().findByName(target, name, JList.class));
+    return new JListFixture(robot, finder().findByName(target, name, JList.class));
   }
 
   /**
@@ -169,7 +204,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
    */
   public final JMenuItemFixture menuItem(String name) {
-    return new JMenuItemFixture(robot, robot.finder().findByName(target, name, JMenuItem.class));
+    return new JMenuItemFixture(robot, finder().findByName(target, name, JMenuItem.class));
   }
 
   /**
@@ -189,7 +224,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    */
   public final JMenuItemFixture menuItem(String... path) {
     ComponentMatcher m = new JMenuItemMatcher(join(path).with("|"));
-    Component item = robot.finder().find(target, m);
+    Component item = finder().find(target, m);
     assertThat(item).isInstanceOf(JMenuItem.class);
     return new JMenuItemFixture(robot, (JMenuItem) item);
   }
@@ -211,7 +246,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JSlider</code> having a matching name could not be found.
    */
   public final JSliderFixture slider(String name) {
-    return new JSliderFixture(robot, robot.finder().findByName(target, name, JSlider.class));
+    return new JSliderFixture(robot, finder().findByName(target, name, JSlider.class));
   }
   
   /**
@@ -222,7 +257,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JSpinner</code> having a matching name could not be found.
    */
   public final JSpinnerFixture spinner(String name) {
-    return new JSpinnerFixture(robot, robot.finder().findByName(target, name, JSpinner.class));
+    return new JSpinnerFixture(robot, finder().findByName(target, name, JSpinner.class));
   }
   
   /**
@@ -233,7 +268,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JTabbedPane</code> having a matching name could not be found.
    */
   public final JTabbedPaneFixture tabbedPane(String name) {
-    return new JTabbedPaneFixture(robot, robot.finder().findByName(target, name, JTabbedPane.class));
+    return new JTabbedPaneFixture(robot, finder().findByName(target, name, JTabbedPane.class));
   }
   
   /**
@@ -244,7 +279,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JTextComponent</code> having a matching name could not be found.
    */
   public final JTextComponentFixture textBox(String name) {
-    return new JTextComponentFixture(robot, robot.finder().findByName(target, name, JTextComponent.class));
+    return new JTextComponentFixture(robot, finder().findByName(target, name, JTextComponent.class));
   }
   
   /**
@@ -255,7 +290,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JToolBar</code> having a matching name could not be found.
    */
   public final JToolBarFixture toolBar(String name) {
-    return new JToolBarFixture(robot, robot.finder().findByName(target, name, JToolBar.class));
+    return new JToolBarFixture(robot, finder().findByName(target, name, JToolBar.class));
   }
   
   /**
@@ -266,6 +301,8 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JTree</code> having a matching name could not be found.
    */
   public final JTreeFixture tree(String name) {
-    return new JTreeFixture(robot, robot.finder().findByName(target, name, JTree.class));
+    return new JTreeFixture(robot, finder().findByName(target, name, JTree.class));
   }
+
+  private ComponentFinder finder() { return robot.finder(); }
 }
