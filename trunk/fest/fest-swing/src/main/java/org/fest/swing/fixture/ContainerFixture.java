@@ -102,9 +102,10 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JButton</code>.
    * @return a fixture that manages the <code>JButton</code> found.
-   * @throws ComponentLookupException if a <code>JButton</code> that matches the given search criteria could not be found.
+   * @throws ComponentLookupException if a <code>JButton</code> that matches the given search criteria could not be 
+   * found.
    */
-  public final JButtonFixture button(GenericTypeMatcher<JButton> matcher) {
+  public final JButtonFixture button(GenericTypeMatcher<? extends JButton> matcher) {
     return new JButtonFixture(robot, finder().find(matcher));
   }
   
@@ -124,9 +125,10 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JCheckBox</code>.
    * @return a fixture that manages the <code>JCheckBox</code> found.
-   * @throws ComponentLookupException if a <code>JCheckBox</code> that matches the given search criteria could not be found.
+   * @throws ComponentLookupException if a <code>JCheckBox</code> that matches the given search criteria could not be 
+   * found.
    */
-  public final JCheckBoxFixture checkbox(GenericTypeMatcher<JCheckBox> matcher) {
+  public final JCheckBoxFixture checkbox(GenericTypeMatcher<? extends JCheckBox> matcher) {
     return new JCheckBoxFixture(robot, finder().find(matcher));
   }
   
@@ -148,7 +150,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @return a fixture that manages the <code>JComboBox</code> found.
    * @throws ComponentLookupException if a <code>JComboBox</code> that matches the given search criteria could not be found.
    */
-  public final JComboBoxFixture comboBox(GenericTypeMatcher<JComboBox> matcher) {
+  public final JComboBoxFixture comboBox(GenericTypeMatcher<? extends JComboBox> matcher) {
     return new JComboBoxFixture(robot, finder().find(matcher));
   }
   
@@ -164,6 +166,18 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   /**
+   * Finds a <code>{@link Dialog}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>Dialog</code>.
+   * @return a fixture that manages the <code>Dialog</code> found.
+   * @throws ComponentLookupException if a <code>Dialog</code> that matches the given search criteria could not be 
+   * found.
+   */
+  public final DialogFixture dialog(GenericTypeMatcher<? extends Dialog> matcher) {
+    return new DialogFixture(robot, finder().find(matcher));
+  }
+  
+  /**
    * Finds a <code>{@link JFileChooser}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which name matches the specified one.
    * @param name the name to match.
@@ -174,6 +188,18 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
     return new JFileChooserFixture(robot, finder().findByName(target, name, JFileChooser.class));
   }
 
+  /**
+   * Finds a <code>{@link JFileChooser}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JFileChooser</code>.
+   * @return a fixture that manages the <code>JFileChooser</code> found.
+   * @throws ComponentLookupException if a <code>JFileChooser</code> that matches the given search criteria could not 
+   * be found.
+   */
+  public final JFileChooserFixture fileChooser(GenericTypeMatcher<? extends JFileChooser> matcher) {
+    return new JFileChooserFixture(robot, finder().find(matcher));
+  }
+  
   /**
    * Finds a <code>{@link JLabel}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which name matches the specified one.

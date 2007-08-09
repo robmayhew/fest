@@ -168,8 +168,28 @@ import org.testng.annotations.Test;
     assertThat(comboBox.target).isSameAs(window.comboBox);
   }
   
+  @Test public void shouldFindComboBoxWithGivenMatcher() {
+    GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
+      @Override protected boolean isMatching(JComboBox comboBox) {
+        return comboBox.getItemCount() == 3;
+      }
+    };
+    JComboBoxFixture comboBox = container.comboBox(itemCountMatcher);
+    assertThat(comboBox.target).isSameAs(window.comboBox);
+  }
+  
   @Test public void shouldFindDialogWithGivenName() {
     DialogFixture dialog = container.dialog("dialog");
+    assertThat(dialog.target).isSameAs(window.dialog);
+  }
+  
+  @Test public void shouldFindDialogWithGivenMatcher() {
+    GenericTypeMatcher<JDialog> titleMatcher = new GenericTypeMatcher<JDialog>() {
+      @Override protected boolean isMatching(JDialog dialog) {
+        return "A Dialog".equals(dialog.getTitle());
+      }
+    };
+    DialogFixture dialog = container.dialog(titleMatcher);
     assertThat(dialog.target).isSameAs(window.dialog);
   }
   
