@@ -39,7 +39,7 @@ public class ComponentFinder {
    * <code>{@link ComponentFinder}</code>.
    * @return the created finder.
    */
-  public static ComponentFinder robotWithNewAwtHierarchy() {
+  public static ComponentFinder finderWithNewAwtHierarchy() {
     return new ComponentFinder(new TestHierarchy());
   }
 
@@ -48,7 +48,7 @@ public class ComponentFinder {
    * hierarchy.
    * @return the created finder.
    */
-  public static ComponentFinder robotWithCurrentAwtHierarchy() {
+  public static ComponentFinder finderWithCurrentAwtHierarchy() {
     return new ComponentFinder(new AWTHierarchy());
   }
 

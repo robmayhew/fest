@@ -64,7 +64,7 @@ public class ComponentFinderTest {
   private MainWindow anotherWindow;
   
   @BeforeMethod public void setUp() {
-    finder = ComponentFinder.robotWithNewAwtHierarchy();
+    finder = ComponentFinder.finderWithNewAwtHierarchy();
     window = showWindow();
   }
   
