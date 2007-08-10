@@ -33,8 +33,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
 import static javax.swing.BoxLayout.Y_AXIS;
@@ -70,6 +73,8 @@ import org.testng.annotations.Test;
     final JLabel label = new JLabel("A Label");
     final JList list = new JList();
     final JMenu menu = new JMenu("A Menu");
+    final JSlider slider = new JSlider(10, 20, 15);
+    final JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
     final JMenuItem subMenu = new JMenu("A Submenu");
     final JTabbedPane tabbedPane = new JTabbedPane();
     final JTextField textField = new JTextField(10);
@@ -84,7 +89,7 @@ import org.testng.annotations.Test;
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      addComponents(label, comboBox, textField, button, tabbedPane, checkBox, list, fileChooser);
+      addComponents(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, tabbedPane, textField);
     }
     
     private void addComponents(Component... components) {
@@ -112,6 +117,8 @@ import org.testng.annotations.Test;
       list.setName("list");
       menu.setName("menu");
       menu.add(subMenu);
+      slider.setName("slider");
+      spinner.setName("spinner");
       textField.setName("textField");
       tabbedPane.setName("tabbedPane");
       tabbedPane.addTab("A Tab", new JPanel());
@@ -148,29 +155,24 @@ import org.testng.annotations.Test;
     assertThat(button.target).isSameAs(window.button);
   }
 
-  @Test public void shouldFindCheckBoxWithGivenName() {
-    JCheckBoxFixture checkBox = container.checkBox("checkBox");
-    assertThat(checkBox.target).isSameAs(window.checkBox);
-  }
-  
   @Test public void shouldFindCheckBoxWithGivenMatcher() {
     GenericTypeMatcher<JCheckBox> textMatcher = new GenericTypeMatcher<JCheckBox>() {
-      @Override protected boolean isMatching(JCheckBox checkBox) {
+      protected boolean isMatching(JCheckBox checkBox) {
         return "A CheckBox".equals(checkBox.getText());
       }
     };
     JCheckBoxFixture checkbox = container.checkbox(textMatcher);
     assertThat(checkbox.target).isSameAs(window.checkBox);
   }
-
-  @Test public void shouldFindComboBoxWithGivenName() {
-    JComboBoxFixture comboBox = container.comboBox("comboBox");
-    assertThat(comboBox.target).isSameAs(window.comboBox);
-  }
   
+  @Test public void shouldFindCheckBoxWithGivenName() {
+    JCheckBoxFixture checkBox = container.checkBox("checkBox");
+    assertThat(checkBox.target).isSameAs(window.checkBox);
+  }
+
   @Test public void shouldFindComboBoxWithGivenMatcher() {
     GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
-      @Override protected boolean isMatching(JComboBox comboBox) {
+      protected boolean isMatching(JComboBox comboBox) {
         return comboBox.getItemCount() == 3;
       }
     };
@@ -178,14 +180,14 @@ import org.testng.annotations.Test;
     assertThat(comboBox.target).isSameAs(window.comboBox);
   }
   
-  @Test public void shouldFindDialogWithGivenName() {
-    DialogFixture dialog = container.dialog("dialog");
-    assertThat(dialog.target).isSameAs(window.dialog);
+  @Test public void shouldFindComboBoxWithGivenName() {
+    JComboBoxFixture comboBox = container.comboBox("comboBox");
+    assertThat(comboBox.target).isSameAs(window.comboBox);
   }
   
   @Test public void shouldFindDialogWithGivenMatcher() {
     GenericTypeMatcher<JDialog> titleMatcher = new GenericTypeMatcher<JDialog>() {
-      @Override protected boolean isMatching(JDialog dialog) {
+      protected boolean isMatching(JDialog dialog) {
         return "A Dialog".equals(dialog.getTitle());
       }
     };
@@ -193,9 +195,34 @@ import org.testng.annotations.Test;
     assertThat(dialog.target).isSameAs(window.dialog);
   }
   
+  @Test public void shouldFindDialogWithGivenName() {
+    DialogFixture dialog = container.dialog("dialog");
+    assertThat(dialog.target).isSameAs(window.dialog);
+  }
+  
+  @Test public void shouldFindFileChooserWithGivenMatcher() {
+    GenericTypeMatcher<JFileChooser> nameMatcher = new GenericTypeMatcher<JFileChooser>() {
+      protected boolean isMatching(JFileChooser fileChooser) {
+        return "fileChooser".equals(fileChooser.getName());
+      }
+    };
+    JFileChooserFixture fileChooser = container.fileChooser(nameMatcher);
+    assertThat(fileChooser.target).isEqualTo(window.fileChooser);
+  }
+  
   @Test public void shouldFindFileChooserWithGivenName() {
-    JFileChooserFixture fixture = container.fileChooser("fileChooser");
-    assertThat(fixture.target).isSameAs(window.fileChooser);
+    JFileChooserFixture fileChooser = container.fileChooser("fileChooser");
+    assertThat(fileChooser.target).isSameAs(window.fileChooser);
+  }
+  
+  @Test public void shouldFindLabelWithGivenMatcher() {
+    GenericTypeMatcher<JLabel> textMatcher = new GenericTypeMatcher<JLabel>() {
+      protected boolean isMatching(JLabel label) {
+        return "A Label".equals(label.getText());
+      }
+    };
+    JLabelFixture label = container.label(textMatcher);
+    assertThat(label.target).isSameAs(window.label);
   }
   
   @Test public void shouldFindLabelWithGivenName() {
@@ -203,19 +230,39 @@ import org.testng.annotations.Test;
     assertThat(label.target).isSameAs(window.label);
   }
   
+  @Test public void shouldFindListWithGivenMatcher() {
+    GenericTypeMatcher<JList> nameMatcher = new GenericTypeMatcher<JList>() {
+      protected boolean isMatching(JList list) {
+        return "list".equals(list.getName());
+      }
+    };
+    JListFixture list = container.list(nameMatcher);
+    assertThat(list.target).isSameAs(window.list);
+  }
+  
   @Test public void shouldFindListWithGivenName() {
-    JListFixture fixture = container.list("list");
-    assertThat(fixture.target).isSameAs(window.list);
+    JListFixture list = container.list("list");
+    assertThat(list.target).isSameAs(window.list);
+  }
+
+  @Test public void shouldFindMenuWithGivenMatcher() {
+    GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
+      protected boolean isMatching(JMenuItem menuItem) {
+        return "A Submenu".equals(menuItem.getText());
+      }
+    };
+    JMenuItemFixture menuItem = container.menuItem(textMatcher);
+    assertThat(menuItem.target).isSameAs(window.subMenu);
   }
 
   @Test public void shouldFindMenuWithGivenName() {
-    JMenuItemFixture fixture = container.menuItem("menu");
-    assertThat(fixture.target).isSameAs(window.menu);
+    JMenuItemFixture menuItem = container.menuItem("menu");
+    assertThat(menuItem.target).isSameAs(window.menu);
   }
-
+  
   @Test public void shouldFindMenuWithGivenPath() {
-    JMenuItemFixture fixture = container.menuItem("A Menu", "A Submenu");
-    assertThat(fixture.target).isSameAs(window.subMenu);
+    JMenuItemFixture menuItem = container.menuItem("A Menu", "A Submenu");
+    assertThat(menuItem.target).isSameAs(window.subMenu);
   }
   
   @Test(dependsOnMethods = "shouldFindButtonWithGivenName") 
@@ -224,15 +271,65 @@ import org.testng.annotations.Test;
     JOptionPaneFixture fixture = container.optionPane();
     assertThat(fixture.target.getMessage()).isEqualTo("A Message");
   }
+
+  @Test public void shouldFindSliderWithGivenMatcher() {
+    GenericTypeMatcher<JSlider> valueMatcher = new GenericTypeMatcher<JSlider>() {
+      protected boolean isMatching(JSlider slider) {
+        return slider.getValue() == 15;
+      }
+    };
+    JSliderFixture slider = container.slider(valueMatcher);
+    assertThat(slider.target).isSameAs(window.slider);
+  }
+  
+  @Test public void shouldFindSliderWithGivenName() {
+    JSliderFixture slider = container.slider("slider");
+    assertThat(slider.target).isSameAs(window.slider);
+  }
+
+  @Test public void shouldFindSpinnerWithGivenMatcher() {
+    GenericTypeMatcher<JSpinner> valueMatcher = new GenericTypeMatcher<JSpinner>() {
+      protected boolean isMatching(JSpinner spinner) {
+        return spinner.getModel().getValue().equals("One");
+      }
+    };
+    JSpinnerFixture spinner = container.spinner(valueMatcher);
+    assertThat(spinner.target).isSameAs(window.spinner);
+  }
+  
+  @Test public void shouldFindSpinnerWithGivenName() {
+    JSpinnerFixture spinner = container.spinner("spinner");
+    assertThat(spinner.target).isSameAs(window.spinner);
+  }
+
+  @Test public void shouldFindTabbedPaneWithGivenMatcher() {
+    GenericTypeMatcher<JTabbedPane> tabCountMatcher = new GenericTypeMatcher<JTabbedPane>() {
+      protected boolean isMatching(JTabbedPane tabbedPane) {
+        return tabbedPane.getTabCount() == 1;
+      }
+    };
+    JTabbedPaneFixture tabbedPane = container.tabbedPane(tabCountMatcher);
+    assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
+  }
   
   @Test public void shouldFindTabbedPaneWithGivenName() {
     JTabbedPaneFixture tabbedPane = container.tabbedPane("tabbedPane");
     assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
   }
   
+  @Test public void shouldFindTextComponentWithGivenMatcher() {
+    GenericTypeMatcher<JTextField> columnMatcher = new GenericTypeMatcher<JTextField>() {
+      protected boolean isMatching(JTextField textField) {
+        return textField.getColumns() == 10;
+      }
+    };
+    JTextComponentFixture textField = container.textBox(columnMatcher);
+    assertThat(textField.target).isSameAs(window.textField);
+  }
+  
   @Test public void shouldFindTextComponentWithGivenName() {
-    JTextComponentFixture fixture = container.textBox("textField");
-    assertThat(fixture.target).isSameAs(window.textField);
+    JTextComponentFixture textField = container.textBox("textField");
+    assertThat(textField.target).isSameAs(window.textField);
   }
   
   @AfterMethod public void tearDown() {
