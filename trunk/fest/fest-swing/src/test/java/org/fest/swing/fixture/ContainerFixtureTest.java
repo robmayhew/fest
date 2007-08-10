@@ -37,10 +37,12 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
 import static javax.swing.BoxLayout.Y_AXIS;
+import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
@@ -78,6 +80,7 @@ import org.testng.annotations.Test;
     final JMenuItem subMenu = new JMenu("A Submenu");
     final JTabbedPane tabbedPane = new JTabbedPane();
     final JTextField textField = new JTextField(10);
+    final JToolBar toolBar = new JToolBar(HORIZONTAL);
     
     CustomWindow() {
       setLayout(new BoxLayout(getContentPane(), Y_AXIS));
@@ -89,7 +92,7 @@ import org.testng.annotations.Test;
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      addComponents(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, tabbedPane, textField);
+      addComponents(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, tabbedPane, textField, toolBar);
     }
     
     private void addComponents(Component... components) {
@@ -119,9 +122,10 @@ import org.testng.annotations.Test;
       menu.add(subMenu);
       slider.setName("slider");
       spinner.setName("spinner");
-      textField.setName("textField");
       tabbedPane.setName("tabbedPane");
       tabbedPane.addTab("A Tab", new JPanel());
+      textField.setName("textField");
+      toolBar.setName("toolBar");
     }
   }
   
@@ -330,6 +334,21 @@ import org.testng.annotations.Test;
   @Test public void shouldFindTextComponentWithGivenName() {
     JTextComponentFixture textField = container.textBox("textField");
     assertThat(textField.target).isSameAs(window.textField);
+  }
+  
+  @Test public void shouldFindToolBarWithGivenMatcher() {
+    GenericTypeMatcher<JToolBar> columnMatcher = new GenericTypeMatcher<JToolBar>() {
+      protected boolean isMatching(JToolBar toolBar) {
+        return toolBar.getOrientation() == HORIZONTAL && "toolBar".equals(toolBar.getName());
+      }
+    };
+    JToolBarFixture toolBar = container.toolBar(columnMatcher);
+    assertThat(toolBar.target).isSameAs(window.toolBar);
+  }
+  
+  @Test public void shouldFindToolBarWithGivenName() {
+    JToolBarFixture toolBar = container.toolBar("toolBar");
+    assertThat(toolBar.target).isSameAs(window.toolBar);
   }
   
   @AfterMethod public void tearDown() {
