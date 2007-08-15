@@ -184,7 +184,7 @@ public class Files {
   /**
    * Flushes and closes the given <code>{@link OutputStream}</code>. Any I/O errors catched by this method are ignored and
    * not rethrown.
-   * @param writer the output stream to flush and close.
+   * @param out the output stream to flush and close.
    */
   public static void flushAndClose(OutputStream out) {
     if (out == null) return;
