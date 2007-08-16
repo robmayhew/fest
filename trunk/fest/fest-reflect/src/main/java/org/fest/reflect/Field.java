@@ -75,6 +75,11 @@ public final class Field<T> {
     field.setAccessible(accessible);
   }
 
+  /**
+   * Sets a value in the field managed by this class.
+   * @param value the value to set.
+   * @throws ReflectionError if the given value cannot be set.
+   */
   public void set(T value) {
     try {
       field.setAccessible(true);
@@ -86,6 +91,11 @@ public final class Field<T> {
     }
   }
 
+  /**
+   * Returns the value of the field managed by this class.
+   * @return the value of the field managed by this class.
+   * @throws ReflectionError if the value of the field cannot be retrieved.
+   */
   @SuppressWarnings("unchecked") public T get() {
     try {
       field.setAccessible(true);
@@ -97,10 +107,19 @@ public final class Field<T> {
     }
   }
 
+  /**
+   * Returns the "real" field managed by this class.
+   * @return the "real" field managed by this class.
+   */
   public java.lang.reflect.Field info() {
     return field;
   }
   
+  /**
+   * @see Field
+   *
+   * @author Alex Ruiz
+   */
   public static class FieldName {
     private final String name;
 
@@ -113,6 +132,11 @@ public final class Field<T> {
     }
   }
 
+  /**
+   * @see Field
+   *
+   * @author Alex Ruiz
+   */
   public static class FieldType<T> {
     private final Class<T> type;
     private final FieldName fieldName;

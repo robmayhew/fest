@@ -51,6 +51,12 @@ public final class Constructor<T> {
     }
   }
 
+  /**
+   * Creates a new instance of <code>T</code> by calling a constructor with the given arguments. 
+   * @param args the arguments to pass to the constructor (can be zero or more).
+   * @return the created instance of <code>T</code>.
+   * @throws ReflectionError if a new instance cannot be created.
+   */
   public T newInstance(Object... args) {
     try {
       constructor.setAccessible(true);
@@ -62,10 +68,20 @@ public final class Constructor<T> {
     }
   }
 
+  /**
+   * Returns the "real" constructor managed by this class.
+   * @return the "real" constructor managed by this class.
+   */
   public java.lang.reflect.Constructor<T> info() {
     return constructor;
   }
   
+  /**
+   * @see Constructor
+   *
+   * @author Alex Ruiz
+   * @author Yvonne Wang
+   */
   public static class TargetType {
     TargetType() {}
 
@@ -78,6 +94,12 @@ public final class Constructor<T> {
     }
   }
 
+  /**
+   * @see Constructor
+   *
+   * @author Alex Ruiz
+   * @author Yvonne Wang
+   */
   public static class ParameterTypes {
     private final Class<?>[] parameterTypes;
 

@@ -19,7 +19,7 @@ import org.fest.reflect.Field.FieldName;
 import org.fest.reflect.Method.MethodName;
 
 /**
- * Understands and API for simplified Java reflection.
+ * Understands the entry point for the classes in this package.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang

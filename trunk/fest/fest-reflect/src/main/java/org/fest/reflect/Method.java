@@ -21,6 +21,15 @@ import static org.fest.util.Strings.quote;
 
 /**
  * Understands the use of reflection to access a method from an object.
+ * <p>
+ * <pre>
+ * The following is an example of proper usage of this class:
+ * method(&quot;setName&quot;).withParameterTypes(String.class)
+ *                             .in(person)
+ *                             .invoke("Luke");
+ * </pre>
+ * </p>
+ * 
  * @param <T> the return type of the method invocation.
  * 
  * @author Yvonne Wang
@@ -46,6 +55,12 @@ public final class Method<T> {
     }
   }
 
+  /**
+   * Invokes the method managed by this class using the given arguments.
+   * @param args the arguments to use to call the method managed by this class.
+   * @return the result of the method call.
+   * @throws ReflectionError if the method cannot be invoked.
+   */
   @SuppressWarnings("unchecked") public T invoke(Object... args) {
     try {
       method.setAccessible(true);
@@ -58,6 +73,10 @@ public final class Method<T> {
     }
   }
   
+  /**
+   * Returns the "real" method managed by this class.
+   * @return the "real" method managed by this class.
+   */
   public java.lang.reflect.Method info() {
     return method;
   }
@@ -83,6 +102,11 @@ public final class Method<T> {
     }
   }
 
+  /**
+   * @see Method
+   *
+   * @author Yvonne Wang
+   */
   public static class ReturnType<T> {
     private final MethodName fieldName;
 
@@ -99,6 +123,11 @@ public final class Method<T> {
     }
   }
 
+  /**
+   * @see Method
+   *
+   * @author Yvonne Wang
+   */
   public static class ParameterTypes<T> {
     private final Class<?>[] values;
     private final ReturnType<T> returnType;
