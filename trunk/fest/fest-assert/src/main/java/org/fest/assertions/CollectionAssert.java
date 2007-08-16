@@ -19,7 +19,7 @@ import java.util.Collection;
 
 import org.fest.util.Collections;
 
-import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
@@ -27,7 +27,6 @@ import static org.fest.util.Strings.concat;
  * Understands assertions for collections.
  *
  * @author Yvonne Wang
- * @param <T> the parameterized type of the collection.
  */
 public final class CollectionAssert extends GroupAssert<Collection<?>> {
 
@@ -35,26 +34,51 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     super(actual);
   }
 
+  /**
+   * Verifies that the actual collection does not have duplicates.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection has duplicates.
+   */
   public CollectionAssert doesNotHaveDuplicates() {
     Collection<?> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty()) fail(concat("the collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
   }
 
+  /**
+   * Verifies that the actual collection is not <code>null</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
+   */
   @Override public CollectionAssert isNotNull() {
     if (actual == null) fail ("the collection is null");
     return this;
   }
   
+  /**
+   * Verifies that the actual collection is empty (not <code>null</code> with zero elements.)
+   * @throws AssertionError if the actual collection is <code>null</code> or not empty.
+   */
   public void isEmpty() {
     if (!Collections.isEmpty(actual)) fail(concat("the collection ", actual, " is not empty"));
   }
   
+  /**
+   * Verifies that the actual collection contains at least on element.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection is empty.
+   */
   public CollectionAssert isNotEmpty() {
     if (Collections.isEmpty(actual)) fail("the collection is null or empty");
     return this;
   }
   
+  /**
+   * Verifies that the number of elements in the actual collection is equal to the given one.
+   * @param expected the expected number of elements in the actual collection.
+   * @return this assertion object.
+   * @throws AssertionError if the number of elements of the actual collection is not equal to the given one.
+   */
   @Override public CollectionAssert hasSize(int expected) {
     return (CollectionAssert)super.hasSize(expected);
   }
@@ -63,19 +87,43 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     return actual.size();
   }
 
+  /**
+   * Verifies that the actual collection is equal to the given one.
+   * @param expected the given collection to compare the actual collection to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection is not equal to the given one.
+   */
   @Override public CollectionAssert isEqualTo(Collection<?> expected) {
     return (CollectionAssert)super.isEqualTo(expected);
   }
 
-  @Override public CollectionAssert isNotEqualTo(Collection<?> obj) {
-    return (CollectionAssert)super.isNotEqualTo(obj);
+  /**
+   * Verifies that the actual collection is not equal to the given one.
+   * @param other the given collection to compare the actual collection to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection is equal to the given one.
+   */
+  @Override public CollectionAssert isNotEqualTo(Collection<?> other) {
+    return (CollectionAssert)super.isNotEqualTo(other);
   }
   
+  /**
+   * Verifies that the actual collection is the same as the given one.
+   * @param expected the given collection to compare the actual collection to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection is not the same as the given one.
+   */
   @Override public CollectionAssert isSameAs(Collection<?> expected) {
     return (CollectionAssert)super.isSameAs(expected);
   }
 
-  @Override public CollectionAssert isNotSameAs(Collection<?> expected) {
-    return (CollectionAssert)super.isNotSameAs(expected);
+  /**
+   * Verifies that the actual collection is not the same as the given one.
+   * @param other the given collection to compare the actual collection to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection is the same as the given one.
+   */
+  @Override public CollectionAssert isNotSameAs(Collection<?> other) {
+    return (CollectionAssert)super.isNotSameAs(other);
   }
 }

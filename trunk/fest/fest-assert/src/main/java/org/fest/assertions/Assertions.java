@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 /**
- * Understands assertion methods.
+ * Understands an entry point for assertions.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

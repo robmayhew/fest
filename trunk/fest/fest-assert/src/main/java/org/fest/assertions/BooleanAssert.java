@@ -27,14 +27,22 @@ public final class BooleanAssert {
 
   private final boolean actual;
 
-  public BooleanAssert(boolean actual) {
+  BooleanAssert(boolean actual) {
     this.actual = actual;
   }
   
+  /**
+   * Verifies that the actual <code>boolean</code> value is <code>true</code>.
+   * @throws AssertionError if the actual <code>boolean</code> value is <code>false</code>.
+   */
   public void isTrue() {
     if (!actual) fail(errorMessageIfNotEqual(actual, true));
   }
 
+  /**
+   * Verifies that the actual <code>boolean</code> value is <code>false</code>.
+   * @throws AssertionError if the actual <code>boolean</code> value is <code>true</code>.
+   */
   public void isFalse() {
     if (actual) fail(errorMessageIfNotEqual(actual, false));
   }

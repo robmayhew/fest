@@ -34,29 +34,68 @@ public class ShortAssert {
     this.actual = actual;
   }
 
+  /**
+   * Verifies that the actual <code>short</code> value is equal to the given one.
+   * @param expected the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is not equal to the given one.
+   */
   public ShortAssert isEqualTo(short expected) {
     failIfNotEqual(actual, expected);
     return this;
   }
 
-  public ShortAssert isNotEqualTo(short expected) {
-    failIfEqual(actual, expected);
+  /**
+   * Verifies that the actual <code>short</code> value is not equal to the given one.
+   * @param other the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is equal to the given one.
+   */
+  public ShortAssert isNotEqualTo(short other) {
+    failIfEqual(actual, other);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>short</code> value is greater than the given one.
+   * @param smaller the value expected to be smaller than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is less than or equal to the given one.
+   */
   public ShortAssert isGreaterThan(short smaller) {
     failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>short</code> value is less than the given one.
+   * @param bigger the value expected to be bigger than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is greater than or equal to the given one.
+   */
   public ShortAssert isLessThan(short bigger) {
     failIfNotLessThan(actual, bigger);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>short</code> value is positive.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is not positive.
+   */
   public ShortAssert isPositive() { return isGreaterThan(ZERO); }
 
+  /**
+   * Verifies that the actual <code>short</code> value is negative.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is not negative.
+   */
   public ShortAssert isNegative() { return isLessThan(ZERO); }
 
+  /**
+   * Verifies that the actual <code>short</code> value is equal to zero.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>short</code> value is not equal to zero.
+   */
   public ShortAssert isZero() { return isEqualTo(ZERO); }
 }

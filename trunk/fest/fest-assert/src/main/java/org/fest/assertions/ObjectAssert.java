@@ -32,6 +32,12 @@ public final class ObjectAssert extends Assert<Object> {
     super(actual);
   }
   
+  /**
+   * Verifies that the actual <code>Object</code> is an instance of the given type.
+   * @param type the type to check the actual <code>Object</code> against.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is not an instance of the given type.
+   */
   public ObjectAssert isInstanceOf(Class<?> type) {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
@@ -40,6 +46,12 @@ public final class ObjectAssert extends Assert<Object> {
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>Object</code> is an instance of any of the given types.
+   * @param types the types to check the actual <code>Object</code> against.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is not an instance of any of the given types.
+   */
   public ObjectAssert isInstanceOfAny(Class<?>...types) {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
@@ -49,22 +61,51 @@ public final class ObjectAssert extends Assert<Object> {
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>Object</code> is not <code>null</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
+   */
   @Override public ObjectAssert isNotNull() {
     return (ObjectAssert)super.isNotNull();
   }
   
+  /**
+   * Verifies that the actual <code>Object</code> is the same as the given one.
+   * @param expected the given <code>Object</code> to compare the actual <code>Object</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is not the same as the given one.
+   */
   @Override public ObjectAssert isSameAs(Object expected) {
     return (ObjectAssert)super.isSameAs(expected);
   }
   
+  /**
+   * Verifies that the actual <code>Object</code> is not the same as the given one.
+   * @param other the given <code>Object</code> to compare the actual <code>Object</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is the same as the given one.
+   */
   @Override public ObjectAssert isNotSameAs(Object other) {
     return (ObjectAssert)super.isNotSameAs(other);
   }
 
+  /**
+   * Verifies that the actual <code>Object</code> is equal to the given one.
+   * @param expected the given <code>Object</code> to compare the actual <code>Object</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is not equal to the given one.
+   */
   @Override public ObjectAssert isEqualTo(Object expected) {
     return (ObjectAssert)super.isEqualTo(expected);
   }
 
+  /**
+   * Verifies that the actual <code>Object</code> is not equal to the given one.
+   * @param other the given <code>Object</code> to compare the actual <code>Object</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is equal to the given one.
+   */
   @Override public ObjectAssert isNotEqualTo(Object other) {
     return (ObjectAssert)super.isNotEqualTo(other);
   }

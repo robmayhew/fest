@@ -36,31 +36,65 @@ public class CharAssert {
     this.actual = actual;
   }
 
+  /**
+   * Verifies that the actual <code>char</code> value is equal to the given one.
+   * @param expected the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> value is not equal to the given one.
+   */
   public CharAssert isEqualTo(char expected) {
     failIfNotEqual(actual, expected);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>char</code> value is not equal to the given one.
+   * @param other the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> value is equal to the given one.
+   */
   public CharAssert isNotEqualTo(char other) {
     failIfEqual(actual, other);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>char</code> value is greater than the given one.
+   * @param smaller the value expected to be smaller than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> value is less than or equal to the given one.
+   */
   public CharAssert isGreaterThan(char smaller) {
     failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>char</code> value is less than the given one.
+   * @param bigger the value expected to be bigger than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> value is greater than or equal to the given one.
+   */
   public CharAssert isLessThan(char bigger) {
     failIfNotLessThan(actual, bigger);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>char</code> value is an uppercase value.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> value is not an uppercase value.
+   */
   public CharAssert isUpperCase() {
     if (!Character.isUpperCase(actual)) fail(concat(valueOf(actual), " should be an uppercase character"));
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>char</code> value is an lowercase value.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> value is not an lowercase value.
+   */
   public CharAssert isLowerCase() {
     if (!Character.isLowerCase(actual)) fail(concat(valueOf(actual), " should be a lowercase character"));
     return this;

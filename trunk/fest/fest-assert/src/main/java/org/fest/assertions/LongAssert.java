@@ -34,30 +34,69 @@ public class LongAssert {
     this.actual = actual;
   }
 
+  /**
+   * Verifies that the actual <code>long</code> value is equal to the given one.
+   * @param expected the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is not equal to the given one.
+   */
   public LongAssert isEqualTo(long expected) {
     failIfNotEqual(actual, expected);
     return this;
   }
 
-  public LongAssert isNotEqualTo(long expected) {
-    failIfEqual(actual, expected);
+  /**
+   * Verifies that the actual <code>long</code> value is not equal to the given one.
+   * @param other the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is equal to the given one.
+   */
+  public LongAssert isNotEqualTo(long other) {
+    failIfEqual(actual, other);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>long</code> value is greater than the given one.
+   * @param smaller the value expected to be smaller than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is less than or equal to the given one.
+   */
   public LongAssert isGreaterThan(long smaller) {
     failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>long</code> value is less than the given one.
+   * @param bigger the value expected to be bigger than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is greater than or equal to the given one.
+   */
   public LongAssert isLessThan(long bigger) {
     failIfNotLessThan(actual, bigger);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>long</code> value is positive.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is not positive.
+   */
   public LongAssert isPositive() { return isGreaterThan(ZERO); }
 
+  /**
+   * Verifies that the actual <code>long</code> value is negative.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is not negative.
+   */
   public LongAssert isNegative() { return isLessThan(ZERO); }
 
+  /**
+   * Verifies that the actual <code>long</code> value is equal to zero.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>long</code> value is not equal to zero.
+   */
   public LongAssert isZero() { return isEqualTo(ZERO); }
 
 }

@@ -40,6 +40,10 @@ abstract class Assert<T> {
     this.actual = actual;
   }
 
+  /**
+   * Asserts that the actual value (specified in the constructor of this class) is <code>null</code>.
+   * @throws AssertionError if the actual value is not <code>null</code>.
+   */
   public final void isNull() {
     failIfNotNull(actual);
   }

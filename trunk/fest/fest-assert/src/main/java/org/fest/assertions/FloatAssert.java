@@ -34,33 +34,76 @@ public class FloatAssert {
     this.actual = actual;
   }
 
+  /**
+   * Verifies that the actual <code>float</code> value is equal to the given one.
+   * @param expected the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is not equal to the given one.
+   */
   public FloatAssert isEqualTo(float expected) {
     failIfNotEqual(actual, expected);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>float</code> value is not equal to the given one.
+   * @param other the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is equal to the given one.
+   */
   public FloatAssert isNotEqualTo(float other) {
     failIfEqual(actual, other);
     return this;
   }
 
-  public FloatAssert isZero() {
-    return isEqualTo(ZERO);
-  }
-
+  /**
+   * Verifies that the actual <code>float</code> value is greater than the given one.
+   * @param smaller the value expected to be smaller than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is less than or equal to the given one.
+   */
   public FloatAssert isGreaterThan(float smaller) {
     failIfNotGreaterThan(actual, smaller);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>float</code> value is less than the given one.
+   * @param bigger the value expected to be bigger than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is greater than or equal to the given one.
+   */
   public FloatAssert isLessThan(float bigger) {
     failIfNotLessThan(actual, bigger);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>float</code> value is equal to <code>{@link Float#NaN}</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is not equal to <code>NaN</code>.
+   */
   public FloatAssert isNaN() { return isEqualTo(Float.NaN); }
 
+  /**
+   * Verifies that the actual <code>float</code> value is positive.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is not positive.
+   */
   public FloatAssert isPositive() { return isGreaterThan(ZERO); }
 
+  /**
+   * Verifies that the actual <code>float</code> value is negative.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is not negative.
+   */
   public FloatAssert isNegative() { return isLessThan(ZERO); }
+
+  /**
+   * Verifies that the actual <code>float</code> value is equal to zero.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is not equal to zero.
+   */
+  public FloatAssert isZero() { return isEqualTo(ZERO); }
 }
+

@@ -32,35 +32,80 @@ public final class StringAssert extends GroupAssert<String> {
     super(actual);
   }
   
+  /**
+   * Verifies that the actual <code>String</code> is empty (not <code>null</code> with zero characters.)
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code> or not empty.
+   */
   public void isEmpty() {
     if (!Strings.isEmpty(actual)) fail(concat("the String ", quote(actual), " should be empty"));
   }
   
+  /**
+   * Verifies that the actual <code>String</code> contains at least on character.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is empty.
+   */
   public StringAssert isNotEmpty() {
     if (Strings.isEmpty(actual)) fail(concat("the String ", quote(actual), " should not be empty"));   
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>String</code> is equal to the given one.
+   * @param expected the given <code>String</code> to compare the actual <code>String</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is not equal to the given one.
+   */
   @Override public StringAssert isEqualTo(String expected) {
     return (StringAssert)super.isEqualTo(expected);
   }
   
-  @Override public StringAssert isNotEqualTo(String obj) {
-    return (StringAssert)super.isNotEqualTo(obj);
+  /**
+   * Verifies that the actual <code>String</code> is not equal to the given one.
+   * @param other the given <code>String</code> to compare the actual <code>String</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is equal to the given one.
+   */
+  @Override public StringAssert isNotEqualTo(String other) {
+    return (StringAssert)super.isNotEqualTo(other);
   }
 
+  /**
+   * Verifies that the actual <code>String</code> is not <code>null</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
+   */
   @Override public StringAssert isNotNull() {
     return (StringAssert)super.isNotNull();
   }
 
-  @Override public StringAssert isNotSameAs(String expected) {
-    return (StringAssert)super.isNotSameAs(expected);
+  /**
+   * Verifies that the actual <code>String</code> is not the same as the given one.
+   * @param other the given <code>String</code> to compare the actual <code>String</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is the same as the given one.
+   */
+  @Override public StringAssert isNotSameAs(String other) {
+    return (StringAssert)super.isNotSameAs(other);
   }
 
+  /**
+   * Verifies that the actual <code>String</code> is the same as the given one.
+   * @param expected the given <code>String</code> to compare the actual <code>String</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is not the same as the given one.
+   */
   @Override public StringAssert isSameAs(String expected) {
     return (StringAssert)super.isSameAs(expected);
   }
 
+  /**
+   * Verifies that the number of characters in the actual <code>String</code> is equal to the given one.
+   * @param expected the expected number of characters in the actual <code>String</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the number of characters of the actual <code>String</code> is not equal to the given 
+   * one.
+   */
   @Override public StringAssert hasSize(int expected) {
     return (StringAssert)super.hasSize(expected);
   }
@@ -69,6 +114,12 @@ public final class StringAssert extends GroupAssert<String> {
     return actual.length();
   }
 
+  /**
+   * Verifies that the actual <code>String</code> contains the given one.
+   * @param expected the given <code>String</code> expected to be contained in the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> does not contain the given one.
+   */
   public StringAssert contains(String expected) {
     if (actual.indexOf(expected) == -1) 
       fail(concat("the String ", quote(actual), " should contain the String ", quote(expected)));

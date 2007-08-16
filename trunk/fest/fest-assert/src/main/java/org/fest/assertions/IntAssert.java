@@ -26,35 +26,74 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  * @author Yvonne Wang
  */
 public final class IntAssert{
-  private int actual;
+  private final int actual;
 
   IntAssert(int actual) {
     this.actual = actual;
   }
   
+  /**
+   * Verifies that the actual <code>int</code> value is equal to the given one.
+   * @param expected the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is not equal to the given one.
+   */
   public IntAssert isEqualTo(int expected) {
     failIfNotEqual(actual, expected);
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>int</code> value is not equal to the given one.
+   * @param other the value to compare the actual one to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is equal to the given one.
+   */
   public IntAssert isNotEqualTo(int other) {
     failIfEqual(actual, other);
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>int</code> value is greater than the given one.
+   * @param smaller the value expected to be smaller than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is less than or equal to the given one.
+   */
   public IntAssert isGreaterThan(int smaller) {
     failIfNotGreaterThan(actual, smaller);
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>int</code> value is less than the given one.
+   * @param bigger the value expected to be bigger than the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is greater than or equal to the given one.
+   */
   public IntAssert isLessThan(int bigger) {
     failIfNotLessThan(actual, bigger);
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>int</code> value is positive.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is not positive.
+   */
   public IntAssert isPositive() { return isGreaterThan(0); }
 
+  /**
+   * Verifies that the actual <code>int</code> value is negative.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is not negative.
+   */
   public IntAssert isNegative() { return isLessThan(0); }
   
+  /**
+   * Verifies that the actual <code>int</code> value is equal to zero.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> value is not equal to zero.
+   */
   public IntAssert isZero() { return isEqualTo(0); }
 }

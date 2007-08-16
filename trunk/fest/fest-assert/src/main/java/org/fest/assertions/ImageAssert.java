@@ -33,8 +33,14 @@ import static org.fest.util.Strings.quote;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class ImageAssert extends Assert<BufferedImage> {
+public final class ImageAssert extends Assert<BufferedImage> {
 
+  /**
+   * Reads the image in the specified path.
+   * @param imageFilePath the path of the image to read.
+   * @return the read image.
+   * @throws AssertionError wrapping any errors thrown when reading the image.
+   */
   public static BufferedImage read(String imageFilePath) {
     File imageFile = new File(imageFilePath);
     if (!imageFile.isFile()) fail(concat("The path ", quote(imageFilePath), "does not belong to a file"));
@@ -46,16 +52,30 @@ public class ImageAssert extends Assert<BufferedImage> {
     }
   }
   
-  public ImageAssert(BufferedImage actual) {
+  ImageAssert(BufferedImage actual) {
     super(actual);
   }
   
-  @Override public final ImageAssert isEqualTo(BufferedImage expected) {
+  /**
+   * Verifies that the actual image is equal to the given one. Two images are equal if they have the same size and the
+   * pixels at the same coordinates have the same color.
+   * @param expected the given image to compare the actual image to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual image is not equal to the given one.
+   */
+  @Override public ImageAssert isEqualTo(BufferedImage expected) {
     if (!areEqual(actual, expected)) fail("Images are not equal");
     return this;
   }
 
-  @Override public final ImageAssert isNotEqualTo(BufferedImage image) {
+  /**
+   * Verifies that the actual image is not equal to the given one. Two images are equal if they have the same size and 
+   * the pixels at the same coordinates have the same color.
+   * @param image the given image to compare the actual image to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual image is equal to the given one.
+   */
+  @Override public ImageAssert isNotEqualTo(BufferedImage image) {
     if (areEqual(actual, image)) fail("Images not equal");
     return this;
   }
@@ -72,20 +92,44 @@ public class ImageAssert extends Assert<BufferedImage> {
     return true;
   }
   
-  @Override public final ImageAssert isNotNull() {
+  /**
+   * Verifies that the actual image is not <code>null</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the actual image is <code>null</code>.
+   */
+  @Override public ImageAssert isNotNull() {
     return (ImageAssert)super.isNotNull();
   }
 
-  @Override public final ImageAssert isNotSameAs(BufferedImage expected) {
+  /**
+   * Verifies that the actual image is not the same as the given one.
+   * @param expected the given image to compare the actual image to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual image is the same as the given one.
+   */
+  @Override public ImageAssert isNotSameAs(BufferedImage expected) {
     return (ImageAssert)super.isNotSameAs(expected);
   }
 
-  @Override public final ImageAssert isSameAs(BufferedImage expected) {
+  /**
+   * Verifies that the actual image is the same as the given one.
+   * @param expected the given image to compare the actual image to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual image is not the same as the given one.
+   */
+  @Override public ImageAssert isSameAs(BufferedImage expected) {
     return (ImageAssert)super.isSameAs(expected);
   }
 
-  public final void hasSize(Dimension expected) {
+  /**
+   * Verifies that the size of the actual image is equal to the given one.
+   * @param expected the expected size of the actual image.
+   * @return this assertion object.
+   * @throws AssertionError if the size of the actual image is not equal to the given one.
+   */
+  public ImageAssert hasSize(Dimension expected) {
     Dimension actual = new Dimension(this.actual.getWidth(), this.actual.getHeight());
     failIfNotEqual(actual, expected);
+    return this;
   }
 }
