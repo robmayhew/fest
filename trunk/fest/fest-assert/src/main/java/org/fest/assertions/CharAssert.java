@@ -24,7 +24,8 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertion methods for <code>char</code>s.
+ * Understands assertion methods for <code>char</code>s. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(char)}</code>.
  * 
  * @author Yvonne Wang
  */

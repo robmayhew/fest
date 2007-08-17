@@ -20,7 +20,8 @@ import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
 import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
- * Understands assertion methods for <code>float</code>s.
+ * Understands assertion methods for <code>float</code>s. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(float)}</code>.
  * 
  * @author Yvonne Wang
  */

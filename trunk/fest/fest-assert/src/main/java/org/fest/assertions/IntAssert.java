@@ -21,7 +21,8 @@ import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
 import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
- * Understands assert method for <code>int</code>s.
+ * Understands assert method for <code>int</code>s. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(int)}</code>.
  *
  * @author Yvonne Wang
  */

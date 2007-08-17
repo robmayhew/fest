@@ -23,7 +23,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertions for <code>Object</code> arrays. 
+ * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(Object[])}</code>.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz

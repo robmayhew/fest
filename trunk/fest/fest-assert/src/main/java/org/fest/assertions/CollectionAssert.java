@@ -24,7 +24,8 @@ import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertions for collections.
+ * Understands assertions for collections. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(Collection)}</code>.
  *
  * @author Yvonne Wang
  */

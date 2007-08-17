@@ -22,7 +22,8 @@ import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 /**
- * Understands assertion methods for <code>String</code>s.
+ * Understands assertion methods for <code>String</code>s. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(String)}</code>.
  *
  * @author Yvonne Wang
  */

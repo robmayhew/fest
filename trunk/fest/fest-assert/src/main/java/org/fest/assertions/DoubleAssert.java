@@ -10,7 +10,8 @@ import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
 import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
 
 /**
- * Understands Assertion methods for <code>Double</code>.
+ * Understands Assertion methods for <code>Double</code>. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(double)}</code>.
  *
  * @author Yvonne Wang
  */

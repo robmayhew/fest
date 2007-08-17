@@ -28,7 +28,8 @@ import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 /**
- * Understands assertion methods for images.
+ * Understands assertion methods for images. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(BufferedImage)}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz

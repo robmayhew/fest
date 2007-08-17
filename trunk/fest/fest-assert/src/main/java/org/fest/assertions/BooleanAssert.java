@@ -19,7 +19,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
 
 /**
- * Understands assertion methods for <code>boolean</code> values.
+ * Understands assertion methods for <code>boolean</code> values. To create a new instance of this class use the method
+ * <code>{@link Assertions#assertThat(boolean)}</code>.
  *
  * @author Alex Ruiz
  */

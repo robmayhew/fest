@@ -23,7 +23,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertion methods for <code>short</code> arrays. 
+ * Understands assertion methods for <code>short</code> arrays. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(short[])}</code>.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz

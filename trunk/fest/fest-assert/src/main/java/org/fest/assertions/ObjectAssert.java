@@ -22,7 +22,8 @@ import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands assertion methods for objects.
+ * Understands assertion methods for objects. To create a new instance of this class use the 
+ * method <code>{@link Assertions#assertThat(Object)}</code>.
  *
  * @author Yvonne Wang
  */
