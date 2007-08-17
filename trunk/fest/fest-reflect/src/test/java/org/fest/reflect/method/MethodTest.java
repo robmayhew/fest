@@ -13,15 +13,19 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.reflect;
+package org.fest.reflect.method;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.reflect.Jedi;
+import org.fest.reflect.Person;
+import org.fest.reflect.ReflectionError;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link Method}</code>.
+ * Tests for the fluent interface for methods.
  *
  * @author Yvonne Wang
  */
@@ -34,17 +38,17 @@ public class MethodTest {
   }
 
   @Test public void shouldCallMethodWithArgs() {
-    new Method.MethodName("setName").withParameterTypes(String.class).in(person).invoke("Leia");
+    new Name("setName").withParameterTypes(String.class).in(person).invoke("Leia");
     assertThat(person.getName()).isEqualTo("Leia");
   }
   
   @Test public void shouldCallMethod() {
-    String personName = new Method.MethodName("getName").withReturnType(String.class).in(person).invoke();
+    String personName = new Name("getName").withReturnType(String.class).in(person).invoke();
     assertThat(personName).isEqualTo("Luke");
   }
   
   @Test public void shouldReturnMethodInfo() {
-    java.lang.reflect.Method method = new Method.MethodName("setName").withParameterTypes(String.class).in(person).info();
+    java.lang.reflect.Method method = new Name("setName").withParameterTypes(String.class).in(person).info();
     assertThat(method).isNotNull();
     assertThat(method.getName()).isEqualTo("setName");
     Class<?>[] parameterTypes = method.getParameterTypes();
@@ -55,25 +59,25 @@ public class MethodTest {
   @Test public void shouldNotHaveToSpecifyReturnTypeIfVoidAndNoParameters() {
     Jedi jedi = new Jedi("Obi Wan");
     assertThat(jedi.isMaster()).isFalse();
-    new Method.MethodName("makeMaster").in(jedi).invoke();
+    new Name("makeMaster").in(jedi).invoke();
     assertThat(jedi.isMaster()).isTrue();
   }
   
   @Test(expectedExceptions = ReflectionError.class) 
   public void shouldThrowErrorIfInvalidMethodName() {
     String invalidName = "getAge";
-    new Method.MethodName(invalidName).withReturnType(Integer.class).in(person);
+    new Name(invalidName).withReturnType(Integer.class).in(person);
   }
   
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfInvalidArgs() {
     int invalidArg = 8;
-    new Method.MethodName("setName").withParameterTypes(String.class).in(person).invoke(invalidArg);
+    new Name("setName").withParameterTypes(String.class).in(person).invoke(invalidArg);
   }
   
   @Test public void shouldCallMethodWithReturnTypeAndArgs() {
     Jedi jedi = new Jedi("Yoda");
-    new Method.MethodName("addPower").withReturnType(Boolean.class).withParameterTypes(String.class).in(jedi).invoke("Heal");
+    new Name("addPower").withReturnType(Boolean.class).withParameterTypes(String.class).in(jedi).invoke("Heal");
     assertThat(jedi.powerCount()).isEqualTo(1);
     assertThat(jedi.powerAt(0)).isEqualTo("Heal");
   }

@@ -13,15 +13,19 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.reflect;
+package org.fest.reflect.field;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.Assertions.*;
+import org.fest.reflect.Jedi;
+import org.fest.reflect.Person;
+import org.fest.reflect.ReflectionError;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link Field}</code>.
+ * Tests for the fluent interface for fields.
  *
  * @author Alex Ruiz
  */
@@ -34,17 +38,17 @@ public class FieldTest {
   }
   
   @Test public void shouldGetFieldValue() {
-    String personName = new Field.FieldName("name").ofType(String.class).in(person).get();
+    String personName = new Name("name").ofType(String.class).in(person).get();
     assertThat(personName).isEqualTo("Luke");
   }
   
   @Test public void shouldSetFieldValue() {
-    new Field.FieldName("name").ofType(String.class).in(person).set("Leia");
+    new Name("name").ofType(String.class).in(person).set("Leia");
     assertThat(person.getName()).isEqualTo("Leia");
   }
   
   @Test public void shouldReturnFieldInfo() {
-    java.lang.reflect.Field field = new Field.FieldName("name").ofType(String.class).in(person).info();
+    java.lang.reflect.Field field = new Name("name").ofType(String.class).in(person).info();
     assertThat(field).isNotNull();
     assertThat(field.getName()).isEqualTo("name");
     assertThat(field.getType()).isEqualTo(String.class);
@@ -53,17 +57,17 @@ public class FieldTest {
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfWrongTypeSpecified() {
     Class<Integer> invalidType = Integer.class;
-    new Field.FieldName("name").ofType(invalidType).in(person).get();
+    new Name("name").ofType(invalidType).in(person).get();
   }
 
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfInvalidFieldName() {
-    new Field.FieldName("age").ofType(Integer.class).in(person);
+    new Name("age").ofType(Integer.class).in(person);
   }
   
   @Test public void shouldGetFieldInSuperType() {
     Jedi jedi = new Jedi("Yoda");
-    String jediName = new Field.FieldName("name").ofType(String.class).in(jedi).get();
+    String jediName = new Name("name").ofType(String.class).in(jedi).get();
     assertThat(jediName).isEqualTo("Yoda");
   }
 }

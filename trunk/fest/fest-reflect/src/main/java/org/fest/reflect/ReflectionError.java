@@ -23,10 +23,19 @@ public final class ReflectionError extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Creates a new </code>{@link ReflectionError}</code>.
+   * @param message the detail message.
+   */
   public ReflectionError(String message) {
     super(message);
   }
 
+  /**
+   * Creates a new </code>{@link ReflectionError}</code>.
+   * @param message the detail message.
+   * @param cause the cause of the exception.
+   */
   public ReflectionError(String message, Exception cause) {
     super(message, cause);
   }

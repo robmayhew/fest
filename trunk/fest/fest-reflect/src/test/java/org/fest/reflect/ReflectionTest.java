@@ -17,9 +17,7 @@ package org.fest.reflect;
 
 import org.testng.annotations.Test;
 
-import org.fest.reflect.Constructor.TargetType;
-import org.fest.reflect.Field.FieldName;
-import org.fest.reflect.Method.MethodName;
+import org.fest.reflect.constructor.TargetType;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -36,10 +34,10 @@ public class ReflectionTest {
   }
 
   @Test public void shouldReturnMethodFactory() {
-    assertThat(Reflection.method("method")).isInstanceOf(MethodName.class);
+    assertThat(Reflection.method("method")).isInstanceOf(org.fest.reflect.method.Name.class);
   }
   
   @Test public void shouldReturnFieldFactory() {
-    assertThat(Reflection.field("field")).isInstanceOf(FieldName.class);
+    assertThat(Reflection.field("field")).isInstanceOf(org.fest.reflect.field.Name.class);
   }
 }
