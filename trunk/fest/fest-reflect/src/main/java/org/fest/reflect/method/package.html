@@ -18,26 +18,18 @@ Copyright @2007 the original author or authors.
 </head>
 <body bgcolor="white">
 <p>
-Provides a <a href="http://www.martinfowler.com/bliki/FluentInterface.html" target="_blank">Fluent Interface</a> that
-makes usage of the Java Reflection API easier and improves code readability.
+Provides a <a href="http://www.martinfowler.com/bliki/FluentInterface.html" target="_blank">Fluent Interface</a> for
+method invocation via the Reflection API.
+</p>
+<p>
+<strong>Note:</strong> Classes in this package are not intended to be used directly. To use them, you need to use the
+class <code>{@link org.fest.reflect.Reflection org.fest.reflect.Reflection}</code>.
 </p>
 <p>
 Here are some examples:
 <pre>
    // import static {@link org.fest.reflect.Reflection org.fest.reflect.Reflection}.*;
 
-   // Equivalent to call 'new Person()'
-   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
-   
-   // Equivalent to call 'new Person("Yoda")'
-   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
- 
-   // Retrieves the value of the field "name"
-   String name = {@link org.fest.reflect.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
-   
-   // Sets the value of the field "name" to "Yoda"
-   {@link org.fest.reflect.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
-   
    // Equivalent to call 'person.setName("Luke")'
    {@link org.fest.reflect.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.Name#withParameterTypes(Class...) withParameterTypes}(String.class)
                     .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)

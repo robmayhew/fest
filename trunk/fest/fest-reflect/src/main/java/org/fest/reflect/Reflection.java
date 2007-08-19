@@ -53,7 +53,7 @@ import org.fest.reflect.constructor.TargetType;
 public final class Reflection {
 
   /**
-   * Starting point for the fluent interface for accessing fields using reflection.
+   * Starting point for the fluent interface for accessing fields via reflection.
    * @param name the name of the field to access.
    * @return the starting point of the method chain.
    */
@@ -62,7 +62,7 @@ public final class Reflection {
   }
 
   /**
-   * Starting point for the fluent interface for invoking methods using reflection.
+   * Starting point for the fluent interface for invoking methods via reflection.
    * @param name the name of the method to invoke.
    * @return the starting point of the method chain.
    */
@@ -71,7 +71,7 @@ public final class Reflection {
   }
 
   /**
-   * Starting point for the fluent interface for invoking constructors using reflection.
+   * Starting point for the fluent interface for invoking constructors via reflection.
    * @return the starting point of the method chain.
    */
   public static TargetType constructor() {
