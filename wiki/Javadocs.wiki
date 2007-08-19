@@ -10,4 +10,6 @@
 
   * [http://fest.googlecode.com/svn/trunk/fest/fest-util/javadocs/index.html Utilities Module]
 
+  * [http://fest.googlecode.com/svn/trunk/fest/fest-reflect/javadocs/index.html Reflection Module]
+
   * [http://fest.googlecode.com/svn/trunk/fest/fest-mocks/javadocs/index.html Mocks Module]
