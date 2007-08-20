@@ -110,7 +110,7 @@ abstract class WindowFinderTemplate<T extends Window> {
   private ComponentMatcher typeMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {
-        return c != null && windowType().isAssignableFrom(c.getClass());
+        return c != null && c.isVisible() && windowType().isAssignableFrom(c.getClass());
       }
     };
   }

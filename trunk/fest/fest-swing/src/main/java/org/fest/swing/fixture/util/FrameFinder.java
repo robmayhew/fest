@@ -74,7 +74,7 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
   protected ComponentMatcher nameMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {
-        return c instanceof Frame && windowName().equals(c.getName());
+        return c instanceof Frame && c.isVisible() && windowName().equals(c.getName());
       }
     };
   }
