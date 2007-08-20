@@ -2,10 +2,4 @@
   <groupId>fest</groupId>
   <artifactId>fest-reflect</artifactId>
   <version>0.1-SNAPSHOT</version>
-  <versioning>
-    <snapshot>
-      <localCopy>true</localCopy>
-    </snapshot>
-    <lastUpdated>20070820050440</lastUpdated>
-  </versioning>
 </metadata>
