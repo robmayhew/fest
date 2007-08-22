@@ -67,8 +67,7 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     assertThat(dropTarget.elements()).isEqualTo(array("four", "five", "six", "two"));
   }
   
-  @Test(/*dependsOnMethods = "shouldDragAndDropValueUsingGivenNames"*/)
-  public void shouldDrop() {
+  @Test public void shouldDrop() {
     targetFixture.drag("two");
     dropTargetFixture.drop();
     assertThat(target.elements()).isEqualTo(array("one", "three"));
