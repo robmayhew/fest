@@ -17,6 +17,8 @@ package org.fest.swing.fixture;
 
 import javax.swing.JList;
 
+import abbot.tester.ComponentLocation;
+import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
 
 import org.fest.swing.ComponentLookupException;
@@ -27,6 +29,8 @@ import org.fest.swing.RobotFixture;
  * <code>{@link JList}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
+ * @author Fabien Barbero
  */
 public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture<JList> {
 
@@ -141,5 +145,58 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   @Override public final JListFixture requireDisabled() {
     return (JListFixture)super.requireDisabled();
+  }
+
+  /**
+   * Simulates a user dragging an item from the <code>{@link JList}</code> managed by this fixture.
+   * @param text the text of the item to drag.
+   * @return this fixture.
+   */
+  public final JListFixture drag(String text) {
+    tester().actionDrag(target, elementLocation(text));
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to the <code>{@link JList}</code> managed by this fixture.
+   * @param text the text of the item to drop.
+   * @return this fixture.
+   */
+  public final JListFixture drop(String text) {
+    tester().actionDrop(target, elementLocation(text));
+    return this;
+  }  
+
+  private ComponentLocation elementLocation(String text) {
+    return new ComponentLocation(new JListLocation(text).getPoint(target));
+  }
+
+  public final JListFixture drop() {
+    tester().actionDrop(target, new ComponentLocation(new JListLocation().getPoint(target)));
+    return this;
+  }
+  
+  /**
+   * Simulates a user dragging an item from the <code>{@link JList}</code> managed by this fixture.
+   * @param index the index of the item to drag.
+   * @return this fixture.
+   */
+  public final JListFixture drag(int index) {
+    tester().actionDrag(target, elementLocation(index));
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to the <code>{@link JList}</code> managed by this fixture.
+   * @param index the index of the item to drop.
+   * @return this fixture.
+   */
+  public final JListFixture drop(int index) {
+    tester().actionDrop(target, elementLocation(index));
+    return this;
+  }
+  
+  private ComponentLocation elementLocation(int index) {
+    return new ComponentLocation(new JListLocation(index).getPoint(target));
   }
 }

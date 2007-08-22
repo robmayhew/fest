@@ -15,10 +15,16 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Arrays.array;
+import static org.fest.util.Collections.list;
 
 import org.testng.annotations.Test;
 
@@ -26,37 +32,91 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link JListFixture}</code>.
  *
  * @author Alex Ruiz 
+ * @author Yvonne Wang
  */
 public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
 
-  private JListFixture fixture;
+  private TestList target;
+  private JListFixture targetFixture;
 
+  private TestList dropTarget;
+  private JListFixture dropTargetFixture;
+  
   @Test public void shouldReturnListContents() {
-    assertThat(fixture.contents()).isEqualTo(array("one", "two", "three"));
+    assertThat(targetFixture.contents()).isEqualTo(array("one", "two", "three"));
   }
   
   @Test public void shouldSelectItemAtGivenIndex() {
-    fixture.selectItem(2);
-    assertThat(fixture.target.getSelectedValue()).equals("three");
+    targetFixture.selectItem(2);
+    assertThat(targetFixture.target.getSelectedValue()).equals("three");
   }
 
   @Test public void shouldSelectItemWithGivenText() {
-    fixture.selectItem("two");
-    assertThat(fixture.target.getSelectedValue()).equals("two");
+    targetFixture.selectItem("two");
+    assertThat(targetFixture.target.getSelectedValue()).equals("two");
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {
-    assertThat(fixture.valueAt(2)).isEqualTo("three");
+    assertThat(targetFixture.valueAt(2)).isEqualTo("three");
+  }
+  
+  @Test public void shouldDragAndDropValueUsingGivenNames() {
+    targetFixture.drag("two");
+    dropTargetFixture.drop("six");
+    assertThat(target.elements()).isEqualTo(array("one", "three"));
+    assertThat(dropTarget.elements()).isEqualTo(array("four", "five", "six", "two"));
+  }
+  
+  @Test(/*dependsOnMethods = "shouldDragAndDropValueUsingGivenNames"*/)
+  public void shouldDrop() {
+    targetFixture.drag("two");
+    dropTargetFixture.drop();
+    assertThat(target.elements()).isEqualTo(array("one", "three"));
+    assertThat(dropTarget.elements()).hasSize(4);
+  }
+  
+  @Test public void shouldDragAndDropValueUsingGivenIndices() {
+    targetFixture.drag(2);
+    dropTargetFixture.drop(1);
+    assertThat(target.elements()).isEqualTo(array("one", "two"));
+    assertThat(dropTarget.elements()).isEqualTo(array("four", "three", "five", "six"));
   }
 
   protected ComponentFixture<JList> createFixture() {
-    fixture = new JListFixture(robot(), "target");
-    return fixture;
+    targetFixture = new JListFixture(robot(), "target");
+    return targetFixture;
   }
 
   protected JList createTarget() {
-    JList target = new JList(array("one", "two", "three"));
-    target.setName("target");
+    target = new TestList("target", list("one", "two", "three"));
     return target;
+  }
+
+  @Override protected void afterSetUp() {
+    dropTarget = new TestList("dropTarget", list("four", "five", "six"));
+    dropTargetFixture = new JListFixture(robot(), dropTarget);
+    window().add(dropTarget);
+    window().setSize(new Dimension(600, 400));
+  }
+  
+  private static class TestList extends JList {
+    private static final long serialVersionUID = 1L;
+
+    private final DefaultListModel model = new DefaultListModel();
+
+    TestList(String name, List<String> elements) {
+      setDragEnabled(true);
+      for (String e : elements) model.addElement(e);
+      setModel(model);
+      setName(name);
+      setTransferHandler(new ListTransferHandler());
+    }
+    
+    String[] elements() {
+      List<String> elements = new ArrayList<String>();
+      int count = model.getSize();
+      for (int i = 0; i < count; i++) elements.add((String)model.get(i));
+      return elements.toArray(new String[0]);
+    }
   }
 }
