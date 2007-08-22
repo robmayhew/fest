@@ -16,7 +16,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -78,7 +77,7 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     targetFixture.drag(2);
     dropTargetFixture.drop(1);
     assertThat(target.elements()).isEqualTo(array("one", "two"));
-    assertThat(dropTarget.elements()).isEqualTo(array("four", "three", "five", "six"));
+    assertThat(dropTarget.elements()).isEqualTo(array("four", "five", "three", "six"));
   }
 
   protected ComponentFixture<JList> createFixture() {
@@ -112,10 +111,10 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     }
     
     String[] elements() {
-      List<String> elements = new ArrayList<String>();
       int count = model.getSize();
-      for (int i = 0; i < count; i++) elements.add((String)model.get(i));
-      return elements.toArray(new String[0]);
+      String[] elements = new String[count];
+      for (int i = 0; i < count; i++) elements[i] = (String)model.get(i);
+      return elements;
     }
   }
 }
