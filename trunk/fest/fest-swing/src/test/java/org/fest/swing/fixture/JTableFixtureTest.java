@@ -16,10 +16,13 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.fixture.JTableFixture.cell;
@@ -34,29 +37,34 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link JTableFixture}</code>.
  *
  * @author Alex Ruiz 
+ * @author Yvonne Wang
  */
 public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
 
   private static final int COLUMN_COUNT = 6;
   private static final int ROW_COUNT = 10;
   
-  private JTableFixture fixture;
+  private TestTable target;
+  private JTableFixture targetFixture;
+  
+  private TestTable dropTarget;
+  private JTableFixture dropTargetFixture;
   
   @Test(dataProvider = "cellsToSelect") 
   public void shouldSelectCell(int row, int column) {
-    fixture.selectCell(row, column);
+    targetFixture.selectCell(row, column);
     assertThatCellIsSelected(row, column);
   }
 
   @Test(dataProvider = "cellsToSelect") 
   public void shouldReturnValueOfGivenCell(int row, int column) {
-    assertThat(fixture.contentsAt(row, column)).isEqualTo(cellValue(row, column));
+    assertThat(targetFixture.contentsAt(row, column)).isEqualTo(cellValue(row, column));
   }
   
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
-    fixture.selectCell(row, column);
-    assertThat(fixture.contents()).isEqualTo(cellValue(row, column));
+    targetFixture.selectCell(row, column);
+    assertThat(targetFixture.contents()).isEqualTo(cellValue(row, column));
   }
   
   @DataProvider(name = "cellsToSelect")
@@ -71,30 +79,40 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   
   @Test public void shouldSelectMultipleRows() {
     JTableFixture.Cell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));    
-    fixture.selectCells(cells);
-    assertThat(fixture.target.getSelectedRowCount()).isEqualTo(cells.length);
+    targetFixture.selectCells(cells);
+    assertThat(targetFixture.target.getSelectedRowCount()).isEqualTo(cells.length);
     for (JTableFixture.Cell c : cells)
       assertThatCellIsSelected(c.row, c.column);
   }
   
   private void assertThatCellIsSelected(int row, int column) {
-    assertThat(fixture.target.isRowSelected(row)).isTrue();
-    assertThat(fixture.target.isColumnSelected(column)).isTrue();
+    assertThat(targetFixture.target.isRowSelected(row)).isTrue();
+    assertThat(targetFixture.target.isColumnSelected(column)).isTrue();
   }
   
   @Test public void shouldReturnNullIfNoSelectedCell() {
-    assertThat(fixture.target.getSelectedRowCount()).isZero();
-    assertThat(fixture.contents()).isNull();
+    assertThat(targetFixture.target.getSelectedRowCount()).isZero();
+    assertThat(targetFixture.contents()).isNull();
+  }
+
+  @Test public void shouldDragAndDrop() throws Exception {
+    int sourceRowCount = target.getRowCount();
+    int destinationRowCount = dropTarget.getRowCount();
+    targetFixture.drag(3, 0);
+    dropTargetFixture.drop(1, 0);
+    assertThat(target.getRowCount()).isEqualTo(sourceRowCount - 1);
+    assertThat(dropTarget.getRowCount()).isEqualTo(destinationRowCount + 1);
+    assertThat(target.getValueAt(3, 0)).isEqualTo("4-0");
+    assertThat(dropTarget.getValueAt(2, 0)).isEqualTo("3-0");
   }
   
   protected ComponentFixture<JTable> createFixture() {
-    fixture = new JTableFixture(robot(), "target");
-    return fixture;
+    targetFixture = new JTableFixture(robot(), "target");
+    return targetFixture;
   }
 
   protected JTable createTarget() {
-    JTable target = new JTable(rowData(), columnNames());
-    target.setName("target");
+    target = new TestTable("target", rowData(), columnNames());
     return target;
   }
   
@@ -118,7 +136,36 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   }
 
   @Override protected Component decorateBeforeAddingToWindow(JTable target) {
-    return new JScrollPane(target);
+    return decorate(target);
   }
 
+  @Override protected void afterSetUp() {
+    int rowCount = 2;
+    Object[][] data = new Object[rowCount][COLUMN_COUNT];
+    for (int i = 0; i < rowCount; i++)
+      for (int j = 0; j < COLUMN_COUNT; j++)
+        data[i][j] = cellValue(i + ROW_COUNT, j); 
+    dropTarget = new TestTable("dropTarget", data,columnNames());
+    dropTargetFixture = new JTableFixture(robot(), dropTarget);
+    window().add(decorate(dropTarget));
+    window().setSize(new Dimension(600, 400));
+  }
+
+  private Component decorate(JTable table) {
+    JScrollPane scrollPane = new JScrollPane(table);
+    scrollPane.setPreferredSize(new Dimension(400, 200));
+    return scrollPane;
+  }
+
+  private static class TestTable extends JTable {
+    private static final long serialVersionUID = 1L;
+
+    TestTable(String name, Object[][] rowData, Object[] columnNames) {
+      setDragEnabled(true);
+      setModel(new DefaultTableModel(rowData, columnNames));
+      setName(name);
+      setSelectionMode(SINGLE_SELECTION);
+      setTransferHandler(new TableTransferHandler());
+    }
+  }
 }

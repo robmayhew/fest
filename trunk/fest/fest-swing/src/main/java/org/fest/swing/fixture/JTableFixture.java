@@ -18,6 +18,8 @@ package org.fest.swing.fixture;
 import javax.swing.JTable;
 
 import abbot.Platform;
+import abbot.tester.ComponentLocation;
+import abbot.tester.JTableLocation;
 import abbot.tester.JTableTester;
 import static java.awt.event.KeyEvent.VK_CONTROL;
 import static java.awt.event.KeyEvent.VK_META;
@@ -93,6 +95,32 @@ public class JTableFixture extends ComponentFixture<JTable> {
    */
   public final String contentsAt(int row, int column) {
     return JTableTester.valueToString(target, row, column);
+  }
+
+  /**
+   * Simulates a user dragging an item from the <code>{@link JTable}</code> managed by this fixture.
+   * @param row the row of the item to drag.
+   * @param col the column of the item to drag.
+   * @return this fixture.
+   */
+  public final JTableFixture drag(int row, int col) {
+    tester().actionDrag(target, cellLocation(row, col));
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to the <code>{@link JTable}</code> managed by this fixture.
+   * @param row the row of the item to drop.
+   * @param col the column of the item to drop.
+   * @return this fixture.
+   */
+  public final JTableFixture drop(int row, int col) {
+    tester().actionDrop(target, cellLocation(row, col));
+    return this;
+  }  
+
+  private ComponentLocation cellLocation(int row, int col) {
+    return new ComponentLocation(new JTableLocation(row, col).getPoint(target));
   }
   
   protected final JTableTester tableTester() {
