@@ -32,6 +32,8 @@ import org.fest.swing.RobotFixture;
  * <code>{@link JTable}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
+ * @author Fabien Barbero
  */
 public class JTableFixture extends ComponentFixture<JTable> {
 
