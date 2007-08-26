@@ -16,9 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
-import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -95,26 +93,5 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     dropTargetFixture = new JListFixture(robot(), dropTarget);
     window().add(dropTarget);
     window().setSize(new Dimension(600, 400));
-  }
-  
-  private static class TestList extends JList {
-    private static final long serialVersionUID = 1L;
-
-    private final DefaultListModel model = new DefaultListModel();
-
-    TestList(String name, List<String> elements) {
-      setDragEnabled(true);
-      for (String e : elements) model.addElement(e);
-      setModel(model);
-      setName(name);
-      setTransferHandler(new ListTransferHandler());
-    }
-    
-    String[] elements() {
-      int count = model.getSize();
-      String[] elements = new String[count];
-      for (int i = 0; i < count; i++) elements[i] = (String)model.get(i);
-      return elements;
-    }
   }
 }

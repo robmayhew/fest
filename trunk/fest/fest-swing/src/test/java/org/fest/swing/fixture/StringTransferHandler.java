@@ -12,7 +12,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing;
+package org.fest.swing.fixture;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;

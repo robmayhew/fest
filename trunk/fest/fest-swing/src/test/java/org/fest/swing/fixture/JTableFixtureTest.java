@@ -20,9 +20,7 @@ import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.fixture.JTableFixture.cell;
@@ -155,17 +153,5 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     JScrollPane scrollPane = new JScrollPane(table);
     scrollPane.setPreferredSize(new Dimension(400, 200));
     return scrollPane;
-  }
-
-  private static class TestTable extends JTable {
-    private static final long serialVersionUID = 1L;
-
-    TestTable(String name, Object[][] rowData, Object[] columnNames) {
-      setDragEnabled(true);
-      setModel(new DefaultTableModel(rowData, columnNames));
-      setName(name);
-      setSelectionMode(SINGLE_SELECTION);
-      setTransferHandler(new TableTransferHandler());
-    }
   }
 }
