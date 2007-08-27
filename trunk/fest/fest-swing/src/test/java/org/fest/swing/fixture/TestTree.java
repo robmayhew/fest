@@ -1,5 +1,5 @@
 /*
- * Created on Aug 25, 2007
+ * Created on Aug 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,88 +15,84 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
 
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static org.fest.util.Strings.isEmpty;
 
 /**
- * Understands a table that:
+ * Understands a tree that:
  * <ul>
  * <li>requires a name</li>
  * <li>supports drag and drop</li>
  * </ul>
- * Adapted from the tutorial 
- * <a href="http://java.sun.com/docs/books/tutorial/uiswing/dnd/intro.html" target="_blank">Introduction to Drag and Drop and Data Transfer</a>.
- *  
- * @author Alex Ruiz 
- * @author Yvonne Wang
+ *
+ * @author Alex Ruiz
  */
-final class TestTable extends JTable {
+final class TestTree extends JTree {
   private static final long serialVersionUID = 1L;
 
-  TestTable(String name, Object[][] rowData, Object[] columnNames) {
+  TestTree(String name, DefaultTreeModel model) {
     if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");
     setDragEnabled(true);
-    setModel(new DefaultTableModel(rowData, columnNames));
+    setModel(model);
     setName(name);
-    setSelectionMode(SINGLE_SELECTION);
-    setTransferHandler(new TableTransferHandler());
+    setTransferHandler(new TreeTransferHandler());
   }
-
-  private static class TableTransferHandler extends StringTransferHandler<JTable> {
-
+  
+  private static class TreeTransferHandler extends StringTransferHandler<JTree> {
     private static final long serialVersionUID = 1L;
-    
-    protected String exportString(JTable table) {
-      rows = table.getSelectedRows();
-      int colCount = table.getColumnCount();
+
+    protected String exportString(JTree tree) {
+      rows = tree.getSelectionRows();
       StringBuilder b = new StringBuilder();
       for (int i = 0; i < rows.length; i++) {
-        for (int j = 0; j < colCount; j++) {
-          Object val = table.getValueAt(rows[i], j);
-          b.append(val == null ? "" : val.toString());
-          if (j != colCount - 1) b.append(",");
-        }
+        TreePath path = tree.getPathForRow(rows[i]);
+        Object val = path.getLastPathComponent();
+        b.append(val == null ? "" : val.toString());
         if (i != rows.length - 1) b.append("\n");
       }
       return b.toString();
     }
 
-    protected void importString(JTable target, String s) {
-      DefaultTableModel model = (DefaultTableModel) target.getModel();
-      int index = target.getSelectedRow();
+    protected void importString(JTree target, String s) {
+      DefaultTreeModel model = (DefaultTreeModel) target.getModel();
+      int index = target.getRowForPath(target.getSelectionPath());
       // Prevent the user from dropping data back on itself.
       if (rows != null && index >= rows[0] - 1 && index <= rows[rows.length - 1]) {
         rows = null;
         return;
       }
-      int max = model.getRowCount();
+      int max = target.getRowCount();
       if (index < 0) index = max;
-      else {
-        index++;
-        if (index > max) index = max;
-      }
+      else if (index > max) index = max;
       addIndex = index;
       String[] values = s.split("\n");
       addCount = values.length;
-      int colCount = target.getColumnCount();
-      for (int i = 0; i < values.length && i < colCount; i++) 
-        model.insertRow(index++, values[i].split(","));
+      for (int i = 0; i < values.length; i++) {
+        TreePath path = target.getPathForRow(index++);
+        model.insertNodeInto(new DefaultMutableTreeNode(values[i]), (MutableTreeNode) path.getLastPathComponent(), 0);
+      }
     }
 
-    protected void cleanup(JTable source, boolean remove) {
+    // not working perfectly right, but good enough for testing.
+    protected void cleanup(JTree source, boolean remove) {
       if (remove && rows != null) {
-        DefaultTableModel model = (DefaultTableModel) source.getModel();
+        DefaultTreeModel model = (DefaultTreeModel) source.getModel();
         // If we are moving items around in the same table, we need to adjust the rows accordingly, since those after the 
         // insertion point have moved.
         if (addCount > 0) {
           for (int i = 0; i < rows.length; i++) 
             if (rows[i] > addIndex) rows[i] += addCount;
         }
-        for (int i = rows.length - 1; i >= 0; i--) 
-          model.removeRow(rows[i]);
+        for (int i = rows.length - 1; i >= 0; i--) {
+          TreePath path = source.getPathForRow(rows[i]);
+          if (path == null) continue;
+          model.removeNodeFromParent((MutableTreeNode) path.getLastPathComponent());
+        }
       }
     }
   }

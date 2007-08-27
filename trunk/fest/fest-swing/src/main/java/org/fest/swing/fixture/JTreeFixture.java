@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import abbot.tester.ComponentLocation;
 import abbot.tester.JTreeLocation;
 import abbot.tester.JTreeTester;
 
@@ -30,6 +31,8 @@ import org.fest.swing.RobotFixture;
  * 
  * @author Keith Coughtrey
  * @author Alex Ruiz
+ * @author Yvonne Wang
+ * @author Fabien Barbero
  */
 public class JTreeFixture extends ComponentFixture<JTree> {
 
@@ -139,5 +142,54 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    */
   @Override public final JTreeFixture requireDisabled() {
     return (JTreeFixture)super.requireDisabled();
+  }
+
+  /**
+   * Simulates a user dragging an item from the <code>{@link JTree}</code> managed by this fixture.
+   * @param treePath the tree path corresponding to the item to drag.
+   * @return this fixture.
+   */
+  public final JTreeFixture drag(TreePath treePath) {
+    selectPath(treePath);
+    tester().actionDrag(target, elementLocation(treePath));
+    return this;
+  }
+  
+  /**
+   * Simulates a user dropping an item to the <code>{@link JTree}</code> managed by this fixture.
+   * @param treePath the tree path corresponding to the item to drop.
+   * @return this fixture.
+   */
+  public final JTreeFixture drop(TreePath treePath) {
+    tester().actionDrop(target, elementLocation(treePath));
+    return this;
+  }
+  
+  private ComponentLocation elementLocation(TreePath treePath) {
+    return new ComponentLocation(new JTreeLocation(treePath).getPoint(target));
+  }
+
+  /**
+   * Simulates a user dragging an item from the <code>{@link JTree}</code> managed by this fixture.
+   * @param index the index of the item to drag.
+   * @return this fixture.
+   */
+  public JTreeFixture drag(int index) {
+    tester().actionDrag(target, elementLocation(index));
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to the <code>{@link JTree}</code> managed by this fixture.
+   * @param index the index of the item to drop.
+   * @return this fixture.
+   */
+  public JTreeFixture drop(int index) {
+    tester().actionDrop(target, elementLocation(index));
+    return this;
+  }
+  
+  private ComponentLocation elementLocation(int index) {
+    return new ComponentLocation(new JTreeLocation(index).getPoint(target));
   }
 }

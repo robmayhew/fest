@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.fixture.JTableFixture.cell;
@@ -76,6 +77,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   }
   
   @Test public void shouldSelectMultipleRows() {
+    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     JTableFixture.Cell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));    
     targetFixture.selectCells(cells);
     assertThat(targetFixture.target.getSelectedRowCount()).isEqualTo(cells.length);
@@ -99,9 +101,9 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     targetFixture.drag(3, 0);
     dropTargetFixture.drop(1, 0);
     assertThat(target.getRowCount()).isEqualTo(sourceRowCount - 1);
+    assertThat(target.getValueAt(3, 0)).isEqualTo(cellValue(4, 0));
     assertThat(dropTarget.getRowCount()).isEqualTo(destinationRowCount + 1);
-    assertThat(target.getValueAt(3, 0)).isEqualTo("4-0");
-    assertThat(dropTarget.getValueAt(2, 0)).isEqualTo("3-0");
+    assertThat(dropTarget.getValueAt(2, 0)).isEqualTo(cellValue(3, 0));
   }
   
   protected ComponentFixture<JTable> createFixture() {

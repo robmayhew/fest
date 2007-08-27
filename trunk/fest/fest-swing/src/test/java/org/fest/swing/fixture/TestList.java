@@ -18,7 +18,6 @@ package org.fest.swing.fixture;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
 import javax.swing.JList;
 
 import static org.fest.util.Strings.isEmpty;
@@ -29,11 +28,13 @@ import static org.fest.util.Strings.isEmpty;
  * <li>requires a name</li>
  * <li>supports drag and drop</li>
  * </ul>
+ * Adapted from the tutorial 
+ * <a href="http://java.sun.com/docs/books/tutorial/uiswing/dnd/intro.html" target="_blank">Introduction to Drag and Drop and Data Transfer</a>.
  *  
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
-class TestList extends JList {
+final class TestList extends JList {
   private static final long serialVersionUID = 1L;
 
   private final DefaultListModel model = new DefaultListModel();
@@ -54,18 +55,12 @@ class TestList extends JList {
     return elements;
   }
 
-  private static class ListTransferHandler extends StringTransferHandler {
+  private static class ListTransferHandler extends StringTransferHandler<JList> {
     private static final long serialVersionUID = 1L;
 
-    private int[] indices = null;
-    private int addIndex = -1; // Location where items were added
-    private int addCount = 0; // Number of items added.
-
-    // Bundle up the selected items in the list
-    // as a single string, for export.
-    protected String exportString(JComponent c) {
-      JList list = (JList)c;
-      indices = list.getSelectedIndices();
+    // Bundle up the selected items in the list as a single string, for export.
+    protected String exportString(JList list) {
+      rows = list.getSelectedIndices();
       Object[] values = list.getSelectedValues();
       StringBuilder b = new StringBuilder();
       for (int i = 0; i < values.length; i++) {
@@ -77,16 +72,12 @@ class TestList extends JList {
     }
 
     // Take the incoming string and wherever there is a newline, break it into a separate item in the list.
-    protected void importString(JComponent c, String str) {
-      JList target = (JList) c;
+    protected void importString(JList target, String s) {
       DefaultListModel listModel = (DefaultListModel) target.getModel();
       int index = target.getSelectedIndex();
       // Prevent the user from dropping data back on itself.
-      // For example, if the user is moving items #4,#5,#6 and #7 and attempts to insert the items after item #5, this 
-      // would be problematic when removing the original items.
-      // So this is not allowed.
-      if (indices != null && index >= indices[0] - 1 && index <= indices[indices.length - 1]) {
-        indices = null;
+      if (rows != null && index >= rows[0] - 1 && index <= rows[rows.length - 1]) {
+        rows = null;
         return;
       }
       int max = listModel.getSize();
@@ -96,7 +87,7 @@ class TestList extends JList {
         if (index > max) index = max;
       }
       addIndex = index;
-      String[] values = str.split("\n");
+      String[] values = s.split("\n");
       addCount = values.length;
       for (int i = 0; i < values.length; i++) 
         listModel.add(index++, values[i]);
@@ -104,22 +95,18 @@ class TestList extends JList {
 
     // If the remove argument is true, the drop has been successful and it's time to remove the selected items from the 
     // list. If the remove argument is false, it was a Copy operation and the original list is left intact.
-    protected void cleanup(JComponent c, boolean remove) {
-      if (remove && indices != null) {
-        JList source = (JList) c;
+    protected void cleanup(JList source, boolean remove) {
+      if (remove && rows != null) {
         DefaultListModel model = (DefaultListModel) source.getModel();
         // If we are moving items around in the same list, we need to adjust the indices accordingly, since those after 
         // the insertion point have moved.
         if (addCount > 0) {
-          for (int i = 0; i < indices.length; i++) 
-            if (indices[i] > addIndex) indices[i] += addCount;
+          for (int i = 0; i < rows.length; i++) 
+            if (rows[i] > addIndex) rows[i] += addCount;
         }
-        for (int i = indices.length - 1; i >= 0; i--) 
-          model.remove(indices[i]);
+        for (int i = rows.length - 1; i >= 0; i--) 
+          model.remove(rows[i]);
       }
-      indices = null;
-      addCount = 0;
-      addIndex = -1;
     }
   }
 }
