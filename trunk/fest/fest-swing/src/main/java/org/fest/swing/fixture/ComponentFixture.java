@@ -183,6 +183,6 @@ public abstract class ComponentFixture<T extends Component> {
     int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     if (menuShortcutKeyMask == CTRL_MASK) return VK_CONTROL;
     if (menuShortcutKeyMask == META_MASK) return VK_META;
-    throw new IllegalStateException(concat("Unable to map even mask '", menuShortcutKeyMask, "' to a key"));
+    throw new IllegalStateException(concat("Unable to map even mask '", String.valueOf(menuShortcutKeyMask), "' to a key"));
   }
 }
