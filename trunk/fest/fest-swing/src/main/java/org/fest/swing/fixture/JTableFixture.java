@@ -17,12 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
-import abbot.Platform;
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 import abbot.tester.JTableTester;
-import static java.awt.event.KeyEvent.VK_CONTROL;
-import static java.awt.event.KeyEvent.VK_META;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
@@ -70,7 +67,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   public final JTableFixture selectCells(Cell... cells) {
-    int multipleSelectionKey = Platform.isOSX() ? VK_META : VK_CONTROL;
+    int multipleSelectionKey = controlOrCommandKey();
     tableTester().actionKeyPress(multipleSelectionKey);
     for (Cell c : cells) selectCell(c.row, c.column);
     tableTester().actionKeyRelease(multipleSelectionKey);
