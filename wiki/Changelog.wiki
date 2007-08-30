@@ -3,7 +3,7 @@
 
 ===[08/30/07] FEST Swing 0.5===
   # Added drag 'n drop support for `JList`, `JTable` and `JTree`. Many thanks to Fabien Barbero for his contribution.
-  # Added support for custom matchers for component lookup. This feature is useful when testing GUI components that don't have an associated name (e.g. testing legacy applications.) Custom matchers are implementations of [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/GenericTypeMatcher.html GenericTypeMatcher]. It is possible to use custom matchers in the fixture 'fluent interface'. The following example shows how to lookup for a `JButton` that has the text 'OK':
+  # Added support for custom matchers for component lookup. This feature is useful when testing GUI components that don't have an associated name (e.g. testing legacy applications.) Custom matchers are implementations of [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/GenericTypeMatcher.html GenericTypeMatcher]. The following example shows how to lookup for a `JButton` that has the text 'OK':
 {{{
 GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
   protected boolean isMatching(JButton button) {
@@ -48,7 +48,6 @@ dialog.button(textMatcher).click();
         method("setName").withParameterTypes(String.class).in(person).invoke("Luke");
         field("name").ofType(String.class).in(person).set("Anakin");
 }}}
-
 
 
 
