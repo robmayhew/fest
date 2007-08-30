@@ -13,11 +13,13 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing;
+package org.fest.swing.util;
 
 import static java.awt.event.KeyEvent.VK_CONTROL;
 import static java.awt.event.KeyEvent.VK_META;
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.util.Platform;
 
 import org.testng.annotations.Test;
 

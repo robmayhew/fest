@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing;
+package org.fest.swing.util;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -40,7 +40,7 @@ public final class Platform {
     int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     if (menuShortcutKeyMask == CTRL_MASK) return VK_CONTROL;
     if (menuShortcutKeyMask == META_MASK) return VK_META;
-    throw new IllegalStateException(concat("Unable to map even mask '", String.valueOf(menuShortcutKeyMask), "' to a key"));
+    throw new IllegalStateException(concat("Unable to map event mask '", String.valueOf(menuShortcutKeyMask), "' to a key"));
   }
 
   private Platform() {}

@@ -21,7 +21,7 @@ import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 import abbot.tester.JTableTester;
 
-import static org.fest.swing.Platform.controlOrCommandKey;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
