@@ -13,43 +13,25 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-
-import abbot.Platform;
 import static java.awt.event.KeyEvent.VK_CONTROL;
 import static java.awt.event.KeyEvent.VK_META;
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.RobotFixture;
-
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**
- * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=19&can=2&q=" target="_blank">issue 19</a>.
+ * Tests for <code>{@link Platform}</code>
  *
  * @author Alex Ruiz
  */
-public class FixControlOrCommandKeyLookupTest {
+public class PlatformTest {
 
-  private ComponentFixture<JComponent> fixture;
-  
-  @BeforeTest public void setUp() {
-    fixture = new ComponentFixture<JComponent>(RobotFixture.robotWithCurrentAwtHierarchy(), new JLabel()) {};
-  }
-  
-  @AfterTest public void tearDown() {
-    fixture.robot.cleanUp();
-  }
-  
   @Test public void shouldReturnControlKeyForNonMacOS() {
-    if (Platform.isOSX())
-      assertThat(fixture.controlOrCommandKey()).isEqualTo(VK_META);
+    if (abbot.Platform.isOSX())
+      assertThat(Platform.controlOrCommandKey()).isEqualTo(VK_META);
     else  
-      assertThat(fixture.controlOrCommandKey()).isEqualTo(VK_CONTROL);
+      assertThat(Platform.controlOrCommandKey()).isEqualTo(VK_CONTROL);
   }
 }

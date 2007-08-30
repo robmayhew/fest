@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class FixCannotFindComponentInPanel {
+public class FixCannotFindComponentInPanelTest {
 
   class MyFrame extends JFrame {
     private static final long serialVersionUID = 1L;

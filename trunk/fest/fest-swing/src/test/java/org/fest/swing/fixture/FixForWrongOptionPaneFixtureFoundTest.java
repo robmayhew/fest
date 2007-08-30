@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class FixForWrongOptionPaneFixtureFound {
+public class FixForWrongOptionPaneFixtureFoundTest {
 
   private FrameFixture frameFixture;
   private CustomWindow window;

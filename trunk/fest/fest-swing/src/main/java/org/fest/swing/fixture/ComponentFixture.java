@@ -16,16 +16,9 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 
 import abbot.tester.ComponentTester;
-import static java.awt.Event.CTRL_MASK;
-import static java.awt.Event.META_MASK;
-import static java.awt.event.KeyEvent.VK_CONTROL;
-import static java.awt.event.KeyEvent.VK_META;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.concat;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
@@ -176,16 +169,4 @@ public abstract class ComponentFixture<T extends Component> {
 
   /** @return a tester for the target component */
   protected final ComponentTester tester() { return tester; }
-
-  /**
-   * Returns <code>{@link KeyEvent#VK_CONTROL}</code> or <code>{@link KeyEvent#VK_META}</code> (if MacOS).
-   * @return <code>VK_CONTROL</code> or <code>VK_META</code> (if MacOS).
-   * @throws IllegalStateException if unable to find the appropriate key.
-   */
-  public final int controlOrCommandKey() {
-    int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    if (menuShortcutKeyMask == CTRL_MASK) return VK_CONTROL;
-    if (menuShortcutKeyMask == META_MASK) return VK_META;
-    throw new IllegalStateException(concat("Unable to map even mask '", String.valueOf(menuShortcutKeyMask), "' to a key"));
-  }
 }
