@@ -46,6 +46,8 @@ public abstract class ComponentFixture<T extends Component> {
   /** The <code>{@link Component}</code> managed by this fixture. */
   public final T target;
   
+  private final ComponentTester tester;
+  
   /**
    * Creates a new </code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
@@ -75,6 +77,7 @@ public abstract class ComponentFixture<T extends Component> {
   public ComponentFixture(RobotFixture robot, T target) {
     this.robot = robot;
     this.target = target;
+    tester = ComponentTester.getTester(target);
   }
   
   /**
@@ -172,7 +175,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /** @return a tester for the target component */
-  protected final ComponentTester tester() { return ComponentTester.getTester(target); }
+  protected final ComponentTester tester() { return tester; }
 
   /**
    * Returns <code>{@link KeyEvent#VK_CONTROL}</code> or <code>{@link KeyEvent#VK_META}</code> (if MacOS).
