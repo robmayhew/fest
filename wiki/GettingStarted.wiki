@@ -33,10 +33,9 @@ GUI Tests that use FEST can be written with either [http://junit.org JUnit] or [
 }}}
 
 Some observations:
-  # We use a `org.fest.swing.fixture.FrameFixture` to display the GUI to test before executing the test method. `FrameFixture`s make it easy to lookup components in the GUI under test.
-  # We clean up resources after running each test method. This step is *very important* because releases the keyboard and mouse from the FEST Robot (otherwise your computer would be pretty close to unusable.)
-  # FEST looks up components by name (which is the most reliable way.) We need to specify unique names for each component in our test. For example, in our GUI under test:
-
+  * We use a `org.fest.swing.fixture.FrameFixture` to display the GUI to test before executing the test method. `FrameFixture`s make it easy to lookup components in the GUI under test.
+  * We clean up resources after running each test method. This step is *very important* because releases the keyboard and mouse from the FEST Robot (otherwise your computer would be pretty close to unusable.)
+  * By default, FEST looks up GUI components by name (which is the most reliable way.) We need to specify unique names for each component in our test. For example, in our GUI under test:
 {{{
   // GUI under test
   JTextField textField = new JTextField();
@@ -49,10 +48,23 @@ Some observations:
   label.setName("copiedText");
 }}}
 
+  * If we are testing legacy applications that do not provide unique names, FEST can also use custom matchers for component lookup. This feature is useful when testing GUI components that don't have an associated name (e.g. testing legacy applications.) Custom matchers are implementations of [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/GenericTypeMatcher.html GenericTypeMatcher]. The following example shows how to lookup for a `JButton` that has the text 'OK':
+{{{
+GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
+  protected boolean isMatching(JButton button) {
+    return "OK".equals(button.getText());
+  }
+};
+dialog.button(textMatcher).click(); 
+}}}
+
 If you have any questions or comments, please post them at [http://groups.google.com/group/easytesting FEST's Group] (you are always welcome to join the group.) 
 
 See Also:
   # [Javadocs]
   # [Dependencies]
+
+
+
 
 
