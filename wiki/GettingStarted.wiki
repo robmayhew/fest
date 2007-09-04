@@ -48,7 +48,7 @@ Some observations:
   label.setName("copiedText");
 }}}
 
-  * If we are testing legacy applications that do not provide unique names, FEST can also use custom matchers for component lookup. This feature is useful when testing GUI components that don't have an associated name (e.g. testing legacy applications.) Custom matchers are implementations of [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/GenericTypeMatcher.html GenericTypeMatcher]. The following example shows how to lookup for a `JButton` that has the text 'OK':
+  * If we are testing legacy applications that do not provide unique names for GUI components, FEST can also use custom matchers for component lookup. Custom matchers are implementations of [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/GenericTypeMatcher.html GenericTypeMatcher]. The following example shows how to lookup for a `JButton` that has the text 'OK':
 {{{
 GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
   protected boolean isMatching(JButton button) {
@@ -63,7 +63,6 @@ If you have any questions or comments, please post them at [http://groups.google
 See Also:
   # [Javadocs]
   # [Dependencies]
-
 
 
 
