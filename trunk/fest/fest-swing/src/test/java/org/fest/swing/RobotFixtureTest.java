@@ -13,9 +13,8 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
@@ -30,11 +29,34 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link JPopupMenuFixture}</code>.
+ * Tests for <code>{@link RobotFixture}</code>.
  *
  * @author Yvonne Wang
  */
-public class JPopupMenuFixtureTest {
+public class RobotFixtureTest {
+
+  private RobotFixture robot;
+  private MyFrame frame;
+  
+  @BeforeTest public void setUp() {
+    robot = RobotFixture.robotWithCurrentAwtHierarchy();
+    frame = new MyFrame();
+    robot.showWindow(frame);
+  }
+  
+  @AfterTest public void tearDown() {
+    robot.cleanUp();
+  }
+  
+  @Test public void shouldShowPopupMenuInTextFieldContainingPopupMenu() {
+    JPopupMenu menu = robot.showPopupMenu(frame.textBoxWithPopupMenu);
+    assertThat(menu).isSameAs(frame.popupMenu);
+  }
+
+  @Test(expectedExceptions = ComponentLookupException.class)
+  public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
+    robot.showPopupMenu(frame.textBox);
+  }
 
   private static class MyFrame extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -51,28 +73,5 @@ public class JPopupMenuFixtureTest {
       popupMenu.add(new JMenuItem("First"));
       popupMenu.add(new JMenuItem("Second"));
     }
-  }
-  
-  private MyFrame frame;
-  
-  @BeforeTest public void setUp() {
-    frame = new MyFrame();
-    frame.setPreferredSize(new Dimension(300, 200));
-    frame.pack();
-    frame.setVisible(true);
-  }
-  
-  @AfterTest public void tearDown() {
-    frame.setVisible(false);
-    frame.dispose();
-  }
-  
-  @Test public void shouldShowPopupMenuInTextFieldContainingPopupMenu() {
-    JPopupMenu menu = JPopupMenuFixture.popupMenu(frame.textBoxWithPopupMenu);
-    assertThat(menu).isSameAs(frame.popupMenu);
-  }
-  
-  @Test public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
-    assertThat(JPopupMenuFixture.popupMenu(frame.textBox)).isNull();
   }
 }

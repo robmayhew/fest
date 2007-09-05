@@ -17,14 +17,18 @@ package org.fest.swing;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.Window;
 import java.util.Collection;
 
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
+import abbot.tester.ComponentLocation;
+import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
@@ -223,5 +227,17 @@ public final class RobotFixture {
    */  
   public void selectMenuItem(JMenuItem target) {
     robot.selectMenuItem(target);
+  }
+
+  public JPopupMenu showPopupMenu(Component invoker) {
+    return showPopupMenu(invoker, new ComponentLocation().getPoint(invoker));
+  }
+  
+  public JPopupMenu showPopupMenu(Component invoker, Point location) {
+    try {
+      return (JPopupMenu) robot.showPopupMenu(invoker, location.x, location.y);
+    } catch (ComponentMissingException e) {
+      throw new ComponentLookupException(e);
+    }
   }
 }

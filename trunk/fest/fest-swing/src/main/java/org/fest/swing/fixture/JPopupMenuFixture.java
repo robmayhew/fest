@@ -15,34 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-
-import abbot.tester.ComponentLocation;
-import abbot.tester.ComponentTester;
 
 /**
  * Understands lookup of <code>{@link JPopupMenu}</code>.
  *
  * @author Yvonne Wang
  */
-public final class JPopupMenuFixture {
-  
-  private static final ComponentTester TESTER = new ComponentTester();
-  
-  protected static JPopupMenu popupMenu(JComponent invoker) {
-    return popupMenu(invoker, new ComponentLocation().getPoint(invoker));
-  }
-  
-  protected static JPopupMenu popupMenu(JComponent invoker, Point location) {
-    JPopupMenu popUpMenu = invoker.getComponentPopupMenu();
-    if (popUpMenu == null) return null;
-    TESTER.showPopupMenu(invoker, location.x, location.y);
-    if (popUpMenu.isVisible()) return popUpMenu;
-    return null;
-  }
-  
-  private JPopupMenuFixture() {}
+public class JPopupMenuFixture {
 }
