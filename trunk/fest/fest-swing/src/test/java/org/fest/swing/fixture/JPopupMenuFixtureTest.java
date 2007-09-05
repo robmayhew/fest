@@ -71,4 +71,8 @@ public class JPopupMenuFixtureTest {
     JPopupMenu menu = JPopupMenuFixture.popUpMenu(frame.textBoxWithPopupMenu);
     assertThat(menu).isSameAs(frame.popupMenu);
   }
+  
+  @Test public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
+    assertThat(JPopupMenuFixture.popUpMenu(frame.textBox)).isNull();
+  }
 }
