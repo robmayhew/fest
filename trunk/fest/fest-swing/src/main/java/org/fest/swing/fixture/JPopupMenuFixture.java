@@ -32,10 +32,13 @@ public final class JPopupMenuFixture {
   
   private static final ComponentTester TESTER = new ComponentTester();
   
-  static JPopupMenu popUpMenu(JComponent invoker) {
+  protected static JPopupMenu popupMenu(JComponent invoker) {
+    return popupMenu(invoker, new ComponentLocation().getPoint(invoker));
+  }
+  
+  protected static JPopupMenu popupMenu(JComponent invoker, Point location) {
     JPopupMenu popUpMenu = invoker.getComponentPopupMenu();
     if (popUpMenu == null) return null;
-    Point location = new ComponentLocation().getPoint(invoker);
     TESTER.showPopupMenu(invoker, location.x, location.y);
     if (popUpMenu.isVisible()) return popUpMenu;
     return null;

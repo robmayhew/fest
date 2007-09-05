@@ -68,11 +68,11 @@ public class JPopupMenuFixtureTest {
   }
   
   @Test public void shouldShowPopupMenuInTextFieldContainingPopupMenu() {
-    JPopupMenu menu = JPopupMenuFixture.popUpMenu(frame.textBoxWithPopupMenu);
+    JPopupMenu menu = JPopupMenuFixture.popupMenu(frame.textBoxWithPopupMenu);
     assertThat(menu).isSameAs(frame.popupMenu);
   }
   
   @Test public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
-    assertThat(JPopupMenuFixture.popUpMenu(frame.textBox)).isNull();
+    assertThat(JPopupMenuFixture.popupMenu(frame.textBox)).isNull();
   }
 }
