@@ -62,4 +62,40 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   protected final JSplitPaneTester splitPaneTester() {
     return (JSplitPaneTester)tester();
   }
+
+  /**
+   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JSplitPane</code> is not visible.
+   */
+  @Override public final JSplitPaneFixture requireVisible() {
+    return (JSplitPaneFixture)super.requireVisible();
+  }
+
+  /**
+   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JSplitPane</code> is visible.
+   */
+  @Override public final JSplitPaneFixture requireNotVisible() {
+    return (JSplitPaneFixture)super.requireNotVisible();
+  }
+
+  /**
+   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JSplitPane</code> is disabled.
+   */
+  @Override public final JSplitPaneFixture requireEnabled() {
+    return (JSplitPaneFixture)super.requireEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JSplitPane</code> is enabled.
+   */
+  @Override public final JSplitPaneFixture requireDisabled() {
+    return (JSplitPaneFixture)super.requireDisabled();
+  }
 }

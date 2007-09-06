@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -35,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -42,6 +44,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
 import static javax.swing.BoxLayout.Y_AXIS;
+import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -77,6 +80,7 @@ import org.testng.annotations.Test;
     final JMenu menu = new JMenu("A Menu");
     final JSlider slider = new JSlider(10, 20, 15);
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
+    final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
     final JMenuItem subMenu = new JMenu("A Submenu");
     final JTabbedPane tabbedPane = new JTabbedPane();
     final JTextField textField = new JTextField(10);
@@ -92,7 +96,7 @@ import org.testng.annotations.Test;
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      addComponents(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, tabbedPane, textField, toolBar);
+      addComponents(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, splitPane, tabbedPane, textField, toolBar);
     }
     
     private void addComponents(Component... components) {
@@ -122,6 +126,8 @@ import org.testng.annotations.Test;
       menu.add(subMenu);
       slider.setName("slider");
       spinner.setName("spinner");
+      splitPane.setName("splitPane");
+      splitPane.setPreferredSize(new Dimension(100, 100));
       tabbedPane.setName("tabbedPane");
       tabbedPane.addTab("A Tab", new JPanel());
       textField.setName("textField");
@@ -304,6 +310,21 @@ import org.testng.annotations.Test;
   @Test public void shouldFindSpinnerWithGivenName() {
     JSpinnerFixture spinner = container.spinner("spinner");
     assertThat(spinner.target).isSameAs(window.spinner);
+  }
+  
+  @Test public void shouldFindSplitPaneWithGivenMatcher() {
+    GenericTypeMatcher<JSplitPane> matcher = new GenericTypeMatcher<JSplitPane>() {
+      protected boolean isMatching(JSplitPane splitPane) {
+        return splitPane.getRightComponent() instanceof JList;
+      }
+    };
+    JSplitPaneFixture splitPane = container.splitPane(matcher);
+    assertThat(splitPane.target).isSameAs(window.splitPane);
+  }
+  
+  @Test public void shouldFindSplitPaneWithGivenName() {
+    JSplitPaneFixture splitPane = container.splitPane("splitPane");
+    assertThat(splitPane.target).isSameAs(window.splitPane);
   }
 
   @Test public void shouldFindTabbedPaneWithGivenMatcher() {
