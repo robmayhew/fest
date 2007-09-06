@@ -96,10 +96,10 @@ import org.testng.annotations.Test;
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      addComponents(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, splitPane, tabbedPane, textField, toolBar);
+      add(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, splitPane, tabbedPane, textField, toolBar);
     }
     
-    private void addComponents(Component... components) {
+    private void add(Component... components) {
       for (Component c : components) add(c);
     }
     
