@@ -36,7 +36,6 @@ import javax.swing.text.JTextComponent;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.join;
 
-import org.fest.swing.ComponentFinder;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.GenericTypeMatcher;
@@ -47,14 +46,9 @@ import org.fest.swing.RobotFixture;
  * @param <T> the type of container handled by this fixture.
  * 
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public abstract class ContainerFixture<T extends Container> extends ComponentFixture<T> {
-
-  private static class JMenuItemMatcher extends abbot.finder.matchers.JMenuItemMatcher implements ComponentMatcher {
-    public JMenuItemMatcher(String label) {
-      super(label);
-    }
-  }
+public abstract class ContainerFixture<T extends Container> extends JMenuItemContainerFixture<T> {
 
   /**
    * Creates a new </code>{@link ContainerFixture}</code>.
@@ -245,18 +239,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   public final JListFixture list(GenericTypeMatcher<? extends JList> matcher) {
     return new JListFixture(robot, find(matcher));
   }
-  
-  /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
-   * which name matches the specified one.
-   * @param name the name to match.
-   * @return a fixture that manages the <code>JMenuItem</code> found.
-   * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
-   */
-  public final JMenuItemFixture menuItem(String name) {
-    return new JMenuItemFixture(robot, findByName(name, JMenuItem.class));
-  }
-
+    
   /**
    * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * which path matches the given one. 
@@ -279,18 +262,6 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
     return new JMenuItemFixture(robot, (JMenuItem) item);
   }
 
-  /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
-   * that matches the specified search criteria.
-   * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
-   * @return a fixture that manages the <code>JMenuItem</code> found.
-   * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be 
-   * found.
-   */
-  public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
-    return new JMenuItemFixture(robot, find(matcher));
-  }
-  
   /**
    * Finds a <code>{@link JOptionPane}</code>.
    * @return a fixture that manages the <code>JOptionPane</code> found.
@@ -436,15 +407,6 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    */
   public final JTreeFixture tree(GenericTypeMatcher<? extends JTree> matcher) {
     return new JTreeFixture(robot, find(matcher));
-  }
+  }  
   
-  private <C extends Component> C findByName(String name, Class<C> type) {
-    return finder().findByName(target, name, type);
-  }
-  
-  private <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
-    return finder().find(matcher);
-  }
-  
-  private ComponentFinder finder() { return robot.finder(); }
 }

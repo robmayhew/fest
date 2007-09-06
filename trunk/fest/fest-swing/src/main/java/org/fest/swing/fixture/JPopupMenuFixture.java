@@ -15,9 +15,9 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-
 import javax.swing.JPopupMenu;
+
+import abbot.tester.JPopupMenuTester;
 
 import org.fest.swing.RobotFixture;
 
@@ -26,14 +26,32 @@ import org.fest.swing.RobotFixture;
  *
  * @author Yvonne Wang
  */
-public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
+public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
   
+  /**
+   * Creates a new </code>{@link JPopupMenuFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JPopupMenu</code>.
+   * @param target the <code>JPopupMenu</code> to be managed by this fixture.
+   */
   public JPopupMenuFixture(RobotFixture robot, JPopupMenu target) {
     super(robot, target);
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Returns the contents of the <code>{@link JPopupMenu}</code> managed by this fixture.
+   * @return a <code>String</code> array representing the contents of the <code>JPopupMenu</code> managed by this 
+   *         fixture. 
+   */
+  public final String[] menuLabels() {
+    return popupMenuTester().getMenuLabels(target);
+  }
+  
+  protected final JPopupMenuTester popupMenuTester() {
+    return (JPopupMenuTester)tester();
+  }
+  
+  /**
+   * Simulates a user clicking the <code>{@link JPopupMenu}</code> managed by this fixture.
    * @return this fixture.
    */
   @Override public final JPopupMenuFixture click() {
@@ -41,7 +59,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   }
 
   /**
-   * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
+   * Gives input focus to the <code>{@link JPopupMenu}</code> managed by this fixture.
    * @return this fixture.
    */
   @Override public final JPopupMenuFixture focus() {
@@ -49,36 +67,36 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * Asserts that the <code>{@link JPopupMenu}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   * @throws AssertionError is the managed <code>JPopupMenu</code> is disabled.
    */
   @Override public final JPopupMenuFixture requireEnabled() {
     return (JPopupMenuFixture)super.requireEnabled();
   }
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
+   * Asserts that the <code>{@link JPopupMenu}</code> managed by this fixture is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   * @throws AssertionError is the managed <code>JPopupMenu</code> is enabled.
    */
   @Override public final JPopupMenuFixture requireDisabled() {
     return (JPopupMenuFixture)super.requireDisabled();
   }
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
+   * Asserts that the <code>{@link JPopupMenu}</code> managed by this fixture is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is not visible.
+   * @throws AssertionError if the managed <code>JPopupMenu</code> is not visible.
    */
   @Override public final JPopupMenuFixture requireVisible() {
     return (JPopupMenuFixture)super.requireVisible();
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
+   * Asserts that the <code>{@link JPopupMenu}</code> managed by this fixture is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is visible.
+   * @throws AssertionError if the managed <code>JPopupMenu</code> is visible.
    */
   @Override public final JPopupMenuFixture requireNotVisible() {
     return (JPopupMenuFixture)super.requireNotVisible();
