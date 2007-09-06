@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
@@ -166,7 +167,28 @@ public abstract class ComponentFixture<T extends Component> {
     assertThat(target.isEnabled()).isFalse();
     return this;
   }
-
+  
+  /**
+   * Shows a popup menu using the <code>{@link Component}</code> managed by this fixture as the invoker of the popup 
+   * menu.
+   * @return a fixture that manages the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
+  public final JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, robot.showPopupMenu(target));
+  }
+  
+  /**
+   * Shows a popup menu using the <code>{@link Component}</code> managed by this fixture as the invoker of the popup 
+   * menu.
+   * @param location the given coordinates for the popup menu.
+   * @return a fixture that manages the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
+  public final JPopupMenuFixture showPopupMenuAt(Point location) {
+    return new JPopupMenuFixture(robot, robot.showPopupMenu(target, location));
+  }
+  
   /** @return a tester for the target component */
   protected final ComponentTester tester() { return tester; }
 }

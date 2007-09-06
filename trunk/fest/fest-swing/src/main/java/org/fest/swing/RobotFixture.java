@@ -36,11 +36,10 @@ import static java.lang.System.currentTimeMillis;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands simulation of user events on a GUI <code>{@link Component}</code>. Useful for creation of programmatic 
- * GUI tests with <a href="http://www.junit.org" target="_blank">JUnit 4</a> and/or 
- * <a href="http://testng.org" target="_blank">TestNG</a>.
+ * Understands simulation of user events on a GUI <code>{@link Component}</code>.
  * 
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class RobotFixture {
 
@@ -229,10 +228,23 @@ public final class RobotFixture {
     robot.selectMenuItem(target);
   }
 
+  /**
+   * Shows a popup menu.
+   * @param invoker the component to invoke the popup menu from.
+   * @return the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
   public JPopupMenu showPopupMenu(Component invoker) {
     return showPopupMenu(invoker, new ComponentLocation().getPoint(invoker));
   }
   
+  /**
+   * Shows a popup menu at the given coordinates.
+   * @param invoker the component to invoke the popup menu from.
+   * @param location the given coordinates for the popup menu.
+   * @return the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
   public JPopupMenu showPopupMenu(Component invoker, Point location) {
     try {
       return (JPopupMenu) robot.showPopupMenu(invoker, location.x, location.y);
