@@ -106,18 +106,6 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Returns a <code>{@link ComponentTester}</code> casted to the given type.
-   * @param <C> indicates that the <code>ComponentTester</code> to return should be casted to one of its subclasses.
-   * @param type the type that the <code>ComponentTester</code> should be casted to.
-   * @return a <code>ComponentTester</code> casted to the given type.
-   */
-  protected final <C extends ComponentTester> C testerCastedTo(Class<C> type) {
-    ComponentTester tester = tester();
-    assertThat(tester).isInstanceOf(type);
-    return type.cast(tester);
-  }
-  
-  /**
    * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.

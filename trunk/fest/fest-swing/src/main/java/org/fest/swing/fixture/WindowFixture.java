@@ -157,7 +157,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   protected final WindowTester windowTester() {
-    return testerCastedTo(WindowTester.class);
+    return (WindowTester)tester();
   }
 
   /**

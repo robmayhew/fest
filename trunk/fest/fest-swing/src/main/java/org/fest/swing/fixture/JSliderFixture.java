@@ -96,7 +96,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   protected final JSliderTester sliderTester() {
-    return testerCastedTo(JSliderTester.class);
+    return (JSliderTester)tester();
   }
 
   /**

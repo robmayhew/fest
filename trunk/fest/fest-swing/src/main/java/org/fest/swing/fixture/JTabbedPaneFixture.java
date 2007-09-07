@@ -85,7 +85,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
   
   private JTabbedPaneTester tabbedPaneTester() {
-    return testerCastedTo(JTabbedPaneTester.class);
+    return (JTabbedPaneTester)tester();
   }
 
   /**

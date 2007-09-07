@@ -92,7 +92,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   private JListTester listTester() {
-    return testerCastedTo(JListTester.class);
+    return (JListTester)tester();
   }
 
   /**

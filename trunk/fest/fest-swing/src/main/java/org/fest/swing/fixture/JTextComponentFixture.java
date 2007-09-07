@@ -153,7 +153,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   private JTextComponentTester textComponentTester() {
-    return testerCastedTo(JTextComponentTester.class);
+    return (JTextComponentTester)tester();
   }
 
   /**

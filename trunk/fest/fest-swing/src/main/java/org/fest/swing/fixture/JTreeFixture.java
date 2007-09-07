@@ -89,7 +89,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   private JTreeTester treeTester() {
-    return testerCastedTo(JTreeTester.class);
+    return (JTreeTester)tester();
   }
 
   /**

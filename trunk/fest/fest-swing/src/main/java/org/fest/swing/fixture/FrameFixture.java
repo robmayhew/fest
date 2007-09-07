@@ -168,7 +168,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   private FrameTester frameTester() {
-    return testerCastedTo(FrameTester.class);
+    return (FrameTester)tester();
   }
 
   /**

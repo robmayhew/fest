@@ -114,7 +114,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   private JComboBoxTester comboBoxTester() {
-    return testerCastedTo(JComboBoxTester.class);
+    return (JComboBoxTester)tester();
   }
 
   /**

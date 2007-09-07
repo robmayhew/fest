@@ -78,7 +78,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   protected final JSpinnerTester spinnerTester() {
-    return testerCastedTo(JSpinnerTester.class);
+    return (JSpinnerTester)tester();
   }
 
   /**
