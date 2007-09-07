@@ -18,7 +18,9 @@ package org.fest.swing.fixture;
 import java.awt.Component;
 import java.awt.Point;
 
+import abbot.tester.ComponentLocation;
 import abbot.tester.ComponentTester;
+import static java.awt.event.InputEvent.BUTTON1_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
@@ -93,6 +95,16 @@ public abstract class ComponentFixture<T extends Component> {
   public ComponentFixture<T> click() {
     focus();
     tester().actionClick(target);
+    return this;
+  }
+  
+  /**
+   * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public ComponentFixture<T> doubleClick() {
+    focus();
+    tester().actionClick(target, new ComponentLocation(), BUTTON1_MASK, 2);
     return this;
   }
   

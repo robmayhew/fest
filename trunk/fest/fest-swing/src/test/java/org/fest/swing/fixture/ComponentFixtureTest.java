@@ -16,12 +16,15 @@
 package org.fest.swing.fixture;
 
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import static java.awt.event.MouseEvent.BUTTON1;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.RobotFixture;
@@ -34,6 +37,7 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link ComponentFixture}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class ComponentFixtureTest {
 
@@ -57,6 +61,13 @@ public class ComponentFixtureTest {
     assertThat(popupMenu.target).isSameAs(frame.popupMenu);
   }
 
+  @Test public void shouldDoubleClickComponent() {
+    DoubleClickVerifier doubleClickVerifier = new DoubleClickVerifier();
+    frame.textBox.addMouseListener(doubleClickVerifier);
+    fixture.doubleClick();
+    assertThat(doubleClickVerifier.doubleClicked).isTrue();
+  }
+  
   private static class MyFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
@@ -71,5 +82,13 @@ public class ComponentFixtureTest {
       popupMenu.add(new JMenuItem("Second"));
     }
   }
-
+  
+  private static class DoubleClickVerifier extends MouseAdapter {
+    boolean doubleClicked;
+    
+    @Override public void mouseClicked(MouseEvent e) {
+      System.out.println(e);
+      doubleClicked = e.getButton() == BUTTON1 && e.getClickCount() == 2;
+    }
+  }
 }
