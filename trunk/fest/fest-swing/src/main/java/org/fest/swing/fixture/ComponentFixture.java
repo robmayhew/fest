@@ -120,12 +120,14 @@ public abstract class ComponentFixture<T extends Component> {
   /**
    * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  protected final void doPressKeys(int...keyCodes) {
+  public ComponentFixture<T> pressKeys(int...keyCodes) {
     focus();
     ComponentTester tester = tester();
     for (int keyCode : keyCodes) tester.actionKeyPress(keyCode);
+    return this;
   }
 
   /**

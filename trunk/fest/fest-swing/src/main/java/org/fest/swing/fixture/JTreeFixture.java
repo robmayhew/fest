@@ -109,6 +109,16 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
+   * Simulates a user pressing the given keys in the <code>{@link JTree}</code> managed by this fixture.
+   * @param keyCodes the codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JTreeFixture pressKeys(int...keyCodes) {
+    return (JTreeFixture)super.pressKeys(keyCodes);
+  }
+
+  /**
    * Asserts that the <code>{@link JTree}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTree</code> is not visible.

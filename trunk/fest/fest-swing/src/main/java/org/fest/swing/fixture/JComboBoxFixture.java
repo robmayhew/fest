@@ -134,6 +134,16 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
+   * Simulates a user pressing the given keys on the <code>{@link JComboBox}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JComboBoxFixture pressKeys(int... keyCodes) {
+    return (JComboBoxFixture)super.pressKeys(keyCodes);
+  }
+  
+  /**
    * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JComboBox</code> is not visible.

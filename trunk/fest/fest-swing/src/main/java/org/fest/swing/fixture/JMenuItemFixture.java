@@ -84,6 +84,16 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
+   * Simulates a user pressing the given keys on the <code>{@link JMenuItem}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JMenuItemFixture pressKeys(int... keyCodes) {
+    return (JMenuItemFixture)super.pressKeys(keyCodes);
+  }
+  
+  /**
    * Asserts that the <code>{@link JMenuItem}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JMenuItem</code> is not visible.

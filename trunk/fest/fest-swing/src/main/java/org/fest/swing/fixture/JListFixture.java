@@ -112,6 +112,16 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
+   * Simulates a user pressing the given keys on the <code>{@link JList}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JListFixture pressKeys(int... keyCodes) {
+    return (JListFixture)super.pressKeys(keyCodes);
+  }
+
+  /**
    * Asserts that the <code>{@link JList}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JList</code> is not visible.

@@ -16,7 +16,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JToolBar;
@@ -96,7 +95,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking the <code>{@link JToolBar}</code> managed by this fixture.
    * @return this fixture.
    */
   @Override public final JToolBarFixture click() {
@@ -104,7 +103,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
+   * Gives input focus to the <code>{@link JToolBar}</code> managed by this fixture.
    * @return this fixture.
    */
   @Override public final JToolBarFixture focus() {
@@ -112,36 +111,46 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
+   * Simulates a user pressing the given keys in the <code>{@link JToolBar}</code> managed by this fixture.
+   * @param keyCodes the codes of the keys to press.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is not visible.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JToolBarFixture pressKeys(int...keyCodes) {
+    return (JToolBarFixture)super.pressKeys(keyCodes);
+  }
+
+  /**
+   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JToolBar</code> is not visible.
    */
   @Override public final JToolBarFixture requireVisible() {
     return (JToolBarFixture)super.requireVisible();
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
+   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is visible.
+   * @throws AssertionError if the managed <code>JToolBar</code> is visible.
    */
   @Override public final JToolBarFixture requireNotVisible() {
     return (JToolBarFixture)super.requireNotVisible();
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   * @throws AssertionError is the managed <code>JToolBar</code> is disabled.
    */
   @Override public final JToolBarFixture requireEnabled() {
     return (JToolBarFixture)super.requireEnabled();
   }
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
+   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   * @throws AssertionError is the managed <code>JToolBar</code> is enabled.
    */
   @Override public final JToolBarFixture requireDisabled() {
     return (JToolBarFixture)super.requireDisabled();

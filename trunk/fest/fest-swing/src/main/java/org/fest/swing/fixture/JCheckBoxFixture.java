@@ -82,6 +82,16 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
   }
   
   /**
+   * Simulates a user pressing the given keys on the <code>{@link JCheckBox}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JCheckBoxFixture pressKeys(int... keyCodes) {
+    return (JCheckBoxFixture)super.pressKeys(keyCodes);
+  }
+  
+  /**
    * Asserts that the <code>{@link JCheckBox}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JCheckBox</code> is not visible.

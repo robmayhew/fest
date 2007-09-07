@@ -176,4 +176,66 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   private ComponentLookupException cannotFindButton(String name, String text) {
     throw new ComponentLookupException(concat("Unable to find ", quote(name), " button with text ", quote(text)));
   }
+
+  /**
+   * Simulates a user clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JFileChooserFixture click() {
+    return (JFileChooserFixture)super.click();
+  }
+  
+  /**
+   * Gives input focus to the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JFileChooserFixture focus() {
+    return (JFileChooserFixture)super.focus();
+  }
+
+  /**
+   * Simulates a user pressing the given keys on the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JFileChooserFixture pressKeys(int... keyCodes) {
+    return (JFileChooserFixture)super.pressKeys(keyCodes);
+  }
+
+  /**
+   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JFileChooser</code> is not visible.
+   */
+  @Override public final JFileChooserFixture requireVisible() {
+    return (JFileChooserFixture)super.requireVisible();
+  }
+
+  /**
+   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JFileChooser</code> is visible.
+   */
+  @Override public final JFileChooserFixture requireNotVisible() {
+    return (JFileChooserFixture)super.requireNotVisible();
+  }
+
+  /**
+   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JFileChooser</code> is disabled.
+   */
+  @Override public final JFileChooserFixture requireEnabled() {
+    return (JFileChooserFixture)super.requireEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>JFileChooser</code> is enabled.
+   */
+  @Override public final JFileChooserFixture requireDisabled() {
+    return (JFileChooserFixture)super.requireDisabled();
+  }
 }

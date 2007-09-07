@@ -20,19 +20,26 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import abbot.tester.ComponentTester;
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_B;
+import static java.awt.event.KeyEvent.VK_Z;
+import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
-import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -72,6 +79,23 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }
   }
 
+  private static class KeyListener extends KeyAdapter {
+    private final List<Integer> pressedKeys = new ArrayList<Integer>();
+    
+    void reset() { pressedKeys.clear(); }
+    
+    @Override public void keyPressed(KeyEvent e) {
+      pressedKeys.add(e.getKeyCode());
+    }
+
+    int[] pressedKeys() {
+      int pressedKeyCount = pressedKeys.size();
+      int[] keys = new int[pressedKeyCount];
+      for(int i = 0; i < pressedKeyCount; i++) keys[i] = pressedKeys.get(i);
+      return keys;
+    }
+  }
+
   private RobotFixture robot;
   private MainWindow window;
   private ComponentFixture<T> fixture;
@@ -95,12 +119,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     fixture = createFixture(); 
     assertThat(fixture.target).isSameAs(target);
   }
-  
-  protected abstract ComponentFixture<T> createFixture();
 
   private void addToWindow(T target) {
     if (addTargetToWindow()) window.add(decorateBeforeAddingToWindow(target));
   }
+
+  protected abstract ComponentFixture<T> createFixture();
 
   protected boolean addTargetToWindow() { return true; }
   
@@ -149,6 +173,14 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
         return c.hasFocus();
       }
     });
+  }
+  
+  @Test public final void shouldPressGivenKeys() {
+    KeyListener keyListener = new KeyListener();
+    fixture.target.addKeyListener(keyListener);
+    int[] keys = { VK_A, VK_B, VK_Z };
+    fixture.pressKeys(keys);
+    assertThat(keyListener.pressedKeys()).isEqualTo(keys);
   }
   
   @Test public final void shouldPassIfComponentIsVisibleAndExpectingVisible() {

@@ -67,6 +67,16 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
   }
   
   /**
+   * Simulates a user pressing the given keys on the <code>{@link JPopupMenu}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JPopupMenuFixture pressKeys(int... keyCodes) {
+    return (JPopupMenuFixture)super.pressKeys(keyCodes);
+  }
+  
+  /**
    * Asserts that the <code>{@link JPopupMenu}</code> managed by this fixture is enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JPopupMenu</code> is disabled.

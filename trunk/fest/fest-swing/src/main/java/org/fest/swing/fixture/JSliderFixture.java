@@ -116,6 +116,16 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
+   * Simulates a user pressing the given keys on the <code>{@link JSlider}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  @Override public final JSliderFixture pressKeys(int... keyCodes) {
+    return (JSliderFixture)super.pressKeys(keyCodes);
+  }
+  
+  /**
    * Asserts that the <code>{@link JSlider}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JSlider</code> is not visible.

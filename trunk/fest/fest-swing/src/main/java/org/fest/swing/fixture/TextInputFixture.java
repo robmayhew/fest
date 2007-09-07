@@ -46,14 +46,6 @@ public interface TextInputFixture<T extends Component> extends TextDisplayFixtur
   TextInputFixture<T> selectAll();
 
   /**
-   * Simulates a user pressing the given keys in the <code>{@link Component}</code> managed by this fixture.
-   * @param keyCodes the codes of the keys to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  TextInputFixture<T> pressKeys(int...keyCodes);
-  
-  /**
    * Simulates a user selecting a portion of the text contained in the <code>{@link Component}</code> managed by this
    * fixture.
    * @param start index where selection should start.

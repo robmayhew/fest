@@ -107,8 +107,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @see java.awt.event.KeyEvent
    */
   public final JTextComponentFixture pressKeys(int...keyCodes) {
-    doPressKeys(keyCodes);
-    return this;
+    return (JTextComponentFixture)super.pressKeys(keyCodes);
   }
 
   /**
