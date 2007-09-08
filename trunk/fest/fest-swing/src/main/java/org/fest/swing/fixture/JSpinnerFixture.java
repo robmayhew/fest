@@ -86,7 +86,15 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    */
   @Override public final JSpinnerFixture click() {
-    return (JSpinnerFixture)super.click();
+    return (JSpinnerFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JSpinnerFixture doubleClick() {
+    return (JSpinnerFixture)doDoubleClick();
   }
 
   /**
@@ -94,7 +102,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    */
   @Override public final JSpinnerFixture focus() {
-    return (JSpinnerFixture)super.focus();
+    return (JSpinnerFixture)doFocus();
   }
   
   /**
@@ -104,7 +112,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final JSpinnerFixture pressKeys(int... keyCodes) {
-    return (JSpinnerFixture)super.pressKeys(keyCodes);
+    return (JSpinnerFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -113,7 +121,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws AssertionError if the managed <code>JSpinner</code> is not visible.
    */
   @Override public final JSpinnerFixture requireVisible() {
-    return (JSpinnerFixture)super.requireVisible();
+    return (JSpinnerFixture)assertVisible();
   }
   
   /**
@@ -122,7 +130,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws AssertionError if the managed <code>JSpinner</code> is visible.
    */
   @Override public final JSpinnerFixture requireNotVisible() {
-    return (JSpinnerFixture)super.requireNotVisible();
+    return (JSpinnerFixture)assertNotVisible();
   }
 
   /**
@@ -131,7 +139,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws AssertionError is the managed <code>JSpinner</code> is disabled.
    */
   @Override public final JSpinnerFixture requireEnabled() {
-    return (JSpinnerFixture)super.requireEnabled();
+    return (JSpinnerFixture)assertEnabled();
   }
   
   /**
@@ -140,6 +148,6 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws AssertionError is the managed <code>JSpinner</code> is enabled.
    */
   @Override public final JSpinnerFixture requireDisabled() {
-    return (JSpinnerFixture)super.requireDisabled();
+    return (JSpinnerFixture)assertDisabled();
   }
 }

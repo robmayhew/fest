@@ -68,7 +68,15 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    */
   @Override public final JOptionPaneFixture click() {
-    return (JOptionPaneFixture)super.click();
+    return (JOptionPaneFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JOptionPaneFixture doubleClick() {
+    return (JOptionPaneFixture)doDoubleClick();
   }
 
   /**
@@ -76,7 +84,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    */
   @Override public final JOptionPaneFixture focus() {
-    return (JOptionPaneFixture)super.focus();
+    return (JOptionPaneFixture)doFocus();
   }
 
   /**
@@ -207,7 +215,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final JOptionPaneFixture pressKeys(int... keyCodes) {
-    return (JOptionPaneFixture)super.pressKeys(keyCodes);
+    return (JOptionPaneFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -216,7 +224,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @throws AssertionError if the managed <code>JOptionPane</code> is not visible.
    */
   @Override public final JOptionPaneFixture requireVisible() {
-    return (JOptionPaneFixture)super.requireVisible();
+    return (JOptionPaneFixture)assertVisible();
   }
 
   /**
@@ -225,7 +233,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @throws AssertionError if the managed <code>JOptionPane</code> is visible.
    */
   @Override public final JOptionPaneFixture requireNotVisible() {
-    return (JOptionPaneFixture)super.requireNotVisible();
+    return (JOptionPaneFixture)assertNotVisible();
   }
 
   /**
@@ -234,7 +242,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @throws AssertionError is the managed <code>JOptionPane</code> is disabled.
    */
   @Override public final JOptionPaneFixture requireEnabled() {
-    return (JOptionPaneFixture)super.requireEnabled();
+    return (JOptionPaneFixture)assertEnabled();
   }
   
   /**
@@ -243,6 +251,6 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @throws AssertionError is the managed <code>JOptionPane</code> is enabled.
    */
   @Override public final JOptionPaneFixture requireDisabled() {
-    return (JOptionPaneFixture)super.requireDisabled();
+    return (JOptionPaneFixture)assertDisabled();
   }
 }

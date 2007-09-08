@@ -41,6 +41,7 @@ public class RobotFixtureTest {
   @BeforeTest public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
     frame = new MyFrame();
+    frame.setTitle(getClass().getSimpleName());
     robot.showWindow(frame);
   }
   

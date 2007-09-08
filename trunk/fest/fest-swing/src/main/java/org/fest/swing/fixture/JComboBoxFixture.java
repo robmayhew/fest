@@ -122,7 +122,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @return this fixture.
    */
   @Override public final JComboBoxFixture focus() {
-    return (JComboBoxFixture)super.focus();
+    return (JComboBoxFixture)doFocus();
   }
 
   /**
@@ -130,7 +130,15 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @return this fixture.
    */
   @Override public final JComboBoxFixture click() {
-    return (JComboBoxFixture)super.click();
+    return (JComboBoxFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JComboBoxFixture doubleClick() {
+    return (JComboBoxFixture)doDoubleClick();
   }
 
   /**
@@ -140,7 +148,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @see java.awt.event.KeyEvent
    */
   @Override public final JComboBoxFixture pressKeys(int... keyCodes) {
-    return (JComboBoxFixture)super.pressKeys(keyCodes);
+    return (JComboBoxFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -149,7 +157,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @throws AssertionError if the managed <code>JComboBox</code> is not visible.
    */
   @Override public final JComboBoxFixture requireVisible() {
-    return (JComboBoxFixture)super.requireVisible();
+    return (JComboBoxFixture)assertVisible();
   }
 
   /**
@@ -158,7 +166,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @throws AssertionError if the managed <code>JComboBox</code> is visible.
    */
   @Override public final JComboBoxFixture requireNotVisible() {
-    return (JComboBoxFixture)super.requireNotVisible();
+    return (JComboBoxFixture)assertNotVisible();
   }
   
   /**
@@ -167,7 +175,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @throws AssertionError is the managed <code>JComboBox</code> is disabled.
    */
   @Override public final JComboBoxFixture requireEnabled() {
-    return (JComboBoxFixture)super.requireEnabled();
+    return (JComboBoxFixture)assertEnabled();
   }
   
   /**
@@ -176,6 +184,6 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @throws AssertionError is the managed <code>JComboBox</code> is enabled.
    */
   @Override public final JComboBoxFixture requireDisabled() {
-    return (JComboBoxFixture)super.requireDisabled();
+    return (JComboBoxFixture)assertDisabled();
   }
 }

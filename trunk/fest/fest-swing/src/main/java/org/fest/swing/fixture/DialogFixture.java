@@ -76,7 +76,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture show() {
-    return (DialogFixture)super.show();
+    return (DialogFixture)doShow();
   }
   
   /**
@@ -85,7 +85,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture show(Dimension size) {
-    return (DialogFixture)super.show(size);
+    return (DialogFixture)doShow(size);
   }
 
   /**
@@ -93,7 +93,15 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture click() {
-    return (DialogFixture)super.click();
+    return (DialogFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final DialogFixture doubleClick() {
+    return (DialogFixture)doDoubleClick();
   }
 
   /**
@@ -101,7 +109,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture focus() {
-    return (DialogFixture)super.focus();
+    return (DialogFixture)doFocus();
   }
 
   /**
@@ -110,7 +118,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture resizeWidthTo(int width) {
-    return (DialogFixture)super.resizeWidthTo(width);
+    return (DialogFixture)doResizeWidthTo(width);
   }
 
   /**
@@ -119,7 +127,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture resizeHeightTo(int height) {
-    return (DialogFixture)super.resizeHeightTo(height);
+    return (DialogFixture)doResizeHeightTo(height);
   }
 
   /**
@@ -128,7 +136,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    */
   @Override public final DialogFixture resizeTo(Dimension size) {
-    return (DialogFixture)super.resizeTo(size);
+    return (DialogFixture)doResizeTo(size);
   }
 
   /**
@@ -138,7 +146,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws AssertionError if the size of the managed <code>Dialog</code> is not equal to the given size. 
    */
   @Override public final DialogFixture requireSize(Dimension size) {
-    return (DialogFixture)super.requireSize(size);
+    return (DialogFixture)assertEqualSize(size);
   }
 
   /**
@@ -148,7 +156,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final DialogFixture pressKeys(int... keyCodes) {
-    return (DialogFixture)super.pressKeys(keyCodes);
+    return (DialogFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -157,7 +165,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws AssertionError if the managed <code>Dialog</code> is not visible.
    */
   @Override public final DialogFixture requireVisible() {
-    return (DialogFixture)super.requireVisible();
+    return (DialogFixture)assertVisible();
   }
   
   /**
@@ -166,7 +174,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws AssertionError if the managed <code>Dialog</code> is visible.
    */
   @Override public final DialogFixture requireNotVisible() {
-    return (DialogFixture)super.requireNotVisible();
+    return (DialogFixture)assertNotVisible();
   }
 
   /**
@@ -175,7 +183,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws AssertionError is the managed <code>Dialog</code> is disabled.
    */
   @Override public final DialogFixture requireEnabled() {
-    return (DialogFixture)super.requireEnabled();
+    return (DialogFixture)assertEnabled();
   }
   
   /**
@@ -184,7 +192,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws AssertionError is the managed <code>Dialog</code> is enabled.
    */
   @Override public final DialogFixture requireDisabled() {
-    return (DialogFixture)super.requireDisabled();
+    return (DialogFixture)assertDisabled();
   }
 
   /**

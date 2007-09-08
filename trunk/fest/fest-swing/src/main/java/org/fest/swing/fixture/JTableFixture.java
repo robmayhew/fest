@@ -161,15 +161,23 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    */
   @Override public final JTableFixture click() {
-    return (JTableFixture)super.click();
+    return (JTableFixture)doClick();
   }
   
+  /**
+   * Simulates a user doble-clicking the <code>{@link JTable}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JTableFixture doubleClick() {    
+    return (JTableFixture)doDoubleClick();
+  }
+
   /**
    * Gives input focus to the <code>{@link JTable}</code> managed by this fixture.
    * @return this fixture.
    */
   @Override public final JTableFixture focus() {
-    return (JTableFixture)super.focus();
+    return (JTableFixture)doFocus();
   }
 
   /**
@@ -179,7 +187,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final JTableFixture pressKeys(int... keyCodes) {
-    return (JTableFixture)super.pressKeys(keyCodes);
+    return (JTableFixture)doPressKeys(keyCodes);
   }
 
   /**
@@ -188,7 +196,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws AssertionError if the managed <code>JTable</code> is not visible.
    */
   @Override public final JTableFixture requireVisible() {
-    return (JTableFixture)super.requireVisible();
+    return (JTableFixture)assertVisible();
   }
 
   /**
@@ -197,7 +205,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws AssertionError if the managed <code>JTable</code> is visible.
    */
   @Override public final JTableFixture requireNotVisible() {
-    return (JTableFixture)super.requireNotVisible();
+    return (JTableFixture)assertNotVisible();
   }
 
   /**
@@ -206,7 +214,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws AssertionError is the managed <code>JTable</code> is disabled.
    */
   @Override public final JTableFixture requireEnabled() {
-    return (JTableFixture)super.requireEnabled();
+    return (JTableFixture)assertEnabled();
   }
   
   /**
@@ -215,6 +223,6 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws AssertionError is the managed <code>JTable</code> is enabled.
    */
   @Override public final JTableFixture requireDisabled() {
-    return (JTableFixture)super.requireDisabled();
+    return (JTableFixture)assertDisabled();
   }
 }

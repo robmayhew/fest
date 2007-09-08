@@ -46,7 +46,6 @@ final class TestTable extends JTable {
   }
 
   private static class TableTransferHandler extends StringTransferHandler<JTable> {
-
     private static final long serialVersionUID = 1L;
     
     protected String exportString(JTable table) {

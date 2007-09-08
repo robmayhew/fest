@@ -16,7 +16,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
-import java.awt.Point;
 
 import abbot.tester.ComponentLocation;
 import abbot.tester.ComponentTester;
@@ -92,30 +91,19 @@ public abstract class ComponentFixture<T extends Component> {
    * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public ComponentFixture<T> click() {
-    focus();
-    tester().actionClick(target);
-    return this;
-  }
-  
+  public abstract ComponentFixture<T> click();
+
   /**
    * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public ComponentFixture<T> doubleClick() {
-    focus();
-    tester().actionClick(target, new ComponentLocation(), BUTTON1_MASK, 2);
-    return this;
-  }
-  
+  public abstract ComponentFixture<T> doubleClick();
+
   /**
    * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public ComponentFixture<T> focus() {
-    robot.focus(target);
-    return this;
-  }
+  public abstract ComponentFixture<T> focus();
 
   /**
    * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
@@ -123,53 +111,36 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public ComponentFixture<T> pressKeys(int...keyCodes) {
-    focus();
-    ComponentTester tester = tester();
-    for (int keyCode : keyCodes) tester.actionKeyPress(keyCode);
-    return this;
-  }
+  public abstract ComponentFixture<T> pressKeys(int...keyCodes);
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
-  public ComponentFixture<T> requireVisible() {
-    assertThat(target.isVisible()).isTrue();
-    return this;
-  }
+  public abstract ComponentFixture<T> requireVisible();
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is visible.
    */
-  public ComponentFixture<T> requireNotVisible() {
-    assertThat(target.isVisible()).isFalse();
-    return this;
-  }
+  public abstract ComponentFixture<T> requireNotVisible();
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>Component</code> is disabled.
    */
-  public ComponentFixture<T> requireEnabled() {
-    assertThat(target.isEnabled()).isTrue();
-    return this;
-  }
-  
+  public abstract ComponentFixture<T> requireEnabled();
+
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>Component</code> is enabled.
    */
-  public ComponentFixture<T> requireDisabled() {
-    assertThat(target.isEnabled()).isFalse();
-    return this;
-  }
-  
+  public abstract ComponentFixture<T> requireDisabled();
+
   /**
    * Shows a popup menu using the <code>{@link Component}</code> managed by this fixture as the invoker of the popup 
    * menu.
@@ -181,16 +152,87 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Shows a popup menu using the <code>{@link Component}</code> managed by this fixture as the invoker of the popup 
-   * menu.
-   * @param location the given coordinates for the popup menu.
-   * @return a fixture that manages the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * @return this fixture.
    */
-  public final JPopupMenuFixture showPopupMenuAt(Point location) {
-    return new JPopupMenuFixture(robot, robot.showPopupMenu(target, location));
+  protected final ComponentFixture<T> doClick() {
+    doFocus();
+    tester().actionClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  protected final ComponentFixture<T> doDoubleClick() {
+    doFocus();
+    tester().actionClick(target, new ComponentLocation(), BUTTON1_MASK, 2);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  protected final ComponentFixture<T> doPressKeys(int... keyCodes) {
+    doFocus();
+    ComponentTester tester = tester();
+    for (int keyCode : keyCodes) tester.actionKeyPress(keyCode);
+    return this;
+  }
+
+  /**
+   * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  protected final ComponentFixture<T> doFocus() {
+    robot.focus(target);
+    return this;
   }
   
+  /**
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Component</code> is not visible.
+   */
+  protected final ComponentFixture<T> assertVisible() {
+    assertThat(target.isVisible()).isTrue();
+    return this;
+  }
+
+  /**
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>Component</code> is visible.
+   */
+  protected final ComponentFixture<T> assertNotVisible() {
+    assertThat(target.isVisible()).isFalse();
+    return this;
+  }
+
+  /**
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   */
+  protected final ComponentFixture<T> assertEnabled() {
+    assertThat(target.isEnabled()).isTrue();
+    return this;
+  }
+
+  /**
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
+   * @return this fixture.
+   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   */
+  protected final ComponentFixture<T> assertDisabled() {
+    assertThat(target.isEnabled()).isFalse();
+    return this;
+  }
+
   /** @return a tester for the target component */
   protected final ComponentTester tester() { return tester; }
 }

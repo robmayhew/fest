@@ -78,7 +78,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public final FrameFixture show() {
-    return (FrameFixture)super.show();
+    return (FrameFixture)doShow();
   }
   
   /**
@@ -87,7 +87,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public final FrameFixture show(Dimension size) {
-    return (FrameFixture)super.show(size);
+    return (FrameFixture)doShow(size);
   }
 
   /**
@@ -95,7 +95,15 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public FrameFixture click() {
-    return (FrameFixture)super.click();
+    return (FrameFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link Frame}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final FrameFixture doubleClick() {
+    return (FrameFixture)doDoubleClick();
   }
 
   /**
@@ -103,7 +111,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public FrameFixture focus() {
-    return (FrameFixture)super.focus();
+    return (FrameFixture)doFocus();
   }
 
   /**
@@ -177,7 +185,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public final FrameFixture resizeWidthTo(int width) {
-    return (FrameFixture)super.resizeWidthTo(width);
+    return (FrameFixture)doResizeWidthTo(width);
   }
 
   /**
@@ -186,7 +194,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public final FrameFixture resizeHeightTo(int height) {
-    return (FrameFixture)super.resizeHeightTo(height);
+    return (FrameFixture)doResizeHeightTo(height);
   }
 
   /**
@@ -195,7 +203,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    */
   @Override public final FrameFixture resizeTo(Dimension size) {
-    return (FrameFixture)super.resizeTo(size);
+    return (FrameFixture)doResizeTo(size);
   }
 
   /**
@@ -205,7 +213,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @throws AssertionError if the size of the managed <code>Frame</code> is not equal to the given size. 
    */
   @Override public final FrameFixture requireSize(Dimension size) {
-    return (FrameFixture)super.requireSize(size);
+    return (FrameFixture)assertEqualSize(size);
   }
 
   /**
@@ -215,7 +223,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final FrameFixture pressKeys(int... keyCodes) {
-    return (FrameFixture)super.pressKeys(keyCodes);
+    return (FrameFixture)doPressKeys(keyCodes);
   }
   
 
@@ -225,7 +233,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @throws AssertionError if the managed <code>Frame</code> is not visible.
    */
   @Override public final FrameFixture requireVisible() {
-    return (FrameFixture)super.requireVisible();
+    return (FrameFixture)assertVisible();
   }
   
   /**
@@ -234,7 +242,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @throws AssertionError if the managed <code>Frame</code> is visible.
    */
   @Override public final FrameFixture requireNotVisible() {
-    return (FrameFixture)super.requireNotVisible();
+    return (FrameFixture)assertNotVisible();
   }
 
   /**
@@ -243,7 +251,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @throws AssertionError is the managed <code>Frame</code> is disabled.
    */
   @Override public final FrameFixture requireEnabled() {
-    return (FrameFixture)super.requireEnabled();
+    return (FrameFixture)assertEnabled();
   }
   
   /**
@@ -252,6 +260,6 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @throws AssertionError is the managed <code>Frame</code> is enabled.
    */
   @Override public final FrameFixture requireDisabled() {
-    return (FrameFixture)super.requireDisabled();
+    return (FrameFixture)assertDisabled();
   }
 }

@@ -64,13 +64,37 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
+   * Simulates a user clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JSplitPaneFixture click() {
+    return (JSplitPaneFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JSplitPaneFixture doubleClick() {
+    return (JSplitPaneFixture)doDoubleClick();
+  }
+  
+  /**
+   * Gives input focus to the <code>{@link JSplitPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JSplitPaneFixture focus() {
+    return (JSplitPaneFixture)doFocus();
+  }
+
+  /**
    * Simulates a user pressing the given keys on the <code>{@link JSplitPane}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
   @Override public final JSplitPaneFixture pressKeys(int... keyCodes) {
-    return (JSplitPaneFixture)super.pressKeys(keyCodes);
+    return (JSplitPaneFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -79,7 +103,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @throws AssertionError if the managed <code>JSplitPane</code> is not visible.
    */
   @Override public final JSplitPaneFixture requireVisible() {
-    return (JSplitPaneFixture)super.requireVisible();
+    return (JSplitPaneFixture)assertVisible();
   }
 
   /**
@@ -88,7 +112,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @throws AssertionError if the managed <code>JSplitPane</code> is visible.
    */
   @Override public final JSplitPaneFixture requireNotVisible() {
-    return (JSplitPaneFixture)super.requireNotVisible();
+    return (JSplitPaneFixture)assertNotVisible();
   }
 
   /**
@@ -97,7 +121,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @throws AssertionError is the managed <code>JSplitPane</code> is disabled.
    */
   @Override public final JSplitPaneFixture requireEnabled() {
-    return (JSplitPaneFixture)super.requireEnabled();
+    return (JSplitPaneFixture)assertEnabled();
   }
   
   /**
@@ -106,6 +130,6 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @throws AssertionError is the managed <code>JSplitPane</code> is enabled.
    */
   @Override public final JSplitPaneFixture requireDisabled() {
-    return (JSplitPaneFixture)super.requireDisabled();
+    return (JSplitPaneFixture)assertDisabled();
   }
 }

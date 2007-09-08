@@ -70,7 +70,15 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @return this fixture.
    */
   @Override public final JCheckBoxFixture click() {
-    return (JCheckBoxFixture)super.click();
+    return (JCheckBoxFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JCheckBox}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JCheckBoxFixture doubleClick() {
+    return (JCheckBoxFixture)doDoubleClick();
   }
 
   /**
@@ -78,7 +86,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @return this fixture.
    */
   @Override public final JCheckBoxFixture focus() {
-    return (JCheckBoxFixture)super.focus();
+    return (JCheckBoxFixture)doFocus();
   }
   
   /**
@@ -88,7 +96,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final JCheckBoxFixture pressKeys(int... keyCodes) {
-    return (JCheckBoxFixture)super.pressKeys(keyCodes);
+    return (JCheckBoxFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -97,7 +105,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @throws AssertionError if the managed <code>JCheckBox</code> is not visible.
    */
   @Override public final JCheckBoxFixture requireVisible() {
-    return (JCheckBoxFixture)super.requireVisible();
+    return (JCheckBoxFixture)assertVisible();
   }
 
   /**
@@ -106,7 +114,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @throws AssertionError if the managed <code>JCheckBox</code> is visible.
    */
   @Override public final JCheckBoxFixture requireNotVisible() {
-    return (JCheckBoxFixture)super.requireNotVisible();
+    return (JCheckBoxFixture)assertNotVisible();
   }
 
   /**
@@ -115,7 +123,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @throws AssertionError is the managed <code>JCheckBox</code> is disabled.
    */
   @Override public final JCheckBoxFixture requireEnabled() {
-    return (JCheckBoxFixture)super.requireEnabled();
+    return (JCheckBoxFixture)assertEnabled();
   }
 
   /**
@@ -124,6 +132,6 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @throws AssertionError is the managed <code>JCheckBox</code> is enabled.
    */
   @Override public final JCheckBoxFixture requireDisabled() {
-    return (JCheckBoxFixture)super.requireDisabled();
+    return (JCheckBoxFixture)assertDisabled();
   }
 }

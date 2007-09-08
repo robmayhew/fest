@@ -72,7 +72,15 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    */
   @Override public final JMenuItemFixture click() {
-    return (JMenuItemFixture)super.click(); 
+    return (JMenuItemFixture)doClick(); 
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JMenuItem}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JMenuItemFixture doubleClick() {
+    return (JMenuItemFixture)doDoubleClick();
   }
 
   /**
@@ -80,7 +88,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    */
   @Override public final JMenuItemFixture focus() {
-    return (JMenuItemFixture)super.focus();
+    return (JMenuItemFixture)doFocus();
   }
 
   /**
@@ -90,7 +98,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @see java.awt.event.KeyEvent
    */
   @Override public final JMenuItemFixture pressKeys(int... keyCodes) {
-    return (JMenuItemFixture)super.pressKeys(keyCodes);
+    return (JMenuItemFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -99,7 +107,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws AssertionError if the managed <code>JMenuItem</code> is not visible.
    */
   @Override public final JMenuItemFixture requireVisible() {
-    return (JMenuItemFixture)super.requireVisible();
+    return (JMenuItemFixture)assertVisible();
   }
 
   /**
@@ -108,7 +116,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws AssertionError if the managed <code>JMenuItem</code> is visible.
    */
   @Override public final JMenuItemFixture requireNotVisible() {
-    return (JMenuItemFixture)super.requireNotVisible();
+    return (JMenuItemFixture)assertNotVisible();
   }
 
   /**
@@ -117,7 +125,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws AssertionError is the managed <code>JMenuItem</code> is disabled.
    */
   @Override public final JMenuItemFixture requireEnabled() {
-    return (JMenuItemFixture)super.requireEnabled();
+    return (JMenuItemFixture)assertEnabled();
   }
   
   /**
@@ -126,6 +134,6 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws AssertionError is the managed <code>JMenuItem</code> is enabled.
    */
   @Override public final JMenuItemFixture requireDisabled() {
-    return (JMenuItemFixture)super.requireDisabled();
+    return (JMenuItemFixture)assertDisabled();
   }
 }

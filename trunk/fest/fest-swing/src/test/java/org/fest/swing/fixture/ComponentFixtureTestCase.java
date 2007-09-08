@@ -103,6 +103,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow();
+    window.setTitle(getClass().getSimpleName());
     window.setSize(new Dimension(300, 200));
     T target = createTarget();
     addToWindow(target);
@@ -151,6 +152,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     fixture.click();
     assertThat(events.clicked()).isTrue();
   }
+  
+  @Test public final void shouldDoubleClickComponent() {
+    ComponentEvents events = ComponentEvents.attachTo(fixture.target);
+    fixture.doubleClick();
+    assertThat(events.doubleClicked()).isTrue();
+  }  
   
   @Test public final void shouldGiveFocusToComponent() {
     T target = fixture.target;

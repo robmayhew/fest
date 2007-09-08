@@ -72,7 +72,15 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @return this fixture.
    */
   @Override public final JLabelFixture click() {
-    return (JLabelFixture)super.click(); 
+    return (JLabelFixture)doClick(); 
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JLabelFixture doubleClick() {
+    return (JLabelFixture)doDoubleClick();
   }
 
   /**
@@ -80,7 +88,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @return this fixture.
    */
   @Override public final JLabelFixture focus() {
-    return (JLabelFixture)super.focus();
+    return (JLabelFixture)doFocus();
   }
 
   /**
@@ -90,7 +98,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @see java.awt.event.KeyEvent
    */
   @Override public final JLabelFixture pressKeys(int... keyCodes) {
-    return (JLabelFixture)super.pressKeys(keyCodes);
+    return (JLabelFixture)doPressKeys(keyCodes);
   }
 
   /**
@@ -99,7 +107,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @throws AssertionError if the managed <code>JLabel</code> is not visible.
    */
   @Override public final JLabelFixture requireVisible() {
-    return (JLabelFixture)super.requireVisible();
+    return (JLabelFixture)assertVisible();
   }
 
   /**
@@ -108,7 +116,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @throws AssertionError if the managed <code>JLabel</code> is visible.
    */
   @Override public final JLabelFixture requireNotVisible() {
-    return (JLabelFixture)super.requireNotVisible();
+    return (JLabelFixture)assertNotVisible();
   }
 
   /**
@@ -117,7 +125,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @throws AssertionError is the managed <code>JLabel</code> is disabled.
    */
   @Override public final JLabelFixture requireEnabled() {
-    return (JLabelFixture)super.requireEnabled();
+    return (JLabelFixture)assertEnabled();
   }
   
   /**
@@ -126,6 +134,6 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @throws AssertionError is the managed <code>JLabel</code> is enabled.
    */
   @Override public final JLabelFixture requireDisabled() {
-    return (JLabelFixture)super.requireDisabled();
+    return (JLabelFixture)assertDisabled();
   }
 }

@@ -16,15 +16,12 @@
 package org.fest.swing.fixture;
 
 import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import static java.awt.event.MouseEvent.BUTTON1;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.RobotFixture;
@@ -48,7 +45,17 @@ public class ComponentFixtureTest {
   @BeforeTest public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     frame = new MyFrame();
-    fixture = new ComponentFixture<JTextField>(robot, frame.textBox) {};
+    frame.setTitle(getClass().getSimpleName());
+    fixture = new ComponentFixture<JTextField>(robot, frame.textBox) {
+      @Override public ComponentFixture<JTextField> click() { return null; }
+      @Override public ComponentFixture<JTextField> doubleClick() { return null; }
+      @Override public ComponentFixture<JTextField> focus() { return null; }
+      @Override public ComponentFixture<JTextField> pressKeys(int... keyCodes) { return null; }
+      @Override public ComponentFixture<JTextField> requireDisabled() { return null; }
+      @Override public ComponentFixture<JTextField> requireEnabled() { return null; }
+      @Override public ComponentFixture<JTextField> requireNotVisible() { return null; }
+      @Override public ComponentFixture<JTextField> requireVisible() { return null; }
+    };
     robot.showWindow(frame);
   }
   
@@ -62,10 +69,9 @@ public class ComponentFixtureTest {
   }
 
   @Test public void shouldDoubleClickComponent() {
-    DoubleClickVerifier doubleClickVerifier = new DoubleClickVerifier();
-    frame.textBox.addMouseListener(doubleClickVerifier);
-    fixture.doubleClick();
-    assertThat(doubleClickVerifier.doubleClicked).isTrue();
+    ComponentEvents events = ComponentEvents.attachTo(frame.textBox);
+    fixture.doDoubleClick();
+    assertThat(events.doubleClicked()).isTrue();
   }
   
   private static class MyFrame extends JFrame {
@@ -81,14 +87,5 @@ public class ComponentFixtureTest {
       popupMenu.add(new JMenuItem("First"));
       popupMenu.add(new JMenuItem("Second"));
     }
-  }
-  
-  private static class DoubleClickVerifier extends MouseAdapter {
-    boolean doubleClicked;
-    
-    @Override public void mouseClicked(MouseEvent e) {
-      System.out.println(e);
-      doubleClicked = e.getButton() == BUTTON1 && e.getClickCount() == 2;
-    }
-  }
+  }  
 }

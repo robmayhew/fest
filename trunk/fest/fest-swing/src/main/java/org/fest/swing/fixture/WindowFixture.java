@@ -102,28 +102,72 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Shows the <code>{@link Window}</code> managed by this fixture.
    * @return this fixture.
    */
-  public WindowFixture<T> show() {
-    robot.showWindow(target);
-    return requireVisible();
-  }
-  
+  public abstract WindowFixture<T> show();
+
   /**
    * Shows the <code>{@link Window}</code> managed by this fixture, resized to the given size.
    * @param size the size to resize the managed <code>Window</code> to.
    * @return this fixture.
    */
-  public WindowFixture<T> show(Dimension size) {
-    robot.showWindow(target, size);
-    return requireVisible();
-  }
-  
+  public abstract WindowFixture<T> show(Dimension size);
+
   /**
    * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
    * @param width the width that the managed <code>Window</code> should have after being resized.
    * @return this fixture.
    */
-  public WindowFixture<T> resizeWidthTo(int width) {
-    return resizeTo(new Dimension(width, target.getHeight()));
+  public abstract WindowFixture<T> resizeWidthTo(int width);
+
+  /**
+   * Simulates a user resizing vertically the <code>{@link Window}</code> managed by this fixture.
+   * @param height the height that the managed <code>Window</code> should have after being resized.
+   * @return this fixture.
+   */
+  public abstract WindowFixture<T> resizeHeightTo(int height);
+
+  /**
+   * Simulates a user resizing the <code>{@link Window}</code> managed by this fixture.
+   * @param size the size that the target window should have after being resized.
+   * @return this fixture.
+   */
+  public abstract WindowFixture<T> resizeTo(Dimension size);
+
+  /**
+   * Asserts that the size of the <code>{@link Window}</code> managed by this fixture is equal to given one. 
+   * @param size the given size to match.
+   * @return this fixture.
+   * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
+   */
+  public abstract WindowFixture<T> requireSize(Dimension size);
+
+  /**
+   * Shows the <code>{@link Window}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  protected final WindowFixture<T> doShow() {
+    robot.showWindow(target);
+    assertVisible();
+    return this;
+  }
+
+  /**
+   * Shows the <code>{@link Window}</code> managed by this fixture, resized to the given size.
+   * @param size the size to resize the managed <code>Window</code> to.
+   * @return this fixture.
+   */
+  protected final WindowFixture<T> doShow(Dimension size) {
+    robot.showWindow(target, size);
+    assertVisible();
+    return this;
+  }
+
+  /**
+   * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
+   * @param width the width that the managed <code>Window</code> should have after being resized.
+   * @return this fixture.
+   */
+  protected final WindowFixture<T> doResizeWidthTo(int width) {
+    return doResizeTo(new Dimension(width, target.getHeight()));
   }
 
   /**
@@ -131,8 +175,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @param height the height that the managed <code>Window</code> should have after being resized.
    * @return this fixture.
    */
-  public WindowFixture<T> resizeHeightTo(int height) {
-    return resizeTo(new Dimension(target.getWidth(), height));
+  protected final WindowFixture<T> doResizeHeightTo(int height) {
+    return doResizeTo(new Dimension(target.getWidth(), height));
   }
 
   /**
@@ -140,7 +184,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
-  public WindowFixture<T> resizeTo(Dimension size) {
+  protected final WindowFixture<T> doResizeTo(Dimension size) {
     windowTester().resize(target, size.width, size.height);
     return this;
   }
@@ -151,23 +195,13 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @return this fixture.
    * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
    */
-  public WindowFixture<T> requireSize(Dimension size) {
+  protected final WindowFixture<T> assertEqualSize(Dimension size) {
     assertThat(target.getSize()).isEqualTo(size);
     return this;
   }
 
   protected final WindowTester windowTester() {
     return (WindowTester)tester();
-  }
-
-  /**
-   * Asserts that the <code>{@link Window}</code> managed by this fixture is visible.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>Window</code> is not visible.
-   */
-  @SuppressWarnings("unchecked") 
-  @Override public WindowFixture<T> requireVisible() {
-    return (WindowFixture<T>)super.requireVisible();
   }
 
   /** 

@@ -44,8 +44,9 @@ public class JPopupMenuFixtureTest {
   private MyFrame frame;
 
   @BeforeTest public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = RobotFixture.robotWithCurrentAwtHierarchy();
     frame = new MyFrame();
+    frame.setTitle(getClass().getSimpleName());
     robot.showWindow(frame);
     fixture = new JPopupMenuFixture(robot, robot.showPopupMenu(frame.textBox));
   }
@@ -55,11 +56,14 @@ public class JPopupMenuFixtureTest {
   }
   
   @Test public void shouldReturnMenuLabels() {
+    System.out.println("running test shouldReturnMenuLabels");
     String[] menuLabels = fixture.menuLabels();
     assertThat(menuLabels).isEqualTo(array("First", "Second", "Third"));
+    frame.popupMenu.setVisible(false);
   }
 
   @Test public void shouldFindMenuWithGivenMatcher() {
+    System.out.println("running test shouldFindMenuWithGivenMatcher");
     GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
       protected boolean isMatching(JMenuItem menuItem) {
         return "First".equals(menuItem.getText());
@@ -67,11 +71,13 @@ public class JPopupMenuFixtureTest {
     };
     JMenuItemFixture menuItem = fixture.menuItem(textMatcher);
     assertThat(menuItem.target).isSameAs(frame.firstMenuItem);
+    frame.popupMenu.setVisible(false);
   }
 
   @Test public void shouldFindMenuWithGivenName() {
     JMenuItemFixture menuItem = fixture.menuItem("first");
     assertThat(menuItem.target).isSameAs(frame.firstMenuItem);
+    frame.popupMenu.setVisible(false);
   }
   
   private static class MyFrame extends JFrame {

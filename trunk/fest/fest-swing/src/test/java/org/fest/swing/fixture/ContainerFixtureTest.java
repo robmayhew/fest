@@ -145,8 +145,18 @@ import org.testng.annotations.Test;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    container = new ContainerFixture<CustomWindow>(robot, new CustomWindow()) {};
+    container = new ContainerFixture<CustomWindow>(robot, new CustomWindow()) {      
+      @Override public ContainerFixture<CustomWindow> click() { return null; }
+      @Override public ContainerFixture<CustomWindow> doubleClick() { return null; }
+      @Override public ContainerFixture<CustomWindow> focus() { return null; }
+      @Override public ContainerFixture<CustomWindow> pressKeys(int... keyCodes) { return null; }
+      @Override public ContainerFixture<CustomWindow> requireDisabled() { return null; }
+      @Override public ContainerFixture<CustomWindow> requireEnabled() { return null; }
+      @Override public ContainerFixture<CustomWindow> requireVisible() { return null; }
+      @Override public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
+    };
     window = container.target;
+    window.setTitle(getClass().getSimpleName());
     robot.showWindow(window);
   }
   

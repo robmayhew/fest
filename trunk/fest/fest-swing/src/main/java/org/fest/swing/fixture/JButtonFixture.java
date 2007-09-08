@@ -54,7 +54,15 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @return this fixture.
    */
   @Override public final JButtonFixture click() {
-    return (JButtonFixture)super.click();
+    return (JButtonFixture)doClick();
+  }
+
+  /**
+   * Simulates a user doble-clicking the <code>{@link JButton}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  @Override public final JButtonFixture doubleClick() {
+    return (JButtonFixture)doDoubleClick();
   }
 
   /**
@@ -62,7 +70,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @return this fixture.
    */
   @Override public final JButtonFixture focus() {
-    return (JButtonFixture)super.focus();
+    return (JButtonFixture)doFocus();
   }
 
   /**
@@ -92,7 +100,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @see java.awt.event.KeyEvent
    */
   @Override public final JButtonFixture pressKeys(int... keyCodes) {
-    return (JButtonFixture)super.pressKeys(keyCodes);
+    return (JButtonFixture)doPressKeys(keyCodes);
   }
   
   /**
@@ -101,7 +109,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @throws AssertionError if the managed <code>JButton</code> is not visible.
    */
   @Override public final JButtonFixture requireVisible() {
-    return (JButtonFixture)super.requireVisible();
+    return (JButtonFixture)assertVisible();
   }
 
   /**
@@ -110,7 +118,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @throws AssertionError if the managed <code>JButton</code> is visible.
    */
   @Override public final JButtonFixture requireNotVisible() {
-    return (JButtonFixture)super.requireNotVisible();
+    return (JButtonFixture)assertNotVisible();
   }
 
   /**
@@ -119,7 +127,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @throws AssertionError is the managed <code>JButton</code> is disabled.
    */
   @Override public final JButtonFixture requireEnabled() {
-    return (JButtonFixture)super.requireEnabled();
+    return (JButtonFixture)assertEnabled();
   }
   
   /**
@@ -128,6 +136,6 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @throws AssertionError is the managed <code>JButton</code> is enabled.
    */
   @Override public final JButtonFixture requireDisabled() {
-    return (JButtonFixture)super.requireDisabled();
+    return (JButtonFixture)assertDisabled();
   }
 }
