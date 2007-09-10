@@ -26,8 +26,8 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -42,7 +42,7 @@ public class ComponentFixtureTest {
   private RobotFixture robot;
   private MyFrame frame;
 
-  @BeforeTest public void setUp() {
+  @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     frame = new MyFrame();
     frame.setTitle(getClass().getSimpleName());
@@ -59,7 +59,7 @@ public class ComponentFixtureTest {
     robot.showWindow(frame);
   }
   
-  @AfterTest public void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
   

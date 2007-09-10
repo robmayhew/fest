@@ -23,13 +23,16 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
 
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -43,27 +46,25 @@ public class JPopupMenuFixtureTest {
   private RobotFixture robot;
   private MyFrame frame;
 
-  @BeforeTest public void setUp() {
-    robot = RobotFixture.robotWithCurrentAwtHierarchy();
+  @BeforeMethod public void setUp() {
+    robot = robotWithNewAwtHierarchy();
     frame = new MyFrame();
     frame.setTitle(getClass().getSimpleName());
     robot.showWindow(frame);
     fixture = new JPopupMenuFixture(robot, robot.showPopupMenu(frame.textBox));
   }
   
-  @AfterTest public void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
   
   @Test public void shouldReturnMenuLabels() {
-    System.out.println("running test shouldReturnMenuLabels");
     String[] menuLabels = fixture.menuLabels();
     assertThat(menuLabels).isEqualTo(array("First", "Second", "Third"));
     frame.popupMenu.setVisible(false);
   }
 
   @Test public void shouldFindMenuWithGivenMatcher() {
-    System.out.println("running test shouldFindMenuWithGivenMatcher");
     GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
       protected boolean isMatching(JMenuItem menuItem) {
         return "First".equals(menuItem.getText());
