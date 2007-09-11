@@ -39,7 +39,14 @@ final class TestTable extends JTable {
   TestTable(String name, Object[][] rowData, Object[] columnNames) {
     if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");
     setDragEnabled(true);
-    setModel(new DefaultTableModel(rowData, columnNames));
+    DefaultTableModel model = new DefaultTableModel(rowData, columnNames) {
+      private static final long serialVersionUID = 1L;
+
+      @Override public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    };
+    setModel(model);
     setName(name);
     setSelectionMode(SINGLE_SELECTION);
     setTransferHandler(new TableTransferHandler());
