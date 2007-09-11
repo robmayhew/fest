@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
 
 /**
@@ -35,6 +36,29 @@ import static org.fest.util.Strings.isEmpty;
  */
 final class TestTable extends JTable {
   private static final long serialVersionUID = 1L;
+
+  TestTable(String name, int rowCount, int columnCount) {
+    this(name, rowData(rowCount, columnCount), columnNames(columnCount));
+  }
+
+  static Object[] columnNames(int columnCount) {
+    Object[] columnNames = new Object[columnCount];
+    for (int i = 0; i < columnCount; i++) 
+      columnNames[i] = String.valueOf(i);
+    return columnNames;
+  }
+  
+  static Object[][] rowData(int rowCount, int columnCount) {
+    Object[][] data = new Object[rowCount][columnCount];
+    for (int i = 0; i < rowCount; i++)
+      for (int j = 0; j < columnCount; j++)
+        data[i][j] = cellValue(i, j); 
+    return data;
+  }
+
+  static String cellValue(int row, int column) {
+    return concat(String.valueOf(row), "-", String.valueOf(column));
+  }
 
   TestTable(String name, Object[][] rowData, Object[] columnNames) {
     if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");

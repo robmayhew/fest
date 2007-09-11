@@ -23,7 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.concat;
 
 import org.fest.swing.RobotFixture;
 
@@ -50,7 +49,7 @@ public class JTableCellFixtureTest {
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    table = new TestTable("table", rowData(), columnNames());
+    table = new TestTable("table", ROW_COUNT, COLUMN_COUNT);
     MainWindow window = new MainWindow(getClass().getSimpleName(), table);
     robot.showWindow(window);
     fixture = new JTableCellFixture(tableFixture(), ROW, COLUMN);
@@ -72,25 +71,6 @@ public class JTableCellFixtureTest {
     assertThat(table.isColumnSelected(COLUMN)).isTrue();
   }
   
-  private Object[] columnNames() {
-    Object[] columnNames = new Object[COLUMN_COUNT];
-    for (int i = 0; i < COLUMN_COUNT; i++) 
-      columnNames[i] = String.valueOf(i);
-    return columnNames;
-  }
-  
-  private Object[][] rowData() {
-    Object[][] data = new Object[ROW_COUNT][COLUMN_COUNT];
-    for (int i = 0; i < ROW_COUNT; i++)
-      for (int j = 0; j < COLUMN_COUNT; j++)
-        data[i][j] = cellValue(i, j); 
-    return data;
-  }
-
-  private String cellValue(int row, int column) {
-    return concat(String.valueOf(row), "-", String.valueOf(column));
-  }
-
   private static class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
 

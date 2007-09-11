@@ -25,9 +25,10 @@ import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.fixture.JTableFixture.cell;
+import static org.fest.swing.fixture.TestTable.cellValue;
+import static org.fest.swing.fixture.TestTable.columnNames;
 
 import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -112,29 +113,10 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   }
 
   protected JTable createTarget() {
-    target = new TestTable("target", rowData(), columnNames());
+    target = new TestTable("target", ROW_COUNT, COLUMN_COUNT);
     return target;
   }
   
-  private Object[] columnNames() {
-    Object[] columnNames = new Object[COLUMN_COUNT];
-    for (int i = 0; i < COLUMN_COUNT; i++) 
-      columnNames[i] = String.valueOf(i);
-    return columnNames;
-  }
-  
-  private Object[][] rowData() {
-    Object[][] data = new Object[ROW_COUNT][COLUMN_COUNT];
-    for (int i = 0; i < ROW_COUNT; i++)
-      for (int j = 0; j < COLUMN_COUNT; j++)
-        data[i][j] = cellValue(i, j); 
-    return data;
-  }
-
-  private String cellValue(int row, int column) {
-    return concat(String.valueOf(row), "-", String.valueOf(column));
-  }
-
   @Override protected Component decorateBeforeAddingToWindow(JTable target) {
     return decorate(target);
   }
@@ -145,7 +127,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     for (int i = 0; i < rowCount; i++)
       for (int j = 0; j < COLUMN_COUNT; j++)
         data[i][j] = cellValue(i + ROW_COUNT, j); 
-    dropTarget = new TestTable("dropTarget", data,columnNames());
+    dropTarget = new TestTable("dropTarget", data, columnNames(COLUMN_COUNT));
     dropTargetFixture = new JTableFixture(robot(), dropTarget);
     window().add(decorate(dropTarget));
     window().setSize(new Dimension(600, 400));
