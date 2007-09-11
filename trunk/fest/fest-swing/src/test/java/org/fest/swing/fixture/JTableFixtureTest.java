@@ -63,7 +63,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
     targetFixture.selectCell(row, column);
-    assertThat(targetFixture.contents()).isEqualTo(cellValue(row, column));
+    assertThat(targetFixture.selectionContents()).isEqualTo(cellValue(row, column));
   }
   
   @DataProvider(name = "cellsToSelect")
@@ -92,7 +92,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   
   @Test public void shouldReturnNullIfNoSelectedCell() {
     assertThat(targetFixture.target.getSelectedRowCount()).isZero();
-    assertThat(targetFixture.contents()).isNull();
+    assertThat(targetFixture.selectionContents()).isNull();
   }
 
   @Test public void shouldDragAndDrop() throws Exception {

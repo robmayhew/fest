@@ -82,7 +82,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * <code>{@link JTable}</code> does not have any selected cell.
    * @return the value of the selected cell.
    */
-  public final String contents() {
+  public final String selectionContents() {
     if (target.getSelectedRowCount() == 0) return null;
     return contentsAt(target.getSelectedRow(), target.getSelectedColumn());
   }
