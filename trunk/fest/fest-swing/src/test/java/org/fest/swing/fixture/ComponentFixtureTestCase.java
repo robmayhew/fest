@@ -17,7 +17,6 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.KeyAdapter;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import abbot.tester.ComponentTester;
@@ -40,6 +38,7 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -53,18 +52,17 @@ import org.testng.annotations.Test;
  */
 public abstract class ComponentFixtureTestCase<T extends Component> {
 
-  protected static class MainWindow extends JFrame {
+  protected static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     public final JButton button = new JButton("Some Button");
 
     private final ComponentTester tester = new ComponentTester();
     
-    MainWindow() {
-      setLayout(new FlowLayout());
+    MainWindow(Class testClass) {
+      super(testClass);
       button.setName("button");
       add(button);
-      setTitle("Testing with FEST");
       lookNative();
     }
     
@@ -102,8 +100,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new MainWindow();
-    window.setTitle(getClass().getSimpleName());
+    window = new MainWindow(getClass());
     window.setSize(new Dimension(300, 200));
     T target = createTarget();
     addToWindow(target);

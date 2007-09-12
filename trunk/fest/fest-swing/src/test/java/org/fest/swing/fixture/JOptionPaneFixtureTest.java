@@ -15,14 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import abbot.tester.ComponentTester;
@@ -44,6 +42,7 @@ import static org.fest.util.Arrays.array;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -56,15 +55,15 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JOptionPaneFixtureTest {
 
-  public static class CustomWindow extends JFrame {
+  public static class CustomWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("Click me");
     
     private final ComponentTester tester = new ComponentTester();
     
-    CustomWindow() {
-      setLayout(new FlowLayout());
+    CustomWindow(Class testClass) {
+      super(testClass);
       add(button);
     }
 
@@ -147,7 +146,7 @@ import org.testng.annotations.Test;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new CustomWindow();
+    window = new CustomWindow(getClass());
     robot.showWindow(window);
   }
   

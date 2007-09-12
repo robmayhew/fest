@@ -26,7 +26,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -55,6 +54,7 @@ import static org.fest.util.Arrays.array;
 import org.fest.swing.GUITest;
 import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -67,7 +67,7 @@ import org.testng.annotations.Test;
  */
 @GUITest public class ContainerFixtureTest {
 
-  private static class CustomWindow extends JFrame {
+  private static class CustomWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
     
     final JButton button = new JButton("A Button");
@@ -86,7 +86,8 @@ import org.testng.annotations.Test;
     final JTextField textField = new JTextField(10);
     final JToolBar toolBar = new JToolBar(HORIZONTAL);
     
-    CustomWindow() {
+    CustomWindow(Class testClass) {
+      super(testClass);
       setLayout(new BoxLayout(getContentPane(), Y_AXIS));
       setUpComponents();
       addComponents();
@@ -145,7 +146,7 @@ import org.testng.annotations.Test;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    container = new ContainerFixture<CustomWindow>(robot, new CustomWindow()) {      
+    container = new ContainerFixture<CustomWindow>(robot, new CustomWindow(getClass())) {      
       @Override public ContainerFixture<CustomWindow> click() { return null; }
       @Override public ContainerFixture<CustomWindow> doubleClick() { return null; }
       @Override public ContainerFixture<CustomWindow> focus() { return null; }
@@ -156,7 +157,6 @@ import org.testng.annotations.Test;
       @Override public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
     };
     window = container.target;
-    window.setTitle(getClass().getSimpleName());
     robot.showWindow(window);
   }
   

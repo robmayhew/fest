@@ -16,15 +16,14 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -50,7 +49,7 @@ public class JTableCellFixtureTest {
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     table = new TestTable("table", ROW_COUNT, COLUMN_COUNT);
-    MainWindow window = new MainWindow(getClass().getSimpleName(), table);
+    MainWindow window = new MainWindow(getClass(), table);
     robot.showWindow(window);
     fixture = new JTableCellFixture(tableFixture(), ROW, COLUMN);
   }
@@ -71,12 +70,11 @@ public class JTableCellFixtureTest {
     assertThat(table.isColumnSelected(COLUMN)).isTrue();
   }
   
-  private static class MainWindow extends JFrame {
+  private static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    MainWindow(String title, TestTable table) {
-      setLayout(new FlowLayout());
-      setTitle(title);
+    MainWindow(Class testClass, TestTable table) {
+      super(testClass);
       addTable(table);
       lookNative();
     }

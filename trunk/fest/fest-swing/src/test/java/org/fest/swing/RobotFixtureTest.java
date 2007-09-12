@@ -15,9 +15,6 @@
  */
 package org.fest.swing;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -40,8 +37,7 @@ public class RobotFixtureTest {
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new MyFrame();
-    frame.setTitle(getClass().getSimpleName());
+    frame = new MyFrame(getClass());
     robot.showWindow(frame);
     assertThat(frame.isVisible()).isTrue();
   }
@@ -60,15 +56,15 @@ public class RobotFixtureTest {
     robot.showPopupMenu(frame.textBox);
   }
 
-  private static class MyFrame extends JFrame {
+  private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     private final JPopupMenu popupMenu = new JPopupMenu("Popup Menu");
     private final JTextField textBoxWithPopupMenu = new JTextField(20);
     private final JTextField textBox = new JTextField(20);
     
-    MyFrame() {
-      setLayout(new FlowLayout());
+    MyFrame(Class testClass) {
+      super(testClass);
       add(textBoxWithPopupMenu);
       add(textBox);
       textBoxWithPopupMenu.setComponentPopupMenu(popupMenu);

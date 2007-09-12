@@ -35,7 +35,7 @@ public class FixForWrongOptionPaneFixtureFoundTest {
   private CustomWindow window;
   
   @BeforeMethod public void setUp() {
-    frameFixture = new FrameFixture(new CustomWindow());
+    frameFixture = new FrameFixture(new CustomWindow(getClass()));
     window = frameFixture.targetCastedTo(CustomWindow.class);
     frameFixture.show();
   }

@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
 import static javax.swing.SwingUtilities.getWindowAncestor;
@@ -36,6 +35,7 @@ import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.NORTH;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.SOUTH;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.WEST;
 
+import org.fest.swing.TestFrame;
 import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
 
 import org.testng.annotations.DataProvider;
@@ -66,7 +66,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
     }
   }
   
-  private JFrame toolbarFrame;
+  private TestFrame toolbarFrame;
   private BorderLayout borderLayout;
   private JToolBarFixture fixture;
   private MyToolBar target;
@@ -147,7 +147,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   }
 
   private void showToolbarFrame() {
-    toolbarFrame = new JFrame();
+    toolbarFrame = new TestFrame(getClass());
     borderLayout = new BorderLayout();
     toolbarFrame.setLayout(borderLayout);
     toolbarFrame.add(target, BorderLayout.NORTH);

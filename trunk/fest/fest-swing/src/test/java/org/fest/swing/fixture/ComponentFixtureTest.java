@@ -15,9 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -25,6 +22,7 @@ import javax.swing.JTextField;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -44,8 +42,7 @@ public class ComponentFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    frame = new MyFrame();
-    frame.setTitle(getClass().getSimpleName());
+    frame = new MyFrame(getClass());
     fixture = new ComponentFixture<JTextField>(robot, frame.textBox) {
       @Override public ComponentFixture<JTextField> click() { return null; }
       @Override public ComponentFixture<JTextField> doubleClick() { return null; }
@@ -74,14 +71,14 @@ public class ComponentFixtureTest {
     assertThat(events.doubleClicked()).isTrue();
   }
   
-  private static class MyFrame extends JFrame {
+  private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     private final JPopupMenu popupMenu = new JPopupMenu("Popup Menu");
     private final JTextField textBox = new JTextField(20);
     
-    MyFrame() {
-      setLayout(new FlowLayout());
+    MyFrame(Class testClass) {
+      super(testClass);
       add(textBox);
       textBox.setComponentPopupMenu(popupMenu);
       popupMenu.add(new JMenuItem("First"));

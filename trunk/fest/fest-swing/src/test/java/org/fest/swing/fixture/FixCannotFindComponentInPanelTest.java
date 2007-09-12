@@ -16,12 +16,12 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -34,14 +34,14 @@ import org.testng.annotations.Test;
  */
 public class FixCannotFindComponentInPanelTest {
 
-  class MyFrame extends JFrame {
+  class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     private final JPanel panel = new JPanel();
     private final JList list = new JList();
     
-    MyFrame() {
-      setLayout(new FlowLayout());
+    MyFrame(Class testClass) {
+      super(testClass);
       add(panel);
       panel.add(new JScrollPane(list));
       list.setName("list");
@@ -51,7 +51,7 @@ public class FixCannotFindComponentInPanelTest {
   private FrameFixture frame;
   
   @BeforeClass public void setUp() {
-    frame = new FrameFixture(new MyFrame());
+    frame = new FrameFixture(new MyFrame(getClass()));
     frame.show(new Dimension(400, 200));
   }
   

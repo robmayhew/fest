@@ -15,9 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -30,6 +27,7 @@ import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -48,8 +46,7 @@ public class JPopupMenuFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new MyFrame();
-    frame.setTitle(getClass().getSimpleName());
+    frame = new MyFrame(getClass());
     robot.showWindow(frame);
     fixture = new JPopupMenuFixture(robot, robot.showPopupMenu(frame.textBox));
   }
@@ -81,15 +78,15 @@ public class JPopupMenuFixtureTest {
     frame.popupMenu.setVisible(false);
   }
   
-  private static class MyFrame extends JFrame {
+  private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     private final JPopupMenu popupMenu = new JPopupMenu("Popup Menu");
     private final JMenuItem firstMenuItem = new JMenuItem("First");
     private final JTextField textBox = new JTextField(20);
     
-    MyFrame() {
-      setLayout(new FlowLayout());
+    MyFrame(Class testClass) {
+      super(testClass);
       add(textBox);
       textBox.setComponentPopupMenu(popupMenu);
       firstMenuItem.setName("first");

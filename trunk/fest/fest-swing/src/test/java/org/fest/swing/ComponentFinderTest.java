@@ -16,11 +16,9 @@
 package org.fest.swing;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Window;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTree;
@@ -40,13 +38,13 @@ import org.testng.annotations.Test;
  */
 public class ComponentFinderTest {
 
-  protected static class MainWindow extends JFrame {
+  protected static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A Button");
 
-    MainWindow() {
-      setLayout(new FlowLayout());
+    MainWindow(Class testClass) {
+      super(testClass);
       add(button);
       button.setName("button");
       lookNative();
@@ -203,7 +201,7 @@ public class ComponentFinderTest {
   }
 
   private MainWindow showWindow() {
-    MainWindow w = new MainWindow();
+    MainWindow w = new MainWindow(getClass());
     w.pack();
     w.setVisible(true);
     return w;

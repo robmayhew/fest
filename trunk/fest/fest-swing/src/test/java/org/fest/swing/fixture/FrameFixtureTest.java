@@ -18,14 +18,13 @@ package org.fest.swing.fixture;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import javax.swing.JFrame;
-
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.GUITest;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.Test;
 
@@ -38,7 +37,7 @@ import org.testng.annotations.Test;
 @GUITest public class FrameFixtureTest extends WindowFixtureTestCase<Frame> {
 
   private FrameFixture fixture;
-  private JFrame target;
+  private TestFrame target;
   
   @Test public void shouldIconifyAndDeiconifyFrame() {
     fixture.iconify();
@@ -71,7 +70,7 @@ import org.testng.annotations.Test;
   }
 
   protected Frame createTarget() {
-    target = new JFrame();
+    target = new TestFrame(getClass());
     return target;
   }
 }

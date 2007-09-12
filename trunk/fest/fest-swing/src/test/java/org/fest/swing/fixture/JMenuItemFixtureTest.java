@@ -18,7 +18,6 @@ package org.fest.swing.fixture;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -29,6 +28,7 @@ import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 
 import org.fest.swing.GUITest;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JMenuItemFixtureTest {
 
-  private static class CustomWindow extends JFrame {
+  private static class CustomWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
     
     final JMenu fileMenu = new JMenu("File");
@@ -49,7 +49,8 @@ import org.testng.annotations.Test;
 
     boolean newMenuSelected;
     
-    CustomWindow() {
+    CustomWindow(Class testClass) {
+      super(testClass);
       setJMenuBar(new JMenuBar());
       newMenu.setName("new");
       newMenu.addMouseListener(new MouseAdapter() {
@@ -68,7 +69,7 @@ import org.testng.annotations.Test;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new CustomWindow();
+    window = new CustomWindow(getClass());
     robot.showWindow(window);
   }
   
