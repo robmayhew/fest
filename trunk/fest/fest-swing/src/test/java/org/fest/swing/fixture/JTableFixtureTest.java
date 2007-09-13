@@ -24,7 +24,7 @@ import javax.swing.JTable;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.fixture.JTableFixture.cell;
+import static org.fest.swing.fixture.TableCell.cell;
 import static org.fest.swing.fixture.TestTable.cellValue;
 import static org.fest.swing.fixture.TestTable.columnNames;
 
@@ -79,10 +79,10 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   
   @Test public void shouldSelectMultipleRows() {
     target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
-    JTableFixture.Cell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));    
+    TableCell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));    
     targetFixture.selectCells(cells);
     assertThat(targetFixture.target.getSelectedRowCount()).isEqualTo(cells.length);
-    for (JTableFixture.Cell c : cells)
+    for (TableCell c : cells)
       assertThatCellIsSelected(c.row, c.column);
   }
   
@@ -91,7 +91,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     assertThat(targetFixture.target.isColumnSelected(column)).isTrue();
   }
   
-  @Test public void shouldReturnNullIfNoSelectedCell() {
+  @Test public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
     assertThat(targetFixture.target.getSelectedRowCount()).isZero();
     assertThat(targetFixture.selectionContents()).isNull();
   }

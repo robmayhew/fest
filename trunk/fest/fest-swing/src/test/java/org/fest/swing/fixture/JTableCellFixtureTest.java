@@ -16,11 +16,17 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.fixture.TestTable.cellValue;
 
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
@@ -36,53 +42,87 @@ import org.testng.annotations.Test;
  */
 public class JTableCellFixtureTest {
 
-  private static final int COLUMN_COUNT = 6;
-  private static final int ROW_COUNT = 5;
-
   private static final int COLUMN = 4;
   private static final int ROW = 2;
   
-  private TestTable table;
   private RobotFixture robot;
-  private JTableCellFixture fixture;
+  private JTableCellFixture cell;
+  private MainWindow window;
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    table = new TestTable("table", ROW_COUNT, COLUMN_COUNT);
-    MainWindow window = new MainWindow(getClass(), table);
+    window = new MainWindow(getClass());
     robot.showWindow(window);
-    fixture = new JTableCellFixture(tableFixture(), ROW, COLUMN);
+    cell = new JTableCellFixture(tableFixture(), ROW, COLUMN);
+    assertCellNotSelected();
   }
 
   private JTableFixture tableFixture() {
-    return new JTableFixture(robot, table);
+    return new JTableFixture(robot, window.table);
   }
   
+  private void assertCellNotSelected() {
+    assertThat(window.table.isRowSelected(cell.row())).isFalse();
+    assertThat(window.table.isColumnSelected(cell.column())).isFalse();
+  }
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
   
   @Test public void shouldSelectCell() {
-    assertThat(table.isRowSelected(ROW)).isFalse();
-    assertThat(table.isColumnSelected(COLUMN)).isFalse();
-    fixture.select();
-    assertThat(table.isRowSelected(ROW)).isTrue();
-    assertThat(table.isColumnSelected(COLUMN)).isTrue();
+    cell.select();
+    assertCellSelected();
+  }
+
+  private void assertCellSelected() {
+    assertThat(window.table.isRowSelected(cell.row())).isTrue();
+    assertThat(window.table.isColumnSelected(cell.column())).isTrue();
+  }
+
+  @Test public void shouldClickCell() {
+    cell.click();
+    assertCellSelected();
+  }
+  
+  @Test public void shouldDoubleClickCell() {
+    ComponentEvents events = ComponentEvents.attachTo(window.table);
+    cell.doubleClick();
+    assertCellSelected();
+    assertThat(events.doubleClicked()).isTrue();
+  }
+  
+  @Test public void shouldReturnCellContent() {
+    assertThat(cell.contents()).isEqualTo(cellValue(ROW, COLUMN));
+  }
+  
+  @Test public void shouldShowPopupMenuFromCell() {
+    window.table.addMouseListener(new MouseAdapter() {
+      @Override public void mouseReleased(MouseEvent e) {
+        assertThat(e.isPopupTrigger()).isTrue();
+        Point point = e.getPoint();
+        assertThat(window.table.rowAtPoint(point)).isEqualTo(cell.row());
+        assertThat(window.table.columnAtPoint(point)).isEqualTo(cell.column());
+      }      
+    });
+    cell.showPopupMenu();
+    assertThat(window.popupMenu.isVisible()).isTrue();
   }
   
   private static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    MainWindow(Class testClass, TestTable table) {
+    private static final int COLUMN_COUNT = 6;
+    private static final int ROW_COUNT = 5;
+
+    final TestTable table = new TestTable("table", ROW_COUNT, COLUMN_COUNT);
+    final JPopupMenu popupMenu = new JPopupMenu();
+    
+    MainWindow(Class testClass) {
       super(testClass);
       addTable(table);
-      lookNative();
-    }
-    
-    private void lookNative() {
-      try {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-      } catch (Exception ignored) {}
+      table.setComponentPopupMenu(popupMenu);
+      popupMenu.add(new JMenuItem("First"));
     }
     
     private void addTable(TestTable table) {

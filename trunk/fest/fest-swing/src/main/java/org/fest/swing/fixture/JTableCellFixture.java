@@ -15,10 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
+import static java.awt.event.InputEvent.BUTTON1_MASK;
+
+import org.fest.swing.ComponentLookupException;
+import org.fest.swing.RobotFixture;
 
 /**
  * Understands simulation of user events on a cell of a <code>{@link JTable}</code> and verification of the state of
@@ -35,8 +40,8 @@ public class JTableCellFixture {
   /**
    * Creates a new </code>{@link JTableCellFixture}</code>.
    * @param table contains the <code>JTable</code> containing the cell to be managed by this fixture.
-   * @param row the index of the row of the cell to be managed by this fixture.
-   * @param column the index of the column of the cell to be managed by this fixture.
+   * @param row the row index of the cell to be managed by this fixture.
+   * @param column the column index of the cell to be managed by this fixture.
    */
   protected JTableCellFixture(JTableFixture table, int row, int column) {
     this.table = table;
@@ -44,17 +49,96 @@ public class JTableCellFixture {
     this.column = column;
   }
 
+  /**
+   * Simulates a user selecting the table cell managed by this fixture.
+   * @return this fixture.
+   */
   public final JTableCellFixture select() {
     table.selectCell(row, column);
     return this;
   }
-  
+
+  /**
+   * Simulates a user clicking the table cell managed by this fixture.
+   * @return this fixture.
+   */
   public final JTableCellFixture click() {
     table.tester().actionClick(table.target, cellLocation());
+    return this;
+  }
+  
+  /**
+   * Simulates a user double-clicking the table cell managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTableCellFixture doubleClick() {
+    table.tester().actionClick(table.target, cellLocation(), BUTTON1_MASK, 2);
     return this;
   }
 
   private ComponentLocation cellLocation() {
     return new ComponentLocation(new JTableLocation(row, column).getPoint(table.target));
   }
+
+  /**
+   * Returns the value of table cell managed by this fixture into a reasonable <code>String</code> representation, or
+   * <code>null</code> if one can not be obtained.
+   * @return the value of the given cell.
+   */  
+  public final String contents() {
+    return table.contentsAt(row, column);
+  }
+
+  /**
+   * Simulates a user dragging the table cell managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTableCellFixture drag() {
+    table.drag(row, column);
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping into the table cell managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTableCellFixture drop() {
+    table.drop(row, column);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing the given keys on the table cell managed by this fixture.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JTableCellFixture pressKeys(int... keyCodes) {
+    table.pressKeys(keyCodes);
+    return this;
+  }
+
+  /**
+   * Shows a popup menu using the table cell managed by this fixture as the invoker of the popup menu.
+   * @return a fixture that manages the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
+  public final JPopupMenuFixture showPopupMenu() {
+    RobotFixture robot = table.robot;
+    JTable target = table.target;
+    JPopupMenu popupMenu = robot.showPopupMenu(target, new JTableLocation(row, column).getPoint(table.target));
+    return new JPopupMenuFixture(robot, popupMenu);
+  }
+  
+  /**
+   * Returns the row index of the table cell managed by this fixture.
+   * @return the row index of the table cell managed by this fixture.
+   */
+  public final int row() { return row; }
+
+  /**
+   * Returns the column index of the table cell managed by this fixture.
+   * @return the column index of the table cell managed by this fixture.
+   */
+  public final int column() { return column; }
 }

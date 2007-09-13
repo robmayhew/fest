@@ -68,10 +68,10 @@ public class JTableFixture extends ComponentFixture<JTable> {
     return this;
   }
 
-  public final JTableFixture selectCells(Cell... cells) {
+  public final JTableFixture selectCells(TableCell... cells) {
     int multipleSelectionKey = controlOrCommandKey();
     tableTester().actionKeyPress(multipleSelectionKey);
-    for (Cell c : cells) selectCell(c.row, c.column);
+    for (TableCell c : cells) selectCell(c.row, c.column);
     tableTester().actionKeyRelease(multipleSelectionKey);
     return this;
   }
@@ -126,34 +126,6 @@ public class JTableFixture extends ComponentFixture<JTable> {
   
   protected final JTableTester tableTester() {
     return (JTableTester)tester();
-  }
-
-  /**
-   * Creates a new representation of a <code>{@link JTable}</code> cell.
-   * @param row the row of the cell.
-   * @param column the column of the cell.
-   * @return the created cell.
-   */
-  public static Cell cell(int row, int column) {
-    return new Cell(row, column);
-  }
-  
-  /**
-   * Understands a cell in a <code>{@link JTable}</code>.
-   */
-  public static class Cell {
-    public final int row;
-    public final int column;
-
-    /**
-     * Creates a new </code>{@link Cell}</code>.
-     * @param row the row of the cell.
-     * @param column the column of the cell.
-     */
-    public Cell(int row, int column) {
-      this.row = row;
-      this.column = column;
-    }
   }
 
   /**
