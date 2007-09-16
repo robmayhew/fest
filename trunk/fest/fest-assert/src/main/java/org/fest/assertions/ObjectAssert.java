@@ -18,8 +18,8 @@ package org.fest.assertions;
 import java.util.Arrays;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.formatMessage;
-import static org.fest.assertions.Formatting.formatObject;
+import static org.fest.assertions.Formatting.format;
+import static org.fest.assertions.Formatting.bracketAround;
 import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
 
@@ -45,8 +45,8 @@ public final class ObjectAssert extends Assert<Object> {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
     if (!type.isAssignableFrom(current))
-      fail(concat(formatMessage(description()), "expected instance of:", formatObject(type.getName()),
-          " but was instance of:", formatObject(current.getName())));
+      fail(concat(format(description()), "expected instance of:", bracketAround(type.getName()),
+          " but was instance of:", bracketAround(current.getName())));
     return this;
   }
   
@@ -60,8 +60,8 @@ public final class ObjectAssert extends Assert<Object> {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
     for (Class<?> type : types) if (type.isAssignableFrom(current)) return this;
-    fail(concat(formatMessage(description()), "expected instance of any:",
-        formatObject(Arrays.toString(namesOf(types))), " but was instance of:", formatObject(current.getName())));   
+    fail(concat(format(description()), "expected instance of any:",
+        bracketAround(Arrays.toString(namesOf(types))), " but was instance of:", bracketAround(current.getName())));   
     return this;
   }
   

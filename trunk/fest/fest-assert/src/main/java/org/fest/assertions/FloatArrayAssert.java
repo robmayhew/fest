@@ -20,8 +20,8 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.formatMessage;
-import static org.fest.assertions.Formatting.formatObject;
+import static org.fest.assertions.Formatting.bracketAround;
+import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -62,7 +62,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    */
   public void isEmpty() {
     if (actual.length > 0) 
-      fail(concat(formatMessage(description()), "expecting empty array, but was ", formatObject(Arrays.toString(actual))));
+      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(Arrays.toString(actual))));
   }
 
   /**
@@ -71,7 +71,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is empty.
    */
   public FloatArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail(concat(formatMessage(description()), "expecting a non-empty array"));
+    if (actualGroupSize() == 0) fail(concat(format(description()), "expecting a non-empty array"));
     return this;
   }
 

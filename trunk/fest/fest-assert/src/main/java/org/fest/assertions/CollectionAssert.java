@@ -20,7 +20,7 @@ import java.util.Collection;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
@@ -44,7 +44,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public CollectionAssert doesNotHaveDuplicates() {
     Collection<?> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty()) 
-      fail(concat(formatMessage(description()), "the collection ", actual, " contains duplicates (", duplicates, ")"));
+      fail(concat(format(description()), "the collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
   }
 
@@ -64,7 +64,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the actual collection is <code>null</code>.
    */
   public CollectionAssert isNotNull() {
-    if (actual == null) fail(concat(formatMessage(description()), "the collection is null"));
+    if (actual == null) fail(concat(format(description()), "the collection is null"));
     return this;
   }
   
@@ -74,7 +74,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    */
   public void isEmpty() {
     if (!Collections.isEmpty(actual)) 
-      fail(concat(formatMessage(description()), "expecting empty collection, but was ", actual));
+      fail(concat(format(description()), "expecting empty collection, but was ", actual));
   }
   
   /**
@@ -83,8 +83,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the actual collection is empty.
    */
   public CollectionAssert isNotEmpty() {
-    if (actual == null) fail(concat(formatMessage(description()), "expecting non-null collection"));
-    if (actual.isEmpty()) fail(concat(formatMessage(description()), "expecting non-empty collection"));
+    if (actual == null) fail(concat(format(description()), "expecting non-null collection"));
+    if (actual.isEmpty()) fail(concat(format(description()), "expecting non-empty collection"));
     return this;
   }
   

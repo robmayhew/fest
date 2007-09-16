@@ -28,13 +28,49 @@ public final class Formatting {
 
   private static final String EMPTY_MESSAGE = "";
 
-  public static String formatMessage(String message) {
+  public static String format(String message) {
     if (isEmpty(message)) return EMPTY_MESSAGE;
     return concat("[", message, "] ");
   }
 
-  public static String formatObject(Object o) {
-    return concat("<", quote(o), ">");
+  public static String bracketAround(Object o) {
+    return doBracketAround(quote(o));
+  }
+  
+  public static String bracketAround(boolean val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  public static String bracketAround(byte val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  public static String bracketAround(char val) {
+    return doBracketAround(quote(String.valueOf(val)));
+  }
+
+  public static String bracketAround(double val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  public static String bracketAround(float val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  public static String bracketAround(int val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  public static String bracketAround(long val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  public static String bracketAround(short val) {
+    return doBracketAround(String.valueOf(val));
+  }
+
+  private static String doBracketAround(Object o) {
+    return concat("<", o, ">");    
   }
   
   private Formatting() {}

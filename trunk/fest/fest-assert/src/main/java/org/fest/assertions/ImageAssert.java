@@ -24,7 +24,7 @@ import javax.imageio.ImageIO;
 
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfNotEqual;
-import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
@@ -76,7 +76,7 @@ public final class ImageAssert extends Assert<BufferedImage> {
    * @throws AssertionError if the actual image is not equal to the given one.
    */
   public ImageAssert isEqualTo(BufferedImage expected) {
-    if (!areEqual(actual, expected)) fail(concat(formatMessage(description()), "images are not equal"));
+    if (!areEqual(actual, expected)) fail(concat(format(description()), "images are not equal"));
     return this;
   }
 
@@ -88,7 +88,7 @@ public final class ImageAssert extends Assert<BufferedImage> {
    * @throws AssertionError if the actual image is equal to the given one.
    */
   public ImageAssert isNotEqualTo(BufferedImage image) {
-    if (areEqual(actual, image)) fail(concat(formatMessage(description()), "images are equal"));
+    if (areEqual(actual, image)) fail(concat(format(description()), "images are equal"));
     return this;
   }
 

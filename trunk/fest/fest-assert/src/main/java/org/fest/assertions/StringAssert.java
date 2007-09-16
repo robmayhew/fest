@@ -18,7 +18,7 @@ package org.fest.assertions;
 import org.fest.util.Strings;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
@@ -40,7 +40,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public void isEmpty() {
     if (!Strings.isEmpty(actual)) 
-      fail(concat(formatMessage(description()), "the String ", quote(actual), " should be empty or null"));
+      fail(concat(format(description()), "the String ", quote(actual), " should be empty or null"));
   }
   
   /**
@@ -50,7 +50,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert isNotEmpty() {
     if (Strings.isEmpty(actual)) 
-      fail(concat(formatMessage(description()), "the String ", quote(actual), " should not be empty"));   
+      fail(concat(format(description()), "the String ", quote(actual), " should not be empty"));   
     return this;
   }
   
@@ -136,7 +136,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert contains(String expected) {
     if (actual.indexOf(expected) == -1) 
-      fail(concat(formatMessage(description()), "the String ", quote(actual), " should contain the String ", quote(expected)));
+      fail(concat(format(description()), "the String ", quote(actual), " should contain the String ", quote(expected)));
     return this;
   } 
 }

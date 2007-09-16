@@ -15,8 +15,8 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Formatting.formatMessage;
-import static org.fest.assertions.Formatting.formatObject;
+import static org.fest.assertions.Formatting.format;
+import static org.fest.assertions.Formatting.bracketAround;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
@@ -77,7 +77,7 @@ public final class Fail {
    * @throws AssertionError if the given object is <code>null</code>.
    */
   static void failIfNull(String message, Object o) {
-    if (o == null) fail(concat(formatMessage(message), "expecting a non-null object"));
+    if (o == null) fail(concat(format(message), "expecting a non-null object"));
   }
   
   /**
@@ -87,7 +87,7 @@ public final class Fail {
    * @throws AssertionError if the given object is not <code>null</code>.
    */
   static void failIfNotNull(String message, Object o) {
-    if (o != null) fail(concat(formatMessage(message), formatObject(o), " should be null"));
+    if (o != null) fail(concat(format(message), bracketAround(o), " should be null"));
   }
 
   /**
@@ -98,7 +98,7 @@ public final class Fail {
    * @throws AssertionError if the given objects are the same instance.
    */
   static void failIfSame(String message, Object first, Object second) {
-    if (first == second) fail(concat(formatMessage(message), "given objects are same:", formatObject(first)));
+    if (first == second) fail(concat(format(message), "given objects are same:", bracketAround(first)));
   }
   
   /**
@@ -110,7 +110,7 @@ public final class Fail {
    */
   static void failIfNotSame(String message, Object first, Object second) {
     if (first != second) 
-      fail(concat(formatMessage(message), "expected same instance but found ", formatObject(first), " and ", formatObject(second)));
+      fail(concat(format(message), "expected same instance but found ", bracketAround(first), " and ", bracketAround(second)));
   }
   
   /**
@@ -130,7 +130,7 @@ public final class Fail {
    * @return an error message to be used when two objects that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, Object actual, Object expected) {
-    return concat(formatMessage(message), "expected:", formatObject(expected), " but was:", formatObject(actual));
+    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
   }
   
   /**
@@ -141,7 +141,7 @@ public final class Fail {
    * @return an error message to be used when two objects that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, Object first, Object second) {
-    return concat(formatMessage(message), formatObject(first), " should not be equal to ", formatObject(second));
+    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
   }
   
   private Fail() {}

@@ -28,26 +28,26 @@ import static org.testng.Assert.assertEquals;
 public class FormattingTest {
 
   @Test public void shouldReturnEmptyStringIfMessageIsNull() {
-    assertEquals(Formatting.formatMessage(null), "");
+    assertEquals(Formatting.format(null), "");
   }
   
   @Test public void shouldReturnEmptyStringIfMessageIsEmpty() {
-    assertEquals(Formatting.formatMessage(""), "");
+    assertEquals(Formatting.format(""), "");
   }
   
   @Test public void shouldReturnFormattedMessageIfMessageIsNotEmpty() {
-    assertEquals(Formatting.formatMessage("some message"), "[some message] ");
+    assertEquals(Formatting.format("some message"), "[some message] ");
   }
   
   @Test public void shouldFormatObject() {
-    assertEquals(Formatting.formatObject(new Integer(3)), "<3>");
+    assertEquals(Formatting.bracketAround(new Integer(3)), "<3>");
   }
   
   @Test public void shouldFormatString() {
-    assertEquals(Formatting.formatObject("Yoda"), "<'Yoda'>");
+    assertEquals(Formatting.bracketAround("Yoda"), "<'Yoda'>");
   }
 
   @Test public void shouldFormatNullObject() {
-    assertEquals(Formatting.formatObject(null), "<null>");
+    assertEquals(Formatting.bracketAround(null), "<null>");
   }
 }

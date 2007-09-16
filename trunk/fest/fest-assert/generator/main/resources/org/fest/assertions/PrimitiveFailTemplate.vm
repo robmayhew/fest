@@ -15,10 +15,8 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Formatting.formatMessage;
-import static org.fest.assertions.Formatting.formatObject;
+import static org.fest.assertions.Formatting.bracketAround;
+import static org.fest.assertions.Formatting.format;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.util.Strings.concat;
 
@@ -57,7 +55,7 @@ public final class ${className} {
    * @return an error message to be used when two <code>$type</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, $type first, $type second) {
-    return concat(formatMessage(message), formatObject(valueOf(first)), " should not be equal to ", formatObject(valueOf(second)));
+    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
   }
   
 #end
@@ -89,7 +87,7 @@ public final class ${className} {
    * @return an error message to be used when two <code>$type</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, $type actual, $type expected) {
-    return concat(formatMessage(message), "expected:", formatObject(valueOf(expected)), " but was:", formatObject(valueOf(actual)));
+    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
   }
   
 #end
@@ -124,7 +122,7 @@ public final class ${className} {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, $type first, $type second) {
-    return concat(formatMessage(message), formatObject(valueOf(first)), " should be less than ", formatObject(valueOf(second)));
+    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
   }
   
 #end
@@ -160,7 +158,7 @@ public final class ${className} {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, $type first, $type second) {
-    return concat(formatMessage(message), formatObject(valueOf(first)), " should be greater than ", formatObject(valueOf(second)));
+    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
   }
   
 #end
