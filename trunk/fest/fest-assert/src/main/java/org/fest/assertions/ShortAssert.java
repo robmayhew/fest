@@ -25,7 +25,7 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  * 
  * @author Yvonne Wang
  */
-public class ShortAssert {
+public class ShortAssert extends PrimitiveAssert {
 
   private static final short ZERO = (short)0;
 
@@ -35,6 +35,11 @@ public class ShortAssert {
     this.actual = actual;
   }
 
+  /** {@inheritDoc} */
+  public ShortAssert as(String description) {
+    return (ShortAssert)description(description);
+  }
+  
   /**
    * Verifies that the actual <code>short</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.
@@ -42,7 +47,7 @@ public class ShortAssert {
    * @throws AssertionError if the actual <code>short</code> value is not equal to the given one.
    */
   public ShortAssert isEqualTo(short expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 
@@ -53,7 +58,7 @@ public class ShortAssert {
    * @throws AssertionError if the actual <code>short</code> value is equal to the given one.
    */
   public ShortAssert isNotEqualTo(short other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
 
@@ -64,7 +69,7 @@ public class ShortAssert {
    * @throws AssertionError if the actual <code>short</code> value is less than or equal to the given one.
    */
   public ShortAssert isGreaterThan(short smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
 
@@ -75,7 +80,7 @@ public class ShortAssert {
    * @throws AssertionError if the actual <code>short</code> value is greater than or equal to the given one.
    */
   public ShortAssert isLessThan(short bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
 

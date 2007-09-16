@@ -29,12 +29,17 @@ import static org.fest.util.Strings.concat;
  * 
  * @author Yvonne Wang
  */
-public class CharAssert {
+public final class CharAssert extends PrimitiveAssert {
 
   private final char actual;
 
   CharAssert(char actual) {
     this.actual = actual;
+  }
+
+  /** {@inheritDoc} */
+  public CharAssert as(String description) {
+    return (CharAssert)description(description);
   }
 
   /**
@@ -44,7 +49,7 @@ public class CharAssert {
    * @throws AssertionError if the actual <code>char</code> value is not equal to the given one.
    */
   public CharAssert isEqualTo(char expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 
@@ -55,7 +60,7 @@ public class CharAssert {
    * @throws AssertionError if the actual <code>char</code> value is equal to the given one.
    */
   public CharAssert isNotEqualTo(char other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
 
@@ -66,7 +71,7 @@ public class CharAssert {
    * @throws AssertionError if the actual <code>char</code> value is less than or equal to the given one.
    */
   public CharAssert isGreaterThan(char smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
 
@@ -77,7 +82,7 @@ public class CharAssert {
    * @throws AssertionError if the actual <code>char</code> value is greater than or equal to the given one.
    */
   public CharAssert isLessThan(char bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
 

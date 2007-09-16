@@ -26,11 +26,17 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  *
  * @author Yvonne Wang
  */
-public final class IntAssert{
+public final class IntAssert extends PrimitiveAssert {
+  
   private final int actual;
 
   IntAssert(int actual) {
     this.actual = actual;
+  }
+  
+  /** {@inheritDoc} */
+  public IntAssert as(String description) {
+    return (IntAssert)description(description);
   }
   
   /**
@@ -40,7 +46,7 @@ public final class IntAssert{
    * @throws AssertionError if the actual <code>int</code> value is not equal to the given one.
    */
   public IntAssert isEqualTo(int expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
   
@@ -51,7 +57,7 @@ public final class IntAssert{
    * @throws AssertionError if the actual <code>int</code> value is equal to the given one.
    */
   public IntAssert isNotEqualTo(int other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
   
@@ -62,7 +68,7 @@ public final class IntAssert{
    * @throws AssertionError if the actual <code>int</code> value is less than or equal to the given one.
    */
   public IntAssert isGreaterThan(int smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
   
@@ -73,7 +79,7 @@ public final class IntAssert{
    * @throws AssertionError if the actual <code>int</code> value is greater than or equal to the given one.
    */
   public IntAssert isLessThan(int bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
   

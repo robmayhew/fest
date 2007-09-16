@@ -15,16 +15,21 @@
  */
 package org.fest.assertions;
 
+import org.fest.util.Strings;
+
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a template for assertion methods related to arrays or collections.
- * @param the type of object implementations of this template can verify.
+ * @param <T> the type of object implementations of this template can verify.
  *
  * @author Yvonne Wang
  */
 abstract class GroupAssert<T> extends Assert<T> {
+
+  private static final String SIZE = "size";
 
   /**
    * Creates a new </code>{@link GroupAssert}</code>.
@@ -34,15 +39,39 @@ abstract class GroupAssert<T> extends Assert<T> {
     super(actual);
   }
   
-  abstract void isEmpty();
+  /**
+   * Verifies that the actual group of values is <code>null</code> or empty.
+   * @throws AssertionError if the actual group of values is not <code>null</code> or not empty.
+   */
+  public abstract void isEmpty();
   
-  abstract GroupAssert<T> isNotEmpty();
+  /**
+   * Verifies that the actual group of values contains at least on value.
+   * @return this assertion object.
+   * @throws AssertionError if the actual group of values is <code>null</code> or empty.
+   */
+  public abstract GroupAssert<T> isNotEmpty();
   
-  GroupAssert<T> hasSize(int expected) {
-    if (actual == null) fail("the object to verify is null");
-    if (actualGroupSize() != expected) fail(errorMessageIfNotEqual(String.valueOf(actual), String.valueOf(expected)));
+  /**
+   * Verifies that the number of values in the actual group is equal to the given one.
+   * @param expected the expected number of values in the actual group.
+   * @return this assertion object.
+   * @throws AssertionError if the number of values of the actual group is not equal to the given one.
+   */
+  public abstract GroupAssert<T> hasSize(int expected);
+
+  protected final GroupAssert<T> assertEqualSize(int expected) {
+    if (actual == null) fail("cannot get size of a null object");
+    int actualSize = actualGroupSize();
+    if (actualSize != expected) fail(errorMessageIfNotEqual(descriptionForSize(), String.valueOf(actualSize), String.valueOf(expected)));
     return this;
   }
 
-  abstract int actualGroupSize();
+  private String descriptionForSize() {
+    String description = description();
+    if (Strings.isEmpty(description)) return SIZE;
+    return concat(description, " - ", SIZE);
+  }
+  
+  protected abstract int actualGroupSize();
 }

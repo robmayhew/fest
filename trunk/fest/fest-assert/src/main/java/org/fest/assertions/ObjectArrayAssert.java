@@ -20,6 +20,8 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -36,13 +38,22 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
 
   /**
+   * Sets the description of the actual <code>Object</code> array, to be used in as message of any
+   * <code>{@link AssertionError}</code> thrown when an assertion fails.
+   * @param description the description of the actual <code>Object</code> array.
+   * @return this assertion object.
+   */
+  public ObjectArrayAssert as(String description) {
+    return (ObjectArrayAssert)description(description);
+  }
+
+  /**
    * Verifies that the actual <code>Object</code> array is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    */
-  @Override public ObjectArrayAssert isNotNull() {
-    super.isNotNull();
-    return this;
+  public ObjectArrayAssert isNotNull() {
+    return (ObjectArrayAssert)assertNotNull();
   }
   
   /**
@@ -50,7 +61,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (actualGroupSize() > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
+    if (actualGroupSize() > 0) 
+      fail(concat(formatMessage(description()), "expecting empty array, but was ", formatObject(Arrays.toString(actual))));
   }
 
   /**
@@ -59,7 +71,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is empty.
    */
   public ObjectArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail("expecting a non-empty array");
+    if (actualGroupSize() == 0) fail(concat(formatMessage(description()), "expecting a non-empty array"));
     return this;
   }
 
@@ -70,9 +82,9 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array is not equal to the given one.
    */
-  @Override public ObjectArrayAssert isEqualTo(Object[] expected) {
+  public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
+      fail(errorMessageIfNotEqual(description(), Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
@@ -83,13 +95,13 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array is equal to the given one.
    */
-  @Override public ObjectArrayAssert isNotEqualTo(Object[] array) {
+  public ObjectArrayAssert isNotEqualTo(Object[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
+      fail(errorMessageIfEqual(description(), Arrays.toString(actual), Arrays.toString(array)));
     return this;
   }
 
-  int actualGroupSize() {
+  protected int actualGroupSize() {
     return actual.length;
   }
 
@@ -100,8 +112,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the number of elements in the actual <code>Object</code> array is not equal to the given 
    * one.
    */
-  @Override public ObjectArrayAssert hasSize(int expected) {
-    return (ObjectArrayAssert)super.hasSize(expected);
+  public ObjectArrayAssert hasSize(int expected) {
+    return (ObjectArrayAssert)assertEqualSize(expected);
   }
   
   /**
@@ -110,8 +122,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array is not the same as the given one.
    */
-  @Override public ObjectArrayAssert isSameAs(Object[] expected) {
-    return (ObjectArrayAssert)super.isSameAs(expected);
+  public ObjectArrayAssert isSameAs(Object[] expected) {
+    return (ObjectArrayAssert)assertSameAs(expected);
   }
 
   /**
@@ -120,7 +132,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array is the same as the given one.
    */
-  @Override public ObjectArrayAssert isNotSameAs(Object[] expected) {
-    return (ObjectArrayAssert)super.isNotSameAs(expected);
+  public ObjectArrayAssert isNotSameAs(Object[] expected) {
+    return (ObjectArrayAssert)assertNotSameAs(expected);
   }
 }

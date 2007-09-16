@@ -1,5 +1,5 @@
 /*
- * Created on Aug 16, 2007
+ * Created on Sep 16, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,6 +20,8 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -36,12 +38,22 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
   }
 
   /**
+   * Sets the description of the actual <code>byte</code> array, to be used in as message of any
+   * <code>{@link AssertionError}</code> thrown when an assertion fails.
+   * @param description the description of the actual <code>byte</code> array.
+   * @return this assertion object.
+   */
+  public ByteArrayAssert as(String description) {
+    return (ByteArrayAssert)description(description);
+  }
+
+  /**
    * Verifies that the actual <code>byte</code> array is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> array is <code>null</code>.
    */
-  @Override public ByteArrayAssert isNotNull() {
-    return (ByteArrayAssert)super.isNotNull();
+  public ByteArrayAssert isNotNull() {
+    return (ByteArrayAssert)assertNotNull();
   }
   
   /**
@@ -49,7 +61,8 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @throws AssertionError if the actual <code>byte</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
+    if (actual.length > 0) 
+      fail(concat(formatMessage(description()), "expecting empty array, but was ", formatObject(Arrays.toString(actual))));
   }
 
   /**
@@ -58,7 +71,7 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @throws AssertionError if the actual <code>byte</code> array is empty.
    */
   public ByteArrayAssert isNotEmpty() {
-    if (actual.length == 0) fail("expecting non-empty array");
+    if (actualGroupSize() == 0) fail(concat(formatMessage(description()), "expecting a non-empty array"));
     return this;
   }
 
@@ -69,9 +82,9 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> array is not equal to the given one.
    */
-  @Override public ByteArrayAssert isEqualTo(byte[] expected) {
+  public ByteArrayAssert isEqualTo(byte[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
+      fail(errorMessageIfNotEqual(description(), Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
@@ -82,13 +95,13 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> array is equal to the given one.
    */
-  @Override public ByteArrayAssert isNotEqualTo(byte[] array) {
+  public ByteArrayAssert isNotEqualTo(byte[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
+      fail(errorMessageIfEqual(description(), Arrays.toString(actual), Arrays.toString(array)));
     return this;
   }
 
-  int actualGroupSize() {
+  protected int actualGroupSize() {
     return actual.length;
   }
 
@@ -99,8 +112,8 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @throws AssertionError if the number of elements in the actual <code>byte</code> array is not equal to the given 
    * one.
    */
-  @Override public ByteArrayAssert hasSize(int expected) {
-    return (ByteArrayAssert)super.hasSize(expected);
+  public ByteArrayAssert hasSize(int expected) {
+    return (ByteArrayAssert)assertEqualSize(expected);
   }
   
   /**
@@ -109,8 +122,8 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> array is not the same as the given one.
    */
-  @Override public ByteArrayAssert isSameAs(byte[] expected) {
-    return (ByteArrayAssert)super.isSameAs(expected);
+  public ByteArrayAssert isSameAs(byte[] expected) {
+    return (ByteArrayAssert)assertSameAs(expected);
   }
 
   /**
@@ -119,7 +132,7 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> array is the same as the given one.
    */
-  @Override public ByteArrayAssert isNotSameAs(byte[] expected) {
-    return (ByteArrayAssert)super.isNotSameAs(expected);
+  public ByteArrayAssert isNotSameAs(byte[] expected) {
+    return (ByteArrayAssert)assertNotSameAs(expected);
   }
 }

@@ -15,8 +15,7 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  *
  * @author Yvonne Wang
  */
-
-public class DoubleAssert {
+public final class DoubleAssert extends PrimitiveAssert {
   
   private static final double ZERO = 0.0;
   
@@ -24,6 +23,11 @@ public class DoubleAssert {
 
   DoubleAssert(double actual) { this.actual = actual; }
 
+  /** {@inheritDoc} */
+  public DoubleAssert as(String description) {
+    return (DoubleAssert)description(description);
+  }
+  
   /**
    * Verifies that the actual <code>double</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.
@@ -31,7 +35,7 @@ public class DoubleAssert {
    * @throws AssertionError if the actual <code>double</code> value is not equal to the given one.
    */
   public DoubleAssert isEqualTo(double expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 
@@ -42,7 +46,7 @@ public class DoubleAssert {
    * @throws AssertionError if the actual <code>double</code> value is equal to the given one.
    */
   public DoubleAssert isNotEqualTo(double other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
 
@@ -53,7 +57,7 @@ public class DoubleAssert {
    * @throws AssertionError if the actual <code>double</code> value is less than or equal to the given one.
    */
   public DoubleAssert isGreaterThan(double smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
 
@@ -64,7 +68,7 @@ public class DoubleAssert {
    * @throws AssertionError if the actual <code>double</code> value is greater than or equal to the given one.
    */
   public DoubleAssert isLessThan(double bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
   
@@ -141,7 +145,7 @@ public class DoubleAssert {
      */
     public DoubleAssert isEqualTo(double expected) {
       if (Double.compare(expected, actual) == 0) return doubleAssert;
-      if (!(abs(expected - actual) <= delta)) fail(errorMessageIfNotEqual(actual, expected));
+      if (!(abs(expected - actual) <= delta)) fail(errorMessageIfNotEqual(doubleAssert.description(), actual, expected));
       return doubleAssert;
     }
   }

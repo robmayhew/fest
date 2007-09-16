@@ -15,13 +15,17 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands failure methods.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class Fail {
 
@@ -47,60 +51,67 @@ public final class Fail {
 
   /**
    * Fails if the given objects are equal.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the value to check against <code>second</code>.
    * @param second second value.
    * @throws AssertionError if the given objects are equal.
    */
-  static void failIfEqual(Object first, Object second) {
-    if (areEqual(first, second)) fail(errorMessageIfEqual(first, second));
+  static void failIfEqual(String message, Object first, Object second) {
+    if (areEqual(first, second)) fail(errorMessageIfEqual(message, first, second));
   }
   
   /**
    * Fails if the given objects are not equal.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the value to check against <code>expected</code>.
    * @param expected expected value.
    * @throws AssertionError if the given objects are not equal.
    */
-  static void failIfNotEqual(Object actual, Object expected) {
-    if (!areEqual(actual, expected)) fail(errorMessageIfNotEqual(actual, expected));
+  static void failIfNotEqual(String message, Object actual, Object expected) {
+    if (!areEqual(actual, expected)) fail(errorMessageIfNotEqual(message, actual, expected));
   }
   
   /**
    * Fails if the given object is <code>null</code>.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param o the object to check.
    * @throws AssertionError if the given object is <code>null</code>.
    */
-  static void failIfNull(Object o) {
-    if (o == null) fail(concat("the given object, ", o, " should not be null"));
+  static void failIfNull(String message, Object o) {
+    if (o == null) fail(concat(formatMessage(message), "expecting null but was ", formatObject(quote(o))));
   }
   
   /**
    * Fails if the given object is not <code>null</code>.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param o the object to check.
    * @throws AssertionError if the given object is not <code>null</code>.
    */
-  static void failIfNotNull(Object o) {
-    if (o != null) fail(concat("<", o, "> should not be null"));
+  static void failIfNotNull(String message, Object o) {
+    if (o != null) fail(concat(formatMessage(message), formatObject(o), " should be null"));
   }
 
   /**
    * Fails if the given objects are the same instance.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the value to check against <code>second</code>.
    * @param second second value.
    * @throws AssertionError if the given objects are the same instance.
    */
-  static void failIfSame(Object first, Object second) {
-    if (first == second) fail(concat("same objects:<", first, ">"));
+  static void failIfSame(String message, Object first, Object second) {
+    if (first == second) fail(concat(formatMessage(message), "given objects are same:", formatObject(first)));
   }
   
   /**
    * Fails if the given objects are not the same instance.
-   * @param actual the value to check against <code>expected</code>.
-   * @param expected expected value.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
+   * @param first the value to check against <code>second</code>.
+   * @param second the second value.
    * @throws AssertionError if the given objects are not the same instance.
    */
-  static void failIfNotSame(Object actual, Object expected) {
-    if (actual != expected) fail(concat("expected same with:<", expected, "> but was:<", actual, ">"));
+  static void failIfNotSame(String message, Object first, Object second) {
+    if (first != second) 
+      fail(concat(formatMessage(message), "expected the same instance but was ", formatObject(first), " and ", formatObject(second)));
   }
   
   /**
@@ -114,22 +125,24 @@ public final class Fail {
 
   /**
    * Returns an error message to be used when two objects that are expected to be equal aren't. 
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the value checked against <code>expected</code>.
    * @param expected expected value.
    * @return an error message to be used when two objects that are expected to be equal aren't. 
    */
-  static String errorMessageIfNotEqual(Object actual, Object expected) {
-    return concat("expected:<", expected, "> but was:<", actual, ">");
+  static String errorMessageIfNotEqual(String message, Object actual, Object expected) {
+    return concat(formatMessage(message), "expected:", formatObject(expected), " but was:", formatObject(actual));
   }
   
   /**
    * Returns an error message to be used when two objects that are not expected to be equal are. 
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the value checked against <code>second</code>.
    * @param second second value.
    * @return an error message to be used when two objects that are not expected to be equal are. 
    */
-  static String errorMessageIfEqual(Object first, Object second) {
-    return concat("<", first, "> should not be equal to <", second, ">");
+  static String errorMessageIfEqual(String message, Object first, Object second) {
+    return concat(formatMessage(message), formatObject(first), " should not be equal to ", formatObject(second));
   }
   
   private Fail() {}

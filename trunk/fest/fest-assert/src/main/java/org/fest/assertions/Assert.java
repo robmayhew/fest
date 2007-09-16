@@ -24,13 +24,14 @@ import static org.fest.assertions.Fail.failIfSame;
 
 /**
  * Understands a template for assertion methods.
- * @param the type of object implementations of this template can verify.
+ * @param <T> the type of object implementations of this template can verify. 
  *
  * @author Yvonne Wang
  */
 abstract class Assert<T> {
 
   final T actual;
+  private String description;
 
   /**
    * Creates a new </code>{@link Assert}</code>.
@@ -45,31 +46,91 @@ abstract class Assert<T> {
    * @throws AssertionError if the actual value is not <code>null</code>.
    */
   public final void isNull() {
-    failIfNotNull(actual);
+    failIfNotNull(description, actual);
   }
 
-  Assert<T> isNotNull() {
-    failIfNull(actual);
-    return this;
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public abstract Assert<T> as(String description);
+
+  /**
+   * Verifies that the actual value is equal to the given one.
+   * @param expected the given value to compare the actual value to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value is not equal to the given one.
+   */
+  public abstract Assert<T> isEqualTo(T expected);
+
+  /**
+   * Verifies that the actual value is not equal to the given one.
+   * @param other the given value to compare the actual value to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value is equal to the given one.
+   */
+  public abstract Assert<T> isNotEqualTo(T other);
+  
+  /**
+   * Verifies that the actual value is not <code>null</code>.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value is <code>null</code>.
+   */
+  public abstract Assert<T> isNotNull();
+
+  /**
+   * Verifies that the actual value is the same as the given one.
+   * @param expected the given value to compare the actual value to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value is not the same as the given one.
+   */
+  public abstract Assert<T> isSameAs(T expected);
+
+  /**
+   * Verifies that the actual value is not the same as the given one.
+   * @param other the given value to compare the actual value to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value is the same as the given one.
+   */
+  public abstract Assert<T> isNotSameAs(T other);
+
+  /**
+   * Returns the description of the actual value in this assertion.
+   * @return the description of the actual value in this assertion.
+   */
+  public final String description() {
+    return description;
   }
   
-  Assert<T> isSameAs(T expected) {
-    failIfNotSame(actual, expected);
-    return this;
-  }
-  
-  Assert<T> isNotSameAs(T expected) {
-    failIfSame(actual, expected);
-    return this;
-  }
-  
-  Assert<T> isEqualTo(T expected) {
-    failIfNotEqual(actual, expected);
+  protected Assert<T> description(String description) {
+    this.description = description;
     return this;
   }
 
-  Assert<T> isNotEqualTo(T obj) {
-    failIfEqual(actual, obj);
+  protected final Assert<T> assertEqualTo(T expected) {
+    failIfNotEqual(description, actual, expected);
+    return this;
+  }
+
+  protected final Assert<T> assertNotEqualTo(T obj) {
+    failIfEqual(description, actual, obj);
+    return this;
+  }
+
+  protected final Assert<T> assertNotNull() {
+    failIfNull(description, actual);
+    return this;
+  }
+
+  protected final Assert<T> assertSameAs(T expected) {
+    failIfNotSame(description, actual, expected);
+    return this;
+  }
+
+  protected final Assert<T> assertNotSameAs(T expected) {
+    failIfSame(description, actual, expected);
     return this;
   }
 }

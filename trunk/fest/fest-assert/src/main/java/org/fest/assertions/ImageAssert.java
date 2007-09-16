@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfNotEqual;
+import static org.fest.assertions.Formatting.formatMessage;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
@@ -58,14 +59,24 @@ public final class ImageAssert extends Assert<BufferedImage> {
   }
   
   /**
+   * Sets the description of the actual image, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the description of the actual image.
+   * @return this assertion object.
+   */
+  public ImageAssert as(String description) {
+    return (ImageAssert) description(description);
+  }
+
+  /**
    * Verifies that the actual image is equal to the given one. Two images are equal if they have the same size and the
    * pixels at the same coordinates have the same color.
    * @param expected the given image to compare the actual image to.
    * @return this assertion object.
    * @throws AssertionError if the actual image is not equal to the given one.
    */
-  @Override public ImageAssert isEqualTo(BufferedImage expected) {
-    if (!areEqual(actual, expected)) fail("Images are not equal");
+  public ImageAssert isEqualTo(BufferedImage expected) {
+    if (!areEqual(actual, expected)) fail(concat(formatMessage(description()), "images are not equal"));
     return this;
   }
 
@@ -76,19 +87,19 @@ public final class ImageAssert extends Assert<BufferedImage> {
    * @return this assertion object.
    * @throws AssertionError if the actual image is equal to the given one.
    */
-  @Override public ImageAssert isNotEqualTo(BufferedImage image) {
-    if (areEqual(actual, image)) fail("Images not equal");
+  public ImageAssert isNotEqualTo(BufferedImage image) {
+    if (areEqual(actual, image)) fail(concat(formatMessage(description()), "images are equal"));
     return this;
   }
 
   private static boolean areEqual(BufferedImage first, BufferedImage second) {
     if (first == null) return second == null;
-    int width = first.getWidth();
-    int height = first.getHeight();
-    if (width != second.getWidth()) return false;
-    if (height != second.getHeight()) return false;
-    for (int x = 0; x < width; x++)
-      for (int y = 0; y < height; y++)
+    int w = first.getWidth();
+    int h = first.getHeight();
+    if (w != second.getWidth()) return false;
+    if (h != second.getHeight()) return false;
+    for (int x = 0; x < w; x++)
+      for (int y = 0; y < h; y++)
         if (first.getRGB(x, y) != second.getRGB(x, y)) return false;
     return true;
   }
@@ -98,8 +109,8 @@ public final class ImageAssert extends Assert<BufferedImage> {
    * @return this assertion object.
    * @throws AssertionError if the actual image is <code>null</code>.
    */
-  @Override public ImageAssert isNotNull() {
-    return (ImageAssert)super.isNotNull();
+  public ImageAssert isNotNull() {
+    return (ImageAssert)assertNotNull();
   }
 
   /**
@@ -108,8 +119,8 @@ public final class ImageAssert extends Assert<BufferedImage> {
    * @return this assertion object.
    * @throws AssertionError if the actual image is the same as the given one.
    */
-  @Override public ImageAssert isNotSameAs(BufferedImage expected) {
-    return (ImageAssert)super.isNotSameAs(expected);
+  public ImageAssert isNotSameAs(BufferedImage expected) {
+    return (ImageAssert)assertNotSameAs(expected);
   }
 
   /**
@@ -118,8 +129,8 @@ public final class ImageAssert extends Assert<BufferedImage> {
    * @return this assertion object.
    * @throws AssertionError if the actual image is not the same as the given one.
    */
-  @Override public ImageAssert isSameAs(BufferedImage expected) {
-    return (ImageAssert)super.isSameAs(expected);
+  public ImageAssert isSameAs(BufferedImage expected) {
+    return (ImageAssert)assertSameAs(expected);
   }
 
   /**
@@ -130,7 +141,7 @@ public final class ImageAssert extends Assert<BufferedImage> {
    */
   public ImageAssert hasSize(Dimension expected) {
     Dimension actual = new Dimension(this.actual.getWidth(), this.actual.getHeight());
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 }

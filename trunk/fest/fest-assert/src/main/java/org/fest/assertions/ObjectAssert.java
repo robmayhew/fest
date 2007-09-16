@@ -18,6 +18,8 @@ package org.fest.assertions;
 import java.util.Arrays;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
 
@@ -43,7 +45,8 @@ public final class ObjectAssert extends Assert<Object> {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
     if (!type.isAssignableFrom(current))
-      fail(concat("expected instance of:<", type.getName(), "> but was instance of:<", current.getName(), ">"));
+      fail(concat(formatMessage(description()), "expected instance of:", formatObject(type.getName()),
+          " but was instance of:", formatObject(current.getName())));
     return this;
   }
   
@@ -57,18 +60,28 @@ public final class ObjectAssert extends Assert<Object> {
     isNotNull();
     Class<? extends Object> current = actual.getClass();
     for (Class<?> type : types) if (type.isAssignableFrom(current)) return this;
-    fail(concat("expected instance of any:<", Arrays.toString(namesOf(types)), "> but was instance of:<", 
-        current.getName(), ">"));   
+    fail(concat(formatMessage(description()), "expected instance of any:",
+        formatObject(Arrays.toString(namesOf(types))), " but was instance of:", formatObject(current.getName())));   
     return this;
   }
   
+  /**
+   * Sets the description of the actual <code>Object</code>, to be used in as message of any 
+   * <code>{@link AssertionError}</code> thrown when an assertion fails.
+   * @param description the description of the actual <code>Object</code>.
+   * @return this assertion object.
+   */
+  public ObjectAssert as(String description) {
+    return (ObjectAssert)description(description);
+  }
+
   /**
    * Verifies that the actual <code>Object</code> is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
    */
-  @Override public ObjectAssert isNotNull() {
-    return (ObjectAssert)super.isNotNull();
+  public ObjectAssert isNotNull() {
+    return (ObjectAssert)assertNotNull();
   }
   
   /**
@@ -77,8 +90,8 @@ public final class ObjectAssert extends Assert<Object> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is not the same as the given one.
    */
-  @Override public ObjectAssert isSameAs(Object expected) {
-    return (ObjectAssert)super.isSameAs(expected);
+  public ObjectAssert isSameAs(Object expected) {
+    return (ObjectAssert)assertSameAs(expected);
   }
   
   /**
@@ -87,8 +100,8 @@ public final class ObjectAssert extends Assert<Object> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is the same as the given one.
    */
-  @Override public ObjectAssert isNotSameAs(Object other) {
-    return (ObjectAssert)super.isNotSameAs(other);
+  public ObjectAssert isNotSameAs(Object other) {
+    return (ObjectAssert)assertNotSameAs(other);
   }
 
   /**
@@ -97,8 +110,8 @@ public final class ObjectAssert extends Assert<Object> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is not equal to the given one.
    */
-  @Override public ObjectAssert isEqualTo(Object expected) {
-    return (ObjectAssert)super.isEqualTo(expected);
+  public ObjectAssert isEqualTo(Object expected) {
+    return (ObjectAssert)assertEqualTo(expected);
   }
 
   /**
@@ -107,7 +120,7 @@ public final class ObjectAssert extends Assert<Object> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is equal to the given one.
    */
-  @Override public ObjectAssert isNotEqualTo(Object other) {
-    return (ObjectAssert)super.isNotEqualTo(other);
+  public ObjectAssert isNotEqualTo(Object other) {
+    return (ObjectAssert)assertNotEqualTo(other);
   }
 }

@@ -18,6 +18,7 @@ package org.fest.assertions;
 import org.fest.util.Strings;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.formatMessage;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
@@ -35,30 +36,42 @@ public final class StringAssert extends GroupAssert<String> {
   
   /**
    * Verifies that the actual <code>String</code> is empty (not <code>null</code> with zero characters.)
-   * @throws AssertionError if the actual <code>String</code> is <code>null</code> or not empty.
+   * @throws AssertionError if the actual <code>String</code> is not <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (!Strings.isEmpty(actual)) fail(concat("the String ", quote(actual), " should be empty"));
+    if (!Strings.isEmpty(actual)) 
+      fail(concat(formatMessage(description()), "the String ", quote(actual), " should be empty or null"));
   }
   
   /**
    * Verifies that the actual <code>String</code> contains at least on character.
    * @return this assertion object.
-   * @throws AssertionError if the actual <code>String</code> is empty.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code> or empty.
    */
   public StringAssert isNotEmpty() {
-    if (Strings.isEmpty(actual)) fail(concat("the String ", quote(actual), " should not be empty"));   
+    if (Strings.isEmpty(actual)) 
+      fail(concat(formatMessage(description()), "the String ", quote(actual), " should not be empty"));   
     return this;
   }
   
+  /**
+   * Sets the description of the actual <code>String</code>, to be used in as message of any 
+   * <code>{@link AssertionError}</code> thrown when an assertion fails.
+   * @param description the description of the actual <code>String</code>.
+   * @return this assertion object.
+   */
+  public StringAssert as(String description) {
+    return (StringAssert)description(description);
+  }
+
   /**
    * Verifies that the actual <code>String</code> is equal to the given one.
    * @param expected the given <code>String</code> to compare the actual <code>String</code> to.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> is not equal to the given one.
    */
-  @Override public StringAssert isEqualTo(String expected) {
-    return (StringAssert)super.isEqualTo(expected);
+  public StringAssert isEqualTo(String expected) {
+    return (StringAssert)assertEqualTo(expected);
   }
   
   /**
@@ -67,8 +80,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> is equal to the given one.
    */
-  @Override public StringAssert isNotEqualTo(String other) {
-    return (StringAssert)super.isNotEqualTo(other);
+  public StringAssert isNotEqualTo(String other) {
+    return (StringAssert)assertNotEqualTo(other);
   }
 
   /**
@@ -76,8 +89,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    */
-  @Override public StringAssert isNotNull() {
-    return (StringAssert)super.isNotNull();
+  public StringAssert isNotNull() {
+    return (StringAssert)assertNotNull();
   }
 
   /**
@@ -86,8 +99,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> is the same as the given one.
    */
-  @Override public StringAssert isNotSameAs(String other) {
-    return (StringAssert)super.isNotSameAs(other);
+  public StringAssert isNotSameAs(String other) {
+    return (StringAssert)assertNotSameAs(other);
   }
 
   /**
@@ -96,8 +109,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> is not the same as the given one.
    */
-  @Override public StringAssert isSameAs(String expected) {
-    return (StringAssert)super.isSameAs(expected);
+  public StringAssert isSameAs(String expected) {
+    return (StringAssert)assertSameAs(expected);
   }
 
   /**
@@ -107,11 +120,11 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the number of characters of the actual <code>String</code> is not equal to the given 
    * one.
    */
-  @Override public StringAssert hasSize(int expected) {
-    return (StringAssert)super.hasSize(expected);
+  public StringAssert hasSize(int expected) {
+    return (StringAssert)assertEqualSize(expected);
   }
 
-  int actualGroupSize() {
+  protected int actualGroupSize() {
     return actual.length();
   }
 
@@ -123,7 +136,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert contains(String expected) {
     if (actual.indexOf(expected) == -1) 
-      fail(concat("the String ", quote(actual), " should contain the String ", quote(expected)));
+      fail(concat(formatMessage(description()), "the String ", quote(actual), " should contain the String ", quote(expected)));
     return this;
   } 
 }

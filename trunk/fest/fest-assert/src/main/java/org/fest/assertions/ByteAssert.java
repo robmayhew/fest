@@ -25,7 +25,7 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  * 
  * @author Yvonne Wang
  */
-public final class ByteAssert {
+public final class ByteAssert extends PrimitiveAssert {
 
   private final byte actual;
 
@@ -35,6 +35,11 @@ public final class ByteAssert {
     this.actual = actual;
   }
 
+  /** {@inheritDoc} */
+  public ByteAssert as(String description) {
+    return (ByteAssert)description(description);
+  }
+
   /**
    * Verifies that the actual <code>byte</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.
@@ -42,7 +47,7 @@ public final class ByteAssert {
    * @throws AssertionError if the actual <code>byte</code> value is not equal to the given one.
    */
   public ByteAssert isEqualTo(byte expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 
@@ -53,7 +58,7 @@ public final class ByteAssert {
    * @throws AssertionError if the actual <code>byte</code> value is equal to the given one.
    */
   public ByteAssert isNotEqualTo(byte other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
 
@@ -64,7 +69,7 @@ public final class ByteAssert {
    * @throws AssertionError if the actual <code>byte</code> value is less than or equal to the given one.
    */
   public ByteAssert isGreaterThan(byte smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
 
@@ -75,7 +80,7 @@ public final class ByteAssert {
    * @throws AssertionError if the actual <code>byte</code> value is greater than or equal to the given one.
    */
   public ByteAssert isLessThan(byte bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
 

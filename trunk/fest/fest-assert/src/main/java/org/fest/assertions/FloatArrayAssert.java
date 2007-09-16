@@ -1,5 +1,5 @@
 /*
- * Created on Aug 16, 2007
+ * Created on Sep 16, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,6 +20,8 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -36,12 +38,22 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
   }
 
   /**
+   * Sets the description of the actual <code>float</code> array, to be used in as message of any
+   * <code>{@link AssertionError}</code> thrown when an assertion fails.
+   * @param description the description of the actual <code>float</code> array.
+   * @return this assertion object.
+   */
+  public FloatArrayAssert as(String description) {
+    return (FloatArrayAssert)description(description);
+  }
+
+  /**
    * Verifies that the actual <code>float</code> array is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> array is <code>null</code>.
    */
-  @Override public FloatArrayAssert isNotNull() {
-    return (FloatArrayAssert)super.isNotNull();
+  public FloatArrayAssert isNotNull() {
+    return (FloatArrayAssert)assertNotNull();
   }
   
   /**
@@ -49,7 +61,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (actual.length > 0) fail(concat("expecting empty array, but was <", Arrays.toString(actual), ">"));
+    if (actual.length > 0) 
+      fail(concat(formatMessage(description()), "expecting empty array, but was ", formatObject(Arrays.toString(actual))));
   }
 
   /**
@@ -58,7 +71,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is empty.
    */
   public FloatArrayAssert isNotEmpty() {
-    if (actual.length == 0) fail("expecting non-empty array");
+    if (actualGroupSize() == 0) fail(concat(formatMessage(description()), "expecting a non-empty array"));
     return this;
   }
 
@@ -69,9 +82,9 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> array is not equal to the given one.
    */
-  @Override public FloatArrayAssert isEqualTo(float[] expected) {
+  public FloatArrayAssert isEqualTo(float[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(Arrays.toString(expected), Arrays.toString(actual)));
+      fail(errorMessageIfNotEqual(description(), Arrays.toString(expected), Arrays.toString(actual)));
     return this;
   }
 
@@ -82,13 +95,13 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> array is equal to the given one.
    */
-  @Override public FloatArrayAssert isNotEqualTo(float[] array) {
+  public FloatArrayAssert isNotEqualTo(float[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(Arrays.toString(actual), Arrays.toString(array)));
+      fail(errorMessageIfEqual(description(), Arrays.toString(actual), Arrays.toString(array)));
     return this;
   }
 
-  int actualGroupSize() {
+  protected int actualGroupSize() {
     return actual.length;
   }
 
@@ -99,8 +112,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the number of elements in the actual <code>float</code> array is not equal to the given 
    * one.
    */
-  @Override public FloatArrayAssert hasSize(int expected) {
-    return (FloatArrayAssert)super.hasSize(expected);
+  public FloatArrayAssert hasSize(int expected) {
+    return (FloatArrayAssert)assertEqualSize(expected);
   }
   
   /**
@@ -109,8 +122,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> array is not the same as the given one.
    */
-  @Override public FloatArrayAssert isSameAs(float[] expected) {
-    return (FloatArrayAssert)super.isSameAs(expected);
+  public FloatArrayAssert isSameAs(float[] expected) {
+    return (FloatArrayAssert)assertSameAs(expected);
   }
 
   /**
@@ -119,7 +132,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> array is the same as the given one.
    */
-  @Override public FloatArrayAssert isNotSameAs(float[] expected) {
-    return (FloatArrayAssert)super.isNotSameAs(expected);
+  public FloatArrayAssert isNotSameAs(float[] expected) {
+    return (FloatArrayAssert)assertNotSameAs(expected);
   }
 }

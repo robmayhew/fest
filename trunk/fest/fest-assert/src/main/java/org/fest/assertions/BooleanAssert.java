@@ -23,8 +23,9 @@ import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
  * <code>{@link Assertions#assertThat(boolean)}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public final class BooleanAssert {
+public final class BooleanAssert extends PrimitiveAssert {
 
   private final boolean actual;
 
@@ -33,11 +34,21 @@ public final class BooleanAssert {
   }
   
   /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public BooleanAssert as(String description) {
+    return (BooleanAssert) description(description);
+  }
+  
+  /**
    * Verifies that the actual <code>boolean</code> value is <code>true</code>.
    * @throws AssertionError if the actual <code>boolean</code> value is <code>false</code>.
    */
   public void isTrue() {
-    if (!actual) fail(errorMessageIfNotEqual(actual, true));
+    if (!actual) fail(errorMessageIfNotEqual(description(), actual, true));
   }
 
   /**
@@ -45,6 +56,6 @@ public final class BooleanAssert {
    * @throws AssertionError if the actual <code>boolean</code> value is <code>true</code>.
    */
   public void isFalse() {
-    if (actual) fail(errorMessageIfNotEqual(actual, false));
+    if (actual) fail(errorMessageIfNotEqual(description(), actual, false));
   }
 }

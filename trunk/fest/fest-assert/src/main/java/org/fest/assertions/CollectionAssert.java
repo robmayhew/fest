@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.formatMessage;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
@@ -42,8 +43,19 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    */
   public CollectionAssert doesNotHaveDuplicates() {
     Collection<?> duplicates = duplicatesFrom(actual);
-    if (!duplicates.isEmpty()) fail(concat("the collection ", actual, " contains duplicates (", duplicates, ")"));
+    if (!duplicates.isEmpty()) 
+      fail(concat(formatMessage(description()), "the collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
+  }
+
+  /**
+   * Sets the description of the actual collection, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the description of the actual collection.
+   * @return this assertion object.
+   */
+  public CollectionAssert as(String description) {
+    return (CollectionAssert)description(description);
   }
 
   /**
@@ -51,8 +63,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @return this assertion object.
    * @throws AssertionError if the actual collection is <code>null</code>.
    */
-  @Override public CollectionAssert isNotNull() {
-    if (actual == null) fail ("the collection is null");
+  public CollectionAssert isNotNull() {
+    if (actual == null) fail(concat(formatMessage(description()), "the collection is null"));
     return this;
   }
   
@@ -61,7 +73,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the actual collection is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (!Collections.isEmpty(actual)) fail(concat("the collection ", actual, " is not empty"));
+    if (!Collections.isEmpty(actual)) 
+      fail(concat(formatMessage(description()), "expecting empty collection, but was ", actual));
   }
   
   /**
@@ -70,7 +83,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the actual collection is empty.
    */
   public CollectionAssert isNotEmpty() {
-    if (Collections.isEmpty(actual)) fail("the collection is null or empty");
+    if (actual == null) fail(concat(formatMessage(description()), "expecting non-null collection"));
+    if (actual.isEmpty()) fail(concat(formatMessage(description()), "expecting non-empty collection"));
     return this;
   }
   
@@ -80,11 +94,11 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @return this assertion object.
    * @throws AssertionError if the number of elements of the actual collection is not equal to the given one.
    */
-  @Override public CollectionAssert hasSize(int expected) {
-    return (CollectionAssert)super.hasSize(expected);
+  public CollectionAssert hasSize(int expected) {
+    return (CollectionAssert)assertEqualSize(expected);
   }
 
-  int actualGroupSize() {
+  protected int actualGroupSize() {
     return actual.size();
   }
 
@@ -94,8 +108,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @return this assertion object.
    * @throws AssertionError if the actual collection is not equal to the given one.
    */
-  @Override public CollectionAssert isEqualTo(Collection<?> expected) {
-    return (CollectionAssert)super.isEqualTo(expected);
+  public CollectionAssert isEqualTo(Collection<?> expected) {
+    return (CollectionAssert)assertEqualTo(expected);
   }
 
   /**
@@ -104,8 +118,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @return this assertion object.
    * @throws AssertionError if the actual collection is equal to the given one.
    */
-  @Override public CollectionAssert isNotEqualTo(Collection<?> other) {
-    return (CollectionAssert)super.isNotEqualTo(other);
+  public CollectionAssert isNotEqualTo(Collection<?> other) {
+    return (CollectionAssert)assertNotEqualTo(other);
   }
   
   /**
@@ -114,8 +128,8 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @return this assertion object.
    * @throws AssertionError if the actual collection is not the same as the given one.
    */
-  @Override public CollectionAssert isSameAs(Collection<?> expected) {
-    return (CollectionAssert)super.isSameAs(expected);
+  public CollectionAssert isSameAs(Collection<?> expected) {
+    return (CollectionAssert)assertSameAs(expected);
   }
 
   /**
@@ -124,7 +138,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @return this assertion object.
    * @throws AssertionError if the actual collection is the same as the given one.
    */
-  @Override public CollectionAssert isNotSameAs(Collection<?> other) {
-    return (CollectionAssert)super.isNotSameAs(other);
+  public CollectionAssert isNotSameAs(Collection<?> other) {
+    return (CollectionAssert)assertNotSameAs(other);
   }
 }

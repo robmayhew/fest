@@ -25,7 +25,7 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  * 
  * @author Yvonne Wang
  */
-public class LongAssert {
+public final class LongAssert extends PrimitiveAssert {
 
   private static final long ZERO = 0L;
 
@@ -35,6 +35,11 @@ public class LongAssert {
     this.actual = actual;
   }
 
+  /** {@inheritDoc} */
+  public LongAssert as(String description) {
+    return (LongAssert)description(description);
+  }
+  
   /**
    * Verifies that the actual <code>long</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.
@@ -42,7 +47,7 @@ public class LongAssert {
    * @throws AssertionError if the actual <code>long</code> value is not equal to the given one.
    */
   public LongAssert isEqualTo(long expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 
@@ -53,7 +58,7 @@ public class LongAssert {
    * @throws AssertionError if the actual <code>long</code> value is equal to the given one.
    */
   public LongAssert isNotEqualTo(long other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
 
@@ -64,7 +69,7 @@ public class LongAssert {
    * @throws AssertionError if the actual <code>long</code> value is less than or equal to the given one.
    */
   public LongAssert isGreaterThan(long smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
 
@@ -75,7 +80,7 @@ public class LongAssert {
    * @throws AssertionError if the actual <code>long</code> value is greater than or equal to the given one.
    */
   public LongAssert isLessThan(long bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
 

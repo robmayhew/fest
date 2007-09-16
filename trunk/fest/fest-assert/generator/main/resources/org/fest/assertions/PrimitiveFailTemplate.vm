@@ -17,6 +17,8 @@ package org.fest.assertions;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.assertions.Formatting.formatMessage;
+import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.util.Strings.concat;
 
@@ -30,17 +32,18 @@ public final class ${className} {
 #foreach($type in $types)
   /**
    * Fails if the given $<code>$type</code>s are equal.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the value to check against <code>second</code>.
    * @param second second value.
    * @throws AssertionError if the given <code>$type</code>s are equal.
    */
-  static void failIfEqual($type first, $type second) {
+  static void failIfEqual(String message, $type first, $type second) {
 #if ($type == "double")    
-    if (Double.compare(first, second) == 0) fail(errorMessageIfEqual(first, second));
+    if (Double.compare(first, second) == 0) fail(errorMessageIfEqual(message, first, second));
 #elseif ($type == "float")
-    if (Float.compare(first, second) == 0) fail(errorMessageIfEqual(first, second));
+    if (Float.compare(first, second) == 0) fail(errorMessageIfEqual(message, first, second));
 #else
-    if (first == second) fail(errorMessageIfEqual(first, second)); 
+    if (first == second) fail(errorMessageIfEqual(message, first, second)); 
 #end
   }
   
@@ -48,29 +51,31 @@ public final class ${className} {
 #foreach($type in $types)
   /**
    * Returns an error message to be used when two <code>$type</code>s that are not expected to be equal are. 
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the value checked against <code>second</code>.
    * @param second second value.
    * @return an error message to be used when two <code>$type</code>s that are not expected to be equal are. 
    */
-  static String errorMessageIfEqual($type first, $type second) {
-    return concat("<", valueOf(first), "> should not be equal to <", valueOf(second), ">");
+  static String errorMessageIfEqual(String message, $type first, $type second) {
+    return concat(formatMessage(message), formatObject(valueOf(first)), " should not be equal to ", formatObject(valueOf(second)));
   }
   
 #end
 #foreach($type in $types)
   /**
    * Fails if the given <code>$type</code>s are not equal.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the value to check against <code>expected</code>.
    * @param expected expected value.
    * @throws AssertionError if the given <code>$type</code>s are not equal.
    */
-  static void failIfNotEqual($type actual, $type expected) {
+  static void failIfNotEqual(String message, $type actual, $type expected) {
 #if ($type == "double")    
-    if (Double.compare(actual, expected) != 0) fail(errorMessageIfNotEqual(actual, expected));
+    if (Double.compare(actual, expected) != 0) fail(errorMessageIfNotEqual(message, actual, expected));
 #elseif ($type == "float")
-    if (Float.compare(actual, expected) != 0) fail(errorMessageIfNotEqual(actual, expected));
+    if (Float.compare(actual, expected) != 0) fail(errorMessageIfNotEqual(message, actual, expected));
 #else
-    if (actual != expected) fail(errorMessageIfNotEqual(actual, expected));
+    if (actual != expected) fail(errorMessageIfNotEqual(message, actual, expected));
 #end
   }
   
@@ -78,12 +83,13 @@ public final class ${className} {
 #foreach($type in $types)
   /**
    * Returns an error message to be used when two <code>$type</code>s that are expected to be equal aren't. 
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the value checked against <code>expected</code>.
    * @param expected expected value.
    * @return an error message to be used when two <code>$type</code>s that are expected to be equal aren't. 
    */
-  static String errorMessageIfNotEqual($type actual, $type expected) {
-    return concat("expected:<", valueOf(expected), "> but was:<", valueOf(actual), ">");
+  static String errorMessageIfNotEqual(String message, $type actual, $type expected) {
+    return concat(formatMessage(message), "expected:", formatObject(valueOf(expected)), " but was:", formatObject(valueOf(actual)));
   }
   
 #end
@@ -91,17 +97,18 @@ public final class ${className} {
 #if ($type != "boolean")
   /**
    * Fails if the first value is not less than the second value.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the first value.
    * @param second the second value.
    * @throws AssertionError if the first value is not less than the second value.
    */
-  static void failIfNotLessThan($type first, $type second) {
+  static void failIfNotLessThan(String message, $type first, $type second) {
 #if ($type == "double")    
-    if (Double.compare(first, second) >= 0) fail(errorMessageIfNotLessThan(first, second));
+    if (Double.compare(first, second) >= 0) fail(errorMessageIfNotLessThan(message, first, second));
 #elseif ($type == "float")
-    if (Float.compare(first, second) >= 0) fail(errorMessageIfNotLessThan(first, second));
+    if (Float.compare(first, second) >= 0) fail(errorMessageIfNotLessThan(message, first, second));
 #else
-    if (first >= second) fail(errorMessageIfNotLessThan(first, second));
+    if (first >= second) fail(errorMessageIfNotLessThan(message, first, second));
 #end
   }
 
@@ -111,12 +118,13 @@ public final class ${className} {
 #if ($type != "boolean")
   /**
    * Returns an error message to be used when the first value is not less than the second value. 
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the first value.
    * @param second the second value.
    * @return an error message to be used when the first value is not less than the second value. 
    */
-  static String errorMessageIfNotLessThan($type first, $type second) {
-    return concat(valueOf(first), " should be less than ", valueOf(second));
+  static String errorMessageIfNotLessThan(String message, $type first, $type second) {
+    return concat(formatMessage(message), formatObject(valueOf(first)), " should be less than ", formatObject(valueOf(second)));
   }
   
 #end
@@ -125,17 +133,18 @@ public final class ${className} {
 #if ($type != "boolean")
   /**
    * Fails if the first value is not greater than the second value.
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the first value.
    * @param second the second value.
    * @throws AssertionError if the first value is not greater than the second value.
    */
-  static void failIfNotGreaterThan($type first, $type second) {
+  static void failIfNotGreaterThan(String message, $type first, $type second) {
 #if ($type == "double")    
-    if (Double.compare(first, second) <= 0) fail(errorMessageIfNotGreaterThan(first, second));
+    if (Double.compare(first, second) <= 0) fail(errorMessageIfNotGreaterThan(message, first, second));
 #elseif ($type == "float")
-    if (Float.compare(first, second) <= 0) fail(errorMessageIfNotGreaterThan(first, second));
+    if (Float.compare(first, second) <= 0) fail(errorMessageIfNotGreaterThan(message, first, second));
 #else
-    if (first <= second) fail(errorMessageIfNotGreaterThan(first, second));
+    if (first <= second) fail(errorMessageIfNotGreaterThan(message, first, second));
 #end
   }
 
@@ -145,12 +154,13 @@ public final class ${className} {
 #if ($type != "boolean")
   /**
    * Returns an error message to be used when the first value is not greater than the second value. 
+   * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the first value.
    * @param second the second value.
    * @return an error message to be used when the first value is not greater than the second value. 
    */
-  static String errorMessageIfNotGreaterThan($type first, $type second) {
-    return concat(valueOf(first), " should be greater than ", valueOf(second));
+  static String errorMessageIfNotGreaterThan(String message, $type first, $type second) {
+    return concat(formatMessage(message), formatObject(valueOf(first)), " should be greater than ", formatObject(valueOf(second)));
   }
   
 #end

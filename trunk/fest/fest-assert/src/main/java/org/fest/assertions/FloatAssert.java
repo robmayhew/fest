@@ -25,7 +25,7 @@ import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
  * 
  * @author Yvonne Wang
  */
-public class FloatAssert {
+public final class FloatAssert extends PrimitiveAssert {
 
   private static final float ZERO = 0f;
   
@@ -35,6 +35,11 @@ public class FloatAssert {
     this.actual = actual;
   }
 
+  /** {@inheritDoc} */
+  public FloatAssert as(String description) {
+    return (FloatAssert)description(description);
+  }
+  
   /**
    * Verifies that the actual <code>float</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.
@@ -42,7 +47,7 @@ public class FloatAssert {
    * @throws AssertionError if the actual <code>float</code> value is not equal to the given one.
    */
   public FloatAssert isEqualTo(float expected) {
-    failIfNotEqual(actual, expected);
+    failIfNotEqual(description(), actual, expected);
     return this;
   }
 
@@ -53,7 +58,7 @@ public class FloatAssert {
    * @throws AssertionError if the actual <code>float</code> value is equal to the given one.
    */
   public FloatAssert isNotEqualTo(float other) {
-    failIfEqual(actual, other);
+    failIfEqual(description(), actual, other);
     return this;
   }
 
@@ -64,7 +69,7 @@ public class FloatAssert {
    * @throws AssertionError if the actual <code>float</code> value is less than or equal to the given one.
    */
   public FloatAssert isGreaterThan(float smaller) {
-    failIfNotGreaterThan(actual, smaller);
+    failIfNotGreaterThan(description(), actual, smaller);
     return this;
   }
 
@@ -75,7 +80,7 @@ public class FloatAssert {
    * @throws AssertionError if the actual <code>float</code> value is greater than or equal to the given one.
    */
   public FloatAssert isLessThan(float bigger) {
-    failIfNotLessThan(actual, bigger);
+    failIfNotLessThan(description(), actual, bigger);
     return this;
   }
 
