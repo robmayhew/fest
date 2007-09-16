@@ -19,7 +19,6 @@ import static org.fest.assertions.Formatting.formatMessage;
 import static org.fest.assertions.Formatting.formatObject;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
 
 /**
  * Understands failure methods.
@@ -78,7 +77,7 @@ public final class Fail {
    * @throws AssertionError if the given object is <code>null</code>.
    */
   static void failIfNull(String message, Object o) {
-    if (o == null) fail(concat(formatMessage(message), "expecting null but was ", formatObject(quote(o))));
+    if (o == null) fail(concat(formatMessage(message), "expecting a non-null object"));
   }
   
   /**
@@ -111,7 +110,7 @@ public final class Fail {
    */
   static void failIfNotSame(String message, Object first, Object second) {
     if (first != second) 
-      fail(concat(formatMessage(message), "expected the same instance but was ", formatObject(first), " and ", formatObject(second)));
+      fail(concat(formatMessage(message), "expected same instance but found ", formatObject(first), " and ", formatObject(second)));
   }
   
   /**

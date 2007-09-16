@@ -17,6 +17,7 @@ package org.fest.assertions;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands utility methods related to formatting.
@@ -33,7 +34,7 @@ public final class Formatting {
   }
 
   public static String formatObject(Object o) {
-    return concat("<", o, ">");
+    return concat("<", quote(o), ">");
   }
   
   private Formatting() {}
