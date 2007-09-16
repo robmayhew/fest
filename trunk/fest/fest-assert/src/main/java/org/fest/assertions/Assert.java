@@ -55,7 +55,7 @@ abstract class Assert<T> {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  public abstract Assert<T> as(String description);
+  protected abstract Assert<T> as(String description);
 
   /**
    * Verifies that the actual value is equal to the given one.
@@ -63,7 +63,7 @@ abstract class Assert<T> {
    * @return this assertion object.
    * @throws AssertionError if the actual value is not equal to the given one.
    */
-  public abstract Assert<T> isEqualTo(T expected);
+  protected abstract Assert<T> isEqualTo(T expected);
 
   /**
    * Verifies that the actual value is not equal to the given one.
@@ -71,14 +71,14 @@ abstract class Assert<T> {
    * @return this assertion object.
    * @throws AssertionError if the actual value is equal to the given one.
    */
-  public abstract Assert<T> isNotEqualTo(T other);
+  protected abstract Assert<T> isNotEqualTo(T other);
   
   /**
    * Verifies that the actual value is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual value is <code>null</code>.
    */
-  public abstract Assert<T> isNotNull();
+  protected abstract Assert<T> isNotNull();
 
   /**
    * Verifies that the actual value is the same as the given one.
@@ -86,7 +86,7 @@ abstract class Assert<T> {
    * @return this assertion object.
    * @throws AssertionError if the actual value is not the same as the given one.
    */
-  public abstract Assert<T> isSameAs(T expected);
+  protected abstract Assert<T> isSameAs(T expected);
 
   /**
    * Verifies that the actual value is not the same as the given one.
@@ -94,7 +94,7 @@ abstract class Assert<T> {
    * @return this assertion object.
    * @throws AssertionError if the actual value is the same as the given one.
    */
-  public abstract Assert<T> isNotSameAs(T other);
+  protected abstract Assert<T> isNotSameAs(T other);
 
   /**
    * Returns the description of the actual value in this assertion.

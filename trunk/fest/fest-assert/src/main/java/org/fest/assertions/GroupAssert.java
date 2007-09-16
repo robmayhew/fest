@@ -43,14 +43,14 @@ abstract class GroupAssert<T> extends Assert<T> {
    * Verifies that the actual group of values is <code>null</code> or empty.
    * @throws AssertionError if the actual group of values is not <code>null</code> or not empty.
    */
-  public abstract void isEmpty();
+  protected abstract void isEmpty();
   
   /**
    * Verifies that the actual group of values contains at least on value.
    * @return this assertion object.
    * @throws AssertionError if the actual group of values is <code>null</code> or empty.
    */
-  public abstract GroupAssert<T> isNotEmpty();
+  protected abstract GroupAssert<T> isNotEmpty();
   
   /**
    * Verifies that the number of values in the actual group is equal to the given one.
@@ -58,7 +58,7 @@ abstract class GroupAssert<T> extends Assert<T> {
    * @return this assertion object.
    * @throws AssertionError if the number of values of the actual group is not equal to the given one.
    */
-  public abstract GroupAssert<T> hasSize(int expected);
+  protected abstract GroupAssert<T> hasSize(int expected);
 
   protected final GroupAssert<T> assertEqualSize(int expected) {
     if (actual == null) fail("cannot get size of a null object");
