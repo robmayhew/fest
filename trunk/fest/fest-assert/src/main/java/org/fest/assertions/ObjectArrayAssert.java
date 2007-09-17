@@ -62,7 +62,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public void isEmpty() {
     if (actualGroupSize() > 0) 
-      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(Arrays.toString(actual))));
+      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(actual)));
   }
 
   /**
@@ -84,7 +84,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), Arrays.toString(expected), Arrays.toString(actual)));
+      fail(errorMessageIfNotEqual(description(), expected, actual));
     return this;
   }
 
@@ -97,7 +97,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isNotEqualTo(Object[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(description(), Arrays.toString(actual), Arrays.toString(array)));
+      fail(errorMessageIfEqual(description(), actual, array));
     return this;
   }
 
