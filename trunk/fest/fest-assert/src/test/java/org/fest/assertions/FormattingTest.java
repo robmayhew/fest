@@ -48,6 +48,6 @@ public class FormattingTest {
   }
 
   @Test public void shouldFormatNullObject() {
-    assertEquals(Formatting.bracketAround(null), "<null>");
+    assertEquals(Formatting.bracketAround((Object)null), "<null>");
   }
 }

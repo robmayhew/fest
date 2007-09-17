@@ -19,60 +19,111 @@ import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.quote;
 
+import java.util.Arrays;
+
 /**
  * Understands utility methods related to formatting.
  *
  * @author Yvonne Wang
  */
-public final class Formatting {
+final class Formatting {
 
   private static final String EMPTY_MESSAGE = "";
 
-  public static String format(String message) {
+  static String format(String message) {
     if (isEmpty(message)) return EMPTY_MESSAGE;
     return concat("[", message, "] ");
   }
 
-  public static String bracketAround(Object o) {
+  static String bracketAround(Object o) {
     return doBracketAround(quote(o));
   }
   
-  public static String bracketAround(boolean val) {
+  static String bracketAround(Object[] array) {
+    return doBracketAround(toString(array));
+  }  
+  
+  static String bracketAround(boolean val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  public static String bracketAround(byte val) {
+  static String bracketAround(boolean[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(byte val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  public static String bracketAround(char val) {
+  static String bracketAround(byte[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(char val) {
     return doBracketAround(quote(String.valueOf(val)));
   }
 
-  public static String bracketAround(double val) {
+  static String bracketAround(char[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(double val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  public static String bracketAround(float val) {
+  static String bracketAround(double[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(float val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  public static String bracketAround(int val) {
+  static String bracketAround(float[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(int val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  public static String bracketAround(long val) {
+  static String bracketAround(int[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(long val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  public static String bracketAround(short val) {
+  static String bracketAround(long[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String bracketAround(short val) {
     return doBracketAround(String.valueOf(val));
   }
 
-  private static String doBracketAround(Object o) {
+  static String bracketAround(short[] array) {
+    return doBracketAround(Arrays.toString(array));
+  }  
+  
+  static String doBracketAround(Object o) {
     return concat("<", o, ">");    
   }
-  
+
+  private static String toString(Object[] array) {
+    if (array == null) return null;
+    int max = array.length - 1;
+    if (max == -1) return "[]";
+    StringBuilder b = new StringBuilder();
+    b.append('[');
+    for (int i = 0;; i++) {
+      b.append(quote(array[i]));
+      if (i == max) return b.append(']').toString();
+      b.append(", ");
+    }
+  }
+
   private Formatting() {}
 
 }

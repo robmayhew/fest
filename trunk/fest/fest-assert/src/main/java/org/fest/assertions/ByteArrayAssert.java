@@ -62,7 +62,7 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    */
   public void isEmpty() {
     if (actual.length > 0) 
-      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(Arrays.toString(actual))));
+      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(actual)));
   }
 
   /**
@@ -84,7 +84,7 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    */
   public ByteArrayAssert isEqualTo(byte[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), Arrays.toString(expected), Arrays.toString(actual)));
+      fail(errorMessageIfNotEqual(description(), expected, actual));
     return this;
   }
 
@@ -97,7 +97,7 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    */
   public ByteArrayAssert isNotEqualTo(byte[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(description(), Arrays.toString(actual), Arrays.toString(array)));
+      fail(errorMessageIfEqual(description(), actual, array));
     return this;
   }
 
