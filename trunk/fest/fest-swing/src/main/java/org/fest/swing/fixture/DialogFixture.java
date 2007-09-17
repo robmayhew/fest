@@ -201,7 +201,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws AssertionError if the managed <code>Dialog</code> is not modal.
    */
   public final DialogFixture requireModal() {
-    assertThat(target.isModal()).isTrue();
+    assertThat(target.isModal()).as(formattedPropertyName("modal")).isTrue();
     return this;
   }
 }

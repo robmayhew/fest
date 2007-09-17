@@ -84,7 +84,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @throws AssertionError if the text of the target component is not equal to the given one.
    */
   public final JTextComponentFixture requireText(String expected) {
-    assertThat(text()).isEqualTo(expected);
+    assertThat(text()).as(textProperty()).isEqualTo(expected);
     return this;
   }
   
@@ -188,9 +188,11 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @throws AssertionError if the target text component is not empty.
    */
   public final JTextComponentFixture requireEmpty() {
-    assertThat(text()).isEmpty();
+    assertThat(text()).as(textProperty()).isEmpty();
     return this;
   }
+
+  private String textProperty() { return formattedPropertyName("text"); }
 
   /**
    * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is enabled.

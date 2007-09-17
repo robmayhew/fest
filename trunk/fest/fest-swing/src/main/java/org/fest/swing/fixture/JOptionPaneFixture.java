@@ -95,7 +95,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    */
   public final JOptionPaneFixture requireTitle(String title) {
     String actualTitle = ((Dialog)target.getRootPane().getParent()).getTitle();
-    assertThat(actualTitle).isEqualTo(title);
+    assertThat(actualTitle).as(formattedPropertyName("title")).isEqualTo(title);
     return this;
   }
 
@@ -106,7 +106,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not show the given message.
    */
   public final JOptionPaneFixture requireMessage(Object message) {
-    assertThat(target.getMessage()).isEqualTo(message);
+    assertThat(target.getMessage()).as(formattedPropertyName("message")).isEqualTo(message);
     return this;
   }
   
@@ -117,7 +117,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not have the given options.
    */
   public final JOptionPaneFixture requireOptions(Object[] options) {
-    assertThat(target.getOptions()).isEqualTo(options);
+    assertThat(target.getOptions()).as(formattedPropertyName("options")).isEqualTo(options);
     return this;
   }
   
@@ -197,8 +197,12 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   private JOptionPaneFixture assertEqualMessageType(int expected) {
-    assertThat(messageTypeAsText(target.getMessageType())).isEqualTo(messageTypeAsText(expected));
+    assertThat(actualMessageTypeAsText()).as(formattedPropertyName("messageType")).isEqualTo(messageTypeAsText(expected));
     return this;
+  }
+
+  private String actualMessageTypeAsText() {
+    return messageTypeAsText(target.getMessageType());
   }
   
   private String messageTypeAsText(int messageType) {
@@ -252,5 +256,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    */
   @Override public final JOptionPaneFixture requireDisabled() {
     return (JOptionPaneFixture)assertDisabled();
+  }
+
+  @Override protected String formattedTarget() {
+    return target.getClass().getName();
   }
 }

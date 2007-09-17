@@ -35,6 +35,9 @@ import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.util.Formatting.format;
+
 import static org.fest.util.Strings.join;
 
 import org.fest.swing.ComponentLookupException;
@@ -259,7 +262,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   public final JMenuItemFixture menuItem(String... path) {
     ComponentMatcher m = new JMenuItemMatcher(join(path).with("|"));
     Component item = finder().find(target, m);
-    assertThat(item).isInstanceOf(JMenuItem.class);
+    assertThat(item).as(format(item)).isInstanceOf(JMenuItem.class);
     return new JMenuItemFixture(robot, (JMenuItem) item);
   }
 

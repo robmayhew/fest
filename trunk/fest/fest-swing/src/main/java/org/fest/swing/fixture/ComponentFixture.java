@@ -22,6 +22,11 @@ import abbot.tester.ComponentTester;
 import static java.awt.event.InputEvent.BUTTON1_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.util.Formatting.format;
+
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
@@ -83,7 +88,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws AssertionError if the <code>Component</code> managed by this fixture is not an instance of the given type.
    */
   public final <C extends T> C targetCastedTo(Class<C> type) {
-    assertThat(target).isInstanceOf(type);
+    assertThat(target).as(formattedTarget()).isInstanceOf(type);
     return type.cast(target);
   }
 
@@ -199,7 +204,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
   protected final ComponentFixture<T> assertVisible() {
-    assertThat(target.isVisible()).isTrue();
+    assertThat(target.isVisible()).as(visibleProperty()).isTrue();
     return this;
   }
 
@@ -209,9 +214,11 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws AssertionError if the managed <code>Component</code> is visible.
    */
   protected final ComponentFixture<T> assertNotVisible() {
-    assertThat(target.isVisible()).isFalse();
+    assertThat(target.isVisible()).as(visibleProperty()).isFalse();
     return this;
   }
+
+  private String visibleProperty() { return formattedPropertyName("visible"); }
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
@@ -219,7 +226,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws AssertionError is the managed <code>Component</code> is disabled.
    */
   protected final ComponentFixture<T> assertEnabled() {
-    assertThat(target.isEnabled()).isTrue();
+    assertThat(target.isEnabled()).as(enabledProperty()).isTrue();
     return this;
   }
 
@@ -229,8 +236,18 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws AssertionError is the managed <code>Component</code> is enabled.
    */
   protected final ComponentFixture<T> assertDisabled() {
-    assertThat(target.isEnabled()).isFalse();
+    assertThat(target.isEnabled()).as(enabledProperty()).isFalse();
     return this;
+  }
+
+  private String enabledProperty() { return formattedPropertyName("enabled"); }
+
+  protected final String formattedPropertyName(String propertyName) {
+    return concat(formattedTarget(), " - property:", quote(propertyName));
+  }
+
+  protected String formattedTarget() {
+    return format(target);
   }
 
   /** @return a tester for the target component */

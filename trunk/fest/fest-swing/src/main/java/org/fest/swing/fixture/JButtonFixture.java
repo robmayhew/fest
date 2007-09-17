@@ -27,6 +27,7 @@ import org.fest.swing.RobotFixture;
  * <code>{@link JButton}</code>.
  * 
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture<JButton> {
 
@@ -81,7 +82,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @throws AssertionError if the text of the target JButton is not equal to the given one.
    */
   public final JButtonFixture requireText(String expected) {
-    assertThat(text()).isEqualTo(expected);
+    assertThat(text()).as(formattedPropertyName("text")).isEqualTo(expected);
     return this;
   }
 

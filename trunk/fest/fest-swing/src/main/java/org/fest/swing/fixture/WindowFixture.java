@@ -196,7 +196,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
    */
   protected final WindowFixture<T> assertEqualSize(Dimension size) {
-    assertThat(target.getSize()).isEqualTo(size);
+    assertThat(target.getSize()).as(formattedPropertyName("size")).isEqualTo(size);
     return this;
   }
 

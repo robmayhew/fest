@@ -57,7 +57,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @throws AssertionError if the text of the target component is not equal to the given one.
    */
   public final JLabelFixture requireText(String expected) {
-    assertThat(text()).isEqualTo(expected);
+    assertThat(text()).as(formattedPropertyName("text")).isEqualTo(expected);
     return this;
   }
   
