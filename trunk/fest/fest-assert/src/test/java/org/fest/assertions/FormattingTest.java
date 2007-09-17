@@ -50,4 +50,49 @@ public class FormattingTest {
   @Test public void shouldFormatNullObject() {
     assertEquals(Formatting.bracketAround((Object)null), "<null>");
   }
+  
+  @Test public void shouldFormatObjectArray() {
+    Object o = new Object[] { "First", 3 };
+    assertEquals(Formatting.bracketAround(o), "<['First', 3]>");
+  }
+  
+  @Test public void shouldFormatBooleanArray() {
+    Object o = new boolean[] { true, false };
+    assertEquals(Formatting.bracketAround(o), "<[true, false]>");
+  }
+  
+  @Test public void shouldFormatByteArray() {
+    Object o = new byte[] { (byte)3, (byte)8 };
+    assertEquals(Formatting.bracketAround(o), "<[3, 8]>");
+  }
+  
+  @Test public void shouldFormatCharArray() {
+    Object o = new char[] { 'a', 'b' };
+    assertEquals(Formatting.bracketAround(o), "<[a, b]>");
+  }
+
+  @Test public void shouldFormatDoubleArray() {
+    Object o = new double[] { 6.8, 8.3 };
+    assertEquals(Formatting.bracketAround(o), "<[6.8, 8.3]>");
+  }
+
+  @Test public void shouldFormatFloatArray() {
+    Object o = new float[] { 6.1f, 8.6f };
+    assertEquals(Formatting.bracketAround(o), "<[6.1, 8.6]>");
+  }
+
+  @Test public void shouldFormatIntArray() {
+    Object o = new int[] { 78, 66 };
+    assertEquals(Formatting.bracketAround(o), "<[78, 66]>");
+  }
+
+  @Test public void shouldFormatLongArray() {
+    Object o = new long[] { 160l, 98l };
+    assertEquals(Formatting.bracketAround(o), "<[160, 98]>");
+  }
+
+  @Test public void shouldFormatShortArray() {
+    Object o = new short[] { (short)5, (short)8 };
+    assertEquals(Formatting.bracketAround(o), "<[5, 8]>");
+  }
 }

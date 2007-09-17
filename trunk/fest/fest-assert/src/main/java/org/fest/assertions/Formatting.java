@@ -36,7 +36,22 @@ final class Formatting {
   }
 
   static String bracketAround(Object o) {
+    if (o != null && o.getClass().isArray()) {
+      if (isArray(o, Object.class)) return bracketAround((Object[])o);
+      if (isArray(o, boolean.class)) return bracketAround((boolean[])o);
+      if (isArray(o, byte.class)) return bracketAround((byte[])o);
+      if (isArray(o, char.class)) return bracketAround((char[])o);
+      if (isArray(o, double.class)) return bracketAround((double[])o);
+      if (isArray(o, float.class)) return bracketAround((float[])o);
+      if (isArray(o, int.class)) return bracketAround((int[])o);
+      if (isArray(o, long.class)) return bracketAround((long[])o);
+      if (isArray(o, short.class)) return bracketAround((short[])o);
+    }
     return doBracketAround(quote(o));
+  }
+  
+  private static boolean isArray(Object o, Class<?> expectedType) {
+    return expectedType.isAssignableFrom(o.getClass().getComponentType());
   }
   
   static String bracketAround(Object[] array) {
