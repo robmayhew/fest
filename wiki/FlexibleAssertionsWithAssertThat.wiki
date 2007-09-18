@@ -1,0 +1,81 @@
+#summary Making tests more readable with FEST's "flexible assertions."
+#labels Featured
+
+== Introduction ==
+
+This guide explains how to get started with FEST's Assert module, which provide "flexible assertions" that can improve our tests' readability. FEST-Assert can be used with either [http://www.junit.org JUnit] or [http://testng.org TestNG].
+
+== Using "Flexible Assertions" in your tests ==
+
+   1. Download the latest version of the Assert module from the project's download page. The filename should be similar to fest-assert-VERSION.zip.
+   2. Include the file fest-assert-VERSION.jar and its dependencies (jar/zip files, located in the 'lib' folder in the downloaded zip file) in your classpath.
+   3. Use any of the '`assertThat`' methods in the class `org.fest.assertions.Assertions`. 
+
+Here is a quick example:
+{{{
+import static org.fest.assertions.Assertions.assertThat;
+
+import org.testng.annotations.Test;
+
+public class SomeTest {
+
+  @Test public void testApp() {
+    assertThat(true).isTrue();
+    int result = 2 + 3;
+    assertThat(result).as("calculation").isEqualTo(5);
+    assertThat("Hello World").contains("World");
+  }
+}
+}}}
+
+In our opinion, our "flexible assertions" can bring the following benefits:
+
+  # Only one static import is needed (`org.fest.assertions.Assertions.assertThat`)
+  # Allows us to use our IDE's "auto-complete" feature: we only type "." and we get the possible assertion methods for the value passed to "`assertThat`"
+  # We can chain related assertion methods:       
+    {{{
+    assertThat(yoda).isInstanceOf(Jedi.class)
+                    .isEqualTo(foundJedi)
+                    .isNotEqualTo(possibleSith);
+    }}}
+
+Currently, this module provides assertions that apply to the following data types:
+  # `Object`s
+  # `String`s
+  # `Collection`s
+  # Primitives (`boolean`, `int`, `char`, etc.)
+  # Arrays of `Object`s
+  # Arrays of primitives  
+  # `BufferedImages`
+
+Assertions can also be extended by using custom `Condition`s. The following condition verifies that the characters in a String are in uppercase:
+{{{
+class UpperCaseCondition extends Condition<String> {
+  
+  private UpperCaseCondition(String description) {
+    super(description);
+  }
+
+  public boolean matches(String value) {
+    if(isEmpty(value)) return false;
+    return value.equals(value.toUpperCase());
+  }
+
+  public static UpperCaseCondition isUpperCase() {
+    return new UpperCaseCondition("Uppercase");
+  }
+}
+}}}
+
+This example shows how to use such condition:
+{{{
+assertThat("hello").as("Greeting").satisfies(isUppercase());
+}}}
+
+which will fail with the message "`[Greeting] expected:Uppercase but was:<'hello'>`"
+ 
+ 
+ 
+ 
+ 
+ 
