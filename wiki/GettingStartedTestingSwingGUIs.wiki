@@ -35,7 +35,7 @@ GUI Tests that use FEST can be written with either [http://junit.org JUnit] or [
 Some observations:
   * We use a `org.fest.swing.fixture.FrameFixture` to display the GUI to test before executing the test method. `FrameFixture`s make it easy to lookup components in the GUI under test.
   * We clean up resources after running each test method. This step is *very important* because releases the keyboard and mouse from the FEST Robot (otherwise your computer would be pretty close to unusable.)
-  * By default, FEST looks up GUI components by name (which is the most reliable way.) We need to specify unique names for each component in our test. For example, in our GUI under test:
+  * By default, FEST looks up GUI components by name (which is the most reliable way.) We need to specify unique names for each component in our test. For example:
 {{{
   // GUI under test
   JTextField textField = new JTextField();
@@ -67,5 +67,6 @@ See Also:
 
 
 
+ 
  
  
