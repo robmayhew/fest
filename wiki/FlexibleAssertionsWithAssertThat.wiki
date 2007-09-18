@@ -28,7 +28,7 @@ public class SomeTest {
 }
 }}}
 
-In our opinion, our "flexible assertions" can bring the following benefits:
+== Features ==
 
   # Only one static import is needed (`org.fest.assertions.Assertions.assertThat`)
   # Allows us to use our IDE's "auto-complete" feature: we only type "." and we get the possible assertion methods for the value passed to "`assertThat`"
@@ -79,5 +79,6 @@ If you have any questions or comments, please post them at [http://groups.google
 See Also:
   # [http://fest.googlecode.com/svn/trunk/fest/fest-assert/javadocs/index.html Javadocs]
   # [Dependencies]
+ 
  
  
