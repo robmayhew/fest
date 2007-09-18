@@ -7,9 +7,9 @@ This guide explains how to get started with FEST's Assert module, which provide 
 
 == Using "Flexible Assertions" in your tests ==
 
-   1. Download the latest version of the Assert module from the project's download page. The filename should be similar to fest-assert-VERSION.zip.
-   2. Include the file fest-assert-VERSION.jar and its dependencies (jar/zip files, located in the 'lib' folder in the downloaded zip file) in your classpath.
-   3. Use any of the '`assertThat`' methods in the class `org.fest.assertions.Assertions`. 
+  # Download the latest version of the Assert module from the project's download page. The filename should be similar to fest-assert-VERSION.zip.
+  # Include the file fest-assert-VERSION.jar and its dependencies (jar/zip files, located in the 'lib' folder in the downloaded zip file) in your classpath.
+  # Use any of the '`assertThat`' methods in the class `org.fest.assertions.Assertions`. 
 
 Here is a quick example:
 {{{
@@ -73,9 +73,3 @@ assertThat("hello").as("Greeting").satisfies(isUppercase());
 }}}
 
 which will fail with the message "`[Greeting] expected:Uppercase but was:<'hello'>`"
- 
- 
- 
- 
- 
- 
