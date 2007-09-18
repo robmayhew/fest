@@ -18,6 +18,9 @@ package org.fest.swing.fixture;
 import javax.swing.JButton;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
 import org.fest.swing.GUITest;
 
@@ -27,6 +30,7 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link JButtonFixture}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 @GUITest public class JButtonFixtureTest extends ComponentFixtureTestCase<JButton> {
 
@@ -36,9 +40,14 @@ import org.testng.annotations.Test;
     fixture.requireText("Target");
   }
   
-  @Test(dependsOnMethods = "shouldPassIfButtonHasMatchingText", expectedExceptions = AssertionError.class) 
+  @Test(dependsOnMethods = "shouldPassIfButtonHasMatchingText") 
   public void shouldFailIfButtonHasNotMatchingText() {
-    fixture.requireText("A Button");
+    try {
+      fixture.requireText("A Button");
+      fail();
+    } catch (AssertionError e) {
+      errorMessages().assertIsCorrect(e, "text", equalsFailedMessage("'A Button'", "'Target'"));
+    }
   }
   
   @Test public void shouldReturnButtonText() {

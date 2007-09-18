@@ -23,7 +23,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.UIManager;
@@ -37,9 +36,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
+import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
 
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
@@ -57,9 +55,9 @@ import org.testng.annotations.Test;
  */
 public abstract class ComponentFixtureTestCase<T extends Component> {
 
-  protected static final String EXPECTED_TRUE_BUT_WAS_FALSE = " expected:<true> but was:<false>";
-  protected static final String EXPECTED_FALSE_BUT_WAS_TRUE = " expected:<false> but was:<true>";
-
+  private static final String ENABLED = "enabled";
+  private static final String VISIBLE = "visible";
+  
   protected static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
@@ -102,17 +100,17 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }
   }
 
-  protected static final Logger LOGGER = Logger.getAnonymousLogger();
-  
   private RobotFixture robot;
   private MainWindow window;
   private ComponentFixture<T> fixture;
-
+  private ErrorMessages errorMessages;
+  
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow(getClass());
     window.setSize(new Dimension(300, 200));
     T target = createTarget();
+    errorMessages = new ErrorMessages(target); 
     addToWindow(target);
     robot().showWindow(window);
     createFixture(target); 
@@ -208,18 +206,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireVisible();
       fail();
     } catch(AssertionError e) {
-      assertCorrectErrorMessage(e, concat(propertyVisible(), EXPECTED_TRUE_BUT_WAS_FALSE));
+      errorMessages.assertIsCorrect(e, VISIBLE, EXPECTED_TRUE_BUT_WAS_FALSE);
     }
   }
 
-  protected final String targetType() {
-    return fixture.target.getClass().getName();
-  }
-  
-  protected final String targetName() {
-    return fixture.target.getName();
-  }
-  
   @Test public final void shouldPassIfComponentIsNotVisibleAndExpectingNotVisible() {
     fixture.target.setVisible(false);
     fixture.requireNotVisible();
@@ -231,14 +221,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireNotVisible();
       fail();
     } catch(AssertionError e) {
-      assertCorrectErrorMessage(e, concat(propertyVisible(), EXPECTED_FALSE_BUT_WAS_TRUE));
+      errorMessages.assertIsCorrect(e, VISIBLE, EXPECTED_FALSE_BUT_WAS_TRUE);
     }
   }
 
-  private String propertyVisible() {
-    return property("visible");
-  }
-  
   @Test public final void shouldPassIfComponentIsEnabledAndExpectingEnabled() {
     fixture.target.setEnabled(true);
     fixture.requireEnabled();
@@ -250,7 +236,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireEnabled();
       fail();
     } catch(AssertionError e) {
-      assertCorrectErrorMessage(e, concat(propertyEnabled(), EXPECTED_TRUE_BUT_WAS_FALSE));
+      errorMessages.assertIsCorrect(e, ENABLED, EXPECTED_TRUE_BUT_WAS_FALSE);
     }
   }
   
@@ -259,17 +245,13 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     fixture.requireDisabled();
   }
   
-  private String propertyEnabled() {
-    return property("enabled");
-  }
-  
   @Test public final void shouldFailIfComponentIsEnabledAndExpectingDisabled() {
     fixture.target.setEnabled(true);
     try {
       fixture.requireDisabled();
       fail();
     } catch(AssertionError e) {
-      assertCorrectErrorMessage(e, concat(propertyEnabled(), EXPECTED_FALSE_BUT_WAS_TRUE));
+      errorMessages.assertIsCorrect(e, ENABLED, EXPECTED_FALSE_BUT_WAS_TRUE);
     }
   }
 
@@ -278,26 +260,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     robot.cleanUp();
   }
 
-  protected final void assertCorrectErrorMessage(AssertionError error, String expectedMessage) {
-    logError(error);
-    assertThat(error.getMessage()).isEqualTo(expectedMessage);
-  }
-  
-  protected final void logError(Throwable error) {
-    LOGGER.info(concat("Error message: ", error.getMessage()));
-  }
-
-  protected String property(String name) {
-    return concat("[", formattedTarget(), " - property:", quote(name), "]");
-  }
-  
-  private String formattedTarget() {
-    return concat(targetType(), "<", quote(targetName()), ">");
-  }
-    
   protected void beforeTearDown() {}
   
   protected final RobotFixture robot() { return robot; }
   protected final MainWindow window() { return window; }
   protected final ComponentFixture<T> fixture() { return fixture; }
+  protected final ErrorMessages errorMessages() { return errorMessages; }
 }

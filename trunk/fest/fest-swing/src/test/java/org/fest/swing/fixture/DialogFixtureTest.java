@@ -18,6 +18,10 @@ package org.fest.swing.fixture;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
+
 import org.fest.swing.GUITest;
 
 import org.testng.annotations.Test;
@@ -38,10 +42,14 @@ import org.testng.annotations.Test;
     fixture.requireModal();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfNotModalAndExpectingModal() {
+  @Test public void shouldFailIfNotModalAndExpectingModal() {
     target.setModal(false);
-    fixture.requireModal();
+    try {
+      fixture.requireModal();
+      fail();
+    } catch(AssertionError e) {
+      errorMessages().assertIsCorrect(e, "modal", EXPECTED_TRUE_BUT_WAS_FALSE);
+    }
   }
   
   protected void afterSetUp() {

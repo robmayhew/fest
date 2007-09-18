@@ -34,8 +34,10 @@ import static javax.swing.JOptionPane.showInputDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showOptionDialog;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
 import static org.fest.util.Arrays.array;
 
@@ -139,10 +141,11 @@ import org.testng.annotations.Test;
       tester.click(button);      
     }    
   }
-
+  
   private CustomWindow window;
   private RobotFixture robot;
   private JOptionPaneFixture fixture;
+  private ErrorMessages errorMessages;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -184,11 +187,16 @@ import org.testng.annotations.Test;
     fixture.requireTitle("Jedi");
   }
   
-  @Test(dependsOnMethods = "shouldPassIfMatchingTitle", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfMatchingTitle")
   public void shouldFailIfNotMatchingTitle() {
     window.showMessageWithTitle("Yoda");
     createFixture();
-    fixture.requireTitle("Darth Vader");
+    try {
+      fixture.requireTitle("Darth Vader");
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, "title", equalsFailedMessage("'Darth Vader'", "'Yoda'"));
+    }
   }
 
   @Test public void shouldPassIfMatchingOptions() {
@@ -197,11 +205,16 @@ import org.testng.annotations.Test;
     fixture.requireOptions(array("First", "Second"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfMatchingOptions", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfMatchingOptions")
   public void shouldFailIfNotMatchingOptions() {
     window.showMessageWithOptions(array("First", "Second"));
-    JOptionPaneFixture fixture = fixture();
-    fixture.requireOptions(array("Third"));
+    createFixture();
+    try {
+      fixture.requireOptions(array("Third"));
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, "options", equalsFailedMessage("['First', 'Second']", "['Third']"));
+    }
   }
 
   @Test public void shouldPassIfMatchingMessage() {
@@ -286,13 +299,10 @@ import org.testng.annotations.Test;
     fixture.requirePlainMessage();
   }
   
-  private JOptionPaneFixture fixture() {
-    return new JOptionPaneFixture(robot);
-  }
-  
   private void createFixture() {
     fixture = new JOptionPaneFixture(robot);
     assertThat(fixture.target).isNotNull();
+    errorMessages = new ErrorMessages(fixture.target);
   }
 
   @AfterMethod public void tearDown() {

@@ -18,6 +18,9 @@ package org.fest.swing.fixture;
 import javax.swing.JLabel;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
 import org.fest.swing.GUITest;
 
@@ -36,9 +39,14 @@ import org.testng.annotations.Test;
     fixture.requireText("Target");
   }
   
-  @Test(dependsOnMethods = "shouldPassIfLabelHasMatchingText", expectedExceptions = AssertionError.class) 
+  @Test(dependsOnMethods = "shouldPassIfLabelHasMatchingText") 
   public void shouldFailIfLabelHasNotMatchingText() {
-    fixture.requireText("A Label");
+    try {
+      fixture.requireText("A Label");
+      fail();
+    } catch (AssertionError e) {
+      errorMessages().assertIsCorrect(e, "text", equalsFailedMessage("'A Label'", "'Target'"));
+    }
   }
   
   @Test public void shouldReturnLabelText() {

@@ -138,6 +138,10 @@ public class JTableFixture extends ComponentFixture<JTable> {
   
   /**
    * Simulates a user doble-clicking the <code>{@link JTable}</code> managed by this fixture.
+   * <p>
+   * <b>Note:</b> This method will not be successful if the double-clicking occurs on an editable table cell. For this 
+   * particular case, this method will start edition of the table cell located under the mouse pointer.
+   * </p>
    * @return this fixture.
    */
   @Override public final JTableFixture doubleClick() {    
