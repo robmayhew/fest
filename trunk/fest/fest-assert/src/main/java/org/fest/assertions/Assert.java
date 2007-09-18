@@ -15,12 +15,17 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Fail.failIfEqual;
 import static org.fest.assertions.Fail.failIfNotEqual;
 import static org.fest.assertions.Fail.failIfNotNull;
 import static org.fest.assertions.Fail.failIfNotSame;
 import static org.fest.assertions.Fail.failIfNull;
 import static org.fest.assertions.Fail.failIfSame;
+import static org.fest.assertions.Formatting.bracketAround;
+import static org.fest.assertions.Formatting.format;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands a template for assertion methods.
@@ -49,6 +54,14 @@ abstract class Assert<T> {
     failIfNotNull(description, actual);
   }
 
+  /**
+   * Verifies that the actual value satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value does not satisfy the given condition.
+   */
+  protected abstract Assert<T> satisfies(Condition<T> condition);
+  
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
    * thrown when an assertion fails.
@@ -102,6 +115,18 @@ abstract class Assert<T> {
    */
   public final String description() {
     return description;
+  }
+
+  protected final Assert<T> verify(Condition<T> condition) {
+    if (condition == null) throw new IllegalArgumentException("condition cannot be null");
+    if (!condition.matches(actual)) fail(conditionFailedMessage(condition));
+    return this;
+  }
+  
+  private String conditionFailedMessage(Condition<T> condition) {
+    String s = condition.description();
+    if (isEmpty(s)) return concat(format(description), "condition failed with: ", bracketAround(actual));
+    return concat(format(description), "expected:", s, " but was:", bracketAround(actual));
   }
   
   protected Assert<T> description(String description) {

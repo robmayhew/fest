@@ -48,6 +48,16 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
   }
 
   /**
+   * Verifies that the actual <code>${arrayType}</code> array satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>${arrayType}</code> array does not satisfy the given condition.
+   */
+  public ${className} satisfies(Condition<${arrayType}[]> condition) {
+    return (${className})verify(condition);
+  }
+
+  /**
    * Verifies that the actual <code>${arrayType}</code> array is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>${arrayType}</code> array is <code>null</code>.

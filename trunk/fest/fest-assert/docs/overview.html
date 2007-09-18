@@ -7,7 +7,7 @@
 <body>
 <p>
 This document is the API specification for the <a href="http://code.google.com/p/fest/" target="_blank">FEST</a> 
-&quot;Flexible Assertions&quot; Module 0.3-SNAPSHOT.
+&quot;Flexible Assertions&quot; Module 0.4.
 </p>
 <p>
 Currently, this module provides assertions that apply to the following data types:
@@ -30,6 +30,27 @@ int removed = employees.removeFired();
 List&lt;Employee&gt; newEmployees = employees.hired(TODAY);
 {@link org.fest.assertions.Assertions#assertThat(java.util.Collection) assertThat}(newEmployees).{@link org.fest.assertions.CollectionAssert#hasSize(int) hasSize}(6);
 </pre>
+</p>
+<p>
+Assertions can also be extended by using custom <code>{@link org.fest.assertions.Condition}</code>s. The following 
+condition verifies that the characters in a <code>String</code> are in uppercase:
+<pre>
+class UpperCaseCondition extends {@link org.fest.assertions.Condition Condition}&lt;String&gt; {
+  public boolean matches(String value) {
+    if(isEmpty(value)) return false;
+    return value.equals(value.toUpperCase());
+  }
+
+  public static UpperCaseCondition isUpperCase() {
+    return new UpperCaseCondition(&quot;Uppercase&quot;);
+  }
+}
+</pre>
+This example shows how to use such condition:  
+<pre>
+{@link org.fest.assertions.Assertions#assertThat(java.lang.String) assertThat}(&quot;hello&quot;).as(&quot;Greeting&quot;).{@link org.fest.assertions.StringAssert#satisfies(org.fest.assertions.Condition) satisfies}(isUppercase());
+</pre>
+which will fail with the message &quot;<code>[Greeting] expected:Uppercase but was:&lt;'hello'&gt;</code>&quot;
 </p>
 </body>
 </html>

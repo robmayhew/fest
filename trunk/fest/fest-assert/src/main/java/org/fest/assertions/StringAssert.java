@@ -35,6 +35,26 @@ public final class StringAssert extends GroupAssert<String> {
   }
   
   /**
+   * Sets the description of the actual <code>String</code>, to be used in as message of any 
+   * <code>{@link AssertionError}</code> thrown when an assertion fails.
+   * @param description the description of the actual <code>String</code>.
+   * @return this assertion object.
+   */
+  public StringAssert as(String description) {
+    return (StringAssert)description(description);
+  }
+
+  /**
+   * Verifies that the actual <code>String</code> satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> does not satisfy the given condition.
+   */
+  public StringAssert satisfies(Condition<String> condition) {
+    return (StringAssert)verify(condition);
+  }
+
+  /**
    * Verifies that the actual <code>String</code> is empty (not <code>null</code> with zero characters.)
    * @throws AssertionError if the actual <code>String</code> is not <code>null</code> or not empty.
    */
@@ -52,16 +72,6 @@ public final class StringAssert extends GroupAssert<String> {
     if (Strings.isEmpty(actual)) 
       fail(concat(format(description()), "the String ", quote(actual), " should not be empty"));   
     return this;
-  }
-  
-  /**
-   * Sets the description of the actual <code>String</code>, to be used in as message of any 
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>String</code>.
-   * @return this assertion object.
-   */
-  public StringAssert as(String description) {
-    return (StringAssert)description(description);
   }
 
   /**
@@ -138,5 +148,5 @@ public final class StringAssert extends GroupAssert<String> {
     if (actual.indexOf(expected) == -1) 
       fail(concat(format(description()), "the String ", quote(actual), " should contain the String ", quote(expected)));
     return this;
-  } 
+  }
 }

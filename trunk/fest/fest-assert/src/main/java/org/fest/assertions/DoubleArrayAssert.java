@@ -1,5 +1,5 @@
 /*
- * Created on Sep 16, 2007
+ * Created on Sep 17, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -45,6 +45,16 @@ public final class DoubleArrayAssert extends GroupAssert<double[]> {
    */
   public DoubleArrayAssert as(String description) {
     return (DoubleArrayAssert)description(description);
+  }
+
+  /**
+   * Verifies that the actual <code>double</code> array satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>double</code> array does not satisfy the given condition.
+   */
+  public DoubleArrayAssert satisfies(Condition<double[]> condition) {
+    return (DoubleArrayAssert)verify(condition);
   }
 
   /**

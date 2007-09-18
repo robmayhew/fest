@@ -1,5 +1,5 @@
 /*
- * Created on Sep 16, 2007
+ * Created on Sep 17, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -45,6 +45,16 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
    */
   public IntArrayAssert as(String description) {
     return (IntArrayAssert)description(description);
+  }
+
+  /**
+   * Verifies that the actual <code>int</code> array satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> array does not satisfy the given condition.
+   */
+  public IntArrayAssert satisfies(Condition<int[]> condition) {
+    return (IntArrayAssert)verify(condition);
   }
 
   /**

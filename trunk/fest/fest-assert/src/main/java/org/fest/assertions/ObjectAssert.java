@@ -76,6 +76,16 @@ public final class ObjectAssert extends Assert<Object> {
   }
 
   /**
+   * Verifies that the actual <code>Object</code> satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> does not satisfy the given condition.
+   */
+  public ObjectAssert satisfies(Condition<Object> condition) {
+    return (ObjectAssert)verify(condition);
+  }
+
+  /**
    * Verifies that the actual <code>Object</code> is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.

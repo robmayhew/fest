@@ -69,6 +69,16 @@ public final class ImageAssert extends Assert<BufferedImage> {
   }
 
   /**
+   * Verifies that the actual image satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual image does not satisfy the given condition.
+   */
+  public ImageAssert satisfies(Condition<BufferedImage> condition) {
+    return (ImageAssert)verify(condition);
+  }
+
+  /**
    * Verifies that the actual image is equal to the given one. Two images are equal if they have the same size and the
    * pixels at the same coordinates have the same color.
    * @param expected the given image to compare the actual image to.

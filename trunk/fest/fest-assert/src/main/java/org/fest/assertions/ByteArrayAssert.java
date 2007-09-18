@@ -1,5 +1,5 @@
 /*
- * Created on Sep 16, 2007
+ * Created on Sep 17, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -45,6 +45,16 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
    */
   public ByteArrayAssert as(String description) {
     return (ByteArrayAssert)description(description);
+  }
+
+  /**
+   * Verifies that the actual <code>byte</code> array satisfies the given condition. 
+   * @param condition the condition to satisfy.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>byte</code> array does not satisfy the given condition.
+   */
+  public ByteArrayAssert satisfies(Condition<byte[]> condition) {
+    return (ByteArrayAssert)verify(condition);
   }
 
   /**
