@@ -46,7 +46,7 @@ Currently, this module provides assertions that apply to the following data type
   # Primitives (`boolean`, `int`, `char`, etc.)
   # Arrays of `Object`s
   # Arrays of primitives  
-  # `BufferedImages`
+  # `BufferedImage`s
 
 Assertions can also be extended by using custom `Condition`s. The following condition verifies that the characters in a String are in uppercase:
 {{{
@@ -73,3 +73,4 @@ assertThat("hello").as("Greeting").satisfies(isUppercase());
 }}}
 
 which will fail with the message "`[Greeting] expected:Uppercase but was:<'hello'>`"
+ 
