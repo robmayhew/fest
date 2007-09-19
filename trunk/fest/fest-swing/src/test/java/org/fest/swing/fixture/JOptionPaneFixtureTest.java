@@ -57,6 +57,8 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JOptionPaneFixtureTest {
 
+  private static final String MESSAGE_TYPE_PROPERTY = "messageType";
+
   public static class CustomWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
 
@@ -213,7 +215,7 @@ import org.testng.annotations.Test;
       fixture.requireOptions(array("Third"));
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, "options", equalsFailedMessage("['First', 'Second']", "['Third']"));
+      errorMessages.assertIsCorrect(e, "options", equalsFailedMessage("['Third']", "['First', 'Second']"));
     }
   }
 
@@ -223,11 +225,16 @@ import org.testng.annotations.Test;
     fixture.requireMessage("Leia");
   }
   
-  @Test(dependsOnMethods = "shouldPassIfMatchingMessage", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfMatchingMessage")
   public void shouldFailIfNotMatchingMessage() {
     window.showMessageWithText("Palpatine");
     createFixture();
-    fixture.requireMessage("Anakin");
+    try {
+      fixture.requireMessage("Anakin");
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, "message", equalsFailedMessage("'Anakin'", "'Palpatine'"));
+    }
   }
   
   @Test public void shouldPassIfExpectedAndActualMessageTypeIsError() {
@@ -236,11 +243,16 @@ import org.testng.annotations.Test;
     fixture.requireErrorMessage();
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsError", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsError")
   public void shouldFailIfExpectedMessageTypeIsErrorAndActualIsNot() {
     window.showInformationMessage();
     createFixture();
-    fixture.requireErrorMessage();
+    try {
+      fixture.requireErrorMessage();
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.ERROR, ErrorTypes.INFORMATION));
+    }
   }
 
   @Test public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
@@ -249,12 +261,16 @@ import org.testng.annotations.Test;
     fixture.requireInformationMessage();
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsInformation", 
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsInformation")
   public void shouldFailIfExpectedMessageTypeIsInformationAndActualIsNot() {
     window.showErrorMessage();
     createFixture();
-    fixture.requireInformationMessage();
+    try {
+      fixture.requireInformationMessage();
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.INFORMATION, ErrorTypes.ERROR));
+    }
   }
 
   @Test public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
@@ -263,12 +279,16 @@ import org.testng.annotations.Test;
     fixture.requireWarningMessage();
   }
   
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning", 
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning")
   public void shouldFailIfExpectedMessageTypeIsWarningAndActualIsNot() {
     window.showErrorMessage();
     createFixture();
-    fixture.requireWarningMessage();
+    try {
+      fixture.requireWarningMessage();
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.WARNING, ErrorTypes.ERROR));
+    }
   }
 
   @Test public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
@@ -277,12 +297,16 @@ import org.testng.annotations.Test;
     fixture.requireQuestionMessage();
   }
   
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning",
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning")
   public void shouldFailIfExpectedMessageTypeIsQuestionAndActualIsNot() {
     window.showErrorMessage();
     createFixture();
-    fixture.requireQuestionMessage();
+    try {
+      fixture.requireQuestionMessage();
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.QUESTION, ErrorTypes.ERROR));
+    }
   }
 
   @Test public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
@@ -291,12 +315,24 @@ import org.testng.annotations.Test;
     fixture.requirePlainMessage();
   }
   
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning",
-        expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning")
   public void shouldFailIfExpectedMessageTypeIsPlainAndActualIsNot() {
     window.showErrorMessage();
     createFixture();
-    fixture.requirePlainMessage();
+    try {
+      fixture.requirePlainMessage();
+      fail();
+    } catch (AssertionError e) {
+      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.PLAIN, ErrorTypes.ERROR));
+    }
+  }
+  
+  private static class ErrorTypes {
+    static final String ERROR = "'Error Message'";
+    static final String INFORMATION = "'Information Message'";
+    static final String WARNING = "'Warning Message'";
+    static final String QUESTION = "'Question Message'";
+    static final String PLAIN = "'Plain Message'";
   }
   
   private void createFixture() {

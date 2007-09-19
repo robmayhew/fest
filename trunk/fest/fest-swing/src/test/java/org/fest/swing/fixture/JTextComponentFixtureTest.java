@@ -18,7 +18,10 @@ package org.fest.swing.fixture;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
+import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import org.fest.swing.GUITest;
 
@@ -32,6 +35,7 @@ import org.testng.annotations.Test;
  */
 @GUITest public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextComponent> {
 
+  private static final String TEXT_PROPERTY = "text";
   private JTextComponentFixture fixture;
   
   @Test public void shouldPassIfTextFieldHasMatchingText() {
@@ -39,9 +43,14 @@ import org.testng.annotations.Test;
     fixture.requireText("Second Text Field");
   }
   
-  @Test(dependsOnMethods = "shouldPassIfTextFieldHasMatchingText", expectedExceptions = AssertionError.class)  
+  @Test(dependsOnMethods = "shouldPassIfTextFieldHasMatchingText")  
   public void shouldFailIfTextFieldHasNotMatchingText() {
-    fixture.requireText("A Text Field");
+    try {
+      fixture.requireText("A Text Field");
+      fail();
+    } catch (AssertionError e) {
+      errorMessages().assertIsCorrect(e, TEXT_PROPERTY, equalsFailedMessage("'A Text Field'", "''"));
+    }
   }
   
   @Test public void shouldReturnTextFieldText() {
@@ -57,7 +66,12 @@ import org.testng.annotations.Test;
   @Test(dependsOnMethods = "shouldPassIfTextFieldIsEmpty", expectedExceptions = AssertionError.class) 
   public void shouldFailIfTextFieldIsNotEmpty() {
     fixture.target.setText("Some text");
-    fixture.requireEmpty();
+    try {
+      fixture.requireEmpty();
+      fail();
+    } catch (AssertionError e) {
+      errorMessages().assertIsCorrect(e, TEXT_PROPERTY, equalsFailedMessage("''", "'Some text'"));
+    }
   }
   
   @Test public void shouldEnterTextInTextField() {

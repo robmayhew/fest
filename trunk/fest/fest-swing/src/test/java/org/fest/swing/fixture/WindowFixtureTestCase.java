@@ -17,6 +17,10 @@ package org.fest.swing.fixture;
 
 import java.awt.Window;
 
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
+
 import org.testng.annotations.Test;
 
 /**
@@ -31,10 +35,15 @@ public abstract class WindowFixtureTestCase<T extends Window> extends ComponentF
     windowFixture().requireSize(windowFixture().target.getSize());
   }
   
-  @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public final void shouldFailIfWindowHasNotMatchingSize() {
     FluentDimension wrongSize = windowSize().addToWidth(50).addToHeight(30);
-    windowFixture().requireSize(wrongSize);
+    try {
+      windowFixture().requireSize(wrongSize);
+      fail();
+    } catch (AssertionError e) {
+      errorMessages().assertIsCorrect(e, "size", equalsFailedMessage(wrongSize.toString(), windowFixture().target.getSize()));
+    }
   }
 
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
