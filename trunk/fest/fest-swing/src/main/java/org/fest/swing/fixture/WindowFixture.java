@@ -102,35 +102,35 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Shows the <code>{@link Window}</code> managed by this fixture.
    * @return this fixture.
    */
-  public abstract WindowFixture<T> show();
+  protected abstract WindowFixture<T> show();
 
   /**
    * Shows the <code>{@link Window}</code> managed by this fixture, resized to the given size.
    * @param size the size to resize the managed <code>Window</code> to.
    * @return this fixture.
    */
-  public abstract WindowFixture<T> show(Dimension size);
+  protected abstract WindowFixture<T> show(Dimension size);
 
   /**
    * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
    * @param width the width that the managed <code>Window</code> should have after being resized.
    * @return this fixture.
    */
-  public abstract WindowFixture<T> resizeWidthTo(int width);
+  protected abstract WindowFixture<T> resizeWidthTo(int width);
 
   /**
    * Simulates a user resizing vertically the <code>{@link Window}</code> managed by this fixture.
    * @param height the height that the managed <code>Window</code> should have after being resized.
    * @return this fixture.
    */
-  public abstract WindowFixture<T> resizeHeightTo(int height);
+  protected abstract WindowFixture<T> resizeHeightTo(int height);
 
   /**
    * Simulates a user resizing the <code>{@link Window}</code> managed by this fixture.
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
-  public abstract WindowFixture<T> resizeTo(Dimension size);
+  protected abstract WindowFixture<T> resizeTo(Dimension size);
 
   /**
    * Asserts that the size of the <code>{@link Window}</code> managed by this fixture is equal to given one. 
@@ -138,7 +138,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @return this fixture.
    * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
    */
-  public abstract WindowFixture<T> requireSize(Dimension size);
+  protected abstract WindowFixture<T> requireSize(Dimension size);
 
   /**
    * Shows the <code>{@link Window}</code> managed by this fixture.

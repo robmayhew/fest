@@ -116,35 +116,35 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public abstract ComponentFixture<T> pressKeys(int...keyCodes);
+  protected abstract ComponentFixture<T> pressKeys(int...keyCodes);
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
-  public abstract ComponentFixture<T> requireVisible();
+  protected abstract ComponentFixture<T> requireVisible();
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is visible.
    */
-  public abstract ComponentFixture<T> requireNotVisible();
+  protected abstract ComponentFixture<T> requireNotVisible();
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>Component</code> is disabled.
    */
-  public abstract ComponentFixture<T> requireEnabled();
+  protected abstract ComponentFixture<T> requireEnabled();
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>Component</code> is enabled.
    */
-  public abstract ComponentFixture<T> requireDisabled();
+  protected abstract ComponentFixture<T> requireDisabled();
 
   /**
    * Shows a popup menu using the <code>{@link Component}</code> managed by this fixture as the invoker of the popup 

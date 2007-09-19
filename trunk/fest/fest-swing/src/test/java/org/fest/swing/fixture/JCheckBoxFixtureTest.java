@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
+public class JCheckBoxFixtureTest extends JToggleButtonTestCase<JCheckBox> {
 
   private JCheckBoxFixture fixture;
   
@@ -60,7 +60,7 @@ public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
   }
 
   protected JCheckBox createTarget() {
-    JCheckBox target = new JCheckBox("A checkbox");
+    JCheckBox target = new JCheckBox("Target");
     target.setName("target");
     return target;
   }

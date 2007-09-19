@@ -17,6 +17,8 @@ package org.fest.swing.fixture;
 
 import javax.swing.JCheckBox;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 
@@ -26,7 +28,7 @@ import org.fest.swing.RobotFixture;
  * 
  * @author Alex Ruiz
  */
-public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
+public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
 
   /**
    * Creates a new </code>{@link JCheckBoxFixture}</code>.
@@ -69,7 +71,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * Simulates a user clicking the <code>{@link JCheckBox}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JCheckBoxFixture click() {
+  public final JCheckBoxFixture click() {
     return (JCheckBoxFixture)doClick();
   }
 
@@ -77,7 +79,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * Simulates a user doble-clicking the <code>{@link JCheckBox}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JCheckBoxFixture doubleClick() {
+  public final JCheckBoxFixture doubleClick() {
     return (JCheckBoxFixture)doDoubleClick();
   }
 
@@ -85,7 +87,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * Gives input focus to the <code>{@link JCheckBox}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JCheckBoxFixture focus() {
+  public final JCheckBoxFixture focus() {
     return (JCheckBoxFixture)doFocus();
   }
   
@@ -95,16 +97,36 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JCheckBoxFixture pressKeys(int... keyCodes) {
+  public final JCheckBoxFixture pressKeys(int... keyCodes) {
     return (JCheckBoxFixture)doPressKeys(keyCodes);
   }
   
+  /**
+   * Asserts that the text of the <code>{@link JCheckBox}</code> managed by this fixture is equal to the specified 
+   * <code>String</code>. 
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target JCheckBox is not equal to the given one.
+   */
+  public final JCheckBoxFixture requireText(String expected) {
+    assertThat(text()).as(formattedPropertyName("text")).isEqualTo(expected);
+    return this;
+  }
+
+  /**
+   * Returns the text of the <code>{@link JCheckBox}</code> managed by this fixture. 
+   * @return the text of the managed <code>JCheckBox</code>. 
+   */
+  public final String text() {
+    return target.getText();
+  }
+
   /**
    * Asserts that the <code>{@link JCheckBox}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JCheckBox</code> is not visible.
    */
-  @Override public final JCheckBoxFixture requireVisible() {
+  public final JCheckBoxFixture requireVisible() {
     return (JCheckBoxFixture)assertVisible();
   }
 
@@ -113,7 +135,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JCheckBox</code> is visible.
    */
-  @Override public final JCheckBoxFixture requireNotVisible() {
+  public final JCheckBoxFixture requireNotVisible() {
     return (JCheckBoxFixture)assertNotVisible();
   }
 
@@ -122,7 +144,7 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JCheckBox</code> is disabled.
    */
-  @Override public final JCheckBoxFixture requireEnabled() {
+  public final JCheckBoxFixture requireEnabled() {
     return (JCheckBoxFixture)assertEnabled();
   }
 
@@ -131,7 +153,25 @@ public class JCheckBoxFixture extends ComponentFixture<JCheckBox> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JCheckBox</code> is enabled.
    */
-  @Override public final JCheckBoxFixture requireDisabled() {
+  public final JCheckBoxFixture requireDisabled() {
     return (JCheckBoxFixture)assertDisabled();
+  }
+
+  /**
+   * Verifies that the <code>{@link JCheckBox}</code> managed by this fixture is selected.
+   * @return this fixture.
+   * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is not selected.
+   */
+  public final JCheckBoxFixture requireSelected() {
+    return (JCheckBoxFixture)assertSelected();
+  }
+
+  /**
+   * Verifies that the <code>{@link JCheckBox}</code> managed by this fixture is not selected.
+   * @return this fixture.
+   * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is selected.
+   */
+  public final JCheckBoxFixture requireNotSelected() {
+    return (JCheckBoxFixture)assertNotSelected();
   }
 }
