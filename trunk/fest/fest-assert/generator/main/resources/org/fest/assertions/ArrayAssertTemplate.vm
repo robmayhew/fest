@@ -94,7 +94,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    */
   public ${className} isEqualTo(${arrayType}[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), expected, actual));
+      fail(errorMessageIfNotEqual(description(), actual, expected));
     return this;
   }
 

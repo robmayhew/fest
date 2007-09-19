@@ -94,7 +94,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), expected, actual));
+      fail(errorMessageIfNotEqual(description(), actual, expected));
     return this;
   }
 

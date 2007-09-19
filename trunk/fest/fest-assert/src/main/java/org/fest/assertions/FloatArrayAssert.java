@@ -1,5 +1,5 @@
 /*
- * Created on Sep 17, 2007
+ * Created on Sep 18, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -94,7 +94,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    */
   public FloatArrayAssert isEqualTo(float[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), expected, actual));
+      fail(errorMessageIfNotEqual(description(), actual, expected));
     return this;
   }
 
