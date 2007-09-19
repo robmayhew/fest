@@ -37,10 +37,10 @@ public final class GUITests {
   public static boolean isGUITest(Class<?> type, Method method) {
     if (isGUITest(type)) return true;
     if (isGUITest(method)) return true;
-    return (isSuperclassGUITest(type, method));
+    return (isSuperClassGUITest(type, method));
   }
 
-  private static boolean isSuperclassGUITest(Class<?> type, Method method) {
+  private static boolean isSuperClassGUITest(Class<?> type, Method method) {
     Class<?> superclass = type.getSuperclass();
     while (superclass != null) {
       if (isGUITest(superclass)) return true;
@@ -51,9 +51,9 @@ public final class GUITests {
     return false;
   }
   
-  private static Method method(Class<?> superclass, String methodName, Class<?>[] parameterTypes) {
+  private static Method method(Class<?> type, String methodName, Class<?>[] parameterTypes) {
     try {
-      return superclass.getDeclaredMethod(methodName, parameterTypes);
+      return type.getDeclaredMethod(methodName, parameterTypes);
     } catch (Exception e) {
       return null;
     }
