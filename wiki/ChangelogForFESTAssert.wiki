@@ -1,0 +1,40 @@
+#summary Summary of changes between releases.
+
+===[09/17/07] FEST Assert 0.4===
+  # Flexible' or 'fluent' assertions:
+    {{{
+    assertThat(yoda).isInstanceOf(Jedi.class)
+                    .isEqualTo(foundJedi)
+                    .isNotEqualTo(foundSith);
+    }}}
+  # Assertions for Object, String, arrays (including primitives), primitives, collections and images
+  # Introduced method "`as`" to describe the actual value in the assertion
+  # Support for extension using Conditions. For example, the following condition verifies that the characters in a String are in uppercase: 
+  {{{
+class UpperCaseCondition extends Condition<String> {
+  
+  private UpperCaseCondition(String description) {
+    super(description);
+  }
+
+  @Override public boolean matches(String value) {
+    if(isEmpty(value)) return false;
+    return value.equals(value.toUpperCase());
+  }
+
+  public static UpperCaseCondition isUpperCase() {
+    return new UpperCaseCondition("Uppercase");
+  }
+}
+  }}} 
+  This example shows how to use such condition:
+  {{{
+assertThat("hello").as("Greeting").satisfies(isUpperCase());
+  }}}
+  which will fail with the message 
+  {{{
+"[Greeting] expected:Uppercase but was:<'hello'>"
+  }}}
+
+ 
+ 
