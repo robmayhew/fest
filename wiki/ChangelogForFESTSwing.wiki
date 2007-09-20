@@ -1,4 +1,4 @@
-#summary Summary of changes between releases of FEST-Swing.
+#summary Changes between releases of FEST-Swing.
 #labels Featured
 
 ===[08/30/07] FEST Swing 0.5===
@@ -48,3 +48,4 @@ dialog.button(textMatcher).click();
         method("setName").withParameterTypes(String.class).in(person).invoke("Luke");
         field("name").ofType(String.class).in(person).set("Anakin");
 }}}
+ 
