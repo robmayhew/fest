@@ -1,4 +1,4 @@
-#summary Links to the javadocs for each FEST Module.
+#summary Links to the javadocs for each FEST module.
 #labels Featured
 
   * FEST Swing Module
@@ -13,3 +13,4 @@
   * [http://fest.googlecode.com/svn/trunk/fest/fest-reflect/javadocs/index.html Reflection Module]
 
   * [http://fest.googlecode.com/svn/trunk/fest/fest-mocks/javadocs/index.html Mocks Module]
+ 
