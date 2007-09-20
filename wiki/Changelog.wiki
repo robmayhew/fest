@@ -9,9 +9,9 @@
                     .isNotEqualTo(foundSith);
     }}}
   # Assertions for Object, String, arrays (including primitives), primitives, collections and images
-  # Introduced method "as" to describe the actual value in the assertion
+  # Introduced method "`as`" to describe the actual value in the assertion
   # Support for extension using Conditions. For example, the following condition verifies that the characters in a String are in uppercase: 
-    {{{
+  {{{
 class UpperCaseCondition extends Condition<String> {
   
   private UpperCaseCondition(String description) {
@@ -27,12 +27,15 @@ class UpperCaseCondition extends Condition<String> {
     return new UpperCaseCondition("Uppercase");
   }
 }
-    }}} 
+  }}} 
   This example shows how to use such condition:
   {{{
 assertThat("hello").as("Greeting").satisfies(isUpperCase());
   }}}
-  which will fail with the message "[[Greeting]] expected:Uppercase but was:<'hello'>"
+  which will fail with the message 
+  {{{
+"[Greeting] expected:Uppercase but was:<'hello'>"
+  }}}
 
 ===[08/30/07] FEST Swing 0.5===
   # Added drag 'n drop support for `JList`, `JTable` and `JTree`. Many thanks to Fabien Barbero for his contribution.
@@ -84,6 +87,7 @@ dialog.button(textMatcher).click();
 
 
 
+ 
  
  
  
