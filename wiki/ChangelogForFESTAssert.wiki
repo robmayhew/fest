@@ -2,7 +2,7 @@
 #labels Featured
 
 ===[09/19/07] FEST Assert 0.5-SNAPSHOT===
-  # Fixed Issue 30. Introduced method "`described as`" as a counterpart to "`as`". This issue prevented to use the method "`as`" in [http://groovy.codehaus.org/ Groovy] ("`as`" is a keyword in Groovy)
+  # Fixed Issue 30. Introduced method "`described as`" as a counterpart to "`as`". This issue prevented to use the method "`as`" in [http://groovy.codehaus.org/ Groovy] ("`as`" is a keyword in Groovy). Many thanks to  [http://marcospereira.wordpress.com/ Marcos Silva Pereira] for pointing this out.
   # Fixed minor bug in assertion classes for arrays (`Object` and primitives) where the actual and expected values where in the wrong order in the failure message of "`isEqualTo`"
 
 ===[09/17/07] FEST Assert 0.4===
@@ -41,6 +41,7 @@ assertThat("hello").as("Greeting").satisfies(isUpperCase());
 "[Greeting] expected:Uppercase but was:<'hello'>"
   }}}
 
+ 
  
  
  
