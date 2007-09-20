@@ -1,4 +1,4 @@
-#summary Summary of changes between releases.
+#summary Changes between releases of FEST-Assert.
 #labels Featured
 
 ===[09/17/07] FEST Assert 0.4===
@@ -37,6 +37,7 @@ assertThat("hello").as("Greeting").satisfies(isUpperCase());
 "[Greeting] expected:Uppercase but was:<'hello'>"
   }}}
 
+ 
  
  
  
