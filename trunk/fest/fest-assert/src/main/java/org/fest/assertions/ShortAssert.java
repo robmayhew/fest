@@ -40,6 +40,11 @@ public class ShortAssert extends PrimitiveAssert {
     return (ShortAssert)description(description);
   }
   
+  /** {@inheritDoc} */
+  public ShortAssert describedAs(String description) {
+    return as(description);
+  }
+
   /**
    * Verifies that the actual <code>short</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.

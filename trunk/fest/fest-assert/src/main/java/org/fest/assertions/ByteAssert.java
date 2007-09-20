@@ -40,6 +40,11 @@ public final class ByteAssert extends PrimitiveAssert {
     return (ByteAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public ByteAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>byte</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.

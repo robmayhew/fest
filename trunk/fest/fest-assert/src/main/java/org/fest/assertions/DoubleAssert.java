@@ -28,6 +28,11 @@ public final class DoubleAssert extends PrimitiveAssert {
     return (DoubleAssert)description(description);
   }
   
+  /** {@inheritDoc} */
+  public DoubleAssert describedAs(String description) {
+    return as(description);
+  }
+
   /**
    * Verifies that the actual <code>double</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.

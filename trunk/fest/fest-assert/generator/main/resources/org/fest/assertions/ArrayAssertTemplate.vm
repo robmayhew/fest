@@ -37,16 +37,16 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
     super(actual);
   }
 
-  /**
-   * Sets the description of the actual <code>${arrayType}</code> array, to be used in as message of any
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>${arrayType}</code> array.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public ${className} as(String description) {
     return (${className})description(description);
   }
 
+  /** {@inheritDoc} */
+  public ${className} describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>${arrayType}</code> array satisfies the given condition. 
    * @param condition the condition to satisfy.

@@ -58,16 +58,16 @@ public final class ImageAssert extends Assert<BufferedImage> {
     super(actual);
   }
   
-  /**
-   * Sets the description of the actual image, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
-   * @param description the description of the actual image.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public ImageAssert as(String description) {
     return (ImageAssert) description(description);
   }
 
+  /** {@inheritDoc} */
+  public ImageAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual image satisfies the given condition. 
    * @param condition the condition to satisfy.

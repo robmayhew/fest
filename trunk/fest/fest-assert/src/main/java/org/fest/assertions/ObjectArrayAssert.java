@@ -37,16 +37,16 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     super(actual);
   }
 
-  /**
-   * Sets the description of the actual <code>Object</code> array, to be used in as message of any
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>Object</code> array.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public ObjectArrayAssert as(String description) {
     return (ObjectArrayAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public ObjectArrayAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>Object</code> array satisfies the given condition. 
    * @param condition the condition to satisfy.

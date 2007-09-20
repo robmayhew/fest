@@ -71,6 +71,14 @@ abstract class Assert<T> {
   protected abstract Assert<T> as(String description);
 
   /**
+   * Alternative to <code>{@link as}</code>, since "as" is a keyword in 
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  protected abstract Assert<T> describedAs(String description);
+
+  /**
    * Verifies that the actual value is equal to the given one.
    * @param expected the given value to compare the actual value to.
    * @return this assertion object.

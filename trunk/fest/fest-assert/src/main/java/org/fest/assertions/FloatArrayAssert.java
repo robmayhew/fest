@@ -1,5 +1,5 @@
 /*
- * Created on Sep 18, 2007
+ * Created on Sep 19, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -37,16 +37,16 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
     super(actual);
   }
 
-  /**
-   * Sets the description of the actual <code>float</code> array, to be used in as message of any
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>float</code> array.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public FloatArrayAssert as(String description) {
     return (FloatArrayAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public FloatArrayAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>float</code> array satisfies the given condition. 
    * @param condition the condition to satisfy.

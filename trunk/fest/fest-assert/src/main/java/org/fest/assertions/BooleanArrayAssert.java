@@ -1,5 +1,5 @@
 /*
- * Created on Sep 18, 2007
+ * Created on Sep 19, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -37,16 +37,16 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
     super(actual);
   }
 
-  /**
-   * Sets the description of the actual <code>boolean</code> array, to be used in as message of any
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>boolean</code> array.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public BooleanArrayAssert as(String description) {
     return (BooleanArrayAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public BooleanArrayAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>boolean</code> array satisfies the given condition. 
    * @param condition the condition to satisfy.

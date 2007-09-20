@@ -48,16 +48,16 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     return this;
   }
 
-  /**
-   * Sets the description of the actual collection, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
-   * @param description the description of the actual collection.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public CollectionAssert as(String description) {
     return (CollectionAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public CollectionAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual collection satisfies the given condition. 
    * @param condition the condition to satisfy.

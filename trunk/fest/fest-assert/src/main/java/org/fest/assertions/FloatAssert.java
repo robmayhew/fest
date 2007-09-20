@@ -40,6 +40,11 @@ public final class FloatAssert extends PrimitiveAssert {
     return (FloatAssert)description(description);
   }
   
+  /** {@inheritDoc} */
+  public FloatAssert describedAs(String description) {
+    return as(description);
+  }
+
   /**
    * Verifies that the actual <code>float</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.

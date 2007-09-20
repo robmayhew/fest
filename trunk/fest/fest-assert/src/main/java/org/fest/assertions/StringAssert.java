@@ -34,16 +34,16 @@ public final class StringAssert extends GroupAssert<String> {
     super(actual);
   }
   
-  /**
-   * Sets the description of the actual <code>String</code>, to be used in as message of any 
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>String</code>.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public StringAssert as(String description) {
     return (StringAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public StringAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>String</code> satisfies the given condition. 
    * @param condition the condition to satisfy.

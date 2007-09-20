@@ -40,6 +40,11 @@ public final class LongAssert extends PrimitiveAssert {
     return (LongAssert)description(description);
   }
   
+  /** {@inheritDoc} */
+  public LongAssert describedAs(String description) {
+    return as(description);
+  }
+
   /**
    * Verifies that the actual <code>long</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.

@@ -65,16 +65,16 @@ public final class ObjectAssert extends Assert<Object> {
     return this;
   }
   
-  /**
-   * Sets the description of the actual <code>Object</code>, to be used in as message of any 
-   * <code>{@link AssertionError}</code> thrown when an assertion fails.
-   * @param description the description of the actual <code>Object</code>.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public ObjectAssert as(String description) {
     return (ObjectAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public ObjectAssert describedAs(String description) {
+    return as(description);
+  }
+  
   /**
    * Verifies that the actual <code>Object</code> satisfies the given condition. 
    * @param condition the condition to satisfy.

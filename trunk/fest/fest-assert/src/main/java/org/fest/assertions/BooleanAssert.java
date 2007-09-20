@@ -33,14 +33,14 @@ public final class BooleanAssert extends PrimitiveAssert {
     this.actual = actual;
   }
   
-  /**
-   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
-   * @param description the description of the actual value.
-   * @return this assertion object.
-   */
+  /** {@inheritDoc} */
   public BooleanAssert as(String description) {
     return (BooleanAssert) description(description);
+  }
+  
+  /** {@inheritDoc} */
+  public BooleanAssert describedAs(String description) {
+    return as(description);
   }
   
   /**

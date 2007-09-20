@@ -39,6 +39,11 @@ public final class IntAssert extends PrimitiveAssert {
     return (IntAssert)description(description);
   }
   
+  /** {@inheritDoc} */
+  public IntAssert describedAs(String description) {
+    return as(description);
+  }
+
   /**
    * Verifies that the actual <code>int</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.

@@ -42,6 +42,11 @@ public final class CharAssert extends PrimitiveAssert {
     return (CharAssert)description(description);
   }
 
+  /** {@inheritDoc} */
+  public CharAssert describedAs(String description) {
+    return as(description);
+  }
+
   /**
    * Verifies that the actual <code>char</code> value is equal to the given one.
    * @param expected the value to compare the actual one to.
