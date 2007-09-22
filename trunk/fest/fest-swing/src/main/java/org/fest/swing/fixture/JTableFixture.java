@@ -57,6 +57,22 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
+   * Returns a fixture that manages the table cell specified by the given row and column.
+   * @param cell the cell of interest.
+   * @return  a fixture that manages the table cell specified by the given row and column.
+   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
+   * empty).
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are either negative or are out of
+   * bounds.
+   */
+  public final JTableCellFixture cell(TableCell cell) {
+    if (cell == null) throw new IllegalArgumentException("Cell cannot be null");
+    cell.beValidatedIn(target);
+    return new JTableCellFixture(this, cell.row, cell.column);
+  }
+
+  /**
    * Simulates a user selecting the given cell (row and column) of the <code>{@link JTable}</code> managed by this 
    * fixture.
    * @param row the row to select.

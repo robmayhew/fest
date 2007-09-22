@@ -17,32 +17,84 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands a cell in a <code>{@link JTable}</code>.
  * 
  * @author Alex Ruiz
  */
 public class TableCell {
-  /**
-   * Creates a new representation of a <code>{@link JTable}</code> cell.
-   * @param row the row of the cell.
-   * @param column the column of the cell.
-   * @return the created cell.
-   */
-  public static TableCell cell(int row, int column) {
-    return new TableCell(row, column);
-  }
-  
-  public final int row;
-  public final int column;
 
   /**
-   * Creates a new </code>{@link TableCell}</code>.
-   * @param row the row of the cell.
-   * @param column the column of the cell.
+   * Understands creation of <code>{@link TableCell}</code>s.
+   *
+   * @author Alex Ruiz
    */
+  public static class TableCellBuilder {
+    
+    /**
+     * Starting point for the creation of a <code>{@link TableCell}</code>.
+     * <p>
+     * Example:
+     * <pre>
+     * // import static org.fest.swing.fixture.TableCell.TableCellBuilder.*;
+     * 
+     * TableCell cell = row(5).column(3);
+     * </pre>
+     * </p>
+     * @param row the row index of the table cell to create.
+     * @return the created builder.
+     */
+    public static TableCellBuilder row(int row) {
+      return new TableCellBuilder(row);
+    }
+
+    private final int row;
+    
+    private TableCellBuilder(int row) {
+      this.row = row;
+    }
+    
+    /**
+     * Creates a new table cell using the row index specified in <code>{@link TableCellBuilder#row(int)}</code> and the 
+     * column index specified as the argument in this method. 
+     * @param column the column index of the table cell to create.
+     * @return the created table cell.
+     */
+    public TableCell column(int column) {
+      return new TableCell(row, column);
+    }
+  }
+  
+  /** The row of the cell. */
+  public final int row;
+  
+  /** The column of the cell. */
+  public final int column;
+
   private TableCell(int row, int column) {
     this.row = row;
     this.column = column;
+  }
+
+  void beValidatedIn(JTable table) {
+    int rowCount = table.getRowCount();
+    if (rowCount == 0) throw new IllegalStateException("Table does not contain any rows");
+    validateIndex(row, rowCount, "row");
+    validateIndex(column, table.getColumnCount(), "column");
+  }
+  
+  private void validateIndex(int index, int elementCount, String indexName) {
+    if (index < 0) throw negativeIndex(indexName);
+    if (index >= elementCount) throw indexExceedsMaximum(indexName, elementCount);
+  }
+  
+  private IllegalArgumentException negativeIndex(String indexName) {
+    throw new IllegalArgumentException(concat(indexName, " index cannot be a negative number"));
+  }
+  
+  private IndexOutOfBoundsException indexExceedsMaximum(String indexName, int max) {
+    throw new IndexOutOfBoundsException(concat(indexName, " index should be less than ", String.valueOf(max)));
   }
 }

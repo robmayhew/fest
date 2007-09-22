@@ -20,9 +20,12 @@ import javax.swing.JTable;
 
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
-import static java.awt.event.InputEvent.BUTTON1_MASK;
+
+import static org.fest.swing.MouseButtons.BUTTON1;
+import static org.fest.swing.MouseButtons.BUTTON3;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -63,16 +66,41 @@ public class JTableCellFixture {
    * @return this fixture.
    */
   public final JTableCellFixture click() {
-    table.tester().actionClick(table.target, cellLocation());
-    return this;
+    return click(BUTTON1);
   }
   
+  /**
+   * Simulates a user clicking the table cell managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JTableCellFixture click(MouseClickInfo mouseClickInfo) {
+    return click(mouseClickInfo.button(), mouseClickInfo.times());
+  }
+  
+  /**
+   * Simulates a user right-clicking the table cell managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTableCellFixture rightClick() {
+    return click(BUTTON3);
+  }
+
   /**
    * Simulates a user double-clicking the table cell managed by this fixture.
    * @return this fixture.
    */
   public final JTableCellFixture doubleClick() {
-    table.tester().actionClick(table.target, cellLocation(), BUTTON1_MASK, 2);
+    return click(BUTTON1, 2);
+  }
+  
+  private JTableCellFixture click(MouseButtons button) {
+    table.tester().actionClick(table.target, cellLocation(), button.mask, 1);
+    return this;
+  }
+  
+  private JTableCellFixture click(MouseButtons button, int times) {
+    table.tester().actionClick(table.target, cellLocation(), button.mask, times);
     return this;
   }
 

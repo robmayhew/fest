@@ -24,7 +24,7 @@ import javax.swing.JTable;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.fixture.TableCell.cell;
+import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
 import static org.fest.swing.fixture.TestTable.cellValue;
 import static org.fest.swing.fixture.TestTable.columnNames;
 
@@ -77,9 +77,15 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     };
   }
   
+  @Test public void shouldReturnCellWithGivenRowAndColumn() {
+    JTableCellFixture cell = targetFixture.cell(row(1).column(2));
+    assertThat(cell.row()).isEqualTo(1);
+    assertThat(cell.column()).isEqualTo(2);
+  }
+  
   @Test public void shouldSelectMultipleRows() {
     target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
-    TableCell[] cells = array(cell(6, 5), cell(8, 3), cell(9, 3));    
+    TableCell[] cells = array(row(6).column(5), row(8).column(3), row(9).column(3));    
     targetFixture.selectCells(cells);
     assertThat(targetFixture.target.getSelectedRowCount()).isEqualTo(cells.length);
     for (TableCell c : cells)
