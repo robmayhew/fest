@@ -17,17 +17,18 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import abbot.tester.ComponentLocation;
 import abbot.tester.ComponentTester;
-import static java.awt.event.InputEvent.BUTTON1_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.MouseButtons.BUTTON1;
+import static org.fest.swing.MouseButtons.BUTTON2;
 import static org.fest.swing.util.Formatting.format;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -98,6 +99,13 @@ public abstract class ComponentFixture<T extends Component> {
    */
   public abstract ComponentFixture<T> click();
 
+  
+  /**
+   * Simulates a user right-clicking the <code>{@link Component}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public abstract ComponentFixture<T> rightClick();
+  
   /**
    * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
@@ -161,9 +169,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    */
   protected final ComponentFixture<T> doClick() {
-    doFocus();
-    tester().actionClick(target);
-    return this;
+    return doClick(BUTTON1, 1);
   }
 
   /**
@@ -171,11 +177,29 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    */
   protected final ComponentFixture<T> doDoubleClick() {
-    doFocus();
-    tester().actionClick(target, new ComponentLocation(), BUTTON1_MASK, 2);
-    return this;
+    return doClick(BUTTON1, 2);
   }
 
+  /**
+   * Simulates a user right-clicking the <code>{@link Component}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  protected final ComponentFixture<T> doRightClick() {
+    return doClick(BUTTON2, 1);
+  }
+  
+  /**
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * @param button the mouse button to click.
+   * @param times the number of times to click the given mouse button.
+   * @return this fixture.
+   */
+  protected final ComponentFixture<T> doClick(MouseButtons button, int times) {
+    doFocus();
+    robot.click(target, button, times);
+    return this;
+  }
+  
   /**
    * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.

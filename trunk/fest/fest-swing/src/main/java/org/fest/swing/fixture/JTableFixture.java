@@ -68,6 +68,11 @@ public class JTableFixture extends ComponentFixture<JTable> {
     return this;
   }
 
+  /**
+   * Simulates a user selecting the given cells of the <code>{@link JTable}</code> managed by this fixture.
+   * @param cells the cells to select.
+   * @return this fixture.
+   */
   public final JTableFixture selectCells(TableCell... cells) {
     int multipleSelectionKey = controlOrCommandKey();
     tableTester().actionKeyPress(multipleSelectionKey);
@@ -132,10 +137,18 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTableFixture click() {
+  public final JTableFixture click() {
     return (JTableFixture)doClick();
   }
   
+  /**
+   * Simulates a user right-clicking the <code>{@link JTable}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTableFixture rightClick() {
+    return (JTableFixture)doRightClick();
+  }
+
   /**
    * Simulates a user doble-clicking the <code>{@link JTable}</code> managed by this fixture.
    * <p>
@@ -144,7 +157,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * </p>
    * @return this fixture.
    */
-  @Override public final JTableFixture doubleClick() {    
+  public final JTableFixture doubleClick() {    
     return (JTableFixture)doDoubleClick();
   }
 
@@ -152,7 +165,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Gives input focus to the <code>{@link JTable}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTableFixture focus() {
+  public final JTableFixture focus() {
     return (JTableFixture)doFocus();
   }
 
@@ -162,7 +175,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JTableFixture pressKeys(int... keyCodes) {
+  public final JTableFixture pressKeys(int... keyCodes) {
     return (JTableFixture)doPressKeys(keyCodes);
   }
 
@@ -171,7 +184,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTable</code> is not visible.
    */
-  @Override public final JTableFixture requireVisible() {
+  public final JTableFixture requireVisible() {
     return (JTableFixture)assertVisible();
   }
 
@@ -180,7 +193,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTable</code> is visible.
    */
-  @Override public final JTableFixture requireNotVisible() {
+  public final JTableFixture requireNotVisible() {
     return (JTableFixture)assertNotVisible();
   }
 
@@ -189,7 +202,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTable</code> is disabled.
    */
-  @Override public final JTableFixture requireEnabled() {
+  public final JTableFixture requireEnabled() {
     return (JTableFixture)assertEnabled();
   }
   
@@ -198,7 +211,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTable</code> is enabled.
    */
-  @Override public final JTableFixture requireDisabled() {
+  public final JTableFixture requireDisabled() {
     return (JTableFixture)assertDisabled();
   }
 }

@@ -239,6 +239,18 @@ public final class RobotFixture {
   }
   
   /**
+   * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
+   * @param target the <code>Component</code> to click on.
+   * @param button the mouse button to click.
+   * @param times the number of times to click the given mouse button.
+   */
+  public void click(Component target, MouseButtons button, int times) {
+    Point where = new ComponentLocation().getPoint(target);
+    robot.click(target, where.x, where.y, button.mask, times);
+    robot.waitForIdle();
+  }
+  
+  /**
    * Shows a popup menu at the given coordinates.
    * @param invoker the component to invoke the popup menu from.
    * @param location the given coordinates for the popup menu.

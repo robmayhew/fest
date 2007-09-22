@@ -92,15 +92,23 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * Simulates a user clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTabbedPaneFixture click() {
+  public final JTabbedPaneFixture click() {
     return (JTabbedPaneFixture)doClick(); 
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTabbedPaneFixture rightClick() {
+    return (JTabbedPaneFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTabbedPaneFixture doubleClick() {
+  public final JTabbedPaneFixture doubleClick() {
     return (JTabbedPaneFixture)doDoubleClick();
   }
 
@@ -108,7 +116,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * Gives input focus to the <code>{@link JTabbedPane}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTabbedPaneFixture focus() {
+  public final JTabbedPaneFixture focus() {
     return (JTabbedPaneFixture)doFocus();
   }
 
@@ -118,7 +126,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JTabbedPaneFixture pressKeys(int... keyCodes) {
+  public final JTabbedPaneFixture pressKeys(int... keyCodes) {
     return (JTabbedPaneFixture)doPressKeys(keyCodes);
   }
   
@@ -127,7 +135,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTabbedPane</code> is not visible.
    */
-  @Override public final JTabbedPaneFixture requireVisible() {
+  public final JTabbedPaneFixture requireVisible() {
     return (JTabbedPaneFixture)assertVisible();
   }
 
@@ -136,7 +144,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTabbedPane</code> is visible.
    */
-  @Override public final JTabbedPaneFixture requireNotVisible() {
+  public final JTabbedPaneFixture requireNotVisible() {
     return (JTabbedPaneFixture)assertNotVisible();
   }
 
@@ -145,7 +153,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTabbedPane</code> is disabled.
    */
-  @Override public final JTabbedPaneFixture requireEnabled() {
+  public final JTabbedPaneFixture requireEnabled() {
     return (JTabbedPaneFixture)assertEnabled();
   }
   
@@ -154,7 +162,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTabbedPane</code> is enabled.
    */
-  @Override public final JTabbedPaneFixture requireDisabled() {
+  public final JTabbedPaneFixture requireDisabled() {
     return (JTabbedPaneFixture)assertDisabled();
   }
 }

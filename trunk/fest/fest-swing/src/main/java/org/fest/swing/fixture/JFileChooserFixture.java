@@ -181,15 +181,23 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Simulates a user clicking the <code>{@link JFileChooser}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JFileChooserFixture click() {
+  public final JFileChooserFixture click() {
     return (JFileChooserFixture)doClick();
   }
   
   /**
+   * Simulates a user right-clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JFileChooserFixture rightClick() {
+    return (JFileChooserFixture)doRightClick();
+  }
+
+  /**
    * Simulates a user doble-clicking the <code>{@link JFileChooser}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JFileChooserFixture doubleClick() {
+  public final JFileChooserFixture doubleClick() {
     return (JFileChooserFixture)doDoubleClick();
   }
 
@@ -197,7 +205,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Gives input focus to the <code>{@link JFileChooser}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JFileChooserFixture focus() {
+  public final JFileChooserFixture focus() {
     return (JFileChooserFixture)doFocus();
   }
 
@@ -207,7 +215,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JFileChooserFixture pressKeys(int... keyCodes) {
+  public final JFileChooserFixture pressKeys(int... keyCodes) {
     return (JFileChooserFixture)doPressKeys(keyCodes);
   }
 
@@ -216,7 +224,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JFileChooser</code> is not visible.
    */
-  @Override public final JFileChooserFixture requireVisible() {
+  public final JFileChooserFixture requireVisible() {
     return (JFileChooserFixture)assertVisible();
   }
 
@@ -225,7 +233,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JFileChooser</code> is visible.
    */
-  @Override public final JFileChooserFixture requireNotVisible() {
+  public final JFileChooserFixture requireNotVisible() {
     return (JFileChooserFixture)assertNotVisible();
   }
 
@@ -234,7 +242,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JFileChooser</code> is disabled.
    */
-  @Override public final JFileChooserFixture requireEnabled() {
+  public final JFileChooserFixture requireEnabled() {
     return (JFileChooserFixture)assertEnabled();
   }
   
@@ -243,7 +251,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JFileChooser</code> is enabled.
    */
-  @Override public final JFileChooserFixture requireDisabled() {
+  public final JFileChooserFixture requireDisabled() {
     return (JFileChooserFixture)assertDisabled();
   }
 }

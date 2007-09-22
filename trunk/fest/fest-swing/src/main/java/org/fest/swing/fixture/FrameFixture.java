@@ -77,7 +77,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * Shows the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final FrameFixture show() {
+  public final FrameFixture show() {
     return (FrameFixture)doShow();
   }
   
@@ -86,7 +86,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @param size the size to resize the managed <code>Frame</code> to.
    * @return this fixture.
    */
-  @Override public final FrameFixture show(Dimension size) {
+  public final FrameFixture show(Dimension size) {
     return (FrameFixture)doShow(size);
   }
 
@@ -94,15 +94,23 @@ public class FrameFixture extends WindowFixture<Frame> {
    * Simulates a user clicking the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public FrameFixture click() {
+  public final FrameFixture click() {
     return (FrameFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link Frame}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final FrameFixture rightClick() {
+    return (FrameFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final FrameFixture doubleClick() {
+  public final FrameFixture doubleClick() {
     return (FrameFixture)doDoubleClick();
   }
 
@@ -110,7 +118,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * Gives input focus to the <code>{@link Frame}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public FrameFixture focus() {
+  public FrameFixture focus() {
     return (FrameFixture)doFocus();
   }
 
@@ -184,7 +192,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @param width the width that the managed <code>Frame</code> should have after being resized.
    * @return this fixture.
    */
-  @Override public final FrameFixture resizeWidthTo(int width) {
+  public final FrameFixture resizeWidthTo(int width) {
     return (FrameFixture)doResizeWidthTo(width);
   }
 
@@ -193,7 +201,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @param height the height that the managed <code>Frame</code> should have after being resized.
    * @return this fixture.
    */
-  @Override public final FrameFixture resizeHeightTo(int height) {
+  public final FrameFixture resizeHeightTo(int height) {
     return (FrameFixture)doResizeHeightTo(height);
   }
 
@@ -202,7 +210,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
-  @Override public final FrameFixture resizeTo(Dimension size) {
+  public final FrameFixture resizeTo(Dimension size) {
     return (FrameFixture)doResizeTo(size);
   }
 
@@ -212,7 +220,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    * @throws AssertionError if the size of the managed <code>Frame</code> is not equal to the given size. 
    */
-  @Override public final FrameFixture requireSize(Dimension size) {
+  public final FrameFixture requireSize(Dimension size) {
     return (FrameFixture)assertEqualSize(size);
   }
 
@@ -222,7 +230,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final FrameFixture pressKeys(int... keyCodes) {
+  public final FrameFixture pressKeys(int... keyCodes) {
     return (FrameFixture)doPressKeys(keyCodes);
   }
   
@@ -232,7 +240,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>Frame</code> is not visible.
    */
-  @Override public final FrameFixture requireVisible() {
+  public final FrameFixture requireVisible() {
     return (FrameFixture)assertVisible();
   }
   
@@ -241,7 +249,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>Frame</code> is visible.
    */
-  @Override public final FrameFixture requireNotVisible() {
+  public final FrameFixture requireNotVisible() {
     return (FrameFixture)assertNotVisible();
   }
 
@@ -250,7 +258,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>Frame</code> is disabled.
    */
-  @Override public final FrameFixture requireEnabled() {
+  public final FrameFixture requireEnabled() {
     return (FrameFixture)assertEnabled();
   }
   
@@ -259,7 +267,7 @@ public class FrameFixture extends WindowFixture<Frame> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>Frame</code> is enabled.
    */
-  @Override public final FrameFixture requireDisabled() {
+  public final FrameFixture requireDisabled() {
     return (FrameFixture)assertDisabled();
   }
 }

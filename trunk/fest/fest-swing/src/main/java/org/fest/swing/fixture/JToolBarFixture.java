@@ -98,15 +98,23 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Simulates a user clicking the <code>{@link JToolBar}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JToolBarFixture click() {
+  public final JToolBarFixture click() {
     return (JToolBarFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JToolBarFixture rightClick() {
+    return (JToolBarFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JToolBar}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JToolBarFixture doubleClick() {
+  public final JToolBarFixture doubleClick() {
     return (JToolBarFixture)doDoubleClick();
   }
 
@@ -114,7 +122,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Gives input focus to the <code>{@link JToolBar}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JToolBarFixture focus() {
+  public final JToolBarFixture focus() {
     return (JToolBarFixture)doFocus();
   }
   
@@ -133,7 +141,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JToolBar</code> is not visible.
    */
-  @Override public final JToolBarFixture requireVisible() {
+  public final JToolBarFixture requireVisible() {
     return (JToolBarFixture)assertVisible();
   }
   
@@ -142,7 +150,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JToolBar</code> is visible.
    */
-  @Override public final JToolBarFixture requireNotVisible() {
+  public final JToolBarFixture requireNotVisible() {
     return (JToolBarFixture)assertNotVisible();
   }
   
@@ -151,7 +159,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JToolBar</code> is disabled.
    */
-  @Override public final JToolBarFixture requireEnabled() {
+  public final JToolBarFixture requireEnabled() {
     return (JToolBarFixture)assertEnabled();
   }
 
@@ -160,7 +168,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JToolBar</code> is enabled.
    */
-  @Override public final JToolBarFixture requireDisabled() {
+  public final JToolBarFixture requireDisabled() {
     return (JToolBarFixture)assertDisabled();
   }
 }

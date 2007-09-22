@@ -76,6 +76,14 @@ public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
   }
 
   /**
+   * Simulates a user right-clicking the <code>{@link JCheckBox}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JCheckBoxFixture rightClick() {
+    return (JCheckBoxFixture)doRightClick();
+  }
+
+  /**
    * Simulates a user doble-clicking the <code>{@link JCheckBox}</code> managed by this fixture.
    * @return this fixture.
    */

@@ -59,6 +59,14 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
   }
 
   /**
+   * Simulates a user right-clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JRadioButtonFixture rightClick() {
+    return (JRadioButtonFixture)doRightClick();
+  }
+
+  /**
    * Simulates a user doble-clicking the <code>{@link JRadioButton}</code> managed by this fixture.
    * @return this fixture.
    */

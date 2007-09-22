@@ -158,6 +158,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     assertThat(events.clicked()).isTrue();
   }
   
+  @Test public final void shouldRightClickComponent() {
+    ComponentEvents events = ComponentEvents.attachTo(fixture.target);
+    fixture.rightClick();
+    assertThat(events.rightClicked()).isTrue();
+  }
+
   @Test public final void shouldDoubleClickComponent() {
     ComponentEvents events = ComponentEvents.attachTo(fixture.target);
     fixture.doubleClick();

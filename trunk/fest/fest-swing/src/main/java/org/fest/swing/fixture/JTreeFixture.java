@@ -96,15 +96,23 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * Simulates a user clicking the <code>{@link JTree}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTreeFixture click() {
+  public final JTreeFixture click() {
     return (JTreeFixture)doClick(); 
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JTree}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTreeFixture rightClick() {
+    return (JTreeFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JTree}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTreeFixture doubleClick() {
+  public final JTreeFixture doubleClick() {
     return (JTreeFixture)doDoubleClick();
   }
 
@@ -112,7 +120,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * Gives input focus to the <code>{@link JTree}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTreeFixture focus() {
+  public final JTreeFixture focus() {
     return (JTreeFixture)doFocus();
   }
 
@@ -131,7 +139,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTree</code> is not visible.
    */
-  @Override public final JTreeFixture requireVisible() {
+  public final JTreeFixture requireVisible() {
     return (JTreeFixture)assertVisible();
   }
 
@@ -140,7 +148,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTree</code> is visible.
    */
-  @Override public final JTreeFixture requireNotVisible() {
+  public final JTreeFixture requireNotVisible() {
     return (JTreeFixture)assertNotVisible();
   }
 
@@ -149,7 +157,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTree</code> is disabled.
    */
-  @Override public final JTreeFixture requireEnabled() {
+  public final JTreeFixture requireEnabled() {
     return (JTreeFixture)assertEnabled();
   }
   
@@ -158,7 +166,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTree</code> is enabled.
    */
-  @Override public final JTreeFixture requireDisabled() {
+  public final JTreeFixture requireDisabled() {
     return (JTreeFixture)assertDisabled();
   }
 

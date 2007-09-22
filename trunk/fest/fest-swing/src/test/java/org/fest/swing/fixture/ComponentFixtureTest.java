@@ -52,6 +52,7 @@ public class ComponentFixtureTest {
       @Override public ComponentFixture<JTextField> requireEnabled() { return null; }
       @Override public ComponentFixture<JTextField> requireNotVisible() { return null; }
       @Override public ComponentFixture<JTextField> requireVisible() { return null; }
+      @Override public ComponentFixture<JTextField> rightClick() { return null; }
     };
     robot.showWindow(frame);
   }

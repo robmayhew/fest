@@ -56,15 +56,23 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * Simulates a user clicking the <code>{@link JTextComponent}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTextComponentFixture click() { 
+  public final JTextComponentFixture click() { 
     return (JTextComponentFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JTextComponentFixture rightClick() {
+    return (JTextComponentFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JTextComponent}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTextComponentFixture doubleClick() {
+  public final JTextComponentFixture doubleClick() {
     return (JTextComponentFixture)doDoubleClick();
   }
 
@@ -72,7 +80,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * Gives input focus to the <code>{@link JTextComponent}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JTextComponentFixture focus() { 
+  public final JTextComponentFixture focus() { 
     return (JTextComponentFixture)doFocus();
   }
 
@@ -169,7 +177,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
-  @Override public final JTextComponentFixture requireVisible() { 
+  public final JTextComponentFixture requireVisible() { 
     return (JTextComponentFixture)assertVisible();
   }
 
@@ -178,7 +186,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is visible.
    */
-  @Override public final JTextComponentFixture requireNotVisible() { 
+  public final JTextComponentFixture requireNotVisible() { 
     return (JTextComponentFixture)assertNotVisible();
   }
 
@@ -199,7 +207,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @throws AssertionError is the managed <code>Component</code> is disabled.
    */
-  @Override public final JTextComponentFixture requireEnabled() {
+  public final JTextComponentFixture requireEnabled() {
     return (JTextComponentFixture)assertEnabled();
   }
   
@@ -208,7 +216,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @throws AssertionError is the managed <code>Component</code> is enabled.
    */
-  @Override public final JTextComponentFixture requireDisabled() {
+  public final JTextComponentFixture requireDisabled() {
     return (JTextComponentFixture)assertDisabled();
   }
 }

@@ -59,6 +59,14 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
+   * Simulates a user right-clicking the <code>{@link JButton}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JButtonFixture rightClick() {
+    return (JButtonFixture)doRightClick();
+  }
+
+  /**
    * Simulates a user doble-clicking the <code>{@link JButton}</code> managed by this fixture.
    * @return this fixture.
    */

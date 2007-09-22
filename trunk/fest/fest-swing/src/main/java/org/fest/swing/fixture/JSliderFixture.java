@@ -53,7 +53,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * Simulates a user incrementing the value of the managed <code>{@link JSlider}</code>.
    * @return this fixture.
    */
-  public JSliderFixture increment() {
+  public final JSliderFixture increment() {
     sliderTester().actionIncrement(target);
     return this;
   }
@@ -62,7 +62,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * Simulates a user decrementing the value of the managed <code>{@link JSlider}</code>.
    * @return this fixture.
    */
-  public JSliderFixture decrement() {
+  public final JSliderFixture decrement() {
     sliderTester().actionDecrement(target);
     return this;
   }
@@ -103,15 +103,23 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * Simulates a user clicking the <code>{@link JSlider}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JSliderFixture click() {
+  public final JSliderFixture click() {
     return (JSliderFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JSliderFixture rightClick() {
+    return (JSliderFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JSlider}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JSliderFixture doubleClick() {
+  public final JSliderFixture doubleClick() {
     return (JSliderFixture)doDoubleClick();
   }
 
@@ -119,7 +127,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * Gives input focus to the <code>{@link JSlider}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JSliderFixture focus() {
+  public final JSliderFixture focus() {
     return (JSliderFixture)doFocus();
   }
   
@@ -129,7 +137,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JSliderFixture pressKeys(int... keyCodes) {
+  public final JSliderFixture pressKeys(int... keyCodes) {
     return (JSliderFixture)doPressKeys(keyCodes);
   }
   
@@ -138,7 +146,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JSlider</code> is not visible.
    */
-  @Override public final JSliderFixture requireVisible() {
+  public final JSliderFixture requireVisible() {
     return (JSliderFixture)assertVisible();
   }
   
@@ -147,7 +155,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JSlider</code> is visible.
    */
-  @Override public final JSliderFixture requireNotVisible() {
+  public final JSliderFixture requireNotVisible() {
     return (JSliderFixture)assertNotVisible();
   }
   
@@ -156,7 +164,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JSlider</code> is disabled.
    */
-  @Override public final JSliderFixture requireEnabled() {
+  public final JSliderFixture requireEnabled() {
     return (JSliderFixture)assertEnabled();
   }
 
@@ -165,7 +173,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JSlider</code> is enabled.
    */
-  @Override public final JSliderFixture requireDisabled() {
+  public final JSliderFixture requireDisabled() {
     return (JSliderFixture)assertDisabled();
   }
 }

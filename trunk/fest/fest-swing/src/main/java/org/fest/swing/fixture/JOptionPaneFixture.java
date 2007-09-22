@@ -67,15 +67,23 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * Simulates a user clicking the <code>{@link JOptionPane}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JOptionPaneFixture click() {
+  public final JOptionPaneFixture click() {
     return (JOptionPaneFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JOptionPaneFixture rightClick() {
+    return (JOptionPaneFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JOptionPane}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JOptionPaneFixture doubleClick() {
+  public final JOptionPaneFixture doubleClick() {
     return (JOptionPaneFixture)doDoubleClick();
   }
 
@@ -83,7 +91,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * Gives input focus to the <code>{@link JOptionPane}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JOptionPaneFixture focus() {
+  public final JOptionPaneFixture focus() {
     return (JOptionPaneFixture)doFocus();
   }
 
@@ -218,7 +226,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JOptionPaneFixture pressKeys(int... keyCodes) {
+  public final JOptionPaneFixture pressKeys(int... keyCodes) {
     return (JOptionPaneFixture)doPressKeys(keyCodes);
   }
   
@@ -227,7 +235,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JOptionPane</code> is not visible.
    */
-  @Override public final JOptionPaneFixture requireVisible() {
+  public final JOptionPaneFixture requireVisible() {
     return (JOptionPaneFixture)assertVisible();
   }
 
@@ -236,7 +244,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JOptionPane</code> is visible.
    */
-  @Override public final JOptionPaneFixture requireNotVisible() {
+  public final JOptionPaneFixture requireNotVisible() {
     return (JOptionPaneFixture)assertNotVisible();
   }
 
@@ -245,7 +253,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JOptionPane</code> is disabled.
    */
-  @Override public final JOptionPaneFixture requireEnabled() {
+  public final JOptionPaneFixture requireEnabled() {
     return (JOptionPaneFixture)assertEnabled();
   }
   
@@ -254,7 +262,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JOptionPane</code> is enabled.
    */
-  @Override public final JOptionPaneFixture requireDisabled() {
+  public final JOptionPaneFixture requireDisabled() {
     return (JOptionPaneFixture)assertDisabled();
   }
 

@@ -54,15 +54,23 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * Simulates a user clicking the <code>{@link JPopupMenu}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JPopupMenuFixture click() {
+  public final JPopupMenuFixture click() {
     return (JPopupMenuFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JPopupMenu}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JPopupMenuFixture rightClick() {
+    return (JPopupMenuFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JPopupMenu}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JPopupMenuFixture doubleClick() {
+  public final JPopupMenuFixture doubleClick() {
     return (JPopupMenuFixture)doDoubleClick();
   }
 
@@ -70,7 +78,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * Gives input focus to the <code>{@link JPopupMenu}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JPopupMenuFixture focus() {
+  public final JPopupMenuFixture focus() {
     return (JPopupMenuFixture)doFocus();
   }
   
@@ -80,7 +88,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JPopupMenuFixture pressKeys(int... keyCodes) {
+  public final JPopupMenuFixture pressKeys(int... keyCodes) {
     return (JPopupMenuFixture)doPressKeys(keyCodes);
   }
   
@@ -89,7 +97,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JPopupMenu</code> is disabled.
    */
-  @Override public final JPopupMenuFixture requireEnabled() {
+  public final JPopupMenuFixture requireEnabled() {
     return (JPopupMenuFixture)assertEnabled();
   }
 
@@ -98,7 +106,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JPopupMenu</code> is enabled.
    */
-  @Override public final JPopupMenuFixture requireDisabled() {
+  public final JPopupMenuFixture requireDisabled() {
     return (JPopupMenuFixture)assertDisabled();
   }
 
@@ -107,7 +115,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JPopupMenu</code> is not visible.
    */
-  @Override public final JPopupMenuFixture requireVisible() {
+  public final JPopupMenuFixture requireVisible() {
     return (JPopupMenuFixture)assertVisible();
   }
   
@@ -116,7 +124,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>JPopupMenu</code> is visible.
    */
-  @Override public final JPopupMenuFixture requireNotVisible() {
+  public final JPopupMenuFixture requireNotVisible() {
     return (JPopupMenuFixture)assertNotVisible();
   }
 }

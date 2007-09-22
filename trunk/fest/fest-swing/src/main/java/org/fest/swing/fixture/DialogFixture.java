@@ -75,7 +75,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Shows the <code>{@link Dialog}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final DialogFixture show() {
+  public final DialogFixture show() {
     return (DialogFixture)doShow();
   }
   
@@ -84,7 +84,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param size the size to resize the managed <code>Dialog</code> to.
    * @return this fixture.
    */
-  @Override public final DialogFixture show(Dimension size) {
+  public final DialogFixture show(Dimension size) {
     return (DialogFixture)doShow(size);
   }
 
@@ -92,15 +92,23 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user clicking the <code>{@link Dialog}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final DialogFixture click() {
+  public final DialogFixture click() {
     return (DialogFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final DialogFixture rightClick() {
+    return (DialogFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link Dialog}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final DialogFixture doubleClick() {
+  public final DialogFixture doubleClick() {
     return (DialogFixture)doDoubleClick();
   }
 
@@ -108,7 +116,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Gives input focus to the <code>{@link Dialog}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final DialogFixture focus() {
+  public final DialogFixture focus() {
     return (DialogFixture)doFocus();
   }
 
@@ -117,7 +125,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param width the width that the managed <code>Dialog</code> should have after being resized.
    * @return this fixture.
    */
-  @Override public final DialogFixture resizeWidthTo(int width) {
+  public final DialogFixture resizeWidthTo(int width) {
     return (DialogFixture)doResizeWidthTo(width);
   }
 
@@ -126,7 +134,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param height the height that the managed <code>Dialog</code> should have after being resized.
    * @return this fixture.
    */
-  @Override public final DialogFixture resizeHeightTo(int height) {
+  public final DialogFixture resizeHeightTo(int height) {
     return (DialogFixture)doResizeHeightTo(height);
   }
 
@@ -135,7 +143,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
-  @Override public final DialogFixture resizeTo(Dimension size) {
+  public final DialogFixture resizeTo(Dimension size) {
     return (DialogFixture)doResizeTo(size);
   }
 
@@ -145,7 +153,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    * @throws AssertionError if the size of the managed <code>Dialog</code> is not equal to the given size. 
    */
-  @Override public final DialogFixture requireSize(Dimension size) {
+  public final DialogFixture requireSize(Dimension size) {
     return (DialogFixture)assertEqualSize(size);
   }
 
@@ -155,7 +163,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final DialogFixture pressKeys(int... keyCodes) {
+  public final DialogFixture pressKeys(int... keyCodes) {
     return (DialogFixture)doPressKeys(keyCodes);
   }
   
@@ -164,7 +172,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>Dialog</code> is not visible.
    */
-  @Override public final DialogFixture requireVisible() {
+  public final DialogFixture requireVisible() {
     return (DialogFixture)assertVisible();
   }
   
@@ -173,7 +181,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    * @throws AssertionError if the managed <code>Dialog</code> is visible.
    */
-  @Override public final DialogFixture requireNotVisible() {
+  public final DialogFixture requireNotVisible() {
     return (DialogFixture)assertNotVisible();
   }
 
@@ -182,7 +190,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>Dialog</code> is disabled.
    */
-  @Override public final DialogFixture requireEnabled() {
+  public final DialogFixture requireEnabled() {
     return (DialogFixture)assertEnabled();
   }
   
@@ -191,7 +199,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>Dialog</code> is enabled.
    */
-  @Override public final DialogFixture requireDisabled() {
+  public final DialogFixture requireDisabled() {
     return (DialogFixture)assertDisabled();
   }
 

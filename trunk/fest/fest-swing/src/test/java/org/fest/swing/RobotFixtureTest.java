@@ -15,14 +15,24 @@
  */
 package org.fest.swing;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.MouseButtons.BUTTON1;
+import static org.fest.swing.MouseButtons.BUTTON2;
+import static org.fest.swing.MouseButtons.BUTTON3;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -51,6 +61,25 @@ public class RobotFixtureTest {
     assertThat(menu).isSameAs(frame.popupMenu);
   }
 
+  @Test(dataProvider = "clickingData") 
+  public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButtons button, int times) {
+    ClickRecordMouseListener clickRecord = new ClickRecordMouseListener();
+    frame.textBox.addMouseListener(clickRecord);
+    robot.click(frame.textBox, button, times);
+  }
+  
+  @DataProvider(name = "clickingData") 
+  public Object[][] clickingData() {
+    return new Object[][] {
+        { BUTTON1, 1 },
+        { BUTTON1, 2 },
+        { BUTTON2, 1 },
+        { BUTTON2, 2 },
+        { BUTTON3, 1 },
+        { BUTTON3, 2 },
+    };
+  }
+  
   @Test(expectedExceptions = ComponentLookupException.class)
   public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
     robot.showPopupMenu(frame.textBox);
@@ -70,6 +99,24 @@ public class RobotFixtureTest {
       textBoxWithPopupMenu.setComponentPopupMenu(popupMenu);
       popupMenu.add(new JMenuItem("First"));
       popupMenu.add(new JMenuItem("Second"));
+    }
+  }
+  
+  private static class ClickRecordMouseListener extends MouseAdapter {
+    private static final Map<Integer, MouseButtons> MOUSE_BUTTON_MAP = new HashMap<Integer, MouseButtons>(); 
+    
+    static {
+        MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON1, BUTTON1);
+        MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON2, BUTTON2);
+        MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON3, BUTTON3);
+    }
+    
+    MouseButtons clickedButton;
+    int clickCount;
+
+    @Override public void mouseClicked(MouseEvent e) {
+      clickedButton = MOUSE_BUTTON_MAP.get(e.getButton());
+      clickCount = e.getClickCount();
     }
   }
 }

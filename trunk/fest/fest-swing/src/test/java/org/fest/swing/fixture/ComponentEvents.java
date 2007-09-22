@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import static java.awt.event.MouseEvent.BUTTON1;
+import static java.awt.event.MouseEvent.BUTTON2;
 
 /**
  * Understands a mouse listener that verifies that a component was clicked.
@@ -34,6 +35,7 @@ final class ComponentEvents extends MouseAdapter {
   }
   
   private boolean clicked;
+  private boolean rightClicked;
   private boolean doubleClicked;
   
   private ComponentEvents(Component target) {
@@ -47,11 +49,16 @@ final class ComponentEvents extends MouseAdapter {
   }
   
   @Override public void mouseClicked(MouseEvent e) { 
-    clicked = e.getButton() == BUTTON1;
-    doubleClicked = clicked && e.getClickCount() == 2;
+    int button = e.getButton();
+    int clickCount = e.getClickCount();
+    clicked = button == BUTTON1;
+    doubleClicked = clicked && clickCount == 2;
+    if (doubleClicked) return;
+    rightClicked = button == BUTTON2 && clickCount == 1;
   }
   
   boolean clicked() { return clicked; }
+  boolean rightClicked() { return rightClicked; }
   boolean doubleClicked() { return doubleClicked; }
   
   void reset() { clicked = false; }

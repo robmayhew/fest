@@ -99,15 +99,23 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JListFixture click() {
+  public final JListFixture click() {
     return (JListFixture)doClick();
+  }
+
+  /**
+   * Simulates a user right-clicking the <code>{@link JList}</code> managed by this fixture.
+   * @return this fixture.
+   */
+  public final JListFixture rightClick() {
+    return (JListFixture)doRightClick();
   }
 
   /**
    * Simulates a user doble-clicking the <code>{@link JList}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JListFixture doubleClick() {
+  public final JListFixture doubleClick() {
     return (JListFixture)doDoubleClick();
   }
 
@@ -115,7 +123,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Gives input focus to the <code>{@link JList}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JListFixture focus() {
+  public final JListFixture focus() {
     return (JListFixture)doFocus();
   }
   
@@ -125,7 +133,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JListFixture pressKeys(int... keyCodes) {
+  public final JListFixture pressKeys(int... keyCodes) {
     return (JListFixture)doPressKeys(keyCodes);
   }
 
@@ -134,7 +142,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if the managed <code>JList</code> is not visible.
    */
-  @Override public final JListFixture requireVisible() {
+  public final JListFixture requireVisible() {
     return (JListFixture)assertVisible();
   }
   
@@ -143,7 +151,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if the managed <code>JList</code> is visible.
    */
-  @Override public final JListFixture requireNotVisible() {
+  public final JListFixture requireNotVisible() {
     return (JListFixture)assertNotVisible();
   }
   
@@ -152,7 +160,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError is the managed <code>JList</code> is disabled.
    */
-  @Override public final JListFixture requireEnabled() {
+  public final JListFixture requireEnabled() {
     return (JListFixture)assertEnabled();
   }
 
@@ -161,7 +169,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError is the managed <code>JList</code> is enabled.
    */
-  @Override public final JListFixture requireDisabled() {
+  public final JListFixture requireDisabled() {
     return (JListFixture)assertDisabled();
   }
 

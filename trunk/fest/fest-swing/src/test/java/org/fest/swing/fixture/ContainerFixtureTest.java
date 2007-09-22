@@ -155,6 +155,7 @@ import org.testng.annotations.Test;
       @Override public ContainerFixture<CustomWindow> requireEnabled() { return null; }
       @Override public ContainerFixture<CustomWindow> requireVisible() { return null; }
       @Override public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
+      @Override public ComponentFixture<CustomWindow> rightClick() { return null; }
     };
     window = container.target;
     robot.showWindow(window);
