@@ -59,8 +59,7 @@ public class RobotFixtureTest {
 
   @Test(dataProvider = "clickingData") 
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButtons button, int times) {
-    ClickRecordMouseListener clickRecord = new ClickRecordMouseListener();
-    frame.textBox.addMouseListener(clickRecord);
+    ClickRecorder clickRecord = ClickRecorder.attachTo(frame.textBox);
     robot.click(frame.textBox, button, times);
     assertThat(clickRecord.clickedButton()).isEqualTo(button);
     assertThat(clickRecord.clickCount()).isEqualTo(times);
@@ -83,6 +82,14 @@ public class RobotFixtureTest {
     robot.showPopupMenu(frame.textBox);
   }
 
+  @Test public void shouldSleepForTheGivenTime() {
+    long start = System.currentTimeMillis();
+    long delay = 2000;
+    robot.delay(delay);
+    long delta = System.currentTimeMillis() - start;
+    assertThat(delta >= delay).isTrue();
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

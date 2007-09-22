@@ -15,7 +15,7 @@
  */
 package org.fest.swing;
 
-import java.awt.event.MouseAdapter;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,12 @@ import static org.fest.swing.MouseButtons.BUTTON3;
  * @author Alex Ruiz
  * @author Yvonne Wang 
  */
-public class ClickRecordMouseListener extends MouseAdapter {
+public class ClickRecorder extends BaseMouseListener {
+
+  public static ClickRecorder attachTo(Component target) {
+    return new ClickRecorder(target);
+  }
+  
   private static final Map<Integer, MouseButtons> MOUSE_BUTTON_MAP = new HashMap<Integer, MouseButtons>(); 
   
   static {
@@ -42,6 +47,11 @@ public class ClickRecordMouseListener extends MouseAdapter {
   private MouseButtons clickedButton;
   private int clickCount;
 
+  protected ClickRecorder(Component target) {
+    super(target);
+  }
+
+  
   @Override public void mousePressed(MouseEvent e) {
     clickedButton = MOUSE_BUTTON_MAP.get(e.getButton());
     clickCount = e.getClickCount();

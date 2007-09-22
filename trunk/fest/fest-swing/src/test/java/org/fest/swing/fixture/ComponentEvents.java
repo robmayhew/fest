@@ -16,19 +16,20 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import static java.awt.event.MouseEvent.BUTTON1;
 import static java.awt.event.MouseEvent.BUTTON3;
 
+import org.fest.swing.BaseMouseListener;
+
 /**
  * Understands a mouse listener that verifies that a component was clicked.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-final class ComponentEvents extends MouseAdapter {
+final class ComponentEvents extends BaseMouseListener {
 
   static ComponentEvents attachTo(Component target) {
     return new ComponentEvents(target);
@@ -38,16 +39,10 @@ final class ComponentEvents extends MouseAdapter {
   private boolean rightClicked;
   private boolean doubleClicked;
   
-  private ComponentEvents(Component target) {
-    attach(this, target);
+  protected ComponentEvents(Component target) {
+    super(target);
   }
 
-  private static void attach(ComponentEvents events, Component target) {
-    target.addMouseListener(events);
-    if (!(target instanceof Container)) return;
-    for (Component c : ((Container)target).getComponents()) attach(events, c);
-  }
-  
   @Override public void mousePressed(MouseEvent e) { 
     int button = e.getButton();
     int clickCount = e.getClickCount();
@@ -59,7 +54,5 @@ final class ComponentEvents extends MouseAdapter {
   
   boolean clicked() { return clicked; }
   boolean rightClicked() { return rightClicked; }
-  boolean doubleClicked() { return doubleClicked; }
-  
-  void reset() { clicked = false; }
+  boolean doubleClicked() { return doubleClicked; }  
 }

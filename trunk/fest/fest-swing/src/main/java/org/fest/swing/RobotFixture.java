@@ -20,6 +20,7 @@ import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.Window;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -262,6 +263,33 @@ public final class RobotFixture {
       return (JPopupMenu) robot.showPopupMenu(invoker, location.x, location.y);
     } catch (ComponentMissingException e) {
       throw new ComponentLookupException(e);
+    }
+  }
+
+  /**
+   * Sleeps for the specified time. 
+   * @param timeout the quantity of time units to sleep.
+   * @param unit the time units.
+   * @see #delay(long)
+   */
+  public void delay(long timeout, TimeUnit unit) {
+    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
+    delay(unit.toMillis(timeout));
+  }
+  
+  /**
+   * Sleeps for the specified time. 
+   * <p>
+   * To catch any <code>InterruptedException</code>s that occur,
+   * <code>{@link Thread#sleep(long)}()</code> may be used instead.
+   * </p>
+   * @param ms the time to sleep in milliseconds.
+   */
+  public void delay(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
     }
   }
 }
