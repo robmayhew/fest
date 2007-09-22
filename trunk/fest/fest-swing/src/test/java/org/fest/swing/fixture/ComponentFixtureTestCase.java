@@ -158,9 +158,9 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   protected void afterSetUp() {}
   
   @Test public final void shouldClickComponent() {
-    ComponentEvents events = ComponentEvents.attachTo(fixture.target);
+    ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.click();
-    assertThat(events.clicked()).isTrue();
+    assertThat(recorder.clicked()).isTrue();
   }
   
   @Test(dataProvider = "mouseClickInfos")
@@ -182,15 +182,15 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
   
   @Test public final void shouldRightClickComponent() {
-    ComponentEvents events = ComponentEvents.attachTo(fixture.target);
+    ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.rightClick();
-    assertThat(events.rightClicked()).isTrue();
+    assertThat(recorder.rightClicked()).isTrue();
   }
 
   @Test public final void shouldDoubleClickComponent() {
-    ComponentEvents events = ComponentEvents.attachTo(fixture.target);
+    ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.doubleClick();
-    assertThat(events.doubleClicked()).isTrue();
+    assertThat(recorder.doubleClicked()).isTrue();
   }  
   
   @Test public final void shouldGiveFocusToComponent() {

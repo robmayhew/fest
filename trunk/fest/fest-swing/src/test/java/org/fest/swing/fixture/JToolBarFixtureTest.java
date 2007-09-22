@@ -35,6 +35,7 @@ import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.NORTH;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.SOUTH;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.WEST;
 
+import org.fest.swing.ClickRecorder;
 import org.fest.swing.TestFrame;
 import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
 
@@ -126,9 +127,9 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
   }
   
   @Test public void shouldFindToolbarSubcomponents() {
-    ComponentEvents events = ComponentEvents.attachTo(target.button);
+    ClickRecorder recorder = ClickRecorder.attachTo(target.button);
     fixture.button("button").click();
-    assertThat(events.clicked());
+    assertThat(recorder.clicked());
   }
   
   @Override protected boolean targetBlocksMainWindow() { return true; }

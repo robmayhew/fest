@@ -28,6 +28,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.fixture.TestTable.cellValue;
 
+import org.fest.swing.ClickRecorder;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 
@@ -81,15 +82,29 @@ public class JTableCellFixtureTest {
   }
 
   @Test public void shouldClickCell() {
+    ClickRecorder recorder = ClickRecorder.attachTo(window.table);
     cell.click();
-    assertCellSelected();
+    assertThat(recorder.clicked()).isTrue();
+    assertCellClicked(recorder.pointClicked());
   }
   
   @Test public void shouldDoubleClickCell() {
-    ComponentEvents events = ComponentEvents.attachTo(window.table);
+    ClickRecorder recorder = ClickRecorder.attachTo(window.table);
     cell.doubleClick();
-    assertCellSelected();
-    assertThat(events.doubleClicked()).isTrue();
+    assertThat(recorder.doubleClicked()).isTrue();
+    assertCellClicked(recorder.pointClicked());
+  }
+  
+  @Test public void shouldRightClickCell() {
+    ClickRecorder recorder = ClickRecorder.attachTo(window.table);
+    cell.rightClick();
+    assertThat(recorder.rightClicked()).isTrue();
+    assertCellClicked(recorder.pointClicked());
+  }
+
+  private void assertCellClicked(Point clickedPoint) {
+    assertThat(window.table.rowAtPoint(clickedPoint)).isEqualTo(cell.row());
+    assertThat(window.table.columnAtPoint(clickedPoint)).isEqualTo(cell.column());
   }
   
   @Test public void shouldReturnCellContent() {

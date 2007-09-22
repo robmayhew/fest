@@ -63,8 +63,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
    * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
    * empty).
-   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are either negative or are out of
-   * bounds.
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are are out of bounds.
    */
   public final JTableCellFixture cell(TableCell cell) {
     if (cell == null) throw new IllegalArgumentException("Cell cannot be null");

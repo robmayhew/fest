@@ -30,6 +30,8 @@ import static org.fest.util.Files.newTemporaryFolder;
 import static org.fest.util.Files.temporaryFolder;
 import static org.fest.util.Strings.isEmpty;
 
+import org.fest.swing.ClickRecorder;
+
 import org.testng.annotations.Test;
 
 /**
@@ -50,9 +52,9 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
   @Test(dependsOnMethods = "shouldFindCancelButton")
   public void shouldCancelFileSelection() {
     JButton cancelButton = fixture.cancelButton().target;
-    ComponentEvents events = ComponentEvents.attachTo(cancelButton);
+    ClickRecorder recorder = ClickRecorder.attachTo(cancelButton);
     fixture.cancel();
-    assertThat(events.clicked()).isTrue();
+    assertThat(recorder.clicked()).isTrue();
   }
   
   @Test public void shouldSelectFile() {
@@ -89,9 +91,9 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     File temporaryFile = newTemporaryFile();
     fixture.selectFile(temporaryFile);
     JButton approveButton = fixture.approveButton().target;
-    ComponentEvents events = ComponentEvents.attachTo(approveButton);
+    ClickRecorder recorder = ClickRecorder.attachTo(approveButton);
     fixture.approve();
-    assertThat(events.clicked()).isTrue();
+    assertThat(recorder.clicked()).isTrue();
     temporaryFile.delete();
   }
 

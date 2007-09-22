@@ -16,6 +16,7 @@
 package org.fest.swing;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +47,7 @@ public class ClickRecorder extends BaseMouseListener {
   
   private MouseButtons clickedButton;
   private int clickCount;
+  private Point pointClicked;
 
   protected ClickRecorder(Component target) {
     super(target);
@@ -55,8 +57,22 @@ public class ClickRecorder extends BaseMouseListener {
   @Override public void mousePressed(MouseEvent e) {
     clickedButton = MOUSE_BUTTON_MAP.get(e.getButton());
     clickCount = e.getClickCount();
+    pointClicked = e.getPoint();
+  }
+  
+  public boolean clicked() { 
+    return BUTTON1.equals(clickedButton()) && clickCount == 1; 
+  }
+
+  public boolean doubleClicked() { 
+    return BUTTON1.equals(clickedButton()) && clickCount == 2; 
+  }
+
+  public boolean rightClicked() { 
+    return BUTTON3.equals(clickedButton()) && clickCount == 1; 
   }
 
   public MouseButtons clickedButton() { return clickedButton; }
   public int clickCount() { return clickCount; }
+  public Point pointClicked() { return pointClicked; }
 }

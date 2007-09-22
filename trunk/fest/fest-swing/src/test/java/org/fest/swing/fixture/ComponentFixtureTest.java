@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.ClickRecorder;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 
@@ -73,9 +74,9 @@ public class ComponentFixtureTest {
   }
   
   @Test public void shouldDoubleClickComponent() {
-    ComponentEvents events = ComponentEvents.attachTo(frame.textBox);
+    ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
     fixture.doDoubleClick();
-    assertThat(events.doubleClicked()).isTrue();
+    assertThat(recorder.doubleClicked()).isTrue();
   }
   
   private static class MyFrame extends TestFrame {
