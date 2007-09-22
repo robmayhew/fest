@@ -21,7 +21,7 @@ import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.MouseButtons.BUTTON1;
-import static org.fest.swing.MouseButtons.BUTTON2;
+import static org.fest.swing.MouseButtons.BUTTON3;
 import static org.fest.swing.util.Formatting.format;
 
 import static org.fest.util.Strings.concat;
@@ -97,26 +97,25 @@ public abstract class ComponentFixture<T extends Component> {
    * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public abstract ComponentFixture<T> click();
-
+  protected abstract ComponentFixture<T> click();
   
   /**
    * Simulates a user right-clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public abstract ComponentFixture<T> rightClick();
+  protected abstract ComponentFixture<T> rightClick();
   
   /**
    * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public abstract ComponentFixture<T> doubleClick();
+  protected abstract ComponentFixture<T> doubleClick();
 
   /**
    * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  public abstract ComponentFixture<T> focus();
+  protected abstract ComponentFixture<T> focus();
 
   /**
    * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
@@ -185,7 +184,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    */
   protected final ComponentFixture<T> doRightClick() {
-    return doClick(BUTTON2, 1);
+    return doClick(BUTTON3, 1);
   }
   
   /**

@@ -229,16 +229,6 @@ public final class RobotFixture {
   }
 
   /**
-   * Shows a popup menu.
-   * @param invoker the component to invoke the popup menu from.
-   * @return the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
-   */
-  public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, new ComponentLocation().getPoint(invoker));
-  }
-  
-  /**
    * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
    * @param button the mouse button to click.
@@ -248,6 +238,16 @@ public final class RobotFixture {
     Point where = new ComponentLocation().getPoint(target);
     robot.click(target, where.x, where.y, button.mask, times);
     robot.waitForIdle();
+  }
+  
+  /**
+   * Shows a popup menu.
+   * @param invoker the component to invoke the popup menu from.
+   * @return the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
+  public JPopupMenu showPopupMenu(Component invoker) {
+    return showPopupMenu(invoker, new ComponentLocation().getPoint(invoker));
   }
   
   /**

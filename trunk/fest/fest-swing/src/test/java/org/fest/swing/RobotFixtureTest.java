@@ -114,7 +114,7 @@ public class RobotFixtureTest {
     MouseButtons clickedButton;
     int clickCount;
 
-    @Override public void mouseClicked(MouseEvent e) {
+    @Override public void mousePressed(MouseEvent e) {
       clickedButton = MOUSE_BUTTON_MAP.get(e.getButton());
       clickCount = e.getClickCount();
     }

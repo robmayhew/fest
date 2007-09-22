@@ -66,6 +66,11 @@ public class ComponentFixtureTest {
     assertThat(popupMenu.target).isSameAs(frame.popupMenu);
   }
 
+  @Test public void shouldRightClickComponent() {
+    fixture.doRightClick();
+    assertThat(frame.popupMenu.isVisible()).isTrue();
+  }
+  
   @Test public void shouldDoubleClickComponent() {
     ComponentEvents events = ComponentEvents.attachTo(frame.textBox);
     fixture.doDoubleClick();
