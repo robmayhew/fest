@@ -147,15 +147,16 @@ import org.testng.annotations.Test;
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     container = new ContainerFixture<CustomWindow>(robot, new CustomWindow(getClass())) {      
-      @Override public ContainerFixture<CustomWindow> click() { return null; }
-      @Override public ContainerFixture<CustomWindow> doubleClick() { return null; }
-      @Override public ContainerFixture<CustomWindow> focus() { return null; }
-      @Override public ContainerFixture<CustomWindow> pressKeys(int... keyCodes) { return null; }
-      @Override public ContainerFixture<CustomWindow> requireDisabled() { return null; }
-      @Override public ContainerFixture<CustomWindow> requireEnabled() { return null; }
-      @Override public ContainerFixture<CustomWindow> requireVisible() { return null; }
-      @Override public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
-      @Override public ComponentFixture<CustomWindow> rightClick() { return null; }
+      public ContainerFixture<CustomWindow> click() { return null; }
+      public ComponentFixture<CustomWindow> click(MouseClickInfo mouseClickInfo) { return null; }
+      public ContainerFixture<CustomWindow> doubleClick() { return null; }
+      public ContainerFixture<CustomWindow> focus() { return null; }
+      public ContainerFixture<CustomWindow> pressKeys(int... keyCodes) { return null; }
+      public ContainerFixture<CustomWindow> requireDisabled() { return null; }
+      public ContainerFixture<CustomWindow> requireEnabled() { return null; }
+      public ContainerFixture<CustomWindow> requireVisible() { return null; }
+      public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
+      public ComponentFixture<CustomWindow> rightClick() { return null; }
     };
     window = container.target;
     robot.showWindow(window);

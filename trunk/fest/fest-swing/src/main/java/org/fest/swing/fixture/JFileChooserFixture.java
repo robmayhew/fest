@@ -186,6 +186,15 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
   
   /**
+   * Simulates a user clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JFileChooserFixture click(MouseClickInfo mouseClickInfo) {
+    return (JFileChooserFixture)doClick(mouseClickInfo);
+  }
+
+  /**
    * Simulates a user right-clicking the <code>{@link JFileChooser}</code> managed by this fixture.
    * @return this fixture.
    */

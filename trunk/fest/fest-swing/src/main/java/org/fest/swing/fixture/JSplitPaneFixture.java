@@ -72,6 +72,15 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
+   * Simulates a user clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JSplitPaneFixture click(MouseClickInfo mouseClickInfo) {
+    return (JSplitPaneFixture)doClick(mouseClickInfo);
+  }
+
+  /**
    * Simulates a user right-clicking the <code>{@link JSplitPane}</code> managed by this fixture.
    * @return this fixture.
    */

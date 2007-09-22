@@ -97,6 +97,15 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
+   * Simulates a user clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final DialogFixture click(MouseClickInfo mouseClickInfo) {
+    return (DialogFixture)doClick(mouseClickInfo);
+  }
+
+  /**
    * Simulates a user right-clicking the <code>{@link Dialog}</code> managed by this fixture.
    * @return this fixture.
    */

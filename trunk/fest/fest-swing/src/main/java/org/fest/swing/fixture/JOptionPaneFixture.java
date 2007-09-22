@@ -72,6 +72,15 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
+   * Simulates a user clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
+    return (JOptionPaneFixture)doClick(mouseClickInfo);
+  }
+
+  /**
    * Simulates a user right-clicking the <code>{@link JOptionPane}</code> managed by this fixture.
    * @return this fixture.
    */

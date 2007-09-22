@@ -100,6 +100,13 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> click();
   
   /**
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  protected abstract ComponentFixture<T> click(MouseClickInfo mouseClickInfo);
+  
+  /**
    * Simulates a user right-clicking the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
@@ -189,6 +196,15 @@ public abstract class ComponentFixture<T extends Component> {
   
   /**
    * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  protected final ComponentFixture<T> doClick(MouseClickInfo mouseClickInfo) {
+    return doClick(mouseClickInfo.button(), mouseClickInfo.times());
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    * @return this fixture.
@@ -198,6 +214,7 @@ public abstract class ComponentFixture<T extends Component> {
     robot.click(target, button, times);
     return this;
   }
+  
   
   /**
    * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.

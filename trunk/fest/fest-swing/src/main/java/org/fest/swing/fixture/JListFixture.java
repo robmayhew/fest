@@ -104,6 +104,15 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
+   * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JListFixture click(MouseClickInfo mouseClickInfo) {
+    return (JListFixture)doClick(mouseClickInfo);
+  }
+
+  /**
    * Simulates a user right-clicking the <code>{@link JList}</code> managed by this fixture.
    * @return this fixture.
    */

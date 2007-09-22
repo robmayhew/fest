@@ -35,16 +35,20 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
+import static org.fest.swing.MouseButtons.BUTTON1;
+import static org.fest.swing.MouseButtons.BUTTON3;
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
 
+import org.fest.swing.ClickRecordMouseListener;
 import org.fest.swing.Condition;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -156,6 +160,25 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     ComponentEvents events = ComponentEvents.attachTo(fixture.target);
     fixture.click();
     assertThat(events.clicked()).isTrue();
+  }
+  
+  @Test(dataProvider = "mouseClickInfos")
+  public final void shouldClickComponentWithGivenInfo(MouseClickInfo info) {
+    ClickRecordMouseListener recorder = new ClickRecordMouseListener();
+    fixture.target.addMouseListener(recorder);
+    fixture.click(info);
+    assertThat(recorder.clickedButton()).isEqualTo(info.button());
+    assertThat(recorder.clickCount()).isEqualTo(info.times());
+  }
+
+  @DataProvider(name = "mouseClickInfos")
+  public Object[][] mouseClickInfos() {
+    return new Object[][] {
+        { MouseClickInfo.button(BUTTON1).times(1) },
+        { MouseClickInfo.button(BUTTON1).times(2) },
+        { MouseClickInfo.button(BUTTON3).times(1) },
+        { MouseClickInfo.button(BUTTON3).times(2) }
+    };
   }
   
   @Test public final void shouldRightClickComponent() {

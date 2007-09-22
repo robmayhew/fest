@@ -142,6 +142,15 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   /**
+   * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JTableFixture click(MouseClickInfo mouseClickInfo) {
+    return (JTableFixture)doClick(mouseClickInfo);
+  }
+
+  /**
    * Simulates a user right-clicking the <code>{@link JTable}</code> managed by this fixture.
    * @return this fixture.
    */

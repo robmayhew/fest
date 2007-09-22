@@ -15,10 +15,6 @@
  */
 package org.fest.swing;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -66,6 +62,8 @@ public class RobotFixtureTest {
     ClickRecordMouseListener clickRecord = new ClickRecordMouseListener();
     frame.textBox.addMouseListener(clickRecord);
     robot.click(frame.textBox, button, times);
+    assertThat(clickRecord.clickedButton()).isEqualTo(button);
+    assertThat(clickRecord.clickCount()).isEqualTo(times);
   }
   
   @DataProvider(name = "clickingData") 
@@ -99,24 +97,6 @@ public class RobotFixtureTest {
       textBoxWithPopupMenu.setComponentPopupMenu(popupMenu);
       popupMenu.add(new JMenuItem("First"));
       popupMenu.add(new JMenuItem("Second"));
-    }
-  }
-  
-  private static class ClickRecordMouseListener extends MouseAdapter {
-    private static final Map<Integer, MouseButtons> MOUSE_BUTTON_MAP = new HashMap<Integer, MouseButtons>(); 
-    
-    static {
-        MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON1, BUTTON1);
-        MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON2, BUTTON2);
-        MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON3, BUTTON3);
-    }
-    
-    MouseButtons clickedButton;
-    int clickCount;
-
-    @Override public void mousePressed(MouseEvent e) {
-      clickedButton = MOUSE_BUTTON_MAP.get(e.getButton());
-      clickCount = e.getClickCount();
     }
   }
 }

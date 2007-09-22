@@ -44,15 +44,16 @@ public class ComponentFixtureTest {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     frame = new MyFrame(getClass());
     fixture = new ComponentFixture<JTextField>(robot, frame.textBox) {
-      @Override public ComponentFixture<JTextField> click() { return null; }
-      @Override public ComponentFixture<JTextField> doubleClick() { return null; }
-      @Override public ComponentFixture<JTextField> focus() { return null; }
-      @Override public ComponentFixture<JTextField> pressKeys(int... keyCodes) { return null; }
-      @Override public ComponentFixture<JTextField> requireDisabled() { return null; }
-      @Override public ComponentFixture<JTextField> requireEnabled() { return null; }
-      @Override public ComponentFixture<JTextField> requireNotVisible() { return null; }
-      @Override public ComponentFixture<JTextField> requireVisible() { return null; }
-      @Override public ComponentFixture<JTextField> rightClick() { return null; }
+      public ComponentFixture<JTextField> click() { return null; }
+      public ComponentFixture<JTextField> click(MouseClickInfo mouseClickInfo) { return null; }
+      public ComponentFixture<JTextField> doubleClick() { return null; }
+      public ComponentFixture<JTextField> focus() { return null; }
+      public ComponentFixture<JTextField> pressKeys(int... keyCodes) { return null; }
+      public ComponentFixture<JTextField> requireDisabled() { return null; }
+      public ComponentFixture<JTextField> requireEnabled() { return null; }
+      public ComponentFixture<JTextField> requireNotVisible() { return null; }
+      public ComponentFixture<JTextField> requireVisible() { return null; }
+      public ComponentFixture<JTextField> rightClick() { return null; }
     };
     robot.showWindow(frame);
   }

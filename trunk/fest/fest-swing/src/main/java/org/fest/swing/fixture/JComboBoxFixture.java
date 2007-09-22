@@ -121,7 +121,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * Gives input focus to the <code>{@link JComboBox}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JComboBoxFixture focus() {
+  public final JComboBoxFixture focus() {
     return (JComboBoxFixture)doFocus();
   }
 
@@ -129,8 +129,17 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * Simulates a user clicking the <code>{@link JComboBox}</code> managed by this fixture.
    * @return this fixture.
    */
-  @Override public final JComboBoxFixture click() {
+  public final JComboBoxFixture click() {
     return (JComboBoxFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public final JComboBoxFixture click(MouseClickInfo mouseClickInfo) {
+    return (JComboBoxFixture)doClick(mouseClickInfo);
   }
 
   /**
