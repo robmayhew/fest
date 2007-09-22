@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing</artifactId>
-	<version>0.5</version>
+	<version>0.6</version>
 	<dependencies>
 		<dependency>
 			<groupId>abbot</groupId>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-assert</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.5-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
