@@ -125,12 +125,12 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> focus();
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  protected abstract ComponentFixture<T> pressKeys(int...keyCodes);
+  protected abstract ComponentFixture<T> pressAndReleaseKeys(int...keyCodes);
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
@@ -215,17 +215,17 @@ public abstract class ComponentFixture<T extends Component> {
     return this;
   }
   
-  
   /**
-   * Simulates a user pressing the given keys on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  protected final ComponentFixture<T> doPressKeys(int... keyCodes) {
+  protected final ComponentFixture<T> doPressAndReleaseKeys(int... keyCodes) {
     doFocus();
     ComponentTester tester = tester();
-    for (int keyCode : keyCodes) tester.actionKeyPress(keyCode);
+    for (int keyCode : keyCodes) tester.actionKeyStroke(target, keyCode);
     return this;
   }
 

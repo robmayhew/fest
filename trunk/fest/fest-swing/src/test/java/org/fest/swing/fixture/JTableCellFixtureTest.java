@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
 import static org.fest.swing.fixture.TestTable.cellValue;
 
 import org.fest.swing.ClickRecorder;
@@ -54,7 +55,7 @@ public class JTableCellFixtureTest {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     window = new MainWindow(getClass());
     robot.showWindow(window);
-    cell = new JTableCellFixture(tableFixture(), ROW, COLUMN);
+    cell = new JTableCellFixture(tableFixture(), row(ROW).column(COLUMN));
     assertCellNotSelected();
   }
 

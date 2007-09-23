@@ -112,13 +112,13 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JButton}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JButtonFixture pressKeys(int... keyCodes) {
-    return (JButtonFixture)doPressKeys(keyCodes);
+  public final JButtonFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JButtonFixture)doPressAndReleaseKeys(keyCodes);
   }
   
   /**

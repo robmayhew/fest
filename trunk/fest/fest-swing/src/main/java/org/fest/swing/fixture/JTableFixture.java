@@ -66,36 +66,46 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are are out of bounds.
    */
   public final JTableCellFixture cell(TableCell cell) {
-    if (cell == null) throw new IllegalArgumentException("Cell cannot be null");
-    cell.beValidatedIn(target);
-    return new JTableCellFixture(this, cell.row, cell.column);
+    validate(cell);
+    return new JTableCellFixture(this, cell);
   }
 
   /**
    * Simulates a user selecting the given cell (row and column) of the <code>{@link JTable}</code> managed by this 
    * fixture.
-   * @param row the row to select.
-   * @param column the column to select.
+   * @param cell the cell to select.
    * @return this fixture.
+   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
+   * empty).
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are are out of bounds.
    */
-  public final JTableFixture selectCell(int row, int column) {
-    tableTester().actionSelectCell(target, row, column);
+  public final JTableFixture selectCell(TableCell cell) {
+    validate(cell);
+    tableTester().actionSelectCell(target, cell.row, cell.column);
     return this;
   }
-
+  
   /**
    * Simulates a user selecting the given cells of the <code>{@link JTable}</code> managed by this fixture.
    * @param cells the cells to select.
    * @return this fixture.
    */
   public final JTableFixture selectCells(TableCell... cells) {
-    int multipleSelectionKey = controlOrCommandKey();
-    tableTester().actionKeyPress(multipleSelectionKey);
-    for (TableCell c : cells) selectCell(c.row, c.column);
-    tableTester().actionKeyRelease(multipleSelectionKey);
+    pressControlOrCommandKey();
+    for (TableCell c : cells) selectCell(c);
+    releaseControlOrCommandKey();
     return this;
   }
 
+  private void pressControlOrCommandKey() {
+    tableTester().actionKeyPress(controlOrCommandKey());
+  }
+
+  private void releaseControlOrCommandKey() {
+    tableTester().actionKeyRelease(controlOrCommandKey());
+  }
+  
   /**
    * Returns the value of the selected cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
    * <code>String</code> representation. Returns <code>null</code> if one can not be obtained or if the
@@ -110,40 +120,60 @@ public class JTableFixture extends ComponentFixture<JTable> {
   /**
    * Returns the value of the given cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
    * <code>String</code> representation, or <code>null</code> if one can not be obtained.
-   * @param row the row of the given cell.
-   * @param column the column of the given cell.
+   * @param cell the given cell.
    * @return the value of the given cell.
+   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
+   * empty).
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are are out of bounds.
    */
-  public final String contentsAt(int row, int column) {
+  public final String contentsAt(TableCell cell) {
+    validate(cell);
+    return contentsAt(cell.row, cell.column);
+  }
+
+  private String contentsAt(int row, int column) {
     return JTableTester.valueToString(target, row, column);
   }
 
   /**
    * Simulates a user dragging an item from the <code>{@link JTable}</code> managed by this fixture.
-   * @param row the row of the item to drag.
-   * @param col the column of the item to drag.
+   * @param cell the cell to drag.
    * @return this fixture.
+   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
+   * empty).
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are are out of bounds.
    */
-  public final JTableFixture drag(int row, int col) {
-    tester().actionDrag(target, cellLocation(row, col));
+  public final JTableFixture drag(TableCell cell) {
+    tester().actionDrag(target, cellLocation(cell));
     return this;
   }
 
   /**
    * Simulates a user dropping an item to the <code>{@link JTable}</code> managed by this fixture.
-   * @param row the row of the item to drop.
-   * @param col the column of the item to drop.
+   * @param cell the cell to drop the dragging item into.
    * @return this fixture.
+   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
+   * empty).
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are are out of bounds.
    */
-  public final JTableFixture drop(int row, int col) {
-    tester().actionDrop(target, cellLocation(row, col));
+  public final JTableFixture drop(TableCell cell) {
+    tester().actionDrop(target, cellLocation(cell));
     return this;
   }  
 
-  private ComponentLocation cellLocation(int row, int col) {
-    return new ComponentLocation(new JTableLocation(row, col).getPoint(target));
+  private ComponentLocation cellLocation(TableCell cell) {
+    validate(cell);
+    return new ComponentLocation(new JTableLocation(cell.row, cell.column).getPoint(target));
   }
   
+  private void validate(TableCell cell) {
+    if (cell == null) throw new IllegalArgumentException("Cell cannot be null");
+    cell.validateBoundsIn(target);
+  }
+
   protected final JTableTester tableTester() {
     return (JTableTester)tester();
   }
@@ -194,13 +224,14 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JTable}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableFixture pressKeys(int... keyCodes) {
-    return (JTableFixture)doPressKeys(keyCodes);
+  public final JTableFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JTableFixture)doPressAndReleaseKeys(keyCodes);
   }
 
   /**

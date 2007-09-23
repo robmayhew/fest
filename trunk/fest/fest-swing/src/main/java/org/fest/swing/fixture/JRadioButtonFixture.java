@@ -112,13 +112,14 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JRadioButton}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JRadioButtonFixture pressKeys(int... keyCodes) {
-    return (JRadioButtonFixture)doPressKeys(keyCodes);
+  public final JRadioButtonFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JRadioButtonFixture)doPressAndReleaseKeys(keyCodes);
   }
   
   /**

@@ -105,13 +105,14 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JSplitPane}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSplitPaneFixture pressKeys(int... keyCodes) {
-    return (JSplitPaneFixture)doPressKeys(keyCodes);
+  public final JSplitPaneFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JSplitPaneFixture)doPressAndReleaseKeys(keyCodes);
   }
   
   /**

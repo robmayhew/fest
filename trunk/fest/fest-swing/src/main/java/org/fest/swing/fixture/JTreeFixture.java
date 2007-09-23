@@ -134,13 +134,13 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user pressing the given keys in the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys in the <code>{@link JTree}</code> managed by this fixture.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTreeFixture pressKeys(int...keyCodes) {
-    return (JTreeFixture)doPressKeys(keyCodes);
+  public final JTreeFixture pressAndReleaseKeys(int...keyCodes) {
+    return (JTreeFixture)doPressAndReleaseKeys(keyCodes);
   }
 
   /**

@@ -234,13 +234,13 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link Frame}</code> managed by this fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final FrameFixture pressKeys(int... keyCodes) {
-    return (FrameFixture)doPressKeys(keyCodes);
+  public final FrameFixture pressAndReleaseKeys(int... keyCodes) {
+    return (FrameFixture)doPressAndReleaseKeys(keyCodes);
   }
   
 

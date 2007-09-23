@@ -92,13 +92,14 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
   }
   
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JPopupMenu}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JPopupMenu}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPopupMenuFixture pressKeys(int... keyCodes) {
-    return (JPopupMenuFixture)doPressKeys(keyCodes);
+  public final JPopupMenuFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JPopupMenuFixture)doPressAndReleaseKeys(keyCodes);
   }
   
   /**

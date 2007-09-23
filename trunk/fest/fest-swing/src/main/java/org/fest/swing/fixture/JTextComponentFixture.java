@@ -126,13 +126,14 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Simulates a user pressing the given keys in the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys in the <code>{@link JTextComponent}</code> managed by this
+   * fixture.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTextComponentFixture pressKeys(int...keyCodes) {
-    return (JTextComponentFixture)doPressKeys(keyCodes);
+  public final JTextComponentFixture pressAndReleaseKeys(int...keyCodes) {
+    return (JTextComponentFixture)doPressAndReleaseKeys(keyCodes);
   }
 
   /**

@@ -220,7 +220,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     KeyListener keyListener = new KeyListener();
     fixture.target.addKeyListener(keyListener);
     int[] keys = { VK_A, VK_B, VK_Z };
-    fixture.pressKeys(keys);
+    fixture.pressAndReleaseKeys(keys);
     assertThat(keyListener.pressedKeys()).isEqualTo(keys);
   }
   

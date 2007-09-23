@@ -51,29 +51,29 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   private JTableFixture dropTargetFixture;
   
   @Test(dataProvider = "cellsToSelect") 
-  public void shouldSelectCell(int row, int column) {
-    targetFixture.selectCell(row, column);
-    assertThatCellIsSelected(row, column);
+  public void shouldSelectCell(TableCell cell) {
+    targetFixture.selectCell(cell);
+    assertThatCellIsSelected(cell);
   }
 
   @Test(dataProvider = "cellsToSelect") 
-  public void shouldReturnValueOfGivenCell(int row, int column) {
-    assertThat(targetFixture.contentsAt(row, column)).isEqualTo(cellValue(row, column));
+  public void shouldReturnValueOfGivenCell(TableCell cell) {
+    assertThat(targetFixture.contentsAt(cell)).isEqualTo(cellValue(cell));
   }
   
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
-  public void shouldReturnValueOfSelectedCell(int row, int column) {
-    targetFixture.selectCell(row, column);
-    assertThat(targetFixture.selectionContents()).isEqualTo(cellValue(row, column));
+  public void shouldReturnValueOfSelectedCell(TableCell cell) {
+    targetFixture.selectCell(cell);
+    assertThat(targetFixture.selectionContents()).isEqualTo(cellValue(cell));
   }
   
   @DataProvider(name = "cellsToSelect")
   public Object[][] cellsToSelect() {
     return new Object[][] {
-        { 6, 5 },  
-        { 0, 0 },
-        { 8, 3 },
-        { 5, 2 }
+        { row(6).column(5) },  
+        { row(0).column(0) },
+        { row(8).column(3) },
+        { row(5).column(2) }
     };
   }
   
@@ -88,13 +88,12 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     TableCell[] cells = array(row(6).column(5), row(8).column(3), row(9).column(3));    
     targetFixture.selectCells(cells);
     assertThat(targetFixture.target.getSelectedRowCount()).isEqualTo(cells.length);
-    for (TableCell c : cells)
-      assertThatCellIsSelected(c.row, c.column);
+    for (TableCell c : cells) assertThatCellIsSelected(c);
   }
   
-  private void assertThatCellIsSelected(int row, int column) {
-    assertThat(targetFixture.target.isRowSelected(row)).isTrue();
-    assertThat(targetFixture.target.isColumnSelected(column)).isTrue();
+  private void assertThatCellIsSelected(TableCell cell) {
+    assertThat(targetFixture.target.isRowSelected(cell.row)).isTrue();
+    assertThat(targetFixture.target.isColumnSelected(cell.column)).isTrue();
   }
   
   @Test public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
@@ -105,8 +104,8 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
   @Test public void shouldDragAndDrop() throws Exception {
     int sourceRowCount = target.getRowCount();
     int destinationRowCount = dropTarget.getRowCount();
-    targetFixture.drag(3, 0);
-    dropTargetFixture.drop(1, 0);
+    targetFixture.drag(row(3).column(0));
+    dropTargetFixture.drop(row(1).column(0));
     assertThat(target.getRowCount()).isEqualTo(sourceRowCount - 1);
     assertThat(target.getValueAt(3, 0)).isEqualTo(cellValue(4, 0));
     assertThat(dropTarget.getRowCount()).isEqualTo(destinationRowCount + 1);

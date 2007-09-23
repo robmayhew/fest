@@ -55,6 +55,10 @@ final class TestTable extends JTable {
         data[i][j] = cellValue(i, j); 
     return data;
   }
+  
+  static String cellValue(TableCell cell) {
+    return cellValue(cell.row, cell.column);
+  }
 
   static String cellValue(int row, int column) {
     return concat(String.valueOf(row), "-", String.valueOf(column));

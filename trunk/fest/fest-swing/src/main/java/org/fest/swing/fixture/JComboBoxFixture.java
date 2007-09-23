@@ -159,13 +159,14 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JComboBox}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  @Override public final JComboBoxFixture pressKeys(int... keyCodes) {
-    return (JComboBoxFixture)doPressKeys(keyCodes);
+  @Override public final JComboBoxFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JComboBoxFixture)doPressAndReleaseKeys(keyCodes);
   }
   
   /**

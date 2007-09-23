@@ -78,7 +78,7 @@ public class TableCell {
     this.column = column;
   }
 
-  void beValidatedIn(JTable table) {
+  void validateBoundsIn(JTable table) {
     int rowCount = table.getRowCount();
     if (rowCount == 0) throw new IllegalStateException("Table does not contain any rows");
     validateIndex(row, rowCount, "row");

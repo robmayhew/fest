@@ -39,30 +39,30 @@ public class TableCellTest {
   @Test(expectedExceptions = IllegalStateException.class)
   public void shouldThrowErrorIfTableIsEmpty() {
     TableCell cell = TableCell.TableCellBuilder.row(2).column(3);
-    cell.beValidatedIn(new JTable());
+    cell.validateBoundsIn(new JTable());
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfRowIndexIsNegative() {
     TableCell cell = TableCell.TableCellBuilder.row(-2).column(3);
-    cell.beValidatedIn(new JTable(4, 3));
+    cell.validateBoundsIn(new JTable(4, 3));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfColumnIndexIsNegative() {
     TableCell cell = TableCell.TableCellBuilder.row(2).column(-3);
-    cell.beValidatedIn(new JTable(4, 3));
+    cell.validateBoundsIn(new JTable(4, 3));
   }
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIsOutOfBounds() {
     TableCell cell = TableCell.TableCellBuilder.row(4).column(2);
-    cell.beValidatedIn(new JTable(4, 3));
+    cell.validateBoundsIn(new JTable(4, 3));
   }  
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIsOutOfBounds() {
     TableCell cell = TableCell.TableCellBuilder.row(0).column(3);
-    cell.beValidatedIn(new JTable(4, 3));
+    cell.validateBoundsIn(new JTable(4, 3));
   }  
 }

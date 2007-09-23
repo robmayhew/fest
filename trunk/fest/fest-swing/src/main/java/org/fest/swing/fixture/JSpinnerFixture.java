@@ -123,13 +123,14 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
   
   /**
-   * Simulates a user pressing the given keys on the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link JSpinner}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSpinnerFixture pressKeys(int... keyCodes) {
-    return (JSpinnerFixture)doPressKeys(keyCodes);
+  public final JSpinnerFixture pressAndReleaseKeys(int... keyCodes) {
+    return (JSpinnerFixture)doPressAndReleaseKeys(keyCodes);
   }
   
   /**

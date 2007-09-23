@@ -151,7 +151,7 @@ import org.testng.annotations.Test;
       public ComponentFixture<CustomWindow> click(MouseClickInfo mouseClickInfo) { return null; }
       public ContainerFixture<CustomWindow> doubleClick() { return null; }
       public ContainerFixture<CustomWindow> focus() { return null; }
-      public ContainerFixture<CustomWindow> pressKeys(int... keyCodes) { return null; }
+      public ContainerFixture<CustomWindow> pressAndReleaseKeys(int... keyCodes) { return null; }
       public ContainerFixture<CustomWindow> requireDisabled() { return null; }
       public ContainerFixture<CustomWindow> requireEnabled() { return null; }
       public ContainerFixture<CustomWindow> requireVisible() { return null; }
