@@ -133,7 +133,8 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the table cell managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the table cell managed by this fixture. This method does
+   * not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -143,6 +144,28 @@ public class JTableCellFixture {
     return this;
   }
 
+  /**
+   * Simulates a user pressing the given key on the table cell managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JTableCellFixture pressKey(int keyCode) {
+    table.pressKey(keyCode);
+    return this;
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the table cell managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JTableCellFixture releaseKey(int keyCode) {
+    table.releaseKey(keyCode);
+    return this;
+  }
+  
   /**
    * Shows a popup menu using the table cell managed by this fixture as the invoker of the popup menu.
    * @return a fixture that manages the displayed popup menu.

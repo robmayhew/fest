@@ -177,6 +177,26 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
+   * Simulates a user pressing the given key on the <code>{@link Dialog}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final DialogFixture pressKey(int keyCode) {
+    return (DialogFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link Dialog}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final DialogFixture releaseKey(int keyCode) {
+    return (DialogFixture)doReleaseKey(keyCode);
+  }
+  
+  /**
    * Asserts that the <code>{@link Dialog}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Dialog</code> is not visible.

@@ -157,6 +157,8 @@ import org.testng.annotations.Test;
       public ContainerFixture<CustomWindow> requireVisible() { return null; }
       public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
       public ComponentFixture<CustomWindow> rightClick() { return null; }
+      public ComponentFixture<CustomWindow> pressKey(int keyCode) { return null; }
+      public ComponentFixture<CustomWindow> releaseKey(int keyCode) { return null; }
     };
     window = container.target;
     robot.showWindow(window);

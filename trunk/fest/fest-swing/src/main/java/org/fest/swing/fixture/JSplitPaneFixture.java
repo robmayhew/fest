@@ -106,13 +106,33 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
 
   /**
    * Simulates a user pressing and releasing the given keys on the <code>{@link JSplitPane}</code> managed by this
-   * fixture.
+   * fixture. This method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
   public final JSplitPaneFixture pressAndReleaseKeys(int... keyCodes) {
     return (JSplitPaneFixture)doPressAndReleaseKeys(keyCodes);
+  }
+  
+  /**
+   * Simulates a user pressing the given key on the <code>{@link JSplitPane}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JSplitPaneFixture pressKey(int keyCode) {
+    return (JSplitPaneFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JSplitPane}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JSplitPaneFixture releaseKey(int keyCode) {
+    return (JSplitPaneFixture)doReleaseKey(keyCode);
   }
   
   /**

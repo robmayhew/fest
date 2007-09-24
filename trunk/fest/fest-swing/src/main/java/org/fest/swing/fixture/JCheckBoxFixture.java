@@ -120,6 +120,26 @@ public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
   }
   
   /**
+   * Simulates a user pressing the given key on the <code>{@link JCheckBox}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JCheckBoxFixture pressKey(int keyCode) {
+    return (JCheckBoxFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JCheckBox}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JCheckBoxFixture releaseKey(int keyCode) {
+    return (JCheckBoxFixture)doReleaseKey(keyCode);
+  }
+  
+  /**
    * Asserts that the text of the <code>{@link JCheckBox}</code> managed by this fixture is equal to the specified 
    * <code>String</code>. 
    * @param expected the text to match.

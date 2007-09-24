@@ -137,7 +137,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   
   /**
    * Simulates a user pressing and releasing the given keys in the <code>{@link JToolBar}</code> managed by this
-   * fixture.
+   * fixture. This method does not affect the current focus.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -146,6 +146,26 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
     return (JToolBarFixture)doPressAndReleaseKeys(keyCodes);
   }
 
+  /**
+   * Simulates a user pressing the given key on the <code>{@link JToolBar}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JToolBarFixture pressKey(int keyCode) {
+    return (JToolBarFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JToolBar}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JToolBarFixture releaseKey(int keyCode) {
+    return (JToolBarFixture)doReleaseKey(keyCode);
+  }
+  
   /**
    * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is visible.
    * @return this fixture.

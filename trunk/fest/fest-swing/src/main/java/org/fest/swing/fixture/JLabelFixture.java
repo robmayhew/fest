@@ -120,6 +120,26 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
+   * Simulates a user pressing the given key on the <code>{@link JLabel}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JLabelFixture pressKey(int keyCode) {
+    return (JLabelFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JLabel}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JLabelFixture releaseKey(int keyCode) {
+    return (JLabelFixture)doReleaseKey(keyCode);
+  }
+  
+  /**
    * Asserts that the <code>{@link JLabel}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JLabel</code> is not visible.

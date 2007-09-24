@@ -292,4 +292,36 @@ public final class RobotFixture {
       Thread.currentThread().interrupt();
     }
   }
+
+  /**
+   * Simulates a user pressing and releasing the given keys. This method does not affect the current focus.
+   * @param keyCodes one or more codes of the keys to press.
+   * @see java.awt.event.KeyEvent
+   */
+  public void pressAndReleaseKeys(int... keyCodes) {
+    for (int keyCode : keyCodes) {
+      robot.key(keyCode);
+      robot.waitForIdle();
+    }
+  }
+  
+  /**
+   * Simulates a user pressing given key. This method does not affect the current focus.
+   * @param keyCode the code of the key to press.
+   * @see java.awt.event.KeyEvent
+   */
+ public void pressKey(int keyCode) {
+    robot.keyPress(keyCode);
+    robot.waitForIdle();
+  }
+  
+  /**
+   * Simulates a user releasing the given key. This method does not affect the current focus.
+   * @param keyCode the code of the key to release.
+   * @see java.awt.event.KeyEvent
+   */
+  public void releaseKey(int keyCode) {
+    robot.keyRelease(keyCode);
+    robot.waitForIdle();
+  }
 }

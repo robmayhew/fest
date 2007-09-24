@@ -50,6 +50,8 @@ public class ComponentFixtureTest {
       public ComponentFixture<JTextField> doubleClick() { return null; }
       public ComponentFixture<JTextField> focus() { return null; }
       public ComponentFixture<JTextField> pressAndReleaseKeys(int... keyCodes) { return null; }
+      public ComponentFixture<JTextField> pressKey(int keyCode) { return null; }
+      public ComponentFixture<JTextField> releaseKey(int keyCode) { return null; }
       public ComponentFixture<JTextField> requireDisabled() { return null; }
       public ComponentFixture<JTextField> requireEnabled() { return null; }
       public ComponentFixture<JTextField> requireNotVisible() { return null; }

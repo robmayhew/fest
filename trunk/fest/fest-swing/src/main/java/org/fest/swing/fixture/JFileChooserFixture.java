@@ -230,6 +230,26 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
+   * Simulates a user pressing the given key on the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JFileChooserFixture pressKey(int keyCode) {
+    return (JFileChooserFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JFileChooser}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JFileChooserFixture releaseKey(int keyCode) {
+    return (JFileChooserFixture)doReleaseKey(keyCode);
+  }
+  
+  /**
    * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JFileChooser</code> is not visible.

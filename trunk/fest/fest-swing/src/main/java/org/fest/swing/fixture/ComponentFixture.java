@@ -125,12 +125,29 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> focus();
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code> managed by this
+   * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
   protected abstract ComponentFixture<T> pressAndReleaseKeys(int...keyCodes);
+
+  /**
+   * Simulates a user pressing given key on the <code>{@link Component}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  protected abstract ComponentFixture<T> pressKey(int keyCode);
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link Component}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  protected abstract ComponentFixture<T> releaseKey(int keyCode);
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
@@ -224,8 +241,31 @@ public abstract class ComponentFixture<T extends Component> {
    */
   protected final ComponentFixture<T> doPressAndReleaseKeys(int... keyCodes) {
     doFocus();
-    ComponentTester tester = tester();
-    for (int keyCode : keyCodes) tester.actionKeyStroke(target, keyCode);
+    robot.pressAndReleaseKeys(keyCodes);
+    return this;
+  }
+  
+  /**
+   * Simulates a user pressing given key on the <code>{@link Component}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  protected final ComponentFixture<T> doPressKey(int keyCode) {
+    doFocus();
+    robot.pressKey(keyCode);
+    return this;
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link Component}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  protected final ComponentFixture<T> doReleaseKey(int keyCode) {
+    doFocus();
+    robot.releaseKey(keyCode);
     return this;
   }
 

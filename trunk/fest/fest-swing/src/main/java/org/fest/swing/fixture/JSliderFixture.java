@@ -142,13 +142,33 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   
   /**
    * Simulates a user pressing and releasing the given keys on the <code>{@link JSlider}</code> managed by this
-   * fixture.
+   * fixture. This method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
   public final JSliderFixture pressAndReleaseKeys(int... keyCodes) {
     return (JSliderFixture)doPressAndReleaseKeys(keyCodes);
+  }
+  
+  /**
+   * Simulates a user pressing the given key on the <code>{@link JSlider}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JSliderFixture pressKey(int keyCode) {
+    return (JSliderFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JSlider}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JSliderFixture releaseKey(int keyCode) {
+    return (JSliderFixture)doReleaseKey(keyCode);
   }
   
   /**

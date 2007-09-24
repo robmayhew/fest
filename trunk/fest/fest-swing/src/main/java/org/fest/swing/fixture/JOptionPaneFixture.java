@@ -231,13 +231,33 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
 
   /**
    * Simulates a user pressing and releasing the given keys on the <code>{@link JOptionPane}</code> managed by this
-   * fixture.
+   * fixture. This method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
   public final JOptionPaneFixture pressAndReleaseKeys(int... keyCodes) {
     return (JOptionPaneFixture)doPressAndReleaseKeys(keyCodes);
+  }
+  
+  /**
+   * Simulates a user pressing the given key on the <code>{@link JOptionPane}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JOptionPaneFixture pressKey(int keyCode) {
+    return (JOptionPaneFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JOptionPane}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JOptionPaneFixture releaseKey(int keyCode) {
+    return (JOptionPaneFixture)doReleaseKey(keyCode);
   }
   
   /**

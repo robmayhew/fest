@@ -131,13 +131,33 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
 
   /**
    * Simulates a user pressing and releasing the given keys on the <code>{@link JTabbedPane}</code> managed by this
-   * fixture.
+   * fixture. This method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
   public final JTabbedPaneFixture pressAndReleaseKeys(int... keyCodes) {
     return (JTabbedPaneFixture)doPressAndReleaseKeys(keyCodes);
+  }
+  
+  /**
+   * Simulates a user pressing the given key on the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JTabbedPaneFixture pressKey(int keyCode) {
+    return (JTabbedPaneFixture)doPressKey(keyCode);
+  }
+  
+  /**
+   * Simulates a user releasing the given key on the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public final JTabbedPaneFixture releaseKey(int keyCode) {
+    return (JTabbedPaneFixture)doReleaseKey(keyCode);
   }
   
   /**
