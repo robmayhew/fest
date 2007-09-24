@@ -20,6 +20,7 @@ import javax.swing.JSlider;
 import abbot.tester.JSliderTester;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -105,6 +106,15 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    */
   public final JSliderFixture click() {
     return (JSliderFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JSliderFixture click(MouseButtons button) {
+    return (JSliderFixture)doClick(button);
   }
 
   /**

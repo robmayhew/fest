@@ -23,6 +23,7 @@ import javax.swing.JToolBar;
 import abbot.tester.JToolBarTester;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -100,6 +101,15 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public final JToolBarFixture click() {
     return (JToolBarFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JToolBarFixture click(MouseButtons button) {
+    return (JToolBarFixture)doClick(button);
   }
 
   /**

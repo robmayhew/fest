@@ -23,6 +23,7 @@ import abbot.tester.JTreeLocation;
 import abbot.tester.JTreeTester;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -98,6 +99,15 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    */
   public final JTreeFixture click() {
     return (JTreeFixture)doClick(); 
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JTree}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JTreeFixture click(MouseButtons button) {
+    return (JTreeFixture)doClick(button);
   }
 
   /**

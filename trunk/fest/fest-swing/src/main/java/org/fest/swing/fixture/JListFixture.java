@@ -22,6 +22,7 @@ import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -101,6 +102,15 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public final JListFixture click() {
     return (JListFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JListFixture click(MouseButtons button) {
+    return (JListFixture)doClick(button);
   }
 
   /**

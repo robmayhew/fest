@@ -25,6 +25,7 @@ import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 
 import org.fest.swing.Condition;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -96,6 +97,15 @@ public class FrameFixture extends WindowFixture<Frame> {
    */
   public final FrameFixture click() {
     return (FrameFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link Frame}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final FrameFixture click(MouseButtons button) {
+    return (FrameFixture)doClick(button);
   }
 
   /**

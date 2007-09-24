@@ -20,6 +20,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_B;
+import static java.awt.event.KeyEvent.VK_Z;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.MouseButtons.BUTTON1;
@@ -77,6 +80,32 @@ public class RobotFixtureTest {
     };
   }
   
+  @Test public void shouldPressAndReleaseGivenKeys() {
+    frame.textBox.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
+    int[] keys = { VK_A, VK_B, VK_Z };
+    robot.pressAndReleaseKeys(keys);
+    recorder.assertKeysPressed(keys);
+    recorder.assertKeysReleased(keys);
+  }
+
+  @Test public void shouldPressGivenKeyWithoutReleasingIt() {
+    frame.textBox.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
+    robot.pressKey(VK_A);
+    recorder.assertKeysPressed(VK_A);
+    recorder.assertNoKeysReleased();
+  }
+
+  @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt") 
+  public void shouldReleaseGivenKey() {
+    frame.textBox.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
+    robot.pressKey(VK_A);
+    robot.releaseKey(VK_A);
+    recorder.assertKeysReleased(VK_A);
+  }
+
   @Test(expectedExceptions = ComponentLookupException.class)
   public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
     robot.showPopupMenu(frame.textBox);

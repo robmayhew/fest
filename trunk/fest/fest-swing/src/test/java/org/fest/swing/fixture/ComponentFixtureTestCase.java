@@ -19,10 +19,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Window;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.UIManager;
@@ -44,6 +40,7 @@ import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
 
 import org.fest.swing.ClickRecorder;
 import org.fest.swing.Condition;
+import org.fest.swing.KeyRecorder;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 
@@ -85,23 +82,6 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     
     public void clickButton() {
       tester.click(button);      
-    }
-  }
-
-  private static class KeyListener extends KeyAdapter {
-    private final List<Integer> pressedKeys = new ArrayList<Integer>();
-    
-    void reset() { pressedKeys.clear(); }
-    
-    @Override public void keyPressed(KeyEvent e) {
-      pressedKeys.add(e.getKeyCode());
-    }
-
-    int[] pressedKeys() {
-      int pressedKeyCount = pressedKeys.size();
-      int[] keys = new int[pressedKeyCount];
-      for(int i = 0; i < pressedKeyCount; i++) keys[i] = pressedKeys.get(i);
-      return keys;
     }
   }
 
@@ -163,6 +143,13 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     assertThat(recorder.clicked()).isTrue();
   }
   
+  @Test public final void shouldClickComponentWithGivenButton() {
+    ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
+    fixture.click(BUTTON2);
+    assertThat(recorder.clickedButton()).isEqualTo(BUTTON2);
+    assertThat(recorder.clickCount()).isEqualTo(1);
+  }
+
   @Test(dataProvider = "mouseClickInfos")
   public final void shouldClickComponentWithGivenInfo(MouseClickInfo info) {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
@@ -216,14 +203,29 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     });
   }
   
-  @Test public final void shouldPressGivenKeys() {
-    KeyListener keyListener = new KeyListener();
-    fixture.target.addKeyListener(keyListener);
+  @Test public final void shouldPressAndReleaseGivenKeys() {
+    KeyRecorder recorder = KeyRecorder.attachTo(fixture.target);
     int[] keys = { VK_A, VK_B, VK_Z };
     fixture.pressAndReleaseKeys(keys);
-    assertThat(keyListener.pressedKeys()).isEqualTo(keys);
+    recorder.assertKeysPressed(keys);
+    recorder.assertKeysReleased(keys);
   }
-  
+
+  @Test public final void shouldPressGivenKeyWithoutReleasingIt() {
+    KeyRecorder recorder = KeyRecorder.attachTo(fixture.target);
+    fixture.pressKey(VK_A);
+    recorder.assertKeysPressed(VK_A);
+    recorder.assertNoKeysReleased();
+  }
+
+  @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt") 
+  public void shouldReleaseGivenKey() {
+    KeyRecorder recorder = KeyRecorder.attachTo(fixture.target);
+    fixture.pressKey(VK_A);
+    fixture.releaseKey(VK_A);
+    recorder.assertKeysReleased(VK_A);
+  }
+
   @Test public final void shouldPassIfComponentIsVisibleAndExpectingVisible() {
     fixture.target.setVisible(true);
     fixture.requireVisible();

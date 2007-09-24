@@ -20,6 +20,7 @@ import javax.swing.JCheckBox;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -73,6 +74,15 @@ public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
    */
   public final JCheckBoxFixture click() {
     return (JCheckBoxFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JCheckBox}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JCheckBoxFixture click(MouseButtons button) {
+    return (JCheckBoxFixture)doClick(button);
   }
 
   /**

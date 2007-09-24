@@ -20,6 +20,7 @@ import javax.swing.JSpinner;
 import abbot.tester.JSpinnerTester;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -87,6 +88,15 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    */
   public final JSpinnerFixture click() {
     return (JSpinnerFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JSpinnerFixture click(MouseButtons button) {
+    return (JSpinnerFixture)doClick(button);
   }
 
   /**

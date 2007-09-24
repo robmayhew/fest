@@ -20,6 +20,7 @@ import javax.swing.JRadioButton;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -56,6 +57,15 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
    */
   public final JRadioButtonFixture click() {
     return (JRadioButtonFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JRadioButtonFixture click(MouseButtons button) {
+    return (JRadioButtonFixture)doClick(button);
   }
 
   /**

@@ -24,6 +24,7 @@ import abbot.tester.JTableTester;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -185,6 +186,15 @@ public class JTableFixture extends ComponentFixture<JTable> {
     return (JTableFixture)doClick();
   }
   
+  /**
+   * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JTableFixture click(MouseButtons button) {
+    return (JTableFixture)doClick(button);
+  }
+
   /**
    * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.

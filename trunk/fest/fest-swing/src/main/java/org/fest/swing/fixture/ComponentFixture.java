@@ -101,6 +101,13 @@ public abstract class ComponentFixture<T extends Component> {
   
   /**
    * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  protected abstract ComponentFixture<T> click(MouseButtons button);
+  
+  /**
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -218,6 +225,15 @@ public abstract class ComponentFixture<T extends Component> {
    */
   protected final ComponentFixture<T> doClick(MouseClickInfo mouseClickInfo) {
     return doClick(mouseClickInfo.button(), mouseClickInfo.times());
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * @param button the mouse button to click.
+   * @return this fixture.
+   */
+  protected final ComponentFixture<T> doClick(MouseButtons button) {
+    return doClick(button, 1);
   }
 
   /**

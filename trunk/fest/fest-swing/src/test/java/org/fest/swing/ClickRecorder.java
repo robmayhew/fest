@@ -16,7 +16,9 @@
 package org.fest.swing;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,12 +28,12 @@ import static org.fest.swing.MouseButtons.BUTTON2;
 import static org.fest.swing.MouseButtons.BUTTON3;
 
 /**
- * Understands a mouse listener that records how many times a button is being pressed.
+ * Understands a mouse listener that records mouse events.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang 
  */
-public class ClickRecorder extends BaseMouseListener {
+public class ClickRecorder extends MouseAdapter {
 
   public static ClickRecorder attachTo(Component target) {
     return new ClickRecorder(target);
@@ -49,11 +51,16 @@ public class ClickRecorder extends BaseMouseListener {
   private int clickCount;
   private Point pointClicked;
 
-  protected ClickRecorder(Component target) {
-    super(target);
+  private ClickRecorder(Component target) {
+    attach(this, target);
+  }
+  
+  private static void attach(ClickRecorder mouseListener, Component target) {
+    target.addMouseListener(mouseListener);
+    if (!(target instanceof Container)) return;
+    for (Component c : ((Container)target).getComponents()) attach(mouseListener, c);
   }
 
-  
   @Override public void mousePressed(MouseEvent e) {
     clickedButton = MOUSE_BUTTON_MAP.get(e.getButton());
     clickCount = e.getClickCount();

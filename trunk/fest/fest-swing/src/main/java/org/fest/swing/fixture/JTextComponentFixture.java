@@ -22,6 +22,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.isEmpty;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButtons;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -58,6 +59,15 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    */
   public final JTextComponentFixture click() { 
     return (JTextComponentFixture)doClick();
+  }
+
+  /**
+   * Simulates a user clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public final JTextComponentFixture click(MouseButtons button) {
+    return (JTextComponentFixture)doClick(button);
   }
 
   /**
