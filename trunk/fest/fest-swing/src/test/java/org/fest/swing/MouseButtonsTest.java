@@ -28,18 +28,28 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class MouseButtonTest {
+public class MouseButtonsTest {
 
-  @Test(dataProvider = "data") 
+  @Test(dataProvider = "masks") 
   public void shouldContainCorrectMouseButtonMask(MouseButtons target, int expectedMask) {
     assertThat(target.mask).isEqualTo(expectedMask);
   }
   
-  @DataProvider(name = "data") public Object[][] data() {
+  @Test(dataProvider = "masks") 
+  public void shouldLookupButtonGivenMask(MouseButtons button, int mask) {
+    assertThat(MouseButtons.lookup(mask)).isEqualTo(button);
+  }
+
+  @DataProvider(name = "masks") public Object[][] masks() {
     return new Object[][] {
         { MouseButtons.BUTTON1, BUTTON1_MASK },
         { MouseButtons.BUTTON2, BUTTON2_MASK },
         { MouseButtons.BUTTON3, BUTTON3_MASK },
     };
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorInLookupIfMaskIsInvalid() {
+    MouseButtons.lookup(Integer.MIN_VALUE);
   }
 }

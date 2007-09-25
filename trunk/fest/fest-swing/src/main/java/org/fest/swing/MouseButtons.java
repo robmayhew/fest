@@ -15,11 +15,12 @@
  */
 package org.fest.swing;
 
+import java.awt.event.InputEvent;
+
 import static java.awt.event.InputEvent.BUTTON1_MASK;
 import static java.awt.event.InputEvent.BUTTON2_MASK;
 import static java.awt.event.InputEvent.BUTTON3_MASK;
-
-import java.awt.event.InputEvent;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands mouse buttons.
@@ -38,5 +39,19 @@ public enum MouseButtons {
   
   private MouseButtons(int mask) {
     this.mask = mask;
+  }
+
+  /**
+   * Returns the mouse button whose mask matches the given mask. Valid values are 
+   * <code>{@link InputEvent#BUTTON1_MASK}</code>, <code>{@link InputEvent#BUTTON2_MASK}</code>, and
+   * <code>{@link InputEvent#BUTTON3_MASK}</code> 
+   * @param mask the mask of the button we are looking for.
+   * @return the found button.
+   * @throws IllegalArgumentException if the given mask is not a valid one.
+   */
+  public static MouseButtons lookup(int mask) {
+    for (MouseButtons button : values())
+      if (button.mask == mask) return button;
+    throw new IllegalArgumentException(concat(String.valueOf(mask), " is not a valid button mask"));
   }
 }
