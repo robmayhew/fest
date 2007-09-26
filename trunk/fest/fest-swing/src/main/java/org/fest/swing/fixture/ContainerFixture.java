@@ -26,10 +26,12 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
@@ -276,6 +278,29 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   }
 
   /**
+   * Finds a <code>{@link JRadioButton}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JRadioButton</code>.
+   * @return a fixture that manages the <code>JRadioButton</code> found.
+   * @throws ComponentLookupException if a <code>JRadioButton</code> that matches the given search criteria could not be 
+   * found.
+   */
+  public final JRadioButtonFixture radioButton(GenericTypeMatcher<? extends JRadioButton> matcher) {
+    return new JRadioButtonFixture(robot, find(matcher));
+  }
+
+  /**
+   * Finds a <code>{@link JRadioButton}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JRadioButton</code> found.
+   * @throws ComponentLookupException if a <code>JRadioButton</code> having a matching name could not be found.
+   */
+  public final JRadioButtonFixture radioButton(String name) {
+    return new JRadioButtonFixture(robot, findByName(name, JRadioButton.class));
+  }
+
+  /**
    * Finds a <code>{@link JSlider}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JSlider</code>.
@@ -365,6 +390,29 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    */
   public final JTabbedPaneFixture tabbedPane(String name) {
     return new JTabbedPaneFixture(robot, findByName(name, JTabbedPane.class));
+  }
+  
+  /**
+   * Finds a <code>{@link JTable}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JTable</code>.
+   * @return a fixture that manages the <code>JTable</code> found.
+   * @throws ComponentLookupException if a <code>JTable</code> that matches the given search criteria could not be 
+   * found.
+   */
+  public final JTableFixture table(GenericTypeMatcher<? extends JTable> matcher) {
+    return new JTableFixture(robot, find(matcher));
+  }
+  
+  /**
+   * Finds a <code>{@link JTable}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JTable</code> found.
+   * @throws ComponentLookupException if a <code>JTable</code> having a matching name could not be found.
+   */
+  public final JTableFixture table(String name) {
+    return new JTableFixture(robot, findByName(name, JTable.class));
   }
   
   /**

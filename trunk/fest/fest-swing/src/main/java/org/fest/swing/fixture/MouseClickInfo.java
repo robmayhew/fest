@@ -15,6 +15,10 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
+
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.MouseButton;
@@ -29,6 +33,30 @@ public final class MouseClickInfo {
   private final MouseButton button;
   private int times;
 
+  /**
+   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the left button should clicked once.
+   * @return the created click info.
+   */
+  public static MouseClickInfo leftButton() {
+    return button(LEFT_BUTTON);
+  }
+  
+  /**
+   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the middle button should clicked once.
+   * @return the created click info.
+   */
+  public static MouseClickInfo middleButton() {
+    return button(MIDDLE_BUTTON);
+  }
+  
+  /**
+   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the right button should clicked once.
+   * @return the created click info.
+   */
+  public static MouseClickInfo rightButton() {
+    return button(RIGHT_BUTTON);
+  }
+  
   /**
    * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the given button should clicked once.
    * @param button the mouse button to click.

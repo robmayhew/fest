@@ -33,10 +33,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerListModel;
@@ -69,7 +71,10 @@ import org.testng.annotations.Test;
 @GUITest public class ContainerFixtureTest {
 
   private static class CustomWindow extends TestFrame {
+    
     private static final long serialVersionUID = 1L;
+
+    private static final Dimension PREFERRED_DIMENSION = new Dimension(100, 100);
     
     final JButton button = new JButton("A Button");
     final JCheckBox checkBox = new JCheckBox("A CheckBox");
@@ -79,11 +84,13 @@ import org.testng.annotations.Test;
     final JLabel label = new JLabel("A Label");
     final JList list = new JList();
     final JMenu menu = new JMenu("A Menu");
+    final JRadioButton radioButton = new JRadioButton("A Radio Button");
     final JSlider slider = new JSlider(10, 20, 15);
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
     final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
     final JMenuItem subMenu = new JMenu("A Submenu");
     final JTabbedPane tabbedPane = new JTabbedPane();
+    final JTable table = new JTable(6, 8);
     final JTextField textField = new JTextField(10);
     final JToolBar toolBar = new JToolBar(HORIZONTAL);
     
@@ -98,7 +105,7 @@ import org.testng.annotations.Test;
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      add(button, checkBox, comboBox, fileChooser, label, list, slider, spinner, splitPane, tabbedPane, textField, toolBar);
+      add(button, checkBox, comboBox, fileChooser, label, list, radioButton, slider, spinner, splitPane, tabbedPane, table, textField, toolBar);
     }
     
     private void add(Component... components) {
@@ -126,12 +133,15 @@ import org.testng.annotations.Test;
       list.setName("list");
       menu.setName("menu");
       menu.add(subMenu);
+      radioButton.setName("radioButton");
       slider.setName("slider");
       spinner.setName("spinner");
       splitPane.setName("splitPane");
-      splitPane.setPreferredSize(new Dimension(100, 100));
+      splitPane.setPreferredSize(PREFERRED_DIMENSION);
       tabbedPane.setName("tabbedPane");
       tabbedPane.addTab("A Tab", new JPanel());
+      table.setName("table");
+      table.setPreferredSize(PREFERRED_DIMENSION);
       textField.setName("textField");
       toolBar.setName("toolBar");
     }
@@ -298,6 +308,21 @@ import org.testng.annotations.Test;
     assertThat(fixture.target.getMessage()).isEqualTo("A Message");
   }
 
+  @Test public void shouldFindRadioButtonWithGivenMatcher() {
+    GenericTypeMatcher<JRadioButton> textMatcher = new GenericTypeMatcher<JRadioButton>() {
+      protected boolean isMatching(JRadioButton radioButton) {
+        return "A Radio Button".equals(radioButton.getText());
+      }
+    };
+    JRadioButtonFixture radioButton = container.radioButton(textMatcher);
+    assertThat(radioButton.target).isSameAs(window.radioButton);
+  }
+  
+  @Test public void shouldFindRadioButtonWithGivenName() {
+    JRadioButtonFixture radioButton = container.radioButton("radioButton");
+    assertThat(radioButton.target).isSameAs(window.radioButton);
+  }
+
   @Test public void shouldFindSliderWithGivenMatcher() {
     GenericTypeMatcher<JSlider> valueMatcher = new GenericTypeMatcher<JSlider>() {
       protected boolean isMatching(JSlider slider) {
@@ -356,6 +381,21 @@ import org.testng.annotations.Test;
   @Test public void shouldFindTabbedPaneWithGivenName() {
     JTabbedPaneFixture tabbedPane = container.tabbedPane("tabbedPane");
     assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
+  }
+  
+  @Test public void shouldFindTableWithGivenMatcher() {
+    GenericTypeMatcher<JTable> rowCountMatcher = new GenericTypeMatcher<JTable>() {
+      protected boolean isMatching(JTable table) {
+        return table.getRowCount() == 6;
+      }
+    };
+    JTableFixture table = container.table(rowCountMatcher);
+    assertThat(table.target).isSameAs(window.table);
+  }
+  
+  @Test public void shouldFindTableWithGivenName() {
+    JTableFixture table = container.table("table");
+    assertThat(table.target).isSameAs(window.table);
   }
   
   @Test public void shouldFindTextComponentWithGivenMatcher() {
