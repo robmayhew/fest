@@ -1,6 +1,59 @@
 #summary Changes between releases of FEST-Swing.
 #labels Featured
 
+===[09/25/07] FEST Swing 0.6===
+  # Assertion failures in all fixtures now provide better feedback. For example, the following assertion:
+  {{{
+      nameField.setText("Yoda"); // nameField is a JTextField
+      dialog.textBox("name").requireText("Leia");
+  }}}
+   will fail with the following message:
+{{{
+      "[javax.swing.JTextField<'name'> - property:'text'] expected:<'Leia'> but was:<'Yoda'>"
+}}}
+  # Added support for time delays in `RobotFixture`. The following example shows how to specify a delay of 2 seconds:
+  {{{
+      robot.delay(2000); // or
+      robot.delay(2, SECONDS);
+  }}} 
+  # Added method `pressAndReleaseKeys(int...)`, `pressAndReleaseKey(int)`, and `releaseKey(int)` to all fixtures. The following example:
+  {{{
+      dialog.textBox("name").pressAndReleaseKeys(VK_A, VK_B, VK_Z);
+  }}}
+   simulates a user pressing and releasing the keys 'A', 'B' and 'Z' (key codes from `java.awt.event.KeyEvent`)
+  # Added method `rightClick` to all fixtures
+  # Added method `doubleClick` to all fixtures
+  # Added method `click(MouseButton)` to all fixtures; this method simulates a user clicking the specified mouse button. Examples:
+  {{{
+      dialog.textBox("name").click(LEFT_BUTTON);
+      dialog.list("messages").click(RIGHT_BUTTON); 
+  }}}
+   `LEFT_BUTTON` and `RIGHT_BUTTON` are constants from the `enum` `MouseButton` (IOHO, a lot better than using `int` flags from `java.awt.event.InputEvent`)
+  # Added method `click(MouseClickInfo)` to all fixtures; this method simulates a user clicking the specified mouse button the given number of times. Examples:
+  {{{
+      dialog.textBox("name").click(button(LEFT_BUTTON).times(2)); 
+      dialog.list("messages").click(button(RIGHT_BUTTON).times(1));
+      dialog.list("messages").click(button(RIGHT_BUTTON)); // right-clicking, 1 time is the default
+  }}}
+  # Added method `showPopupMenu` to all fixtures, which shows a pop-up menu on a `Component` and returns a `JPopupMenuFixture`
+  # Replaced class `JTableFixture.Cell` with `TableCell`, which can be created as follows:
+  {{{
+      // import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
+
+      TableCell cell = row(5).column(6);
+  }}}
+  # In `JTableFixture`, the methods that used to take two `int` values as the row and column indices as arguments, now take a `TableCell` as argument (reasons for these change can be found [http://www.jroller.com/alexRuiz/entry/simulating_named_parameters_in_java here])
+  # Added method `cell(TableCell)` to `JTableFixture`, which returns a fixture that can manage the specified table cell. Here is an example:
+  {{{
+      JTableCellFixture cell = dialog.table("salesReport").cell(row(5).column(3));
+      cell.showPopupMenu().menuItem("Paste").select();
+      assertThat(cell.contents()).isEqualTo("84.20");
+  }}}
+  # Added support for `JPopupMenu`, `JRadioButton` and `JSplitPane`
+  # Renamed method `contents` to `selectionContents` in `JTableFixture`
+  # Removed method `testerCastedTo` from `ComponentFixture`
+
+
 ===[08/30/07] FEST Swing 0.5===
   # Added drag 'n drop support for `JList`, `JTable` and `JTree`. Many thanks to Fabien Barbero for his contribution.
   # Added support for custom matchers for component lookup. This feature is useful when testing GUI components that don't have an associated name (e.g. testing legacy applications.) Custom matchers are implementations of [http://fest.googlecode.com/svn/trunk/fest/fest-swing/javadocs/org/fest/swing/GenericTypeMatcher.html GenericTypeMatcher]. The following example shows how to lookup for a `JButton` that has the text 'OK':
