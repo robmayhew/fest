@@ -1,6 +1,24 @@
 #summary Changes between releases of FEST-Swing.
 #labels Featured
 
+===[09/25/07] FEST Swing 0.6.1===
+  # Added methods `radioButton` and `table` to `ContainerFixture` (superclass of `DialogFixture` and `FrameFixture`.) Now it is possible to write the following:
+    {{{
+      dialog.radioButton("addTax").click();
+      dialog.table("results").selectCell(row(6).column(8));
+    }}}  
+      Many thanks to *Pavol Bernhauser*.
+  # Added static methods `leftButton`, `middleButton` and `rightButton` to `MouseClickInfo`. This simplifies the API even more! For example, instead of:
+    {{{ 
+      dialog.textBox.click(button(LEFT_BUTTON).times(2));
+    }}}
+      we can write:
+    {{{
+      dialog.textBox.click(leftButton().times(2));
+    }}}
+      Many thanks to *[http://jroller.com/aalmiray Andres Almiray]*.
+
+
 ===[09/25/07] FEST Swing 0.6===
   # Assertion failures in all fixtures now provide better feedback. For example, the following assertion:
   {{{
