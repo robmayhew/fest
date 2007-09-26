@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ClickRecorder;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 
@@ -47,7 +47,7 @@ public class ComponentFixtureTest {
     frame = new MyFrame(getClass());
     fixture = new ComponentFixture<JTextField>(robot, frame.textBox) {
       public ComponentFixture<JTextField> click() { return null; }
-      public ComponentFixture<JTextField> click(MouseButtons button) { return null; }
+      public ComponentFixture<JTextField> click(MouseButton button) { return null; }
       public ComponentFixture<JTextField> click(MouseClickInfo mouseClickInfo) { return null; }
       public ComponentFixture<JTextField> doubleClick() { return null; }
       public ComponentFixture<JTextField> focus() { return null; }

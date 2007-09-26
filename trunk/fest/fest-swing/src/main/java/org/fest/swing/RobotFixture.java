@@ -235,7 +235,7 @@ public final class RobotFixture {
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    */
-  public void click(Component target, MouseButtons button, int times) {
+  public void click(Component target, MouseButton button, int times) {
     Point where = new ComponentLocation().getPoint(target);
     robot.click(target, where.x, where.y, button.mask, times);
     robot.waitForIdle();

@@ -20,7 +20,7 @@ import javax.swing.JLabel;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -81,7 +81,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JLabelFixture click(MouseButtons button) {
+  public final JLabelFixture click(MouseButton button) {
     return (JLabelFixture)doClick(button);
   }
 

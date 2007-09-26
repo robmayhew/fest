@@ -27,9 +27,9 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-public enum MouseButtons {
+public enum MouseButton {
 
-  BUTTON1(BUTTON1_MASK), BUTTON2(BUTTON2_MASK), BUTTON3(BUTTON3_MASK);
+  LEFT_BUTTON(BUTTON1_MASK), MIDDLE_BUTTON(BUTTON2_MASK), RIGHT_BUTTON(BUTTON3_MASK);
   
   /**
    * The mouse button modifier.
@@ -37,7 +37,7 @@ public enum MouseButtons {
    */
   public final int mask;
   
-  private MouseButtons(int mask) {
+  private MouseButton(int mask) {
     this.mask = mask;
   }
 
@@ -49,8 +49,8 @@ public enum MouseButtons {
    * @return the found button.
    * @throws IllegalArgumentException if the given mask is not a valid one.
    */
-  public static MouseButtons lookup(int mask) {
-    for (MouseButtons button : values())
+  public static MouseButton lookup(int mask) {
+    for (MouseButton button : values())
       if (button.mask == mask) return button;
     throw new IllegalArgumentException(concat(String.valueOf(mask), " is not a valid button mask"));
   }

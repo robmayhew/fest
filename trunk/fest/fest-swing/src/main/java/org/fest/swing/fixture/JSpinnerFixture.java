@@ -20,7 +20,7 @@ import javax.swing.JSpinner;
 import abbot.tester.JSpinnerTester;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -95,7 +95,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JSpinnerFixture click(MouseButtons button) {
+  public final JSpinnerFixture click(MouseButton button) {
     return (JSpinnerFixture)doClick(button);
   }
 

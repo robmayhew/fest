@@ -20,7 +20,7 @@ import javax.swing.JButton;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -64,7 +64,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JButtonFixture click(MouseButtons button) {
+  public final JButtonFixture click(MouseButton button) {
     return (JButtonFixture)doClick(button);
   }
 

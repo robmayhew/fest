@@ -22,7 +22,7 @@ import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -109,7 +109,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JListFixture click(MouseButtons button) {
+  public final JListFixture click(MouseButton button) {
     return (JListFixture)doClick(button);
   }
 

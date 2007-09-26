@@ -19,7 +19,7 @@ import javax.swing.Action;
 import javax.swing.JMenuItem;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -81,7 +81,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JMenuItemFixture click(MouseButtons button) {
+  public final JMenuItemFixture click(MouseButton button) {
     return (JMenuItemFixture)doClick(button);
   }
 

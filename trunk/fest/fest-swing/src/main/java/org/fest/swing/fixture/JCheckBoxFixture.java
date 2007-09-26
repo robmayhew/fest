@@ -20,7 +20,7 @@ import javax.swing.JCheckBox;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -81,7 +81,7 @@ public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JCheckBoxFixture click(MouseButtons button) {
+  public final JCheckBoxFixture click(MouseButton button) {
     return (JCheckBoxFixture)doClick(button);
   }
 

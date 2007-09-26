@@ -21,7 +21,7 @@ import javax.swing.JList;
 import abbot.tester.JComboBoxTester;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -148,7 +148,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JComboBoxFixture click(MouseButtons button) {
+  public final JComboBoxFixture click(MouseButton button) {
     return (JComboBoxFixture)doClick(button);
   }
 

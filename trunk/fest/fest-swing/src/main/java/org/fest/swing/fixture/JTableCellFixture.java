@@ -21,11 +21,11 @@ import javax.swing.JTable;
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 
-import static org.fest.swing.MouseButtons.BUTTON1;
-import static org.fest.swing.MouseButtons.BUTTON3;
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -63,7 +63,7 @@ public class JTableCellFixture {
    * @return this fixture.
    */
   public final JTableCellFixture click() {
-    return click(BUTTON1);
+    return click(LEFT_BUTTON);
   }
   
   /**
@@ -80,7 +80,7 @@ public class JTableCellFixture {
    * @return this fixture.
    */
   public final JTableCellFixture rightClick() {
-    return click(BUTTON3);
+    return click(RIGHT_BUTTON);
   }
 
   /**
@@ -88,15 +88,15 @@ public class JTableCellFixture {
    * @return this fixture.
    */
   public final JTableCellFixture doubleClick() {
-    return click(BUTTON1, 2);
+    return click(LEFT_BUTTON, 2);
   }
   
-  private JTableCellFixture click(MouseButtons button) {
+  private JTableCellFixture click(MouseButton button) {
     table.tester().actionClick(table.target, cellLocation(), button.mask, 1);
     return this;
   }
   
-  private JTableCellFixture click(MouseButtons button, int times) {
+  private JTableCellFixture click(MouseButton button, int times) {
     table.tester().actionClick(table.target, cellLocation(), button.mask, times);
     return this;
   }

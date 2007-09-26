@@ -25,9 +25,9 @@ import static java.awt.event.KeyEvent.VK_B;
 import static java.awt.event.KeyEvent.VK_Z;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.MouseButtons.BUTTON1;
-import static org.fest.swing.MouseButtons.BUTTON2;
-import static org.fest.swing.MouseButtons.BUTTON3;
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -61,7 +61,7 @@ public class RobotFixtureTest {
   }
 
   @Test(dataProvider = "clickingData") 
-  public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButtons button, int times) {
+  public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
     ClickRecorder clickRecord = ClickRecorder.attachTo(frame.textBox);
     robot.click(frame.textBox, button, times);
     assertThat(clickRecord.clickedButton()).isEqualTo(button);
@@ -71,12 +71,12 @@ public class RobotFixtureTest {
   @DataProvider(name = "clickingData") 
   public Object[][] clickingData() {
     return new Object[][] {
-        { BUTTON1, 1 },
-        { BUTTON1, 2 },
-        { BUTTON2, 1 },
-        { BUTTON2, 2 },
-        { BUTTON3, 1 },
-        { BUTTON3, 2 },
+        { LEFT_BUTTON, 1 },
+        { LEFT_BUTTON, 2 },
+        { MIDDLE_BUTTON, 1 },
+        { MIDDLE_BUTTON, 2 },
+        { RIGHT_BUTTON, 1 },
+        { RIGHT_BUTTON, 2 },
     };
   }
   

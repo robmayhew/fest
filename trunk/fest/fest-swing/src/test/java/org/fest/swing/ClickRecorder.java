@@ -23,9 +23,9 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.fest.swing.MouseButtons.BUTTON1;
-import static org.fest.swing.MouseButtons.BUTTON2;
-import static org.fest.swing.MouseButtons.BUTTON3;
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 
 /**
  * Understands a mouse listener that records mouse events.
@@ -39,15 +39,15 @@ public class ClickRecorder extends MouseAdapter {
     return new ClickRecorder(target);
   }
   
-  private static final Map<Integer, MouseButtons> MOUSE_BUTTON_MAP = new HashMap<Integer, MouseButtons>(); 
+  private static final Map<Integer, MouseButton> MOUSE_BUTTON_MAP = new HashMap<Integer, MouseButton>(); 
   
   static {
-      MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON1, BUTTON1);
-      MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON2, BUTTON2);
-      MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON3, BUTTON3);
+      MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON1, LEFT_BUTTON);
+      MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON2, MIDDLE_BUTTON);
+      MOUSE_BUTTON_MAP.put(MouseEvent.BUTTON3, RIGHT_BUTTON);
   }
   
-  private MouseButtons clickedButton;
+  private MouseButton clickedButton;
   private int clickCount;
   private Point pointClicked;
 
@@ -68,18 +68,18 @@ public class ClickRecorder extends MouseAdapter {
   }
   
   public boolean clicked() { 
-    return BUTTON1.equals(clickedButton()) && clickCount == 1; 
+    return LEFT_BUTTON.equals(clickedButton()) && clickCount == 1; 
   }
 
   public boolean doubleClicked() { 
-    return BUTTON1.equals(clickedButton()) && clickCount == 2; 
+    return LEFT_BUTTON.equals(clickedButton()) && clickCount == 2; 
   }
 
   public boolean rightClicked() { 
-    return BUTTON3.equals(clickedButton()) && clickCount == 1; 
+    return RIGHT_BUTTON.equals(clickedButton()) && clickCount == 1; 
   }
 
-  public MouseButtons clickedButton() { return clickedButton; }
+  public MouseButton clickedButton() { return clickedButton; }
   public int clickCount() { return clickCount; }
   public Point pointClicked() { return pointClicked; }
 }

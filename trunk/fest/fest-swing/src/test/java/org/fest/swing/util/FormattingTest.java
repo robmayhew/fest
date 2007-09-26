@@ -24,8 +24,8 @@ import static org.fest.util.Strings.concat;
 
 import org.fest.swing.TestFrame;
 
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -41,7 +41,7 @@ public class FormattingTest {
   private TestFrame frame;
   private JButton button;
   
-  @BeforeTest public void setUp() {
+  @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
     button = new JButton();
     frame.add(button);
@@ -49,7 +49,7 @@ public class FormattingTest {
     frame.setVisible(true);
   }
   
-  @AfterTest public void tearDown() {
+  @AfterMethod public void tearDown() {
     frame.setVisible(false);
     frame.dispose();
   }

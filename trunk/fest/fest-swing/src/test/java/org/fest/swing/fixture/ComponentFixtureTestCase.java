@@ -31,9 +31,9 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.MouseButtons.BUTTON1;
-import static org.fest.swing.MouseButtons.BUTTON2;
-import static org.fest.swing.MouseButtons.BUTTON3;
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
@@ -145,8 +145,8 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   
   @Test public final void shouldClickComponentWithGivenButton() {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
-    fixture.click(BUTTON2);
-    assertThat(recorder.clickedButton()).isEqualTo(BUTTON2);
+    fixture.click(MIDDLE_BUTTON);
+    assertThat(recorder.clickedButton()).isEqualTo(MIDDLE_BUTTON);
     assertThat(recorder.clickCount()).isEqualTo(1);
   }
 
@@ -161,10 +161,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   @DataProvider(name = "mouseClickInfos")
   public Object[][] mouseClickInfos() {
     return new Object[][] {
-        { MouseClickInfo.button(BUTTON1).times(1) },
-        { MouseClickInfo.button(BUTTON1).times(2) },
-        { MouseClickInfo.button(BUTTON3).times(1) },
-        { MouseClickInfo.button(BUTTON2).times(2) }
+        { MouseClickInfo.button(LEFT_BUTTON).times(1) },
+        { MouseClickInfo.button(LEFT_BUTTON).times(2) },
+        { MouseClickInfo.button(RIGHT_BUTTON).times(1) },
+        { MouseClickInfo.button(MIDDLE_BUTTON).times(2) }
     };
   }
   

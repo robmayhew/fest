@@ -24,7 +24,7 @@ import abbot.tester.JTableTester;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -191,7 +191,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JTableFixture click(MouseButtons button) {
+  public final JTableFixture click(MouseButton button) {
     return (JTableFixture)doClick(button);
   }
 

@@ -21,7 +21,7 @@ import abbot.tester.JTabbedPaneLocation;
 import abbot.tester.JTabbedPaneTester;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -102,7 +102,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture click(MouseButtons button) {
+  public final JTabbedPaneFixture click(MouseButton button) {
     return (JTabbedPaneFixture)doClick(button);
   }
 

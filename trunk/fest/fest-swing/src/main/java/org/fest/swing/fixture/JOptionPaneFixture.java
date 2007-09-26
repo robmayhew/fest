@@ -34,7 +34,7 @@ import static org.fest.util.Strings.concat;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TypeMatcher;
 
@@ -77,7 +77,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JOptionPaneFixture click(MouseButtons button) {
+  public final JOptionPaneFixture click(MouseButton button) {
     return (JOptionPaneFixture)doClick(button);
   }
 

@@ -53,7 +53,7 @@ import static org.fest.util.Arrays.array;
 
 import org.fest.swing.GUITest;
 import org.fest.swing.GenericTypeMatcher;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 
@@ -149,7 +149,7 @@ import org.testng.annotations.Test;
     robot = robotWithNewAwtHierarchy();
     container = new ContainerFixture<CustomWindow>(robot, new CustomWindow(getClass())) {      
       public ContainerFixture<CustomWindow> click() { return null; }
-      public ContainerFixture<CustomWindow> click(MouseButtons button) { return null; }
+      public ContainerFixture<CustomWindow> click(MouseButton button) { return null; }
       public ComponentFixture<CustomWindow> click(MouseClickInfo mouseClickInfo) { return null; }
       public ContainerFixture<CustomWindow> doubleClick() { return null; }
       public ContainerFixture<CustomWindow> focus() { return null; }

@@ -21,7 +21,7 @@ import java.awt.Dimension;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -102,7 +102,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final DialogFixture click(MouseButtons button) {
+  public final DialogFixture click(MouseButton button) {
     return (DialogFixture)doClick(button);
   }
 

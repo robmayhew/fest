@@ -19,7 +19,7 @@ import javax.swing.JPopupMenu;
 
 import abbot.tester.JPopupMenuTester;
 
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -64,7 +64,7 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JPopupMenuFixture click(MouseButtons button) {
+  public final JPopupMenuFixture click(MouseButton button) {
     return (JPopupMenuFixture)doClick(button);
   }
 

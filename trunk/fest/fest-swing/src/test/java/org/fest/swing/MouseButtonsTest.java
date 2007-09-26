@@ -24,32 +24,32 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link MouseButtons}</code>.
+ * Tests for <code>{@link MouseButton}</code>.
  *
  * @author Alex Ruiz
  */
 public class MouseButtonsTest {
 
   @Test(dataProvider = "masks") 
-  public void shouldContainCorrectMouseButtonMask(MouseButtons target, int expectedMask) {
+  public void shouldContainCorrectMouseButtonMask(MouseButton target, int expectedMask) {
     assertThat(target.mask).isEqualTo(expectedMask);
   }
   
   @Test(dataProvider = "masks") 
-  public void shouldLookupButtonGivenMask(MouseButtons button, int mask) {
-    assertThat(MouseButtons.lookup(mask)).isEqualTo(button);
+  public void shouldLookupButtonGivenMask(MouseButton button, int mask) {
+    assertThat(MouseButton.lookup(mask)).isEqualTo(button);
   }
 
   @DataProvider(name = "masks") public Object[][] masks() {
     return new Object[][] {
-        { MouseButtons.BUTTON1, BUTTON1_MASK },
-        { MouseButtons.BUTTON2, BUTTON2_MASK },
-        { MouseButtons.BUTTON3, BUTTON3_MASK },
+        { MouseButton.LEFT_BUTTON, BUTTON1_MASK },
+        { MouseButton.MIDDLE_BUTTON, BUTTON2_MASK },
+        { MouseButton.RIGHT_BUTTON, BUTTON3_MASK },
     };
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorInLookupIfMaskIsInvalid() {
-    MouseButtons.lookup(Integer.MIN_VALUE);
+    MouseButton.lookup(Integer.MIN_VALUE);
   }
 }

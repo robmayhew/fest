@@ -20,7 +20,7 @@ import javax.swing.JSplitPane;
 import abbot.tester.JSplitPaneTester;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -77,7 +77,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JSplitPaneFixture click(MouseButtons button) {
+  public final JSplitPaneFixture click(MouseButton button) {
     return (JSplitPaneFixture)doClick(button);
   }
 

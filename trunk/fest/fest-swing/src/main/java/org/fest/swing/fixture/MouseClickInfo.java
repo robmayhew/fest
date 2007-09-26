@@ -17,7 +17,7 @@ package org.fest.swing.fixture;
 
 import static org.fest.util.Strings.concat;
 
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 
 /**
  * Understands information about clicking a mouse button.
@@ -26,7 +26,7 @@ import org.fest.swing.MouseButtons;
  */
 public final class MouseClickInfo {
 
-  private final MouseButtons button;
+  private final MouseButton button;
   private int times;
 
   /**
@@ -34,16 +34,16 @@ public final class MouseClickInfo {
    * @param button the mouse button to click.
    * @return the created click info.
    */
-  public static MouseClickInfo button(MouseButtons button) {
+  public static MouseClickInfo button(MouseButton button) {
     return new MouseClickInfo(button, 1);
   }
   
-  private MouseClickInfo(MouseButtons button, int times) {
+  private MouseClickInfo(MouseButton button, int times) {
     this.button = button;
     this.times = times;
   }
 
-  MouseButtons button() { return button; }
+  MouseButton button() { return button; }
   
   int times() { return times; }
   

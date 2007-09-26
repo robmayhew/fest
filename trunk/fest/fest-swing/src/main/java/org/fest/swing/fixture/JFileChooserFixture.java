@@ -31,7 +31,7 @@ import static org.fest.util.Strings.quote;
 
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -191,7 +191,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JFileChooserFixture click(MouseButtons button) {
+  public final JFileChooserFixture click(MouseButton button) {
     return (JFileChooserFixture)doClick(button);
   }
 

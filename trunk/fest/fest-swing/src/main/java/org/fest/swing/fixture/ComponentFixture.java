@@ -20,15 +20,15 @@ import java.awt.Component;
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.MouseButtons.BUTTON1;
-import static org.fest.swing.MouseButtons.BUTTON3;
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.util.Formatting.format;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
 import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButtons;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 
 /**
@@ -104,7 +104,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param button the button to click.
    * @return this fixture.
    */
-  protected abstract ComponentFixture<T> click(MouseButtons button);
+  protected abstract ComponentFixture<T> click(MouseButton button);
   
   /**
    * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
@@ -199,7 +199,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    */
   protected final ComponentFixture<T> doClick() {
-    return doClick(BUTTON1, 1);
+    return doClick(LEFT_BUTTON, 1);
   }
 
   /**
@@ -207,7 +207,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    */
   protected final ComponentFixture<T> doDoubleClick() {
-    return doClick(BUTTON1, 2);
+    return doClick(LEFT_BUTTON, 2);
   }
 
   /**
@@ -215,7 +215,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return this fixture.
    */
   protected final ComponentFixture<T> doRightClick() {
-    return doClick(BUTTON3, 1);
+    return doClick(RIGHT_BUTTON, 1);
   }
   
   /**
@@ -232,7 +232,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param button the mouse button to click.
    * @return this fixture.
    */
-  protected final ComponentFixture<T> doClick(MouseButtons button) {
+  protected final ComponentFixture<T> doClick(MouseButton button) {
     return doClick(button, 1);
   }
 
@@ -242,7 +242,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param times the number of times to click the given mouse button.
    * @return this fixture.
    */
-  protected final ComponentFixture<T> doClick(MouseButtons button, int times) {
+  protected final ComponentFixture<T> doClick(MouseButton button, int times) {
     doFocus();
     robot.click(target, button, times);
     return this;
