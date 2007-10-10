@@ -1,5 +1,5 @@
 /*
- * Created on Sep 19, 2007
+ * Created on Oct 10, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,9 @@
  */
 package org.fest.assertions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
@@ -45,6 +47,26 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
   /** {@inheritDoc} */
   public ByteArrayAssert describedAs(String description) {
     return as(description);
+  }
+  
+  /**
+   * Verifies that the actual <code>byte</code> array contains the given values.
+   * @param values the values to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>byte</code> array does not contain the given values.
+   */
+  public ByteArrayAssert contains(byte...values) {
+    List<Object> notFound = new ArrayList<Object>();
+    for (byte value : values) if (!hasElement(value)) notFound.add(value);
+    if (!notFound.isEmpty()) 
+      fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    return this;
+  }
+  
+  private boolean hasElement(byte value) {
+    for (byte actualElement : actual)
+      if (value == actualElement) return true;
+    return false;
   }
   
   /**

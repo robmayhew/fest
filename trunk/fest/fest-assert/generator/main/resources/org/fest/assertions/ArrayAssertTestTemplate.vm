@@ -25,6 +25,15 @@ import org.testng.annotations.Test;
  */
 public class ${testName} {
 
+  @Test public void shouldPassIfGivenValuesIsInArray() {
+    new ${classToTest}(${firstArray}).contains(${firstArray});
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenObjectIsNotInArray() {
+    new ${classToTest}(emptyArray()).contains(${firstArray});
+  }
+
   @Test public void shouldPassIfArrayIsNull() {
     new ${classToTest}(nullArray()).isNull();
   }

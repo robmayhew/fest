@@ -1,5 +1,5 @@
 /*
- * Created on Sep 19, 2007
+ * Created on Oct 10, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -24,6 +24,15 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  */
 public class DoubleArrayAssertTest {
+
+  @Test public void shouldPassIfGivenValuesIsInArray() {
+    new DoubleArrayAssert(55.03, 4345.91).contains(55.03, 4345.91);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenObjectIsNotInArray() {
+    new DoubleArrayAssert(emptyArray()).contains(55.03, 4345.91);
+  }
 
   @Test public void shouldPassIfArrayIsNull() {
     new DoubleArrayAssert(nullArray()).isNull();

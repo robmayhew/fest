@@ -15,7 +15,9 @@
  */
 package org.fest.assertions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
@@ -45,6 +47,26 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
   /** {@inheritDoc} */
   public ${className} describedAs(String description) {
     return as(description);
+  }
+  
+  /**
+   * Verifies that the actual <code>${arrayType}</code> array contains the given values.
+   * @param values the values to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>${arrayType}</code> array does not contain the given values.
+   */
+  public ${className} contains(${arrayType}...values) {
+    List<Object> notFound = new ArrayList<Object>();
+    for (${arrayType} value : values) if (!hasElement(value)) notFound.add(value);
+    if (!notFound.isEmpty()) 
+      fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    return this;
+  }
+  
+  private boolean hasElement(${arrayType} value) {
+    for (${arrayType} actualElement : actual)
+      if (value == actualElement) return true;
+    return false;
   }
   
   /**
