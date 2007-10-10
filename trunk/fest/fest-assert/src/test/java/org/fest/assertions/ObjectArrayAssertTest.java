@@ -28,8 +28,12 @@ import static org.fest.util.Arrays.array;
 public class ObjectArrayAssertTest {
 
   @Test public void shouldPassIfGivenObjectIsInArray() {
-    String s = "Luke";
-    new ObjectArrayAssert(s, "Leia").contains(s);
+    new ObjectArrayAssert("Luke", "Leia").contains("Luke");
+  }
+
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInArray") 
+  public void shouldPassIfGivenObjectsIsInArray() {
+    new ObjectArrayAssert("Luke", "Leia", "Anakin").contains("Luke", "Leia");
   }
   
   @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInArray", expectedExceptions = AssertionError.class) 

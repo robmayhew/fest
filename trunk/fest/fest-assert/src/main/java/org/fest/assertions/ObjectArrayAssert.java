@@ -15,15 +15,18 @@
  */
 package org.fest.assertions;
 
-import java.util.Arrays;
-
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Formatting.bracketAround;
 import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.fest.util.Objects.*;
 
 /**
  * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the 
@@ -49,22 +52,22 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
 
   /**
-   * Verifies that the actual <code>Object</code> array contains the given object.
-   * <p>
-   * <strong>Note:</strong> matching is performed using identity, not equality.
-   * </p>
-   * @param o the object to look for.
+   * Verifies that the actual <code>Object</code> array contains the given objects.
+   * @param objects the objects to look for.
    * @return this assertion object.
-   * @throws AssertionError if the actual <code>Object</code> array does not contain the given object.
+   * @throws AssertionError if the actual <code>Object</code> array does not contain the given objects.
    */
-  public ObjectArrayAssert contains(Object o) {
-    if (!hasElement(o)) fail(concat("array ", bracketAround(actual), " does not contain element ", quote(o)));
+  public ObjectArrayAssert contains(Object...objects) {
+    List<Object> notFound = new ArrayList<Object>();
+    for (Object o : objects) if (!hasElement(o)) notFound.add(o);
+    if (!notFound.isEmpty()) 
+      fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
     return this;
   }
-
+  
   private boolean hasElement(Object o) {
     for (Object actualElement : actual)
-      if (actualElement == o) return true;
+      if (areEqual(o, actualElement)) return true;
     return false;
   }
   
