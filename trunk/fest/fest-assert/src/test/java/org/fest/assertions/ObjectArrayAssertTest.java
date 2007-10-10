@@ -27,6 +27,16 @@ import static org.fest.util.Arrays.array;
  */
 public class ObjectArrayAssertTest {
 
+  @Test public void shouldPassIfGivenObjectIsInArray() {
+    String s = "Luke";
+    new ObjectArrayAssert(s, "Leia").contains(s);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenObjectIsNotInArray() {
+    new ObjectArrayAssert(new Object[0]).contains("Luke");
+  }
+
   @Test public void shouldPassIfArrayIsNull() {
     new ObjectArrayAssert((Object[])null).isNull();
   }

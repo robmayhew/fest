@@ -20,9 +20,10 @@ import java.util.Arrays;
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.format;
 import static org.fest.assertions.Formatting.bracketAround;
+import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the 
@@ -45,6 +46,26 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   /** {@inheritDoc} */
   public ObjectArrayAssert describedAs(String description) {
     return as(description);
+  }
+
+  /**
+   * Verifies that the actual <code>Object</code> array contains the given object.
+   * <p>
+   * <strong>Note:</strong> matching is performed using identity, not equality.
+   * </p>
+   * @param o the object to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array does not contain the given object.
+   */
+  public ObjectArrayAssert contains(Object o) {
+    if (!hasElement(o)) fail(concat("array ", bracketAround(actual), " does not contain element ", quote(o)));
+    return this;
+  }
+
+  private boolean hasElement(Object o) {
+    for (Object actualElement : actual)
+      if (actualElement == o) return true;
+    return false;
   }
   
   /**
