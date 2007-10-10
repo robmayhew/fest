@@ -15,24 +15,25 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
 /**
- * Tests for {@link Assert}.
+ * Understands the base class for all assertion methods for objects and primitives.
  *
  * @author Yvonne Wang
  */
-public class AssertTest {
+public abstract class Assert {
 
-  private Assert assertion;
-  
-  @BeforeTest public void setUp() {
-    assertion = new Assert() {};
+  /**
+   * Throws <code>{@link UnsupportedOperationException}</code> if called. It is easy to accidentally call
+   * <code>{@link #equals(Object)}</code> instead of <code>isEqualTo</code>.
+   * @throws UnsupportedOperationException
+   */
+  @Override public final boolean equals(Object obj) {
+    throw new UnsupportedOperationException("Hmmm...maybe you intended to call 'isEqualTo'");
   }
-  
-  @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void shouldThrowErrorIfEqualsCalled() {
-    assertion.equals(null);
-  }
+
+  /**
+   * Always returns 1.
+   * @return 1.
+   */
+  @Override public final int hashCode() { return 1; }
 }

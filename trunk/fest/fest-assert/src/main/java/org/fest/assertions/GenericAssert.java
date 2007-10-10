@@ -33,7 +33,7 @@ import static org.fest.util.Strings.isEmpty;
  *
  * @author Yvonne Wang
  */
-abstract class GenericAssert<T> {
+abstract class GenericAssert<T> extends Assert {
 
   final T actual;
   private String description;

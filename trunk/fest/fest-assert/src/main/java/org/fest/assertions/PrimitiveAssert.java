@@ -20,7 +20,7 @@ package org.fest.assertions;
  *
  * @author Yvonne Wang
  */
-abstract class PrimitiveAssert {
+abstract class PrimitiveAssert extends Assert {
 
   private String description;
 
