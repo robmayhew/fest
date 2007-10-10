@@ -15,11 +15,14 @@
  */
 package org.fest.assertions;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.bracketAround;
 import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
@@ -37,6 +40,20 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
 
   /**
+   * Verifies that the actual collection contains the given objects.
+   * @param objects the objects to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection does not contain the given objects.
+   */
+  public CollectionAssert contains(Object...objects) {
+    List<Object> notFound = new ArrayList<Object>();
+    for (Object o : objects) if (!actual.contains(o)) notFound.add(o);
+    if (!notFound.isEmpty()) 
+      fail(concat("collection ", actual, " does not contain element(s) ", bracketAround(notFound.toArray())));
+    return this;
+  }
+  
+  /**
    * Verifies that the actual collection does not have duplicates.
    * @return this assertion object.
    * @throws AssertionError if the actual collection has duplicates.
@@ -44,7 +61,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public CollectionAssert doesNotHaveDuplicates() {
     Collection<?> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty()) 
-      fail(concat(format(description()), "the collection ", actual, " contains duplicates (", duplicates, ")"));
+      fail(concat(format(description()), "collection ", actual, " contains duplicates (", duplicates, ")"));
     return this;
   }
 

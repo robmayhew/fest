@@ -35,6 +35,20 @@ public class CollectionAssertTest {
 
   private static Logger logger = Logger.getAnonymousLogger();
   
+  @Test public void shouldPassIfGivenObjectIsInCollection() {
+    new CollectionAssert(list("Luke", "Leia")).contains("Luke");
+  }
+
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection") 
+  public void shouldPassIfGivenObjectsIsInCollection() {
+    new CollectionAssert(list("Luke", "Leia", "Anakin")).contains("Luke", "Leia");
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenObjectIsNotInCollection() {
+    new CollectionAssert(new ArrayList<String>()).contains("Luke");
+  }
+
   @Test() 
   public void shouldFailIfCollectionHasDuplicates() {
     List<String> list = list("Luke", "Yoda", "Luke");
