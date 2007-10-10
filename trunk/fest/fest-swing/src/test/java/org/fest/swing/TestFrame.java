@@ -40,4 +40,14 @@ public class TestFrame extends JFrame {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (Exception ignored) {}
   }
+  
+  public void beVisible() {
+    pack();
+    setVisible(true);
+  }
+  
+  public void beDisposed() {
+    setVisible(false);
+    dispose();
+  }
 }
