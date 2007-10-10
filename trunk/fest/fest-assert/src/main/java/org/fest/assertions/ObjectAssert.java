@@ -29,7 +29,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Yvonne Wang
  */
-public final class ObjectAssert extends Assert<Object> {
+public final class ObjectAssert extends GenericAssert<Object> {
 
   ObjectAssert(Object actual) {
     super(actual);

@@ -35,7 +35,7 @@ import static org.fest.util.Strings.quote;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ImageAssert extends Assert<BufferedImage> {
+public final class ImageAssert extends GenericAssert<BufferedImage> {
 
   /**
    * Reads the image in the specified path.

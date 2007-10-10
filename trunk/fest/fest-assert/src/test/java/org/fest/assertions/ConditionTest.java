@@ -23,7 +23,7 @@ import static org.fest.util.Strings.isEmpty;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Tests interaction between an <code>{@link Assert}</code> object and a <code>{@link Condition}</code>.
+ * Tests interaction between an <code>{@link GenericAssert}</code> object and a <code>{@link Condition}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz

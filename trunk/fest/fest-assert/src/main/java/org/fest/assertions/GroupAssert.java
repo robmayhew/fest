@@ -27,7 +27,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Yvonne Wang
  */
-abstract class GroupAssert<T> extends Assert<T> {
+abstract class GroupAssert<T> extends GenericAssert<T> {
 
   private static final String SIZE = "size";
 
