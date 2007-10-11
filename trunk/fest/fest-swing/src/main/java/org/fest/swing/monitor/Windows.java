@@ -57,7 +57,7 @@ final class Windows {
    * Marks the given window as "ready to use" and if not showing, as "hidden."
    * @param w the given window.
    */
-  void evaluate(Window w) {
+  void markExisting(Window w) {
     synchronized(lock) {
       addWindowTo(w, open);
       if (!w.isShowing()) addWindowTo(w, hidden);
