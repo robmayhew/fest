@@ -4,11 +4,8 @@
   <version>0.4</version>
   <versioning>
     <versions>
-      <version>0.4</version>
-      <version>0.5-SNAPSHOT</version>
-      <version>0.5</version>
-      <version>0.6</version>
+      <version>0.6.1</version>
     </versions>
-    <lastUpdated>20070926035855</lastUpdated>
+    <lastUpdated>20070926154216</lastUpdated>
   </versioning>
 </metadata>
