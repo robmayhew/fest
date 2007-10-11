@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-assert</artifactId>
-	<version>0.5-SNAPSHOT</version>
+	<version>0.6-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>fest</groupId>
