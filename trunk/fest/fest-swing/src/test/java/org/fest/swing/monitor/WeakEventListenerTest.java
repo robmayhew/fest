@@ -17,13 +17,11 @@ package org.fest.swing.monitor;
 
 import java.awt.AWTEvent;
 import java.awt.event.AWTEventListener;
-import java.awt.event.AWTEventListenerProxy;
-
-import org.fest.swing.monitor.WeakEventListener;
 
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
-import static java.awt.Toolkit.getDefaultToolkit;
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -73,16 +71,7 @@ public class WeakEventListenerTest {
   }
   
   private boolean toolkitHasListenerUnderTest() {
-    for (AWTEventListener l : getDefaultToolkit().getAWTEventListeners(EVENT_MASK)) 
-      if (isListenerUnderTest(l)) return true;
-    return false;
-  }
-  
-  private boolean isListenerUnderTest(AWTEventListener listenerToCheck) {
-    if (listener == listenerToCheck) return true;
-    if (!(listenerToCheck instanceof AWTEventListenerProxy)) return false;
-    AWTEventListenerProxy proxy = (AWTEventListenerProxy)listenerToCheck;
-    return listener == proxy.getListener();
+    return toolkitHasListenerUnderEventMask(listener, EVENT_MASK);
   }
   
   private static class WrappedEventListener implements AWTEventListener {
