@@ -15,6 +15,12 @@
  */
 package org.fest.swing.monitor;
 
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JTextField;
+
 import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
 import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
 import static java.awt.AWTEvent.PAINT_EVENT_MASK;
@@ -50,11 +56,45 @@ public class WindowAvailabilityMonitorTest {
   @AfterMethod public void tearDown() {
     frame.beDisposed();
   }
-  
 
   @Test public void shouldAttachItSelfToToolkit() {
-    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(windows);
+    attachMonitor();
     WeakEventListener l = new WeakEventListener(monitor);
     assertThat(toolkitHasListenerUnderEventMask(l, EVENT_MASK)).isTrue();
+  }
+
+  @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
+  public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {
+    attachMonitor();
+    windows.simulatePendingWindow(frame);
+    monitor.eventDispatched(mouseEvent(frame));
+    assertThat(windows.isReady(frame)).isTrue();
+  }
+  
+  @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
+  public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
+    attachMonitor();
+    windows.simulatePendingWindow(frame);
+    JTextField source = new JTextField();
+    frame.add(source);
+    monitor.eventDispatched(mouseEvent(source));
+    assertThat(windows.isReady(frame)).isTrue();
+  }
+  
+  @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
+  public void shouldNotMarkSourceWindowAsReadyIfEventIsNotMouseEvent() {
+    attachMonitor();
+    windows.simulatePendingWindow(frame);
+    monitor.eventDispatched(new KeyEvent(frame, 8, 9238, 0, 0, 'a'));
+    assertThat(windows.isReady(frame)).isFalse();
+    assertThat(windows.isShowingButNotReady(frame)).isTrue();
+  }
+
+  private void attachMonitor() {
+    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(windows);
+  }
+  
+  private MouseEvent mouseEvent(Component source) {
+    return new MouseEvent(source, 8, 8912, 0, 0, 0, 0, 0, 1, false, 0);
   }
 }
