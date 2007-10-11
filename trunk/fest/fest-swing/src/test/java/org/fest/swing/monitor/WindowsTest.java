@@ -17,6 +17,8 @@ package org.fest.swing.monitor;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.monitor.WindowsUtils.waitForWindowToBeMarkedAsReady;
+
 import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -66,10 +68,10 @@ public class WindowsTest {
     assertThat(windows.isShowingButNotReady(frame)).isFalse();
   }
   
-  @Test public void shouldMarkWindowAsShowing() throws Exception {
+  @Test public void shouldMarkWindowAsShowing() {
     windows.markAsShowing(frame);
     assertThat(windows.isShowingButNotReady(frame)).isTrue();
-    Thread.sleep(Windows.WINDOW_READY_DELAY * 2);
+    waitForWindowToBeMarkedAsReady();
     assertWindowIsReady();
   }
 

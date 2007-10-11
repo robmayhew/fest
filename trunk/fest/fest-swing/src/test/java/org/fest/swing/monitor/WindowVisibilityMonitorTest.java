@@ -17,8 +17,13 @@ package org.fest.swing.monitor;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
+
+import javax.swing.JTextField;
+
+import static org.fest.swing.monitor.WindowsUtils.waitForWindowToBeMarkedAsReady;
 
 import org.fest.swing.TestFrame;
 
@@ -38,7 +43,6 @@ public class WindowVisibilityMonitorTest {
   private Windows windows;
   private TestFrame frame;
 
-  
   @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
     windows = new Windows();
@@ -55,17 +59,33 @@ public class WindowVisibilityMonitorTest {
   }
   
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldMarkWindowAsShowing() {
+  public void shouldMarkWindowAsShowingIfWindowShown() {
     attachMonitor();
-    monitor.componentShown(componentEvent());
-    windows.isReady(frame);
+    monitor.componentShown(componentEventWithWindowAsSource());
+    waitForWindowToBeMarkedAsReady();
+    assertThat(windows.isReady(frame)).isTrue();
   }
 
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldMarkWindowAsHidden() {
+  public void shouldNotMarkWindowAsShowingIfComponentShownIsNotWindow() {
     attachMonitor();
-    monitor.componentShown(componentEvent());
-    windows.isHidden(frame);
+    monitor.componentShown(componentEventWithTextFieldAsSource());
+    waitForWindowToBeMarkedAsReady();
+    assertThat(windows.isReady(frame)).isFalse();
+  }
+
+  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
+  public void shouldMarkWindowAsHiddenIfWindowHidden() {
+    attachMonitor();
+    monitor.componentHidden(componentEventWithWindowAsSource());
+    assertThat(windows.isHidden(frame)).isTrue();
+  }
+
+  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
+  public void shouldNotMarkWindowAsHiddenIfComponentHiddenIsNotWindow() {
+    attachMonitor();
+    monitor.componentHidden(componentEventWithTextFieldAsSource());
+    assertThat(windows.isHidden(frame)).isFalse();
   }
 
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
@@ -80,7 +100,15 @@ public class WindowVisibilityMonitorTest {
     monitor = WindowVisibilityMonitor.attachWindowVisibilityMonitor(frame, windows);
   }
   
-  private ComponentEvent componentEvent() {
-    return new ComponentEvent(frame, 8);
+  private ComponentEvent componentEventWithWindowAsSource() {
+    return componentEvent(frame);
+  }
+  
+  private ComponentEvent componentEventWithTextFieldAsSource() {
+    return componentEvent(new JTextField());
+  }
+
+  private ComponentEvent componentEvent(Component source) {
+    return new ComponentEvent(source, 8);
   }
 }
