@@ -19,6 +19,7 @@ import java.awt.event.AWTEventListener;
 import java.lang.ref.WeakReference;
 
 import static java.awt.Toolkit.getDefaultToolkit;
+import static org.fest.util.Objects.areEqual;
 
 /**
  * Understands an event listener that wraps a given <code>{@link AWTEventListener}</code> and:
@@ -77,7 +78,7 @@ final class WeakEventListener implements AWTEventListener {
     if (obj == this) return true;
     if (!(obj instanceof WeakEventListener)) return false;
     WeakEventListener other = (WeakEventListener)obj;
-    return listenerReference.get().equals(other.listenerReference.get());
+    return areEqual(listenerReference.get(), other.listenerReference.get());
   }
 
   @Override public int hashCode() {
