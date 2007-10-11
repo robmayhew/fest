@@ -20,6 +20,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.AWTEventListenerProxy;
 
 import static java.awt.Toolkit.getDefaultToolkit;
+import static org.fest.util.Objects.areEqual;
 
 /**
  * Understands utility methods related to <code>{@link Toolkit}</code>.
@@ -38,7 +39,7 @@ public final class ToolkitUtils {
     if (target == listenerToCheck) return true;
     if (!(listenerToCheck instanceof AWTEventListenerProxy)) return false;
     AWTEventListenerProxy proxy = (AWTEventListenerProxy)listenerToCheck;
-    return target == proxy.getListener();
+    return areEqual(target, proxy.getListener());
   }
 
   private ToolkitUtils() {}

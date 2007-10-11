@@ -37,12 +37,13 @@ final class WeakEventListener implements AWTEventListener {
   private final WeakReference<AWTEventListener> listenerReference;
 
   static WeakEventListener attachAsWeakEventListener(AWTEventListener listener, long eventMask) {
-    return new WeakEventListener(listener, eventMask);
+    WeakEventListener l = new WeakEventListener(listener);
+    getDefaultToolkit().addAWTEventListener(l, eventMask);
+    return l;
   }
   
-  private WeakEventListener(AWTEventListener listener, long eventMask) {
+  WeakEventListener(AWTEventListener listener) {
     listenerReference = new WeakReference<AWTEventListener>(listener);
-    getDefaultToolkit().addAWTEventListener(this, eventMask);
   }
 
   /**
@@ -69,5 +70,17 @@ final class WeakEventListener implements AWTEventListener {
    */
   void removeListener() {
     listenerReference.clear();
+  }
+
+  @Override public boolean equals(Object obj) {
+    if (obj == null) return false;
+    if (obj == this) return true;
+    if (!(obj instanceof WeakEventListener)) return false;
+    WeakEventListener other = (WeakEventListener)obj;
+    return listenerReference.get().equals(other.listenerReference.get());
+  }
+
+  @Override public int hashCode() {
+    return 1;
   }
 }
