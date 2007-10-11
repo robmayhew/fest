@@ -63,6 +63,20 @@ public final class DoubleArrayAssert extends GroupAssert<double[]> {
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>double</code> array does not contain the given values.
+   * @param values the values the array should exclude.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array contains any of the given values.
+   */
+  public DoubleArrayAssert excludes(double...values) {
+    List<Object> found = new ArrayList<Object>();
+    for (double value : values) if (hasElement(value)) found.add(value);
+    if (!found.isEmpty())
+      fail(concat("array ", bracketAround(actual), " does not exclude element(s) ", bracketAround(found.toArray())));      
+    return this;
+  }
+
   private boolean hasElement(double value) {
     for (double actualElement : actual)
       if (value == actualElement) return true;

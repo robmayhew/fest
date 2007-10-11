@@ -63,6 +63,20 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
     return this;
   }
   
+  /**
+   * Verifies that the actual <code>byte</code> array does not contain the given values.
+   * @param values the values the array should exclude.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array contains any of the given values.
+   */
+  public ByteArrayAssert excludes(byte...values) {
+    List<Object> found = new ArrayList<Object>();
+    for (byte value : values) if (hasElement(value)) found.add(value);
+    if (!found.isEmpty())
+      fail(concat("array ", bracketAround(actual), " does not exclude element(s) ", bracketAround(found.toArray())));      
+    return this;
+  }
+
   private boolean hasElement(byte value) {
     for (byte actualElement : actual)
       if (value == actualElement) return true;

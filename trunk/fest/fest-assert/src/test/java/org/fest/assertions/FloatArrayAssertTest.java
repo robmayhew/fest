@@ -25,13 +25,22 @@ import org.testng.annotations.Test;
  */
 public class FloatArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesIsInArray() {
+  @Test public void shouldPassIfGivenValuesAreInArray() {
     new FloatArrayAssert(34.90f).contains(34.90f);
   }
   
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenObjectIsNotInArray() {
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsNotInArray() {
     new FloatArrayAssert(emptyArray()).contains(34.90f);
+  }
+
+  @Test public void shouldPassIfGivenValuesAreNotInArray() {
+    new FloatArrayAssert(34.90f).excludes(88.43f);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsInArray() {
+    new FloatArrayAssert(34.90f).excludes(34.90f);
   }
 
   @Test public void shouldPassIfArrayIsNull() {

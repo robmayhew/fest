@@ -40,7 +40,7 @@ public class CollectionAssertTest {
   }
 
   @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection") 
-  public void shouldPassIfGivenObjectsIsInCollection() {
+  public void shouldPassIfGivenObjectsAreInCollection() {
     new CollectionAssert(list("Luke", "Leia", "Anakin")).contains("Luke", "Leia");
   }
   
@@ -49,8 +49,22 @@ public class CollectionAssertTest {
     new CollectionAssert(new ArrayList<String>()).contains("Luke");
   }
 
-  @Test() 
-  public void shouldFailIfCollectionHasDuplicates() {
+  
+  @Test public void shouldPassIfGivenObjectIsNotInCollection() {
+    new CollectionAssert(list("Luke", "Leia")).excludes("Anakin");
+  }
+
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsNotInCollection") 
+  public void shouldPassIfGivenObjectsAreNotInCollection() {
+    new CollectionAssert(list("Luke", "Leia", "Anakin")).excludes("Han", "Yoda");
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenObjectIsInCollection() {
+    new CollectionAssert(list("Luke", "Leia")).excludes("Luke");
+  }
+
+  @Test public void shouldFailIfCollectionHasDuplicates() {
     List<String> list = list("Luke", "Yoda", "Luke");
     try {
       new CollectionAssert(list).doesNotHaveDuplicates();

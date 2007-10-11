@@ -39,9 +39,9 @@ final class PrimitiveArrayAssertGenerator extends VelocityCodeGenerator {
   }
   
   void generate() throws Exception {
-    generate(boolean.class, new TestArrays(array("true", "false"), array("false", "true")));
+    generate(boolean.class, new TestArrays(array("true"), array("false")));
     generate(char.class, new TestArrays(array("'a'", "'b'"), array("'c'", "'d'")));
-    generate(byte.class, new TestArrays(array("(byte)8", "(byte)6"), array("(byte)8")));
+    generate(byte.class, new TestArrays(array("(byte)8", "(byte)6"), array("(byte)7")));
     generate(short.class, new TestArrays(array("(short)43", "(short)68"), array("(short)98")));
     generate(int.class, new TestArrays(array("459", "23"), array("90, 82")));
     generate(long.class, new TestArrays(array("43l", "53l"), array("434l")));

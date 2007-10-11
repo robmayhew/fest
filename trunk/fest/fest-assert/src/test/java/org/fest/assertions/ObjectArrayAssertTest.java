@@ -32,13 +32,27 @@ public class ObjectArrayAssertTest {
   }
 
   @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInArray") 
-  public void shouldPassIfGivenObjectsIsInArray() {
+  public void shouldPassIfGivenObjectsAreInArray() {
     new ObjectArrayAssert("Luke", "Leia", "Anakin").contains("Luke", "Leia");
   }
   
   @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInArray", expectedExceptions = AssertionError.class) 
   public void shouldFailIfGivenObjectIsNotInArray() {
     new ObjectArrayAssert(new Object[0]).contains("Luke");
+  }
+
+  @Test public void shouldPassIfGivenObjectIsNotInArray() {
+    new ObjectArrayAssert("Luke", "Leia").excludes("Anakin");
+  }
+
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsNotInArray") 
+  public void shouldPassIfGivenObjectsAreNotInArray() {
+    new ObjectArrayAssert("Luke", "Leia", "Anakin").excludes("Han", "Yoda");
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenObjectIsInArray() {
+    new ObjectArrayAssert("Luke").excludes("Luke");
   }
 
   @Test public void shouldPassIfArrayIsNull() {

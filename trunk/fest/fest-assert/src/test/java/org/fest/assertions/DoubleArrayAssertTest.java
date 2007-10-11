@@ -25,13 +25,22 @@ import org.testng.annotations.Test;
  */
 public class DoubleArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesIsInArray() {
+  @Test public void shouldPassIfGivenValuesAreInArray() {
     new DoubleArrayAssert(55.03, 4345.91).contains(55.03, 4345.91);
   }
   
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenObjectIsNotInArray() {
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsNotInArray() {
     new DoubleArrayAssert(emptyArray()).contains(55.03, 4345.91);
+  }
+
+  @Test public void shouldPassIfGivenValuesAreNotInArray() {
+    new DoubleArrayAssert(55.03, 4345.91).excludes(5323.2);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsInArray() {
+    new DoubleArrayAssert(55.03, 4345.91).excludes(55.03, 4345.91);
   }
 
   @Test public void shouldPassIfArrayIsNull() {

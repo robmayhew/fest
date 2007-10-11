@@ -54,6 +54,20 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
   
   /**
+   * Verifies that the actual collection does not contain the given objects.
+   * @param objects the objects that the collection should exclude.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection contains any of the given objects.
+   */
+  public CollectionAssert excludes(Object...objects) {
+    List<Object> found = new ArrayList<Object>();
+    for (Object o : objects) if (actual.contains(o)) found.add(o);
+    if (!found.isEmpty()) 
+      fail(concat("collection ", actual, " does not exclude element(s) ", bracketAround(found.toArray())));
+    return this;
+  }
+
+  /**
    * Verifies that the actual collection does not have duplicates.
    * @return this assertion object.
    * @throws AssertionError if the actual collection has duplicates.

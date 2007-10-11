@@ -15,18 +15,17 @@
  */
 package org.fest.assertions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.fest.assertions.Fail.errorMessageIfEqual;
 import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Formatting.bracketAround;
 import static org.fest.assertions.Formatting.format;
+import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.fest.util.Objects.*;
 
 /**
  * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the 
@@ -62,6 +61,20 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     for (Object o : objects) if (!hasElement(o)) notFound.add(o);
     if (!notFound.isEmpty()) 
       fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    return this;
+  }
+  
+  /**
+   * Verifies that the actual <code>Object</code> array does not contain the given objects.
+   * @param objects the objects the array should exclude.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array contains any of the given objects.
+   */
+  public ObjectArrayAssert excludes(Object...objects) {
+    List<Object> found = new ArrayList<Object>();
+    for (Object o : objects) if (hasElement(o)) found.add(o);
+    if (!found.isEmpty())
+      fail(concat("array ", bracketAround(actual), " does not exclude element(s) ", bracketAround(found.toArray())));      
     return this;
   }
   

@@ -25,13 +25,22 @@ import org.testng.annotations.Test;
  */
 public class ShortArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesIsInArray() {
+  @Test public void shouldPassIfGivenValuesAreInArray() {
     new ShortArrayAssert((short)43, (short)68).contains((short)43, (short)68);
   }
   
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenObjectIsNotInArray() {
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsNotInArray() {
     new ShortArrayAssert(emptyArray()).contains((short)43, (short)68);
+  }
+
+  @Test public void shouldPassIfGivenValuesAreNotInArray() {
+    new ShortArrayAssert((short)43, (short)68).excludes((short)98);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsInArray() {
+    new ShortArrayAssert((short)43, (short)68).excludes((short)43, (short)68);
   }
 
   @Test public void shouldPassIfArrayIsNull() {

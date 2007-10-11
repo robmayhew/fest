@@ -25,13 +25,22 @@ import org.testng.annotations.Test;
  */
 public class CharArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesIsInArray() {
+  @Test public void shouldPassIfGivenValuesAreInArray() {
     new CharArrayAssert('a', 'b').contains('a', 'b');
   }
   
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenObjectIsNotInArray() {
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsNotInArray() {
     new CharArrayAssert(emptyArray()).contains('a', 'b');
+  }
+
+  @Test public void shouldPassIfGivenValuesAreNotInArray() {
+    new CharArrayAssert('a', 'b').excludes('c', 'd');
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsInArray() {
+    new CharArrayAssert('a', 'b').excludes('a', 'b');
   }
 
   @Test public void shouldPassIfArrayIsNull() {

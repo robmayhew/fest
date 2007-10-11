@@ -25,13 +25,22 @@ import org.testng.annotations.Test;
  */
 public class LongArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesIsInArray() {
+  @Test public void shouldPassIfGivenValuesAreInArray() {
     new LongArrayAssert(43l, 53l).contains(43l, 53l);
   }
   
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenObjectIsNotInArray() {
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsNotInArray() {
     new LongArrayAssert(emptyArray()).contains(43l, 53l);
+  }
+
+  @Test public void shouldPassIfGivenValuesAreNotInArray() {
+    new LongArrayAssert(43l, 53l).excludes(434l);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsInArray() {
+    new LongArrayAssert(43l, 53l).excludes(43l, 53l);
   }
 
   @Test public void shouldPassIfArrayIsNull() {

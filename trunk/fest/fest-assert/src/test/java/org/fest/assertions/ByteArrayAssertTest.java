@@ -25,13 +25,22 @@ import org.testng.annotations.Test;
  */
 public class ByteArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesIsInArray() {
+  @Test public void shouldPassIfGivenValuesAreInArray() {
     new ByteArrayAssert((byte)8, (byte)6).contains((byte)8, (byte)6);
   }
   
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesIsInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenObjectIsNotInArray() {
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsNotInArray() {
     new ByteArrayAssert(emptyArray()).contains((byte)8, (byte)6);
+  }
+
+  @Test public void shouldPassIfGivenValuesAreNotInArray() {
+    new ByteArrayAssert((byte)8, (byte)6).excludes((byte)7);
+  }
+  
+  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
+  public void shouldFailIfGivenValueIsInArray() {
+    new ByteArrayAssert((byte)8, (byte)6).excludes((byte)8, (byte)6);
   }
 
   @Test public void shouldPassIfArrayIsNull() {
@@ -76,11 +85,11 @@ public class ByteArrayAssertTest {
   
   @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(array((byte)8));
+    new ByteArrayAssert((byte)8, (byte)6).isEqualTo(array((byte)7));
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
-    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(array((byte)8));
+    new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(array((byte)7));
   }
   
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
