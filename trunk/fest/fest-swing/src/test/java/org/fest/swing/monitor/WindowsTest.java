@@ -46,13 +46,13 @@ public class WindowsTest {
   
   @Test public void shouldEvaluateWindowAsReadyAndNotHiddenIfVisible() {
     frame.beVisible();
-    windows.evaluate(frame);
+    windows.markExisting(frame);
     assertWindowIsReady();
   }
 
   @Test public void shouldEvaluateWindowAsReadyAndHiddenIfNotVisible() {
     frame.pack();
-    windows.evaluate(frame);
+    windows.markExisting(frame);
     assertWindowIsHidden();
   }
   
