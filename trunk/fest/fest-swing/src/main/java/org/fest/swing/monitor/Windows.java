@@ -165,4 +165,15 @@ final class Windows {
       return pending.containsKey(w);
     }
   }
+
+  /**
+   * Simulates marking the given window as "showing but not ready to receive OS-level event input." This test should be 
+   * used for testing purposes.
+   * @param window the given window.
+   */
+  void simulatePendingWindow(Window window) {
+    synchronized(lock) {
+      pending.put(window, null);
+    }
+  }
 }
