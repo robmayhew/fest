@@ -95,6 +95,6 @@ public class WindowAvailabilityMonitorTest {
   }
   
   private MouseEvent mouseEvent(Component source) {
-    return new MouseEvent(source, 8, 8912, 0, 0, 0, 0, 0, 1, false, 0);
+    return new MouseEvent(source, 8, 8912, 0, 0, 0, 0, false, 0);
   }
 }
