@@ -22,8 +22,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 
-import abbot.util.NamedTimer;
-
 /**
  * Understands the information collected by the monitors in this package.
  *
@@ -50,7 +48,7 @@ final class Windows {
   private final Object lock = new Object();
   
   Windows() {
-    windowReadyTimer = new NamedTimer("Window Ready Timer", true);
+    windowReadyTimer = new Timer("Window Ready Timer", true);
   }
 
   /**
