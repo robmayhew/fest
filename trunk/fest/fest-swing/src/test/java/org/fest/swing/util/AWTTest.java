@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz 
  */
-public class AWTTests {
+public class AWTTest {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0); 
   
