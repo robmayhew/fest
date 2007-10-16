@@ -1,6 +1,25 @@
 #summary Changes between releases of FEST-Assert.
 #labels Featured
 
+===[10/15/07] FEST Assert 0.6===
+  # If [http://www.junit.org JUnit 4] (or greater) is in the classpath, failures of
+    * `isEqualTo(String)` in `StringAssert`
+    * `isEqualTo(Object)` in `ObjectAssert` (only if both the expected and the actual values are `String`s)
+    throw `ComparisonFailure`s. This feature can be useful when using tools that have support for this exception. For example, [http://www.eclipse.org Eclipse] provides a nice GUI that shows the differences between the expected and actual values:
+    [http://www.jroller.com/alexRuiz/resource/ecfg.jpg]
+    Many thanks to Konstantin Scheglov for suggesting this feature.
+  # Added method `contains` to all assertion objects that handle arrays or collection, which verifies that the actual array or collection contains all the given values. This method takes an array of `Object`s or primitives as argument, depending on the supported data type. For example, `ObjectArrayAssert` takes an array of `Object`s and `IntArrayAssert` takes an array of `int`s. Many thanks to [http://martin.ankerl.com/ Martin Ankerl] for suggesting this feature.
+  # Added method `excludes` to all assertion objects that handle arrays or collection, `which verifies that the actual array or collection does not contain any of the given values. This is the exact opposite of `contains`.
+  # All assertion objects override equals(Object), which now throws UnsupportedOperationException` to prevent accidental calls like
+   {{{
+assertThat(person).equals(anotherPerson);
+   }}}
+   which will make the test pass, regardless if person and anotherPerson are equal or not.     In this example, what we really meant was
+   {{{
+assertThat(person).isEqualTo(anotherPerson);
+   }}}
+   Many thanks to Martin Ankerl for suggesting this feature.
+
 ===[09/19/07] FEST Assert 0.5-SNAPSHOT===
   # Fixed Issue 30. Introduced method "`described as`" as a counterpart to "`as`". This issue prevented to use the method "`as`" in [http://groovy.codehaus.org/ Groovy] ("`as`" is a keyword in Groovy). Many thanks to  [http://marcospereira.wordpress.com/ Marcos Silva Pereira] for pointing this out
   # Fixed minor bug in assertion classes for arrays (`Object` and primitives) where the actual and expected values where in the wrong order in the failure message of "`isEqualTo`"
