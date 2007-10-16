@@ -20,7 +20,7 @@ package org.fest.assertions;
  *
  * @author Yvonne Wang
  */
-public abstract class Assert {
+abstract class Assert {
 
   /**
    * Throws <code>{@link UnsupportedOperationException}</code> if called. It is easy to accidentally call
