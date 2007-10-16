@@ -11,6 +11,7 @@
 
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.classes.dir" value="${target.dir}/classes" />
+  <property name="target.lib.dir" value="${target.dir}/lib" />
 	<property name="target.instrumented.dir" value="${target.dir}/instrumented" />
 	<property name="target.test.classes.dir" value="${target.dir}/test-classes" />
 	<property name="target.test.results.dir" value="${target.dir}/test-reports" />
@@ -67,6 +68,12 @@
 		                       pathId="dependency.classpath"
 		                       settingsFile="../settings.xml"
 		                       pomRefId="maven.project" />
+
+		<artifact:dependencies verbose="true"
+		                       filesetId="compile.dependency.fileset"
+		                       settingsFile="../settings.xml"
+		                       pomRefId="maven.project"
+													 useScope="runtime" />
 	</target>
 
   <target name="init-classpath" depends="init-maven">
@@ -86,9 +93,9 @@
 		<delete dir="${target.dir}" failonerror="false" />
 		<mkdir dir="${target.dir}" />
 		<mkdir dir="${target.classes.dir}" />
+	  <mkdir dir="${target.lib.dir}" />
 		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.test.classes.dir}" />
-		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.dist.dir}" />
     <taskdef resource="testngtasks" classpathref="lib.classpath" />
 	</target>
@@ -141,9 +148,12 @@
 	</target>
 
 	<target name="dist" depends="dist.src">
+	  <copy todir="${target.lib.dir}">
+	    <fileset refid="compile.dependency.fileset" />
+	    <mapper type="flatten" />
+	  </copy>
 		<zip destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.zip">
-			<zipfileset dir="${src.dir}" prefix="src" />
-			<zipfileset dir="${lib.dir}" prefix="lib" />
+			<zipfileset dir="${target.lib.dir}" prefix="lib" />
 			<fileset dir="${target.dist.dir}" includes="*.jar" />
 			<fileset dir="${target.dist.dir}" includes="*.zip" />
 		</zip>
