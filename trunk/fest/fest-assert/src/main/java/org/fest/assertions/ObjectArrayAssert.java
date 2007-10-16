@@ -40,12 +40,22 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     super(actual);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
   public ObjectArrayAssert as(String description) {
     return (ObjectArrayAssert)description(description);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in 
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
   public ObjectArrayAssert describedAs(String description) {
     return as(description);
   }

@@ -1,5 +1,5 @@
 /*
- * Created on Oct 10, 2007
+ * Created on Oct 15, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -39,12 +39,22 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
     super(actual);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
   public ByteArrayAssert as(String description) {
     return (ByteArrayAssert)description(description);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in 
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
   public ByteArrayAssert describedAs(String description) {
     return as(description);
   }

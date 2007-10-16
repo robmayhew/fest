@@ -38,7 +38,7 @@ abstract class PrimitiveAssert extends Assert {
   }
   
   /**
-   * Alternative to <code>{@link as}</code>, since "as" is a keyword in 
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in 
    * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
    * @param description the description of the actual value.
    * @return this assertion object.
