@@ -76,7 +76,6 @@ final class Context {
       Map<Window, Boolean> context = contexts.get(queue);
       if (context != null) {
         context.remove(component);
-        return;
       }
       for (EventQueue q : contexts.keySet()) 
         contexts.get(q).remove(component);

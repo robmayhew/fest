@@ -21,6 +21,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTextField;
@@ -84,11 +85,21 @@ public class ContextTest {
     frame.beVisible();
     context.addContextFor(textField);
     assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
-    Map<Window, Boolean> context = contexts.get(defaultSystemEventQueue());
-    assertThat(context.keySet()).excludes(textField);
+    assertContextExcludes(defaultSystemEventQueue(), textField);
     assertQueueAddedFor(textField);
   }
 
+  private void assertQueueAddedFor(Component c) {
+    assertMapContainsOnlyOneKey(queues, c);
+    WeakReference<EventQueue> queueReference = queues.get(c);
+    assertThat(queueReference.get()).isSameAs(c.getToolkit().getSystemEventQueue());
+  }
+  
+  private void assertMapContainsOnlyOneKey(Map<?, ?> map, Object key) {
+    assertThat(map.size()).isEqualTo(1);
+    assertThat(map.keySet()).contains(key);
+  }
+  
   @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
   public void shouldLookupQueueForGivenComponent() {
     frame.beVisible();
@@ -136,16 +147,31 @@ public class ContextTest {
     queues.clear();
     assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
   }
-  
-  private void assertQueueAddedFor(Component c) {
-    assertMapContainsOnlyOneKey(queues, c);
-    WeakReference<EventQueue> queueReference = queues.get(c);
-    assertThat(queueReference.get()).isSameAs(c.getToolkit().getSystemEventQueue());
+
+  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
+  public void shouldRemoveContextForComponentMappedWithDefaultEventQueue() {
+    contexts.put(defaultSystemEventQueue(), contextWith(frame));
+    context.removeContextFor(frame);
+    assertContextExcludes(defaultSystemEventQueue(), frame);
   }
   
-  private void assertMapContainsOnlyOneKey(Map<?, ?> map, Object key) {
-    assertThat(map.size()).isEqualTo(1);
-    assertThat(map.keySet()).contains(key);
+  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
+  public void shouldRemoveContextForComponentMappedWithNotDefaultEventQueue() {
+    contexts.get(defaultSystemEventQueue()).remove(frame);
+    EventQueue queue = new EventQueue();
+    contexts.put(queue, contextWith(frame));
+    context.removeContextFor(frame);
+    assertContextExcludes(queue, frame);
+  }
+
+  private Map<Window, Boolean> contextWith(Window w) {
+    Map<Window, Boolean> context = new HashMap<Window, Boolean>();
+    context.put(w, true);
+    return context;
+  }
+  
+  private void assertContextExcludes(EventQueue queue, Component excluded) {
+    assertThat(contexts.get(queue).keySet()).excludes(excluded);
   }
   
   private EventQueue defaultSystemEventQueue() {
