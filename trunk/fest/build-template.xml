@@ -11,7 +11,6 @@
 
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.classes.dir" value="${target.dir}/classes" />
-  <property name="target.lib.dir" value="${target.dir}/lib" />
 	<property name="target.instrumented.dir" value="${target.dir}/instrumented" />
 	<property name="target.test.classes.dir" value="${target.dir}/test-classes" />
 	<property name="target.test.results.dir" value="${target.dir}/test-reports" />
@@ -74,6 +73,8 @@
 		                       settingsFile="../settings.xml"
 		                       pomRefId="maven.project"
 													 useScope="runtime" />
+	  <property name="release.name" value="${maven.project.artifactId}-${maven.project.version}"/>
+
 	</target>
 
   <target name="init-classpath" depends="init-maven">
@@ -93,7 +94,6 @@
 		<delete dir="${target.dir}" failonerror="false" />
 		<mkdir dir="${target.dir}" />
 		<mkdir dir="${target.classes.dir}" />
-	  <mkdir dir="${target.lib.dir}" />
 		<mkdir dir="${target.test.results.dir}" />
 		<mkdir dir="${target.test.classes.dir}" />
 		<mkdir dir="${target.dist.dir}" />
@@ -147,33 +147,39 @@
 		                  srcdir="${src.java.main.dir}" />
 	</target>
 
-	<target name="dist" depends="dist.src">
-	  <copy todir="${target.lib.dir}">
+	<target name="dist" depends="test, dist.init, dist.jar, dist.src">
+	  <copy todir="${target.zip.root.lib.dir}">
 	    <fileset refid="compile.dependency.fileset" />
 	    <mapper type="flatten" />
 	  </copy>
-		<zip destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.zip">
-			<zipfileset dir="${target.lib.dir}" prefix="lib" />
-			<fileset dir="${target.dist.dir}" includes="*.jar" />
-			<fileset dir="${target.dist.dir}" includes="*.zip" />
+		<zip destfile="${target.dist.dir}/${release.name}.zip">
+			<fileset dir="${target.zip.dir}" includes="**/*.*"  />
 		</zip>
-
-		<artifact:install file="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.jar">
+		<artifact:install file="${target.zip.root.dir}/${release.name}.jar">
 			<pom refid="maven.project" />
 			<artifact:localRepository id="local.repository" location="${maven.repository.local}" layout="default" />
 		</artifact:install>
 	</target>
 
-	<target name="dist.src" depends="dist.jar">
-		<zip destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}-src.zip">
-			<fileset dir="${src.java.main.dir}" includes="**/*.java" />
-		</zip>
-	</target>
-
-	<target name="dist.jar" depends="test">
-		<jar destfile="${target.dist.dir}/${maven.project.artifactId}-${maven.project.version}.jar" update="true">
+  <target name="dist.init">
+	  <property name="target.zip.dir" value="${target.dist.dir}/zip" />
+	  <property name="target.zip.root.dir" value="${target.zip.dir}/${release.name}" />
+	  <property name="target.zip.root.lib.dir" value="${target.zip.root.dir}/lib"/>
+	  <mkdir dir="${target.zip.dir}" />
+	  <mkdir dir="${target.zip.root.dir}"/>
+	  <mkdir dir="${target.zip.root.lib.dir}"/>  
+  </target>
+  
+	<target name="dist.jar">
+		<jar destfile="${target.zip.root.dir}/${release.name}.jar" update="true">
 			<fileset dir="${target.classes.dir}" />
 		</jar>
+	</target>
+
+	<target name="dist.src">
+		<zip destfile="${target.zip.root.dir}/${release.name}-src.zip">
+			<fileset dir="${src.java.main.dir}" includes="**/*.java" />
+		</zip>
 	</target>
 
   <target name="javadoc" depends="init">
