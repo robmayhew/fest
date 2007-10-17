@@ -24,6 +24,11 @@ import java.util.Map;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_HIDDEN;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
+
 /**
  * Understands a subclass of <code>{@link Windows}</code> which methods have been overriden to be public, allowing us to
  * create mocks.
@@ -31,33 +36,48 @@ import static org.easymock.classextension.EasyMock.createMock;
  * @author Alex Ruiz
  */
 public class MockWindows extends Windows {
-  
-  static final String MARK_AS_CLOSED = "markAsClosed";
-  static final String MARK_AS_HIDDEN = "markAsHidden";
-  static final String MARK_AS_READY = "markAsReady";
-  static final String MARK_AS_SHOWING = "markAsShowing";
-  
-  private static final Map<String, Method> METHODS_TO_MOCK = new HashMap<String, Method>();
+
+  enum MethodToMock {
+    MARK_AS_CLOSED("markAsClosed"),
+    MARK_AS_HIDDEN("markAsHidden"),
+    MARK_AS_READY("markAsReady"),
+    MARK_AS_SHOWING("markAsShowing");
+
+    final String methodName;
+
+    private MethodToMock(String methodName) {
+      this.methodName = methodName;
+    }
+  }
+
+  private static final Map<MethodToMock, Method> METHODS_TO_MOCK = new HashMap<MethodToMock, Method>();
   
   static { populateMethodsToMock(); }
 
   private static void populateMethodsToMock() {
     try {
-      Class<MockWindows> type = MockWindows.class;
-      METHODS_TO_MOCK.put(MARK_AS_CLOSED, type.getMethod(MARK_AS_CLOSED, Window.class));
-      METHODS_TO_MOCK.put(MARK_AS_HIDDEN, type.getMethod(MARK_AS_HIDDEN, Window.class));
-      METHODS_TO_MOCK.put(MARK_AS_READY, type.getMethod(MARK_AS_READY, Window.class));
-      METHODS_TO_MOCK.put(MARK_AS_SHOWING, type.getMethod(MARK_AS_SHOWING, Window.class));
+      mapMethod(MARK_AS_CLOSED, Window.class);
+      mapMethod(MARK_AS_HIDDEN, Window.class);
+      mapMethod(MARK_AS_READY, Window.class);
+      mapMethod(MARK_AS_SHOWING, Window.class);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  public static Windows mock(String...methodsToMock) throws Exception {
+  private static void mapMethod(MethodToMock method, Class<?>... parameterTypes) throws Exception {
+    METHODS_TO_MOCK.put(method, method(method, parameterTypes));
+  }
+  
+  private static Method method(MethodToMock method, Class<?>... parameterTypes) throws Exception {
+    return MockWindows.class.getMethod(method.methodName, parameterTypes);
+  }
+
+  public static Windows mock(MethodToMock...methodsToMock) throws Exception {
     Class<MockWindows> type = MockWindows.class;
     List<Method> methods = new ArrayList<Method>();
-    for (String methodName : methodsToMock)
-      methods.add(METHODS_TO_MOCK.get(methodName));
+    for (MethodToMock method : methodsToMock)
+      methods.add(METHODS_TO_MOCK.get(method));
     return createMock(type, methods.toArray(new Method[methods.size()]));
   }
   

@@ -25,9 +25,9 @@ import org.fest.mocks.EasyMockTemplate;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.monitor.MockWindows.MARK_AS_HIDDEN;
-import static org.fest.swing.monitor.MockWindows.MARK_AS_SHOWING;
 import static org.fest.swing.monitor.MockWindows.mock;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_HIDDEN;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
 
 import org.fest.swing.TestFrame;
 

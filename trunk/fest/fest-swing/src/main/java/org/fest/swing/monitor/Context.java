@@ -35,7 +35,7 @@ import java.util.WeakHashMap;
  * 
  * @author Alex Ruiz
  */
-final class Context {
+class Context {
 
   /** Maps unique event queues to the set of root windows found on each queue. */
   private final Map<EventQueue, Map<Window, Boolean>> contexts = new WeakHashMap<EventQueue, Map<Window, Boolean>>();
