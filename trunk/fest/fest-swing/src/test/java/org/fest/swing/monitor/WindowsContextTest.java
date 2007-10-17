@@ -17,8 +17,10 @@ package org.fest.swing.monitor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.swing.JTextField;
@@ -94,6 +96,22 @@ public class WindowsContextTest {
     WeakReference<EventQueue> reference = new WeakReference<EventQueue>(queue);
     queues.put(frame, reference);
     assertThat(context.lookupEventQueueFor(frame)).isSameAs(queue);
+  }
+  
+  @Test(dependsOnMethods = { "shouldHaveSystemEventQueueInContext", 
+                             "shouldAddContextIfGivenComponentIsWindowAndAddQueue" })
+  public void shouldReturnAllRootWindows() {
+    TestFrame anotherFrame = new TestFrame(getClass());
+    anotherFrame.beVisible();
+    frame.beVisible();
+    context.addContextFor(frame);
+    context.addContextFor(anotherFrame);
+    Collection<Component> rootWindows = context.rootWindows();
+    Object[] allFrames = Frame.getFrames();
+    assertThat(rootWindows.size()).isEqualTo(allFrames.length);
+    assertThat(rootWindows).contains(frame, anotherFrame);
+    assertThat(rootWindows).contains(allFrames);
+    anotherFrame.beDisposed();
   }
   
   private void assertQueueAddedFor(Component c) {

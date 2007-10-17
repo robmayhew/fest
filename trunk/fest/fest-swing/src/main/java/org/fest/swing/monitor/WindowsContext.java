@@ -26,11 +26,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.logging.Logger;
-
-import static org.fest.swing.util.Formatting.format;
-
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands a monitor that maps event queues to GUI components.
@@ -42,8 +37,6 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 final class WindowsContext {
-
-  private static Logger logger = Logger.getAnonymousLogger();
 
   /** Maps unique event queues to the set of root windows found on each queue. */
   private final Map<EventQueue, Map<Component, Boolean>> contexts = new WeakHashMap<EventQueue, Map<Component, Boolean>>();
@@ -85,39 +78,29 @@ final class WindowsContext {
     EventQueue queue = component.getToolkit().getSystemEventQueue();
     synchronized (lock) {
       Map<Component, Boolean> componentMap = contexts.get(queue);
-      if (componentMap != null) componentMap.remove(component);
-      else {
-        EventQueue foundQueue = removeComponentFromContext(component);
-        if (foundQueue == null) logger.info(concat("Got WINDOW_CLOSED on ", format(component),
-            " on a previously unseen context: ", queue, "(", Thread.currentThread(), ")"));
-        else logger.info(concat("Window ", format(component), " sent WINDOW_CLOSED on ", queue,
-            " but sent WINDOW_OPENED on ", foundQueue));
+      if (componentMap != null) {
+        componentMap.remove(component);
+        return;
       }
+      for (EventQueue q : contexts.keySet()) 
+        contexts.get(q).remove(component);
     }
-  }
-
-  private EventQueue removeComponentFromContext(Component component) {
-    EventQueue foundQueue = null;
-    for (EventQueue q : contexts.keySet()) {
-      Map<Component, Boolean> componentMap = contexts.get(q);
-      if (!componentMap.containsKey(component)) continue;
-      foundQueue = q;
-      componentMap.remove(component);
-    }
-    return foundQueue;
   }
 
   void addContextFor(Component component) {
     EventQueue queue = component.getToolkit().getSystemEventQueue();
     synchronized (lock) {
       Map<Component, Boolean> context = contexts.get(queue);
-      if (context == null) {
-        context = new WeakHashMap<Component, Boolean>();
-        contexts.put(queue, context);
-      }
+      if (context == null) context = createContext(queue);
       if (component instanceof Window && component.getParent() == null) context.put(component, true);
       queues.put(component, new WeakReference<EventQueue>(queue));
     }
+  }
+
+  private Map<Component, Boolean> createContext(EventQueue queue) {
+    Map<Component, Boolean> context = new WeakHashMap<Component, Boolean>();
+    contexts.put(queue, context);
+    return context;
   }  
   
   /**
