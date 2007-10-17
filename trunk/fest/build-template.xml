@@ -2,9 +2,9 @@
 <project name="fest-template" default="all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
 
 	<property name="src.dir" value="${basedir}/src" />
-	<property name="src.java.main.dir" value="${src.dir}/main/java" />
-	<property name="src.resources.main.dir" value="${src.dir}/main/resources" />
-	<property name="src.java.test.dir" value="${src.dir}/test/java" />
+	<property name="src.main" value="${src.dir}/main" />
+  <property name="src.main.java.dir" value="${src.main}/java" />
+	<property name="src.test.java.dir" value="${src.dir}/test/java" />
 
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="lib.cobertura.dir" value="../cobertura" />
@@ -14,7 +14,7 @@
 	<property name="target.instrumented.dir" value="${target.dir}/instrumented" />
 	<property name="target.test.classes.dir" value="${target.dir}/test-classes" />
 	<property name="target.test.results.dir" value="${target.dir}/test-reports" />
-	<property name="coverage.report.dir" value="${target.dir}/coverage-reports" />
+	<property name="target.coverage.report.dir" value="${target.dir}/coverage-reports" />
   <property name="target.javadocs.dir" value="${target.dir}/javadocs" />
 	<property name="target.dist.dir" value="${target.dir}/dist" />
 
@@ -42,7 +42,7 @@
 		       optimize="${compiler.optimize}"
 		       source="${compiler.javac.source}"
 		       target="${compiler.javac.target}">
-			<src path="${src.java.main.dir}" />
+			<src path="${src.main.java.dir}" />
 			<classpath refid="dependency.classpath" />
 		</javac>
 		<antcall target="after.compile.main" />
@@ -108,7 +108,7 @@
 		       optimize="${compiler.optimize}"
 		       source="${compiler.javac.source}"
 		       target="${compiler.javac.target}">
-			<src path="${src.java.test.dir}" />
+			<src path="${src.test.java.dir}" />
 			<classpath>
 				<pathelement location="${target.classes.dir}" />
 			</classpath>
@@ -140,11 +140,11 @@
 			<classpath refid="lib.classpath" />
 		  <classpath refid="cobertura.classpath" />
 		</testng>
-		<mkdir dir="${coverage.report.dir}" />
+		<mkdir dir="${target.coverage.report.dir}" />
 		<cobertura-report format="html"
 		                  datafile="${basedir}/cobertura.ser"
-		                  destdir="${coverage.report.dir}"
-		                  srcdir="${src.java.main.dir}" />
+		                  destdir="${target.coverage.report.dir}"
+		                  srcdir="${src.main.java.dir}" />
 	</target>
 
 	<target name="dist" depends="test, dist.init, dist.jar, dist.src">
@@ -178,7 +178,7 @@
 
 	<target name="dist.src">
 		<zip destfile="${target.zip.root.dir}/${release.name}-src.zip">
-			<fileset dir="${src.java.main.dir}" includes="**/*.java" />
+			<fileset dir="${src.main.java.dir}" includes="**/*.java" />
 		</zip>
 	</target>
 
@@ -189,7 +189,7 @@
              author="true"
              version="true"
              access="public"
-             overview="${basedir}/docs/overview.html"
+             overview="${src.main}/javadocs/overview.html"
              windowtitle="${maven.project.artifactId} v. ${maven.project.version} API"
              doctitle="${maven.project.artifactId} v. ${maven.project.version}"
              bottom="${copyright}">
@@ -199,9 +199,9 @@
       </classpath>
 			<classpath refid="lib.classpath" />
       <sourcepath>
-        <pathelement location="${src.java.main.dir}" />
+        <pathelement location="${src.main.java.dir}" />
       </sourcepath>
-      <packageset dir="${src.java.main.dir}">
+      <packageset dir="${src.main.java.dir}">
         <include name="**/*" />
       </packageset>
       <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
