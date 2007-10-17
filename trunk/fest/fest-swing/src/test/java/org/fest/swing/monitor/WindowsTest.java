@@ -15,7 +15,12 @@
  */
 package org.fest.swing.monitor;
 
+import java.awt.Window;
+import java.util.Map;
+import java.util.TimerTask;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.monitor.WindowsUtils.waitForWindowToBeMarkedAsReady;
 
@@ -35,11 +40,25 @@ public class WindowsTest {
   private Windows windows;
   private TestFrame frame;
   
+  private Map<Window, TimerTask> pending;
+  private Map<Window, Boolean> open;
+  private Map<Window, Boolean> closed;
+  private Map<Window, Boolean> hidden;
+  
+  @SuppressWarnings("unchecked") 
   @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
     windows = new Windows();
+    pending = windowsMapField("pending");
+    open = windowsMapField("open");
+    closed = windowsMapField("closed");
+    hidden = windowsMapField("hidden");
   }
 
+  private Map windowsMapField(String name) {
+    return field(name).ofType(Map.class).in(windows).get();
+  }
+  
   @AfterMethod public void tearDown() {
     frame.beDisposed();
   }
@@ -53,19 +72,18 @@ public class WindowsTest {
   @Test public void shouldEvaluateWindowAsReadyAndHiddenIfNotVisible() {
     frame.pack();
     windows.markExisting(frame);
-    assertWindowIsHidden();
-  }
-  
-  @Test public void shouldMarkWindowAsHidden() {
-    windows.markAsHidden(frame);
-    assertWindowIsHidden();
+    assertThat(frameClosed()).isFalse();
+    assertThat(frameHidden()).isTrue();
+    assertThat(frameOpen()).isTrue();
+    assertThat(framePending()).isFalse();
   }
 
-  private void assertWindowIsHidden() {
-    assertThat(windows.isClosed(frame)).isFalse();
-    assertThat(windows.isHidden(frame)).isTrue();
-    assertThat(windows.isReady(frame)).isFalse();
-    assertThat(windows.isShowingButNotReady(frame)).isFalse();
+  @Test public void shouldMarkWindowAsHidden() {
+    windows.markAsHidden(frame);
+    assertThat(frameClosed()).isFalse();
+    assertThat(frameHidden()).isTrue();
+    assertThat(frameOpen()).isFalse();
+    assertThat(framePending()).isFalse();
   }
   
   @Test public void shouldMarkWindowAsShowing() {
@@ -76,17 +94,79 @@ public class WindowsTest {
   }
 
   private void assertWindowIsReady() {
-    assertThat(windows.isClosed(frame)).isFalse();
-    assertThat(windows.isHidden(frame)).isFalse();
-    assertThat(windows.isReady(frame)).isTrue();
-    assertThat(windows.isShowingButNotReady(frame)).isFalse();
+    assertThat(frameClosed()).isFalse();
+    assertThat(frameHidden()).isFalse();
+    assertThat(frameOpen()).isTrue();
+    assertThat(framePending()).isFalse();
   }
   
   @Test public void shouldMarkWindowAsClosed() {
     windows.markAsClosed(frame);
+    assertThat(frameClosed()).isTrue();
+    assertThat(frameHidden()).isFalse();
+    assertThat(frameOpen()).isFalse();
+    assertThat(framePending()).isFalse();
+  }
+
+  private boolean framePending() { return pending.containsKey(frame); }
+
+  private boolean frameOpen() { return open.containsKey(frame); }
+
+  private boolean frameHidden() { return hidden.containsKey(frame); }
+
+  private boolean frameClosed() { return closed.containsKey(frame); }
+
+  @Test public void shouldReturnTrueIfWindowIsClosed() {
+    closed.put(frame, true);
     assertThat(windows.isClosed(frame)).isTrue();
-    assertThat(windows.isHidden(frame)).isFalse();
+  }
+  
+  @Test public void shouldReturnFalseIfWindowIsNotClosed() {
+    closed.remove(frame);
+    assertThat(windows.isClosed(frame)).isFalse();
+  }
+  
+  @Test public void shouldReturnTrueIfWindowIsOpenAndNotHidden() {
+    open.put(frame, true);
+    hidden.remove(frame);
+    assertThat(windows.isReady(frame)).isTrue();
+  }
+  
+  @Test public void shouldReturnFalseIfWindowIsOpenAndHidden() {
+    open.put(frame, true);
+    hidden.put(frame, true);
     assertThat(windows.isReady(frame)).isFalse();
+  }
+  
+  @Test public void shouldReturnFalseIfWindowIsNotOpenAndHidden() {
+    open.remove(frame);
+    hidden.put(frame, true);
+    assertThat(windows.isReady(frame)).isFalse();
+  }
+  
+  @Test public void shouldReturnFalseIfWindowIsNotOpenAndNotHidden() {
+    open.remove(frame);
+    hidden.remove(frame);
+    assertThat(windows.isReady(frame)).isFalse();
+  }
+  
+  @Test public void shouldReturnTrueIfWindowIsHidden() {
+    hidden.put(frame, true);
+    assertThat(windows.isHidden(frame)).isTrue();
+  }
+  
+  @Test public void shouldReturnFalseIfWindowIsNotHidden() {
+    hidden.remove(frame);
+    assertThat(windows.isHidden(frame)).isFalse();
+  }
+
+  @Test public void shouldReturnTrueIfWindowIsPending() {
+    pending.put(frame, null);
+    assertThat(windows.isShowingButNotReady(frame)).isTrue();
+  }
+  
+  @Test public void shouldReturnFalseIfWindowIsNotPending() {
+    pending.remove(frame);
     assertThat(windows.isShowingButNotReady(frame)).isFalse();
   }
 }

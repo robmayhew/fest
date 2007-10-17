@@ -15,15 +15,19 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JTextField;
 
-import static org.fest.swing.monitor.WindowsUtils.waitForWindowToBeMarkedAsReady;
+import org.fest.mocks.EasyMockTemplate;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.monitor.MockWindows.MARK_AS_HIDDEN;
+import static org.fest.swing.monitor.MockWindows.MARK_AS_SHOWING;
+import static org.fest.swing.monitor.MockWindows.mock;
 
 import org.fest.swing.TestFrame;
 
@@ -43,9 +47,9 @@ public class WindowVisibilityMonitorTest {
   private Windows windows;
   private TestFrame frame;
 
-  @BeforeMethod public void setUp() {
+  @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = new Windows();
+    windows = mock(MARK_AS_SHOWING, MARK_AS_HIDDEN);
   }
 
   @AfterMethod public void tearDown() {
@@ -61,31 +65,53 @@ public class WindowVisibilityMonitorTest {
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
   public void shouldMarkWindowAsShowingIfWindowShown() {
     attachMonitor();
-    monitor.componentShown(componentEventWithWindowAsSource());
-    waitForWindowToBeMarkedAsReady();
-    assertThat(windows.isReady(frame)).isTrue();
+    new EasyMockTemplate(windows) {
+      protected void expectations() {
+        windows.markAsShowing(frame);
+      }
+
+      protected void codeToTest() {
+        monitor.componentShown(componentEventWithWindowAsSource());
+      }
+    }.run();
   }
 
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
   public void shouldNotMarkWindowAsShowingIfComponentShownIsNotWindow() {
     attachMonitor();
-    monitor.componentShown(componentEventWithTextFieldAsSource());
-    waitForWindowToBeMarkedAsReady();
-    assertThat(windows.isReady(frame)).isFalse();
+    new EasyMockTemplate(windows) {
+      protected void expectations() {}
+
+      protected void codeToTest() {
+        monitor.componentShown(componentEventWithTextFieldAsSource());
+      }
+    }.run();
   }
 
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
   public void shouldMarkWindowAsHiddenIfWindowHidden() {
     attachMonitor();
-    monitor.componentHidden(componentEventWithWindowAsSource());
-    assertThat(windows.isHidden(frame)).isTrue();
+    new EasyMockTemplate(windows) {
+      protected void expectations() {
+        windows.markAsHidden(frame);
+      }
+
+      protected void codeToTest() {
+        monitor.componentHidden(componentEventWithWindowAsSource());
+      }
+    }.run();
   }
 
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
   public void shouldNotMarkWindowAsHiddenIfComponentHiddenIsNotWindow() {
     attachMonitor();
-    monitor.componentHidden(componentEventWithTextFieldAsSource());
-    assertThat(windows.isHidden(frame)).isFalse();
+    new EasyMockTemplate(windows) {
+      protected void expectations() {}
+
+      protected void codeToTest() {
+        monitor.componentHidden(componentEventWithTextFieldAsSource());
+      }
+    }.run();
   }
 
   @Test(dependsOnMethods = "shouldAttachMonitorToWindow")

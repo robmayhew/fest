@@ -32,6 +32,9 @@ import static org.fest.util.Objects.areEqual;
  * Adapted from <code>abbot.util.WeakAWTEventListener</code> from 
  * <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
  * </p>
+ * 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 final class WeakEventListener implements AWTEventListener {
 

@@ -24,10 +24,14 @@ import java.util.WeakHashMap;
 
 /**
  * Understands the information collected by the monitors in this package.
+ * <p>
+ * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
+ * target="_blank">Abbot</a>.
+ * </p>
  *
  * @author Alex Ruiz
  */
-final class Windows {
+class Windows {
 
   static int WINDOW_READY_DELAY = 10000;
 
@@ -161,17 +165,6 @@ final class Windows {
   boolean isShowingButNotReady(Window w) {
     synchronized(lock) {
       return pending.containsKey(w);
-    }
-  }
-
-  /**
-   * Simulates marking the given window as "showing but not ready to receive OS-level event input." This test should be 
-   * used for testing purposes.
-   * @param window the given window.
-   */
-  void simulatePendingWindow(Window window) {
-    synchronized(lock) {
-      pending.put(window, null);
     }
   }
 }

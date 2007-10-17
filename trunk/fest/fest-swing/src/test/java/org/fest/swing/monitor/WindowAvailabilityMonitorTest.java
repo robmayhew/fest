@@ -21,11 +21,15 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTextField;
 
+import org.fest.mocks.EasyMockTemplate;
+
 import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
 import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
 import static java.awt.AWTEvent.PAINT_EVENT_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.monitor.MockWindows.MARK_AS_READY;
+import static org.fest.swing.monitor.MockWindows.mock;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
@@ -47,10 +51,10 @@ public class WindowAvailabilityMonitorTest {
   
   private Windows windows;
   private TestFrame frame;
-
-  @BeforeMethod public void setUp() {
+  
+  @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = new Windows();
+    windows = mock(MARK_AS_READY);
   }
 
   @AfterMethod public void tearDown() {
@@ -66,28 +70,43 @@ public class WindowAvailabilityMonitorTest {
   @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
   public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {
     attachMonitor();
-    windows.simulatePendingWindow(frame);
-    monitor.eventDispatched(mouseEvent(frame));
-    assertThat(windows.isReady(frame)).isTrue();
+    new EasyMockTemplate(windows) {
+      protected void expectations() {
+        windows.markAsReady(frame);
+      }
+
+      protected void codeToTest() {
+        monitor.eventDispatched(mouseEvent(frame));        
+      }
+    }.run();
   }
   
   @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
   public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
     attachMonitor();
-    windows.simulatePendingWindow(frame);
-    JTextField source = new JTextField();
+    final JTextField source = new JTextField();
     frame.add(source);
-    monitor.eventDispatched(mouseEvent(source));
-    assertThat(windows.isReady(frame)).isTrue();
+    new EasyMockTemplate(windows) {
+      protected void expectations() {
+        windows.markAsReady(frame);
+      }
+
+      protected void codeToTest() {
+        monitor.eventDispatched(mouseEvent(source));        
+      }
+    }.run();
   }
   
   @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
   public void shouldNotMarkSourceWindowAsReadyIfEventIsNotMouseEvent() {
     attachMonitor();
-    windows.simulatePendingWindow(frame);
-    monitor.eventDispatched(new KeyEvent(frame, 8, 9238, 0, 0, 'a'));
-    assertThat(windows.isReady(frame)).isFalse();
-    assertThat(windows.isShowingButNotReady(frame)).isTrue();
+    new EasyMockTemplate(windows) {
+      protected void expectations() { /* should not call markAsReady */ }
+
+      protected void codeToTest() {
+        monitor.eventDispatched(new KeyEvent(frame, 8, 9238, 0, 0, 'a'));
+      }
+    }.run();
   }
 
   private void attachMonitor() {
