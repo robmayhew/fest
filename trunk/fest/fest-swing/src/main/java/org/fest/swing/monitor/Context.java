@@ -17,7 +17,6 @@ package org.fest.swing.monitor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
@@ -28,7 +27,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
- * Understands a monitor that maps event queues to GUI components and viceversa.
+ * Understands a monitor that maps event queues to GUI components and vice versa.
  * <p>
  * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
  * target="_blank">Abbot</a>.
@@ -36,25 +35,23 @@ import java.util.WeakHashMap;
  * 
  * @author Alex Ruiz
  */
-final class WindowsContext {
+final class Context {
 
   /** Maps unique event queues to the set of root windows found on each queue. */
-  private final Map<EventQueue, Map<Component, Boolean>> contexts = new WeakHashMap<EventQueue, Map<Component, Boolean>>();
+  private final Map<EventQueue, Map<Window, Boolean>> contexts = new WeakHashMap<EventQueue, Map<Window, Boolean>>();
   
   /** Maps components to their corresponding event queues. */
   private final Map<Component, WeakReference<EventQueue>> queues = new WeakHashMap<Component, WeakReference<EventQueue>>();
 
   private final Object lock = new Object();
   
-  public WindowsContext() {
-    contexts.put(Toolkit.getDefaultToolkit().getSystemEventQueue(), new WeakHashMap<Component, Boolean>());
+  public Context() {
+    contexts.put(Toolkit.getDefaultToolkit().getSystemEventQueue(), new WeakHashMap<Window, Boolean>());
   }
   
   /**
-   * Return all available root windows. A root window is one that has a null parent. Nominally this means a list similar
-   * to that returned by <code>{@link Frame#getFrames() Frame.getFrames()}</code>, but in the case of an
-   * <code>{@link java.applet.Applet}</code> may return a few dialogs as well.
-   * @return all available root windows.
+   * Return all available root windows in this context.
+   * @return all available root windows in this context.
    */
   Collection<Component> rootWindows() {
     Set<Component> rootWindows = new HashSet<Component>();
@@ -62,7 +59,6 @@ final class WindowsContext {
       for (EventQueue queue : contexts.keySet())
         rootWindows.addAll(contexts.get(queue).keySet());
     }
-    for (Frame f : Frame.getFrames()) rootWindows.add(f);
     return rootWindows;
   }
   
@@ -77,7 +73,7 @@ final class WindowsContext {
   void removeContextFor(Component component) {
     EventQueue queue = component.getToolkit().getSystemEventQueue();
     synchronized (lock) {
-      Map<Component, Boolean> context = contexts.get(queue);
+      Map<Window, Boolean> context = contexts.get(queue);
       if (context != null) {
         context.remove(component);
         return;
@@ -90,15 +86,15 @@ final class WindowsContext {
   void addContextFor(Component component) {
     EventQueue queue = component.getToolkit().getSystemEventQueue();
     synchronized (lock) {
-      Map<Component, Boolean> context = contexts.get(queue);
+      Map<Window, Boolean> context = contexts.get(queue);
       if (context == null) context = createContext(queue);
-      if (component instanceof Window && component.getParent() == null) context.put(component, true);
+      if (component instanceof Window && component.getParent() == null) context.put((Window)component, true);
       queues.put(component, new WeakReference<EventQueue>(queue));
     }
   }
 
-  private Map<Component, Boolean> createContext(EventQueue queue) {
-    Map<Component, Boolean> context = new WeakHashMap<Component, Boolean>();
+  private Map<Window, Boolean> createContext(EventQueue queue) {
+    Map<Window, Boolean> context = new WeakHashMap<Window, Boolean>();
     contexts.put(queue, context);
     return context;
   }  

@@ -39,13 +39,13 @@ public class ContextMonitorTest {
   private ContextMonitor monitor;
   
   private Windows windows;
-  private WindowsContext context;
+  private Context context;
   private TestFrame frame;
 
   @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
     windows = new Windows();
-    context = new WindowsContext();
+    context = new Context();
   }
 
   @AfterMethod public void tearDown() {

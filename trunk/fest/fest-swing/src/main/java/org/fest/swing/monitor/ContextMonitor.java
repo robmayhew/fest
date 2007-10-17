@@ -47,16 +47,16 @@ final class ContextMonitor implements AWTEventListener {
 
   private static final long EVENT_MASK = WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK;
 
-  private final WindowsContext context;
+  private final Context context;
   private final Windows windows;
 
-  static ContextMonitor attachContextMonitor(Windows windows, WindowsContext context) {
+  static ContextMonitor attachContextMonitor(Windows windows, Context context) {
     ContextMonitor monitor = new ContextMonitor(windows, context);
     attachAsWeakEventListener(monitor, EVENT_MASK);
     return monitor;
   }
   
-  private ContextMonitor(Windows windows, WindowsContext context) {
+  private ContextMonitor(Windows windows, Context context) {
     this.windows = windows;
     this.context = context;
   }

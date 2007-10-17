@@ -17,39 +17,39 @@ package org.fest.swing.monitor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Map;
 
 import javax.swing.JTextField;
 
-import org.fest.swing.TestFrame;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
+
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link WindowsContext}</code>.
+ * Tests for <code>{@link Context}</code>.
  *
  * @author Alex Ruiz
  */
-public class WindowsContextTest {
+public class ContextTest {
 
-  private Map<EventQueue, Map<Component, Boolean>> contexts;
+  private Map<EventQueue, Map<Window, Boolean>> contexts;
   private Map<Component, WeakReference<EventQueue>> queues;
   private TestFrame frame;
   
-  private WindowsContext context;
+  private Context context;
   
   @SuppressWarnings("unchecked") 
   @BeforeMethod public void setUp() {
-    context = new WindowsContext();
+    context = new Context();
     contexts = contextMapField("contexts");
     queues = contextMapField("queues");
     frame = new TestFrame(getClass());
@@ -72,7 +72,7 @@ public class WindowsContextTest {
     frame.beVisible();
     context.addContextFor(frame);
     assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
-    Map<Component, Boolean> context = contexts.get(defaultSystemEventQueue());
+    Map<Window, Boolean> context = contexts.get(defaultSystemEventQueue());
     assertMapContainsOnlyOneKey(context, frame);
     assertQueueAddedFor(frame);
   }
@@ -84,7 +84,7 @@ public class WindowsContextTest {
     frame.beVisible();
     context.addContextFor(textField);
     assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
-    Map<Component, Boolean> context = contexts.get(defaultSystemEventQueue());
+    Map<Window, Boolean> context = contexts.get(defaultSystemEventQueue());
     assertThat(context.keySet()).excludes(textField);
     assertQueueAddedFor(textField);
   }
@@ -107,10 +107,8 @@ public class WindowsContextTest {
     context.addContextFor(frame);
     context.addContextFor(anotherFrame);
     Collection<Component> rootWindows = context.rootWindows();
-    Object[] allFrames = Frame.getFrames();
-    assertThat(rootWindows.size()).isEqualTo(allFrames.length);
+    assertThat(rootWindows.size()).isEqualTo(2);
     assertThat(rootWindows).contains(frame, anotherFrame);
-    assertThat(rootWindows).contains(allFrames);
     anotherFrame.beDisposed();
   }
   
