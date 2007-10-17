@@ -1,0 +1,22 @@
+#summary Setting FEST modules as dependencies with Maven 2.
+#labels Featured
+
+FEST has its own [http://maven.apache.org/ Maven 2] repository located at [http://fest.googlecode.com/svn/trunk/fest/m2/repository/]
+
+The `groupId` for all FEST modules is *fest*. The following table shows the `artifactId` for each module:
+
+|| fest-assert ||
+|| fest-mocks ||
+|| fest-reflect ||
+|| fest-swing ||
+|| fest-swing-junit ||
+|| fest-swing-testng ||
+|| fest-util ||
+
+Here is a quick example:
+
+{{{
+<groupId>fest</groupId>
+<artifactId>fest-assert</artifactId>
+<version>0.6</version>
+}}}
