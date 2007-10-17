@@ -114,6 +114,31 @@ public class WindowsContextTest {
     anotherFrame.beDisposed();
   }
   
+  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
+  public void shouldReturnEventQueueInMapForGivenComponent() {
+    EventQueue queue = new EventQueue();
+    queues.put(frame, new WeakReference<EventQueue>(queue));
+    assertThat(context.eventQueueFor(frame)).isSameAs(queue);
+  }
+
+  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
+  public void shouldReturnComponentEventQueueIfEventQueueInMapIsNull() {
+    queues.put(frame, new WeakReference<EventQueue>(null));
+    assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
+  }
+
+  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
+  public void shouldReturnComponentEventQueueIfEventQueueReferenceInMapIsNull() {
+    queues.put(frame, null);
+    assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
+  }
+  
+  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
+  public void shouldReturnComponentEventQueueIfComponentNotInMap() {
+    queues.clear();
+    assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
+  }
+  
   private void assertQueueAddedFor(Component c) {
     assertMapContainsOnlyOneKey(queues, c);
     WeakReference<EventQueue> queueReference = queues.get(c);

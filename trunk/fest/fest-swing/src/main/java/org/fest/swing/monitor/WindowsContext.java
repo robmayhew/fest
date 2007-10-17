@@ -110,7 +110,7 @@ final class WindowsContext {
    * @param c the given component.
    * @return the event queue corresponding to the given component
    */
-  EventQueue queueFor(Component c) {
+  EventQueue eventQueueFor(Component c) {
     Component component = c;
     // Components above the applet in the hierarchy may or may not share the same context with the applet itself.
     while (!(component instanceof java.applet.Applet) && component.getParent() != null)
