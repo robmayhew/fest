@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
- * Understands a monitor that maps event queues to GUI components.
+ * Understands a monitor that maps event queues to GUI components and viceversa.
  * <p>
  * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
  * target="_blank">Abbot</a>.
