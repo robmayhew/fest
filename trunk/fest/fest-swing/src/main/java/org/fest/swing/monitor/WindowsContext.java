@@ -77,9 +77,9 @@ final class WindowsContext {
   void removeContextFor(Component component) {
     EventQueue queue = component.getToolkit().getSystemEventQueue();
     synchronized (lock) {
-      Map<Component, Boolean> componentMap = contexts.get(queue);
-      if (componentMap != null) {
-        componentMap.remove(component);
+      Map<Component, Boolean> context = contexts.get(queue);
+      if (context != null) {
+        context.remove(component);
         return;
       }
       for (EventQueue q : contexts.keySet()) 
