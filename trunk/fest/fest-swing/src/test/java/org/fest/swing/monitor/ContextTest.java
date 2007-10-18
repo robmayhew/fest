@@ -17,6 +17,7 @@ package org.fest.swing.monitor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
@@ -118,8 +119,10 @@ public class ContextTest {
     context.addContextFor(frame);
     context.addContextFor(anotherFrame);
     Collection<Component> rootWindows = context.rootWindows();
-    assertThat(rootWindows.size()).isEqualTo(2);
+    Object[] frames = Frame.getFrames();
+    assertThat(rootWindows.size()).isEqualTo(frames.length);
     assertThat(rootWindows).contains(frame, anotherFrame);
+    assertThat(rootWindows).contains(frames);
     anotherFrame.beDisposed();
   }
   

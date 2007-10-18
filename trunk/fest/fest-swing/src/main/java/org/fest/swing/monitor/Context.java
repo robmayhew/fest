@@ -17,6 +17,7 @@ package org.fest.swing.monitor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
@@ -50,8 +51,10 @@ class Context {
   }
   
   /**
-   * Return all available root windows in this context.
-   * @return all available root windows in this context.
+   * Return all available root windows. A root window is one that has a null parent. Nominally this means a list similar
+   * to that returned by <code>{@link Frame#getFrames() Frame.getFrames()}</code>, but in the case of an
+   * <code>{@link java.applet.Applet}</code> may return a few dialogs as well.
+   * @return all available root windows.
    */
   Collection<Component> rootWindows() {
     Set<Component> rootWindows = new HashSet<Component>();
@@ -59,6 +62,7 @@ class Context {
       for (EventQueue queue : contexts.keySet())
         rootWindows.addAll(contexts.get(queue).keySet());
     }
+    for (Frame f : Frame.getFrames()) rootWindows.add(f);
     return rootWindows;
   }
   
