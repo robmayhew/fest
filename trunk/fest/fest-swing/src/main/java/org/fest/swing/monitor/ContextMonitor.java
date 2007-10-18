@@ -15,6 +15,7 @@
  */
 package org.fest.swing.monitor;
 
+import java.applet.Applet;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.FileDialog;
@@ -56,7 +57,7 @@ final class ContextMonitor implements AWTEventListener {
     return monitor;
   }
   
-  private ContextMonitor(Windows windows, Context context) {
+  ContextMonitor(Windows windows, Context context) {
     this.windows = windows;
     this.context = context;
   }
@@ -69,7 +70,7 @@ final class ContextMonitor implements AWTEventListener {
     // beyond OPENED in order to catch windows that have already opened by the time we start listening but which are not
     // in the Frame.getFrames list (i.e. they are on a different context). Specifically watch for COMPONENT_SHOWN on 
     // applets, since we may not get frame events for them.
-    if (!(component instanceof java.applet.Applet) && !(component instanceof Window)) return;
+    if (!(component instanceof Applet) && !(component instanceof Window)) return;
     processEvent(event);
     // The context for root-level windows may change between WINDOW_OPENED and subsequent events.
     if (!component.getToolkit().getSystemEventQueue().equals(context.lookupEventQueueFor(component)))

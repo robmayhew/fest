@@ -62,14 +62,13 @@ public class WindowAvailabilityMonitorTest {
   }
 
   @Test public void shouldAttachItSelfToToolkit() {
-    attachMonitor();
+    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(windows);
     WeakEventListener l = new WeakEventListener(monitor);
     assertThat(toolkitHasListenerUnderEventMask(l, EVENT_MASK)).isTrue();
   }
 
-  @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
-  public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {
-    attachMonitor();
+  @Test public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {
+    createMonitor();
     new EasyMockTemplate(windows) {
       protected void expectations() {
         windows.markAsReady(frame);
@@ -81,9 +80,8 @@ public class WindowAvailabilityMonitorTest {
     }.run();
   }
   
-  @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
-  public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
-    attachMonitor();
+  @Test public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
+    createMonitor();
     final JTextField source = new JTextField();
     frame.add(source);
     new EasyMockTemplate(windows) {
@@ -97,9 +95,8 @@ public class WindowAvailabilityMonitorTest {
     }.run();
   }
   
-  @Test(dependsOnMethods = "shouldAttachItSelfToToolkit") 
-  public void shouldNotMarkSourceWindowAsReadyIfEventIsNotMouseEvent() {
-    attachMonitor();
+  @Test public void shouldNotMarkSourceWindowAsReadyIfEventIsNotMouseEvent() {
+    createMonitor();
     new EasyMockTemplate(windows) {
       protected void expectations() { /* should not call markAsReady */ }
 
@@ -109,10 +106,10 @@ public class WindowAvailabilityMonitorTest {
     }.run();
   }
 
-  private void attachMonitor() {
-    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(windows);
+  private void createMonitor() {
+    monitor = new WindowAvailabilityMonitor(windows);
   }
-  
+
   private MouseEvent mouseEvent(Component source) {
     return new MouseEvent(source, 8, 8912, 0, 0, 0, 0, false, 0);
   }

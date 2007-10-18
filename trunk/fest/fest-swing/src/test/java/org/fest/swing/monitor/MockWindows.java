@@ -15,6 +15,7 @@
  */
 package org.fest.swing.monitor;
 
+import java.awt.Component;
 import java.awt.Window;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_HIDDEN;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
@@ -38,6 +40,7 @@ import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
 public class MockWindows extends Windows {
 
   enum MethodToMock {
+    IS_CLOSED("isClosed"),
     MARK_AS_CLOSED("markAsClosed"),
     MARK_AS_HIDDEN("markAsHidden"),
     MARK_AS_READY("markAsReady"),
@@ -56,6 +59,7 @@ public class MockWindows extends Windows {
 
   private static void populateMethodsToMock() {
     try {
+      mapMethod(IS_CLOSED, Component.class);
       mapMethod(MARK_AS_CLOSED, Window.class);
       mapMethod(MARK_AS_HIDDEN, Window.class);
       mapMethod(MARK_AS_READY, Window.class);
@@ -88,6 +92,8 @@ public class MockWindows extends Windows {
   @Override public void markAsReady(Window w) {}
 
   @Override public void markAsShowing(Window w) {}
+  
+  @Override public boolean isClosed(Component c) { return false; }
 
   public MockWindows() {}
 }

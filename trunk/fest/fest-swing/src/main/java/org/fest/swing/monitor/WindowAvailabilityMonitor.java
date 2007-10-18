@@ -49,7 +49,7 @@ final class WindowAvailabilityMonitor implements AWTEventListener {
     return monitor;
   }
   
-  private WindowAvailabilityMonitor(Windows windows) {
+  WindowAvailabilityMonitor(Windows windows) {
     this.windows = windows;
   }
   

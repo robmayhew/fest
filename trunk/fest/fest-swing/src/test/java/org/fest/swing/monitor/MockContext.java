@@ -72,7 +72,7 @@ public class MockContext extends Context {
   }
   
   private static Method method(MethodToMock method, Class<?>... parameterTypes) throws Exception {
-    return Context.class.getMethod(method.methodName, parameterTypes);
+    return MockContext.class.getMethod(method.methodName, parameterTypes);
   }
 
   public static Context mock(MethodToMock...methodsToMock) throws Exception {
@@ -87,7 +87,7 @@ public class MockContext extends Context {
 
   @Override public EventQueue lookupEventQueueFor(Component c) { return null; }
 
-  @Override public void removeContextFor(Component component) {}
+  @Override public void removeContextFor(Component component) { }
 
-  @Override Collection<Component> rootWindows() { return null; }
+  @Override public Collection<Component> rootWindows() { return null; }
 }

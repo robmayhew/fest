@@ -15,10 +15,23 @@
  */
 package org.fest.swing.monitor;
 
+import java.awt.Component;
+import java.awt.event.ComponentEvent;
+
+import javax.swing.JTextField;
+
+import org.fest.mocks.EasyMockTemplate;
+
 import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.monitor.MockContext.MethodToMock.ADD_CONTEXT_FOR;
+import static org.fest.swing.monitor.MockContext.MethodToMock.LOOKUP_EVENT_QUEUE_FOR;
+import static org.fest.swing.monitor.MockContext.MethodToMock.REMOVE_CONTEXT_FOR;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_CLOSED;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
@@ -42,10 +55,10 @@ public class ContextMonitorTest {
   private Context context;
   private TestFrame frame;
 
-  @BeforeMethod public void setUp() {
+  @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = new Windows();
-    context = new Context();
+    windows = MockWindows.mock(IS_CLOSED, MARK_AS_CLOSED, MARK_AS_READY);
+    context = MockContext.mock(LOOKUP_EVENT_QUEUE_FOR, ADD_CONTEXT_FOR, REMOVE_CONTEXT_FOR);
   }
 
   @AfterMethod public void tearDown() {
@@ -53,12 +66,27 @@ public class ContextMonitorTest {
   }
 
   @Test public void shouldAttachItSelfToToolkit() {
-    attachMonitor();
+    monitor = ContextMonitor.attachContextMonitor(new Windows(), new Context());
     WeakEventListener l = new WeakEventListener(monitor);
     assertThat(toolkitHasListenerUnderEventMask(l, EVENT_MASK)).isTrue();
   }
 
-  private void attachMonitor() {
-    monitor = ContextMonitor.attachContextMonitor(windows, context);
+  @Test public void shouldNotProcessEventIfComponentIsNotWindowOrApplet() {
+    createMonitor();
+    new EasyMockTemplate(windows, context) {
+      @Override protected void expectations() {}
+
+      @Override protected void codeToTest() {
+        monitor.eventDispatched(componentEvent(new JTextField()));
+      }
+    }.run();
+  }
+
+  private void createMonitor() {
+    monitor = new ContextMonitor(windows, context);
+  } 
+
+  private ComponentEvent componentEvent(Component source) {
+    return new ComponentEvent(source, 8);
   }
 }
