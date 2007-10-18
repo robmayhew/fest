@@ -18,10 +18,8 @@ package org.fest.swing.monitor;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.easymock.classextension.EasyMock.createMock;
@@ -76,11 +74,11 @@ public class MockContext extends Context {
   }
 
   public static Context mock(MethodToMock...methodsToMock) throws Exception {
-    Class<Context> type = Context.class;
-    List<Method> methods = new ArrayList<Method>();
-    for (MethodToMock method : methodsToMock)
-      methods.add(METHODS_TO_MOCK.get(method));
-    return createMock(type, methods.toArray(new Method[methods.size()]));
+    Class<MockContext> type = MockContext.class;
+    Method[] methods = new Method[methodsToMock.length];
+    for (int i = 0; i < methods.length; i++)
+      methods[i] = METHODS_TO_MOCK.get(methodsToMock[i]);
+    return createMock(type, methods);
   }
 
   @Override public void addContextFor(Component component) {}
@@ -90,4 +88,6 @@ public class MockContext extends Context {
   @Override public void removeContextFor(Component component) { }
 
   @Override public Collection<Component> rootWindows() { return null; }
+  
+  public MockContext() {}
 }

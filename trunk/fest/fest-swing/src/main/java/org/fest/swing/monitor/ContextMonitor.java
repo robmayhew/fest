@@ -89,9 +89,8 @@ final class ContextMonitor implements AWTEventListener {
       return;
     }
     if (id == WINDOW_CLOSING) return;
-    // Take note of all other window events
-    if ((id >= WINDOW_FIRST && id <= WINDOW_LAST) || id == COMPONENT_SHOWN) 
-      if (!context.rootWindows().contains(component) || windows.isClosed(component)) recognizeAsOpenWindow(component);    
+    if ((id >= WINDOW_FIRST && id <= WINDOW_LAST) || id == COMPONENT_SHOWN)
+      if ((!context.rootWindows().contains(component)) || windows.isClosed(component)) recognizeAsOpenWindow(component);    
   }
   
   private void recognizeAsOpenWindow(Component component) {
