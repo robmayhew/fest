@@ -33,7 +33,7 @@ import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibil
  * 
  * @author Alex Ruiz
  */
-final class WindowMonitor {
+public final class WindowMonitor {
 
   private final Windows windows = new Windows();
   private final Context context = new Context();
@@ -43,7 +43,7 @@ final class WindowMonitor {
    * Create an instance of WindowTracker which will track all windows coming and going on the current and subsequent app
    * contexts. WARNING: if an applet loads this class, it will only ever see stuff in its own app context.
    */
-  WindowMonitor() {
+  private WindowMonitor() {
     attachContextMonitor(windows, context);
     attachWindowAvailabilityMonitor(windows);
     populateExistingWindows();

@@ -25,6 +25,8 @@ import java.util.Map;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.swing.monitor.MockContext.MethodToMock.ADD_CONTEXT_FOR;
+import static org.fest.swing.monitor.MockContext.MethodToMock.ALL_EVENT_QUEUES;
+import static org.fest.swing.monitor.MockContext.MethodToMock.EVENT_QUEUE_FOR;
 import static org.fest.swing.monitor.MockContext.MethodToMock.LOOKUP_EVENT_QUEUE_FOR;
 import static org.fest.swing.monitor.MockContext.MethodToMock.REMOVE_CONTEXT_FOR;
 import static org.fest.swing.monitor.MockContext.MethodToMock.ROOT_WINDOWS;
@@ -39,6 +41,8 @@ public class MockContext extends Context {
 
   enum MethodToMock {
     ADD_CONTEXT_FOR("addContextFor"),
+    ALL_EVENT_QUEUES("allEventQueues"),
+    EVENT_QUEUE_FOR("eventQueueFor"),
     LOOKUP_EVENT_QUEUE_FOR("lookupEventQueueFor"),
     REMOVE_CONTEXT_FOR("removeContextFor"),
     ROOT_WINDOWS("rootWindows");
@@ -57,6 +61,8 @@ public class MockContext extends Context {
   private static void populateMethodsToMock() {
     try {
       mapMethod(ADD_CONTEXT_FOR, Component.class);
+      mapMethod(ALL_EVENT_QUEUES);
+      mapMethod(EVENT_QUEUE_FOR, Component.class);
       mapMethod(LOOKUP_EVENT_QUEUE_FOR, Component.class);
       mapMethod(REMOVE_CONTEXT_FOR, Component.class);
       mapMethod(ROOT_WINDOWS);
@@ -82,6 +88,10 @@ public class MockContext extends Context {
   }
 
   @Override public void addContextFor(Component component) {}
+
+  @Override public Collection<EventQueue> allEventQueues() { return null; }
+
+  @Override public EventQueue eventQueueFor(Component c) { return null; }
 
   @Override public EventQueue lookupEventQueueFor(Component c) { return null; }
 

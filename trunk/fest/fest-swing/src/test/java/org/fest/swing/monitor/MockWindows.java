@@ -26,10 +26,12 @@ import java.util.Map;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_CLOSED;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_READY;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_HIDDEN;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_EXISTING;
 
 /**
  * Understands a subclass of <code>{@link Windows}</code> which methods have been overriden to be public, allowing us to
@@ -41,10 +43,12 @@ public class MockWindows extends Windows {
 
   enum MethodToMock {
     IS_CLOSED("isClosed"),
+    IS_READY("isReady"),
     MARK_AS_CLOSED("markAsClosed"),
     MARK_AS_HIDDEN("markAsHidden"),
     MARK_AS_READY("markAsReady"),
-    MARK_AS_SHOWING("markAsShowing");
+    MARK_AS_SHOWING("markAsShowing"),
+    MARK_EXISTING("markExisting");
 
     final String methodName;
 
@@ -60,10 +64,12 @@ public class MockWindows extends Windows {
   private static void populateMethodsToMock() {
     try {
       mapMethod(IS_CLOSED, Component.class);
+      mapMethod(IS_READY, Window.class);
       mapMethod(MARK_AS_CLOSED, Window.class);
       mapMethod(MARK_AS_HIDDEN, Window.class);
       mapMethod(MARK_AS_READY, Window.class);
       mapMethod(MARK_AS_SHOWING, Window.class);
+      mapMethod(MARK_EXISTING, Window.class);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -85,6 +91,8 @@ public class MockWindows extends Windows {
     return createMock(type, methods.toArray(new Method[methods.size()]));
   }
   
+  @Override public void markExisting(Window w) {}
+
   @Override public void markAsClosed(Window w) {}
 
   @Override public void markAsHidden(Window w) {}
@@ -94,6 +102,8 @@ public class MockWindows extends Windows {
   @Override public void markAsShowing(Window w) {}
   
   @Override public boolean isClosed(Component c) { return false; }
+  
+  @Override public boolean isReady(Window w) { return false; }
 
   public MockWindows() {}
 }
