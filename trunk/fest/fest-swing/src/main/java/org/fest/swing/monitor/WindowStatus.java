@@ -35,14 +35,14 @@ import static org.fest.swing.util.AWT.insetsFrom;
  *
  * @author Alex Ruiz
  */
-class WindowChecker {
+class WindowStatus {
 
   private static int sign = 1;
 
   private final Windows windows;
   private Robot robot;
   
-  WindowChecker(Windows windows) {
+  WindowStatus(Windows windows) {
     this.windows = windows;
     createRobot();
   }

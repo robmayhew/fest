@@ -37,7 +37,7 @@ final class WindowMonitor {
 
   private final Windows windows = new Windows();
   private final Context context = new Context();
-  private final WindowChecker windowChecker = new WindowChecker(windows);
+  private final WindowStatus windowStatus = new WindowStatus(windows);
 
   /**
    * Create an instance of WindowTracker which will track all windows coming and going on the current and subsequent app
@@ -69,7 +69,7 @@ final class WindowMonitor {
    */
   public boolean isWindowReady(Window w) {
     if (windows.isReady(w)) return true;
-    windowChecker.checkIfReady(w);
+    windowStatus.checkIfReady(w);
     return false;
   }
 
