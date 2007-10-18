@@ -80,7 +80,7 @@ public final class WindowMonitor {
    * @param c the given component.
    * @return the event queue corresponding to the given component.
    */
-  public EventQueue queueFor(Component c) {
+  public EventQueue eventQueueFor(Component c) {
     return context.eventQueueFor(c);
   }
 
@@ -98,7 +98,7 @@ public final class WindowMonitor {
    * <code>{@link java.applet.Applet}</code> may return a few dialogs as well.
    * @return all available root windows.
    */
-  public Collection<Component> rootWindows() { 
+  public Collection<Window> rootWindows() { 
     return context.rootWindows();
   }
 

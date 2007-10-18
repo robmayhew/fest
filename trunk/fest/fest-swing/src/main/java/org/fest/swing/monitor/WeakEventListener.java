@@ -38,7 +38,7 @@ import static org.fest.util.Objects.areEqual;
  */
 final class WeakEventListener implements AWTEventListener {
 
-  private final WeakReference<AWTEventListener> listenerReference;
+  final WeakReference<AWTEventListener> listenerReference;
 
   static WeakEventListener attachAsWeakEventListener(AWTEventListener listener, long eventMask) {
     WeakEventListener l = new WeakEventListener(listener);

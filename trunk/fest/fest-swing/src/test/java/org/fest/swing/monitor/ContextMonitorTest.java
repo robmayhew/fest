@@ -209,7 +209,7 @@ public class ContextMonitorTest {
     assertWindowVisibilityMonitorInFrameCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
-        expect(context.rootWindows()).andReturn(new ArrayList<Component>());
+        expect(context.rootWindows()).andReturn(new ArrayList<Window>());
         context.addContextFor(frame);
         windows.markAsShowing(frame);
         expectEventQueueLookupFor(frame);
@@ -228,9 +228,7 @@ public class ContextMonitorTest {
     assertWindowVisibilityMonitorInFrameCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
-        List<Component> rootWindows = new ArrayList<Component>();
-        rootWindows.add(frame);
-        expect(context.rootWindows()).andReturn(rootWindows);
+        expect(context.rootWindows()).andReturn(frameInList());
         expect(windows.isClosed(frame)).andReturn(true);
         context.addContextFor(frame);
         windows.markAsShowing(frame);
@@ -250,9 +248,7 @@ public class ContextMonitorTest {
     assertWindowVisibilityMonitorInFrameCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
-        List<Component> rootWindows = new ArrayList<Component>();
-        rootWindows.add(frame);
-        expect(context.rootWindows()).andReturn(rootWindows);
+        expect(context.rootWindows()).andReturn(frameInList());
         expect(windows.isClosed(frame)).andReturn(false);
         expectEventQueueLookupFor(frame);
       }
@@ -296,5 +292,11 @@ public class ContextMonitorTest {
   
   private void dispatchEventToMonitor(Component c, int eventId) {
     monitor.eventDispatched(new ComponentEvent(c, eventId));    
+  }
+
+  private List<Window> frameInList() {
+    List<Window> rootWindows = new ArrayList<Window>();
+    rootWindows.add(frame);
+    return rootWindows;
   }
 }

@@ -17,6 +17,7 @@ package org.fest.swing.monitor;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Window;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
@@ -97,7 +98,7 @@ public class MockContext extends Context {
 
   @Override public void removeContextFor(Component component) { }
 
-  @Override public Collection<Component> rootWindows() { return null; }
+  @Override public Collection<Window> rootWindows() { return null; }
   
   public MockContext() {}
 }

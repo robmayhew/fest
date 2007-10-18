@@ -118,7 +118,7 @@ public class ContextTest {
     frame.beVisible();
     context.addContextFor(frame);
     context.addContextFor(anotherFrame);
-    Collection<Component> rootWindows = context.rootWindows();
+    Collection<Window> rootWindows = context.rootWindows();
     Object[] frames = Frame.getFrames();
     assertThat(rootWindows.size()).isEqualTo(frames.length);
     assertThat(rootWindows).contains(frame, anotherFrame);

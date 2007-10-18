@@ -15,6 +15,22 @@
  */
 package org.fest.swing.monitor;
 
+import java.awt.EventQueue;
+import java.awt.Window;
+import java.awt.event.AWTEventListener;
+import java.awt.event.AWTEventListenerProxy;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.fest.mocks.EasyMockTemplate;
+
+import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
+import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
+import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
+import static java.awt.AWTEvent.PAINT_EVENT_MASK;
+import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+import static java.awt.Toolkit.getDefaultToolkit;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.monitor.MockContext.MethodToMock.ADD_CONTEXT_FOR;
@@ -25,8 +41,13 @@ import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_READY;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_EXISTING;
 import static org.fest.swing.monitor.MockWindowsStatus.MethodToMock.CHECK_IF_READY;
 
+import org.fest.swing.TestFrame;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.easymock.classextension.EasyMock.*;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.
@@ -35,17 +56,117 @@ import org.testng.annotations.Test;
  */
 public class WindowMonitorTest {
 
+  private static final long WINDOWS_AVAILABILITY_MONITOR_EVENT_MASK = MOUSE_MOTION_EVENT_MASK | MOUSE_EVENT_MASK | PAINT_EVENT_MASK;
+
+  private static final long CONTEXT_MONITOR_EVENT_MASK = WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK;
+
   private WindowMonitor monitor;
   
   private Windows windows;
   private Context context;
   private WindowStatus windowStatus;
   
-  @BeforeMethod public void setUp() throws Exception {
+  private TestFrame frame;
+  
+  @BeforeMethod public void setUp() {
     monitor = WindowMonitor.instance();
-    createAndInjectMocks();
+    frame = new TestFrame(getClass());
+  }
+  
+  @AfterMethod public void tearDown() {
+    frame.beDisposed();
   }
 
+  @Test public void shouldAttachMonitors() {
+    assertThat(listenersInToolkit(ContextMonitor.class, CONTEXT_MONITOR_EVENT_MASK)).isEqualTo(1);
+    assertThat(listenersInToolkit(WindowAvailabilityMonitor.class, WINDOWS_AVAILABILITY_MONITOR_EVENT_MASK)).isEqualTo(1);
+    // TODO Test 'populateExistingWindows'
+  }
+
+  private static int listenersInToolkit(Class<? extends AWTEventListener> targetType, long eventMask) {
+    int count = 0;
+    for (AWTEventListener l : getDefaultToolkit().getAWTEventListeners(eventMask))
+      if (isInstanceOf(l, targetType)) count++;
+    return count;
+  }
+  
+  private static boolean isInstanceOf(AWTEventListener l, Class<? extends AWTEventListener> type) {
+    if (type.isAssignableFrom(l.getClass())) return true;
+    if (!(l instanceof AWTEventListenerProxy)) return false;
+    AWTEventListenerProxy proxy = (AWTEventListenerProxy)l;
+    WeakEventListener wrapper = (WeakEventListener)proxy.getListener();
+    return type.isAssignableFrom(wrapper.listenerReference.get().getClass());
+  }
+  
+  @Test public void shouldReturnWindowIsReady() throws Exception {
+    createAndInjectMocks();
+    new EasyMockTemplate(windows, context, windowStatus) {
+      @Override protected void expectations() {
+        expect(windows.isReady(frame)).andReturn(true);
+      }
+      
+      @Override protected void codeToTest() {
+        assertThat(monitor.isWindowReady(frame)).isTrue();
+      }
+    }.run();
+  }
+  
+  @Test public void shouldReturnWindowIsNotReadyAndCheckWindow() throws Exception {
+    createAndInjectMocks();
+    new EasyMockTemplate(windows, context, windowStatus) {
+      @Override protected void expectations() {
+        expect(windows.isReady(frame)).andReturn(false);
+        windowStatus.checkIfReady(frame);
+      }
+      
+      @Override protected void codeToTest() {
+        assertThat(monitor.isWindowReady(frame)).isFalse();
+      }
+    }.run();    
+  }
+  
+  @Test public void shouldReturnEventQueueForComponent() throws Exception {
+    createAndInjectMocks();
+    final EventQueue queue = new EventQueue();
+    new EasyMockTemplate(windows, context, windowStatus) {
+      @Override protected void expectations() {
+        expect(context.eventQueueFor(frame)).andReturn(queue);
+      }
+      
+      @Override protected void codeToTest() {
+        assertThat(monitor.eventQueueFor(frame)).isSameAs(queue);
+      }
+    }.run();    
+  }
+  
+  @Test public void shouldReturnAllEventQueues() throws Exception {
+    createAndInjectMocks();
+    final List<EventQueue> allQueues = new ArrayList<EventQueue>();
+    new EasyMockTemplate(windows, context, windowStatus) {
+      @Override protected void expectations() {
+        expect(context.allEventQueues()).andReturn(allQueues);
+      }
+      
+      @Override protected void codeToTest() {
+        assertThat(monitor.allEventQueues()).isSameAs(allQueues);
+      }
+    }.run();    
+  }
+  
+  @Test public void shouldReturnRootWindows() throws Exception {
+    createAndInjectMocks();
+    final List<Window> rootWindows = new ArrayList<Window>();
+    new EasyMockTemplate(windows, context, windowStatus) {
+      @Override protected void expectations() {
+        expect(context.rootWindows()).andReturn(rootWindows);
+      }
+      
+      @Override protected void codeToTest() {
+        assertThat(monitor.rootWindows()).isSameAs(rootWindows);
+      }
+    }.run();    
+  }
+  
   private void createAndInjectMocks() throws Exception {
     createMocks();
     injectMocks();
@@ -61,8 +182,5 @@ public class WindowMonitorTest {
     field("windows").ofType(Windows.class).in(monitor).set(windows);
     field("context").ofType(Context.class).in(monitor).set(context);
     field("windowStatus").ofType(WindowStatus.class).in(monitor).set(windowStatus);
-  }
-  
-  @Test public void mocksInjected() {
   }
 }

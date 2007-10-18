@@ -56,8 +56,8 @@ class Context {
    * <code>{@link java.applet.Applet}</code> may return a few dialogs as well.
    * @return all available root windows.
    */
-  Collection<Component> rootWindows() {
-    Set<Component> rootWindows = new HashSet<Component>();
+  Collection<Window> rootWindows() {
+    Set<Window> rootWindows = new HashSet<Window>();
     synchronized (lock) {
       for (EventQueue queue : contexts.keySet())
         rootWindows.addAll(contexts.get(queue).keySet());
