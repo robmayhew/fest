@@ -70,7 +70,7 @@ public class WindowStatusTest {
         status.checkIfReady(frame);
       }
     }.run();
-    assertThat(mouseLocation()).isEqualTo(center);
+    assertThat(mousePointerLocation()).isEqualTo(center);
   }
   
   @Test public void shouldMoveMouseToCenterWithFrameHeightGreaterThanWidth() {
@@ -86,7 +86,7 @@ public class WindowStatusTest {
         status.checkIfReady(frame);
       }
     }.run();
-    assertThat(mouseLocation()).isEqualTo(center);
+    assertThat(mousePointerLocation()).isEqualTo(center);
   }
   
   @Test public void shouldResizeWindowToReceiveEvents() {
@@ -104,12 +104,26 @@ public class WindowStatusTest {
     }.run();
     assertThat(frame.getHeight()).isGreaterThan(original.height);
   }
+  
+  @Test public void shouldNotCheckIfRobotIsNull() {
+    status = new WindowStatus(windows, null);
+    Point before = mousePointerLocation();
+    new EasyMockTemplate(windows) {
+      @Override protected void expectations() {}
+
+      @Override protected void codeToTest() {
+        status.checkIfReady(frame);
+      }
+    }.run();
+    // mouse pointer should not have moved
+    assertThat(mousePointerLocation()).isEqualTo(before);
+  }
 
   private void expectFrameIsReady() {
     expect(windows.isShowingButNotReady(frame)).andReturn(false);
   }
 
-  private Point mouseLocation() {
+  private Point mousePointerLocation() {
     return MouseInfo.getPointerInfo().getLocation();
   }
 }
