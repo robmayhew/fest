@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.reflect.field.Invoker;
 
 import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
 import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
@@ -86,9 +87,9 @@ public class WindowMonitorTest {
   }
 
   private void restoreOriginal() {
-    field("windows").ofType(Windows.class).in(monitor).set(windows);
-    field("context").ofType(Context.class).in(monitor).set(context);
-    field("windowStatus").ofType(WindowStatus.class).in(monitor).set(windowStatus);
+    windowsField().set(windows);
+    contextField().set(context);
+    windowsStatusField().set(windowStatus);
   }
 
   @Test public void shouldAttachMonitors() {
@@ -208,15 +209,27 @@ public class WindowMonitorTest {
   }
 
   private void saveOriginal() {
-    windows = field("windows").ofType(Windows.class).in(monitor).get();
-    context = field("context").ofType(Context.class).in(monitor).get();
-    windowStatus = field("windowStatus").ofType(WindowStatus.class).in(monitor).get();
+    windows = windowsField().get();
+    context = contextField().get();
+    windowStatus = windowsStatusField().get();
   }
   
   private void injectMocks() {
     mocksInjected = true;
-    field("windows").ofType(Windows.class).in(monitor).set(mockWindows);
-    field("context").ofType(Context.class).in(monitor).set(mockContext);
-    field("windowStatus").ofType(WindowStatus.class).in(monitor).set(mockWindowStatus);
+    windowsField().set(mockWindows);
+    contextField().set(mockContext);
+    windowsStatusField().set(mockWindowStatus);
+  }
+
+  private Invoker<WindowStatus> windowsStatusField() {
+    return field("windowStatus").ofType(WindowStatus.class).in(monitor);
+  }
+
+  private Invoker<Context> contextField() {
+    return field("context").ofType(Context.class).in(monitor);
+  }
+
+  private Invoker<Windows> windowsField() {
+    return field("windows").ofType(Windows.class).in(monitor);
   }
 }
