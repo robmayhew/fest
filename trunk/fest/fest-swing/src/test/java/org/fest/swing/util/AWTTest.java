@@ -17,6 +17,8 @@ package org.fest.swing.util;
 
 import java.awt.Insets;
 
+import javax.swing.JTextField;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.TestFrame;
@@ -54,5 +56,13 @@ public class AWTTest {
     };
     Insets insets = AWT.insetsFrom(frame);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
+  }
+  
+  @Test public void shouldReturnFalseIfComponentIsNotAppletViewer() {
+    assertThat(AWT.isAppletViewer(new JTextField())).isFalse();
+  }
+
+  @Test public void shouldReturnFalseIfComponentIsNull() {
+    assertThat(AWT.isAppletViewer(null)).isFalse();
   }
 }

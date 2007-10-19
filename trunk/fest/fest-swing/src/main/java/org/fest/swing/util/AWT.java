@@ -14,6 +14,7 @@
  */
 package org.fest.swing.util;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Insets;
 
@@ -24,6 +25,8 @@ import java.awt.Insets;
  * </p>
  */
 public final class AWT {
+
+  private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
 
   /**
    * Returns the insets of the given container, or an empty one if no insets can be found.
@@ -36,6 +39,16 @@ public final class AWT {
       if (insets != null) return insets;
     } catch (Exception e) {}
     return new Insets(0, 0, 0, 0);
+  }
+  
+  /**
+   * Returns <code>true</code> if the given component is an Applet viewer.
+   * @param c the component to check.
+   * @return <code>true</code> if the given component is an Applet viewer, <code>false</code> otherwise.
+   */
+  public static boolean isAppletViewer(Component c) {
+    if (c == null) return false;
+    return APPLET_APPLET_VIEWER_CLASS.equals(c.getClass().getName());
   }
 
   private AWT() {}
