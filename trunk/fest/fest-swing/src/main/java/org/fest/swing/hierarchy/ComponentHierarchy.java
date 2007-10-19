@@ -17,7 +17,6 @@ package org.fest.swing.hierarchy;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.Window;
 import java.util.Collection;
 
@@ -32,10 +31,10 @@ import java.util.Collection;
 public interface ComponentHierarchy {
 
   /**
-   * Provides all root components in the hierarchy.
-   * @return all root components in the hierarchy.
+   * Provides all root windows in the hierarchy.
+   * @return all root windows in the hierarchy.
    */
-  Collection<Frame> roots();
+  Collection<Window> rootWindows();
 
   /**
    * Returns all sub-components of the given component.
