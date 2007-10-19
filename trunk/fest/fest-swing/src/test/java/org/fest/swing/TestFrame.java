@@ -18,6 +18,7 @@ package org.fest.swing;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -36,18 +37,31 @@ public class TestFrame extends JFrame {
   }
 
   private void lookNative() {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Exception ignored) {}
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        try {
+          UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
+      }
+    });
   }
   
   public void beVisible() {
-    pack();
-    setVisible(true);
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        pack();
+        setVisible(true);
+      }
+    });
+    while (isShowing() != true) {}
   }
   
   public void beDisposed() {
-    setVisible(false);
-    dispose();
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        setVisible(false);
+        dispose();
+      }
+    });
   }
 }

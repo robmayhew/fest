@@ -63,11 +63,17 @@ public class WindowMonitorTest {
 
   private WindowMonitor monitor;
   
+  private Windows mockWindows;
+  private Context mockContext;
+  private WindowStatus mockWindowStatus;
+  
   private Windows windows;
   private Context context;
   private WindowStatus windowStatus;
-  
+
   private TestFrame frame;
+
+  private boolean mocksInjected;
   
   @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
@@ -76,6 +82,13 @@ public class WindowMonitorTest {
   
   @AfterMethod public void tearDown() {
     frame.beDisposed();
+    if (mocksInjected) restoreOriginal();
+  }
+
+  private void restoreOriginal() {
+    field("windows").ofType(Windows.class).in(monitor).set(windows);
+    field("context").ofType(Context.class).in(monitor).set(context);
+    field("windowStatus").ofType(WindowStatus.class).in(monitor).set(windowStatus);
   }
 
   @Test public void shouldAttachMonitors() {
@@ -111,9 +124,9 @@ public class WindowMonitorTest {
   @Test(dependsOnMethods = "shouldAttachMonitors")
   public void shouldReturnWindowIsReady() throws Exception {
     createAndInjectMocks();
-    new EasyMockTemplate(windows, context, windowStatus) {
+    new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
-        expect(windows.isReady(frame)).andReturn(true);
+        expect(mockWindows.isReady(frame)).andReturn(true);
       }
       
       @Override protected void codeToTest() {
@@ -125,10 +138,10 @@ public class WindowMonitorTest {
   @Test(dependsOnMethods = "shouldAttachMonitors")
   public void shouldReturnWindowIsNotReadyAndCheckWindow() throws Exception {
     createAndInjectMocks();
-    new EasyMockTemplate(windows, context, windowStatus) {
+    new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
-        expect(windows.isReady(frame)).andReturn(false);
-        windowStatus.checkIfReady(frame);
+        expect(mockWindows.isReady(frame)).andReturn(false);
+        mockWindowStatus.checkIfReady(frame);
       }
       
       @Override protected void codeToTest() {
@@ -141,9 +154,9 @@ public class WindowMonitorTest {
   public void shouldReturnEventQueueForComponent() throws Exception {
     createAndInjectMocks();
     final EventQueue queue = new EventQueue();
-    new EasyMockTemplate(windows, context, windowStatus) {
+    new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
-        expect(context.eventQueueFor(frame)).andReturn(queue);
+        expect(mockContext.eventQueueFor(frame)).andReturn(queue);
       }
       
       @Override protected void codeToTest() {
@@ -156,9 +169,9 @@ public class WindowMonitorTest {
   public void shouldReturnAllEventQueues() throws Exception {
     createAndInjectMocks();
     final List<EventQueue> allQueues = new ArrayList<EventQueue>();
-    new EasyMockTemplate(windows, context, windowStatus) {
+    new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
-        expect(context.allEventQueues()).andReturn(allQueues);
+        expect(mockContext.allEventQueues()).andReturn(allQueues);
       }
       
       @Override protected void codeToTest() {
@@ -171,9 +184,9 @@ public class WindowMonitorTest {
   public void shouldReturnRootWindows() throws Exception {
     createAndInjectMocks();
     final List<Window> rootWindows = new ArrayList<Window>();
-    new EasyMockTemplate(windows, context, windowStatus) {
+    new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
-        expect(context.rootWindows()).andReturn(rootWindows);
+        expect(mockContext.rootWindows()).andReturn(rootWindows);
       }
       
       @Override protected void codeToTest() {
@@ -184,18 +197,26 @@ public class WindowMonitorTest {
   
   private void createAndInjectMocks() throws Exception {
     createMocks();
-    injectMocks();
+    saveOriginal();
+    injectMocks();    
   }
   
   private void createMocks() throws Exception {
-    windows = MockWindows.mock(IS_READY, MARK_EXISTING);
-    context = MockContext.mock(ADD_CONTEXT_FOR, ALL_EVENT_QUEUES, EVENT_QUEUE_FOR, ROOT_WINDOWS);
-    windowStatus = MockWindowsStatus.mock(CHECK_IF_READY);
+    mockWindows = MockWindows.mock(IS_READY, MARK_EXISTING);
+    mockContext = MockContext.mock(ADD_CONTEXT_FOR, ALL_EVENT_QUEUES, EVENT_QUEUE_FOR, ROOT_WINDOWS);
+    mockWindowStatus = MockWindowsStatus.mock(CHECK_IF_READY);
+  }
+
+  private void saveOriginal() {
+    windows = field("windows").ofType(Windows.class).in(monitor).get();
+    context = field("context").ofType(Context.class).in(monitor).get();
+    windowStatus = field("windowStatus").ofType(WindowStatus.class).in(monitor).get();
   }
   
   private void injectMocks() {
-    field("windows").ofType(Windows.class).in(monitor).set(windows);
-    field("context").ofType(Context.class).in(monitor).set(context);
-    field("windowStatus").ofType(WindowStatus.class).in(monitor).set(windowStatus);
+    mocksInjected = true;
+    field("windows").ofType(Windows.class).in(monitor).set(mockWindows);
+    field("context").ofType(Context.class).in(monitor).set(mockContext);
+    field("windowStatus").ofType(WindowStatus.class).in(monitor).set(mockWindowStatus);
   }
 }
