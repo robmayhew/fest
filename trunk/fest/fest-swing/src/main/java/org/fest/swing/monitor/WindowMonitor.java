@@ -75,8 +75,8 @@ public final class WindowMonitor {
 
   /**
    * Returns the event queue corresponding to the given component. In most cases, this is the same as
-   * Component.getToolkit().getSystemEventQueue(), but in the case of applets will bypass the AppContext and provide the
-   * real event queue.
+   * <code>Component.getToolkit().getSystemEventQueue()</code>, but in the case of applets will bypass the
+   * <code>AppContext</code> and provide the real event queue.
    * @param c the given component.
    * @return the event queue corresponding to the given component.
    */
@@ -107,10 +107,10 @@ public final class WindowMonitor {
    * @return the singleton instance of this class.
    */
   public static WindowMonitor instance() {
-    return SingletonHolder.INSTANCE;
+    return SingletonLazyLoader.INSTANCE;
   }
 
-  private static class SingletonHolder {
+  private static class SingletonLazyLoader {
     static final WindowMonitor INSTANCE = new WindowMonitor();
   }
 }
