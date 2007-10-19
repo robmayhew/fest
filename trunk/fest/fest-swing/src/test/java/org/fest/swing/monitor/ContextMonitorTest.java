@@ -47,6 +47,7 @@ import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
+import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
@@ -100,7 +101,7 @@ public class ContextMonitorTest {
 
   @Test public void shouldProcessEventWithIdEqualToWindowOpen() {
     createMonitor();
-    assertWindowVisibilityMonitorInFrameCount(frame, 0);
+    assertWindowVisibilityMonitorCountIn(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         context.addContextFor(frame);
@@ -112,13 +113,13 @@ public class ContextMonitorTest {
         dispatchWindowOpenedEventToMonitor(frame);
       }
     }.run();
-    assertWindowVisibilityMonitorInFrameCount(frame, 1);
+    assertWindowVisibilityMonitorCountIn(frame, 1);
   }
   
   @Test public void shouldProcessEventWithIdEqualToWindowOpenedAndMarkWindowAsReadyIfFileDialog() {
     createMonitor();
     final Window w = new FileDialog(frame);
-    assertWindowVisibilityMonitorInFrameCount(w, 0);
+    assertWindowVisibilityMonitorCountIn(w, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         context.addContextFor(w);
@@ -131,21 +132,9 @@ public class ContextMonitorTest {
         dispatchWindowOpenedEventToMonitor(w);
       }
     }.run();
-    assertWindowVisibilityMonitorInFrameCount(w, 1);
+    assertWindowVisibilityMonitorCountIn(w, 1);
   }
 
-  private void assertWindowVisibilityMonitorInFrameCount(Window window, int expected) {
-    assertThat(windowVisibilityMonitorCountIn(window.getComponentListeners())).isEqualTo(expected);
-    assertThat(windowVisibilityMonitorCountIn(window.getWindowListeners())).isEqualTo(expected);
-  }
-
-  private int windowVisibilityMonitorCountIn(Object[] listeners) {
-    int count = 0;
-    for (Object listener : listeners)
-      if (listener instanceof WindowVisibilityMonitor) count++;
-    return count;
-  }
-  
   @Test public void shouldProcessEventWithIdEqualToWindowClosedAndWithRootWindow() {
     createMonitor();
     new EasyMockTemplate(windows, context) {
@@ -206,7 +195,7 @@ public class ContextMonitorTest {
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdInBetweenWindowFirstAndWindowLastAndWindowNotInContext(final int eventId) {
     createMonitor();
-    assertWindowVisibilityMonitorInFrameCount(frame, 0);
+    assertWindowVisibilityMonitorCountIn(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(new ArrayList<Window>());
@@ -219,13 +208,13 @@ public class ContextMonitorTest {
         dispatchEventToMonitor(frame, eventId);
       }
     }.run();
-    assertWindowVisibilityMonitorInFrameCount(frame, 1);
+    assertWindowVisibilityMonitorCountIn(frame, 1);
   }
   
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdInBetweenWindowFirstAndWindowLastAndWindowInContextAndClosed(final int eventId) {
     createMonitor();
-    assertWindowVisibilityMonitorInFrameCount(frame, 0);
+    assertWindowVisibilityMonitorCountIn(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(frameInList());
@@ -239,13 +228,13 @@ public class ContextMonitorTest {
         dispatchEventToMonitor(frame, eventId);
       }
     }.run();
-    assertWindowVisibilityMonitorInFrameCount(frame, 1);
+    assertWindowVisibilityMonitorCountIn(frame, 1);
   }
 
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdInBetweenWindowFirstAndWindowLastAndWindowInContextAndNotClosed(final int eventId) {
     createMonitor();
-    assertWindowVisibilityMonitorInFrameCount(frame, 0);
+    assertWindowVisibilityMonitorCountIn(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(frameInList());
@@ -257,7 +246,7 @@ public class ContextMonitorTest {
         dispatchEventToMonitor(frame, eventId);
       }
     }.run();
-    assertWindowVisibilityMonitorInFrameCount(frame, 0);
+    assertWindowVisibilityMonitorCountIn(frame, 0);
   }
 
   @DataProvider(name = "eventsBetweenWindowFirstAndWindowLast")
@@ -273,7 +262,7 @@ public class ContextMonitorTest {
   private void createMonitor() {
     monitor = new ContextMonitor(windows, context);
   }
-  
+    
   private void expectEventQueueLookupFor(Component c) {
     expect(context.lookupEventQueueFor(c)).andReturn(c.getToolkit().getSystemEventQueue());
   }

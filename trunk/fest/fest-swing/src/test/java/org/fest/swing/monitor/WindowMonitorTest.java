@@ -16,6 +16,7 @@
 package org.fest.swing.monitor;
 
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.awt.event.AWTEventListenerProxy;
@@ -30,6 +31,7 @@ import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
 import static java.awt.AWTEvent.PAINT_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 import static java.awt.Toolkit.getDefaultToolkit;
+import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
@@ -40,14 +42,13 @@ import static org.fest.swing.monitor.MockContext.MethodToMock.ROOT_WINDOWS;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_READY;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_EXISTING;
 import static org.fest.swing.monitor.MockWindowsStatus.MethodToMock.CHECK_IF_READY;
+import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
 
 import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.easymock.classextension.EasyMock.*;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.
@@ -69,8 +70,8 @@ public class WindowMonitorTest {
   private TestFrame frame;
   
   @BeforeMethod public void setUp() {
-    monitor = WindowMonitor.instance();
     frame = new TestFrame(getClass());
+    monitor = WindowMonitor.instance();
   }
   
   @AfterMethod public void tearDown() {
@@ -80,9 +81,18 @@ public class WindowMonitorTest {
   @Test public void shouldAttachMonitors() {
     assertThat(listenersInToolkit(ContextMonitor.class, CONTEXT_MONITOR_EVENT_MASK)).isEqualTo(1);
     assertThat(listenersInToolkit(WindowAvailabilityMonitor.class, WINDOWS_AVAILABILITY_MONITOR_EVENT_MASK)).isEqualTo(1);
-    // TODO Test 'populateExistingWindows'
+    assertPopulatedExistingWindows();
   }
 
+  private void assertPopulatedExistingWindows() {
+    for (Frame f : Frame.getFrames()) assertPopulated(f);
+  }
+  
+  private void assertPopulated(Window w) {
+    assertWindowVisibilityMonitorCountIn(w, 1);
+    for (Window owned : w.getOwnedWindows()) assertPopulated(owned);
+  }
+  
   private static int listenersInToolkit(Class<? extends AWTEventListener> targetType, long eventMask) {
     int count = 0;
     for (AWTEventListener l : getDefaultToolkit().getAWTEventListeners(eventMask))
@@ -98,7 +108,8 @@ public class WindowMonitorTest {
     return type.isAssignableFrom(wrapper.listenerReference.get().getClass());
   }
   
-  @Test public void shouldReturnWindowIsReady() throws Exception {
+  @Test(dependsOnMethods = "shouldAttachMonitors")
+  public void shouldReturnWindowIsReady() throws Exception {
     createAndInjectMocks();
     new EasyMockTemplate(windows, context, windowStatus) {
       @Override protected void expectations() {
@@ -111,7 +122,8 @@ public class WindowMonitorTest {
     }.run();
   }
   
-  @Test public void shouldReturnWindowIsNotReadyAndCheckWindow() throws Exception {
+  @Test(dependsOnMethods = "shouldAttachMonitors")
+  public void shouldReturnWindowIsNotReadyAndCheckWindow() throws Exception {
     createAndInjectMocks();
     new EasyMockTemplate(windows, context, windowStatus) {
       @Override protected void expectations() {
@@ -125,7 +137,8 @@ public class WindowMonitorTest {
     }.run();    
   }
   
-  @Test public void shouldReturnEventQueueForComponent() throws Exception {
+  @Test(dependsOnMethods = "shouldAttachMonitors")
+  public void shouldReturnEventQueueForComponent() throws Exception {
     createAndInjectMocks();
     final EventQueue queue = new EventQueue();
     new EasyMockTemplate(windows, context, windowStatus) {
@@ -139,7 +152,8 @@ public class WindowMonitorTest {
     }.run();    
   }
   
-  @Test public void shouldReturnAllEventQueues() throws Exception {
+  @Test(dependsOnMethods = "shouldAttachMonitors")
+  public void shouldReturnAllEventQueues() throws Exception {
     createAndInjectMocks();
     final List<EventQueue> allQueues = new ArrayList<EventQueue>();
     new EasyMockTemplate(windows, context, windowStatus) {
@@ -153,7 +167,8 @@ public class WindowMonitorTest {
     }.run();    
   }
   
-  @Test public void shouldReturnRootWindows() throws Exception {
+  @Test(dependsOnMethods = "shouldAttachMonitors")
+  public void shouldReturnRootWindows() throws Exception {
     createAndInjectMocks();
     final List<Window> rootWindows = new ArrayList<Window>();
     new EasyMockTemplate(windows, context, windowStatus) {
