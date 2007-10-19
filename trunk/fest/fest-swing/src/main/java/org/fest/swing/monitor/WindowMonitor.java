@@ -61,9 +61,9 @@ public final class WindowMonitor {
   }
 
   /**
-   * Returns whether the window is ready to receive OS-level event input. A window's "isShowing" flag may be set true
-   * before the WINDOW_OPENED event is generated, and even after the WINDOW_OPENED is sent the window peer is not
-   * guaranteed to be ready.
+   * Returns whether the window is ready to receive OS-level event input. A window's "isShowing" flag may be set
+   * <code>true</code> before the <code>WINDOW_OPENED</code> event is generated, and even after the
+   * <code>WINDOW_OPENED</code> is sent the window peer is not guaranteed to be ready.
    * @param w the given window.
    * @return whether the window is ready to receive OS-level event input.
    */

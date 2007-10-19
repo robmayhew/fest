@@ -17,6 +17,7 @@ package org.fest.swing.monitor;
 
 import java.awt.AWTException;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Window;
 
@@ -36,6 +37,8 @@ import static org.fest.swing.util.AWT.insetsFrom;
  * @author Alex Ruiz
  */
 class WindowStatus {
+
+  private static final int ARBITRARY_EXTRA_VALUE = 3;
 
   private static int sign = 1;
 
@@ -60,29 +63,39 @@ class WindowStatus {
   void checkIfReady(Window w) {
     if (robot == null) return;
     // Must avoid frame borders, which are insensitive to mouse motion (at least on w32).
-    Insets insets = insetsFrom(w);
-    int width = w.getWidth();
-    int height = w.getHeight();
-    int x = w.getX() + insets.left + (width - (insets.left + insets.right)) / 2;
-    int y = w.getY() + insets.top + (height - (insets.top + insets.bottom)) / 2;
-    if (x != 0 && y != 0) {
-      robot.mouseMove(x, y);
-      if (width > height) robot.mouseMove(x + sign, y);
-      else robot.mouseMove(x, y + sign);
-      sign = -sign;
-    }
+    WindowMetrics metrics = new WindowMetrics(w);
+    Point center = metrics.center();
+    mouseMove(w, center);
     if (windows.isShowingButNotReady(w) && isEmptyFrame(w)) 
-      makeLargeEnoughToReceiveEvents(w, insets, width, height);
+      makeLargeEnoughToReceiveEvents(w, metrics);
   }
 
-  private void makeLargeEnoughToReceiveEvents(final Window w, Insets insets, int width, int height) {
-    final int newWidth = max(width, insets.left + insets.right + 3);
-    final int newHeight = max(height, insets.top + insets.bottom + 3);
+  private void mouseMove(Window w, Point point) {
+    int x = point.x;
+    int y = point.y;
+    if (x == 0 || y == 0) return;
+    robot.mouseMove(x, y);
+    if (w.getWidth() > w.getHeight()) robot.mouseMove(x + sign, y);
+    else robot.mouseMove(x, y + sign);
+    sign = -sign;
+  }
+  
+  private void makeLargeEnoughToReceiveEvents(final Window w, WindowMetrics metrics) {
+    final int width = max(w.getWidth(), proposedWidth(metrics));
+    final int height = max(w.getHeight(), proposedHeight(metrics));
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        w.setSize(newWidth, newHeight);
+        w.setSize(width, height);
       }
     });
+  }
+
+  private int proposedHeight(WindowMetrics metrics) {
+    return metrics.addHorizontalInsets() + ARBITRARY_EXTRA_VALUE;
+  }
+
+  private int proposedWidth(WindowMetrics metrics) {
+    return metrics.addVerticalInsets() + ARBITRARY_EXTRA_VALUE;
   }
   
   private boolean isEmptyFrame(Window w) {
