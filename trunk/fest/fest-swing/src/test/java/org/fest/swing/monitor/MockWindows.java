@@ -27,6 +27,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_READY;
+import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_SHOWING_BUT_NOT_READY;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_HIDDEN;
 import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
@@ -44,6 +45,7 @@ public class MockWindows extends Windows {
   enum MethodToMock {
     IS_CLOSED("isClosed"),
     IS_READY("isReady"),
+    IS_SHOWING_BUT_NOT_READY("isShowingButNotReady"),
     MARK_AS_CLOSED("markAsClosed"),
     MARK_AS_HIDDEN("markAsHidden"),
     MARK_AS_READY("markAsReady"),
@@ -65,6 +67,7 @@ public class MockWindows extends Windows {
     try {
       mapMethod(IS_CLOSED, Component.class);
       mapMethod(IS_READY, Window.class);
+      mapMethod(IS_SHOWING_BUT_NOT_READY, Window.class);
       mapMethod(MARK_AS_CLOSED, Window.class);
       mapMethod(MARK_AS_HIDDEN, Window.class);
       mapMethod(MARK_AS_READY, Window.class);
@@ -104,6 +107,8 @@ public class MockWindows extends Windows {
   @Override public boolean isClosed(Component c) { return false; }
   
   @Override public boolean isReady(Window w) { return false; }
+
+  @Override public boolean isShowingButNotReady(Window w) { return false; }
 
   public MockWindows() {}
 }

@@ -38,22 +38,28 @@ import static org.fest.swing.util.AWT.insetsFrom;
  */
 class WindowStatus {
 
-  private static final int ARBITRARY_EXTRA_VALUE = 3;
+  private static final int ARBITRARY_EXTRA_VALUE = 20;
 
   private static int sign = 1;
 
   private final Windows windows;
-  private Robot robot;
+  private final Robot robot;
   
   WindowStatus(Windows windows) {
-    this.windows = windows;
-    createRobot();
+    this(windows, createRobot());
   }
 
-  private void createRobot() {
+  WindowStatus(Windows windows, Robot robot) {
+    this.windows = windows;
+    this.robot = robot;
+  }
+  
+  private static Robot createRobot() {
     try {
-      robot = new java.awt.Robot();
-    } catch (AWTException e) {}
+      return new Robot();
+    } catch (AWTException e) {
+      return null;
+    }
   }
 
   /**
@@ -64,8 +70,7 @@ class WindowStatus {
     if (robot == null) return;
     // Must avoid frame borders, which are insensitive to mouse motion (at least on w32).
     WindowMetrics metrics = new WindowMetrics(w);
-    Point center = metrics.center();
-    mouseMove(w, center);
+    mouseMove(w, metrics.center());
     if (windows.isShowingButNotReady(w) && isEmptyFrame(w)) 
       makeLargeEnoughToReceiveEvents(w, metrics);
   }
@@ -102,4 +107,6 @@ class WindowStatus {
     Insets insets = insetsFrom(w);
     return insets.top + insets.bottom == w.getHeight() || insets.left + insets.right == w.getWidth();
   }
+  
+  static int sign() { return sign; }
 }
