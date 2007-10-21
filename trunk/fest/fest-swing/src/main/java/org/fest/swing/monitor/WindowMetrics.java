@@ -19,7 +19,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Window;
 
-import static org.fest.swing.util.AWT.insetsFrom;
+import static org.fest.swing.util.Swing.insetsFrom;
 
 /**
  * Understands some window metrics.

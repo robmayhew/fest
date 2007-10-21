@@ -20,7 +20,8 @@ package org.fest.swing.util;
  * @author Alex Ruiz
  */
 public final class Arrays {
-
+ 
+  // TODO: Move this method to fest-util.
   public static int objectsOfType(Object[] objects, Class<?> type) {
     int count = 0;
     for (Object o : objects) {

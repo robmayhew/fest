@@ -21,22 +21,37 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 
+import static java.util.logging.Level.WARNING;
+
+import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.util.Swing.isAppletViewer;
+import static org.fest.swing.util.Swing.isSharedInvisibleFrame;
+import static org.fest.swing.util.Swing.runInEventThreadAndWait;
+
 import static org.fest.util.Collections.list;
+import static org.fest.util.Strings.concat;
 
 import org.fest.swing.monitor.WindowMonitor;
 
 /**
- * Understands SOMETHING DUMMY.
- *
- * @author Alex Ruiz 
+ * Understands access to the current AWT hierarchy.
+ * <p>
+ * Adapted from <code>abbot.finder.AWTHierarchy</code> from <a href="http://abbot.sourceforge.net"
+ * target="_blank">Abbot</a>.
+ * </p>
+ * 
+ * @author Alex Ruiz
  */
 public final class ExistingHierarchy implements ComponentHierarchy {
 
+  private static Logger logger = Logger.getLogger(ExistingHierarchy.class.getName());
+  
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
   
   /** ${@inheritDoc} */
@@ -59,12 +74,22 @@ public final class ExistingHierarchy implements ComponentHierarchy {
     return null;
   }
   
-  /** ${@inheritDoc} */
+  /**
+   * Returns whether the given component is reachable from any of the root windows. The default is to consider all
+   * components to be contained in the hierarchy, whether they are reachable or not.
+   * @param c the given component.
+   * @return <code>true</code>.
+   */
   public boolean contains(Component c) {
-    return false;
+    return true;
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Returns all descendents of interest of the given component. This includes owned windows for
+   * <code>{@link Window}</code>s, children for <code>{@link Container}</code>s.
+   * @param c the given component.
+   * @return all descendents of interest of the given component.
+   */
   public Collection<Component> subComponentsOf(Component c) {
     if (!(c instanceof Container)) return empty();
     Container container = (Container)c;
@@ -75,12 +100,9 @@ public final class ExistingHierarchy implements ComponentHierarchy {
   }
 
   private Collection<Component> notExplicitChildrenOf(Container c) {
+    if (c instanceof JDesktopPane) return internalFramesFromIcons(c);
     if (c instanceof JMenu) return popupMenuIn((JMenu)c);
     if (c instanceof Window) return ownedWindowsIn((Window)c);
-    if (c instanceof JDesktopPane) 
-      // Add iconified frames, which are otherwise unreachable. For consistency, they are still considerered children of 
-      // the desktop pane.
-      return internalFramesFromIcons(c);
     return empty();
   }
 
@@ -100,6 +122,8 @@ public final class ExistingHierarchy implements ComponentHierarchy {
     return new ArrayList<Component>();
   }
   
+  // From Abbot: add iconified frames, which are otherwise unreachable. For consistency, they are still considerered 
+  // children of the desktop pane.
   private Collection<Component> internalFramesFromIcons(Container container) {
     List<Component> frames = new ArrayList<Component>();
     for (Component child : container.getComponents()) {
@@ -114,7 +138,29 @@ public final class ExistingHierarchy implements ComponentHierarchy {
     return frames;
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Properly dispose of the given window, making it and its native resources available for garbage collection.
+   * @param w the window to dispose.
+   */
   public void dispose(final Window w) {
+    if (isAppletViewer(w)) return; // From Abbot: don't dispose, it must quit on its own.
+    logger.info(concat("Disposing ", w));
+    for (Window owned : w.getOwnedWindows()) dispose(owned);
+    if (isSharedInvisibleFrame(w)) return; // From Abbot: don't dispose, ignored windows will be hidden and disposed.
+    try {
+      runInEventThreadAndWait(disposerFor(w));
+    } catch (Exception ignored) {}
+  }
+
+  private Runnable disposerFor(final Window w) {
+    return new Runnable() {
+      public void run() {
+        try {
+          w.dispose();
+        } catch (Throwable e) {
+          logger.log(WARNING, concat("Ignoring exception thrown when disposing the window ", format(w)), e);
+        }
+      }
+    };
   }
 }

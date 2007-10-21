@@ -15,8 +15,10 @@
  */
 package org.fest.swing.util;
 
+import java.awt.Frame;
 import java.awt.Insets;
 
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -26,24 +28,24 @@ import org.fest.swing.TestFrame;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link AWT}</code>.
+ * Tests for <code>{@link Swing}</code>.
  *
  * @author Alex Ruiz 
  */
-public class AWTTest {
+public class SwingTest {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0); 
   
   @Test public void shouldReturnInsetsFromContainer() {
     TestFrame frame = new TestFrame(getClass());
     frame.beVisible();
-    Insets insets = AWT.insetsFrom(frame);
+    Insets insets = Swing.insetsFrom(frame);
     assertThat(insets).isEqualTo(frame.getInsets());
     frame.beDisposed();
   }
   
   @Test public void shouldReturnEmptyInsetsIfExceptionThrown() {
-    Insets insets = AWT.insetsFrom(null);
+    Insets insets = Swing.insetsFrom(null);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
 
@@ -54,15 +56,32 @@ public class AWTTest {
         return null;
       }
     };
-    Insets insets = AWT.insetsFrom(frame);
+    Insets insets = Swing.insetsFrom(frame);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
   
   @Test public void shouldReturnFalseIfComponentIsNotAppletViewer() {
-    assertThat(AWT.isAppletViewer(new JTextField())).isFalse();
+    assertThat(Swing.isAppletViewer(new JTextField())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfComponentIsNull() {
-    assertThat(AWT.isAppletViewer(null)).isFalse();
+    assertThat(Swing.isAppletViewer(null)).isFalse();
+  }
+  
+  @Test public void shouldReturnTrueIfComponentIsSharedInvisibleFrame() {
+    JDialog dialog = dialogWithSharedInvisibleFrameAsOwner(); 
+    assertThat(Swing.isSharedInvisibleFrame(dialog.getOwner())).isTrue();
+  }
+
+  private JDialog dialogWithSharedInvisibleFrameAsOwner() {
+    return new JDialog((Frame)null);
+  }
+  
+  @Test public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrame() {
+    assertThat(Swing.isSharedInvisibleFrame(new JTextField())).isFalse();
+  }
+  
+  @Test public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrameAndNull() {
+    assertThat(Swing.isSharedInvisibleFrame(null)).isFalse();
   }
 }

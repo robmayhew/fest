@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 
 import static java.lang.Math.max;
 
-import static org.fest.swing.util.AWT.insetsFrom;
+import static org.fest.swing.util.Swing.insetsFrom;
 
 /**
  * Understands verification of the state of a window.
