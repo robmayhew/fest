@@ -142,11 +142,11 @@ public final class ExistingHierarchy implements ComponentHierarchy {
    * Properly dispose of the given window, making it and its native resources available for garbage collection.
    * @param w the window to dispose.
    */
-  public void dispose(final Window w) {
-    if (isAppletViewer(w)) return; // From Abbot: don't dispose, it must quit on its own.
+  public void dispose(Window w) {
+    if (isAppletViewer(w)) return;
     logger.info(concat("Disposing ", w));
     for (Window owned : w.getOwnedWindows()) dispose(owned);
-    if (isSharedInvisibleFrame(w)) return; // From Abbot: don't dispose, ignored windows will be hidden and disposed.
+    if (isSharedInvisibleFrame(w)) return;
     try {
       runInEventThreadAndWait(disposerFor(w));
     } catch (Exception ignored) {}

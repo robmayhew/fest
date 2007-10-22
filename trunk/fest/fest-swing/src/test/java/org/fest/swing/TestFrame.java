@@ -15,6 +15,7 @@
  */
 package org.fest.swing;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
@@ -29,31 +30,44 @@ import javax.swing.UIManager;
 public class TestFrame extends JFrame {
 
   private static final long serialVersionUID = 1L;
+  private final String typeName;
 
   public TestFrame(Class testClass) {
-    setLayout(new FlowLayout());
-    setTitle(testClass.getSimpleName());
-    lookNative();
+    typeName = testClass.getSimpleName();
   }
 
-  private void lookNative() {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
-      }
-    });
+  public void beVisible() {
+    beVisible(new Dimension(400, 200));
   }
   
-  public void beVisible() {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        pack();
-        setVisible(true);
-      }
-    });
-    while (isShowing() != true) {}
+  public void beVisible(final Dimension size) {
+    try {
+      SwingUtilities.invokeAndWait(new Runnable() {
+        public void run() {
+          beforeShown();
+          setLayout(new FlowLayout());
+          setTitle(typeName);
+          lookAndFeel();
+          setPreferredSize(size);
+          pack();
+          setVisible(true);
+        }
+      });
+    } catch (Exception e) {
+      throw new RuntimeException("Unable to show frame", e);
+    }
+  }
+  
+  protected void beforeShown() {}
+
+  protected void lookAndFeel() {
+    lookNative();
+  }
+  
+  private void lookNative() {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception ignored) {}
   }
   
   public void beDisposed() {

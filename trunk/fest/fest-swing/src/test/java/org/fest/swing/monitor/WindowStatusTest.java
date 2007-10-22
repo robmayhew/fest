@@ -16,7 +16,6 @@
 package org.fest.swing.monitor;
 
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -30,7 +29,7 @@ import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_SHOWING_BUT_NOT
 
 import org.fest.swing.TestFrame;
 
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -48,17 +47,16 @@ public class WindowStatusTest {
   
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    frame.beVisible();
     windows = mock(IS_SHOWING_BUT_NOT_READY);
     status = new WindowStatus(windows);
   }
   
-  @AfterTest public void tearDown() {
+  @AfterMethod public void tearDown() {
     frame.beDisposed();
   }
   
   @Test public void shouldMoveMouseToCenterWithFrameWidthGreaterThanHeight() {
-    frame.setSize(new Dimension(400, 200));
+    frame.beVisible();
     Point center = new WindowMetrics(frame).center();
     center.x += WindowStatus.sign();
     new EasyMockTemplate(windows) {
@@ -74,7 +72,7 @@ public class WindowStatusTest {
   }
   
   @Test public void shouldMoveMouseToCenterWithFrameHeightGreaterThanWidth() {
-    frame.setSize(new Dimension(200, 400));
+    frame.beVisible(new Dimension(200, 400));
     Point center = new WindowMetrics(frame).center();
     center.y += WindowStatus.sign();
     new EasyMockTemplate(windows) {
@@ -90,8 +88,7 @@ public class WindowStatusTest {
   }
   
   @Test public void shouldResizeWindowToReceiveEvents() {
-    Insets insets = frame.getInsets();
-    frame.setSize(new Dimension(insets.left + insets.right, insets.top + insets.bottom));
+    frame.beVisible(new Dimension(0 ,0));
     Dimension original = frame.getSize();
     new EasyMockTemplate(windows) {
       @Override protected void expectations() {
@@ -102,6 +99,10 @@ public class WindowStatusTest {
         status.checkIfReady(frame);
       }
     }.run();
+    // wait till frame is resized
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {}
     assertThat(frame.getHeight()).isGreaterThan(original.height);
   }
   

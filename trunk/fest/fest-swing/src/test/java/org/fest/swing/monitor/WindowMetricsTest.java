@@ -15,7 +15,6 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 
@@ -40,7 +39,6 @@ public class WindowMetricsTest {
   @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
     frame.beVisible();
-    frame.setPreferredSize(new Dimension(400, 200));
     metrics = new WindowMetrics(frame);
   }
   
