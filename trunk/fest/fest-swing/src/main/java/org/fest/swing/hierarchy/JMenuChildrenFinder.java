@@ -23,14 +23,15 @@ import java.util.List;
 import javax.swing.JMenu;
 
 /**
- * Understands finding children components in a <code>{@link JMenu}</code>.
+ * Understands how to find children components in a <code>{@link JMenu}</code>.
  *
  * @author Yvonne Wang
  */
 class JMenuChildrenFinder implements ChildrenFinder<JMenu> {
     
   /**
-   * Returns non-explicit children of the given {@link JMenu}.
+   * Returns the non-explicit children of the given {@link JMenu}. In the case of <code>{@link JMenu}</code>s, popup
+   * menus are considered non-explicit children.
    * @param m the menu whose children we are looking for.
    * @return a collection containing the non-explicit children found.
    */

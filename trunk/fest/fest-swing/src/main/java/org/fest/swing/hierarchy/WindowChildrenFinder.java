@@ -22,14 +22,15 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Understands finding children components in a <code>{@link Window}</code>.
+ * Understands how to find children components in a <code>{@link Window}</code>.
  *
  * @author Yvonne Wang
  */
 public class WindowChildrenFinder implements ChildrenFinder<Window> {
 
   /**
-   * Returns non-explicit children of the given {@link Window}.
+   * Returns the non-explicit children of the given {@link Window}. In the case of <code>{@link Window}</code>s, owned
+   * windows are considered non-explicit children.
    * @param w the window whose children we are looking for.
    * @return a collection containing the non-explicit children found.
    */
