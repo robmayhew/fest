@@ -25,7 +25,7 @@ import java.util.Collection;
  *
  * @author Yvonne Wang
  */
-interface ChildrenFinder<T extends Container> {
+interface ChildrenFinderStrategy<T extends Container> {
   
   /**
    * Returns the non-explicit children of a container. Non-explicit children are components considered to be children of 

@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Yvonne Wang
  */
-public class WindowChildrenFinder implements ChildrenFinder<Window> {
+final class WindowChildrenFinder implements ChildrenFinderStrategy<Window> {
 
   /**
    * Returns the non-explicit children of the given {@link Window}. In the case of <code>{@link Window}</code>s, owned

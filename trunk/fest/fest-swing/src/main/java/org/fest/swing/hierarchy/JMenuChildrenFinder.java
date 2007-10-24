@@ -27,7 +27,7 @@ import javax.swing.JMenu;
  *
  * @author Yvonne Wang
  */
-class JMenuChildrenFinder implements ChildrenFinder<JMenu> {
+final class JMenuChildrenFinder implements ChildrenFinderStrategy<JMenu> {
     
   /**
    * Returns the non-explicit children of the given {@link JMenu}. In the case of <code>{@link JMenu}</code>s, popup

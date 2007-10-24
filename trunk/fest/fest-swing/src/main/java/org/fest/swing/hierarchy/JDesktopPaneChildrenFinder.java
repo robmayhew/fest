@@ -29,7 +29,7 @@ import javax.swing.JInternalFrame;
  *
  * @author Yvonne Wang
  */
-public class JDesktopPaneChildrenFinder implements ChildrenFinder<JDesktopPane> {
+final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy<JDesktopPane> {
 
   /**
    * Returns the non-explicit children of the given {@link JDesktopPane}. In the case of 
