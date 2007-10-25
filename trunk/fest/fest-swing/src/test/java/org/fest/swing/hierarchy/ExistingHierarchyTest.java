@@ -15,12 +15,17 @@
  */
 package org.fest.swing.hierarchy;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.util.Collection;
 
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -68,6 +73,25 @@ public class ExistingHierarchyTest {
     assertThat(hierarchy.parentOf(internalFrame)).isSameAs(internalFrame.getDesktopIcon().getDesktopPane());
     frame.beDisposed();
   }
+  
+  @Test public void shouldReturnSubcomponents() {
+    TestFrame frame = new TestFrame(getClass());
+    JTextField textField = new JTextField(20);
+    JLabel label = new JLabel("label");
+    JButton button = new JButton("button");
+    frame.addComponents(textField, label, button);
+    frame.beVisible();
+    Collection<Component> subComponents = hierarchy.childrenOf(frame.getContentPane());
+    assertThat(subComponents).hasSize(3).contains(textField).contains(label).contains(button);
+    frame.beDisposed();
+  }
+  
+  @Test public void shouldReturnPopupMenuAsSubcomponentOfMenu() {
+    JMenu menu = new JMenu();
+    menu.add(new JMenuItem());
+    Collection<Component> subComponents = hierarchy.childrenOf(menu);
+    assertThat(subComponents).hasSize(1).contains(menu.getPopupMenu());
+  }
 
   private static class CustomFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
@@ -91,6 +115,6 @@ public class ExistingHierarchyTest {
       internalFrame.setVisible(true);
     }
 
-    @Override protected void lookAndFeel() {}
+    @Override protected void updateLookAndFeel() {}
   }
 }

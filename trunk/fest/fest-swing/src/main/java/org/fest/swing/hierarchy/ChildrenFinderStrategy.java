@@ -21,17 +21,16 @@ import java.util.Collection;
 
 /**
  * Understands how to find children components in a <code>{@link Container}</code>.
- * @param <T> the type of the container.
  *
  * @author Yvonne Wang
  */
-interface ChildrenFinderStrategy<T extends Container> {
+interface ChildrenFinderStrategy {
   
   /**
    * Returns the non-explicit children of a container. Non-explicit children are components considered to be children of 
    * the given container but cannot be obtained by calling <code>{@link Container#getComponents()}</code>.
-   * @param container the container whose children we are looking for.
+   * @param c the container whose children we are looking for.
    * @return a collection containing the non-explicit children found.
    */
-  Collection<Component> nonExplicitChildrenOf(T container);
+  Collection<Component> nonExplicitChildrenOf(Container c);
 }

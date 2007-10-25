@@ -16,28 +16,28 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
-import java.util.ArrayList;
+import java.awt.Container;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+
+import static org.fest.swing.util.ComponentCollections.EMPTY;
+import static org.fest.swing.util.ComponentCollections.components;
 
 /**
  * Understands how to find children components in a <code>{@link JMenu}</code>.
  *
  * @author Yvonne Wang
  */
-final class JMenuChildrenFinder implements ChildrenFinderStrategy<JMenu> {
+final class JMenuChildrenFinder implements ChildrenFinderStrategy {
     
-  /**
-   * Returns the non-explicit children of the given {@link JMenu}. In the case of <code>{@link JMenu}</code>s, popup
-   * menus are considered non-explicit children.
-   * @param m the menu whose children we are looking for.
-   * @return a collection containing the non-explicit children found.
-   */
-  public Collection<Component> nonExplicitChildrenOf(JMenu m) {
-    List<Component> components = new ArrayList<Component>();
-    components.add(m.getPopupMenu());
-    return components;
+  public Collection<Component> nonExplicitChildrenOf(Container c) {
+    if (!(c instanceof JMenu)) return EMPTY;
+    return components(popupMenuFrom((JMenu)c));
+  }
+
+  private JPopupMenu popupMenuFrom(JMenu menu) {
+    return menu.getPopupMenu();
   }
 }

@@ -17,35 +17,31 @@ package org.fest.swing.hierarchy;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+
+import static org.fest.swing.util.ComponentCollections.EMPTY;
+import static org.fest.swing.util.ComponentCollections.empty;
 
 /**
  * Understands how to find children components in a <code>{@link JDesktopPane}</code>.
  *
  * @author Yvonne Wang
  */
-final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy<JDesktopPane> {
+final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy {
 
-  /**
-   * Returns the non-explicit children of the given {@link JDesktopPane}. In the case of 
-   * <code>{@link JDesktopPane}</code>s, internal frames are considered non-explicit children.
-   * @param p the desktop pane whose children we are looking for.
-   * @return a collection containing the non-explicit children found.
-   */
-  public Collection<Component> nonExplicitChildrenOf(JDesktopPane p) {
-    return internalFramesFromIcons(p);
+  public Collection<Component> nonExplicitChildrenOf(Container c) {
+    if (!(c instanceof JDesktopPane)) return EMPTY;
+    return internalFramesFromIcons(c);
   }
 
   // From Abbot: add iconified frames, which are otherwise unreachable. For consistency, they are still considerered 
   // children of the desktop pane.
-  private Collection<Component> internalFramesFromIcons(Container container) {
-    List<Component> frames = new ArrayList<Component>();
-    for (Component child : container.getComponents()) {
+  private Collection<Component> internalFramesFromIcons(Container c) {
+    Collection<Component> frames = empty();
+    for (Component child : c.getComponents()) {
       if (child instanceof JInternalFrame.JDesktopIcon) {
         JInternalFrame frame = ((JInternalFrame.JDesktopIcon)child).getInternalFrame();
         if (frame != null) frames.add(frame);

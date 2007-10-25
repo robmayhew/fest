@@ -41,7 +41,7 @@ public interface ComponentHierarchy {
    * @param c the given component.
    * @return all sub-components of the given component.
    */
-  Collection<Component> subComponentsOf(Component c);
+  Collection<Component> childrenOf(Component c);
 
   /**
    * Return the parent for the given component.

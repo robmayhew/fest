@@ -18,14 +18,10 @@ package org.fest.swing.hierarchy;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
 
 import static java.util.logging.Level.WARNING;
 
@@ -34,7 +30,6 @@ import static org.fest.swing.util.Swing.isAppletViewer;
 import static org.fest.swing.util.Swing.isSharedInvisibleFrame;
 import static org.fest.swing.util.Swing.runInEventThreadAndWait;
 
-import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.monitor.WindowMonitor;
@@ -47,12 +42,15 @@ import org.fest.swing.monitor.WindowMonitor;
  * </p>
  * 
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class ExistingHierarchy implements ComponentHierarchy {
 
   private static Logger logger = Logger.getLogger(ExistingHierarchy.class.getName());
   
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
+  
+  private final ChildrenFinder childrenFinder = new ChildrenFinder();
   
   /** ${@inheritDoc} */
   public Collection<Window> rootWindows() {
@@ -85,57 +83,12 @@ public final class ExistingHierarchy implements ComponentHierarchy {
   }
 
   /**
-   * Returns all descendents of interest of the given component. This includes owned windows for
-   * <code>{@link Window}</code>s, children for <code>{@link Container}</code>s.
+   * Returns all descendents of interest of the given component.
    * @param c the given component.
    * @return all descendents of interest of the given component.
    */
-  public Collection<Component> subComponentsOf(Component c) {
-    if (!(c instanceof Container)) return empty();
-    Container container = (Container)c;
-    List<Component> children = new ArrayList<Component>();
-    children.addAll(list(container.getComponents()));
-    children.addAll(notExplicitChildrenOf(container));
-    return children;
-  }
-
-  private Collection<Component> notExplicitChildrenOf(Container c) {
-    if (c instanceof JDesktopPane) return internalFramesFromIcons(c);
-    if (c instanceof JMenu) return popupMenuIn((JMenu)c);
-    if (c instanceof Window) return ownedWindowsIn((Window)c);
-    return empty();
-  }
-
-  private Collection<Component> popupMenuIn(JMenu m) {
-    return components(m.getPopupMenu());
-  }
-  
-  private Collection<Component> ownedWindowsIn(Window w) {
-    return components(w.getOwnedWindows());
-  }
-  
-  private Collection<Component> components(Component...components) {
-    return list(components);
-  }
-  
-  private Collection<Component> empty() {
-    return new ArrayList<Component>();
-  }
-  
-  // From Abbot: add iconified frames, which are otherwise unreachable. For consistency, they are still considerered 
-  // children of the desktop pane.
-  private Collection<Component> internalFramesFromIcons(Container container) {
-    List<Component> frames = new ArrayList<Component>();
-    for (Component child : container.getComponents()) {
-      if (child instanceof JInternalFrame.JDesktopIcon) {
-        JInternalFrame frame = ((JInternalFrame.JDesktopIcon)child).getInternalFrame();
-        if (frame != null) frames.add(frame);
-        continue;
-      }
-      // OSX puts icons into a dock; handle icon manager situations here
-      if (child instanceof Container) frames.addAll(internalFramesFromIcons((Container)child));
-    }
-    return frames;
+  public Collection<Component> childrenOf(Component c) {
+    return childrenFinder.childrenOf(c);
   }
 
   /**

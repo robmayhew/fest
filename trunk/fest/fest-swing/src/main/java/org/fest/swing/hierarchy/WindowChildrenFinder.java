@@ -16,27 +16,32 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Window;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
+import static org.fest.swing.util.ComponentCollections.EMPTY;
+import static org.fest.swing.util.ComponentCollections.empty;
 
 /**
  * Understands how to find children components in a <code>{@link Window}</code>.
  *
  * @author Yvonne Wang
  */
-final class WindowChildrenFinder implements ChildrenFinderStrategy<Window> {
+final class WindowChildrenFinder implements ChildrenFinderStrategy {
 
-  /**
-   * Returns the non-explicit children of the given {@link Window}. In the case of <code>{@link Window}</code>s, owned
-   * windows are considered non-explicit children.
-   * @param w the window whose children we are looking for.
-   * @return a collection containing the non-explicit children found.
-   */
-  public Collection<Component> nonExplicitChildrenOf(Window w) {
-    List<Component> windows = new ArrayList<Component>();
-    for (Window window : w.getOwnedWindows()) windows.add(window);
-    return windows;
+  public Collection<Component> nonExplicitChildrenOf(Container c) {
+    if (!(c instanceof Window)) return EMPTY;
+    return ownedWindows((Window)c);
+  }
+  
+  private Collection<Component> ownedWindows(Window w) {
+    return windows(w.getOwnedWindows());
+  }
+  
+  private Collection<Component> windows(Window[] windows) {
+    Collection<Component> components = empty();
+    for (Window w : windows) components.add(w);
+    return components;
   }
 }
