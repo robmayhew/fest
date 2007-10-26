@@ -52,7 +52,6 @@ public class JMenuChildrenFinderTest {
   @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
     JMenu menu = new JMenu();
     List<Component> children = new ArrayList<Component>(finder.nonExplicitChildrenOf(menu));
-    assertThat(children.size()).isEqualTo(1);
-    assertThat(children).contains(menu.getPopupMenu());
+    assertThat(children).containsOnly(menu.getPopupMenu());
   }
 }

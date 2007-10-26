@@ -50,8 +50,7 @@ public class JDesktopPaneChildrenFinderTest {
     MDIFrame frame = MDIFrame.show(getClass());
     frame.internalFrame().setIcon(true);
     Collection<Component> children = finder.nonExplicitChildrenOf(frame.desktop());
-    assertThat(children.size()).isEqualTo(1);
-    assertThat(children).contains(frame.internalFrame());
+    assertThat(children).containsOnly(frame.internalFrame());
     frame.beDisposed();
   }
 }

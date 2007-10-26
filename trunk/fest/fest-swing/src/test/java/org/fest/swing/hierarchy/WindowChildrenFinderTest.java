@@ -60,8 +60,7 @@ public class WindowChildrenFinderTest {
     TestDialog dialog = TestDialog.show(frame);
     dialog.beVisible();
     Collection<Component> children = finder.nonExplicitChildrenOf(frame);
-    assertThat(children.size()).isEqualTo(1);
-    assertThat(children).contains(dialog);
+    assertThat(children).containsOnly(dialog);
     dialog.beDisposed();
     frame.beDisposed();
   }

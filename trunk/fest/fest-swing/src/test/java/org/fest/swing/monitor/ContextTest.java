@@ -120,9 +120,8 @@ public class ContextTest {
     context.addContextFor(anotherFrame);
     Collection<Window> rootWindows = context.rootWindows();
     Object[] frames = Frame.getFrames();
-    assertThat(rootWindows.size()).isEqualTo(frames.length);
     assertThat(rootWindows).contains(frame, anotherFrame);
-    assertThat(rootWindows).contains(frames);
+    assertThat(rootWindows).containsOnly(frames);
     anotherFrame.beDisposed();
   }
   
