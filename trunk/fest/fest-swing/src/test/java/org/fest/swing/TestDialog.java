@@ -18,8 +18,9 @@ package org.fest.swing;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Window;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.UIManager;
 
 import static javax.swing.SwingUtilities.invokeAndWait;
@@ -30,17 +31,16 @@ import static javax.swing.SwingUtilities.invokeLater;
  *
  * @author Alex Ruiz
  */
-public class TestFrame extends JFrame {
+public class TestDialog extends JDialog {
 
   private static final long serialVersionUID = 1L;
-  private final String typeName;
 
-  public static TestFrame show(Class testClass) {
-    return new TestFrame(testClass);
+  public static TestDialog show(Window owner) {
+    return new TestDialog(owner);
   }
   
-  public TestFrame(Class testClass) {
-    typeName = testClass.getSimpleName();
+  public TestDialog(Window owner) {
+    super(owner);
   }
 
   public void addComponents(Component...components) {
@@ -57,7 +57,6 @@ public class TestFrame extends JFrame {
         public void run() {
           beforeShown();
           setLayout(new FlowLayout());
-          setTitle(typeName);
           updateLookAndFeel();
           setPreferredSize(size);
           pack();
@@ -65,7 +64,7 @@ public class TestFrame extends JFrame {
         }
       });
     } catch (Exception e) {
-      throw new RuntimeException("Unable to show frame", e);
+      throw new RuntimeException("Unable to show dialog", e);
     }
   }
   
