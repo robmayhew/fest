@@ -61,7 +61,7 @@ public final class Invoker<T> {
       return type.getDeclaredMethod(methodName, parameterTypes);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
-          type.getName(), " with parameter types ", Arrays.toString(parameterTypes)));
+          type.getName(), " with parameter types ", Arrays.toString(parameterTypes)), e);
     }
   }
 
@@ -77,7 +77,7 @@ public final class Invoker<T> {
       return (T) method.invoke(target, args);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to invoke method ", quote(method.getName()), " with arguments ",
-          Arrays.toString(args)));
+          Arrays.toString(args)), e);
     } finally {
       method.setAccessible(accessible);
     }
