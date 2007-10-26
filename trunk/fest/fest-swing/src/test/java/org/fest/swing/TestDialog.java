@@ -36,7 +36,9 @@ public class TestDialog extends JDialog {
   private static final long serialVersionUID = 1L;
 
   public static TestDialog show(Window owner) {
-    return new TestDialog(owner);
+    TestDialog d = new TestDialog(owner);
+    d.beVisible();
+    return d;
   }
   
   public TestDialog(Window owner) {

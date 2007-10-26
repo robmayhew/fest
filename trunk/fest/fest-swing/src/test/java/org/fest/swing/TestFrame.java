@@ -36,7 +36,9 @@ public class TestFrame extends JFrame {
   private final String typeName;
 
   public static TestFrame show(Class testClass) {
-    return new TestFrame(testClass);
+    TestFrame f = new TestFrame(testClass);
+    f.beVisible();
+    return f;
   }
   
   public TestFrame(Class testClass) {
