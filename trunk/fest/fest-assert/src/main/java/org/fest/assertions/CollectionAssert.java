@@ -48,8 +48,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public CollectionAssert contains(Object...objects) {
     List<Object> notFound = new ArrayList<Object>();
     for (Object o : objects) if (!actual.contains(o)) notFound.add(o);
-    if (!notFound.isEmpty()) 
-      fail(concat("collection ", actual, " does not contain element(s) ", bracketAround(notFound.toArray())));
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     return this;
   }
   
@@ -61,8 +60,23 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    *           contains elements other than the ones specified.
    */
   public CollectionAssert containsOnly(Object...objects) {
-    hasSize(objects.length);
-    return contains(objects);
+    List<Object> notFound = new ArrayList<Object>();
+    List<Object> copy = new ArrayList<Object>(actual);
+    for (Object o : objects) {
+      if (!copy.contains(o)) {
+        notFound.add(o);
+        continue;
+      }
+      copy.remove(o);
+    }
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
+    if (!copy.isEmpty()) 
+      fail(concat("unexpected element(s) ", bracketAround(copy.toArray()), " in collection ", actual));
+    return this;
+  }
+
+  private void failIfElementsNotFound(List<Object> notFound) {
+    fail(concat("collection ", actual, " does not contain element(s) ", bracketAround(notFound.toArray())));
   }
   
   /**

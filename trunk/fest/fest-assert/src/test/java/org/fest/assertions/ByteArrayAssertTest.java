@@ -104,9 +104,14 @@ public class ByteArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new ByteArrayAssert((byte)8, (byte)6).containsOnly(array((byte)8, (byte)6, (byte)7));
+    new ByteArrayAssert((byte)8, (byte)6, (byte)7).containsOnly(array((byte)8, (byte)6));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new ByteArrayAssert((byte)8, (byte)6).containsOnly(array((byte)7));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new ByteArrayAssert((byte)8, (byte)6).containsOnly(array((byte)8, (byte)6));    
   }

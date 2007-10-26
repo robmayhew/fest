@@ -116,9 +116,14 @@ public class ObjectArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia", "Anakin");
+    new ObjectArrayAssert("Luke", "Leia", "Anakin").containsOnly("Luke", "Leia");
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia", "Anakin");
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia");    
   }

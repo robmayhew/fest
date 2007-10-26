@@ -24,6 +24,7 @@ import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.assertions.Formatting.bracketAround;
 import static org.fest.assertions.Formatting.format;
+import static org.fest.util.Collections.list;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
@@ -69,11 +70,10 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   public ObjectArrayAssert contains(Object...objects) {
     List<Object> notFound = new ArrayList<Object>();
     for (Object o : objects) if (!hasElement(o)) notFound.add(o);
-    if (!notFound.isEmpty()) 
-      fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>Object</code> array contains the given objects <strong>only</strong>.
    * @param objects the objects to look for.
@@ -82,8 +82,23 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    *           actual <code>Object</code> array contains elements other than the ones specified.
    */
   public ObjectArrayAssert containsOnly(Object...objects) {
-    hasSize(objects.length);
-    return contains(objects);
+    List<Object> notFound = new ArrayList<Object>();
+    List<Object> copy = new ArrayList<Object>(list(actual));
+    for (Object o : objects) {
+      if (!copy.contains(o)) {
+        notFound.add(o);
+        continue;
+      }
+      copy.remove(o);
+    }
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
+    if (!copy.isEmpty()) 
+      fail(concat("unexpected element(s) ", bracketAround(copy.toArray()), " in array ", bracketAround(actual)));
+    return this;
+  }
+  
+  private void failIfElementsNotFound(List<Object> notFound) {
+    fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
   }
   
   /**

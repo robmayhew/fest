@@ -144,10 +144,16 @@ public class CollectionAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfCollectionHasExtraElements() {
+    List<String> names = list("Gandalf", "Frodo", "Sam");
+    new CollectionAssert(names).containsOnly("Gandalf", "Frodo");
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfCollectionDoesNotContainElement() {
     List<String> names = list("Gandalf", "Frodo");
     new CollectionAssert(names).containsOnly("Gandalf", "Frodo", "Sam");
   }
-  
+
   @Test public void shouldPassIfCollectionHasOnlySpecifiedElements() {
     List<String> names = list("Gandalf", "Frodo");
     new CollectionAssert(names).containsOnly("Gandalf", "Frodo");    

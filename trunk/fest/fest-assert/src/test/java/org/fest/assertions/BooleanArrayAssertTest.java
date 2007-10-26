@@ -104,9 +104,14 @@ public class BooleanArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new BooleanArrayAssert(true).containsOnly(array(true, false));
+    new BooleanArrayAssert(true, false).containsOnly(array(true));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new BooleanArrayAssert(true).containsOnly(array(false));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new BooleanArrayAssert(true).containsOnly(array(true));    
   }

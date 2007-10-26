@@ -104,9 +104,14 @@ public class LongArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new LongArrayAssert(43l, 53l).containsOnly(array(43l, 53l, 88l));
+    new LongArrayAssert(43l, 53l, 88l).containsOnly(array(43l, 53l));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new LongArrayAssert(43l, 53l).containsOnly(array(434l));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new LongArrayAssert(43l, 53l).containsOnly(array(43l, 53l));    
   }

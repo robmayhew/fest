@@ -104,9 +104,14 @@ public class FloatArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new FloatArrayAssert(34.90f).containsOnly(array(34.90f, 88.6f));
+    new FloatArrayAssert(34.90f, 88.6f).containsOnly(array(34.90f));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new FloatArrayAssert(34.90f).containsOnly(array(88.43f));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new FloatArrayAssert(34.90f).containsOnly(array(34.90f));    
   }

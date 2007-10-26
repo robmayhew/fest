@@ -68,8 +68,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
   public FloatArrayAssert contains(float...values) {
     List<Object> notFound = new ArrayList<Object>();
     for (float value : values) if (!hasElement(value)) notFound.add(value);
-    if (!notFound.isEmpty()) 
-      fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);      
     return this;
   }
   
@@ -81,10 +80,31 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    *           actual <code>float</code> array contains elements other than the ones specified.
    */
   public FloatArrayAssert containsOnly(float...values) {
-    hasSize(values.length);
-    return contains(values);
+    List<Object> notFound = new ArrayList<Object>();
+    List<Object> copy = list(actual);
+    for (Object value : list(values)) {
+      if (!copy.contains(value)) {
+        notFound.add(value);
+        continue;
+      }
+      copy.remove(value);
+    }
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
+    if (!copy.isEmpty()) 
+      fail(concat("unexpected element(s) ", bracketAround(copy.toArray()), " in array ", bracketAround(actual)));
+    return this;
   }
+
+	private List<Object> list(float[] values) {
+	  List<Object> list = new ArrayList<Object>();
+	  for (float value : values) list.add(value);
+	  return list;
+	}
   
+  private void failIfElementsNotFound(List<Object> notFound) {
+    fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+  }
+
   /**
    * Verifies that the actual <code>float</code> array does not contain the given values.
    * @param values the values the array should exclude.

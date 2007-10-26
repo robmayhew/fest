@@ -104,9 +104,14 @@ public class ShortArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new ShortArrayAssert((short)43, (short)68).containsOnly(array((short)43, (short)68, (short)98));
+    new ShortArrayAssert((short)43, (short)68, (short)98).containsOnly(array((short)43, (short)68));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new ShortArrayAssert((short)43, (short)68).containsOnly(array((short)98));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new ShortArrayAssert((short)43, (short)68).containsOnly(array((short)43, (short)68));    
   }

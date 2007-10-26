@@ -104,9 +104,14 @@ public class ${testName} {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new ${classToTest}(${baseArray}).containsOnly(array(${superSetOfBaseArray}));
+    new ${classToTest}(${superSetOfBaseArray}).containsOnly(array(${baseArray}));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new ${classToTest}(${baseArray}).containsOnly(array(${differentThanBaseArray}));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new ${classToTest}(${baseArray}).containsOnly(array(${baseArray}));    
   }

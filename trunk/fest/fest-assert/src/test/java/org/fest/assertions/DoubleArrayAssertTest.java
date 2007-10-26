@@ -104,9 +104,14 @@ public class DoubleArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new DoubleArrayAssert(55.03, 4345.91).containsOnly(array(55.03, 4345.91, 88.6));
+    new DoubleArrayAssert(55.03, 4345.91, 88.6).containsOnly(array(55.03, 4345.91));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new DoubleArrayAssert(55.03, 4345.91).containsOnly(array(5323.2));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new DoubleArrayAssert(55.03, 4345.91).containsOnly(array(55.03, 4345.91));    
   }

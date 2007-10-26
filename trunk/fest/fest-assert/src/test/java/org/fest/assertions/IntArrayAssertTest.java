@@ -104,9 +104,14 @@ public class IntArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new IntArrayAssert(459, 23).containsOnly(array(459, 23, 88));
+    new IntArrayAssert(459, 23, 88).containsOnly(array(459, 23));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new IntArrayAssert(459, 23).containsOnly(array(90, 82));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new IntArrayAssert(459, 23).containsOnly(array(459, 23));    
   }

@@ -104,9 +104,14 @@ public class CharArrayAssertTest {
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfArrayHasExtraElements() {
-    new CharArrayAssert('a', 'b').containsOnly(array('a', 'b', 'c'));
+    new CharArrayAssert('a', 'b', 'c').containsOnly(array('a', 'b'));
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsMissingElements() {
+    new CharArrayAssert('a', 'b').containsOnly(array('c', 'd'));
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new CharArrayAssert('a', 'b').containsOnly(array('a', 'b'));    
   }
