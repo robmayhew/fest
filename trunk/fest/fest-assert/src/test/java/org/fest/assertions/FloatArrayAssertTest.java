@@ -1,5 +1,5 @@
 /*
- * Created on Oct 15, 2007
+ * Created on Oct 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -95,6 +95,20 @@ public class FloatArrayAssertTest {
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
     new FloatArrayAssert(34.90f).isNotEqualTo(array(34.90f));
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new FloatArrayAssert(emptyArray()).containsOnly(34.90f);
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayHasExtraElements() {
+    new FloatArrayAssert(34.90f).containsOnly(array(34.90f, 88.6f));
+  }
+  
+  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
+    new FloatArrayAssert(34.90f).containsOnly(array(34.90f));    
   }
   
   private float[] nullArray() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Created on Oct 15, 2007
+ * Created on Oct 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -71,6 +71,18 @@ public final class CharArrayAssert extends GroupAssert<char[]> {
     if (!notFound.isEmpty()) 
       fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
     return this;
+  }
+  
+  /**
+   * Verifies that the actual <code>char</code> array contains the given values <strong>only</strong>.
+   * @param values the values to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> array does not contain the given objects, or if the
+   *           actual <code>char</code> array contains elements other than the ones specified.
+   */
+  public CharArrayAssert containsOnly(char...values) {
+    hasSize(values.length);
+    return contains(values);
   }
   
   /**

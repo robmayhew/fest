@@ -1,5 +1,5 @@
 /*
- * Created on Oct 15, 2007
+ * Created on Oct 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -95,6 +95,20 @@ public class BooleanArrayAssertTest {
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
     new BooleanArrayAssert(true).isNotEqualTo(array(true));
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new BooleanArrayAssert(emptyArray()).containsOnly(true);
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayHasExtraElements() {
+    new BooleanArrayAssert(true).containsOnly(array(true, false));
+  }
+  
+  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
+    new BooleanArrayAssert(true).containsOnly(array(true));    
   }
   
   private boolean[] nullArray() { return null; }

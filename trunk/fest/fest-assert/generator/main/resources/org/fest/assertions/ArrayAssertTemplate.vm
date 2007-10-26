@@ -74,6 +74,18 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
   }
   
   /**
+   * Verifies that the actual <code>${arrayType}</code> array contains the given values <strong>only</strong>.
+   * @param values the values to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>${arrayType}</code> array does not contain the given objects, or if the
+   *           actual <code>${arrayType}</code> array contains elements other than the ones specified.
+   */
+  public ${className} containsOnly(${arrayType}...values) {
+    hasSize(values.length);
+    return contains(values);
+  }
+  
+  /**
    * Verifies that the actual <code>${arrayType}</code> array does not contain the given values.
    * @param values the values the array should exclude.
    * @return this assertion object.

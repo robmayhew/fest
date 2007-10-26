@@ -54,6 +54,18 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
   
   /**
+   * Verifies that the actual collection contains the given objects <strong>only</strong>.
+   * @param objects the objects to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection does not contain the given objects, or if the actual collection
+   *           contains elements other than the ones specified.
+   */
+  public CollectionAssert containsOnly(Object...objects) {
+    hasSize(objects.length);
+    return contains(objects);
+  }
+  
+  /**
    * Verifies that the actual collection does not contain the given objects.
    * @param objects the objects that the collection should exclude.
    * @return this assertion object.

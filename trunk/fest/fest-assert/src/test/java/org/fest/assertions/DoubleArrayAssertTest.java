@@ -1,5 +1,5 @@
 /*
- * Created on Oct 15, 2007
+ * Created on Oct 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -95,6 +95,20 @@ public class DoubleArrayAssertTest {
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
     new DoubleArrayAssert(55.03, 4345.91).isNotEqualTo(array(55.03, 4345.91));
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new DoubleArrayAssert(emptyArray()).containsOnly(55.03, 4345.91);
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayHasExtraElements() {
+    new DoubleArrayAssert(55.03, 4345.91).containsOnly(array(55.03, 4345.91, 88.6));
+  }
+  
+  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
+    new DoubleArrayAssert(55.03, 4345.91).containsOnly(array(55.03, 4345.91));    
   }
   
   private double[] nullArray() { return null; }

@@ -108,4 +108,18 @@ public class ObjectArrayAssertTest {
   public void shouldFailIfEqualArrays() {
     new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Luke", "Leia"));
   }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new ObjectArrayAssert(new Object[0]).containsOnly("Yoda");
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayHasExtraElements() {
+    new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia", "Anakin");
+  }
+  
+  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
+    new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia");    
+  }
 }

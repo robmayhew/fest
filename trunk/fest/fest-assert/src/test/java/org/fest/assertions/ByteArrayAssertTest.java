@@ -1,5 +1,5 @@
 /*
- * Created on Oct 15, 2007
+ * Created on Oct 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -95,6 +95,20 @@ public class ByteArrayAssertTest {
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
     new ByteArrayAssert((byte)8, (byte)6).isNotEqualTo(array((byte)8, (byte)6));
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new ByteArrayAssert(emptyArray()).containsOnly((byte)8, (byte)6);
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayHasExtraElements() {
+    new ByteArrayAssert((byte)8, (byte)6).containsOnly(array((byte)8, (byte)6, (byte)7));
+  }
+  
+  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
+    new ByteArrayAssert((byte)8, (byte)6).containsOnly(array((byte)8, (byte)6));    
   }
   
   private byte[] nullArray() { return null; }

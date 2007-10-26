@@ -1,5 +1,5 @@
 /*
- * Created on Oct 15, 2007
+ * Created on Oct 26, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -95,6 +95,20 @@ public class CharArrayAssertTest {
   @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
   public void shouldFailIfEqualArrays() {
     new CharArrayAssert('a', 'b').isNotEqualTo(array('a', 'b'));
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new CharArrayAssert(emptyArray()).containsOnly('a', 'b');
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfArrayHasExtraElements() {
+    new CharArrayAssert('a', 'b').containsOnly(array('a', 'b', 'c'));
+  }
+  
+  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
+    new CharArrayAssert('a', 'b').containsOnly(array('a', 'b'));    
   }
   
   private char[] nullArray() { return null; }

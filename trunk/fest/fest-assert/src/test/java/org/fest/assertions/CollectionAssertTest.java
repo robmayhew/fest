@@ -136,4 +136,20 @@ public class CollectionAssertTest {
   public void shouldFailIfCollectionIsNotNullAndExpectingNull() {
     new CollectionAssert(new ArrayList<String>()).isNull();
   }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfCollectionIsEmpty() {
+    new CollectionAssert(new ArrayList<String>()).containsOnly("Sam");
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfCollectionHasExtraElements() {
+    List<String> names = list("Gandalf", "Frodo");
+    new CollectionAssert(names).containsOnly("Gandalf", "Frodo", "Sam");
+  }
+  
+  @Test public void shouldPassIfCollectionHasOnlySpecifiedElements() {
+    List<String> names = list("Gandalf", "Frodo");
+    new CollectionAssert(names).containsOnly("Gandalf", "Frodo");    
+  }
 }

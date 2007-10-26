@@ -75,6 +75,18 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
   
   /**
+   * Verifies that the actual <code>Object</code> array contains the given objects <strong>only</strong>.
+   * @param objects the objects to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array does not contain the given objects, or if the
+   *           actual <code>Object</code> array contains elements other than the ones specified.
+   */
+  public ObjectArrayAssert containsOnly(Object...objects) {
+    hasSize(objects.length);
+    return contains(objects);
+  }
+  
+  /**
    * Verifies that the actual <code>Object</code> array does not contain the given objects.
    * @param objects the objects the array should exclude.
    * @return this assertion object.
