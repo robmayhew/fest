@@ -16,19 +16,21 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Window;
 import java.util.Collection;
 
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import org.fest.mocks.EasyMockTemplate;
+
+import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.reflect.Reflection.field;
+
+import static org.fest.swing.hierarchy.MockChildrenFinder.mock;
+import static org.fest.swing.hierarchy.MockChildrenFinder.MethodToMock.CHILDREN_OF;
+import static org.fest.swing.util.ComponentCollections.empty;
 
 import org.fest.swing.TestFrame;
 import org.fest.swing.monitor.WindowMonitor;
@@ -45,7 +47,7 @@ public class ExistingHierarchyTest {
 
   private ExistingHierarchy hierarchy;
   
-  @BeforeMethod public void setUp() {
+  @BeforeMethod public void setUp() throws Exception {
     hierarchy = new ExistingHierarchy();
   }
   
@@ -67,54 +69,25 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldReturnParentOfInternalFrame() {
-    CustomFrame frame = new CustomFrame(getClass());
-    frame.beVisible();
-    JInternalFrame internalFrame = frame.internalFrame;
+    MDIFrame frame = MDIFrame.show(getClass());
+    JInternalFrame internalFrame = frame.internalFrame();
     assertThat(hierarchy.parentOf(internalFrame)).isSameAs(internalFrame.getDesktopIcon().getDesktopPane());
     frame.beDisposed();
   }
   
-  @Test public void shouldReturnSubcomponents() {
-    TestFrame frame = new TestFrame(getClass());
-    JTextField textField = new JTextField(20);
-    JLabel label = new JLabel("label");
-    JButton button = new JButton("button");
-    frame.addComponents(textField, label, button);
-    frame.beVisible();
-    Collection<Component> subComponents = hierarchy.childrenOf(frame.getContentPane());
-    assertThat(subComponents).hasSize(3).contains(textField).contains(label).contains(button);
-    frame.beDisposed();
-  }
-  
-  @Test public void shouldReturnPopupMenuAsSubcomponentOfMenu() {
-    JMenu menu = new JMenu();
-    menu.add(new JMenuItem());
-    Collection<Component> subComponents = hierarchy.childrenOf(menu);
-    assertThat(subComponents).hasSize(1).contains(menu.getPopupMenu());
-  }
+  @Test public void shouldReturnSubcomponents() throws Exception {
+    final Component c = new JTextField();
+    final ChildrenFinder finder = mock(CHILDREN_OF);
+    field("childrenFinder").ofType(ChildrenFinder.class).in(hierarchy).set(finder);
+    final Collection<Component> children = empty();
+    new EasyMockTemplate(finder) {
+      @Override protected void expectations() {
+        expect(finder.childrenOf(c)).andReturn(children);
+      }
 
-  private static class CustomFrame extends TestFrame {
-    private static final long serialVersionUID = 1L;
-    
-    JInternalFrame internalFrame;
-
-    public CustomFrame(Class testClass) {
-      super(testClass);
-    }
-
-    @Override protected void beforeShown() {
-      JDesktopPane desktop = new JDesktopPane();
-      createInternalFrame();
-      desktop.add(internalFrame);
-      setContentPane(desktop);
-    }
-
-    private void createInternalFrame() {
-      internalFrame = new JInternalFrame("Internal Frame");
-      internalFrame.setPreferredSize(new Dimension(200, 100));
-      internalFrame.setVisible(true);
-    }
-
-    @Override protected void updateLookAndFeel() {}
+      @Override protected void codeToTest() {
+        assertThat(hierarchy.childrenOf(c)).isSameAs(children);
+      }
+    }.run();
   }
 }

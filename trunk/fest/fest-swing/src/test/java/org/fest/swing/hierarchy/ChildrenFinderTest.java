@@ -21,9 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JMenu;
+import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Collections.list;
+
+import org.fest.swing.TestDialog;
+import org.fest.swing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -57,6 +62,29 @@ public class ChildrenFinderTest {
     frame.beDisposed();
   }
   
+  @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
+    JMenu menu = new JMenu();
+    assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
+  }
+
+  @Test public void shouldReturnOwnedWindowsIfComponentIsWindow() {
+    TestFrame frame = TestFrame.show(getClass());
+    TestDialog dialog = TestDialog.show(frame);
+    dialog.beVisible();
+    assertThat(finder.childrenOf(frame)).containsOnly(childrenOf(frame));
+    dialog.beDisposed();
+    frame.beDisposed();
+  }
+  
+  @Test public void shouldReturnChildrenOfContainer() {
+    TestFrame frame = new TestFrame(getClass());
+    JTextField textField = new JTextField();
+    frame.add(textField);
+    frame.beVisible();
+    assertThat(finder.childrenOf(frame.getContentPane())).containsOnly(textField);
+    frame.beDisposed();
+  }
+
   private Object[] childrenOf(Container c) {
     List<Component> children = new ArrayList<Component>();
     children.addAll(list(c.getComponents()));
