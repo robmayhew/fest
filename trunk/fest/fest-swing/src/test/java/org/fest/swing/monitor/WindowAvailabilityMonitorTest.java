@@ -29,7 +29,6 @@ import static java.awt.AWTEvent.PAINT_EVENT_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.monitor.MockWindows.mock;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
@@ -54,7 +53,7 @@ public class WindowAvailabilityMonitorTest {
   
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = mock(MARK_AS_READY);
+    windows = mock();
   }
 
   @AfterMethod public void tearDown() {

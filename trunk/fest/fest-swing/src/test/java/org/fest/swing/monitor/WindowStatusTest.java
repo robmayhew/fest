@@ -25,7 +25,6 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.monitor.MockWindows.mock;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_SHOWING_BUT_NOT_READY;
 
 import org.fest.swing.TestFrame;
 
@@ -47,7 +46,7 @@ public class WindowStatusTest {
   
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = mock(IS_SHOWING_BUT_NOT_READY);
+    windows = mock();
     status = new WindowStatus(windows);
   }
   

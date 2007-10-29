@@ -26,8 +26,6 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.monitor.MockWindows.mock;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_HIDDEN;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
 
 import org.fest.swing.TestFrame;
 
@@ -49,7 +47,7 @@ public class WindowVisibilityMonitorTest {
 
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = mock(MARK_AS_SHOWING, MARK_AS_HIDDEN);
+    windows = mock();
   }
 
   @AfterMethod public void tearDown() {

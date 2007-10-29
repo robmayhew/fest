@@ -39,14 +39,6 @@ import static java.awt.event.WindowEvent.WINDOW_OPENED;
 import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.monitor.MockContext.MethodToMock.ADD_CONTEXT_FOR;
-import static org.fest.swing.monitor.MockContext.MethodToMock.LOOKUP_EVENT_QUEUE_FOR;
-import static org.fest.swing.monitor.MockContext.MethodToMock.REMOVE_CONTEXT_FOR;
-import static org.fest.swing.monitor.MockContext.MethodToMock.ROOT_WINDOWS;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_CLOSED;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_CLOSED;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_READY;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_AS_SHOWING;
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
@@ -74,8 +66,8 @@ public class ContextMonitorTest {
 
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = MockWindows.mock(IS_CLOSED, MARK_AS_CLOSED, MARK_AS_READY, MARK_AS_SHOWING);
-    context = MockContext.mock(ROOT_WINDOWS, LOOKUP_EVENT_QUEUE_FOR, ADD_CONTEXT_FOR, REMOVE_CONTEXT_FOR);
+    windows = MockWindows.mock();
+    context = MockContext.mock();
   }
 
   @AfterMethod public void tearDown() {

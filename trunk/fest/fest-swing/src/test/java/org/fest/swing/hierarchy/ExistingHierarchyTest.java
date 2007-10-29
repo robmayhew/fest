@@ -29,7 +29,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.hierarchy.MockChildrenFinder.mock;
-import static org.fest.swing.hierarchy.MockChildrenFinder.MethodToMock.CHILDREN_OF;
 import static org.fest.swing.util.ComponentCollections.empty;
 
 import org.fest.swing.TestFrame;
@@ -75,9 +74,9 @@ public class ExistingHierarchyTest {
     frame.beDisposed();
   }
   
-  @Test public void shouldReturnSubcomponents() throws Exception {
+  @Test public void shouldReturnSubcomponents() {
     final Component c = new JTextField();
-    final ChildrenFinder finder = mock(CHILDREN_OF);
+    final ChildrenFinder finder = mock();
     field("childrenFinder").ofType(ChildrenFinder.class).in(hierarchy).set(finder);
     final Collection<Component> children = empty();
     new EasyMockTemplate(finder) {

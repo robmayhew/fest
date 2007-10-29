@@ -36,13 +36,6 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
-import static org.fest.swing.monitor.MockContext.MethodToMock.ADD_CONTEXT_FOR;
-import static org.fest.swing.monitor.MockContext.MethodToMock.ALL_EVENT_QUEUES;
-import static org.fest.swing.monitor.MockContext.MethodToMock.EVENT_QUEUE_FOR;
-import static org.fest.swing.monitor.MockContext.MethodToMock.ROOT_WINDOWS;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.IS_READY;
-import static org.fest.swing.monitor.MockWindows.MethodToMock.MARK_EXISTING;
-import static org.fest.swing.monitor.MockWindowsStatus.MethodToMock.CHECK_IF_READY;
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
 
 import org.fest.swing.TestFrame;
@@ -203,9 +196,9 @@ public class WindowMonitorTest {
   }
   
   private void createMocks() throws Exception {
-    mockWindows = MockWindows.mock(IS_READY, MARK_EXISTING);
-    mockContext = MockContext.mock(ADD_CONTEXT_FOR, ALL_EVENT_QUEUES, EVENT_QUEUE_FOR, ROOT_WINDOWS);
-    mockWindowStatus = MockWindowsStatus.mock(CHECK_IF_READY);
+    mockWindows = MockWindows.mock();
+    mockContext = MockContext.mock();
+    mockWindowStatus = MockWindowsStatus.mock();
   }
 
   private void saveOriginal() {
