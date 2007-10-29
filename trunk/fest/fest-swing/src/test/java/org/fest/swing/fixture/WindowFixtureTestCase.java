@@ -21,6 +21,9 @@ import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
+import org.fest.swing.Condition;
+
+
 import org.testng.annotations.Test;
 
 /**
@@ -65,6 +68,15 @@ public abstract class WindowFixtureTestCase<T extends Window> extends ComponentF
     FluentDimension newSize = windowSize().addToHeight(50);
     windowFixture().resizeHeightTo(newSize.height);
     windowFixture().requireSize(newSize);
+  }
+  
+  @Test public final void shouldCloseWindow() {
+    windowFixture().close();
+    robot().wait(new Condition("Window is closed") {
+      @Override public boolean test() {
+        return !windowFixture().target.isVisible();
+      }
+    });
   }
   
   @Override protected boolean addTargetToWindow() { return false; }

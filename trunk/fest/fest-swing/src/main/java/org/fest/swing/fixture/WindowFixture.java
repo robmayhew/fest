@@ -112,6 +112,13 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   protected abstract WindowFixture<T> show(Dimension size);
 
   /**
+   * Simulates a user closing the <code>{@link Window}</code> managed by this fixture.
+   */
+  public void close() {
+    robot.close(target);
+  }
+  
+  /**
    * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
    * @param width the width that the managed <code>Window</code> should have after being resized.
    * @return this fixture.

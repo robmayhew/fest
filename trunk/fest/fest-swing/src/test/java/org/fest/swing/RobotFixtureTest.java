@@ -119,6 +119,18 @@ public class RobotFixtureTest {
     assertThat(delta >= delay).isTrue();
   }
   
+  @Test public void shouldCloseWindow() {
+    final TestFrame w = new TestFrame(getClass());
+    w.beVisible();
+    robot.close(w);
+    robot.wait(new Condition("Window closed") {
+      @Override public boolean test() {
+        return !w.isVisible();
+      }
+    });
+    assertThat(w.isVisible()).isFalse();
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

@@ -18,6 +18,9 @@ package org.fest.swing.fixture;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
+import javax.swing.JDialog;
+import static javax.swing.WindowConstants.*;
+
 import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
@@ -35,7 +38,7 @@ import org.testng.annotations.Test;
 @GUITest public class DialogFixtureTest extends WindowFixtureTestCase<Dialog> {
 
   private DialogFixture fixture;
-  private Dialog target;
+  private JDialog target;
 
   @Test public void shouldPassIfModalAndExpectingModal() {
     target.setModal(true);
@@ -63,7 +66,8 @@ import org.testng.annotations.Test;
   }
 
   protected Dialog createTarget() {
-    target = new Dialog(window());
+    target = new JDialog(window());
+    target.setDefaultCloseOperation(HIDE_ON_CLOSE);
     return target;
   }
 }

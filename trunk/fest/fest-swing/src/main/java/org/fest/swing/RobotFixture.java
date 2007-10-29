@@ -324,4 +324,13 @@ public final class RobotFixture {
     robot.keyRelease(keyCode);
     robot.waitForIdle();
   }
+
+  /**
+   * Simulates a user closing the given window.
+   * @param w the window to close.
+   */
+  public void close(Window w) {
+    focus(w);
+    robot.close(w);
+  }
 }
