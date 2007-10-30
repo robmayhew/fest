@@ -68,13 +68,13 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
   *           found.
    */
   public FrameFixture using(RobotFixture robot) {
-    return new FrameFixture(robot, findWindowWith(robot));
+    return new FrameFixture(robot, findComponentWith(robot));
   }
   
   protected ComponentMatcher nameMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {
-        return c instanceof Frame && c.isVisible() && windowName().equals(c.getName());
+        return c instanceof Frame && c.isVisible() && componentName().equals(c.getName());
       }
     };
   }

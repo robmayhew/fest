@@ -69,13 +69,13 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
   *           found.
    */
   public DialogFixture using(RobotFixture robot) {
-    return new DialogFixture(robot, findWindowWith(robot));
+    return new DialogFixture(robot, findComponentWith(robot));
   }
   
   protected ComponentMatcher nameMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {
-        return c instanceof Dialog && c.isVisible() &&  windowName().equals(c.getName());
+        return c instanceof Dialog && c.isVisible() && componentName().equals(c.getName());
       }
     };
   }
