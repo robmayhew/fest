@@ -15,6 +15,8 @@
  */
 package org.fest.swing.fixture.util;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.JFileChooser;
 
 import org.fest.swing.ComponentLookupException;
@@ -23,16 +25,57 @@ import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
 
 /**
- * Understands SOMETHING DUMMY.
- *
+ * Understands a finder for <code>{@link JFileChooser}</code>s. Lookups are performed till a file chooser is found,
+ * or until the given time to perform the lookup is over. The default lookup time is 5 seconds.
+ * </p>
+ * <p>
+ * This example illustrates finding a <code>{@link JFileChooser}</code> by name, using the default lookup time (5
+ * seconds):
+ * <pre>
+ * FrameFixture frame = JFileChooserFinder.findFileChooser().using(robot);
+ * </pre>
+ * </p>
+ * <p>
+ * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.RobotFixture}</code>.
+ * </p>
+ * <p>
+ * This example shows how to find a <code>{@link JFileChooser}</code> by type using a lookup time of 10 seconds:
+ * <pre>
+ * DialogFixture dialog = JFileChooserFinder.findFileChooser().withTimeout(10000).using(robot);
+ * </pre>
+ * We can also specify the time unit:
+ * <pre>
+ * DialogFixture dialog = JFileChooserFinder.findFileChooser().withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
+ * </pre>
+ * </p>
+ * 
  * @author Alex Ruiz
  */
 public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChooser> {
 
-  public static JFileChooserFinder find() {
+  /**
+   * Creates a new <code>{@link JFileChooserFinder}</code> to lookup a <code>{@link JFileChooser}</code>.
+   * @return the created finder.
+   */
+  public static JFileChooserFinder findFileChooser() {
     return new JFileChooserFinder();
   }
+  
+  /**
+   * Creates a new <code>{@link JFileChooserFinder}</code> to lookup a <code>{@link JFileChooser}</code> by name.
+   * @param name the name of the file chooser to find.
+   * @return the created finder.
+   */
+  public static JFileChooserFinder findFileChooser(String name) {
+    return new JFileChooserFinder(name);
+  }
 
+  /**
+   * Finds a <code>{@link JFileChooserFinder}</code> by name or type.
+   * @param robot contains the underlying finding to delegate the search to.
+   * @return a <code>JFileChooserFixture</code> managing the found <code>JFileChooser</code>.
+   * @throws ComponentLookupException if a <code>JFileChooser</code> could not be found.
+   */
   public JFileChooserFixture using(RobotFixture robot) {
     return new JFileChooserFixture(robot, findComponentWith(robot));
   }
@@ -41,9 +84,32 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
     throw new ComponentLookupException("Unable to find JFileChooser");
   }
 
+  /**
+   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * @param timeout the number of milliseconds before stopping the search.
+   * @return this finder.
+   */
+  @Override public FrameFinder withTimeout(long timeout) {
+    return (FrameFinder)super.withTimeout(timeout);
+  }
+
+  /**
+   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * @param timeout the period of time the search should be performed.
+   * @param unit the time unit for <code>timeout</code>.
+   * @return this finder.
+   */
+  @Override public FrameFinder withTimeout(long timeout, TimeUnit unit) {
+    return (FrameFinder)super.withTimeout(timeout, unit);
+  }
+
   @Override protected ComponentMatcher nameMatcher() { return null; }
 
   JFileChooserFinder() {
     super(JFileChooser.class);
+  }
+
+  JFileChooserFinder(String name) {
+    super(name);
   }
 }

@@ -65,7 +65,7 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
    * @param robot contains the underlying finding to delegate the search to.
    * @return a <code>FrameFixture</code> managing the found <code>Frame</code>.
    * @throws ComponentLookupException if a <code>Frame</code> with the given name or of the given type could not be
-  *           found.
+   *           found.
    */
   public FrameFixture using(RobotFixture robot) {
     return new FrameFixture(robot, findComponentWith(robot));

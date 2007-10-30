@@ -51,13 +51,13 @@ public class JFileChooserFinderTest {
   
   @Test public void shouldFindFileChooser() {
     JFileChooser fileChooser = showFileChooser();
-    JFileChooserFixture found = JFileChooserFinder.find().using(robot);
+    JFileChooserFixture found = JFileChooserFinder.findFileChooser().using(robot);
     assertThat(found.target).isSameAs(fileChooser);
   }
 
   @Test(expectedExceptions = ComponentLookupException.class)
   public void shouldFailIfFileChooserNotFound() {
-    JFileChooserFinder.find().using(robot);
+    JFileChooserFinder.findFileChooser().using(robot);
   }
   
   private JFileChooser showFileChooser() {
