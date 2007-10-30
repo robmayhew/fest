@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture.util;
 
+import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFileChooser;
@@ -103,7 +104,13 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
     return (FrameFinder)super.withTimeout(timeout, unit);
   }
 
-  @Override protected ComponentMatcher nameMatcher() { return null; }
+  protected ComponentMatcher nameMatcher() {
+    return new ComponentMatcher() {
+      public boolean matches(Component c) {
+        return c instanceof JFileChooser && c.isVisible() && componentName().equals(c.getName());
+      }
+    };
+  }
 
   JFileChooserFinder() {
     super(JFileChooser.class);

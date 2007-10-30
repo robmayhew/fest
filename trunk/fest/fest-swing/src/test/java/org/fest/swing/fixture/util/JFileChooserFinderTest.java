@@ -60,6 +60,13 @@ public class JFileChooserFinderTest {
     JFileChooserFinder.findFileChooser().using(robot);
   }
   
+  @Test public void shouldFindFileChooserByName() {
+    JFileChooser fileChooser = showFileChooser();
+    fileChooser.setName("myFileChooser");
+    JFileChooserFixture found = JFileChooserFinder.findFileChooser("myFileChooser").using(robot);
+    assertThat(found.target).isSameAs(fileChooser);    
+  }
+  
   private JFileChooser showFileChooser() {
     final JFileChooser fileChooser = new JFileChooser();
     SwingUtilities.invokeLater(new Runnable() {
