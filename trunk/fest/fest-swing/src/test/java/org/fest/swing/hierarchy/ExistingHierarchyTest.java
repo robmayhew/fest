@@ -28,10 +28,12 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
+import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.hierarchy.MockChildrenFinder.mock;
 import static org.fest.swing.util.ComponentCollections.empty;
 
+import org.fest.swing.Condition;
 import org.fest.swing.TestFrame;
 import org.fest.swing.monitor.WindowMonitor;
 
@@ -89,5 +91,32 @@ public class ExistingHierarchyTest {
         assertThat(hierarchy.childrenOf(c)).isSameAs(children);
       }
     }.run();
+  }
+  
+  @Test public void shouldDisposeWindow() {
+    class CustomFrame extends TestFrame {
+      private static final long serialVersionUID = 1L;
+
+      boolean disposed;
+      
+      public CustomFrame(Class testClass) {
+        super(testClass);
+      }
+
+      @Override public void dispose() {
+        disposed = true;
+        super.dispose();
+      }
+    };
+    
+    final CustomFrame frame = new CustomFrame(getClass());
+    frame.display();
+    hierarchy.dispose(frame);
+    robotWithCurrentAwtHierarchy().wait(new Condition("Window is disposed") {
+      @Override public boolean test() {
+        return frame.disposed;
+      }
+    });
+    assertThat(frame.disposed).isTrue();
   }
 }
