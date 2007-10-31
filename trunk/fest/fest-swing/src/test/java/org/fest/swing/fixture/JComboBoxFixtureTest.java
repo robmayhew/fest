@@ -41,12 +41,12 @@ import org.testng.annotations.Test;
   
   @Test public void shouldSelectItemAtGivenIndex() {
     fixture.selectItem(2);
-    assertThat(fixture.target.getSelectedItem()).equals("third");
+    assertThat(fixture.target.getSelectedItem()).isEqualTo("third");
   }
 
   @Test public void shouldSelectItemWithGivenText() {
     fixture.selectItem("second");
-    assertThat(fixture.target.getSelectedItem()).equals("second");
+    assertThat(fixture.target.getSelectedItem()).isEqualTo("second");
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {

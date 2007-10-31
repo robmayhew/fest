@@ -45,12 +45,12 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
   
   @Test public void shouldSelectItemAtGivenIndex() {
     targetFixture.selectItem(2);
-    assertThat(targetFixture.target.getSelectedValue()).equals("three");
+    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("three");
   }
 
   @Test public void shouldSelectItemWithGivenText() {
     targetFixture.selectItem("two");
-    assertThat(targetFixture.target.getSelectedValue()).equals("two");
+    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {
