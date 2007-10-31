@@ -18,7 +18,7 @@ package org.fest.swing;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Window;
+import java.awt.Frame;
 
 import javax.swing.JDialog;
 import javax.swing.UIManager;
@@ -30,26 +30,28 @@ import static javax.swing.SwingUtilities.invokeLater;
  * Understands the base window for all GUI tests.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class TestDialog extends JDialog {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestDialog show(Window owner) {
+  public static TestDialog showInTest(Frame owner) {
     TestDialog d = new TestDialog(owner);
-    d.beVisible();
+    d.display();
     return d;
   }
   
-  public TestDialog(Window owner) {
+  public TestDialog(Frame owner) {
     super(owner);
+    setLayout(new FlowLayout());
   }
 
   public void addComponents(Component...components) {
     for (Component c : components) add(c);
   }
   
-  public void beVisible() {
+  public void display() {
     beVisible(new Dimension(400, 200));
   }
   
@@ -57,9 +59,8 @@ public class TestDialog extends JDialog {
     try {
       invokeAndWait(new Runnable() {
         public void run() {
-          beforeShown();
-          setLayout(new FlowLayout());
-          updateLookAndFeel();
+          beforeDisplayed();
+          chooseLookAndFeel();
           setPreferredSize(size);
           pack();
           setVisible(true);
@@ -70,9 +71,9 @@ public class TestDialog extends JDialog {
     }
   }
   
-  protected void beforeShown() {}
+  protected void beforeDisplayed() {}
 
-  protected void updateLookAndFeel() {
+  protected void chooseLookAndFeel() {
     lookNative();
   }
   
@@ -84,7 +85,7 @@ public class TestDialog extends JDialog {
     }
   }
   
-  public void beDisposed() {
+  public void destroy() {
     invokeLater(new Runnable() {
       public void run() {
         setVisible(false);
