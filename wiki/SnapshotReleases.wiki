@@ -1,0 +1,17 @@
+#summary Snapshot releases: When, Where and Why
+#labels Featured
+
+Snapshot releases are available at our Maven 2 repository at http://fest.googlecode.com/svn/trunk/fest/m2/repository/
+
+Snapshot releases include the name of the project, version and "-SNAPSHOT". For example: fest-swing-SNAPSHOT.
+
+===What can you expect from snapshot releases?===
+  * Latest features
+  * Latest bug fixes
+
+===When are snapshot releases updated?===
+Every time we add new features and/or we fix bugs. To file enhancement requests (new features) or files bugs at the [http://code.google.com/p/fest/issues/list "Issues" Page].
+
+===Where I can find a list of new features/fixed bugs for each snapshot release?===
+  * FEST-Swing: FESTSwingSnapshots
+
