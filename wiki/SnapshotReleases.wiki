@@ -13,5 +13,4 @@ Snapshot releases include the name of the project, version and "-SNAPSHOT". For 
 Every time we add new features and/or we fix bugs. To file enhancement requests (new features) or files bugs at the [http://code.google.com/p/fest/issues/list "Issues" Page].
 
 ===Where I can find a list of new features/fixed bugs for each snapshot release?===
-  * FEST-Swing: FESTSwingSnapshots
-
+  * FEST-Swing: [FESTSwingSnapshots]
