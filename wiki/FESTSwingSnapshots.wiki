@@ -3,5 +3,6 @@
 Snapshots can be found at http://fest.googlecode.com/svn/trunk/fest/m2/repository/fest/fest-swing/
 
 ===[10/30/07] FEST-Swing 0.7 SNAPSHOT===
+http://fest.googlecode.com/svn/trunk/fest/m2/repository/fest/fest-swing/0.7-SNAPSHOT/
   * Fixed Issue 44
   * Fixed Issue 50
