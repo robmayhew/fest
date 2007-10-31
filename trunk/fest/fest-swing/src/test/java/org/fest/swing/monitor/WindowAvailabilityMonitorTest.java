@@ -28,10 +28,12 @@ import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
 import static java.awt.AWTEvent.PAINT_EVENT_MASK;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
 import static org.fest.swing.monitor.MockWindows.mock;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
+import org.fest.swing.listener.WeakEventListener;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -62,7 +64,7 @@ public class WindowAvailabilityMonitorTest {
 
   @Test public void shouldAttachItSelfToToolkit() {
     monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(windows);
-    WeakEventListener l = new WeakEventListener(monitor);
+    WeakEventListener l = createWithoutAttaching(monitor);
     assertThat(toolkitHasListenerUnderEventMask(l, EVENT_MASK)).isTrue();
   }
 

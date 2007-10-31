@@ -39,10 +39,12 @@ import static java.awt.event.WindowEvent.WINDOW_OPENED;
 import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
+import org.fest.swing.listener.WeakEventListener;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -76,7 +78,7 @@ public class ContextMonitorTest {
 
   @Test public void shouldAttachItSelfToToolkit() {
     monitor = ContextMonitor.attachContextMonitor(new Windows(), new Context());
-    WeakEventListener l = new WeakEventListener(monitor);
+    WeakEventListener l = createWithoutAttaching(monitor);
     assertThat(toolkitHasListenerUnderEventMask(l, EVENT_MASK)).isTrue();
   }
 

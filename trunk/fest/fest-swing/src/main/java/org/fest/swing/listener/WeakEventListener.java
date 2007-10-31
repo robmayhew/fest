@@ -12,7 +12,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.monitor;
+package org.fest.swing.listener;
 
 import java.awt.AWTEvent;
 import java.awt.event.AWTEventListener;
@@ -36,20 +36,28 @@ import static org.fest.util.Objects.areEqual;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class WeakEventListener implements AWTEventListener {
+public final class WeakEventListener implements AWTEventListener {
 
-  final WeakReference<AWTEventListener> listenerReference;
+  private final WeakReference<AWTEventListener> listenerReference;
 
-  static WeakEventListener attachAsWeakEventListener(AWTEventListener listener, long eventMask) {
+  public static WeakEventListener attachAsWeakEventListener(AWTEventListener listener, long eventMask) {
     WeakEventListener l = new WeakEventListener(listener);
     getDefaultToolkit().addAWTEventListener(l, eventMask);
     return l;
   }
   
-  WeakEventListener(AWTEventListener listener) {
+  public static WeakEventListener createWithoutAttaching(AWTEventListener listener) {
+    return new WeakEventListener(listener);
+  }
+  
+  private WeakEventListener(AWTEventListener listener) {
     listenerReference = new WeakReference<AWTEventListener>(listener);
   }
 
+  public AWTEventListener realListener() {
+    return listenerReference.get();
+  }
+  
   /**
    * Dispatches the given event to the wrapped event listener. If the wrapped listener is <code>null</code> 
    * (garbage-collected,) this listener will remove itself from the default toolkit.

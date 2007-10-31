@@ -44,7 +44,7 @@ import org.fest.swing.monitor.WindowMonitor;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class ExistingHierarchy implements ComponentHierarchy {
+public class ExistingHierarchy implements ComponentHierarchy {
 
   private static Logger logger = Logger.getLogger(ExistingHierarchy.class.getName());
   

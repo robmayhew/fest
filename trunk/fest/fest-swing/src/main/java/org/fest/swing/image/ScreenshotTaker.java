@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.image;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;

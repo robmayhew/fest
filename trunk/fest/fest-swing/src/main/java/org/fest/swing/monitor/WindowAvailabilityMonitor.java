@@ -26,7 +26,7 @@ import static java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK;
 import static java.awt.AWTEvent.PAINT_EVENT_MASK;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 
-import static org.fest.swing.monitor.WeakEventListener.attachAsWeakEventListener;
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 /**
  * Understands an event listener that monitors when a window is ready to receive OS-level event input.

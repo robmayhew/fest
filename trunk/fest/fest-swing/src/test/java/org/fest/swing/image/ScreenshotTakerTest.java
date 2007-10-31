@@ -13,11 +13,14 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.image;
 
 import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+
+import org.fest.swing.image.ImageException;
+import org.fest.swing.image.ScreenshotTaker;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;

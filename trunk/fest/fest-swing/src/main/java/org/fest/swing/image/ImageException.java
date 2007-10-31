@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.image;
 
 /**
  * Understands an exception thrown by <code>{@link ScreenshotTaker}</code> when, for some reason, a screenshot of the 

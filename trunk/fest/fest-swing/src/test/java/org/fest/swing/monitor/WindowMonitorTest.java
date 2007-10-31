@@ -39,6 +39,7 @@ import static org.fest.reflect.Reflection.field;
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
 
 import org.fest.swing.TestFrame;
+import org.fest.swing.listener.WeakEventListener;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -112,7 +113,7 @@ public class WindowMonitorTest {
     if (!(l instanceof AWTEventListenerProxy)) return false;
     AWTEventListenerProxy proxy = (AWTEventListenerProxy)l;
     WeakEventListener wrapper = (WeakEventListener)proxy.getListener();
-    return type.isAssignableFrom(wrapper.listenerReference.get().getClass());
+    return type.isAssignableFrom(wrapper.realListener().getClass());
   }
   
   @Test(dependsOnMethods = "shouldAttachMonitors")

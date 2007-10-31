@@ -32,7 +32,7 @@ import static java.awt.event.WindowEvent.WINDOW_FIRST;
 import static java.awt.event.WindowEvent.WINDOW_LAST;
 import static java.awt.event.WindowEvent.WINDOW_OPENED;
 
-import static org.fest.swing.monitor.WeakEventListener.attachAsWeakEventListener;
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibilityMonitor;
 
 /**
