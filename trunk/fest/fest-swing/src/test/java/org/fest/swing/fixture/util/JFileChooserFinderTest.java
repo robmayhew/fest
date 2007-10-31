@@ -15,12 +15,16 @@
  */
 package org.fest.swing.fixture.util;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 import org.fest.swing.fixture.JFileChooserFixture;
@@ -37,11 +41,11 @@ import org.testng.annotations.Test;
 public class JFileChooserFinderTest {
 
   private RobotFixture robot;
-  private TestFrame frame;
+  private MyFrame frame;
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    frame = new TestFrame(getClass());
+    frame = new MyFrame(getClass());
     robot.showWindow(frame);
   }
   
@@ -50,9 +54,13 @@ public class JFileChooserFinderTest {
   }
   
   @Test public void shouldFindFileChooser() {
-    JFileChooser fileChooser = showFileChooser();
+    clickBrowseButton();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser().using(robot);
-    assertThat(found.target).isSameAs(fileChooser);
+    assertThat(found.target).isSameAs(frame.fileChooser);
+  }
+
+  private void clickBrowseButton() {
+    robot.click(frame.browseButton, MouseButton.LEFT_BUTTON, 1);
   }
 
   @Test(expectedExceptions = ComponentLookupException.class)
@@ -61,20 +69,33 @@ public class JFileChooserFinderTest {
   }
   
   @Test public void shouldFindFileChooserByName() {
-    JFileChooser fileChooser = showFileChooser();
-    fileChooser.setName("myFileChooser");
-    JFileChooserFixture found = JFileChooserFinder.findFileChooser("myFileChooser").using(robot);
-    assertThat(found.target).isSameAs(fileChooser);    
+    clickBrowseButton();
+    JFileChooserFixture found = JFileChooserFinder.findFileChooser("fileChooser").using(robot);
+    assertThat(found.target).isSameAs(frame.fileChooser);    
   }
   
-  private JFileChooser showFileChooser() {
-    final JFileChooser fileChooser = new JFileChooser();
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        fileChooser.showOpenDialog(frame);
-      }
-    });
-    return fileChooser;
+  private static class MyFrame extends TestFrame {
+    
+    private static final long serialVersionUID = 1L;
+
+    JButton browseButton = new JButton("Browse");
+    JFileChooser fileChooser = new JFileChooser();
+    
+    public MyFrame(Class testClass) {
+      super(testClass);
+      setUp();
+    }
+
+    private void setUp() {
+      browseButton.setName("browse");
+      browseButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          fileChooser.showOpenDialog(MyFrame.this);
+        }
+      });
+      add(browseButton);
+      fileChooser.setName("fileChooser");
+    }
   }
   
 }

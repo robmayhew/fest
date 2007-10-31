@@ -31,9 +31,9 @@ public class MDIFrame extends TestFrame {
 
   private static final long serialVersionUID = 1L;
 
-  public static MDIFrame show(Class testClass) {
+  public static MDIFrame showInTest(Class testClass) {
     MDIFrame f = new MDIFrame(testClass);
-    f.beVisible();
+    f.display();
     return f;
   }
   
@@ -44,7 +44,7 @@ public class MDIFrame extends TestFrame {
     super(testClass);
   }
 
-  @Override protected void beforeShown() {
+  @Override protected void beforeDisplayed() {
     desktop = new JDesktopPane();
     createInternalFrame();
     desktop.add(internalFrame);
@@ -58,7 +58,7 @@ public class MDIFrame extends TestFrame {
     internalFrame.setVisible(true);
   }
 
-  @Override protected void updateLookAndFeel() {}
+  @Override protected void chooseLookAndFeel() {}
 
   public JDesktopPane desktop() { return desktop; }
   public JInternalFrame internalFrame() { return internalFrame; }

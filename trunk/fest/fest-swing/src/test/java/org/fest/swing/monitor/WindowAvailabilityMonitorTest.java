@@ -57,7 +57,7 @@ public class WindowAvailabilityMonitorTest {
   }
 
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
   }
 
   @Test public void shouldAttachItSelfToToolkit() {

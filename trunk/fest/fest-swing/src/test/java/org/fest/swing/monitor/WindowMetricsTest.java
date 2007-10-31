@@ -20,6 +20,8 @@ import java.awt.Point;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.TestFrame.showInTest;
+
 import org.fest.swing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -37,13 +39,12 @@ public class WindowMetricsTest {
   private TestFrame frame;
   
   @BeforeMethod public void setUp() {
-    frame = new TestFrame(getClass());
-    frame.beVisible();
+    frame = showInTest(getClass());
     metrics = new WindowMetrics(frame);
   }
   
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldObtainInsets() {

@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.TestFrame.showInTest;
+
 import org.fest.swing.TestFrame;
 
 import org.testng.annotations.Test;
@@ -37,11 +39,10 @@ public class SwingTest {
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0); 
   
   @Test public void shouldReturnInsetsFromContainer() {
-    TestFrame frame = new TestFrame(getClass());
-    frame.beVisible();
+    TestFrame frame = showInTest(getClass());
     Insets insets = Swing.insetsFrom(frame);
     assertThat(insets).isEqualTo(frame.getInsets());
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldReturnEmptyInsetsIfExceptionThrown() {

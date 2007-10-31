@@ -60,11 +60,11 @@ public class WindowsTest {
   }
   
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldEvaluateWindowAsReadyAndNotHiddenIfVisible() {
-    frame.beVisible();
+    frame.display();
     windows.markExisting(frame);
     assertWindowIsReady();
   }

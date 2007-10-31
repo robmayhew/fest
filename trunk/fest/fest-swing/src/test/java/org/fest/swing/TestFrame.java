@@ -35,32 +35,32 @@ public class TestFrame extends JFrame {
   private static final long serialVersionUID = 1L;
   private final String typeName;
 
-  public static TestFrame show(Class testClass) {
+  public static TestFrame showInTest(Class testClass) {
     TestFrame f = new TestFrame(testClass);
-    f.beVisible();
+    f.display();
     return f;
   }
   
   public TestFrame(Class testClass) {
     typeName = testClass.getSimpleName();
+    setLayout(new FlowLayout());
   }
 
   public void addComponents(Component...components) {
     for (Component c : components) add(c);
   }
   
-  public void beVisible() {
-    beVisible(new Dimension(400, 200));
+  public void display() {
+    display(new Dimension(400, 200));
   }
   
-  public void beVisible(final Dimension size) {
+  public void display(final Dimension size) {
     try {
       invokeAndWait(new Runnable() {
         public void run() {
-          beforeShown();
-          setLayout(new FlowLayout());
+          beforeDisplayed();
           setTitle(typeName);
-          updateLookAndFeel();
+          chooseLookAndFeel();
           setPreferredSize(size);
           pack();
           setVisible(true);
@@ -71,9 +71,9 @@ public class TestFrame extends JFrame {
     }
   }
   
-  protected void beforeShown() {}
+  protected void beforeDisplayed() {}
 
-  protected void updateLookAndFeel() {
+  protected void chooseLookAndFeel() {
     lookNative();
   }
   
@@ -85,7 +85,7 @@ public class TestFrame extends JFrame {
     }
   }
   
-  public void beDisposed() {
+  public void destroy() {
     invokeLater(new Runnable() {
       public void run() {
         setVisible(false);

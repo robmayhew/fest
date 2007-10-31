@@ -25,6 +25,9 @@ import javax.swing.JMenu;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+
 import static org.fest.util.Collections.list;
 
 import org.fest.swing.TestDialog;
@@ -55,11 +58,11 @@ public class ChildrenFinderTest {
   }
   
   @Test public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() throws Exception {
-    MDIFrame frame = MDIFrame.show(getClass());
+    MDIFrame frame = showInTest(getClass());
     frame.internalFrame().setIcon(true);
     JDesktopPane desktop = frame.desktop();
     assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
@@ -68,21 +71,21 @@ public class ChildrenFinderTest {
   }
 
   @Test public void shouldReturnOwnedWindowsIfComponentIsWindow() {
-    TestFrame frame = TestFrame.show(getClass());
+    TestFrame frame = TestFrame.showInTest(getClass());
     TestDialog dialog = TestDialog.show(frame);
     dialog.beVisible();
     assertThat(finder.childrenOf(frame)).containsOnly(childrenOf(frame));
     dialog.beDisposed();
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldReturnChildrenOfContainer() {
     TestFrame frame = new TestFrame(getClass());
     JTextField textField = new JTextField();
     frame.add(textField);
-    frame.beVisible();
+    frame.display();
     assertThat(finder.childrenOf(frame.getContentPane())).containsOnly(textField);
-    frame.beDisposed();
+    frame.destroy();
   }
 
   private Object[] childrenOf(Container c) {

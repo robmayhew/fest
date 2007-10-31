@@ -28,6 +28,7 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
+import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.hierarchy.MockChildrenFinder.mock;
 import static org.fest.swing.util.ComponentCollections.empty;
 
@@ -64,14 +65,14 @@ public class ExistingHierarchyTest {
     JTextField textField = new JTextField();
     frame.add(textField);
     assertThat(hierarchy.parentOf(textField)).isSameAs(frame.getContentPane());
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldReturnParentOfInternalFrame() {
-    MDIFrame frame = MDIFrame.show(getClass());
+    MDIFrame frame = showInTest(getClass());
     JInternalFrame internalFrame = frame.internalFrame();
     assertThat(hierarchy.parentOf(internalFrame)).isSameAs(internalFrame.getDesktopIcon().getDesktopPane());
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldReturnSubcomponents() {

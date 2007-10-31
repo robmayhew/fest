@@ -51,7 +51,7 @@ public class WindowVisibilityMonitorTest {
   }
 
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldAttachMonitorToWindow() {

@@ -75,7 +75,7 @@ public class WindowMonitorTest {
   }
   
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
     if (mocksInjected) restoreOriginal();
   }
 

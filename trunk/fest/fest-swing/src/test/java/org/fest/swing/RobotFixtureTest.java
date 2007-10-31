@@ -121,7 +121,7 @@ public class RobotFixtureTest {
   
   @Test public void shouldCloseWindow() {
     final TestFrame w = new TestFrame(getClass());
-    w.beVisible();
+    w.display();
     robot.close(w);
     robot.wait(new Condition("Window closed") {
       @Override public boolean test() {

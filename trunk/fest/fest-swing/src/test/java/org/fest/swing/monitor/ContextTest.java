@@ -62,7 +62,7 @@ public class ContextTest {
   }
   
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldHaveSystemEventQueueInContext() {
@@ -71,7 +71,7 @@ public class ContextTest {
 
   @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
   public void shouldAddContextIfGivenComponentIsWindowAndAddQueue() {
-    frame.beVisible();
+    frame.display();
     context.addContextFor(frame);
     assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
     Map<Window, Boolean> context = contexts.get(defaultSystemEventQueue());
@@ -83,7 +83,7 @@ public class ContextTest {
   public void shouldNotAddContextIfGivenComponentIsNotWindowAndAddQueue() {
     JTextField textField = new JTextField();
     frame.add(textField);
-    frame.beVisible();
+    frame.display();
     context.addContextFor(textField);
     assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
     assertContextExcludes(defaultSystemEventQueue(), textField);
@@ -103,7 +103,7 @@ public class ContextTest {
   
   @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
   public void shouldLookupQueueForGivenComponent() {
-    frame.beVisible();
+    frame.display();
     EventQueue queue = frame.getToolkit().getSystemEventQueue();
     WeakReference<EventQueue> reference = new WeakReference<EventQueue>(queue);
     queues.put(frame, reference);
@@ -114,15 +114,15 @@ public class ContextTest {
                              "shouldAddContextIfGivenComponentIsWindowAndAddQueue" })
   public void shouldReturnAllRootWindows() {
     TestFrame anotherFrame = new TestFrame(getClass());
-    anotherFrame.beVisible();
-    frame.beVisible();
+    anotherFrame.display();
+    frame.display();
     context.addContextFor(frame);
     context.addContextFor(anotherFrame);
     Collection<Window> rootWindows = context.rootWindows();
     Object[] frames = Frame.getFrames();
     assertThat(rootWindows).contains(frame, anotherFrame);
     assertThat(rootWindows).containsOnly(frames);
-    anotherFrame.beDisposed();
+    anotherFrame.destroy();
   }
   
   @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")

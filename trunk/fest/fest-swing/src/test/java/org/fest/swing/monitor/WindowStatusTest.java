@@ -51,11 +51,11 @@ public class WindowStatusTest {
   }
   
   @AfterMethod public void tearDown() {
-    frame.beDisposed();
+    frame.destroy();
   }
   
   @Test public void shouldMoveMouseToCenterWithFrameWidthGreaterThanHeight() {
-    frame.beVisible();
+    frame.display();
     Point center = new WindowMetrics(frame).center();
     center.x += WindowStatus.sign();
     new EasyMockTemplate(windows) {
@@ -71,7 +71,7 @@ public class WindowStatusTest {
   }
   
   @Test public void shouldMoveMouseToCenterWithFrameHeightGreaterThanWidth() {
-    frame.beVisible(new Dimension(200, 400));
+    frame.display(new Dimension(200, 400));
     Point center = new WindowMetrics(frame).center();
     center.y += WindowStatus.sign();
     new EasyMockTemplate(windows) {
@@ -87,7 +87,7 @@ public class WindowStatusTest {
   }
   
   @Test public void shouldResizeWindowToReceiveEvents() {
-    frame.beVisible(new Dimension(0 ,0));
+    frame.display(new Dimension(0 ,0));
     Dimension original = frame.getSize();
     new EasyMockTemplate(windows) {
       @Override protected void expectations() {

@@ -22,6 +22,8 @@ import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -47,10 +49,10 @@ public class JDesktopPaneChildrenFinderTest {
   }
   
   @Test public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() throws Exception {
-    MDIFrame frame = MDIFrame.show(getClass());
+    MDIFrame frame = showInTest(getClass());
     frame.internalFrame().setIcon(true);
     Collection<Component> children = finder.nonExplicitChildrenOf(frame.desktop());
     assertThat(children).containsOnly(frame.internalFrame());
-    frame.beDisposed();
+    frame.destroy();
   }
 }
