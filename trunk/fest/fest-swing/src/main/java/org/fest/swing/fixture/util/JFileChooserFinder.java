@@ -90,8 +90,8 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
    * @param timeout the number of milliseconds before stopping the search.
    * @return this finder.
    */
-  @Override public FrameFinder withTimeout(long timeout) {
-    return (FrameFinder)super.withTimeout(timeout);
+  @Override public JFileChooserFinder withTimeout(long timeout) {
+    return (JFileChooserFinder)super.withTimeout(timeout);
   }
 
   /**
@@ -100,8 +100,8 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
    * @param unit the time unit for <code>timeout</code>.
    * @return this finder.
    */
-  @Override public FrameFinder withTimeout(long timeout, TimeUnit unit) {
-    return (FrameFinder)super.withTimeout(timeout, unit);
+  @Override public JFileChooserFinder withTimeout(long timeout, TimeUnit unit) {
+    return (JFileChooserFinder)super.withTimeout(timeout, unit);
   }
 
   protected ComponentMatcher nameMatcher() {
