@@ -24,6 +24,11 @@ public final class Timeout {
 
   private final long ms;
 
+  /**
+   * Creates a new <code>{@link Timeout}</code>.
+   * @param ms the timeout in milliseconds.
+   * @return the created <code>Timeout</code>.
+   */
   public static Timeout timeout(long ms) {
     return new Timeout(ms);
   }
