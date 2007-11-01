@@ -52,6 +52,12 @@ public class ExistingHierarchy implements ComponentHierarchy {
   
   private final ChildrenFinder childrenFinder = new ChildrenFinder();
   
+  public static ExistingHierarchy createExistingHierarchy() {
+    return new ExistingHierarchy();
+  }
+  
+  ExistingHierarchy() {}
+
   /** ${@inheritDoc} */
   public Collection<Window> rootWindows() {
     return windowMonitor.rootWindows();
