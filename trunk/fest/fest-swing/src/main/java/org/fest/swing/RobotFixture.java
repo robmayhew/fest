@@ -34,7 +34,12 @@ import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 import static java.lang.System.currentTimeMillis;
+
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+
 import static org.fest.util.Strings.concat;
+
+import org.fest.swing.util.TimeoutWatch;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -45,6 +50,8 @@ import static org.fest.util.Strings.concat;
 public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
+  private static final int DEFAULT_DELAY = 30000;
+  private static final int SLEEP_INTERVAL = 10;
 
   private Robot robot;
   private WindowTracker windowTracker;
@@ -167,11 +174,30 @@ public final class RobotFixture {
   /**
    * Waits until the given condition is <code>true</code>.
    * @param condition the condition to verify.
+   * @throws WaitTimedOutError if the wait times out (more 30 seconds).
    */
   public void wait(Condition condition) {
-    robot.wait(condition);
+    wait(condition, DEFAULT_DELAY);
   }
 
+  /**
+   * Waits until the given condition is <code>true</code>.
+   * @param condition the condition to verify.
+   * @param timeout the timeout.
+   * @throws WaitTimedOutError if the wait times out.
+   */
+  public void wait(Condition condition, Timeout timeout) {
+    wait(condition, timeout.time());
+  }
+  
+  private void wait(Condition condition, long timeout) {
+    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
+    while (!condition.test()) {
+      if (watch.isTimeout()) throw new WaitTimedOutError(("Timed out waiting for " + condition));
+      delay(SLEEP_INTERVAL);
+    }
+  }
+  
   /**
    * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
    * on the event dispatch thread.
