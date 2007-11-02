@@ -25,7 +25,7 @@ public abstract class Condition implements abbot.script.Condition {
   private final String description;
   
   /**
-   * Creates a new </code>{@link Condition}</code>.
+   * Creates a new <code>{@link Condition}</code>.
    * @param description describes this condition.
    */
   public Condition(String description) { 
