@@ -5,7 +5,7 @@
       <value n="oracle.ide.model.Project" v="11.1.1.0.0"/>
    </hash>
    <list n="listOfChildren">
-      <hash><url n="URL" path="src/main/java/main-java.jpr"/></hash>
-      <hash><url n="URL" path="src/test/java/test-java.jpr"/></hash>
+      <hash><url n="URL" path="src/main/java/src.main.java.jpr"/></hash>
+      <hash><url n="URL" path="src/test/java/src.test.java.jpr"/></hash>
    </list>
 </jws:workspace>
