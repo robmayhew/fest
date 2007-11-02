@@ -72,4 +72,8 @@ public final class Collections {
   }
   
   private Collections() {}
+
+  public static <T> List<T> filter(Collection<?> target, CollectionFilter<T> filter) {
+    return filter.filter(target);
+  }
 }

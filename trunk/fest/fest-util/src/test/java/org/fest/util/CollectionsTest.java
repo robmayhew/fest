@@ -15,15 +15,17 @@
  */
 package org.fest.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Collections}</code>.
@@ -72,5 +74,23 @@ public class CollectionsTest {
   @Test public void shouldNotReturnDuplicatesIfCollectionIsNull() {
     Collection<String> duplicates = Collections.duplicatesFrom(null);
     assertTrue(duplicates.isEmpty());
+  }
+  
+  @Test public void shouldFilterCollection() {
+    class FilterStub implements CollectionFilter<Object> {
+      private final List<Object> expectedResult;
+
+      FilterStub(List<Object> expectedResult) {
+        this.expectedResult = expectedResult;
+      }
+      
+      public List<Object> filter(Collection<?> target) {
+        return expectedResult;
+      }
+    };
+    List<Object> expectedResult = new ArrayList<Object>();
+    FilterStub filter = new FilterStub(expectedResult);
+    List<Object> filtered = Collections.filter(new ArrayList<Object>(), filter);
+    assertSame(filtered, expectedResult);
   }
 }
