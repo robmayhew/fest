@@ -25,7 +25,7 @@ import java.awt.Component;
 public final class NameMatcher extends abbot.finder.matchers.NameMatcher implements ComponentMatcher {
 
   /**
-   * Creates a new </code>{@link NameMatcher}</code>.
+   * Creates a new <code>{@link NameMatcher}</code>.
    * @param name the name of the component we are looking for.
    */
   public NameMatcher(String name) {
