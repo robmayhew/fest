@@ -15,7 +15,11 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JPanelFixture}</code>.
@@ -33,7 +37,9 @@ public class JPanelFixtureTest extends ComponentFixtureTestCase<JPanel> {
   @Override protected JPanel createTarget() {
     JPanel panel = new JPanel();
     panel.setName("panel");
+    panel.setPreferredSize(new Dimension(100, 100));
     return panel;
   }
 
+  @Test public void justAddedToRunClassAsTest() {}
 }
