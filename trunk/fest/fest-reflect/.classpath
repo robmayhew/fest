@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/fest-assert-0.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fest-util-0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-0.7-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
