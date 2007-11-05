@@ -41,7 +41,8 @@
 		       deprecation="${compiler.deprecation}"
 		       optimize="${compiler.optimize}"
 		       source="${compiler.javac.source}"
-		       target="${compiler.javac.target}">
+		       target="${compiler.javac.target}"
+      		 excludes="org/fest/swing/hierarchy/**,org/fest/swing/monitor/**,org/fest/swing/util/Swing.java">
 			<src path="${src.main.java.dir}" />
 			<classpath refid="dependency.classpath" />
 		</javac>
@@ -107,12 +108,14 @@
 		       deprecation="${compiler.deprecation}"
 		       optimize="${compiler.optimize}"
 		       source="${compiler.javac.source}"
-		       target="${compiler.javac.target}">
+		       target="${compiler.javac.target}"
+		  		 excludes="org/fest/swing/hierarchy/**,org/fest/swing/monitor/**,org/fest/swing/util/SwingTest.java">
 			<src path="${src.test.java.dir}" />
 			<classpath>
 				<pathelement location="${target.classes.dir}" />
 			</classpath>
 			<classpath refid="dependency.classpath" />
+		    
 		</javac>
 	</target>
 
@@ -156,6 +159,7 @@
 			<fileset dir="${target.zip.dir}" includes="**/*.*"  />
 		</zip>
 		<artifact:install file="${target.zip.root.dir}/${release.name}.jar">
+		  <attach file="${target.zip.root.dir}/${release.name}-sources.jar" classifier="sources" />
 			<pom refid="maven.project" />
 			<artifact:localRepository id="local.repository" location="${maven.repository.local}" layout="default" />
 		</artifact:install>
@@ -177,7 +181,7 @@
 	</target>
 
 	<target name="dist.src">
-		<zip destfile="${target.zip.root.dir}/${release.name}-src.zip">
+		<zip destfile="${target.zip.root.dir}/${release.name}-sources.jar">
 			<fileset dir="${src.main.java.dir}" includes="**/*.java" />
 		</zip>
 	</target>
