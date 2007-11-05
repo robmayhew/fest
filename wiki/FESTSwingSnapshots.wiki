@@ -6,6 +6,8 @@ Snapshots can be found at http://fest.googlecode.com/svn/trunk/fest/m2/repositor
 http://fest.googlecode.com/svn/trunk/fest/m2/repository/fest/fest-swing/0.7-SNAPSHOT/
   * Uploaded source attachments to Maven repository (fest-assert-0.7-SNAPSHOT-sources.jar)
   * Fixed Issue 42
+  * Moved `ImageException` and `ScreenshotTaker` from package `org.fest.swing.util` to package `org.fest.swing.image`
+  * Renamed `org.fest.swing.util.GUITests` to `org.fest.swing.util.GUITestFinder`
 
 ===[11/01/07] FEST-Swing 0.7 SNAPSHOT===
 http://fest.googlecode.com/svn/trunk/fest/m2/repository/fest/fest-swing/0.7-SNAPSHOT/
