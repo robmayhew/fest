@@ -22,15 +22,15 @@ import junit.framework.Test;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 import org.w3c.dom.Element;
 
-import org.fest.swing.util.GUITests;
-import org.fest.swing.util.ImageException;
-import org.fest.swing.util.ScreenshotTaker;
+import org.fest.swing.image.ImageException;
+import org.fest.swing.image.ScreenshotTaker;
+import org.fest.swing.util.GUITestFinder;
 
 import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testClassName;
 import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testMethodName;
 import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
 
-import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
+import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
 import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
 
@@ -90,7 +90,7 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
     try {
       Class<?> testClass = Class.forName(className);
       Method testMethod = testClass.getDeclaredMethod(methodName, new Class<?>[0]);
-      return GUITests.isGUITest(testClass, testMethod);
+      return GUITestFinder.isGUITest(testClass, testMethod);
     } catch (Exception e) {
       return false;
     }

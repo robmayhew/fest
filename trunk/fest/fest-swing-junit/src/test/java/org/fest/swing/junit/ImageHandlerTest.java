@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.util.ScreenshotTaker;
+import org.fest.swing.image.ScreenshotTaker;
 
 import static org.fest.assertions.Assertions.assertThat;
 

@@ -30,7 +30,7 @@ import static java.io.File.separator;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 
-import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
+import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
 import static org.fest.util.Files.flushAndClose;
 import static org.fest.util.Files.newFile;
 import static org.fest.util.Strings.isEmpty;
