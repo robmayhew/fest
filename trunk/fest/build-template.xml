@@ -4,6 +4,7 @@
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="src.main" value="${src.dir}/main" />
   <property name="src.main.java.dir" value="${src.main}/java" />
+  <property name="src.main.resources.dir" value="${src.main}/resources"/>
 	<property name="src.test.java.dir" value="${src.dir}/test/java" />
 
 	<property name="lib.dir" value="${basedir}/lib" />
