@@ -17,23 +17,22 @@ package org.fest.swing.testng;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.Reporter;
+
+import org.fest.swing.image.ImageException;
+import org.fest.swing.image.ScreenshotTaker;
+import org.fest.swing.util.GUITestFinder;
+
 import static java.io.File.separator;
 import static java.util.logging.Level.SEVERE;
 
-import static org.fest.swing.util.ScreenshotTaker.PNG_EXTENSION;
-
+import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.isEmpty;
 import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
-
-import org.fest.swing.util.GUITests;
-import org.fest.swing.util.ImageException;
-import org.fest.swing.util.ScreenshotTaker;
-
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.Reporter;
 
 /**
  * Understands a <a href="http://testng.org" target="_blank">TestNG</a> listener that takes a screenshot when a GUI test 
@@ -107,7 +106,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   private static boolean isGUITest(ITestResult testResult) {
     Class<?> realClass = testResult.getTestClass().getRealClass();
     Method testMethod = testResult.getMethod().getMethod();
-    return GUITests.isGUITest(realClass, testMethod);
+    return GUITestFinder.isGUITest(realClass, testMethod);
   }
   
   private String takeScreenshotAndReturnFileName(ITestResult result) {
