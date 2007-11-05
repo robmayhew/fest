@@ -3,6 +3,7 @@
 Snapshots can be found at http://fest.googlecode.com/svn/trunk/fest/m2/repository/fest/fest-swing/
 
 ===[11/04/07] FEST-Swing 0.7 SNAPSHOT===
+http://fest.googlecode.com/svn/trunk/fest/m2/repository/fest/fest-swing/0.7-SNAPSHOT/
   * Uploaded source attachments to Maven repository (fest-assert-0.7-SNAPSHOT-sources.jar)
   * Fixed Issue 42
 
