@@ -28,7 +28,8 @@ import java.util.Map;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.Reflection.field;
+
+import static org.fest.swing.util.ReflectionUtils.mapField;
 
 import org.fest.swing.TestFrame;
 
@@ -49,16 +50,11 @@ public class ContextTest {
   
   private Context context;
   
-  @SuppressWarnings("unchecked") 
   @BeforeMethod public void setUp() {
     context = new Context();
-    contexts = contextMapField("contexts");
-    queues = contextMapField("queues");
+    contexts = mapField("contexts", context);
+    queues = mapField("queues", context);
     frame = new TestFrame(getClass());
-  }
-  
-  private Map contextMapField(String name) {
-    return field(name).ofType(Map.class).in(context).get();
   }
   
   @AfterMethod public void tearDown() {

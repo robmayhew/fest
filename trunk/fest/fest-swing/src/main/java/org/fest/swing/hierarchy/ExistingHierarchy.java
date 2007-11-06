@@ -21,8 +21,6 @@ import java.awt.Window;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import javax.swing.JInternalFrame;
-
 import static java.util.logging.Level.WARNING;
 
 import static org.fest.swing.util.Formatting.format;
@@ -46,11 +44,12 @@ import org.fest.swing.monitor.WindowMonitor;
  */
 public class ExistingHierarchy implements ComponentHierarchy {
 
-  private static Logger logger = Logger.getLogger(ExistingHierarchy.class.getName());
-  
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
-  
-  private final ChildrenFinder childrenFinder = new ChildrenFinder();
+
+  final ParentFinder parentFinder = new ParentFinder();
+  final ChildrenFinder childrenFinder = new ChildrenFinder();
+
+  final Logger logger = Logger.getLogger(getClass().getName());
   
   public static ExistingHierarchy createExistingHierarchy() {
     return new ExistingHierarchy();
@@ -65,17 +64,7 @@ public class ExistingHierarchy implements ComponentHierarchy {
 
   /** ${@inheritDoc} */
   public Container parentOf(Component c) {
-    Container p = c.getParent();
-    if (p == null && c instanceof JInternalFrame) p = parentOf((JInternalFrame)c);
-    return p;
-  }
-
-  private Container parentOf(JInternalFrame internalFrame) {
-    // From Abbot: workaround for bug in JInternalFrame: COMPONENT_HIDDEN is sent before the desktop icon is set, so
-    // JInternalFrame.getDesktopPane will throw a NPE if called while dispatching that event. Reported against 1.4.x.
-    JInternalFrame.JDesktopIcon icon = internalFrame.getDesktopIcon();
-    if (icon != null) return icon.getDesktopPane();
-    return null;
+    return parentFinder.parentOf(c);
   }
   
   /**

@@ -40,7 +40,7 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
-import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
+import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
 import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
 
 import org.fest.swing.TestFrame;
@@ -95,7 +95,7 @@ public class ContextMonitorTest {
 
   @Test public void shouldProcessEventWithIdEqualToWindowOpen() {
     createMonitor();
-    assertWindowVisibilityMonitorCountIn(frame, 0);
+    assertWindowVisibilityMonitorCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         context.addContextFor(frame);
@@ -107,13 +107,13 @@ public class ContextMonitorTest {
         dispatchWindowOpenedEventToMonitor(frame);
       }
     }.run();
-    assertWindowVisibilityMonitorCountIn(frame, 1);
+    assertWindowVisibilityMonitorCount(frame, 1);
   }
   
   @Test public void shouldProcessEventWithIdEqualToWindowOpenedAndMarkWindowAsReadyIfFileDialog() {
     createMonitor();
     final Window w = new FileDialog(frame);
-    assertWindowVisibilityMonitorCountIn(w, 0);
+    assertWindowVisibilityMonitorCount(w, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         context.addContextFor(w);
@@ -126,7 +126,7 @@ public class ContextMonitorTest {
         dispatchWindowOpenedEventToMonitor(w);
       }
     }.run();
-    assertWindowVisibilityMonitorCountIn(w, 1);
+    assertWindowVisibilityMonitorCount(w, 1);
   }
 
   @Test public void shouldProcessEventWithIdEqualToWindowClosedAndWithRootWindow() {
@@ -189,7 +189,7 @@ public class ContextMonitorTest {
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdInBetweenWindowFirstAndWindowLastAndWindowNotInContext(final int eventId) {
     createMonitor();
-    assertWindowVisibilityMonitorCountIn(frame, 0);
+    assertWindowVisibilityMonitorCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(new ArrayList<Window>());
@@ -202,13 +202,13 @@ public class ContextMonitorTest {
         dispatchEventToMonitor(frame, eventId);
       }
     }.run();
-    assertWindowVisibilityMonitorCountIn(frame, 1);
+    assertWindowVisibilityMonitorCount(frame, 1);
   }
   
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdInBetweenWindowFirstAndWindowLastAndWindowInContextAndClosed(final int eventId) {
     createMonitor();
-    assertWindowVisibilityMonitorCountIn(frame, 0);
+    assertWindowVisibilityMonitorCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(frameInList());
@@ -222,13 +222,13 @@ public class ContextMonitorTest {
         dispatchEventToMonitor(frame, eventId);
       }
     }.run();
-    assertWindowVisibilityMonitorCountIn(frame, 1);
+    assertWindowVisibilityMonitorCount(frame, 1);
   }
 
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdInBetweenWindowFirstAndWindowLastAndWindowInContextAndNotClosed(final int eventId) {
     createMonitor();
-    assertWindowVisibilityMonitorCountIn(frame, 0);
+    assertWindowVisibilityMonitorCount(frame, 0);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(frameInList());
@@ -240,7 +240,7 @@ public class ContextMonitorTest {
         dispatchEventToMonitor(frame, eventId);
       }
     }.run();
-    assertWindowVisibilityMonitorCountIn(frame, 0);
+    assertWindowVisibilityMonitorCount(frame, 0);
   }
 
   @DataProvider(name = "eventsBetweenWindowFirstAndWindowLast")

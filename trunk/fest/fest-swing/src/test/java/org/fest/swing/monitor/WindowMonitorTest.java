@@ -36,7 +36,7 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
-import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCountIn;
+import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
 
 import org.fest.swing.TestFrame;
 import org.fest.swing.listener.WeakEventListener;
@@ -97,7 +97,7 @@ public class WindowMonitorTest {
   }
   
   private void assertPopulated(Window w) {
-    assertWindowVisibilityMonitorCountIn(w, 1);
+    assertWindowVisibilityMonitorCount(w, 1);
     for (Window owned : w.getOwnedWindows()) assertPopulated(owned);
   }
   

@@ -33,7 +33,6 @@ import static javax.swing.SwingUtilities.invokeLater;
 public class TestFrame extends JFrame {
 
   private static final long serialVersionUID = 1L;
-  private final String typeName;
 
   public static TestFrame showInTest(Class testClass) {
     TestFrame f = new TestFrame(testClass);
@@ -42,7 +41,7 @@ public class TestFrame extends JFrame {
   }
   
   public TestFrame(Class testClass) {
-    typeName = testClass.getSimpleName();
+    setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
   }
 
@@ -59,7 +58,6 @@ public class TestFrame extends JFrame {
       invokeAndWait(new Runnable() {
         public void run() {
           beforeDisplayed();
-          setTitle(typeName);
           chooseLookAndFeel();
           setPreferredSize(size);
           pack();

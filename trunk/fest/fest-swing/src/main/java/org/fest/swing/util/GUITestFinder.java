@@ -25,7 +25,7 @@ import org.fest.swing.GUITest;
  * 
  * @author Alex Ruiz
  */
-public final class GUITests {
+public final class GUITestFinder {
 
   /**
    * Returns <code>true</code> if the given class and/or method are annotated with <code>{@link GUITest}</code>. This 
@@ -64,5 +64,5 @@ public final class GUITests {
     return annotation != null;
   }
 
-  private GUITests() {}
+  private GUITestFinder() {}
 }

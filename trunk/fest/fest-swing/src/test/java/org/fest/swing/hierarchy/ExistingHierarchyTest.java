@@ -19,7 +19,6 @@ import java.awt.Component;
 import java.awt.Window;
 import java.util.Collection;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -29,8 +28,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.hierarchy.MDIFrame.showInTest;
-import static org.fest.swing.hierarchy.MockChildrenFinder.mock;
 import static org.fest.swing.util.ComponentCollections.empty;
 
 import org.fest.swing.Condition;
@@ -63,23 +60,25 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldReturnParentOfComponent() {
-    TestFrame frame = new TestFrame(getClass());
-    JTextField textField = new JTextField();
-    frame.add(textField);
-    assertThat(hierarchy.parentOf(textField)).isSameAs(frame.getContentPane());
-    frame.destroy();
-  }
-  
-  @Test public void shouldReturnParentOfInternalFrame() {
-    MDIFrame frame = showInTest(getClass());
-    JInternalFrame internalFrame = frame.internalFrame();
-    assertThat(hierarchy.parentOf(internalFrame)).isSameAs(internalFrame.getDesktopIcon().getDesktopPane());
+    final TestFrame frame = new TestFrame(getClass());
+    final JTextField textField = new JTextField();
+    final ParentFinder finder = MockParentFinder.mock();
+    field("parentFinder").ofType(ParentFinder.class).in(hierarchy).set(finder);
+    new EasyMockTemplate(finder) {
+      @Override protected void expectations() {
+        expect(finder.parentOf(textField)).andReturn(frame);
+      }
+
+      @Override protected void codeToTest() {
+        assertThat(hierarchy.parentOf(textField)).isSameAs(frame);
+      }
+    }.run();
     frame.destroy();
   }
   
   @Test public void shouldReturnSubcomponents() {
     final Component c = new JTextField();
-    final ChildrenFinder finder = mock();
+    final ChildrenFinder finder = MockChildrenFinder.mock();
     field("childrenFinder").ofType(ChildrenFinder.class).in(hierarchy).set(finder);
     final Collection<Component> children = empty();
     new EasyMockTemplate(finder) {

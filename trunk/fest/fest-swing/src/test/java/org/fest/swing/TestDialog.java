@@ -52,10 +52,10 @@ public class TestDialog extends JDialog {
   }
   
   public void display() {
-    beVisible(new Dimension(400, 200));
+    display(new Dimension(400, 200));
   }
   
-  public void beVisible(final Dimension size) {
+  public void display(final Dimension size) {
     try {
       invokeAndWait(new Runnable() {
         public void run() {

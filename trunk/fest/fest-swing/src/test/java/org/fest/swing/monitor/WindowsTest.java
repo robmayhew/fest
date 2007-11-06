@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.TimerTask;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.monitor.WindowsUtils.waitForWindowToBeMarkedAsReady;
+import static org.fest.swing.util.ReflectionUtils.mapField;
 
 import org.fest.swing.TestFrame;
 
@@ -45,18 +45,13 @@ public class WindowsTest {
   private Map<Window, Boolean> closed;
   private Map<Window, Boolean> hidden;
   
-  @SuppressWarnings("unchecked") 
   @BeforeMethod public void setUp() {
     frame = new TestFrame(getClass());
     windows = new Windows();
-    pending = windowsMapField("pending");
-    open = windowsMapField("open");
-    closed = windowsMapField("closed");
-    hidden = windowsMapField("hidden");
-  }
-
-  private Map windowsMapField(String name) {
-    return field(name).ofType(Map.class).in(windows).get();
+    pending = mapField("pending", windows);
+    open = mapField("open", windows);
+    closed = mapField("closed", windows);
+    hidden = mapField("hidden", windows);
   }
   
   @AfterMethod public void tearDown() {

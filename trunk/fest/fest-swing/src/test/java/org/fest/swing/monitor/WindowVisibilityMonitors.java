@@ -17,10 +17,12 @@ package org.fest.swing.monitor;
 
 import java.awt.Window;
 import java.util.EventListener;
+import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.util.Arrays.objectsOfType;
+import static org.fest.util.Collections.filter;
+import static org.fest.util.Collections.list;
+import static org.fest.util.TypeFilter.byType;
 
 /**
  * Understands utility methods related to <code>{@link WindowVisibilityMonitor}</code>.
@@ -29,7 +31,7 @@ import static org.fest.swing.util.Arrays.objectsOfType;
  */
 public class WindowVisibilityMonitors {
 
-  public static void assertWindowVisibilityMonitorCountIn(Window w, int expected) {
+  public static void assertWindowVisibilityMonitorCount(Window w, int expected) {
     assertCountIn(w.getWindowListeners(), expected);
     assertCountIn(w.getComponentListeners(), expected);
   }
@@ -39,7 +41,8 @@ public class WindowVisibilityMonitors {
   }
 
   private static int countIn(Object[] listeners) {
-    return objectsOfType(listeners, WindowVisibilityMonitor.class);
+    List<WindowVisibilityMonitor> filtered = filter(list(listeners), byType(WindowVisibilityMonitor.class));
+    return filtered.size();
   }
 
   private WindowVisibilityMonitors() {}
