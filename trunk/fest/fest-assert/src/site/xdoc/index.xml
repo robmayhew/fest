@@ -11,7 +11,9 @@
 				<p>
 				  FEST-Assert is a Java library that provides a 
 				  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
-				  writing assertions in our test.
+				  writing assertions. FEST-Assert can be used with either 
+				  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
+				  <a href="http://testng.org" target="_blank">TestNG</a>.
 				</p>
 				<p>
 					Its main goal is to improve test code readability, making maintenance of tests easier.
@@ -19,8 +21,8 @@
 			</subsection>
 			<subsection name="Example">
 				<p>
-					The following is a simple test that uses <a href="http://www.junit.org" target="_blank">JUnit</a>'s assertions:
-					<pre>
+					The following is a simple test that uses JUnit's assertions:
+					<pre class="codeBlock">
 import org.junit.Test;					
 					
 import static org.junit.Assert.assertTrue;
@@ -39,7 +41,7 @@ public class SomeTest {
 				</p>
 				<p>
 					Now let's rewrite the same example using FEST-Assert:
-					<pre>
+					<pre class="codeBlock">
 import org.junit.Test;					
 
 import static org.fest.assertions.Assertions.assertThat;
