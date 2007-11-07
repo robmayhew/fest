@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>FEST-Assert::Welcome</title>
+	</properties>
+
+	<body>
+		<section name="Welcome to the FEST Fluent Assertions Module">
+		  <subsection name="Introduction">
+				<p>
+				  FEST-Assert is a Java library that provides a 
+				  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
+				  writing assertions in our test.
+				</p>
+				<p>
+					Its main goal is to improve test code readability, making maintenance of tests easier.
+				</p>
+			</subsection>
+			<subsection name="Example">
+				<p>
+					The following is a simple test that uses <a href="http://www.junit.org" target="_blank">JUnit</a>'s assertions:
+					<pre>
+import org.junit.Test;					
+					
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
+public class SomeTest {
+
+  @Test public void simpleTest() {
+    assertTrue(true);
+    int result = 2 + 3;
+    assertEquals(&quot;calculation&quot;, 5, result);
+    assertTrue(&quot;Hello World&quot;.contains(&quot;World&quot;));
+  }
+}				
+					</pre>
+				</p>
+				<p>
+					Now let's rewrite the same example using FEST-Assert:
+					<pre>
+import org.junit.Test;					
+
+import static org.fest.assertions.Assertions.assertThat;
+
+public class SomeTest {
+
+  @Test public void simpleTest() {
+    assertThat(true).isTrue();
+    int result = 2 + 3;
+    assertThat(result).as(&quot;calculation&quot;).isEqualTo(5);
+    assertThat(&quot;Hello World&quot;).contains(&quot;World&quot;);
+  }
+}					
+					</pre>
+				</p>
+			</subsection>
+		</section>
+	</body>
+</document>

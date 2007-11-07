@@ -20,8 +20,8 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<developerConnection>http://code.google.com/p/fest/source</developerConnection>
-		<connection>http://code.google.com/p/fest/source</connection>
+		<developerConnection>scm:svn:https://fest.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:svn:http://fest.googlecode.com/svn/trunk/</connection>
 		<url>http://fisheye2.cenqua.com/browse/fest</url>
 	</scm>
 	<issueManagement>

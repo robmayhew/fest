@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="FEST-Assert">
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-stylus-skin</artifactId>
+	</skin>
+	<bannerLeft>
+		<name>FEST-Assert</name>
+		<src>/images/fest-assert.png</src>
+		<href>http://code.google.com/p/fest</href>
+	</bannerLeft>
+	<poweredBy>
+		<logo name="Build with Maven 2" href="http://maven.apache.org"
+			img="images/logos/maven-feather.png" />
+	</poweredBy>
+
+	<body>
+		<links>
+			<item name="FEST" href="http://code.google.com/p/fest" />
+		</links>
+
+		<menu name="Overview">
+			<item name="Introduction" href="index.html" />
+		</menu>
+
+		<menu ref="reports"/>		
+
+	</body>
+</project>
