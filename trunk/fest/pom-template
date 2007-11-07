@@ -15,6 +15,10 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<organization>
+		<name>FEST (Fixtures for Easy Software Testing)</name>
+		<url>http://code.google.com/p/fest</url>
+	</organization>
 	<developers>
 		<developer>
 			<name>Alex Ruiz</name>
@@ -34,15 +38,36 @@
 	</developers>
 	<contributors>
 		<contributor>
-			<name>Keith Coughtrey</name>
+			<name>Andres Almiray</name>
+			<email>aalmiray at users.sourceforge.net</email>
+			<url>http://www.jroller.com/aalmiray/</url>
+		</contributor>
+		<contributor>
+			<name>Martin Ankerl</name>
+		</contributor>
+		<contributor>
+			<name>Jeff Bay</name>
 		</contributor>
 		<contributor>
 			<name>Fabien Barbero</name>
 		</contributor>
 		<contributor>
-			<name>Andres Almiray</name>
-			<email>aalmiray at users.sourceforge.net</email>
-			<url>http://www.jroller.com/aalmiray/</url>
+			<name>Pavol Bernhauser</name>
+		</contributor>
+		<contributor>
+			<name>Keith Coughtrey</name>
+		</contributor>
+		<contributor>
+			<name>Javier Sandino</name>
+		</contributor>
+		<contributor>
+			<name>Konstantin Scheglov</name>
+		</contributor>
+		<contributor>
+			<name>John Stephi</name>
+		</contributor>
+		<contributor>
+			<name>Geoffrey Wiseman</name>
 		</contributor>
 	</contributors>
 	<build>
