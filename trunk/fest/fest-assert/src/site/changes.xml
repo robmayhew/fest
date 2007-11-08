@@ -17,9 +17,25 @@
         Added method 'excludes' to all assertion objects that handle arrays or collections. This 
         method is the opposite of 'contains'.
       </action>
-      <action dev="aruiz" type="fix" issue="39" due-to="Martin Ankerl">
+      <action dev="alruiz" type="fix" issue="39" due-to="Martin Ankerl">
         All assertion objects override 'equals(Object)', which now throws 
         'UnsupportedOperationException' to prevent accidental calls.
+      </action>
+    </release>
+    <release version="0.5-SNAPSHOT" date="2007-09-19" description="Subsequent release">
+      <action dev="wanghy" type="add" issue="30" due-to="Marcos Silva Pereira">
+        Introduced method 'describedAs' as a counterpart to 'as'. This issue prevented to use the method 'as' in Groovy ('as' is a keyword in Groovy).
+      </action>
+      <action dev="wanghy" type="add">
+        Introduced method 'as' to describe the actual value in the assertion.
+      </action>
+    </release>
+    <release version="0.4" date="2007-09-17" description="First public release">
+      <action dev="wanghy" type="add" issue="30" due-to="Marcos Silva Pereira">
+        Introduced method 'describedAs' as a counterpart to 'as'. This issue prevented to use the method 'as' in Groovy ('as' is a keyword in Groovy).
+      </action>
+      <action dev="alruiz" type="fix" issue="29">
+        Added support for extensibility using Conditions.
       </action>
     </release>
   </body>
