@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>Extending</title>
+	</properties>
+
+	<body>
+		<section name="Extending FEST-Assert">
+		  <subsection name="Custom Conditions">
+		    <p>
+          Assertions can also be extended by using custom conditions (instances of 
+          <code class="code">org.fest.assertions.Condition</code>.) 
+        </p>
+        <p>  
+          The following condition verifies that the 
+          characters in a <code class="code">String</code> are in uppercase:
+        </p>
+        <p>
+          <pre class="prettyprint">
+class UpperCaseCondition extends Condition&lt;String&gt; {
+  public boolean matches(String value) {
+    if(isEmpty(value)) return false;
+    return value.equals(value.toUpperCase());
+  }
+
+  public static UpperCaseCondition isUpperCase() {
+    return new UpperCaseCondition(&quot;Uppercase&quot;);
+  }
+}
+          </pre>
+        </p>
+        <p>  
+          This example shows how to use such condition:
+        </p>
+        <p>  
+          <pre class="prettyprint">
+assertThat("hello").as("Greeting").satisfies(isUppercase());
+          </pre>
+        </p>
+        <p>
+          which will fail with the message 
+          &quot;<code class="code">[Greeting] expected:Uppercase but was:&lt;'hello'&gt;</code>&quot;
+		    </p>
+			</subsection>
+		</section>
+	</body>
+</document>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>Comparing to Hamcrest</title>
+	</properties>
+
+	<body>
+		<section name="What about Hamcrest?">
+      <p>
+  		  <a href="http://code.google.com/p/hamcrest/" target="_blank">Hamcrest</a> is a powerful library for writing 
+  		  custom matchers. Although FEST-Assert and Hamcrest have similar goals, FEST-Assert takes a different approach. 
+  		  Here is an example using Hamcrest (borrowed from Martin Gilday's example posted at the 
+		    <a href="http://testng.org" target="_blank">TestNG</a> mailing list):
+		    <pre class="prettyprint">
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.testng.Assert.assertTrue;
+ 
+import org.testng.annotations.Test;
+ 
+public class SomeTest {
+ 
+  @Test public void withHamcrest() {
+    assertTrue(true);
+    int result = 2 + 3;
+    assertThat(&quot;calculation&quot;, 5, equalTo(result));
+    assertThat(&quot;Hello World&quot;, containsString(&quot;World&quot;));
+  }
+}		    
+		    </pre>
+		  </p>
+		  <p>
+		    This is the same example, using FEST's assertions:
+		  </p>
+		  <p>
+		    <pre class="prettyprint">
+import static org.fest.assertions.Assertions.assertThat;
+ 
+import org.testng.annotations.Test;
+ 
+public class SomeTest {
+ 
+  @Test public void testApp() {
+    assertThat(true).isTrue();
+    int result = 2 + 3;
+    assertThat(result).as(&quot;calculation&quot;).isEqualTo(5);
+    assertThat(&quot;Hello World&quot;).contains(&quot;World&quot;);
+  }
+}		    
+		    </pre>
+		  </p>
+      <p>
+        We like FEST-Assert's approach because:
+        <ol>
+          <li>
+            Only one static import is needed (<code class="code">org.fest.assertions.Assertions.assertThat</code>)
+          </li>
+          <li>
+            Allows us to use our IDE's &quot;auto-complete&quot; feature: we only type &quot;.&quot; and we get the 
+            possible assertion methods for the value passed to &quot;<code class="code">assertThat</code>&quot;
+          </li>
+          <li>
+            We can chain related assertion methods:
+            <pre class="prettyprint">
+assertThat(yoda).isInstanceOf(Jedi.class).isEqualTo(foundJedi).isNotEqualTo(possibleSith);
+            </pre>
+          </li>
+        </ol>
+      </p>
+      <p>
+        Which one to use? Hamcrest or FEST-Assert? It is up to you...it depends on the needs of your project and your coding style!
+      </p>
+		</section>
+	</body>
+</document>

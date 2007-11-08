@@ -26,7 +26,7 @@
 	</scm>
 	<issueManagement>
 		<system>Google Code</system>
-		<url>http://code.google.com/p/fest/issues/list</url>
+		<url>http://code.google.com/p/fest/issues</url>
 	</issueManagement>
 	<parent>
 		<groupId>fest</groupId>

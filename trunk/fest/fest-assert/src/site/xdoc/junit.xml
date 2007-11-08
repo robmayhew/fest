@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>JUnit's ComparisonFailure</title>
+	</properties>
+
+	<body>
+		<section name="Support for JUnit's Comparison Failure">
+      <p>
+       If <a href="http://www.junit.org" target="_blank">JUnit 4</a> (or greater) is in the classpath, failures of
+       <ul style="list-style-type: square;">
+         <li>
+           <code class="code">isEqualTo(String)</code> in <code class="code">StringAssert</code>
+         </li>
+         <li>
+           <code class="code">isEqualTo(Object)</code> in <code class="code">ObjectAssert</code> (only if both the expected and the actual values are <code class="code">String</code>s)
+         </li>
+       </ul>
+       throw <code class="code"><a href="http://junit.sourceforge.net/javadoc_40/org/junit/ComparisonFailure.html" target="_blank">ComparisonFailure</a></code>s.       
+      </p>
+      <p>
+        This feature can be useful when using tools that have support for this exception. For example, 
+        <a href="http://www.eclipse.org" target="_blank">Eclipse</a> provides a nice GUI that shows the differences 
+        between the expected and actual values:
+      </p>
+      <p>
+        <center>
+          <img src="./images/ecfg.jpg" border="0" />
+        </center>
+      </p>
+		</section>
+	</body>
+</document>

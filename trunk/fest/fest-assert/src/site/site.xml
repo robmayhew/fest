@@ -22,6 +22,10 @@
 
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
+			<item name="Extending" href="extending.html" />
+			<item name="Comparing to Hamcrest" href="hamcrest.html" />
+			<item name="JUnit's ComparisonFailure" href="junit.html" />
+      <item name="Changelog" href="changes-report.html" />
 		</menu>
 
 		<menu ref="reports"/>		
