@@ -257,6 +257,11 @@ table {
   height:auto;
 }
 
+.code {
+ font-family: "Lucida Console","courier new",courier;
+ font-size: 9pt;
+}
+
 .str { color: #080; }
 .kwd { color: #008; }
 .com { color: #800; }
