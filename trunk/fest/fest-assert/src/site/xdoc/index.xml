@@ -9,7 +9,7 @@
 		<section name="Welcome to the FEST Fluent Assertions Module">
 		  <subsection name="Introduction">
 				<p>
-				  FEST-Assert is a Java library that provides a 
+				  <a href="http://code.google.com/p/fest" target="_blank">FEST-Assert</a> is a Java library that provides a 
 				  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
 				  writing assertions. Its main goal is to improve test code readability and make maintenance of tests easier.
 				</p>
@@ -45,7 +45,10 @@
 				</p>
 				<p>
 				  FEST-Assert can be downloaded 
-				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>.
+				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
+				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
+				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
+				  (groupId: fest, artifactId: fest-assert).
 				</p>
 			</subsection>
 			<subsection name="Examples">

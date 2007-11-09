@@ -9,6 +9,9 @@
       <action dev="wanghy" type="fix" issue="38" due-to="Martin Ankerl">
         Added a delta value for floating point equality in 'DoubleAssert' and 'FloatAssert'.
       </action>
+      <action dev="alruiz" type="add">
+        Created Maven-generated site to replace Google Code's wiki pages.
+      </action>
       <action dev="alruiz" type="fix" issue="54">
         Fixed incorrect test for floating point equality in 'DoubleArrayAssert' and 'FloatArrayAssert'.
       </action>
