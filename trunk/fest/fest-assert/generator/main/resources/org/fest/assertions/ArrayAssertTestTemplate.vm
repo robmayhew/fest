@@ -18,7 +18,7 @@ package org.fest.assertions;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{${classToTest}}</code>.
+ * Tests for <code>{@link ${classToTest}}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz

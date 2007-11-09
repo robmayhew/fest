@@ -27,16 +27,14 @@ class UpperCaseCondition extends Condition&lt;String&gt; {
   public static UpperCaseCondition isUpperCase() {
     return new UpperCaseCondition(&quot;Uppercase&quot;);
   }
-}
-          </pre>
+}</pre>
         </p>
         <p>  
           This example shows how to use such condition:
         </p>
         <p>  
           <pre class="prettyprint">
-assertThat("hello").as("Greeting").satisfies(isUppercase());
-          </pre>
+assertThat("hello").as("Greeting").satisfies(isUppercase());</pre>
         </p>
         <p>
           which will fail with the message 

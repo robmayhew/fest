@@ -17,7 +17,7 @@
            <code class="code">isEqualTo(Object)</code> in <code class="code">ObjectAssert</code> (only if both the expected and the actual values are <code class="code">String</code>s)
          </li>
        </ul>
-       throw <code class="code"><a href="http://junit.sourceforge.net/javadoc_40/org/junit/ComparisonFailure.html" target="_blank">ComparisonFailure</a></code>s.       
+       throw <code class="code"><a href="http://junit.sourceforge.net/javadoc_40/org/junit/ComparisonFailure.html" target="_blank">ComparisonFailure</a></code>.       
       </p>
       <p>
         This feature can be useful when using tools that have support for this exception. For example, 

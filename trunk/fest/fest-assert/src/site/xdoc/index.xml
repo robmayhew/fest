@@ -63,8 +63,7 @@ assertThat(newHires).containsOnly("Gandalf", "Arwen", "Gimli");
  
 assertThat(yoda).isInstanceOf(Jedi.class)
                 .isEqualTo(foundJedi)
-                .isNotEqualTo(foundSith);
-           </pre>
+                .isNotEqualTo(foundSith);</pre>
 				</p>
 			</subsection>
 			<subsection name="Links">

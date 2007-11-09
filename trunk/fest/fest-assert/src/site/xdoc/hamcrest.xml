@@ -28,8 +28,7 @@ public class SomeTest {
     assertThat(&quot;calculation&quot;, 5, equalTo(result));
     assertThat(&quot;Hello World&quot;, containsString(&quot;World&quot;));
   }
-}		    
-		    </pre>
+}</pre>
 		  </p>
 		  <p>
 		    This is the same example, using FEST's assertions:
@@ -48,8 +47,7 @@ public class SomeTest {
     assertThat(result).as(&quot;calculation&quot;).isEqualTo(5);
     assertThat(&quot;Hello World&quot;).contains(&quot;World&quot;);
   }
-}		    
-		    </pre>
+}</pre>
 		  </p>
       <p>
         We like FEST-Assert's approach because:
@@ -64,8 +62,7 @@ public class SomeTest {
           <li>
             We can chain related assertion methods:
             <pre class="prettyprint">
-assertThat(yoda).isInstanceOf(Jedi.class).isEqualTo(foundJedi).isNotEqualTo(possibleSith);
-            </pre>
+assertThat(yoda).isInstanceOf(Jedi.class).isEqualTo(foundJedi).isNotEqualTo(possibleSith);</pre>
           </li>
         </ol>
       </p>
