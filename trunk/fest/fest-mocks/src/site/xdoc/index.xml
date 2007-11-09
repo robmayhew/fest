@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>Welcome</title>
+	</properties>
+
+	<body>
+		<section name="Welcome to the FEST Mocks Module">
+		  <subsection name="Introduction">
+				<p>
+				  <a href="http://code.google.com/p/fest" target="_blank">FEST-Mocks</a> is a Java library which mission is to 
+				  minimize potential shortcomings of <a href="http://www.mockobjects.com/" target="_blank">Mock Objects</a>.
+				</p>
+			  <p>
+			    To learn more about the potential shortcomings of mocks, please read:
+			    <ul> 
+	  		    <li><a href="http://dev2dev.bea.com/pub/a/2007/06/mock-shortcomings.html">Mock Objects: Shortcomings and Use Cases</a></li>
+		  	    <li><a href="http://www.jroller.com/page/alexRuiz?entry=mocks_for_concrete_class_can">Mock Objects: the Good, the Bad and the Ugly</a></li>
+			    </ul>
+			  </p>				
+				<p>
+					FEST-Mocks requires 
+					<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
+					and can be used with either 
+				  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
+				  <a href="http://testng.org" target="_blank">TestNG</a>.
+				</p>
+				<p>
+				  FEST-Mocks can be downloaded 
+				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
+				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
+				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
+				  (groupId: fest, artifactId: fest-mocks).
+				</p>
+			</subsection>
+			<subsection name="EasyMockTemplate">
+				<p>
+				  One of the shortcomings of using mocks is introduction of clutter and duplication in our code. Take a look at
+				  this example using <a href="http://www.easymock.org/">EasyMock</a>:
+					<pre class="prettyprint">
+@Test public void shouldAddNewEmployee() {
+  mockEmployeeDAO.insert(employee);
+  replay(mockEmployeeDAO);
+  employeeBO.addNewEmployee(employee);
+  verify(mockEmployeeDAO);
+}
+ 
+@Test public void shouldUpdateEmployee() {
+  mockEmployeeDAO.update(employee);
+  replay(mockEmployeeDAO);
+  employeeBO.updateEmployee(employee);
+  verify(mockEmployeeDAO);
+}</pre>
+				</p>
+				<p>
+				  The problems with the code listing above are the following:
+				  <ol>
+				    <li>There is no clear separation of mock expectations and code to test</li>
+				    <li>Calls to <code class="code">replay</code> and <code class="code">verify</code> are duplicated</li>
+				    <li>It is easy to forget to call <code class="code">replay</code> and <code class="code">verify</code> in
+				    every test method, which will result in failing tests</li>
+				  </ol>
+				</p>
+				<p>
+				  A solution to this problem is FEST's <code class="code">EasyMockTemplate</code>:
+				  <pre class="prettyprint">
+@Test public void shouldUpdateEmployee() {
+ 
+  new EasyMockTemplate(mockEmployeeDao) {
+    @Override protected void expectations() {
+      mockEmployeeDAO.update(employee);
+    }
+ 
+    @Override protected void codeToTest() {
+      employeeBO.updateEmployee(employee);
+    }
+  }.run();
+
+}</pre>
+				</p>
+				<p>
+				  <ul>
+				    <li>We have eliminated code duplication (calls <code class="code">replay</code> and 
+				    <code class="code">verify</code>)</li>
+				    <li>We have a clear separation of mock expectations and code to test</li>
+				    <li>We no longer have to call <code class="code">replay</code> and 
+				    <code class="code">verify</code></li>
+				  </ul>
+				</p>
+			</subsection>
+		</section>
+	</body>
+</document>

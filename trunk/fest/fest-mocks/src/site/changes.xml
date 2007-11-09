@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <properties>
+    <title>Changelog</title>
+    <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
+  </properties>
+  <body>
+    <release version="0.1" date="2007-28-04" description="First release">
+      <action dev="alruiz" type="add">
+        Created EasyMockTemplate.
+      </action>
+    </release>
+  </body>
+</document>

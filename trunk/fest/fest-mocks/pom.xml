@@ -7,6 +7,33 @@
 	<groupId>fest</groupId>
 	<artifactId>fest-mocks</artifactId>
 	<version>0.1-SNAPSHOT</version>
+	<name>FEST Mocks</name>
+	<description>Utilities that simplify usage of Mock Objects</description>
+	<inceptionYear>2007</inceptionYear>
+	<url>http://code.google.com/p/fest/</url>
+	<mailingLists>
+		<mailingList>
+			<name>Easy Testing Group</name>
+			<post>http://groups.google.com/group/easytesting</post>
+			<subscribe>http://groups.google.com/group/easytesting</subscribe>
+			<unsubscribe>http://groups.google.com/group/easytesting</unsubscribe>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<developerConnection>scm:svn:https://fest.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:svn:http://fest.googlecode.com/svn/trunk/</connection>
+		<url>http://fisheye2.cenqua.com/browse/fest</url>
+	</scm>
+	<issueManagement>
+		<system>Google Code</system>
+		<url>http://code.google.com/p/fest/issues</url>
+	</issueManagement>
+	<parent>
+		<groupId>fest</groupId>
+		<artifactId>pom-template</artifactId>
+		<version>1.0</version>
+		<relativePath>../pom-template</relativePath>
+	</parent>
 	<dependencies>
 		<dependency>
 			<groupId>easymock</groupId>
