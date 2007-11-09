@@ -114,54 +114,39 @@ public final class DoubleAssert extends PrimitiveAssert {
    * @throws AssertionError if the actual <code>double</code> value is not equal to <code>NAN</code>.
    */
   public DoubleAssert isNaN() { return isEqualTo(Double.NaN); }
-  
+
   /**
-   * Intermediate method that returns assertion methods for <code>double</code> values using a delta.
-   * <p>
-   * This method is expected to be used like this:
-   * <pre>
-   * double result = total(price, discount);
-   * {@link Assertions#assertThat(double) assertThat}(result).withDelta(0.4d).isEqualTo(expected);
-   * </pre>
-   * </p>
-   * @param delta the delta to use.
-   * @return the delta-aware assertion object.
+   * Verifies that the actual <code>double</code> value is equal to the given one, within a positive delta.
+   * @param expected the value to compare the actual one to.
+   * @param delta the given delta.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>double</code> value is not equal to the given one.
    */
-  public WithDelta withDelta(double delta) {
-    return new WithDelta(actual, delta, this);
+  public DoubleAssert isEqualTo(double expected, Delta delta) {
+    if (Double.compare(expected, actual) == 0) return this;
+    if (!(abs(expected - actual) <= delta.value)) fail(errorMessageIfNotEqual(description(), actual, expected));    
+    return this;
   }
   
   /**
-   * Understands assertion methods for <code>double</code> values using a positive delta.
-   * <p>
-   * This class is expected to be used like this:
-   * <pre>
-   * double result = total(price, discount);
-   * {@link Assertions#assertThat(double) assertThat}(result).{@link DoubleAssert#withDelta(double) withDelta}(0.4d).isEqualTo(expected);
-   * </pre>
-   * </p>
+   * Creates a new holder for a delta value to be used in 
+   * <code>{@link DoubleAssert#isEqualTo(double, org.fest.assertions.DoubleAssert.Delta)}</code>.
+   * @param d the delta value.
+   * @return a new delta value holder.
    */
-  public static class WithDelta {
-    private final double actual;
-    private final double delta;
-    private final DoubleAssert doubleAssert;
+  public static Delta delta(double d) {
+    return new Delta(d);
+  }
+  
+  /**
+   * Holds a delta value to be used in
+   * <code>{@link DoubleAssert#isEqualTo(double, org.fest.assertions.DoubleAssert.Delta)}</code>.
+   */
+  public static class Delta {
+    final double value;
 
-    WithDelta(double actual, double delta, DoubleAssert doubleAssert) {
-      this.actual = actual;
-      this.delta = delta;
-      this.doubleAssert = doubleAssert;
-    }
-
-    /**
-     * Verifies that the actual <code>double</code> value is equal to the given one, within a positive delta.
-     * @param expected the value to compare the actual one to.
-     * @return this assertion object.
-     * @throws AssertionError if the actual <code>double</code> value is not equal to the given one.
-     */
-    public DoubleAssert isEqualTo(double expected) {
-      if (Double.compare(expected, actual) == 0) return doubleAssert;
-      if (!(abs(expected - actual) <= delta)) fail(errorMessageIfNotEqual(doubleAssert.description(), actual, expected));
-      return doubleAssert;
+    private Delta(double value) {
+      this.value = value;
     }
   }
 }

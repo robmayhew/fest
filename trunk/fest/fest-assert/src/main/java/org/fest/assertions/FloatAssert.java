@@ -14,6 +14,9 @@
  */
 package org.fest.assertions;
 
+import static java.lang.Math.abs;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
 import static org.fest.assertions.PrimitiveFail.failIfEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
 import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
@@ -67,6 +70,19 @@ public final class FloatAssert extends PrimitiveAssert {
   }
 
   /**
+   * Verifies that the actual <code>float</code> value is equal to the given one, within a positive delta.
+   * @param expected the value to compare the actual one to.
+   * @param delta the given delta.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> value is not equal to the given one.
+   */
+  public FloatAssert isEqualTo(float expected, Delta delta) {
+    if (Float.compare(expected, actual) == 0) return this;
+    if (!(abs(expected - actual) <= delta.value)) fail(errorMessageIfNotEqual(description(), actual, expected));    
+    return this;
+  }
+  
+  /**
    * Verifies that the actual <code>float</code> value is not equal to the given one.
    * @param other the value to compare the actual one to.
    * @return this assertion object.
@@ -104,7 +120,7 @@ public final class FloatAssert extends PrimitiveAssert {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> value is not equal to <code>NaN</code>.
    */
-  public FloatAssert isNaN() { return isEqualTo(Float.NaN); }
+  public FloatAssert isNaN() { return isEqualTo(Float.NaN, delta(Float.NaN)); }
 
   /**
    * Verifies that the actual <code>float</code> value is positive.
@@ -126,5 +142,28 @@ public final class FloatAssert extends PrimitiveAssert {
    * @throws AssertionError if the actual <code>float</code> value is not equal to zero.
    */
   public FloatAssert isZero() { return isEqualTo(ZERO); }
+  
+  /**
+   * Creates a new holder for a delta value to be used in 
+   * <code>{@link FloatAssert#isEqualTo(float, org.fest.assertions.FloatAssert.Delta)}</code>.
+   * @param d the delta value.
+   * @return a new delta value holder.
+   */  
+  public static Delta delta(float d) {
+    return new Delta(d);
+  }
+  
+  /**
+   * Holds a delta value to be used in
+   * <code>{@link FloatAssert#isEqualTo(float, org.fest.assertions.FloatAssert.Delta)}</code>.
+   */
+  public static class Delta {
+    final float value;
+    
+    private Delta(float value) {
+      this.value = value;
+    }
+  }
+
 }
 

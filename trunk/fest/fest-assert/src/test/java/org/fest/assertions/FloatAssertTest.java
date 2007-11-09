@@ -15,6 +15,7 @@
 package org.fest.assertions;
 
 import org.testng.annotations.Test;
+import static org.fest.assertions.FloatAssert.delta;
 
 /**
  * Test for <code>{@link FloatAssert}</code>.
@@ -24,12 +25,12 @@ import org.testng.annotations.Test;
 public class FloatAssertTest {
 
   @Test public void shouldPassIfEqualAndExpectedEqual() {
-    new FloatAssert(6.6f).isEqualTo(6.6f);
+    new FloatAssert(6.6f).isEqualTo(6.6f, delta(0.0f));
   }
 
   @Test(expectedExceptions = AssertionError.class) 
   public void shouldFailIfNotEqualAndExpectedEqual() {
-    new FloatAssert(6.6f).isEqualTo(6.8f);
+    new FloatAssert(6.6f).isEqualTo(6.8f, delta(0.0f));
   }
 
   @Test public void shouldPassIfNotEqualAndExpectedNotEqual() {

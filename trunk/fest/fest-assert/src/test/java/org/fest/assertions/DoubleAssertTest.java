@@ -1,6 +1,7 @@
 package org.fest.assertions;
 
 import org.testng.annotations.Test;
+import static org.fest.assertions.DoubleAssert.delta;
 
 /**
  * Test for <code>{@link DoubleAssert}</code>.
@@ -73,12 +74,12 @@ public class DoubleAssertTest {
   }
   
   @Test public void shouldPassIfEqualWithDeltaAndExpectedEqual() {
-    new DoubleAssert(8.688).withDelta(0.009).isEqualTo(8.68);
+    new DoubleAssert(8.688).isEqualTo(8.68, delta(0.009));
   }
   
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotEqualWithDeltaAndExpectedEqual() {
-    new DoubleAssert(8.688).withDelta(0.009).isEqualTo(8.888);
+    new DoubleAssert(8.688).isEqualTo(8.888, delta(0.009));
   }  
   
   @Test public void shouldPassIfZeroAndExpectedZero() {
