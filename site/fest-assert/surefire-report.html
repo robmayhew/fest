@@ -1,0 +1,2215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>FEST-Assert - </title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/site.css");
+    </style>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      </head>
+  <body class="composite">
+    <div id="banner">
+                  <a href="" id="bannerLeft">
+    
+                                            <img src="images/fest-assert.png" alt="" />
+    
+            </a>
+                    <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+          
+  
+
+  
+    
+  
+  
+    
+            <div class="xleft">
+        Last Published: 2007-11-08
+                      </div>
+            <div class="xright">            <a href="">FEST</a>
+            
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+           
+  
+
+  
+    
+  
+  
+    
+                   <h5>Overview</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="index.html">Introduction</a>
+          </li>
+              
+    <li class="none">
+                    <a href="extending.html">Extending</a>
+          </li>
+              
+    <li class="none">
+                    <a href="hamcrest.html">Comparing to Hamcrest</a>
+          </li>
+              
+    <li class="none">
+                    <a href="junit.html">JUnit's ComparisonFailure</a>
+          </li>
+              
+    <li class="none">
+                    <a href="changes-report.html">Changelog</a>
+          </li>
+          </ul>
+              <h5>Project Documentation</h5>
+            <ul>
+              
+                
+              
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+              
+        <li class="collapsed">
+                    <a href="project-info.html">Project Information</a>
+                </li>
+              
+                
+              
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+            
+              
+            <li class="expanded">
+                    <a href="project-reports.html">Project Reports</a>
+                  <ul>
+                  
+    <li class="none">
+                    <a href="changes-report.html">Changes Report</a>
+          </li>
+                  
+    <li class="none">
+                    <a href="cobertura/index.html">Cobertura Test Coverage</a>
+          </li>
+                  
+    <li class="none">
+                    <a href="findbugs.html">FindBugs Report</a>
+          </li>
+                  
+    <li class="none">
+                    <a href="apidocs/index.html">JavaDocs</a>
+          </li>
+                  
+    <li class="none">
+                    <a href="jdepend-report.html">JDepend</a>
+          </li>
+                  
+    <li class="none">
+              <strong>Maven Surefire Report</strong>
+        </li>
+              </ul>
+        </li>
+          </ul>
+                                                 
+                        
+                        
+            <a href="http://maven.apache.org" title="Build with Maven 2" class="poweredBy">
+                            <img alt="Build with Maven 2" src="images/logos/maven-feather.png" />
+            </a>
+                               
+  
+
+  
+    
+  
+  
+    
+        </div>
+    </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <script type="text/javascript">
+function toggleDisplay(elementId) {
+ var elm = document.getElementById(elementId + 'error');
+ if (elm && typeof elm.style != "undefined") {
+ if (elm.style.display == "none") {
+ elm.style.display = "";
+ document.getElementById(elementId + 'off').style.display = "none";
+ document.getElementById(elementId + 'on').style.display = "inline";
+ } else if (elm.style.display == "") { elm.style.display = "none";
+ document.getElementById(elementId + 'off').style.display = "inline";
+ document.getElementById(elementId + 'on').style.display = "none";
+ } 
+ } 
+ }
+</script><h2><a name="Summary"></a>
+Summary</h2>
+<div class="section">[<a href="#Summary">Summary</a>
+][<a href="#Package_List">Package List</a>
+][<a href="#Test_Cases">Test Cases</a>
+]</div>
+<table class="bodyTable"><tr class="a"></tr>
+<tr class="b"></tr>
+</table>
+<table class="bodyTable"><tr class="a"><th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th>
+</tr>
+<tr class="b"><td>388</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.704</td>
+</tr>
+</table>
+<br />
+Note: failures are anticipated and checked for with assertions while errors are unanticipated.<table class="bodyTable"><tr class="a"></tr>
+<tr class="b"></tr>
+</table>
+<h2><a name="Package_List"></a>
+Package List</h2>
+<div class="section">[<a href="#Summary">Summary</a>
+][<a href="#Package_List">Package List</a>
+][<a href="#Test_Cases">Test Cases</a>
+]</div>
+<table class="bodyTable"><tr class="a"></tr>
+<tr class="b"></tr>
+</table>
+<table class="bodyTable"><tr class="a"><th>Package</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertions">org.fest.assertions</a>
+</td>
+<td>388</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.704</td>
+</tr>
+</table>
+<br />
+Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.<h3><a name="org.fest.assertions"></a>
+org.fest.assertions</h3>
+<table class="bodyTable"><tr class="a"><th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsAssertionsTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsAssertionsTest">AssertionsTest</a>
+</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.031</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsAssertTest">AssertTest</a>
+</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsBooleanArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsBooleanArrayAssertTest">BooleanArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.015</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsBooleanAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsBooleanAssertTest">BooleanAssertTest</a>
+</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsByteArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsByteArrayAssertTest">ByteArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsByteAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsByteAssertTest">ByteAssertTest</a>
+</td>
+<td>14</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.015</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsCharArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsCharArrayAssertTest">CharArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.031</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsCharAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsCharAssertTest">CharAssertTest</a>
+</td>
+<td>10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsCollectionAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsCollectionAssertTest">CollectionAssertTest</a>
+</td>
+<td>24</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.062</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsConditionTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsConditionTest">ConditionTest</a>
+</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsDoubleArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsDoubleArrayAssertTest">DoubleArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.063</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsDoubleAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsDoubleAssertTest">DoubleAssertTest</a>
+</td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsFailTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsFailTest">FailTest</a>
+</td>
+<td>27</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.032</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsFloatArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsFloatArrayAssertTest">FloatArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.031</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsFloatAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsFloatAssertTest">FloatAssertTest</a>
+</td>
+<td>16</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.031</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsFormattingTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsFormattingTest">FormattingTest</a>
+</td>
+<td>15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsImageAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsImageAssertTest">ImageAssertTest</a>
+</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.141</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsIntArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsIntArrayAssertTest">IntArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.031</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsIntAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsIntAssertTest">IntAssertTest</a>
+</td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsLongArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsLongArrayAssertTest">LongArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsLongAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsLongAssertTest">LongAssertTest</a>
+</td>
+<td>14</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.015</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsObjectArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsObjectArrayAssertTest">ObjectArrayAssertTest</a>
+</td>
+<td>22</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsObjectAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsObjectAssertTest">ObjectAssertTest</a>
+</td>
+<td>13</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsShortArrayAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsShortArrayAssertTest">ShortArrayAssertTest</a>
+</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.031</td>
+</tr>
+<tr class="b"><td><a href="#org.fest.assertionsShortAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsShortAssertTest">ShortAssertTest</a>
+</td>
+<td>14</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><a href="#org.fest.assertionsStringAssertTest"><img src="images/icon_success_sml.gif" /></a>
+</td>
+<td><a href="#org.fest.assertionsStringAssertTest">StringAssertTest</a>
+</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.015</td>
+</tr>
+</table>
+<table class="bodyTable"><tr class="b"></tr>
+<tr class="a"></tr>
+</table>
+<h2><a name="Test_Cases"></a>
+Test Cases</h2>
+<div class="section">[<a href="#Summary">Summary</a>
+][<a href="#Package_List">Package List</a>
+][<a href="#Test_Cases">Test Cases</a>
+]</div>
+<h3><a name="org.fest.assertionsAssertionsTest"></a>
+AssertionsTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnObjectArrayAssertIfArgumentIsObjectArray</td>
+<td>0.015</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnCollectionAssertIfArgumentIsCollection</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnIntAssertIfArgumentIsInt</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnObjectAssertIfArgumentIsObject</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnStringAssertIfArgumentIsString</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsAssertTest"></a>
+AssertTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldThrowErrorIfEqualsCalled</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsBooleanArrayAssertTest"></a>
+BooleanArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsBooleanAssertTest"></a>
+BooleanAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfActualValueIsFalse</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfActualValueIsTrue</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfActualValueIsFalse</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfActualValueIsTrue</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsByteArrayAssertTest"></a>
+ByteArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsByteAssertTest"></a>
+ByteAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shoudlFailIfNotNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfLessThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGreaterThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsCharArrayAssertTest"></a>
+CharArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsCharAssertTest"></a>
+CharAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotWildCharAndExpectedWildChar</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfWildCharAndExpectedWildChar</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsCollectionAssertTest"></a>
+CollectionAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectIsNotInCollection</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectsAreNotInCollection</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectIsInCollection</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectsAreInCollection</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenObjectIsInCollection</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenObjectIsNotInCollection</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionIsNotEmptyAndExpectingEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionHasDuplicates</td>
+<td>0.031</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfCollectionIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfCollectionHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionIsNotNullAndExpectingNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionIsNotEmptyAndExpectingNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfCollectionDoesNotHaveDuplicates</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfCollectionIsEmptyAndExpectingEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfCollectionIsNullAndExpectingEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionDoesNotHaveExpectedSize</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfCollectionIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionIsNullAndExpectingSomeSize</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfCollectionHasExpectedSize</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfCollectionIsNullAndExpectingNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfCollectionDoesNotContainElement</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfCollectionIsNotEmptyAndExpectingNotEmpty</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsConditionTest"></a>
+ConditionTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfConditionNotSatisfied</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsDoubleArrayAssertTest"></a>
+DoubleArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0.032</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsDoubleAssertTest"></a>
+DoubleAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotLessThanAndExceptedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualWithDeltaAndExpectedEqual</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualWithDeltaAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotNaNAndExpectedNaN</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNaNAndExpectedNaN</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotGreaterThanAndExceptedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsFailTest"></a>
+FailTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfSameShouldNotFailIfNotSame</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotEqualShouldFailIfNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotEqualShouldFailIfNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotEqualShouldFailIfNotEqual</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotSameShouldFailIfNotSame</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotSameShouldFailIfNotSame</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotSameShouldFailIfNotSame</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNullShouldFailIfNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNullShouldFailIfNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNullShouldFailIfNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotEqualShouldNotFailIfEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNullShouldNotFailIfNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotSameShouldNotFailIfSame</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldThrowExceptionWithGivenMessageAndCause</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotNullShouldNotFailIfNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldThrowExceptionWhenFailing</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfEqualShouldNotFailIfNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfEqualShouldFailIfEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfEqualShouldFailIfEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfEqualShouldFailIfEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailWithGivenMessage</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotNullShouldFailIfNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotNullShouldFailIfNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfNotNullShouldFailIfNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfSameShouldFailIfSame</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfSameShouldFailIfSame</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>failIfSameShouldFailIfSame</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsFloatArrayAssertTest"></a>
+FloatArrayAssertTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0.015</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsFloatAssertTest"></a>
+FloatAssertTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0.016</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGreaterThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0.015</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNaNAndExpectedNaN</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotNaNAndExpectedNaN</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfLessThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsFormattingTest"></a>
+FormattingTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatShortArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatCharArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatBooleanArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatDoubleArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnFormattedMessageIfMessageIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatObjectArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatNullObject</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatString</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnEmptyStringIfMessageIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatByteArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatObject</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatFloatArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatIntArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldReturnEmptyStringIfMessageIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFormatLongArray</td>
+<td>0.016</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsImageAssertTest"></a>
+ImageAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>isEqualToShouldFailIfImagesHaveDifferentWidth</td>
+<td>0.125</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>isEqualToShouldFailIfImagesHaveDifferentHeight</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>isEqualToShouldPassIfImagesAreEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>isEqualToShouldFailIfImagesHaveDifferentColor</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsIntArrayAssertTest"></a>
+IntArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsIntAssertTest"></a>
+IntAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualToZeroAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfLessThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGreaterToZeroAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanZeroAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualToZeroAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanZeroAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGreaterThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfLessToZeroAndExpectedPositive</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsLongArrayAssertTest"></a>
+LongArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsLongAssertTest"></a>
+LongAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGreaterThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfLessThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsObjectArrayAssertTest"></a>
+ObjectArrayAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenObjectIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0.016</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenObjectIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectsAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenObjectsAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsObjectAssertTest"></a>
+ObjectAssertTest</h3>
+<table class="bodyTable"><tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfObjectIsInstanceOfExpectedClass</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectsAreNotSame</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfObjectsAreSame</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectIsNotInstanceOfExpectedClass</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectsAreNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfObjectIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectIsNullAndNotInstanceOfExpectedClass</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfObjectsAreEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfObjectsAreNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfObjectsAreEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfObjectIsNull</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsShortArrayAssertTest"></a>
+ShortArrayAssertTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGivenValuesAreInArray</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsNotInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualArrays</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfGivenValueIsInArray</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayIsNotNull</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsMissingElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayIsEmptyWhenLookingForSpecificElements</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfArrayHasExtraElements</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfArrayHasOnlySpecifiedElements</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsShortAssertTest"></a>
+ShortAssertTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfLessThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotZeroAndExpectedZero</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNotEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfEqualAndExpectedNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfGreaterThanAndExpectedGreaterThan</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfNotEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfNegativeAndExpectedNegative</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfLessThanAndExpectedLessThan</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfPositiveAndExpectedPositive</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldPassIfEqualAndExpectedEqual</td>
+<td>0</td>
+</tr>
+</table>
+<h3><a name="org.fest.assertionsStringAssertTest"></a>
+StringAssertTest</h3>
+<table class="bodyTable"><tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfStringIsNotEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfStringDoesNotContainGivenString</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfStringIsEmpty</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfStringIsNull</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldFailIfStringsAreNotEqual</td>
+<td>0</td>
+</tr>
+<tr class="b"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfStringsAreEqual</td>
+<td>0</td>
+</tr>
+<tr class="a"><td><img src="images/icon_success_sml.gif" /></td>
+<td>shouldSucceedIfStringContainsGivenString</td>
+<td>0</td>
+</tr>
+</table>
+<table class="bodyTable"><tr class="b"></tr>
+<tr class="a"></tr>
+</table>
+<table class="bodyTable"><tr class="b"></tr>
+<tr class="a"></tr>
+</table>
+
+      </div>
+    </div>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2007
+    
+          FEST (Fixtures for Easy Software Testing)
+          
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>
