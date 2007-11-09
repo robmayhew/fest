@@ -275,20 +275,10 @@ table {
 .dec { color: #606; }
 
 pre.prettyprint { 
-  font-family: "Lucida Console",courier;
+  font-family: "Lucida Console","courier new",courier;
   font-size: 9pt;
-  padding-left: 10px;
-  padding-right: 5px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-left: 0px;
-  font-size:11px;
-  clear:both;
-  width:90%; 
-  background-color:#F7F7F7;
-  overflow:auto;
-  line-height:normal;
-  height:auto;
+	padding: 2px; 
+	border: 1px solid #888; 
 }
 
 @media print {
