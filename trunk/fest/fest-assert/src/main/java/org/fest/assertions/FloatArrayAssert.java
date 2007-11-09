@@ -121,7 +121,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
 
   private boolean hasElement(float value) {
     for (float actualElement : actual)
-      if (value == actualElement) return true;
+      if (Float.floatToIntBits(value) == Float.floatToIntBits(actualElement)) return true;
     return false;
   }
   

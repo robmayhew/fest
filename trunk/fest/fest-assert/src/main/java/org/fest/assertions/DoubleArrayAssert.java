@@ -121,7 +121,7 @@ public final class DoubleArrayAssert extends GroupAssert<double[]> {
 
   private boolean hasElement(double value) {
     for (double actualElement : actual)
-      if (value == actualElement) return true;
+      if (Double.doubleToLongBits(value) == Double.doubleToLongBits(actualElement)) return true;
     return false;
   }
   

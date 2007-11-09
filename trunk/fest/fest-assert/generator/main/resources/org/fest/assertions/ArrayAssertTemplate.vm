@@ -121,7 +121,13 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
 
   private boolean hasElement(${arrayType} value) {
     for (${arrayType} actualElement : actual)
+#if (${arrayType} == "double")    
+      if (Double.doubleToLongBits(value) == Double.doubleToLongBits(actualElement)) return true;
+#elseif (${arrayType} == "float")
+      if (Float.floatToIntBits(value) == Float.floatToIntBits(actualElement)) return true;
+#else
       if (value == actualElement) return true;
+#end
     return false;
   }
   
