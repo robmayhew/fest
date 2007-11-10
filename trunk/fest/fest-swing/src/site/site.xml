@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="FEST-Assert">
+	<skin>
+		<groupId>fest</groupId>
+		<artifactId>fest-site-skin</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</skin>
+	<bannerLeft>
+		<name>FEST-Swing</name>
+		<src>/images/fest-assert.png</src>
+		<href>http://code.google.com/p/fest</href>
+	</bannerLeft>
+	<poweredBy>
+		<logo name="Build with Maven 2" href="http://maven.apache.org"
+			img="images/logos/maven-feather.png" />
+	</poweredBy>
+
+	<body>
+		<links>
+			<item name="FEST" href="http://code.google.com/p/fest" />
+		</links>
+
+		<menu name="Overview">
+			<item name="Introduction" href="index.html" />
+			<item name="Features" href="features.html" />
+			<item name="Examples" href="examples.html" />
+      <item name="Changelog" href="changes-report.html" />
+		</menu>
+
+		<menu ref="reports"/>		
+
+	</body>
+</project>

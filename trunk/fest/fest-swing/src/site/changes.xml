@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <properties>
+    <title>Changelog</title>
+    <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
+  </properties>
+  <body>
+    <release version="0.6.1" date="2007-09-26" description="Subsequent release">
+      <action dev="alruiz" type="fix" due-to="Pavol Bernhauser">
+        Added methods 'radioButton' and 'table' to ContainerFixture (superclass of DialogFixture and FrameFixture).
+      </action>
+      <action dev="alruiz" type="fix" due-to="Andres Almiray">
+        Added static methods 'leftButton', 'middleButton' and 'rightButton' to MouseClickInfo.
+      </action>
+    </release>
+    <release version="0.6" date="2007-09-25" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="27" due-to="Jesper Thaning">
+        Assertion failures in all fixtures now provide better feedback.
+      </action>
+      <action dev="wanghy" type="add" issue="34">
+        Added support for time delays in RobotFixture.
+      </action>
+      <action dev="wanghy" type="add">
+        Added method 'pressAndReleaseKeys(int...)', 'pressAndReleaseKey(int)', and 'releaseKey(int)' to all fixtures.
+      </action>
+      <action dev="alruiz" type="add" issue="33">
+        Added method 'rightClick' to all fixtures.
+      </action>
+      <action dev="wanghy" type="add">
+        Added method 'doubleClick' to all fixtures.
+      </action>
+      <action dev="wanghy" type="add">
+        Added method 'click(MouseButton)' to all fixtures; this method simulates a user clicking the specified mouse button.
+      </action>
+    </release>
+  </body>
+</document>
