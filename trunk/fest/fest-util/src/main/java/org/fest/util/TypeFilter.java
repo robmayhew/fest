@@ -28,7 +28,8 @@ public class TypeFilter<T> implements CollectionFilter<T> {
 
   /**
    * Creates a new </code>{@link TypeFilter}</code>.
-   * @param the target type for this filter.
+   * @param type the target type for this filter.
+   * @return the created filter.
    */
   public static <T> TypeFilter<T> byType(Class<T> type) {
     return new TypeFilter<T>(type);
