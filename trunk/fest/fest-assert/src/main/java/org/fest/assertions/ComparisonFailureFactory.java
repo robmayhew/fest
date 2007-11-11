@@ -34,7 +34,7 @@ public final class ComparisonFailureFactory {
    * either the expected or actual values is not a <code>String</code>.
    */
   public static AssertionError comparisonFailure(String message, Object expected, Object actual) {
-    if (!isString(expected) || !isString(actual)) return null;
+    if (isNotString(expected) || isNotString(actual)) return null;
     try {
       return newComparisonFailure(clean(message), (String)expected, (String)actual);
     } catch (Exception e) {
@@ -46,7 +46,7 @@ public final class ComparisonFailureFactory {
     return message == null ? "" : message;
   }
 
-  private static boolean isString(Object o) { return o instanceof String; }
+  private static boolean isNotString(Object o) { return !(o instanceof String); }
   
   private static AssertionError newComparisonFailure(String message, String expected, String actual) throws Exception {
     Class<?> targetType = Class.forName("org.junit.ComparisonFailure");

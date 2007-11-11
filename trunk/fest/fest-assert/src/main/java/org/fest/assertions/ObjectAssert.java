@@ -43,7 +43,7 @@ public final class ObjectAssert extends GenericAssert<Object> {
    */
   public ObjectAssert isInstanceOf(Class<?> type) {
     isNotNull();
-    Class<? extends Object> current = actual.getClass();
+    Class<?> current = actual.getClass();
     if (!type.isAssignableFrom(current))
       fail(concat(format(description()), "expected instance of:", bracketAround(type.getName()),
           " but was instance of:", bracketAround(current.getName())));
@@ -58,7 +58,7 @@ public final class ObjectAssert extends GenericAssert<Object> {
    */
   public ObjectAssert isInstanceOfAny(Class<?>...types) {
     isNotNull();
-    Class<? extends Object> current = actual.getClass();
+    Class<?> current = actual.getClass();
     for (Class<?> type : types) if (type.isAssignableFrom(current)) return this;
     fail(concat(format(description()), "expected instance of any:",
         bracketAround(Arrays.toString(namesOf(types))), " but was instance of:", bracketAround(current.getName())));   

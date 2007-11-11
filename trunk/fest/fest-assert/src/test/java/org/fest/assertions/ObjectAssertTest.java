@@ -49,8 +49,7 @@ public class ObjectAssertTest {
       if (!(obj instanceof Person)) return false;
       Person other = (Person) obj;
       if (!areEqual(age, other.age)) return false;
-      if (!areEqual(name, other.name)) return false;
-      return true;
+      return areEqual(name, other.name);
     }
   }
   
