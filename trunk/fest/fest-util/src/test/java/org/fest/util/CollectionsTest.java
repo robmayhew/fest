@@ -87,7 +87,7 @@ public class CollectionsTest {
       public List<Object> filter(Collection<?> target) {
         return expectedResult;
       }
-    };
+    }
     List<Object> expectedResult = new ArrayList<Object>();
     FilterStub filter = new FilterStub(expectedResult);
     List<Object> filtered = Collections.filter(new ArrayList<Object>(), filter);
