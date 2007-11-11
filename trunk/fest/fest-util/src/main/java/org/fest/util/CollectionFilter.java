@@ -25,5 +25,10 @@ import java.util.List;
  */
 public interface CollectionFilter<T> {
 
+  /**
+   * Filters a given collection.
+   * @param target the collection to filter.
+   * @return a list containing the filtered elements.
+   */
   List<T> filter(Collection<?> target);
 }
