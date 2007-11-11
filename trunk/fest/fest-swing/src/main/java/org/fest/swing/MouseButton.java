@@ -15,12 +15,10 @@
  */
 package org.fest.swing;
 
-import java.awt.event.InputEvent;
-
-import static java.awt.event.InputEvent.BUTTON1_MASK;
-import static java.awt.event.InputEvent.BUTTON2_MASK;
-import static java.awt.event.InputEvent.BUTTON3_MASK;
 import static org.fest.util.Strings.concat;
+
+import java.awt.event.InputEvent;
+import static java.awt.event.InputEvent.*;
 
 /**
  * Understands mouse buttons.

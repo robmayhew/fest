@@ -15,15 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Container;
-
-import javax.swing.JMenuItem;
-
 import org.fest.swing.ComponentFinder;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Understands lookup of <code>{@link JMenuItem}</code>s contained in a <code>{@link Container}</code>.

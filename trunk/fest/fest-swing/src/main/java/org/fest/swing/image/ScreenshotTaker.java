@@ -15,19 +15,13 @@
  */
 package org.fest.swing.image;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import static org.fest.util.Files.newFile;
+import static org.fest.util.Strings.*;
 
 import javax.imageio.ImageIO;
-
-import static org.fest.util.Files.newFile;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * Understands taking screenshots of the desktop.

@@ -15,17 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTable;
-
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 import abbot.tester.JTableTester;
-
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such

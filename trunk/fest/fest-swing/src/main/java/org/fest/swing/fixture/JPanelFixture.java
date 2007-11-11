@@ -14,11 +14,11 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JPanel;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JPanel}</code> and verification of the state of such 

@@ -15,14 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JComboBox;
-import javax.swing.JList;
-
 import abbot.tester.JComboBoxTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JComboBox}</code> and verification of the state of such

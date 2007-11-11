@@ -15,9 +15,9 @@
  */
 package org.fest.swing;
 
-import java.awt.Component;
-
 import abbot.finder.matchers.ClassMatcher;
+
+import java.awt.*;
 
 /**
  * Understands <code>{@link java.awt.Component}</code> matching by type.

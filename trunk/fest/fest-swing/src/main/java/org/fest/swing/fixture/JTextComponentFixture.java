@@ -15,15 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.text.JTextComponent;
-
 import abbot.tester.JTextComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.isEmpty;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import static org.fest.util.Strings.isEmpty;
+
+import javax.swing.text.JTextComponent;
 
 /**
  * Understands simulation of user events on a <code>{@link JTextComponent}</code> and verification of the state of such

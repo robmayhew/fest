@@ -15,11 +15,9 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Component;
+import static org.fest.util.Strings.*;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
+import java.awt.*;
 
 /**
  * Understands utility methods related to formatting.

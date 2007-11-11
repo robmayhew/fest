@@ -15,7 +15,7 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
+import java.awt.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> that contains or displays a group of items,

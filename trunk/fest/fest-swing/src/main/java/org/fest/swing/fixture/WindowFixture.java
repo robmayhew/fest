@@ -15,17 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
-import java.awt.Window;
-
 import abbot.tester.WindowTester;
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
+import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
 import org.fest.swing.ScreenLock;
+
+import java.awt.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Window}</code> and verification of the state of such

@@ -15,15 +15,14 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Window;
-import java.util.concurrent.TimeUnit;
-
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.WindowFixture;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
+import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a template for <code>{@link Window}</code> finders.

@@ -15,18 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JPopupMenu;
-import javax.swing.JTable;
-
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
-
-import static org.fest.swing.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.MouseButton.RIGHT_BUTTON;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a cell of a <code>{@link JTable}</code> and verification of the state of

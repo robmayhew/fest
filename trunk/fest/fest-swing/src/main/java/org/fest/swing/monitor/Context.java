@@ -15,17 +15,11 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.Window;
+import static org.fest.util.Collections.list;
+
+import java.awt.*;
 import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 
 /**
  * Understands a monitor that maps event queues to GUI components and vice versa.
@@ -62,7 +56,7 @@ class Context {
       for (EventQueue queue : contexts.keySet())
         rootWindows.addAll(contexts.get(queue).keySet());
     }
-    for (Frame f : Frame.getFrames()) rootWindows.add(f);
+    rootWindows.addAll(list(Frame.getFrames()));
     return rootWindows;
   }
   

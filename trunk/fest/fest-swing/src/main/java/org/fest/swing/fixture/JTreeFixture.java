@@ -15,16 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTree;
-import javax.swing.tree.TreePath;
-
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTreeLocation;
 import abbot.tester.JTreeTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
+import javax.swing.tree.TreePath;
 
 /**
  * Understands simulation of user events on a <code>{@link JTree}</code> and verification of the state of such

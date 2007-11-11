@@ -15,28 +15,16 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Dialog;
-import java.util.HashMap;
-
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.text.JTextComponent;
-
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.PLAIN_MESSAGE;
-import static javax.swing.JOptionPane.QUESTION_MESSAGE;
-import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static org.fest.assertions.Assertions.assertThat;
+import org.fest.swing.*;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.ComponentMatcher;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TypeMatcher;
+import javax.swing.*;
+import static javax.swing.JOptionPane.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * Understands simulation of user events on a <code>{@link JOptionPane}</code> and verification of the state of such

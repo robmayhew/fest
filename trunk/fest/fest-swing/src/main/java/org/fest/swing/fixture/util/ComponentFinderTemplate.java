@@ -15,21 +15,19 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Component;
-import java.util.concurrent.TimeUnit;
-
-import static org.fest.swing.fixture.util.FinderConstants.SLEEP_TIME;
-import static org.fest.swing.fixture.util.FinderConstants.TIMEOUT;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-
-import static org.fest.util.Strings.isEmpty;
-
 import org.fest.swing.ComponentFinder;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.ComponentFixture;
+import static org.fest.swing.fixture.util.FinderConstants.SLEEP_TIME;
+import static org.fest.swing.fixture.util.FinderConstants.TIMEOUT;
 import org.fest.swing.util.TimeoutWatch;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.isEmpty;
+
+import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a template for <code>{@link Component}</code> finders.
@@ -92,7 +90,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
     ComponentFinder finder = robot.finder();
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (true) {
-      Component c = null;
+      Component c;
       try {
         c = finder.find(matcher());
       } catch (ComponentLookupException e) {

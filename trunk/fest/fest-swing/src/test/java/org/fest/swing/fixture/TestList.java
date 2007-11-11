@@ -89,8 +89,7 @@ final class TestList extends JList {
       addIndex = index;
       String[] values = s.split("\n");
       addCount = values.length;
-      for (int i = 0; i < values.length; i++) 
-        listModel.add(index++, values[i]);
+      for (String value : values) listModel.add(index++, value);
     }
 
     // If the remove argument is true, the drop has been successful and it's time to remove the selected items from the 

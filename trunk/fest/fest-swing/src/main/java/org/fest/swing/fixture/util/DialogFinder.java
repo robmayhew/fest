@@ -15,14 +15,13 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Component;
-import java.awt.Dialog;
-import java.util.concurrent.TimeUnit;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.DialogFixture;
+
+import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a finder for <code>{@link Dialog}</code>s. This class cannot be used directly, please see 

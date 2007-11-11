@@ -15,16 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.BorderLayout;
-import java.awt.Point;
-
-import javax.swing.JToolBar;
-
 import abbot.tester.JToolBarTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JToolBar}</code> and verification of the state of such

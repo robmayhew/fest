@@ -15,14 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTabbedPane;
-
 import abbot.tester.JTabbedPaneLocation;
 import abbot.tester.JTabbedPaneTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JTabbedPane}</code> and verification of the state of such

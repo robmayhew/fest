@@ -15,13 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JButton;
-
 import static org.fest.assertions.Assertions.assertThat;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JButton}</code> and verification of the state of such 

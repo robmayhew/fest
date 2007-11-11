@@ -15,15 +15,13 @@
  */
 package org.fest.swing.hierarchy;
 
-import java.awt.Component;
-import java.awt.Container;
+import static org.fest.swing.util.ComponentCollections.empty;
+import static org.fest.util.Collections.list;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static org.fest.swing.util.ComponentCollections.empty;
-
-import static org.fest.util.Collections.list;
 
 /**
  * Understands how to find children components in a <code>{@link Container}</code>.

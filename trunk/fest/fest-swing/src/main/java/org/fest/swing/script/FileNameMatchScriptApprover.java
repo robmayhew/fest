@@ -14,11 +14,11 @@
  */
 package org.fest.swing.script;
 
-import java.io.File;
-import java.util.List;
-
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Collections.list;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Understands a <code>{@link ScriptApprover}</code> that approves a file only if its name is in a list of approved

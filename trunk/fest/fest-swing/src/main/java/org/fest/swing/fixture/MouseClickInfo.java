@@ -15,13 +15,9 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.swing.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
-import static org.fest.swing.MouseButton.RIGHT_BUTTON;
-
-import static org.fest.util.Strings.concat;
-
 import org.fest.swing.MouseButton;
+import static org.fest.swing.MouseButton.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands information about clicking a mouse button.

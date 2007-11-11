@@ -14,10 +14,10 @@
  */
 package org.fest.swing.util;
 
+import org.fest.swing.GUITest;
+
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-
-import org.fest.swing.GUITest;
 
 /**
  * Understands utility methods related to GUI tests. A GUI test is a class or method annotated with

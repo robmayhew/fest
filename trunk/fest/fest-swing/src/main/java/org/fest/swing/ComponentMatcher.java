@@ -15,9 +15,9 @@
  */
 package org.fest.swing;
 
-import java.awt.Component;
-
 import abbot.finder.Matcher;
+
+import java.awt.*;
 
 /**
  * Understands whether a <code>{@link Component}</code> matches some desired criteria.

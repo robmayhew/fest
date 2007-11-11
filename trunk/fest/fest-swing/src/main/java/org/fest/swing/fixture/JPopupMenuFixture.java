@@ -15,12 +15,11 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JPopupMenu;
-
 import abbot.tester.JPopupMenuTester;
-
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands lookup of <code>{@link JPopupMenu}</code>.

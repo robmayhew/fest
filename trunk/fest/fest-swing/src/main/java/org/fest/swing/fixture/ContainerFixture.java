@@ -14,38 +14,17 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dialog;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JToolBar;
-import javax.swing.JTree;
-import javax.swing.text.JTextComponent;
-
 import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.util.Formatting.format;
-
-import static org.fest.util.Strings.join;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.RobotFixture;
+import static org.fest.swing.util.Formatting.format;
+import static org.fest.util.Strings.join;
+
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
 
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.

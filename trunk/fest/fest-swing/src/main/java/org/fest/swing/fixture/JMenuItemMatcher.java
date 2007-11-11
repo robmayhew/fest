@@ -15,9 +15,9 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JMenuItem;
-
 import org.fest.swing.ComponentMatcher;
+
+import javax.swing.*;
 
 /**
  * Matches a <code>{@link JMenuItem}</code> given a simple label or a menu path of the format "menu|submenu|menuitem", 

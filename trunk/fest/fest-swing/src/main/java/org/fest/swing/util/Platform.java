@@ -15,14 +15,14 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import static org.fest.util.Strings.concat;
 
 import static java.awt.Event.CTRL_MASK;
 import static java.awt.Event.META_MASK;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.VK_CONTROL;
 import static java.awt.event.KeyEvent.VK_META;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands platform-specific functionality.

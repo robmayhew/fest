@@ -72,9 +72,9 @@ final class TestTree extends JTree {
       addIndex = index;
       String[] values = s.split("\n");
       addCount = values.length;
-      for (int i = 0; i < values.length; i++) {
+      for (String value : values) {
         TreePath path = target.getPathForRow(index++);
-        model.insertNodeInto(new DefaultMutableTreeNode(values[i]), (MutableTreeNode) path.getLastPathComponent(), 0);
+        model.insertNodeInto(new DefaultMutableTreeNode(value), (MutableTreeNode) path.getLastPathComponent(), 0);
       }
     }
 

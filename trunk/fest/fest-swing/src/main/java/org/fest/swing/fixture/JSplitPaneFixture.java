@@ -15,13 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JSplitPane;
-
 import abbot.tester.JSplitPaneTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JSplitPane}</code> and verification of the state of such

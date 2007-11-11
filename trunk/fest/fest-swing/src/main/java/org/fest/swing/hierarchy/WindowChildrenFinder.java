@@ -15,15 +15,13 @@
  */
 package org.fest.swing.hierarchy;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Window;
-import java.util.Collection;
-
 import static org.fest.swing.util.ComponentCollections.EMPTY;
 import static org.fest.swing.util.ComponentCollections.empty;
-
 import static org.fest.util.Arrays.isEmpty;
+import static org.fest.util.Collections.list;
+
+import java.awt.*;
+import java.util.Collection;
 
 /**
  * Understands how to find children components in a <code>{@link Window}</code>.
@@ -44,7 +42,7 @@ final class WindowChildrenFinder implements ChildrenFinderStrategy {
   private Collection<Component> windows(Window[] windows) {
     if (isEmpty(windows)) return EMPTY;
     Collection<Component> components = empty();
-    for (Window w : windows) components.add(w);
+    components.addAll(list(windows));
     return components;
   }
 }

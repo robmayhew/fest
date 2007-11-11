@@ -15,8 +15,7 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Dialog;
-import java.awt.Frame;
+import java.awt.*;
 
 /**
  * <p>

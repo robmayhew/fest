@@ -14,22 +14,21 @@
  */
 package org.fest.swing.script;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.fest.swing.ScreenLock;
-
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.script.Script;
 import abbot.script.StepRunner;
 import abbot.util.AWTFixtureHelper;
+import org.fest.swing.ScreenLock;
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Files.fileNamesIn;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Understands how to run one or more <a href="http://abbot.sourceforge.net" target="_blank">Abbot<a/> scripts.

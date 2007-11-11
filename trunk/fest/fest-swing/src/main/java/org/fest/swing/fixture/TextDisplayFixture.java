@@ -15,7 +15,7 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
+import java.awt.*;
 
 /**
  * Understands verification of the state of a <code>{@link Component}</code> that displays text.

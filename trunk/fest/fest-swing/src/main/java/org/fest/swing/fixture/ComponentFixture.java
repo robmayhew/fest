@@ -15,21 +15,18 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
-
+import org.fest.swing.ComponentLookupException;
+import org.fest.swing.MouseButton;
 import static org.fest.swing.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.MouseButton.RIGHT_BUTTON;
+import org.fest.swing.RobotFixture;
 import static org.fest.swing.util.Formatting.format;
-
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
+import java.awt.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such

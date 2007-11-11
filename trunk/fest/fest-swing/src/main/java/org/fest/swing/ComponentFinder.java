@@ -14,15 +14,14 @@
  */
 package org.fest.swing;
 
-import java.awt.Component;
-import java.awt.Container;
-
 import abbot.finder.AWTHierarchy;
 import abbot.finder.BasicFinder;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
-import static org.fest.util.Strings.*;
+import java.awt.*;
 
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.

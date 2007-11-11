@@ -15,7 +15,7 @@
  */
 package org.fest.swing;
 
-import java.awt.Component;
+import java.awt.*;
 
 /**
  * Understands <code>{@link java.awt.Component}</code> matching by name.

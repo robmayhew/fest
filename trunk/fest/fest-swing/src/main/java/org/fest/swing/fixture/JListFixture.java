@@ -15,15 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JList;
-
 import abbot.tester.ComponentLocation;
 import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such

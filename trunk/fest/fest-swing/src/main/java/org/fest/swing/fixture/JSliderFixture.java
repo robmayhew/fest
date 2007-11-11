@@ -15,13 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JSlider;
-
 import abbot.tester.JSliderTester;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JSlider}</code> and verification of the state of such

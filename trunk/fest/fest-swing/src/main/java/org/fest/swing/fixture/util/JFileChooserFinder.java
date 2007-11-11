@@ -15,15 +15,14 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Component;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.JFileChooser;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a finder for <code>{@link JFileChooser}</code>s. Lookups are performed till a file chooser is found,

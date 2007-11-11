@@ -15,24 +15,17 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.io.File;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-
-import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
-import static javax.swing.JFileChooser.FILES_ONLY;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import static org.fest.util.Strings.*;
+
+import javax.swing.*;
+import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
+import static javax.swing.JFileChooser.FILES_ONLY;
+import java.awt.*;
+import java.io.File;
 
 /**
  * Understands simulation of user events on a <code>{@link JFileChooser}</code> and verification of the state of such

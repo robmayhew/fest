@@ -15,15 +15,12 @@
  */
 package org.fest.swing.hierarchy;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.util.Collection;
-
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-
 import static org.fest.swing.util.ComponentCollections.EMPTY;
 import static org.fest.swing.util.ComponentCollections.empty;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
 
 /**
  * Understands how to find children components in a <code>{@link JDesktopPane}</code>.

@@ -15,8 +15,7 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Component;
-import java.awt.Window;
+import java.awt.*;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;

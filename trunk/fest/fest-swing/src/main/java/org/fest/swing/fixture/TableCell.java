@@ -15,9 +15,9 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTable;
-
 import static org.fest.util.Strings.concat;
+
+import javax.swing.*;
 
 /**
  * Understands a cell in a <code>{@link JTable}</code>.

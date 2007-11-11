@@ -15,22 +15,15 @@
  */
 package org.fest.swing.hierarchy;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Window;
-import java.util.Collection;
-import java.util.logging.Logger;
-
-import static java.util.logging.Level.WARNING;
-
+import org.fest.swing.monitor.WindowMonitor;
 import static org.fest.swing.util.Formatting.format;
-import static org.fest.swing.util.Swing.isAppletViewer;
-import static org.fest.swing.util.Swing.isSharedInvisibleFrame;
-import static org.fest.swing.util.Swing.runInEventThreadAndWait;
-
+import static org.fest.swing.util.Swing.*;
 import static org.fest.util.Strings.concat;
 
-import org.fest.swing.monitor.WindowMonitor;
+import java.awt.*;
+import java.util.Collection;
+import static java.util.logging.Level.WARNING;
+import java.util.logging.Logger;
 
 /**
  * Understands access to the current AWT hierarchy.

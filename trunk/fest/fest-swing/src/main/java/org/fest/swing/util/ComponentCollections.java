@@ -15,11 +15,11 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Component;
+import static org.fest.util.Collections.list;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static org.fest.util.Collections.list;
 
 /**
  * Understands utility methods related to collection of <code>{@link Component}</code>s.

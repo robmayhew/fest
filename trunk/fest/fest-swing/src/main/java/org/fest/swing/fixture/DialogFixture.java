@@ -15,14 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dialog;
-import java.awt.Dimension;
-
 import static org.fest.assertions.Assertions.assertThat;
-
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import java.awt.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Dialog}</code> and verification of the state of such

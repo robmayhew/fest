@@ -14,15 +14,12 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Window;
-import java.util.Collection;
-
 import static org.fest.swing.monitor.ContextMonitor.attachContextMonitor;
 import static org.fest.swing.monitor.WindowAvailabilityMonitor.attachWindowAvailabilityMonitor;
 import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibilityMonitor;
+
+import java.awt.*;
+import java.util.Collection;
 
 /**
  * Understands a monitor that keeps track of all known root windows (showing, hidden, closed.)

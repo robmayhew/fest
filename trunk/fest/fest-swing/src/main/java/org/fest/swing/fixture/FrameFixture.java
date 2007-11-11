@@ -15,18 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
-import static java.awt.Frame.ICONIFIED;
-import static java.awt.Frame.MAXIMIZED_BOTH;
-import static java.awt.Frame.NORMAL;
-
 import org.fest.swing.Condition;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+
+import java.awt.*;
+import static java.awt.Frame.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such

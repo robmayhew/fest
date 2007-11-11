@@ -84,8 +84,7 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
   }
 
   @Override public boolean canImport(JComponent c, DataFlavor[] flavors) {
-    for (int i = 0; i < flavors.length; i++) 
-      if (stringFlavor.equals(flavors[i])) return true; 
+    for (DataFlavor flavor : flavors) if (stringFlavor.equals(flavor)) return true; 
     return false;
   }
 }

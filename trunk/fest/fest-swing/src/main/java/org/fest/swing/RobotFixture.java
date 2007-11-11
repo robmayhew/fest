@@ -14,17 +14,6 @@
  */
 package org.fest.swing;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Point;
-import java.awt.Window;
-import java.util.Collection;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
@@ -33,13 +22,15 @@ import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
-import static java.lang.System.currentTimeMillis;
-
+import org.fest.swing.util.TimeoutWatch;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-
 import static org.fest.util.Strings.concat;
 
-import org.fest.swing.util.TimeoutWatch;
+import javax.swing.*;
+import java.awt.*;
+import static java.lang.System.currentTimeMillis;
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -150,7 +141,7 @@ public final class RobotFixture {
 
   private void waitForWindow(Window w) {
     long start = currentTimeMillis();
-    while ((Robot.getEventMode() == Robot.EM_ROBOT && !windowTracker.isWindowReady(w)) || w.isShowing() != true) {
+    while ((Robot.getEventMode() == Robot.EM_ROBOT && !windowTracker.isWindowReady(w)) || !w.isShowing()) {
       long elapsed = currentTimeMillis() - start;
       if (elapsed > WINDOW_DELAY)
         throw new RuntimeException(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));

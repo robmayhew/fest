@@ -15,13 +15,8 @@
  */
 package org.fest.swing.hierarchy;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Window;
-
-import javax.swing.JInternalFrame;
-import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Understands how to find the parent of a <code>{@link Component}</code>.
