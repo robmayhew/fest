@@ -2,3 +2,4 @@
 #labels Featured
 
 * [http://fest.googlecode.com/svn/site/fest-assert/index.html FEST-Assert]
+* [http://fest.googlecode.com/svn/site/fest-mocks/index.html FEST-Mocks]
