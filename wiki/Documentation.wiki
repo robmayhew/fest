@@ -1,5 +1,5 @@
 #summary Documentation of each FEST module.
 #labels Featured
 
-* [http://fest.googlecode.com/svn/site/fest-assert/index.html FEST-Assert]
-* [http://fest.googlecode.com/svn/site/fest-mocks/index.html FEST-Mocks]
+  * [http://fest.googlecode.com/svn/site/fest-assert/index.html FEST-Assert]
+  * [http://fest.googlecode.com/svn/site/fest-mocks/index.html FEST-Mocks]
