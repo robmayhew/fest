@@ -15,11 +15,16 @@
 package org.fest.swing.util;
 
 import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import static javax.swing.SwingUtilities.invokeAndWait;
 import static javax.swing.SwingUtilities.isEventDispatchThread;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.Insets;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -52,8 +57,7 @@ public final class Swing {
    * @return <code>true</code> if the given component is an Applet viewer, <code>false</code> otherwise.
    */
   public static boolean isAppletViewer(Component c) {
-    if (c == null) return false;
-    return APPLET_APPLET_VIEWER_CLASS.equals(c.getClass().getName());
+    return c != null && APPLET_APPLET_VIEWER_CLASS.equals(c.getClass().getName());
   }
 
   /**
@@ -86,6 +90,17 @@ public final class Swing {
     }
     invokeAndWait(r);
   }
-  
+
+  /**
+   * Returns the name of the given component. If the component is <code>null</code>, this method will return
+   * <code>null</code>.
+   * @param c the given component.
+   * @return the name of the given component, or <code>null</code> if the component is <code>null</code>.
+   */
+  public static String quoteNameOf(Component c) {
+    if (c == null) return null;
+    return quote(c.getName());
+  }
+
   private Swing() {}
 }

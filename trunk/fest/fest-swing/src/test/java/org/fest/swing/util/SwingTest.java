@@ -15,19 +15,15 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Frame;
-import java.awt.Insets;
+import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import org.fest.swing.TestFrame;
+import static org.fest.swing.TestFrame.showInTest;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.TestFrame.showInTest;
-
-import org.fest.swing.TestFrame;
-
-import org.testng.annotations.Test;
+import java.awt.Frame;
+import java.awt.Insets;
 
 /**
  * Tests for <code>{@link Swing}</code>.
@@ -84,5 +80,15 @@ public class SwingTest {
   
   @Test public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrameAndNull() {
     assertThat(Swing.isSharedInvisibleFrame(null)).isFalse();
+  }
+
+  @Test public void shouldReturnNullAsNameIfComponentIsNull() {
+    assertThat(Swing.quoteNameOf(null)).isNull();
+  }
+
+  @Test public void shouldReturnComponentNameInQuotes() {
+    JTextField textField = new JTextField();
+    textField.setName("firstName");
+    assertThat(Swing.quoteNameOf(textField)).isEqualTo("'firstName'");
   }
 }

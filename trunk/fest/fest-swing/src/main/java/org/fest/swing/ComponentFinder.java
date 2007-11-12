@@ -18,10 +18,11 @@ import abbot.finder.AWTHierarchy;
 import abbot.finder.BasicFinder;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
+import static org.fest.swing.util.Swing.quoteNameOf;
 import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
 
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.
@@ -202,7 +203,7 @@ public class ComponentFinder {
 
   private <T> void checkRightTypeForNamedComponent(Component c, Class<T> expected) {
     if (expected.isAssignableFrom(c.getClass())) return;
-    throw new ComponentLookupException(concat("Found component with name ", quote(c.getName()),
+    throw new ComponentLookupException(concat("Found component with name ", quoteNameOf(c),
         " but with different type (", expected.getName(), ")"));
   }
 
