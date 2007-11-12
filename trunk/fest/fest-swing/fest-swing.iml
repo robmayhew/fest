@@ -28,10 +28,10 @@
           <root url="jar://$MODULE_DIR$/lib/MRJToolkitStubs-1.0.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/gnu-regexp-1.1.4.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/jdom-1.0.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/fest-assert-0.7-SNAPSHOT.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/easymockclassextension-2.2.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/cglib-nodep-2.1_3.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/testng-5.5-jdk15.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/fest-assert-0.7.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
