@@ -20,7 +20,9 @@ import static org.fest.swing.util.Formatting.format;
 import static org.fest.swing.util.Swing.*;
 import static org.fest.util.Strings.concat;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
 import java.util.Collection;
 import static java.util.logging.Level.WARNING;
 import java.util.logging.Logger;
@@ -44,7 +46,7 @@ public class ExistingHierarchy implements ComponentHierarchy {
 
   final Logger logger = Logger.getLogger(getClass().getName());
   
-  public static ExistingHierarchy createExistingHierarchy() {
+  public static ExistingHierarchy existingHierarchy() {
     return new ExistingHierarchy();
   }
   

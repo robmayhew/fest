@@ -16,7 +16,9 @@ package org.fest.swing.hierarchy;
 
 import static org.fest.swing.util.Swing.isSharedInvisibleFrame;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Window;
+import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -33,6 +35,10 @@ class WindowFilter {
 
   private final ParentFinder parentFinder;
   private final ChildrenFinder childrenFinder;
+
+  WindowFilter() {
+    this(new ParentFinder(), new ChildrenFinder());
+  }
 
   WindowFilter(ParentFinder parentFinder, ChildrenFinder childrenFinder) {
     this.parentFinder = parentFinder;
@@ -72,6 +78,10 @@ class WindowFilter {
 
   void unfilter(Component c) {
     filter(c, false);
+  }
+
+  Collection<Component> filtered() {
+    return filtered.keySet();
   }
 
   private void filter(Component c, boolean filter) {

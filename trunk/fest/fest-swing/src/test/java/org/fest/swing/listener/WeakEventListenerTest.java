@@ -15,18 +15,14 @@
  */
 package org.fest.swing.listener;
 
-import java.awt.AWTEvent;
-import java.awt.event.AWTEventListener;
-
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
-
-import org.fest.swing.listener.WeakEventListener;
-
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
+
+import java.awt.AWTEvent;
+import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+import java.awt.event.AWTEventListener;
 
 /**
  * Tests for <code>{@link WeakEventListener}</code>.
@@ -66,14 +62,13 @@ public class WeakEventListenerTest {
   }
   
   private AWTEvent awtEvent() {
-    AWTEvent event = new AWTEvent(new Object(), 0) {
+    return new AWTEvent(new Object(), 0) {
       private static final long serialVersionUID = 1L;
     };
-    return event;
   }
   
   private boolean toolkitHasListenerUnderTest() {
-    return toolkitHasListenerUnderEventMask(listener, EVENT_MASK);
+    return isListenerInToolkit(listener, EVENT_MASK);
   }
   
   private static class WrappedEventListener implements AWTEventListener {

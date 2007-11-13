@@ -39,7 +39,5 @@ public class MockWindowFilter extends WindowFilter {
 
   @Override public void unfilter(Component c) {}
 
-  public MockWindowFilter() {
-    super(null, null);
-  }
+  public MockWindowFilter() {}
 }

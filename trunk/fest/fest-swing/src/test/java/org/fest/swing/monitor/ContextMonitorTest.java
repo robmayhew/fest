@@ -15,41 +15,32 @@
  */
 package org.fest.swing.monitor;
 
+import static org.easymock.EasyMock.expect;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.TestFrame;
+import org.fest.swing.listener.WeakEventListener;
+import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
+import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
+import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
+
+import javax.swing.JTextField;
 import java.applet.Applet;
+import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
+import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FileDialog;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
+import static java.awt.event.WindowEvent.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.JTextField;
-
-import org.fest.mocks.EasyMockTemplate;
-
-import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
-import static java.awt.event.WindowEvent.WINDOW_CLOSED;
-import static java.awt.event.WindowEvent.WINDOW_CLOSING;
-import static java.awt.event.WindowEvent.WINDOW_FIRST;
-import static java.awt.event.WindowEvent.WINDOW_LAST;
-import static java.awt.event.WindowEvent.WINDOW_OPENED;
-import static org.easymock.EasyMock.expect;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
-import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
-import static org.fest.swing.util.ToolkitUtils.toolkitHasListenerUnderEventMask;
-
-import org.fest.swing.TestFrame;
-import org.fest.swing.listener.WeakEventListener;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ContextMonitor}</code>.
@@ -79,7 +70,7 @@ public class ContextMonitorTest {
   @Test public void shouldAttachItSelfToToolkit() {
     monitor = ContextMonitor.attachContextMonitor(new Windows(), new Context());
     WeakEventListener l = createWithoutAttaching(monitor);
-    assertThat(toolkitHasListenerUnderEventMask(l, EVENT_MASK)).isTrue();
+    assertThat(isListenerInToolkit(l, EVENT_MASK)).isTrue();
   }
 
   @Test public void shouldNotProcessEventIfComponentIsNotWindowOrApplet() {
