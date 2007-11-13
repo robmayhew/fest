@@ -30,7 +30,51 @@
         Added method 'doubleClick' to all fixtures.
       </action>
       <action dev="wanghy" type="add">
-        Added method 'click(MouseButton)' to all fixtures; this method simulates a user clicking the specified mouse button.
+        Added method 'click(MouseButton)' to all fixtures; this method simulates a user clicking the specified mouse
+        button.
+      </action>
+      <action dev="wanghy" type="add">
+        Added method 'click(MouseClickInfo)' to all fixtures; this method simulates a user clicking the specified mouse
+        button, the specified number of times.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'showPopupMenu' to all fixtures. This method shows a pop-up menu on a component and returns a
+        JPopupMenuFixture.
+      </action>
+      <action dev="alruiz" type="remove">
+        Replaced class JTableFixture.Cell with TableCell.
+      </action>
+      <action dev="alruiz" type="add">
+        In JTableFixture, the methods that used to take two int values as the row and column indices as arguments, now
+        take a TableCell as argument.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'cell(TableCell)' to JTableFixture, which returns a fixture that can manage the specified table
+        cell.
+      </action>
+      <action dev="wanghy" type="add">
+        Added support for JPopupMenu, JRadioButton and JSplitPane.
+      </action>
+      <action dev="alruiz" type="remove">
+        Renamed method 'contents' to 'selectionContents' in JTableFixture.
+      </action>
+      <action dev="alruiz" type="remove">
+        Removed method testerCastedTo from ComponentFixture.
+      </action>
+    </release>
+    <release version="0.5" date="2007-08-30" description="Subsequent release">
+      <action dev="alruiz" type="add" due-to="Fabien Barbero">
+        Added drag 'n drop support for JList, JTable and JTree.        
+      </action>
+      <action dev="wanghy" type="add">
+        Added support for custom matchers for component lookup. This feature is useful when testing GUI components that
+        don't have an associated name (e.g. testing legacy applications.)
+      </action>
+      <action dev="alruiz" type="add">
+        Added utility class Platform, which contains platform-specific utility methods.
+      </action>
+      <action dev="alruiz" type="add" due-to="Fabien Barbero">
+        ContainerFixture now recognizes JFileChooserFixture and JListFixture.
       </action>
     </release>
   </body>
