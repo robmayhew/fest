@@ -6,6 +6,13 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="add">
+        Added method 'click(Component, Point, MouseButton, int)' to RobotFixture. This method simulates a user clicking
+        on the given component, at the specific point, with the given mouse button, the given number of times.
+      </action>
+      <action dev="wanghy" type="add" due-to="Fabien Barbero" issue="40">
+        Added methods 'doubleClickItem(int)' and 'doubleClickItem(String)' to JListFixture.
+      </action>
       <action dev="alruiz" type="add">
         Uploaded source attachments to Maven repository.
       </action>

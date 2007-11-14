@@ -16,16 +16,14 @@
 package org.fest.swing.util;
 
 import org.fest.swing.listener.WeakEventListener;
-import org.fest.util.CollectionFilter;
-import static org.fest.util.Collections.list;
 import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Objects.castIfBelongsToType;
 
 import java.awt.Toolkit;
 import static java.awt.Toolkit.getDefaultToolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.AWTEventListenerProxy;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EventListener;
 import java.util.List;
 
@@ -36,17 +34,6 @@ import java.util.List;
  */
 public final class ToolkitUtils {
 
-  public static void removeFromToolkit(Class<? extends AWTEventListener> listenerType) {
-    List<? extends AWTEventListener> toRemove = eventListenersInToolkit(listenerType);
-    if (toRemove.isEmpty()) return;
-    removeFromToolkit(toRemove);
-  }
-
-  public static void removeFromToolkit(Collection<? extends AWTEventListener> listeners) {
-    for (AWTEventListener listener : listeners)
-      getDefaultToolkit().removeAWTEventListener(listener);
-  }
-
   public static boolean isListenerInToolkit(AWTEventListener target, long eventMask) {
     for (AWTEventListener l : getDefaultToolkit().getAWTEventListeners(eventMask)) 
       if (areEqualListeners(target, l)) return true;
@@ -54,8 +41,7 @@ public final class ToolkitUtils {
   }
 
   private static boolean areEqualListeners(AWTEventListener target, AWTEventListener listenerToCheck) {
-    if (target == listenerToCheck) return true;
-    return areEqual(target, proxiedListener(listenerToCheck));
+    return target == listenerToCheck || areEqual(target, proxiedListener(listenerToCheck));
   }
 
   public static <T extends AWTEventListener> List<T> eventListenersInToolkit(Class<T> listenerType) {
@@ -69,37 +55,29 @@ public final class ToolkitUtils {
   }
 
   private static <T extends AWTEventListener> List<T> filter(AWTEventListener[] eventListeners, Class<T> listenerType) {
-    return new EventListenerFilter<T>(listenerType).filter(list(eventListeners));
+    List<T> filtered = new ArrayList<T>();
+    for (AWTEventListener l : eventListeners) {
+      T listener = listenerFrom(l, listenerType);
+      if (listener != null) filtered.add(listener);
+    }
+    return filtered;
   }
 
-  private static class EventListenerFilter<T extends AWTEventListener> implements CollectionFilter<T> {
-    private Class<T> targetType;
-
-    EventListenerFilter(Class<T> targetType) {
-      this.targetType = targetType;
-    }
-
-    public List<T> filter(Collection<?> objects) {
-      List<T> filtered = new ArrayList<T>();
-      for (Object o : objects) {
-        T listener = findListenerIn(o);
-        if (listener != null) filtered.add(listener);
-      }
-      return filtered; 
-    }
-
-    private T findListenerIn(Object o) {
-      EventListener proxied = proxiedListener(o);
-      if (!(proxied instanceof WeakEventListener)) return null;
-      AWTEventListener real = ((WeakEventListener) proxied).realListener();
-      if (real != null && targetType.isAssignableFrom(real.getClass())) return targetType.cast(real);
-      return null;
-    }
+  private static <T extends AWTEventListener> T listenerFrom(AWTEventListener l, Class<T> targetType) {
+    T casted = castIfBelongsToType(l, targetType);
+    if (casted != null) return casted;
+    return castIfBelongsToType(realListener(l), targetType);
   }
 
-  private static EventListener proxiedListener(Object o) {
-    if (!(o instanceof AWTEventListenerProxy)) return null;
-    return ((AWTEventListenerProxy)o).getListener();
+  private static AWTEventListener realListener(AWTEventListener l) {
+    EventListener proxied = proxiedListener(l);
+    if (!(proxied instanceof WeakEventListener)) return null;
+    return ((WeakEventListener)proxied).realListener();
+  }
+
+  private static EventListener proxiedListener(AWTEventListener l) {
+    if (!(l instanceof AWTEventListenerProxy)) return null;
+    return ((AWTEventListenerProxy)l).getListener();
   }
 
   private ToolkitUtils() {}

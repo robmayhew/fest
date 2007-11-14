@@ -21,7 +21,6 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.TestFrame;
 import static org.fest.swing.util.ToolkitUtils.eventListenersInToolkit;
-import static org.fest.swing.util.ToolkitUtils.removeFromToolkit;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -47,7 +46,6 @@ public class NewHierarchyTest {
 
   @AfterMethod public void tearDown() {
     frame.destroy();
-    removeFromToolkit(TransientWindowListener.class);
   }
 
   @Test public void shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
