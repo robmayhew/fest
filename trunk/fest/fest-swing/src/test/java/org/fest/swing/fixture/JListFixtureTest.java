@@ -15,20 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
-
-import javax.swing.JList;
-
+import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
-
+import org.fest.swing.ClickRecorder;
 import static org.fest.swing.MouseButton.LEFT_BUTTON;
-
-import static org.fest.util.Arrays.array;
 import static org.fest.util.Collections.list;
 
-import org.fest.swing.ClickRecorder;
-
-import org.testng.annotations.Test;
+import javax.swing.JList;
+import java.awt.Dimension;
 
 /**
  * Tests for <code>{@link JListFixture}</code>.
@@ -45,7 +39,7 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
   private JListFixture dropTargetFixture;
   
   @Test public void shouldReturnListContents() {
-    assertThat(targetFixture.contents()).isEqualTo(array("one", "two", "three"));
+    assertThat(targetFixture.contents()).containsOnly("one", "two", "three");
   }
   
   @Test public void shouldSelectItemAtGivenIndex() {
@@ -81,22 +75,22 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
   @Test public void shouldDragAndDropValueUsingGivenNames() {
     targetFixture.drag("two");
     dropTargetFixture.drop("six");
-    assertThat(target.elements()).isEqualTo(array("one", "three"));
-    assertThat(dropTarget.elements()).isEqualTo(array("four", "five", "six", "two"));
+    assertThat(target.elements()).containsOnly("one", "three");
+    assertThat(dropTarget.elements()).containsOnly("four", "five", "six", "two");
   }
   
   @Test public void shouldDrop() {
     targetFixture.drag("two");
     dropTargetFixture.drop();
-    assertThat(target.elements()).isEqualTo(array("one", "three"));
+    assertThat(target.elements()).containsOnly("one", "three");
     assertThat(dropTarget.elements()).hasSize(4);
   }
   
   @Test public void shouldDragAndDropValueUsingGivenIndices() {
     targetFixture.drag(2);
     dropTargetFixture.drop(1);
-    assertThat(target.elements()).isEqualTo(array("one", "two"));
-    assertThat(dropTarget.elements()).isEqualTo(array("four", "five", "three", "six"));
+    assertThat(target.elements()).containsOnly("one", "two");
+    assertThat(dropTarget.elements()).containsOnly("four", "five", "three", "six");
   }
 
   protected ComponentFixture<JList> createFixture() {
@@ -106,13 +100,17 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
 
   protected JList createTarget() {
     target = new TestList("target", list("one", "two", "three"));
+    target.setPreferredSize(listSize());
     return target;
   }
 
   @Override protected void afterSetUp() {
     dropTarget = new TestList("dropTarget", list("four", "five", "six"));
+    dropTarget.setPreferredSize(listSize());
     dropTargetFixture = new JListFixture(robot(), dropTarget);
     window().add(dropTarget);
     window().setSize(new Dimension(600, 400));
   }
+
+  private Dimension listSize() { return new Dimension(50, 100); }
 }
