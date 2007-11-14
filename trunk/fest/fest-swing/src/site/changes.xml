@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="fix" due-to="John Stephi" issue="57">
+        Renamed method 'checkbox' to 'checkBox' in ContainerFixture.
+      </action>
       <action dev="wanghy" type="add">
         Added method 'click(Component, Point, MouseButton, int)' to RobotFixture. This method simulates a user clicking
         on the given component, at the specific point, with the given mouse button, the given number of times.
