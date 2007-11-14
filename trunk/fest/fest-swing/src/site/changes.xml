@@ -5,6 +5,29 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="0.7" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Uploaded source attachments to Maven repository.
+      </action>
+      <action dev="wanghy" type="add" issue="42">
+        Added class JPanelFixture.        
+      </action>
+      <action dev="alruiz" type="fix">
+        Moved ImageException and ScreenshotTaker from package org.fest.swing.util to package org.fest.swing.image.        
+      </action>
+      <action dev="alruiz" type="fix">
+        Renamed org.fest.swing.util.GUITests to org.fest.swing.util.GUITestFinder.
+      </action>
+      <action dev="wanghy" type="add" issue="45">
+        Add timeout for RobotFixture.wait(Condition): RobotFixture.wait(Condition, Timeout).
+      </action>
+      <action dev="alruiz" type="add" issue="44" due-to="Javier Sandino">
+        Added method 'close' to WindowFixture (superclass of FrameFixture and DialogFixture).
+      </action>
+      <action dev="alruiz" type="fix" issue="50" due-to="Javier Sandino">
+        Created class JFileChooserFinder.
+      </action>
+    </release>
     <release version="0.6.1" date="2007-09-26" description="Subsequent release">
       <action dev="alruiz" type="fix" due-to="Pavol Bernhauser">
         Added methods 'radioButton' and 'table' to ContainerFixture (superclass of DialogFixture and FrameFixture).
