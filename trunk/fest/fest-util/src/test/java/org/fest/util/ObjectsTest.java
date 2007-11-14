@@ -14,23 +14,20 @@
  */
 package org.fest.util;
 
-import java.util.Arrays;
-
+import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import java.util.Arrays;
 
 /**
  * Tests for {@link Objects}.
  * 
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public class ObjectTest {
+public class ObjectsTest {
 
   @Test public void shouldReturnAreEqualIfBothObjectsAreNull() {
     assertTrue(Objects.areEqual(null, null));
@@ -49,7 +46,7 @@ public class ObjectTest {
   }
   
   @Test public void shouldReturnAreNotEqualIfObjectsAreNotEqual() {
-    assertFalse(Objects.areEqual("Yoda", new Integer(2)));
+    assertFalse(Objects.areEqual("Yoda", 2));
   }
   
   @Test public void shouldReturnEmptyStringArrayIfClassArrayIsNull() {
@@ -81,5 +78,17 @@ public class ObjectTest {
   
   @Test public void shouldReturnZeroIfObjectIsNull() {
     assertEquals(Objects.hashCodeFor(null), 0);
+  }
+
+  @Test public void shouldReturnCastedObjectIfIsOfType() {
+    Object o = "Frodo";
+    String casted = Objects.castIfBelongsToType(o, String.class);
+    assertSame(casted, o);
+  }
+
+  @Test public void shouldReturnNullIfObjectIsNotOfType() {
+    Object o = 4;
+    String casted = Objects.castIfBelongsToType(o, String.class);
+    assertNull(casted);
   }
 }

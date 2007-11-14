@@ -56,5 +56,17 @@ public final class Objects {
     return o != null ? o.hashCode() : 0;
   }
 
+  /**
+   * Casts the given object to the given type only if the object is of the given type. If the object is not of the given
+   * type, this method returns <code>null</code>.
+   * @param o the object to cast.
+   * @param type the givent type.
+   * @return the casted object, or <code>null</code> if the given object is not to the given type.
+   */
+  public static <T> T castIfBelongsToType(Object o, Class<T> type) {
+    if (o != null && type.isAssignableFrom(o.getClass())) return type.cast(o);
+    return null;
+  }
+
   private Objects() {}
 }
