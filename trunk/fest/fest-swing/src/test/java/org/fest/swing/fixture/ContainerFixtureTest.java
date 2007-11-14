@@ -197,7 +197,7 @@ import org.testng.annotations.Test;
         return "A CheckBox".equals(checkBox.getText());
       }
     };
-    JCheckBoxFixture checkbox = container.checkbox(textMatcher);
+    JCheckBoxFixture checkbox = container.checkBox(textMatcher);
     assertThat(checkbox.target).isSameAs(window.checkBox);
   }
   

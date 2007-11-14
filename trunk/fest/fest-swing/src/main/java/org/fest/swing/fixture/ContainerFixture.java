@@ -96,7 +96,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * @throws ComponentLookupException if a <code>JCheckBox</code> that matches the given search criteria could not be 
    * found.
    */
-  public final JCheckBoxFixture checkbox(GenericTypeMatcher<? extends JCheckBox> matcher) {
+  public final JCheckBoxFixture checkBox(GenericTypeMatcher<? extends JCheckBox> matcher) {
     return new JCheckBoxFixture(robot, find(matcher));
   }
   
