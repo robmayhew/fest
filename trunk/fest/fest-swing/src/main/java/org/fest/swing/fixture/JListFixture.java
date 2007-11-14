@@ -15,14 +15,21 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JList;
+
 import abbot.tester.ComponentLocation;
 import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
+
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
+import org.fest.swing.ActionFailedException;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -67,7 +74,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    */
   public final JListFixture selectItem(int index) {
-    listTester().actionSelectIndex(target, index);
+    clickItem(new JListLocation(index), LEFT_BUTTON, 1);
     return this;
   }
 
@@ -77,10 +84,42 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    */
   public final JListFixture selectItem(String text) {
-    listTester().actionSelectValue(target, text);
-    return null;
+    clickItem(new JListLocation(text), LEFT_BUTTON, 1);
+    return this;
+  }
+  
+  /**
+   * Simulates a user double-clicking an item in the <code>{@link JList}</code> managed by this fixture. 
+   * @param index the index of the item to double-click.
+   * @return this fixture.
+   */
+  public final JListFixture doubleClickItem(int index) {
+    clickItem(new JListLocation(index), LEFT_BUTTON, 2);
+    return this;
   }
 
+  /**
+   * Simulates a user double-clicking an item in the <code>{@link JList}</code> managed by this fixture. 
+   * @param text the text of the item to double-click.
+   * @return this fixture.
+   */
+  public final JListFixture doubleClickItem(String text) {
+    clickItem(new JListLocation(text), LEFT_BUTTON, 2);
+    return this;
+  }
+  
+  private void clickItem(JListLocation location, MouseButton button, int times) {
+    int index = location.getIndex(target);
+    validateItemIndex(index);
+    robot.click(target, location.getPoint(target), button, times);
+  }
+  
+  private void validateItemIndex(int index) {
+    int itemCount = target.getModel().getSize();
+    if (index < 0 || index >= itemCount)
+      throw new ActionFailedException(concat(quote(index), " should be between ", quote(0), " and ", quote(itemCount)));
+  }
+  
   /**
    * Returns the <code>String</code> representation of an item in the <code>{@link JList}</code> managed by this 
    * fixture. If such <code>String</code> representation is not meaningful, this method will return <code>null</code>.

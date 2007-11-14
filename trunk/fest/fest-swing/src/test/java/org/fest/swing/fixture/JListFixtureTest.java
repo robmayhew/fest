@@ -20,8 +20,13 @@ import java.awt.Dimension;
 import javax.swing.JList;
 
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.MouseButton.LEFT_BUTTON;
+
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Collections.list;
+
+import org.fest.swing.ClickRecorder;
 
 import org.testng.annotations.Test;
 
@@ -51,6 +56,22 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
   @Test public void shouldSelectItemWithGivenText() {
     targetFixture.selectItem("two");
     assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
+  }
+
+  @Test public void shouldDoubleClickItemAtGivenIndex() {
+    ClickRecorder recorder = ClickRecorder.attachTo(targetFixture.target);
+    targetFixture.doubleClickItem(2);
+    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("three");
+    assertThat(recorder.clickCount()).isEqualTo(2);
+    assertThat(recorder.clickedButton()).isEqualTo(LEFT_BUTTON);
+  }
+
+  @Test public void shouldDoubleClickItemWithGivenText() {
+    ClickRecorder recorder = ClickRecorder.attachTo(targetFixture.target);
+    targetFixture.doubleClickItem("two");
+    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
+    assertThat(recorder.clickCount()).isEqualTo(2);
+    assertThat(recorder.clickedButton()).isEqualTo(LEFT_BUTTON);
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {

@@ -254,6 +254,18 @@ public final class RobotFixture {
    */
   public void click(Component target, MouseButton button, int times) {
     Point where = new ComponentLocation().getPoint(target);
+    click(target, where, button, times);
+  }
+
+  /**
+   * Simulates a user clicking the given mouse button, the given times at the given position on the given 
+   * <code>{@link Component}</code>.
+   * @param target the <code>Component</code> to click on.
+   * @param where the position where to click.
+   * @param button the mouse button to click.
+   * @param times the number of times to click the given mouse button.
+   */
+  public void click(Component target, Point where, MouseButton button, int times) {
     robot.click(target, where.x, where.y, button.mask, times);
     robot.waitForIdle();
   }
