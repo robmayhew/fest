@@ -42,7 +42,7 @@ import org.fest.swing.RobotFixture;
 public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture<JList> {
 
   /**
-   * Creates a new </code>{@link JListFixture}</code>.
+   * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on a <code>JList</code>.
    * @param listName the name of the <code>JList</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JList</code> could not be found.
@@ -52,7 +52,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Creates a new </code>{@link JListFixture}</code>.
+   * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JList</code>.
    * @param target the <code>JList</code> to be managed by this fixture.
    */
