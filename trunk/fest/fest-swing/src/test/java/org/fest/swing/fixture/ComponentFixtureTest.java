@@ -19,12 +19,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.Timeout.timeout;
 
 import org.fest.swing.ClickRecorder;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -56,6 +61,7 @@ public class ComponentFixtureTest {
       public ComponentFixture<JTextField> releaseKey(int keyCode) { return null; }
       public ComponentFixture<JTextField> requireDisabled() { return null; }
       public ComponentFixture<JTextField> requireEnabled() { return null; }
+      public ComponentFixture<JTextField> requireEnabled(Timeout timout) { return null; }
       public ComponentFixture<JTextField> requireNotVisible() { return null; }
       public ComponentFixture<JTextField> requireVisible() { return null; }
       public ComponentFixture<JTextField> rightClick() { return null; }
@@ -81,6 +87,25 @@ public class ComponentFixtureTest {
     ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
     fixture.doDoubleClick();
     assertThat(recorder.doubleClicked()).isTrue();
+  }
+  
+  @Test public void shouldWaitTillComponentIsEnabled() {
+    fixture.target.setEnabled(false);
+    new Thread() {
+      @Override public void run() {
+        try {
+          Thread.sleep(2000);
+        } catch (InterruptedException e) {}
+        fixture.target.setEnabled(true);
+      }
+    }.start();
+    fixture.assertEnabled(timeout(3, SECONDS));
+  }
+  
+  @Test(expectedExceptions = WaitTimedOutError.class) 
+  public void shouldTimeoutIfComponentNotEnabled() {
+    fixture.target.setEnabled(false);
+    fixture.assertEnabled(timeout(1, SECONDS));
   }
   
   private static class MyFrame extends TestFrame {

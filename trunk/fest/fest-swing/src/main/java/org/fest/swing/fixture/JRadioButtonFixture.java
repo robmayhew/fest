@@ -15,12 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JRadioButton;
+
 import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JRadioButton}</code> and verification of the state of such 
@@ -176,6 +179,16 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
    */
   public final JRadioButtonFixture requireEnabled() {
     return (JRadioButtonFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JRadioButton</code> is never enabled.
+   */
+  public final JRadioButtonFixture requireEnabled(Timeout timeout) {
+    return (JRadioButtonFixture)assertEnabled(timeout);
   }
   
   /**

@@ -15,6 +15,8 @@
  */
 package org.fest.swing;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Understands a timeout.
  *
@@ -22,20 +24,34 @@ package org.fest.swing;
  */
 public final class Timeout {
 
-  private final long ms;
+  private final long duration;
 
   /**
    * Creates a new <code>{@link Timeout}</code>.
-   * @param ms the timeout in milliseconds.
+   * @param duration the duration of the timeout in milliseconds.
    * @return the created <code>Timeout</code>.
    */
-  public static Timeout timeout(long ms) {
-    return new Timeout(ms);
+  public static Timeout timeout(long duration) {
+    return new Timeout(duration);
   }
   
-  private Timeout(long ms) {
-    this.ms = ms;
+  /**
+   * Creates a new <code>{@link Timeout}</code>.
+   * @param duration the duration of the timeout.
+   * @param timeUnit the unit of time of the timeout.
+   * @return the created <code>Timeout</code>.
+   */
+  public static Timeout timeout(long duration, TimeUnit timeUnit) {
+    return new Timeout(timeUnit.toMillis(duration));
+  }
+  
+  private Timeout(long duration) {
+    this.duration = duration;
   }
 
-  public long time() { return ms; }
+  /**
+   * Returns the duration of the timeout in milliseconds.
+   * @return the duration of the timeout in milliseconds.
+   */
+  public long duration() { return duration; }
 }

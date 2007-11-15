@@ -15,12 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JCheckBox;
+
 import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JCheckBox}</code> and verification of the state of such 
@@ -193,6 +196,16 @@ public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
    */
   public final JCheckBoxFixture requireEnabled() {
     return (JCheckBoxFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JCheckBox}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JCheckBox</code> is never enabled.
+   */
+  public final JCheckBoxFixture requireEnabled(Timeout timeout) {
+    return (JCheckBoxFixture)assertEnabled(timeout);
   }
 
   /**

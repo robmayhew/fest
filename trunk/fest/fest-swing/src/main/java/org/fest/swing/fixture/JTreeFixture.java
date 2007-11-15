@@ -15,15 +15,18 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
+
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTreeLocation;
 import abbot.tester.JTreeTester;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
-import javax.swing.tree.TreePath;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JTree}</code> and verification of the state of such
@@ -198,6 +201,16 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    */
   public final JTreeFixture requireEnabled() {
     return (JTreeFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JTree}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JTree</code> is never enabled.
+   */
+  public final JTreeFixture requireEnabled(Timeout timeout) {
+    return (JTreeFixture)assertEnabled(timeout);
   }
   
   /**

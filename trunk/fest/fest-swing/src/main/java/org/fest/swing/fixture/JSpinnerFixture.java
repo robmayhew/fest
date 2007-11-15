@@ -15,12 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JSpinner;
+
 import abbot.tester.JSpinnerTester;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JSpinner}</code> and verification of the state of such
@@ -187,6 +190,16 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    */
   public final JSpinnerFixture requireEnabled() {
     return (JSpinnerFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JSpinner</code> is never enabled.
+   */
+  public final JSpinnerFixture requireEnabled(Timeout timeout) {
+    return (JSpinnerFixture)assertEnabled(timeout);
   }
   
   /**

@@ -15,15 +15,19 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JTable;
+
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 import abbot.tester.JTableTester;
+
+import static org.fest.swing.util.Platform.controlOrCommandKey;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -288,6 +292,16 @@ public class JTableFixture extends ComponentFixture<JTable> {
     return (JTableFixture)assertEnabled();
   }
   
+  /**
+   * Asserts that the <code>{@link JTable}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JTable</code> is never enabled.
+   */
+  public final JTableFixture requireEnabled(Timeout timeout) {
+    return (JTableFixture)assertEnabled(timeout);
+  }
+
   /**
    * Asserts that the <code>{@link JTable}</code> managed by this fixture is disabled.
    * @return this fixture.

@@ -19,6 +19,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 import java.awt.*;
 
@@ -225,16 +227,26 @@ public class DialogFixture extends WindowFixture<Dialog> {
   /**
    * Asserts that the <code>{@link Dialog}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Dialog</code> is disabled.
+   * @throws AssertionError if the managed <code>Dialog</code> is disabled.
    */
   public final DialogFixture requireEnabled() {
     return (DialogFixture)assertEnabled();
   }
   
   /**
+   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>Dialog</code> is never enabled.
+   */
+  public final DialogFixture requireEnabled(Timeout timeout) {
+    return (DialogFixture)assertEnabled(timeout);
+  }
+
+  /**
    * Asserts that the <code>{@link Dialog}</code> managed by this fixture is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Dialog</code> is enabled.
+   * @throws AssertionError if the managed <code>Dialog</code> is enabled.
    */
   public final DialogFixture requireDisabled() {
     return (DialogFixture)assertDisabled();

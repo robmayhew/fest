@@ -15,12 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JSplitPane;
+
 import abbot.tester.JSplitPaneTester;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JSplitPane}</code> and verification of the state of such
@@ -169,6 +172,16 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    */
   public final JSplitPaneFixture requireEnabled() {
     return (JSplitPaneFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JSplitPane</code> is never enabled.
+   */
+  public final JSplitPaneFixture requireEnabled(Timeout timeout) {
+    return (JSplitPaneFixture)assertEnabled(timeout);
   }
   
   /**

@@ -14,11 +14,13 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPanel;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JPanel}</code> and verification of the state of such 
@@ -154,6 +156,16 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    */
   public final JPanelFixture requireEnabled() {
     return (JPanelFixture) assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JPanel}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JPanel</code> is never enabled.
+   */
+  public final JPanelFixture requireEnabled(Timeout timeout) {
+    return (JPanelFixture)assertEnabled(timeout);
   }
 
   /**

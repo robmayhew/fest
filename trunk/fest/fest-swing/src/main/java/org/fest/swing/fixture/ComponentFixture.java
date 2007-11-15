@@ -15,18 +15,24 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
+
 import static org.fest.swing.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.MouseButton.RIGHT_BUTTON;
-import org.fest.swing.RobotFixture;
 import static org.fest.swing.util.Formatting.format;
+
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
-import java.awt.*;
+import org.fest.swing.ComponentLookupException;
+import org.fest.swing.Condition;
+import org.fest.swing.MouseButton;
+import org.fest.swing.RobotFixture;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
@@ -170,14 +176,22 @@ public abstract class ComponentFixture<T extends Component> {
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   * @throws AssertionError if the managed <code>Component</code> is disabled.
    */
   protected abstract ComponentFixture<T> requireEnabled();
 
   /**
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>Component</code> is never enabled.
+   */
+  protected abstract ComponentFixture<T> requireEnabled(Timeout timeout);
+  
+  /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   * @throws AssertionError if the managed <code>Component</code> is enabled.
    */
   protected abstract ComponentFixture<T> requireDisabled();
 
@@ -316,17 +330,33 @@ public abstract class ComponentFixture<T extends Component> {
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   * @throws AssertionError if the managed <code>Component</code> is disabled.
    */
   protected final ComponentFixture<T> assertEnabled() {
     assertThat(target.isEnabled()).as(enabledProperty()).isTrue();
+    return this;
+  }
+  
+  /**
+   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>Component</code> is never enabled.
+   */
+  protected final ComponentFixture<T> assertEnabled(Timeout timeout) {
+    Condition targetEnabledCondition = new Condition(enabledProperty()) {
+      @Override public boolean test() {
+        return target.isEnabled();
+      }
+    };
+    robot.wait(targetEnabledCondition, timeout);
     return this;
   }
 
   /**
    * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   * @throws AssertionError if the managed <code>Component</code> is enabled.
    */
   protected final ComponentFixture<T> assertDisabled() {
     assertThat(target.isEnabled()).as(enabledProperty()).isFalse();

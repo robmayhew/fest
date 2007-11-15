@@ -30,6 +30,8 @@ import org.fest.swing.ActionFailedException;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -239,6 +241,16 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public final JListFixture requireEnabled() {
     return (JListFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JList}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JList</code> is never enabled.
+   */
+  public final JListFixture requireEnabled(Timeout timeout) {
+    return (JListFixture)assertEnabled(timeout);
   }
 
   /**

@@ -19,6 +19,8 @@ import abbot.tester.JToolBarTester;
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 import javax.swing.*;
 import java.awt.*;
@@ -198,6 +200,16 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public final JToolBarFixture requireEnabled() {
     return (JToolBarFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JToolBar</code> is never enabled.
+   */
+  public final JToolBarFixture requireEnabled(Timeout timeout) {
+    return (JToolBarFixture)assertEnabled(timeout);
   }
 
   /**

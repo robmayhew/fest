@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.*;
+
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
@@ -283,6 +284,16 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    */
   public final JOptionPaneFixture requireEnabled() {
     return (JOptionPaneFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JOptionPane</code> is never enabled.
+   */
+  public final JOptionPaneFixture requireEnabled(Timeout timeout) {
+    return (JOptionPaneFixture)assertEnabled(timeout);
   }
   
   /**

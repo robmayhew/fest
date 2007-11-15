@@ -27,6 +27,7 @@ import abbot.tester.ComponentTester;
 import static java.awt.event.KeyEvent.VK_A;
 import static java.awt.event.KeyEvent.VK_B;
 import static java.awt.event.KeyEvent.VK_Z;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -35,6 +36,7 @@ import static org.fest.swing.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
 import static org.fest.swing.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.Timeout.timeout;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
 
@@ -43,6 +45,7 @@ import org.fest.swing.Condition;
 import org.fest.swing.KeyRecorder;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
+import org.fest.swing.WaitTimedOutError;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -286,6 +289,25 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }
   }
 
+  @Test public void shouldWaitTillComponentIsEnabled() {
+    fixture.target.setEnabled(false);
+    new Thread() {
+      @Override public void run() {
+        try {
+          Thread.sleep(2000);
+        } catch (InterruptedException e) {}
+        fixture.target.setEnabled(true);
+      }
+    }.start();
+    fixture.assertEnabled(timeout(3, SECONDS));
+  }
+  
+  @Test(expectedExceptions = WaitTimedOutError.class) 
+  public void shouldTimeoutIfComponentNotEnabled() {
+    fixture.target.setEnabled(false);
+    fixture.assertEnabled(timeout(1, SECONDS));
+  }
+  
   @AfterMethod public final void tearDown() {
     beforeTearDown();
     robot.cleanUp();

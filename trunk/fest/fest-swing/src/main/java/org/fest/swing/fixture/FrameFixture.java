@@ -20,8 +20,11 @@ import abbot.util.Bugs;
 import org.fest.swing.Condition;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 import java.awt.*;
+
 import static java.awt.Frame.*;
 
 /**
@@ -296,6 +299,17 @@ public class FrameFixture extends WindowFixture<Frame> {
     return (FrameFixture)assertEnabled();
   }
   
+  
+  /**
+   * Asserts that the <code>{@link Frame}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>Frame</code> is never enabled.
+   */
+  public final FrameFixture requireEnabled(Timeout timeout) {
+    return (FrameFixture)assertEnabled(timeout);
+  }
+
   /**
    * Asserts that the <code>{@link Frame}</code> managed by this fixture is disabled.
    * @return this fixture.

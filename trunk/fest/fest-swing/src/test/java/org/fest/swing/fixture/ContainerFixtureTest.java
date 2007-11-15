@@ -58,6 +58,7 @@ import org.fest.swing.GenericTypeMatcher;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
+import org.fest.swing.Timeout;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -166,6 +167,7 @@ import org.testng.annotations.Test;
       public ContainerFixture<CustomWindow> pressAndReleaseKeys(int... keyCodes) { return null; }
       public ContainerFixture<CustomWindow> requireDisabled() { return null; }
       public ContainerFixture<CustomWindow> requireEnabled() { return null; }
+      public ContainerFixture<CustomWindow> requireEnabled(Timeout timeout) { return null; }
       public ContainerFixture<CustomWindow> requireVisible() { return null; }
       public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
       public ComponentFixture<CustomWindow> rightClick() { return null; }

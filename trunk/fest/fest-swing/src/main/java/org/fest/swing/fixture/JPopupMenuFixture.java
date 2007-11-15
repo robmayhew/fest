@@ -15,11 +15,14 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
+
 import abbot.tester.JPopupMenuTester;
+
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands lookup of <code>{@link JPopupMenu}</code>.
@@ -138,6 +141,16 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
    */
   public final JPopupMenuFixture requireEnabled() {
     return (JPopupMenuFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JPopupMenu}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JPopupMenu</code> is never enabled.
+   */
+  public final JPopupMenuFixture requireEnabled(Timeout timeout) {
+    return (JPopupMenuFixture)assertEnabled(timeout);
   }
 
   /**

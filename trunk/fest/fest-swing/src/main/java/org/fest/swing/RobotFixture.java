@@ -178,13 +178,13 @@ public final class RobotFixture {
    * @throws WaitTimedOutError if the wait times out.
    */
   public void wait(Condition condition, Timeout timeout) {
-    wait(condition, timeout.time());
+    wait(condition, timeout.duration());
   }
   
   private void wait(Condition condition, long timeout) {
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!condition.test()) {
-      if (watch.isTimeout()) throw new WaitTimedOutError(("Timed out waiting for " + condition));
+      if (watch.isTimeout()) throw new WaitTimedOutError((concat("Timed out waiting for ", condition)));
       delay(SLEEP_INTERVAL);
     }
   }

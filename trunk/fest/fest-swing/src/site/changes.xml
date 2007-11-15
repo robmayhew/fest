@@ -6,6 +6,12 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="add">
+        Added factory method 'timeout(long, java.util.concurrent.TimeUnit)' to class org.fest.swing.Timeout.
+      </action>
+      <action dev="wanghy" type="fix">
+        Renamed method 'time' to 'duration' in class org.fest.swing.Timeout.
+      </action>
       <action dev="wanghy" type="fix" due-to="John Stephi" issue="57">
         Renamed method 'checkbox' to 'checkBox' in ContainerFixture.
       </action>

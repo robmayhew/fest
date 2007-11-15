@@ -15,14 +15,17 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.text.JTextComponent;
+
 import abbot.tester.JTextComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.isEmpty;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-import static org.fest.util.Strings.isEmpty;
-
-import javax.swing.text.JTextComponent;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JTextComponent}</code> and verification of the state of such
@@ -250,6 +253,16 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
     return (JTextComponentFixture)assertEnabled();
   }
   
+  /**
+   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JTextComponent</code> is never enabled.
+   */
+  public final JTextComponentFixture requireEnabled(Timeout timeout) {
+    return (JTextComponentFixture)assertEnabled(timeout);
+  }
+
   /**
    * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is disabled.
    * @return this fixture.

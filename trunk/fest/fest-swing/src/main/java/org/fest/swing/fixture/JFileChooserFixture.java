@@ -19,6 +19,9 @@ import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
+
 import static org.fest.util.Strings.*;
 
 import javax.swing.*;
@@ -277,6 +280,16 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    */
   public final JFileChooserFixture requireEnabled() {
     return (JFileChooserFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JFileChooser</code> is never enabled.
+   */
+  public final JFileChooserFixture requireEnabled(Timeout timeout) {
+    return (JFileChooserFixture)assertEnabled(timeout);
   }
   
   /**

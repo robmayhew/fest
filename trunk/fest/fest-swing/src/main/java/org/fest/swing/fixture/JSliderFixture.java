@@ -15,12 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JSlider;
+
 import abbot.tester.JSliderTester;
+
 import org.fest.swing.ComponentLookupException;
 import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
-
-import javax.swing.*;
+import org.fest.swing.Timeout;
+import org.fest.swing.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JSlider}</code> and verification of the state of such
@@ -205,6 +208,16 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    */
   public final JSliderFixture requireEnabled() {
     return (JSliderFixture)assertEnabled();
+  }
+  
+  /**
+   * Asserts that the <code>{@link JSlider}</code> managed by this fixture is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if the managed <code>JSlider</code> is never enabled.
+   */
+  public final JSliderFixture requireEnabled(Timeout timeout) {
+    return (JSliderFixture)assertEnabled(timeout);
   }
 
   /**
