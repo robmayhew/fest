@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * This example illustrates finding a <code>{@link JFileChooser}</code> by name, using the default lookup time (5
  * seconds):
  * <pre>
- * FrameFixture frame = JFileChooserFinder.findFileChooser().using(robot);
+ * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().using(robot);
  * </pre>
  * </p>
  * <p>
@@ -40,11 +40,11 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * This example shows how to find a <code>{@link JFileChooser}</code> by type using a lookup time of 10 seconds:
  * <pre>
- * DialogFixture dialog = JFileChooserFinder.findFileChooser().withTimeout(10000).using(robot);
+ * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().withTimeout(10000).using(robot);
  * </pre>
  * We can also specify the time unit:
  * <pre>
- * DialogFixture dialog = JFileChooserFinder.findFileChooser().withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
+ * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
  * </pre>
  * </p>
  * 

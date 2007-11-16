@@ -83,9 +83,8 @@ abstract class ComponentFinderTemplate<T extends Component> {
 
   private String searchDescription() {
     String message = concat("Find ", componentTypeName());
-    if (searchingByType()) message = concat(message, " of type ", componentType().getName());
-    else message = concat(message, " with name ", quote(componentName()));
-    return message;
+    if (searchingByType()) return concat(message, " of type ", componentType().getName());
+    return concat(message, " with name ", quote(componentName()));
   }
 
   protected abstract String componentTypeName();

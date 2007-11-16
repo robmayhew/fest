@@ -1,29 +1,26 @@
 /*
  * Created on Oct 29, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.Component;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.JOptionPane;
-
-import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.JOptionPaneFixture;
+
+import javax.swing.JOptionPane;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a finder for <code>{@link JOptionPane}</code>s. Lookups are performed till a file chooser is found,
@@ -37,7 +34,7 @@ import org.fest.swing.fixture.JOptionPaneFixture;
  * </pre>
  * </p>
  * <p>
- * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.RobotFixture}</code>.
+ * Where <code>robot</code> is an instance of <code>{@link RobotFixture}</code>.
  * </p>
  * <p>
  * This example shows how to find a <code>{@link JOptionPane}</code> by type using a lookup time of 10 seconds:
@@ -46,13 +43,18 @@ import org.fest.swing.fixture.JOptionPaneFixture;
  * </pre>
  * We can also specify the time unit:
  * <pre>
- * JOptionPaneFixture optionPane = JOptionPaneFinder.findOptionPane().withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
+ * JOptionPaneFixture optionPane = JOptionPaneFinder.findOptionPane().withTimeout(10, {@link TimeUnit#SECONDS SECONDS}).using(robot);
  * </pre>
  * </p>
- * 
+ *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane> {
+
+  JOptionPaneFinder() {
+    super(JOptionPane.class);
+  }
 
   /**
    * Creates a new <code>{@link JOptionPaneFinder}</code> to lookup a <code>{@link JOptionPane}</code>.
@@ -61,23 +63,19 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
   public static JOptionPaneFinder findOptionPane() {
     return new JOptionPaneFinder();
   }
-  
+
   /**
    * Finds a <code>{@link JOptionPaneFinder}</code> by name or type.
    * @param robot contains the underlying finding to delegate the search to.
    * @return a <code>JOptionPaneFixture</code> managing the found <code>JOptionPane</code>.
-   * @throws ComponentLookupException if a <code>JOptionPane</code> could not be found.
+   * @throws org.fest.swing.WaitTimedOutError if a <code>JOptionPane</code> could not be found.
    */
   public JOptionPaneFixture using(RobotFixture robot) {
     return new JOptionPaneFixture(robot, findComponentWith(robot));
   }
 
-  @Override protected ComponentLookupException cannotFindComponent() {
-    throw new ComponentLookupException("Unable to find JOptionPane");
-  }
-
   /**
-   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * Sets the timeout for this finder. The window to search should be found within the given time period.
    * @param timeout the number of milliseconds before stopping the search.
    * @return this finder.
    */
@@ -86,7 +84,7 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
   }
 
   /**
-   * Sets the timeout for this finder. The window to search should be found within the given time period. 
+   * Sets the timeout for this finder. The window to search should be found within the given time period.
    * @param timeout the period of time the search should be performed.
    * @param unit the time unit for <code>timeout</code>.
    * @return this finder.
@@ -95,15 +93,11 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
     return (JOptionPaneFinder)super.withTimeout(timeout, unit);
   }
 
-  protected ComponentMatcher nameMatcher() {
-    return new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return c instanceof JOptionPane && c.isVisible() && componentName().equals(c.getName());
-      }
-    };
+  protected String componentTypeName() {
+    return "option pane";
   }
 
-  JOptionPaneFinder() {
-    super(JOptionPane.class);
+  protected ComponentMatcher nameMatcher() {
+    return null; // no name matching with JOptionPane
   }
 }

@@ -17,14 +17,15 @@ package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.*;
-
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.*;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
 import java.util.HashMap;
 
 /**
@@ -51,6 +52,15 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    */
   public JOptionPaneFixture(RobotFixture robot) {
     super(robot, (JOptionPane)robot.finder().find(new TypeMatcher(JOptionPane.class, true)));
+  }
+
+  /**
+   * Creates a new </code>{@link JOptionPaneFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JOptionPane</code>.
+   * @param target the <code>JOptionPane</code> to be managed by this fixture.
+   */
+  public JOptionPaneFixture(RobotFixture robot, JOptionPane target) {
+    super(robot, target);
   }
 
   /**
@@ -145,8 +155,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   public final JButtonFixture buttonWithText(final String text) {
     Component component = robot.finder().find(target, new ComponentMatcher() {
       public boolean matches(Component c) {
-        if (!(c instanceof JButton)) return false;
-        return areEqual(text, ((JButton)c).getText());
+        return c instanceof JButton && areEqual(text, ((JButton) c).getText());
       }
     });
     if (component == null) return null;
@@ -222,10 +231,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   private String messageTypeAsText(int messageType) {
-    Integer key = messageType;
-    if (!messageMap.containsKey(key)) 
-      throw new IllegalArgumentException(concat("The message type <", key, "> is not valid"));
-    return messageMap.get(key);
+    if (!messageMap.containsKey(messageType))
+      throw new IllegalArgumentException(concat("The message type <", messageType, "> is not valid"));
+    return messageMap.get(messageType);
   }
 
   /**

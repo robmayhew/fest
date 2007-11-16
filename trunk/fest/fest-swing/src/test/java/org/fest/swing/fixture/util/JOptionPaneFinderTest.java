@@ -23,38 +23,39 @@ import org.fest.swing.MouseButton;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.TestFrame;
 import org.fest.swing.WaitTimedOutError;
-import org.fest.swing.fixture.JFileChooserFixture;
+import org.fest.swing.fixture.JOptionPaneFixture;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Tests for <code>{@link JFileChooserFinder}</code>.
+ * Tests for <code>{@link JOptionPaneFinder}</code>.
  *
+ * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JFileChooserFinderTest {
+public class JOptionPaneFinderTest {
 
   private RobotFixture robot;
   private MyFrame frame;
-  
+
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     frame = new MyFrame(getClass());
     robot.showWindow(frame);
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   @Test public void shouldFindFileChooser() {
-    clickBrowseButton();
-    JFileChooserFixture found = JFileChooserFinder.findFileChooser().using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);
+    clickMessageButton();
+    JOptionPaneFixture found = JOptionPaneFinder.findOptionPane().using(robot);
+    assertThat(found.target).isNotNull();
   }
 
   @Test public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
@@ -63,50 +64,42 @@ public class JFileChooserFinderTest {
         try {
           Thread.sleep(2000);
         } catch (InterruptedException e) {}
-        clickBrowseButton();
+        clickMessageButton();
       }
     }.start();
-    JFileChooserFixture found = JFileChooserFinder.findFileChooser().withTimeout(5, SECONDS).using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);
+    JOptionPaneFixture found = JOptionPaneFinder.findOptionPane().withTimeout(5, SECONDS).using(robot);
+    assertThat(found.target).isNotNull();
   }
 
-  private void clickBrowseButton() {
-    robot.click(frame.browseButton, MouseButton.LEFT_BUTTON, 1);
+  private void clickMessageButton() {
+    robot.click(frame.messageButton, MouseButton.LEFT_BUTTON, 1);
   }
 
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldFailIfFileChooserNotFound() {
     JFileChooserFinder.findFileChooser().using(robot);
   }
-  
-  @Test public void shouldFindFileChooserByName() {
-    clickBrowseButton();
-    JFileChooserFixture found = JFileChooserFinder.findFileChooser("fileChooser").using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);    
-  }
-  
+
   private static class MyFrame extends TestFrame {
-    
+
     private static final long serialVersionUID = 1L;
 
-    JButton browseButton = new JButton("Browse");
-    JFileChooser fileChooser = new JFileChooser();
-    
+    JButton messageButton = new JButton("Message");
+
     public MyFrame(Class testClass) {
       super(testClass);
       setUp();
     }
 
     private void setUp() {
-      browseButton.setName("browse");
-      browseButton.addActionListener(new ActionListener() {
+      messageButton.setName("message");
+      messageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          fileChooser.showOpenDialog(MyFrame.this);
+          JOptionPane.showMessageDialog(MyFrame.this, "A message");
         }
       });
-      add(browseButton);
-      fileChooser.setName("fileChooser");
+      add(messageButton);
     }
   }
-  
+
 }
