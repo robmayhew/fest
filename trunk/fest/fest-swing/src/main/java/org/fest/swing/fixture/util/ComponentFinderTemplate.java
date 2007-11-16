@@ -15,18 +15,13 @@
  */
 package org.fest.swing.fixture.util;
 
-import org.fest.swing.ComponentFinder;
-import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.ComponentFixture;
-import static org.fest.swing.fixture.util.FinderConstants.SLEEP_TIME;
 import static org.fest.swing.fixture.util.FinderConstants.TIMEOUT;
-import org.fest.swing.util.TimeoutWatch;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.*;
 
-import java.awt.*;
+import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -69,7 +64,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
    * Finds a component by name or type using the given robot.
    * @param robot contains the underlying finding to delegate the search to.
    * @return a fixture capable of managing the found component.
-   * @throws ComponentLookupException if a component with the given name or of the given type could not be found.
+   * @throws org.fest.swing.WaitTimedOutError if a component with the given name or of the given type could not be found.
    */
   public abstract ComponentFixture<T> using(RobotFixture robot);
 
@@ -77,38 +72,31 @@ abstract class ComponentFinderTemplate<T extends Component> {
    * Finds the component using either by name or type.
    * @param robot contains the underlying finding to delegate the search to.
    * @return the found component.
-   * @throws ComponentLookupException if a component with the given name or of the given type could not be found.
+   * @throws org.fest.swing.WaitTimedOutError if a component with the given name or of the given type could not be found.
    */
   @SuppressWarnings("unchecked") 
   protected final T findComponentWith(RobotFixture robot) {
-    Component c = find(robot);
-    if (c != null) return (T)c;
-    throw cannotFindComponent();
+    ComponentFoundCondition condition = new ComponentFoundCondition(searchDescription(), robot.finder(), matcher());
+    robot.wait(condition, timeout);
+    return (T)condition.found();
   }
-  
-  private Component find(RobotFixture robot) {
-    ComponentFinder finder = robot.finder();
-    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
-    while (true) {
-      Component c;
-      try {
-        c = finder.find(matcher());
-      } catch (ComponentLookupException e) {
-        if (watch.isTimeout()) return null;
-        robot.delay(SLEEP_TIME);
-        continue;
-      }
-      return c;
-    }    
+
+  private String searchDescription() {
+    String message = concat("Find ", componentTypeName());
+    if (searchingByType()) message = concat(message, " of type ", componentType().getName());
+    else message = concat(message, " with name ", quote(componentName()));
+    return message;
   }
-  
+
+  protected abstract String componentTypeName();
+
   private ComponentMatcher matcher() {
     if (searchingByType()) return typeMatcher();
     return nameMatcher();
   }
 
-  protected abstract ComponentMatcher nameMatcher();
-  
+  protected final boolean searchingByType() { return componentType != null; }
+
   private ComponentMatcher typeMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {
@@ -116,12 +104,10 @@ abstract class ComponentFinderTemplate<T extends Component> {
       }
     };
   }
-  
-  protected abstract ComponentLookupException cannotFindComponent();
+
+  protected abstract ComponentMatcher nameMatcher();
 
   protected final String componentName() { return componentName; }
   protected final Class<? extends T> componentType() { return componentType; }
   protected final long timeout() { return timeout; }
-  
-  protected final boolean searchingByType() { return componentType != null; }
 }

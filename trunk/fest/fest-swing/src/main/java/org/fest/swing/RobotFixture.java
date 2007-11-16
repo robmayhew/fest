@@ -26,7 +26,8 @@ import org.fest.swing.util.TimeoutWatch;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import java.awt.*;
 import static java.lang.System.currentTimeMillis;
 import java.util.Collection;
@@ -181,7 +182,13 @@ public final class RobotFixture {
     wait(condition, timeout.duration());
   }
   
-  private void wait(Condition condition, long timeout) {
+  /**
+   * Waits until the given condition is <code>true</code>.
+   * @param condition the condition to verify.
+   * @param timeout the timeout (in milliseconds.)
+   * @throws WaitTimedOutError if the wait times out.
+   */
+  public void wait(Condition condition, long timeout) {
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!condition.test()) {
       if (watch.isTimeout()) throw new WaitTimedOutError((concat("Timed out waiting for ", condition)));

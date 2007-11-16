@@ -15,13 +15,10 @@
  */
 package org.fest.swing.fixture.util;
 
-import org.fest.swing.ComponentLookupException;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.WindowFixture;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
 
-import java.awt.*;
+import java.awt.Window;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,14 +50,7 @@ abstract class WindowFinderTemplate<T extends Window> extends ComponentFinderTem
    * Finds a window by name or type using the given robot.
    * @param robot contains the underlying finding to delegate the search to.
    * @return a fixture capable of managing the found window.
-   * @throws ComponentLookupException if a window with the given name or of the given type could not be found.
+   * @throws org.fest.swing.WaitTimedOutError if a window with the given name or of the given type could not be found.
    */
   public abstract WindowFixture<T> using(RobotFixture robot);
-
-  protected ComponentLookupException cannotFindComponent() {
-    String message = "Cannot find window ";
-    if (searchingByType()) message = concat(message, "of type ", componentType().getName());
-    else message = concat(message, "with name ", quote(componentName()));
-    throw new ComponentLookupException(message);
-  }
 }

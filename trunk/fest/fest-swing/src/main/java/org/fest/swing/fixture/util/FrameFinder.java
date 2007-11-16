@@ -15,12 +15,12 @@
  */
 package org.fest.swing.fixture.util;
 
-import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.FrameFixture;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Frame;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -63,13 +63,16 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
    * Finds a <code>{@link Frame}</code> by name or type.
    * @param robot contains the underlying finding to delegate the search to.
    * @return a <code>FrameFixture</code> managing the found <code>Frame</code>.
-   * @throws ComponentLookupException if a <code>Frame</code> with the given name or of the given type could not be
-   *           found.
+   * @throws org.fest.swing.WaitTimedOutError if a <code>Frame</code> could not be found.
    */
   public FrameFixture using(RobotFixture robot) {
     return new FrameFixture(robot, findComponentWith(robot));
   }
-  
+
+  protected String componentTypeName() {
+    return "frame";
+  }
+
   protected ComponentMatcher nameMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {

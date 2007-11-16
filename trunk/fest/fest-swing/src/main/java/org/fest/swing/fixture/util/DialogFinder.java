@@ -15,12 +15,12 @@
  */
 package org.fest.swing.fixture.util;
 
-import org.fest.swing.ComponentLookupException;
 import org.fest.swing.ComponentMatcher;
 import org.fest.swing.RobotFixture;
 import org.fest.swing.fixture.DialogFixture;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,13 +64,16 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
    * Finds a <code>{@link Dialog}</code> by name or type.
    * @param robot contains the underlying finding to delegate the search to.
    * @return a <code>DialogFixture</code> managing the found <code>Dialog</code>.
-   * @throws ComponentLookupException if a <code>Dialog</code> with the given name or of the given type could not be
-  *           found.
+   * @throws org.fest.swing.WaitTimedOutError if a <code>Dialog</code> could not be found.
    */
   public DialogFixture using(RobotFixture robot) {
     return new DialogFixture(robot, findComponentWith(robot));
   }
-  
+
+  protected String componentTypeName() {
+    return "dialog";
+  }
+
   protected ComponentMatcher nameMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {

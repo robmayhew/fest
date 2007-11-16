@@ -15,23 +15,20 @@
  */
 package org.fest.swing.fixture.util;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
-import org.fest.swing.fixture.JFileChooserFixture;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import org.fest.swing.MouseButton;
+import org.fest.swing.RobotFixture;
+import org.fest.swing.TestFrame;
+import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.fixture.JFileChooserFixture;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Tests for <code>{@link JFileChooserFinder}</code>.
@@ -63,7 +60,7 @@ public class JFileChooserFinderTest {
     robot.click(frame.browseButton, MouseButton.LEFT_BUTTON, 1);
   }
 
-  @Test(expectedExceptions = ComponentLookupException.class)
+  @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldFailIfFileChooserNotFound() {
     JFileChooserFinder.findFileChooser().using(robot);
   }
