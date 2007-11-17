@@ -15,7 +15,7 @@
  */
 package org.fest.swing.junit;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 /**
  * Understands a JUnit test that fails to be used to test FEST's JUnit extensions.

@@ -22,9 +22,9 @@ import junit.framework.Test;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 import org.w3c.dom.Element;
 
+import org.fest.swing.annotation.GUITestFinder;
 import org.fest.swing.image.ImageException;
 import org.fest.swing.image.ScreenshotTaker;
-import org.fest.swing.util.GUITestFinder;
 
 import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testClassName;
 import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testMethodName;
