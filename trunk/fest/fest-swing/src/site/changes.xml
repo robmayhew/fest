@@ -6,7 +6,19 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
-      <action dev="wanghy" type="add">
+			<action dev="alruiz" type="fix" issue="59">
+				Moved org.swing.fest.GUITest and org.fest.swing.util.GUITestFinder to package org.fest.swing.annotation.
+			</action>
+			<action dev="alruiz" type="fix" issue="59">
+				Moved exception classes in package org.fest.swing to org.fest.swing.exception.
+			</action>
+			<action dev="alruiz" type="fix" issue="59">
+				Moved exception classes in package org.fest.swing to org.fest.swing.core.
+			</action>
+			<action dev="alruiz" type="fix" issue="59">
+				Renamed package org.fest.swing.fixture.util to org.fest.swing.finder.			
+			</action>
+      <action dev="wanghy, alruiz" type="add">
         Added factory method 'timeout(long, java.util.concurrent.TimeUnit)' to class org.fest.swing.core.Timeout.
       </action>
       <action dev="wanghy" type="fix">
