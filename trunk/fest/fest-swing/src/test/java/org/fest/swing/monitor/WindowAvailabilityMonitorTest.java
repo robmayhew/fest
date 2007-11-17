@@ -20,7 +20,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 import org.fest.swing.listener.WeakEventListener;
 import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
 import static org.fest.swing.monitor.MockWindows.mock;

@@ -19,11 +19,10 @@ import javax.swing.JSlider;
 
 import abbot.tester.JSliderTester;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JSlider}</code> and verification of the state of such
@@ -37,7 +36,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * Creates a new </code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSlider</code>.
    * @param sliderName the name of the <code>JSlider</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a matching <code>JSlider</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JSlider</code> could not be found.
    */
   public JSliderFixture(RobotFixture robot, String sliderName) {
     super(robot, sliderName, JSlider.class);

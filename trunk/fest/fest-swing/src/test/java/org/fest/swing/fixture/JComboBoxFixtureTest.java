@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 import org.testng.annotations.Test;
 
@@ -31,7 +31,8 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
+@GUITest
+public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
 
   private JComboBoxFixture fixture;
   

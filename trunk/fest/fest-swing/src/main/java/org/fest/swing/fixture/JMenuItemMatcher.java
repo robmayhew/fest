@@ -15,7 +15,7 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.ComponentMatcher;
+import org.fest.swing.core.ComponentMatcher;
 
 import javax.swing.*;
 

@@ -23,8 +23,8 @@ import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.TestDialog;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

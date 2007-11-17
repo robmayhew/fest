@@ -33,7 +33,7 @@ public class ScriptFailure extends RuntimeException {
    * @param cause the cause of the failure.
    */
   public ScriptFailure(String scriptName, Throwable cause) {
-    super(concat("The script ", quote(scriptName), " failed", cause));
+    super(concat("The script ", quote(scriptName), " failed. Cause: ", cause));
 
   }
 

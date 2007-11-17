@@ -27,11 +27,11 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
-import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.util.ComponentCollections.empty;
 
-import org.fest.swing.Condition;
-import org.fest.swing.TestFrame;
+import org.fest.swing.core.Condition;
+import org.fest.swing.testing.TestFrame;
 import org.fest.swing.monitor.WindowMonitor;
 
 import org.testng.annotations.BeforeMethod;

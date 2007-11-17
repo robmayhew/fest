@@ -32,20 +32,20 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.MouseButton.MIDDLE_BUTTON;
-import static org.fest.swing.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.Timeout.timeout;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
 
-import org.fest.swing.ClickRecorder;
-import org.fest.swing.Condition;
-import org.fest.swing.KeyRecorder;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.KeyRecorder;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.exception.WaitTimedOutError;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

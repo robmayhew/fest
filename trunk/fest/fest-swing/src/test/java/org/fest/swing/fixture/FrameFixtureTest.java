@@ -23,8 +23,8 @@ import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.GUITest;
-import org.fest.swing.TestFrame;
+import org.fest.swing.annotation.GUITest;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.Test;
 
@@ -34,7 +34,8 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class FrameFixtureTest extends WindowFixtureTestCase<Frame> {
+@GUITest
+public class FrameFixtureTest extends WindowFixtureTestCase<Frame> {
 
   private FrameFixture fixture;
   private TestFrame target;

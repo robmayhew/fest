@@ -24,11 +24,11 @@ import javax.swing.JMenuItem;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 
-import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
+import org.fest.swing.annotation.GUITest;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -39,7 +39,8 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@GUITest public class JMenuItemFixtureTest {
+@GUITest
+public class JMenuItemFixtureTest {
 
   private static class CustomWindow extends TestFrame {
     private static final long serialVersionUID = 1L;

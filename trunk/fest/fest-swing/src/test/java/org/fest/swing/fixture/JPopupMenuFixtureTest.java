@@ -21,13 +21,13 @@ import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.GenericTypeMatcher;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

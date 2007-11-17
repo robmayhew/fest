@@ -30,7 +30,7 @@ import static org.fest.util.Files.newTemporaryFolder;
 import static org.fest.util.Files.temporaryFolder;
 import static org.fest.util.Strings.isEmpty;
 
-import org.fest.swing.ClickRecorder;
+import org.fest.swing.testing.ClickRecorder;
 
 import org.testng.annotations.Test;
 

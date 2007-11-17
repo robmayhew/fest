@@ -21,7 +21,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;

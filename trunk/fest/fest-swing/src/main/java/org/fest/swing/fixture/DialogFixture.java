@@ -16,11 +16,9 @@
 package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
 
 import java.awt.*;
 
@@ -36,8 +34,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param dialogName the name of the <code>Dialog</code> to find.
-   * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found. 
-   * @see RobotFixture#robotWithCurrentAwtHierarchy()
+   * @throws org.fest.swing.exception.ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
+   * @see org.fest.swing.core.RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
@@ -47,7 +45,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Creates a new </code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
    * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a dialog having a matching name could not be found. 
+   * @throws org.fest.swing.exception.ComponentLookupException if a dialog having a matching name could not be found.
    */
   public DialogFixture(RobotFixture robot, String dialogName) {
     super(robot, dialogName, Dialog.class);
@@ -237,7 +235,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Asserts that the <code>{@link Dialog}</code> managed by this fixture is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>Dialog</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>Dialog</code> is never enabled.
    */
   public final DialogFixture requireEnabled(Timeout timeout) {
     return (DialogFixture)assertEnabled(timeout);

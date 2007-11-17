@@ -20,11 +20,10 @@ import javax.swing.JList;
 
 import abbot.tester.JComboBoxTester;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link JComboBox}</code> and verification of the state of such
@@ -232,7 +231,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JComboBox</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JComboBox</code> is never enabled.
    */
   public final JComboBoxFixture requireEnabled(Timeout timeout) {
     return (JComboBoxFixture)assertEnabled(timeout);

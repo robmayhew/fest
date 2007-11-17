@@ -21,17 +21,16 @@ import abbot.tester.ComponentLocation;
 import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
 
-import static org.fest.swing.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import org.fest.swing.core.MouseButton;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
-import org.fest.swing.ActionFailedException;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -47,7 +46,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on a <code>JList</code>.
    * @param listName the name of the <code>JList</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a matching <code>JList</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JList</code> could not be found.
    */
   public JListFixture(RobotFixture robot, String listName) {
     super(robot, listName, JList.class);

@@ -30,8 +30,8 @@ import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 
 import static org.fest.util.Collections.list;
 
-import org.fest.swing.TestDialog;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

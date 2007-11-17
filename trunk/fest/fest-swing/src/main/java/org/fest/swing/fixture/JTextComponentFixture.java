@@ -21,11 +21,10 @@ import abbot.tester.JTextComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.isEmpty;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JTextComponent}</code> and verification of the state of such
@@ -40,7 +39,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @param robot performs simulation of user events on a <code>JTextComponent</code>.
    * @param textComponentName the name of the <code>JTextComponent</code> to find using the given 
    * <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a matching <code>JTextComponent</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JTextComponent</code> could not be found.
    */
   public JTextComponentFixture(RobotFixture robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);

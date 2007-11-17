@@ -17,11 +17,11 @@ package org.fest.swing.fixture;
 
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import static org.fest.swing.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.MouseButton.RIGHT_BUTTON;
-import org.fest.swing.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 
 import javax.swing.*;
 

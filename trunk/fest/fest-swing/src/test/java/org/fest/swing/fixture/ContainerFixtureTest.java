@@ -49,16 +49,16 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.GUITest;
-import org.fest.swing.GenericTypeMatcher;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
-import org.fest.swing.Timeout;
+import org.fest.swing.annotation.GUITest;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.core.Timeout;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -69,7 +69,8 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@GUITest public class ContainerFixtureTest {
+@GUITest
+public class ContainerFixtureTest {
 
   private static class CustomWindow extends TestFrame {
     

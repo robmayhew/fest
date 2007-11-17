@@ -19,11 +19,11 @@ import javax.swing.JSplitPane;
 
 import abbot.tester.JSplitPaneTester;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link JSplitPane}</code> and verification of the state of such

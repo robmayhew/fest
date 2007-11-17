@@ -21,7 +21,7 @@ import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
-import org.fest.swing.Condition;
+import org.fest.swing.core.Condition;
 
 
 import org.testng.annotations.Test;

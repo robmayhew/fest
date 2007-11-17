@@ -38,7 +38,7 @@ import static org.fest.reflect.Reflection.field;
 
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
 
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 import org.fest.swing.listener.WeakEventListener;
 
 import org.testng.annotations.AfterMethod;

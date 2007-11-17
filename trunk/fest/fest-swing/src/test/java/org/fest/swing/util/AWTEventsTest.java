@@ -19,7 +19,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 
 import javax.swing.JLabel;
 import java.awt.AWTEvent;

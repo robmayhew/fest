@@ -36,15 +36,15 @@ import static javax.swing.JOptionPane.showOptionDialog;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.GUITest;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.annotation.GUITest;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -55,7 +55,8 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@GUITest public class JOptionPaneFixtureTest {
+@GUITest
+public class JOptionPaneFixtureTest {
 
   private static final String MESSAGE_TYPE_PROPERTY = "messageType";
 

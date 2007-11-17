@@ -22,7 +22,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

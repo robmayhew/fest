@@ -25,7 +25,7 @@ import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 import org.testng.annotations.Test;
 
@@ -35,7 +35,8 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class DialogFixtureTest extends WindowFixtureTestCase<Dialog> {
+@GUITest
+public class DialogFixtureTest extends WindowFixtureTestCase<Dialog> {
 
   private DialogFixture fixture;
   private JDialog target;

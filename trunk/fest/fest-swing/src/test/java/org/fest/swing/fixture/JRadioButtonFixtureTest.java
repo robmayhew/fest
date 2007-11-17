@@ -19,7 +19,7 @@ import javax.swing.JRadioButton;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 import org.testng.annotations.Test;
 
@@ -29,7 +29,8 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@GUITest public class JRadioButtonFixtureTest extends JToggleButtonTestCase<JRadioButton> {
+@GUITest
+public class JRadioButtonFixtureTest extends JToggleButtonTestCase<JRadioButton> {
 
   private JRadioButtonFixture fixture;
   

@@ -17,8 +17,8 @@ package org.fest.swing.util;
 
 import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.TestFrame;
-import static org.fest.swing.TestFrame.showInTest;
+import org.fest.swing.testing.TestFrame;
+import static org.fest.swing.testing.TestFrame.showInTest;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;

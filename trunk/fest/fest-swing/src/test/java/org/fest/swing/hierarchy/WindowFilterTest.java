@@ -26,8 +26,8 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.util.ReflectionUtils.mapField;
 
-import org.fest.swing.TestDialog;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

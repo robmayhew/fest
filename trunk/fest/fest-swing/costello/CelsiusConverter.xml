@@ -12,7 +12,7 @@
   <component class="javax.swing.JPanel" id="JPanel Instance 2" index="0" parent="JPanel Instance" window="Convert Celsius to Fahrenheit 4" />
   <component class="javax.swing.JRootPane" id="JRootPane Instance" index="0" parent="Convert Celsius to Fahrenheit" />
   <component class="javax.swing.JTextField" id="JTextField Instance" index="0" parent="JPanel Instance 2" window="Convert Celsius to Fahrenheit 5" />
-  <launch args="[]" class="org.fest.swing.CelsiusConverter" classpath="." method="main" />
+  <launch args="[]" class="org.fest.swing.core.CelsiusConverter" classpath="." method="main" />
   <sequence>
     <action args="JTextField Instance,0" class="javax.swing.text.JTextComponent" method="actionClick" />
     <action args="JTextField Instance,98" method="actionKeyString" />

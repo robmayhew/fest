@@ -16,8 +16,8 @@
 package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.RobotFixture;
 
 import javax.swing.*;
 

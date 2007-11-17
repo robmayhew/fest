@@ -35,8 +35,8 @@ import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.NORTH;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.SOUTH;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.WEST;
 
-import org.fest.swing.ClickRecorder;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
 import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
 
 import org.testng.annotations.DataProvider;

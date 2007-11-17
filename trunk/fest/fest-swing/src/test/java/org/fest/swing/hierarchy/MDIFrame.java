@@ -20,7 +20,7 @@ import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 
 /**
  * Understands an MDI frame.

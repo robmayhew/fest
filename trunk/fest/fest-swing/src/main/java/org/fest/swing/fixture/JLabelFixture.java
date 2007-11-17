@@ -19,11 +19,10 @@ import javax.swing.JLabel;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
 
 /**
  * Understands simulation of user events on a <code>{@link JLabel}</code> and verification of the state of such
@@ -182,7 +181,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * Asserts that the <code>{@link JLabel}</code> managed by this fixture is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JLabel</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JLabel</code> is never enabled.
    */
   public final JLabelFixture requireEnabled(Timeout timeout) {
     return (JLabelFixture)assertEnabled(timeout);

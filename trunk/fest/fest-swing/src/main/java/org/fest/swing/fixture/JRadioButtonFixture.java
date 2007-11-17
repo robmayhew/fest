@@ -19,11 +19,9 @@ import javax.swing.JRadioButton;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
 
 /**
  * Understands simulation of user events on a <code>{@link JRadioButton}</code> and verification of the state of such 
@@ -38,7 +36,7 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
    * Creates a new </code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JRadioButton</code>.
    * @param buttonName the name of the <code>JRadioButton</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a matching <code>JRadioButton</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JRadioButton</code> could not be found.
    */
   public JRadioButtonFixture(RobotFixture robot, String buttonName) {
     super(robot, buttonName, JRadioButton.class);
@@ -185,7 +183,7 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
    * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JRadioButton</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JRadioButton</code> is never enabled.
    */
   public final JRadioButtonFixture requireEnabled(Timeout timeout) {
     return (JRadioButtonFixture)assertEnabled(timeout);

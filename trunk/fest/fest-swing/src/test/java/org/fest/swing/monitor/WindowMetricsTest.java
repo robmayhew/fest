@@ -20,9 +20,9 @@ import java.awt.Point;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.TestFrame.showInTest;
+import static org.fest.swing.testing.TestFrame.showInTest;
 
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

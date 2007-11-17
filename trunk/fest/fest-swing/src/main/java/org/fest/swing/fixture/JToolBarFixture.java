@@ -16,11 +16,11 @@
 package org.fest.swing.fixture;
 
 import abbot.tester.JToolBarTester;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.WaitTimedOutError;
 
 import javax.swing.*;
 import java.awt.*;

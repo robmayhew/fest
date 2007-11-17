@@ -17,10 +17,10 @@ package org.fest.swing.fixture;
 
 import abbot.tester.WindowTester;
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.RobotFixture;
-import static org.fest.swing.RobotFixture.robotWithCurrentAwtHierarchy;
-import org.fest.swing.ScreenLock;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.RobotFixture;
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import org.fest.swing.core.ScreenLock;
 
 import java.awt.*;
 
@@ -34,10 +34,10 @@ import java.awt.*;
 public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> {
 
   /**
-   * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new </code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found. 
+   * @throws org.fest.swing.exception.ComponentLookupException if a <code>Window</code> having a matching name could not be found.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(Class<? extends T> type) {
@@ -48,7 +48,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new </code>{@link WindowFixture}</code>.
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a dialog having a matching name could not be found. 
+   * @throws org.fest.swing.exception.ComponentLookupException if a dialog having a matching name could not be found.
    */
   public WindowFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, type);

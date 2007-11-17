@@ -20,8 +20,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.TestDialog;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestFrame;
 
 import java.awt.AWTEvent;
 import java.awt.event.ComponentEvent;

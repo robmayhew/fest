@@ -22,7 +22,7 @@ import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 import org.testng.annotations.Test;
 
@@ -31,7 +31,8 @@ import org.testng.annotations.Test;
  *
  * @author Yvonne Wang
  */
-@GUITest public class JLabelFixtureTest extends ComponentFixtureTestCase<JLabel> {
+@GUITest
+public class JLabelFixtureTest extends ComponentFixtureTestCase<JLabel> {
 
   private JLabelFixture fixture;
   

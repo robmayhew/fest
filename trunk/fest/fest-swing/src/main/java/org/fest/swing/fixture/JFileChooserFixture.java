@@ -15,12 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.ComponentMatcher;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.util.Strings.*;
 
@@ -42,7 +42,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   /**
    * Creates a new </code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
-   * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
    */
   public JFileChooserFixture(RobotFixture robot) {
     super(robot, JFileChooser.class);
@@ -52,7 +52,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Creates a new </code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
    * @param labelName the name of the <code>JFileChooser</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
    */
   public JFileChooserFixture(RobotFixture robot, String labelName) {
     super(robot, labelName, JFileChooser.class);
@@ -107,7 +107,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Returns a fixture that manages the text field where the user can enter the name of the file to select in the 
    * <code>{@link JFileChooser}</code> managed by this fixture.
    * @return the created fixture.
-   * @throws ComponentLookupException if a matching text field could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching text field could not be found.
    */
   public final JTextComponentFixture fileNameTextBox() {
     return new JTextComponentFixture(robot, robot.finder().findByType(target, JTextField.class));
@@ -115,7 +115,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
 
   /**
    * Simulates a user pressing the "Cancel" button in the <code>{@link JFileChooser}</code> managed by this fixture.
-   * @throws ComponentLookupException if the "Cancel" button cannot be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if the "Cancel" button cannot be found.
    * @throws AssertionError if the "Cancel" button is disabled.
    */
   public final void cancel() {
@@ -136,7 +136,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
 
   /**
    * Simulates a user pressing the "Approve" button in the <code>{@link JFileChooser}</code> managed by this fixture.
-   * @throws ComponentLookupException if the "Approve" button cannot be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if the "Approve" button cannot be found.
    * @throws AssertionError if the "Approve" button is disabled.
    */
   public final void approve() {
@@ -146,7 +146,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   /**
    * Finds the "Approve" button in the <code>{@link JFileChooser}</code> managed by this fixture.
    * @return the found "Approve" button.
-   * @throws ComponentLookupException if the "Approve" button cannot be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if the "Approve" button cannot be found.
    */
   public final JButtonFixture approveButton() {
     String buttonText = approveButtonText();

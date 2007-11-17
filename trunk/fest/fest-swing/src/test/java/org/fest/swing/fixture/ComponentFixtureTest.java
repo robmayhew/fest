@@ -22,14 +22,14 @@ import javax.swing.JTextField;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.Timeout.timeout;
+import static org.fest.swing.core.Timeout.timeout;
 
-import org.fest.swing.ClickRecorder;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -102,7 +102,7 @@ public class ComponentFixtureTest {
     fixture.assertEnabled(timeout(3, SECONDS));
   }
   
-  @Test(expectedExceptions = WaitTimedOutError.class) 
+  @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeoutIfComponentNotEnabled() {
     fixture.target.setEnabled(false);
     fixture.assertEnabled(timeout(1, SECONDS));

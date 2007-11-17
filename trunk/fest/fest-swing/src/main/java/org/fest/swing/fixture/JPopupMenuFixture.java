@@ -19,10 +19,10 @@ import javax.swing.JPopupMenu;
 
 import abbot.tester.JPopupMenuTester;
 
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands lookup of <code>{@link JPopupMenu}</code>.

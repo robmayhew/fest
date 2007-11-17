@@ -15,8 +15,8 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.MouseButton;
-import static org.fest.swing.MouseButton.*;
+import org.fest.swing.core.MouseButton;
+import static org.fest.swing.core.MouseButton.*;
 import static org.fest.util.Strings.concat;
 
 /**

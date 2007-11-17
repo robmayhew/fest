@@ -17,11 +17,10 @@ package org.fest.swing.fixture;
 
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
-import org.fest.swing.Condition;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.*;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 import java.awt.*;
 
@@ -37,7 +36,7 @@ import static java.awt.Frame.*;
 public class FrameFixture extends WindowFixture<Frame> {
 
   /**
-   * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param name the name of the <code>Frame</code> to find.
    */
@@ -55,7 +54,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new </code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param target the <code>Frame</code> to be managed by this fixture.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()

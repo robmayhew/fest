@@ -22,7 +22,7 @@ import javax.swing.JButton;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.concat;
 
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

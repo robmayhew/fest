@@ -19,11 +19,9 @@ import javax.swing.JSpinner;
 
 import abbot.tester.JSpinnerTester;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link JSpinner}</code> and verification of the state of such
@@ -37,7 +35,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Creates a new </code>{@link JSpinnerFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSpinner</code>.
    * @param spinnerName the name of the <code>JSpinner</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a matching <code>JSpinner</code> could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JSpinner</code> could not be found.
    */
   public JSpinnerFixture(RobotFixture robot, String spinnerName) {
     super(robot, spinnerName, JSpinner.class);
@@ -196,7 +194,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JSpinner</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JSpinner</code> is never enabled.
    */
   public final JSpinnerFixture requireEnabled(Timeout timeout) {
     return (JSpinnerFixture)assertEnabled(timeout);

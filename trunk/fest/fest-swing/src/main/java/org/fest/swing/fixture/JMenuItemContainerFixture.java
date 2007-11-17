@@ -15,10 +15,10 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.ComponentFinder;
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.GenericTypeMatcher;
-import org.fest.swing.RobotFixture;
+import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.RobotFixture;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +35,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
    * Creates a new </code>{@link JMenuItemContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByType(Class)
+   * @see org.fest.swing.core.ComponentFinder#findByType(Class)
    */
   public JMenuItemContainerFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, robot.finder().findByType(type));
@@ -46,7 +46,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param name the name of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
-   * @see org.fest.swing.ComponentFinder#findByName(String, Class)
+   * @see org.fest.swing.core.ComponentFinder#findByName(String, Class)
    */
   public JMenuItemContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, robot.finder().findByName(name, type));
@@ -77,7 +77,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.
-   * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be 
+   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
    * found.
    */
   public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {

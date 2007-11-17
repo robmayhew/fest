@@ -29,9 +29,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
 import static org.fest.swing.fixture.TestTable.cellValue;
 
-import org.fest.swing.ClickRecorder;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.TestFrame;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

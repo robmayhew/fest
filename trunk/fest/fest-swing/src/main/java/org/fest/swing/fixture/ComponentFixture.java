@@ -20,19 +20,19 @@ import java.awt.Component;
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.util.Formatting.format;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
-import org.fest.swing.ComponentLookupException;
-import org.fest.swing.Condition;
-import org.fest.swing.MouseButton;
-import org.fest.swing.RobotFixture;
-import org.fest.swing.Timeout;
-import org.fest.swing.WaitTimedOutError;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such

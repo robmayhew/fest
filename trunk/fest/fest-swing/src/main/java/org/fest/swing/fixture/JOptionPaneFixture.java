@@ -16,7 +16,8 @@
 package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.*;
+import org.fest.swing.core.*;
+import org.fest.swing.exception.ComponentLookupException;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
@@ -298,7 +299,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JOptionPane</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JOptionPane</code> is never enabled.
    */
   public final JOptionPaneFixture requireEnabled(Timeout timeout) {
     return (JOptionPaneFixture)assertEnabled(timeout);

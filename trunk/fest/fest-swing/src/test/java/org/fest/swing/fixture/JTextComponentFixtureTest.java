@@ -23,7 +23,7 @@ import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 import org.testng.annotations.Test;
 
@@ -33,7 +33,8 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextComponent> {
+@GUITest
+public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextComponent> {
 
   private static final String TEXT_PROPERTY = "text";
   private JTextComponentFixture fixture;
