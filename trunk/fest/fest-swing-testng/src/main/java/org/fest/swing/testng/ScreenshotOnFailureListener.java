@@ -21,9 +21,9 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
+import org.fest.swing.annotation.GUITestFinder;
 import org.fest.swing.image.ImageException;
 import org.fest.swing.image.ScreenshotTaker;
-import org.fest.swing.util.GUITestFinder;
 
 import static java.io.File.separator;
 import static java.util.logging.Level.SEVERE;
@@ -39,7 +39,7 @@ import static org.fest.util.Strings.quote;
  * fails.
  * <p>
  * <strong>Note:</strong> A test is consider a GUI test if it is marked with the annotation
- * <code>{@link org.fest.swing.GUITest}</code>.
+ * <code>{@link org.fest.swing.annotation.GUITest}</code>.
  * </p>
  * <p>
  * To use this listener, we just need to make TestNG aware of it. The following is an example using Ant:

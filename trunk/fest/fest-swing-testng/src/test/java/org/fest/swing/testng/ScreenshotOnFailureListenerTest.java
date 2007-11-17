@@ -25,7 +25,7 @@ import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.GUITest;
+import org.fest.swing.annotation.GUITest;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
