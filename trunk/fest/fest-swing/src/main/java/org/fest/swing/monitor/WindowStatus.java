@@ -78,29 +78,39 @@ class WindowStatus {
     else robot.mouseMove(x, y + sign);
     sign = -sign;
   }
+
+  private boolean isEmptyFrame(Window w) {
+    Insets insets = insetsFrom(w);
+    return insets.top + insets.bottom == w.getHeight() || insets.left + insets.right == w.getWidth();
+  }
   
-  private void makeLargeEnoughToReceiveEvents(final Window w, WindowMetrics metrics) {
-    final int width = max(w.getWidth(), proposedWidth(metrics));
-    final int height = max(w.getHeight(), proposedHeight(metrics));
-    invokeLater(new Runnable() {
-      public void run() {
-        w.setSize(width, height);
-      }
-    });
+  private void makeLargeEnoughToReceiveEvents(Window window, WindowMetrics metrics) {
+    int w = max(window.getWidth(), proposedWidth(metrics));
+    int h = max(window.getHeight(), proposedHeight(metrics));
+    invokeLater(new WindowSizeSetter(window, new Dimension(w, h)));
+  }
+
+  private int proposedWidth(WindowMetrics metrics) {
+    return metrics.addVerticalInsets() + ARBITRARY_EXTRA_VALUE;
   }
 
   private int proposedHeight(WindowMetrics metrics) {
     return metrics.addHorizontalInsets() + ARBITRARY_EXTRA_VALUE;
   }
 
-  private int proposedWidth(WindowMetrics metrics) {
-    return metrics.addVerticalInsets() + ARBITRARY_EXTRA_VALUE;
+  private static class WindowSizeSetter implements Runnable {
+    private final Window window;
+    private final Dimension size;
+
+    WindowSizeSetter(Window window, Dimension size) {
+      this.window = window;
+      this.size = size;
+    }
+
+    public void run() {
+      window.setSize(size);
+    }
   }
-  
-  private boolean isEmptyFrame(Window w) {
-    Insets insets = insetsFrom(w);
-    return insets.top + insets.bottom == w.getHeight() || insets.left + insets.right == w.getWidth();
-  }
-  
+
   static int sign() { return sign; }
 }

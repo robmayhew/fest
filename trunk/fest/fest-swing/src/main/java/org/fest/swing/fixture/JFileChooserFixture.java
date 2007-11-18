@@ -15,19 +15,19 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
 import static org.fest.util.Strings.*;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
 import static javax.swing.JFileChooser.FILES_ONLY;
-import java.awt.*;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 import java.io.File;
 
 /**
@@ -104,10 +104,10 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Returns a fixture that manages the text field where the user can enter the name of the file to select in the 
+   * Returns a fixture that manages the textToMatch field where the user can enter the name of the file to select in the
    * <code>{@link JFileChooser}</code> managed by this fixture.
    * @return the created fixture.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching text field could not be found.
+   * @throws org.fest.swing.exception.ComponentLookupException if a matching textToMatch field could not be found.
    */
   public final JTextComponentFixture fileNameTextBox() {
     return new JTextComponentFixture(robot, robot.finder().findByType(target, JTextField.class));
@@ -161,17 +161,12 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
     return text;
   }
 
-  private JButton findButton(final String text) {
-    JButton button = (JButton) robot.finder().find(target, new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return (c instanceof JButton && text.equals(((JButton) c).getText()));
-      }
-    });
-    return button;
+  private JButton findButton(String text) {
+    return robot.finder().find(target, new JButtonMatcher(text));
   }
   
   private ComponentLookupException cannotFindButton(String name, String text) {
-    throw new ComponentLookupException(concat("Unable to find ", quote(name), " button with text ", quote(text)));
+    throw new ComponentLookupException(concat("Unable to find ", quote(name), " button with textToMatch ", quote(text)));
   }
 
   /**

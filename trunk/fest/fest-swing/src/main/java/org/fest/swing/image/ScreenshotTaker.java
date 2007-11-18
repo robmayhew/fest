@@ -19,9 +19,13 @@ import static org.fest.util.Files.newFile;
 import static org.fest.util.Strings.*;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Understands taking screenshots of the desktop.
@@ -77,6 +81,6 @@ public final class ScreenshotTaker {
   private void validate(String imageFilePath) {
     if (isEmpty(imageFilePath)) throw new ImageException("The image path cannot be empty");
     if (!imageFilePath.endsWith(PNG_EXTENSION)) 
-      throw new ImageException(concat("The image file should be a ", PNG_EXTENSION.toUpperCase()));     
+      throw new ImageException(concat("The image file should be a ", PNG_EXTENSION.toUpperCase(Locale.getDefault())));
   }
 }

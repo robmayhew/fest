@@ -18,6 +18,12 @@
 			<action dev="alruiz" type="fix" issue="59">
 				Renamed package org.fest.swing.fixture.util to org.fest.swing.finder.			
 			</action>
+      <action dev="wanghy" type="add" issue="56" due-to="Volker Berlin">
+        Added method 'requireEnabled(Timeout)' to all component fixtures.
+      </action>
+      <action dev="wanghy" type="add" issue="56" due-to="Volker Berlin">
+        Added class JOptionPaneFinder to find a JOptionPane with timeout support.                
+      </action>
       <action dev="wanghy, alruiz" type="add">
         Added factory method 'timeout(long, java.util.concurrent.TimeUnit)' to class org.fest.swing.core.Timeout.
       </action>

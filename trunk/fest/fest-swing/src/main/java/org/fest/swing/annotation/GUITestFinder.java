@@ -14,8 +14,6 @@
  */
 package org.fest.swing.annotation;
 
-import org.fest.swing.annotation.GUITest;
-
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 
@@ -35,9 +33,7 @@ public final class GUITestFinder {
    * @return <code>true</code> if the given class and/or method are annotated with <code>{@link GUITest}</code>.
    */
   public static boolean isGUITest(Class<?> type, Method method) {
-    if (isGUITest(type)) return true;
-    if (isGUITest(method)) return true;
-    return (isSuperClassGUITest(type, method));
+    return isGUITest(type) || isGUITest(method) || isSuperClassGUITest(type, method);
   }
 
   private static boolean isSuperClassGUITest(Class<?> type, Method method) {
@@ -54,9 +50,9 @@ public final class GUITestFinder {
   private static Method method(Class<?> type, String methodName, Class<?>[] parameterTypes) {
     try {
       return type.getDeclaredMethod(methodName, parameterTypes);
-    } catch (Exception e) {
-      return null;
-    }
+    } catch (NoSuchMethodException e) {
+    } catch (RuntimeException e) {}
+    return null;
   }
   
   private static boolean isGUITest(AnnotatedElement annotatedElement) {

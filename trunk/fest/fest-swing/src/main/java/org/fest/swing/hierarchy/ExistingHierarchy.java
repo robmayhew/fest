@@ -24,6 +24,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.util.Collection;
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import java.util.logging.Logger;
 
@@ -92,7 +93,9 @@ public class ExistingHierarchy implements ComponentHierarchy {
     if (isSharedInvisibleFrame(w)) return;
     try {
       runInEventThreadAndWait(disposerFor(w));
-    } catch (Exception ignored) {}
+    } catch (Exception e) {
+      logger.log(INFO, concat("Failed to dispose window ", format(w)), e);
+    }
   }
 
   private Runnable disposerFor(final Window w) {

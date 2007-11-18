@@ -30,6 +30,14 @@ public final class ActionFailedException extends RuntimeException {
    */
   public ActionFailedException(String message) {
     super(message);
+  }
 
+  /**
+   * Creates a new </code>{@link ActionFailedException}</code>.
+   * @param message the detail message.
+   * @param cause the cause of the error.
+   */
+  public ActionFailedException(String message, Throwable cause) {
+    super(message, cause);
   }
 }

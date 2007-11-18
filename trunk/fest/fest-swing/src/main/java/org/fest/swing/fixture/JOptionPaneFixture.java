@@ -16,16 +16,17 @@
 package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.core.*;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
-import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.*;
 import javax.swing.text.JTextComponent;
-import java.awt.Component;
 import java.awt.Dialog;
 import java.util.HashMap;
 
@@ -153,14 +154,10 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @param text the text of the button to find and return.
    * @return a fixture wrapping a button containing the given text, or <code>null</code> if none if found.
    */
-  public final JButtonFixture buttonWithText(final String text) {
-    Component component = robot.finder().find(target, new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return c instanceof JButton && areEqual(text, ((JButton) c).getText());
-      }
-    });
-    if (component == null) return null;
-    return new JButtonFixture(robot, (JButton)component);
+  public final JButtonFixture buttonWithText(String text) {
+    JButton button = robot.finder().find(target, new JButtonMatcher(text));
+    if (button == null) return null;
+    return new JButtonFixture(robot, button);
   }
   
   /**
