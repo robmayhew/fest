@@ -56,9 +56,7 @@ import static org.fest.util.Arrays.array;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.Timeout;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -159,22 +157,7 @@ public class ContainerFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    container = new ContainerFixture<CustomWindow>(robot, new CustomWindow(getClass())) {      
-      public ContainerFixture<CustomWindow> click() { return null; }
-      public ContainerFixture<CustomWindow> click(MouseButton button) { return null; }
-      public ComponentFixture<CustomWindow> click(MouseClickInfo mouseClickInfo) { return null; }
-      public ContainerFixture<CustomWindow> doubleClick() { return null; }
-      public ContainerFixture<CustomWindow> focus() { return null; }
-      public ContainerFixture<CustomWindow> pressAndReleaseKeys(int... keyCodes) { return null; }
-      public ContainerFixture<CustomWindow> requireDisabled() { return null; }
-      public ContainerFixture<CustomWindow> requireEnabled() { return null; }
-      public ContainerFixture<CustomWindow> requireEnabled(Timeout timeout) { return null; }
-      public ContainerFixture<CustomWindow> requireVisible() { return null; }
-      public ComponentFixture<CustomWindow> requireNotVisible() { return null; }
-      public ComponentFixture<CustomWindow> rightClick() { return null; }
-      public ComponentFixture<CustomWindow> pressKey(int keyCode) { return null; }
-      public ComponentFixture<CustomWindow> releaseKey(int keyCode) { return null; }
-    };
+    container = new ConcreteContainerFixture<CustomWindow>(robot, new CustomWindow(getClass()));
     window = container.target;
     robot.showWindow(window);
   }
