@@ -68,7 +68,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   private boolean ready;
   
   /**
-   * Creates a new </code>{@link ScreenshotOnFailureListener}</code>.
+   * Creates a new <code>{@link ScreenshotOnFailureListener}</code>.
    */
   public ScreenshotOnFailureListener() {
     try {
