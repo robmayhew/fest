@@ -27,7 +27,7 @@ import java.util.List;
 public class TypeFilter<T> implements CollectionFilter<T> {
 
   /**
-   * Creates a new </code>{@link TypeFilter}</code>.
+   * Creates a new <code>{@link TypeFilter}</code>.
    * @param type the target type for this filter.
    * @return the created filter.
    */

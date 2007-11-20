@@ -91,7 +91,7 @@ public final class Strings {
     private final String[] strings;
 
     /**
-     * Creates a new </code>{@link StringsToJoin}</code>.
+     * Creates a new <code>{@link StringsToJoin}</code>.
      * @param strings the <code>String</code>s to join.
      */
     private StringsToJoin(String...strings) {
@@ -145,7 +145,7 @@ public final class Strings {
     private final String toAppend;
 
     /**
-     * Creates a new </code>{@link StringToAppend}</code>.
+     * Creates a new <code>{@link StringToAppend}</code>.
      * @param toAppend the <code>String</code> to append.
      */
     private StringToAppend(String toAppend) {

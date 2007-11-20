@@ -39,8 +39,8 @@ public final class FolderFixture {
 
   private static Logger logger = Logger.getLogger(FolderFixture.class.getName());
   
-  private List<FolderFixture> folders = new ArrayList<FolderFixture>();
-  private List<FileFixture> files = new ArrayList<FileFixture>();
+  private final List<FolderFixture> folders = new ArrayList<FolderFixture>();
+  private final List<FileFixture> files = new ArrayList<FileFixture>();
   
   final String name;
   final FolderFixture parent;
@@ -56,6 +56,8 @@ public final class FolderFixture {
     this.parent = parent;
     create();
   }
+
+  File dir() { return dir; }
   
   private void create() {
     String path = relativePath();

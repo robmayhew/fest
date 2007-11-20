@@ -192,6 +192,32 @@ public class Files {
     try { out.close(); } catch (Exception e) {}
   }
 
+  /**
+   * Returns the current directory.
+   * @return the current directory.
+   * @throws FilesException if the current directory cannot be obtained.
+   */
+  public static File currentFolder() {
+    try {
+      return new File(".").getCanonicalFile();
+    } catch (IOException e) {
+      throw new FilesException("Unable to get current directory", e);
+    }
+  }
+  
+  /**
+   * Deletes the given file or directory.
+   * @param file the file or directory to delete.
+   */
+  public static void delete(File file) {
+    if (file.isFile()) {
+      file.delete();
+      return;
+    }
+    if (!file.isDirectory()) return;
+    for (File f : file.listFiles()) delete(f); 
+    file.delete();
+  }
+  
   private Files() {}
-
 }

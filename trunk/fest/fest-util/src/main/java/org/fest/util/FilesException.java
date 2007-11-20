@@ -25,7 +25,7 @@ public final class FilesException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link FilesException}</code>.
+   * Creates a new <code>{@link FilesException}</code>.
    * @param message the detail message.
    */
   public FilesException(String message) {
@@ -33,7 +33,7 @@ public final class FilesException extends RuntimeException {
   }
 
   /**
-   * Creates a new </code>{@link FilesException}</code>.
+   * Creates a new <code>{@link FilesException}</code>.
    * @param message the detail message.
    * @param cause the cause of the error.
    */

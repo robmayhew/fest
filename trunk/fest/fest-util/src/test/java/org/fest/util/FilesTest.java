@@ -16,6 +16,7 @@
 package org.fest.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import static org.fest.util.Strings.join;
 import static org.fest.util.Strings.quote;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -142,5 +144,21 @@ public class FilesTest {
     File newFolder = Files.newFolder("folder");
     assertTrue(newFolder.isDirectory());
     assertTrue(newFolder.delete());
+  }
+  
+  @Test public void shouldReturnCurrentFolder() throws IOException {
+    File expected = new File(".");
+    File actual = Files.currentFolder();
+    assertEquals(actual.getCanonicalPath(), expected.getCanonicalPath());
+  }
+  
+  @Test public void shouldDeleteFolder() throws IOException {
+    FolderFixture dir3 = new FolderFixture("dir_3");
+    dir3.addFiles("file_3_1").addFiles("file_3_2").addFiles("file_3_2");
+    dir3.addFolder("dir_3_1").addFiles("file_3_1_1").addFiles("file_3_1_2");
+    String path = dir3.dir().getCanonicalPath();
+    assertTrue(new File(path).exists());
+    Files.delete(dir3.dir());
+    assertFalse(new File(path).exists());
   }
 }
