@@ -57,7 +57,7 @@ public class ReportTransformer extends AggregateTransformer {
   private static int counter;
 
   /**
-   * Creates a new </code>{@link ReportTransformer}</code>.
+   * Creates a new <code>{@link ReportTransformer}</code>.
    * @param task task delegating to this class.
    */
   public ReportTransformer(Task task) {

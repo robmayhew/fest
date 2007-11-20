@@ -79,7 +79,7 @@ public class TestDescriptionParser {
     private final boolean isGUITest;
 
     /**
-     * Creates a new </code>{@link ParseResult}</code>.
+     * Creates a new <code>{@link ParseResult}</code>.
      * @param testClass the test class obtained when parsing a <code>Description</code>.
      * @param testMethod the test method obtained when parsing a <code>Description</code>.
      */

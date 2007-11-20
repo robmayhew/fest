@@ -55,7 +55,7 @@ public class FailedGUITestListener extends RunListener {
   private File images;
   
   /**
-   * Creates a new </code>{@link FailedGUITestListener}</code>.
+   * Creates a new <code>{@link FailedGUITestListener}</code>.
    */
   public FailedGUITestListener() {
     super();

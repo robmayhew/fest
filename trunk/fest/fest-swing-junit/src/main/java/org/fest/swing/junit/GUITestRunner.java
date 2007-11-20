@@ -49,7 +49,7 @@ public class GUITestRunner extends Runner {
   final Class<?> testClass;
 
   /**
-   * Creates a new </code>{@link GUITestRunner}</code>.
+   * Creates a new <code>{@link GUITestRunner}</code>.
    * @param testClass the class containing the tests to run.
    * @throws InitializationError if something goes wrong when creating this runner. 
    */

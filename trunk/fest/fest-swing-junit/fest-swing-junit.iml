@@ -31,6 +31,10 @@
           <root url="jar://$MODULE_DIR$/lib/fest-reflect-0.1-SNAPSHOT.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/MRJToolkitStubs-1.0.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/ant-1.7.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/cglib-nodep-2.1_3.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/fest-mocks-0.1-SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/easymockclassextension-2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/easymock-2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
