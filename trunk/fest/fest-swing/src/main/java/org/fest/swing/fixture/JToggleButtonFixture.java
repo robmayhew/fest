@@ -34,7 +34,7 @@ public abstract class JToggleButtonFixture<T extends JToggleButton> extends Comp
   private static final String SELECTED_PROPERTY = "selected";
   
   /**
-   * Creates a new </code>{@link JToggleButtonFixture}</code>.
+   * Creates a new <code>{@link JToggleButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
@@ -44,7 +44,7 @@ public abstract class JToggleButtonFixture<T extends JToggleButton> extends Comp
   }
 
   /**
-   * Creates a new </code>{@link JToggleButtonFixture}</code>.
+   * Creates a new <code>{@link JToggleButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param name the name of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
@@ -55,7 +55,7 @@ public abstract class JToggleButtonFixture<T extends JToggleButton> extends Comp
   }
   
   /**
-   * Creates a new </code>{@link JToggleButtonFixture}</code>.
+   * Creates a new <code>{@link JToggleButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToggleButton</code>.
    * @param target the <code>JToggleButton</code> to be managed by this fixture.
    */

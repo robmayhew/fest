@@ -34,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
 
   /**
-   * Creates a new </code>{@link JSplitPaneFixture}</code>.
+   * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSplitPane</code>.
    * @param spinnerName the name of the <code>JSplitPane</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JSplitPane</code> could not be found.
@@ -44,7 +44,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Creates a new </code>{@link JSplitPaneFixture}</code>.
+   * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSplitPane</code>.
    * @param target the <code>JSplitPane</code> to be managed by this fixture.
    */

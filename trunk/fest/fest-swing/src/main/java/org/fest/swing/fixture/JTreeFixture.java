@@ -39,7 +39,7 @@ import org.fest.swing.core.Timeout;
 public class JTreeFixture extends ComponentFixture<JTree> {
 
   /**
-   * Creates a new </code>{@link JTreeFixture}</code>.
+   * Creates a new <code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTree</code>.
    * @param treeName the name of the <code>JTree</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JTree</code> could not be found.
@@ -49,7 +49,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Creates a new </code>{@link JTreeFixture}</code>.
+   * Creates a new <code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTree</code>.
    * @param target the <code>JTree</code> to be managed by this fixture.
    */

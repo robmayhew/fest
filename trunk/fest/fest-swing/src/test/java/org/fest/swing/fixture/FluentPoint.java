@@ -27,7 +27,7 @@ public class FluentPoint extends Point {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link FluentPoint}</code>.
+   * Creates a new <code>{@link FluentPoint}</code>.
    * @param p the source point.
    */
   public FluentPoint(Point p) {

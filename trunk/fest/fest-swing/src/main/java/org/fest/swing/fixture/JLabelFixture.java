@@ -33,7 +33,7 @@ import org.fest.swing.core.RobotFixture;
 public class JLabelFixture extends ComponentFixture<JLabel> implements TextDisplayFixture<JLabel> {
   
   /**
-   * Creates a new </code>{@link JLabelFixture}</code>.
+   * Creates a new <code>{@link JLabelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JLabel</code>.
    * @param labelName the name of the <code>JLabel</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JLabel</code> could not be found.
@@ -43,7 +43,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
   
   /**
-   * Creates a new </code>{@link JLabelFixture}</code>.
+   * Creates a new <code>{@link JLabelFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JLabel</code>.
    * @param target the <code>JLabel</code> to be managed by this fixture.
    */

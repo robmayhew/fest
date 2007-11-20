@@ -32,7 +32,7 @@ import java.awt.*;
 public abstract class JMenuItemContainerFixture<T extends Container> extends ComponentFixture<T> {
 
   /**
-   * Creates a new </code>{@link JMenuItemContainerFixture}</code>.
+   * Creates a new <code>{@link JMenuItemContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.core.ComponentFinder#findByType(Class)
@@ -42,7 +42,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
   }
 
   /**
-   * Creates a new </code>{@link JMenuItemContainerFixture}</code>.
+   * Creates a new <code>{@link JMenuItemContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param name the name of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
@@ -53,7 +53,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
   }
 
   /**
-   * Creates a new </code>{@link JMenuItemContainerFixture}</code>.
+   * Creates a new <code>{@link JMenuItemContainerFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Container</code>.
    * @param target the <code>Container</code> to be managed by this fixture.
    */
@@ -77,7 +77,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
    * found.
    */
   public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
@@ -89,7 +89,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
   }
   
   protected final <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
-    return finder().find(matcher);
+    return finder().find(target, matcher);
   }
 
   protected final ComponentFinder finder() { return robot.finder(); }

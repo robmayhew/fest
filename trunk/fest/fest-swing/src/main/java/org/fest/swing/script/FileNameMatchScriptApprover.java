@@ -32,7 +32,7 @@ public final class FileNameMatchScriptApprover implements ScriptApprover {
   private final List<String> fileNamesToMatch;
 
   /**
-   * Creates a new </code>{@link FileNameMatchScriptApprover}</code>.
+   * Creates a new <code>{@link FileNameMatchScriptApprover}</code>.
    * @param fileNamesToMatch the names of the script files that are approved for execution.
    */
   public FileNameMatchScriptApprover(String... fileNamesToMatch) {

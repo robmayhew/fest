@@ -35,7 +35,7 @@ import org.fest.swing.core.Timeout;
 public class JComboBoxFixture extends ComponentFixture<JComboBox> implements ItemGroupFixture<JComboBox> {
 
   /**
-   * Creates a new </code>{@link JComboBoxFixture}</code>.
+   * Creates a new <code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JComboBox</code>.
    * @param comboBoxName the name of the <code>JComboBox</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JComboBox</code> could not be found.
@@ -45,7 +45,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Creates a new </code>{@link JComboBoxFixture}</code>.
+   * Creates a new <code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JComboBox</code>.
    * @param target the <code>JComboBox</code> to be managed by this fixture.
    */

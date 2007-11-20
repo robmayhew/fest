@@ -47,7 +47,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Creates a new </code>{@link JToolBarFixture}</code>.
+   * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToolBar</code>.
    * @param toolbarName the name of the <code>JToolBar</code> to find using the given 
    * <code>RobotFixture</code>.
@@ -58,7 +58,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Creates a new </code>{@link JToolBarFixture}</code>.
+   * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToolBar</code>.
    * @param target the <code>JToolBar</code> to be managed by this fixture.
    */

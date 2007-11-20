@@ -40,7 +40,7 @@ public final class ScreenshotTaker {
   private final Robot robot;
   
   /**
-   * Creates a new </code>{@link ScreenshotTaker}</code>.
+   * Creates a new <code>{@link ScreenshotTaker}</code>.
    * @throws ImageException if a AWT Robot (the responsible for taking screenshots) cannot be instantiated.
    */
   public ScreenshotTaker() {

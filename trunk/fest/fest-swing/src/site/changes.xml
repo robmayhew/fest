@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="add" issue="55" due-to="Volker Berlin">
+        Added support for taking screenshots of failing tests with JUnit inside an IDE.
+      </action>
 			<action dev="alruiz" type="fix" issue="59">
 				Moved org.swing.fest.GUITest and org.fest.swing.util.GUITestFinder to package org.fest.swing.annotation.
 			</action>

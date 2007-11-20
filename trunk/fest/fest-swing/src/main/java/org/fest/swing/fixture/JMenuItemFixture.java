@@ -32,7 +32,7 @@ import org.fest.swing.core.Timeout;
 public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
 
   /**
-   * Creates a new </code>{@link JMenuItemFixture}</code>.
+   * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param menuItemName the name of the <code>JMenuItem</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JMenuItem</code> could not be found.
@@ -42,7 +42,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
   
   /**
-   * Creates a new </code>{@link JMenuItemFixture}</code>. It uses the given <code>{@link Action}</code> to create a new 
+   * Creates a new <code>{@link JMenuItemFixture}</code>. It uses the given <code>{@link Action}</code> to create a new
    * <code>{@link JMenuItem}</code> as the target menu item.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param action the <code>Action</code> to assign to the created <code>JMenuItem</code>.
@@ -52,7 +52,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
   
   /**
-   * Creates a new </code>{@link JMenuItemFixture}</code>.
+   * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JMenuItem</code>.
    * @param target the <code>JMenuItem</code> to be managed by this fixture.
    */

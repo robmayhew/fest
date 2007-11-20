@@ -31,7 +31,7 @@ import java.awt.*;
 public class DialogFixture extends WindowFixture<Dialog> {
 
   /**
-   * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param dialogName the name of the <code>Dialog</code> to find.
    * @throws org.fest.swing.exception.ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
@@ -42,7 +42,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Creates a new </code>{@link DialogFixture}</code>.
+   * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
    * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
    * @throws org.fest.swing.exception.ComponentLookupException if a dialog having a matching name could not be found.
@@ -52,7 +52,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Creates a new </code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param target the <code>Dialog</code> to be managed by this fixture.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
@@ -62,7 +62,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Creates a new </code>{@link DialogFixture}</code>.
+   * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Dialog</code>.
    * @param target the <code>Dialog</code> to be managed by this fixture.
    */

@@ -34,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture<JButton> {
 
   /**
-   * Creates a new </code>{@link JButtonFixture}</code>.
+   * Creates a new <code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JButton</code>.
    * @param buttonName the name of the <code>JButton</code> to find using the given <code>RobotFixture</code>.
    * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JButton</code> could not be found.
@@ -44,7 +44,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
   
   /**
-   * Creates a new </code>{@link JButtonFixture}</code>.
+   * Creates a new <code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JButton</code>.
    * @param target the <code>JButton</code> to be managed by this fixture.
    */

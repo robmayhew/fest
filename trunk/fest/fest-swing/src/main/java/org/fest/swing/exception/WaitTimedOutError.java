@@ -25,7 +25,7 @@ public final class WaitTimedOutError extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link WaitTimedOutError}</code>.
+   * Creates a new <code>{@link WaitTimedOutError}</code>.
    * @param message the detail message.
    */
   public WaitTimedOutError(String message) {

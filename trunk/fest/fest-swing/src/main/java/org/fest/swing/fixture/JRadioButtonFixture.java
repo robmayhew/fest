@@ -33,7 +33,7 @@ import org.fest.swing.core.RobotFixture;
 public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
 
   /**
-   * Creates a new </code>{@link JRadioButtonFixture}</code>.
+   * Creates a new <code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JRadioButton</code>.
    * @param buttonName the name of the <code>JRadioButton</code> to find using the given <code>RobotFixture</code>.
    * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JRadioButton</code> could not be found.
@@ -43,7 +43,7 @@ public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
   }
   
   /**
-   * Creates a new </code>{@link JRadioButtonFixture}</code>.
+   * Creates a new <code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JRadioButton</code>.
    * @param target the <code>JRadioButton</code> to be managed by this fixture.
    */

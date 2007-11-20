@@ -26,6 +26,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -57,7 +58,6 @@ import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.TestFrame;
 import org.fest.swing.core.Timeout;
 
 import org.testng.annotations.AfterMethod;
@@ -72,7 +72,7 @@ import org.testng.annotations.Test;
 @GUITest
 public class ContainerFixtureTest {
 
-  private static class CustomWindow extends TestFrame {
+  private static class CustomWindow extends JFrame {
     
     private static final long serialVersionUID = 1L;
 
@@ -97,11 +97,11 @@ public class ContainerFixtureTest {
     final JToolBar toolBar = new JToolBar(HORIZONTAL);
     
     CustomWindow(Class testClass) {
-      super(testClass);
+      setTitle(testClass.getName());
       setLayout(new BoxLayout(getContentPane(), Y_AXIS));
+      lookNative();
       setUpComponents();
       addComponents();
-      lookNative();
     }
     
     private void addComponents() {
@@ -178,7 +178,12 @@ public class ContainerFixtureTest {
     window = container.target;
     robot.showWindow(window);
   }
-  
+
+  @Test public void shouldFindButtonByTypeIfOnlyOnePresent() {
+    JButtonFixture button = container.button();
+    assertThat(button.target).isSameAs(window.button);
+  }
+
   @Test public void shouldFindButtonWithGivenMatcher() {
     GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {

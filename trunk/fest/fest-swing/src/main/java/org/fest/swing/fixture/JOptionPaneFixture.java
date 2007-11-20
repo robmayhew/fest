@@ -48,7 +48,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Creates a new </code>{@link JOptionPaneFixture}</code>.
+   * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot finds a visible <code>JOptionPane</code>, which will be managed by this fixture.
    * @throws ComponentLookupException if a visible <code>JOptionPane</code> could not be found.
    */
@@ -57,7 +57,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Creates a new </code>{@link JOptionPaneFixture}</code>.
+   * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JOptionPane</code>.
    * @param target the <code>JOptionPane</code> to be managed by this fixture.
    */
@@ -116,7 +116,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture has the given title.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture has the given title.
    * @param title the title to match.
    * @return this fixture.
    * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not have the given title.
@@ -128,7 +128,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture shows the given message.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture shows the given message.
    * @param message the message to verify.
    * @return this fixture.
    * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not show the given message.
@@ -139,7 +139,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture has the given options.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture has the given options.
    * @param options the options to verify.
    * @return this fixture.
    * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not have the given options.
@@ -161,7 +161,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Finds a <code>{@link JButton}</code> in the </code>{@link JOptionPaneFixture}</code> managed by this fixture. 
+   * Finds a <code>{@link JButton}</code> in the <code>{@link JOptionPaneFixture}</code> managed by this fixture.
    * @return a fixture wrapping a <code>JButton</code> contained in the managed <code>JOptionPane</code>. 
    */
   public final JButtonFixture button() {
@@ -179,7 +179,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying an error message.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying an error message.
    * @return this fixture.
    */
   public final JOptionPaneFixture requireErrorMessage() {
@@ -187,7 +187,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying an information 
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying an information
    * message.
    * @return this fixture.
    */
@@ -196,7 +196,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a warning message.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a warning message.
    * @return this fixture.
    */
   public final JOptionPaneFixture requireWarningMessage() {
@@ -204,7 +204,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a question.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a question.
    * @return this fixture.
    */
   public final JOptionPaneFixture requireQuestionMessage() {
@@ -212,7 +212,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the </code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a plain message.
+   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a plain message.
    * @return this fixture.
    */
   public final JOptionPaneFixture requirePlainMessage() {

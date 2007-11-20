@@ -25,7 +25,7 @@ public final class ActionFailedException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link ActionFailedException}</code>.
+   * Creates a new <code>{@link ActionFailedException}</code>.
    * @param message the detail message.
    */
   public ActionFailedException(String message) {
@@ -33,7 +33,7 @@ public final class ActionFailedException extends RuntimeException {
   }
 
   /**
-   * Creates a new </code>{@link ActionFailedException}</code>.
+   * Creates a new <code>{@link ActionFailedException}</code>.
    * @param message the detail message.
    * @param cause the cause of the error.
    */

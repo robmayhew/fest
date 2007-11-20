@@ -25,7 +25,7 @@ public class ComponentLookupException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link ComponentLookupException}</code>.
+   * Creates a new <code>{@link ComponentLookupException}</code>.
    * @param message the detail message.
    */
   public ComponentLookupException(String message) {
@@ -33,7 +33,7 @@ public class ComponentLookupException extends RuntimeException {
   }
 
   /**
-   * Creates a new </code>{@link ComponentLookupException}</code>.
+   * Creates a new <code>{@link ComponentLookupException}</code>.
    * @param cause the cause of the error.
    */
   public ComponentLookupException(Throwable cause) {

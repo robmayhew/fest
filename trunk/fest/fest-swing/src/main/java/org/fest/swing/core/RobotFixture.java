@@ -74,7 +74,7 @@ public final class RobotFixture {
   }
 
   /**
-   * Creates a new </code>{@link RobotFixture}</code>.
+   * Creates a new <code>{@link RobotFixture}</code>.
    * @param hierarchy the AWT component hierarchy to use.
    */
   private RobotFixture(Hierarchy hierarchy) {

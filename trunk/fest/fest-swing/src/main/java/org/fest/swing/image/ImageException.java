@@ -26,7 +26,7 @@ public final class ImageException extends RuntimeException {
   private static final long serialVersionUID = 1L;
   
   /**
-   * Creates a new </code>{@link ImageException}</code>.
+   * Creates a new <code>{@link ImageException}</code>.
    * @param message the detail message.
    */
   public ImageException(String message) {
@@ -34,7 +34,7 @@ public final class ImageException extends RuntimeException {
   }
 
   /**
-   * Creates a new </code>{@link ImageException}</code>.
+   * Creates a new <code>{@link ImageException}</code>.
    * @param message the detail message.
    * @param cause the cause of the error.
    */

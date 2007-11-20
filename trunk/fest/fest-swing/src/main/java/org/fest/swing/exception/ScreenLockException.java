@@ -25,7 +25,7 @@ public final class ScreenLockException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link ScreenLockException}</code>.
+   * Creates a new <code>{@link ScreenLockException}</code>.
    * @param message the detail message.
    */
   public ScreenLockException(String message) {

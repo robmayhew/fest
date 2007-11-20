@@ -37,7 +37,7 @@ public class JTableCellFixture {
   private final TableCell cell;
 
   /**
-   * Creates a new </code>{@link JTableCellFixture}</code>.
+   * Creates a new <code>{@link JTableCellFixture}</code>.
    * @param table contains the <code>JTable</code> containing the cell to be managed by this fixture.
    * @param cell contains the row and column indices of the cell to be managed by this fixture.
    */

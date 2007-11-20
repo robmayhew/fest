@@ -27,7 +27,7 @@ import java.awt.*;
 public final class TypeMatcher extends ClassMatcher implements ComponentMatcher {
 
   /**
-   * Creates a new </code>{@link TypeMatcher}</code>.
+   * Creates a new <code>{@link TypeMatcher}</code>.
    * @param type the type of the component we are looking for.
    */
   public TypeMatcher(Class<?> type) {
@@ -35,7 +35,7 @@ public final class TypeMatcher extends ClassMatcher implements ComponentMatcher 
   }
 
   /**
-   * Creates a new </code>{@link TypeMatcher}</code>.
+   * Creates a new <code>{@link TypeMatcher}</code>.
    * @param type the type of the component we are looking for.
    * @param requireShowing indicates if the component we are looking should be visible or not.
    */

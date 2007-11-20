@@ -35,7 +35,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JTextComponentFixture extends ComponentFixture<JTextComponent> implements TextInputFixture<JTextComponent> {
 
   /**
-   * Creates a new </code>{@link JTextComponentFixture}</code>.
+   * Creates a new <code>{@link JTextComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTextComponent</code>.
    * @param textComponentName the name of the <code>JTextComponent</code> to find using the given 
    * <code>RobotFixture</code>.
@@ -46,7 +46,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Creates a new </code>{@link JTextComponentFixture}</code>.
+   * Creates a new <code>{@link JTextComponentFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTextComponent</code>.
    * @param target the <code>JTextComponent</code> to be managed by this fixture.
    */

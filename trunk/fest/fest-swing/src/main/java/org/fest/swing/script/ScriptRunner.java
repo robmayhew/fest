@@ -45,7 +45,7 @@ public final class ScriptRunner {
   private final List<String> successfulScripts = new ArrayList<String>();
 
   /**
-   * Creates a new </code>{@link ScriptRunner}</code>.
+   * Creates a new <code>{@link ScriptRunner}</code>.
    * @param dirName the directory containing the script files to execute. Recursion is not enabled.
    * @param approvers approve or rejects the files to be executed. If none is specified, all the script files in the
    *          given directory will be approved.
@@ -57,7 +57,7 @@ public final class ScriptRunner {
   }
 
   /**
-   * Creates a new </code>{@link ScriptRunner}</code>.
+   * Creates a new <code>{@link ScriptRunner}</code>.
    * @param dirName the directory containing the script files to execute.
    * @param recurse flag that indicates if subdirectories should be searched for script files.
    * @param approvers approve or rejects the files to be executed. If none is specified, all the script files in the
@@ -70,7 +70,7 @@ public final class ScriptRunner {
   }
 
   /**
-   * Creates a new </code>{@link ScriptRunner}</code>.
+   * Creates a new <code>{@link ScriptRunner}</code>.
    * @param fileNames the names of the script files to execute.
    * @param approvers approve or rejects the files to be executed. If none is specified, all the script files in the
    *          given directory will be approved.
@@ -81,7 +81,7 @@ public final class ScriptRunner {
   }
 
   /**
-   * Creates a new </code>{@link ScriptRunner}</code>.
+   * Creates a new <code>{@link ScriptRunner}</code>.
    * @param fileNames the names of the script files to execute.
    * @param approvers approve or rejects the files to be executed. If none is specified, all the script files in the
    *          given directory will be approved.

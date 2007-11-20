@@ -33,7 +33,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JSliderFixture extends ComponentFixture<JSlider> {
 
   /**
-   * Creates a new </code>{@link JSliderFixture}</code>.
+   * Creates a new <code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSlider</code>.
    * @param sliderName the name of the <code>JSlider</code> to find using the given <code>RobotFixture</code>.
    * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JSlider</code> could not be found.
@@ -43,7 +43,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Creates a new </code>{@link JSliderFixture}</code>.
+   * Creates a new <code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSlider</code>.
    * @param target the <code>JSlider</code> to be managed by this fixture.
    */

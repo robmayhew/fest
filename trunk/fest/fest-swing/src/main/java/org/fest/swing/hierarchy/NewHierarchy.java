@@ -45,7 +45,7 @@ public class NewHierarchy extends ExistingHierarchy {
   private final WindowFilter filter;
 
   /**
-   * Creates a new </code>{@link NewHierarchy}</code> which does not contain any existing GUI components.
+   * Creates a new <code>{@link NewHierarchy}</code> which does not contain any existing GUI components.
    * @return the created hierarchy.
    */
   public static NewHierarchy ignoreExistingComponents() {
@@ -53,7 +53,7 @@ public class NewHierarchy extends ExistingHierarchy {
   }
 
   /**
-   * Creates a new </code>{@link NewHierarchy}</code> which contains existing GUI components.
+   * Creates a new <code>{@link NewHierarchy}</code> which contains existing GUI components.
    * @return the created hierarchy.
    */
   public static NewHierarchy includeExistingComponents() {

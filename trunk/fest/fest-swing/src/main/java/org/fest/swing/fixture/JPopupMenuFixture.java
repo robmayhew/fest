@@ -32,7 +32,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
   
   /**
-   * Creates a new </code>{@link JPopupMenuFixture}</code>.
+   * Creates a new <code>{@link JPopupMenuFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPopupMenu</code>.
    * @param target the <code>JPopupMenu</code> to be managed by this fixture.
    */

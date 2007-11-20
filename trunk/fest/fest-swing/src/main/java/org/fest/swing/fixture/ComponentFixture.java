@@ -53,7 +53,7 @@ public abstract class ComponentFixture<T extends Component> {
   private final ComponentTester tester;
   
   /**
-   * Creates a new </code>{@link ComponentFixture}</code>.
+   * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
@@ -63,7 +63,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Creates a new </code>{@link ComponentFixture}</code>.
+   * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
@@ -74,7 +74,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Creates a new </code>{@link ComponentFixture}</code>.
+   * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Component</code>.
    * @param target the <code>Component</code> to be managed by this fixture.
    */

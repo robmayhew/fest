@@ -32,7 +32,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JPanelFixture extends ContainerFixture<JPanel> {
 
   /**
-   * Creates a new </code>{@link JPanelFixture}</code>.
+   * Creates a new <code>{@link JPanelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JPanel</code>.
    * @param panelName the name of the <code>JPanel</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JPanel</code> could not be found.
@@ -42,7 +42,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Creates a new </code>{@link JPanelFixture}</code>.
+   * Creates a new <code>{@link JPanelFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPanel</code>.
    * @param target the <code>JPanel</code> to be managed by this fixture.
    */

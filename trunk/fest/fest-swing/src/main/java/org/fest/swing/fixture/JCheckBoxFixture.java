@@ -33,7 +33,7 @@ import org.fest.swing.core.Timeout;
 public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
 
   /**
-   * Creates a new </code>{@link JCheckBoxFixture}</code>.
+   * Creates a new <code>{@link JCheckBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JCheckBox</code>.
    * @param checkBoxName the name of the <code>JCheckBox</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JCheckBox</code> could not be found.
@@ -43,7 +43,7 @@ public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
   }
   
   /**
-   * Creates a new </code>{@link JCheckBoxFixture}</code>.
+   * Creates a new <code>{@link JCheckBoxFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JCheckBox</code>.
    * @param target the <code>JCheckBox</code> to be managed by this fixture.
    */

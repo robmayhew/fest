@@ -14,17 +14,38 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
+import javax.swing.text.JTextComponent;
+
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.util.Formatting.format;
+
+import static org.fest.util.Strings.join;
+
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
-import static org.fest.swing.util.Formatting.format;
-import static org.fest.util.Strings.join;
-
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
@@ -36,7 +57,7 @@ import java.awt.*;
 public abstract class ContainerFixture<T extends Container> extends JMenuItemContainerFixture<T> {
 
   /**
-   * Creates a new </code>{@link ContainerFixture}</code>.
+   * Creates a new <code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @see org.fest.swing.core.ComponentFinder#findByType(Class)
@@ -46,7 +67,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   }
 
   /**
-   * Creates a new </code>{@link ContainerFixture}</code>.
+   * Creates a new <code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param name the name of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
@@ -57,7 +78,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   }
 
   /**
-   * Creates a new </code>{@link ContainerFixture}</code>.
+   * Creates a new <code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Container</code>.
    * @param target the <code>Container</code> to be managed by this fixture.
    */
@@ -65,12 +86,17 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
     super(robot, target);
   }
 
+
+  public final JButtonFixture button() {
+    return new JButtonFixture(robot, finder().findByType(target, JButton.class));
+  }
+  
   /**
    * Finds a <code>{@link JButton}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JButton</code>.
    * @return a fixture that manages the <code>JButton</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JButton</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JButton</code> that matches the given search criteria could not be
    * found.
    */
   public final JButtonFixture button(GenericTypeMatcher<? extends JButton> matcher) {
@@ -82,7 +108,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JButton</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JButton</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JButton</code> having a matching name could not be found.
    */
   public final JButtonFixture button(String name) {
     return new JButtonFixture(robot, findByName(name, JButton.class));
@@ -93,7 +119,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JCheckBox</code>.
    * @return a fixture that manages the <code>JCheckBox</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JCheckBox</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JCheckBox</code> that matches the given search criteria could not be
    * found.
    */
   public final JCheckBoxFixture checkBox(GenericTypeMatcher<? extends JCheckBox> matcher) {
@@ -105,7 +131,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JCheckBox</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JCheckBox</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JCheckBox</code> having a matching name could not be found.
    */
   public final JCheckBoxFixture checkBox(String name) {
     return new JCheckBoxFixture(robot, findByName(name, JCheckBox.class));
@@ -116,7 +142,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JComboBox</code>.
    * @return a fixture that manages the <code>JComboBox</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JComboBox</code> that matches the given search criteria could not be found.
+   * @throws ComponentLookupException if a <code>JComboBox</code> that matches the given search criteria could not be found.
    */
   public final JComboBoxFixture comboBox(GenericTypeMatcher<? extends JComboBox> matcher) {
     return new JComboBoxFixture(robot, find(matcher));
@@ -138,7 +164,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>Dialog</code>.
    * @return a fixture that manages the <code>Dialog</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>Dialog</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>Dialog</code> that matches the given search criteria could not be
    * found.
    */
   public final DialogFixture dialog(GenericTypeMatcher<? extends Dialog> matcher) {
@@ -150,7 +176,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>Dialog</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
    */
   public final DialogFixture dialog(String name) {
     return new DialogFixture(robot, findByName(name, Dialog.class));
@@ -161,7 +187,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JFileChooser</code>.
    * @return a fixture that manages the <code>JFileChooser</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JFileChooser</code> that matches the given search criteria could not
+   * @throws ComponentLookupException if a <code>JFileChooser</code> that matches the given search criteria could not
    * be found.
    */
   public final JFileChooserFixture fileChooser(GenericTypeMatcher<? extends JFileChooser> matcher) {
@@ -173,7 +199,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JFileChooser</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JFileChooser</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JFileChooser</code> having a matching name could not be found.
    */
   public final JFileChooserFixture fileChooser(String name) {
     return new JFileChooserFixture(robot, findByName(name, JFileChooser.class));
@@ -184,7 +210,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JLabel</code>.
    * @return a fixture that manages the <code>JLabel</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JLabel</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JLabel</code> that matches the given search criteria could not be
    * found.
    */
   public final JLabelFixture label(GenericTypeMatcher<? extends JLabel> matcher) {
@@ -207,7 +233,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JList</code>.
    * @return a fixture that manages the <code>JList</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JList</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JList</code> that matches the given search criteria could not be
    * found.
    */
   public final JListFixture list(GenericTypeMatcher<? extends JList> matcher) {
@@ -219,7 +245,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JList</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JList</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JList</code> having a matching name could not be found.
    */
   public final JListFixture list(String name) {
     return new JListFixture(robot, findByName(name, JList.class));
@@ -250,7 +276,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   /**
    * Finds a <code>{@link JOptionPane}</code>.
    * @return a fixture that manages the <code>JOptionPane</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JOptionPane</code> could not be found.
+   * @throws ComponentLookupException if a <code>JOptionPane</code> could not be found.
    */
   public final JOptionPaneFixture optionPane() {
     return new JOptionPaneFixture(robot);
@@ -261,7 +287,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JRadioButton</code>.
    * @return a fixture that manages the <code>JRadioButton</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JRadioButton</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JRadioButton</code> that matches the given search criteria could not be
    * found.
    */
   public final JRadioButtonFixture radioButton(GenericTypeMatcher<? extends JRadioButton> matcher) {
@@ -273,7 +299,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JRadioButton</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JRadioButton</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JRadioButton</code> having a matching name could not be found.
    */
   public final JRadioButtonFixture radioButton(String name) {
     return new JRadioButtonFixture(robot, findByName(name, JRadioButton.class));
@@ -284,7 +310,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JSlider</code>.
    * @return a fixture that manages the <code>JSlider</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JSlider</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JSlider</code> that matches the given search criteria could not be
    * found.
    */
   public final JSliderFixture slider(GenericTypeMatcher<? extends JSlider> matcher) {
@@ -296,7 +322,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JSlider</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JSlider</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JSlider</code> having a matching name could not be found.
    */
   public final JSliderFixture slider(String name) {
     return new JSliderFixture(robot, findByName(name, JSlider.class));
@@ -307,7 +333,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JSpinner</code>.
    * @return a fixture that manages the <code>JSpinner</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JSpinner</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JSpinner</code> that matches the given search criteria could not be
    * found.
    */
   public final JSpinnerFixture spinner(GenericTypeMatcher<? extends JSpinner> matcher) {
@@ -319,7 +345,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JSpinner</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JSpinner</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JSpinner</code> having a matching name could not be found.
    */
   public final JSpinnerFixture spinner(String name) {
     return new JSpinnerFixture(robot, findByName(name, JSpinner.class));
@@ -330,7 +356,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JSplitPane</code>.
    * @return a fixture that manages the <code>JSplitPane</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JSplitPane</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JSplitPane</code> that matches the given search criteria could not be
    * found.
    */
   public final JSplitPaneFixture splitPane(GenericTypeMatcher<? extends JSplitPane> matcher) {
@@ -388,7 +414,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JTable</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JTable</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JTable</code> having a matching name could not be found.
    */
   public final JTableFixture table(String name) {
     return new JTableFixture(robot, findByName(name, JTable.class));
@@ -399,7 +425,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * fixture, that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JTextComponent</code>.
    * @return a fixture that manages the <code>JTextComponent</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JTextComponent</code> that matches the given search criteria could not
+   * @throws ComponentLookupException if a <code>JTextComponent</code> that matches the given search criteria could not
    * be found.
    */
   public final JTextComponentFixture textBox(GenericTypeMatcher<? extends JTextComponent> matcher) {
@@ -411,7 +437,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * fixture, which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JTextComponent</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JTextComponent</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JTextComponent</code> having a matching name could not be found.
    */
   public final JTextComponentFixture textBox(String name) {
     return new JTextComponentFixture(robot, findByName(name, JTextComponent.class));
@@ -434,7 +460,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JToolBar</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JToolBar</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>JToolBar</code> having a matching name could not be found.
    */
   public final JToolBarFixture toolBar(String name) {
     return new JToolBarFixture(robot, findByName(name, JToolBar.class));
@@ -445,7 +471,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JTree</code>.
    * @return a fixture that manages the <code>JTree</code> found.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>JTree</code> that matches the given search criteria could not be
+   * @throws ComponentLookupException if a <code>JTree</code> that matches the given search criteria could not be
    * found.
    */
   public final JTreeFixture tree(GenericTypeMatcher<? extends JTree> matcher) {

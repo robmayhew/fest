@@ -40,7 +40,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JTableFixture extends ComponentFixture<JTable> {
 
   /**
-   * Creates a new </code>{@link JTableFixture}</code>.
+   * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTable</code>.
    * @param tableName the name of the <code>JTable</code> to find using the given 
    * <code>RobotFixture</code>.
@@ -51,7 +51,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   /**
-   * Creates a new </code>{@link JTableFixture}</code>.
+   * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTable</code>.
    * @param target the <code>JTable</code> to be managed by this fixture.
    */

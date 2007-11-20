@@ -54,7 +54,7 @@ public class ComponentFinder {
   }
 
   /**
-   * Creates a new </code>{@link ComponentFinder}</code>.
+   * Creates a new <code>{@link ComponentFinder}</code>.
    * @param hierarchy provides access to the components in the AWT hierarchy.
    */
   ComponentFinder(Hierarchy hierarchy) {

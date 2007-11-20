@@ -35,7 +35,7 @@ import org.fest.swing.core.Timeout;
 public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
 
   /**
-   * Creates a new </code>{@link JTabbedPaneFixture}</code>.
+   * Creates a new <code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
    * @param tabbedPaneName the name of the <code>JTabbedPane</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JTabbedPane</code> could not be found.
@@ -45,7 +45,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
   
   /**
-   * Creates a new </code>{@link JTabbedPaneFixture}</code>.
+   * Creates a new <code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTabbedPane</code>.
    * @param target the <code>JTabbedPane</code> to be managed by this fixture.
    */

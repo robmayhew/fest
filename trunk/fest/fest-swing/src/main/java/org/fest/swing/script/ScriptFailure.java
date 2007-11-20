@@ -28,7 +28,7 @@ public class ScriptFailure extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link ScriptFailure}</code>.
+   * Creates a new <code>{@link ScriptFailure}</code>.
    * @param scriptName the name of the failed script.
    * @param cause the cause of the failure.
    */
