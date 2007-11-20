@@ -19,7 +19,7 @@
          <hash>
             <value n="class" v="oracle.jdeveloper.library.ProjectLibrary"/>
             <url n="sourceOwnerURL" path="../../../fest-swing.jws"/>
-            <url n="sourceURL" path="../../main/java/main-java.jpr"/>
+            <url n="sourceURL" path="../../main/java/src.main.java.jpr"/>
          </hash>
       </list>
    </hash>
