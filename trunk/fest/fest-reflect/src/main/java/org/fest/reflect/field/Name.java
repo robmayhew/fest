@@ -33,7 +33,7 @@ public final class Name {
   final String name;
 
   /**
-   * Creates a new </code>{@link Name}</code>.
+   * Creates a new <code>{@link Name}</code>.
    * @param name the name of the field to access using Java Reflection.
    */
   public Name(String name) {

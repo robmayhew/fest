@@ -43,7 +43,7 @@ public final class Name {
   final String name;
 
   /**
-   * Creates a new </code>{@link Name}</code>.
+   * Creates a new <code>{@link Name}</code>.
    * @param name the name of the method to invoke.
    */
   public Name(String name) {

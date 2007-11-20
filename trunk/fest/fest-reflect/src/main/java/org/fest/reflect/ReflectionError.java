@@ -24,7 +24,7 @@ public final class ReflectionError extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link ReflectionError}</code>.
+   * Creates a new <code>{@link ReflectionError}</code>.
    * @param message the detail message.
    */
   public ReflectionError(String message) {
@@ -32,7 +32,7 @@ public final class ReflectionError extends RuntimeException {
   }
 
   /**
-   * Creates a new </code>{@link ReflectionError}</code>.
+   * Creates a new <code>{@link ReflectionError}</code>.
    * @param message the detail message.
    * @param cause the cause of the exception.
    */
