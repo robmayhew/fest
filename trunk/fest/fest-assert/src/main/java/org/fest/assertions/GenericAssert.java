@@ -39,7 +39,7 @@ abstract class GenericAssert<T> extends Assert {
   private String description;
 
   /**
-   * Creates a new </code>{@link GenericAssert}</code>.
+   * Creates a new <code>{@link GenericAssert}</code>.
    * @param actual the actual target to verify.
    */
   GenericAssert(T actual) {

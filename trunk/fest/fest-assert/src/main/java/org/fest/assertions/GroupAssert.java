@@ -32,7 +32,7 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
   private static final String SIZE = "size";
 
   /**
-   * Creates a new </code>{@link GroupAssert}</code>.
+   * Creates a new <code>{@link GroupAssert}</code>.
    * @param actual the object to verify.
    */
   GroupAssert(T actual) {

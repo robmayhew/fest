@@ -27,12 +27,12 @@ public abstract class Condition<T> {
   private String description;
 
   /**
-   * Creates a new </code>{@link Condition}</code>.
+   * Creates a new <code>{@link Condition}</code>.
    */
   public Condition() {}
 
   /**
-   * Creates a new </code>{@link Condition}</code>.
+   * Creates a new <code>{@link Condition}</code>.
    * @param description the description of this condition.
    */
   public Condition(String description) {
