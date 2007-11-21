@@ -162,9 +162,9 @@ public class ContainerFixtureTest {
     robot.showWindow(window);
   }
 
-  @Test public void shouldFindButtonByTypeIfOnlyOnePresent() {
+  @Test public void shouldFindButtonByType() {
     JButtonFixture button = container.button();
-    assertThat(button.target).isSameAs(window.button);
+    assertThat(button.target).isNotNull();
   }
 
   @Test public void shouldFindButtonWithGivenMatcher() {
@@ -182,6 +182,11 @@ public class ContainerFixtureTest {
     assertThat(button.target).isSameAs(window.button);
   }
 
+  @Test public void shouldFindCheckBoxByType() {
+    JCheckBoxFixture checkBox = container.checkBox();
+    assertThat(checkBox.target).isNotNull();
+  }
+
   @Test public void shouldFindCheckBoxWithGivenMatcher() {
     GenericTypeMatcher<JCheckBox> textMatcher = new GenericTypeMatcher<JCheckBox>() {
       protected boolean isMatching(JCheckBox checkBox) {
@@ -197,6 +202,11 @@ public class ContainerFixtureTest {
     assertThat(checkBox.target).isSameAs(window.checkBox);
   }
 
+  @Test public void shouldFindComboBoxByType() {
+    JComboBoxFixture comboBox = container.comboBox();
+    assertThat(comboBox.target).isNotNull();
+  }
+  
   @Test public void shouldFindComboBoxWithGivenMatcher() {
     GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
       protected boolean isMatching(JComboBox comboBox) {
@@ -210,6 +220,11 @@ public class ContainerFixtureTest {
   @Test public void shouldFindComboBoxWithGivenName() {
     JComboBoxFixture comboBox = container.comboBox("comboBox");
     assertThat(comboBox.target).isSameAs(window.comboBox);
+  }
+  
+  @Test public void shouldFindDialogByType() {
+    DialogFixture dialog = container.dialog();
+    assertThat(dialog.target).isNotNull();
   }
   
   @Test public void shouldFindDialogWithGivenMatcher() {
@@ -227,6 +242,11 @@ public class ContainerFixtureTest {
     assertThat(dialog.target).isSameAs(window.dialog);
   }
   
+  @Test public void shouldFindFileChooserByType() {
+    JFileChooserFixture fileChooser = container.fileChooser();
+    assertThat(fileChooser.target).isNotNull();
+  }
+  
   @Test public void shouldFindFileChooserWithGivenMatcher() {
     GenericTypeMatcher<JFileChooser> nameMatcher = new GenericTypeMatcher<JFileChooser>() {
       protected boolean isMatching(JFileChooser fileChooser) {
@@ -242,6 +262,11 @@ public class ContainerFixtureTest {
     assertThat(fileChooser.target).isSameAs(window.fileChooser);
   }
   
+  @Test public void shouldFindLabelByType() {
+    JLabelFixture label = container.label();
+    assertThat(label.target).isNotNull();
+  }
+  
   @Test public void shouldFindLabelWithGivenMatcher() {
     GenericTypeMatcher<JLabel> textMatcher = new GenericTypeMatcher<JLabel>() {
       protected boolean isMatching(JLabel label) {
@@ -255,6 +280,11 @@ public class ContainerFixtureTest {
   @Test public void shouldFindLabelWithGivenName() {
     JLabelFixture label = container.label("label");
     assertThat(label.target).isSameAs(window.label);
+  }
+  
+  @Test public void shouldFindListByType() {
+    JListFixture list = container.list();
+    assertThat(list.target).isNotNull();
   }
   
   @Test public void shouldFindListWithGivenMatcher() {
@@ -298,6 +328,11 @@ public class ContainerFixtureTest {
     JOptionPaneFixture fixture = container.optionPane();
     assertThat(fixture.target.getMessage()).isEqualTo("A Message");
   }
+  
+  @Test public void shouldFindRadioButtonByType() {
+    JRadioButtonFixture radioButton = container.radioButton();
+    assertThat(radioButton.target).isNotNull();
+  }
 
   @Test public void shouldFindRadioButtonWithGivenMatcher() {
     GenericTypeMatcher<JRadioButton> textMatcher = new GenericTypeMatcher<JRadioButton>() {
@@ -313,6 +348,11 @@ public class ContainerFixtureTest {
     JRadioButtonFixture radioButton = container.radioButton("radioButton");
     assertThat(radioButton.target).isSameAs(window.radioButton);
   }
+  
+  @Test public void shouldFindSliderByType() {
+    JSliderFixture slider = container.slider();
+    assertThat(slider.target).isNotNull();
+  }
 
   @Test public void shouldFindSliderWithGivenMatcher() {
     GenericTypeMatcher<JSlider> valueMatcher = new GenericTypeMatcher<JSlider>() {
@@ -327,6 +367,11 @@ public class ContainerFixtureTest {
   @Test public void shouldFindSliderWithGivenName() {
     JSliderFixture slider = container.slider("slider");
     assertThat(slider.target).isSameAs(window.slider);
+  }
+  
+  @Test public void shouldFindSpinnerByType() {
+    JSpinnerFixture spinner = container.spinner();
+    assertThat(spinner.target).isNotNull();
   }
 
   @Test public void shouldFindSpinnerWithGivenMatcher() {
@@ -344,6 +389,11 @@ public class ContainerFixtureTest {
     assertThat(spinner.target).isSameAs(window.spinner);
   }
   
+  @Test public void shouldFindSplitPaneByType() {
+    JSplitPaneFixture splitPane = container.splitPane();
+    assertThat(splitPane.target).isNotNull();
+  }
+  
   @Test public void shouldFindSplitPaneWithGivenMatcher() {
     GenericTypeMatcher<JSplitPane> matcher = new GenericTypeMatcher<JSplitPane>() {
       protected boolean isMatching(JSplitPane splitPane) {
@@ -357,6 +407,11 @@ public class ContainerFixtureTest {
   @Test public void shouldFindSplitPaneWithGivenName() {
     JSplitPaneFixture splitPane = container.splitPane("splitPane");
     assertThat(splitPane.target).isSameAs(window.splitPane);
+  }
+  
+  @Test public void shouldFindTabbedPaneByType() {
+    JTabbedPaneFixture tabbedPane = container.tabbedPane();
+    assertThat(tabbedPane.target).isNotNull();
   }
 
   @Test public void shouldFindTabbedPaneWithGivenMatcher() {
@@ -374,6 +429,11 @@ public class ContainerFixtureTest {
     assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
   }
   
+  @Test public void shouldFindTableByType() {
+    JTableFixture table = container.table();
+    assertThat(table.target).isNotNull();
+  }
+  
   @Test public void shouldFindTableWithGivenMatcher() {
     GenericTypeMatcher<JTable> rowCountMatcher = new GenericTypeMatcher<JTable>() {
       protected boolean isMatching(JTable table) {
@@ -389,6 +449,11 @@ public class ContainerFixtureTest {
     assertThat(table.target).isSameAs(window.table);
   }
   
+  @Test public void shouldFindTextComponentByType() {
+    JTextComponentFixture textField = container.textBox();
+    assertThat(textField.target).isNotNull();
+  }
+  
   @Test public void shouldFindTextComponentWithGivenMatcher() {
     GenericTypeMatcher<JTextField> columnMatcher = new GenericTypeMatcher<JTextField>() {
       protected boolean isMatching(JTextField textField) {
@@ -402,6 +467,11 @@ public class ContainerFixtureTest {
   @Test public void shouldFindTextComponentWithGivenName() {
     JTextComponentFixture textField = container.textBox("textField");
     assertThat(textField.target).isSameAs(window.textField);
+  }
+  
+  @Test public void shouldFindToolBarByType() {
+    JToolBarFixture toolBar = container.toolBar();
+    assertThat(toolBar.target).isNotNull();
   }
   
   @Test public void shouldFindToolBarWithGivenMatcher() {

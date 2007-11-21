@@ -46,15 +46,26 @@ public class ExistingHierarchy implements ComponentHierarchy {
   final ChildrenFinder childrenFinder = new ChildrenFinder();
 
   final Logger logger = Logger.getLogger(getClass().getName());
-  
-  public static ExistingHierarchy existingHierarchy() {
-    return new ExistingHierarchy();
+
+  /**
+   * Returns the singleton instance of this class.
+   * @return the singleton instance of this class.
+   */
+  public static ExistingHierarchy instance() {
+    return SingletonHolder.INSTANCE;
   }
-  
-  ExistingHierarchy() {}
+
+  private static class SingletonHolder {
+    static final ExistingHierarchy INSTANCE = new ExistingHierarchy();
+  }
+
+  /**
+   * Creates a new <code>{@link ExistingHierarchy}</code>
+   */
+  public ExistingHierarchy() {}
 
   /** ${@inheritDoc} */
-  public Collection<Window> rootWindows() {
+  public Collection<? extends Container> roots() {
     return windowMonitor.rootWindows();
   }
 

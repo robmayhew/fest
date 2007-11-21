@@ -19,6 +19,7 @@ import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListene
 import static org.fest.swing.util.ComponentCollections.empty;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Window;
 import static java.awt.event.WindowEvent.COMPONENT_EVENT_MASK;
 import static java.awt.event.WindowEvent.WINDOW_EVENT_MASK;
@@ -30,7 +31,7 @@ import java.util.Collection;
  * <p>
  * Implicitly auto-filters windows which are disposed (i.e. generate a
  * <code>{@link java.awt.event.WindowEvent#WINDOW_CLOSED WINDOW_CLOSED}</code> event), but also implicitly un-filters
- * them if they should be shown again. Any window explicitly disposed with <code>{@link #dispose(Window)}</code< will be
+ * them if they should be shown again. Any window explicitly disposed with <code>{@link ComponentHierarchy#dispose(java.awt.Window)}</code< will be
  * ignored permanently.
  * </p>
  * <p>
@@ -79,8 +80,8 @@ public class NewHierarchy extends ExistingHierarchy {
    * Make all currently extisting components invisible to this hierarchy, without affecting their current state.
    */
   public void ignoreExisting() {
-    for (Window w : rootWindows())
-      filter.filter(w);
+    for (Container c : roots())
+      filter.filter(c);
   }
 
   /**
@@ -118,11 +119,11 @@ public class NewHierarchy extends ExistingHierarchy {
   }
 
   /**
-   * Returns all available root windows, excluding those which have been filtered.
-   * @return  all available root windows, excluding those which have been filtered.
+   * Returns all available root containers, excluding those which have been filtered.
+   * @return  all available root containers, excluding those which have been filtered.
    */
-  @Override public Collection<Window> rootWindows() {
-    Collection<Window> roots = super.rootWindows();
+  @Override public Collection<? extends Container> roots() {
+    Collection<? extends Container> roots = super.roots();
     roots.removeAll(filter.filtered());
     return roots;
   }

@@ -95,13 +95,13 @@ public class NewHierarchyTest {
   @Test(dependsOnMethods = "shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
   public void shouldNotContainFilteredWindowsInRootWindows() {
     NewHierarchy hierarchy = new NewHierarchy(filter, true);
-    assertThat(hierarchy.rootWindows()).excludes(frame);
+    assertThat(hierarchy.roots()).excludes(frame);
   }
 
   @Test(dependsOnMethods = "shouldNotIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
   public void shouldContainUnfilteredWindowsInRootWindows() {
     NewHierarchy hierarchy = new NewHierarchy(filter, false);
-    assertThat(hierarchy.rootWindows()).contains(frame);
+    assertThat(hierarchy.roots()).contains(frame);
   }
 
   // TODO Test method dispose(Window)

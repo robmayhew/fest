@@ -52,7 +52,7 @@ public class ExistingHierarchyTest {
   
   @Test public void shouldReturnAllRootWindows() {
     Collection<Window> rootWindows = WindowMonitor.instance().rootWindows();
-    assertThat(hierarchy.rootWindows()).isEqualTo(rootWindows);
+    assertThat(hierarchy.roots()).isEqualTo(rootWindows);
   }
   
   @Test public void shouldAlwaysContainGivenComponent() {

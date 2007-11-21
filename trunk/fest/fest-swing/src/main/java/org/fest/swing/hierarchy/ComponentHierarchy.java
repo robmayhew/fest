@@ -29,10 +29,10 @@ import java.util.Collection;
 public interface ComponentHierarchy {
 
   /**
-   * Provides all root windows in the hierarchy.
-   * @return all root windows in the hierarchy.
+   * Provides all root containers in the hierarchy.
+   * @return all root containers in the hierarchy.
    */
-  Collection<Window> rootWindows();
+  Collection<? extends Container> roots();
 
   /**
    * Returns all sub-components of the given component.
@@ -58,7 +58,7 @@ public interface ComponentHierarchy {
   /**
    * Provides proper disposal of the given window, appropriate to this hierarchy. After disposal, the window and its
    * descendents will no longer be reachable from this hierarchy.
-   * @param w the window to dispose.
+   * @param w the container to window.
    */
   void dispose(Window w);
 }
