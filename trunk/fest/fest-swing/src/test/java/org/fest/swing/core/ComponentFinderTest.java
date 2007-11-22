@@ -25,9 +25,9 @@ import javax.swing.JTree;
 import javax.swing.UIManager;
 
 import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -199,6 +199,18 @@ public class ComponentFinderTest {
     });
   }
   
+  @Test public void shouldPrintAllComponents() {
+    PrintStreamStub out = new PrintStreamStub();
+    finder.printComponents(out);
+    assertThat(out.printed()).contains("javax.swing.JButton<'button'>");
+  }
+  
+  @Test public void shouldPrintAllComponentsOfGivenType() {
+    PrintStreamStub out = new PrintStreamStub();
+    finder.printComponents(out, JButton.class);
+    assertThat(out.printed()).containsOnly("javax.swing.JButton<'button'>");
+  }
+
   @AfterMethod public void tearDown() {
     dispose(window);
     dispose(anotherWindow);

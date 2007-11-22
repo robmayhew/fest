@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+			<action dev="alruiz" type="add" issue="58" due-to="Volker Berlin">
+				Added method 'printComponents' (with overloaded version) to ComponentFinder.
+			</action>
 			<action dev="alruiz" type="add" issue="60" due-to="Volker Berlin">
 				Added method 'toggleButton' (and overloaded versions) to org.fest.swing.fixture.ContainerFixture.
 			</action>

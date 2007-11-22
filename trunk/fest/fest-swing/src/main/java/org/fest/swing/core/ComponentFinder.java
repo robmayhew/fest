@@ -14,16 +14,22 @@
  */
 package org.fest.swing.core;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.io.PrintStream;
+
 import abbot.finder.AWTHierarchy;
 import abbot.finder.BasicFinder;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
+
+import static org.fest.swing.util.Formatting.format;
 import static org.fest.swing.util.Swing.quoteNameOf;
-import org.fest.swing.exception.ComponentLookupException;
+
 import static org.fest.util.Strings.concat;
 
-import java.awt.Component;
-import java.awt.Container;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.util.Formatting;
 
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.
@@ -251,4 +257,51 @@ public class ComponentFinder {
     }
   }
 
+  /**
+   * Prints all the components (as <code>String</code>s) in the hierarchy used when creating this finder.
+   * @param out the output stream where to print the components to.
+   * @see Formatting#format(Component)
+   */
+  public final void printComponents(PrintStream out) {
+    printComponents(new PrintComponentMatcher(out));
+  }
+
+  /**
+   * Prints only the components of the given type (as <code>String</code>s) in the hierarchy used when creating this
+   * finder.
+   * @param out the output stream where to print the components to.
+   * @param type the type of components to print.
+   * @see Formatting#format(Component)
+   */
+  public final void printComponents(PrintStream out, Class<? extends Component> type) {
+    printComponents(new PrintComponentMatcher(out, type));
+  }
+  
+  private void printComponents(PrintComponentMatcher matcher) {
+    try {
+      find(matcher);
+    } catch (ComponentLookupException ignored) {}
+  }
+
+  private static class PrintComponentMatcher implements ComponentMatcher {
+
+    private final PrintStream out;
+    private final Class<? extends Component> type;
+
+    PrintComponentMatcher(PrintStream out) {
+      this(out, null);
+    }
+
+    PrintComponentMatcher(PrintStream out, Class<? extends Component> type) {
+      this.out = out;
+      this.type = type;
+    }
+    
+    public boolean matches(Component c) {
+      if (c == null) return false;
+      if (type == null || type.isAssignableFrom(c.getClass())) 
+        out.println(format(c));
+      return false;
+    }
+  }
 }
