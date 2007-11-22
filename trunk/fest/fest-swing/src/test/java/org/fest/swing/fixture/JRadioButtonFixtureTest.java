@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  */
 @GUITest
-public class JRadioButtonFixtureTest extends JToggleButtonTestCase<JRadioButton> {
+public class JRadioButtonFixtureTest extends TwoStateButtonFixtureTestCase<JRadioButton> {
 
   private JRadioButtonFixture fixture;
   

@@ -15,35 +15,31 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JToggleButton;
-
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
-import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
-import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
-
 import org.testng.annotations.Test;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.fixture.ErrorMessages.*;
+
+import javax.swing.AbstractButton;
 
 /**
- * Understands test methods for subclasses of <code>{@link JToggleButtonFixture}</code>.
+ * Understands test methods for subclasses of <code>{@link org.fest.swing.fixture.TwoStateButtonFixture}</code>.
  * @param <T> the type of component tested by this test class. 
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public abstract class JToggleButtonTestCase<T extends JToggleButton> extends ComponentFixtureTestCase<T> {
+public abstract class TwoStateButtonFixtureTestCase<T extends AbstractButton> extends ComponentFixtureTestCase<T> {
 
   private static final String SELECTED_PROPERTY = "selected";
 
   @Test public void shouldPassIfButtonHasMatchingText() {
-    toggleButtonFixture().requireText("Target");
+    twoStateButtonFixture().requireText("Target");
   }
   
   @Test(dependsOnMethods = "shouldPassIfButtonHasMatchingText") 
   public void shouldFailIfButtonHasNotMatchingText() {
     try {
-      toggleButtonFixture().requireText("A Button");
+      twoStateButtonFixture().requireText("A Button");
       fail();
     } catch (AssertionError e) {
       errorMessages().assertIsCorrect(e, "text", equalsFailedMessage("'A Button'", "'Target'"));
@@ -51,14 +47,14 @@ public abstract class JToggleButtonTestCase<T extends JToggleButton> extends Com
   }
   
   @Test public final void shouldPassIfButtonIsSelectedAndExpectingSelected() {
-    toggleButtonFixture().target.setSelected(true);
-    toggleButtonFixture().requireSelected();
+    twoStateButtonFixture().target.setSelected(true);
+    twoStateButtonFixture().requireSelected();
   }
   
   @Test public final void shouldFailIfButtonIsNotSelectedAndExpectingSelected() {
-    toggleButtonFixture().target.setSelected(false);
+    twoStateButtonFixture().target.setSelected(false);
     try {
-      toggleButtonFixture().requireSelected();
+      twoStateButtonFixture().requireSelected();
       fail();
     } catch(AssertionError e) {
       errorMessages().assertIsCorrect(e, SELECTED_PROPERTY, EXPECTED_TRUE_BUT_WAS_FALSE);
@@ -66,21 +62,21 @@ public abstract class JToggleButtonTestCase<T extends JToggleButton> extends Com
   }
   
   @Test public final void shouldPassIfButtonIsNotSelectedAndExpectingNotSelected() {
-    toggleButtonFixture().target.setSelected(false);
-    toggleButtonFixture().requireNotSelected();
+    twoStateButtonFixture().target.setSelected(false);
+    twoStateButtonFixture().requireNotSelected();
   }
   
   @Test public final void shouldFailIfButtonIsSelectedAndExpectingNotSelected() {
-    toggleButtonFixture().target.setSelected(true);
+    twoStateButtonFixture().target.setSelected(true);
     try {
-      toggleButtonFixture().requireNotSelected();
+      twoStateButtonFixture().requireNotSelected();
       fail();
     } catch(AssertionError e) {
       errorMessages().assertIsCorrect(e, SELECTED_PROPERTY, EXPECTED_FALSE_BUT_WAS_TRUE);
     }
   }
   
-  protected final JToggleButtonFixture<T> toggleButtonFixture() {
-    return (JToggleButtonFixture<T>)fixture();
+  protected final TwoStateButtonFixture<T> twoStateButtonFixture() {
+    return (TwoStateButtonFixture<T>)fixture();
   }
 }

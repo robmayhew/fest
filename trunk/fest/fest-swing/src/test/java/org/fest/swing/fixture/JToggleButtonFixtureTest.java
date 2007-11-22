@@ -15,52 +15,51 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JCheckBox;
-
+import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.testng.annotations.Test;
+import javax.swing.JToggleButton;
 
 /**
- * Tests for <code>{@link JCheckBoxFixture}</code>.
+ * Tests for <code>{@link org.fest.swing.fixture.JToggleButtonFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest extends TwoStateButtonFixtureTestCase<JCheckBox> {
+public class JToggleButtonFixtureTest extends TwoStateButtonFixtureTestCase<JToggleButton> {
 
-  private JCheckBoxFixture fixture;
-  
+  private JToggleButtonFixture fixture;
+
   @Test public void shouldSelectCheckBoxIfNotSelected() {
     fixture.target.setSelected(false);
     fixture.check();
     assertThat(fixture.target.isSelected()).isTrue();
   }
-  
+
   @Test public void shouldNotSelectCheckboxIfAlreadySelected() {
     fixture.target.setSelected(true);
     fixture.check();
     assertThat(fixture.target.isSelected()).isTrue();
   }
-  
+
   @Test public void shouldUnselectCheckBoxIfSelected() {
     fixture.target.setSelected(true);
     fixture.uncheck();
     assertThat(fixture.target.isSelected()).isFalse();
   }
-  
+
   @Test public void shouldNotUnselectCheckboxIfAlreadyUnselected() {
     fixture.target.setSelected(false);
     fixture.uncheck();
     assertThat(fixture.target.isSelected()).isFalse();
   }
 
-  protected ComponentFixture<JCheckBox> createFixture() {
-    fixture = new JCheckBoxFixture(robot(), "target");
+  protected ComponentFixture<JToggleButton> createFixture() {
+    fixture = new JToggleButtonFixture(robot(), "target");
     return fixture;
   }
 
-  protected JCheckBox createTarget() {
-    JCheckBox target = new JCheckBox("Target");
+  protected JToggleButton createTarget() {
+    JToggleButton target = new JToggleButton("Target");
     target.setName("target");
     return target;
   }
