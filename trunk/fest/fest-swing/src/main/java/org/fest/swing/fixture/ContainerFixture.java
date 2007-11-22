@@ -32,6 +32,7 @@ import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.text.JTextComponent;
@@ -634,6 +635,43 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    */
   public final JTextComponentFixture textBox(String name) {
     return new JTextComponentFixture(robot, findByName(name, JTextComponent.class));
+  }
+
+  /**
+   * Returns the first <code>{@link JToggleButton}</code> found in this fixture's <code>{@link Container}</code>.
+   * <p>
+   * <strong>Warning:</strong> For consistent results, use this method if you have only one <code>JToggleButton</code> 
+   * in this fixture's <code>Container</code> (including &quot;complex&quot; GUI components that might include their own 
+   * <code>JToggleButton</code>es.) 
+   * </p>
+   * @return a fixture that manages the <code>JToggleButton</code> found.
+   * @throws ComponentLookupException if a <code>JToggleButton</code> could not be found.
+   */
+  public final JToggleButtonFixture toggleButton() {
+    return new JToggleButtonFixture(robot, findByType(JToggleButton.class));
+  }
+
+  /**
+   * Finds a <code>{@link JToggleButton}</code> in this fixture's <code>{@link Container}</code>, that matches the
+   * specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JToggleButton</code>.
+   * @return a fixture that manages the <code>JToggleButton</code> found.
+   * @throws ComponentLookupException if a <code>JToggleButton</code> that matches the given search criteria could not 
+   *          be found.
+   */
+  public final JToggleButtonFixture toggleButton(GenericTypeMatcher<? extends JToggleButton> matcher) {
+    return new JToggleButtonFixture(robot, find(matcher));
+  }
+
+  /**
+   * Finds a <code>{@link JToggleButton}</code> in this fixture's <code>{@link Container}</code>, which name matches
+   * the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JToggleButton</code> found.
+   * @throws ComponentLookupException if a <code>JToggleButton</code> having a matching name could not be found.
+   */
+  public final JToggleButtonFixture toggleButton(String name) {
+    return new JToggleButtonFixture(robot, findByName(name, JToggleButton.class));
   }
 
   /**

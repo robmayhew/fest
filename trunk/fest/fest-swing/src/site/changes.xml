@@ -6,6 +6,15 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+			<action dev="alruiz" type="add" issue="60" due-to="Volker Berlin">
+				Added method 'toggleButton' (and overloaded versions) to org.fest.swing.fixture.ContainerFixture.
+			</action>
+			<action dev="alruiz" type="add" issue="60" due-to="Volker Berlin">
+				Added org.fest.swing.fixture.JToggleButtonFixture to handle javax.swing.JToggleButton(s).
+			</action>
+			<action dev="alruiz" type="remove" issue="60" due-to="Volker Berlin">
+				Renamed org.fest.swing.fixture.JToggleButtonFixture to org.fest.fixture.TwoStateButtonFixture.				
+			</action>
       <action dev="alruiz, wanghy" type="add" issue="55" due-to="Volker Berlin">
         Added support for taking screenshots of failing tests with JUnit inside an IDE.
       </action>

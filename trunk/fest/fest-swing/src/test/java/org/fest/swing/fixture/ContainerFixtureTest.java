@@ -41,6 +41,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
@@ -92,6 +93,7 @@ public class ContainerFixtureTest {
     final JTabbedPane tabbedPane = new JTabbedPane();
     final JTable table = new JTable(6, 8);
     final JTextField textField = new JTextField(10);
+    final JToggleButton toggleButton = new JToggleButton("A ToggleButton");
     final JToolBar toolBar = new JToolBar(HORIZONTAL);
     
     CustomWindow(Class testClass) {
@@ -105,7 +107,8 @@ public class ContainerFixtureTest {
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      add(button, checkBox, comboBox, fileChooser, label, list, radioButton, slider, spinner, splitPane, tabbedPane, table, textField, toolBar);
+      add(button, checkBox, comboBox, fileChooser, label, list, radioButton, slider, spinner, splitPane, tabbedPane,
+          table, textField, toggleButton, toolBar);
     }
     
     private void add(Component... components) {
@@ -143,6 +146,7 @@ public class ContainerFixtureTest {
       table.setName("table");
       table.setPreferredSize(PREFERRED_DIMENSION);
       textField.setName("textField");
+      toggleButton.setName("toggleButton");
       toolBar.setName("toolBar");
     }
   }
@@ -467,6 +471,26 @@ public class ContainerFixtureTest {
   @Test public void shouldFindTextComponentWithGivenName() {
     JTextComponentFixture textField = container.textBox("textField");
     assertThat(textField.target).isSameAs(window.textField);
+  }
+  
+  @Test public void shouldFindToggleButtonByType() {
+    JToggleButtonFixture toggleButton = container.toggleButton();
+    assertThat(toggleButton.target).isNotNull();
+  }
+
+  @Test public void shouldFindToggleButtonWithGivenMatcher() {
+    GenericTypeMatcher<JToggleButton> textMatcher = new GenericTypeMatcher<JToggleButton>() {
+      protected boolean isMatching(JToggleButton toggleButton) {
+        return "A ToggleButton".equals(toggleButton.getText());
+      }
+    };
+    JToggleButtonFixture checkbox = container.toggleButton(textMatcher);
+    assertThat(checkbox.target).isSameAs(window.toggleButton);
+  }
+  
+  @Test public void shouldFindToggleButtonWithGivenName() {
+    JToggleButtonFixture toggleButton = container.toggleButton("toggleButton");
+    assertThat(toggleButton.target).isSameAs(window.toggleButton);
   }
   
   @Test public void shouldFindToolBarByType() {
