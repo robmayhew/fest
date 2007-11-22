@@ -15,16 +15,22 @@
  */
 package org.fest.swing.junit;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.internal.runners.BeforeAndAfterRunner;
 import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.TestClassRunner;
+import org.junit.internal.runners.MethodValidator;
 import org.junit.internal.runners.TestIntrospector;
+import org.junit.internal.runners.TestMethodRunner;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
+import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 
@@ -44,9 +50,8 @@ public class GUITestRunner extends Runner {
 
   private static final List<RunListener> NO_LISTENERS = new ArrayList<RunListener>();
   
-  final Runner delegate;
-  final List<Method> testMethods;
-  final Class<?> testClass;
+  private final List<Method> testMethods;
+  private final Class<?> testClass;
 
   /**
    * Creates a new <code>{@link GUITestRunner}</code>.
@@ -54,13 +59,15 @@ public class GUITestRunner extends Runner {
    * @throws InitializationError if something goes wrong when creating this runner. 
    */
   public GUITestRunner(Class<?> testClass) throws InitializationError  {
-    this(testClass, new TestClassRunner(testClass));
-  }
-  
-  GUITestRunner(Class<?> testClass, Runner delegate) {
     this.testClass = testClass;
-    this.delegate = delegate;
     testMethods = new TestIntrospector(testClass).getTestMethods(Test.class);
+    validate();
+  }
+
+  private void validate() throws InitializationError {
+    MethodValidator methodValidator= new MethodValidator(testClass);
+    methodValidator.validateMethodsForDefaultRunner();
+    methodValidator.assertValid();
   }
   
   /**
@@ -69,7 +76,7 @@ public class GUITestRunner extends Runner {
    */
   @Override public void run(RunNotifier notifier) {
     addFailedGUITestListenerTo(notifier);
-    delegate.run(notifier);
+    new InnerRunner(notifier).runProtected();
     removeFailedGUITestListenersFrom(notifier);
   }
 
@@ -98,11 +105,60 @@ public class GUITestRunner extends Runner {
     }
   }
 
+  private void doRun(RunNotifier notifier) {
+    if (testMethods.isEmpty()) notifier.testAborted(getDescription(), new Exception("No runnable methods"));
+    for (Method method : testMethods)
+      invokeTestMethod(method, notifier);
+  }
+
+  private void invokeTestMethod(Method method, RunNotifier notifier) {
+    Object test;
+    try {
+      test = testClass.getConstructor().newInstance();
+    } catch (InvocationTargetException e) {
+      notifier.testAborted(methodDescription(method), e.getCause());
+      return;     
+    } catch (Exception e) {
+      notifier.testAborted(methodDescription(method), e);
+      return;
+    }
+    createMethodRunner(test, method, notifier).run();
+  }
+
+  private TestMethodRunner createMethodRunner(Object test, Method method, RunNotifier notifier) {
+    return new TestMethodRunner(test, method, notifier, methodDescription(method));
+  }
+  
   /**
    * Returns a <code>{@link Description}</code> showing the tests to be run by the receiver.
    * @return a <code>Description</code> showing the tests to be run by the receiver.
    */
   @Override public Description getDescription() {
-    return delegate.getDescription();
+    Description spec= Description.createSuiteDescription(testClass.getName());
+    for (Method method : testMethods)
+        spec.addChild(methodDescription(method));
+    return spec;
   }
+
+  private Description methodDescription(Method method) {
+    return new GUITestDescription(testClass, method);
+  }
+  
+  private class InnerRunner extends BeforeAndAfterRunner {
+    private final RunNotifier notifier;
+
+    InnerRunner(RunNotifier notifier) {
+      super(testClass, BeforeClass.class, AfterClass.class, null);
+      this.notifier = notifier;
+    }
+    
+    @Override protected void runUnprotected() {
+      doRun(notifier);
+    }
+
+    @Override protected void addFailure(Throwable targetException) {
+      notifier.fireTestFailure(new Failure(getDescription(), targetException));
+    }
+  }
+
 }

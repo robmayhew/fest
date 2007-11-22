@@ -24,7 +24,6 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 import org.fest.swing.image.ScreenshotTaker;
-import org.fest.swing.junit.TestDescriptionParser.ParseResult;
 import org.fest.util.FilesException;
 
 import static java.io.File.separator;
@@ -32,6 +31,7 @@ import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 
 import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
+import static org.fest.swing.junit.Formatter.format;
 import static org.fest.util.Files.currentFolder;
 import static org.fest.util.Files.delete;
 import static org.fest.util.Strings.concat;
@@ -50,7 +50,6 @@ public class FailedGUITestListener extends RunListener {
   private static Logger logger = Logger.getLogger(FailedGUITestListener.class.getName());
   
   private final ScreenshotTaker screenshotTaker = new ScreenshotTaker();
-  private final TestDescriptionParser parser = new TestDescriptionParser();
   
   private File images;
   
@@ -84,21 +83,23 @@ public class FailedGUITestListener extends RunListener {
   
   private void takeScreenshot(Failure failure) {
     if (images == null) return;
-    ParseResult parse = parse(failure);
-    if (parse == null || !parse.isGUITest()) return;
-    String testHeader = failure.getTestHeader();
+    GUITestDescription description = descriptionForGUITest(failure);
+    if (description == null) return;
+    String methodSignature = format(description.testClass(), description.testMethod());
     try {
-      String fileName = concat(images.getCanonicalPath(), separator, testHeader, ".",  PNG_EXTENSION);
+      String fileName = concat(images.getCanonicalPath(), separator, methodSignature, ".",  PNG_EXTENSION);
       screenshotTaker.saveDesktopAsPng(fileName);
       logger.info(concat("Screenshot of failed test saved as ", quote(fileName)));
     } catch (Exception e) {
-      logger.log(WARNING, concat("Unable to take screenshot of failed test ", quote(testHeader)), e);
+      logger.log(WARNING, concat("Unable to take screenshot of failed test ", quote(methodSignature)), e);
     }
   }
   
-  private ParseResult parse(Failure failure) {
+  private GUITestDescription descriptionForGUITest(Failure failure) {
     Description description = failure.getDescription();
-    if (description == null) return null;
-    return parser.parse(description);
+    if (!(description instanceof GUITestDescription)) return null;
+    GUITestDescription guiTestDescription = (GUITestDescription)description;
+    if (!guiTestDescription.isGUITest()) return null;
+    return guiTestDescription;
   }
 }
