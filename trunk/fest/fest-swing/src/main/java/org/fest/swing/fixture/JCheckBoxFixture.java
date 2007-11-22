@@ -15,14 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JCheckBox;
-
 import static org.fest.assertions.Assertions.assertThat;
-
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
+
+import javax.swing.JCheckBox;
 
 /**
  * Understands simulation of user events on a <code>{@link JCheckBox}</code> and verification of the state of such 
@@ -30,7 +29,7 @@ import org.fest.swing.core.Timeout;
  * 
  * @author Alex Ruiz
  */
-public class JCheckBoxFixture extends JToggleButtonFixture<JCheckBox> {
+public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
 
   /**
    * Creates a new <code>{@link JCheckBoxFixture}</code>.

@@ -15,13 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JRadioButton;
-
 import static org.fest.assertions.Assertions.assertThat;
-
-import org.fest.swing.core.Timeout;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+
+import javax.swing.JRadioButton;
 
 /**
  * Understands simulation of user events on a <code>{@link JRadioButton}</code> and verification of the state of such 
@@ -30,7 +29,7 @@ import org.fest.swing.core.RobotFixture;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JRadioButtonFixture extends JToggleButtonFixture<JRadioButton> {
+public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
 
   /**
    * Creates a new <code>{@link JRadioButtonFixture}</code>.

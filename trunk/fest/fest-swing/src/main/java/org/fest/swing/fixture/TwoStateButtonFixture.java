@@ -16,50 +16,50 @@
 package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.JToggleButton;
 
 /**
- * Understands simulation of user events on a <code>{@link JButton}</code> and verification of the state of such 
- * <code>{@link JButton}</code>.
- * @param <T> 
+ * Understands simulation of user events on a two-state button and verification of the state of such button.
+ * @param <T> the specific type of two-state button this fixture can handle.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public abstract class JToggleButtonFixture<T extends JToggleButton> extends ComponentFixture<T> implements TextDisplayFixture<T> {
+public abstract class TwoStateButtonFixture<T extends AbstractButton> extends ComponentFixture<T> implements TextDisplayFixture<T> {
 
   private static final String SELECTED_PROPERTY = "selected";
   
   /**
-   * Creates a new <code>{@link JToggleButtonFixture}</code>.
+   * Creates a new <code>{@link TwoStateButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    */
-  public JToggleButtonFixture(RobotFixture robot, Class<? extends T> type) {
+  public TwoStateButtonFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, type);
   }
 
   /**
-   * Creates a new <code>{@link JToggleButtonFixture}</code>.
+   * Creates a new <code>{@link TwoStateButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param name the name of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    */
-  public JToggleButtonFixture(RobotFixture robot, String name, Class<? extends T> type) {
+  public TwoStateButtonFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, name, type);
   }
   
   /**
-   * Creates a new <code>{@link JToggleButtonFixture}</code>.
+   * Creates a new <code>{@link TwoStateButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToggleButton</code>.
    * @param target the <code>JToggleButton</code> to be managed by this fixture.
    */
-  public JToggleButtonFixture(RobotFixture robot, T target) {
+  public TwoStateButtonFixture(RobotFixture robot, T target) {
     super(robot, target);
   }
 
@@ -68,21 +68,21 @@ public abstract class JToggleButtonFixture<T extends JToggleButton> extends Comp
    * @return this fixture.
    * @throws AssertionError if the <code>JToggleButton</code> managed by this fixture is not selected.
    */
-  protected abstract JToggleButtonFixture<T> requireSelected(); 
+  protected abstract TwoStateButtonFixture<T> requireSelected();
 
   /**
    * Verifies that the <code>{@link JToggleButton}</code> managed by this fixture is not selected.
    * @return this fixture.
    * @throws AssertionError if the <code>JToggleButton</code> managed by this fixture is selected.
    */
-  protected abstract JToggleButtonFixture<T> requireNotSelected();
+  protected abstract TwoStateButtonFixture<T> requireNotSelected();
   
-  protected final JToggleButtonFixture<T> assertSelected() {
+  protected final TwoStateButtonFixture<T> assertSelected() {
     assertThat(target.isSelected()).as(formattedPropertyName(SELECTED_PROPERTY)).isTrue();
     return this;
   }
   
-  protected final JToggleButtonFixture<T> assertNotSelected() {
+  protected final TwoStateButtonFixture<T> assertNotSelected() {
     assertThat(target.isSelected()).as(formattedPropertyName(SELECTED_PROPERTY)).isFalse();
     return this;
   }
