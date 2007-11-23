@@ -6,6 +6,14 @@
   </properties>
   <body>
     <release version="0.7" date="TBD" description="Subsequent release">
+			<action dev="wanghy, alruiz" type="add" due-to="Steve Tom">
+				Added method 'takeScreenshotOf' to class ScreenshotTaker. This method takes screenshots of a particular GUI 
+				component.
+			</action>
+			<action dev="wanghy, alruiz" type="add" due-to="Steve Tom">
+				Added method 'saveComponentAsPng' to class ScreenshotTaker. This method takes screenshots of a particular GUI 
+				component and saves it as PNG.
+			</action>
 			<action dev="alruiz" type="add" issue="58" due-to="Volker Berlin">
 				Added method 'printComponents' (with overloaded version) to ComponentFinder.
 			</action>

@@ -16,16 +16,21 @@
 package org.fest.swing.image;
 
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
-import org.fest.swing.image.ImageException;
-import org.fest.swing.image.ScreenshotTaker;
+import javax.swing.JButton;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
+
+import static org.fest.swing.testing.TestFrame.showInTest;
+
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
+
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,9 +39,11 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link ScreenshotTaker}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class ScreenshotTakerTest {
 
+  private static final BufferedImage NO_IMAGE = null;
   private ScreenshotTaker taker;
 
   @BeforeMethod public void setUp() {
@@ -45,25 +52,62 @@ public class ScreenshotTakerTest {
 
   @Test(expectedExceptions = ImageException.class)
   public void shouldThrowErrorIfFilePathIsNull() {
-    taker.saveDesktopAsPng(null);
+    taker.saveImage(NO_IMAGE, null);
   }
   
   @Test(expectedExceptions = ImageException.class)
   public void shouldThrowErrorIfFilePathIsEmpty() {
-    taker.saveDesktopAsPng("");
+    taker.saveImage(NO_IMAGE, "");
   }
   
   @Test(expectedExceptions = ImageException.class)
   public void shouldThrowErrorIfFilePathNotEndingWithPng() {
-    taker.saveDesktopAsPng("somePathWithoutPng");
+    taker.saveImage(NO_IMAGE, "somePathWithoutPng");
   }
-  
-  @Test public void shouldTakeScreenshotAndSaveItInGivenPath() throws Exception {
+
+  @Test public void shouldTakeDesktopScreenshotAndSaveItInGivenPath() throws Exception {
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveDesktopAsPng(imagePath);
     assertThat(read(imagePath)).hasSize(Toolkit.getDefaultToolkit().getScreenSize());
   }
-  
+
+  @Test public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
+    TestFrame frame = showInTest(getClass());
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    String imagePath = concat(temporaryFolderPath(), imageFileName());
+    taker.saveComponentAsPng(frame, imagePath);
+    assertThat(read(imagePath)).hasSize(frame.getSize());
+    frame.destroy();
+  }
+
+  @Test public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
+    class CustomFrame extends TestFrame {
+      private static final long serialVersionUID = 1L;
+      
+      final JButton button = new JButton("Hello");
+      
+      CustomFrame(Class<?> testClass) {
+        super(testClass);
+        add(button);
+      }
+    }
+    CustomFrame frame = new CustomFrame(getClass());
+    frame.display();
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    String imagePath = concat(temporaryFolderPath(), imageFileName());
+    taker.saveComponentAsPng(frame.button, imagePath);
+    assertThat(read(imagePath)).hasSize(frame.button.getSize());
+    frame.destroy();
+  }
+
   private String imageFileName() {
     String timestamp = new SimpleDateFormat("yyMMdd.hhmmss").format(new GregorianCalendar().getTime());
     return concat(timestamp, ".png");
