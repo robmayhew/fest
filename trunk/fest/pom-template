@@ -41,6 +41,8 @@
 	<contributors>
 		<contributor>
 			<name>Andres Almiray</name>
+      <organization>Oracle</organization>
+      <organizationUrl>http://www.oracle.com/</organizationUrl>
 			<email>aalmiray at users.sourceforge.net</email>
 			<url>http://www.jroller.com/aalmiray/</url>
 		</contributor>
@@ -49,7 +51,8 @@
 		</contributor>
 		<contributor>
 			<name>Jeff Bay</name>
-		</contributor>
+      <url>http://www.xpteam.com/jeff/</url>
+    </contributor>
 		<contributor>
 			<name>Fabien Barbero</name>
 		</contributor>
@@ -59,7 +62,13 @@
 		<contributor>
 			<name>Keith Coughtrey</name>
 		</contributor>
-		<contributor>
+    <contributor>
+      <name>Andy Glover</name>
+      <organization>Stelligent</organization>
+      <organizationUrl>http://www.stelligent.com/</organizationUrl>
+      <url>http://thediscoblog.com</url>
+    </contributor>
+    <contributor>
 			<name>Javier Sandino</name>
 		</contributor>
 		<contributor>
@@ -71,7 +80,10 @@
 		<contributor>
 			<name>John Stephi</name>
 		</contributor>
-		<contributor>
+    <contributor>
+      <name>Jesper Thaning</name>
+    </contributor>
+    <contributor>
 			<name>Geoffrey Wiseman</name>
 		</contributor>
 	</contributors>
@@ -114,7 +126,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 			</plugin>
-			<plugin>
+			<!--plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<reportSets>
@@ -158,7 +170,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
+			</plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changes-plugin</artifactId>

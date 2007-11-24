@@ -23,6 +23,20 @@
       <maximumHeapSize value="128" />
       <properties />
     </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-swing-junit/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-swing-testng/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -259,6 +273,7 @@
       <module fileurl="file://$PROJECT_DIR$/fest-assert/fest-assert.iml" filepath="$PROJECT_DIR$/fest-assert/fest-assert.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-maven-site/fest-maven-site.iml" filepath="$PROJECT_DIR$/fest-maven-site/fest-maven-site.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-swing/fest-swing.iml" filepath="$PROJECT_DIR$/fest-swing/fest-swing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fest-swing-junit/fest-swing-junit.iml" filepath="$PROJECT_DIR$/fest-swing-junit/fest-swing-junit.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-util/fest-util.iml" filepath="$PROJECT_DIR$/fest-util/fest-util.iml" />
     </modules>
   </component>
@@ -284,6 +299,7 @@
     <mapping directory="$PROJECT_DIR$/fest-assert" vcs="svn" />
     <mapping directory="$PROJECT_DIR$/fest-maven-site" vcs="svn" />
     <mapping directory="$PROJECT_DIR$/fest-swing" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/fest-swing-junit" vcs="svn" />
     <mapping directory="$PROJECT_DIR$/fest-util" vcs="svn" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
