@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="FEST-Assert">
+<project name="FEST-Swing">
 	<skin>
 		<groupId>fest</groupId>
 		<artifactId>fest-site-skin</artifactId>
@@ -7,7 +7,7 @@
 	</skin>
 	<bannerLeft>
 		<name>FEST-Swing</name>
-		<src>/images/fest-assert.png</src>
+		<src>/images/fest-swing.png</src>
 		<href>http://code.google.com/p/fest</href>
 	</bannerLeft>
 	<poweredBy>
@@ -22,12 +22,28 @@
 
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
-			<item name="Features" href="features.html" />
-			<item name="Examples" href="examples.html" />
+      <item name="Getting Started" href="getting-started.html" />
       <item name="Changelog" href="changes-report.html" />
 		</menu>
 
-		<menu ref="reports"/>		
+    <menu name="Features">
+      <item name="GUI Component Lookup" href="component-lookup.html" />
+      <item name="Component-specific fixtures" />
+      <item name="Mouse Input" />
+      <item name="Keyboard Input" />
+      <item name="Drag 'n Drop"/>
+      <item name="Testing Time-consuming Task" />
+      <item name="Screenshots of failing tests with JUnit" />
+      <item name="Screenshots of failing tests with TestNG" />
+      <item name="Screenshots of GUI components" />
+    </menu>
 
+    <menu name="FEST Modules">
+      <item name="FEST-Swing" href="../../fest-swing/index.html" />
+      <item name="FEST-Assert" href="../../fest-assert/index.html" />
+      <item name="FEST-Mocks" href="../../fest-mocks/index.html" />
+    </menu>
+
+    <menu ref="reports"/>
 	</body>
 </project>

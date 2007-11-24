@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>GUI Component Lookup</title>
+	</properties>
+
+	<body>
+		<section name="Looking up GUI Components">
+      <p>
+        FEST provides different ways to lookup a GUI component: by name, type or custom search criteria. FEST's main
+        fixtures
+      </p>
+      <p>
+        <ul>
+          <li>
+            <code class="code">org.fest.swing.fixture.FrameFixture</code>
+          </li>
+          <li>
+            <code class="code">org.fest.swing.fixture.DialogFixture</code>
+          </li>
+        </ul>
+      </p>
+      <p>
+        support these lookup mechanisms.
+      </p>
+
+      <subsection name="By name">
+        <p>
+          Using a unique name for GUI components guarantees that we can always find them, regardless of any change in the
+          GUI (as long as the components have not been removed.)
+        </p>
+        <p>
+          In this code listing we are simulating a user clicking a <code class="code">JButton</code> with name
+          &quot;ok&quot;:
+<pre class="prettyprint">
+  // GUI test
+  frame.button(&quot;ok&quot;).click();</pre>
+        </p>
+        <p>
+          In order for this lookup to be successful, we need to give such button the name we expect:
+<pre class="prettyprint">
+  // GUI
+  okButton.setName(&quot;ok&quot;);
+</pre>
+        </p>
+      </subsection>
+      <subsection name="By type">
+        <p>
+          Finding components by type is reliable as long as the GUI under test
+          <strong>has only one component of such type</strong>. If the
+          GUI has more that one component of the specified type, we will get unexpected results.
+        </p>
+        <p>
+          The following example shows how to simulate a user clicking a <code class="code">JButton</code>, assumming
+          that the GUI under test has one and only one <code class="code">JButton</code>:
+          <pre class="prettyprint">
+  // GUI test
+  frame.button().click();</pre>          
+        </p>
+      </subsection>
+      <subsection name="Custom Search Criteria">
+        <p>
+          There are times when the GUI to test does not provide unique names for their components (e.g. legacy applications.)
+          To overcome this limitation, FEST provides a way to specify custom search criteria using a
+          <code class="code">org.fest.swing.core.GenericTypeMatcher</code>.
+        </p>
+        <p>
+          In this example, we are simulating a user clicking a <code class="code">JButton</code> containing the text
+          &quot;OK&quot;:
+          <pre class="prettyprint">
+  // GUI test
+  GenericTypeMatcher&lt;JButton&gt; textMatcher = new GenericTypeMatcher&lt;JButton&gt;() {
+    @Override protected boolean isMatching(JButton button) {
+      return &quot;OK&quot;.equals(button.getText());
+    }
+  };
+  frame.button(textMatcher).click();</pre>
+        </p>
+        <p>
+          <strong>Note: </strong>
+          <code class="code">GenericTypeMatcher</code> guarantees that the component passed as
+          argument in the method &quot;<code class="code">isMatching</code>&quot; is never <code class="code">null</code>.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

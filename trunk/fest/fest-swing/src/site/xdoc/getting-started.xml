@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+	<properties>
+		<title>Getting Started</title>
+	</properties>
+
+	<body>
+    <section name="Getting Started">
+      <subsection name="Introduction">
+        FEST (Fixtures for Easy Software Testing) is an open source project (<a
+        href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache 2.0 license</a>) which aims at
+        making software testing simpler. This guide explains how to get started with FEST's Swing module, which makes
+        creation and maintain robust GUI functional tests easy.
+      </subsection>
+      <subsection name="Before you start">
+        <p>
+          Before starting to write any test, please do the following:
+          <ol>
+            <li>
+              Download the latest version of the Swing module from the project's <a
+              href="http://code.google.com/p/fest/downloads/list" target="_blank">download page</a>. The filename should
+              be similar to fest-swing-{VERSION}.zip, where {VERSION} is the latest version of the module.
+            </li>
+            <li>
+              Include the file fest-swing-{VERSION}.jar and its dependencies (jar/zip files, located in the 'lib' folder
+              in the downloaded zip file) in your classpath.
+            </li>
+          </ol>
+        </p>
+      </subsection>
+      <subsection name="Writing your first GUI test">
+        <p>
+          When writing GUI tests, please use the fixtures in the package <code class="code">org.fest.swing.fixture</code>.
+          These fixtures provide specific methods to simulate user interaction with a GUI component and also provide
+          assertion methods to verify the state of such GUI component. Although you could work with the FEST Robot
+          (<code class="code">org.fest.swing.core.RobotFixture</code>) directly, the Robot is too low level and requires
+          considerably more code than the fixtures.
+        </p>
+        <p>
+          There is one fixture per Swing component. Each fixture has the same name as the Swing component they can handle
+          ending with &quot;Fixture.&quot; For example, a <code class="code">JButtonFixture</code> knows how to
+          simulate user interaction and verify state of a <code class="code">JButton</code>.
+        </p>
+        <p>
+          For our first test, let's assume we have a very simple <code class="code">JFrame</code> that contains a
+          <code class="code">JTextField</code>, a <code class="code">JLabel</code> and a
+          <code class="code">JButton</code>. The expected behavior of this
+          GUI is: when user clicks on the <code class="code">JButton</code>, the text of the
+          <code class="code">JTextField</code> should be copied to the <code class="code">JLabel</code>.
+        </p>
+        <p>
+          To create a GUI test, please follow these steps:
+          <ol>
+            <li>
+              <p>
+                Create a fixture to handle either a <code class="code">Frame</code> or a <code class="code">Dialog</code>
+                (depending on the GUI to test) in the &quot;<code class="code">setUp</code>&quot; method of your test. The
+                &quot;<code class="code">setUp</code>&quot; method is the method that initializes the test fixture
+                <strong>before running each test method</strong>:
+              </p>
+              <p>
+                <ul style="list-style-type:square">
+                  <li>&quot;<code class="code">setUp</code>&quot; method in JUnit 3.8.x</li>
+                  <li>any method annotated with <code class="code">@Before</code> in JUnit 4.x</li>
+                  <li>any method annotated with <code class="code">@BeforeMethod</code> in TestNG</li>
+                </ul>
+              </p>
+              <p>
+                Example:
+                <pre class="prettyprint">
+private FrameFixture window;
+
+@BeforeMethod public void setUp() {
+  window = new FrameFixture(new MyFrame());
+  window.show(); // shows the frame to test
+}</pre>
+              </p>
+            </li>
+            <li>
+              <p>
+                Clean up resources after running each test method to release the keyboard and mouse from the
+                FEST Robot (otherwise your computer would be pretty close to unusable.) To clean up resources simply
+                call the method <code>cleanUp</code> in the FEST fixture inside:
+              </p>
+              <p>
+                <ul style="list-style-type:square">
+                  <li>&quot;<code class="code">tearDown</code>&quot; method in JUnit 3.8.x</li>
+                  <li>any method annotated with <code class="code">@After</code> in JUnit 4.x</li>
+                  <li>any method annotated with <code class="code">@AfterMethod</code> in TestNG</li>
+                </ul>
+              </p>
+              <p>
+                Example:
+                <pre class="prettyprint">
+@AfterMethod public void tearDown() {
+  window.cleanUp();
+}</pre>
+              </p>
+            </li>
+            <li>
+              <p>
+                Start using the FEST fixture to test your GUI. FEST fixtures simulate a user interacting with a GUI in
+                order to verify that such GUI behaves as we expect. For our example, we need to verify that the text
+                in the <code class="code">JTextField</code> is copied to the <code class="code">JLabel</code> when the
+                <code class="code">JButton</code> is clicked:
+                <pre class="prettyprint">
+@Test public void shouldCopyTextInLabelWhenClickingButton() {
+  window.textBox("textToCopy").enterText("Some random text");
+  window.button("copyButton").click();
+  window.label("copiedText").requireText("Some random text");
+}</pre>
+              </p>
+            </li>
+          </ol>
+        </p>
+
+        <p>
+          The following code listing shows the whole test that verifies the described GUI is behaving correctly:
+          <pre class="prettyprint">
+import org.testng.annotations.*;
+import org.fest.swing.fixture.FrameFixture;
+
+public class FirstGUITest {
+
+  private FrameFixture window;
+
+  @BeforeMethod public void setUp() {
+    window = new FrameFixture(new MyFrame());
+    window.show();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.cleanUp();
+  }
+
+  @Test public void shouldCopyTextInLabelWhenClickingButton() {
+    window.textBox("textToCopy").enterText("Some random text");
+    window.button("copyButton").click();
+    window.label("copiedText").requireText("Some random text");
+  }
+}</pre>
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

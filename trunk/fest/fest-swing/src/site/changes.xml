@@ -165,7 +165,7 @@
         Swing module and the extensions for TestNG and JUnit are included in one zip file.
       </action>
     </release>
-    <release version="0.4" date="2007-07-17">
+    <release version="0.4" date="2007-07-17" description="Subsequent release">
       <action dev="alruiz, wanghy" type="add" issue="3">
         Now it is possible to embed screenshots of failing GUI tests in JUnit's HTML report.
       </action>
