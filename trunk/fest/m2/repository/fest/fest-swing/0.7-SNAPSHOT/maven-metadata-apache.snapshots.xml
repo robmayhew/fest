@@ -2,10 +2,4 @@
   <groupId>fest</groupId>
   <artifactId>fest-swing</artifactId>
   <version>0.7-SNAPSHOT</version>
-  <versioning>
-    <snapshot>
-      <localCopy>true</localCopy>
-    </snapshot>
-    <lastUpdated>20071117214305</lastUpdated>
-  </versioning>
 </metadata>
