@@ -8,7 +8,7 @@
 	<bannerLeft>
 		<name>FEST-Assert</name>
 		<src>/images/fest-assert.png</src>
-		<href>http://code.google.com/p/fest</href>
+		<href>index.html</href>
 	</bannerLeft>
 	<poweredBy>
 		<logo name="Build with Maven 2" href="http://maven.apache.org"
@@ -17,7 +17,7 @@
 
 	<body>
 		<links>
-			<item name="FEST" href="http://code.google.com/p/fest" />
+			<item name="FEST" href="../index.html" />
 		</links>
 
 		<menu name="Overview">
@@ -28,7 +28,13 @@
       <item name="Changelog" href="changes-report.html" />
 		</menu>
 
-		<menu ref="reports"/>		
+		<menu name="FEST Modules">
+			<item name="FEST-Swing" href="../swing/index.html" />
+			<item name="FEST-Assert" href="../assert/index.html" />
+			<item name="FEST-Reflection" href="../reflection/index.html" />
+			<item name="FEST-Mocks" href="../mocks/index.html" />
+		</menu>
 
+		<menu ref="reports"/>		
 	</body>
 </project>
