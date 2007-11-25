@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Component-specific Fixtures</title>
+  </properties>
+
+  <body>
+    <section name="Component-specific Fixtures">
+      <p>
+        FEST-Swing provides fixtures that know how to simulate specific user interaction scenarios. These 
+        component-specific fixtures are not limited to simulate user input, they also provide assertion methods that 
+        verify state of a GUI component.
+      </p>
+      <p>
+       FEST-Swing provides fixtures for <strong>each Swing component in the JDK</strong>. The name of a fixture is 
+       composed by the name of the GUI component plus &quot;Fixture.&quot; For example, 
+       <code class="code">JButtonFixture</code> can manage <code class="code">JButton</code>s. 
+      </p>
+    </section>
+    <section name="Examples">
+      <p>
+        The following are some examples of FEST's fixtures. For more details, please take a look at the module's
+        Javadoc.
+      </p>
+      <subsection name="Frames">
+        <p>
+          A <code class="code">org.fest.swing.fixture.FrameFixture</code> is capable of simulating user interaction with
+          a <code class="code">java.awt.Frame</code> or any subclass (e.g. <code class="code">javax.swing.JFrame</code>.)
+        </p>
+        <p>
+          Creating a <code class="code">FrameFixture</code> is easy, we just need to pass an instance of the frame 
+          we want to test:
+          <pre class="prettyprint">
+FrameFixture frame = new FrameFixture(new MyFrame());</pre>
+        </p>
+        <p>
+          Once we have a <code class="code">FrameFixture</code> up, we can show the frame to test (we can optionally
+          specify its size) and start simulating a user interacting with the frame.
+          <pre class="prettyprint">
+frame.resizeTo(new Dimension(400, 600))
+     .minimize()
+     .normalize()
+     .close();</pre>
+        </p>
+        <p>
+          We can also get a reference to component-specific fixtures linked to the GUI components inside the frame under
+          test.
+          <pre class="prettyprint">
+// getting a reference to the JButton with name &quot;connect&quot; inside the frame
+frame.button(&quot;connect&quot;).click();
+
+// getting a reference to the JComboBox with name &quot;projects&quot; inside the frame
+frame.comboBox(&quot;projects&quot;).selectItem(&quot;FEST&quot;);</pre>
+        </p>
+        <p>
+          <code class="code">FrameFixture</code> is not limited to just simulate user input, it can also verify the
+          state of the frame under test.
+          <pre class="prettyprint">
+frame.requireEnabled()
+     .requireVisible()
+     .requireSize(new Dimension(300, 200));</pre> 
+        </p>
+      </subsection>
+      <subsection name="Text Fields">
+        <p>
+          A <code class="code">org.fest.swing.fixture.JTextComponentFixture</code> is capable of simulating user 
+          interaction with a <code class="code">javax.swing.text.JTextComponent</code> or any subclass (e.g.
+          <code class="code">javax.swing.JTextField</code>.)
+        </p>  
+        <p>
+          There are different ways to create a <code class="code">JTextComponentFixture</code>. The first one is to
+          use any of its constructors. In this example we are creating a <code class="code">JTextComponentFixture</code>
+          that will manage a <code class="code">JTextField</code> with name &quot;username&quot;:
+          <pre class="prettyprint">
+// import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;          
+JTextComponentFixture textBox = new JTextComponent(robotWithNewAwtHierarchy(), &quot;username&quot;);</pre>
+        </p>
+        <p>
+          The downside of this approach is that we need to pass an instance of 
+          <code class="code">org.fest.swing.core.RobotFixture</code> to the constructor. An easier and more compact
+          approach (actually, this is <strong>the recommended approach</strong>) is to get a reference to the button 
+          from the <code class="code">FrameFixture</code> that manages the frame containing the button we are interested 
+          in:
+          <pre class="prittyprint">
+JTextComponentFixture textBox = frame.button(&quot;username&quot;);</pre>
+        </p>
+        <p>
+          Once we have a <code class="code">JTextComponentFixture</code>, we can simulate a user interacting with it.
+          <pre class="prettyprint">
+textBox.deleteText()
+       .enterText(&quot;frodo.baggins&quot;)
+       .select(&quot;frodo&quot;);</pre>
+        </p>
+        <p>
+          We can also verify the state of the <code class="code">JTextField</code>:
+          <pre class="prettyprint">
+textBox.requireText(&quot;yoda&quot;)
+       .requireEnabled()
+       .deleteText()
+       .requireEmpty();</pre>          
+        </p>
+      </subsection>
+    </section>  
+  </body>
+</document>  

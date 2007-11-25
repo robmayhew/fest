@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Simulating Mouse Input</title>
+  </properties>
+
+  <body>
+    <section name="Simulating Mouse Input">
+      <p>
+        All FEST Fixtures can simulate user input using a mouse. This simulation is not limited to send events to
+        <code class="code">MouseListener</code>s. FEST provides true mouse input, at the operating system level. For
+        example, simulating a user moving the mouse will result in the mouse pointer moving to a specified
+        location.
+      </p>
+      <subsection name="Simple Click">
+        <p>
+          The method &quot;<code class="code">click()</code>&quot; can simulate a user clicking a GUI component once, 
+          using the left mouse button. The following code listing shows how to simulate a user clicking the button with 
+          name &quot;connect&quot;:
+          <pre class="prettyprint">
+frame.button(&quot;connect&quot;).click();</pre>
+        </p>
+        <p>
+          The following are alternative (and more verbose) ways to click a component once, using the left mouse button:
+          <pre class="prettyprint">
+// import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+frame.button(&quot;connect&quot;).click(LEFT_BUTTON); 
+
+// import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+frame.button(&quot;connect&quot;).click(leftButton().times(1));</pre>
+        </p>
+      </subsection>
+      <subsection name="Right-Click">
+        <p>
+          The method &quot;<code class="code">rightClick()</code>&quot; can simulate a user clicking a GUI component once, 
+          using the right mouse button. The following code listing shows how to simulate a user right-clicking the text 
+          field with name &quot;username&quot;:
+          <pre class="prettyprint">
+frame.textBox(&quot;username&quot;).rightClick();</pre>
+        </p>
+        <p>
+          The following are alternative (and more verbose) ways to click a component once, using the right mouse button:
+          <pre class="prettyprint">
+// import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+frame.textBox(&quot;username&quot;).click(RIGHT_BUTTON); 
+
+// import static org.fest.swing.fixture.MouseClickInfo.rightButton;
+frame.textBox(&quot;username&quot;).click(rightButton().times(1));</pre>
+        </p>
+      </subsection>
+      <subsection name="Double-Click">
+        <p>
+          The method &quot;<code class="code">doubleClick()</code>&quot; can simulate a user double-clicking a GUI 
+          component, using the left mouse button. The following code listing shows how to simulate a user 
+          double-clicking the label with name &quot;configure&quot;:
+          <pre class="prettyprint">
+frame.label(&quot;configure&quot;).doubleClick();</pre>
+        </p>
+        <p>
+          The following is an alternative (and more verbose) way to double-click a component, using the left mouse 
+          button:
+          <pre class="prettyprint">
+// import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+frame.label(&quot;configure&quot;).click(leftButton().times(2));</pre>
+        </p>
+      </subsection>
+      <subsection name="Click Using Specific Button, Once">
+        <p>
+          The method &quot;<code class="code">click(MouseButton)</code>&quot; can simulate a user clicking a GUI 
+          component, using the specified mouse button. The following code listing shows how to simulate a user 
+          clicking the check box with name &quot;include&quot; using the middle mouse button:
+          <pre class="prettyprint">
+// import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+frame.checkBox(&quot;include&quot;).click(MIDDLE_BUTTON);</pre>
+        </p>
+      </subsection>
+      <subsection name="Click Using Specific Button, Many Times">
+        <p>
+          The method &quot;<code class="code">click(MouseClickInfo)</code>&quot; can simulate a user clicking a GUI 
+          component, using the specified mouse button, many times. The following code listing shows how to simulate a user 
+          clicking three times the radio button with name &quot;monthly&quot; using the left mouse button:
+          <pre class="prettyprint">
+// import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+frame.radioButton(&quot;monthly&quot;).click(leftButton().times(3));</pre>
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>  
