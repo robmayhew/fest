@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>DSL-Oriented API</title>
+  </properties>
+
+  <body>
+    <section name="DSL-Oriented API">
+      <p>
+        FEST-Swing exploits the concept of 
+        <a href="http://martinfowler.com/bliki/DomainSpecificLanguage.html" target="_blank">Internal Domain-Specific Language</a>
+        to provide an easy and simple way to create and maintain GUI functional tests. Although we might argue that
+        it is not possible to create domain-specific languages (DSLs) with the Java language, designing an API from a 
+        DSL perspective. The result is an API that is both easy to read and write.
+      </p>
+      <p>
+        The following examples demonstrate FEST-Swing API: 
+        <code class="code">JTable</code>:
+        <pre class="prettyprint">
+// simulate a user selecting a particular cell in a JTable       
+dialog.table(&quot;reports&quot;).selectCellAt(row(3).column(4));
+
+// simulate a user entering some text in a JTextField and selecting it
+dialog.textBox(&quot;username&quot;).enterText(&quot;yvonne&quot;).selectAll();</pre>
+      </p>
+      <p>
+        Not every class in FEST-Swing follows this programming style. Only the classes intended for be used to create
+        GUI tests, that is, the classes in the package <code class="code">org.fest.swing.fixture</code>, were created in 
+        with a DSL style in mind.
+      </p>
+    </section>
+  </body>
+</document>  

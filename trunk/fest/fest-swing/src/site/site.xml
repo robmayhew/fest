@@ -16,9 +16,9 @@
 	</poweredBy>
 
 	<body>
-		<links>
+		<!--  links>
 			<item name="FEST" href="http://code.google.com/p/fest" />
-		</links>
+		</links-->
 
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
@@ -27,13 +27,14 @@
 		</menu>
 
 		<menu name="Features">
+		  <item name="DSL-Oriented API" href="dsl-api.html" />
 			<item name="FEST Fixtures" href="component-fixture.html" />
 			<item name="GUI Component Lookup" href="component-lookup.html" />
 			<item name="Mouse Input" href="mouse-input.html" />
 			<item name="Keyboard Input" href="keyboard-input.html" />
-			<item name="Drag 'n Drop" />
-			<item name="Time Consuming Tasks" />
-			<item name="Screenshots of failing tests">
+			<item name="Drag 'n Drop" href="drag-n-drop.html" />
+			<item name="Time Consuming Tasks" href="time-consuming.html" />
+			<item name="Screenshots of failing tests" href="failure-screenshots.html">
 	      <item name="JUnit" />
 	      <item name="TestNG" />
 			</item>
