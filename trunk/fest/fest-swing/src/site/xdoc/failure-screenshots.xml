@@ -7,6 +7,38 @@
 
   <body>
     <section name="Screenshots of Failing Tests">
+      <p>
+        On some occasions a functional GUI test will run perfectly from within the IDE but will break when executed in a 
+        batch with other tests (such as when you are using Ant). This is because functional GUI tests are vulnerable to 
+        certain environment-related events, and FEST-Swing is no exception. 
+      </p>
+      <p>  
+        It occasionally may happen that antivirus software runs a scheduled scan while a GUI is under test. If the 
+        antivirus software pops up a dialog in front of the GUI, the FEST robot will not be able to access the GUI and 
+        will time out eventually, making the test fail. In this case, the failure is not related to a programming error; 
+        it is just a case of bad timing. 
+      </p>
+      <p>
+        FEST-Swing is capable of taking a screenshot of the desktop when a GUI test fails, regardless of the test
+        framework you use (<a href="http://www.junit.org" target="_blank">JUnit</a> or 
+        <a href="http://testng.org" target="_blank">TestNG</a>.) You then can use this 
+        screenshot to verify the cause of a failed test and discover whether it is programmatic or environmental.
+      </p>
+      <p>
+        There are many ways to take a screenshot of the desktop when a GUI test fails. Regardless of how the FEST-Swing
+        takes a screenshot, it needs to know which tests should be considered &quot;GUI tests.&quot; In order to do so,
+        we only need to add the annotation <code class="code">@GUITest</code>. This annotation can be placed at class
+        or method level, and it is inherited by subclasses of annotated classes.
+      </p>
+      <p>
+        Once our GUI tests have the <code class="code">@GUITest</code> annotation, we can take screenshot of the desktop
+        when a GUI test fails:
+        <ol>
+          <li>Manually</li>
+          <li>FEST's JUnit extension</li>
+          <li>FEST's TestNG extension</li>
+        </ol>
+      </p>
     </section>
   </body>
 </document>  

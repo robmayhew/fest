@@ -35,8 +35,9 @@
 			<item name="Drag 'n Drop" href="drag-n-drop.html" />
 			<item name="Time Consuming Tasks" href="time-consuming.html" />
 			<item name="Screenshots of failing tests" href="failure-screenshots.html">
-	      <item name="JUnit" />
-	      <item name="TestNG" />
+	      <item name="Manually" />
+	      <item name="JUnit Extension" />
+	      <item name="TestNG Extension" />
 			</item>
 			<item name="Screenshots of GUI components" />
 			<item name="Platform-Specific" />
