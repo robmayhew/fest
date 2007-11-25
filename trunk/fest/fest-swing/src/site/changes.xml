@@ -36,7 +36,7 @@
 				Moved exception classes in package org.fest.swing to org.fest.swing.exception.
 			</action>
 			<action dev="alruiz" type="fix" issue="59">
-				Moved exception classes in package org.fest.swing to org.fest.swing.core.
+				Moved classes in package org.fest.swing to org.fest.swing.core.
 			</action>
 			<action dev="alruiz" type="fix" issue="59">
 				Renamed package org.fest.swing.fixture.util to org.fest.swing.finder.			

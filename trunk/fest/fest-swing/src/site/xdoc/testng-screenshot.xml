@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Taking Screenshots of TestNG Failed Tests</title>
+  </properties>
+
+  <body>
+    <section name="Taking Screenshots of TestNG Failed Tests">
+      <p>
+        FEST-Swing can take screenshots of the desktop when a <a href="http://testng.org" target="_blank">TestNG</a> 
+        GUI test fails. Because of TestNG's excellent support for extensibility, it is quite easy to setup FEST-Swing
+        with TestNG.
+      </p>
+      <p>
+        FEST-Swing provides the listener <code class="code">org.fest.swing.testng.ScreenshotOnFailureListener</code>,
+        which takes a screenshot of the desktop when a test fails and saves it in TestNG's default output directory. 
+        Due to TestNG's flexible architecture, this listener can be called either from Ant, TestNG plug-in for 
+        <a href="http://www.eclipse.org" target="_blank">Eclipse</a>, command line, etc.)
+      </p>
+      <p>
+        To take screenshots of failed GUI tests, regardless of how they are executed, please follow these steps:
+        <ol>
+          <li>
+            Add the FEST TestNG Extension to your classpath (file fest-swing-testng-{VERSION}.jar, included when you
+            download FEST-Swing)
+          </li>
+          <li>
+            Mark GUI tests (class or method level) with the annotation <code class="code">org.fest.swing.GUITest</code>
+          </li>
+        </ol>
+      </p>
+      <p>
+        The following example shows how to register a <code class="code">ScreenshotOnFailureListener</code> with TestNG
+        Ant task:
+        <pre class="prettyprint">
+&lt;testng <strong>listeners=&quot;org.fest.swing.testng.ScreenshotOnFailureListener&quot;</strong>
+        outputDir=&quot;${target.test.results.dir}&quot; haltOnFailure=&quot;true&quot; 
+        verbose=&quot;2&quot;&gt;
+  &lt;classfileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;**/*Test.class&quot; /&gt;
+  &lt;classpath location=&quot;${target.test.classes.dir}&quot; /&gt;
+  &lt;classpath location=&quot;${target.classes.dir}&quot; /&gt;
+  &lt;classpath refid=&quot;test.classpath&quot; /&gt;
+&lt;/testng&gt;</pre>
+      </p>
+      <p>
+        The following is a screenshot of a failed TestNG GUI test:
+      </p>
+      <p>
+        <center>
+          <img src="./images/testng-ext.png" border="0" />
+        </center>
+      </p>
+      <p>
+        For more details about using TestNG listeners, please visit <a href="http://testng.org" target="_blank">TestNG documentation</a>.
+      </p>
+    </section>
+  </body>
+</document>  

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Taking Desktop Screenshots Manually</title>
+  </properties>
+
+  <body>
+    <section name="Taking Desktop Screenshots Manually">
+      <p>
+			  Taking a screenshot of the desktop is quite simple. The class 
+			  <code class="code">org.fest.swing.image.ScreenshotTaker</code> provides two methods:
+      </p>
+      <p>
+        <ol>
+          <li>
+            &quot;<code class="code">takeDesktopScreenshot()</code>&quot;: takes a screenshot of the desktop and 
+            returns it as a <code class="code">java.awt.image.BufferedImage</code>.
+          </li>
+          <li>
+            &quot;<code class="code">saveDesktopAsPng(String)</code>&quot;: takes a screenshot of the desktop and
+            saves it as a PNG image using the file path passed as argument.
+          </li>
+        </ol>
+      </p>
+      <subsection name="Example">
+        <p>
+          The following example takes a screenshot of the desktop when a test fails and saves the image as 
+          &quot;myTest.png&quot;:
+          <pre class="prettyprint">
+ScreenshotTaker screenshotTaker = new ScreenshotTaker();          
+          
+// import static org.fest.util.Files.currentFolder; 
+String currentFolderPath = currentFolder().getCanonicalPath();
+
+// import static java.io.File.separator          
+File imageFolder = new File(currentFolderPath + separator + &quot;failed-tests&quot;))
+String imageFolderPath = imageFolder.getCanonicalPath() + separator;
+
+try {
+// perform your test
+} catch (Exception e) {
+  // test failed
+  screenshotTaker.saveDesktopAsPng(imageFolderPath + &quot;myTest.png&quot;);
+  throw e;
+}</pre>       
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>  

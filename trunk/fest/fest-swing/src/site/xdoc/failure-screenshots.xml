@@ -27,16 +27,17 @@
       <p>
         There are many ways to take a screenshot of the desktop when a GUI test fails. Regardless of how the FEST-Swing
         takes a screenshot, it needs to know which tests should be considered &quot;GUI tests.&quot; In order to do so,
-        we only need to add the annotation <code class="code">@GUITest</code>. This annotation can be placed at class
+        we only need to add the annotation <code class="code">@GUITest</code> 
+        (<code class="code">org.fest.swing.annotation.GUITest</code>.) This annotation can be placed at class
         or method level, and it is inherited by subclasses of annotated classes.
       </p>
       <p>
         Once our GUI tests have the <code class="code">@GUITest</code> annotation, we can take screenshot of the desktop
         when a GUI test fails:
         <ol>
-          <li>Manually</li>
-          <li>FEST's JUnit extension</li>
-          <li>FEST's TestNG extension</li>
+          <li><a href="manual-screenshot.html">Manually</a></li>
+          <li><a href="junit-screenshot.html">FEST's JUnit extension</a></li>
+          <li><a href="testng-screenshot.html">FEST's TestNG extension</a></li>
         </ol>
       </p>
     </section>

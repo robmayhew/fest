@@ -32,7 +32,8 @@
           Creating a <code class="code">FrameFixture</code> is easy, we just need to pass an instance of the frame 
           we want to test:
           <pre class="prettyprint">
-FrameFixture frame = new FrameFixture(new MyFrame());</pre>
+FrameFixture frame = new FrameFixture(new MyFrame());
+frame.show();</pre>
         </p>
         <p>
           Once we have a <code class="code">FrameFixture</code> up, we can show the frame to test (we can optionally
