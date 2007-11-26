@@ -11,7 +11,7 @@
         FEST (Fixtures for Easy Software Testing) is an open source project (<a
         href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache 2.0 license</a>) which aims at
         making software testing simpler. This guide explains how to get started with FEST's Swing module, which makes
-        creation and maintain robust GUI functional tests easy.
+        creation and maintenance of robust GUI functional tests easy.
       </subsection>
       <subsection name="Before you start">
         <p>

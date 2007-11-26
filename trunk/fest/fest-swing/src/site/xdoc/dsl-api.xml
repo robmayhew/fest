@@ -12,11 +12,10 @@
         <a href="http://martinfowler.com/bliki/DomainSpecificLanguage.html" target="_blank">Internal Domain-Specific Language</a>
         to provide an easy and simple way to create and maintain GUI functional tests. Although we might argue that
         it is not possible to create domain-specific languages (DSLs) with the Java language, designing an API from a 
-        DSL perspective. The result is an API that is both easy to read and write.
+        DSL perspective can result in an APIthat is both easy to read and write.
       </p>
       <p>
         The following examples demonstrate FEST-Swing API: 
-        <code class="code">JTable</code>:
         <pre class="prettyprint">
 // simulate a user selecting a particular cell in a JTable       
 dialog.table(&quot;reports&quot;).selectCellAt(row(3).column(4));

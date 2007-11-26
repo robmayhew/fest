@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.7" date="TBD" description="Subsequent release">
+    <release version="0.7" date="2007-11-27" description="Subsequent release">
 			<action dev="wanghy, alruiz" type="add" due-to="Steve Tom">
 				Added method 'takeScreenshotOf' to class ScreenshotTaker. This method takes screenshots of a particular GUI 
 				component.
