@@ -13,12 +13,13 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.junit;
+package org.fest.swing.junit.runner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.fest.swing.annotation.GUITest;
+import org.fest.swing.junit.runner.GUITestRunner;
 
 /**
  * Understands a JUnit test to be used to test the TestNG tests in this package.

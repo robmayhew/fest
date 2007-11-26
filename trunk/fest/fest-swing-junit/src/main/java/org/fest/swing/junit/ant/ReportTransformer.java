@@ -12,7 +12,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.junit;
+package org.fest.swing.junit.ant;
 
 import java.io.File;
 import java.net.URL;
@@ -45,10 +45,12 @@ import static org.fest.util.Strings.concat;
  */
 public class ReportTransformer extends AggregateTransformer {
 
+  private static final String XSL_FILE_PATH = "org/fest/swing/junit/ant/";
+
   private Path classpath;
 
   /** The params that will be sent to the XSL transformation. */
-  private List<XSLTProcess.Param> params;
+  private final List<XSLTProcess.Param> params;
 
   /** Instance of a utility class to use for file operations. */
   private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
@@ -116,7 +118,7 @@ public class ReportTransformer extends AggregateTransformer {
     if (NOFRAMES.equals(format)) xslname = "junit-noframes.xsl";
     if (styleDir == null) {
       URLResource stylesheet = new URLResource();
-      URL stylesheetURL = getClass().getClassLoader().getResource(concat("org/fest/swing/junit/", xslname));
+      URL stylesheetURL = getClass().getClassLoader().getResource(concat(XSL_FILE_PATH, xslname));
       stylesheet.setURL(stylesheetURL);
       return stylesheet;
     }

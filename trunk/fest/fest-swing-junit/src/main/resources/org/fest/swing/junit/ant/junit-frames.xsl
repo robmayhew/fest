@@ -699,7 +699,7 @@ h6 {
     <table width="100%">
     <tr>
         <td align="left"></td>
-        <td align="right">Designed for use with <a href="http://www.junit.org/">JUnit</a> and <a href="http://ant.apache.org/">Ant</a>. Screenshots of failed tests taken by <a href="http://code.google.com/p/fest/">FEST</a>.</td>
+        <td align="right">Designed for use with <a href="http://www.junit.org/">JUnit</a> and <a href="http://ant.apache.org/">Ant</a>. Screenshots of failed tests taken by <a href="http://fest.easytesting.org/swing">FEST</a>.</td>
     </tr>
     </table>
     <hr size="1"/>
@@ -881,7 +881,7 @@ h6 {
     <xsl:variable name="encoded.image">
         <xsl:value-of select="."/>   
     </xsl:variable>
-    <xsl:value-of select="java:org.fest.swing.junit.ImageHandler.decodeBase64AndSaveAsPng(string($encoded.image), string($screenshot.fullpath))"/>
+    <xsl:value-of select="java:org.fest.swing.junit.ant.ImageHandler.decodeBase64AndSaveAsPng(string($encoded.image), string($screenshot.fullpath))"/>
     <div>
     <br/>
     <a>

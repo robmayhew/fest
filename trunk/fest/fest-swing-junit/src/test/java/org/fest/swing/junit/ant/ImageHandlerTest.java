@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.junit;
+package org.fest.swing.junit.ant;
 
 import java.awt.image.BufferedImage;
 
@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import org.fest.swing.image.ScreenshotTaker;
+import org.fest.swing.junit.ant.ImageHandler;
 
 import static org.fest.assertions.Assertions.assertThat;
 

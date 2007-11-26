@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.junit;
+package org.fest.swing.junit.ant;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;

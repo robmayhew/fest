@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.junit;
+package org.fest.swing.junit.runner;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 
 import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
-import static org.fest.swing.junit.Formatter.format;
+import static org.fest.swing.junit.runner.Formatter.format;
 import static org.fest.util.Files.currentFolder;
 import static org.fest.util.Files.delete;
 import static org.fest.util.Strings.concat;

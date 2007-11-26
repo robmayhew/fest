@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.junit;
+package org.fest.swing.junit.runner;
 
 import java.util.List;
 
@@ -21,6 +21,9 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.junit.runner.FailedGUITestListener;
+import org.fest.swing.junit.runner.GUITestRunner;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
