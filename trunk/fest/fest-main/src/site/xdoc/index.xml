@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Welcome</title>
+  </properties>
+
+  <body>
+    <section name="Welcome to FEST (Fixtures for Easy Software Testing)">
+      <p>
+        FEST is a collection of APIs, released under the 
+        <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>, which mission is to 
+        simplify software testing.
+      </p>
+      <subsection name="Modules">  
+      <p>
+        FEST is composed of various modules, all of them can be used with 
+        <a href="http://www.junit.org" target="_blank">JUnit</a> or 
+        <a href="http://testng.org" target="_blank">TestNG</a>.</p>
+      <p>
+        <a href="swing/index.html">Swing Module</a>:
+        <ul>
+          <li>DSL-oriented API for functional Swing GUI testing</li>
+					<li>Simulation of user-generated events and reliable GUI component lookup</li>
+					<li>Easy-to-use and powerful API that simplifies creation and maintenance of Swing GUI functional tests:
+<pre class="prettyprint">
+dialog.comboBox(&quot;domain&quot;).select(&quot;Users&quot;);
+dialog.textBox(&quot;username&quot;).enterText(&quot;alex.ruiz&quot;);
+dialog.button(&quot;ok&quot;).click();
+dialog.optionPane().requireErrorMessage()
+                   .requireMessage(&quot;Please enter your password&quot;);</pre>					
+					</li>
+					<li>Ability to take screenshots of failed GUI tests and embed them in a HTML test report</li> 
+					<li>And much <a href="swing/index.html">more!</a></li>       
+        </ul>
+      </p>
+      <p>
+        <a href="assert/index.html">Assertions Module</a>:
+        <ul>
+        	<li>
+        	  'Flexible' or 'fluent' assertions:
+        	  <pre class="prettyprint">
+assertThat(yoda).isInstanceOf(Jedi.class)
+                .isEqualTo(foundJedi)
+                .isNotEqualTo(foundSith);</pre>
+        	</li>
+        	<li>
+        	  Assertions for <code class="code">Object</code>s, <code class="code">String</code>s, arrays (including 
+        	  primitives), primitives, <code class="code">Collection</code>s, images and more!
+        	</li>
+        	<li>Assertions can be extended using custom <code class="code">Condition</code>s</li>
+        </ul>      
+      </p>
+      <p>
+        <a href="reflection/index.html">Reflection Module</a>:
+        <ul>
+          <li>
+            'Fluent interface' for simplifying usage of reflection:
+            <pre class="prettyprint">
+Person person = constructor().withParameterTypes(String.class)
+                             .in(Person.class)
+                             .newInstance("Yoda");
+method("setName").withParameterTypes(String.class)
+                 .in(person)
+                 .invoke("Luke");
+field("name").ofType(String.class)
+             .in(person)
+             .set("Anakin");</pre>          
+          </li>
+        </ul>
+      </p>
+      <p>
+        <a href="mocks/index.html">Mocks Module</a>:
+        <ul>
+          <li>Eliminates code duplication when using mock objects</li>
+          <li>Clearly separates mock expectations from code to test, improving code readability</li>
+        </ul>	
+      </p>
+      </subsection>
+	    <subsection name="Links">
+	     <p>
+	      <ul>
+				<li><a href="http://code.google.com/p/fest/" target="_blank">FEST project at Google Code</a></li>	      
+				<li><a href="http://fisheye2.cenqua.com/browse/fest" target="_blank">Browse source repository (FishEye)</a></li>
+				</ul>	      
+	     </p>
+	    </subsection>
+    </section>
+  </body>
+</document>  
