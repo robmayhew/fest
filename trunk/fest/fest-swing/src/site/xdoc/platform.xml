@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Platform-Specific Features</title>
+  </properties>
+
+  <body>
+    <section name="Support for Platform-Specific Features">
+      <p>
+				Sometimes, when testing our applications, we need to deal with platform-specific issues. FEST-Swing provides
+				the utility class <code class="code">org.fest.swing.util.Platform</code> to overcome this type of issues.
+      </p>
+      <p>
+        Currently <code class="code">Platform</code> provides one method, 
+        &quot;<code class="code">controlOrCommandKey()</code>&quot; that returns the code of either the &quot;Command&quot;
+        key (if MacOS) or the code of the &quot;Control&quot; key (if other than MacOS, for example Windows.) A good
+        example of the utility of this method is simulation of a user copying some text to the clipboard. In windows
+        we need to simulate a user pressing the keys &quot;Control&quot; and &quot;C,&quot; while in MacOS we need to
+        simulate a user pressing the keys &quot;Command&quot; and &quot;C.&quot; With FEST-Swing we can simple write:
+        <pre class="prettyprint">
+// import static org.fest.swing.util.Platform.controlOrCommandKey;      
+// import static java.awt.event.KeyEvent.VK_C;  
+dialog.textBox(&quot;username&quot;).selectAll()
+                          .pressKey(controlOrCommandKey())
+                          .pressAndReleaseKeys(VK_C)
+                          .releaseKey(controlOrCommandKey());</pre>
+      </p>
+    </section>
+  </body>
+</document>  

@@ -39,12 +39,12 @@
         network traffic, etc.) and we need to wait for the main window to appear in order to continue our test. It is 
         possible to test this scenario with FEST:
         <pre class="prettyprint">
-loginDialog.textBox("username").enterText("yvonne");
-loginDialog.textBox("password").enterText("welcome");
-loginDialog.button("login").click();
+loginDialog.textBox(&quot;username&quot;).enterText(&quot;yvonne&quot;);
+loginDialog.textBox(&quot;password&quot;).enterText(&quot;welcome&quot;);
+loginDialog.button(&quot;login&quot;).click();
     
 // now the interesting part, we need to wait till the main window is shown.
-FrameFixture mainFrame = findFrame("main").using(loginDialog.robot);
+FrameFixture mainFrame = findFrame(&quot;main&quot;).using(loginDialog.robot);
 
 // we can continue testing the main window.</pre>
       </p>

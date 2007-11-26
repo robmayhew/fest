@@ -8,7 +8,7 @@
 	<bannerLeft>
 		<name>FEST-Swing</name>
 		<src>/images/fest-swing.png</src>
-		<href>http://code.google.com/p/fest</href>
+		<href>index.html</href>
 	</bannerLeft>
 	<poweredBy>
 		<logo name="Build with Maven 2" href="http://maven.apache.org"
@@ -16,14 +16,16 @@
 	</poweredBy>
 
 	<body>
-		<!-- links>
-			<item name="FEST" href="http://code.google.com/p/fest" />
-		</links-->
+		<breadcrumbs>
+			<item name="FEST" href="../index.html" />
+      <item name="Swing" href="index.html"/>
+    </breadcrumbs>
 
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
 			<item name="Getting Started" href="getting-started.html" />
 			<item name="Changelog" href="changes-report.html" />
+			<item name="Javadocs" href="apidocs/index.html" />
 		</menu>
 
 		<menu name="Features">
@@ -39,15 +41,15 @@
 	      <item name="JUnit Extension" href="junit-screenshot.html" />
 	      <item name="TestNG Extension" href="testng-screenshot.html" />
 			</item>
-			<item name="Screenshots of GUI components" />
-			<item name="Platform-Specific" />
+			<item name="Screenshots of GUI components" href="component-screenshot.html" />
+			<item name="Platform-Specific" href="platform.html" />
 		</menu>
 
 		<menu name="FEST Modules">
-			<item name="FEST-Swing" href="../../fest-swing/index.html" />
-			<item name="FEST-Assert"
-				href="../../fest-assert/index.html" />
-			<item name="FEST-Mocks" href="../../fest-mocks/index.html" />
+			<item name="FEST-Swing" href="../swing/index.html" />
+			<item name="FEST-Assert" href="../assert/index.html" />
+			<item name="FEST-Reflection" href="../reflection/index.html" />
+			<item name="FEST-Mocks" href="../mocks/index.html" />
 		</menu>
 
 		<menu ref="reports" />

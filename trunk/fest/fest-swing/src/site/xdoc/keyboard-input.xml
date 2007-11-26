@@ -53,8 +53,8 @@ dialog.button(&quot;configure&quot;).focus().pressAndReleaseKeys(VK_F1);</pre>
           <pre class="prettyprint">
 // import static java.awt.event.KeyEvent.*;          
 dialog.list(&quot;employees&quot;).pressKey(VK_CONTROL)
-                                  .click()
-                                  .releaseKey(VK_CONTROL);</pre>
+                        .click()
+                        .releaseKey(VK_CONTROL);</pre>
         </p>
       </subsection>
     </section>

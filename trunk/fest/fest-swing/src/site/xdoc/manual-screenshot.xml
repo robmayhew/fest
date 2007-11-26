@@ -14,11 +14,11 @@
       <p>
         <ol>
           <li>
-            &quot;<code class="code">takeDesktopScreenshot()</code>&quot;: takes a screenshot of the desktop and 
+            &quot;<code class="code">takeDesktopScreenshot()</code>&quot; takes a screenshot of the desktop and 
             returns it as a <code class="code">java.awt.image.BufferedImage</code>.
           </li>
           <li>
-            &quot;<code class="code">saveDesktopAsPng(String)</code>&quot;: takes a screenshot of the desktop and
+            &quot;<code class="code">saveDesktopAsPng(String)</code>&quot; takes a screenshot of the desktop and
             saves it as a PNG image using the file path passed as argument.
           </li>
         </ol>

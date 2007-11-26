@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Taking Screenshots of GUI Components</title>
+  </properties>
+
+  <body>
+    <section name="Taking Screenshots of GUI Components">
+      <p>
+        FEST-Swing provides support for taking screenshots of specific GUI components. This feature may be handy in cases
+        when we want to verify that custom drawing/painting is being made by our application.
+      </p>
+      <p>
+        The class <code class="code">org.fest.swing.image.ScreenshotTaker</code> provides two methods for taking 
+        screenshots of GUI components:
+        <ol>
+          <li>
+            &quot;<code class="code">takeScreenshotOf(java.awt.Component)</code>&quot; takes a screenshot of the 
+            given component and returns it as a <code class="code">java.awt.image.BufferedImage</code>.
+          </li>
+          <li>
+            &quot;<code class="code">saveComponentAsPng(java.awt.Component, String)</code>&quot; takes a screenshot of 
+            the given component and saves it as a PNG image using the file path passed as argument.
+          </li>
+       </ol>
+      </p>
+      <subsection name="Comparing images">
+        <p>
+          To test that two images are equal, we can use the method 
+          &quot;<code class="code">isEqualTo(java.awt.image.BufferedImage)</code>&quot; in 
+          <code class="code">org.fest.assertion.ImageAssertion</code> (part of the 
+          <a href="../assert/index.html">FEST-Assert</a> module.) This method verifies that two images have the same
+          size and the color of each pixel is the same between the two images. 
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>  
