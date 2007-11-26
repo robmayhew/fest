@@ -2,11 +2,11 @@
 <document>
 
 	<properties>
-		<title>JUnit's ComparisonFailure</title>
+		<title>JUnit-Specific Features</title>
 	</properties>
 
 	<body>
-		<section name="Support for JUnit's Comparison Failure">
+		<section name="Support for JUnit-Specific Features">
       <p>
        If <a href="http://www.junit.org" target="_blank">JUnit 4</a> (or greater) is in the classpath, failures of
        <ul style="list-style-type: square;">

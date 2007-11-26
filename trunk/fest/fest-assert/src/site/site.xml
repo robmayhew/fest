@@ -25,8 +25,9 @@
 			<item name="Introduction" href="index.html" />
 			<item name="Extending" href="extending.html" />
 			<item name="Comparing to Hamcrest" href="hamcrest.html" />
-			<item name="JUnit's ComparisonFailure" href="junit.html" />
+			<item name="JUnit Specific" href="junit.html" />
       <item name="Changelog" href="changes-report.html" />
+			<item name="Javadocs" href="apidocs/index.html" />
 		</menu>
 
 		<menu name="FEST Modules">
