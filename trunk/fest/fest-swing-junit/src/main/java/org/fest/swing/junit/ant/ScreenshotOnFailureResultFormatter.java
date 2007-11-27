@@ -38,7 +38,7 @@ import static org.fest.util.Strings.join;
  * Understands a JUnit XML report formatter that takes a screenshot when a GUI test fails.
  * <p>
  * <strong>Note:</strong> A test is consider a GUI test if it is marked with the annotation
- * <code>{@link org.fest.swing.GUITest}</code>.
+ * <code>org.fest.swing.annotation.GUITest</code>.
  * </p>
  * 
  * @author Alex Ruiz
@@ -56,7 +56,7 @@ public final class ScreenshotOnFailureResultFormatter extends XmlJUnitResultForm
   public ScreenshotOnFailureResultFormatter() {
     try {
       screenshotTaker = new ScreenshotTaker();
-      ready = screenshotTaker != null;
+      ready = true;
     } catch (ImageException e) {
       couldNotCreateScreenshotTaker = e;
     }
