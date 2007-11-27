@@ -45,6 +45,11 @@
 			<item name="Platform-Specific" href="platform.html" />
 		</menu>
 
+		<menu name="Extensions">
+			<item name="JUnit Extension" href="junit/apidocs/index.html" />
+			<item name="TestNG Extension" href="testng/apidocs/index.html" />
+		</menu>
+
 		<menu name="FEST Modules">
 			<item name="FEST-Swing" href="../swing/index.html" />
 			<item name="FEST-Assert" href="../assert/index.html" />

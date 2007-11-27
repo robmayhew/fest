@@ -27,6 +27,10 @@
 				Renamed org.fest.swing.fixture.JToggleButtonFixture to org.fest.fixture.TwoStateButtonFixture.				
 			</action>
       <action dev="alruiz, wanghy" type="add" issue="55" due-to="Volker Berlin">
+        Moved Ant task-related classes from the package 'org.fest.swing.junit' to
+        'org.fest.swing.junit.ant'.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="55" due-to="Volker Berlin">
         Added support for taking screenshots of failing tests with JUnit inside an IDE.
       </action>
 			<action dev="alruiz" type="fix" issue="59">

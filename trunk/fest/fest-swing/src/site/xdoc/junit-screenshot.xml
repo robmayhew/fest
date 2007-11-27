@@ -20,7 +20,7 @@
             download FEST-Swing)
           </li>
           <li>
-            Mark GUI tests (class or method level) with the annotation <code class="code">org.fest.swing.GUITest</code>
+            Mark GUI tests (class or method level) with the annotation <code class="code">org.fest.swing.annotation.GUITest</code>
           </li>
         </ol>
       </p>
@@ -33,7 +33,7 @@
           please follow these steps:
           <ol>
             <li>Add a definition of the Ant task <code class="code">festreport</code></li>
-            <li>Use the formatter <code class="code">org.fest.swing.junit.ScreenshotOnFailureResultFormatter</code> 
+            <li>Use the formatter <code class="code">org.fest.swing.junit.ant.ScreenshotOnFailureResultFormatter</code> 
             inside the junit Ant task</li>
             <li>Use the Ant task <code class="code">festreport</code> instead of <code class="code">junitreport</code>, 
             and specify in its classpath where the fest-swing-junit-{VERSION}.jar file is.</li>            
@@ -49,7 +49,7 @@
       &lt;classpath refid=&quot;lib.classpath&quot; /&gt;
       &lt;classpath location=&quot;${target.test.classes.dir}&quot; /&gt;
       &lt;classpath location=&quot;${target.classes.dir}&quot; /&gt;
-      <strong>&lt;formatter classname=&quot;org.fest.swing.junit.ScreenshotOnFailureResultFormatter&quot; extension=&quot;.xml&quot; /&gt;</strong>
+      <strong>&lt;formatter classname=&quot;org.fest.swing.junit.ant.ScreenshotOnFailureResultFormatter&quot; extension=&quot;.xml&quot; /&gt;</strong>
       &lt;batchtest fork=&quot;yes&quot; todir=&quot;${target.junit.results.dir}&quot;&gt;
         &lt;fileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;**/*Test*.class&quot; /&gt;
       &lt;/batchtest&gt;
@@ -85,7 +85,8 @@
         <p>
           FEST-Swing also provides a custom JUnit Runner, <code class="code">org.fest.swing.junit.GUITestRunner</code>,
           which takes screenshots of failed GUI tests. To use it, just annotate your test class with 
-          &quot;<code class="code">@RunWith(GUITestRunner.class)</code>.&quot;
+          &quot;<code class="code">@RunWith(GUITestRunner.class)</code>.&quot; Screenshots of failed tests will be saved
+          in the directory &quot;failed-gui-tests&quot; (relative to the directory where tests are executed.)
         </p>
         <p>
           <code class="code">GUITestRunner</code> has been tested with Eclipse 3.1.1. It is currently not working with

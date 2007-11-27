@@ -26,7 +26,7 @@
             download FEST-Swing)
           </li>
           <li>
-            Mark GUI tests (class or method level) with the annotation <code class="code">org.fest.swing.GUITest</code>
+            Mark GUI tests (class or method level) with the annotation <code class="code">org.fest.swing.annotation.GUITest</code>
           </li>
         </ol>
       </p>
