@@ -17,6 +17,7 @@ package org.fest.swing.remote.core;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.logging.Logger;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,6 +35,8 @@ import static org.fest.swing.remote.core.Request.Type.PING;
  * @author Alex Ruiz
  */
 public class RequestTest {
+
+  private static Logger logger = Logger.getAnonymousLogger();
   
   private Request request;
   
@@ -49,6 +52,7 @@ public class RequestTest {
     request.removeValue("lastName");
     assertThat(request.value("firstName", String.class)).isEqualTo("Frodo");
     assertThat(request.value("lastName", String.class)).isNull();
+    logger.info(request.toString());
   }
   
   @Test(dependsOnMethods = "shouldAddGetAndRemoveValues") 

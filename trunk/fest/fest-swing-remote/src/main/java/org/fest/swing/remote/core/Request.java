@@ -15,6 +15,9 @@
  */
 package org.fest.swing.remote.core;
 
+import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
+import static org.fest.util.Strings.concat;
+
 
 /**
  * Understands a request for the GUI test server.
@@ -51,4 +54,17 @@ public final class Request extends Message {
    * @return the type of this request.
    */
   public Type type() { return type; }
+
+  /**
+   * Returns a <code>String</code> representation of this class.
+   * @return a <code>String</code> representation of this class.
+   */
+  @Override public String toString() {
+    StringBuilder b = new StringBuilder();
+    b.append(concat(getClass().getName(), "[", LINE_SEPARATOR));
+    b.append(concat("  ", "type:", type, LINE_SEPARATOR));
+    b.append(concat(super.toString(), LINE_SEPARATOR));
+    b.append("]");
+    return b.toString();
+  }
 }

@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.fest.swing.remote.util.Castings.cast;
+import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands the base class for messages to be passed between clients and the server.
@@ -57,5 +60,19 @@ public abstract class Message implements Serializable {
    */
   public final void removeValue(String name) {
     values.remove(name);
+  }
+
+  /**
+   * Returns a <code>String</code> representation of this class.
+   * @return a <code>String</code> representation of this class.
+   */
+  @Override public String toString() {
+    String lineSeparator = LINE_SEPARATOR;
+    StringBuilder b = new StringBuilder();
+    b.append(concat("  ", "values:[", lineSeparator));
+    for (Map.Entry<String, Serializable> entry : values.entrySet()) 
+      b.append(concat("    ", quote(entry.getKey()), ":", quote(entry.getValue()), lineSeparator));
+    b.append(concat("  ", "]"));
+    return b.toString();
   }
 }

@@ -15,6 +15,9 @@
  */
 package org.fest.swing.remote.core;
 
+import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands a result of processing a request.
  *
@@ -90,4 +93,18 @@ public final class Response extends Message {
    * @return the cause of a failure.
    */
   public Exception cause() { return cause; }
+
+  /**
+   * Returns a <code>String</code> representation of this class.
+   * @return a <code>String</code> representation of this class.
+   */
+  @Override public String toString() {
+    StringBuilder b = new StringBuilder();
+    b.append(concat(getClass().getName(), "[", LINE_SEPARATOR));
+    b.append(concat("  ", "status:", status, LINE_SEPARATOR));
+    b.append(concat("  ", "cause:", cause, LINE_SEPARATOR));
+    b.append(concat(super.toString(), LINE_SEPARATOR));
+    b.append("]");
+    return b.toString();
+  }
 }

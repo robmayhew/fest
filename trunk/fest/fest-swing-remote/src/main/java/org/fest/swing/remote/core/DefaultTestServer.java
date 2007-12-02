@@ -92,6 +92,7 @@ public class DefaultTestServer implements TestServer {
         client = serverSocket.accept();
         service(client);
       } catch (Exception e) {
+        logger.log(SEVERE, concat("Unable to handle client request "), e);
         sendFailure(client, e);
       } finally {
         close(client);
@@ -106,7 +107,6 @@ public class DefaultTestServer implements TestServer {
   }
   
   private void sendFailure(Socket client, Exception cause) {
-    logger.log(SEVERE, "Unable to handle client request", cause);
     if (client == null || !client.isConnected()) return;
     try {
       serialize(failed(cause), client.getOutputStream());
