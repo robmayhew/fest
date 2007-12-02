@@ -15,11 +15,6 @@
  */
 package org.fest.swing.remote.core;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.fest.swing.remote.util.Castings.cast;
 
 /**
  * Understands a request for the GUI test server.
@@ -27,7 +22,7 @@ import static org.fest.swing.remote.util.Castings.cast;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class Request implements Serializable {
+public final class Request extends Message {
 
   private static final long serialVersionUID = 1L;
   
@@ -42,7 +37,6 @@ public final class Request implements Serializable {
   }
   
   private final Type type;
-  private final Map<String, Serializable> values = new HashMap<String, Serializable>();
 
   public static Request pingRequest() {
     return new Request(Type.PING);
@@ -57,30 +51,4 @@ public final class Request implements Serializable {
    * @return the type of this request.
    */
   public Type type() { return type; }
-  
-  /**
-   * Adds a new value to this request.
-   * @param name the name of the value to add.
-   * @param value the actual value to add.
-   */
-  public void addValue(String name, Serializable value) {
-    values.put(name, value);
-  }
-  
-  /**
-   * Returns a value from this request, stored under the given name and casted to the given type.
-   * @param <T> the generic type of the class to cast the request value to.
-   * @param name the name of the value to return.
-   * @param valueType the class to cast the request value to.
-   * @return the request value stored under the given name, casted to the given type, or <code>null</code> if no value 
-   * is found.
-   * @throws ClassCastException if the value cannot be casted to the given type.
-   */
-  public <T extends Serializable> T value(String name, Class<T> valueType) {
-    return cast(values.get(name), valueType);
-  }
-  
-  public void removeValue(String name) {
-    values.remove(name);
-  }
 }

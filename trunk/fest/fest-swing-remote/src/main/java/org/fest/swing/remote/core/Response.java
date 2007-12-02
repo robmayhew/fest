@@ -15,14 +15,12 @@
  */
 package org.fest.swing.remote.core;
 
-import java.io.Serializable;
-
 /**
  * Understands a result of processing a request.
  *
  * @author Alex Ruiz
  */
-public final class Response implements Serializable {
+public final class Response extends Message {
 
   private static final long serialVersionUID = 1L;
   
