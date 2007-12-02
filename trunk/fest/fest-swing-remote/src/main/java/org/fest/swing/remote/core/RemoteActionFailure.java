@@ -16,39 +16,39 @@
 package org.fest.swing.remote.core;
 
 /**
- * Understands the base class for all exception thrown when performing testing of remote GUIs.
+ * Understands an error that ocurred when perfoming testing on remote GUIs.
  *
  * @author Alex Ruiz
  */
-public abstract class RemoteActionFailedException extends RuntimeException {
+public class RemoteActionFailure extends RuntimeException {
+
+  private static final long serialVersionUID = 1L;
+
+  /** Creates a new </code>{@link RemoteActionFailure}</code>. */
+  public RemoteActionFailure() {}
 
   /**
-   * Creates a new </code>{@link RemoteActionFailedException}</code>.
-   */
-  public RemoteActionFailedException() {}
-
-  /**
-   * Creates a new </code>{@link RemoteActionFailedException}</code>.
+   * Creates a new </code>{@link RemoteActionFailure}</code>.
    * @param message the detail message.
    */
-  public RemoteActionFailedException(String message) {
+  public RemoteActionFailure(String message) {
     super(message);
   }
 
   /**
-   * Creates a new </code>{@link RemoteActionFailedException}</code>.
+   * Creates a new </code>{@link RemoteActionFailure}</code>.
    * @param cause the cause of the error.
    */
-  public RemoteActionFailedException(Throwable cause) {
+  public RemoteActionFailure(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Creates a new </code>{@link RemoteActionFailedException}</code>.
+   * Creates a new </code>{@link RemoteActionFailure}</code>.
    * @param message the detail message.
    * @param cause the cause of the error.
    */
-  public RemoteActionFailedException(String message, Throwable cause) {
+  public RemoteActionFailure(String message, Throwable cause) {
     super(message, cause);
   }
 }

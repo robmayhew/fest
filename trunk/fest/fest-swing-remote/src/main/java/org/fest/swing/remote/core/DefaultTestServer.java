@@ -50,7 +50,6 @@ public class DefaultTestServer implements TestServer {
   /**
    * Creates a new </code>{@link DefaultTestServer}</code>, connecting to the port specified by 
    * <code>{@link #DEFAULT_PORT}</code>.
-   * @throws ConnectionFailedException if the server cannot be started.
    */
   public DefaultTestServer() {
     this(DEFAULT_PORT);
@@ -59,7 +58,6 @@ public class DefaultTestServer implements TestServer {
   /**
    * Creates a new </code>{@link DefaultTestServer}</code>.
    * @param port the port to connect to.
-   * @throws ConnectionFailedException if the server cannot be started.
    */
   public DefaultTestServer(int port) {
     this.port = port;
@@ -79,7 +77,7 @@ public class DefaultTestServer implements TestServer {
     } catch (Exception e) {
       String errorMessage = concat("Cannot start server at port ", asString(port));
       logger.severe(errorMessage);
-      throw new ConnectionFailedException(errorMessage, e);
+      throw new RemoteActionFailure(errorMessage, e);
     }
   }
   

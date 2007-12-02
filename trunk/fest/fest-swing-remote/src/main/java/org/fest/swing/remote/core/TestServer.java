@@ -25,7 +25,7 @@ public interface TestServer {
 
   /**
    * Starts this server at the port specified when created.
-   * @throws ConnectionFailedException if the server cannot connect to the specified port.
+   * @throws RemoteActionFailure if the server cannot connect to the specified port.
    */
   void start();
 
