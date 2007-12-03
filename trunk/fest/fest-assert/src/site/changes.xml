@@ -6,7 +6,7 @@
   </properties>
   <body>
     <release version="0.8" date="TBD" description="Subsequent release">
-      <action dev="wanghy, alruiz" type="fix" issue="47" due-to="Mark Derricutt">
+      <action dev="wanghy, alruiz" type="add" issue="47" due-to="Mark Derricutt">
 				Added a generified overload of 'assertThat'.
       </action>
     </release>
