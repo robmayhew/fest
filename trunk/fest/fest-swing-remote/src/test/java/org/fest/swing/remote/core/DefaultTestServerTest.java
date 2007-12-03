@@ -56,11 +56,11 @@ public class DefaultTestServerTest {
     newSingleThreadExecutor().execute(new Runnable() {
       public void run() { server.start(expectedPort); }
     });
+    waitUntilStarts(server);
     assertServerStarted(expectedPort);
   }
   
   private void assertServerStarted(int expectedPort) {
-    waitUntilStarts(server);
     ServerSocketAssert socket = new ServerSocketAssert(serverSocket());
     assertThat(socket).isConnectedTo(expectedPort);
     assertThat(server.isRunning()).isTrue();
@@ -76,13 +76,12 @@ public class DefaultTestServerTest {
   @Test(dependsOnMethods = "shouldStartAtGivenPortAndStop") 
   public void shouldProcessClientRequest() throws Exception {
     startServerAsynchronously();
-    waitUntilStarts(server);
     try {
-      Socket socket = new Socket("localhost", DEFAULT_PORT);
-      serialize(pingRequest(), socket.getOutputStream());
-      Response response = deserialize(socket.getInputStream(), Response.class);
+      Socket client = new Socket("localhost", DEFAULT_PORT);
+      serialize(pingRequest(), client.getOutputStream());
+      Response response = deserialize(client.getInputStream(), Response.class);
       assertThat(response.status()).isEqualTo(SUCCESS);
-      socket.close();
+      client.close();
     } finally {
       server.stop();
     }
@@ -92,5 +91,6 @@ public class DefaultTestServerTest {
     newSingleThreadExecutor().execute(new Runnable() {
       public void run() { server.start(); }
     });
+    waitUntilStarts(server);
   }
 }
