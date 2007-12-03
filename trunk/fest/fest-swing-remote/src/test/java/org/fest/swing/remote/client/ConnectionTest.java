@@ -17,15 +17,16 @@ package org.fest.swing.remote.client;
 
 import java.net.Socket;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.remote.core.DefaultTestServer;
+import org.fest.swing.remote.core.RemoteActionFailure;
 import org.fest.swing.remote.core.TestServer;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
+import static org.fest.swing.remote.core.TestServer.DEFAULT_PORT;
 
 /**
  * Tests for <code>{@link Connection}</code>.
@@ -34,31 +35,35 @@ import static org.fest.reflect.Reflection.field;
  */
 public class ConnectionTest {
 
-  private TestServer server;
+  private static final String HOST = "localhost";
+  
   private Connection connection;
   
-  @BeforeClass public void setUp() {
-    server = new DefaultTestServer();
-    server.start();
+  @BeforeMethod public void setUp() {
     connection = new Connection();
   }
   
   @Test public void shouldConnectToServerAndClose() {
-    String host = "localhost";
-    int port = TestServer.DEFAULT_PORT;
-    connection.connect(host, port);
-    SocketAssert socket = new SocketAssert(connectionSocket());
-    assertThat(socket).isConnectedTo(host, port);
-    assertThat(connection.isConnected()).isTrue();
-    connection.close();
-    assertThat(socket).isClosed();
+    TestServer server = new DefaultTestServer();
+    server.start();
+    try {
+      connection.connect(HOST, DEFAULT_PORT);
+      SocketAssert socket = new SocketAssert(connectionSocket());
+      assertThat(socket).isConnectedTo(HOST, DEFAULT_PORT);
+      assertThat(connection.isConnected()).isTrue();
+      connection.close();
+      assertThat(socket).isClosed();
+    } finally {
+      server.stop();
+    }
   }
   
+  @Test(expectedExceptions = RemoteActionFailure.class) 
+  public void shouldThrowErrorIfServerNotUp() {
+    connection.connect(HOST, DEFAULT_PORT);
+  }
+
   private Socket connectionSocket() {
     return field("socket").ofType(Socket.class).in(connection).get();
-  }
-  
-  @AfterClass public void tearDown() {
-    if (server != null) server.stop();
   }
 }
