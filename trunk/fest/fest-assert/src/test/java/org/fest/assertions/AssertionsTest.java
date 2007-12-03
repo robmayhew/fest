@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertSame;
 
 /**
  * Tests for <code>{@link Assertions}</code>.
@@ -50,5 +51,10 @@ public class AssertionsTest {
   
   private void assertIsInstanceOf(Object target, Class<?> expectedType) {
     assertEquals(target.getClass(), expectedType);
+  }
+  
+  @Test public void shouldReturnGivenAssertExtension() {
+    AssertExtension extension = new AssertExtension() {};
+    assertSame(Assertions.assertThat(extension), extension);
   }
 }

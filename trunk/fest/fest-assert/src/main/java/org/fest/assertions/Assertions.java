@@ -226,5 +226,43 @@ public final class Assertions {
     return new ImageAssert(actual);
   }
   
+  /**
+   * Returns the given assertion. This method improves code readability by surrounding the given assertion with "<code>assertThat</code>".
+   * <p>
+   * For example, let's assume we have the following custom assertion class:
+   * 
+   * <pre>
+   * public class ServerSocketAssertion implements AssertExtension {
+   *   private final ServerSocket socket;
+   *   
+   *   public ServerSocketAssertion(ServerSocket socket) {
+   *     this.socket = socket;
+   *   }
+   *   
+   *   public ServerSocketAssert isConnectedTo(int port) {
+   *     assertThat(socket.isBound()).isTrue();
+   *     assertThat(socket.getLocalPort()).isEqualTo(port);
+   *     assertThat(socket.isClosed()).isFalse();
+   *     return this;
+   *   }
+   * }
+   * </pre>
+   * </p>
+   * <p>
+   * We can wrap that assertion with "<code>assertThat</code>" to improve test code readability.
+   * <pre>
+   *   ServerSocketAssertion socket = new ServerSocketAssertion(server.getSocket());
+   *   assertThat(socket).isConnectedTo(2000);
+   * </pre>
+   * </p>
+   * 
+   * @param <T> the generic type of the user-defined assertion.
+   * @param assertion the assertion to return.
+   * @return the given assertion.
+   */
+  public static <T extends AssertExtension> T assertThat(T assertion) {
+    return assertion;
+  }
+  
   private Assertions() {}
 }

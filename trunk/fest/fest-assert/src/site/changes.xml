@@ -5,6 +5,11 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="0.8" date="TBD" description="Subsequent release">
+      <action dev="wanghy, alruiz" type="fix" issue="47" due-to="Mark Derricutt">
+				Added a generified overload of 'assertThat'.
+      </action>
+    </release>
     <release version="0.7" date="2007-11-08" description="Subsequent release">
       <action dev="wanghy" type="fix" issue="38" due-to="Martin Ankerl">
         Added a delta value for floating point equality in 'DoubleAssert' and 'FloatAssert'.
