@@ -22,8 +22,7 @@ import java.io.Serializable;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Objects.hashCodeFor;
+import static org.fest.util.Objects.*;
 
 /**
  * Tests for <code>{@link Serialization}</code>.

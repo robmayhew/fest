@@ -27,8 +27,7 @@ import static org.fest.swing.remote.core.Request.pingRequest;
 import static org.fest.swing.remote.core.Response.Status.SUCCESS;
 import static org.fest.swing.remote.core.TestServer.DEFAULT_PORT;
 import static org.fest.swing.remote.core.TestServerUtils.waitUntilStarts;
-import static org.fest.swing.remote.util.Serialization.deserialize;
-import static org.fest.swing.remote.util.Serialization.serialize;
+import static org.fest.swing.remote.util.Serialization.*;
 
 /**
  * Tests for <code>{@link DefaultTestServer}</code>.

@@ -20,8 +20,7 @@ import java.util.Map;
 
 import static org.fest.swing.remote.util.Castings.cast;
 import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands the base class for messages to be passed between clients and the server.

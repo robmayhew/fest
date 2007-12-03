@@ -15,8 +15,7 @@
  */
 package org.fest.swing.remote.util;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to casting.

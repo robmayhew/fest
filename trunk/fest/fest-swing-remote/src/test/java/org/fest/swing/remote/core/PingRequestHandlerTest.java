@@ -20,13 +20,11 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.remote.core.Request.pingRequest;
-import static org.fest.swing.remote.core.Response.Status.FAILED;
-import static org.fest.swing.remote.core.Response.Status.SUCCESS;
+import static org.fest.swing.remote.core.Response.Status.*;
 
 /**
  * Tests for <code>{@link PingRequestHandler}</code>.

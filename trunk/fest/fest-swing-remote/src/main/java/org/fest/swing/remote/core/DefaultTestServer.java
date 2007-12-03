@@ -26,8 +26,7 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static java.util.logging.Level.SEVERE;
 
 import static org.fest.swing.remote.core.Response.failed;
-import static org.fest.swing.remote.util.Serialization.deserialize;
-import static org.fest.swing.remote.util.Serialization.serialize;
+import static org.fest.swing.remote.util.Serialization.*;
 import static org.fest.swing.remote.util.Sockets.close;
 import static org.fest.util.Strings.concat;
 
