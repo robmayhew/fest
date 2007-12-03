@@ -50,13 +50,14 @@ public class RequestDispatcher {
    * Delegates to a <code>{@link RequestHandler}</code> the processing of the given request.
    * @param request the request to process.
    * @return the result of the process.
+   * @throws IllegalArgumentException if the request is <code>null</code>.
    */
   public Response dispatch(Request request) {
     return handlerFor(request).process(request);
   }
 
   RequestHandler handlerFor(Request request) {
-    if (request == null) throw new NullPointerException("request should not be null");
+    if (request == null) throw new IllegalArgumentException("request should not be null");
     return handlers.get(request.type());
   }
 }

@@ -44,7 +44,7 @@ public class RequestDispatcherTest {
     assertThat(handler).isInstanceOf(PingRequestHandler.class);
   }
   
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfRequestIsNull() {
     dispatcher.handlerFor(null);
   }

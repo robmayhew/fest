@@ -68,7 +68,7 @@ public class DefaultTestServer implements TestServer {
   /** {@inheritDoc} */
   public void start(int port) {
     serverSocket = createServerSocket(port);
-    logger.info(concat("GUI Test Server started at port ", asString(port)));
+    logger.info(concat("GUI Test Server started at port ", String.valueOf(port)));
     newSingleThreadExecutor().execute(new Runnable() {
       public void run() { service(); }
     });
@@ -78,13 +78,11 @@ public class DefaultTestServer implements TestServer {
     try {
       return new ServerSocket(port);
     } catch (Exception e) {
-      String errorMessage = concat("Cannot start server at port ", asString(port));
+      String errorMessage = concat("Cannot start server at port ", String.valueOf(port));
       logger.severe(errorMessage);
       throw new RemoteActionFailure(errorMessage, e);
     }
   }
-  
-  private String asString(int i) { return String.valueOf(i); }
   
   /** Listens for client requests. */
   private void service() {
@@ -137,9 +135,9 @@ public class DefaultTestServer implements TestServer {
   
   /** {@inheritDoc} */
   public void stop() {
-    logger.info("Stopping server");
     executor.shutdown();
     if (serverSocket == null) return;
+    logger.info("Stopping server");
     try {
       serverSocket.close();
     } catch (IOException ignored) {

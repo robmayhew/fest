@@ -15,9 +15,12 @@
  */
 package org.fest.swing.remote.core;
 
-import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
-import static org.fest.util.Strings.concat;
+import java.io.Serializable;
 
+import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Objects.hashCodeFor;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a request for the GUI test server.
@@ -35,8 +38,33 @@ public final class Request extends Message {
    * @author Alex Ruiz
    * @author Yvonne Wang
    */
-  public static enum Type {
-    PING;
+  public static class Type implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /** Request for pinging the server. */
+    public static final Type PING = new Type("PING");
+    
+    private final String name;
+
+    Type(String name) {
+      this.name = name;
+    }
+    
+    @Override public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (!(obj instanceof Type)) return false;
+      final Type other = (Type) obj;
+      return areEqual(name, other.name);
+    }
+    
+    @Override public int hashCode() {
+      int prime = 31;
+      int result = 1;
+      result = prime * result + hashCodeFor(name);
+      return result;
+    }
+
+    @Override public String toString() { return name; }
   }
   
   private final Type type;
@@ -45,7 +73,7 @@ public final class Request extends Message {
     return new Request(Type.PING);
   }
   
-  private Request(Type type) {
+  Request(Type type) {
     this.type = type;
   }
 
