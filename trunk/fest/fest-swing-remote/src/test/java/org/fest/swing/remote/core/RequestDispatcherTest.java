@@ -24,28 +24,28 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.remote.core.Request.pingRequest;
 
 /**
- * Tests for <code>{@link RequestHandlers}</code>.
+ * Tests for <code>{@link RequestDispatcher}</code>.
  *
  * @author Alex Ruiz
  */
-public class RequestHandlersTest {
+public class RequestDispatcherTest {
 
   private TestServer testServer;
-  private RequestHandlers handlers;
+  private RequestDispatcher dispatcher;
   
   @BeforeMethod public void setUp() {
     testServer = createMock(TestServer.class);
-    handlers = new RequestHandlers(testServer);
+    dispatcher = new RequestDispatcher(testServer);
   }
   
   @Test public void shouldHaveHandlerForPingRequests() {
     Request request = pingRequest();
-    RequestHandler handler = handlers.handlerFor(request);
+    RequestHandler handler = dispatcher.handlerFor(request);
     assertThat(handler).isInstanceOf(PingRequestHandler.class);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRequestIsNull() {
-    handlers.handlerFor(null);
+    dispatcher.handlerFor(null);
   }
 }

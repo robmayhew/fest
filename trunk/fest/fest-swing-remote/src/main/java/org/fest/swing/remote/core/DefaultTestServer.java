@@ -18,8 +18,11 @@ package org.fest.swing.remote.core;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Logger;
 
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static java.util.logging.Level.SEVERE;
 
 import static org.fest.swing.remote.core.Response.failed;
@@ -35,16 +38,18 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+/**
+ * Understands SOMETHING DUMMY.
+ *
+ * @author Alex Ruiz
+ */
 public class DefaultTestServer implements TestServer {
   
-  /** Default port. */
-  public static final int DEFAULT_PORT = 4123;
-
   private static Logger logger = Logger.getLogger(DefaultTestServer.class.getName());
-  
-  private final int port;
-  private final RequestHandlers requestHandlers;
 
+  private final ExecutorService executor = newSingleThreadExecutor();
+  private final RequestDispatcher requestHandlers;
+  
   private ServerSocket serverSocket;
   
   /**
@@ -52,20 +57,16 @@ public class DefaultTestServer implements TestServer {
    * <code>{@link #DEFAULT_PORT}</code>.
    */
   public DefaultTestServer() {
-    this(DEFAULT_PORT);
+    requestHandlers = new RequestDispatcher(this);
   }
   
-  /**
-   * Creates a new </code>{@link DefaultTestServer}</code>.
-   * @param port the port to connect to.
-   */
-  public DefaultTestServer(int port) {
-    this.port = port;
-    requestHandlers = new RequestHandlers(this);
-  }
-
-  /** @see org.fest.swing.remote.core.TestServer#start() */
+  /** {@inheritDoc} */
   public void start() {
+    start(DEFAULT_PORT);
+  }
+  
+  /** {@inheritDoc} */
+  public void start(int port) {
     serverSocket = createServerSocket(port);
     logger.info(concat("GUI Test Server started at port ", asString(port)));
     service();    
@@ -86,24 +87,36 @@ public class DefaultTestServer implements TestServer {
   /** Listens for client requests. */
   private void service() {
     logger.info("Listening for client requests");
-    while(true) {
-      Socket client = null;
+    while(!executor.isShutdown()) {
       try {
-        client = serverSocket.accept();
-        service(client);
-      } catch (Exception e) {
-        logger.log(SEVERE, concat("Unable to handle client request "), e);
-        sendFailure(client, e);
-      } finally {
-        close(client);
+        final Socket client = serverSocket.accept();
+        executor.execute(new Runnable() {
+          public void run() { service(client); }
+        });
+      } catch (RejectedExecutionException ignored) {
+      } catch (IOException e) {
+        if (!executor.isShutdown()) {
+          logger.log(SEVERE, concat("Unable connect to clients"), e);
+          executor.shutdown();
+        }
       }
     }
   }
 
-  private void service(Socket client) throws Exception {
-    Request request = deserialize(client.getInputStream(), Request.class);
-    Response response = requestHandlers.handlerFor(request).process(request);
-    serialize(response, client.getOutputStream());
+  private void service(Socket client) {
+    try {
+      Response response = requestHandlers.dispatch(requestFrom(client));
+      serialize(response, client.getOutputStream());
+    } catch (Exception e) {
+      logger.log(SEVERE, concat("Unable to handle client request "), e);
+      sendFailure(client, e);
+    } finally {
+      close(client);
+    }
+  }
+
+  private Request requestFrom(Socket client) throws Exception {
+    return deserialize(client.getInputStream(), Request.class);
   }
   
   private void sendFailure(Socket client, Exception cause) {
@@ -115,14 +128,15 @@ public class DefaultTestServer implements TestServer {
     }
   }
   
-  /** @see org.fest.swing.remote.core.TestServer#isRunning() */
+  /** {@inheritDoc} */
   public boolean isRunning() {
-    return serverSocket != null && serverSocket.isBound();
+    return serverSocket != null && serverSocket.isBound() && !serverSocket.isClosed();
   }
   
-  /** @see org.fest.swing.remote.core.TestServer#stop() */
+  /** {@inheritDoc} */
   public void stop() {
     logger.info("Stopping server");
+    executor.shutdown();
     if (serverSocket == null) return;
     try {
       serverSocket.close();

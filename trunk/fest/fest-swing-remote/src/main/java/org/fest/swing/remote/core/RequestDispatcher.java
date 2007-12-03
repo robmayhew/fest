@@ -23,20 +23,21 @@ import org.fest.swing.remote.core.Request.Type;
 import static org.fest.swing.remote.core.Request.Type.PING;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands a registry of <code>{@link RequestHandler}</code>s. Each <code>{@link RequestHandler}</code> is 
+ * associated to a specific request <code>{@link Request.Type type}</code>.
  *
  * @author Alex Ruiz
  */
-public class RequestHandlers {
+public class RequestDispatcher {
 
   private final Map<Type, RequestHandler> handlers = new HashMap<Type, RequestHandler>();
   private final TestServer server;
   
   /**
-   * Creates a new </code>{@link RequestHandlers}</code>.
+   * Creates a new </code>{@link RequestDispatcher}</code>.
    * @param server the GUI testing server in use. 
    */
-  public RequestHandlers(TestServer server) {
+  public RequestDispatcher(TestServer server) {
     this.server = server;
     populate();
   }
@@ -45,7 +46,16 @@ public class RequestHandlers {
     handlers.put(PING, new PingRequestHandler(server));
   }
   
-  public RequestHandler handlerFor(Request request) {
+  /**
+   * Delegates to a <code>{@link RequestHandler}</code> the processing of the given request.
+   * @param request the request to process.
+   * @return the result of the process.
+   */
+  public Response dispatch(Request request) {
+    return handlerFor(request).process(request);
+  }
+
+  RequestHandler handlerFor(Request request) {
     if (request == null) throw new NullPointerException("request should not be null");
     return handlers.get(request.type());
   }

@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-assert</artifactId>
-			<version>0.7</version>
+			<version>0.8-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

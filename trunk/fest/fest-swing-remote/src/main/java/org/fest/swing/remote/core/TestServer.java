@@ -23,11 +23,20 @@ package org.fest.swing.remote.core;
  */
 public interface TestServer {
 
+  /** Default port */
+  int DEFAULT_PORT = 4123;
+
   /**
-   * Starts this server at the port specified when created.
+   * Starts this server at the port specified by <code>{@link #DEFAULT_PORT}</code>.
    * @throws RemoteActionFailure if the server cannot connect to the specified port.
    */
   void start();
+  
+  /**
+   * Starts this server at the specified port.
+   * @param port the given port.
+   */
+  void start(int port);
 
   /**
    * Indicates whether this server is running or not.
