@@ -21,8 +21,6 @@ import java.net.Socket;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static java.util.concurrent.Executors.newSingleThreadExecutor;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 import static org.fest.swing.remote.core.Request.pingRequest;
@@ -46,16 +44,15 @@ public class DefaultTestServerTest {
   }
   
   @Test public void shouldStartAtDefaultPortAndStop() {
-    startServerAsynchronously();
+    server.start();
+    waitUntilStarts(server);
     assertServerStarted(DEFAULT_PORT);
   }
 
   @Test(dependsOnMethods = "shouldStartAtDefaultPortAndStop") 
   public void shouldStartAtGivenPortAndStop() {
-    final int expectedPort = 4000;
-    newSingleThreadExecutor().execute(new Runnable() {
-      public void run() { server.start(expectedPort); }
-    });
+    int expectedPort = 4000;
+    server.start(expectedPort);
     waitUntilStarts(server);
     assertServerStarted(expectedPort);
   }
@@ -75,7 +72,8 @@ public class DefaultTestServerTest {
   
   @Test(dependsOnMethods = "shouldStartAtGivenPortAndStop") 
   public void shouldProcessClientRequest() throws Exception {
-    startServerAsynchronously();
+    server.start();
+    waitUntilStarts(server);
     try {
       Socket client = new Socket("localhost", DEFAULT_PORT);
       serialize(pingRequest(), client.getOutputStream());
@@ -85,12 +83,5 @@ public class DefaultTestServerTest {
     } finally {
       server.stop();
     }
-  }
-
-  private void startServerAsynchronously() {
-    newSingleThreadExecutor().execute(new Runnable() {
-      public void run() { server.start(); }
-    });
-    waitUntilStarts(server);
   }
 }

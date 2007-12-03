@@ -69,7 +69,9 @@ public class DefaultTestServer implements TestServer {
   public void start(int port) {
     serverSocket = createServerSocket(port);
     logger.info(concat("GUI Test Server started at port ", asString(port)));
-    service();    
+    newSingleThreadExecutor().execute(new Runnable() {
+      public void run() { service(); }
+    });
   }
   
   private ServerSocket createServerSocket(int port) {
