@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.8-SNAPSHOT" date="TBD" description="Subsequent release">
+    <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
       <action dev="alruiz" type="add" issue="64" due-to="Fabien Barbero">
 				Added method 'selectItems(int...)' to allow multiple-selection a JListFixture.
 			</action>      
