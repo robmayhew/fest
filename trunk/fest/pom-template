@@ -68,6 +68,7 @@
 		<contributor>
       <name>Wim Deblauwe</name>
       <url>http://www.jroller.com/page/Fester</url>
+      <organizationUrl>http://vigilog.sourceforge.net/</organizationUrl>
 		</contributor>
     <contributor>
       <name>Mark Derricutt</name>
@@ -78,6 +79,12 @@
       <organization>Stelligent</organization>
       <organizationUrl>http://www.stelligent.com/</organizationUrl>
       <url>http://thediscoblog.com</url>
+    </contributor>
+    <contributor>
+      <name>Duncan Mills</name>
+      <organization>Oracle</organization>
+      <organizationUrl>http://www.oracle.com/</organizationUrl>
+      <url>http://www.groundside.com/blog/DuncanMills.php</url>
     </contributor>
     <contributor>
 			<name>Javier Sandino</name>
