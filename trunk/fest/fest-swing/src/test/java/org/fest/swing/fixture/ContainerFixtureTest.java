@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -85,6 +86,7 @@ public class ContainerFixtureTest {
     final JLabel label = new JLabel("A Label");
     final JList list = new JList();
     final JMenu menu = new JMenu("A Menu");
+    final JPanel panel = new JPanel();
     final JRadioButton radioButton = new JRadioButton("A Radio Button");
     final JSlider slider = new JSlider(10, 20, 15);
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
@@ -107,8 +109,8 @@ public class ContainerFixtureTest {
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      add(button, checkBox, comboBox, fileChooser, label, list, radioButton, slider, spinner, splitPane, tabbedPane,
-          table, textField, toggleButton, toolBar);
+      add(button, checkBox, comboBox, fileChooser, label, list, panel, radioButton, slider, spinner, splitPane,
+          tabbedPane, table, textField, toggleButton, toolBar);
     }
     
     private void add(Component... components) {
@@ -136,6 +138,9 @@ public class ContainerFixtureTest {
       list.setName("list");
       menu.setName("menu");
       menu.add(subMenu);
+      panel.setName("panel");
+      panel.setPreferredSize(new Dimension(40, 40));
+      panel.setBackground(Color.RED);
       radioButton.setName("radioButton");
       slider.setName("slider");
       spinner.setName("spinner");
@@ -324,6 +329,26 @@ public class ContainerFixtureTest {
   @Test public void shouldFindMenuWithGivenPath() {
     JMenuItemFixture menuItem = container.menuItem("A Menu", "A Submenu");
     assertThat(menuItem.target).isSameAs(window.subMenu);
+  }
+  
+  @Test public void shouldFindPanelByType() {
+    JPanelFixture panel = container.panel();
+    assertThat(panel.target).isNotNull();
+  }
+
+  @Test public void shouldFindPanelWithGivenMatcher() {
+    GenericTypeMatcher<JPanel> colorMatcher = new GenericTypeMatcher<JPanel>() {
+      protected boolean isMatching(JPanel panel) {
+        return Color.RED.equals(panel.getBackground());
+      }
+    };
+    JPanelFixture panel = container.panel(colorMatcher);
+    assertThat(panel.target).isSameAs(window.panel);
+  }
+  
+  @Test public void shouldFindPanelWithGivenName() {
+    JPanelFixture panel = container.panel("panel");
+    assertThat(panel.target).isSameAs(window.panel);
   }
   
   @Test(dependsOnMethods = "shouldFindButtonWithGivenName") 
