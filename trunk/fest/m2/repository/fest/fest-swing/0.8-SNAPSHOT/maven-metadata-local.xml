@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><metadata>
   <groupId>fest</groupId>
   <artifactId>fest-swing</artifactId>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.8-SNAPSHOT</version>
   <versioning>
-    <versions>
-      <version>0.6.1</version>
-      <version>0.7-SNAPSHOT</version>
-      <version>0.7</version>
-      <version>0.8-SNAPSHOT</version>
-    </versions>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
     <lastUpdated>20071205163629</lastUpdated>
   </versioning>
 </metadata>
