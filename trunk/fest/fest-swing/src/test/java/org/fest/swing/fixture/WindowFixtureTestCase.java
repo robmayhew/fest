@@ -50,7 +50,7 @@ public abstract class WindowFixtureTestCase<T extends Window> extends ComponentF
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
       Dimension windowSize = windowFixture().target.getSize();
-      assertThat(errorMessage).contains(property("text"), expected(wrongSize), actual(windowSize));
+      assertThat(errorMessage).contains(property("size"), expected(wrongSize), actual(windowSize));
     }
   }
 

@@ -6,6 +6,15 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="64" due-to="Fabien Barbero">
+				Added method 'selectItems(int...)' to allow multiple-selection a JListFixture.
+			</action>      
+      <action dev="alruiz" type="add" issue="64" due-to="Fabien Barbero">
+				Added method 'selectItems(String...)' to allow multiple-selection a JListFixture.
+			</action>      
+      <action dev="alruiz" type="add" issue="64" due-to="Wim Deblauwe">
+				Added method 'selectItems(Range.From, Range.To)' to allow selection of a range of items in a JListFixture.
+			</action>      
       <action dev="alruiz" type="add" issue="66" due-to="Wim Deblauwe, Volker Berlin">
         Added methods 'okButton', 'cancelButton', 'yesButton' and 'noButton' to JOptionPaneFixture. These methods return 
         a JButtonFixture wrapping the buttons in a JOptionPane

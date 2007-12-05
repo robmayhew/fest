@@ -20,17 +20,20 @@ import javax.swing.JList;
 import abbot.tester.ComponentLocation;
 import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
+import static java.awt.event.KeyEvent.VK_SHIFT;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import org.fest.swing.core.MouseButton;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
-import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.Range;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -68,7 +71,44 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   public String[] contents() {
     return listTester().getContents(target);
   }
+
+  /**
+   * Simulates a user selecting the items (in the specified range) in the <code>{@link JList}</code> managed by
+   * this fixture. The simulated user actions are:
+   * <ul>
+   * <li>pressing the "Shift" key</li>
+   * <li>selecting the items (in the specified range) in the <code>{@link JList}</code> managed by this fixture</li>
+   * <li>releasing the "Shift"</li>
+   * </ul>
+   * @param from the starting point of the selection.
+   * @param to the last item to select (inclusive.)
+   * @return this fixture.
+   */
+  public final JListFixture selectItems(Range.From from, Range.To to) {
+    pressKey(VK_SHIFT);
+    for (int i = from.value; i <= to.value; i++) selectItem(i);
+    releaseKey(VK_SHIFT);
+    return this;
+  }
   
+  /**
+   * Simulates a user selecting the specified items in the <code>{@link JList}</code> managed by this fixture. The
+   * simulated user actions are:
+   * <ul>
+   * <li>pressing the "Control" or "Command" key (depending on the OS)</li>
+   * <li>selecting the specified items in the <code>{@link JList}</code> managed by this fixture</li>
+   * <li>releasing the "Control" or "Command" key</li>
+   * </ul>
+   * @param indices the indices of the items to select.
+   * @return this fixture.
+   */
+  public final JListFixture selectItems(int...indices) {
+    pressKey(controlOrCommandKey());
+    for (int index : indices) selectItem(index);
+    releaseKey(controlOrCommandKey());
+    return this;
+  }
+
   /**
    * Simulates a user selecting an item in the <code>{@link JList}</code> managed by this fixture. 
    * @param index the index of the item to select.
@@ -76,6 +116,24 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public final JListFixture selectItem(int index) {
     clickItem(new JListLocation(index), LEFT_BUTTON, 1);
+    return this;
+  }
+
+  /**
+   * Simulates a user selecting the specified items in the <code>{@link JList}</code> managed by this fixture. The
+   * simulated user actions are:
+   * <ul>
+   * <li>pressing the "Control" or "Command" key (depending on the OS)</li>
+   * <li>selecting the specified items in the <code>{@link JList}</code> managed by this fixture</li>
+   * <li>releasing the "Control" or "Command" key</li>
+   * </ul>
+   * @param items the text of the items to select.
+   * @return this fixture.
+   */
+  public final JListFixture selectItems(String...items) {
+    pressKey(controlOrCommandKey());
+    for (String item : items) selectItem(item);
+    releaseKey(controlOrCommandKey());
     return this;
   }
 

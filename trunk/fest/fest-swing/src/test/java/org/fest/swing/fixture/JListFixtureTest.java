@@ -15,15 +15,22 @@
  */
 package org.fest.swing.fixture;
 
-import org.testng.annotations.Test;
-import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.testing.ClickRecorder;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.util.Collections.list;
-
-import javax.swing.JList;
 import java.awt.Dimension;
 
+import javax.swing.JList;
+
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.Range.from;
+import static org.fest.swing.util.Range.to;
+
+import static org.fest.util.Collections.list;
+
+import org.fest.swing.testing.ClickRecorder;
+
+import org.testng.annotations.Test;
 /**
  * Tests for <code>{@link JListFixture}</code>.
  *
@@ -50,6 +57,24 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
   @Test public void shouldSelectItemWithGivenText() {
     targetFixture.selectItem("two");
     assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
+  }
+
+  @Test public void shouldSelectItemsWithGivenText() {
+    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+    targetFixture.selectItems("two", "three");
+    assertThat(targetFixture.target.getSelectedValues()).containsOnly("two", "three");
+  }
+  
+  @Test public void shouldSelectItemsWithGivenIndices() {
+    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+    targetFixture.selectItems(1, 2);
+    assertThat(targetFixture.target.getSelectedValues()).containsOnly("two", "three");
+  }
+
+  @Test public void shouldSelectItemsInGivenRange() {
+    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+    targetFixture.selectItems(from(0), to(1));
+    assertThat(targetFixture.target.getSelectedValues()).containsOnly("one", "two");
   }
 
   @Test public void shouldDoubleClickItemAtGivenIndex() {
