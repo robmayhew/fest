@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
@@ -376,6 +377,43 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    */
   public final JOptionPaneFixture optionPane() {
     return new JOptionPaneFixture(robot);
+  }
+
+  /**
+   * Returns the first <code>{@link JPanel}</code> found in this fixture's <code>{@link Container}</code>.
+   * <p>
+   * <strong>Warning:</strong> For consistent results, use this method if you have only one <code>JPanel</code> in 
+   * this fixture's <code>Container</code> (including &quot;complex&quot; GUI components that might include their own 
+   * <code>JPanel</code>s.) 
+   * </p>
+   * @return a fixture that manages the <code>JPanel</code> found.
+   * @throws ComponentLookupException if a <code>JPanel</code> could not be found.
+   */
+  public final JPanelFixture panel() {
+    return new JPanelFixture(robot, findByType(JPanel.class));
+  }
+  
+  /**
+   * Finds a <code>{@link JPanel}</code> in this fixture's <code>{@link Container}</code>, that matches the
+   * specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JPanel</code>.
+   * @return a fixture that manages the <code>JPanel</code> found.
+   * @throws ComponentLookupException if a <code>JPanel</code> that matches the given search criteria could not
+   *          be found.
+   */
+  public final JPanelFixture panel(GenericTypeMatcher<? extends JPanel> matcher) {
+    return new JPanelFixture(robot, find(matcher));
+  }
+
+  /**
+   * Finds a <code>{@link JPanel}</code> in this fixture's <code>{@link Container}</code>, which name matches
+   * the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JPanel</code> found.
+   * @throws ComponentLookupException if a <code>JPanel</code> having a matching name could not be found.
+   */
+  public final JPanelFixture panel(String name) {
+    return new JPanelFixture(robot, findByName(name, JPanel.class));
   }
 
   /**
