@@ -6,6 +6,10 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="66" due-to="Wim Deblauwe, Volker Berlin">
+        Added methods 'okButton', 'cancelButton', 'yesButton' and 'noButton' to JOptionPaneFixture. These methods return 
+        a JButtonFixture wrapping the buttons in a JOptionPane
+      </action>
 			<action dev="alruiz" type="fix" issue="67" due-to="Rich Toulouse">
 				Added method 'panel' to class ContainerFixture. FrameFixture and DialogFixture can now lookup a JPanel (or 
 				subclass by type (if only one JPanel in the container,) by name or by custom search criteria.
