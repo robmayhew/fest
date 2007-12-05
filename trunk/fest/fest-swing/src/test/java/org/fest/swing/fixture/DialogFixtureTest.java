@@ -19,11 +19,14 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 
 import javax.swing.JDialog;
-import static javax.swing.WindowConstants.*;
 
+import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.fest.swing.annotation.GUITest;
 
@@ -52,7 +55,8 @@ public class DialogFixtureTest extends WindowFixtureTestCase<Dialog> {
       fixture.requireModal();
       fail();
     } catch(AssertionError e) {
-      errorMessages().assertIsCorrect(e, "modal", EXPECTED_TRUE_BUT_WAS_FALSE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, target);
+      assertThat(errorMessage).contains(property("modal"), expected("true"), actual("false"));
     }
   }
   

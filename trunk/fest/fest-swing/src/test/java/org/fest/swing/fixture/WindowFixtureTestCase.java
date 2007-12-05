@@ -15,14 +15,17 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dimension;
 import java.awt.Window;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.fest.swing.core.Condition;
-
 
 import org.testng.annotations.Test;
 
@@ -45,7 +48,9 @@ public abstract class WindowFixtureTestCase<T extends Window> extends ComponentF
       windowFixture().requireSize(wrongSize);
       fail();
     } catch (AssertionError e) {
-      errorMessages().assertIsCorrect(e, "size", equalsFailedMessage(wrongSize.toString(), windowFixture().target.getSize()));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      Dimension windowSize = windowFixture().target.getSize();
+      assertThat(errorMessage).contains(property("text"), expected(wrongSize), actual(windowSize));
     }
   }
 

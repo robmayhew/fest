@@ -32,20 +32,22 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.fixture.ErrorMessages.EXPECTED_FALSE_BUT_WAS_TRUE;
-import static org.fest.swing.fixture.ErrorMessages.EXPECTED_TRUE_BUT_WAS_FALSE;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.MouseClickInfo.middleButton;
+import static org.fest.swing.fixture.MouseClickInfo.rightButton;
 
-import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
-import org.fest.swing.exception.WaitTimedOutError;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -91,14 +93,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   private RobotFixture robot;
   private MainWindow window;
   private ComponentFixture<T> fixture;
-  private ErrorMessages errorMessages;
   
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new MainWindow(getClass());
     window.setSize(new Dimension(300, 200));
     T target = createTarget();
-    errorMessages = new ErrorMessages(target); 
     addToWindow(target);
     robot().showWindow(window);
     createFixture(target); 
@@ -164,10 +164,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   @DataProvider(name = "mouseClickInfos")
   public Object[][] mouseClickInfos() {
     return new Object[][] {
-        { MouseClickInfo.button(LEFT_BUTTON).times(1) },
-        { MouseClickInfo.button(LEFT_BUTTON).times(2) },
-        { MouseClickInfo.button(RIGHT_BUTTON).times(1) },
-        { MouseClickInfo.button(MIDDLE_BUTTON).times(2) }
+        { leftButton().times(1) },
+        { leftButton().times(2) },
+        { middleButton().times(2) },
+        { rightButton().times(1) }
     };
   }
   
@@ -240,7 +240,8 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireVisible();
       fail();
     } catch(AssertionError e) {
-      errorMessages.assertIsCorrect(e, VISIBLE, EXPECTED_TRUE_BUT_WAS_FALSE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(VISIBLE), expected("true"), actual("false"));
     }
   }
 
@@ -255,7 +256,8 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireNotVisible();
       fail();
     } catch(AssertionError e) {
-      errorMessages.assertIsCorrect(e, VISIBLE, EXPECTED_FALSE_BUT_WAS_TRUE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(VISIBLE), expected("false"), actual("true"));
     }
   }
 
@@ -270,7 +272,8 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireEnabled();
       fail();
     } catch(AssertionError e) {
-      errorMessages.assertIsCorrect(e, ENABLED, EXPECTED_TRUE_BUT_WAS_FALSE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(ENABLED), expected("true"), actual("false"));
     }
   }
   
@@ -285,7 +288,8 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       fixture.requireDisabled();
       fail();
     } catch(AssertionError e) {
-      errorMessages.assertIsCorrect(e, ENABLED, EXPECTED_FALSE_BUT_WAS_TRUE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(ENABLED), expected("false"), actual("true"));
     }
   }
 
@@ -318,5 +322,4 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   protected final RobotFixture robot() { return robot; }
   protected final MainWindow window() { return window; }
   protected final ComponentFixture<T> fixture() { return fixture; }
-  protected final ErrorMessages errorMessages() { return errorMessages; }
 }

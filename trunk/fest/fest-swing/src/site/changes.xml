@@ -10,6 +10,9 @@
 				Added method 'panel' to class ContainerFixture. FrameFixture and DialogFixture can now lookup a JPanel (or 
 				subclass by type (if only one JPanel in the container,) by name or by custom search criteria.
 			</action>
+			<action dev="alruiz" type="add">
+			  Added method 'invokeAndWait(Runnable)' to RobotFixture.
+			</action>
     </release>
     <release version="0.7" date="2007-11-27" description="Subsequent release">
 			<action dev="wanghy, alruiz" type="add" due-to="Steve Tom">

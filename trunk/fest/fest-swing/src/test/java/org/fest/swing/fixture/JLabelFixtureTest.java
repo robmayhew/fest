@@ -20,7 +20,9 @@ import javax.swing.JLabel;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.fest.swing.annotation.GUITest;
 
@@ -46,7 +48,8 @@ public class JLabelFixtureTest extends ComponentFixtureTestCase<JLabel> {
       fixture.requireText("A Label");
       fail();
     } catch (AssertionError e) {
-      errorMessages().assertIsCorrect(e, "text", equalsFailedMessage("'A Label'", "'Target'"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property("text"), expected("'A Label'"), actual("'Target'"));
     }
   }
   

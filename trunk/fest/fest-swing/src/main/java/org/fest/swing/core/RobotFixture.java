@@ -14,6 +14,17 @@
  */
 package org.fest.swing.core;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Point;
+import java.awt.Window;
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
@@ -22,18 +33,16 @@ import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
-import org.fest.swing.util.TimeoutWatch;
+import static java.lang.System.currentTimeMillis;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
+
 import static org.fest.util.Strings.concat;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import java.awt.*;
-import static java.lang.System.currentTimeMillis;
-import java.util.Collection;
-import java.util.concurrent.TimeUnit;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.TimeoutWatch;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -209,7 +218,15 @@ public final class RobotFixture {
   }
   
   /**
-   * Post a runnable on the given component's event queue and wait for it to finish.
+   * Runs the given <code>{@link Runnable}</code> on the event dispatch thread, but don't return until it's been run.
+   * @param action the <code>Runnable</code> to run.
+   */
+  public void invokeAndWait(Runnable action) {
+    invokeAndWait(null, action);
+  }
+
+/**
+   * Posts a <code>{@link Runnable}</code> on the given component's event queue and wait for it to finish.
    * @param c the component which event queue will be used.
    * @param action the <code>Runnable</code> to post in the event queue.
    */
@@ -255,6 +272,14 @@ public final class RobotFixture {
     robot.selectMenuItem(target);
   }
 
+  /**
+   * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
+   * @param target the <code>Component</code> to click on. 
+   */
+  public void click(Component target) {
+    click(target, LEFT_BUTTON, 1);
+  }
+  
   /**
    * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.

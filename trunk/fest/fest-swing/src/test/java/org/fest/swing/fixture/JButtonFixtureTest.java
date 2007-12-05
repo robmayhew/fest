@@ -20,7 +20,9 @@ import javax.swing.JButton;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.fest.swing.annotation.GUITest;
 
@@ -47,7 +49,8 @@ public class JButtonFixtureTest extends ComponentFixtureTestCase<JButton> {
       fixture.requireText("A Button");
       fail();
     } catch (AssertionError e) {
-      errorMessages().assertIsCorrect(e, "text", equalsFailedMessage("'A Button'", "'Target'"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property("text"), expected("'A Button'"), actual("'Target'"));
     }
   }
   

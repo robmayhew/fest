@@ -20,7 +20,7 @@ package org.fest.swing.exception;
  *
  * @author Yvonne Wang
  */
-public final class ActionFailedException extends RuntimeException {
+public class ActionFailedException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 

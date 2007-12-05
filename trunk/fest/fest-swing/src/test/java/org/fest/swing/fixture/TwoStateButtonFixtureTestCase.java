@@ -15,11 +15,16 @@
  */
 package org.fest.swing.fixture;
 
-import org.testng.annotations.Test;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.fixture.ErrorMessages.*;
-
 import javax.swing.AbstractButton;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
+
+import org.testng.annotations.Test;
 
 /**
  * Understands test methods for subclasses of <code>{@link org.fest.swing.fixture.TwoStateButtonFixture}</code>.
@@ -30,7 +35,7 @@ import javax.swing.AbstractButton;
  */
 public abstract class TwoStateButtonFixtureTestCase<T extends AbstractButton> extends ComponentFixtureTestCase<T> {
 
-  private static final String SELECTED_PROPERTY = "selected";
+  private static final String SELECTED = "selected";
 
   @Test public void shouldPassIfButtonHasMatchingText() {
     twoStateButtonFixture().requireText("Target");
@@ -42,7 +47,8 @@ public abstract class TwoStateButtonFixtureTestCase<T extends AbstractButton> ex
       twoStateButtonFixture().requireText("A Button");
       fail();
     } catch (AssertionError e) {
-      errorMessages().assertIsCorrect(e, "text", equalsFailedMessage("'A Button'", "'Target'"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("text"), expected("'A Button'"), actual("'Target'"));
     }
   }
   
@@ -57,7 +63,8 @@ public abstract class TwoStateButtonFixtureTestCase<T extends AbstractButton> ex
       twoStateButtonFixture().requireSelected();
       fail();
     } catch(AssertionError e) {
-      errorMessages().assertIsCorrect(e, SELECTED_PROPERTY, EXPECTED_TRUE_BUT_WAS_FALSE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property(SELECTED), expected("true"), actual("false"));
     }
   }
   
@@ -72,7 +79,8 @@ public abstract class TwoStateButtonFixtureTestCase<T extends AbstractButton> ex
       twoStateButtonFixture().requireNotSelected();
       fail();
     } catch(AssertionError e) {
-      errorMessages().assertIsCorrect(e, SELECTED_PROPERTY, EXPECTED_FALSE_BUT_WAS_TRUE);
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property(SELECTED), expected("false"), actual("true"));
     }
   }
   

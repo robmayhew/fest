@@ -18,10 +18,12 @@ package org.fest.swing.fixture;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.fest.swing.annotation.GUITest;
 
@@ -36,7 +38,7 @@ import org.testng.annotations.Test;
 @GUITest
 public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextComponent> {
 
-  private static final String TEXT_PROPERTY = "text";
+  private static final String TEXT = "text";
   private JTextComponentFixture fixture;
   
   @Test public void shouldPassIfTextFieldHasMatchingText() {
@@ -50,7 +52,8 @@ public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextCom
       fixture.requireText("A Text Field");
       fail();
     } catch (AssertionError e) {
-      errorMessages().assertIsCorrect(e, TEXT_PROPERTY, equalsFailedMessage("'A Text Field'", "''"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(TEXT), expected("'A Text Field'"), actual("''"));
     }
   }
   
@@ -71,7 +74,8 @@ public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextCom
       fixture.requireEmpty();
       fail();
     } catch (AssertionError e) {
-      errorMessages().assertIsCorrect(e, TEXT_PROPERTY, equalsFailedMessage("''", "'Some text'"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(TEXT), expected("''"), actual("'Some text'"));
     }
   }
   

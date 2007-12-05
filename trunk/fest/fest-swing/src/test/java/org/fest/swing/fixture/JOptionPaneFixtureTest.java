@@ -22,6 +22,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import abbot.tester.ComponentTester;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -37,13 +38,20 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.fixture.ErrorMessages.equalsFailedMessage;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
+import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.ERROR;
+import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.INFORMATION;
+import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.PLAIN;
+import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.QUESTION;
+import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.WARNING;
 
 import static org.fest.util.Arrays.array;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -58,7 +66,7 @@ import org.testng.annotations.Test;
 @GUITest
 public class JOptionPaneFixtureTest {
 
-  private static final String MESSAGE_TYPE_PROPERTY = "messageType";
+  private static final String MESSAGE_TYPE = "messageType";
 
   public static class CustomWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
@@ -84,7 +92,7 @@ public class JOptionPaneFixtureTest {
       setActionAndClickButton(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showOptionDialog(CustomWindow.this, "Message", "Title", YES_NO_OPTION, QUESTION_MESSAGE, null, options,
-              options[0]); 
+              options[0]);
         }
       });
     }
@@ -96,13 +104,21 @@ public class JOptionPaneFixtureTest {
         }
       });
     }
+
+    void showConfirmMessage() {
+      setActionAndClickButton(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) {
+          JOptionPane.showConfirmDialog(CustomWindow.this, "Text");
+        }
+      });
+    }
     
     void showErrorMessage() { showMessage(ERROR_MESSAGE); }
     void showInformationMessage() { showMessage(INFORMATION_MESSAGE); }
     void showWarningMessage() { showMessage(WARNING_MESSAGE); }
     void showQuestionMessage() { showMessage(QUESTION_MESSAGE); }
     void showPlainMessage() { showMessage(PLAIN_MESSAGE); }
-
+    
     private void showMessage(final int messageType) {
       showMessage("Text", "Title", messageType);
     }
@@ -114,7 +130,7 @@ public class JOptionPaneFixtureTest {
         }
       });
     }
-    
+
     void showManuallyCreatedOptionPaneWithTitle(final String title) {
       setActionAndClickButton(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
@@ -148,7 +164,6 @@ public class JOptionPaneFixtureTest {
   private CustomWindow window;
   private RobotFixture robot;
   private JOptionPaneFixture fixture;
-  private ErrorMessages errorMessages;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -164,6 +179,46 @@ public class JOptionPaneFixtureTest {
     assertThat(button.target.getText()).isEqualTo("Second");
   }
 
+  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
+  public void shouldFindOKButton() {
+    window.showInformationMessage();
+    createFixture();
+    JButtonFixture button = fixture.okButton();
+    assertThat(button).isNotNull();
+    String okText = UIManager.getString("OptionPane.okButtonText");
+    assertThat(button.target.getText()).isEqualTo(okText);
+  }
+  
+  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
+  public void shouldFindCancelButton() {
+    window.showInputMessage();
+    createFixture();
+    JButtonFixture button = fixture.cancelButton();
+    assertThat(button).isNotNull();
+    String cancelText = UIManager.getString("OptionPane.cancelButtonText");
+    assertThat(button.target.getText()).isEqualTo(cancelText);
+  }
+  
+  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
+  public void shouldFindYesButton() {
+    window.showConfirmMessage();
+    createFixture();
+    JButtonFixture button = fixture.yesButton();
+    assertThat(button).isNotNull();
+    String cancelText = UIManager.getString("OptionPane.yesButtonText");
+    assertThat(button.target.getText()).isEqualTo(cancelText);
+  }
+  
+  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
+  public void shouldFindNoButton() {
+    window.showConfirmMessage();
+    createFixture();
+    JButtonFixture button = fixture.noButton();
+    assertThat(button).isNotNull();
+    String cancelText = UIManager.getString("OptionPane.noButtonText");
+    assertThat(button.target.getText()).isEqualTo(cancelText);
+  }
+  
   @Test public void shouldFindTextComponentInOptionPane() {
     window.showInputMessage();
     createFixture();
@@ -198,7 +253,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireTitle("Darth Vader");
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, "title", equalsFailedMessage("'Darth Vader'", "'Yoda'"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property("title"), expected("'Darth Vader'"), actual("'Yoda'"));
     }
   }
 
@@ -216,7 +272,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireOptions(array("Third"));
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, "options", equalsFailedMessage("['Third']", "['First', 'Second']"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property("options"), expected("['Third']"), actual("['First', 'Second']"));
     }
   }
 
@@ -234,7 +291,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireMessage("Anakin");
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, "message", equalsFailedMessage("'Anakin'", "'Palpatine'"));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property("message"), expected("'Anakin'"), actual("'Palpatine'"));
     }
   }
   
@@ -252,7 +310,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireErrorMessage();
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.ERROR, ErrorTypes.INFORMATION));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ERROR), actual(INFORMATION));
     }
   }
 
@@ -270,7 +329,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireInformationMessage();
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.INFORMATION, ErrorTypes.ERROR));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(INFORMATION), actual(ERROR));
     }
   }
 
@@ -288,7 +348,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireWarningMessage();
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.WARNING, ErrorTypes.ERROR));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(WARNING), actual(ERROR));
     }
   }
 
@@ -306,7 +367,8 @@ public class JOptionPaneFixtureTest {
       fixture.requireQuestionMessage();
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.QUESTION, ErrorTypes.ERROR));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(QUESTION), actual(ERROR));
     }
   }
 
@@ -324,11 +386,12 @@ public class JOptionPaneFixtureTest {
       fixture.requirePlainMessage();
       fail();
     } catch (AssertionError e) {
-      errorMessages.assertIsCorrect(e, MESSAGE_TYPE_PROPERTY, equalsFailedMessage(ErrorTypes.PLAIN, ErrorTypes.ERROR));
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(PLAIN), actual(ERROR));
     }
   }
   
-  private static class ErrorTypes {
+  static class ErrorTypes {
     static final String ERROR = "'Error Message'";
     static final String INFORMATION = "'Information Message'";
     static final String WARNING = "'Warning Message'";
@@ -339,7 +402,6 @@ public class JOptionPaneFixtureTest {
   private void createFixture() {
     fixture = new JOptionPaneFixture(robot);
     assertThat(fixture.target).isNotNull();
-    errorMessages = new ErrorMessages(fixture.target);
   }
 
   @AfterMethod public void tearDown() {

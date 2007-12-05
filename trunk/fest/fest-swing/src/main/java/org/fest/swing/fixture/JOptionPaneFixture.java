@@ -15,20 +15,27 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dialog;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
+
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+import static javax.swing.JOptionPane.PLAIN_MESSAGE;
+import static javax.swing.JOptionPane.QUESTION_MESSAGE;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.concat;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
-import static org.fest.util.Strings.concat;
-
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.*;
-import javax.swing.text.JTextComponent;
-import java.awt.Dialog;
-import java.util.HashMap;
 
 /**
  * Understands simulation of user events on a <code>{@link JOptionPane}</code> and verification of the state of such
@@ -148,21 +155,67 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
     assertThat(target.getOptions()).as(formattedPropertyName("options")).isEqualTo(options);
     return this;
   }
-  
+
   /**
-   * Finds and returns a fixture wrapping a button containing the given text.
+   * Returns a fixture wrapping the "OK" button in the <code>{@link JOptionPaneFixture}</code> managed by this
+   * fixture. This method is locale-independent and platform-independent.
+   * @return a fixture wrapping the "OK" button.
+   * @throws ComponentLookupException if the a "OK" button cannot be found.
+   */
+  public final JButtonFixture okButton() {
+    return buttonWithTextFromUIManager("OptionPane.okButtonText");
+  }
+
+  /**
+   * Returns a fixture wrapping the "Cancel" button in the <code>{@link JOptionPaneFixture}</code> managed by this
+   * fixture. This method is locale-independent and platform-independent.
+   * @return a fixture wrapping the "Cancel" button.
+   * @throws ComponentLookupException if the a "Cancel" button cannot be found.
+   */
+  public final JButtonFixture cancelButton() {
+    return buttonWithTextFromUIManager("OptionPane.cancelButtonText");
+  }
+
+  /**
+   * Returns a fixture wrapping the "Yes" button in the <code>{@link JOptionPaneFixture}</code> managed by this
+   * fixture. This method is locale-independent and platform-independent.
+   * @return a fixture wrapping the "Yes" button.
+   * @throws ComponentLookupException if the a "Yes" button cannot be found.
+   */
+  public final JButtonFixture yesButton() {
+    return buttonWithTextFromUIManager("OptionPane.yesButtonText");
+  }
+
+  /**
+   * Returns a fixture wrapping the "No" button in the <code>{@link JOptionPaneFixture}</code> managed by this
+   * fixture. This method is locale-independent and platform-independent.
+   * @return a fixture wrapping the "No" button.
+   * @throws ComponentLookupException if the a "No" button cannot be found.
+   */
+  public final JButtonFixture noButton() {
+    return buttonWithTextFromUIManager("OptionPane.noButtonText");
+  }
+
+  private JButtonFixture buttonWithTextFromUIManager(String key) {
+    return buttonWithText(UIManager.getString(key));
+  }
+
+  /**
+   * Finds and returns a fixture wrapping a button (in the <code>{@link JOptionPaneFixture}</code> managed by this
+   * fixture) containing the given text.
    * @param text the text of the button to find and return.
-   * @return a fixture wrapping a button containing the given text, or <code>null</code> if none if found.
+   * @return a fixture wrapping a button containing the given text.
+   * @throws ComponentLookupException if the a button with the given text cannot be found.
    */
   public final JButtonFixture buttonWithText(String text) {
     JButton button = robot.finder().find(target, new JButtonMatcher(text));
-    if (button == null) return null;
     return new JButtonFixture(robot, button);
   }
   
   /**
-   * Finds a <code>{@link JButton}</code> in the <code>{@link JOptionPaneFixture}</code> managed by this fixture.
-   * @return a fixture wrapping a <code>JButton</code> contained in the managed <code>JOptionPane</code>. 
+   * Finds the first <code>{@link JButton}</code> in the <code>{@link JOptionPaneFixture}</code> managed by this 
+   * fixture.
+   * @return a fixture wrapping the first <code>JButton</code> contained in the managed <code>JOptionPane</code>. 
    */
   public final JButtonFixture button() {
     return new JButtonFixture(robot, robot.finder().findByType(target, JButton.class));
@@ -171,7 +224,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   /**
    * Returns the <code>{@link JTextComponent}</code> in the given message only if the message is of type input.
    * @return the text component in the given message.
-   * @throws ComponentLookupException if the message type is not input and hence does not contain a text component.
+   * @throws ComponentLookupException if the message type is not input and therefore it does not contain a text component.
    */
   public final JTextComponentFixture textBox() throws ComponentLookupException {
     JTextComponent textComponent = robot.finder().findByType(target, JTextComponent.class);
