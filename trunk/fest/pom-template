@@ -65,15 +65,19 @@
 		<contributor>
 			<name>Keith Coughtrey</name>
 		</contributor>
+		<contributor>
+      <name>Wim Deblauwe</name>
+      <url>http://www.jroller.com/page/Fester</url>
+		</contributor>
+    <contributor>
+      <name>Mark Derricutt</name>
+      <url>http://www.talios.com/</url>
+    </contributor>
     <contributor>
       <name>Andy Glover</name>
       <organization>Stelligent</organization>
       <organizationUrl>http://www.stelligent.com/</organizationUrl>
       <url>http://thediscoblog.com</url>
-    </contributor>
-    <contributor>
-      <name>Mark Derricutt</name>
-      <url>http://www.talios.com/</url>
     </contributor>
     <contributor>
 			<name>Javier Sandino</name>
@@ -94,6 +98,9 @@
       <name>Steve Tom</name>
       <organization>Oracle</organization>
       <organizationUrl>http://www.oracle.com/</organizationUrl>
+    </contributor>
+    <contributor>
+      <name>Rich Toulouse</name>
     </contributor>
     <contributor>
 			<name>Geoffrey Wiseman</name>
