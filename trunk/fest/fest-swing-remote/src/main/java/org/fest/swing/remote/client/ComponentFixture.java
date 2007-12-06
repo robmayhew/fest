@@ -46,11 +46,14 @@ public abstract class ComponentFixture<T extends Component> {
    */
   public ComponentFixture(Connection connection, String name) {
     this.connection = connection;
-    findByName(name);
+    findComponentByName(name);
   }
 
   private void findComponentByName(String name) {
-    Response response = connection.send(findByName(name));    
+    Response response = connection.send(findByName(name));
+    if (!response.success()) {
+      Exception cause = response.cause();
+    }
   }
   
   /**

@@ -108,7 +108,7 @@ public class DefaultTestServer implements TestServer {
       serialize(response, client.getOutputStream());
     } catch (Exception e) {
       logger.log(SEVERE, concat("Unable to handle client request "), e);
-      sendFailure(client, e);
+      // TODO: FIX sendFailure(client, e);
     } finally {
       close(client);
     }
@@ -118,7 +118,7 @@ public class DefaultTestServer implements TestServer {
     return deserialize(client.getInputStream(), Request.class);
   }
   
-  private void sendFailure(Socket client, Exception cause) {
+  private void sendFailure(Socket client, RemoteActionFailure cause) {
     if (client == null || !client.isConnected()) return;
     try {
       serialize(failed(cause), client.getOutputStream());

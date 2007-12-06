@@ -29,7 +29,7 @@ public final class Response implements Serializable {
   private static final long serialVersionUID = 1L;
   
   private final boolean success;
-  private final Exception cause;
+  private final RemoteActionFailure cause;
 
   /**
    * Indicates that the processing of a request was successful.
@@ -52,7 +52,7 @@ public final class Response implements Serializable {
    * @param cause the cause of the failure.
    * @return the created response.
    */  
-  static Response failed(Exception cause) {
+  static Response failed(RemoteActionFailure cause) {
     return new Response(false, cause);
   }
   
@@ -60,7 +60,7 @@ public final class Response implements Serializable {
     this(success, null);
   }
 
-  private Response(boolean success, Exception cause) {
+  private Response(boolean success, RemoteActionFailure cause) {
     this.success = success;
     this.cause = cause;
   }
@@ -75,7 +75,7 @@ public final class Response implements Serializable {
    * Returns the cause of a failure, only if the status of this response is not successful.
    * @return the cause of a failure.
    */
-  public Exception cause() { return cause; }
+  public RemoteActionFailure cause() { return cause; }
 
   /** @see java.lang.Object#toString() */
   @Override public String toString() {
