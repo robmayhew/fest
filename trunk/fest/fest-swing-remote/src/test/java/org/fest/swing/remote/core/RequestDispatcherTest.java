@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 import static org.easymock.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.remote.core.Request.pingRequest;
+import static org.fest.swing.remote.core.PingRequest.pingRequest;
 
 /**
  * Tests for <code>{@link RequestDispatcher}</code>.

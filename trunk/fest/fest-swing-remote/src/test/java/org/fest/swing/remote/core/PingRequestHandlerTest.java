@@ -23,8 +23,7 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.remote.core.Request.pingRequest;
-import static org.fest.swing.remote.core.Response.Status.*;
+import static org.fest.swing.remote.core.PingRequest.pingRequest;
 
 /**
  * Tests for <code>{@link PingRequestHandler}</code>.
@@ -50,7 +49,7 @@ public class PingRequestHandlerTest {
 
       @Override protected void codeToTest() {
         Response response = handler.process(request);
-        assertThat(response.status()).isEqualTo(SUCCESS);
+        assertThat(response.success()).isTrue();
       }
     }.run();
   }
@@ -64,7 +63,7 @@ public class PingRequestHandlerTest {
 
       @Override protected void codeToTest() {
         Response response = handler.process(request);
-        assertThat(response.status()).isEqualTo(FAILED);
+        assertThat(response.success()).isFalse();
       }
     }.run();
   }

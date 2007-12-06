@@ -25,8 +25,7 @@ import org.fest.swing.remote.core.Response;
 
 import static java.util.logging.Level.SEVERE;
 
-import static org.fest.swing.remote.core.Request.pingRequest;
-import static org.fest.swing.remote.core.Response.Status.SUCCESS;
+import static org.fest.swing.remote.core.PingRequest.pingRequest;
 import static org.fest.swing.remote.util.Serialization.*;
 import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
 import static org.fest.util.Strings.*;
@@ -62,7 +61,7 @@ public final class Connection {
   private void pingHost() {
     Response response = send(pingRequest());
     if (response == null) throw new RemoteActionFailure("Ping response not returned");
-    if (SUCCESS.equals(response.status())) return;
+    if (response.success()) return;
     Exception cause = response.cause();
     if (cause instanceof RemoteActionFailure) throw (RemoteActionFailure)cause;
     throw new RemoteActionFailure("Could not ping host", cause);

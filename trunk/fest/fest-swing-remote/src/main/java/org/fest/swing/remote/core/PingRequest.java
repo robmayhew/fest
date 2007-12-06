@@ -1,5 +1,5 @@
 /*
- * Created on Dec 1, 2007
+ * Created on Dec 5, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,14 +15,32 @@
  */
 package org.fest.swing.remote.core;
 
-import java.io.Serializable;
 
 /**
- * Understands a request for the GUI test server.
+ * Understands a request for pinging a test server.
  *
  * @author Alex Ruiz
- * @author Yvonne Wang
  */
-public interface Request extends Serializable {
-  // Marker interface.
+public final class PingRequest implements Request {
+  private static final long serialVersionUID = 1L;
+  
+  public static PingRequest pingRequest() {
+    return new PingRequest();
+  }
+  
+  /** @see java.lang.Object#equals(java.lang.Object) */
+  @Override public boolean equals(Object obj) {
+    if (this == obj) return true;
+    return obj instanceof PingRequest;
+  }
+
+  /** @see java.lang.Object#hashCode() */
+  @Override public int hashCode() {
+    return 1;
+  }
+
+  /** @see java.lang.Object#toString() */
+  @Override public String toString() {
+    return getClass().getSimpleName();
+  }
 }

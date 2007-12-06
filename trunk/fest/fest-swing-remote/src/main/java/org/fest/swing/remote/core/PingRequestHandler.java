@@ -20,7 +20,7 @@ package org.fest.swing.remote.core;
  *
  * @author Alex Ruiz
  */
-public final class PingRequestHandler implements RequestHandler {
+public final class PingRequestHandler extends RequestHandler {
 
   private final TestServer server;
   
@@ -33,11 +33,19 @@ public final class PingRequestHandler implements RequestHandler {
   }
   
   /**
+   * Indicates that this handle supports request of type <code>{@link PingRequest}</code>.
+   * @return <code>PingRequest.class</code>.
+   */
+  public Class<? extends Request> supportedType() {
+    return PingRequest.class;
+  }
+
+  /**
    * Processes a request of type "ping".
    * @param request the request to process.
    * @return a response indicating that pinging the server was successful or not.
    */
-  public Response process(Request request) {
+  @Override protected Response doProcess(Request request) {
     return server.isRunning() ? Response.successful() : Response.failed();
   }
 }

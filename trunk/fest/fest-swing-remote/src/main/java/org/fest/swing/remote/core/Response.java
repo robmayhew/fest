@@ -15,7 +15,8 @@
  */
 package org.fest.swing.remote.core;
 
-import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
+import java.io.Serializable;
+
 import static org.fest.util.Strings.concat;
 
 /**
@@ -23,36 +24,27 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-public final class Response extends Message {
+public final class Response implements Serializable {
 
   private static final long serialVersionUID = 1L;
   
-  private final Status status;
+  private final boolean success;
   private final Exception cause;
 
-  /**
-   * Understands the status of processing a request.
-   *
-   * @author Alex Ruiz
-   */
-  public static enum Status {
-    SUCCESS, FAILED;
-  }
-  
   /**
    * Indicates that the processing of a request was successful.
    * @return the created response.
    */
-  public static Response successful() {
-    return new Response(Status.SUCCESS);
+  static Response successful() {
+    return new Response(true);
   }
   
   /**
    * Indicates that the processing of a request failed. 
    * @return the created response.
    */
-  public static Response failed() {
-    return new Response(Status.FAILED);
+  static Response failed() {
+    return new Response(false);
   }
 
   /**
@@ -60,25 +52,16 @@ public final class Response extends Message {
    * @param cause the cause of the failure.
    * @return the created response.
    */  
-  public static Response failed(Exception cause) {
-    return new Response(Status.FAILED, cause);
+  static Response failed(Exception cause) {
+    return new Response(false, cause);
   }
   
-  /**
-   * Creates a new </code>{@link Response}</code>.
-   * @param status the status of this response.
-   */
-  private Response(Status status) {
-    this(status, null);
+  private Response(boolean success) {
+    this(success, null);
   }
 
-  /**
-   * Creates a new </code>{@link Response}</code>.
-   * @param status the status of this response.
-   * @param cause the cause of the failure.
-   */
-  private Response(Status status, Exception cause) {
-    this.status = status;
+  private Response(boolean success, Exception cause) {
+    this.success = success;
     this.cause = cause;
   }
 
@@ -86,10 +69,10 @@ public final class Response extends Message {
    * Returns the status of this response.
    * @return the status of this response.
    */
-  public Status status() { return status; }
+  public boolean success() { return success; }
   
   /**
-   * Returns the cause of a failure, only if the status of this response is <code>{@link Status#FAILED}</code>.
+   * Returns the cause of a failure, only if the status of this response is not successful.
    * @return the cause of a failure.
    */
   public Exception cause() { return cause; }
@@ -99,12 +82,10 @@ public final class Response extends Message {
    * @return a <code>String</code> representation of this class.
    */
   @Override public String toString() {
-    StringBuilder b = new StringBuilder();
-    b.append(concat(getClass().getName(), "[", LINE_SEPARATOR));
-    b.append(concat("  ", "status:", status, LINE_SEPARATOR));
-    b.append(concat("  ", "cause:", cause, LINE_SEPARATOR));
-    b.append(concat(super.toString(), LINE_SEPARATOR));
-    b.append("]");
-    return b.toString();
+    return concat(
+        getClass().getName(), "[",
+        "success:", String.valueOf(success), ", ",
+        "cause:", cause, "]"
+    );
   }
 }

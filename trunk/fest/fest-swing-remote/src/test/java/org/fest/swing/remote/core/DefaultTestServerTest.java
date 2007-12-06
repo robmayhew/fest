@@ -23,8 +23,7 @@ import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
-import static org.fest.swing.remote.core.Request.pingRequest;
-import static org.fest.swing.remote.core.Response.Status.SUCCESS;
+import static org.fest.swing.remote.core.PingRequest.pingRequest;
 import static org.fest.swing.remote.core.TestServer.DEFAULT_PORT;
 import static org.fest.swing.remote.core.TestServerUtils.waitUntilStarts;
 import static org.fest.swing.remote.util.Serialization.*;
@@ -77,7 +76,7 @@ public class DefaultTestServerTest {
       Socket client = new Socket("localhost", DEFAULT_PORT);
       serialize(pingRequest(), client.getOutputStream());
       Response response = deserialize(client.getInputStream(), Response.class);
-      assertThat(response.status()).isEqualTo(SUCCESS);
+      assertThat(response.success()).isTrue();
       client.close();
     } finally {
       server.stop();

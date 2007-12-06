@@ -18,19 +18,17 @@ package org.fest.swing.remote.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.swing.remote.core.Request.Type;
-
-import static org.fest.swing.remote.core.Request.Type.PING;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a registry of <code>{@link RequestHandler}</code>s. Each <code>{@link RequestHandler}</code> is 
- * associated to a specific request <code>{@link Request.Type type}</code>.
+ * associated to a specific request type.
  *
  * @author Alex Ruiz
  */
 public class RequestDispatcher {
 
-  private final Map<Type, RequestHandler> handlers = new HashMap<Type, RequestHandler>();
+  private final Map<Class<? extends Request>, RequestHandler> handlers = new HashMap<Class<? extends Request>, RequestHandler>();
   private final TestServer server;
   
   /**
@@ -39,11 +37,26 @@ public class RequestDispatcher {
    */
   public RequestDispatcher(TestServer server) {
     this.server = server;
-    populate();
+    reqisterHandlers();
   }
 
-  private void populate() {
-    handlers.put(PING, new PingRequestHandler(server));
+  private void reqisterHandlers() {
+    register(new PingRequestHandler(server));
+  }
+  
+  private void register(RequestHandler handler) {
+    Class<? extends Request> supportedType = handler.supportedType();
+    if (handlers.containsKey(supportedType)) throw handlerAlreadyRegistered(handler);
+    handlers.put(supportedType, handler);
+  }
+  
+  private IllegalStateException handlerAlreadyRegistered(RequestHandler newHandler) {
+    Class<? extends Request> supportedType = newHandler.supportedType();
+    String message = concat(
+        "Cannot register handler ", quote(newHandler), ". ",
+        "The handler ", quote(handlers.get(supportedType)), " is already register to process requests of type ",
+        quote(supportedType.getName()));
+    throw new IllegalArgumentException(message);
   }
   
   /**
@@ -58,6 +71,6 @@ public class RequestDispatcher {
 
   RequestHandler handlerFor(Request request) {
     if (request == null) throw new IllegalArgumentException("request should not be null");
-    return handlers.get(request.type());
+    return handlers.get(request.getClass());
   }
 }
