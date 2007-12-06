@@ -77,10 +77,7 @@ public final class Response implements Serializable {
    */
   public Exception cause() { return cause; }
 
-  /**
-   * Returns a <code>String</code> representation of this class.
-   * @return a <code>String</code> representation of this class.
-   */
+  /** @see java.lang.Object#toString() */
   @Override public String toString() {
     return concat(
         getClass().getName(), "[",

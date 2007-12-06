@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing-remote</artifactId>
-	<version>0.7</version>
+	<version>0.8-SNAPSHOT</version>
 	<name>FEST Swing - Remote GUI Testing Extension</name>
 	<description>FEST-Swing extension that supports testing of GUIs in other JVMs</description>
 	<inceptionYear>2007</inceptionYear>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-swing</artifactId>
-			<version>0.7</version>
+			<version>0.8-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
