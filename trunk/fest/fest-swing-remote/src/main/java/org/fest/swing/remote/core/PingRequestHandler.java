@@ -36,7 +36,7 @@ public final class PingRequestHandler extends RequestHandler {
    * Indicates that this handle supports request of type <code>{@link PingRequest}</code>.
    * @return <code>PingRequest.class</code>.
    */
-  public Class<? extends Request> supportedType() {
+  @Override public Class<? extends Request> supportedType() {
     return PingRequest.class;
   }
 
