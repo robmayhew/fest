@@ -15,12 +15,33 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.core.MouseButton;
-import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+
 import static org.fest.util.Strings.concat;
+
+import org.fest.swing.core.MouseButton;
 
 /**
  * Understands information about clicking a mouse button.
+ * <p>
+ * Examples:
+ * </p>
+ * <p>
+ * Specify that the right button should be clicked once:
+ * <pre>
+ * // import static org.fest.swing.fixture.MouseClickInfo.*;
+ * MouseClickInfo i = rightButton();
+ * </pre>
+ * </p>
+ * <p>
+ * Specify that the left button should be clicked two times (similar to double-click):
+ * <pre>
+ * // import static org.fest.swing.fixture.MouseClickInfo.*;
+ * MouseClickInfo i = leftButton().times(2);
+ * </pre>
+ * </p>
  *
  * @author Alex Ruiz
  */
@@ -30,7 +51,7 @@ public final class MouseClickInfo {
   private int times;
 
   /**
-   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the left button should clicked once.
+   * Specifies that the left button should be clicked once.
    * @return the created click info.
    */
   public static MouseClickInfo leftButton() {
@@ -38,7 +59,7 @@ public final class MouseClickInfo {
   }
   
   /**
-   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the middle button should clicked once.
+   * Specifies that the middle button should be clicked once.
    * @return the created click info.
    */
   public static MouseClickInfo middleButton() {
@@ -46,7 +67,7 @@ public final class MouseClickInfo {
   }
   
   /**
-   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the right button should clicked once.
+   * Specifies that the right button should be clicked once.
    * @return the created click info.
    */
   public static MouseClickInfo rightButton() {
@@ -54,7 +75,7 @@ public final class MouseClickInfo {
   }
   
   /**
-   * Creates a new <code>{@link MouseClickInfo}</code> that specifies that the given button should clicked once.
+   * Specifies that the given button should be clicked once.
    * @param button the mouse button to click.
    * @return the created click info.
    */
@@ -67,9 +88,17 @@ public final class MouseClickInfo {
     this.times = times;
   }
 
-  MouseButton button() { return button; }
+  /**
+   * Returns the button to click.
+   * @return the button to click.
+   */
+  public MouseButton button() { return button; }
   
-  int times() { return times; }
+  /**
+   * Returns how many times the <code>{@link #button() mouse button}</code> should be clicked.
+   * @return how many times the <code>{@link #button() mouse button}</code> should be clicked.
+   */
+  public int times() { return times; }
   
   /**
    * Specifies how many times the mouse button should be clicked.
@@ -81,15 +110,11 @@ public final class MouseClickInfo {
     return this;
   }
 
-  /**
-   * Returns a <code>String</code> representation of this object.
-   * @return a <code>String</code> representation of this object.
-   */
+  /** @see java.lang.Object#toString() */
   @Override public String toString() {
-    StringBuilder b = new StringBuilder();
-    b.append(concat(getClass().getSimpleName(), "["));
-    b.append(concat("button=", button, ","));
-    b.append(concat("times=", String.valueOf(times), "]"));
-    return b.toString();
+    return concat(
+        getClass().getSimpleName(), "[",
+        "button=", button, ",",
+        "times=", String.valueOf(times), "]");
   }
 }
