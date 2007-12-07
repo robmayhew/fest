@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8" date="TBD" description="Subsequent release">
+      <action dev="wanghy, alruiz" type="fix" issue="72" due-to="Wim Deblauwe">
+				Expected and actual values were in wrong order when creating a ComparisonFailure.
+      </action>
       <action dev="wanghy, alruiz" type="add" issue="47" due-to="Mark Derricutt">
 				Added a generified overload of 'assertThat'.
       </action>

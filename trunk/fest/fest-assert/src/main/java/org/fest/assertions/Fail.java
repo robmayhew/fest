@@ -16,8 +16,7 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.ComparisonFailureFactory.comparisonFailure;
-import static org.fest.assertions.Formatting.bracketAround;
-import static org.fest.assertions.Formatting.format;
+import static org.fest.assertions.Formatting.*;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
@@ -69,7 +68,7 @@ public final class Fail {
    */
   static void failIfNotEqual(String message, Object actual, Object expected) {
     if (areEqual(actual, expected)) return;
-    AssertionError comparisonFailure = comparisonFailure(message, actual, expected);
+    AssertionError comparisonFailure = comparisonFailure(message, expected, actual);
     if (comparisonFailure != null) throw comparisonFailure;
     fail(errorMessageIfNotEqual(message, actual, expected));
   }
