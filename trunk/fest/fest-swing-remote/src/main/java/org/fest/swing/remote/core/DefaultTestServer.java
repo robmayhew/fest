@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static java.util.logging.Level.SEVERE;
 
+import static org.fest.swing.remote.core.RemoteActionFailure.failure;
 import static org.fest.swing.remote.core.Response.failed;
 import static org.fest.swing.remote.util.Serialization.*;
 import static org.fest.swing.remote.util.Sockets.close;
@@ -107,8 +108,9 @@ public class DefaultTestServer implements TestServer {
       Response response = requestHandlers.dispatch(requestFrom(client));
       serialize(response, client.getOutputStream());
     } catch (Exception e) {
-      logger.log(SEVERE, concat("Unable to handle client request "), e);
-      // TODO: FIX sendFailure(client, e);
+      String message = "Unable to handle client request";
+      logger.log(SEVERE, concat(message), e);
+      sendFailure(client, failure(message, e));
     } finally {
       close(client);
     }

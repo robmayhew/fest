@@ -26,6 +26,7 @@ import org.fest.swing.remote.core.Response;
 import static java.util.logging.Level.SEVERE;
 
 import static org.fest.swing.remote.core.PingRequest.pingRequest;
+import static org.fest.swing.remote.core.RemoteActionFailure.failure;
 import static org.fest.swing.remote.util.Serialization.*;
 import static org.fest.swing.remote.util.System.LINE_SEPARATOR;
 import static org.fest.util.Strings.*;
@@ -62,9 +63,7 @@ public final class Connection {
     Response response = send(pingRequest());
     if (response == null) throw new RemoteActionFailure("Ping response not returned");
     if (response.success()) return;
-    Exception cause = response.cause();
-    if (cause instanceof RemoteActionFailure) throw (RemoteActionFailure)cause;
-    throw new RemoteActionFailure("Could not ping host", cause);
+    throw logAndThrow("Cannot ping server", response.cause());
   }
   
   /**
@@ -103,13 +102,12 @@ public final class Connection {
       serialize(request, socket.getOutputStream());
       return deserialize(socket.getInputStream(), Response.class);
     } catch (Exception e) {
-      throw logAndThrow(concat("Unable to send request to server", LINE_SEPARATOR, request), e);
+      throw logAndThrow(concat("Unable to send request to server:", LINE_SEPARATOR, request), e);
     }
   }
   
   private RemoteActionFailure logAndThrow(String message, Exception e) {
     logger.log(SEVERE, message, e);
-    if (e instanceof RemoteActionFailure) throw (RemoteActionFailure)e;
-    throw new RemoteActionFailure(message, e);
+    throw failure(message, e);
   }
 }

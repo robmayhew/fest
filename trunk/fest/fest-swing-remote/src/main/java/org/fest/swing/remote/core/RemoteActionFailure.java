@@ -24,23 +24,25 @@ public class RemoteActionFailure extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  /** Creates a new </code>{@link RemoteActionFailure}</code>. */
-  public RemoteActionFailure() {}
-
+  /**
+   * Returns a <code>{@link RemoteActionFailure}</code>. If the given exception is already a 
+   * <code>{@link RemoteActionFailure}</code>, it simply returns it. Otherwise it creates a new one, using the given 
+   * exception as the cause.
+   * @param message the detail message of the failure.
+   * @param e the cause of the failure.
+   * @return a <code>RemoteActionFailure</code>.
+   */
+  public static RemoteActionFailure failure(String message, Exception e) {
+    if (e instanceof RemoteActionFailure) return (RemoteActionFailure)e;
+    return new RemoteActionFailure(message, e);
+  }
+  
   /**
    * Creates a new </code>{@link RemoteActionFailure}</code>.
    * @param message the detail message.
    */
   public RemoteActionFailure(String message) {
     super(message);
-  }
-
-  /**
-   * Creates a new </code>{@link RemoteActionFailure}</code>.
-   * @param cause the cause of the error.
-   */
-  public RemoteActionFailure(Throwable cause) {
-    super(cause);
   }
 
   /**

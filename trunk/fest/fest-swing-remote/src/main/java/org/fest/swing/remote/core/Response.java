@@ -55,7 +55,7 @@ public final class Response implements Serializable {
   static Response failed(RemoteActionFailure cause) {
     return new Response(false, cause);
   }
-  
+
   private Response(boolean success) {
     this(success, null);
   }
