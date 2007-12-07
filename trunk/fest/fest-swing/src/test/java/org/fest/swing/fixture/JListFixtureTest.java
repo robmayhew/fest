@@ -19,10 +19,14 @@ import java.awt.Dimension;
 
 import javax.swing.JList;
 
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.message;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 import static org.fest.swing.util.Range.from;
 import static org.fest.swing.util.Range.to;
 
@@ -60,21 +64,83 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
   }
 
   @Test public void shouldSelectItemsWithGivenText() {
-    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     targetFixture.selectItems("two", "three");
     assertThat(targetFixture.target.getSelectedValues()).containsOnly("two", "three");
   }
   
   @Test public void shouldSelectItemsWithGivenIndices() {
-    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     targetFixture.selectItems(1, 2);
     assertThat(targetFixture.target.getSelectedValues()).containsOnly("two", "three");
   }
 
   @Test public void shouldSelectItemsInGivenRange() {
-    target.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     targetFixture.selectItems(from(0), to(1));
     assertThat(targetFixture.target.getSelectedValues()).containsOnly("one", "two");
+  }
+
+  @Test public void shouldPassIfSingleSelectionMatches() {
+    target.setSelectedIndex(1);
+    targetFixture.requireSelection("two");
+  }
+  
+  @Test public void shouldFailIfNoSingleSelection() {
+    target.setSelectedIndex(-1);
+    try {
+      targetFixture.requireSelection("one");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndex"), message("No selection"));
+    }
+  }
+  
+  @Test public void shouldFailIfSingleSelectionNotMatching() {
+    target.setSelectedIndex(1);
+    try {
+      targetFixture.requireSelection("one");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndex"), expected("'one'"), actual("'two'"));
+    }
+  }
+
+  @Test public void shouldPassIfMultipleSelectionMatches() {
+    target.setSelectedIndices(new int[] { 0 , 1});
+    targetFixture.requireSelectedItems("one", "two");
+  }
+  
+  @Test public void shouldFailIfNoMultipleSelection() {
+    target.setSelectedIndex(-1);
+    try {
+      targetFixture.requireSelectedItems("one");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndex"), message("No selection"));
+    }
+  }
+  
+  @Test public void shouldFailIfMultipleSelectionCountNotMatching() {
+    target.setSelectedIndex(1);
+    try {
+      targetFixture.requireSelectedItems("one", "two");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndices#length"), expected("2"), actual("1"));
+    }
+  }
+  
+  @Test public void shouldFailIfMultipleSelectionNotMatching() {
+    target.setSelectedIndices(new int[] {1});
+    try {
+      targetFixture.requireSelectedItems("one");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndices[0]"), expected("'one'"), actual("'two'"));
+    }
   }
 
   @Test public void shouldDoubleClickItemAtGivenIndex() {

@@ -21,6 +21,9 @@ import abbot.tester.ComponentLocation;
 import abbot.tester.JListLocation;
 import abbot.tester.JListTester;
 import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
@@ -65,7 +68,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Returns the elements in the <code>{@link JList}</code> managed by this fixture as <code>String</code>s.
+   * Returns the elements in the <code>{@link JList}</code> in this fixture as <code>String</code>s.
    * @return the elements in the managed <code>JList</code>.
    */
   public String[] contents() {
@@ -73,11 +76,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user selecting the items (in the specified range) in the <code>{@link JList}</code> managed by
-   * this fixture. The simulated user actions are:
+   * Simulates a user selecting the items (in the specified range) in this fixture's <code>{@link JList}</code>. The 
+   * simulated user actions are:
    * <ul>
    * <li>pressing the "Shift" key</li>
-   * <li>selecting the items (in the specified range) in the <code>{@link JList}</code> managed by this fixture</li>
+   * <li>selecting the items (in the specified range) in this fixture's <code>{@link JList}</code></li>
    * <li>releasing the "Shift"</li>
    * </ul>
    * @param from the starting point of the selection.
@@ -85,32 +88,34 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    */
   public final JListFixture selectItems(Range.From from, Range.To to) {
-    pressKey(VK_SHIFT);
+    int shift = VK_SHIFT;
+    pressKey(shift);
     for (int i = from.value; i <= to.value; i++) selectItem(i);
-    releaseKey(VK_SHIFT);
+    releaseKey(shift);
     return this;
   }
   
   /**
-   * Simulates a user selecting the specified items in the <code>{@link JList}</code> managed by this fixture. The
-   * simulated user actions are:
+   * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>. The simulated user 
+   * actions are:
    * <ul>
    * <li>pressing the "Control" or "Command" key (depending on the OS)</li>
-   * <li>selecting the specified items in the <code>{@link JList}</code> managed by this fixture</li>
+   * <li>selecting the specified items in this fixture's <code>{@link JList}</code></li>
    * <li>releasing the "Control" or "Command" key</li>
    * </ul>
    * @param indices the indices of the items to select.
    * @return this fixture.
    */
   public final JListFixture selectItems(int...indices) {
-    pressKey(controlOrCommandKey());
+    int controlOrCommand = controlOrCommandKey();
+    pressKey(controlOrCommand);
     for (int index : indices) selectItem(index);
-    releaseKey(controlOrCommandKey());
+    releaseKey(controlOrCommand);
     return this;
   }
 
   /**
-   * Simulates a user selecting an item in the <code>{@link JList}</code> managed by this fixture. 
+   * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>. 
    * @param index the index of the item to select.
    * @return this fixture.
    */
@@ -120,25 +125,26 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user selecting the specified items in the <code>{@link JList}</code> managed by this fixture. The
-   * simulated user actions are:
+   * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>. The simulated user 
+   * actions are:
    * <ul>
    * <li>pressing the "Control" or "Command" key (depending on the OS)</li>
-   * <li>selecting the specified items in the <code>{@link JList}</code> managed by this fixture</li>
+   * <li>selecting the specified items in this fixture's <code>{@link JList}</code></li>
    * <li>releasing the "Control" or "Command" key</li>
    * </ul>
    * @param items the text of the items to select.
    * @return this fixture.
    */
   public final JListFixture selectItems(String...items) {
-    pressKey(controlOrCommandKey());
+    int controlOrCommand = controlOrCommandKey();
+    pressKey(controlOrCommand);
     for (String item : items) selectItem(item);
-    releaseKey(controlOrCommandKey());
+    releaseKey(controlOrCommand);
     return this;
   }
 
   /**
-   * Simulates a user selecting an item in the <code>{@link JList}</code> managed by this fixture. 
+   * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>. 
    * @param text the text of the item to select.
    * @return this fixture.
    */
@@ -148,7 +154,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Simulates a user double-clicking an item in the <code>{@link JList}</code> managed by this fixture. 
+   * Simulates a user double-clicking an item in this fixture's <code>{@link JList}</code>. 
    * @param index the index of the item to double-click.
    * @return this fixture.
    */
@@ -158,7 +164,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user double-clicking an item in the <code>{@link JList}</code> managed by this fixture. 
+   * Simulates a user double-clicking an item in this fixture's <code>{@link JList}</code>. 
    * @param text the text of the item to double-click.
    * @return this fixture.
    */
@@ -176,12 +182,50 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   private void validateItemIndex(int index) {
     int itemCount = target.getModel().getSize();
     if (index < 0 || index >= itemCount)
-      throw new ActionFailedException(concat(quote(index), " should be between ", quote(0), " and ", quote(itemCount)));
+      throw new ActionFailedException(concat(
+          quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", quote(valueOf(itemCount))));
   }
-  
+
   /**
-   * Returns the <code>String</code> representation of an item in the <code>{@link JList}</code> managed by this 
-   * fixture. If such <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * Verifies that the <code>String</code> representation of the selected item in this fixture's 
+   * <code>{@link JList}</code> matches the given text.
+   * @param text the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the selected item does not match the given text.
+   */
+  public final JListFixture requireSelection(String text) {
+    int selectedIndex = target.getSelectedIndex(); 
+    if (selectedIndex == -1) failNoSelection();
+    assertThat(valueAt(selectedIndex)).as(selectedIndexProperty()).isEqualTo(text);
+    return this;
+  }
+
+  /**
+   * Verifies that the <code>String</code> representations of the selected items in this fixture's 
+   * <code>{@link JList}</code> match the given text items.
+   * @param items text items to match. 
+   * @return this fixture.
+   * @throws AssertionError if the selected items do not match the given text items.
+   */
+  public final JListFixture requireSelectedItems(String... items) {
+    int[] selectedIndices = target.getSelectedIndices();
+    int currentSelectionCount = selectedIndices.length;
+    if (currentSelectionCount == 0) failNoSelection();
+    assertThat(currentSelectionCount).as(formattedPropertyName("selectedIndices#length")).isEqualTo(items.length);
+    for (int i = 0; i < currentSelectionCount; i++) { 
+      String description = formattedPropertyName(concat("selectedIndices[", valueOf(i), "]"));
+      assertThat(valueAt(selectedIndices[i])).as(description).isEqualTo(items[i]);
+    }
+    return this;
+  }
+
+  private void failNoSelection() { fail(concat("[", selectedIndexProperty(), "] No selection")); }
+  
+  private String selectedIndexProperty() { return formattedPropertyName("selectedIndex"); }
+
+  /**
+   * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JList}</code> . If such 
+   * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
    * @param index the index of the item to return.
    * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
@@ -194,7 +238,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
   public final JListFixture click() {
@@ -202,7 +246,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -211,7 +255,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -220,7 +264,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
   public final JListFixture rightClick() {
@@ -228,7 +272,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
   public final JListFixture doubleClick() {
@@ -236,7 +280,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Gives input focus to the <code>{@link JList}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
   public final JListFixture focus() {
@@ -244,7 +288,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JList}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -254,7 +298,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JList}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -264,7 +308,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JList}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -274,7 +318,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Asserts that the <code>{@link JList}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JList}</code> is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JList</code> is not visible.
    */
@@ -283,7 +327,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Asserts that the <code>{@link JList}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JList}</code> is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JList</code> is visible.
    */
@@ -292,7 +336,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Asserts that the <code>{@link JList}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JList}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JList</code> is disabled.
    */
@@ -301,7 +345,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Asserts that the <code>{@link JList}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JList}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
    * @throws WaitTimedOutError if the managed <code>JList</code> is never enabled.
@@ -311,7 +355,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Asserts that the <code>{@link JList}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JList}</code> is not enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JList</code> is enabled.
    */
@@ -320,7 +364,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user dragging an item from the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
    * @param text the text of the item to drag.
    * @return this fixture.
    */
@@ -330,7 +374,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user dropping an item to the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
    * @param text the text of the item to drop.
    * @return this fixture.
    */
@@ -349,7 +393,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
   
   /**
-   * Simulates a user dragging an item from the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to drag.
    * @return this fixture.
    */
@@ -359,7 +403,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user dropping an item to the <code>{@link JList}</code> managed by this fixture.
+   * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to drop.
    * @return this fixture.
    */

@@ -19,6 +19,13 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.message;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
+
 import static org.fest.util.Arrays.array;
 
 import org.fest.swing.annotation.GUITest;
@@ -35,6 +42,7 @@ import org.testng.annotations.Test;
 public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
 
   private JComboBoxFixture fixture;
+  private JComboBox target;
   
   @Test public void shouldReturnComboBoxContents() {
     assertThat(fixture.contents()).isEqualTo(array("first", "second", "third"));
@@ -50,6 +58,33 @@ public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
     assertThat(fixture.target.getSelectedItem()).isEqualTo("second");
   }
 
+  @Test public void shouldPassIfSelectionMatches() {
+    target.setSelectedIndex(1);
+    fixture.requireSelection("second");
+  }
+  
+  @Test public void shouldFailIfNoSelection() {
+    target.setSelectedIndex(-1);
+    try {
+      fixture.requireSelection("first");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndex"), message("No selection"));
+    }
+  }
+  
+  @Test public void shouldFailIfSelectionNotMatching() {
+    target.setSelectedIndex(1);
+    try {
+      fixture.requireSelection("first");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("selectedIndex"), expected("'first'"), actual("'second'"));
+    }
+  }
+  
   @Test public void shouldReturnValueAtGivenIndex() {
     assertThat(fixture.valueAt(2)).isEqualTo("third");
   }
@@ -76,7 +111,7 @@ public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
   }
 
   protected JComboBox createTarget() {
-    JComboBox target = new JComboBox(array("first", "second", "third"));
+    target = new JComboBox(array("first", "second", "third"));
     target.setName("target");
     return target;
   }

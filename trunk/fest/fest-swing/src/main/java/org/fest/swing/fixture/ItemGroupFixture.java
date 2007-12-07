@@ -15,7 +15,7 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.*;
+import java.awt.Component;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> that contains or displays a group of items,
@@ -23,24 +23,25 @@ import java.awt.*;
  * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
  * 
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public interface ItemGroupFixture<T extends Component> {
 
   /**
-   * Returns the elements in the <code>{@link Component}</code> managed by this fixture as <code>String</code>s.
+   * Returns the elements in this fixture's <code>{@link Component}</code> as <code>String</code>s.
    * @return the elements in the managed <code>Component</code>.
    */
   String[] contents();
 
   /**
-   * Simulates a user selecting an item in the <code>{@link Component}</code> managed by this fixture. 
+   * Simulates a user selecting an item in this fixture's <code>{@link Component}</code>. 
    * @param index the index of the item to select.
    * @return this fixture.
    */
   ItemGroupFixture<T> selectItem(int index);
 
   /**
-   * Simulates a user selecting an item in the <code>{@link Component}</code> managed by this fixture. 
+   * Simulates a user selecting an item in this fixture's <code>{@link Component}</code>. 
    * @param text the text of the item to select.
    * @return this fixture.
    */
@@ -53,4 +54,13 @@ public interface ItemGroupFixture<T extends Component> {
    * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
   String valueAt(int index);
+  
+  /**
+   * Verifies that the <code>String</code> representation of the selected item in this fixture's 
+   * <code>{@link Component}</code> matches the given text.
+   * @param text the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the selected item does not match the given text.
+   */
+  ItemGroupFixture<T> requireSelection(String text);
 }

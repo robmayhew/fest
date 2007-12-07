@@ -19,11 +19,14 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 
 import abbot.tester.JComboBoxTester;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Strings.concat;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link JComboBox}</code> and verification of the state of such
@@ -54,7 +57,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Returns the elements in the <code>{@link JComboBox}</code> managed by this fixture as <code>String</code>s.
+   * Returns the elements in this fixture's <code>{@link JComboBox}</code> as <code>String</code>s.
    * @return the elements in the managed <code>JComboBox</code>.
    */
   public final String[] contents() {
@@ -62,7 +65,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Simulates a user selecting an item in the <code>{@link JComboBox}</code> managed by this fixture. 
+   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. 
    * @param index the index of the item to select.
    * @return this fixture.
    */
@@ -72,7 +75,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user selecting an item in the <code>{@link JComboBox}</code> managed by this fixture. 
+   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. 
    * @param text the text of the item to select.
    * @return this fixture.
    */
@@ -82,8 +85,24 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Returns the <code>String</code> representation of an item in the <code>{@link JComboBox}</code> managed by this 
-   * fixture. If such <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * Verifies that the <code>String</code> representation of the selected item in this fixture's 
+   * <code>{@link JComboBox}</code> matches the given text.
+   * @param text the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the selected item does not match the given text.
+   */
+  public final JComboBoxFixture requireSelection(String text) {
+    int selectedIndex = target.getSelectedIndex();
+    if (selectedIndex == -1) fail(concat("[", selectedIndexProperty(), "] No selection")); 
+    assertThat(valueAt(selectedIndex)).as(selectedIndexProperty()).isEqualTo(text);
+    return this;
+  }
+  
+  private String selectedIndexProperty() { return formattedPropertyName("selectedIndex"); }
+
+  /**
+   * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JComboBox}</code>. If such 
+   * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
    * @param index the index of the item to return.
    * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
@@ -93,8 +112,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /** 
-   * Finds and returns the {@link JList} in the popup raised by the <code>{@link JComboBox}</code> managed by this 
-   * fixture.
+   * Finds and returns the {@link JList} in the popup raised by this fixture's <code>{@link JComboBox}</code>.
    * @return the <code>JList</code> in the popup raised by the managed <code>JComboBox</code>. 
    */
   public JList list() {
@@ -103,7 +121,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code> managed by this fixture only
+   * Simulates a user entering the specified text in this fixture's <code>{@link JComboBox}</code> only
    * if it is editable.
    * @param text the text to enter.
    * @return this fixture.
@@ -120,7 +138,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Gives input focus to the <code>{@link JComboBox}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
    */
   public final JComboBoxFixture focus() {
@@ -128,7 +146,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
    */
   public final JComboBoxFixture click() {
@@ -136,7 +154,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JComboBox}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -145,7 +163,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JComboBox}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -154,7 +172,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
    */
   public final JComboBoxFixture rightClick() {
@@ -162,7 +180,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
    */
   public final JComboBoxFixture doubleClick() {
@@ -170,8 +188,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JComboBox}</code> managed by this
-   * fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JComboBox}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -181,7 +198,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JComboBox}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -191,7 +208,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JComboBox}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JComboBox}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -201,7 +218,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JComboBox</code> is not visible.
    */
@@ -210,7 +227,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JComboBox</code> is visible.
    */
@@ -219,7 +236,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JComboBox</code> is disabled.
    */
@@ -228,7 +245,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JComboBox</code> is never enabled.
@@ -238,7 +255,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /**
-   * Asserts that the <code>{@link JComboBox}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is disabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JComboBox</code> is enabled.
    */

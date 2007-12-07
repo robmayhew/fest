@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.fest.util.Strings.isEmpty;
 
 /**
@@ -42,6 +43,7 @@ final class TestList extends JList {
   TestList(String name, List<String> elements) {
     if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");
     setDragEnabled(true);
+    setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     for (String e : elements) model.addElement(e);
     setModel(model);
     setName(name);
