@@ -15,15 +15,18 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.BorderLayout;
+import java.awt.Point;
+
+import javax.swing.JToolBar;
+
 import abbot.tester.JToolBarTester;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.Timeout;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JToolBar}</code> and verification of the state of such
@@ -67,7 +70,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Simulates a user floating the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user floating this fixture's <code>{@link JToolBar}</code>.
    * @param point the point where the <code>JToolBar</code> will be floating to.
    * @return this fixture.
    */
@@ -77,7 +80,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user unfloating the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user unfloating this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
   public final JToolBarFixture unfloat() {
@@ -95,7 +98,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
   public final JToolBarFixture click() {
@@ -103,7 +106,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JToolBar}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -112,7 +115,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JToolBar}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -121,7 +124,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
   public final JToolBarFixture rightClick() {
@@ -129,7 +132,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
   public final JToolBarFixture doubleClick() {
@@ -137,7 +140,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JToolBar}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
   public final JToolBarFixture focus() {
@@ -145,8 +148,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Simulates a user pressing and releasing the given keys in the <code>{@link JToolBar}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys in this fixture's <code>{@link JToolBar}</code>. This method 
+   * does not affect the current focus.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -156,7 +159,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JToolBar}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -166,7 +169,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JToolBar}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JToolBar}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -176,46 +179,46 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
   
   /**
-   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JToolBar</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is not visible.
    */
   public final JToolBarFixture requireVisible() {
     return (JToolBarFixture)assertVisible();
   }
   
   /**
-   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JToolBar</code> is visible.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is visible.
    */
   public final JToolBarFixture requireNotVisible() {
     return (JToolBarFixture)assertNotVisible();
   }
   
   /**
-   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JToolBar</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is disabled.
    */
   public final JToolBarFixture requireEnabled() {
     return (JToolBarFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JToolBar</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JToolBar</code> is never enabled.
    */
   public final JToolBarFixture requireEnabled(Timeout timeout) {
     return (JToolBarFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link JToolBar}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JToolBar</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is enabled.
    */
   public final JToolBarFixture requireDisabled() {
     return (JToolBarFixture)assertDisabled();

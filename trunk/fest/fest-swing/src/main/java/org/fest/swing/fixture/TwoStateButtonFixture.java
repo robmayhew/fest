@@ -15,12 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.exception.ComponentLookupException;
-
 import javax.swing.AbstractButton;
 import javax.swing.JToggleButton;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a two-state button and verification of the state of such button.
@@ -29,7 +30,7 @@ import javax.swing.JToggleButton;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public abstract class TwoStateButtonFixture<T extends AbstractButton> extends ComponentFixture<T> implements TextDisplayFixture<T> {
+public abstract class TwoStateButtonFixture<T extends AbstractButton> extends ComponentFixture<T> implements TextDisplayFixture {
 
   private static final String SELECTED_PROPERTY = "selected";
   

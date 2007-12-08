@@ -22,10 +22,10 @@ import abbot.tester.ComponentLocation;
 import abbot.tester.JTreeLocation;
 import abbot.tester.JTreeTester;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link JTree}</code> and verification of the state of such
@@ -95,7 +95,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
   public final JTreeFixture click() {
@@ -103,7 +103,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -112,7 +112,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -121,7 +121,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
   public final JTreeFixture rightClick() {
@@ -129,7 +129,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
   public final JTreeFixture doubleClick() {
@@ -137,7 +137,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JTree}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
   public final JTreeFixture focus() {
@@ -145,7 +145,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys in the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys in this fixture's <code>{@link JTree}</code>.
    * This method does not affect the current focus.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
@@ -156,7 +156,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JTree}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -166,7 +166,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JTree}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -176,53 +176,53 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
   
   /**
-   * Asserts that the <code>{@link JTree}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JTree}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JTree</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JTree</code> is not visible.
    */
   public final JTreeFixture requireVisible() {
     return (JTreeFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JTree}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JTree}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JTree</code> is visible.
+   * @throws AssertionError if this fixture's <code>JTree</code> is visible.
    */
   public final JTreeFixture requireNotVisible() {
     return (JTreeFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JTree}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JTree</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JTree</code> is disabled.
    */
   public final JTreeFixture requireEnabled() {
     return (JTreeFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JTree}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JTree</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JTree</code> is never enabled.
    */
   public final JTreeFixture requireEnabled(Timeout timeout) {
     return (JTreeFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JTree}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JTree}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JTree</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JTree</code> is enabled.
    */
   public final JTreeFixture requireDisabled() {
     return (JTreeFixture)assertDisabled();
   }
 
   /**
-   * Simulates a user dragging an item from the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
    * @param treePath the tree path corresponding to the item to drag.
    * @return this fixture.
    */
@@ -233,7 +233,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
   
   /**
-   * Simulates a user dropping an item to the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
    * @param treePath the tree path corresponding to the item to drop.
    * @return this fixture.
    */
@@ -247,7 +247,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user dragging an item from the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
    * @param index the index of the item to drag.
    * @return this fixture.
    */
@@ -257,7 +257,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user dropping an item to the <code>{@link JTree}</code> managed by this fixture.
+   * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
    * @param index the index of the item to drop.
    * @return this fixture.
    */

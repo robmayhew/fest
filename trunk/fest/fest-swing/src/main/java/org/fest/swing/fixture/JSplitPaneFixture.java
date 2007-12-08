@@ -19,10 +19,10 @@ import javax.swing.JSplitPane;
 
 import abbot.tester.JSplitPaneTester;
 
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.Timeout;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -53,7 +53,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user moving the divider of the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user moving the divider of this fixture's <code>{@link JSplitPane}</code>.
    * @param location the location to move the divider to.
    * @return this fixture.
    */
@@ -67,7 +67,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
   public final JSplitPaneFixture click() {
@@ -75,7 +75,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -84,7 +84,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -93,7 +93,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
   public final JSplitPaneFixture rightClick() {
@@ -101,7 +101,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
   public final JSplitPaneFixture doubleClick() {
@@ -109,7 +109,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
   
   /**
-   * Gives input focus to the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
   public final JSplitPaneFixture focus() {
@@ -117,8 +117,8 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JSplitPane}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JSplitPane}</code>. This 
+   * method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -128,7 +128,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JSplitPane}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -138,7 +138,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JSplitPane}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JSplitPane}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -148,46 +148,46 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JSplitPane</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is not visible.
    */
   public final JSplitPaneFixture requireVisible() {
     return (JSplitPaneFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JSplitPane</code> is visible.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is visible.
    */
   public final JSplitPaneFixture requireNotVisible() {
     return (JSplitPaneFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JSplitPane</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is disabled.
    */
   public final JSplitPaneFixture requireEnabled() {
     return (JSplitPaneFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JSplitPane</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JSplitPane</code> is never enabled.
    */
   public final JSplitPaneFixture requireEnabled(Timeout timeout) {
     return (JSplitPaneFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JSplitPane}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JSplitPane</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is enabled.
    */
   public final JSplitPaneFixture requireDisabled() {
     return (JSplitPaneFixture)assertDisabled();

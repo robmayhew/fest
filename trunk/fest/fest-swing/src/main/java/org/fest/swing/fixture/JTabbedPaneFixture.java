@@ -20,10 +20,10 @@ import javax.swing.JTabbedPane;
 import abbot.tester.JTabbedPaneLocation;
 import abbot.tester.JTabbedPaneTester;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link JTabbedPane}</code> and verification of the state of such
@@ -79,7 +79,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
   
   /** 
-   * Returns the titles of all the tabs in the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Returns the titles of all the tabs in this fixture's <code>{@link JTabbedPane}</code>.
    * @return the titles of all the tabs. 
    */
   public final String[] tabTitles() {
@@ -91,7 +91,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
   public final JTabbedPaneFixture click() {
@@ -99,7 +99,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -108,7 +108,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -117,7 +117,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
   public final JTabbedPaneFixture rightClick() {
@@ -125,7 +125,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
   public final JTabbedPaneFixture doubleClick() {
@@ -133,7 +133,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
   public final JTabbedPaneFixture focus() {
@@ -141,8 +141,8 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JTabbedPane}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JTabbedPane}</code>. This 
+   * method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -152,7 +152,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JTabbedPane}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -162,7 +162,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JTabbedPane}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JTabbedPane}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -172,46 +172,46 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JTabbedPane</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is not visible.
    */
   public final JTabbedPaneFixture requireVisible() {
     return (JTabbedPaneFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JTabbedPane</code> is visible.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is visible.
    */
   public final JTabbedPaneFixture requireNotVisible() {
     return (JTabbedPaneFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JTabbedPane</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is disabled.
    */
   public final JTabbedPaneFixture requireEnabled() {
     return (JTabbedPaneFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JTabbedPane</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JTabbedPane</code> is never enabled.
    */
   public final JTabbedPaneFixture requireEnabled(Timeout timeout) {
     return (JTabbedPaneFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JTabbedPane}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JTabbedPane</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is enabled.
    */
   public final JTabbedPaneFixture requireDisabled() {
     return (JTabbedPaneFixture)assertDisabled();

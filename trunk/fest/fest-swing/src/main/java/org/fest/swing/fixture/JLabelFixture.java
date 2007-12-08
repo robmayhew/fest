@@ -19,10 +19,10 @@ import javax.swing.JLabel;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.Timeout;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link JLabel}</code> and verification of the state of such
@@ -30,7 +30,7 @@ import org.fest.swing.core.RobotFixture;
  *
  * @author Alex Ruiz
  */
-public class JLabelFixture extends ComponentFixture<JLabel> implements TextDisplayFixture<JLabel> {
+public class JLabelFixture extends ComponentFixture<JLabel> implements TextDisplayFixture {
   
   /**
    * Creates a new <code>{@link JLabelFixture}</code>.
@@ -52,8 +52,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
   
   /**
-   * Asserts that the text of the <code>{@link JLabel}</code> managed by this fixture is equal to the specified 
-   * <code>String</code>. 
+   * Asserts that the text of this fixture's <code>{@link JLabel}</code> is equal to the specified <code>String</code>. 
    * @param expected the text to match.
    * @return this fixture.
    * @throws AssertionError if the text of the target component is not equal to the given one.
@@ -64,13 +63,13 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
   
   /**
-   * Returns the text of the <code>{@link JLabel}</code> managed by this fixture. 
-   * @return the text of the managed <code>JLabel</code>. 
+   * Returns the text of this fixture's <code>{@link JLabel}</code>. 
+   * @return the text of this fixture's <code>JLabel</code>. 
    */
   public final String text() { return target.getText(); }
   
   /**
-   * Simulates a user clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
   public final JLabelFixture click() {
@@ -78,7 +77,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -87,7 +86,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -96,7 +95,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
   public final JLabelFixture rightClick() {
@@ -104,7 +103,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
   public final JLabelFixture doubleClick() {
@@ -112,7 +111,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Gives input focus to the <code>{@link JLabel}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
   public final JLabelFixture focus() {
@@ -120,8 +119,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JLabel}</code> managed by this
-   * fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JLabel}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -131,7 +129,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JLabel}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -141,7 +139,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JLabel}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JLabel}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -151,46 +149,46 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
   
   /**
-   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JLabel</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is not visible.
    */
   public final JLabelFixture requireVisible() {
     return (JLabelFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JLabel</code> is visible.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is visible.
    */
   public final JLabelFixture requireNotVisible() {
     return (JLabelFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JLabel</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is disabled.
    */
   public final JLabelFixture requireEnabled() {
     return (JLabelFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JLabel</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JLabel</code> is never enabled.
    */
   public final JLabelFixture requireEnabled(Timeout timeout) {
     return (JLabelFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JLabel}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JLabel</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is enabled.
    */
   public final JLabelFixture requireDisabled() {
     return (JLabelFixture)assertDisabled();

@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+			<action dev="alruiz, wanghy" type="remove">
+				Removed unnecessary generic types in ItemGroupFixture, TextInputFixture and TextDisplayFixture.
+			</action>
       <action dev="alruiz" type="add" issue="52" due-to="John Stephi">
 				Added method 'requireSelection(String)' to JComboBoxFixture.
 			</action>      

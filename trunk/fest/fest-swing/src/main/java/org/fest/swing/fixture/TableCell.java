@@ -15,12 +15,20 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JTable;
+
 import static org.fest.util.Strings.concat;
 
-import javax.swing.*;
-
 /**
- * Understands a cell in a <code>{@link JTable}</code>.
+ * Understands a cell in a <code>{@link JTable}</code>. Intended for creation of <code>{@link JTableCellFixture}</code>s 
+ * only.
+ * <p>
+ * Example:
+ * <pre>
+ * // import static org.fest.swing.fixture.TableCellBuilder.row;
+ * {@link JTableCellFixture} cell = dialog.{@link JTableFixture table}("records").cell({@link TableCell.TableCellBuilder#row(int) row}(3).column(0));
+ * </pre>
+ * </p>
  * 
  * @author Alex Ruiz
  */
@@ -32,29 +40,23 @@ public class TableCell {
    * @author Alex Ruiz
    */
   public static class TableCellBuilder {
+    private final int row;
     
     /**
      * Starting point for the creation of a <code>{@link TableCell}</code>.
      * <p>
      * Example:
      * <pre>
-     * // import static org.fest.swing.fixture.TableCell.TableCellBuilder.*;
-     * 
+     * // import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
      * TableCell cell = row(5).column(3);
      * </pre>
      * </p>
      * @param row the row index of the table cell to create.
      * @return the created builder.
      */
-    public static TableCellBuilder row(int row) {
-      return new TableCellBuilder(row);
-    }
-
-    private final int row;
-    
-    private TableCellBuilder(int row) {
-      this.row = row;
-    }
+    public static TableCellBuilder row(int row) { return new TableCellBuilder(row); }
+   
+    private TableCellBuilder(int row) { this.row = row; }
     
     /**
      * Creates a new table cell using the row index specified in <code>{@link TableCellBuilder#row(int)}</code> and the 
@@ -62,9 +64,7 @@ public class TableCell {
      * @param column the column index of the table cell to create.
      * @return the created table cell.
      */
-    public TableCell column(int column) {
-      return new TableCell(row, column);
-    }
+    public TableCell column(int column) { return new TableCell(row, column); }
   }
   
   /** The row of the cell. */
@@ -78,7 +78,12 @@ public class TableCell {
     this.column = column;
   }
 
-  void validateBoundsIn(JTable table) {
+  /**
+   * Validates the indices of this cell regarding the given table.
+   * @param table the table to use to validate this cell's indices.
+   * @throw IllegalArgumentException if the indices are either negative or out of bounds.
+   */
+  public void validateBoundsIn(JTable table) {
     int rowCount = table.getRowCount();
     if (rowCount == 0) throw new IllegalStateException("Table does not contain any rows");
     validateIndex(row, rowCount, "row");

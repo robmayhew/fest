@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
@@ -27,11 +28,11 @@ import static org.fest.swing.util.Formatting.format;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -47,7 +48,7 @@ public abstract class ComponentFixture<T extends Component> {
   /** Performs simulation of user events on <code>{@link #target}</code> */
   public final RobotFixture robot;
   
-  /** The <code>{@link Component}</code> managed by this fixture. */
+  /** This fixture's <code>{@link Component}</code>. */
   public final T target;
   
   private final ComponentTester tester;
@@ -85,11 +86,11 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Returns the <code>{@link Component}</code> managed by this fixture casted to the given subtype.
+   * Returns this fixture's <code>{@link Component}</code> casted to the given subtype.
    * @param <C> enforces that the given type is a subsubtype of the managed <code>Component</code>.
    * @param type the type that the managed <code>Component</code> will be casted to.
-   * @return the <code>Component</code> managed by this fixture casted to the given subtype.
-   * @throws AssertionError if the <code>Component</code> managed by this fixture is not an instance of the given type.
+   * @return this fixture's <code>Component</code> casted to the given subtype.
+   * @throws AssertionError if this fixture's <code>Component</code> is not an instance of the given type.
    */
   public final <C extends T> C targetCastedTo(Class<C> type) {
     assertThat(target).as(formattedTarget()).isInstanceOf(type);
@@ -97,46 +98,45 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> click();
   
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> click(MouseButton button);
   
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> click(MouseClickInfo mouseClickInfo);
   
   /**
-   * Simulates a user right-clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> rightClick();
   
   /**
-   * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> doubleClick();
 
   /**
-   * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> focus();
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code> managed by this
-   * fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Component}</code> .
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -144,7 +144,7 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> pressAndReleaseKeys(int...keyCodes);
 
   /**
-   * Simulates a user pressing given key on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user pressing given key on this fixture's <code>{@link Component}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -152,7 +152,7 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> pressKey(int keyCode);
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link Component}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -160,28 +160,28 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> releaseKey(int keyCode);
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link Component}</code> is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
   protected abstract ComponentFixture<T> requireVisible();
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link Component}</code> is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is visible.
    */
   protected abstract ComponentFixture<T> requireNotVisible();
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Component}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is disabled.
    */
   protected abstract ComponentFixture<T> requireEnabled();
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Component}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
    * @throws WaitTimedOutError if the managed <code>Component</code> is never enabled.
@@ -189,15 +189,14 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> requireEnabled(Timeout timeout);
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link Component}</code> is disabled.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is enabled.
    */
   protected abstract ComponentFixture<T> requireDisabled();
 
   /**
-   * Shows a popup menu using the <code>{@link Component}</code> managed by this fixture as the invoker of the popup 
-   * menu.
+   * Shows a popup menu using this fixture's <code>{@link Component}</code> as the invoker of the popup menu.
    * @return a fixture that manages the displayed popup menu.
    * @throws ComponentLookupException if a popup menu cannot be found.
    */
@@ -206,7 +205,18 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Shows a popup menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the 
+   * popup menu.
+   * @param p the given point where to show the popup menu.
+   * @return a fixture that manages the displayed popup menu.
+   * @throws ComponentLookupException if a popup menu cannot be found.
+   */
+  public final JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, robot.showPopupMenu(target, p));
+  }
+  
+  /**
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected final ComponentFixture<T> doClick() {
@@ -214,7 +224,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected final ComponentFixture<T> doDoubleClick() {
@@ -222,7 +232,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected final ComponentFixture<T> doRightClick() {
@@ -230,7 +240,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -239,7 +249,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param button the mouse button to click.
    * @return this fixture.
    */
@@ -248,7 +258,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    * @return this fixture.
@@ -260,8 +270,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code> managed by this
-   * fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Component}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -273,7 +282,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Simulates a user pressing given key on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user pressing given key on this fixture's <code>{@link Component}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -285,7 +294,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link Component}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link Component}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -297,7 +306,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Gives input focus to the <code>{@link Component}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected final ComponentFixture<T> doFocus() {
@@ -306,7 +315,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link Component}</code> is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
@@ -316,7 +325,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link Component}</code> is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is visible.
    */
@@ -328,7 +337,7 @@ public abstract class ComponentFixture<T extends Component> {
   private String visibleProperty() { return formattedPropertyName("visible"); }
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Component}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is disabled.
    */
@@ -338,7 +347,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
   
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Component}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
    * @throws WaitTimedOutError if the managed <code>Component</code> is never enabled.
@@ -354,7 +363,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Asserts that the <code>{@link Component}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link Component}</code> is disabled.
    * @return this fixture.
    * @throws AssertionError if the managed <code>Component</code> is enabled.
    */

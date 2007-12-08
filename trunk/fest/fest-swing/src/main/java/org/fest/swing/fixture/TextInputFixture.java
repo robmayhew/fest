@@ -15,35 +15,34 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.*;
+import java.awt.Component;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> that accepts text input from the user, and 
  * verification of the state of such <code>{@link Component}</code>.
- * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
  * 
  * @author Alex Ruiz
  */
-public interface TextInputFixture<T extends Component> extends TextDisplayFixture<T> {
+public interface TextInputFixture extends TextDisplayFixture {
 
   /**
    * Simulates a user entering the given text in the <code>{@link Component}</code> managed by this fixture.
    * @param text the text to enter.
    * @return this fixture.
    */
-  TextInputFixture<T> enterText(String text);
+  TextInputFixture enterText(String text);
 
   /**
    * Simulates a user deleting all the text in the <code>{@link Component}</code> managed by this fixture.
    * @return this fixture.
    */
-  TextInputFixture<T> deleteText();
+  TextInputFixture deleteText();
   
   /**
    * Simulates a user selecting all the text contained in the <code>{@link Component}</code> managed by this fixture. 
    * @return this fixture.
    */
-  TextInputFixture<T> selectAll();
+  TextInputFixture selectAll();
 
   /**
    * Simulates a user selecting a portion of the text contained in the <code>{@link Component}</code> managed by this
@@ -52,12 +51,12 @@ public interface TextInputFixture<T extends Component> extends TextDisplayFixtur
    * @param end index where selection should end.
    * @return this fixture.
    */
-  TextInputFixture<T> selectText(int start, int end);
+  TextInputFixture selectText(int start, int end);
   
   /**
    * Simulates a user selecting the given text contained in the <code>{@link Component}</code> managed by this fixture.
    * @param text the text to select.
    * @return this fixture.
    */
-  TextInputFixture<T> select(String text);
+  TextInputFixture select(String text);
 }

@@ -15,20 +15,24 @@
  */
 package org.fest.swing.fixture;
 
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+
+import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
+import static javax.swing.JFileChooser.FILES_ONLY;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.quote;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-import static org.fest.util.Strings.*;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
-import static javax.swing.JFileChooser.FILES_ONLY;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import java.io.File;
 
 /**
  * Understands simulation of user events on a <code>{@link JFileChooser}</code> and verification of the state of such
@@ -68,12 +72,12 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Selects the given file in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Selects the given file in this fixture's <code>{@link JFileChooser}</code>.
    * @param file the file to select.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JFileChooser</code> can select directories only and the file to
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> can select directories only and the file to
    *           select is not a directory.
-   * @throws AssertionError if the managed <code>JFileChooser</code> cannot select directories and the file to select
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> cannot select directories and the file to select
    *           is a directory.
    */
   public final JFileChooserFixture selectFile(final File file) {
@@ -81,7 +85,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
     boolean isFolder = file.isDirectory();
     if (mode == FILES_ONLY && isFolder) throw new AssertionError("The file chooser cannot open directories");
     if (mode == DIRECTORIES_ONLY && !isFolder) throw new AssertionError("The file chooser can only open directories");
-    robot.invokeAndWait(null, new Runnable() {
+    robot.invokeAndWait(new Runnable() {
       public void run() {
         target.setSelectedFile(file);
       }
@@ -90,7 +94,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Sets the current diretory of the <code>{@link JFileChooser}</code> managed by this fixture to the given one.
+   * Sets the current diretory of this fixture's <code>{@link JFileChooser}</code> to the given one.
    * @param dir the directory to set as current.
    * @return this fixture.
    */
@@ -114,7 +118,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user pressing the "Cancel" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user pressing the "Cancel" button in this fixture's <code>{@link JFileChooser}</code>.
    * @throws org.fest.swing.exception.ComponentLookupException if the "Cancel" button cannot be found.
    * @throws AssertionError if the "Cancel" button is disabled.
    */
@@ -123,7 +127,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
   
   /**
-   * Finds the "Cancel" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Finds the "Cancel" button in this fixture's <code>{@link JFileChooser}</code>.
    * @return the found "Cancel" button.
    * @throws ComponentLookupException if the "Cancel" button cannot be found.
    */
@@ -135,7 +139,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user pressing the "Approve" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user pressing the "Approve" button in this fixture's <code>{@link JFileChooser}</code>.
    * @throws org.fest.swing.exception.ComponentLookupException if the "Approve" button cannot be found.
    * @throws AssertionError if the "Approve" button is disabled.
    */
@@ -144,7 +148,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
   
   /**
-   * Finds the "Approve" button in the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Finds the "Approve" button in this fixture's <code>{@link JFileChooser}</code>.
    * @return the found "Approve" button.
    * @throws org.fest.swing.exception.ComponentLookupException if the "Approve" button cannot be found.
    */
@@ -170,7 +174,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
    */
   public final JFileChooserFixture click() {
@@ -178,7 +182,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
   
   /**
-   * Simulates a user clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JFileChooser}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -187,7 +191,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JFileChooser}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -196,7 +200,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
    */
   public final JFileChooserFixture rightClick() {
@@ -204,7 +208,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
    */
   public final JFileChooserFixture doubleClick() {
@@ -212,7 +216,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
    */
   public final JFileChooserFixture focus() {
@@ -231,7 +235,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JFileChooser}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -241,7 +245,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JFileChooser}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JFileChooser}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -251,46 +255,46 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
   
   /**
-   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JFileChooser</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> is not visible.
    */
   public final JFileChooserFixture requireVisible() {
     return (JFileChooserFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JFileChooser</code> is visible.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> is visible.
    */
   public final JFileChooserFixture requireNotVisible() {
     return (JFileChooserFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JFileChooser</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> is disabled.
    */
   public final JFileChooserFixture requireEnabled() {
     return (JFileChooserFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JFileChooser</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JFileChooser</code> is never enabled.
    */
   public final JFileChooserFixture requireEnabled(Timeout timeout) {
     return (JFileChooserFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JFileChooser}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JFileChooser</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> is enabled.
    */
   public final JFileChooserFixture requireDisabled() {
     return (JFileChooserFixture)assertDisabled();

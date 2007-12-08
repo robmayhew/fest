@@ -15,12 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JToggleButton;
+
 import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
-
-import javax.swing.JToggleButton;
 
 /**
  * Understands simulation of user events on a <code>{@link JToggleButton}</code> and verification of the state of such
@@ -50,7 +51,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Checks (or selects) the <code>{@link JToggleButton}</code> managed by this fixture only it is not already checked.
+   * Checks (or selects) this fixture's <code>{@link JToggleButton}</code> only it is not already checked.
    * @return this fixture.
    */
   public final JToggleButtonFixture check() {
@@ -59,7 +60,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Unchecks the <code>{@link JToggleButton}</code> managed by this fixture only if it is checked.
+   * Unchecks this fixture's <code>{@link JToggleButton}</code> only if it is checked.
    * @return this fixture.
    */
   public final JToggleButtonFixture uncheck() {
@@ -68,7 +69,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
    */
   public final JToggleButtonFixture click() {
@@ -76,7 +77,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JToggleButton}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -85,7 +86,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JToggleButton}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -94,7 +95,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
    */
   public final JToggleButtonFixture rightClick() {
@@ -102,7 +103,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
    */
   public final JToggleButtonFixture doubleClick() {
@@ -110,7 +111,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
    */
   public final JToggleButtonFixture focus() {
@@ -118,8 +119,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JToggleButton}</code> managed by this
-   * fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JToggleButton}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -129,7 +129,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JToggleButton}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -139,7 +139,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user releasing the given key on the <code>{@link JToggleButton}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JToggleButton}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -149,7 +149,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Asserts that the text of the <code>{@link JToggleButton}</code> managed by this fixture is equal to the specified
+   * Asserts that the text of this fixture's <code>{@link JToggleButton}</code> is equal to the specified
    * <code>String</code>.
    * @param expected the text to match.
    * @return this fixture.
@@ -161,72 +161,72 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Returns the text of the <code>{@link JToggleButton}</code> managed by this fixture.
-   * @return the text of the managed <code>JToggleButton</code>.
+   * Returns the text of this fixture's <code>{@link JToggleButton}</code>.
+   * @return the text of this fixture's <code>JToggleButton</code>.
    */
   public final String text() {
     return target.getText();
   }
 
   /**
-   * Asserts that the <code>{@link JToggleButton}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JToggleButton</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is not visible.
    */
   public final JToggleButtonFixture requireVisible() {
     return (JToggleButtonFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JToggleButton}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JToggleButton</code> is visible.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is visible.
    */
   public final JToggleButtonFixture requireNotVisible() {
     return (JToggleButtonFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JToggleButton}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JToggleButton</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is disabled.
    */
   public final JToggleButtonFixture requireEnabled() {
     return (JToggleButtonFixture)assertEnabled();
   }
 
   /**
-   * Asserts that the <code>{@link JToggleButton}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JToggleButton</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JToggleButton</code> is never enabled.
    */
   public final JToggleButtonFixture requireEnabled(Timeout timeout) {
     return (JToggleButtonFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link JToggleButton}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JToggleButton</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is enabled.
    */
   public final JToggleButtonFixture requireDisabled() {
     return (JToggleButtonFixture)assertDisabled();
   }
 
   /**
-   * Verifies that the <code>{@link JToggleButton}</code> managed by this fixture is selected.
+   * Verifies that this fixture's <code>{@link JToggleButton}</code> is selected.
    * @return this fixture.
-   * @throws AssertionError if the <code>JToggleButton</code> managed by this fixture is not selected.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is not selected.
    */
   public final JToggleButtonFixture requireSelected() {
     return (JToggleButtonFixture)assertSelected();
   }
 
   /**
-   * Verifies that the <code>{@link JToggleButton}</code> managed by this fixture is not selected.
+   * Verifies that this fixture's <code>{@link JToggleButton}</code> is not selected.
    * @return this fixture.
-   * @throws AssertionError if the <code>JToggleButton</code> managed by this fixture is selected.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is selected.
    */
   public final JToggleButtonFixture requireNotSelected() {
     return (JToggleButtonFixture)assertNotSelected();

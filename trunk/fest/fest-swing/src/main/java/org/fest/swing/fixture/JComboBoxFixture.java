@@ -35,7 +35,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxFixture extends ComponentFixture<JComboBox> implements ItemGroupFixture<JComboBox> {
+public class JComboBoxFixture extends ComponentFixture<JComboBox> implements ItemGroupFixture {
 
   /**
    * Creates a new <code>{@link JComboBoxFixture}</code>.
@@ -58,7 +58,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   
   /**
    * Returns the elements in this fixture's <code>{@link JComboBox}</code> as <code>String</code>s.
-   * @return the elements in the managed <code>JComboBox</code>.
+   * @return the elements in this fixture's <code>JComboBox</code>.
    */
   public final String[] contents() {
     return comboBoxTester().getContents(target);
@@ -113,7 +113,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   
   /** 
    * Finds and returns the {@link JList} in the popup raised by this fixture's <code>{@link JComboBox}</code>.
-   * @return the <code>JList</code> in the popup raised by the managed <code>JComboBox</code>. 
+   * @return the <code>JList</code> in the popup raised by this fixture's <code>JComboBox</code>. 
    */
   public JList list() {
     target.showPopup();
@@ -220,7 +220,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JComboBox</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is not visible.
    */
   public final JComboBoxFixture requireVisible() {
     return (JComboBoxFixture)assertVisible();
@@ -229,7 +229,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JComboBox</code> is visible.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is visible.
    */
   public final JComboBoxFixture requireNotVisible() {
     return (JComboBoxFixture)assertNotVisible();
@@ -238,7 +238,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JComboBox</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is disabled.
    */
   public final JComboBoxFixture requireEnabled() {
     return (JComboBoxFixture)assertEnabled();
@@ -248,7 +248,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * Asserts that this fixture's <code>{@link JComboBox}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JComboBox</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JComboBox</code> is never enabled.
    */
   public final JComboBoxFixture requireEnabled(Timeout timeout) {
     return (JComboBoxFixture)assertEnabled(timeout);
@@ -257,7 +257,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JComboBox</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is enabled.
    */
   public final JComboBoxFixture requireDisabled() {
     return (JComboBoxFixture)assertDisabled();

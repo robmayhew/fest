@@ -15,14 +15,17 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dimension;
+import java.awt.Window;
+
 import abbot.tester.WindowTester;
 import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.RobotFixture;
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import org.fest.swing.core.ScreenLock;
 
-import java.awt.*;
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link Window}</code> and verification of the state of such
@@ -96,56 +99,56 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Shows the <code>{@link Window}</code> managed by this fixture.
+   * Shows this fixture's <code>{@link Window}</code>.
    * @return this fixture.
    */
   protected abstract WindowFixture<T> show();
 
   /**
-   * Shows the <code>{@link Window}</code> managed by this fixture, resized to the given size.
-   * @param size the size to resize the managed <code>Window</code> to.
+   * Shows this fixture's <code>{@link Window}</code>, resized to the given size.
+   * @param size the size to resize this fixture's <code>Window</code> to.
    * @return this fixture.
    */
   protected abstract WindowFixture<T> show(Dimension size);
 
   /**
-   * Simulates a user closing the <code>{@link Window}</code> managed by this fixture.
+   * Simulates a user closing this fixture's <code>{@link Window}</code>.
    */
   public void close() {
     robot.close(target);
   }
   
   /**
-   * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
-   * @param width the width that the managed <code>Window</code> should have after being resized.
+   * Simulates a user resizing horizontally this fixture's <code>{@link Window}</code>.
+   * @param width the width that this fixture's <code>Window</code> should have after being resized.
    * @return this fixture.
    */
   protected abstract WindowFixture<T> resizeWidthTo(int width);
 
   /**
-   * Simulates a user resizing vertically the <code>{@link Window}</code> managed by this fixture.
-   * @param height the height that the managed <code>Window</code> should have after being resized.
+   * Simulates a user resizing vertically this fixture's <code>{@link Window}</code>.
+   * @param height the height that this fixture's <code>Window</code> should have after being resized.
    * @return this fixture.
    */
   protected abstract WindowFixture<T> resizeHeightTo(int height);
 
   /**
-   * Simulates a user resizing the <code>{@link Window}</code> managed by this fixture.
+   * Simulates a user resizing this fixture's <code>{@link Window}</code>.
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
   protected abstract WindowFixture<T> resizeTo(Dimension size);
 
   /**
-   * Asserts that the size of the <code>{@link Window}</code> managed by this fixture is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link Window}</code> is equal to given one. 
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>Window</code> is not equal to the given size. 
    */
   protected abstract WindowFixture<T> requireSize(Dimension size);
 
   /**
-   * Shows the <code>{@link Window}</code> managed by this fixture.
+   * Shows this fixture's <code>{@link Window}</code>.
    * @return this fixture.
    */
   protected final WindowFixture<T> doShow() {
@@ -155,8 +158,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Shows the <code>{@link Window}</code> managed by this fixture, resized to the given size.
-   * @param size the size to resize the managed <code>Window</code> to.
+   * Shows this fixture's <code>{@link Window}</code>, resized to the given size.
+   * @param size the size to resize this fixture's <code>Window</code> to.
    * @return this fixture.
    */
   protected final WindowFixture<T> doShow(Dimension size) {
@@ -166,8 +169,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Simulates a user resizing horizontally the <code>{@link Window}</code> managed by this fixture.
-   * @param width the width that the managed <code>Window</code> should have after being resized.
+   * Simulates a user resizing horizontally this fixture's <code>{@link Window}</code>.
+   * @param width the width that this fixture's <code>Window</code> should have after being resized.
    * @return this fixture.
    */
   protected final WindowFixture<T> doResizeWidthTo(int width) {
@@ -175,8 +178,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Simulates a user resizing vertically the <code>{@link Window}</code> managed by this fixture.
-   * @param height the height that the managed <code>Window</code> should have after being resized.
+   * Simulates a user resizing vertically this fixture's <code>{@link Window}</code>.
+   * @param height the height that this fixture's <code>Window</code> should have after being resized.
    * @return this fixture.
    */
   protected final WindowFixture<T> doResizeHeightTo(int height) {
@@ -184,7 +187,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Simulates a user resizing the <code>{@link Window}</code> managed by this fixture.
+   * Simulates a user resizing this fixture's <code>{@link Window}</code>.
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
@@ -194,10 +197,10 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
 
   /**
-   * Asserts that the size of the <code>{@link Window}</code> managed by this fixture is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link Window}</code> is equal to given one. 
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of the managed <code>Window</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>Window</code> is not equal to the given size. 
    */
   protected final WindowFixture<T> assertEqualSize(Dimension size) {
     assertThat(target.getSize()).as(formattedPropertyName("size")).isEqualTo(size);

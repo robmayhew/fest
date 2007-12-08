@@ -15,15 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.*;
+import java.awt.Component;
 
 /**
  * Understands verification of the state of a <code>{@link Component}</code> that displays text.
- * @param <T> the type of <code>{@link Component}</code> that this fixture can manage. 
  *
  * @author Alex Ruiz
  */
-public interface TextDisplayFixture<T extends Component> {
+public interface TextDisplayFixture {
 
   /**
    * Returns the text of the <code>{@link Component}</code> managed by this fixture. 
@@ -38,5 +37,5 @@ public interface TextDisplayFixture<T extends Component> {
    * @return this fixture.
    * @throws AssertionError if the text of the target component is not equal to the given one.
    */
-  TextDisplayFixture<T> requireText(String expected);
+  TextDisplayFixture requireText(String expected);
 }

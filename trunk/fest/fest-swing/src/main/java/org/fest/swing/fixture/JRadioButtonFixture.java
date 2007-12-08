@@ -15,12 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JRadioButton;
+
 import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
-
-import javax.swing.JRadioButton;
 
 /**
  * Understands simulation of user events on a <code>{@link JRadioButton}</code> and verification of the state of such 
@@ -51,7 +52,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
    */
   public final JRadioButtonFixture click() {
@@ -59,7 +60,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -68,7 +69,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -77,7 +78,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
    */
   public final JRadioButtonFixture rightClick() {
@@ -85,7 +86,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
    */
   public final JRadioButtonFixture doubleClick() {
@@ -93,7 +94,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
    */
   public final JRadioButtonFixture focus() {
@@ -101,7 +102,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Asserts that the text of the <code>{@link JRadioButton}</code> managed by this fixture is equal to the specified 
+   * Asserts that the text of this fixture's <code>{@link JRadioButton}</code> is equal to the specified 
    * <code>String</code>. 
    * @param expected the text to match.
    * @return this fixture.
@@ -113,16 +114,16 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Returns the text of the <code>{@link JRadioButton}</code> managed by this fixture. 
-   * @return the text of the managed <code>JRadioButton</code>. 
+   * Returns the text of this fixture's <code>{@link JRadioButton}</code>. 
+   * @return the text of this fixture's <code>JRadioButton</code>. 
    */
   public final String text() {
     return target.getText();
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JRadioButton}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JRadioButton}</code>. This 
+   * method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -132,7 +133,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JRadioButton}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -142,7 +143,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JRadioButton}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JRadioButton}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -152,64 +153,64 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
   
   /**
-   * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JRadioButton</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> is not visible.
    */
   public final JRadioButtonFixture requireVisible() {
     return (JRadioButtonFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JRadioButton</code> is visible.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> is visible.
    */
   public final JRadioButtonFixture requireNotVisible() {
     return (JRadioButtonFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JRadioButton</code> is disabled.
+   * @throws AssertionError is this fixture's <code>JRadioButton</code> is disabled.
    */
   public final JRadioButtonFixture requireEnabled() {
     return (JRadioButtonFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JRadioButton</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JRadioButton</code> is never enabled.
    */
   public final JRadioButtonFixture requireEnabled(Timeout timeout) {
     return (JRadioButtonFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JRadioButton}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JRadioButton</code> is enabled.
+   * @throws AssertionError is this fixture's <code>JRadioButton</code> is enabled.
    */
   public final JRadioButtonFixture requireDisabled() {
     return (JRadioButtonFixture)assertDisabled();
   }
   
   /**
-   * Verifies that the <code>{@link JRadioButton}</code> managed by this fixture is selected.
+   * Verifies that this fixture's <code>{@link JRadioButton}</code> is selected.
    * @return this fixture.
-   * @throws AssertionError if the <code>JRadioButton</code> managed by this fixture is not selected.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> is not selected.
    */
   public final JRadioButtonFixture requireSelected() {
     return (JRadioButtonFixture)assertSelected();
   }
 
   /**
-   * Verifies that the <code>{@link JRadioButton}</code> managed by this fixture is not selected.
+   * Verifies that this fixture's <code>{@link JRadioButton}</code> is not selected.
    * @return this fixture.
-   * @throws AssertionError if the <code>JRadioButton</code> managed by this fixture is selected.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> is selected.
    */
   public final JRadioButtonFixture requireNotSelected() {
     return (JRadioButtonFixture)assertNotSelected();

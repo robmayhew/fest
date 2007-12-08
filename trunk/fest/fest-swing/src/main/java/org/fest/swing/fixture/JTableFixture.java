@@ -23,10 +23,10 @@ import abbot.tester.JTableTester;
 
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -62,41 +62,23 @@ public class JTableFixture extends ComponentFixture<JTable> {
   /**
    * Returns a fixture that manages the table cell specified by the given row and column.
    * @param cell the cell of interest.
-   * @return  a fixture that manages the table cell specified by the given row and column.
+   * @return a fixture that manages the table cell specified by the given row and column.
    * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
-   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
-   * empty).
+   * @throws IllegalStateException if this fixture's <code>JTable</code> does not contain any cells (is empty).
    * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableCellFixture cell(TableCell cell) {
     validate(cell);
     return new JTableCellFixture(this, cell);
   }
-
-  /**
-   * Simulates a user selecting the given cell (row and column) of the <code>{@link JTable}</code> managed by this 
-   * fixture.
-   * @param cell the cell to select.
-   * @return this fixture.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
-   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
-   * empty).
-   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are out of bounds.
-   */
-  public final JTableFixture selectCell(TableCell cell) {
-    validate(cell);
-    tableTester().actionSelectCell(target, cell.row, cell.column);
-    return this;
-  }
   
   /**
-   * Simulates a user selecting the given cells of the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user selecting the given cells of this fixture's <code>{@link JTable}</code>.
    * @param cells the cells to select.
    * @return this fixture.
    * @throws IllegalArgumentException if <code>cells</code> is <code>null</code>.
    * @throws IllegalArgumentException if any element in <code>cells</code> is <code>null</code>.
-   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
-   * empty).
+   * @throws IllegalStateException if this fixture's <code>JTable</code> does not contain any cells (is empty).
    * @throws IndexOutOfBoundsException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public final JTableFixture selectCells(TableCell... cells) {
@@ -109,7 +91,21 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Returns the value of the selected cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
+   * Simulates a user selecting the given cell (row and column) of this fixture's <code>{@link JTable}</code>.
+   * @param cell the cell to select.
+   * @return this fixture.
+   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> does not contain any cells (is empty).
+   * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public final JTableFixture selectCell(TableCell cell) {
+    validate(cell);
+    tableTester().actionSelectCell(target, cell.row, cell.column);
+    return this;
+  }
+
+  /**
+   * Returns the value of the selected cell in this fixture's <code>{@link JTable}</code> into a reasonable 
    * <code>String</code> representation. Returns <code>null</code> if one can not be obtained or if the
    * <code>{@link JTable}</code> does not have any selected cell.
    * @return the value of the selected cell.
@@ -120,13 +116,12 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Returns the value of the given cell in the <code>{@link JTable}</code> managed by this fixture into a reasonable 
+   * Returns the value of the given cell in this fixture's <code>{@link JTable}</code> into a reasonable 
    * <code>String</code> representation, or <code>null</code> if one can not be obtained.
    * @param cell the given cell.
    * @return the value of the given cell.
    * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
-   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
-   * empty).
+   * @throws IllegalStateException if this fixture's <code>JTable</code> does not contain any cells (is empty).
    * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final String contentsAt(TableCell cell) {
@@ -139,11 +134,11 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user dragging an item from the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user dragging an item from this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to drag.
    * @return this fixture.
    * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
-   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
+   * @throws IllegalStateException if this fixture's <code>JTable</code> does not contain any cells (is
    * empty).
    * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are out of bounds.
    */
@@ -153,12 +148,11 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user dropping an item to the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user dropping an item to this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to drop the dragging item into.
    * @return this fixture.
    * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
-   * @throws IllegalStateException if the <code>JTable</code> managed by this fixture does not contain any cells (is
-   * empty).
+   * @throws IllegalStateException if this fixture's <code>JTable</code> does not contain any cells (is empty).
    * @throws IndexOutOfBoundsException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableFixture drop(TableCell cell) {
@@ -181,7 +175,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
    * @return this fixture.
    */
   public final JTableFixture click() {
@@ -189,7 +183,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   /**
-   * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -198,7 +192,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -207,7 +201,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JTable}</code>.
    * @return this fixture.
    */
   public final JTableFixture rightClick() {
@@ -215,7 +209,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JTable}</code>.
    * <p>
    * <b>Note:</b> This method will not be successful if the double-clicking occurs on an editable table cell. For this 
    * particular case, this method will start edition of the table cell located under the mouse pointer.
@@ -227,7 +221,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JTable}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JTable}</code>.
    * @return this fixture.
    */
   public final JTableFixture focus() {
@@ -235,8 +229,8 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JTable}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JTable}</code>. This method 
+   * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -246,7 +240,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JTable}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -256,7 +250,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JTable}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JTable}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -266,7 +260,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   /**
-   * Asserts that the <code>{@link JTable}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JTable}</code> is visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTable</code> is not visible.
    */
@@ -275,7 +269,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Asserts that the <code>{@link JTable}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JTable}</code> is not visible.
    * @return this fixture.
    * @throws AssertionError if the managed <code>JTable</code> is visible.
    */
@@ -284,7 +278,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Asserts that the <code>{@link JTable}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTable}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTable</code> is disabled.
    */
@@ -293,7 +287,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   /**
-   * Asserts that the <code>{@link JTable}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTable}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
    * @throws WaitTimedOutError if the managed <code>JTable</code> is never enabled.
@@ -303,7 +297,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Asserts that the <code>{@link JTable}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JTable}</code> is disabled.
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTable</code> is enabled.
    */

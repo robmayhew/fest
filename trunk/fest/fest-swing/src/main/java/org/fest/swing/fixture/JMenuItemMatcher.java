@@ -15,9 +15,9 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.core.ComponentMatcher;
+import javax.swing.JMenuItem;
 
-import javax.swing.*;
+import org.fest.swing.core.ComponentMatcher;
 
 /**
  * Matches a <code>{@link JMenuItem}</code> given a simple label or a menu path of the format "menu|submenu|menuitem", 
@@ -28,6 +28,10 @@ import javax.swing.*;
  */
 final class JMenuItemMatcher extends abbot.finder.matchers.JMenuItemMatcher implements ComponentMatcher {
   
+  /**
+   * Creates a new </code>{@link JMenuItemMatcher}</code>.
+   * @param label the label of the menu item to match.
+   */
   public JMenuItemMatcher(String label) { 
     super(label);
   }

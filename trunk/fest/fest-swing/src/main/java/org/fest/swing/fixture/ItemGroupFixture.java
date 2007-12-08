@@ -20,12 +20,11 @@ import java.awt.Component;
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> that contains or displays a group of items,
  * and verification of the state of such <code>{@link Component}</code>.
- * @param <T> the type of <code>{@link Component}</code> that this fixture can manage.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public interface ItemGroupFixture<T extends Component> {
+public interface ItemGroupFixture {
 
   /**
    * Returns the elements in this fixture's <code>{@link Component}</code> as <code>String</code>s.
@@ -38,14 +37,14 @@ public interface ItemGroupFixture<T extends Component> {
    * @param index the index of the item to select.
    * @return this fixture.
    */
-  ItemGroupFixture<T> selectItem(int index);
+  ItemGroupFixture selectItem(int index);
 
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link Component}</code>. 
    * @param text the text of the item to select.
    * @return this fixture.
    */
-  ItemGroupFixture<T> selectItem(String text);
+  ItemGroupFixture selectItem(String text);
 
   /**
    * Returns the <code>String</code> representation of an item in the <code>{@link Component}</code> managed by this 
@@ -62,5 +61,5 @@ public interface ItemGroupFixture<T extends Component> {
    * @return this fixture.
    * @throws AssertionError if the selected item does not match the given text.
    */
-  ItemGroupFixture<T> requireSelection(String text);
+  ItemGroupFixture requireSelection(String text);
 }

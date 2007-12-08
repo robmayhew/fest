@@ -46,7 +46,7 @@ import org.fest.swing.util.Range;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture<JList> {
+public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture {
 
   /**
    * Creates a new <code>{@link JListFixture}</code>.
@@ -68,8 +68,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Returns the elements in the <code>{@link JList}</code> in this fixture as <code>String</code>s.
-   * @return the elements in the managed <code>JList</code>.
+   * Returns the elements in this fixture's <code>{@link JList}</code> as <code>String</code>s.
+   * @return the elements in this fixture's <code>JList</code>.
    */
   public String[] contents() {
     return listTester().getContents(target);
@@ -89,9 +89,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public final JListFixture selectItems(Range.From from, Range.To to) {
     int shift = VK_SHIFT;
-    pressKey(shift);
+    doPressKey(shift);
     for (int i = from.value; i <= to.value; i++) selectItem(i);
-    releaseKey(shift);
+    doReleaseKey(shift);
     return this;
   }
   
@@ -108,9 +108,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public final JListFixture selectItems(int...indices) {
     int controlOrCommand = controlOrCommandKey();
-    pressKey(controlOrCommand);
+    doPressKey(controlOrCommand);
     for (int index : indices) selectItem(index);
-    releaseKey(controlOrCommand);
+    doReleaseKey(controlOrCommand);
     return this;
   }
 
@@ -137,9 +137,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public final JListFixture selectItems(String...items) {
     int controlOrCommand = controlOrCommandKey();
-    pressKey(controlOrCommand);
+    doPressKey(controlOrCommand);
     for (String item : items) selectItem(item);
-    releaseKey(controlOrCommand);
+    doReleaseKey(controlOrCommand);
     return this;
   }
 
@@ -320,7 +320,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   /**
    * Asserts that this fixture's <code>{@link JList}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JList</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JList</code> is not visible.
    */
   public final JListFixture requireVisible() {
     return (JListFixture)assertVisible();
@@ -329,7 +329,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   /**
    * Asserts that this fixture's <code>{@link JList}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JList</code> is visible.
+   * @throws AssertionError if this fixture's <code>JList</code> is visible.
    */
   public final JListFixture requireNotVisible() {
     return (JListFixture)assertNotVisible();
@@ -338,7 +338,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   /**
    * Asserts that this fixture's <code>{@link JList}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JList</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JList</code> is disabled.
    */
   public final JListFixture requireEnabled() {
     return (JListFixture)assertEnabled();
@@ -348,7 +348,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Asserts that this fixture's <code>{@link JList}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JList</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JList</code> is never enabled.
    */
   public final JListFixture requireEnabled(Timeout timeout) {
     return (JListFixture)assertEnabled(timeout);
@@ -357,7 +357,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   /**
    * Asserts that this fixture's <code>{@link JList}</code> is not enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JList</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JList</code> is enabled.
    */
   public final JListFixture requireDisabled() {
     return (JListFixture)assertDisabled();

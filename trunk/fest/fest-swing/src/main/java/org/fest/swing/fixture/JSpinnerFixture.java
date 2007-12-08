@@ -51,7 +51,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user increasing the value of the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user increasing the value of this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture. 
    */
   public final JSpinnerFixture increment() {
@@ -60,7 +60,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user decreasing the value of the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user decreasing the value of this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture. 
    */
   public final JSpinnerFixture decrement() {
@@ -69,7 +69,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
   
   /**
-   * Simulates a user entering the given text in the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user entering the given text in this fixture's <code>{@link JSpinner}</code>.
    * @param text the text to enter.
    * @return this fixture.
    */
@@ -83,7 +83,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
   public final JSpinnerFixture click() {
@@ -91,7 +91,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -100,7 +100,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -109,7 +109,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
   public final JSpinnerFixture rightClick() {
@@ -117,7 +117,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
   public final JSpinnerFixture doubleClick() {
@@ -125,7 +125,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JSpinner}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
   public final JSpinnerFixture focus() {
@@ -133,8 +133,8 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
   
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JSpinner}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JSpinner}</code>. This method 
+   * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -144,7 +144,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JSpinner}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -154,7 +154,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JSpinner}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JSpinner}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -164,46 +164,46 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
   
   /**
-   * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JSpinner</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> is not visible.
    */
   public final JSpinnerFixture requireVisible() {
     return (JSpinnerFixture)assertVisible();
   }
   
   /**
-   * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JSpinner</code> is visible.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> is visible.
    */
   public final JSpinnerFixture requireNotVisible() {
     return (JSpinnerFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JSpinner</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> is disabled.
    */
   public final JSpinnerFixture requireEnabled() {
     return (JSpinnerFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JSpinner</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JSpinner</code> is never enabled.
    */
   public final JSpinnerFixture requireEnabled(Timeout timeout) {
     return (JSpinnerFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JSpinner}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JSpinner</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> is enabled.
    */
   public final JSpinnerFixture requireDisabled() {
     return (JSpinnerFixture)assertDisabled();

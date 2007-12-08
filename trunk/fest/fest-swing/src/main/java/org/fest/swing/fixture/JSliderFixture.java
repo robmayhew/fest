@@ -45,14 +45,14 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   /**
    * Creates a new <code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSlider</code>.
-   * @param target the <code>JSlider</code> to be managed by this fixture.
+   * @param target the <code>JSlider</code> to be managed <code>{@link JSlider}</code> by this fixture.
    */
   public JSliderFixture(RobotFixture robot, JSlider target) {
     super(robot, target);
   }
   
   /**
-   * Simulates a user incrementing the value of the managed <code>{@link JSlider}</code>.
+   * Simulates a user incrementing the value of this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture increment() {
@@ -61,7 +61,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
-   * Simulates a user decrementing the value of the managed <code>{@link JSlider}</code>.
+   * Simulates a user decrementing the value of this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture decrement() {
@@ -70,7 +70,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
-   * Simulates a user sliding the managed <code>{@link JSlider}</code> to the given value.
+   * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.
    * @return this fixture.
    */
@@ -80,7 +80,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user sliding the managed <code>{@link JSlider}</code> to its maximum value.
+   * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to its maximum value.
    * @return this fixture.
    */
   public JSliderFixture slideToMax() {
@@ -89,7 +89,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user sliding the managed <code>{@link JSlider}</code> to its minimum value.
+   * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to its minimum value.
    * @return this fixture.
    */
   public JSliderFixture slideToMin() {
@@ -102,7 +102,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture click() {
@@ -110,7 +110,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSlider}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -119,7 +119,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JSlider}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -128,7 +128,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture rightClick() {
@@ -136,7 +136,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture doubleClick() {
@@ -144,7 +144,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JSlider}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture focus() {
@@ -152,8 +152,8 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JSlider}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JSlider}</code>. This method 
+   * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -163,7 +163,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JSlider}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -173,7 +173,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JSlider}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JSlider}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -183,46 +183,46 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
   
   /**
-   * Asserts that the <code>{@link JSlider}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JSlider</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JSlider</code> is not visible.
    */
   public final JSliderFixture requireVisible() {
     return (JSliderFixture)assertVisible();
   }
   
   /**
-   * Asserts that the <code>{@link JSlider}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JSlider}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JSlider</code> is visible.
+   * @throws AssertionError if this fixture's <code>JSlider</code> is visible.
    */
   public final JSliderFixture requireNotVisible() {
     return (JSliderFixture)assertNotVisible();
   }
   
   /**
-   * Asserts that the <code>{@link JSlider}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JSlider}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JSlider</code> is disabled.
+   * @throws AssertionError is this fixture's <code>JSlider</code> is disabled.
    */
   public final JSliderFixture requireEnabled() {
     return (JSliderFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JSlider}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JSlider}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JSlider</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JSlider</code> is never enabled.
    */
   public final JSliderFixture requireEnabled(Timeout timeout) {
     return (JSliderFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link JSlider}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JSlider}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JSlider</code> is enabled.
+   * @throws AssertionError is this fixture's <code>JSlider</code> is enabled.
    */
   public final JSliderFixture requireDisabled() {
     return (JSliderFixture)assertDisabled();

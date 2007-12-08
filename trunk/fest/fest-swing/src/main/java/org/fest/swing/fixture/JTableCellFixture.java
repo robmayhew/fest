@@ -15,23 +15,36 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 
-import javax.swing.*;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a cell of a <code>{@link JTable}</code> and verification of the state of
  * such table cell.
+ * <p>
+ * Example:
+ * <pre>
+ * // import static org.fest.swing.fixture.TableCellBuilder.row;
+ * {@link JTableCellFixture} cell = dialog.{@link JTableFixture table}("records").cell({@link TableCell.TableCellBuilder#row(int) row}(3).column(0));
+ * cell.select().showPopupMenu();
+ * </pre>
+ * </p>
  * 
  * @author Alex Ruiz
+ * 
+ * @see TableCell
  */
-public class JTableCellFixture {
+public class JTableCellFixture implements ItemFixture {
 
   private final JTableFixture table;
   private final TableCell cell;
@@ -47,7 +60,7 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user selecting the table cell managed by this fixture.
+   * Simulates a user selecting this fixture's table cell.
    * @return this fixture.
    */
   public final JTableCellFixture select() {
@@ -56,7 +69,7 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user clicking the table cell managed by this fixture.
+   * Simulates a user clicking this fixture's table cell.
    * @return this fixture.
    */
   public final JTableCellFixture click() {
@@ -64,7 +77,7 @@ public class JTableCellFixture {
   }
   
   /**
-   * Simulates a user clicking the table cell managed by this fixture.
+   * Simulates a user clicking this fixture's table cell.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -73,7 +86,7 @@ public class JTableCellFixture {
   }
   
   /**
-   * Simulates a user right-clicking the table cell managed by this fixture.
+   * Simulates a user right-clicking this fixture's table cell.
    * @return this fixture.
    */
   public final JTableCellFixture rightClick() {
@@ -81,7 +94,7 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user double-clicking the table cell managed by this fixture.
+   * Simulates a user double-clicking this fixture's table cell.
    * @return this fixture.
    */
   public final JTableCellFixture doubleClick() {
@@ -106,13 +119,13 @@ public class JTableCellFixture {
    * Returns the value of table cell managed by this fixture into a reasonable <code>String</code> representation, or
    * <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
-   */  
+   */
   public final String contents() {
     return table.contentsAt(cell);
   }
 
   /**
-   * Simulates a user dragging the table cell managed by this fixture.
+   * Simulates a user dragging this fixture's table cell.
    * @return this fixture.
    */
   public final JTableCellFixture drag() {
@@ -121,7 +134,7 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user dropping into the table cell managed by this fixture.
+   * Simulates a user dropping into this fixture's table cell.
    * @return this fixture.
    */
   public final JTableCellFixture drop() {
@@ -130,8 +143,8 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the table cell managed by this fixture. This method does
-   * not affect the current focus.
+   * Simulates a user pressing and releasing the given keys on this fixture's table cell. This method does not affect
+   * the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -142,7 +155,7 @@ public class JTableCellFixture {
   }
 
   /**
-   * Simulates a user pressing the given key on the table cell managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's table cell.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -153,7 +166,7 @@ public class JTableCellFixture {
   }
   
   /**
-   * Simulates a user releasing the given key on the table cell managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's table cell.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -164,7 +177,7 @@ public class JTableCellFixture {
   }
   
   /**
-   * Shows a popup menu using the table cell managed by this fixture as the invoker of the popup menu.
+   * Shows a popup menu using this fixture's table cell as the invoker of the popup menu.
    * @return a fixture that manages the displayed popup menu.
    * @throws ComponentLookupException if a popup menu cannot be found.
    */
@@ -176,14 +189,14 @@ public class JTableCellFixture {
   }
   
   /**
-   * Returns the row index of the table cell managed by this fixture.
-   * @return the row index of the table cell managed by this fixture.
+   * Returns the row index of this fixture's table cell.
+   * @return the row index of this fixture's table cell.
    */
   public final int row() { return cell.row; }
 
   /**
-   * Returns the column index of the table cell managed by this fixture.
-   * @return the column index of the table cell managed by this fixture.
+   * Returns the column index of this fixture's table cell.
+   * @return the column index of this fixture's table cell.
    */
   public final int column() { return cell.column; }
 }

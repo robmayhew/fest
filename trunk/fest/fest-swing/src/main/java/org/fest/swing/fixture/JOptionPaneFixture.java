@@ -73,7 +73,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
   public final JOptionPaneFixture click() {
@@ -81,7 +81,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -90,7 +90,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -99,7 +99,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
   public final JOptionPaneFixture rightClick() {
@@ -107,7 +107,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
   public final JOptionPaneFixture doubleClick() {
@@ -115,7 +115,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
   public final JOptionPaneFixture focus() {
@@ -123,10 +123,10 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture has the given title.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> has the given title.
    * @param title the title to match.
    * @return this fixture.
-   * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not have the given title.
+   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given title.
    */
   public final JOptionPaneFixture requireTitle(String title) {
     String actualTitle = ((Dialog)target.getRootPane().getParent()).getTitle();
@@ -135,10 +135,10 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture shows the given message.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> shows the given message.
    * @param message the message to verify.
    * @return this fixture.
-   * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not show the given message.
+   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not show the given message.
    */
   public final JOptionPaneFixture requireMessage(Object message) {
     assertThat(target.getMessage()).as(formattedPropertyName("message")).isEqualTo(message);
@@ -146,10 +146,10 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture has the given options.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> has the given options.
    * @param options the options to verify.
    * @return this fixture.
-   * @throws AssertionError if the managed </code>JOptionPaneFixture</code> managed by this fixture does not have the given options.
+   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given options.
    */
   public final JOptionPaneFixture requireOptions(Object[] options) {
     assertThat(target.getOptions()).as(formattedPropertyName("options")).isEqualTo(options);
@@ -157,8 +157,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Returns a fixture wrapping the "OK" button in the <code>{@link JOptionPaneFixture}</code> managed by this
-   * fixture. This method is locale-independent and platform-independent.
+   * Returns a fixture wrapping the "OK" button in this fixture's <code>{@link JOptionPane}</code>. This method is 
+   * locale-independent and platform-independent.
    * @return a fixture wrapping the "OK" button.
    * @throws ComponentLookupException if the a "OK" button cannot be found.
    */
@@ -167,8 +167,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Returns a fixture wrapping the "Cancel" button in the <code>{@link JOptionPaneFixture}</code> managed by this
-   * fixture. This method is locale-independent and platform-independent.
+   * Returns a fixture wrapping the "Cancel" button in this fixture's <code>{@link JOptionPane}</code>. This method is 
+   * locale-independent and platform-independent.
    * @return a fixture wrapping the "Cancel" button.
    * @throws ComponentLookupException if the a "Cancel" button cannot be found.
    */
@@ -177,8 +177,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Returns a fixture wrapping the "Yes" button in the <code>{@link JOptionPaneFixture}</code> managed by this
-   * fixture. This method is locale-independent and platform-independent.
+   * Returns a fixture wrapping the "Yes" button in this fixture's <code>{@link JOptionPane}</code>. This method is 
+   * locale-independent and platform-independent.
    * @return a fixture wrapping the "Yes" button.
    * @throws ComponentLookupException if the a "Yes" button cannot be found.
    */
@@ -187,8 +187,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Returns a fixture wrapping the "No" button in the <code>{@link JOptionPaneFixture}</code> managed by this
-   * fixture. This method is locale-independent and platform-independent.
+   * Returns a fixture wrapping the "No" button in this fixture's <code>{@link JOptionPane}</code>. This method is 
+   * locale-independent and platform-independent.
    * @return a fixture wrapping the "No" button.
    * @throws ComponentLookupException if the a "No" button cannot be found.
    */
@@ -201,8 +201,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Finds and returns a fixture wrapping a button (in the <code>{@link JOptionPaneFixture}</code> managed by this
-   * fixture) containing the given text.
+   * Finds and returns a fixture wrapping a button (this fixture's <code>{@link JOptionPane}</code>) containing the 
+   * given text.
    * @param text the text of the button to find and return.
    * @return a fixture wrapping a button containing the given text.
    * @throws ComponentLookupException if the a button with the given text cannot be found.
@@ -213,9 +213,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Finds the first <code>{@link JButton}</code> in the <code>{@link JOptionPaneFixture}</code> managed by this 
-   * fixture.
-   * @return a fixture wrapping the first <code>JButton</code> contained in the managed <code>JOptionPane</code>. 
+   * Finds the first <code>{@link JButton}</code> in this fixture's <code>{@link JOptionPane}</code>.
+   * @return a fixture wrapping the first <code>JButton</code> contained in this fixture's <code>JOptionPane</code>. 
    */
   public final JButtonFixture button() {
     return new JButtonFixture(robot, robot.finder().findByType(target, JButton.class));
@@ -232,7 +231,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying an error message.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying an error message.
    * @return this fixture.
    */
   public final JOptionPaneFixture requireErrorMessage() {
@@ -240,7 +239,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying an information
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying an information
    * message.
    * @return this fixture.
    */
@@ -249,7 +248,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a warning message.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying a warning message.
    * @return this fixture.
    */
   public final JOptionPaneFixture requireWarningMessage() {
@@ -257,7 +256,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a question.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying a question.
    * @return this fixture.
    */
   public final JOptionPaneFixture requireQuestionMessage() {
@@ -265,7 +264,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPaneFixture}</code> managed by this fixture is displaying a plain message.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying a plain message.
    * @return this fixture.
    */
   public final JOptionPaneFixture requirePlainMessage() {
@@ -288,8 +287,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JOptionPane}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys this fixture's <code>{@link JOptionPane}</code>. This method 
+   * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -299,7 +298,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JOptionPane}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -309,7 +308,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JOptionPane}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JOptionPane}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -319,46 +318,46 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JOptionPane</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> is not visible.
    */
   public final JOptionPaneFixture requireVisible() {
     return (JOptionPaneFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JOptionPane</code> is visible.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> is visible.
    */
   public final JOptionPaneFixture requireNotVisible() {
     return (JOptionPaneFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JOptionPane</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> is disabled.
    */
   public final JOptionPaneFixture requireEnabled() {
     return (JOptionPaneFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>JOptionPane</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JOptionPane</code> is never enabled.
    */
   public final JOptionPaneFixture requireEnabled(Timeout timeout) {
     return (JOptionPaneFixture)assertEnabled(timeout);
   }
   
   /**
-   * Asserts that the <code>{@link JOptionPane}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JOptionPane</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> is enabled.
    */
   public final JOptionPaneFixture requireDisabled() {
     return (JOptionPaneFixture)assertDisabled();

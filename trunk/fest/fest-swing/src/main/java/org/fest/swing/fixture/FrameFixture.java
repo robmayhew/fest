@@ -15,16 +15,20 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dimension;
+import java.awt.Frame;
+
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
+import static java.awt.Frame.ICONIFIED;
+import static java.awt.Frame.MAXIMIZED_BOTH;
+import static java.awt.Frame.NORMAL;
+
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.*;
+import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import java.awt.*;
-
-import static java.awt.Frame.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such
@@ -36,7 +40,7 @@ import static java.awt.Frame.*;
 public class FrameFixture extends WindowFixture<Frame> {
 
   /**
-   * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
+   * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param name the name of the <code>Frame</code> to find.
    */
@@ -54,7 +58,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
+   * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param target the <code>Frame</code> to be managed by this fixture.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
@@ -73,7 +77,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
   
   /**
-   * Shows the <code>{@link Frame}</code> managed by this fixture.
+   * Shows this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture show() {
@@ -81,8 +85,8 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
   
   /**
-   * Shows the <code>{@link Frame}</code> managed by this fixture, resized to the given size.
-   * @param size the size to resize the managed <code>Frame</code> to.
+   * Shows this fixture's <code>{@link Frame}</code>, resized to the given size.
+   * @param size the size to resize this fixture's <code>Frame</code> to.
    * @return this fixture.
    */
   public final FrameFixture show(Dimension size) {
@@ -90,7 +94,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture click() {
@@ -98,7 +102,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -107,7 +111,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -116,7 +120,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture rightClick() {
@@ -124,7 +128,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture doubleClick() {
@@ -132,7 +136,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Gives input focus to the <code>{@link Frame}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public FrameFixture focus() {
@@ -140,7 +144,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user iconifying the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user iconifying this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture iconify() {
@@ -154,7 +158,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user deiconifying the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user deiconifying this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture deiconify() {
@@ -168,7 +172,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user maximizing the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user maximizing this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture maximize() {
@@ -182,7 +186,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user normalizing the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user normalizing this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture normalize() {
@@ -205,8 +209,8 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user resizing horizontally the <code>{@link Frame}</code> managed by this fixture.
-   * @param width the width that the managed <code>Frame</code> should have after being resized.
+   * Simulates a user resizing horizontally this fixture's <code>{@link Frame}</code>.
+   * @param width the width that this fixture's <code>Frame</code> should have after being resized.
    * @return this fixture.
    */
   public final FrameFixture resizeWidthTo(int width) {
@@ -214,8 +218,8 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user resizing vertically the <code>{@link Frame}</code> managed by this fixture.
-   * @param height the height that the managed <code>Frame</code> should have after being resized.
+   * Simulates a user resizing vertically this fixture's <code>{@link Frame}</code>.
+   * @param height the height that this fixture's <code>Frame</code> should have after being resized.
    * @return this fixture.
    */
   public final FrameFixture resizeHeightTo(int height) {
@@ -223,7 +227,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Simulates a user resizing the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user resizing this fixture's <code>{@link Frame}</code>.
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
@@ -232,17 +236,17 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
 
   /**
-   * Asserts that the size of the <code>{@link Frame}</code> managed by this fixture is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link Frame}</code> is equal to given one. 
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of the managed <code>Frame</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>Frame</code> is not equal to the given size. 
    */
   public final FrameFixture requireSize(Dimension size) {
     return (FrameFixture)assertEqualSize(size);
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Frame}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -252,7 +256,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link Frame}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -262,7 +266,7 @@ public class FrameFixture extends WindowFixture<Frame> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link Frame}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link Frame}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -272,27 +276,27 @@ public class FrameFixture extends WindowFixture<Frame> {
   }  
 
   /**
-   * Asserts that the <code>{@link Frame}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link Frame}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Frame</code> is not visible.
+   * @throws AssertionError if this fixture's <code>Frame</code> is not visible.
    */
   public final FrameFixture requireVisible() {
     return (FrameFixture)assertVisible();
   }
   
   /**
-   * Asserts that the <code>{@link Frame}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link Frame}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Frame</code> is visible.
+   * @throws AssertionError if this fixture's <code>Frame</code> is visible.
    */
   public final FrameFixture requireNotVisible() {
     return (FrameFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link Frame}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Frame</code> is disabled.
+   * @throws AssertionError if this fixture's <code>Frame</code> is disabled.
    */
   public final FrameFixture requireEnabled() {
     return (FrameFixture)assertEnabled();
@@ -300,19 +304,19 @@ public class FrameFixture extends WindowFixture<Frame> {
   
   
   /**
-   * Asserts that the <code>{@link Frame}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>Frame</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>Frame</code> is never enabled.
    */
   public final FrameFixture requireEnabled(Timeout timeout) {
     return (FrameFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link Frame}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link Frame}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Frame</code> is enabled.
+   * @throws AssertionError if this fixture's <code>Frame</code> is enabled.
    */
   public final FrameFixture requireDisabled() {
     return (FrameFixture)assertDisabled();

@@ -15,12 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dialog;
+import java.awt.Dimension;
+
 import static org.fest.assertions.Assertions.assertThat;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
-
-import java.awt.*;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link Dialog}</code> and verification of the state of such
@@ -34,8 +37,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param dialogName the name of the <code>Dialog</code> to find.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
-   * @see org.fest.swing.core.RobotFixture#robotWithCurrentAwtHierarchy()
+   * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
+   * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
@@ -45,7 +48,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
    * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a dialog having a matching name could not be found.
+   * @throws ComponentLookupException if a dialog having a matching name could not be found.
    */
   public DialogFixture(RobotFixture robot, String dialogName) {
     super(robot, dialogName, Dialog.class);
@@ -71,7 +74,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Shows the <code>{@link Dialog}</code> managed by this fixture.
+   * Shows this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
    */
   public final DialogFixture show() {
@@ -79,8 +82,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Shows the <code>{@link Dialog}</code> managed by this fixture, resized to the given size.
-   * @param size the size to resize the managed <code>Dialog</code> to.
+   * Shows this fixture's <code>{@link Dialog}</code>, resized to the given size.
+   * @param size the size to resize this fixture's <code>Dialog</code> to.
    * @return this fixture.
    */
   public final DialogFixture show(Dimension size) {
@@ -88,7 +91,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
    */
   public final DialogFixture click() {
@@ -96,7 +99,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Dialog}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -105,7 +108,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link Dialog}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -114,7 +117,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
    */
   public final DialogFixture rightClick() {
@@ -122,7 +125,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
    */
   public final DialogFixture doubleClick() {
@@ -130,7 +133,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Gives input focus to the <code>{@link Dialog}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
    */
   public final DialogFixture focus() {
@@ -138,8 +141,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user resizing horizontally the <code>{@link Dialog}</code> managed by this fixture.
-   * @param width the width that the managed <code>Dialog</code> should have after being resized.
+   * Simulates a user resizing horizontally this fixture's <code>{@link Dialog}</code>.
+   * @param width the width that this fixture's <code>Dialog</code> should have after being resized.
    * @return this fixture.
    */
   public final DialogFixture resizeWidthTo(int width) {
@@ -147,8 +150,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user resizing vertically the <code>{@link Dialog}</code> managed by this fixture.
-   * @param height the height that the managed <code>Dialog</code> should have after being resized.
+   * Simulates a user resizing vertically this fixture's <code>{@link Dialog}</code>.
+   * @param height the height that this fixture's <code>Dialog</code> should have after being resized.
    * @return this fixture.
    */
   public final DialogFixture resizeHeightTo(int height) {
@@ -156,7 +159,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user resizing the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user resizing this fixture's <code>{@link Dialog}</code>.
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
    */
@@ -165,17 +168,17 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Asserts that the size of the <code>{@link Dialog}</code> managed by this fixture is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link Dialog}</code> is equal to given one. 
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of the managed <code>Dialog</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>Dialog</code> is not equal to the given size. 
    */
   public final DialogFixture requireSize(Dimension size) {
     return (DialogFixture)assertEqualSize(size);
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Dialog}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -185,7 +188,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link Dialog}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -195,7 +198,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link Dialog}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link Dialog}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -205,55 +208,55 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
   
   /**
-   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link Dialog}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Dialog</code> is not visible.
+   * @throws AssertionError if this fixture's <code>Dialog</code> is not visible.
    */
   public final DialogFixture requireVisible() {
     return (DialogFixture)assertVisible();
   }
   
   /**
-   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link Dialog}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Dialog</code> is visible.
+   * @throws AssertionError if this fixture's <code>Dialog</code> is visible.
    */
   public final DialogFixture requireNotVisible() {
     return (DialogFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Dialog}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Dialog</code> is disabled.
+   * @throws AssertionError if this fixture's <code>Dialog</code> is disabled.
    */
   public final DialogFixture requireEnabled() {
     return (DialogFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link Dialog}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the managed <code>Dialog</code> is never enabled.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>Dialog</code> is never enabled.
    */
   public final DialogFixture requireEnabled(Timeout timeout) {
     return (DialogFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link Dialog}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Dialog</code> is enabled.
+   * @throws AssertionError if this fixture's <code>Dialog</code> is enabled.
    */
   public final DialogFixture requireDisabled() {
     return (DialogFixture)assertDisabled();
   }
 
   /**
-   * Asserts that the <code>{@link Dialog}</code> managed by this fixture is modal.
+   * Asserts that this fixture's <code>{@link Dialog}</code> is modal.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Dialog</code> is not modal.
+   * @throws AssertionError if this fixture's <code>Dialog</code> is not modal.
    */
   public final DialogFixture requireModal() {
     assertThat(target.isModal()).as(formattedPropertyName("modal")).isTrue();

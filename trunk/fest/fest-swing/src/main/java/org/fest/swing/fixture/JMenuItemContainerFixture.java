@@ -15,13 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Container;
+
+import javax.swing.JMenuItem;
+
 import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
-
-import javax.swing.*;
-import java.awt.*;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands lookup of <code>{@link JMenuItem}</code>s contained in a <code>{@link Container}</code>.
@@ -62,7 +64,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JMenuItem</code> found.
@@ -73,7 +75,7 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code> managed by this fixture, 
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.

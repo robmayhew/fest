@@ -32,7 +32,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JTextComponentFixture extends ComponentFixture<JTextComponent> implements TextInputFixture<JTextComponent> {
+public class JTextComponentFixture extends ComponentFixture<JTextComponent> implements TextInputFixture {
 
   /**
    * Creates a new <code>{@link JTextComponentFixture}</code>.
@@ -55,7 +55,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
   public final JTextComponentFixture click() { 
@@ -63,7 +63,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -72,7 +72,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -81,7 +81,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
   public final JTextComponentFixture rightClick() {
@@ -89,7 +89,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
   public final JTextComponentFixture doubleClick() {
@@ -97,7 +97,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Gives input focus to the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
   public final JTextComponentFixture focus() { 
@@ -105,7 +105,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Asserts that the text of the <code>{@link JTextComponent}</code> managed by this fixture is equal to the specified 
+   * Asserts that the text of this fixture's <code>{@link JTextComponent}</code> is equal to the specified 
    * <code>String</code>. 
    * @param expected the text to match.
    * @return this fixture.
@@ -117,7 +117,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Simulates a user entering the given text in the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user entering the given text in this fixture's <code>{@link JTextComponent}</code>.
    * @param text the text to enter.
    * @return this fixture.
    */
@@ -128,7 +128,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Simulates a user deleting all the text in the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user deleting all the text in this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
   public final JTextComponentFixture deleteText() {
@@ -137,8 +137,8 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Simulates a user pressing and releasing the given keys in the <code>{@link JTextComponent}</code> managed by this
-   * fixture. This method does not affect the current focus.
+   * Simulates a user pressing and releasing the given keys in this fixture's <code>{@link JTextComponent}</code>. This 
+   * method does not affect the current focus.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -148,7 +148,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JTextComponent}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -158,7 +158,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JTextComponent}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JTextComponent}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -168,16 +168,15 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Returns the text of the <code>{@link JTextComponent}</code> managed by this fixture. 
-   * @return the text of the managed <code>JTextComponent</code>. 
+   * Returns the text of this fixture's <code>{@link JTextComponent}</code>. 
+   * @return the text of this fixture's <code>JTextComponent</code>. 
    */
   public final String text() {
     return target.getText();
   }
   
   /**
-   * Simulates a user selecting all the text contained in the <code>{@link JTextComponent}</code> managed by this 
-   * fixture. 
+   * Simulates a user selecting all the text contained in this fixture's <code>{@link JTextComponent}</code>. 
    * @return this fixture.
    */
   public final JTextComponentFixture selectAll() {
@@ -185,8 +184,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
   
   /**
-   * Simulates a user selecting the given text contained in the <code>{@link JTextComponent}</code> managed by this 
-   * fixture.
+   * Simulates a user selecting the given text contained in this fixture's <code>{@link JTextComponent}</code>.
    * @param text the text to select.
    * @return this fixture.
    */
@@ -197,8 +195,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user selecting a portion of the text contained in the <code>{@link JTextComponent}</code> managed by 
-   * this fixture.
+   * Simulates a user selecting a portion of the text contained in this fixture's <code>{@link JTextComponent}</code>.
    * @param start index where selection should start.
    * @param end index where selection should end.
    * @return this fixture.
@@ -214,18 +211,18 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is not visible.
+   * @throws AssertionError if this fixture's <code>Component</code> is not visible.
    */
   public final JTextComponentFixture requireVisible() { 
     return (JTextComponentFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is visible.
+   * @throws AssertionError if this fixture's <code>Component</code> is visible.
    */
   public final JTextComponentFixture requireNotVisible() { 
     return (JTextComponentFixture)assertNotVisible();
@@ -244,28 +241,28 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   private String textProperty() { return formattedPropertyName("text"); }
 
   /**
-   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is disabled.
+   * @throws AssertionError if this fixture's <code>Component</code> is disabled.
    */
   public final JTextComponentFixture requireEnabled() {
     return (JTextComponentFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JTextComponent</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JTextComponent</code> is never enabled.
    */
   public final JTextComponentFixture requireEnabled(Timeout timeout) {
     return (JTextComponentFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link JTextComponent}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>Component</code> is enabled.
+   * @throws AssertionError if this fixture's <code>Component</code> is enabled.
    */
   public final JTextComponentFixture requireDisabled() {
     return (JTextComponentFixture)assertDisabled();

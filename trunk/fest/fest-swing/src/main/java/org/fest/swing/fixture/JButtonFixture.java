@@ -31,7 +31,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture<JButton> {
+public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture {
 
   /**
    * Creates a new <code>{@link JButtonFixture}</code>.
@@ -53,7 +53,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
   public final JButtonFixture click() {
@@ -61,7 +61,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -70,7 +70,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -79,7 +79,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
   public final JButtonFixture rightClick() {
@@ -87,7 +87,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
   public final JButtonFixture doubleClick() {
@@ -95,7 +95,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Gives input focus to the <code>{@link JButton}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
   public final JButtonFixture focus() {
@@ -103,8 +103,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Asserts that the text of the <code>{@link JButton}</code> managed by this fixture is equal to the specified 
-   * <code>String</code>. 
+   * Asserts that the text of this fixture's <code>{@link JButton}</code> is equal to the specified <code>String</code>.
    * @param expected the text to match.
    * @return this fixture.
    * @throws AssertionError if the text of the target JButton is not equal to the given one.
@@ -115,16 +114,15 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Returns the text of the <code>{@link JButton}</code> managed by this fixture. 
-   * @return the text of the managed <code>JButton</code>. 
+   * Returns the text of this fixture's <code>{@link JButton}</code>. 
+   * @return the text of this fixture's <code>JButton</code>. 
    */
   public final String text() {
     return target.getText();
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on the <code>{@link JButton}</code> managed by this
-   * fixture.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JButton}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -134,7 +132,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
   
   /**
-   * Simulates a user pressing the given key on the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JButton}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -144,7 +142,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
   
   /**
-   * Simulates a user releasing the given key on the <code>{@link JButton}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JButton}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -154,46 +152,46 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
   
   /**
-   * Asserts that the <code>{@link JButton}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JButton}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JButton</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JButton</code> is not visible.
    */
   public final JButtonFixture requireVisible() {
     return (JButtonFixture)assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JButton}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JButton}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JButton</code> is visible.
+   * @throws AssertionError if this fixture's <code>JButton</code> is visible.
    */
   public final JButtonFixture requireNotVisible() {
     return (JButtonFixture)assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JButton}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JButton}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JButton</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JButton</code> is disabled.
    */
   public final JButtonFixture requireEnabled() {
     return (JButtonFixture)assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JButton}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JButton}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JButton</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JButton</code> is never enabled.
    */
   public final JButtonFixture requireEnabled(Timeout timeout) {
     return (JButtonFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link JButton}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JButton}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JButton</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JButton</code> is enabled.
    */
   public final JButtonFixture requireDisabled() {
     return (JButtonFixture)assertDisabled();

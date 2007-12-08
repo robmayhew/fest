@@ -16,10 +16,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JPanel;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -51,7 +51,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
   public final JPanelFixture click() {
@@ -59,7 +59,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JPanel}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -68,7 +68,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user clicking the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user clicking this fixture's <code>{@link JPanel}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -77,7 +77,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user right-clicking the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user right-clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
   public final JPanelFixture rightClick() {
@@ -85,7 +85,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user doble-clicking the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user doble-clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
   public final JPanelFixture doubleClick() {
@@ -93,7 +93,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Gives input focus to the <code>{@link JPanel}</code> managed by this fixture.
+   * Gives input focus to this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
   public final JPanelFixture focus() {
@@ -112,7 +112,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user pressing the given key on the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user pressing the given key on this fixture's <code>{@link JPanel}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -122,7 +122,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user releasing the given key on the <code>{@link JPanel}</code> managed by this fixture.
+   * Simulates a user releasing the given key on this fixture's <code>{@link JPanel}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
@@ -132,46 +132,46 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Asserts that the <code>{@link JPanel}</code> managed by this fixture is visible.
+   * Asserts that this fixture's <code>{@link JPanel}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JPanel</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JPanel</code> is not visible.
    */
   public final JPanelFixture requireVisible() {
     return (JPanelFixture) assertVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JPanel}</code> managed by this fixture is not visible.
+   * Asserts that this fixture's <code>{@link JPanel}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JPanel</code> is visible.
+   * @throws AssertionError if this fixture's <code>JPanel</code> is visible.
    */
   public final JPanelFixture requireNotVisible() {
     return (JPanelFixture) assertNotVisible();
   }
 
   /**
-   * Asserts that the <code>{@link JPanel}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JPanel}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JPanel</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JPanel</code> is disabled.
    */
   public final JPanelFixture requireEnabled() {
     return (JPanelFixture) assertEnabled();
   }
   
   /**
-   * Asserts that the <code>{@link JPanel}</code> managed by this fixture is enabled.
+   * Asserts that this fixture's <code>{@link JPanel}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>JPanel</code> is never enabled.
+   * @throws WaitTimedOutError if this fixture's <code>JPanel</code> is never enabled.
    */
   public final JPanelFixture requireEnabled(Timeout timeout) {
     return (JPanelFixture)assertEnabled(timeout);
   }
 
   /**
-   * Asserts that the <code>{@link JPanel}</code> managed by this fixture is disabled.
+   * Asserts that this fixture's <code>{@link JPanel}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JPanel</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JPanel</code> is enabled.
    */
   public final JPanelFixture requireDisabled() {
     return (JPanelFixture) assertDisabled();
