@@ -56,8 +56,7 @@ public final class GUITestFinder {
   }
   
   private static boolean isGUITest(AnnotatedElement annotatedElement) {
-    GUITest annotation = annotatedElement.getAnnotation(GUITest.class);
-    return annotation != null;
+    return annotatedElement.isAnnotationPresent(GUITest.class);
   }
 
   private GUITestFinder() {}
