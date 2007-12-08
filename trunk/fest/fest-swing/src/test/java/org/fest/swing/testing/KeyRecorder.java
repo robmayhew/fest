@@ -22,6 +22,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fest.assertions.AssertExtension;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
@@ -29,7 +31,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class KeyRecorder extends KeyAdapter {
+public class KeyRecorder extends KeyAdapter implements AssertExtension {
 
   public static KeyRecorder attachTo(Component target) {
     return new KeyRecorder(target);
@@ -64,16 +66,19 @@ public class KeyRecorder extends KeyAdapter {
     keysReleased.add(new KeyEventRecord(e.getKeyCode()));
   }
 
-  public void assertKeysPressed(int... expected) {
+  public KeyRecorder keysPressed(int...expected) {
     assertEqualKeyCodes(keysPressed, expected);
+    return this;
   }
   
-  public void assertKeysReleased(int... expected) {
+  public KeyRecorder keysReleased(int... expected) {
     assertEqualKeyCodes(keysReleased, expected);
+    return this;
   }
   
-  public void assertNoKeysReleased() {
+  public KeyRecorder noKeysReleased() {
     assertThat(keysReleased.size()).isZero();
+    return this;
   }
 
   private void assertEqualKeyCodes(List<KeyEventRecord> actual, int[] expected) {

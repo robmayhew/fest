@@ -23,14 +23,17 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import org.fest.assertions.AssertExtension;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
 import static org.fest.swing.fixture.TestTable.cellValue;
 
-import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -56,58 +59,43 @@ public class JTableCellFixtureTest {
     window = new MainWindow(getClass());
     robot.showWindow(window);
     cell = new JTableCellFixture(tableFixture(), row(ROW).column(COLUMN));
-    assertCellNotSelected();
+    assertThat(cell()).isNotSelected();
   }
 
   private JTableFixture tableFixture() {
     return new JTableFixture(robot, window.table);
   }
   
-  private void assertCellNotSelected() {
-    assertThat(window.table.isRowSelected(cell.row())).isFalse();
-    assertThat(window.table.isColumnSelected(cell.column())).isFalse();
-  }
-
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
   
   @Test public void shouldSelectCell() {
     cell.select();
-    assertCellSelected();
-  }
-
-  private void assertCellSelected() {
-    assertThat(window.table.isRowSelected(cell.row())).isTrue();
-    assertThat(window.table.isColumnSelected(cell.column())).isTrue();
+    assertThat(cell()).isSelected();
   }
 
   @Test public void shouldClickCell() {
     ClickRecorder recorder = ClickRecorder.attachTo(window.table);
     cell.click();
-    assertThat(recorder.clicked()).isTrue();
-    assertCellClicked(recorder.pointClicked());
+    assertThat(recorder).wasClicked();
+    assertThat(cell()).isAt(recorder.pointClicked());
   }
   
   @Test public void shouldDoubleClickCell() {
     ClickRecorder recorder = ClickRecorder.attachTo(window.table);
     cell.doubleClick();
-    assertThat(recorder.doubleClicked()).isTrue();
-    assertCellClicked(recorder.pointClicked());
+    assertThat(recorder).wasDoubleClicked();
+    assertThat(cell()).isAt(recorder.pointClicked());
   }
   
   @Test public void shouldRightClickCell() {
     ClickRecorder recorder = ClickRecorder.attachTo(window.table);
     cell.rightClick();
-    assertThat(recorder.rightClicked()).isTrue();
-    assertCellClicked(recorder.pointClicked());
+    assertThat(recorder).wasRightClicked();
+    assertThat(cell()).isAt(recorder.pointClicked());
   }
 
-  private void assertCellClicked(Point clickedPoint) {
-    assertThat(window.table.rowAtPoint(clickedPoint)).isEqualTo(cell.row());
-    assertThat(window.table.columnAtPoint(clickedPoint)).isEqualTo(cell.column());
-  }
-  
   @Test public void shouldReturnCellContent() {
     assertThat(cell.contents()).isEqualTo(cellValue(ROW, COLUMN));
   }
@@ -116,13 +104,46 @@ public class JTableCellFixtureTest {
     window.table.addMouseListener(new MouseAdapter() {
       @Override public void mouseReleased(MouseEvent e) {
         assertThat(e.isPopupTrigger()).isTrue();
-        Point point = e.getPoint();
-        assertThat(window.table.rowAtPoint(point)).isEqualTo(cell.row());
-        assertThat(window.table.columnAtPoint(point)).isEqualTo(cell.column());
+        assertThat(cell()).isAt(e.getPoint());
       }      
     });
     cell.showPopupMenu();
     assertThat(window.popupMenu.isVisible()).isTrue();
+  }
+  
+  private CellAssert cell() {
+    return new CellAssert(window.table, cell);
+  }
+  
+  private static class CellAssert implements AssertExtension {
+    private final JTable table;
+    private final JTableCellFixture cell;
+
+    CellAssert(JTable table, JTableCellFixture cell) {
+      this.table = table;
+      this.cell = cell;
+    }
+    
+    CellAssert isAt(Point p) {
+      assertThat(cell.row()).isEqualTo(table.rowAtPoint(p));
+      assertThat(cell.column()).isEqualTo(table.columnAtPoint(p));
+      return this;
+    }
+    
+    CellAssert isNotSelected() {
+      assertThat(rowSelected()).isFalse();
+      assertThat(columnSelected()).isFalse();
+      return this;
+    }
+
+    CellAssert isSelected() {
+      assertThat(rowSelected()).isTrue();
+      assertThat(columnSelected()).isTrue();
+      return this;
+    }
+
+    private boolean rowSelected() { return table.isRowSelected(cell.row()); }
+    private boolean columnSelected() { return table.isColumnSelected(cell.column()); }
   }
   
   private static class MainWindow extends TestFrame {

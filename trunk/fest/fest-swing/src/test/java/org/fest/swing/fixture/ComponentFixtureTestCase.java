@@ -143,22 +143,20 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   @Test public final void shouldClickComponent() {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.click();
-    assertThat(recorder.clicked()).isTrue();
+    assertThat(recorder).wasClicked();
   }
   
   @Test public final void shouldClickComponentWithGivenButton() {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.click(MIDDLE_BUTTON);
-    assertThat(recorder.clickedButton()).isEqualTo(MIDDLE_BUTTON);
-    assertThat(recorder.clickCount()).isEqualTo(1);
+    assertThat(recorder).clicked(MIDDLE_BUTTON).timesClicked(1);
   }
 
   @Test(dataProvider = "mouseClickInfos")
   public final void shouldClickComponentWithGivenInfo(MouseClickInfo info) {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.click(info);
-    assertThat(recorder.clickedButton()).isEqualTo(info.button());
-    assertThat(recorder.clickCount()).isEqualTo(info.times());
+    assertThat(recorder).clicked(info.button()).timesClicked(info.times());
   }
 
   @DataProvider(name = "mouseClickInfos")
@@ -174,13 +172,13 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   @Test public final void shouldRightClickComponent() {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.rightClick();
-    assertThat(recorder.rightClicked()).isTrue();
+    assertThat(recorder).wasRightClicked();
   }
 
   @Test public final void shouldDoubleClickComponent() {
     ClickRecorder recorder = ClickRecorder.attachTo(fixture.target);
     fixture.doubleClick();
-    assertThat(recorder.doubleClicked()).isTrue();
+    assertThat(recorder).wasDoubleClicked();
   }  
   
   @Test public final void shouldGiveFocusToComponent() {
@@ -210,15 +208,13 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     KeyRecorder recorder = KeyRecorder.attachTo(fixture.target);
     int[] keys = { VK_A, VK_B, VK_Z };
     fixture.pressAndReleaseKeys(keys);
-    recorder.assertKeysPressed(keys);
-    recorder.assertKeysReleased(keys);
+    assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
   @Test public final void shouldPressGivenKeyWithoutReleasingIt() {
     KeyRecorder recorder = KeyRecorder.attachTo(fixture.target);
     fixture.pressKey(VK_A);
-    recorder.assertKeysPressed(VK_A);
-    recorder.assertNoKeysReleased();
+    assertThat(recorder).keysPressed(VK_A).noKeysReleased();
   }
 
   @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt") 
@@ -226,7 +222,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     KeyRecorder recorder = KeyRecorder.attachTo(fixture.target);
     fixture.pressKey(VK_A);
     fixture.releaseKey(VK_A);
-    recorder.assertKeysReleased(VK_A);
+    assertThat(recorder).keysPressed(VK_A);
   }
 
   @Test public final void shouldPassIfComponentIsVisibleAndExpectingVisible() {

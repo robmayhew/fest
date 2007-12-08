@@ -98,7 +98,7 @@ public class ComponentFixtureTest {
   @Test public void shouldDoubleClickComponent() {
     ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
     fixture.doDoubleClick();
-    assertThat(recorder.doubleClicked()).isTrue();
+    assertThat(recorder).wasDoubleClicked();
   }
   
   @Test public void shouldWaitTillComponentIsEnabled() {

@@ -60,8 +60,8 @@ public interface ItemFixture {
   ItemFixture doubleClick();
 
   /**
-   * Returns the value of item managed by this fixture into a reasonable <code>String</code> representation, or
-   * <code>null</code> if one can not be obtained.
+   * Returns the value of this fixture's item into a reasonable <code>String</code> representation, or <code>null</code> 
+   * if one can not be obtained.
    * @return the value of the given cell.
    */
   String contents();

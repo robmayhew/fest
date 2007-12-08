@@ -23,9 +23,14 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.fest.assertions.AssertExtension;
+
+import static org.fest.assertions.Assertions.assertThat;
+
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+
 import org.fest.swing.core.MouseButton;
 
 /**
@@ -34,7 +39,7 @@ import org.fest.swing.core.MouseButton;
  * @author Alex Ruiz
  * @author Yvonne Wang 
  */
-public class ClickRecorder extends MouseAdapter {
+public class ClickRecorder extends MouseAdapter implements AssertExtension {
 
   public static ClickRecorder attachTo(Component target) {
     return new ClickRecorder(target);
@@ -67,20 +72,33 @@ public class ClickRecorder extends MouseAdapter {
     clickCount = e.getClickCount();
     pointClicked = e.getPoint();
   }
+
+  public ClickRecorder clicked(MouseButton button) {
+    assertThat(clickedButton).isEqualTo(button);
+    return this;
+  }
   
-  public boolean clicked() { 
-    return LEFT_BUTTON.equals(clickedButton()) && clickCount == 1; 
+  public ClickRecorder timesClicked(int times) {
+    assertThat(clickCount).isEqualTo(times);
+    return this;
+  }
+  
+  public ClickRecorder wasClicked() {
+    return clicked(LEFT_BUTTON).timesClicked(1);
   }
 
-  public boolean doubleClicked() { 
-    return LEFT_BUTTON.equals(clickedButton()) && clickCount == 2; 
+  public ClickRecorder wasDoubleClicked() {
+    return clicked(LEFT_BUTTON).timesClicked(2);
   }
 
-  public boolean rightClicked() { 
-    return RIGHT_BUTTON.equals(clickedButton()) && clickCount == 1; 
+  public ClickRecorder wasRightClicked() {
+    return clicked(RIGHT_BUTTON).timesClicked(1);
   }
 
-  public MouseButton clickedButton() { return clickedButton; }
-  public int clickCount() { return clickCount; }
+  public ClickRecorder clickedAt(Point p) {
+    assertThat(pointClicked).isEqualTo(p);
+    return this;
+  }
+  
   public Point pointClicked() { return pointClicked; }
 }

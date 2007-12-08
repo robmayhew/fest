@@ -173,7 +173,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
     return this;
   }
   
-  private void clickItem(JListLocation location, MouseButton button, int times) {
+  void clickItem(JListLocation location, MouseButton button, int times) {
     int index = location.getIndex(target);
     validateItemIndex(index);
     robot.click(target, location.getPoint(target), button, times);
@@ -235,6 +235,26 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
 
   private JListTester listTester() {
     return (JListTester)tester();
+  }
+
+  /**
+   * Returns a fixture that manages the list item specified by the given index.
+   * @param index of the item.
+   * @return a fixture that manages the list item specified by the given index.
+   * @throws ActionFailedException if the index is out of bounds.
+   */
+  public final JListItemFixture item(int index) {
+    return new JListItemFixture(this, index);
+  }
+  
+  /**
+   * Returns a fixture that manages the list item specified by the given text.
+   * @param text the text of the item.
+   * @return a fixture that manages the list item specified by the given text.
+   */
+  public final JListItemFixture item(String text) {
+    int index = new JListLocation(text).getIndex(target);
+    return new JListItemFixture(this, index);
   }
 
   /**

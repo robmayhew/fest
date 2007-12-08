@@ -56,6 +56,10 @@ final class TestList extends JList {
     for (int i = 0; i < count; i++) elements[i] = (String)model.get(i);
     return elements;
   }
+  
+  String itemValue(int index) {
+    return getModel().getElementAt(index).toString();
+  }
 
   private static class ListTransferHandler extends StringTransferHandler<JList> {
     private static final long serialVersionUID = 1L;

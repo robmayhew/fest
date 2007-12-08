@@ -29,7 +29,7 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
- * Understands simulation of user events on a cell of a <code>{@link JTable}</code> and verification of the state of
+ * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
  * such table cell.
  * <p>
  * Example:
@@ -51,8 +51,8 @@ public class JTableCellFixture implements ItemFixture {
 
   /**
    * Creates a new <code>{@link JTableCellFixture}</code>.
-   * @param table contains the <code>JTable</code> containing the cell to be managed by this fixture.
-   * @param cell contains the row and column indices of the cell to be managed by this fixture.
+   * @param table manages the <code>JTable</code> containing the table cell to be managed by this fixture.
+   * @param cell row and column indices of the table cell to be managed by this fixture.
    */
   protected JTableCellFixture(JTableFixture table, TableCell cell) {
     this.table = table;
@@ -116,7 +116,7 @@ public class JTableCellFixture implements ItemFixture {
   }
 
   /**
-   * Returns the value of table cell managed by this fixture into a reasonable <code>String</code> representation, or
+   * Returns the value of this fixture's table cell into a reasonable <code>String</code> representation, or 
    * <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
    */

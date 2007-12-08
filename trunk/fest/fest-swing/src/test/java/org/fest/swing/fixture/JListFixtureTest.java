@@ -22,7 +22,6 @@ import javax.swing.JList;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.fixture.ErrorMessageAssert.actual;
 import static org.fest.swing.fixture.ErrorMessageAssert.expected;
 import static org.fest.swing.fixture.ErrorMessageAssert.message;
@@ -147,16 +146,14 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     ClickRecorder recorder = ClickRecorder.attachTo(targetFixture.target);
     targetFixture.doubleClickItem(2);
     assertThat(targetFixture.target.getSelectedValue()).isEqualTo("three");
-    assertThat(recorder.clickCount()).isEqualTo(2);
-    assertThat(recorder.clickedButton()).isEqualTo(LEFT_BUTTON);
+    assertThat(recorder).wasDoubleClicked();
   }
 
   @Test public void shouldDoubleClickItemWithGivenText() {
     ClickRecorder recorder = ClickRecorder.attachTo(targetFixture.target);
     targetFixture.doubleClickItem("two");
     assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
-    assertThat(recorder.clickCount()).isEqualTo(2);
-    assertThat(recorder.clickedButton()).isEqualTo(LEFT_BUTTON);
+    assertThat(recorder).wasDoubleClicked();
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {
@@ -182,6 +179,18 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     dropTargetFixture.drop(1);
     assertThat(target.elements()).containsOnly("one", "two");
     assertThat(dropTarget.elements()).containsOnly("four", "five", "three", "six");
+  }
+
+  @Test public void shouldReturnItemFixtureWithIndex() {
+    JListItemFixture item = targetFixture.item(1);
+    assertThat(item.index()).isEqualTo(1);
+    assertThat(item.contents()).isEqualTo("two");
+  }
+  
+  @Test public void shouldReturnItemFixtureWithText() {
+    JListItemFixture item = targetFixture.item("three");
+    assertThat(item.index()).isEqualTo(2);
+    assertThat(item.contents()).isEqualTo("three");
   }
 
   protected ComponentFixture<JList> createFixture() {

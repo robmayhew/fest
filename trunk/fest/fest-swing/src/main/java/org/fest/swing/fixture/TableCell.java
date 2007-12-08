@@ -17,7 +17,11 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
+import static java.lang.String.valueOf;
 import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
+import org.fest.swing.exception.ActionFailedException;
 
 /**
  * Understands a cell in a <code>{@link JTable}</code>. Intended for creation of <code>{@link JTableCellFixture}</code>s 
@@ -81,25 +85,18 @@ public class TableCell {
   /**
    * Validates the indices of this cell regarding the given table.
    * @param table the table to use to validate this cell's indices.
-   * @throw IllegalArgumentException if the indices are either negative or out of bounds.
+   * @throw ActionFailedException if any of the indices is out of bounds. 
    */
-  public void validateBoundsIn(JTable table) {
+  void validateBoundsIn(JTable table) {
     int rowCount = table.getRowCount();
-    if (rowCount == 0) throw new IllegalStateException("Table does not contain any rows");
+    if (rowCount == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
     validateIndex(row, rowCount, "row");
     validateIndex(column, table.getColumnCount(), "column");
   }
   
-  private void validateIndex(int index, int elementCount, String indexName) {
-    if (index < 0) throw negativeIndex(indexName);
-    if (index >= elementCount) throw indexExceedsMaximum(indexName, elementCount);
-  }
-  
-  private IllegalArgumentException negativeIndex(String indexName) {
-    throw new IllegalArgumentException(concat(indexName, " index cannot be a negative number"));
-  }
-  
-  private IndexOutOfBoundsException indexExceedsMaximum(String indexName, int max) {
-    throw new IndexOutOfBoundsException(concat(indexName, " index should be less than ", String.valueOf(max)));
+  private void validateIndex(int index, int itemCount, String indexName) {
+    if (index < 0 || index >= itemCount) 
+      throw new ActionFailedException(concat(
+          indexName, " ", quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", quote(valueOf(itemCount))));
   }
 }

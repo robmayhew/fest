@@ -30,15 +30,12 @@ import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.util.StopWatch.startNewStopWatch;
 
-import org.fest.swing.util.StopWatch;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
+import org.fest.swing.util.StopWatch;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -73,10 +70,9 @@ public class RobotFixtureTest {
 
   @Test(dataProvider = "clickingData") 
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
-    ClickRecorder clickRecord = ClickRecorder.attachTo(frame.textBox);
+    ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
     robot.click(frame.textBox, button, times);
-    assertThat(clickRecord.clickedButton()).isEqualTo(button);
-    assertThat(clickRecord.clickCount()).isEqualTo(times);
+    assertThat(recorder).clicked(button).timesClicked(times);
   }
   
   @DataProvider(name = "clickingData") 
@@ -96,16 +92,14 @@ public class RobotFixtureTest {
     KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
     int[] keys = { VK_A, VK_B, VK_Z };
     robot.pressAndReleaseKeys(keys);
-    recorder.assertKeysPressed(keys);
-    recorder.assertKeysReleased(keys);
+    assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
   @Test public void shouldPressGivenKeyWithoutReleasingIt() {
     frame.textBox.requestFocusInWindow();
     KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
     robot.pressKey(VK_A);
-    recorder.assertKeysPressed(VK_A);
-    recorder.assertNoKeysReleased();
+    assertThat(recorder).keysPressed(VK_A).noKeysReleased();
   }
 
   @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt") 
@@ -114,7 +108,7 @@ public class RobotFixtureTest {
     KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
     robot.pressKey(VK_A);
     robot.releaseKey(VK_A);
-    recorder.assertKeysReleased(VK_A);
+    assertThat(recorder).keysReleased(VK_A);
   }
 
   @Test(expectedExceptions = ComponentLookupException.class)

@@ -54,7 +54,7 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     JButton cancelButton = fixture.cancelButton().target;
     ClickRecorder recorder = ClickRecorder.attachTo(cancelButton);
     fixture.cancel();
-    assertThat(recorder.clicked()).isTrue();
+    assertThat(recorder).wasClicked();
   }
   
   @Test public void shouldSelectFile() {
@@ -93,7 +93,7 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     JButton approveButton = fixture.approveButton().target;
     ClickRecorder recorder = ClickRecorder.attachTo(approveButton);
     fixture.approve();
-    assertThat(recorder.clicked()).isTrue();
+    assertThat(recorder).wasClicked();
     temporaryFile.delete();
   }
 
