@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+			<action dev="alruiz" type="add" issue="63" due-to="Fabien Barbero">
+			  Added method 'showPopupMenuAt(Point)' to ComponentFixture (and therefore to all fixtures).
+			</action>
 			<action dev="alruiz, wanghy" type="remove">
 				Removed unnecessary generic types in ItemGroupFixture, TextInputFixture and TextDisplayFixture.
 			</action>
