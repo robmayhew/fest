@@ -1,19 +1,29 @@
 /*
  * Created on Dec 1, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.remote.core;
+
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
+import static java.util.logging.Level.SEVERE;
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.remote.core.RemoteActionFailure.failure;
+import static org.fest.swing.remote.core.Response.failure;
+import static org.fest.swing.remote.util.Serialization.deserialize;
+import static org.fest.swing.remote.util.Serialization.serialize;
+import static org.fest.swing.remote.util.Sockets.close;
+import static org.fest.util.Strings.concat;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,17 +32,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Logger;
 
-import static java.util.concurrent.Executors.newSingleThreadExecutor;
-import static java.util.logging.Level.SEVERE;
-
-import static org.fest.swing.remote.core.RemoteActionFailure.failure;
-import static org.fest.swing.remote.core.Response.failed;
-import static org.fest.swing.remote.util.Serialization.*;
-import static org.fest.swing.remote.util.Sockets.close;
-import static org.fest.util.Strings.concat;
+import org.fest.swing.core.RobotFixture;
 
 /**
- * Understands a server that accepts client requests that either simulate user interaction with the GUI under test or 
+ * Understands a server that accepts client requests that either simulate user interaction with the GUI under test or
  * verify the state of a GUI component.
  *
  * @author Alex Ruiz
@@ -44,27 +47,28 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 public class DefaultTestServer implements TestServer {
-  
+
   private static Logger logger = Logger.getLogger(DefaultTestServer.class.getName());
 
   private final ExecutorService executor = newSingleThreadExecutor();
+  private final RobotFixture robot = robotWithCurrentAwtHierarchy();
   private final RequestDispatcher requestHandlers;
-  
+
   private ServerSocket serverSocket;
-  
+
   /**
-   * Creates a new </code>{@link DefaultTestServer}</code>, connecting to the port specified by 
+   * Creates a new </code>{@link DefaultTestServer}</code>, connecting to the port specified by
    * <code>{@link #DEFAULT_PORT}</code>.
    */
   public DefaultTestServer() {
-    requestHandlers = new RequestDispatcher(this);
+    requestHandlers = new RequestDispatcher(this, robot);
   }
-  
+
   /** {@inheritDoc} */
   public void start() {
     start(DEFAULT_PORT);
   }
-  
+
   /** {@inheritDoc} */
   public void start(int port) {
     serverSocket = createServerSocket(port);
@@ -73,7 +77,7 @@ public class DefaultTestServer implements TestServer {
       public void run() { service(); }
     });
   }
-  
+
   private ServerSocket createServerSocket(int port) {
     try {
       return new ServerSocket(port);
@@ -83,7 +87,7 @@ public class DefaultTestServer implements TestServer {
       throw new RemoteActionFailure(errorMessage, e);
     }
   }
-  
+
   /** Listens for client requests. */
   private void service() {
     logger.info("Listening for client requests");
@@ -119,24 +123,25 @@ public class DefaultTestServer implements TestServer {
   private Request requestFrom(Socket client) throws Exception {
     return deserialize(client.getInputStream(), Request.class);
   }
-  
+
   private void sendFailure(Socket client, RemoteActionFailure cause) {
     if (client == null || !client.isConnected()) return;
     try {
-      serialize(failed(cause), client.getOutputStream());
+      serialize(failure(cause), client.getOutputStream());
     } catch (Exception e) {
       logger.log(SEVERE, "Unable to send failed response to client", e);
     }
   }
-  
+
   /** {@inheritDoc} */
   public boolean isRunning() {
     return serverSocket != null && serverSocket.isBound() && !serverSocket.isClosed();
   }
-  
+
   /** {@inheritDoc} */
   public void stop() {
     executor.shutdown();
+    robot.cleanUp();
     if (serverSocket == null) return;
     logger.info("Stopping server");
     try {
