@@ -6,6 +6,15 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="73" due-to="Wim Deblauwe">
+				Added method 'requireValue(Object)' to JSpinnerFixture.
+			</action>      
+      <action dev="alruiz" type="add" issue="74" due-to="Wim Deblauwe">
+				Added method 'increment(int)' to JSpinnerFixture.
+			</action>      
+      <action dev="alruiz" type="add">
+				Added method 'decrement(int)' to JSpinnerFixture.
+			</action>      
 			<action dev="alruiz, wanghy" type="add" issue="63" due-to="Fabien Barbero">
 				Added class JListItemFixture. that knows how to simulate user input on a specific item of a JList.
 			</action>

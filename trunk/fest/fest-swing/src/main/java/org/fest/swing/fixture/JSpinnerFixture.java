@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.JSpinner;
 
 import abbot.tester.JSpinnerTester;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
@@ -51,7 +52,31 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user increasing the value of this fixture's <code>{@link JSpinner}</code>.
+   * Verifies that the value of this fixture's <code>{@link JSpinner}</code> is equal to the given one.
+   * @param value the expected value of this fixture's <code>JSpinner</code>.
+   * @return this fixture.
+   * @throws AssertionError if the value of this fixture's <code>JSpinner</code> is not equal to the given one. 
+   */
+  public final JSpinnerFixture requireValue(Object value) {
+    assertThat(target.getValue()).as(formattedPropertyName("value")).isEqualTo(value);
+    return this;
+  }
+  
+  /**
+   * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
+   * @param value how many times the value of this fixture's <code>JSpinner</code> should be incremented.
+   * @return this fixture.
+   * @throws IllegalArgumentException if <code>value</code> is less than zero.
+   */
+  public final JSpinnerFixture increment(int value) {
+    if (value <= 0) 
+      throw new IllegalArgumentException("The number of times to increment the value should be greater than zero");
+    for (int i = 0; i < value; i++) increment();
+    return this;
+  }
+  
+  /**
+   * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> one time.
    * @return this fixture. 
    */
   public final JSpinnerFixture increment() {
@@ -60,7 +85,20 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user decreasing the value of this fixture's <code>{@link JSpinner}</code>.
+   * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
+   * @param value how many times the value of this fixture's <code>JSpinner</code> should be decremented.
+   * @return this fixture.
+   * @throws IllegalArgumentException if <code>value</code> is less than zero.
+   */
+  public final JSpinnerFixture decrement(int value) {
+    if (value <= 0) 
+      throw new IllegalArgumentException("The number of times to decrement the value should be greater than zero");
+    for (int i = 0; i < value; i++) decrement();
+    return this;
+  }
+
+  /**
+   * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> one time.
    * @return this fixture. 
    */
   public final JSpinnerFixture decrement() {

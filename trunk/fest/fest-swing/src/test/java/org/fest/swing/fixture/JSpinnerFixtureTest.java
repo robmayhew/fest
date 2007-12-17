@@ -21,6 +21,11 @@ import javax.swing.SpinnerListModel;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+
+import static org.fest.swing.fixture.ErrorMessageAssert.actual;
+import static org.fest.swing.fixture.ErrorMessageAssert.expected;
+import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.testng.annotations.Test;
 
@@ -32,23 +37,74 @@ import org.testng.annotations.Test;
 public class JSpinnerFixtureTest extends ComponentFixtureTestCase<JSpinner> {
 
   private JSpinnerFixture fixture;
+
+  @Test public void shouldPassIfMatchingValue() {
+    fixture.target.setValue("Gandalf");
+    fixture.requireValue("Gandalf");
+  }
+  
+  @Test public void shouldFailIfNotMatchingValue() {
+    assertThat(spinnerValue()).isEqualTo("Frodo");
+    try {
+      fixture.requireValue("Sam");
+      fail();
+    } catch (AssertionError e) {
+      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
+      assertThat(errorMessage).contains(property("value"), expected("'Sam'"), actual("'Frodo'"));
+    }
+  }
   
   @Test public void shouldIncrementValue() {
-    assertThat(fixture.target.getValue()).isEqualTo("Frodo");
+    assertThat(spinnerValue()).isEqualTo("Frodo");
     fixture.increment();
-    assertThat(fixture.target.getValue()).isEqualTo("Sam");
+    assertThat(spinnerValue()).isEqualTo("Sam");
+  }
+
+  @Test public void shouldIncrementValueTheGivenTimes() {
+    assertThat(spinnerValue()).isEqualTo("Frodo");
+    fixture.increment(2);
+    assertThat(spinnerValue()).isEqualTo("Gandalf");
   }
   
-  @Test(dependsOnMethods = "shouldIncrementValue")
-  public void shouldDecrementValue() {
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfTimesToIncrementIsZero() {
+    fixture.increment(0);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfTimesToIncrementIsNegative() {
+    fixture.increment(-1);
+  }
+  
+  @Test public void shouldDecrementValue() {
     fixture.increment();
     fixture.decrement();
-    assertThat(fixture.target.getValue()).isEqualTo("Frodo");
+    assertThat(spinnerValue()).isEqualTo("Frodo");
   }
   
+  @Test public void shouldDecrementValueTheGivenTimes() {
+    fixture.target.setValue("Gandalf");
+    fixture.decrement(2);
+    assertThat(spinnerValue()).isEqualTo("Frodo");
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfTimesToDecrementIsZero() {
+    fixture.decrement(0);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfTimesToDecrementIsNegative() {
+    fixture.decrement(-1);
+  }
+
   @Test public void shouldEnterText() {
     fixture.enterText("Gandalf");
-    assertThat(fixture.target.getValue()).isEqualTo("Gandalf");
+    assertThat(spinnerValue()).isEqualTo("Gandalf");
+  }
+
+  private Object spinnerValue() {
+    return fixture.target.getValue();
   }
 
   protected ComponentFixture<JSpinner> createFixture() {
