@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.awt.Window;
 
 import javax.swing.JButton;
-import javax.swing.UIManager;
 
 import abbot.tester.ComponentTester;
 import static java.awt.event.KeyEvent.VK_A;
@@ -76,13 +75,6 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       super(testClass);
       button.setName("button");
       add(button);
-      lookNative();
-    }
-    
-    private void lookNative() {
-      try {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-      } catch (Exception ignored) {}
     }
     
     public void clickButton() {

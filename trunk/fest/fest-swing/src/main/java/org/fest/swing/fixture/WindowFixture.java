@@ -114,7 +114,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   /**
    * Simulates a user closing this fixture's <code>{@link Window}</code>.
    */
-  public void close() {
+  public final void close() {
     robot.close(target);
   }
   

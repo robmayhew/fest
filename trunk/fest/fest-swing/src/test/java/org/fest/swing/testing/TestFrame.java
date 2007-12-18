@@ -43,6 +43,7 @@ public class TestFrame extends JFrame {
   public TestFrame(Class testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
+    chooseLookAndFeel();
   }
 
   public void addComponents(Component...components) {
@@ -58,7 +59,6 @@ public class TestFrame extends JFrame {
       invokeAndWait(new Runnable() {
         public void run() {
           beforeDisplayed();
-          chooseLookAndFeel();
           setPreferredSize(size);
           pack();
           setVisible(true);
