@@ -56,6 +56,28 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   }
 
   /**
+   * Brings this fixture's <code>{@link JInternalFrame}</code> to the front. 
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture moveToFront() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() { target.toFront(); }
+    });
+    return this;
+  }
+
+  /**
+   * Brings this fixture's <code>{@link JInternalFrame}</code> to the back. 
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture moveToBack() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() { target.toBack(); }
+    });
+    return this;
+  }
+
+  /**
    * Simulates a user deiconifying this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
    */

@@ -22,6 +22,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.concat;
 
 import org.fest.swing.testing.TestFrame;
 
@@ -37,6 +38,7 @@ public class JInternalFrameFixtureTest extends WindowLikeFixtureTestCase<JIntern
   private TestFrame mainFrame;
   private JInternalFrameFixture fixture;
   private MyInternalFrame target;
+  private JDesktopPane desktop;
 
   protected JInternalFrame createTarget() {
     target = new MyInternalFrame();
@@ -51,9 +53,8 @@ public class JInternalFrameFixtureTest extends WindowLikeFixtureTestCase<JIntern
 
   private void showMainFrame() {
     mainFrame = new TestFrame(getClass());
-    JDesktopPane desktop = new JDesktopPane(); 
-    target.setVisible(true);
-    desktop.add(target);
+    desktop = new JDesktopPane();
+    add(target);
     mainFrame.setContentPane(desktop);
     robot().showWindow(mainFrame, new Dimension(400, 300));
   }
@@ -78,6 +79,30 @@ public class JInternalFrameFixtureTest extends WindowLikeFixtureTestCase<JIntern
     assertThat(target.isMaximum()).isFalse();
   }
   
+  @Test public void shouldMoveInternalFrameToFront() {
+    add(new MyInternalFrame());
+    fixture.moveToFront();
+    assertThat(desktop.getComponentZOrder(target)).isEqualTo(0);
+  }
+  
+  @Test(dependsOnMethods = "shouldMoveInternalFrameToFront")
+  public void shouldMoveInternalFrameToBack() {
+    add(new MyInternalFrame());
+    fixture.moveToFront();
+    fixture.moveToBack();
+    assertThat(desktop.getComponentZOrder(target)).isEqualTo(1);
+  }
+
+  private void add(final MyInternalFrame frame) {
+    robot().invokeAndWait(new Runnable() {
+      public void run() {
+        frame.setVisible(true);
+        desktop.add(frame);
+        frame.toFront();        
+      }
+    });
+  }
+
   protected Component target() {
     return target;
   }
@@ -85,8 +110,10 @@ public class JInternalFrameFixtureTest extends WindowLikeFixtureTestCase<JIntern
   private static class MyInternalFrame extends JInternalFrame {
     private static final long serialVersionUID = 1L;
 
+    private static int index;
+    
     MyInternalFrame() {
-      super("Internal Frame", true, true, true, true);
+      super(concat("Internal Frame ", String.valueOf(index++)), true, true, true, true);
       setName("target");
       setSize(200, 100);
     }
