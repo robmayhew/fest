@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 
 import abbot.tester.ComponentTester;
@@ -311,6 +312,17 @@ public abstract class ComponentFixture<T extends Component> {
    */
   protected final ComponentFixture<T> doFocus() {
     robot.focus(target);
+    return this;
+  }
+
+  /**
+   * Asserts that the size of this fixture's <code>{@link Component}</code> is equal to given one. 
+   * @param size the given size to match.
+   * @return this fixture.
+   * @throws AssertionError if the size of this fixture's <code>Window</code> is not equal to the given size. 
+   */
+  protected final ComponentFixture<T> assertEqualSize(Dimension size) {
+    assertThat(target.getSize()).as(formattedPropertyName("size")).isEqualTo(size);
     return this;
   }
   

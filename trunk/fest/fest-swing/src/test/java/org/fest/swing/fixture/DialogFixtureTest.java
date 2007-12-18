@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
@@ -39,7 +40,7 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  */
 @GUITest
-public class DialogFixtureTest extends WindowFixtureTestCase<Dialog> {
+public class DialogFixtureTest extends WindowLikeFixtureTestCase<Dialog> {
 
   private DialogFixture fixture;
   private JDialog target;
@@ -60,7 +61,11 @@ public class DialogFixtureTest extends WindowFixtureTestCase<Dialog> {
     }
   }
   
-  protected void afterSetUp() {
+  protected Component target() {
+    return target;
+  }
+
+  @Override protected void afterSetUp() {
     fixture.show();
     target.setSize(new Dimension(400, 200));
   }

@@ -15,8 +15,9 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Window;
+import java.awt.Point;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -30,26 +31,26 @@ import org.fest.swing.core.Condition;
 import org.testng.annotations.Test;
 
 /**
- * Understands test methods for subclasses of <code>{@link WindowFixture}</code>.
+ * Understands test methods for implementations of <code>{@link WindowLikeFixture}</code>.
  * @param <T> the type of window tested by this test class. 
  *
  * @author Alex Ruiz 
  */
-public abstract class WindowFixtureTestCase<T extends Window> extends ComponentFixtureTestCase<T> {
+public abstract class WindowLikeFixtureTestCase<T extends Component> extends ComponentFixtureTestCase<T> {
 
   @Test public final void shouldPassIfWindowHasMatchingSize() {
-    windowFixture().requireSize(windowFixture().target.getSize());
+    windowLikeFixture().requireSize(target().getSize());
   }
   
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public final void shouldFailIfWindowHasNotMatchingSize() {
     FluentDimension wrongSize = windowSize().addToWidth(50).addToHeight(30);
     try {
-      windowFixture().requireSize(wrongSize);
+      windowLikeFixture().requireSize(wrongSize);
       fail();
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      Dimension windowSize = windowFixture().target.getSize();
+      Dimension windowSize = target().getSize();
       assertThat(errorMessage).contains(property("size"), expected(wrongSize), actual(windowSize));
     }
   }
@@ -57,40 +58,51 @@ public abstract class WindowFixtureTestCase<T extends Window> extends ComponentF
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public final void shouldResizeWindowToGivenSize() {
     FluentDimension newSize = windowSize().addToWidth(20).addToHeight(40);
-    windowFixture().resizeTo(newSize);
-    windowFixture().requireSize(newSize);
+    windowLikeFixture().resizeTo(newSize);
+    windowLikeFixture().requireSize(newSize);
   }
   
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public final void shouldResizeToGivenWidth() {
     FluentDimension newSize = windowSize().addToWidth(50);
-    windowFixture().resizeWidthTo(newSize.width);
-    windowFixture().requireSize(newSize);
+    windowLikeFixture().resizeWidthTo(newSize.width);
+    windowLikeFixture().requireSize(newSize);
   }
 
   @Test(dependsOnMethods = "shouldPassIfWindowHasMatchingSize")
   public final void shouldResizeToGivenHeight() {
     FluentDimension newSize = windowSize().addToHeight(50);
-    windowFixture().resizeHeightTo(newSize.height);
-    windowFixture().requireSize(newSize);
+    windowLikeFixture().resizeHeightTo(newSize.height);
+    windowLikeFixture().requireSize(newSize);
   }
   
   @Test public final void shouldCloseWindow() {
-    windowFixture().close();
+    windowLikeFixture().close();
     robot().wait(new Condition("Window is closed") {
       @Override public boolean test() {
-        return !windowFixture().target.isVisible();
+        return !target().isVisible();
       }
     });
   }
   
-  @Override protected boolean addTargetToWindow() { return false; }
-
-  @Override protected boolean targetBlocksMainWindow() { return true; }
-
-  protected final FluentDimension windowSize() {
-    return new FluentDimension(windowFixture().target.getSize());
+  @Test public final void shouldMoveWindow() {
+    Point p = new FluentPoint(windowLocationOnScreen()).addToX(10).addToY(10);
+    windowLikeFixture().moveTo(p);
+    assertThat(windowLocationOnScreen()).isEqualTo(p);
   }
 
-  protected final WindowFixture<T> windowFixture() { return (WindowFixture<T>)fixture(); }
+  private Point windowLocationOnScreen() {
+    return target().getLocationOnScreen();
+  }
+  
+  @Override protected boolean targetBlocksMainWindow() { return true; }
+  @Override protected boolean addTargetToWindow() { return false; }
+
+  protected final FluentDimension windowSize() {
+    return new FluentDimension(target().getSize());
+  }
+
+  protected abstract Component target();
+  
+  protected final WindowLikeFixture windowLikeFixture() { return (WindowLikeFixture)fixture(); }
 }

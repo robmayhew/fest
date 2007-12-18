@@ -19,7 +19,6 @@ import java.awt.Dimension;
 import java.awt.Window;
 
 import abbot.tester.WindowTester;
-import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 
@@ -34,7 +33,7 @@ import org.fest.swing.exception.ComponentLookupException;
  *
  * @author Alex Ruiz
  */
-public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> {
+public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> implements WindowLikeFixture {
 
   /**
    * Creates a new <code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
@@ -119,35 +118,6 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
   }
   
   /**
-   * Simulates a user resizing horizontally this fixture's <code>{@link Window}</code>.
-   * @param width the width that this fixture's <code>Window</code> should have after being resized.
-   * @return this fixture.
-   */
-  protected abstract WindowFixture<T> resizeWidthTo(int width);
-
-  /**
-   * Simulates a user resizing vertically this fixture's <code>{@link Window}</code>.
-   * @param height the height that this fixture's <code>Window</code> should have after being resized.
-   * @return this fixture.
-   */
-  protected abstract WindowFixture<T> resizeHeightTo(int height);
-
-  /**
-   * Simulates a user resizing this fixture's <code>{@link Window}</code>.
-   * @param size the size that the target window should have after being resized.
-   * @return this fixture.
-   */
-  protected abstract WindowFixture<T> resizeTo(Dimension size);
-
-  /**
-   * Asserts that the size of this fixture's <code>{@link Window}</code> is equal to given one. 
-   * @param size the given size to match.
-   * @return this fixture.
-   * @throws AssertionError if the size of this fixture's <code>Window</code> is not equal to the given size. 
-   */
-  protected abstract WindowFixture<T> requireSize(Dimension size);
-
-  /**
    * Shows this fixture's <code>{@link Window}</code>.
    * @return this fixture.
    */
@@ -193,17 +163,6 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    */
   protected final WindowFixture<T> doResizeTo(Dimension size) {
     windowTester().resize(target, size.width, size.height);
-    return this;
-  }
-
-  /**
-   * Asserts that the size of this fixture's <code>{@link Window}</code> is equal to given one. 
-   * @param size the given size to match.
-   * @return this fixture.
-   * @throws AssertionError if the size of this fixture's <code>Window</code> is not equal to the given size. 
-   */
-  protected final WindowFixture<T> assertEqualSize(Dimension size) {
-    assertThat(target.getSize()).as(formattedPropertyName("size")).isEqualTo(size);
     return this;
   }
 

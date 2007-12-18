@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Point;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -88,6 +89,16 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public final DialogFixture show(Dimension size) {
     return (DialogFixture)doShow(size);
+  }
+
+  /**
+   * Simulates a user moving this fixture's <code>{@link Dialog}</code> to the given point.
+   * @param p the point to move this fixture's <code>Dialog</code> to.
+   * @return this fixture.
+   */
+  public final DialogFixture moveTo(Point p) {
+    windowTester().actionMove(target, p.x, p.y);
+    return this;
   }
 
   /**

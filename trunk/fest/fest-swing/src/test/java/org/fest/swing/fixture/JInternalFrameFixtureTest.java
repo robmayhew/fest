@@ -15,17 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
 
 import org.fest.swing.testing.TestFrame;
 
@@ -36,44 +32,11 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixtureTest extends ComponentFixtureTestCase<JInternalFrame> {
+public class JInternalFrameFixtureTest extends WindowLikeFixtureTestCase<JInternalFrame> {
 
   private TestFrame mainFrame;
   private JInternalFrameFixture fixture;
   private MyInternalFrame target;
-
-  @Test public void shouldCloseInternalFrame() {
-    fixture.close();
-    assertThat(target.isClosed()).isTrue();
-  }
-  
-  @Test public final void shouldPassIfInternalFrameHasMatchingSize() {
-    fixture.requireSize(target.getSize());
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfInternalFrameHasMatchingSize")
-  public final void shouldFailIfInternalFrameHasNotMatchingSize() {
-    FluentDimension wrongSize = internalFrameSize().addToWidth(50).addToHeight(30);
-    try {
-      fixture.requireSize(wrongSize);
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      Dimension windowSize = target.getSize();
-      assertThat(errorMessage).contains(property("size"), expected(wrongSize), actual(windowSize));
-    }
-  }
-
-  @Test(dependsOnMethods = "shouldPassIfInternalFrameHasMatchingSize")
-  public final void shouldResizeInternalFrameToGivenSize() {
-    FluentDimension newSize = internalFrameSize().addToWidth(20).addToHeight(40);
-    fixture.resizeTo(newSize);
-    fixture.requireSize(newSize);
-  }
-
-  private FluentDimension internalFrameSize() {
-    return new FluentDimension(target.getSize());
-  }
 
   protected JInternalFrame createTarget() {
     target = new MyInternalFrame();
@@ -95,8 +58,29 @@ public class JInternalFrameFixtureTest extends ComponentFixtureTestCase<JInterna
     robot().showWindow(mainFrame, new Dimension(400, 300));
   }
 
-  @Override protected boolean targetBlocksMainWindow() { return true; }
-  @Override protected boolean addTargetToWindow() { return false; }
+  @Test public void shouldIconifyAndDeiconifyInternalFrame() {
+    fixture.iconify();
+    assertThat(target.isIcon()).isTrue();
+    fixture.deiconify();
+    assertThat(target.isIcon()).isFalse();
+  }
+  
+  @Test public void shouldMaximizeInternalFrame() {
+    fixture.maximize();
+    assertThat(target.isMaximum()).isTrue();
+  }
+
+  @Test(dependsOnMethods = "shouldMaximizeInternalFrame") 
+  public void shouldNormalizeInternalFrame() {
+    fixture.maximize();
+    fixture.normalize();
+    assertThat(target.isIcon()).isFalse();
+    assertThat(target.isMaximum()).isFalse();
+  }
+  
+  protected Component target() {
+    return target;
+  }
   
   private static class MyInternalFrame extends JInternalFrame {
     private static final long serialVersionUID = 1L;

@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 
@@ -35,7 +36,7 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  */
 @GUITest
-public class FrameFixtureTest extends WindowFixtureTestCase<Frame> {
+public class FrameFixtureTest extends WindowLikeFixtureTestCase<Frame> {
 
   private FrameFixture fixture;
   private TestFrame target;
@@ -58,6 +59,10 @@ public class FrameFixtureTest extends WindowFixtureTestCase<Frame> {
     fixture.maximize();
     fixture.normalize();
     assertThat(fixture.target.getExtendedState()).isEqualTo(NORMAL);
+  }
+  
+  protected Component target() {
+    return target;
   }
 
   protected void afterSetUp() {

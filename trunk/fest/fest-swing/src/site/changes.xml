@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+      <action dev="wanghy, alruiz" type="add">
+				Added method 'moveTo(Point)' to FrameFixture and DialogFixture.
+			</action>      
       <action dev="alruiz" type="add" issue="73" due-to="Wim Deblauwe">
 				Added method 'requireValue(Object)' to JSpinnerFixture.
 			</action>      

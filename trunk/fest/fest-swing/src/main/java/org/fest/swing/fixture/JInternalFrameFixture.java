@@ -16,11 +16,11 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JInternalFrame;
 
 import abbot.tester.JInternalFrameTester;
-import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
@@ -34,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> {
+public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> implements FrameLikeFixture {
 
   /**
    * Creates a new <code>{@link JInternalFrameFixture}</code>.
@@ -56,6 +56,42 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> {
   }
 
   /**
+   * Simulates a user deiconifying this fixture's <code>{@link JInternalFrame}</code>.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture deiconify() {
+    internalFrameTester().actionDeiconify(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user iconifying this fixture's <code>{@link JInternalFrame}</code>.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture iconify() {
+    internalFrameTester().actionIconify(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user maximizing this fixture's <code>{@link JInternalFrame}</code>.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture maximize() {
+    internalFrameTester().actionMaximize(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user normalizing this fixture's <code>{@link JInternalFrame}</code>.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture normalize() {
+    internalFrameTester().actionNormalize(target);
+    return this;
+  }
+
+  /**
    * Simulates a user closing this fixture's <code>{@link JInternalFrame}</code>.
    */
   public final void close() {
@@ -69,8 +105,25 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> {
    * @throws AssertionError if the size of this fixture's <code>JInternalFrame</code> is not equal to the given size. 
    */
   public final JInternalFrameFixture requireSize(Dimension size) {
-    assertThat(target.getSize()).as(formattedPropertyName("size")).isEqualTo(size);
-    return this;
+    return (JInternalFrameFixture)assertEqualSize(size);
+  }
+  
+  /**
+   * Simulates a user resizing horizontally this fixture's <code>{@link JInternalFrame}</code>.
+   * @param width the width that this fixture's <code>JInternalFrame</code> should have after being resized.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture resizeWidthTo(int width) {
+    return resizeTo(new Dimension(width, target.getHeight()));
+  }
+
+  /**
+   * Simulates a user resizing vertically this fixture's <code>{@link JInternalFrame}</code>.
+   * @param height the height that this fixture's <code>JInternalFrame</code> should have after being resized.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture resizeHeightTo(int height) {
+    return resizeTo(new Dimension(target.getWidth(), height));
   }
   
   /**
@@ -83,6 +136,18 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> {
     return this;
   }
   
+  /**
+   * Simulates a user moving this fixture's <code>{@link JInternalFrame}</code> to the given point.
+   * @param p the point to move this fixture's <code>JInternalFrame</code> to.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture moveTo(Point p) {
+    Point locationOnScreen = target.getLocationOnScreen();
+    Point destination = new Point(p.x - locationOnScreen.x, p.y - locationOnScreen.y);
+    internalFrameTester().actionMove(target, destination.x, destination.y);
+    return this;
+  }
+
   protected final JInternalFrameTester internalFrameTester() {
     return (JInternalFrameTester)tester();
   }

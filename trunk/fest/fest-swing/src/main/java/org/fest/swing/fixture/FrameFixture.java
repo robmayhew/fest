@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Point;
 
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
@@ -37,7 +38,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class FrameFixture extends WindowFixture<Frame> {
+public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixture {
 
   /**
    * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
@@ -91,6 +92,16 @@ public class FrameFixture extends WindowFixture<Frame> {
    */
   public final FrameFixture show(Dimension size) {
     return (FrameFixture)doShow(size);
+  }
+
+  /**
+   * Simulates a user moving this fixture's <code>{@link Frame}</code> to the given point.
+   * @param p the point to move this fixture's <code>Frame</code> to.
+   * @return this fixture.
+   */
+  public final FrameFixture moveTo(Point p) {
+    windowTester().actionMove(target, p.x, p.y);
+    return this;
   }
 
   /**
