@@ -37,6 +37,7 @@ import static javax.swing.JOptionPane.showOptionDialog;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.fixture.ErrorMessageAssert.actual;
 import static org.fest.swing.fixture.ErrorMessageAssert.expected;
@@ -145,11 +146,7 @@ public class JOptionPaneFixtureTest {
       removeAllMouseListeners();
       button.addMouseListener(l);
       clickButton();
-      try {
-        Thread.sleep(200);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
+      pause(2000);
     }
     
     private void removeAllMouseListeners() {

@@ -15,12 +15,14 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.util.ComponentCollections.EMPTY;
-import static org.fest.swing.util.ComponentCollections.components;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
 import java.util.Collection;
+
+import javax.swing.JMenu;
+
+import static java.util.Collections.emptyList;
+import static org.fest.util.Collections.list;
 
 /**
  * Understands how to find children components in a <code>{@link JMenu}</code>.
@@ -30,11 +32,11 @@ import java.util.Collection;
 final class JMenuChildrenFinder implements ChildrenFinderStrategy {
     
   public Collection<Component> nonExplicitChildrenOf(Container c) {
-    if (!(c instanceof JMenu)) return EMPTY;
-    return components(popupMenuFrom((JMenu)c));
+    if (!(c instanceof JMenu)) return emptyList();
+    return list(popupMenuFrom((JMenu)c));
   }
 
-  private JPopupMenu popupMenuFrom(JMenu menu) {
+  private Component popupMenuFrom(JMenu menu) {
     return menu.getPopupMenu();
   }
 }

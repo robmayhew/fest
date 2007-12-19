@@ -15,13 +15,18 @@
  */
 package org.fest.swing.finder;
 
+import java.awt.Component;
+import java.util.concurrent.TimeUnit;
+
+import static org.fest.swing.core.Pause.pause;
+
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.quote;
+
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.fixture.ComponentFixture;
-import static org.fest.util.Strings.*;
-
-import java.awt.Component;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a template for <code>{@link Component}</code> finders.
@@ -76,7 +81,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
   @SuppressWarnings("unchecked") 
   protected final T findComponentWith(RobotFixture robot) {
     ComponentFoundCondition condition = new ComponentFoundCondition(searchDescription(), robot.finder(), matcher());
-    robot.wait(condition, timeout);
+    pause(condition, timeout);
     return (T)condition.found();
   }
 

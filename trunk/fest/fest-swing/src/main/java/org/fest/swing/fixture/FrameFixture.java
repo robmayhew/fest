@@ -25,6 +25,8 @@ import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 
+import static org.fest.swing.core.Pause.pause;
+
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
@@ -160,7 +162,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public final FrameFixture iconify() {
     frameTester().iconify(target);
-    robot.wait(new Condition("frame being iconified") {
+    pause(new Condition("frame being iconified") {
       public boolean test() {
         return target.getExtendedState() == ICONIFIED;
       }
@@ -174,7 +176,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public final FrameFixture deiconify() {
     frameTester().deiconify(target);
-    robot.wait(new Condition("frame being deiconified") {
+    pause(new Condition("frame being deiconified") {
       public boolean test() {
         return target.getExtendedState() != ICONIFIED;
       }
@@ -188,7 +190,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public final FrameFixture maximize() {
     frameTester().maximize(target);
-    robot.wait(new Condition("frame being maximized") {
+    pause(new Condition("frame being maximized") {
       public boolean test() {
         return (target.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
       }
@@ -207,7 +209,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
         if (Bugs.hasFrameDeiconifyBug()) target.setVisible(true);
       }
     });
-    robot.wait(new Condition("frame being normalized") {
+    pause(new Condition("frame being normalized") {
       public boolean test() {
         return target.getExtendedState() == NORMAL;
       }

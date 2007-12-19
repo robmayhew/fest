@@ -25,6 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.swing.SwingUtilities.convertPoint;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 
 import org.fest.swing.core.MouseButton;
@@ -105,9 +106,7 @@ public class ComponentFixtureTest {
     fixture.target.setEnabled(false);
     new Thread() {
       @Override public void run() {
-        try {
-          Thread.sleep(2000);
-        } catch (InterruptedException e) {}
+        pause(2000);
         fixture.target.setEnabled(true);
       }
     }.start();

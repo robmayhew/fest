@@ -16,7 +16,7 @@
 package org.fest.swing.core;
 
 /**
- * Understands a condition to verify, usually used in the method <code>{@link RobotFixture#wait(Condition)}</code>.
+ * Understands a condition to verify, usually used in the method <code>{@link Pause#pause(Condition)}</code>.
  * 
  * @author Yvonne Wang
  */

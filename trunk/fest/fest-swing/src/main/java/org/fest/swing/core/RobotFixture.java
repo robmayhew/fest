@@ -20,7 +20,6 @@ import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.Window;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -36,13 +35,10 @@ import abbot.util.Bugs;
 import static java.lang.System.currentTimeMillis;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.util.TimeoutWatch;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -53,8 +49,6 @@ import org.fest.swing.util.TimeoutWatch;
 public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
-  private static final int DEFAULT_DELAY = 30000;
-  private static final int SLEEP_INTERVAL = 10;
 
   private Robot robot;
   private WindowTracker windowTracker;
@@ -175,39 +169,6 @@ public final class RobotFixture {
   }
 
   /**
-   * Waits until the given condition is <code>true</code>.
-   * @param condition the condition to verify.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out (more 30 seconds).
-   */
-  public void wait(Condition condition) {
-    wait(condition, DEFAULT_DELAY);
-  }
-
-  /**
-   * Waits until the given condition is <code>true</code>.
-   * @param condition the condition to verify.
-   * @param timeout the timeout.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out.
-   */
-  public void wait(Condition condition, Timeout timeout) {
-    wait(condition, timeout.duration());
-  }
-  
-  /**
-   * Waits until the given condition is <code>true</code>.
-   * @param condition the condition to verify.
-   * @param timeout the timeout (in milliseconds.)
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out.
-   */
-  public void wait(Condition condition, long timeout) {
-    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
-    while (!condition.test()) {
-      if (watch.isTimeout()) throw new WaitTimedOutError((concat("Timed out waiting for ", condition)));
-      delay(SLEEP_INTERVAL);
-    }
-  }
-  
-  /**
    * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
    * on the event dispatch thread.
    * @param c the component which event queue will be used.
@@ -326,33 +287,6 @@ public final class RobotFixture {
       return (JPopupMenu) robot.showPopupMenu(invoker, location.x, location.y);
     } catch (ComponentMissingException e) {
       throw new ComponentLookupException(e);
-    }
-  }
-
-  /**
-   * Sleeps for the specified time. 
-   * @param timeout the quantity of time units to sleep.
-   * @param unit the time units.
-   * @see #delay(long)
-   */
-  public void delay(long timeout, TimeUnit unit) {
-    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
-    delay(unit.toMillis(timeout));
-  }
-  
-  /**
-   * Sleeps for the specified time. 
-   * <p>
-   * To catch any <code>InterruptedException</code>s that occur,
-   * <code>{@link Thread#sleep(long)}()</code> may be used instead.
-   * </p>
-   * @param ms the time to sleep in milliseconds.
-   */
-  public void delay(long ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
     }
   }
 

@@ -14,15 +14,19 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.util.AWTEvents.*;
-import static org.fest.swing.util.Swing.quoteNameOf;
-import static org.fest.util.Strings.concat;
-
-import javax.swing.SwingUtilities;
 import java.awt.AWTEvent;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
+
+import static org.fest.swing.util.AWTEvents.windowClosed;
+import static org.fest.swing.util.AWTEvents.windowOpened;
+import static org.fest.swing.util.AWTEvents.windowShown;
+import static org.fest.swing.util.Swing.quoteNameOf;
+
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands automatic filtering of auto-generated Swing dialogs.
@@ -38,7 +42,7 @@ public final class TransientWindowListener implements AWTEventListener {
   private static Logger logger = Logger.getLogger(TransientWindowListener.class.getName());
 
   private final WindowFilter filter;
-
+  
   TransientWindowListener(WindowFilter filter) {
     this.filter = filter;
   }
@@ -85,9 +89,7 @@ public final class TransientWindowListener implements AWTEventListener {
   private class DisposeAction implements Runnable {
     private final Window w;
 
-    DisposeAction(Window w) {
-      this.w = w;
-    }
+    DisposeAction(Window w) { this.w = w; }
 
     public void run() {
       // If the window was shown again since we queued this action, it will have removed the window from the 

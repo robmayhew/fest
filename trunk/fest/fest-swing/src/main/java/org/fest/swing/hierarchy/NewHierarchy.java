@@ -15,15 +15,16 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-import static org.fest.swing.util.ComponentCollections.empty;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
-import static java.awt.event.WindowEvent.COMPONENT_EVENT_MASK;
-import static java.awt.event.WindowEvent.WINDOW_EVENT_MASK;
 import java.util.Collection;
+
+import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
+import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+import static java.util.Collections.emptyList;
+
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 /**
  * Understands isolation of a component hierarchy to limit to only those components created during the lifetime of this
@@ -90,7 +91,7 @@ public class NewHierarchy extends ExistingHierarchy {
    * @return all sub-components of the given component, omitting those which are currently filtered.
    */
   @Override public Collection<Component> childrenOf(Component c) {
-    if (filter.isFiltered(c)) return empty();
+    if (filter.isFiltered(c)) return emptyList();
     Collection<Component> children = super.childrenOf(c);
     // this only removes those components which are directly filtered, not necessarily those which have a filtered 
     // ancestor.

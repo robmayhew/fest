@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
 
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestFrame.showInTest;
 
 import static org.fest.util.Files.temporaryFolderPath;
@@ -73,11 +74,7 @@ public class ScreenshotTakerTest {
 
   @Test public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
     TestFrame frame = showInTest(getClass());
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame, imagePath);
     assertThat(read(imagePath)).hasSize(frame.getSize());
@@ -97,11 +94,7 @@ public class ScreenshotTakerTest {
     }
     CustomFrame frame = new CustomFrame(getClass());
     frame.display();
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame.button, imagePath);
     assertThat(read(imagePath)).hasSize(frame.button.getSize());

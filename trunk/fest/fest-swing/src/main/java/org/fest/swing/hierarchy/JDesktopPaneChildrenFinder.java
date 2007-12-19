@@ -15,12 +15,15 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.util.ComponentCollections.EMPTY;
-import static org.fest.swing.util.ComponentCollections.empty;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Understands how to find children components in a <code>{@link JDesktopPane}</code>.
@@ -30,14 +33,14 @@ import java.util.Collection;
 final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy {
 
   public Collection<Component> nonExplicitChildrenOf(Container c) {
-    if (!(c instanceof JDesktopPane)) return EMPTY;
+    if (!(c instanceof JDesktopPane)) return emptyList();
     return internalFramesFromIcons(c);
   }
 
   // From Abbot: add iconified frames, which are otherwise unreachable. For consistency, they are still considerered 
   // children of the desktop pane.
   private Collection<Component> internalFramesFromIcons(Container c) {
-    Collection<Component> frames = empty();
+    Collection<Component> frames = new ArrayList<Component>();
     for (Component child : c.getComponents()) {
       if (child instanceof JInternalFrame.JDesktopIcon) {
         JInternalFrame frame = ((JInternalFrame.JDesktopIcon)child).getInternalFrame();

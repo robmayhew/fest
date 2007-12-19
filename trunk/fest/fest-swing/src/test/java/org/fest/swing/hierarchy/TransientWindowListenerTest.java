@@ -15,20 +15,27 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.easymock.classextension.EasyMock.*;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import java.awt.AWTEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
+
 import org.fest.mocks.EasyMockTemplate;
+
+import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
+import static java.awt.event.WindowEvent.WINDOW_CLOSED;
+import static java.awt.event.WindowEvent.WINDOW_OPENED;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.swing.core.Pause.pause;
+
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestFrame;
 
-import java.awt.AWTEvent;
-import java.awt.event.ComponentEvent;
-import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
-import java.awt.event.WindowEvent;
-import static java.awt.event.WindowEvent.WINDOW_CLOSED;
-import static java.awt.event.WindowEvent.WINDOW_OPENED;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link TransientWindowListener}</code>.
@@ -125,7 +132,6 @@ public class TransientWindowListenerTest {
         expect(mockWindowFilter.isFiltered(eventSource)).andReturn(false);
         mockWindowFilter.implicitFilter(eventSource);
         expectLastCall();
-        waitTillClosedEventIsHandled();
         expect(mockWindowFilter.isImplicitFiltered(eventSource)).andReturn(true);
         mockWindowFilter.filter(eventSource);
         expectLastCall();
@@ -133,6 +139,7 @@ public class TransientWindowListenerTest {
 
       protected void codeToTest() {
         listener.eventDispatched(closedWindowEvent());
+        waitTillClosedEventIsHandled();
       }
     }.run();
   }
@@ -143,23 +150,17 @@ public class TransientWindowListenerTest {
         expect(mockWindowFilter.isFiltered(eventSource)).andReturn(false);
         mockWindowFilter.implicitFilter(eventSource);
         expectLastCall();
-        waitTillClosedEventIsHandled();
         expect(mockWindowFilter.isImplicitFiltered(eventSource)).andReturn(false);
       }
 
       protected void codeToTest() {
         listener.eventDispatched(closedWindowEvent());
+        waitTillClosedEventIsHandled();
       }
     }.run();
   }
 
-  private void waitTillClosedEventIsHandled() {
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
+  private void waitTillClosedEventIsHandled() { pause(2000); }
 
   private WindowEvent closedWindowEvent() {
     return new WindowEvent(eventSource, WINDOW_CLOSED);

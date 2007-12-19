@@ -27,15 +27,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.util.StopWatch.startNewStopWatch;
+import static org.fest.swing.core.Pause.pause;
 
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
-import org.fest.swing.util.StopWatch;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -116,76 +113,18 @@ public class RobotFixtureTest {
     robot.showPopupMenu(frame.textBox);
   }
 
-  @Test public void shouldSleepForTheGivenTime() {
-    StopWatch watch = startNewStopWatch();
-    long delay = 2000;
-    robot.delay(delay);
-    watch.stop();
-    assertThat(watch.ellapsedTime() >= delay).isTrue();
-  }
-  
   @Test public void shouldCloseWindow() {
     final TestFrame w = new TestFrame(getClass());
     w.display();
     robot.close(w);
-    robot.wait(new Condition("Window closed") {
+    pause(new Condition("Window closed") {
       @Override public boolean test() {
         return !w.isVisible();
       }
     });
     assertThat(w.isVisible()).isFalse();
   }
-  
-  @Test public void shouldWaitTillConditionIsTrue() {
-    class CustomCondition extends Condition {
-      boolean satisfied;
-      
-      public CustomCondition(String description) {
-        super(description);
-      }
-
-      @Override public boolean test() {
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        satisfied = true;
-        return satisfied;
-      }
-    };
-    CustomCondition condition = new CustomCondition("Some condition");
-    StopWatch watch = startNewStopWatch();
-    robot.wait(condition);
-    watch.stop();
-    assertThat(watch.ellapsedTime() >= 1000).isTrue();
-    assertThat(condition.satisfied).isTrue();
-  }
-  
-  @Test(expectedExceptions = WaitTimedOutError.class) 
-  public void shouldTimeoutIfConditionIsNeverTrue() {
-    robot.wait(neverSatisfied());
-  }
-  
-  @Test(expectedExceptions = WaitTimedOutError.class)
-  public void shouldTimeoutWithGivenTimeIfConditionIsNeverTrue() {
-    robot.wait(neverSatisfied(), timeout(100));
-  }
-  
-  private NeverSatisfiedCondition neverSatisfied() {
-    return new NeverSatisfiedCondition("Never satisfied");
-  }
-  
-  private static class NeverSatisfiedCondition extends Condition {
-    public NeverSatisfiedCondition(String description) {
-      super(description);
-    }
-
-    @Override public boolean test() {
-      return false;
-    }
-  };    
-  
+    
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

@@ -21,7 +21,7 @@ import java.util.TimerTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.monitor.WindowsUtils.waitForWindowToBeMarkedAsReady;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.util.ReflectionUtils.mapField;
 
 import org.fest.swing.testing.TestFrame;
@@ -84,7 +84,7 @@ public class WindowsTest {
   @Test public void shouldMarkWindowAsShowing() {
     windows.markAsShowing(frame);
     assertThat(windows.isShowingButNotReady(frame)).isTrue();
-    waitForWindowToBeMarkedAsReady();
+    pause(Windows.WINDOW_READY_DELAY * 2);
     assertWindowIsReady();
   }
 

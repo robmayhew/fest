@@ -24,6 +24,7 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.monitor.MockWindows.mock;
 
 import org.fest.swing.testing.TestFrame;
@@ -99,9 +100,7 @@ public class WindowStatusTest {
       }
     }.run();
     // wait till frame is resized
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {}
+    pause(5000);
     assertThat(frame.getHeight()).isGreaterThan(original.height);
   }
   

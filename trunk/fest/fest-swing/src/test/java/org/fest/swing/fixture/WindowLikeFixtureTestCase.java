@@ -22,6 +22,7 @@ import java.awt.Point;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.fixture.ErrorMessageAssert.actual;
 import static org.fest.swing.fixture.ErrorMessageAssert.expected;
 import static org.fest.swing.fixture.ErrorMessageAssert.property;
@@ -78,7 +79,7 @@ public abstract class WindowLikeFixtureTestCase<T extends Component> extends Com
   
   @Test public final void shouldCloseWindow() {
     windowLikeFixture().close();
-    robot().wait(new Condition("Window is closed") {
+    pause(new Condition("Window is closed") {
       @Override public boolean test() {
         return !target().isVisible();
       }

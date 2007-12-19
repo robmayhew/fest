@@ -23,16 +23,16 @@ import javax.swing.JTextField;
 
 import org.fest.mocks.EasyMockTemplate;
 
+import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.field;
 
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.util.ComponentCollections.empty;
+import static org.fest.swing.core.Pause.pause;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.testing.TestFrame;
 import org.fest.swing.monitor.WindowMonitor;
+import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -80,7 +80,7 @@ public class ExistingHierarchyTest {
     final Component c = new JTextField();
     final ChildrenFinder finder = MockChildrenFinder.mock();
     field("childrenFinder").ofType(ChildrenFinder.class).in(hierarchy).set(finder);
-    final Collection<Component> children = empty();
+    final Collection<Component> children = emptyList();
     new EasyMockTemplate(finder) {
       @Override protected void expectations() {
         expect(finder.childrenOf(c)).andReturn(children);
@@ -111,7 +111,7 @@ public class ExistingHierarchyTest {
     final CustomFrame frame = new CustomFrame(getClass());
     frame.display();
     hierarchy.dispose(frame);
-    robotWithCurrentAwtHierarchy().wait(new Condition("Window is disposed") {
+    pause(new Condition("Window is disposed") {
       @Override public boolean test() {
         return frame.disposed;
       }

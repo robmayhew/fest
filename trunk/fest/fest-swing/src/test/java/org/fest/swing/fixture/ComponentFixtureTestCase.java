@@ -32,6 +32,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.fixture.ErrorMessageAssert.actual;
@@ -189,7 +190,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   
   protected final void giveFocusTo(final Component c) {
     c.requestFocusInWindow();
-    robot().wait(new Condition("component has focus") {
+    pause(new Condition("component has focus") {
       public boolean test() {
         return c.hasFocus();
       }
@@ -285,9 +286,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     fixture.target.setEnabled(false);
     new Thread() {
       @Override public void run() {
-        try {
-          Thread.sleep(2000);
-        } catch (InterruptedException e) {}
+        pause(2000);
         fixture.target.setEnabled(true);
       }
     }.start();

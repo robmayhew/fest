@@ -15,18 +15,23 @@
  */
 package org.fest.swing.hierarchy;
 
-import org.fest.swing.monitor.WindowMonitor;
-import static org.fest.swing.util.Formatting.format;
-import static org.fest.swing.util.Swing.*;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.util.Collection;
+import java.util.logging.Logger;
+
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
-import java.util.logging.Logger;
+
+import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.util.Swing.isAppletViewer;
+import static org.fest.swing.util.Swing.isSharedInvisibleFrame;
+import static org.fest.swing.util.Swing.runInEventThreadAndWait;
+
+import static org.fest.util.Strings.concat;
+
+import org.fest.swing.monitor.WindowMonitor;
 
 /**
  * Understands access to the current AWT hierarchy.
@@ -99,7 +104,6 @@ public class ExistingHierarchy implements ComponentHierarchy {
    */
   public void dispose(Window w) {
     if (isAppletViewer(w)) return;
-    logger.info(concat("Disposing ", w));
     for (Window owned : w.getOwnedWindows()) dispose(owned);
     if (isSharedInvisibleFrame(w)) return;
     try {

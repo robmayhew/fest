@@ -15,18 +15,24 @@
  */
 package org.fest.swing.hierarchy;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.testing.TestFrame;
-import static org.fest.swing.util.ToolkitUtils.eventListenersInToolkit;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
 import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
-import java.util.List;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.util.ToolkitUtils.eventListenersInToolkit;
+
+import static org.fest.util.Arrays.array;
+
+import org.fest.swing.testing.TestFrame;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link NewHierarchy}</code>.
@@ -109,8 +115,8 @@ public class NewHierarchyTest {
   private static class CustomFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    final JTextField textField = new JTextField();
-    final JComboBox comboBox = new JComboBox();
+    final JTextField textField = new JTextField(20);
+    final JComboBox comboBox = new JComboBox(array("One", "Two"));
 
     public CustomFrame(Class testClass) {
       super(testClass);

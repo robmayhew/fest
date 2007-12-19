@@ -15,23 +15,26 @@
  */
 package org.fest.swing.finder;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.fixture.JOptionPaneFixture;
-import org.fest.swing.finder.JOptionPaneFinder;
-import org.fest.swing.finder.JFileChooserFinder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.core.Pause.pause;
+
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.fixture.JOptionPaneFixture;
+import org.fest.swing.testing.TestFrame;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JOptionPaneFinder}</code>.
@@ -63,9 +66,7 @@ public class JOptionPaneFinderTest {
   @Test public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
     new Thread() {
       @Override public void run() {
-        try {
-          Thread.sleep(2000);
-        } catch (InterruptedException e) {}
+        pause(2000);
         clickMessageButton();
       }
     }.start();

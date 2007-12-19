@@ -15,13 +15,14 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.util.ComponentCollections.empty;
-import static org.fest.util.Collections.list;
-
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static org.fest.util.Collections.list;
 
 /**
  * Understands how to find children components in a <code>{@link Container}</code>.
@@ -40,16 +41,16 @@ class ChildrenFinder {
   }
 
   Collection<Component> childrenOf(Component c) {
-    if (!(c instanceof Container)) return empty();
+    if (!(c instanceof Container)) return emptyList();
     Container container = (Container)c;
-    Collection<Component> children = empty();
+    Collection<Component> children = new ArrayList<Component>();
     children.addAll(list(container.getComponents()));
     children.addAll(nonExplicitChildrenOf(container));
     return children;
   }
 
   private Collection<Component> nonExplicitChildrenOf(Container c) {
-    Collection<Component> children = empty();
+    Collection<Component> children = new ArrayList<Component>();
     for (ChildrenFinderStrategy s : strategies) 
       children.addAll(s.nonExplicitChildrenOf(c));
     return children;

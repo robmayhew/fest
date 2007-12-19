@@ -15,13 +15,15 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.util.ComponentCollections.EMPTY;
-import static org.fest.swing.util.ComponentCollections.empty;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static java.util.Collections.emptyList;
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Collections.list;
-
-import java.awt.*;
-import java.util.Collection;
 
 /**
  * Understands how to find children components in a <code>{@link Window}</code>.
@@ -31,7 +33,7 @@ import java.util.Collection;
 final class WindowChildrenFinder implements ChildrenFinderStrategy {
 
   public Collection<Component> nonExplicitChildrenOf(Container c) {
-    if (!(c instanceof Window)) return EMPTY;
+    if (!(c instanceof Window)) return emptyList();
     return ownedWindows((Window)c);
   }
   
@@ -40,9 +42,7 @@ final class WindowChildrenFinder implements ChildrenFinderStrategy {
   }
   
   private Collection<Component> windows(Window[] windows) {
-    if (isEmpty(windows)) return EMPTY;
-    Collection<Component> components = empty();
-    components.addAll(list(windows));
-    return components;
+    if (isEmpty(windows)) return emptyList();
+    return new ArrayList<Component>(list(windows));
   }
 }

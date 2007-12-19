@@ -24,6 +24,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.util.Formatting.format;
 
 import static org.fest.util.Strings.concat;
@@ -370,7 +371,7 @@ public abstract class ComponentFixture<T extends Component> {
         return target.isEnabled();
       }
     };
-    robot.wait(targetEnabledCondition, timeout);
+    pause(targetEnabledCondition, timeout);
     return this;
   }
 
