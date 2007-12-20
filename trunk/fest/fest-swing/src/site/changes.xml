@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+      <action dev="wanghy, alruiz" type="add" issue="69" due-to="Wim Deblauwe">
+				Added method 'robotAutoDelay' in class 'org.fest.swing.core.Settings' to configure test speed.
+			</action>      
       <action dev="wanghy, alruiz" type="add" issue="70" due-to="Ken Geis">
 				Added JInternalFrameFixture.
 			</action>      
