@@ -258,7 +258,7 @@ public class ComponentFinder {
   }
 
   /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy used when creating this finder.
+   * Prints all the components (as <code>String</code>s) in the hierarchy.
    * @param out the output stream where to print the components to.
    * @see Formatting#format(Component)
    */
@@ -267,8 +267,17 @@ public class ComponentFinder {
   }
 
   /**
-   * Prints only the components of the given type (as <code>String</code>s) in the hierarchy used when creating this
-   * finder.
+   * Prints all the components (as <code>String</code>s) in the hierarchy under the given root.
+   * @param out the output stream where to print the components to.
+   * @param root the root used as the starting point of the search.
+   * @see Formatting#format(Component)
+   */
+  public final void printComponents(PrintStream out, Container root) {
+    printComponents(root, new PrintComponentMatcher(out));
+  }
+
+  /**
+   * Prints only the components of the given type (as <code>String</code>s) in the hierarchy.
    * @param out the output stream where to print the components to.
    * @param type the type of components to print.
    * @see Formatting#format(Component)
@@ -277,9 +286,24 @@ public class ComponentFinder {
     printComponents(new PrintComponentMatcher(out, type));
   }
   
+  /**
+   * Prints all the components of the given type (as <code>String</code>s) in the hierarchy under the given root.
+   * @param out the output stream where to print the components to.
+   * @param type the type of components to print.
+   * @param root the root used as the starting point of the search.
+   * @see Formatting#format(Component)
+   */
+  public final void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
+    printComponents(root, new PrintComponentMatcher(out, type));
+  }
+
   private void printComponents(PrintComponentMatcher matcher) {
+    printComponents(null, matcher);
+  }
+
+  private void printComponents(Container root, PrintComponentMatcher matcher) {
     try {
-      find(matcher);
+      find(root, matcher);
     } catch (ComponentLookupException ignored) {}
   }
 

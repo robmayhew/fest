@@ -6,6 +6,20 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+    	<action dev="wanghy" type="add" issue="71" due-to="Win Deblauwe">
+    		Added methods 'printComponents(PrintStream, Container)' and 
+    		'printComponents(PrintStream, Class, Container)' to ComponentFinder.
+    	</action>
+    	<action dev="alruiz" type="fix" issue="71" due-to="Wim Deblauwe">
+    		Added 'toString' implementation to JMenuItemMatcher to facilitate debugging.
+    	</action>
+    	<action dev="alruiz" type="fix" issue="71" due-to="Wim Deblauwe">
+    		Added 'toString' implementation to JButtonMatcher to facilitate debugging.
+    	</action>
+			<action dev="alruiz" type="add">
+				Renamed methods 'wait' and 'delay' in RobotFixture to 'pause'. Then moved methods 'pause' to the new class
+				Pause.
+			</action>
       <action dev="wanghy, alruiz" type="add" issue="69" due-to="Wim Deblauwe">
 				Added method 'robotAutoDelay' in class 'org.fest.swing.core.Settings' to configure test speed.
 			</action>      

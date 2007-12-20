@@ -15,9 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.core.GenericTypeMatcher;
-
 import javax.swing.JButton;
+
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
+import org.fest.swing.core.GenericTypeMatcher;
 
 /**
  * Understands matching a <code>{@link JButton}</code> by its displayed text.
@@ -34,5 +37,13 @@ final class JButtonMatcher extends GenericTypeMatcher<JButton> {
 
   protected boolean isMatching(JButton button) {
     return textToMatch.equals(button.getText());
+  }
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "textToMatch=", quote(textToMatch),
+        "]"
+    );
   }
 }

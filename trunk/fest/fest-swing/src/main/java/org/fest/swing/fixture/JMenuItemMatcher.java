@@ -17,6 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JMenuItem;
 
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
+
 import org.fest.swing.core.ComponentMatcher;
 
 /**
@@ -28,11 +31,22 @@ import org.fest.swing.core.ComponentMatcher;
  */
 final class JMenuItemMatcher extends abbot.finder.matchers.JMenuItemMatcher implements ComponentMatcher {
   
+  private final String label;
+
   /**
    * Creates a new </code>{@link JMenuItemMatcher}</code>.
    * @param label the label of the menu item to match.
    */
   public JMenuItemMatcher(String label) { 
     super(label);
+    this.label = label;
   }
+  
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "label=", quote(label),
+        "]"
+    );
+  }  
 }
