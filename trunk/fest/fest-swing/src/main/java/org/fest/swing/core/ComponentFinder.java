@@ -16,15 +16,18 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import abbot.finder.AWTHierarchy;
 import abbot.finder.BasicFinder;
+import abbot.finder.ComponentSearchException;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 
 import static org.fest.swing.util.Formatting.format;
 import static org.fest.swing.util.Swing.quoteNameOf;
+import static org.fest.swing.util.System.LINE_SEPARATOR;
 
 import static org.fest.util.Strings.concat;
 
@@ -111,7 +114,7 @@ public class ComponentFinder {
    * @param root the root used as the starting point of the search.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public final <T extends Component> T findByType(Container root, Class<T> type) {
     return type.cast(find(root, new TypeMatcher(type)));
@@ -123,7 +126,7 @@ public class ComponentFinder {
    * @param name the name of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String)
    */
   public final <T extends Component> T findByName(String name, Class<T> type) {
@@ -159,7 +162,7 @@ public class ComponentFinder {
    * </p>
    * @param name the name of the component to find.
    * @return the found component.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public final Component findByName(String name) {
     return find(new NameMatcher(name));
@@ -181,16 +184,20 @@ public class ComponentFinder {
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>.
    * @param m the matcher to use to find the component of interest.
    * @return the found component.
-   * @throws org.fest.swing.exception.ComponentLookupException if a component matching the given criteria could not be found.
+   * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
   public final Component find(ComponentMatcher m) {
     try {
       return finder.find(m);
-    } catch (Exception e) {
-      throw new ComponentLookupException(e);
+    } catch (ComponentSearchException e) {
+      throw componentNotFound(m);
     }
   }
 
+  private ComponentLookupException componentNotFound(ComponentMatcher m) {
+    return componentNotFound(null, m);
+  }
+  
   /**
    * Finds a <code>{@link Component}</code> by name and type in the hierarchy under the given root.
    * @param <T> the parameterized type of the component to find.
@@ -198,7 +205,7 @@ public class ComponentFinder {
    * @param name the name of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String)
    * @see #findByType(Container, Class)
    */
@@ -209,9 +216,14 @@ public class ComponentFinder {
   }
 
   private <T> void checkRightTypeForNamedComponent(Component c, Class<T> expected) {
-    if (expected.isAssignableFrom(c.getClass())) return;
-    throw new ComponentLookupException(concat("Found component with name ", quoteNameOf(c),
-        " but with different type (", expected.getName(), ")"));
+    Class<? extends Component> actual = c.getClass();
+    if (expected.isAssignableFrom(actual)) return;
+    throw new ComponentLookupException(
+        concat(
+            "Found component with name ", quoteNameOf(c),
+            " of type ", actual.getName(), ". Expecting type ", expected.getName(), ".",
+            formattedHierarchy()
+        ));
   }
 
   /**
@@ -247,16 +259,37 @@ public class ComponentFinder {
    * @param root the root used as the starting point of the search.
    * @param m the matcher to use to find the component.
    * @return the found component.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if a matching component could not be found.
    */
   public final Component find(Container root, ComponentMatcher m) {
     try {
       return finder.find(root, m);
-    } catch (Exception e) {
-      throw new ComponentLookupException(e);
+    } catch (ComponentSearchException e) {
+      throw componentNotFound(root, m);
     }
   }
 
+  private ComponentLookupException componentNotFound(Container root, ComponentMatcher m) {
+    String message = concat("Unable to find component using matcher ", m, ".", formattedHierarchy(root));
+    throw new ComponentLookupException(message);
+  }
+
+  private String formattedHierarchy() {
+    return formattedHierarchy(null);
+  }
+
+  private String formattedHierarchy(Container root) {
+    return concat(LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, hierarchy(root));
+  }
+  
+  private String hierarchy(Container root) {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(out, true);
+    printComponents(printStream, root);
+    printStream.flush();
+    return new String(out.toByteArray());    
+  }
+  
   /**
    * Prints all the components (as <code>String</code>s) in the hierarchy.
    * @param out the output stream where to print the components to.
@@ -303,12 +336,15 @@ public class ComponentFinder {
 
   private void printComponents(Container root, PrintComponentMatcher matcher) {
     try {
-      find(root, matcher);
-    } catch (ComponentLookupException ignored) {}
+      if (root == null) {
+        finder.find(matcher);
+        return;
+      }
+      finder.find(root, matcher);
+    } catch (ComponentSearchException ignored) {}
   }
 
   private static class PrintComponentMatcher implements ComponentMatcher {
-
     private final PrintStream out;
     private final Class<? extends Component> type;
 

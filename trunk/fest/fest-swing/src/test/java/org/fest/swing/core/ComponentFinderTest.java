@@ -17,6 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,7 +25,9 @@ import javax.swing.JList;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 
+import static java.util.logging.Level.INFO;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.PrintStreamStub;
@@ -61,6 +64,8 @@ public class ComponentFinderTest {
     }
   }
 
+  private static Logger logger = Logger.getAnonymousLogger();
+  
   private ComponentFinder finder;
   private MainWindow window;
   private MainWindow anotherWindow;
@@ -75,9 +80,11 @@ public class ComponentFinderTest {
     assertThat(button).isSameAs(window.button);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentNotFoundByType() {
-    finder.findByType(JTree.class);
+  @Test public void shouldThrowExceptionIfComponentNotFoundByType() {
+    try {
+      finder.findByType(JTree.class);
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
 
   @Test public void shouldFindComponentByTypeAndContainer() {
@@ -86,9 +93,11 @@ public class ComponentFinderTest {
     assertThat(button).isSameAs(anotherWindow.button);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentNotFoundByTypeAndContainer() {
-    finder.findByType(window, JList.class);
+  @Test public void shouldThrowExceptionIfComponentNotFoundByTypeAndContainer() {
+    try {
+      finder.findByType(window, JList.class);
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
   
   @Test public void shouldFindComponentByName() {
@@ -96,9 +105,11 @@ public class ComponentFinderTest {
     assertThat(button).isSameAs(window.button);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentNotFoundByName() {
-    finder.findByName("list");
+  @Test public void shouldThrowExceptionIfComponentNotFoundByName() {
+    try {
+      finder.findByName("list");
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
   
   @Test public void shouldFindComponentByNameAndContainer() {
@@ -108,9 +119,11 @@ public class ComponentFinderTest {
     assertThat(button).isSameAs(anotherWindow.button);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentNotFoundByNameAndContainer() {
-    finder.findByName(window, "label");
+  @Test public void shouldThrowExceptionIfComponentNotFoundByNameAndContainer() {
+    try {
+      finder.findByName(window, "label");
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
   
   @Test public void shouldFindComponentByNameAndType() {
@@ -118,14 +131,18 @@ public class ComponentFinderTest {
     assertThat(button).isSameAs(window.button);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentNotFoundByNameAndType() {
-    finder.findByName("list", JLabel.class);
+  @Test public void shouldThrowExceptionIfComponentNotFoundByNameAndType() {
+    try {
+      finder.findByName("list", JLabel.class);
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentFoundByNameAndNotByType() {
-    finder.findByName("button", JLabel.class);
+  @Test public void shouldThrowExceptionIfComponentFoundByNameAndNotByType() {
+    try {
+      finder.findByName("button", JLabel.class);
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
   
   @Test public void shouldFindComponentByNameAndTypeAndContainer() {
@@ -134,14 +151,18 @@ public class ComponentFinderTest {
     assertThat(button).isSameAs(anotherWindow.button);
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
-  public void shouldThrowExceptionIfComponentNotFoundByNameAndTypeAndContainer() {
-    finder.findByName(window, "list", JLabel.class);
+  @Test public void shouldThrowExceptionIfComponentNotFoundByNameAndTypeAndContainer() {
+    try {
+      finder.findByName(window, "list", JLabel.class);
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class)
-  public void shouldThrowExceptionIfComponentFoundByNameAndContainerAndNotByType() {
-    finder.findByName(window, "button", JLabel.class);
+  @Test public void shouldThrowExceptionIfComponentFoundByNameAndContainerAndNotByType() {
+    try {
+      finder.findByName(window, "button", JLabel.class);
+      fail();
+    } catch (ComponentLookupException e) { log(e); }
   }
 
   
@@ -199,6 +220,10 @@ public class ComponentFinderTest {
     });
   }
   
+  private void log(ComponentLookupException e) {
+    logger.log(INFO, e.getMessage(), e);
+  }
+
   @Test public void shouldPrintAllComponents() {
     PrintStreamStub out = new PrintStreamStub();
     finder.printComponents(out);

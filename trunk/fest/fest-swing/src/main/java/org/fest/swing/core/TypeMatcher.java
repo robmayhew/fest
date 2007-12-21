@@ -15,9 +15,11 @@
  */
 package org.fest.swing.core;
 
-import abbot.finder.matchers.ClassMatcher;
+import java.awt.Component;
 
-import java.awt.*;
+import abbot.finder.matchers.ClassMatcher;
+import static java.lang.String.valueOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands <code>{@link java.awt.Component}</code> matching by type.
@@ -26,12 +28,15 @@ import java.awt.*;
  */
 public final class TypeMatcher extends ClassMatcher implements ComponentMatcher {
 
+  private final Class<?> type;
+  private final boolean requireShowing;
+
   /**
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param type the type of the component we are looking for.
    */
   public TypeMatcher(Class<?> type) {
-    super(type);
+    this(type, false);
   }
 
   /**
@@ -41,6 +46,8 @@ public final class TypeMatcher extends ClassMatcher implements ComponentMatcher 
    */
   public TypeMatcher(Class<?> type, boolean requireShowing) {
     super(type, requireShowing);
+    this.type = type;
+    this.requireShowing = requireShowing;
   }
 
   /**
@@ -49,5 +56,14 @@ public final class TypeMatcher extends ClassMatcher implements ComponentMatcher 
    */
   @Override public boolean matches(Component c) {
     return super.matches(c);
+  }
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "type=", type.getName(), ", ",
+        "requireShowing=", valueOf(requireShowing), 
+        "]"
+    );
   }
 }

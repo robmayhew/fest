@@ -15,7 +15,10 @@
  */
 package org.fest.swing.core;
 
-import java.awt.*;
+import java.awt.Component;
+
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.quote;
 
 /**
  * Understands <code>{@link java.awt.Component}</code> matching by name.
@@ -24,12 +27,15 @@ import java.awt.*;
  */
 public final class NameMatcher extends abbot.finder.matchers.NameMatcher implements ComponentMatcher {
 
+  private final String name;
+
   /**
    * Creates a new <code>{@link NameMatcher}</code>.
    * @param name the name of the component we are looking for.
    */
   public NameMatcher(String name) {
     super(name);
+    this.name = name;
   }
 
   /** 
@@ -40,5 +46,14 @@ public final class NameMatcher extends abbot.finder.matchers.NameMatcher impleme
    */
   @Override public boolean matches(Component c) {
     return super.matches(c);
+  }
+
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "name=", quote(name), 
+        "]"
+    );
   }
 }

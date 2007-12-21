@@ -43,7 +43,7 @@ public final class TimeoutWatch {
   }
   
   void start() {
-    startTime = System.currentTimeMillis();
+    startTime = currentTimeMillis();
   }
 
   public boolean isTimeout() {

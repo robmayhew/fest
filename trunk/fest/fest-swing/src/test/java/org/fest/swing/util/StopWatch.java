@@ -15,6 +15,8 @@
  */
 package org.fest.swing.util;
 
+import static java.lang.System.currentTimeMillis;
+
 /**
  * Understands watch that can be instantly started and stopped by pushing a button and used to measure an exact duration
  * of time.
@@ -37,13 +39,13 @@ public final class StopWatch {
   public void start() {
     started = true;
     stopped = false;
-    startTime = System.currentTimeMillis();
+    startTime = currentTimeMillis();
     endTime = 0;
   }
   
   public void stop() {
     stopped = true;
-    endTime = System.currentTimeMillis();
+    endTime = currentTimeMillis();
   }
   
   public long ellapsedTime() {

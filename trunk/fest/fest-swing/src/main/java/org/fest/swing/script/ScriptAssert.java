@@ -24,9 +24,6 @@ package org.fest.swing.script;
  */
 public final class ScriptAssert {
 
-  /** Platform-dependent line separator. */
-  public static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
   /**
    * Asserts that all the scripts in the specified directory are executed successfully. This method does not execute
    * scripts located in subfolders of the given directory. This method reports all the failing scripts as well as the 
