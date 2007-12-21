@@ -53,15 +53,15 @@ abstract class ComponentFinderTemplate<T extends Component> {
       throw new IllegalArgumentException("The type of component to find should not be null");
   }
 
+  ComponentFinderTemplate withTimeout(long timeout, TimeUnit unit) {
+    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
+    return withTimeout(unit.toMillis(timeout));
+  }
+  
   ComponentFinderTemplate withTimeout(long timeout) {
     if (timeout < 0) throw new IllegalArgumentException("Timeout cannot be a negative number");
     this.timeout = timeout;
     return this;
-  }
-
-  ComponentFinderTemplate withTimeout(long timeout, TimeUnit unit) {
-    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
-    return withTimeout(unit.toMillis(timeout));
   }
   
   /**
@@ -103,7 +103,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
   private ComponentMatcher typeMatcher() {
     return new ComponentMatcher() {
       public boolean matches(Component c) {
-        return c != null && c.isVisible() && componentType().isAssignableFrom(c.getClass());
+        return c != null && c.isShowing() && componentType().isAssignableFrom(c.getClass());
       }
     };
   }

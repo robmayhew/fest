@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+      <action dev="alruiz" issue="76" due-to="Win Deblauwe">
+      	ComponentFinders now match components if 'isShowing()' is true, instead of checking for 'isVisible()'.
+      </action>
     	<action dev="alruiz, wanghy" type="fix" issue="71" due-to="Win Deblauwe">
     		When components are not found, the message in the thrown ComponentLookupException now includes list of
     		Components in the hierarchy.
