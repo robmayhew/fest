@@ -17,7 +17,6 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import abbot.finder.matchers.ClassMatcher;
 import static java.lang.String.valueOf;
 import static org.fest.util.Strings.concat;
 
@@ -26,36 +25,38 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz 
  */
-public final class TypeMatcher extends ClassMatcher implements ComponentMatcher {
+public final class TypeMatcher implements ComponentMatcher {
 
   private final Class<?> type;
   private final boolean requireShowing;
 
   /**
-   * Creates a new <code>{@link TypeMatcher}</code>.
+   * Creates a new <code>{@link TypeMatcher}</code>. By default this constructor looks for a 
+   * <code>{@link Component}</code> having a matching type and being shown. 
    * @param type the type of the component we are looking for.
    */
   public TypeMatcher(Class<?> type) {
-    this(type, false);
+    this(type, true);
   }
 
   /**
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param type the type of the component we are looking for.
-   * @param requireShowing indicates if the component we are looking should be visible or not.
+   * @param requireShowing indicates if the component we are looking should be shown or not.
    */
   public TypeMatcher(Class<?> type, boolean requireShowing) {
-    super(type, requireShowing);
     this.type = type;
     this.requireShowing = requireShowing;
   }
 
   /**
-   * @return whether the type and visibility of the given <code>Component</code> matches the values specified in this
-   *         matcher.
+   * Indicates whether the type and visibility of the given <code>{@link java.awt.Component}</code> matches the values
+   * specified in this matcher.
+   * @return <code>true</code> if the type and visibility of the given <code>Component</code> matches the values
+   *         specified in this matcher, <code>false</code> otherwise.
    */
-  @Override public boolean matches(Component c) {
-    return super.matches(c);
+  public boolean matches(Component c) {
+    return type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
   }
 
   @Override public String toString() {

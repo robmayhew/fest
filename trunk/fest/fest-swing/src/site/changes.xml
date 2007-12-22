@@ -6,7 +6,10 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
-      <action dev="alruiz" issue="76" due-to="Win Deblauwe">
+      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe">
+      	NameMatcher and TypeMatcher now match components that are shown by default.
+      </action>
+      <action dev="alruiz" type="fix" issue="76" due-to="Win Deblauwe">
       	ComponentFinders now match components if 'isShowing()' is true, instead of checking for 'isVisible()'.
       </action>
     	<action dev="alruiz, wanghy" type="fix" issue="71" due-to="Win Deblauwe">

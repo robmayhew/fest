@@ -30,7 +30,7 @@ public class JOptionPaneTest {
 
   private DialogFixture m_window;
 
-  @Test public void testJOptionPane() throws InterruptedException {
+  @Test public void shouldFindOptionPane() throws InterruptedException {
     JOptionPaneStarter optionPaneStarter = new JOptionPaneStarter(null, "Message 1");
     m_window = new DialogFixture(optionPaneStarter);
     m_window.show();
@@ -44,7 +44,7 @@ public class JOptionPaneTest {
     fixture.button().click();
   }
 
-  @Test public void testJOptionPane2() throws InterruptedException {
+  @Test public void shouldFindOptionPaneAgain() throws InterruptedException {
     JOptionPaneStarter optionPaneStarter = new JOptionPaneStarter(null, "Message 2");
     m_window = new DialogFixture(optionPaneStarter);
     m_window.show();

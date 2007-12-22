@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import static java.lang.String.valueOf;
+import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
 
@@ -25,34 +27,45 @@ import static org.fest.util.Strings.quote;
  *
  * @author Alex Ruiz
  */
-public final class NameMatcher extends abbot.finder.matchers.NameMatcher implements ComponentMatcher {
+public final class NameMatcher implements ComponentMatcher {
 
   private final String name;
+  private final boolean requireShowing;
 
   /**
-   * Creates a new <code>{@link NameMatcher}</code>.
+   * Creates a new <code>{@link NameMatcher}</code>. By default this constructor looks for a 
+   * <code>{@link Component}</code> having a matching name and being shown. 
    * @param name the name of the component we are looking for.
    */
   public NameMatcher(String name) {
-    super(name);
-    this.name = name;
+    this(name, true);
   }
 
-  /** 
-   * Verifies that the name of the given <code>{@link Component}</code> matches the one specified in this matcher.
-   * @param c the <code>Component</code> to verify.
-   * @return <code>true</code> if the name of the given <code>Component</code> matches the one specified in this 
-   * matcher, otherwise <code>false</code>. 
+  /**
+   * Creates a new <code>{@link TypeMatcher}</code>.
+   * @param name the name of the component we are looking for.
+   * @param requireShowing indicates if the component we are looking should be shown or not.
    */
-  @Override public boolean matches(Component c) {
-    return super.matches(c);
+  public NameMatcher(String name, boolean requireShowing) {
+    this.name = name;
+    this.requireShowing = requireShowing;
   }
-
+  
+  /** 
+   * Indicates whether the name and visibility of the given <code>{@link java.awt.Component}</code> matches the values
+   * specified in this matcher.
+   * @return <code>true</code> if the name and visibility of the given <code>Component</code> matches the values
+   *         specified in this matcher, <code>false</code> otherwise.
+   */
+  public boolean matches(Component c) {
+    return areEqual(name, c.getName()) && (!requireShowing || c.isShowing());
+  }
 
   @Override public String toString() {
     return concat(
         getClass().getName(), "[",
         "name=", quote(name), 
+        "requireShowing=", valueOf(requireShowing), 
         "]"
     );
   }
