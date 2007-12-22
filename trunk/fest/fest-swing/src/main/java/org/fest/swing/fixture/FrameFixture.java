@@ -31,6 +31,7 @@ import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -46,6 +47,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param name the name of the <code>Frame</code> to find.
+   * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
    */
   public FrameFixture(String name) {
     super(name, Frame.class);
@@ -55,6 +58,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Creates a new <code>{@link FrameFixture}</code>.
    * @param robot performs user events on the given window and verifies expected output.
    * @param name the name of the <code>Frame</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
    */
   public FrameFixture(RobotFixture robot, String name) {
     super(robot, name, Frame.class);

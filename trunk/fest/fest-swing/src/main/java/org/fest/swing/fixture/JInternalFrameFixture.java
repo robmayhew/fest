@@ -41,6 +41,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param robot performs simulation of user events on a <code>JInternalFrame</code>.
    * @param internalFrameName the name of the <code>JInternalFrame</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JInternalFrame</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JInternalFrame</code> is found.
    */
   public JInternalFrameFixture(RobotFixture robot, String internalFrameName) {
     super(robot, internalFrameName, JInternalFrame.class);

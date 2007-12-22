@@ -60,6 +60,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public ComponentFixture(RobotFixture robot, Class<? extends T> type) {
     this(robot, robot.finder().findByType(type));
@@ -71,6 +72,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public ComponentFixture(RobotFixture robot, String name, Class<? extends T> type) {
     this(robot, robot.finder().findByName(name, type));

@@ -35,6 +35,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.Range;
 
@@ -52,7 +53,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on a <code>JList</code>.
    * @param listName the name of the <code>JList</code> to find using the given <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JList</code> could not be found.
+   * @throws ComponentLookupException if a matching <code>JList</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JList</code> is found.
    */
   public JListFixture(RobotFixture robot, String listName) {
     super(robot, listName, JList.class);

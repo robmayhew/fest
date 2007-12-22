@@ -36,6 +36,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param menuItemName the name of the <code>JMenuItem</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JMenuItem</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JMenuItem</code> is found.
    */
   public JMenuItemFixture(RobotFixture robot, String menuItemName) {
     super(robot, menuItemName, JMenuItem.class);

@@ -43,9 +43,9 @@ public class JTableFixture extends ComponentFixture<JTable> {
   /**
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTable</code>.
-   * @param tableName the name of the <code>JTable</code> to find using the given 
-   * <code>RobotFixture</code>.
+   * @param tableName the name of the <code>JTable</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JTable</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JTable</code> is found.
    */
   public JTableFixture(RobotFixture robot, String tableName) {
     super(robot, tableName, JTable.class);

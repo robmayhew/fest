@@ -39,6 +39,7 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends Co
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public TwoStateButtonFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, type);
@@ -50,6 +51,7 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends Co
    * @param name the name of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public TwoStateButtonFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, name, type);

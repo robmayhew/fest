@@ -39,7 +39,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new <code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link org.fest.swing.core.RobotFixture}</code>
    * containing the current AWT hierarchy.
    * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a <code>Window</code> having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>Window</code> having a matching type could not be found.
+   * @throws ComponentLookupException if more than one <code>Window</code> having a matching type is found.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(Class<? extends T> type) {
@@ -50,7 +51,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new <code>{@link WindowFixture}</code>.
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a dialog having a matching name could not be found.
+   * @throws ComponentLookupException if a <code>Window</code> having a matching type could not be found.
+   * @throws ComponentLookupException if more than one <code>Window</code> having a matching type is found.
    */
   public WindowFixture(RobotFixture robot, Class<? extends T> type) {
     super(robot, type);
@@ -62,6 +64,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @param name the name of the <code>Window</code> to find.
    * @param type the type of <code>Window</code> to find using the created <code>RobotFixture</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found. 
+   * @throws ComponentLookupException if more than one <code>Window</code> having a matching name is found. 
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(String name, Class<? extends T> type) {
@@ -73,7 +76,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param name the name of the <code>Window</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of <code>Window</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a dialog having a matching name could not be found. 
+   * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found. 
+   * @throws ComponentLookupException if more than one <code>Window</code> having a matching name is found. 
    */
   public WindowFixture(RobotFixture robot, String name, Class<? extends T> type) {
     super(robot, name, type);

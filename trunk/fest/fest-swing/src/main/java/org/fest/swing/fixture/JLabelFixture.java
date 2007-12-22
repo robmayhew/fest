@@ -37,6 +37,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @param robot performs simulation of user events on a <code>JLabel</code>.
    * @param labelName the name of the <code>JLabel</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JLabel</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JLabel</code> is found.
    */
   public JLabelFixture(RobotFixture robot, String labelName) {
     super(robot, labelName, JLabel.class);

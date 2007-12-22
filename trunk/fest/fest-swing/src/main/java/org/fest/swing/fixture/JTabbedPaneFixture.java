@@ -39,6 +39,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
    * @param tabbedPaneName the name of the <code>JTabbedPane</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JTabbedPane</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JTabbedPane</code> is found.
    */
   public JTabbedPaneFixture(RobotFixture robot, String tabbedPaneName) {
     super(robot, tabbedPaneName, JTabbedPane.class);

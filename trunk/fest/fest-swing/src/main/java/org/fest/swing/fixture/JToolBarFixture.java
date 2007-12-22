@@ -38,6 +38,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
 
   /**
    * Understands constraints used to unfloat a floating <code>{@link JToolBar}</code>.
+   * 
+   * @author Alex Ruiz
    */
   public enum UnfloatConstraint {
     NORTH(BorderLayout.NORTH), EAST(BorderLayout.EAST), SOUTH(BorderLayout.SOUTH), WEST(BorderLayout.WEST);
@@ -55,6 +57,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @param toolbarName the name of the <code>JToolBar</code> to find using the given 
    * <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JToolBar</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JToolBar</code> is found.
    */
   public JToolBarFixture(RobotFixture robot, String toolbarName) {
     super(robot, toolbarName, JToolBar.class);

@@ -36,6 +36,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @param robot performs simulation of user events on a <code>JPanel</code>.
    * @param panelName the name of the <code>JPanel</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JPanel</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JPanel</code> is found.
    */
   public JPanelFixture(RobotFixture robot, String panelName) {
     super(robot, panelName, JPanel.class);

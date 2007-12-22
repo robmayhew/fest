@@ -27,7 +27,7 @@ import static org.fest.util.Strings.concat;
  */
 public final class TypeMatcher implements ComponentMatcher {
 
-  private final Class<?> type;
+  private final Class<? extends Component> type;
   private final boolean requireShowing;
 
   /**
@@ -35,7 +35,7 @@ public final class TypeMatcher implements ComponentMatcher {
    * <code>{@link Component}</code> having a matching type and being shown. 
    * @param type the type of the component we are looking for.
    */
-  public TypeMatcher(Class<?> type) {
+  public TypeMatcher(Class<? extends Component> type) {
     this(type, true);
   }
 
@@ -44,7 +44,7 @@ public final class TypeMatcher implements ComponentMatcher {
    * @param type the type of the component we are looking for.
    * @param requireShowing indicates if the component we are looking should be shown or not.
    */
-  public TypeMatcher(Class<?> type, boolean requireShowing) {
+  public TypeMatcher(Class<? extends Component> type, boolean requireShowing) {
     this.type = type;
     this.requireShowing = requireShowing;
   }

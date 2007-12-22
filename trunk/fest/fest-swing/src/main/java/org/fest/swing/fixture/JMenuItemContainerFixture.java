@@ -37,6 +37,8 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
    * Creates a new <code>{@link JMenuItemContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>Container</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>Container</code> is found.
    * @see org.fest.swing.core.ComponentFinder#findByType(Class)
    */
   public JMenuItemContainerFixture(RobotFixture robot, Class<? extends T> type) {
@@ -48,6 +50,8 @@ public abstract class JMenuItemContainerFixture<T extends Container> extends Com
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param name the name of the <code>Container</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching <code>Container</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>Container</code> is found.
    * @see org.fest.swing.core.ComponentFinder#findByName(String, Class)
    */
   public JMenuItemContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {

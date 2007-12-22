@@ -22,6 +22,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -37,7 +38,8 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * Creates a new <code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JButton</code>.
    * @param buttonName the name of the <code>JButton</code> to find using the given <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JButton</code> could not be found.
+   * @throws ComponentLookupException if a matching <code>JButton</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JButton</code> is found.
    */
   public JButtonFixture(RobotFixture robot, String buttonName) {
     super(robot, buttonName, JButton.class);

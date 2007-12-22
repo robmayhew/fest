@@ -16,23 +16,14 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import abbot.finder.AWTHierarchy;
-import abbot.finder.BasicFinder;
-import abbot.finder.ComponentSearchException;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 
-import static org.fest.swing.util.Formatting.format;
-import static org.fest.swing.util.Swing.quoteNameOf;
-import static org.fest.swing.util.System.LINE_SEPARATOR;
-
-import static org.fest.util.Strings.concat;
+import static org.fest.swing.core.BasicComponentFinder.finder;
 
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.util.Formatting;
 
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.
@@ -41,7 +32,8 @@ import org.fest.swing.util.Formatting;
  */
 public class ComponentFinder {
 
-  private final abbot.finder.ComponentFinder finder;
+  private final Hierarchy hierarchy;
+  private final ComponentPrinter printer;
 
   /**
    * Creates a new <code>{@link ComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
@@ -67,7 +59,8 @@ public class ComponentFinder {
    * @param hierarchy provides access to the components in the AWT hierarchy.
    */
   ComponentFinder(Hierarchy hierarchy) {
-    finder = new BasicFinder(hierarchy);
+    this.hierarchy = hierarchy;
+    printer = new ComponentPrinter(hierarchy);
   }
 
   /**
@@ -130,8 +123,7 @@ public class ComponentFinder {
    * @see #findByName(String)
    */
   public final <T extends Component> T findByName(String name, Class<T> type) {
-    Component found = findByName(name);
-    checkRightTypeForNamedComponent(found, type);
+    Component found = find(new NameAndTypeMatcher(name, type));
     return type.cast(found);
   }
 
@@ -187,15 +179,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
   public final Component find(ComponentMatcher m) {
-    try {
-      return finder.find(m);
-    } catch (ComponentSearchException e) {
-      throw componentNotFound(m);
-    }
-  }
-
-  private ComponentLookupException componentNotFound(ComponentMatcher m) {
-    return componentNotFound(null, m);
+    return finder(hierarchy, printer).find(m);
   }
   
   /**
@@ -210,20 +194,8 @@ public class ComponentFinder {
    * @see #findByType(Container, Class)
    */
   public final <T extends Component> T findByName(Container root, String name, Class<T> type) {
-    Component found = findByName(root, name);
-    checkRightTypeForNamedComponent(found, type);
+    Component found = find(root, new NameAndTypeMatcher(name, type));
     return type.cast(found);
-  }
-
-  private <T> void checkRightTypeForNamedComponent(Component c, Class<T> expected) {
-    Class<? extends Component> actual = c.getClass();
-    if (expected.isAssignableFrom(actual)) return;
-    throw new ComponentLookupException(
-        concat(
-            "Found component with name ", quoteNameOf(c),
-            " of type ", actual.getName(), ". Expecting type ", expected.getName(), ".",
-            formattedHierarchy()
-        ));
   }
 
   /**
@@ -262,106 +234,6 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    */
   public final Component find(Container root, ComponentMatcher m) {
-    try {
-      return finder.find(root, m);
-    } catch (ComponentSearchException e) {
-      throw componentNotFound(root, m);
-    }
-  }
-
-  private ComponentLookupException componentNotFound(Container root, ComponentMatcher m) {
-    String message = concat("Unable to find component using matcher ", m, ".", formattedHierarchy(root));
-    throw new ComponentLookupException(message);
-  }
-
-  private String formattedHierarchy() {
-    return formattedHierarchy(null);
-  }
-
-  private String formattedHierarchy(Container root) {
-    return concat(LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, hierarchy(root));
-  }
-  
-  private String hierarchy(Container root) {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    PrintStream printStream = new PrintStream(out, true);
-    printComponents(printStream, root);
-    printStream.flush();
-    return new String(out.toByteArray());    
-  }
-  
-  /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy.
-   * @param out the output stream where to print the components to.
-   * @see Formatting#format(Component)
-   */
-  public final void printComponents(PrintStream out) {
-    printComponents(new PrintComponentMatcher(out));
-  }
-
-  /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy under the given root.
-   * @param out the output stream where to print the components to.
-   * @param root the root used as the starting point of the search.
-   * @see Formatting#format(Component)
-   */
-  public final void printComponents(PrintStream out, Container root) {
-    printComponents(root, new PrintComponentMatcher(out));
-  }
-
-  /**
-   * Prints only the components of the given type (as <code>String</code>s) in the hierarchy.
-   * @param out the output stream where to print the components to.
-   * @param type the type of components to print.
-   * @see Formatting#format(Component)
-   */
-  public final void printComponents(PrintStream out, Class<? extends Component> type) {
-    printComponents(new PrintComponentMatcher(out, type));
-  }
-  
-  /**
-   * Prints all the components of the given type (as <code>String</code>s) in the hierarchy under the given root.
-   * @param out the output stream where to print the components to.
-   * @param type the type of components to print.
-   * @param root the root used as the starting point of the search.
-   * @see Formatting#format(Component)
-   */
-  public final void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
-    printComponents(root, new PrintComponentMatcher(out, type));
-  }
-
-  private void printComponents(PrintComponentMatcher matcher) {
-    printComponents(null, matcher);
-  }
-
-  private void printComponents(Container root, PrintComponentMatcher matcher) {
-    try {
-      if (root == null) {
-        finder.find(matcher);
-        return;
-      }
-      finder.find(root, matcher);
-    } catch (ComponentSearchException ignored) {}
-  }
-
-  private static class PrintComponentMatcher implements ComponentMatcher {
-    private final PrintStream out;
-    private final Class<? extends Component> type;
-
-    PrintComponentMatcher(PrintStream out) {
-      this(out, null);
-    }
-
-    PrintComponentMatcher(PrintStream out, Class<? extends Component> type) {
-      this.out = out;
-      this.type = type;
-    }
-    
-    public boolean matches(Component c) {
-      if (c == null) return false;
-      if (type == null || type.isAssignableFrom(c.getClass())) 
-        out.println(format(c));
-      return false;
-    }
+    return finder(hierarchy, printer).find(root, m);
   }
 }

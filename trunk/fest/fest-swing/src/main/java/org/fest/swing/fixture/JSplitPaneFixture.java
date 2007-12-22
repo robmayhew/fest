@@ -38,6 +38,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @param robot performs simulation of user events on a <code>JSplitPane</code>.
    * @param spinnerName the name of the <code>JSplitPane</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JSplitPane</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JSplitPane</code> is found.
    */
   public JSplitPaneFixture(RobotFixture robot, String spinnerName) {
     super(robot, spinnerName, JSplitPane.class);

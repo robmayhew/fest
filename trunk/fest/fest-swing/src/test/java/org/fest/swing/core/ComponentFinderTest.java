@@ -16,21 +16,18 @@
 package org.fest.swing.core;
 
 import java.awt.Component;
-import java.awt.Window;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTree;
-import javax.swing.UIManager;
 
 import static java.util.logging.Level.INFO;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -50,17 +47,16 @@ public class ComponentFinderTest {
 
     final JButton button = new JButton("A Button");
 
-    MainWindow(Class testClass) {
+    static MainWindow show(Class<?> testClass) {
+      MainWindow window = new MainWindow(testClass);
+      window.display();
+      return window;
+    }
+    
+    MainWindow(Class<?> testClass) {
       super(testClass);
       add(button);
       button.setName("button");
-      lookNative();
-    }
-    
-    private void lookNative() {
-      try {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-      } catch (Exception ignored) {}
     }
   }
 
@@ -72,7 +68,12 @@ public class ComponentFinderTest {
   
   @BeforeMethod public void setUp() {
     finder = ComponentFinder.finderWithNewAwtHierarchy();
-    window = showWindow();
+    window = MainWindow.show(getClass());
+  }
+  
+  @AfterMethod public void tearDown() {
+    window.destroy();
+    if (anotherWindow != null) anotherWindow.destroy();
   }
   
   @Test public void shouldFindComponentByType() {
@@ -88,7 +89,7 @@ public class ComponentFinderTest {
   }
 
   @Test public void shouldFindComponentByTypeAndContainer() {
-    anotherWindow = showWindow();
+    anotherWindow = MainWindow.show(getClass());
     JButton button = finder.findByType(anotherWindow, JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -113,7 +114,7 @@ public class ComponentFinderTest {
   }
   
   @Test public void shouldFindComponentByNameAndContainer() {
-    anotherWindow = showWindow();
+    anotherWindow = MainWindow.show(getClass());
     anotherWindow.button.setName("anotherButton");
     Component button = finder.findByName(anotherWindow, "anotherButton");
     assertThat(button).isSameAs(anotherWindow.button);
@@ -146,7 +147,7 @@ public class ComponentFinderTest {
   }
   
   @Test public void shouldFindComponentByNameAndTypeAndContainer() {
-    anotherWindow = showWindow();
+    anotherWindow = MainWindow.show(getClass());
     JButton button = finder.findByName(anotherWindow, "button", JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -222,35 +223,5 @@ public class ComponentFinderTest {
   
   private void log(ComponentLookupException e) {
     logger.log(INFO, e.getMessage(), e);
-  }
-
-  @Test public void shouldPrintAllComponents() {
-    PrintStreamStub out = new PrintStreamStub();
-    finder.printComponents(out);
-    assertThat(out.printed()).contains("javax.swing.JButton<'button'>");
-  }
-  
-  @Test public void shouldPrintAllComponentsOfGivenType() {
-    PrintStreamStub out = new PrintStreamStub();
-    finder.printComponents(out, JButton.class);
-    assertThat(out.printed()).containsOnly("javax.swing.JButton<'button'>");
-  }
-
-  @AfterMethod public void tearDown() {
-    dispose(window);
-    dispose(anotherWindow);
-  }
-
-  private MainWindow showWindow() {
-    MainWindow w = new MainWindow(getClass());
-    w.pack();
-    w.setVisible(true);
-    return w;
-  }
-  
-  private void dispose(Window w) {
-    if (w == null) return;
-    w.setVisible(false);
-    w.dispose();
   }
 }

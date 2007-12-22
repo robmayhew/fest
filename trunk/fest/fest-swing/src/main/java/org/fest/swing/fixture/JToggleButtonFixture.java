@@ -22,6 +22,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link JToggleButton}</code> and verification of the state of such
@@ -35,7 +36,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * Creates a new <code>{@link org.fest.swing.fixture.JToggleButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param checkBoxName the name of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JToggleButton</code> could not be found.
+   * @throws ComponentLookupException if a matching <code>JToggleButton</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JToggleButton</code> is found.
    */
   public JToggleButtonFixture(RobotFixture robot, String checkBoxName) {
     super(robot, checkBoxName, JToggleButton.class);

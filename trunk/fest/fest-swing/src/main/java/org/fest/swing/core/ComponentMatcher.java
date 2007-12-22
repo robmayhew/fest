@@ -15,16 +15,14 @@
  */
 package org.fest.swing.core;
 
-import abbot.finder.Matcher;
-
-import java.awt.*;
+import java.awt.Component;
 
 /**
  * Understands whether a <code>{@link Component}</code> matches some desired criteria.
  * 
  * @author Alex Ruiz
  */
-public interface ComponentMatcher extends Matcher {
+public interface ComponentMatcher {
   
   /**
    * Verifies that the given <code>{@link Component}</code> matches some lookup criteria.

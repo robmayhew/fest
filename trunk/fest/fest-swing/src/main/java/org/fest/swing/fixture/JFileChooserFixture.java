@@ -47,6 +47,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
    * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JFileChooser</code> is found.
    */
   public JFileChooserFixture(RobotFixture robot) {
     super(robot, JFileChooser.class);
@@ -57,6 +58,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
    * @param labelName the name of the <code>JFileChooser</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JFileChooser</code> is found.
    */
   public JFileChooserFixture(RobotFixture robot, String labelName) {
     super(robot, labelName, JFileChooser.class);

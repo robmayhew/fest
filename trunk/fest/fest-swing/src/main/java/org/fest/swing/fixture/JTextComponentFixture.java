@@ -24,6 +24,7 @@ import static org.fest.util.Strings.isEmpty;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -39,7 +40,8 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @param robot performs simulation of user events on a <code>JTextComponent</code>.
    * @param textComponentName the name of the <code>JTextComponent</code> to find using the given 
    * <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JTextComponent</code> could not be found.
+   * @throws ComponentLookupException if a matching <code>JTextComponent</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JTextComponent</code> is found.
    */
   public JTextComponentFixture(RobotFixture robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);

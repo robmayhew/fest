@@ -23,6 +23,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user events on a <code>{@link JSpinner}</code> and verification of the state of such
@@ -36,7 +37,8 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Creates a new <code>{@link JSpinnerFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSpinner</code>.
    * @param spinnerName the name of the <code>JSpinner</code> to find using the given <code>RobotFixture</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching <code>JSpinner</code> could not be found.
+   * @throws ComponentLookupException if a matching <code>JSpinner</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JSpinner</code> is found.
    */
   public JSpinnerFixture(RobotFixture robot, String spinnerName) {
     super(robot, spinnerName, JSpinner.class);

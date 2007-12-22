@@ -64,7 +64,7 @@ public final class NameMatcher implements ComponentMatcher {
   @Override public String toString() {
     return concat(
         getClass().getName(), "[",
-        "name=", quote(name), 
+        "name=", quote(name), ", ",
         "requireShowing=", valueOf(requireShowing), 
         "]"
     );

@@ -57,10 +57,11 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   /**
    * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot finds a visible <code>JOptionPane</code>, which will be managed by this fixture.
-   * @throws ComponentLookupException if a visible <code>JOptionPane</code> could not be found.
+   * @throws ComponentLookupException if a showing <code>JOptionPane</code> could not be found.
+   * @throws ComponentLookupException if more than one showing <code>JOptionPane</code> is found.
    */
   public JOptionPaneFixture(RobotFixture robot) {
-    super(robot, (JOptionPane)robot.finder().find(new TypeMatcher(JOptionPane.class, true)));
+    super(robot, (JOptionPane)robot.finder().find(new TypeMatcher(JOptionPane.class)));
   }
 
   /**

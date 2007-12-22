@@ -43,6 +43,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @param robot performs simulation of user events on a <code>JTree</code>.
    * @param treeName the name of the <code>JTree</code> to find using the given <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JTree</code> could not be found.
+   * @throws ComponentLookupException if more than one matching <code>JTree</code> is found.
    */
   public JTreeFixture(RobotFixture robot, String treeName) {
     super(robot, treeName, JTree.class);
