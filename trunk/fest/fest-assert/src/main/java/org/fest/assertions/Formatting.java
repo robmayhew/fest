@@ -15,11 +15,9 @@
  */
 package org.fest.assertions;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
+import org.fest.util.Arrays;
 
-import java.util.Arrays;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to formatting.
@@ -36,107 +34,13 @@ final class Formatting {
   }
 
   static String bracketAround(Object o) {
-    if (o != null && o.getClass().isArray()) {
-      if (isArray(o, Object.class)) return bracketAround((Object[])o);
-      if (isArray(o, boolean.class)) return bracketAround((boolean[])o);
-      if (isArray(o, byte.class)) return bracketAround((byte[])o);
-      if (isArray(o, char.class)) return bracketAround((char[])o);
-      if (isArray(o, double.class)) return bracketAround((double[])o);
-      if (isArray(o, float.class)) return bracketAround((float[])o);
-      if (isArray(o, int.class)) return bracketAround((int[])o);
-      if (isArray(o, long.class)) return bracketAround((long[])o);
-      if (isArray(o, short.class)) return bracketAround((short[])o);
-    }
+    if (o != null && o.getClass().isArray() && !o.getClass().getComponentType().isArray()) 
+      return doBracketAround(Arrays.format(o));
     return doBracketAround(quote(o));
   }
   
-  private static boolean isArray(Object o, Class<?> expectedType) {
-    return expectedType.isAssignableFrom(o.getClass().getComponentType());
-  }
-  
-  static String bracketAround(Object[] array) {
-    return doBracketAround(toString(array));
-  }  
-  
-  static String bracketAround(boolean val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(boolean[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(byte val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(byte[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(char val) {
-    return doBracketAround(quote(String.valueOf(val)));
-  }
-
-  static String bracketAround(char[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(double val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(double[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(float val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(float[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(int val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(int[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(long val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(long[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String bracketAround(short val) {
-    return doBracketAround(String.valueOf(val));
-  }
-
-  static String bracketAround(short[] array) {
-    return doBracketAround(Arrays.toString(array));
-  }  
-  
-  static String doBracketAround(Object o) {
+  private static String doBracketAround(Object o) {
     return concat("<", o, ">");    
-  }
-
-  private static String toString(Object[] array) {
-    if (array == null) return null;
-    int max = array.length - 1;
-    if (max == -1) return "[]";
-    StringBuilder b = new StringBuilder();
-    b.append('[');
-    for (int i = 0;; i++) {
-      b.append(quote(array[i]));
-      if (i == max) return b.append(']').toString();
-      b.append(", ");
-    }
   }
 
   private Formatting() {}
