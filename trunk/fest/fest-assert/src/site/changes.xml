@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="add" issue="79" due-to="David DIDIER">
+        Integrated contribution from David DIDIER. Added class FileAssert.
+      </action>
       <action dev="alruiz" type="add" issue="77" due-to="David DIDIER">
 				Integrated contribution from David DIDIER. Added class ThrowableAssert.
       </action>

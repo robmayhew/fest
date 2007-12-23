@@ -1,32 +1,33 @@
 /*
  * Created on Dec 27, 2006
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2006 the original author or authors.
  */
 package org.fest.assertions;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Collection;
 
 /**
- * Understands an entry point for assertion methods for different data types. Each method in this class is a static 
- * factory for the type-specific assertion objects. The purpose of this class is to make test code more readable. 
+ * Understands an entry point for assertion methods for different data types. Each method in this class is a static
+ * factory for the type-specific assertion objects. The purpose of this class is to make test code more readable.
  * <p>
  * For example:
  * <pre>
  * int removed = employees.removeFired();
  * {@link org.fest.assertions.Assertions#assertThat(int) assertThat}(removed).{@link org.fest.assertions.IntAssert#isZero isZero}();
- * 
+ *
  * List&lt;Employee&gt; newEmployees = employees.hired(TODAY);
  * {@link org.fest.assertions.Assertions#assertThat(java.util.Collection) assertThat}(newEmployees).{@link org.fest.assertions.CollectionAssert#hasSize(int) hasSize}(6);
  * </pre>
@@ -45,7 +46,7 @@ public final class Assertions {
   public static StringAssert assertThat(String actual) {
     return new StringAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link ObjectAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -54,7 +55,7 @@ public final class Assertions {
   public static ObjectAssert assertThat(Object actual) {
     return new ObjectAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link BooleanAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -63,7 +64,7 @@ public final class Assertions {
   public static BooleanAssert assertThat(boolean actual) {
     return new BooleanAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link BooleanArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -81,7 +82,7 @@ public final class Assertions {
   public static CharAssert assertThat(char actual) {
     return new CharAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link CharArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -99,7 +100,7 @@ public final class Assertions {
   public static ByteAssert assertThat(byte actual) {
     return new ByteAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link ByteArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -117,7 +118,7 @@ public final class Assertions {
   public static ShortAssert assertThat(short actual) {
     return new ShortAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link ShortArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -153,7 +154,7 @@ public final class Assertions {
   public static LongAssert assertThat(long actual) {
     return new LongAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link LongArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -162,7 +163,7 @@ public final class Assertions {
   public static LongArrayAssert assertThat(long[] actual) {
     return new LongArrayAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link FloatAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -189,7 +190,7 @@ public final class Assertions {
   public static DoubleAssert assertThat(double actual) {
     return new DoubleAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link DoubleArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -216,7 +217,7 @@ public final class Assertions {
   public static CollectionAssert assertThat(Collection<?> actual) {
     return new CollectionAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link ImageAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -225,7 +226,7 @@ public final class Assertions {
   public static ImageAssert assertThat(BufferedImage actual) {
     return new ImageAssert(actual);
   }
-  
+
   /**
    * Creates a new instance of <code>{@link ThrowableAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
@@ -236,18 +237,27 @@ public final class Assertions {
   }
 
   /**
+   * Creates a new instance of <code>{@link FileAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static FileAssert assertThat(File actual) {
+    return new FileAssert(actual);
+  }
+
+  /**
    * Returns the given assertion. This method improves code readability by surrounding the given assertion with "<code>assertThat</code>".
    * <p>
    * For example, let's assume we have the following custom assertion class:
-   * 
+   *
    * <pre>
    * public class ServerSocketAssertion implements AssertExtension {
    *   private final ServerSocket socket;
-   *   
+   *
    *   public ServerSocketAssertion(ServerSocket socket) {
    *     this.socket = socket;
    *   }
-   *   
+   *
    *   public ServerSocketAssert isConnectedTo(int port) {
    *     assertThat(socket.isBound()).isTrue();
    *     assertThat(socket.getLocalPort()).isEqualTo(port);
@@ -264,7 +274,7 @@ public final class Assertions {
    *   assertThat(socket).isConnectedTo(2000);
    * </pre>
    * </p>
-   * 
+   *
    * @param <T> the generic type of the user-defined assertion.
    * @param assertion the assertion to return.
    * @return the given assertion.
@@ -272,6 +282,6 @@ public final class Assertions {
   public static <T extends AssertExtension> T assertThat(T assertion) {
     return assertion;
   }
-  
+
   private Assertions() {}
 }
