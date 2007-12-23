@@ -23,7 +23,7 @@ import java.util.Set;
 
 import abbot.finder.Hierarchy;
 
-import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.System.LINE_SEPARATOR;
 
 import static org.fest.util.Strings.concat;

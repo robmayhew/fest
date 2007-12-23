@@ -15,17 +15,20 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibilityMonitor;
-
 import java.applet.Applet;
-import java.awt.*;
-import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+import java.awt.AWTEvent;
+import java.awt.Component;
+import java.awt.FileDialog;
+import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
+
+import static java.awt.AWTEvent.*;
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
+
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
+import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibilityMonitor;
 
 /**
  * Understands a monitor for components and event queues.

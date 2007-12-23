@@ -16,6 +16,7 @@
 package org.fest.swing.core;
 
 import static org.fest.util.Strings.concat;
+
 import org.fest.swing.exception.ScreenLockException;
 
 /**

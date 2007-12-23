@@ -15,10 +15,8 @@
  */
 package org.fest.swing.finder;
 
-import org.fest.swing.finder.DialogFinder;
-import org.fest.swing.finder.FrameFinder;
-
-import java.awt.*;
+import java.awt.Dialog;
+import java.awt.Frame;
 
 /**
  * <p>

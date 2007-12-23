@@ -15,7 +15,7 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.*;
+import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;

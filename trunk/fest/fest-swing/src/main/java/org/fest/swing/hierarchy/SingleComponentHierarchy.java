@@ -15,13 +15,14 @@
  */
 package org.fest.swing.hierarchy;
 
-import static javax.swing.SwingUtilities.isDescendingFrom;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static javax.swing.SwingUtilities.isDescendingFrom;
 
 /**
  * Understands a component hierarchy having only one component as root.

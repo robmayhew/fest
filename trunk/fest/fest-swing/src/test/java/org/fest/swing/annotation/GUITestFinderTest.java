@@ -20,9 +20,6 @@ import java.lang.reflect.Method;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.Reflection.method;
 
-import org.fest.swing.annotation.GUITest;
-import org.fest.swing.annotation.GUITestFinder;
-
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

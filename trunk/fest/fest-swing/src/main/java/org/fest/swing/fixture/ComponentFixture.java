@@ -22,13 +22,11 @@ import java.awt.Point;
 import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.format.Formatting.format;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;

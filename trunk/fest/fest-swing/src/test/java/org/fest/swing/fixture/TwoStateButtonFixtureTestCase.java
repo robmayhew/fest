@@ -20,9 +20,7 @@ import javax.swing.AbstractButton;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 import org.testng.annotations.Test;
 

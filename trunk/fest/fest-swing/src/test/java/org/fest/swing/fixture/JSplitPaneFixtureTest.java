@@ -21,10 +21,9 @@ import javax.swing.JList;
 import javax.swing.JSplitPane;
 
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.testng.annotations.Test;
-
-import static org.fest.assertions.Assertions.*;
 
 /**
  * Tests for <code>{@link JSplitPaneFixture}</code>.

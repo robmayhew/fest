@@ -14,12 +14,12 @@
  */
 package org.fest.swing.listener;
 
-import static org.fest.util.Objects.areEqual;
-
-import java.awt.*;
-import static java.awt.Toolkit.getDefaultToolkit;
+import java.awt.AWTEvent;
 import java.awt.event.AWTEventListener;
 import java.lang.ref.WeakReference;
+
+import static java.awt.Toolkit.getDefaultToolkit;
+import static org.fest.util.Objects.areEqual;
 
 /**
  * Understands an event listener that wraps a given <code>{@link AWTEventListener}</code> and:

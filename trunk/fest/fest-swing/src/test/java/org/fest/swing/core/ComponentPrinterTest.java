@@ -20,7 +20,7 @@ import javax.swing.JComboBox;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.format.Formatting.format;
 
 import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestFrame;

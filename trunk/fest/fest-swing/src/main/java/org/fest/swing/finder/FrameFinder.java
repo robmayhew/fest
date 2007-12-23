@@ -15,13 +15,13 @@
  */
 package org.fest.swing.finder;
 
-import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.fixture.FrameFixture;
-
 import java.awt.Component;
 import java.awt.Frame;
 import java.util.concurrent.TimeUnit;
+
+import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.fixture.FrameFixture;
 
 /**
  * Understands a finder for <code>{@link Frame}</code>s. This class cannot be used directly, please see 

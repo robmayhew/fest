@@ -23,8 +23,7 @@ import java.awt.Frame;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 
-import static javax.swing.SwingUtilities.invokeAndWait;
-import static javax.swing.SwingUtilities.invokeLater;
+import static javax.swing.SwingUtilities.*;
 
 /**
  * Understands the base window for all GUI tests.

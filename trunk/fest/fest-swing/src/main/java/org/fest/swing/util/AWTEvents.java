@@ -17,9 +17,9 @@ package org.fest.swing.util;
 
 import java.awt.AWTEvent;
 import java.awt.Window;
+
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
-import static java.awt.event.WindowEvent.WINDOW_CLOSED;
-import static java.awt.event.WindowEvent.WINDOW_OPENED;
+import static java.awt.event.WindowEvent.*;
 
 /**
  * Understands utility methods related to AWT events.

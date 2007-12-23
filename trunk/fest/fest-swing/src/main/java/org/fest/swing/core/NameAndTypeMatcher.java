@@ -19,8 +19,7 @@ import java.awt.Component;
 
 import static java.lang.String.valueOf;
 import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands <code>{@link java.awt.Component}</code> matching by name and type.

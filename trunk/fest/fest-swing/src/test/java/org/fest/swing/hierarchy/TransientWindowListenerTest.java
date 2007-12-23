@@ -22,10 +22,8 @@ import java.awt.event.WindowEvent;
 import org.fest.mocks.EasyMockTemplate;
 
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
-import static java.awt.event.WindowEvent.WINDOW_CLOSED;
-import static java.awt.event.WindowEvent.WINDOW_OPENED;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
+import static java.awt.event.WindowEvent.*;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.swing.core.Pause.pause;

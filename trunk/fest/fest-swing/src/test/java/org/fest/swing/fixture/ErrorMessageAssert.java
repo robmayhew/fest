@@ -21,9 +21,7 @@ import java.util.logging.Logger;
 import org.fest.assertions.AssertExtension;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands assertion methods for error messages.

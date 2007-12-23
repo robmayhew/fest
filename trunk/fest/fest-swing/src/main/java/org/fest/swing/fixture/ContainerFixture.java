@@ -18,29 +18,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.format.Formatting.format;
 
 import static org.fest.util.Strings.join;
 

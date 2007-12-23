@@ -15,13 +15,16 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-
-import static javax.swing.SwingUtilities.getWindowAncestor;
-import java.awt.*;
-import static java.awt.AWTEvent.*;
+import java.awt.AWTEvent;
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
+
+import static java.awt.AWTEvent.*;
+import static javax.swing.SwingUtilities.getWindowAncestor;
+
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 /**
  * Understands an event listener that monitors when a window is ready to receive OS-level event input.

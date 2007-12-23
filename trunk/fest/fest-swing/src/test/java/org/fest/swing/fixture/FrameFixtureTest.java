@@ -19,9 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import static java.awt.Frame.ICONIFIED;
-import static java.awt.Frame.MAXIMIZED_BOTH;
-import static java.awt.Frame.NORMAL;
+import static java.awt.Frame.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.annotation.GUITest;

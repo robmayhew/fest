@@ -15,11 +15,17 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.swing.util.Swing.insetsFrom;
+import java.awt.AWTException;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.Window;
 
-import static javax.swing.SwingUtilities.invokeLater;
-import java.awt.*;
 import static java.lang.Math.max;
+import static javax.swing.SwingUtilities.invokeLater;
+
+import static org.fest.swing.util.Swing.insetsFrom;
 
 /**
  * Understands verification of the state of a window.

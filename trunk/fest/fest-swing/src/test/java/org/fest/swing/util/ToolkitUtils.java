@@ -15,17 +15,17 @@
  */
 package org.fest.swing.util;
 
-import org.fest.swing.listener.WeakEventListener;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Objects.castIfBelongsToType;
-
 import java.awt.Toolkit;
-import static java.awt.Toolkit.getDefaultToolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.AWTEventListenerProxy;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
+
+import static java.awt.Toolkit.getDefaultToolkit;
+import static org.fest.util.Objects.*;
+
+import org.fest.swing.listener.WeakEventListener;
 
 /**
  * Understands utility methods related to <code>{@link Toolkit}</code>.

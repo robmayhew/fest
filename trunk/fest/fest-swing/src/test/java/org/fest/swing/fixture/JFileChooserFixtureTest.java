@@ -21,13 +21,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
-import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
-import static javax.swing.JFileChooser.FILES_ONLY;
-import static javax.swing.JFileChooser.OPEN_DIALOG;
+import static javax.swing.JFileChooser.*;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Files.newTemporaryFile;
-import static org.fest.util.Files.newTemporaryFolder;
-import static org.fest.util.Files.temporaryFolder;
+import static org.fest.util.Files.*;
 import static org.fest.util.Strings.isEmpty;
 
 import org.fest.swing.testing.ClickRecorder;

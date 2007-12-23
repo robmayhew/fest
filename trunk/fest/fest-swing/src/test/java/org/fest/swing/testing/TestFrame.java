@@ -22,8 +22,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import static javax.swing.SwingUtilities.invokeAndWait;
-import static javax.swing.SwingUtilities.invokeLater;
+import static javax.swing.SwingUtilities.*;
 
 /**
  * Understands the base window for all GUI tests.

@@ -22,11 +22,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import static javax.swing.JFileChooser.DIRECTORIES_ONLY;
-import static javax.swing.JFileChooser.FILES_ONLY;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
+import static javax.swing.JFileChooser.*;
+import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;

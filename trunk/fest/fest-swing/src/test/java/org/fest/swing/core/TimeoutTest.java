@@ -17,10 +17,9 @@ package org.fest.swing.core;
 
 import java.util.concurrent.TimeUnit;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.assertions.Assertions.*;
-import org.fest.swing.core.Timeout;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Timeout}</code>.

@@ -28,8 +28,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;

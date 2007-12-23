@@ -15,14 +15,16 @@
  */
 package org.fest.swing.listener;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import java.awt.AWTEvent;
+import java.awt.event.AWTEventListener;
+
+import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 import static org.fest.assertions.Assertions.assertThat;
+
 import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
 
-import java.awt.AWTEvent;
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
-import java.awt.event.AWTEventListener;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link WeakEventListener}</code>.

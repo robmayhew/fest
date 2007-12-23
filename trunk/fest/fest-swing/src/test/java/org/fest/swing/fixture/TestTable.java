@@ -19,8 +19,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a table that:

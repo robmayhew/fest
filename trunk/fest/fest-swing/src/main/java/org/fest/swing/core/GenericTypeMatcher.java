@@ -15,7 +15,7 @@
  */
 package org.fest.swing.core;
 
-import java.awt.*;
+import java.awt.Component;
 
 /**
  * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 

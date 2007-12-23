@@ -15,19 +15,21 @@
  */
 package org.fest.swing.util;
 
+import java.awt.AWTEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JLabel;
+
+import static java.awt.event.ComponentEvent.*;
+import static java.awt.event.WindowEvent.*;
+import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.testing.TestFrame;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static org.fest.assertions.Assertions.assertThat;
-import org.fest.swing.testing.TestFrame;
-
-import javax.swing.JLabel;
-import java.awt.AWTEvent;
-import java.awt.event.ComponentEvent;
-import static java.awt.event.ComponentEvent.COMPONENT_HIDDEN;
-import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
-import java.awt.event.WindowEvent;
-import static java.awt.event.WindowEvent.*;
 
 /**
  * Tests for <code>{@link AWTEvents}</code>.

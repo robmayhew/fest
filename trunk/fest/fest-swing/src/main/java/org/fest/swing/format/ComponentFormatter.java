@@ -1,5 +1,5 @@
 /*
- * Created on Sep 16, 2007
+ * Created on Dec 22, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,33 +13,27 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.format;
 
-import static org.fest.util.Strings.*;
-
-import java.awt.*;
+import java.awt.Component;
 
 /**
- * Understands utility methods related to formatting.
+ * Understands a formatter that returns a <code>String</code> representation of a given <code>{@link Component}</code>.
  *
  * @author Alex Ruiz
- * @author Yvonne Wang
  */
-public class Formatting {
+public interface ComponentFormatter {
 
-  private static final String NULL_COMPONENT_MESSAGE = "Null Component";
-  
   /**
-   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>. 
+   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
    */
-  public static String format(Component c) {
-    if (c == null) return NULL_COMPONENT_MESSAGE;
-    String name = c.getName();
-    if (isEmpty(name)) return c.toString();
-    return concat(c.getClass().getName(), "<", quote(name), ">");
-  }
-  
-  private Formatting() {}
+  String format(Component c);
+
+  /**
+   * Returns the type of <code>{@link Component}</code> this formatter supports.
+   * @return the type of <code>Component</code> this formatter supports.
+   */
+  Class<? extends Component> targetType();
 }

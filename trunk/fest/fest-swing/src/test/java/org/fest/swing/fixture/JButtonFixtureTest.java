@@ -20,9 +20,7 @@ import javax.swing.JButton;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 import org.fest.swing.annotation.GUITest;
 

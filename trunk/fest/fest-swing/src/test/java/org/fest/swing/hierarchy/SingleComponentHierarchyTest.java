@@ -15,19 +15,23 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.easymock.EasyMock.*;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import static org.fest.assertions.Assertions.assertThat;
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestFrame;
-
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+
+import org.fest.mocks.EasyMockTemplate;
+
+import static org.easymock.EasyMock.*;
+import static org.fest.assertions.Assertions.assertThat;
+
+import org.fest.swing.testing.TestFrame;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link SingleComponentHierarchy}</code>.

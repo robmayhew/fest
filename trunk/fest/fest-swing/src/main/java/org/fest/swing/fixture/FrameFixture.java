@@ -21,9 +21,7 @@ import java.awt.Point;
 
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
-import static java.awt.Frame.ICONIFIED;
-import static java.awt.Frame.MAXIMIZED_BOTH;
-import static java.awt.Frame.NORMAL;
+import static java.awt.Frame.*;
 
 import static org.fest.swing.core.Pause.pause;
 

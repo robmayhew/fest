@@ -15,7 +15,8 @@
  */
 package org.fest.swing.hierarchy;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
 import java.util.Collection;
 
 /**

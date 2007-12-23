@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.MouseButton.*;
 
 import org.testng.annotations.Test;
 

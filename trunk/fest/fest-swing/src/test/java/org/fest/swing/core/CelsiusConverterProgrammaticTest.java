@@ -23,7 +23,6 @@ import abbot.tester.ComponentTester;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import org.fest.swing.core.RobotFixture;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

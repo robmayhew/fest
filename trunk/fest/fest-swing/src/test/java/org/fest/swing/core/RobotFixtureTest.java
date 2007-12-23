@@ -19,14 +19,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import static java.awt.event.KeyEvent.VK_A;
-import static java.awt.event.KeyEvent.VK_B;
-import static java.awt.event.KeyEvent.VK_Z;
+import static java.awt.event.KeyEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 
 import org.fest.swing.exception.ComponentLookupException;

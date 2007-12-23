@@ -15,9 +15,11 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.swing.util.Swing.insetsFrom;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Window;
 
-import java.awt.*;
+import static org.fest.swing.util.Swing.insetsFrom;
 
 /**
  * Understands some window metrics.

@@ -20,8 +20,7 @@ import java.util.EventListener;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Collections.filter;
-import static org.fest.util.Collections.list;
+import static org.fest.util.Collections.*;
 import static org.fest.util.TypeFilter.byType;
 
 /**

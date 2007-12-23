@@ -15,10 +15,11 @@
  */
 package org.fest.swing.fixture;
 
-import org.testng.annotations.Test;
+import javax.swing.JToggleButton;
+
 import static org.fest.assertions.Assertions.assertThat;
 
-import javax.swing.JToggleButton;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link org.fest.swing.fixture.JToggleButtonFixture}</code>.

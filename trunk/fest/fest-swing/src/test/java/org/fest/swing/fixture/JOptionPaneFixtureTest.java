@@ -25,28 +25,13 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import abbot.tester.ComponentTester;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.PLAIN_MESSAGE;
-import static javax.swing.JOptionPane.QUESTION_MESSAGE;
-import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.showInputDialog;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.JOptionPane.showOptionDialog;
+import static javax.swing.JOptionPane.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
-import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.ERROR;
-import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.INFORMATION;
-import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.PLAIN;
-import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.QUESTION;
-import static org.fest.swing.fixture.JOptionPaneFixtureTest.ErrorTypes.WARNING;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 import static org.fest.util.Arrays.array;
 
@@ -308,7 +293,7 @@ public class JOptionPaneFixtureTest {
       fail();
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
-      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ERROR), actual(INFORMATION));
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ErrorTypes.ERROR), actual(ErrorTypes.INFORMATION));
     }
   }
 
@@ -327,7 +312,7 @@ public class JOptionPaneFixtureTest {
       fail();
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
-      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(INFORMATION), actual(ERROR));
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ErrorTypes.INFORMATION), actual(ErrorTypes.ERROR));
     }
   }
 
@@ -346,7 +331,7 @@ public class JOptionPaneFixtureTest {
       fail();
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
-      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(WARNING), actual(ERROR));
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ErrorTypes.WARNING), actual(ErrorTypes.ERROR));
     }
   }
 
@@ -365,7 +350,7 @@ public class JOptionPaneFixtureTest {
       fail();
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
-      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(QUESTION), actual(ERROR));
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ErrorTypes.QUESTION), actual(ErrorTypes.ERROR));
     }
   }
 
@@ -384,7 +369,7 @@ public class JOptionPaneFixtureTest {
       fail();
     } catch (AssertionError e) {
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
-      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(PLAIN), actual(ERROR));
+      assertThat(errorMessage).contains(property(MESSAGE_TYPE), expected(ErrorTypes.PLAIN), actual(ErrorTypes.ERROR));
     }
   }
   

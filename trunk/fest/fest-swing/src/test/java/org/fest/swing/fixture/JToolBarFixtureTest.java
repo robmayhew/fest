@@ -30,10 +30,7 @@ import javax.swing.JToolBar;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 
-import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.EAST;
-import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.NORTH;
-import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.SOUTH;
-import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.WEST;
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
 
 import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
 import org.fest.swing.testing.ClickRecorder;

@@ -18,8 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.JTable;
 
 import static java.lang.String.valueOf;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 import org.fest.swing.exception.ActionFailedException;
 

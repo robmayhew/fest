@@ -19,11 +19,9 @@ import java.io.File;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
+import static org.fest.swing.script.Scripts.*;
 import static org.fest.swing.testing.Assert.assertScriptFailed;
 import static org.fest.swing.testing.Files.absolutePath;
-import static org.fest.swing.script.Scripts.MUST_BE_SUCCESSFUL;
-import static org.fest.swing.script.Scripts.MUST_FAIL;
-import static org.fest.swing.script.Scripts.ROOT_FOLDER;
 
 import org.testng.annotations.Test;
 

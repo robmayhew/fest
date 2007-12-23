@@ -14,8 +14,7 @@
  */
 package org.fest.swing.script;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a wrapper for <code>{@link Throwable}</code>s thrown while running an

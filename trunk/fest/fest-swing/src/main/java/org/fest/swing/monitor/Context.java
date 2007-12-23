@@ -15,11 +15,19 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.util.Collections.list;
-
-import java.awt.*;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+import static org.fest.util.Collections.list;
 
 /**
  * Understands a monitor that maps event queues to GUI components and vice versa.

@@ -21,8 +21,7 @@ import javax.swing.JTable;
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.MouseButton.*;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;

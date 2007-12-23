@@ -20,8 +20,7 @@ import java.awt.Container;
 import java.awt.Window;
 import java.util.Collection;
 
-import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+import static java.awt.AWTEvent.*;
 import static java.util.Collections.emptyList;
 
 import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;

@@ -21,10 +21,7 @@ import javax.swing.JTextField;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.message;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 import static org.fest.util.Arrays.array;
 

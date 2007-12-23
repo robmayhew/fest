@@ -23,9 +23,7 @@ import java.awt.Window;
 import javax.swing.JButton;
 
 import abbot.tester.ComponentTester;
-import static java.awt.event.KeyEvent.VK_A;
-import static java.awt.event.KeyEvent.VK_B;
-import static java.awt.event.KeyEvent.VK_Z;
+import static java.awt.event.KeyEvent.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
@@ -35,12 +33,8 @@ import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.MouseClickInfo.middleButton;
-import static org.fest.swing.fixture.MouseClickInfo.rightButton;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.swing.fixture.MouseClickInfo.*;
 
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.RobotFixture;

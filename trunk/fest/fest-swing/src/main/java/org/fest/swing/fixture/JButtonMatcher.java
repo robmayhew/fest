@@ -17,8 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JButton;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.GenericTypeMatcher;
 

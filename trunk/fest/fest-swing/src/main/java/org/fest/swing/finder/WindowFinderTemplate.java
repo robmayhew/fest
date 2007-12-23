@@ -15,12 +15,11 @@
  */
 package org.fest.swing.finder;
 
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.fixture.WindowFixture;
-import org.fest.swing.finder.ComponentFinderTemplate;
-
 import java.awt.Window;
 import java.util.concurrent.TimeUnit;
+
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.fixture.WindowFixture;
 
 /**
  * Understands a template for <code>{@link Window}</code> finders.

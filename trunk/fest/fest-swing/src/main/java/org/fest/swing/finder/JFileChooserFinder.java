@@ -15,13 +15,14 @@
  */
 package org.fest.swing.finder;
 
+import java.awt.Component;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFileChooser;
+
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
-
-import javax.swing.JFileChooser;
-import java.awt.Component;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a finder for <code>{@link JFileChooser}</code>s. Lookups are performed till a file chooser is found,

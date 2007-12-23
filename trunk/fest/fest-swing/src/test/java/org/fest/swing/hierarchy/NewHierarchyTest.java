@@ -20,8 +20,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import static java.awt.AWTEvent.COMPONENT_EVENT_MASK;
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+import static java.awt.AWTEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 import static org.fest.swing.util.ToolkitUtils.eventListenersInToolkit;

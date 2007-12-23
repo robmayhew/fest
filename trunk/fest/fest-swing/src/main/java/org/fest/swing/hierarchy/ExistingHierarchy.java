@@ -21,13 +21,10 @@ import java.awt.Window;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
+import static java.util.logging.Level.*;
 
-import static org.fest.swing.util.Formatting.format;
-import static org.fest.swing.util.Swing.isAppletViewer;
-import static org.fest.swing.util.Swing.isSharedInvisibleFrame;
-import static org.fest.swing.util.Swing.runInEventThreadAndWait;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Swing.*;
 
 import static org.fest.util.Strings.concat;
 

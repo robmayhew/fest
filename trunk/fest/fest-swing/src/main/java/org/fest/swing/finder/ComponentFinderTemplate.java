@@ -20,9 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.fest.swing.core.Pause.pause;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
+import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;

@@ -15,22 +15,27 @@
  */
 package org.fest.swing.monitor;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import static org.fest.assertions.Assertions.assertThat;
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JTextField;
+
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.listener.WeakEventListener;
+
+import static java.awt.AWTEvent.*;
+import static org.fest.assertions.Assertions.assertThat;
+
 import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
 import static org.fest.swing.monitor.MockWindows.mock;
 import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
 
-import javax.swing.JTextField;
-import static java.awt.AWTEvent.*;
-import java.awt.Component;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import org.fest.swing.listener.WeakEventListener;
+import org.fest.swing.testing.TestFrame;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link WindowAvailabilityMonitor}</code>.

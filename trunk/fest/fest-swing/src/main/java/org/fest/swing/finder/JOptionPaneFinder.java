@@ -15,12 +15,13 @@
  */
 package org.fest.swing.finder;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JOptionPane;
+
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.fixture.JOptionPaneFixture;
-
-import javax.swing.JOptionPane;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Understands a finder for <code>{@link JOptionPane}</code>s. Lookups are performed till a file chooser is found,

@@ -14,9 +14,8 @@
  */
 package org.fest.swing.script;
 
+import static org.fest.swing.script.Scripts.*;
 import static org.fest.swing.testing.Assert.assertScriptFailed;
-import static org.fest.swing.script.Scripts.MUST_FAIL;
-import static org.fest.swing.script.Scripts.ROOT_FOLDER;
 
 import org.testng.annotations.Test;
 

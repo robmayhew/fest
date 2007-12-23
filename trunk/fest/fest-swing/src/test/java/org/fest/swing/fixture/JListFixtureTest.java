@@ -22,12 +22,8 @@ import javax.swing.JList;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
-import static org.fest.swing.fixture.ErrorMessageAssert.actual;
-import static org.fest.swing.fixture.ErrorMessageAssert.expected;
-import static org.fest.swing.fixture.ErrorMessageAssert.message;
-import static org.fest.swing.fixture.ErrorMessageAssert.property;
-import static org.fest.swing.util.Range.from;
-import static org.fest.swing.util.Range.to;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.swing.util.Range.*;
 
 import static org.fest.util.Collections.list;
 

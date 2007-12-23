@@ -14,18 +14,17 @@
  */
 package org.fest.swing.util;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import static javax.swing.SwingUtilities.invokeAndWait;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import static javax.swing.SwingUtilities.*;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands AWT-related utility methods.

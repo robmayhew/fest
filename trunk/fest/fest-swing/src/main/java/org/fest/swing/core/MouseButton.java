@@ -15,10 +15,10 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.util.Strings.concat;
-
 import java.awt.event.InputEvent;
+
 import static java.awt.event.InputEvent.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands mouse buttons.

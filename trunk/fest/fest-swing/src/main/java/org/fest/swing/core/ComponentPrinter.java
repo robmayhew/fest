@@ -22,9 +22,9 @@ import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 
-import static org.fest.swing.util.Formatting.format;
+import static org.fest.swing.format.Formatting.format;
 
-import org.fest.swing.util.Formatting;
+import org.fest.swing.format.Formatting;
 
 /**
  * Understands printing the <code>String</code> representation of <code>{@link java.awt.Component}</code>s to
@@ -108,11 +108,16 @@ public final class ComponentPrinter {
   }
   
   private static void print(Hierarchy hierarchy, Class<? extends Component> type, PrintStream out) {
-    for (Object o : hierarchy.getRoots()) print((Component)o, hierarchy, type, out);
+    for (Object o : hierarchy.getRoots()) print((Component)o, hierarchy, type, 0, out);
   }
   
-  private static void print(Component root, Hierarchy hierarchy, Class<? extends Component> type, PrintStream out) {
-    if (type == null || type.isAssignableFrom(root.getClass())) out.println(format(root));
-    for (Object o : hierarchy.getComponents(root)) print((Component)o, hierarchy, type, out);
+  private static void print(Component c, Hierarchy h, Class<? extends Component> type, int level, PrintStream out) {
+    if (type == null || type.isAssignableFrom(c.getClass())) print(c, level, out);
+    for (Object o : h.getComponents(c)) print((Component)o, h, type, level + 1, out);
+  }
+
+  private static void print(Component c, int level, PrintStream out) {
+    for (int i = 0; i < level; i++) out.print("  ");
+    out.println(format(c));
   }
 }
