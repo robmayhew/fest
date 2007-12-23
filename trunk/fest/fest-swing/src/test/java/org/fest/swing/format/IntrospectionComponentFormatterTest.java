@@ -18,6 +18,7 @@ package org.fest.swing.format;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.concat;
@@ -26,28 +27,38 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link IntrospectorComponentFormatter}</code>.
+ * Tests for <code>{@link IntrospectionComponentFormatter}</code>.
  *
  * @author Alex Ruiz
  */
-public class IntrospectorComponentFormatterTest {
+public class IntrospectionComponentFormatterTest {
 
   private static Logger logger = Logger.getAnonymousLogger();
   
   private JButton button;
-  private IntrospectorComponentFormatter formatter;
+  private IntrospectionComponentFormatter formatter;
   
   @BeforeMethod public void setUp() {
     button = new JButton("Click Me");
     button.setName("button");
-    formatter = new IntrospectorComponentFormatter(JButton.class, "name", "text");
-    logger.info(formatter.toString());
+    formatter = new IntrospectionComponentFormatter(JButton.class, "name", "text");
   }
   
   @Test public void shouldFormatComponent() {
+    logger.info(formatter.toString());
     String formatted = formatter.format(button);
     String expected = 
       concat(button.getClass().getName(), "[name='button', text='Click Me']");
     assertThat(formatted).isEqualTo(expected);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfComponentHasUnsupportedType() {
+    formatter.format(new JComboBox());
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfComponentIsNull() {
+    formatter.format(null);
   }
 }

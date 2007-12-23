@@ -30,11 +30,13 @@ import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands a formatter that uses introspection to display property values of a <code>{@link Component}</code>.
+ * Understands a formatter that uses 
+ * <a href="http://java.sun.com/docs/books/tutorial/javabeans/introspection/" target="_blank">introspection</a>
+ * to display property values of a <code>{@link Component}</code>. This formatter does not support nested properties.
  *
  * @author Alex Ruiz
  */
-public final class IntrospectorComponentFormatter implements ComponentFormatter {
+public final class IntrospectionComponentFormatter implements ComponentFormatter {
 
   private final Class<? extends Component> targetType;
   private final List<String> propertyNames;
@@ -42,12 +44,12 @@ public final class IntrospectorComponentFormatter implements ComponentFormatter 
   private final Map<String, PropertyDescriptor> descriptors = new HashMap<String, PropertyDescriptor>();
 
   /**
-   * Creates a new </code>{@link IntrospectorComponentFormatter}</code>.
+   * Creates a new </code>{@link IntrospectionComponentFormatter}</code>.
    * @param targetType the type of <code>Component</code> that this formatter supports.
    * @param propertyNames the property names to show as the <code>String</code> representation of a given 
    * <code>Component</code>.
    */
-  public IntrospectorComponentFormatter(Class<? extends Component> targetType, String...propertyNames) {
+  public IntrospectionComponentFormatter(Class<? extends Component> targetType, String...propertyNames) {
     this.targetType = targetType;
     this.propertyNames = list(propertyNames);
     populate(); 
@@ -69,11 +71,16 @@ public final class IntrospectorComponentFormatter implements ComponentFormatter 
   
   /**
    * Returns a <code>String</code> representation of the given <code>{@link Component}</code>, showing only the 
-   * properties specified in this formatters <code>{@link #IntrospectorComponentFormatter(Class, String...) constructor}</code>.
+   * properties specified in this formatter's 
+   * <code>{@link #IntrospectionComponentFormatter(Class, String...) constructor}</code>.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> is <code>null</code> or its type is not
+   * supported by this formatter.
+   * @see #targetType()
    */
   public String format(Component c) {
+    validateTypeOf(c);
     StringBuilder b = new StringBuilder();
     b.append(c.getClass().getName()).append("[");
     int max = propertyNames.size() - 1;
@@ -83,6 +90,11 @@ public final class IntrospectorComponentFormatter implements ComponentFormatter 
     }
     b.append("]");
     return b.toString();
+  }
+
+  private void validateTypeOf(Component c) {
+    if (c == null || !targetType.isAssignableFrom(c.getClass()))
+      throw new IllegalArgumentException(concat("This formatter only supports components of type ", targetType.getName()));
   }
 
   private void appendProperty(StringBuilder b, String name, Component c) {

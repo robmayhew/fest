@@ -18,14 +18,10 @@ package org.fest.swing.format;
 import java.awt.Component;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
+import javax.swing.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.testing.TestFrame;
@@ -59,6 +55,17 @@ public class FormattingTest {
     frame.destroy();
   }
   
+  @SuppressWarnings("unchecked") 
+  @Test public void shouldFormatJComboBox() {
+    JComboBox comboBox = new JComboBox(array("One", 2, "Three", 4));
+    comboBox.setName("comboBox");
+    comboBox.setSelectedIndex(1);
+    comboBox.setEditable(true);
+    String formatted = formatted(comboBox);
+    assertThat(formatted).isEqualTo(
+        expected(comboBox, "[name='comboBox', selectedItem=2, contents=['One', 2, 'Three', 4], enabled=true, editable=true]"));    
+  }
+  
   @Test public void shouldFormatJButton() {
     JButton button = new JButton("A button");
     button.setName("button");
@@ -67,6 +74,18 @@ public class FormattingTest {
     assertThat(formatted).isEqualTo(expected(button, "[name='button', text='A button', enabled=false]"));
   }
 
+  @Test public void shouldFormatJFileChooser() {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("A file chooser");
+    fileChooser.setName("fileChooser");
+    fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+    String formatted = formatted(fileChooser);
+    assertThat(formatted).isEqualTo(
+        expected(fileChooser, 
+            concat("[name='fileChooser', dialogTitle='A file chooser', dialogType=OPEN_DIALOG, currentDirectory=", 
+                fileChooser.getCurrentDirectory(), ", enabled=true]")));    
+  }
+  
   @Test public void shouldFormatJLabel() {
     JLabel label = new JLabel("A label");
     label.setName("label");
@@ -93,6 +112,22 @@ public class FormattingTest {
     assertThat(formatted).isEqualTo(expected(pane, "[]"));
   }
 
+  @Test public void shouldFormatJTextComponent() {
+    JTextField textField = new JTextField("Hello");
+    textField.setName("textField");
+    String formatted = formatted(textField);
+    assertThat(formatted).isEqualTo(expected(textField, "[name='textField', text='Hello', enabled=true]"));    
+  }
+
+  @Test public void shouldFormatJToggleButton() {
+    JRadioButton radio = new JRadioButton();
+    radio.setText("a Radio");
+    radio.setName("radio");
+    radio.setSelected(true);
+    String formatted = formatted(radio);
+    assertThat(formatted).isEqualTo(expected(radio, "[name='radio', text='a Radio', selected=true, enabled=true]"));    
+  }
+  
   private String formatted(Component c) {
     String formatted = Formatting.format(c);
     logger.info(concat("formatted: ", formatted));

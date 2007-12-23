@@ -54,15 +54,17 @@ public class Formatting {
   private static Logger logger = Logger.getLogger(Formatting.class.getName());
 
   static {
-    register(new IntrospectorComponentFormatter(Dialog.class, NAME, TITLE, ENABLED, SHOWING));
-    register(new IntrospectorComponentFormatter(Frame.class, NAME, TITLE, ENABLED, SHOWING));
-    register(new IntrospectorComponentFormatter(JButton.class, NAME, TEXT, ENABLED));
-    register(new IntrospectorComponentFormatter(JLabel.class, NAME, TEXT, ENABLED));
-    register(new IntrospectorComponentFormatter(JLayeredPane.class));
-    register(new IntrospectorComponentFormatter(JPanel.class, NAME));
-    register(new IntrospectorComponentFormatter(JRootPane.class));
-    register(new IntrospectorComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
-    register(new IntrospectorComponentFormatter(JToggleButton.class, NAME, TEXT, "selected", ENABLED));
+    register(new IntrospectionComponentFormatter(Dialog.class, NAME, TITLE, ENABLED, SHOWING));
+    register(new IntrospectionComponentFormatter(Frame.class, NAME, TITLE, ENABLED, SHOWING));
+    register(new JComboBoxFormatter());
+    register(new IntrospectionComponentFormatter(JButton.class, NAME, TEXT, ENABLED));
+    register(new JFileChooserFormatter());
+    register(new IntrospectionComponentFormatter(JLabel.class, NAME, TEXT, ENABLED));
+    register(new IntrospectionComponentFormatter(JLayeredPane.class));
+    register(new IntrospectionComponentFormatter(JPanel.class, NAME));
+    register(new IntrospectionComponentFormatter(JRootPane.class));
+    register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
+    register(new IntrospectionComponentFormatter(JToggleButton.class, NAME, TEXT, "selected", ENABLED));
   }
   
   public static void register(ComponentFormatter formatter) {
