@@ -17,7 +17,6 @@ package org.fest.util;
 
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.*;
 
 /**
@@ -42,5 +41,50 @@ public class ArraysTest {
   @Test public void shouldReturnObjectArrayArgument() {
     Object[] array = { "one", "two" };
     assertSame(Arrays.array(array), array);
+  }
+
+  @Test public void shouldFormatObjectArray() {
+    Object o = new Object[] { "First", 3 };
+    assertEquals(Arrays.format(o), "['First', 3]");
+  }
+  
+  @Test public void shouldFormatBooleanArray() {
+    Object o = new boolean[] { true, false };
+    assertEquals(Arrays.format(o), "[true, false]");
+  }
+  
+  @Test public void shouldFormatByteArray() {
+    Object o = new byte[] { (byte)3, (byte)8 };
+    assertEquals(Arrays.format(o), "[3, 8]");
+  }
+  
+  @Test public void shouldFormatCharArray() {
+    Object o = new char[] { 'a', 'b' };
+    assertEquals(Arrays.format(o), "[a, b]");
+  }
+
+  @Test public void shouldFormatDoubleArray() {
+    Object o = new double[] { 6.8, 8.3 };
+    assertEquals(Arrays.format(o), "[6.8, 8.3]");
+  }
+
+  @Test public void shouldFormatFloatArray() {
+    Object o = new float[] { 6.1f, 8.6f };
+    assertEquals(Arrays.format(o), "[6.1, 8.6]");
+  }
+
+  @Test public void shouldFormatIntArray() {
+    Object o = new int[] { 78, 66 };
+    assertEquals(Arrays.format(o), "[78, 66]");
+  }
+
+  @Test public void shouldFormatLongArray() {
+    Object o = new long[] { 160l, 98l };
+    assertEquals(Arrays.format(o), "[160, 98]");
+  }
+
+  @Test public void shouldFormatShortArray() {
+    Object o = new short[] { (short)5, (short)8 };
+    assertEquals(Arrays.format(o), "[5, 8]");
   }
 }

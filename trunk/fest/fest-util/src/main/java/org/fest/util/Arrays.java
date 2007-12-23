@@ -15,6 +15,11 @@
  */
 package org.fest.util;
 
+import java.lang.reflect.Array;
+
+import static org.fest.util.Strings.quote;
+
+
 /**
  * Understands utility methods related to arrays.
  *
@@ -40,5 +45,26 @@ public class Arrays {
    */
   public static <T> T[] array(T... values) { return values; }
 
+  /**
+   * Returns the <code>String</code> representation of the given one-dimensional array, or <code>null</code> if the
+   * given object is either <code>null</code> or not a one-dimensional array.
+   * @param array the object that is expected to be a one-dimensional array.
+   * @return the <code>String</code> representation of the given one-dimensional array.
+   */
+  public static String format(Object array) {
+    if (array == null) return null;
+    Class<?> type = array.getClass();
+    if (!type.isArray() || type.getComponentType().isArray()) return null;
+    int length = Array.getLength(array) - 1;
+    if (length == -1) return "[]";
+    StringBuilder b = new StringBuilder();
+    b.append('[');
+    for (int i = 0;; i++) {
+      b.append(quote(Array.get(array, i)));
+      if (i == length) return b.append(']').toString();
+      b.append(", ");
+    }
+  }
+  
   private Arrays() {}
 }
