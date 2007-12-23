@@ -227,6 +227,15 @@ public final class Assertions {
   }
   
   /**
+   * Creates a new instance of <code>{@link ThrowableAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static ThrowableAssert assertThat(Throwable actual) {
+    return new ThrowableAssert(actual);
+  }
+
+  /**
    * Returns the given assertion. This method improves code readability by surrounding the given assertion with "<code>assertThat</code>".
    * <p>
    * For example, let's assume we have the following custom assertion class:

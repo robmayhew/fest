@@ -19,8 +19,7 @@ import java.util.ArrayList;
 
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertSame;
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link Assertions}</code>.
@@ -49,6 +48,10 @@ public class AssertionsTest {
     assertIsInstanceOf(Assertions.assertThat(8), IntAssert.class);
   }
   
+  @Test public void shouldReturnThrowableAssertIfArgumentIsThrowable() {
+    assertIsInstanceOf(Assertions.assertThat(new Exception()), ThrowableAssert.class);
+  }
+
   private void assertIsInstanceOf(Object target, Class<?> expectedType) {
     assertEquals(target.getClass(), expectedType);
   }

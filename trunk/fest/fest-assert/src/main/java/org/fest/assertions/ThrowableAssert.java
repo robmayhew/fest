@@ -15,8 +15,7 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.bracketAround;
-import static org.fest.assertions.Formatting.format;
+import static org.fest.assertions.Formatting.*;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -36,13 +35,13 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   }
 
   /**
-   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>.
    * thrown when an assertion fails.
    * @param description the description of the actual value.
    * @return this assertion object.
    */
   public ThrowableAssert as(String description) {
-    return (ThrowableAssert) description(description);
+    return (ThrowableAssert)description(description);
   }
 
   /**
@@ -56,7 +55,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   }
 
   /**
-   * Verifies that the actual <code>Throwable</code> has the given class for cause.
+   * Verifies that the actual <code>Throwable</code> has the given class for cause. The test is <code>true</code> if
+   * <code>causeClass</code> is a subclass of the cause of the actual exception.
    * @param causeClass the cause to check the actual <code>Throwable</code> against.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> has not the given class for cause.
@@ -64,90 +64,114 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    */
   public ThrowableAssert hasCause(Class<? extends Throwable> causeClass) {
     isNotNull();
-    if (causeClass == null) { throw new IllegalArgumentException("'causeClass' cannot be null"); }
+    validate(causeClass);
     Throwable actualCause = actual.getCause();
-    if (actualCause == null || !actualCause.getClass().equals(causeClass)) 
-      notMatchingCauseFailure(causeClass, actualCause);
+    if (actualCause == null || !causeClass.isAssignableFrom(actualCause.getClass())) 
+      notMatchingCauseTypeFailure(causeClass, actualCause);
     return this;
   }
 
-  private void notMatchingCauseFailure(Class<? extends Throwable> causeClass, Throwable actualCause) {
-    fail(concat(
-        format(description()), "expected cause:", bracketAround(causeClass.getName()), " but was:", bracketAround(actual)));
-  }
-
   /**
-   * Verifies that the actual <code>Throwable</code> has the given class in its ancestor tree of causes.
-   * 
+   * Verifies that the actual <code>Throwable</code> has the given class in its ancestor tree of causes. The test is
+   * <code>true</code> if <code>causeClass</code> is a subclass of one of the causes of the actual exception.
    * @param causeClass the cause to check the actual <code>Throwable</code> against.
-   * 
    * @return this assertion object.
-   * 
-   * @throws AssertionError if the actual <code>Throwable</code> has not the given class in its ancestor tree of
-   *           causes.
+   * @throws AssertionError if the actual <code>Throwable</code> has not the given class in its ancestor tree of causes.
    * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
    */
   public ThrowableAssert hasCauseAsAncestor(Class<? extends Throwable> causeClass) {
     isNotNull();
-
-    if (causeClass == null) { throw new IllegalArgumentException("'causeClass' cannot be null!"); }
-
+    validate(causeClass);
     Throwable actualCause = actual.getCause();
-
     while (actualCause != null) {
-      if (actualCause.getClass().equals(causeClass)) { return this; }
-
+      if (causeClass.isAssignableFrom(actualCause.getClass())) return this; 
       actualCause = actualCause.getCause();
     }
-
     fail(concat(format(description()), "expected cause as ancestor:", bracketAround(causeClass.getName())));
-
     return this;
   }
 
   /**
-   * Verifies that the actual <code>Throwable</code> has no cause.
-   * 
+   * Verifies that the actual <code>Throwable</code> has exactly the given class for cause. The test is <code>
+   * true</code> if <code>causeClass</code> is strictly equal to the cause of the actual exception.
+   * @param causeClass the cause to check the actual <code>Throwable</code> against.
    * @return this assertion object.
-   * 
+   * @throws AssertionError if the actual <code>Throwable</code> has not the given class for cause.
+   * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
+   */
+  public ThrowableAssert hasExactCause(Class<? extends Throwable> causeClass) {
+    isNotNull();
+    validate(causeClass);
+    Throwable actualCause = actual.getCause();
+    if (actualCause == null || !actualCause.getClass().equals(causeClass)) 
+      notMatchingCauseTypeFailure(causeClass, actualCause);
+    return this;
+  }
+
+  private void notMatchingCauseTypeFailure(Class<? extends Throwable> causeClass, Throwable actualCause) {
+    String typeName = actualCause != null ? actualCause.getClass().getName() : null;
+    fail(concat(
+        format(description()), 
+        "expected cause:", bracketAround(causeClass.getName()), " but was:", bracketAround(typeName)
+    ));
+  }
+  
+  /**
+   * Verifies that the actual <code>Throwable</code> has exactly the given class in its ancestor tree of causes. The
+   * test is <code>true</code> if <code>causeClass</code> is strictly equal to one of the causes of the actual
+   * exception.
+   * @param causeClass the cause to check the actual <code>Throwable</code> against.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Throwable</code> has not the given class in its ancestor tree of causes.
+   * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
+   */
+  public ThrowableAssert hasExactCauseAsAncestor(Class<? extends Throwable> causeClass) {
+    isNotNull();
+    validate(causeClass);
+    Throwable actualCause = actual.getCause();
+    while (actualCause != null) {
+      if (actualCause.getClass().equals(causeClass)) { return this; }
+      actualCause = actualCause.getCause();
+    }
+    fail(concat(format(description()), "expected exact cause as ancestor:", bracketAround(causeClass.getName())));
+    return this;
+  }
+
+  private void validate(Class<? extends Throwable> causeClass) {
+    if (causeClass == null) throw new IllegalArgumentException("'causeClass' cannot be null");
+  }
+
+  /**
+   * Verifies that the actual <code>Throwable</code> has no cause.
+   * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> has a cause.
    */
   public ThrowableAssert hasNoCause() {
     isNotNull();
-
     Throwable actualCause = actual.getCause();
-
-    if (actualCause != null) {
+    if (actualCause != null) 
       fail(concat(format(description()), "expected no cause but was:", bracketAround(actualCause.getClass().getName())));
-    }
-
     return this;
   }
 
   /**
    * Verifies that the actual <code>Throwable</code> is equal to the given one.
-   * 
    * @param expected the given <code>Throwable</code> to compare the actual <code>Throwable</code> to.
-   * 
    * @return this assertion object.
-   * 
    * @throws AssertionError if the actual <code>Throwable</code> is not equal to the given one.
    */
   public ThrowableAssert isEqualTo(Throwable expected) {
-    return (ThrowableAssert) assertEqualTo(expected);
+    return (ThrowableAssert)assertEqualTo(expected);
   }
 
   /**
    * Verifies that the actual <code>Throwable</code> is not equal to the given one.
-   * 
    * @param other the given <code>Throwable</code> to compare the actual <code>Throwable</code> to.
-   * 
    * @return this assertion object.
-   * 
    * @throws AssertionError if the actual <code>Throwable</code> is equal to the given one.
    */
   public ThrowableAssert isNotEqualTo(Throwable other) {
-    return (ThrowableAssert) assertNotEqualTo(other);
+    return (ThrowableAssert)assertNotEqualTo(other);
   }
 
   /**
@@ -158,45 +182,36 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
    */
   public ThrowableAssert isNotNull() {
-    return (ThrowableAssert) assertNotNull();
+    return (ThrowableAssert)assertNotNull();
   }
 
   /**
    * Verifies that the actual <code>Throwable</code> is not the same as the given one.
-   * 
    * @param other the given <code>Throwable</code> to compare the actual <code>Throwable</code> to.
-   * 
    * @return this assertion object.
-   * 
    * @throws AssertionError if the actual <code>Throwable</code> is the same as the given one.
    */
   public ThrowableAssert isNotSameAs(Throwable other) {
-    return (ThrowableAssert) assertNotSameAs(other);
+    return (ThrowableAssert)assertNotSameAs(other);
   }
 
   /**
    * Verifies that the actual <code>Throwable</code> is the same as the given one.
-   * 
    * @param expected the given <code>Throwable</code> to compare the actual <code>Throwable</code> to.
-   * 
    * @return this assertion object.
-   * 
    * @throws AssertionError if the actual <code>Throwable</code> is not the same as the given one.
    */
   public ThrowableAssert isSameAs(Throwable expected) {
-    return (ThrowableAssert) assertSameAs(expected);
+    return (ThrowableAssert)assertSameAs(expected);
   }
 
   /**
    * Verifies that the actual <code>Throwable</code> satisfies the given condition.
-   * 
    * @param condition the condition to satisfy.
-   * 
    * @return this assertion object.
-   * 
    * @throws AssertionError if the actual <code>Throwable</code> does not satisfy the given condition.
    */
   public ThrowableAssert satisfies(Condition<Throwable> condition) {
-    return (ThrowableAssert) verify(condition);
+    return (ThrowableAssert)verify(condition);
   }
 }
