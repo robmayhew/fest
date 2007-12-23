@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="add" issue="78" due-to="David DIDIER">
+        Added method 'excludes' to StringAssert.
+      </action>
       <action dev="wanghy" type="add" issue="79" due-to="David DIDIER">
         Integrated contribution from David DIDIER. Added class FileAssert.
       </action>
