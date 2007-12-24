@@ -52,7 +52,6 @@ public class Formatting {
 
   private static final Map<Class<?>, ComponentFormatter> FORMATTERS = new ConcurrentHashMap<Class<?>, ComponentFormatter>();
 
-
   private static Logger logger = Logger.getLogger(Formatting.class.getName());
 
   static {
@@ -73,6 +72,10 @@ public class Formatting {
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
   }
 
+  /**
+   * Registers the given formatter, replacing any other one previously registered for the same supported component type.
+   * @param formatter the formatter to register.
+   */
   public static void register(ComponentFormatter formatter) {
     Class<?> key = formatter.targetType();
     if (FORMATTERS.containsKey(key))
