@@ -63,12 +63,12 @@ public class ThrowableAssertTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class) 
   public void shouldFailIfThrowableHasNotExpectedCauseAsAncestor3() {
-    new ThrowableAssert(new Exception(new IOException(new IllegalStateException()))).hasCauseAsAncestor(null);
+    new ThrowableAssert(new Exception(new RuntimeException(new IllegalStateException()))).hasCauseAsAncestor(null);
   }
 
   @Test(expectedExceptions = AssertionError.class) 
   public void shouldFailIfThrowableHasNotExpectedCauseAsAncestor4() {
-    Exception e = new Exception(new IOException(new IllegalStateException()));
+    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
     new ThrowableAssert(e).hasCauseAsAncestor(FileNotFoundException.class);
   }
 
@@ -109,12 +109,12 @@ public class ThrowableAssertTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class) 
   public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor3() {
-    new ThrowableAssert(new Exception(new IOException(new IllegalStateException()))).hasExactCauseAsAncestor(null);
+    new ThrowableAssert(new Exception(new RuntimeException(new IllegalStateException()))).hasExactCauseAsAncestor(null);
   }
 
   @Test(expectedExceptions = AssertionError.class) 
   public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor4() {
-    Exception e = new Exception(new IOException(new IllegalStateException()));
+    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
     new ThrowableAssert(e).hasExactCauseAsAncestor(FileNotFoundException.class);
   }
 
@@ -162,13 +162,13 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor2() {
-    Exception e = new Exception(new IOException(new IllegalStateException()));
+    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
     new ThrowableAssert(e).hasCauseAsAncestor(IllegalStateException.class);
   }
 
   @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor3() {
-    Exception e = new Exception(new IOException(new IllegalStateException()));
-    new ThrowableAssert(e).hasCauseAsAncestor(IOException.class);
+    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
+    new ThrowableAssert(e).hasCauseAsAncestor(RuntimeException.class);
   }
 
   @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor4() {
@@ -185,13 +185,13 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldPassIfThrowableHasExpectedExactCauseAsAncestor2() {
-    Exception e = new Exception(new IOException(new IllegalStateException()));
+    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
     new ThrowableAssert(e).hasExactCauseAsAncestor(IllegalStateException.class);
   }
 
   @Test public void shouldPassIfThrowableHasExpectedExactCauseAsAncestor3() {
-    Exception e = new Exception(new IOException(new IllegalStateException()));
-    new ThrowableAssert(e).hasExactCauseAsAncestor(IOException.class);
+    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
+    new ThrowableAssert(e).hasExactCauseAsAncestor(RuntimeException.class);
   }
 
   @Test public void shouldPassIfThrowableHasNoCause() {
