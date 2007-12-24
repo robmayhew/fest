@@ -19,6 +19,8 @@ import java.awt.Component;
 import java.util.logging.Logger;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreeSelectionModel;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Arrays.array;
@@ -43,7 +45,7 @@ public class FormattingTest {
     dialog.setTitle("A dialog");
     dialog.setName("dialog");
     String formatted = formatted(dialog);
-    assertThat(formatted).isEqualTo(expected(dialog, "[name='dialog', title='A dialog', enabled=true, showing=false]"));
+    assertThat(formatted).isEqualTo(expected(dialog, "[name='dialog', title='A dialog', enabled=true, modal=false, showing=false]"));
   }
 
   @Test public void shouldFormatFrame() {
@@ -211,6 +213,19 @@ public class FormattingTest {
     assertThat(formatted).isEqualTo(expected(radio, "[name='radio', text='a Radio', selected=true, enabled=true]"));
   }
 
+  @Test public void shouldFormatJTree() {
+    JTree tree = new JTree(array("One", "Two", "Three"));
+    tree.setName("tree");
+    DefaultTreeSelectionModel model = new DefaultTreeSelectionModel();
+    model.setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
+    tree.setSelectionModel(model);
+    tree.setSelectionRow(1);
+    String formatted = formatted(tree);
+    assertThat(formatted).isEqualTo(expected(tree, concat(
+        "[name='tree', selectionCount=1, selectionPaths=['[root, Two]'], selectionMode=CONTIGUOUS_TREE_SELECTION, enabled=true]"
+    )));
+  }
+  
   private String formatted(Component c) {
     String formatted = Formatting.format(c);
     logger.info(concat("formatted: ", formatted));

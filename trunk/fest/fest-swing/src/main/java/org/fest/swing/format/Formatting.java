@@ -22,15 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenuBar;
-import javax.swing.JPopupMenu;
-import javax.swing.JRootPane;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 import static org.fest.util.Strings.*;
@@ -58,23 +50,34 @@ public class Formatting {
 
   static {
     register(new IntrospectionComponentFormatter(AbstractButton.class, NAME, TEXT, "selected", ENABLED));
-    register(new IntrospectionComponentFormatter(Dialog.class, NAME, TITLE, ENABLED, SHOWING));
+    register(new IntrospectionComponentFormatter(Dialog.class, NAME, TITLE, ENABLED, "modal", SHOWING));
     register(new IntrospectionComponentFormatter(Frame.class, NAME, TITLE, ENABLED, SHOWING));
     register(new JComboBoxFormatter());
     register(new IntrospectionComponentFormatter(JButton.class, NAME, TEXT, ENABLED));
     register(new JFileChooserFormatter());
     register(new IntrospectionComponentFormatter(JLabel.class, NAME, TEXT, ENABLED));
-    register(new IntrospectionComponentFormatter(JLayeredPane.class));
+    register(empty(JLayeredPane.class));
     register(new JListFormatter());
-    register(new IntrospectionComponentFormatter(JMenuBar.class));
+    register(empty(JMenuBar.class));
     register(new JOptionPaneFormatter());
+    register(nameOnly(JPanel.class));
     register(new IntrospectionComponentFormatter(JPopupMenu.class, NAME, "label", ENABLED));
-    register(new IntrospectionComponentFormatter(JRootPane.class));
+    register(empty(JRootPane.class));
     register(new IntrospectionComponentFormatter(JSlider.class, NAME, "minimum", "maximum", VALUE, ENABLED));
     register(new IntrospectionComponentFormatter(JSpinner.class, NAME, VALUE, ENABLED));
     register(new JTabbedPaneFormatter());
     register(new JTableFormatter());
+    register(nameOnly(JToolBar.class));
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
+    register(new JTreeFormatter());
+  }
+  
+  private static ComponentFormatter empty(Class<? extends Component> targetType) {
+    return new IntrospectionComponentFormatter(targetType);
+  }
+
+  private static ComponentFormatter nameOnly(Class<? extends Component> targetType) {
+    return new IntrospectionComponentFormatter(targetType, NAME);
   }
 
   /**
