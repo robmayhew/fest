@@ -63,6 +63,8 @@ public final class ComponentPrinter {
     this.hierarchy = hierarchy;
   }
   
+  Hierarchy hierarchy() { return hierarchy; }
+  
   /**
    * Prints all the components (as <code>String</code>s) in the hierarchy.
    * @param out the output stream where to print the components to.

@@ -94,10 +94,18 @@ public final class RobotFixture {
     if (Bugs.hasMultiClickFrameBug()) robot.delay(500);
     return robot;
   }
+  
+  /**
+   * Returns the <code>{@link ComponentPrinter}</code> used by this fixture.
+   * @return the <code>ComponentPrinter</code> used by this fixture.
+   */
+  public ComponentPrinter printer() {
+    return finder().printer();
+  }
 
   /**
    * Returns the <code>{@link ComponentFinder}</code> used by this fixture.
-   * @return the object responsible for GUI component lookup. 
+   * @return the object responsible for GUI component lookup and user input simulation. 
    */
   public ComponentFinder finder() {
     return finder;

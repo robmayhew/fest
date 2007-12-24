@@ -47,7 +47,7 @@ public class BasicComponentFinderTest {
   
   @BeforeMethod public void setUp() {
     Hierarchy hierarchy = new AWTHierarchy();
-    finder = BasicComponentFinder.finder(hierarchy, new ComponentPrinter(hierarchy));
+    finder = new BasicComponentFinder(new ComponentPrinter(hierarchy));
     window = MainWindow.show(getClass());
   }
   

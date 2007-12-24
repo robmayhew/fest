@@ -21,8 +21,6 @@ import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 
-import static org.fest.swing.core.BasicComponentFinder.finder;
-
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -32,8 +30,8 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class ComponentFinder {
 
-  private final Hierarchy hierarchy;
   private final ComponentPrinter printer;
+  private final BasicComponentFinder finder;
 
   /**
    * Creates a new <code>{@link ComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
@@ -59,10 +57,16 @@ public class ComponentFinder {
    * @param hierarchy provides access to the components in the AWT hierarchy.
    */
   ComponentFinder(Hierarchy hierarchy) {
-    this.hierarchy = hierarchy;
     printer = new ComponentPrinter(hierarchy);
+    finder = new BasicComponentFinder(printer);
   }
 
+  /**
+   * Returns the <code>{@link ComponentPrinter}</code> in this finder.
+   * @return the <code>ComponentPrinter</code> in this finder.
+   */
+  public final ComponentPrinter printer() { return printer; }
+  
   /**
    * Finds a <code>{@link Component}</code> by type. For example:
    * 
@@ -179,7 +183,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
   public final Component find(ComponentMatcher m) {
-    return finder(hierarchy, printer).find(m);
+    return finder.find(m);
   }
   
   /**
@@ -234,6 +238,6 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    */
   public final Component find(Container root, ComponentMatcher m) {
-    return finder(hierarchy, printer).find(root, m);
+    return finder.find(root, m);
   }
 }
