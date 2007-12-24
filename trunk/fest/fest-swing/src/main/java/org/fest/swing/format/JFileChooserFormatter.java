@@ -29,21 +29,6 @@ import static org.fest.util.Strings.*;
  */
 public class JFileChooserFormatter extends ComponentFormatterTemplate {
 
-  private enum Type {
-    OPEN_DIALOG(JFileChooser.OPEN_DIALOG),
-    SAVE_DIALOG(JFileChooser.SAVE_DIALOG),
-    CUSTOM_DIALOG(JFileChooser.CUSTOM_DIALOG);
-
-    private final int type;
-
-    private Type(int type) { this.type = type; }
-
-    static String lookup(int type) {
-      for (Type t : values()) if (t.type == type) return t.name();
-      return String.valueOf(type);
-    }
-  }
-
   /**
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
    * <code>{@link JFileChooser}</code> (or subclass.)
@@ -56,11 +41,26 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
         fileChooser.getClass().getName(), "[",
         "name=", quote(fileChooser.getName()), ", ",
         "dialogTitle=", quote(fileChooser.getDialogTitle()), ", ",
-        "dialogType=", Type.lookup(fileChooser.getDialogType()), ", ",
+        "dialogType=", DialogType.lookup(fileChooser.getDialogType()), ", ",
         "currentDirectory=", fileChooser.getCurrentDirectory(), ", ",
         "enabled=", valueOf(fileChooser.isEnabled()),
         "]"
     );
+  }
+
+  private static enum DialogType {
+    OPEN_DIALOG(JFileChooser.OPEN_DIALOG),
+    SAVE_DIALOG(JFileChooser.SAVE_DIALOG),
+    CUSTOM_DIALOG(JFileChooser.CUSTOM_DIALOG);
+
+    private final int type;
+
+    private DialogType(int type) { this.type = type; }
+
+    static String lookup(int type) {
+      for (DialogType t : values()) if (t.type == type) return t.name();
+      return String.valueOf(type);
+    }
   }
 
   /**

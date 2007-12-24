@@ -129,8 +129,11 @@ public class FormattingTest {
 
   @Test public void shouldFormatJOptionPane() {
     JOptionPane optionPane = new JOptionPane("A message", JOptionPane.ERROR_MESSAGE);
+    optionPane.setOptionType(JOptionPane.DEFAULT_OPTION);
     String formatted = formatted(optionPane);
-    assertThat(formatted).isEqualTo(expected(optionPane, "[]"));
+    assertThat(formatted).isEqualTo(
+        expected(optionPane, 
+            "[message='A message', messageType=ERROR_MESSAGE, optionType=DEFAULT_OPTION, enabled=true, showing=false]"));
   }
 
   @Test public void shouldFormatJPanel() {
@@ -140,6 +143,13 @@ public class FormattingTest {
     assertThat(formatted).isEqualTo(expected(panel, "[name='panel']"));
   }
 
+  @Test public void shouldFormatJPopupMenu() {
+    JPopupMenu popupMenu = new JPopupMenu("Menu");
+    popupMenu.setName("popupMenu");
+    String formatted = formatted(popupMenu);
+    assertThat(formatted).isEqualTo(expected(popupMenu, "[name='popupMenu', label='Menu', enabled=true]"));    
+  }
+  
   @Test public void shouldFormatJRootPane() {
     JRootPane pane = new JRootPane();
     String formatted = formatted(pane);

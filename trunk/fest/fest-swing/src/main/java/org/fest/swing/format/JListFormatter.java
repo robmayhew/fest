@@ -35,21 +35,6 @@ import static org.fest.util.Strings.*;
  */
 public class JListFormatter extends ComponentFormatterTemplate {
 
-  private enum SelectionMode {
-    SINGLE_SELECTION(ListSelectionModel.SINGLE_SELECTION),
-    SINGLE_INTERVAL_SELECTION(ListSelectionModel.SINGLE_INTERVAL_SELECTION),
-    MULTIPLE_INTERVAL_SELECTION(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-    private final int mode;
-
-    private SelectionMode(int mode) { this.mode = mode; }
-
-    static String lookup(int mode) {
-      for (SelectionMode m : values()) if (m.mode == mode) return m.name();
-      return String.valueOf(mode);
-    }
-  }
-
   /**
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
    * <code>{@link JList}</code> (or subclass.)
@@ -67,6 +52,21 @@ public class JListFormatter extends ComponentFormatterTemplate {
         "enabled=", valueOf(list.isEnabled()),
         "]"
     );
+  }
+
+  private static enum SelectionMode {
+    SINGLE_SELECTION(ListSelectionModel.SINGLE_SELECTION),
+    SINGLE_INTERVAL_SELECTION(ListSelectionModel.SINGLE_INTERVAL_SELECTION),
+    MULTIPLE_INTERVAL_SELECTION(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+    private final int mode;
+
+    private SelectionMode(int mode) { this.mode = mode; }
+
+    static String lookup(int mode) {
+      for (SelectionMode m : values()) if (m.mode == mode) return m.name();
+      return String.valueOf(mode);
+    }
   }
 
   private Object[] contentsOf(JList list) {

@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.text.JTextComponent;
 
@@ -65,7 +66,9 @@ public class Formatting {
     register(new IntrospectionComponentFormatter(JLayeredPane.class));
     register(new JListFormatter());
     register(new IntrospectionComponentFormatter(JMenuBar.class));
+    register(new JOptionPaneFormatter());
     register(new IntrospectionComponentFormatter(JPanel.class, NAME));
+    register(new IntrospectionComponentFormatter(JPopupMenu.class, NAME, "label", ENABLED));
     register(new IntrospectionComponentFormatter(JRootPane.class));
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
   }
