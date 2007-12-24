@@ -20,6 +20,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 
 import static java.lang.String.valueOf;
+import static javax.swing.JOptionPane.*;
 import static org.fest.util.Strings.*;
 
 /**
@@ -28,6 +29,24 @@ import static org.fest.util.Strings.*;
  * @author Alex Ruiz
  */
 public class JOptionPaneFormatter extends ComponentFormatterTemplate {
+
+  private static final IntEnum MESSAGE_TYPES = new IntEnum();
+  static {
+    MESSAGE_TYPES.put(ERROR_MESSAGE, "ERROR_MESSAGE")
+                 .put(INFORMATION_MESSAGE, "INFORMATION_MESSAGE") 
+                 .put(WARNING_MESSAGE, "WARNING_MESSAGE") 
+                 .put(QUESTION_MESSAGE, "QUESTION_MESSAGE") 
+                 .put(PLAIN_MESSAGE, "PLAIN_MESSAGE"); 
+  }
+  
+  private static final IntEnum OPTION_TYPES = new IntEnum();
+  static {
+    OPTION_TYPES.put(DEFAULT_OPTION, "DEFAULT_OPTION")
+                .put(YES_NO_OPTION, "YES_NO_OPTION") 
+                .put(YES_NO_CANCEL_OPTION, "YES_NO_CANCEL_OPTION") 
+                .put(QUESTION_MESSAGE, "QUESTION_MESSAGE") 
+                .put(OK_CANCEL_OPTION, "OK_CANCEL_OPTION"); 
+  }
 
   /**
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
@@ -40,41 +59,12 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
     return concat(
         optionPane.getClass().getName(), "[",
         "message=", quote(optionPane.getMessage()), ", ",
-        "messageType=", MessageType.lookup(optionPane.getMessageType()), ", ",
-        "optionType=", OptionType.lookup(optionPane.getOptionType()), ", ",
+        "messageType=", MESSAGE_TYPES.get(optionPane.getMessageType()), ", ",
+        "optionType=", OPTION_TYPES.get(optionPane.getOptionType()), ", ",
         "enabled=", valueOf(optionPane.isEnabled()), ", ",
         "showing=", valueOf(optionPane.isShowing()),
         "]"
     );
-  }
-
-  private static enum MessageType {
-    ERROR_MESSAGE(JOptionPane.ERROR_MESSAGE), INFORMATION_MESSAGE(JOptionPane.INFORMATION_MESSAGE),
-    WARNING_MESSAGE(JOptionPane.WARNING_MESSAGE), QUESTION_MESSAGE(JOptionPane.QUESTION_MESSAGE),
-    PLAIN_MESSAGE(JOptionPane.PLAIN_MESSAGE);
-
-    private final int type;
-
-    private MessageType(int type) { this.type = type; }
-
-    static String lookup(int type) {
-      for (MessageType m : values()) if (m.type == type) return m.name();
-      return String.valueOf(type);
-    }
-  }
-
-  private static enum OptionType {
-    DEFAULT_OPTION(JOptionPane.DEFAULT_OPTION), YES_NO_OPTION(JOptionPane.YES_NO_OPTION),
-    YES_NO_CANCEL_OPTION(JOptionPane.YES_NO_CANCEL_OPTION), OK_CANCEL_OPTION(JOptionPane.OK_CANCEL_OPTION);
-
-    private final int type;
-
-    private OptionType(int type) { this.type = type; }
-
-    static String lookup(int type) {
-      for (OptionType m : values()) if (m.type == type) return m.name();
-      return String.valueOf(type);
-    }
   }
 
   /**

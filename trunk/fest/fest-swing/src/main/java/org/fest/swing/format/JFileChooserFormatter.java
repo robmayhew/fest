@@ -20,6 +20,7 @@ import java.awt.Component;
 import javax.swing.JFileChooser;
 
 import static java.lang.String.valueOf;
+import static javax.swing.JFileChooser.*;
 import static org.fest.util.Strings.*;
 
 /**
@@ -29,6 +30,13 @@ import static org.fest.util.Strings.*;
  */
 public class JFileChooserFormatter extends ComponentFormatterTemplate {
 
+  private static final IntEnum DIALOG_TYPES = new IntEnum();
+  static {
+    DIALOG_TYPES.put(OPEN_DIALOG, "OPEN_DIALOG")
+                .put(SAVE_DIALOG, "SAVE_DIALOG")
+                .put(CUSTOM_DIALOG, "CUSTOM_DIALOG");
+  }
+  
   /**
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
    * <code>{@link JFileChooser}</code> (or subclass.)
@@ -41,26 +49,11 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
         fileChooser.getClass().getName(), "[",
         "name=", quote(fileChooser.getName()), ", ",
         "dialogTitle=", quote(fileChooser.getDialogTitle()), ", ",
-        "dialogType=", DialogType.lookup(fileChooser.getDialogType()), ", ",
+        "dialogType=", DIALOG_TYPES.get(fileChooser.getDialogType()), ", ",
         "currentDirectory=", fileChooser.getCurrentDirectory(), ", ",
         "enabled=", valueOf(fileChooser.isEnabled()),
         "]"
     );
-  }
-
-  private static enum DialogType {
-    OPEN_DIALOG(JFileChooser.OPEN_DIALOG),
-    SAVE_DIALOG(JFileChooser.SAVE_DIALOG),
-    CUSTOM_DIALOG(JFileChooser.CUSTOM_DIALOG);
-
-    private final int type;
-
-    private DialogType(int type) { this.type = type; }
-
-    static String lookup(int type) {
-      for (DialogType t : values()) if (t.type == type) return t.name();
-      return String.valueOf(type);
-    }
   }
 
   /**

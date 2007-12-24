@@ -1,0 +1,78 @@
+/*
+ * Created on Dec 24, 2007
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Copyright @2007 the original author or authors.
+ */
+package org.fest.swing.format;
+
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JTabbedPane;
+
+import org.fest.util.Arrays;
+
+import static java.lang.String.valueOf;
+import static org.fest.util.Strings.*;
+
+/**
+ * Understands a formatter for <code>{@link JTabbedPane}</code>es.
+ *
+ * @author Alex Ruiz
+ */
+public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
+
+  /**
+   * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
+   * <code>{@link JTabbedPane}</code> (or subclass.)
+   * @param c the given <code>Component</code>.
+   * @return the <code>String</code> representation of the given <code>JTabbedPane</code>.
+   */
+  protected String doFormat(Component c) {
+    JTabbedPane tabbedPane = (JTabbedPane)c;
+    return concat(
+        tabbedPane.getClass().getName(), "[",
+        "name=", quote(tabbedPane.getName()), ", ",
+        "selectedTabIndex=", valueOf(tabbedPane.getSelectedIndex()), ", ",
+        "selectedTabTitle=", quote(selectedTab(tabbedPane)), ", ",
+        "tabCount=", valueOf(tabbedPane.getTabCount()), ", ",
+        "tabTitles=", Arrays.format(tabTitles(tabbedPane)),  ", ",
+        "enabled=", valueOf(tabbedPane.isEnabled()),
+        "]"
+    );
+  }
+
+  private String selectedTab(JTabbedPane tabbedPane) {
+    if (tabbedPane.getTabCount() == 0) return null;
+    int index = tabbedPane.getSelectedIndex();
+    if (index == -1) return null;
+    return tabbedPane.getTitleAt(index);
+  }
+
+  private String[] tabTitles(JTabbedPane tabbedPane) {
+    int count = tabbedPane.getTabCount();
+    if (count == 0) return new String[0];
+    List<String> contents = new ArrayList<String>();
+    for (int i = 0; i < count; i++) contents.add(tabbedPane.getTitleAt(i));
+    return contents.toArray(new String[0]);
+  }
+
+  /**
+   * Indicates that this formatter supports <code>{@link JTabbedPane}</code> only.
+   * @return <code>JTabbedPane.class</code>.
+   */
+  public Class<? extends Component> targetType() {
+    return JTabbedPane.class;
+  }
+}

@@ -21,11 +21,13 @@ import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 
 import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
+
+import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
+
 import static org.fest.util.Strings.*;
 
 /**
@@ -48,25 +50,10 @@ public class JListFormatter extends ComponentFormatterTemplate {
         "name=", quote(list.getName()), ", ",
         "selectedValues=", Arrays.format(list.getSelectedValues()), ", ",
         "contents=", Arrays.format(contentsOf(list)),  ", ",
-        "selectionMode=", SelectionMode.lookup(list.getSelectionMode()), ", ",
+        "selectionMode=", SELECTION_MODES.get(list.getSelectionMode()), ", ",
         "enabled=", valueOf(list.isEnabled()),
         "]"
     );
-  }
-
-  private static enum SelectionMode {
-    SINGLE_SELECTION(ListSelectionModel.SINGLE_SELECTION),
-    SINGLE_INTERVAL_SELECTION(ListSelectionModel.SINGLE_INTERVAL_SELECTION),
-    MULTIPLE_INTERVAL_SELECTION(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-    private final int mode;
-
-    private SelectionMode(int mode) { this.mode = mode; }
-
-    static String lookup(int mode) {
-      for (SelectionMode m : values()) if (m.mode == mode) return m.name();
-      return String.valueOf(mode);
-    }
   }
 
   private Object[] contentsOf(JList list) {

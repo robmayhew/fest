@@ -27,9 +27,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
 import static org.fest.util.Strings.*;
@@ -49,6 +50,7 @@ public class Formatting {
   private static final String SHOWING = "showing";
   private static final String TEXT = "text";
   private static final String TITLE = "title";
+  private static final String VALUE = "value";
 
   private static final Map<Class<?>, ComponentFormatter> FORMATTERS = new ConcurrentHashMap<Class<?>, ComponentFormatter>();
 
@@ -66,9 +68,12 @@ public class Formatting {
     register(new JListFormatter());
     register(new IntrospectionComponentFormatter(JMenuBar.class));
     register(new JOptionPaneFormatter());
-    register(new IntrospectionComponentFormatter(JPanel.class, NAME));
     register(new IntrospectionComponentFormatter(JPopupMenu.class, NAME, "label", ENABLED));
     register(new IntrospectionComponentFormatter(JRootPane.class));
+    register(new IntrospectionComponentFormatter(JSlider.class, NAME, "minimum", "maximum", VALUE, ENABLED));
+    register(new IntrospectionComponentFormatter(JSpinner.class, NAME, VALUE, ENABLED));
+    register(new JTabbedPaneFormatter());
+    register(new JTableFormatter());
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
   }
 
@@ -95,7 +100,7 @@ public class Formatting {
     if (formatter != null) return formatter.format(c);
     String name = c.getName();
     if (isEmpty(name)) return c.toString();
-    return concat(c.getClass().getName(), "<", quote(name), ">");
+    return concat(c.getClass().getName(), "[name=", quote(name), "]");
   }
 
   private static ComponentFormatter formatterFor(Class<?> type) {

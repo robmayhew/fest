@@ -156,6 +156,45 @@ public class FormattingTest {
     assertThat(formatted).isEqualTo(expected(pane, "[]"));
   }
 
+  @Test public void shouldFormatJSlider() {
+    JSlider slider = new JSlider(2, 8, 6);
+    slider.setName("slider");
+    String formatted = formatted(slider);
+    assertThat(formatted).isEqualTo(expected(slider, "[name='slider', minimum=2, maximum=8, value=6, enabled=true]"));
+  }
+
+  @Test public void shouldFormatJSpinner() {
+    JSpinner spinner = new JSpinner(new SpinnerNumberModel(6, 2, 8, 1));
+    spinner.setName("spinner");
+    String formatted = formatted(spinner);
+    assertThat(formatted).isEqualTo(expected(spinner, "[name='spinner', value=6, enabled=true]"));
+  }
+  
+  @Test public void shouldFormatJTabbedPane() {
+    JTabbedPane tabbedPane = new JTabbedPane();
+    tabbedPane.addTab("First", new JPanel());
+    tabbedPane.addTab("Second", new JPanel());
+    tabbedPane.addTab("Third", new JPanel());
+    tabbedPane.setName("tabbedPane");
+    tabbedPane.setSelectedIndex(1);
+    String formatted = formatted(tabbedPane);
+    assertThat(formatted).isEqualTo(expected(tabbedPane, concat( 
+        "[name='tabbedPane', selectedTabIndex=1, selectedTabTitle='Second', tabCount=3, ",
+        "tabTitles=['First', 'Second', 'Third'], enabled=true]"
+    )));
+  }
+  
+  @Test public void shouldFormatJTable() {
+    JTable table = new JTable(8, 6);
+    table.setName("table");
+    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    String formatted = formatted(table);
+    assertThat(formatted).isEqualTo(expected(table, concat(
+        "[name='table', rowCount=8, columnCount=6, rowSelectionMode=MULTIPLE_INTERVAL_SELECTION, " +
+        "columnSelectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true]"
+    )));
+  }
+
   @Test public void shouldFormatJTextComponent() {
     JTextField textField = new JTextField("Hello");
     textField.setName("textField");
