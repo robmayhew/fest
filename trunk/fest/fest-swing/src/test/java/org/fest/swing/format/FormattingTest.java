@@ -190,8 +190,8 @@ public class FormattingTest {
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     String formatted = formatted(table);
     assertThat(formatted).isEqualTo(expected(table, concat(
-        "[name='table', rowCount=8, columnCount=6, rowSelectionMode=MULTIPLE_INTERVAL_SELECTION, " +
-        "columnSelectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true]"
+        "[name='table', rowCount=8, columnCount=6, selectedRows=[], selectedColumns=[], ",
+        "rowSelectionMode=MULTIPLE_INTERVAL_SELECTION, columnSelectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true]"
     )));
   }
 

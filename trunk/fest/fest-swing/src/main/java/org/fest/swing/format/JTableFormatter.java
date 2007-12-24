@@ -21,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
+import org.fest.util.Arrays;
+
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
@@ -48,6 +50,8 @@ public class JTableFormatter extends ComponentFormatterTemplate {
         "name=", quote(table.getName()), ", ",
         "rowCount=", valueOf(table.getRowCount()), ", ",
         "columnCount=", valueOf(table.getColumnCount()), ", ",
+        "selectedRows=", Arrays.format(table.getSelectedRows()), ", ",
+        "selectedColumns=", Arrays.format(table.getSelectedColumns()), ", ",
         "rowSelectionMode=", selectionMode(table.getSelectionModel()), ", ",
         "columnSelectionMode=", selectionMode(table.getColumnModel()), ", ",
         "enabled=", valueOf(table.isEnabled()),
