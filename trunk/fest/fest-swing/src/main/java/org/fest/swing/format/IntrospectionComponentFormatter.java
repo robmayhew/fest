@@ -1,16 +1,16 @@
 /*
  * Created on Dec 22, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.format;
@@ -30,13 +30,13 @@ import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands a formatter that uses 
+ * Understands a formatter that uses
  * <a href="http://java.sun.com/docs/books/tutorial/javabeans/introspection/" target="_blank">introspection</a>
  * to display property values of a <code>{@link Component}</code>. This formatter does not support nested properties.
  *
  * @author Alex Ruiz
  */
-public final class IntrospectionComponentFormatter implements ComponentFormatter {
+public final class IntrospectionComponentFormatter extends ComponentFormatterTemplate {
 
   private final Class<? extends Component> targetType;
   private final List<String> propertyNames;
@@ -46,15 +46,15 @@ public final class IntrospectionComponentFormatter implements ComponentFormatter
   /**
    * Creates a new </code>{@link IntrospectionComponentFormatter}</code>.
    * @param targetType the type of <code>Component</code> that this formatter supports.
-   * @param propertyNames the property names to show as the <code>String</code> representation of a given 
+   * @param propertyNames the property names to show as the <code>String</code> representation of a given
    * <code>Component</code>.
    */
   public IntrospectionComponentFormatter(Class<? extends Component> targetType, String...propertyNames) {
     this.targetType = targetType;
     this.propertyNames = list(propertyNames);
-    populate(); 
+    populate();
   }
-  
+
   private void populate() {
     BeanInfo beanInfo = null;
     try {
@@ -66,12 +66,12 @@ public final class IntrospectionComponentFormatter implements ComponentFormatter
   private void register(PropertyDescriptor d) {
     String name = d.getName();
     if (!propertyNames.contains(name)) return;
-    descriptors.put(name, d);    
+    descriptors.put(name, d);
   }
-  
+
   /**
-   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>, showing only the 
-   * properties specified in this formatter's 
+   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>, showing only the
+   * properties specified in this formatter's
    * <code>{@link #IntrospectionComponentFormatter(Class, String...) constructor}</code>.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
@@ -79,8 +79,7 @@ public final class IntrospectionComponentFormatter implements ComponentFormatter
    * supported by this formatter.
    * @see #targetType()
    */
-  public String format(Component c) {
-    validateTypeOf(c);
+  protected String doFormat(Component c) {
     StringBuilder b = new StringBuilder();
     b.append(c.getClass().getName()).append("[");
     int max = propertyNames.size() - 1;
@@ -92,20 +91,15 @@ public final class IntrospectionComponentFormatter implements ComponentFormatter
     return b.toString();
   }
 
-  private void validateTypeOf(Component c) {
-    if (c == null || !targetType.isAssignableFrom(c.getClass()))
-      throw new IllegalArgumentException(concat("This formatter only supports components of type ", targetType.getName()));
-  }
-
   private void appendProperty(StringBuilder b, String name, Component c) {
     b.append(name).append("=");
     try {
       b.append(quote(propertyValue(c, name)));
     } catch (Exception e) {
-      b.append(concat("<Unable read property: [", e.getMessage(), "]>")); 
+      b.append(concat("<Unable read property: [", e.getMessage(), "]>"));
     }
   }
-  
+
   private Object propertyValue(Component c, String property) throws Exception {
     PropertyDescriptor descriptor = descriptors.get(property);
     Object value = descriptor.getReadMethod().invoke(c);
@@ -116,7 +110,7 @@ public final class IntrospectionComponentFormatter implements ComponentFormatter
   private boolean isOneDimensionalArray(Object o) {
     return o != null && o.getClass().isArray() && !o.getClass().getComponentType().isArray();
   }
-  
+
   /**
    * Returns the type of <code>{@link Component}</code> this formatter supports.
    * @return the type of <code>Component</code> this formatter supports.

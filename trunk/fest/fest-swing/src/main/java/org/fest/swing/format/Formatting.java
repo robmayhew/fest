@@ -1,16 +1,16 @@
 /*
  * Created on Sep 16, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.format;
@@ -22,12 +22,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.JToggleButton;
 import javax.swing.text.JTextComponent;
 
 import static org.fest.util.Strings.*;
@@ -54,6 +55,7 @@ public class Formatting {
   private static Logger logger = Logger.getLogger(Formatting.class.getName());
 
   static {
+    register(new IntrospectionComponentFormatter(AbstractButton.class, NAME, TEXT, "selected", ENABLED));
     register(new IntrospectionComponentFormatter(Dialog.class, NAME, TITLE, ENABLED, SHOWING));
     register(new IntrospectionComponentFormatter(Frame.class, NAME, TITLE, ENABLED, SHOWING));
     register(new JComboBoxFormatter());
@@ -61,22 +63,23 @@ public class Formatting {
     register(new JFileChooserFormatter());
     register(new IntrospectionComponentFormatter(JLabel.class, NAME, TEXT, ENABLED));
     register(new IntrospectionComponentFormatter(JLayeredPane.class));
+    register(new JListFormatter());
+    register(new IntrospectionComponentFormatter(JMenuBar.class));
     register(new IntrospectionComponentFormatter(JPanel.class, NAME));
     register(new IntrospectionComponentFormatter(JRootPane.class));
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
-    register(new IntrospectionComponentFormatter(JToggleButton.class, NAME, TEXT, "selected", ENABLED));
   }
-  
+
   public static void register(ComponentFormatter formatter) {
     Class<?> key = formatter.targetType();
-    if (FORMATTERS.containsKey(key)) 
+    if (FORMATTERS.containsKey(key))
       logger.info(
           concat("Replacing formatter ", FORMATTERS.get(key), " with ", formatter, " for the type ", key.getName()));
     FORMATTERS.put(key, formatter);
   }
-  
+
   /**
-   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>. 
+   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
    */
@@ -95,6 +98,6 @@ public class Formatting {
     if (superType != null) return formatterFor(superType);
     return null;
   }
-  
+
   private Formatting() {}
 }
