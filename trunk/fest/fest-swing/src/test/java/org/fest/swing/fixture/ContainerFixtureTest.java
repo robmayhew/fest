@@ -65,6 +65,7 @@ public class ContainerFixtureTest {
     final JMenu menu = new JMenu("A Menu");
     final JPanel panel = new JPanel();
     final JRadioButton radioButton = new JRadioButton("A Radio Button");
+    final JScrollBar scrollBar = new JScrollBar();
     final JSlider slider = new JSlider(10, 20, 15);
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
     final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
@@ -86,8 +87,8 @@ public class ContainerFixtureTest {
     private void addComponents() {
       setJMenuBar(new JMenuBar());
       getJMenuBar().add(menu);
-      add(button, checkBox, comboBox, fileChooser, label, list, panel, radioButton, slider, spinner, splitPane,
-          tabbedPane, table, textField, toggleButton, toolBar);
+      add(button, checkBox, comboBox, fileChooser, label, list, panel, radioButton, scrollBar, slider, spinner, 
+          splitPane, tabbedPane, table, textField, toggleButton, toolBar);
     }
     
     private void add(Component... components) {
@@ -119,6 +120,8 @@ public class ContainerFixtureTest {
       panel.setPreferredSize(new Dimension(40, 40));
       panel.setBackground(Color.RED);
       radioButton.setName("radioButton");
+      scrollBar.setName("scrollBar");
+      scrollBar.setValue(10);
       slider.setName("slider");
       spinner.setName("spinner");
       splitPane.setName("splitPane");
@@ -355,6 +358,27 @@ public class ContainerFixtureTest {
   @Test public void shouldFindRadioButtonWithGivenName() {
     JRadioButtonFixture radioButton = container.radioButton("radioButton");
     assertThat(radioButton.target).isSameAs(window.radioButton);
+  }
+
+  @Test(expectedExceptions=ComponentLookupException.class) 
+  public void shouldThrowErrorWhenFindingScrollBarByTypeAndThanOneFound() {
+    JScrollBarFixture scrollBar = container.scrollBar();
+    assertThat(scrollBar.target).isNotNull();
+  }
+
+  @Test public void shouldFindScrollBarWithGivenMatcher() {
+    GenericTypeMatcher<JScrollBar> valueMatcher = new GenericTypeMatcher<JScrollBar>() {
+      protected boolean isMatching(JScrollBar scrollBar) {
+        return scrollBar.getValue() == 10;
+      }
+    };
+    JScrollBarFixture scrollBar = container.scrollBar(valueMatcher);
+    assertThat(scrollBar.target).isSameAs(window.scrollBar);
+  }
+  
+  @Test public void shouldFindScrollBarWithGivenName() {
+    JScrollBarFixture scrollBar = container.scrollBar("scrollBar");
+    assertThat(scrollBar.target).isSameAs(window.scrollBar);
   }
   
   @Test public void shouldFindSliderByType() {

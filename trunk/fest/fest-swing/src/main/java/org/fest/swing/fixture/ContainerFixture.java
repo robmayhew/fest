@@ -414,6 +414,40 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   }
 
   /**
+   * Returns a <code>{@link JScrollBar}</code> found in this fixture's <code>{@link Container}</code>.
+   * @return a fixture that manages the <code>JScrollBar</code> found.
+   * @throws ComponentLookupException if a <code>JScrollBar</code> could not be found.
+   * @throws ComponentLookupException if more than one <code>JScrollBar</code> is found.
+   */
+  public final JScrollBarFixture scrollBar() {
+    return new JScrollBarFixture(robot, findByType(JScrollBar.class));
+  }
+
+  /**
+   * Finds a <code>{@link JScrollBar}</code> in this fixture's <code>{@link Container}</code>, that matches the
+   * specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JScrollBar</code>.
+   * @return a fixture that manages the <code>JScrollBar</code> found.
+   * @throws ComponentLookupException if a <code>JScrollBar</code> that matches the given search criteria could not be found.
+   * @throws ComponentLookupException if more than one <code>JScrollBar</code> that matches the given search criteria is found.
+   */
+  public final JScrollBarFixture scrollBar(GenericTypeMatcher<? extends JScrollBar> matcher) {
+    return new JScrollBarFixture(robot, find(matcher));
+  }
+
+  /**
+   * Finds a <code>{@link JScrollBar}</code> in this fixture's <code>{@link Container}</code>, which name matches the
+   * specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JScrollBar</code> found.
+   * @throws ComponentLookupException if a <code>JScrollBar</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>JScrollBar</code> having a matching name is found.
+   */
+  public final JScrollBarFixture scrollBar(String name) {
+    return new JScrollBarFixture(robot, findByName(name, JScrollBar.class));
+  }
+
+  /**
    * Returns a <code>{@link JSlider}</code> found in this fixture's <code>{@link Container}</code>.
    * @return a fixture that manages the <code>JSlider</code> found.
    * @throws ComponentLookupException if a <code>JSlider</code> could not be found.
