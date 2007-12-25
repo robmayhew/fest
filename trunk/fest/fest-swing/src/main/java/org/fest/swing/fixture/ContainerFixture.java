@@ -1,15 +1,15 @@
 /*
  * Created on Apr 10, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -35,7 +35,7 @@ import org.fest.swing.exception.ComponentLookupException;
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
  * @param <T> the type of container handled by this fixture.
- * 
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
@@ -318,11 +318,11 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    * <p>
    * For example, if we are looking for the menu with text "New" contained under the menu with text "File", we can
    * simply call
-   * 
+   *
    * <pre>
    * JMenuItemFixture menuItem = container.&lt;strong&gt;findMenuItem(&quot;File&quot;, &quot;Menu&quot;)&lt;/strong&gt;;
    * </pre>
-   * 
+   *
    * </p>
    * @param path the path of the menu to find.
    * @return a fixture that manages the <code>JMenuItem</code> found.
@@ -355,7 +355,7 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
   public final JPanelFixture panel() {
     return new JPanelFixture(robot, findByType(JPanel.class));
   }
-  
+
   /**
    * Finds a <code>{@link JPanel}</code> in this fixture's <code>{@link Container}</code>, that matches the
    * specified search criteria.
@@ -445,6 +445,40 @@ public abstract class ContainerFixture<T extends Container> extends JMenuItemCon
    */
   public final JScrollBarFixture scrollBar(String name) {
     return new JScrollBarFixture(robot, findByName(name, JScrollBar.class));
+  }
+
+  /**
+   * Returns a <code>{@link JScrollPane}</code> found in this fixture's <code>{@link Container}</code>.
+   * @return a fixture that manages the <code>JScrollPane</code> found.
+   * @throws ComponentLookupException if a <code>JScrollPane</code> could not be found.
+   * @throws ComponentLookupException if more than one <code>JScrollPane</code> is found.
+   */
+  public final JScrollPaneFixture scrollPane() {
+    return new JScrollPaneFixture(robot, findByType(JScrollPane.class));
+  }
+
+  /**
+   * Finds a <code>{@link JScrollPane}</code> in this fixture's <code>{@link Container}</code>, that matches the
+   * specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JScrollPane</code>.
+   * @return a fixture that manages the <code>JScrollPane</code> found.
+   * @throws ComponentLookupException if a <code>JScrollPane</code> that matches the given search criteria could not be found.
+   * @throws ComponentLookupException if more than one <code>JScrollPane</code> that matches the given search criteria is found.
+   */
+  public final JScrollPaneFixture scrollPane(GenericTypeMatcher<? extends JScrollPane> matcher) {
+    return new JScrollPaneFixture(robot, find(matcher));
+  }
+
+  /**
+   * Finds a <code>{@link JScrollPane}</code> in this fixture's <code>{@link Container}</code>, which name matches the
+   * specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JScrollPane</code> found.
+   * @throws ComponentLookupException if a <code>JScrollPane</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>JScrollPane</code> having a matching name is found.
+   */
+  public final JScrollPaneFixture scrollPane(String name) {
+    return new JScrollPaneFixture(robot, findByName(name, JScrollPane.class));
   }
 
   /**
