@@ -68,7 +68,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
    * @param value how many times the value of this fixture's <code>JSpinner</code> should be incremented.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>value</code> is less than zero.
+   * @throws IllegalArgumentException if <code>value</code> is less than or equal to zero.
    */
   public final JSpinnerFixture increment(int value) {
     if (value <= 0) 
@@ -90,7 +90,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
    * @param value how many times the value of this fixture's <code>JSpinner</code> should be decremented.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>value</code> is less than zero.
+   * @throws IllegalArgumentException if <code>value</code> is less than or equal to zero.
    */
   public final JSpinnerFixture decrement(int value) {
     if (value <= 0) 

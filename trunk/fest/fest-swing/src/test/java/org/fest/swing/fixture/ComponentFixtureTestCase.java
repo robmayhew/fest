@@ -213,12 +213,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   @Test public final void shouldPassIfComponentIsVisibleAndExpectingVisible() {
-    fixture.target.setVisible(true);
+    makeTargetVisible(true);
     fixture.requireVisible();
   }
   
   @Test public final void shouldFailIfComponentIsNotVisibleAndExpectingVisible() {
-    fixture.target.setVisible(false);
+    makeTargetVisible(false);
     try {
       fixture.requireVisible();
       fail();
@@ -229,12 +229,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   @Test public final void shouldPassIfComponentIsNotVisibleAndExpectingNotVisible() {
-    fixture.target.setVisible(false);
+    makeTargetVisible(false);
     fixture.requireNotVisible();
   }
   
   @Test public final void shouldFailIfComponentIsVisibleAndExpectingNotVisible() {
-    fixture.target.setVisible(true);
+    makeTargetVisible(true);
     try {
       fixture.requireNotVisible();
       fail();
@@ -243,14 +243,16 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
       assertThat(errorMessage).contains(property(VISIBLE), expected("false"), actual("true"));
     }
   }
+  
+  protected void makeTargetVisible(boolean visible) { fixture.target.setVisible(visible); }
 
   @Test public final void shouldPassIfComponentIsEnabledAndExpectingEnabled() {
-    fixture.target.setEnabled(true);
+    makeTargetEnabled(true);
     fixture.requireEnabled();
   }
   
   @Test public final void shouldFailIfComponentIsDisabledAndExpectingEnabled() {
-    fixture.target.setEnabled(false);
+    makeTargetEnabled(false);
     try {
       fixture.requireEnabled();
       fail();
@@ -261,12 +263,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
   
   @Test public final void shouldPassIfComponentIsDisabledAndExpectingDisabled() {
-    fixture.target.setEnabled(false);
+    makeTargetEnabled(false);
     fixture.requireDisabled();
   }
   
   @Test public final void shouldFailIfComponentIsEnabledAndExpectingDisabled() {
-    fixture.target.setEnabled(true);
+    makeTargetEnabled(true);
     try {
       fixture.requireDisabled();
       fail();
@@ -277,11 +279,11 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   @Test public void shouldWaitTillComponentIsEnabled() {
-    fixture.target.setEnabled(false);
+    makeTargetEnabled(false);
     new Thread() {
       @Override public void run() {
         pause(2000);
-        fixture.target.setEnabled(true);
+        makeTargetEnabled(true);
       }
     }.start();
     fixture.assertEnabled(timeout(3, SECONDS));
@@ -289,9 +291,11 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   
   @Test(expectedExceptions = WaitTimedOutError.class) 
   public void shouldTimeoutIfComponentNotEnabled() {
-    fixture.target.setEnabled(false);
+    makeTargetEnabled(false);
     fixture.assertEnabled(timeout(1, SECONDS));
   }
+  
+  protected void makeTargetEnabled(boolean enabled) { fixture.target.setEnabled(enabled); }
   
   @AfterMethod public final void tearDown() {
     beforeTearDown();

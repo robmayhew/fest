@@ -23,6 +23,8 @@ import org.fest.assertions.AssertExtension;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.*;
 
+import org.fest.swing.format.Formatting;
+
 /**
  * Understands assertion methods for error messages.
  *
@@ -66,18 +68,9 @@ class ErrorMessageAssert implements AssertExtension {
   static Message message(String message) { return new Message(message); }
 
   private String formattedProperty(String name) {
-    return concat("[", formattedTarget(), " - property:", quote(name), "]");
+    return concat("[", Formatting.format(target), " - property:", quote(name), "]");
   }
   
-  private String formattedTarget() {
-    String targetName = targetName();
-    if (isEmpty(targetName)) return targetType();
-    return concat(targetType(), "<", quote(targetName), ">");
-  }
-
-  private String targetType() { return target.getClass().getName(); }
-  private String targetName() { return target.getName(); }
-
   private static class PropertyName {
     final String name;
     PropertyName(String name) { this.name = name; }

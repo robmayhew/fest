@@ -35,6 +35,7 @@ import static org.fest.util.Arrays.array;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -147,9 +148,9 @@ public class ContainerFixtureTest {
     robot.showWindow(window);
   }
 
-  @Test public void shouldFindButtonByType() {
-    JButtonFixture button = container.button();
-    assertThat(button.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class) 
+  public void shouldThrowErrorWhenFindingButtonByTypeAndMoreThanOneFound() {
+    container.button();
   }
 
   @Test public void shouldFindButtonWithGivenMatcher() {
@@ -187,9 +188,9 @@ public class ContainerFixtureTest {
     assertThat(checkBox.target).isSameAs(window.checkBox);
   }
 
-  @Test public void shouldFindComboBoxByType() {
-    JComboBoxFixture comboBox = container.comboBox();
-    assertThat(comboBox.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingComboBoxByTypeAndMoreThanOneFound() {
+    container.comboBox();
   }
   
   @Test public void shouldFindComboBoxWithGivenMatcher() {
@@ -207,9 +208,9 @@ public class ContainerFixtureTest {
     assertThat(comboBox.target).isSameAs(window.comboBox);
   }
   
-  @Test public void shouldFindDialogByType() {
-    DialogFixture dialog = container.dialog();
-    assertThat(dialog.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingDialogByTypeAndMoreThanOneFound() {
+    container.dialog();
   }
   
   @Test public void shouldFindDialogWithGivenMatcher() {
@@ -223,6 +224,8 @@ public class ContainerFixtureTest {
   }
   
   @Test public void shouldFindDialogWithGivenName() {
+    window.dialog.pack();
+    window.dialog.setVisible(true);
     DialogFixture dialog = container.dialog("dialog");
     assertThat(dialog.target).isSameAs(window.dialog);
   }
@@ -247,9 +250,9 @@ public class ContainerFixtureTest {
     assertThat(fileChooser.target).isSameAs(window.fileChooser);
   }
   
-  @Test public void shouldFindLabelByType() {
-    JLabelFixture label = container.label();
-    assertThat(label.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingLabelByTypeAndMoreThanOneFound() {
+    container.label();
   }
   
   @Test public void shouldFindLabelWithGivenMatcher() {
@@ -267,9 +270,9 @@ public class ContainerFixtureTest {
     assertThat(label.target).isSameAs(window.label);
   }
   
-  @Test public void shouldFindListByType() {
-    JListFixture list = container.list();
-    assertThat(list.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingListByTypeAndMoreThanOneFound() {
+    container.list();
   }
   
   @Test public void shouldFindListWithGivenMatcher() {
@@ -307,9 +310,9 @@ public class ContainerFixtureTest {
     assertThat(menuItem.target).isSameAs(window.subMenu);
   }
   
-  @Test public void shouldFindPanelByType() {
-    JPanelFixture panel = container.panel();
-    assertThat(panel.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingPanelByTypeAndMoreThanOneFound() {
+    container.panel();
   }
 
   @Test public void shouldFindPanelWithGivenMatcher() {
@@ -454,9 +457,9 @@ public class ContainerFixtureTest {
     assertThat(table.target).isSameAs(window.table);
   }
   
-  @Test public void shouldFindTextComponentByType() {
-    JTextComponentFixture textField = container.textBox();
-    assertThat(textField.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingTextComponentByTypeAndMoreThanOneFound() {
+    container.textBox();
   }
   
   @Test public void shouldFindTextComponentWithGivenMatcher() {
@@ -474,9 +477,9 @@ public class ContainerFixtureTest {
     assertThat(textField.target).isSameAs(window.textField);
   }
   
-  @Test public void shouldFindToggleButtonByType() {
-    JToggleButtonFixture toggleButton = container.toggleButton();
-    assertThat(toggleButton.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingToggleButtonByTypeAndMoreThanOneFound() {
+    container.toggleButton();
   }
 
   @Test public void shouldFindToggleButtonWithGivenMatcher() {
@@ -494,9 +497,9 @@ public class ContainerFixtureTest {
     assertThat(toggleButton.target).isSameAs(window.toggleButton);
   }
   
-  @Test public void shouldFindToolBarByType() {
-    JToolBarFixture toolBar = container.toolBar();
-    assertThat(toolBar.target).isNotNull();
+  @Test(expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorWhenFindingToolBarByTypeAndMoreThanOneFound() {
+    container.toolBar();
   }
   
   @Test public void shouldFindToolBarWithGivenMatcher() {
