@@ -35,6 +35,10 @@ import static org.fest.util.Strings.*;
  */
 public class Formatting {
 
+  private static final String MAXIMUM = "maximum";
+
+  private static final String MINIMUM = "minimum";
+
   private static final String NULL_COMPONENT_MESSAGE = "Null Component";
 
   private static final String ENABLED = "enabled";
@@ -63,7 +67,9 @@ public class Formatting {
     register(nameOnly(JPanel.class));
     register(new IntrospectionComponentFormatter(JPopupMenu.class, NAME, "label", ENABLED));
     register(empty(JRootPane.class));
-    register(new IntrospectionComponentFormatter(JSlider.class, NAME, "minimum", "maximum", VALUE, ENABLED));
+    register(new IntrospectionComponentFormatter(JScrollBar.class, NAME, VALUE, "blockIncrement", MINIMUM, MAXIMUM, ENABLED));
+    register(new IntrospectionComponentFormatter(JScrollPane.class, NAME, ENABLED));
+    register(new IntrospectionComponentFormatter(JSlider.class, NAME, VALUE, MINIMUM, MAXIMUM, ENABLED));
     register(new IntrospectionComponentFormatter(JSpinner.class, NAME, VALUE, ENABLED));
     register(new JTabbedPaneFormatter());
     register(new JTableFormatter());
@@ -71,7 +77,7 @@ public class Formatting {
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
     register(new JTreeFormatter());
   }
-  
+
   private static ComponentFormatter empty(Class<? extends Component> targetType) {
     return new IntrospectionComponentFormatter(targetType);
   }

@@ -15,6 +15,7 @@
  */
 package org.fest.swing.format;
 
+import java.awt.Adjustable;
 import java.awt.Component;
 import java.util.logging.Logger;
 
@@ -134,7 +135,7 @@ public class FormattingTest {
     optionPane.setOptionType(JOptionPane.DEFAULT_OPTION);
     String formatted = formatted(optionPane);
     assertThat(formatted).isEqualTo(
-        expected(optionPane, 
+        expected(optionPane,
             "[message='A message', messageType=ERROR_MESSAGE, optionType=DEFAULT_OPTION, enabled=true, showing=false]"));
   }
 
@@ -149,20 +150,36 @@ public class FormattingTest {
     JPopupMenu popupMenu = new JPopupMenu("Menu");
     popupMenu.setName("popupMenu");
     String formatted = formatted(popupMenu);
-    assertThat(formatted).isEqualTo(expected(popupMenu, "[name='popupMenu', label='Menu', enabled=true]"));    
+    assertThat(formatted).isEqualTo(expected(popupMenu, "[name='popupMenu', label='Menu', enabled=true]"));
   }
-  
+
   @Test public void shouldFormatJRootPane() {
     JRootPane pane = new JRootPane();
     String formatted = formatted(pane);
     assertThat(formatted).isEqualTo(expected(pane, "[]"));
   }
 
+  @Test public void shouldFormatJScrollBar() {
+    JScrollBar scrollBar = new JScrollBar(Adjustable.VERTICAL, 20, 10, 0, 60);
+    scrollBar.setName("scrollBar");
+    String formatted = formatted(scrollBar);
+    assertThat(formatted).isEqualTo(expected(scrollBar,
+        "[name='scrollBar', value=20, blockIncrement=10, minimum=0, maximum=60, enabled=true]"
+    ));
+  }
+
+  @Test public void shouldFormatJScrollPane() {
+    JScrollPane scrollPane = new JScrollPane();
+    scrollPane.setName("scrollPane");
+    String formatted = formatted(scrollPane);
+    assertThat(formatted).isEqualTo(expected(scrollPane, "[name='scrollPane', enabled=true]"));
+  }
+
   @Test public void shouldFormatJSlider() {
     JSlider slider = new JSlider(2, 8, 6);
     slider.setName("slider");
     String formatted = formatted(slider);
-    assertThat(formatted).isEqualTo(expected(slider, "[name='slider', minimum=2, maximum=8, value=6, enabled=true]"));
+    assertThat(formatted).isEqualTo(expected(slider, "[name='slider', value=6, minimum=2, maximum=8, enabled=true]"));
   }
 
   @Test public void shouldFormatJSpinner() {
@@ -171,7 +188,7 @@ public class FormattingTest {
     String formatted = formatted(spinner);
     assertThat(formatted).isEqualTo(expected(spinner, "[name='spinner', value=6, enabled=true]"));
   }
-  
+
   @Test public void shouldFormatJTabbedPane() {
     JTabbedPane tabbedPane = new JTabbedPane();
     tabbedPane.addTab("First", new JPanel());
@@ -180,12 +197,12 @@ public class FormattingTest {
     tabbedPane.setName("tabbedPane");
     tabbedPane.setSelectedIndex(1);
     String formatted = formatted(tabbedPane);
-    assertThat(formatted).isEqualTo(expected(tabbedPane, concat( 
+    assertThat(formatted).isEqualTo(expected(tabbedPane, concat(
         "[name='tabbedPane', selectedTabIndex=1, selectedTabTitle='Second', tabCount=3, ",
         "tabTitles=['First', 'Second', 'Third'], enabled=true]"
     )));
   }
-  
+
   @Test public void shouldFormatJTable() {
     JTable table = new JTable(8, 6);
     table.setName("table");
@@ -225,7 +242,7 @@ public class FormattingTest {
         "[name='tree', selectionCount=1, selectionPaths=['[root, Two]'], selectionMode=CONTIGUOUS_TREE_SELECTION, enabled=true]"
     )));
   }
-  
+
   private String formatted(Component c) {
     String formatted = Formatting.format(c);
     logger.info(concat("formatted: ", formatted));
