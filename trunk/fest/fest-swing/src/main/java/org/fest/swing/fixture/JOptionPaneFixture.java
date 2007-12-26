@@ -359,8 +359,4 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   public final JOptionPaneFixture requireDisabled() {
     return (JOptionPaneFixture)assertDisabled();
   }
-
-  @Override protected String formattedTarget() {
-    return target.getClass().getName();
-  }
 }
