@@ -62,7 +62,7 @@ public class JDialogStarter extends JDialog {
     private static final long serialVersionUID = 1L;
 
     private NestedJDialog(JDialog owner) {
-      super(owner, false);
+      super(owner, true);
       setContentPane(createContentPane());
       setName("NestedDialog");
     }

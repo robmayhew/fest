@@ -37,10 +37,9 @@ public class JDialogTest {
 
     DialogFixture dialogFixture = m_window.dialog("NestedDialog");
     dialogFixture.requireVisible();
-//    dialogFixture.requireModal();
-
-//    dialogFixture.button().click();
-//    dialogFixture.requireNotVisible();
+    dialogFixture.requireModal();
+    dialogFixture.button().click();
+    dialogFixture.requireNotVisible();
 
     m_window.button().click();
 
@@ -48,8 +47,9 @@ public class JDialogTest {
 
     dialogFixture = m_window.dialog("NestedDialog");
     dialogFixture.requireVisible();
-//    dialogFixture.requireModal();
-
-//    dialogFixture.button().click();
+    dialogFixture.requireModal();
+    dialogFixture.button().click();
+    
+    m_window.cleanUp();
   }
 }
