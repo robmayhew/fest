@@ -88,7 +88,7 @@ public class TableCell {
    */
   void validateBoundsIn(JTable table) {
     int rowCount = table.getRowCount();
-    if (rowCount == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
+    if (rowCount == 0) throw new ActionFailedException("Table does not contain any rows");
     validateIndex(row, rowCount, "row");
     validateIndex(column, table.getColumnCount(), "column");
   }

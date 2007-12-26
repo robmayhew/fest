@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.exception.ActionFailedException;
+
 import org.testng.annotations.Test;
 
 /**
@@ -36,31 +38,31 @@ public class TableCellTest {
     assertThat(cell.column).isEqualTo(column);
   }
   
-  @Test(expectedExceptions = IllegalStateException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfTableIsEmpty() {
     TableCell cell = TableCell.TableCellBuilder.row(2).column(3);
     cell.validateBoundsIn(new JTable());
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfRowIndexIsNegative() {
     TableCell cell = TableCell.TableCellBuilder.row(-2).column(3);
     cell.validateBoundsIn(new JTable(4, 3));
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfColumnIndexIsNegative() {
     TableCell cell = TableCell.TableCellBuilder.row(2).column(-3);
     cell.validateBoundsIn(new JTable(4, 3));
   }
   
-  @Test(expectedExceptions = IndexOutOfBoundsException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfRowIsOutOfBounds() {
     TableCell cell = TableCell.TableCellBuilder.row(4).column(2);
     cell.validateBoundsIn(new JTable(4, 3));
   }  
   
-  @Test(expectedExceptions = IndexOutOfBoundsException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfColumnIsOutOfBounds() {
     TableCell cell = TableCell.TableCellBuilder.row(0).column(3);
     cell.validateBoundsIn(new JTable(4, 3));
