@@ -18,6 +18,9 @@
       	Added JScrollBarFixture and JScrollPaneFixture.
       </action>
       <action dev="alruiz" type="add">
+      	Added NameAndTypeMatcher to lookup GUI components by name and type.
+      </action>
+      <action dev="alruiz" type="add">
       	Added method 'printer()' to RobotFixture. This method returns a ComponentPrinter using the same component
       	hierarchy as the RobotFixture.
       </action>
