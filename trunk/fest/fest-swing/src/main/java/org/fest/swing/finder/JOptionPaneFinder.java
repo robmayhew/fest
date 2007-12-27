@@ -94,11 +94,11 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
     return (JOptionPaneFinder)super.withTimeout(timeout, unit);
   }
 
-  protected String componentTypeName() {
+  protected String componentDisplayName() {
     return "option pane";
   }
 
-  protected ComponentMatcher nameMatcher() {
+  @Override protected ComponentMatcher nameMatcher() {
     return null; // no name matching with JOptionPane
   }
 }

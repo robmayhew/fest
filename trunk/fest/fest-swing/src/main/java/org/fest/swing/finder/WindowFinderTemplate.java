@@ -30,8 +30,8 @@ import org.fest.swing.fixture.WindowFixture;
  */
 abstract class WindowFinderTemplate<T extends Window> extends ComponentFinderTemplate<T> {
 
-  WindowFinderTemplate(String windowName) {
-    super(windowName);
+  WindowFinderTemplate(String windowName, Class<? extends T> windowType) {
+    super(windowName, windowType);
   }
   
   WindowFinderTemplate(Class<? extends T> windowType) {

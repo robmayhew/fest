@@ -15,11 +15,9 @@
  */
 package org.fest.swing.finder;
 
-import java.awt.Component;
 import java.awt.Dialog;
 import java.util.concurrent.TimeUnit;
 
-import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.fixture.DialogFixture;
 
@@ -33,7 +31,7 @@ import org.fest.swing.fixture.DialogFixture;
 public final class DialogFinder extends WindowFinderTemplate<Dialog> {
 
   DialogFinder(String dialogName) {
-    super(dialogName);
+    super(dialogName, Dialog.class);
   }
 
   DialogFinder(Class<? extends Dialog> dialogType) {
@@ -70,15 +68,7 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
     return new DialogFixture(robot, findComponentWith(robot));
   }
 
-  protected String componentTypeName() {
+  protected String componentDisplayName() {
     return "dialog";
-  }
-
-  protected ComponentMatcher nameMatcher() {
-    return new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return c instanceof Dialog && c.isVisible() && componentName().equals(c.getName());
-      }
-    };
   }
 }

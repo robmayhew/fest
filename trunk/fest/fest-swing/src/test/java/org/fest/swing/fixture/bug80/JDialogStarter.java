@@ -40,16 +40,16 @@ public class JDialogStarter extends JDialog {
 
   private Container createContentPane() {
     JPanel panel = new JPanel();
-    panel.add(new JButton(new OpenJDialogAction()));
+    JButton startButton = new JButton(new OpenJDialogAction());
+    startButton.setName("start");
+    panel.add(startButton);
     return panel;
   }
 
   private class OpenJDialogAction extends AbstractAction {
     private static final long serialVersionUID = 1L;
 
-    private OpenJDialogAction() {
-      super("Start!");
-    }
+    private OpenJDialogAction() { super("Start!"); }
 
     public void actionPerformed(ActionEvent e) {
       NestedJDialog dialog = new NestedJDialog(JDialogStarter.this);
@@ -76,6 +76,7 @@ public class JDialogStarter extends JDialog {
           NestedJDialog.this.dispose();
         }
       });
+      closeButton.setName("close");
       result.add(closeButton);
       return result;
     }

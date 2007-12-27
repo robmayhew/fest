@@ -214,9 +214,9 @@ public class ContainerFixtureTest {
     assertThat(comboBox.target).isSameAs(window.comboBox);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingDialogByTypeAndMoreThanOneFound() {
-    container.dialog();
+  @Test public void shouldThrowErrorWhenFindingDialogByTypeAndMoreThanOneFound() {
+    DialogFixture dialog = container.dialog();
+    assertThat(dialog.target).isNotNull();
   }
 
   @Test public void shouldFindDialogWithGivenMatcher() {

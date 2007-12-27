@@ -23,7 +23,9 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.NameAndTypeMatcher;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.fixture.ComponentFixture;
 
 /**
@@ -39,7 +41,8 @@ abstract class ComponentFinderTemplate<T extends Component> {
   private Class<? extends T> componentType;
   private long timeout = FinderConstants.TIMEOUT;
   
-  ComponentFinderTemplate(String componentName) {
+  ComponentFinderTemplate(String componentName, Class<? extends T> componentType) {
+    this(componentType);
     if (isEmpty(componentName))
       throw new IllegalArgumentException("The name of the component to find should not be empty or null");
     this.componentName = componentName;
@@ -84,29 +87,23 @@ abstract class ComponentFinderTemplate<T extends Component> {
   }
 
   private String searchDescription() {
-    String message = concat("Find ", componentTypeName());
+    String message = concat("Find ", componentDisplayName());
     if (searchingByType()) return concat(message, " of type ", componentType().getName());
     return concat(message, " with name ", quote(componentName()));
   }
 
-  protected abstract String componentTypeName();
+  protected abstract String componentDisplayName();
 
   private ComponentMatcher matcher() {
-    if (searchingByType()) return typeMatcher();
+    if (searchingByType()) return new TypeMatcher(componentType(), true);
     return nameMatcher();
   }
 
   protected final boolean searchingByType() { return componentType != null; }
 
-  private ComponentMatcher typeMatcher() {
-    return new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return c != null && c.isShowing() && componentType().isAssignableFrom(c.getClass());
-      }
-    };
+  protected ComponentMatcher nameMatcher() {
+    return new NameAndTypeMatcher(componentName(), componentType(), true);
   }
-
-  protected abstract ComponentMatcher nameMatcher();
 
   protected final String componentName() { return componentName; }
   protected final Class<? extends T> componentType() { return componentType; }

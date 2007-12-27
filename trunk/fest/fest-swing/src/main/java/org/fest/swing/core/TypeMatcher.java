@@ -36,7 +36,7 @@ public final class TypeMatcher implements ComponentMatcher {
    * @param type the type of the component we are looking for.
    */
   public TypeMatcher(Class<? extends Component> type) {
-    this(type, true);
+    this(type, false);
   }
 
   /**

@@ -15,12 +15,10 @@
  */
 package org.fest.swing.finder;
 
-import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
 
@@ -58,7 +56,7 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
   }
 
   JFileChooserFinder(String name) {
-    super(name);
+    super(name, JFileChooser.class);
   }
 
   /**
@@ -107,15 +105,7 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
     return (JFileChooserFinder)super.withTimeout(timeout, unit);
   }
 
-  protected String componentTypeName() {
+  protected String componentDisplayName() {
     return "file chooser";
-  }
-
-  protected ComponentMatcher nameMatcher() {
-    return new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return c instanceof JFileChooser && c.isVisible() && componentName().equals(c.getName());
-      }
-    };
   }
 }

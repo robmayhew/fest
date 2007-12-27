@@ -33,7 +33,7 @@ public class JDialogTest {
     m_window.show();
     m_window.requireVisible();
 
-    m_window.button().click();
+    m_window.button("start").click();
 
     DialogFixture dialogFixture = m_window.dialog("NestedDialog");
     dialogFixture.requireVisible();
@@ -41,7 +41,7 @@ public class JDialogTest {
     dialogFixture.button().click();
     dialogFixture.requireNotVisible();
 
-    m_window.button().click();
+    m_window.button("start").click();
 
     Thread.sleep(3000);
 

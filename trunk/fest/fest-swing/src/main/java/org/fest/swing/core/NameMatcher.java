@@ -37,7 +37,7 @@ public final class NameMatcher implements ComponentMatcher {
    * @param name the name of the component we are looking for.
    */
   public NameMatcher(String name) {
-    this(name, true);
+    this(name, false);
   }
 
   /**

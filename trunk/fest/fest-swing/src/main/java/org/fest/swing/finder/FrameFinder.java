@@ -15,11 +15,9 @@
  */
 package org.fest.swing.finder;
 
-import java.awt.Component;
 import java.awt.Frame;
 import java.util.concurrent.TimeUnit;
 
-import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.fixture.FrameFixture;
 
@@ -33,7 +31,7 @@ import org.fest.swing.fixture.FrameFixture;
 public final class FrameFinder extends WindowFinderTemplate<Frame> {
 
   FrameFinder(String frameName) {
-    super(frameName);
+    super(frameName, Frame.class);
   }
 
   FrameFinder(Class<? extends Frame> frameType) {
@@ -69,15 +67,7 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
     return new FrameFixture(robot, findComponentWith(robot));
   }
 
-  protected String componentTypeName() {
+  protected String componentDisplayName() {
     return "frame";
-  }
-
-  protected ComponentMatcher nameMatcher() {
-    return new ComponentMatcher() {
-      public boolean matches(Component c) {
-        return c instanceof Frame && c.isVisible() && componentName().equals(c.getName());
-      }
-    };
   }
 }
