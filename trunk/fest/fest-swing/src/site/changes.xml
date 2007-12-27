@@ -14,12 +14,12 @@
       	Moved 'print' methods from org.fest.swing.core.ComponentFinder to the new class
       	org.fest.swing.core.ComponentPrinter.
       </action>
+      <action dev="wanghy, alruiz" type="add" issue="75" due-to="Fabien Barbero">
+      	Added JScrollBarFixture and JScrollPaneFixture.
+      </action>
       <action dev="alruiz" type="add">
       	Added method 'printer()' to RobotFixture. This method returns a ComponentPrinter using the same component
       	hierarchy as the RobotFixture.
-      </action>
-      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe">
-      	NameMatcher and TypeMatcher now match components that are shown by default.
       </action>
       <action dev="alruiz" type="fix" issue="76" due-to="Win Deblauwe">
       	ComponentFinders now match components if 'isShowing()' is true, instead of checking for 'isVisible()'.
