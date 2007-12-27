@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -299,5 +300,17 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    */
   public final JInternalFrameFixture requireDisabled() {
     return (JInternalFrameFixture)assertDisabled();
+  }
+
+
+  /**
+   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
+   * the ones showing.
+   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
+   * showing.
+   * @return this fixture.
+   */
+  public final JInternalFrameFixture showingComponentLookup(boolean newValue) {
+    return (JInternalFrameFixture)doSetShowingComponentLookup(newValue);
   }
 }

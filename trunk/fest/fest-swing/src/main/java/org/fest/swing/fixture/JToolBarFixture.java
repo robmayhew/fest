@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JToolBar;
@@ -225,5 +226,17 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public final JToolBarFixture requireDisabled() {
     return (JToolBarFixture)assertDisabled();
+  }
+
+
+  /**
+   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
+   * the ones showing.
+   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
+   * showing.
+   * @return this fixture.
+   */
+  public final JToolBarFixture showingComponentLookup(boolean newValue) {
+    return (JToolBarFixture)doSetShowingComponentLookup(newValue);
   }
 }

@@ -32,8 +32,7 @@ public final class NameMatcher implements ComponentMatcher {
   private final boolean requireShowing;
 
   /**
-   * Creates a new <code>{@link NameMatcher}</code>. By default this constructor looks for a 
-   * <code>{@link Component}</code> having a matching name and being shown. 
+   * Creates a new <code>{@link NameMatcher}</code>. The component to match does not have to be showing.
    * @param name the name of the component we are looking for.
    */
   public NameMatcher(String name) {
@@ -43,7 +42,7 @@ public final class NameMatcher implements ComponentMatcher {
   /**
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param name the name of the component we are looking for.
-   * @param requireShowing indicates if the component we are looking should be shown or not.
+   * @param requireShowing indicates if the component to match should be showing or not.
    */
   public NameMatcher(String name, boolean requireShowing) {
     this.name = name;

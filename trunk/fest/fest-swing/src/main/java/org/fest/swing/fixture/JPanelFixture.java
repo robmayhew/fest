@@ -14,6 +14,8 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+
 import javax.swing.JPanel;
 
 import org.fest.swing.core.MouseButton;
@@ -176,5 +178,16 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    */
   public final JPanelFixture requireDisabled() {
     return (JPanelFixture) assertDisabled();
+  }
+
+  /**
+   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
+   * the ones showing.
+   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
+   * showing.
+   * @return this fixture.
+   */
+  public final JPanelFixture showingComponentLookup(boolean newValue) {
+    return (JPanelFixture)doSetShowingComponentLookup(newValue);
   }
 }

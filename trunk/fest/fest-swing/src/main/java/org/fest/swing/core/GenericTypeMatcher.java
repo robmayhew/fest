@@ -26,6 +26,21 @@ import java.awt.Component;
  */
 public abstract class GenericTypeMatcher<T extends Component> implements ComponentMatcher {
 
+  private boolean requireShowing;
+
+  /** Creates a new </code>{@link GenericTypeMatcher}</code>. The component to match does not have to be showing. */
+  public GenericTypeMatcher() {
+    this(false);
+  }
+
+  /**
+   * Creates a new </code>{@link GenericTypeMatcher}</code>.
+   * @param requireShowing indicates if the component to match should be showing or not.
+   */
+  public GenericTypeMatcher(boolean requireShowing) {
+    this.requireShowing = requireShowing;
+  }
+  
   /**
    * Verifies that the given <code>{@link Component}</code>:
    * <ol>
@@ -40,7 +55,7 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
-      return isMatching((T)c);
+      return (!requireShowing || c.isShowing()) && isMatching((T)c);
     } catch(ClassCastException ignored) {
       return false;
     }
@@ -52,4 +67,16 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
    * @return <code>true</code> if the given component matches the defined search criteria; otherwise, <code>false</code>.
    */
   protected abstract boolean isMatching(T component);
+
+  /**
+   * Indicates whether the component to match has to be showing.
+   * @return <code>true</code> if the component to find has to be showing, <code>false</code> otherwise.
+   */
+  public final boolean requireShowing() { return requireShowing; }
+
+  /**
+   * Sets this matcher to match either showing or not showing components.
+   * @param requireShowing indicates if the component to match should be showing or not.
+   */
+  public final void requireShowing(boolean requireShowing) { this.requireShowing = requireShowing; }
 }

@@ -33,8 +33,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
   private final Class<? extends Component> type;
 
   /**
-   * Creates a new <code>{@link NameAndTypeMatcher}</code>. By default this constructor looks for a 
-   * <code>{@link Component}</code> having a matching name and  being shown. 
+   * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
    * @param name the name of the component we are looking for.
    * @param type the type of the component we are looking for.
    */
@@ -46,7 +45,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param name the name of the component we are looking for.
    * @param type the type of the component we are looking for.
-   * @param requireShowing indicates if the component we are looking should be shown or not.
+   * @param requireShowing indicates if the component to match should be showing or not.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
     this.name = name;

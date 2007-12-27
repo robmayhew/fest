@@ -15,13 +15,20 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Container;
+
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import abbot.tester.JPopupMenuTester;
 
+import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 /**
@@ -29,7 +36,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang
  */
-public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
+public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   
   /**
    * Creates a new <code>{@link JPopupMenuFixture}</code>.
@@ -39,6 +46,42 @@ public class JPopupMenuFixture extends JMenuItemContainerFixture<JPopupMenu> {
   public JPopupMenuFixture(RobotFixture robot, JPopupMenu target) {
     super(robot, target);
   }
+
+  /**
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
+   * which name matches the specified one.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>JMenuItem</code> having a matching name is found.
+   */
+  public final JMenuItemFixture menuItem(String name) {
+    return new JMenuItemFixture(robot, findByName(name, JMenuItem.class));
+  }
+
+  /**
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
+   * that matches the specified search criteria.
+   * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
+   *         found.
+   * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria is
+   *         found.
+   */
+  public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
+    return new JMenuItemFixture(robot, find(matcher));
+  }
+
+  private <C extends Component> C findByName(String name, Class<C> type) {
+    return finder().findByName(target, name, type);
+  }
+  
+  private <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
+    return finder().find(target, matcher);
+  }
+
+  private ComponentFinder finder() { return robot.finder(); }
 
   /**
    * Returns the contents of this fixture's <code>{@link JPopupMenu}</code>.

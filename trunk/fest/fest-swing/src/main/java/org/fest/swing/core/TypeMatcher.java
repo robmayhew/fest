@@ -31,8 +31,7 @@ public final class TypeMatcher implements ComponentMatcher {
   private final boolean requireShowing;
 
   /**
-   * Creates a new <code>{@link TypeMatcher}</code>. By default this constructor looks for a 
-   * <code>{@link Component}</code> having a matching type and being shown. 
+   * Creates a new <code>{@link TypeMatcher}</code>. The component to match does not have to be showing. 
    * @param type the type of the component we are looking for.
    */
   public TypeMatcher(Class<? extends Component> type) {
@@ -42,7 +41,7 @@ public final class TypeMatcher implements ComponentMatcher {
   /**
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param type the type of the component we are looking for.
-   * @param requireShowing indicates if the component we are looking should be shown or not.
+   * @param requireShowing indicates if the component to match should be showing or not.
    */
   public TypeMatcher(Class<? extends Component> type, boolean requireShowing) {
     this.type = type;

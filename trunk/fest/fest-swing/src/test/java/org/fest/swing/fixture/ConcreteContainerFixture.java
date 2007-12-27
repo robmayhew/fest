@@ -35,7 +35,7 @@ public class ConcreteContainerFixture<T extends Container> extends ContainerFixt
 
   public ContainerFixture<T> click() { return null; }
   public ContainerFixture<T> click(MouseButton button) { return null; }
-  public ComponentFixture<T> click(MouseClickInfo mouseClickInfo) { return null; }
+  public ContainerFixture<T> click(MouseClickInfo mouseClickInfo) { return null; }
   public ContainerFixture<T> doubleClick() { return null; }
   public ContainerFixture<T> focus() { return null; }
   public ContainerFixture<T> pressAndReleaseKeys(int... keyCodes) { return null; }
@@ -43,8 +43,9 @@ public class ConcreteContainerFixture<T extends Container> extends ContainerFixt
   public ContainerFixture<T> requireEnabled() { return null; }
   public ContainerFixture<T> requireEnabled(Timeout timeout) { return null; }
   public ContainerFixture<T> requireVisible() { return null; }
-  public ComponentFixture<T> requireNotVisible() { return null; }
-  public ComponentFixture<T> rightClick() { return null; }
-  public ComponentFixture<T> pressKey(int keyCode) { return null; }
-  public ComponentFixture<T> releaseKey(int keyCode) { return null; }
+  public ContainerFixture<T> requireNotVisible() { return null; }
+  public ContainerFixture<T> rightClick() { return null; }
+  public ContainerFixture<T> pressKey(int keyCode) { return null; }
+  public ContainerFixture<T> releaseKey(int keyCode) { return null; }
+  public ContainerFixture<T> showingComponentLookup(boolean newValue) { return null; }
 }

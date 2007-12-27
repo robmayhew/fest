@@ -68,24 +68,41 @@ public class ComponentFinder {
   public final ComponentPrinter printer() { return printer; }
   
   /**
-   * Finds a <code>{@link Component}</code> by type. For example:
-   * 
+   * Finds a <code>{@link Component}</code> by type. The component to find does not have to be showing. 
+   * <p>
+   * Example:
    * <pre>
    * JTextField textbox = finder.findByType(JTextField.class);
    * </pre>
-   * 
+   * </p>
    * @param <T> the parameterized type of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public final <T extends Component> T findByType(Class<T> type) {
-    return type.cast(find(new TypeMatcher(type)));
+    return findByType(type, false);
   }
 
   /**
+   * Finds a <code>showing</code> <code>{@link Component}</code> by type. For example:
+   * @param <T> the parameterized type of the component to find.
+   * @param type the type of the component to find.
+   * @param showing indicates whether the component to find should be visible (or showing) or not.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   * @see #findByType(Class)
+   */
+  public final <T extends Component> T findByType(Class<T> type, boolean showing) {
+    return type.cast(find(new TypeMatcher(type, showing)));
+  }
+  
+  /**
    * <p>
-   * Finds a <code>{@link Component}</code> by type in the hierarchy under the given root.
+   * Finds a <code>{@link Component}</code> by type in the hierarchy under the given root. The component to find does 
+   * not have to be showing.
    * </p>
    * <p>
    * Let's assume we have the following <code>{@link javax.swing.JFrame}</code> containing a
@@ -112,13 +129,29 @@ public class ComponentFinder {
    * @param type the type of the component to find.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public final <T extends Component> T findByType(Container root, Class<T> type) {
-    return type.cast(find(root, new TypeMatcher(type)));
+    return findByType(root, type, false);
   }
 
   /**
-   * Finds a <code>{@link Component}</code> by name and type.
+   * Finds a <strong>showing</strong> <code>{@link Component}</code> by type in the hierarchy under the given root.
+   * @param <T> the parameterized type of the component to find.
+   * @param root the root used as the starting point of the search.
+   * @param showing indicates whether the component to find should be visible (or showing) or not.
+   * @param type the type of the component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   * @see #findByType(Container, Class)
+   */
+  public final <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
+    return type.cast(find(root, new TypeMatcher(type, showing)));
+  }
+
+  /**
+   * Finds a <code>{@link Component}</code> by name and type. The component to find does not have to be showing.
    * @param <T> the parameterized type of the component to find.
    * @param name the name of the component to find.
    * @param type the type of the component to find.
@@ -127,13 +160,27 @@ public class ComponentFinder {
    * @see #findByName(String)
    */
   public final <T extends Component> T findByName(String name, Class<T> type) {
-    Component found = find(new NameAndTypeMatcher(name, type));
+    return findByName(name, type, false);
+  }
+
+  /**
+   * Finds a <strong>showing</code> <code>{@link Component}</code> by name and type.
+   * @param <T> the parameterized type of the component to find.
+   * @param name the name of the component to find.
+   * @param type the type of the component to find.
+   * @param showing indicates whether the component to find should be visible (or showing) or not.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @see #findByName(String, Class)
+   */
+  public final <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
+    Component found = find(new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
 
   /**
    * <p>
-   * Finds a <code>{@link Component}</code> by name.
+   * Finds a <code>{@link Component}</code> by name. The component to find does not have to be showing.
    * </p>
    * <p>
    * Let's assume we have the <code>{@link javax.swing.JTextField}</code> with name "myTextBox";
@@ -153,15 +200,35 @@ public class ComponentFinder {
    * 
    * </p>
    * <p>
-   * Please note that you need to cast the result of the lookup to the right type. To avoid casting, please use
-   * <code>{@link #findByName(String, Class)}</code> or <code>{@link #findByName(Container, String, Class)}</code>.
+   * Please note that you need to cast the result of the lookup to the right type. To avoid casting, please use one of
+   * following:
+   * <ol>
+   * <li><code>{@link #findByName(String, Class)}</code></li>
+   * <li><code>{@link #findByName(String, Class, boolean)}</code></li>
+   * <li><code>{@link #findByName(Container, String, Class)}</code></li>
+   * <li><code>{@link #findByName(Container, String, Class, boolean)}</code></li>
+   * </ol>
    * </p>
    * @param name the name of the component to find.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public final Component findByName(String name) {
-    return find(new NameMatcher(name));
+    return findByName(name, false);
+  }
+
+  /**
+   * Finds a <strong>showing</strong> <code>{@link Component}</code> by name.
+   * @param name the name of the component to find.
+   * @param showing indicates whether the component to find should be visible (or showing) or not.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   * @see #findByName(String)
+   */
+  public final Component findByName(String name, boolean showing) {
+    return find(new NameMatcher(name, showing));
   }
 
   /**
@@ -187,34 +254,68 @@ public class ComponentFinder {
   }
   
   /**
-   * Finds a <code>{@link Component}</code> by name and type in the hierarchy under the given root.
+   * Finds a <code>{@link Component}</code> by name and type in the hierarchy under the given root. The component to 
+   * find does not have to be showing.
    * @param <T> the parameterized type of the component to find.
    * @param root the root used as the starting point of the search.
    * @param name the name of the component to find.
    * @param type the type of the component to find.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    * @see #findByType(Container, Class)
    */
   public final <T extends Component> T findByName(Container root, String name, Class<T> type) {
-    Component found = find(root, new NameAndTypeMatcher(name, type));
+    return findByName(root, name, type, false);
+  }
+
+  /**
+   * Finds a <strong>showing</strong> <code>{@link Component}</code> by name and type in the hierarchy under the given 
+   * root.
+   * @param <T> the parameterized type of the component to find.
+   * @param root the root used as the starting point of the search.
+   * @param name the name of the component to find.
+   * @param type the type of the component to find.
+   * @param showing indicates whether the component to find should be visible (or showing) or not.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   * @see #findByName(Container, String, Class)
+   */
+  public final <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
+    Component found = find(root, new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
 
   /**
-   * Finds a <code>{@link Component}</code> by name in the hierarchy under the given root.
+   * Finds a <code>{@link Component}</code> by name in the hierarchy under the given root. The component to find does
+   * not have to be showing.
    * @param root the root used as the starting point of the search.
    * @param name the name of the component to find.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
-   * @see #findByName(Container, String, Class)
    */
   public final Component findByName(Container root, String name) {
-    return find(root, new NameMatcher(name));
+    return findByName(root, name, false);
   }
 
+  /**
+   * Finds a <strong>showing</strong> <code>{@link Component}</code> by name in the hierarchy under the given root.
+   * @param root the root used as the starting point of the search.
+   * @param name the name of the component to find.
+   * @param showing indicates whether the component to find should be visible (or showing) or not.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   * @see #findByName(String)
+   */
+  public final Component findByName(Container root, String name, boolean showing) {
+    return find(root, new NameMatcher(name, showing));
+  }
+  
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code> in the hierarchy
    * under the given root.

@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -274,5 +275,16 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture requireModal() {
     assertThat(target.isModal()).as(formattedPropertyName("modal")).isTrue();
     return this;
+  }
+
+  /**
+   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
+   * the ones showing.
+   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
+   * showing.
+   * @return this fixture.
+   */
+  public final DialogFixture showingComponentLookup(boolean newValue) {
+    return (DialogFixture)doSetShowingComponentLookup(newValue);
   }
 }

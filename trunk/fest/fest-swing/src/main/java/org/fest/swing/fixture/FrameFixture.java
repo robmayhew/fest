@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
@@ -336,5 +337,16 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public final FrameFixture requireDisabled() {
     return (FrameFixture)assertDisabled();
+  }
+
+  /**
+   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
+   * the ones showing.
+   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
+   * showing.
+   * @return this fixture.
+   */
+  public final FrameFixture showingComponentLookup(boolean newValue) {
+    return (FrameFixture)doSetShowingComponentLookup(newValue);
   }
 }
