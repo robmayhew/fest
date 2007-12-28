@@ -56,7 +56,7 @@ public class BasicComponentFinderTest {
   }
   
   @Test public void shouldFindComponentUsingMatcher() {
-    Component found = finder.find(new NameMatcher("firstButton"));
+    Component found = finder.find(new NameMatcher("firstButton", true));
     assertThat(found).isSameAs(window.firstButton);
   }
 

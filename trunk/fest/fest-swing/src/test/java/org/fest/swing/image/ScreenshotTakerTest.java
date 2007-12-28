@@ -17,8 +17,7 @@ package org.fest.swing.image;
 
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.util.UUID;
 
 import javax.swing.JButton;
 
@@ -102,7 +101,7 @@ public class ScreenshotTakerTest {
   }
 
   private String imageFileName() {
-    String timestamp = new SimpleDateFormat("yyMMdd.hhmmss").format(new GregorianCalendar().getTime());
-    return concat(timestamp, ".png");
+    UUID uuid = UUID.randomUUID();
+    return concat(uuid.toString(), ".png");
   }
 }
