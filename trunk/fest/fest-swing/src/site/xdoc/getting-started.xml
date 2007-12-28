@@ -34,7 +34,7 @@
           When writing GUI tests, please use the fixtures in the package <code class="code">org.fest.swing.fixture</code>.
           These fixtures provide specific methods to simulate user interaction with a GUI component and also provide
           assertion methods to verify the state of such GUI component. Although you could work with the FEST Robot
-          (<code class="code">org.fest.swing.core.RobotFixture</code>) directly, the Robot is too low level and requires
+          (<code class="code">org.fest.swing.core.RobotFixture</code>) directly, the Robot is too low-level and requires
           considerably more code than the fixtures.
         </p>
         <p>
@@ -61,9 +61,9 @@
               </p>
               <p>
                 <ul style="list-style-type:square">
-                  <li>&quot;<code class="code">setUp</code>&quot; method in JUnit 3.8.x</li>
-                  <li>any method annotated with <code class="code">@Before</code> in JUnit 4.x</li>
-                  <li>any method annotated with <code class="code">@BeforeMethod</code> in TestNG</li>
+                  <li>&quot;<code class="code">setUp</code>&quot; method (JUnit 3.8.x)</li>
+                  <li>any method marked with <code class="code">@Before</code> (JUnit 4.x)</li>
+                  <li>any method marked with <code class="code">@BeforeMethod</code> (TestNG)</li>
                 </ul>
               </p>
               <p>
@@ -85,9 +85,9 @@ private FrameFixture window;
               </p>
               <p>
                 <ul style="list-style-type:square">
-                  <li>&quot;<code class="code">tearDown</code>&quot; method in JUnit 3.8.x</li>
-                  <li>any method annotated with <code class="code">@After</code> in JUnit 4.x</li>
-                  <li>any method annotated with <code class="code">@AfterMethod</code> in TestNG</li>
+                  <li>&quot;<code class="code">tearDown</code>&quot; method (JUnit 3.8.x)</li>
+                  <li>any method marked with <code class="code">@After</code> (JUnit 4.x)</li>
+                  <li>any method marked with <code class="code">@AfterMethod</code> (TestNG)</li>
                 </ul>
               </p>
               <p>

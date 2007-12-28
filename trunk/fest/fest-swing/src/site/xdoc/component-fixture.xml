@@ -83,7 +83,7 @@ JTextComponentFixture textBox = new JTextComponent(robotWithNewAwtHierarchy(), &
           approach (actually, this is <strong>the recommended approach</strong>) is to get a reference to the button 
           from the <code class="code">FrameFixture</code> that manages the frame containing the button we are interested 
           in:
-          <pre class="prittyprint">
+          <pre class="prettyprint">
 JTextComponentFixture textBox = frame.button(&quot;username&quot;);</pre>
         </p>
         <p>
