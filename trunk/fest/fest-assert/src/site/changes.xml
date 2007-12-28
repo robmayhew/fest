@@ -19,7 +19,7 @@
 				Expected and actual values were in wrong order when creating a ComparisonFailure.
       </action>
       <action dev="wanghy, alruiz" type="add" issue="47" due-to="Mark Derricutt">
-				Added a generified overload of 'assertThat'.
+				Added a generified overload of 'assertThat' to class Assertions.
       </action>
     </release>
     <release version="0.7" date="2007-11-08" description="Subsequent release">
