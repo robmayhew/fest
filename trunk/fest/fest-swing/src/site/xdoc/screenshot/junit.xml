@@ -8,7 +8,7 @@
   <body>
     <section name="Taking Screenshots of JUnit Failed Tests">
       <p>
-        FEST-Swing can take screenshots of the desktop when a <a href="http://www.junit.org" target="_blank">JUnit</a> 
+        FEST-Swing can take a screenshot of the desktop when a <a href="http://www.junit.org" target="_blank">JUnit</a> 
         GUI test fails, either when running tests using Ant or inside an IDE (e.g. 
         <a href="http://www.eclipse.org" target="_blank">Eclipse</a>.)
       </p>
@@ -69,7 +69,7 @@
         </p>        
         <p>
           <center>
-            <img src="./images/junit-ext.jpg" border="0" />
+            <img src="../images/junit-ext.jpg" border="0" />
           </center>
         </p>
         <p>

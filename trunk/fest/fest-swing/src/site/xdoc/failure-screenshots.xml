@@ -35,9 +35,9 @@
         Once our GUI tests have the <code class="code">@GUITest</code> annotation, we can take screenshot of the desktop
         when a GUI test fails:
         <ol>
-          <li><a href="manual-screenshot.html">Manually</a></li>
-          <li><a href="junit-screenshot.html">FEST's JUnit extension</a></li>
-          <li><a href="testng-screenshot.html">FEST's TestNG extension</a></li>
+          <li><a href="./screenshot/manual.html">Manually</a></li>
+          <li><a href="./screenshot/junit.html">FEST's JUnit extension</a></li>
+          <li><a href="./screenshot/testng.html">FEST's TestNG extension</a></li>
         </ol>
       </p>
     </section>
