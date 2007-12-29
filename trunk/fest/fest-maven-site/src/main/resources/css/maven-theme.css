@@ -264,7 +264,7 @@ table {
 
 .str { color: #080; }
 .kwd { color: #990000; }
-.com { color: #006600; }
+.com { color: #666666; }
 .typ { color: #606; }
 .lit { color: #066; }
 .pun { color: #660; }
