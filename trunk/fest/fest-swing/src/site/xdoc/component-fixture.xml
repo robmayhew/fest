@@ -32,35 +32,35 @@
           Creating a <code class="code">FrameFixture</code> is easy, we just need to pass an instance of the frame 
           we want to test:
           <pre class="prettyprint">
-FrameFixture frame = new FrameFixture(new MyFrame());
-frame.show();</pre>
+<span class="typ">FrameFixture</span> frame = <span class="kwd">new </span><span class="fnc">FrameFixture</span>(<span class="kwd">new </span><span class="fnc">MyFrame</span>());
+frame.<span class="fnc">show</span>();</pre>
         </p>
         <p>
           Once we have a <code class="code">FrameFixture</code> up, we can show the frame to test (we can optionally
           specify its size) and start simulating a user interacting with the frame.
           <pre class="prettyprint">
-frame.resizeTo(new Dimension(400, 600))
-     .minimize()
-     .normalize()
-     .close();</pre>
+frame.<span class="fnc">resizeTo</span>(<span class="kwd">new </span><span class="fnc">Dimension</span>(400, 600))
+     .<span class="fnc">minimize</span>()
+     .<span class="fnc">normalize</span>()
+     .<span class="fnc">close</span>();</pre>
         </p>
         <p>
           We can also get a reference to component-specific fixtures linked to the GUI components inside the frame under
           test.
           <pre class="prettyprint">
-// getting a reference to the JButton with name &quot;connect&quot; inside the frame
-frame.button(&quot;connect&quot;).click();
+<span class="com">// getting a reference to the JButton with name &quot;connect&quot; inside the frame</span>
+frame.<span class="fnc">button</span>(<span class="str">&quot;connect&quot;</span>).<span class="fnc">click</span>();
 
-// getting a reference to the JComboBox with name &quot;projects&quot; inside the frame
-frame.comboBox(&quot;projects&quot;).selectItem(&quot;FEST&quot;);</pre>
+<span class="com">// getting a reference to the JComboBox with name &quot;projects&quot; inside the frame</span>
+frame.<span class="fnc">comboBox</span>(<span class="str">&quot;projects&quot;</span>).<span class="fnc">selectItem</span>(<span class="str">&quot;FEST&quot;</span>);</pre>
         </p>
         <p>
           <code class="code">FrameFixture</code> is not limited to just simulate user input, it can also verify the
           state of the frame under test.
           <pre class="prettyprint">
-frame.requireEnabled()
-     .requireVisible()
-     .requireSize(new Dimension(300, 200));</pre> 
+frame.<span class="fnc">requireEnabled</span>()
+     .<span class="fnc">requireVisible</span>()
+     .<span class="fnc">requireSize</span>(<span class="kwd">new </span><span class="fnc">Dimension</span>(300, 200));</pre> 
         </p>
       </subsection>
       <subsection name="Text Fields">
@@ -74,8 +74,8 @@ frame.requireEnabled()
           use any of its constructors. In this example we are creating a <code class="code">JTextComponentFixture</code>
           that will manage a <code class="code">JTextField</code> with name &quot;username&quot;:
           <pre class="prettyprint">
-// import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;          
-JTextComponentFixture textBox = new JTextComponent(robotWithNewAwtHierarchy(), &quot;username&quot;);</pre>
+<div class="com">// import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;</div>         
+<span class="typ">JTextComponentFixture</span> textBox = <span class="kwd">new </span><span class="fnc">JTextComponent</span>(<span class="fnc">robotWithNewAwtHierarchy</span>(), <span class="str">&quot;username&quot;</span>);</pre>
         </p>
         <p>
           The downside of this approach is that we need to pass an instance of 
@@ -84,22 +84,22 @@ JTextComponentFixture textBox = new JTextComponent(robotWithNewAwtHierarchy(), &
           from the <code class="code">FrameFixture</code> that manages the frame containing the button we are interested 
           in:
           <pre class="prettyprint">
-JTextComponentFixture textBox = frame.button(&quot;username&quot;);</pre>
+<span class="typ">JTextComponentFixture</span> textBox = frame.<span class="fnc">button</span>(<span class="str">&quot;username&quot;</span>);</pre>
         </p>
         <p>
           Once we have a <code class="code">JTextComponentFixture</code>, we can simulate a user interacting with it.
           <pre class="prettyprint">
-textBox.deleteText()
-       .enterText(&quot;frodo.baggins&quot;)
-       .select(&quot;frodo&quot;);</pre>
+textBox.<span class="fnc">deleteText</span>()
+       .<span class="fnc">enterText</span>(<span class="str">&quot;frodo.baggins&quot;</span>)
+       .<span class="fnc">select</span>(<span class="str">&quot;frodo&quot;</span>);</pre>
         </p>
         <p>
           We can also verify the state of the <code class="code">JTextField</code>:
           <pre class="prettyprint">
-textBox.requireText(&quot;yoda&quot;)
-       .requireEnabled()
-       .deleteText()
-       .requireEmpty();</pre>          
+textBox.<span class="fnc">requireText</span>(<span class="str">&quot;yoda&quot;</span>)
+       .<span class="fnc">requireEnabled</span>()
+       .<span class="fnc">deleteText</span>()
+       .<span class="fnc">requireEmpty</span>();</pre>          
         </p>
       </subsection>
     </section>  
