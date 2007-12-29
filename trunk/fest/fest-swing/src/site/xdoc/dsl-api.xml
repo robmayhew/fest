@@ -17,11 +17,11 @@
       <p>
         The following examples demonstrate FEST-Swing API: 
         <pre class="prettyprint">
-// simulate a user selecting a particular cell in a JTable       
-dialog.table(&quot;reports&quot;).selectCellAt(row(3).column(4));
+<span class="com">// simulate a user selecting a particular cell in a JTable</span>       
+dialog.<span class="fnc">table</span>(<span class="str">&quot;reports&quot;</span>).<span class="fnc">selectCellAt</span>(<span class="fnc">row</span>(3).<span class="fnc">column</span>(4));
 
-// simulate a user entering some text in a JTextField and selecting it
-dialog.textBox(&quot;username&quot;).enterText(&quot;yvonne&quot;).selectAll();</pre>
+<span class="com">// simulate a user entering some text in a JTextField and selecting it</span>
+dialog.<span class="fnc">textBox</span>(<span class="str">&quot;username&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;yvonne&quot;</span>).<span class="fnc">selectAll</span>();</pre>
       </p>
       <p>
         Not every class in FEST-Swing follows this programming style. Only the classes intended for be used to create

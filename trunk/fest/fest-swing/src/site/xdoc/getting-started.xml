@@ -8,10 +8,12 @@
 	<body>
     <section name="Getting Started">
       <subsection name="Introduction">
+        <p>
         FEST (Fixtures for Easy Software Testing) is an open source project (<a
         href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache 2.0 license</a>) which aims at
         making software testing simpler. This guide explains how to get started with FEST's Swing module, which makes
         creation and maintenance of robust GUI functional tests easy.
+        </p>
       </subsection>
       <subsection name="Before you start">
         <p>
@@ -69,11 +71,11 @@
               <p>
                 Example:
                 <pre class="prettyprint">
-private FrameFixture window;
+<span class="kwd">private </span><span class="typ">FrameFixture</span> window;
 
-@BeforeMethod public void setUp() {
-  window = new FrameFixture(new MyFrame());
-  window.show(); // shows the frame to test
+<span class="lit">@BeforeMethod </span><span class="kwd">public void </span><span class="fnc">setUp</span>() {
+  window = <span class="kwd">new </span><span class="fnc">FrameFixture</span>(<span class="kwd">new </span><span class="fnc">MyFrame</span>());
+  window.<span class="fnc">show</span>(); // shows the frame to test
 }</pre>
               </p>
             </li>
@@ -93,8 +95,8 @@ private FrameFixture window;
               <p>
                 Example:
                 <pre class="prettyprint">
-@AfterMethod public void tearDown() {
-  window.cleanUp();
+<span class="lit">@AfterMethod </span><span class="kwd">public void </span><span class="fnc">tearDown</span>() {
+  window.<span class="fnc">cleanUp</span>();
 }</pre>
               </p>
             </li>
@@ -105,10 +107,10 @@ private FrameFixture window;
                 in the <code class="code">JTextField</code> is copied to the <code class="code">JLabel</code> when the
                 <code class="code">JButton</code> is clicked:
                 <pre class="prettyprint">
-@Test public void shouldCopyTextInLabelWhenClickingButton() {
-  window.textBox("textToCopy").enterText("Some random text");
-  window.button("copyButton").click();
-  window.label("copiedText").requireText("Some random text");
+<span class="lit">@Test </span><span class="kwd">public void </span><span class="fnc">shouldCopyTextInLabelWhenClickingButton</span>() {
+  window.<span class="fnc">textBox</span>(<span class="str">&quot;textToCopy&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;Some random text&quot;</span>);
+  window.<span class="fnc">button</span>(<span class="str">&quot;copyButton&quot;</span>).<span class="fnc">click</span>();
+  window.<span class="fnc">label</span>(<span class="str">&quot;copiedText&quot;</span>).<span class="fnc">requireText</span>(<span class="str">&quot;Some random text&quot;</span>);
 }</pre>
               </p>
             </li>
@@ -118,26 +120,26 @@ private FrameFixture window;
         <p>
           The following code listing shows the whole test that verifies the described GUI is behaving correctly:
           <pre class="prettyprint">
-import org.testng.annotations.*;
-import org.fest.swing.fixture.FrameFixture;
+<span class="kwd">import</span> org.testng.annotations.*;
+<span class="kwd">import</span> org.fest.swing.fixture.FrameFixture;
 
-public class FirstGUITest {
+<span class="kwd">public class </span><span class="typ">FirstGUITest</span> {
 
-  private FrameFixture window;
+  <span class="kwd">private </span><span class="typ">FrameFixture</span> window;
 
-  @BeforeMethod public void setUp() {
-    window = new FrameFixture(new MyFrame());
-    window.show();
+  <span class="lit">@BeforeMethod </span><span class="kwd">public void </span><span class="fnc">setUp</span>() {
+    window = <span class="kwd">new </span><span class="fnc">FrameFixture</span>(<span class="kwd">new </span><span class="fnc">MyFrame</span>());
+    window.<span class="fnc">show</span>();
   }
 
-  @AfterMethod public void tearDown() {
-    window.cleanUp();
+  <span class="lit">@AfterMethod </span><span class="kwd">public void </span><span class="fnc">tearDown</span>() {
+    window.<span class="fnc">cleanUp</span>();
   }
 
-  @Test public void shouldCopyTextInLabelWhenClickingButton() {
-    window.textBox("textToCopy").enterText("Some random text");
-    window.button("copyButton").click();
-    window.label("copiedText").requireText("Some random text");
+  <span class="lit">@Test </span><span class="kwd">public void </span><span class="fnc">shouldCopyTextInLabelWhenClickingButton</span>() {
+    window.<span class="fnc">textBox</span>(<span class="str">&quot;textToCopy&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;Some random text&quot;</span>);
+    window.<span class="fnc">button</span>(<span class="str">&quot;copyButton&quot;</span>).<span class="fnc">click</span>();
+    window.<span class="fnc">label</span>(<span class="str">&quot;copiedText&quot;</span>).<span class="fnc">requireText</span>(<span class="str">&quot;Some random text&quot;</span>);
   }
 }</pre>
         </p>
