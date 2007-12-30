@@ -97,6 +97,7 @@ p {
 }
 
 #breadcrumbs {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
 	height: 13px;
 	background-image: url(../images/breadcrumbs.jpg);
 	padding: 5px 10px 14px 20px;
@@ -155,6 +156,11 @@ table.bodyTable tr.b {
 .source {
 	border: 1px solid #999;
 	overflow: auto
+}
+
+.source pre {
+    font-family: "Lucida Console","courier new",courier;
+    font-size: 9pt;
 }
 
 dt {
@@ -246,7 +252,7 @@ table {
 }
 
 .codeBlock {
-  font-family: "Lucida Console",courier;
+  font-family: "Lucida Console","courier new",courier;
   font-size: 9pt;
   padding-left: 10px;
   padding-right: 5px;
