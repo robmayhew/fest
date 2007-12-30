@@ -21,10 +21,13 @@
         <pre class="prettyprint">
 <span class="com">// import static org.fest.swing.util.Platform.controlOrCommandKey;</span>&#160;      
 <span class="com">// import static java.awt.event.KeyEvent.VK_C; </span>&#160; 
+
+<span class="kwd">int</span> controlOrCommand = <span class="fnc">controlOrCommandKey</span>();
+
 dialog.<span class="fnc">textBox</span>(<span class="str">&quot;username&quot;</span>).<span class="fnc">selectAll</span>()
-                          .<span class="fnc">pressKey</span>(<span class="fnc">controlOrCommandKey</span>())
+                          .<span class="fnc">pressKey</span>(controlOrCommand)
                           .<span class="fnc">pressAndReleaseKeys</span>(VK_C)
-                          .<span class="fnc">releaseKey</span>(<span class="fnc">controlOrCommandKey</span>());</pre>
+                          .<span class="fnc">releaseKey</span>(controlOrCommand);</pre>
       </p>
     </section>
   </body>

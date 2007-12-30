@@ -11,7 +11,7 @@
     <href>index.html</href>
   </bannerLeft>
   <poweredBy>
-    <logo name="Build with Maven 2" href="http://maven.apache.org"
+    <logo name="Built with Maven 2" href="http://maven.apache.org"
       img="images/logos/maven-feather.png" />
   </poweredBy>
 
@@ -41,13 +41,13 @@
       <item name="Keyboard Input" href="keyboard-input.html" />
       <item name="Drag 'n Drop" href="drag-n-drop.html" />
       <item name="Long-Duration Tasks" href="long-duration.html" />
-      <item name="Screenshots of failing tests" href="failure-screenshots.html">
+      <item name="Screenshots of Failing Tests" href="failure-screenshots.html">
         <item name="Manually" href="./screenshot/manual.html" />
         <item name="JUnit Extension" href="./screenshot/junit.html" />
         <item name="TestNG Extension" href="./screenshot/testng.html" />
       </item>
       <item name="Component Formatters" href="component-formatter.html" />
-      <item name="Screenshots of GUI components" href="component-screenshot.html" />
+      <item name="Screenshots of GUI Components" href="component-screenshot.html" />
       <item name="Platform-Specific" href="platform.html" />
     </menu>
 
