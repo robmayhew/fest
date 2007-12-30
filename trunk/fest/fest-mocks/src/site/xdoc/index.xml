@@ -9,11 +9,11 @@
 		<section name="Welcome to the FEST Mocks Module">
 		  <subsection name="Introduction">
 				<p>
-				  <a href="http://code.google.com/p/fest" target="_blank">FEST-Mocks</a> is a Java library which mission is to 
+				  FEST-Mocks is a Java library which mission is to 
 				  minimize potential shortcomings of <a href="http://www.mockobjects.com/" target="_blank">Mock Objects</a>.
 				</p>
 			  <p>
-			    To learn more about the potential shortcomings of mocks, please read:
+			    More information about the potential shortcomings of mocks can be found at:
 			    <ul> 
 	  		    <li><a href="http://dev2dev.bea.com/pub/a/2007/06/mock-shortcomings.html">Mock Objects: Shortcomings and Use Cases</a></li>
 		  	    <li><a href="http://www.jroller.com/page/alexRuiz?entry=mocks_for_concrete_class_can">Mock Objects: the Good, the Bad and the Ugly</a></li>
@@ -24,10 +24,10 @@
 					<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
 					and can be used with either 
 				  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
-				  <a href="http://testng.org" target="_blank">TestNG</a>.
+				  <a href="http://testng.org" target="_blank">TestNG</a>. 
 				</p>
-				<p>
-				  FEST-Mocks can be downloaded 
+				<p>  
+				  It can be downloaded 
 				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
 				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
 				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
@@ -39,18 +39,18 @@
 				  One of the shortcomings of using mocks is introduction of clutter and duplication in our code. Take a look at
 				  this example using <a href="http://www.easymock.org/">EasyMock</a>:
 					<pre class="prettyprint">
-@Test public void shouldAddNewEmployee() {
-  mockEmployeeDAO.insert(employee);
-  replay(mockEmployeeDAO);
-  employeeBO.addNewEmployee(employee);
-  verify(mockEmployeeDAO);
+<span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">shouldAddNewEmployee</span>() {
+  mockEmployeeDAO.<span class="fnc">insert</span>(employee);
+  <span class="fnc">replay</span>(mockEmployeeDAO);
+  employeeBO.<span class="fnc">addNewEmployee</span>(employee);
+  <span class="fnc">verify</span>(mockEmployeeDAO);
 }
  
-@Test public void shouldUpdateEmployee() {
-  mockEmployeeDAO.update(employee);
-  replay(mockEmployeeDAO);
-  employeeBO.updateEmployee(employee);
-  verify(mockEmployeeDAO);
+<span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">shouldUpdateEmployee</span>() {
+  mockEmployeeDAO.<span class="fnc">update</span>(employee);
+  <span class="fnc">replay</span>(mockEmployeeDAO);
+  employeeBO.<span class="fnc">updateEmployee</span>(employee);
+  <span class="fnc">verify</span>(mockEmployeeDAO);
 }</pre>
 				</p>
 				<p>
@@ -65,17 +65,17 @@
 				<p>
 				  A solution to this problem is FEST's <code class="code">EasyMockTemplate</code>:
 				  <pre class="prettyprint">
-@Test public void shouldUpdateEmployee() {
+<span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">shouldUpdateEmployee</span>() {
  
-  new EasyMockTemplate(mockEmployeeDao) {
-    @Override protected void expectations() {
-      mockEmployeeDAO.update(employee);
+  <span class="kwd">new</span>&#160;<span class="fnc">EasyMockTemplate</span>(mockEmployeeDao) {
+    <span class="lit">@Override</span>&#160;<span class="kwd">protected void</span>&#160;<span class="fnc">expectations</span>() {
+      mockEmployeeDAO.<span class="fnc">update</span>(employee);
     }
  
-    @Override protected void codeToTest() {
-      employeeBO.updateEmployee(employee);
+    <span class="lit">@Override</span>&#160;<span class="kwd">protected void</span>&#160;<span class="fnc">codeToTest</span>() {
+      employeeBO.<span class="fnc">updateEmployee</span>(employee);
     }
-  }.run();
+  }.<span class="fnc">run</span>();
 
 }</pre>
 				</p>
