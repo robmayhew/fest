@@ -275,6 +275,10 @@ table {
 .dec { color: #606; }
 .fnc { color: #336699; }
 
+.htag { color: #FF6600 }
+.hatn { color: #CC0000 }
+.hatv { color: #FF0000 }
+
 pre.prettyprint { 
   font-family: "Lucida Console","courier new",courier;
   font-size: 9pt;
