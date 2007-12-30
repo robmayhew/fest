@@ -34,14 +34,14 @@
         The following example shows how to register a <code class="code">ScreenshotOnFailureListener</code> with TestNG
         Ant task:
         <pre class="prettyprint">
-&lt;testng <strong>listeners=&quot;org.fest.swing.testng.ScreenshotOnFailureListener&quot;</strong>
-        outputDir=&quot;${target.test.results.dir}&quot; haltOnFailure=&quot;true&quot; 
-        verbose=&quot;2&quot;&gt;
-  &lt;classfileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;**/*Test.class&quot; /&gt;
-  &lt;classpath location=&quot;${target.test.classes.dir}&quot; /&gt;
-  &lt;classpath location=&quot;${target.classes.dir}&quot; /&gt;
-  &lt;classpath refid=&quot;test.classpath&quot; /&gt;
-&lt;/testng&gt;</pre>
+&lt;<span class="tag">testng</span>&#160;<span class="hatn">listeners</span>=<span class="hatv">&quot;org.fest.swing.testng.ScreenshotOnFailureListener&quot;</span>
+      &#160;&#160;<span class="atn">outputDir</span>=<span class="atv">&quot;${target.test.results.dir}&quot;</span>&#160;<span class="atn">haltOnFailure</span>=<span class="atv">&quot;true&quot;</span> 
+      &#160;&#160;<span class="atn">verbose</span>=&quot;2&quot;&gt;
+  &lt;<span class="tag">classfileset</span>&#160;<span class="atn">dir</span>=<span class="atv">&quot;${target.test.classes.dir}&quot;</span>&#160;<span class="atn">includes</span>=<span class="atv">&quot;**/*Test.class&quot;</span> /&gt;
+  &lt;<span class="tag">classpath</span>&#160;<span class="atn">location</span>=<span class="atv">&quot;${target.test.classes.dir}&quot;</span> /&gt;
+  &lt;<span class="tag">classpath</span>&#160;<span class="atn">location</span>=<span class="atv">&quot;${target.classes.dir}&quot;</span> /&gt;
+  &lt;<span class="tag">classpath</span>&#160;<span class="atn">refid</span>=<span class="atv">&quot;test.classpath&quot;</span> /&gt;
+&lt;/<span class="tag">testng</span>&gt;</pre>
       </p>
       <p>
         The following is a screenshot of a failed TestNG GUI test:

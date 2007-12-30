@@ -40,29 +40,29 @@
           </ol>
         </p>
         <p>
-          Example:
+          Example (please note the text in orange/red):
           <pre class="prettyprint">
-  &lt;target name=&quot;test&quot; depends=&quot;compile&quot;&gt;
-    <strong>&lt;taskdef resource=&quot;festjunittasks&quot; classpathref=&quot;lib.classpath&quot; /&gt;</strong>
+  &lt;<span class="tag">target</span>&#160;<span class="atn">name</span>=<span class="atv">&quot;test&quot;</span>&#160;<span class="atn">depends</span>=<span class="atv">&quot;compile&quot;</span>&gt;
+    &lt;<span class="htag">taskdef</span>&#160;<span class="hatn">resource</span>=<span class="hatv">&quot;festjunittasks&quot;</span>&#160;<span class="hatn">classpathref</span>=<span class="hatv">&quot;lib.classpath&quot;</span> /&gt;
     
-    &lt;junit forkmode=&quot;perBatch&quot; printsummary=&quot;yes&quot; haltonfailure=&quot;no&quot; haltonerror=&quot;no&quot;&gt;
-      &lt;classpath refid=&quot;lib.classpath&quot; /&gt;
-      &lt;classpath location=&quot;${target.test.classes.dir}&quot; /&gt;
-      &lt;classpath location=&quot;${target.classes.dir}&quot; /&gt;
-      <strong>&lt;formatter classname=&quot;org.fest.swing.junit.ant.ScreenshotOnFailureResultFormatter&quot; extension=&quot;.xml&quot; /&gt;</strong>
-      &lt;batchtest fork=&quot;yes&quot; todir=&quot;${target.junit.results.dir}&quot;&gt;
-        &lt;fileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;**/*Test*.class&quot; /&gt;
-      &lt;/batchtest&gt;
-    &lt;/junit&gt;
+    &lt;<span class="tag">junit</span>&#160;<span class="atn">forkmode</span>=<span class="atv">&quot;perBatch&quot;</span>&#160;<span class="atn">printsummary</span>=<span class="atv">&quot;yes&quot;</span>&#160;<span class="atn">haltonfailure</span>=<span class="atv">&quot;no&quot;</span>&#160;<span class="atn">haltonerror</span>=<span class="atv">&quot;no&quot;</span>&gt;
+      &lt;<span class="tag">classpath</span>&#160;<span class="atn">refid</span>=<span class="atv">&quot;lib.classpath&quot;</span> /&gt;
+      &lt;<span class="tag">classpath</span>&#160;<span class="atn">location</span>=<span class="atv">&quot;${target.test.classes.dir}&quot;</span> /&gt;
+      &lt;<span class="tag">classpath</span>&#160;<span class="atn">location</span>=<span class="atv">&quot;${target.classes.dir}&quot;</span> /&gt;
+      &lt;<span class="htag">formatter</span>&#160;<span class="hatn">classname</span>=<span class="hatv">&quot;org.fest.swing.junit.ant.ScreenshotOnFailureResultFormatter&quot;</span>&#160;<span class="hatn">extension</span>=<span class="hatv">&quot;.xml&quot;</span> /&gt;
+      &lt;<span class="tag">batchtest</span>&#160;<span class="atn">fork</span>=<span class="atv">&quot;yes&quot;</span>&#160;<span class="atn">todir</span>=<span class="atv">&quot;${target.junit.results.dir}&quot;</span>&gt;
+        &lt;<span class="tag">fileset</span>&#160;<span class="atn">dir</span>=<span class="atv">&quot;${target.test.classes.dir}&quot;</span>&#160;<span class="atn">includes</span>=<span class="atv">&quot;**/*Test*.class&quot;</span> /&gt;
+      &lt;/<span class="tag">batchtest</span>&gt;
+    &lt;/<span class="tag">junit</span>&gt;
     
-    <strong>&lt;festreport</strong> todir=&quot;${target.junit.report.dir}&quot;&gt;
-      <strong>&lt;classpath refid=&quot;lib.classpath&quot; /&gt;</strong>
-      &lt;fileset dir=&quot;${target.junit.results.dir}&quot;&gt;
-        &lt;include name=&quot;TEST-*.xml&quot; /&gt;
-      &lt;/fileset&gt;
-      &lt;report format=&quot;frames&quot; todir=&quot;${target.junit.report.dir}/html&quot; /&gt;
-    &lt;/festreport&gt;
-  &lt;/target&gt;</pre>          
+    &lt;<span class="htag">festreport</span>&#160;<span class="hatn">todir</span>=<span class="hatv">&quot;${target.junit.report.dir}&quot;</span>&gt;
+      &lt;<span class="htag">classpath</span>&#160;<span class="hatn">refid</span>=<span class="hatv">&quot;lib.classpath&quot;</span> /&gt;
+      &lt;<span class="tag">fileset</span>&#160;<span class="atn">dir</span>=<span class="atv">&quot;${target.junit.results.dir}&quot;</span>&gt;
+        &lt;<span class="tag">include</span>&#160;<span class="atn">name</span>=<span class="atv">&quot;TEST-*.xml&quot;</span> /&gt;
+      &lt;/<span class="tag">fileset</span>&gt;
+      &lt;<span class="tag">report</span>&#160;<span class="atn">format</span>=<span class="atv">&quot;frames&quot;</span>&#160;<span class="atn">todir</span>=<span class="atv">&quot;${target.junit.report.dir}/html&quot;</span> /&gt;
+    &lt;/<span class="tag">festreport</span>&gt;
+  &lt;/<span class="tag">target</span>&gt;</pre>          
         </p>
         <p>
           The following is a screenshot of a JUnit HTML report:

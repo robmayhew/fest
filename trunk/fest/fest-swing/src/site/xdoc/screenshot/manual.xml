@@ -28,21 +28,21 @@
           The following example takes a screenshot of the desktop when a test fails and saves the image as 
           &quot;myTest.png&quot;:
           <pre class="prettyprint">
-ScreenshotTaker screenshotTaker = new ScreenshotTaker();          
+<span class="typ">ScreenshotTaker</span> screenshotTaker = <span class="kwd">new</span>&#160;<span class="fnc">ScreenshotTaker</span>();          
           
-// import static org.fest.util.Files.currentFolder; 
-String currentFolderPath = currentFolder().getCanonicalPath();
+<span class="com">// import static org.fest.util.Files.currentFolder;</span>&#160; 
+<span class="typ">String</span> currentFolderPath = <span class="fnc">currentFolder</span>().<span class="fnc">getCanonicalPath</span>();
 
-// import static java.io.File.separator          
-File imageFolder = new File(currentFolderPath + separator + &quot;failed-tests&quot;))
-String imageFolderPath = imageFolder.getCanonicalPath() + separator;
+<span class="com">// import static java.io.File.separator</span>&#160;          
+<span class="typ">File</span> imageFolder = <span class="kwd">new</span>&#160;<span class="fnc">File</span>(currentFolderPath + separator + <span class="str">&quot;failed-tests&quot;</span>))
+<span class="typ">String</span> imageFolderPath = imageFolder.<span class="fnc">getCanonicalPath</span>() + separator;
 
-try {
-// perform your test
-} catch (Exception e) {
-  // test failed
-  screenshotTaker.saveDesktopAsPng(imageFolderPath + &quot;myTest.png&quot;);
-  throw e;
+<span class="kwd">try</span> {
+<span class="com">// perform your test</span>
+} <span class="kwd">catch</span> (<span class="typ">Exception</span> e) {
+  <span class="com">// test failed</span>
+  screenshotTaker.<span class="fnc">saveDesktopAsPng</span>(imageFolderPath + <span class="str">&quot;myTest.png&quot;</span>);
+  <span class="kwd">throw</span> e;
 }</pre>       
         </p>
       </subsection>

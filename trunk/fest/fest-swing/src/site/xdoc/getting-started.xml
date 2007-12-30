@@ -71,10 +71,10 @@
               <p>
                 Example:
                 <pre class="prettyprint">
-<span class="kwd">private </span><span class="typ">FrameFixture</span> window;
+<span class="kwd">private</span>&#160;<span class="typ">FrameFixture</span> window;
 
-<span class="lit">@BeforeMethod </span><span class="kwd">public void </span><span class="fnc">setUp</span>() {
-  window = <span class="kwd">new </span><span class="fnc">FrameFixture</span>(<span class="kwd">new </span><span class="fnc">MyFrame</span>());
+<span class="lit">@BeforeMethod</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">setUp</span>() {
+  window = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">MyFrame</span>());
   window.<span class="fnc">show</span>(); // shows the frame to test
 }</pre>
               </p>
@@ -95,7 +95,7 @@
               <p>
                 Example:
                 <pre class="prettyprint">
-<span class="lit">@AfterMethod </span><span class="kwd">public void </span><span class="fnc">tearDown</span>() {
+<span class="lit">@AfterMethod</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">tearDown</span>() {
   window.<span class="fnc">cleanUp</span>();
 }</pre>
               </p>
@@ -107,7 +107,7 @@
                 in the <code class="code">JTextField</code> is copied to the <code class="code">JLabel</code> when the
                 <code class="code">JButton</code> is clicked:
                 <pre class="prettyprint">
-<span class="lit">@Test </span><span class="kwd">public void </span><span class="fnc">shouldCopyTextInLabelWhenClickingButton</span>() {
+<span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">shouldCopyTextInLabelWhenClickingButton</span>() {
   window.<span class="fnc">textBox</span>(<span class="str">&quot;textToCopy&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;Some random text&quot;</span>);
   window.<span class="fnc">button</span>(<span class="str">&quot;copyButton&quot;</span>).<span class="fnc">click</span>();
   window.<span class="fnc">label</span>(<span class="str">&quot;copiedText&quot;</span>).<span class="fnc">requireText</span>(<span class="str">&quot;Some random text&quot;</span>);
@@ -123,20 +123,20 @@
 <span class="kwd">import</span> org.testng.annotations.*;
 <span class="kwd">import</span> org.fest.swing.fixture.FrameFixture;
 
-<span class="kwd">public class </span><span class="typ">FirstGUITest</span> {
+<span class="kwd">public class</span>&#160;<span class="typ">FirstGUITest</span> {
 
-  <span class="kwd">private </span><span class="typ">FrameFixture</span> window;
+  <span class="kwd">private</span>&#160;<span class="typ">FrameFixture</span> window;
 
-  <span class="lit">@BeforeMethod </span><span class="kwd">public void </span><span class="fnc">setUp</span>() {
-    window = <span class="kwd">new </span><span class="fnc">FrameFixture</span>(<span class="kwd">new </span><span class="fnc">MyFrame</span>());
+  <span class="lit">@BeforeMethod</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">setUp</span>() {
+    window = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">MyFrame</span>());
     window.<span class="fnc">show</span>();
   }
 
-  <span class="lit">@AfterMethod </span><span class="kwd">public void </span><span class="fnc">tearDown</span>() {
+  <span class="lit">@AfterMethod</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">tearDown</span>() {
     window.<span class="fnc">cleanUp</span>();
   }
 
-  <span class="lit">@Test </span><span class="kwd">public void </span><span class="fnc">shouldCopyTextInLabelWhenClickingButton</span>() {
+  <span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">shouldCopyTextInLabelWhenClickingButton</span>() {
     window.<span class="fnc">textBox</span>(<span class="str">&quot;textToCopy&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;Some random text&quot;</span>);
     window.<span class="fnc">button</span>(<span class="str">&quot;copyButton&quot;</span>).<span class="fnc">click</span>();
     window.<span class="fnc">label</span>(<span class="str">&quot;copiedText&quot;</span>).<span class="fnc">requireText</span>(<span class="str">&quot;Some random text&quot;</span>);

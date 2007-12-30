@@ -19,16 +19,16 @@
           using the left mouse button. The following code listing shows how to simulate a user clicking the button with 
           name &quot;connect&quot;:
           <pre class="prettyprint">
-frame.button(&quot;connect&quot;).click();</pre>
+frame.<span class="fnc">button</span>(<span class="str">&quot;connect&quot;</span>).<span class="fnc">click</span>();</pre>
         </p>
         <p>
           The following are alternative (and more verbose) ways to click a component once, using the left mouse button:
           <pre class="prettyprint">
-// import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-frame.button(&quot;connect&quot;).click(LEFT_BUTTON); 
+<span class="com">// import static org.fest.swing.core.MouseButton.LEFT_BUTTON;</span>
+frame.<span class="fnc">button</span>(<span class="str">&quot;connect&quot;</span>).<span class="fnc">click</span>(LEFT_BUTTON); 
 
-// import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-frame.button(&quot;connect&quot;).click(leftButton().times(1));</pre>
+<span class="com">// import static org.fest.swing.fixture.MouseClickInfo.leftButton;</span>
+frame.<span class="fnc">button</span>(<span class="str">&quot;connect&quot;</span>).<span class="fnc">click</span>(<span class="fnc">leftButton</span>().<span class="fnc">times</span>(1));</pre>
         </p>
       </subsection>
       <subsection name="Right-Click">
@@ -37,16 +37,16 @@ frame.button(&quot;connect&quot;).click(leftButton().times(1));</pre>
           using the right mouse button. The following code listing shows how to simulate a user right-clicking the text 
           field with name &quot;username&quot;:
           <pre class="prettyprint">
-frame.textBox(&quot;username&quot;).rightClick();</pre>
+frame.<span class="fnc">textBox</span>(<span class="str">&quot;username&quot;</span>).<span class="fnc">rightClick</span>();</pre>
         </p>
         <p>
           The following are alternative (and more verbose) ways to click a component once, using the right mouse button:
           <pre class="prettyprint">
-// import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-frame.textBox(&quot;username&quot;).click(RIGHT_BUTTON); 
+<span class="com">// import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;</span>
+frame.<span class="fnc">textBox</span>(<span class="str">&quot;username&quot;</span>).<span class="fnc">click</span>(RIGHT_BUTTON); 
 
-// import static org.fest.swing.fixture.MouseClickInfo.rightButton;
-frame.textBox(&quot;username&quot;).click(rightButton().times(1));</pre>
+<span class="com">// import static org.fest.swing.fixture.MouseClickInfo.rightButton;</span>
+frame.<span class="fnc">textBox</span>(<span class="str">&quot;username&quot;</span>).<span class="fnc">click</span>(<span class="fnc">rightButton</span>().<span class="fnc">times</span>(1));</pre>
         </p>
       </subsection>
       <subsection name="Double-Click">
@@ -55,14 +55,14 @@ frame.textBox(&quot;username&quot;).click(rightButton().times(1));</pre>
           component, using the left mouse button. The following code listing shows how to simulate a user 
           double-clicking the label with name &quot;configure&quot;:
           <pre class="prettyprint">
-frame.label(&quot;configure&quot;).doubleClick();</pre>
+frame.<span class="fnc">label</span>(<span class="str">&quot;configure&quot;</span>).<span class="fnc">doubleClick</span>();</pre>
         </p>
         <p>
           The following is an alternative (and more verbose) way to double-click a component, using the left mouse 
           button:
           <pre class="prettyprint">
-// import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-frame.label(&quot;configure&quot;).click(leftButton().times(2));</pre>
+<span class="com">// import static org.fest.swing.fixture.MouseClickInfo.leftButton;</span>
+frame.<span class="fnc">label</span>(<span class="str">&quot;configure&quot;</span>).<span class="fnc">click</span>(<span class="fnc">leftButton</span>().<span class="fnc">times</span>(2));</pre>
         </p>
       </subsection>
       <subsection name="Click Using Specific Button, Once">
@@ -71,8 +71,8 @@ frame.label(&quot;configure&quot;).click(leftButton().times(2));</pre>
           component, using the specified mouse button. The following code listing shows how to simulate a user 
           clicking the check box with name &quot;include&quot; using the middle mouse button:
           <pre class="prettyprint">
-// import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
-frame.checkBox(&quot;include&quot;).click(MIDDLE_BUTTON);</pre>
+<span class="com">// import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;</span>
+frame.<span class="fnc">checkBox</span>(<span class="str">&quot;include&quot;</span>).<span class="fnc">click</span>(MIDDLE_BUTTON);</pre>
         </p>
       </subsection>
       <subsection name="Click Using Specific Button, Many Times">
@@ -81,8 +81,8 @@ frame.checkBox(&quot;include&quot;).click(MIDDLE_BUTTON);</pre>
           component, using the specified mouse button, many times. The following code listing shows how to simulate a user 
           clicking three times the radio button with name &quot;monthly&quot; using the left mouse button:
           <pre class="prettyprint">
-// import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-frame.radioButton(&quot;monthly&quot;).click(leftButton().times(3));</pre>
+<span class="com">// import static org.fest.swing.fixture.MouseClickInfo.leftButton;</span>
+frame.<span class="fnc">radioButton</span>(<span class="str">&quot;monthly&quot;</span>).<span class="fnc">click</span>(<span class="fnc">leftButton</span>().<span class="fnc">times</span>(3));</pre>
         </p>
       </subsection>
     </section>

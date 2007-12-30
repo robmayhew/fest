@@ -16,7 +16,7 @@
       <p>
         The following example uses a 
         <code class="code"><a href="http://fest.easytesting.org/swing/apidocs/org/fest/swing/fixture/FrameFixture.html" target="_blank">FrameFixture</a></code>,
-        a concrete implementation of <code class="code">ContainerFixture</code>, to look up a &quot;loging&quot; 
+        a concrete implementation of <code class="code">ContainerFixture</code>, to look up a &quot;login&quot; 
         <code class="code">JButton</code> by name, type and custom search criteria:
         <pre class="prettyprint">
   frame.button(&quot;login&quot;)

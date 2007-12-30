@@ -40,7 +40,7 @@
       <item name="Mouse Input" href="mouse-input.html" />
       <item name="Keyboard Input" href="keyboard-input.html" />
       <item name="Drag 'n Drop" href="drag-n-drop.html" />
-      <item name="Time Consuming Tasks" href="time-consuming.html" />
+      <item name="Long-Duration Tasks" href="long-duration.html" />
       <item name="Screenshots of failing tests" href="failure-screenshots.html">
         <item name="Manually" href="./screenshot/manual.html" />
         <item name="JUnit Extension" href="./screenshot/junit.html" />

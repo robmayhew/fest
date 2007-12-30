@@ -36,8 +36,8 @@
           The following example shows drag 'n drop between two <code class="code">JList</code>s named
           &quot;source&quot; and &quot;destination&quot;
           <pre class="prettyprint">
-dialog.list(&quot;source&quot;).drag(&quot;Swing&quot;);
-dialog.list(&quot;destination&quot;).drop(&quot;AWT&quot;);</pre>    
+dialog.<span class="fnc">list</span>(<span class="str">&quot;source&quot;</span>).<span class="fnc">drag</span>(<span class="str">&quot;Swing&quot;</span>);
+dialog.<span class="fnc">list</span>(<span class="str">&quot;destination&quot;</span>).<span class="fnc">drop</span>(<span class="str">&quot;AWT&quot;</span>);</pre>    
         </p>
         <p>
           The code listing above simulates a user dragging the element &quot;Swing&quot; from the list &quot;source&quot;
@@ -50,9 +50,9 @@ dialog.list(&quot;destination&quot;).drop(&quot;AWT&quot;);</pre>
           The following example shows drag 'n drop between two <code class="code">JTables</code>s named
           &quot;source&quot; and &quot;destination&quot;
           <pre class="prettyprint">
-// import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;          
-dialog.table(&quot;source&quot;).drag(row(3).column(0));
-dialog.table(&quot;destination&quot;).drop(row(1).column(0));</pre>    
+<span class="com">// import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;</span>          
+dialog.<span class="fnc">table</span>(<span class="str">&quot;source&quot;</span>).<span class="fnc">drag</span>(<span class="fnc">row</span>(3).<span class="fnc">column</span>(0));
+dialog.<span class="fnc">table</span>(<span class="str">&quot;destination&quot;</span>).<span class="fnc">drop</span>(<span class="fnc">row</span>(1).<span class="fnc">column</span>(0));</pre>    
         </p>
         <p>
           The code listing above simulates a user dragging the content of the cell at row 3, column 0 from the table 
@@ -64,8 +64,8 @@ dialog.table(&quot;destination&quot;).drop(row(1).column(0));</pre>
           The following example shows drag 'n drop between two <code class="code">JTrees</code>s named
           &quot;source&quot; and &quot;destination&quot;
           <pre class="prettyprint">
-dialog.tree(&quot;source&quot;).drag(path("root", "branch1", "branch1.1"));
-dialog.tree(&quot;destination&quot;).drop(path("root"));</pre>    
+dialog.<span class="fnc">tree</span>(<span class="str">&quot;source&quot;</span>).<span class="fnc">drag</span>(<span class="fnc">path</span>(<span class="str">&quot;root&quot;</span>, <span class="str">&quot;branch1&quot;</span>, <span class="str">&quot;branch1.1&quot;</span>));
+dialog.<span class="fnc">tree</span>(<span class="str">&quot;destination&quot;</span>).<span class="fnc">drop</span>(<span class="fnc">path</span>(<span class="str">&quot;root&quot;</span>));</pre>    
         </p>
         <p>
           The code listing above simulates a user dragging the node &quot;branch1.1&quot; (in the path

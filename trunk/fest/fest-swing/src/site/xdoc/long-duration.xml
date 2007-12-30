@@ -2,14 +2,14 @@
 <document>
 
   <properties>
-    <title>Testing Time-Consuming Tasks</title>
+    <title>Testing Long-Duration Tasks</title>
   </properties>
 
   <body>
-    <section name="Testing Time-Consuming Tasks">
+    <section name="Testing Long-Duration Tasks">
       <p>
         FEST-Swing provides support for finding GUI components <strong>after</strong> the execution of
-        a time-consuming task is complete. Currently, it provides the following finders:
+        a long-duration task is complete. Currently, it provides the following finders:
         <ul>
           <li><code class="code">WindowFinder</code> (which can find <code class="code">Frame</code>s and
           <code class="code">Dialog</code>s)</li>
@@ -22,7 +22,7 @@
       </p>
       <subsection name="Example">
       <p>
-        A good example is the main window of an application beign shown after the user's credentials have been
+        A good example is the main window of an application being shown after the user's credentials have been
         successfully verified. The following are the typical steps to complete such scenario:
       </p>      
       <p>
@@ -39,14 +39,14 @@
         network traffic, etc.) and we need to wait for the main window to appear in order to continue our test. It is 
         possible to test this scenario with FEST:
         <pre class="prettyprint">
-loginDialog.textBox(&quot;username&quot;).enterText(&quot;yvonne&quot;);
-loginDialog.textBox(&quot;password&quot;).enterText(&quot;welcome&quot;);
-loginDialog.button(&quot;login&quot;).click();
+loginDialog.<span class="fnc">textBox</span>(<span class="str">&quot;username&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;yvonne&quot;</span>);
+loginDialog.<span class="fnc">textBox</span>(<span class="str">&quot;password&quot;</span>).<span class="fnc">enterText</span>(<span class="str">&quot;welcome&quot;</span>);
+loginDialog.<span class="fnc">button</span>(<span class="str">&quot;login&quot;</span>).<span class="fnc">click</span>();
     
-// now the interesting part, we need to wait till the main window is shown.
-FrameFixture mainFrame = findFrame(&quot;main&quot;).using(loginDialog.robot);
+<span class="com">// now the interesting part, we need to wait till the main window is shown.</span>&#160;          
+<span class="typ">FrameFixture</span> mainFrame = <span class="fnc">findFrame</span>(<span class="str">&quot;main&quot;</span>).<span class="fnc">using</span>(loginDialog.robot);
 
-// we can continue testing the main window.</pre>
+<span class="com">// we can continue testing the main window.</span></pre>
       </p>
       <p>
         The &quot;<code class="code">findFrame</code>&quot; method (statically imported from 
@@ -57,16 +57,17 @@ FrameFixture mainFrame = findFrame(&quot;main&quot;).using(loginDialog.robot);
       <p>  
         We can also specify a custom value for the timeout. For example, we can set the timeout to 10 seconds in two ways:
         <pre class="prettyprint">
-FrameFixture mainFrame = 
-  findFrame("main").withTimeout(10000).using(loginDialog.robot);
-// or
-FrameFixture mainFrame = 
-  findFrame("main").withTimeout(10, SECONDS).using(loginDialog.robot);</pre>        
+<span class="com">// import static org.fest.swing.finder.WindowFinder.findFrame;</span>&#160;          
+<span class="typ">FrameFixture</span> mainFrame = 
+  <span class="fnc">findFrame</span>(<span class="str">&quot;main&quot;</span>).<span class="fnc">withTimeout</span>(10000).<span class="fnc">using</span>(loginDialog.robot);
+<span class="com">// or</span>&#160;          
+<span class="typ">FrameFixture</span> mainFrame = 
+  <span class="fnc">findFrame</span>(<span class="str">&quot;main&quot;</span>).<span class="fnc">withTimeout</span>(10, SECONDS).<span class="fnc">using</span>(loginDialog.robot);</pre>        
       </p>      
       <p>
         We can also look up Frames by type:
         <pre class="prettyprint">
-FrameFixture mainFrame = findFrame(MainFrame.class).using(loginDialog.robot);</pre>
+<span class="typ">FrameFixture</span> mainFrame = <span class="fnc">findFrame</span>(MainFrame.<span class="kwd">class</span>).<span class="fnc">using</span>(loginDialog.robot);</pre>
       </p>
       <p>
         Something that you may find weird in the code examples is &quot;<code class="code">using(loginDialog.robot)</code>.&quot; 

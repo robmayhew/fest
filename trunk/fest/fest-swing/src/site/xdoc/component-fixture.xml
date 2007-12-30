@@ -32,21 +32,20 @@
           Creating a <code class="code">FrameFixture</code> is easy, we just need to pass an instance of the frame 
           we want to test:
           <pre class="prettyprint">
-<span class="typ">FrameFixture</span> frame = <span class="kwd">new </span><span class="fnc">FrameFixture</span>(<span class="kwd">new </span><span class="fnc">MyFrame</span>());
+<span class="typ">FrameFixture</span> frame = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">MyFrame</span>());
 frame.<span class="fnc">show</span>();</pre>
         </p>
         <p>
           Once we have a <code class="code">FrameFixture</code> up, we can show the frame to test (we can optionally
           specify its size) and start simulating a user interacting with the frame.
           <pre class="prettyprint">
-frame.<span class="fnc">resizeTo</span>(<span class="kwd">new </span><span class="fnc">Dimension</span>(400, 600))
+frame.<span class="fnc">resizeTo</span>(<span class="kwd">new</span>&#160;<span class="fnc">Dimension</span>(400, 600))
      .<span class="fnc">minimize</span>()
      .<span class="fnc">normalize</span>()
      .<span class="fnc">close</span>();</pre>
         </p>
         <p>
-          We can also get a reference to component-specific fixtures linked to the GUI components inside the frame under
-          test.
+          We can also get a reference to fixtures for the GUI components inside the frame under test.
           <pre class="prettyprint">
 <span class="com">// getting a reference to the JButton with name &quot;connect&quot; inside the frame</span>
 frame.<span class="fnc">button</span>(<span class="str">&quot;connect&quot;</span>).<span class="fnc">click</span>();
@@ -60,7 +59,7 @@ frame.<span class="fnc">comboBox</span>(<span class="str">&quot;projects&quot;</
           <pre class="prettyprint">
 frame.<span class="fnc">requireEnabled</span>()
      .<span class="fnc">requireVisible</span>()
-     .<span class="fnc">requireSize</span>(<span class="kwd">new </span><span class="fnc">Dimension</span>(300, 200));</pre> 
+     .<span class="fnc">requireSize</span>(<span class="kwd">new</span>&#160;<span class="fnc">Dimension</span>(300, 200));</pre> 
         </p>
       </subsection>
       <subsection name="Text Fields">
@@ -74,15 +73,15 @@ frame.<span class="fnc">requireEnabled</span>()
           use any of its constructors. In this example we are creating a <code class="code">JTextComponentFixture</code>
           that will manage a <code class="code">JTextField</code> with name &quot;username&quot;:
           <pre class="prettyprint">
-<div class="com">// import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;</div>         
-<span class="typ">JTextComponentFixture</span> textBox = <span class="kwd">new </span><span class="fnc">JTextComponent</span>(<span class="fnc">robotWithNewAwtHierarchy</span>(), <span class="str">&quot;username&quot;</span>);</pre>
+<span class="com">// import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;</span>&#160;         
+<span class="typ">JTextComponentFixture</span> textBox = <span class="kwd">new</span>&#160;<span class="fnc">JTextComponent</span>(<span class="fnc">robotWithNewAwtHierarchy</span>(), <span class="str">&quot;username&quot;</span>);</pre>
         </p>
         <p>
           The downside of this approach is that we need to pass an instance of 
           <code class="code">org.fest.swing.core.RobotFixture</code> to the constructor. An easier and more compact
           approach (actually, this is <strong>the recommended approach</strong>) is to get a reference to the button 
           from the <code class="code">FrameFixture</code> that manages the frame containing the button we are interested 
-          in:
+          in (we are assuming the button is in a <code class="code">Frame</code>):
           <pre class="prettyprint">
 <span class="typ">JTextComponentFixture</span> textBox = frame.<span class="fnc">button</span>(<span class="str">&quot;username&quot;</span>);</pre>
         </p>
