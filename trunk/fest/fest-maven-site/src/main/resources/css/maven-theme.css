@@ -107,6 +107,7 @@ p {
 }
 
 #leftColumn {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
 	margin: 10px 0 10px 0;
 	border-top-color: #ccc;
 	border-top-style: solid;
@@ -192,6 +193,10 @@ table {
 
 #navcolumn ul {
 	margin: 5px 0 15px -0em;
+}
+
+#navcolumn li {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
 }
 
 #navcolumn ul a {
