@@ -5,6 +5,7 @@
 		<artifactId>fest-site-skin</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</skin>
+
 	<bannerLeft>
 		<name>FEST-Mocks</name>
 		<src>/images/fest-mocks.png</src>
@@ -26,11 +27,10 @@
 		<menu name="FEST Modules">
 			<item name="FEST-Swing" href="../swing/index.html" />
 			<item name="FEST-Assert" href="../assert/index.html" />
-			<item name="FEST-Reflection" href="../reflection/index.html" />
+      <item name="FEST-Reflect" href="../reflect/index.html" />
 			<item name="FEST-Mocks" href="../mocks/index.html" />
 		</menu>
 
 		<menu ref="reports"/>		
-
 	</body>
 </project>
