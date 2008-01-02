@@ -49,7 +49,16 @@
         <p>
           Java Reflection:
           <pre class="prettyprint">
-Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;clear&quot;</span>).<span class="fnc">invoke</span>(names);</pre>
+<span class="typ">Method</span> method = Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;clear&quot;</span>);
+
+AccessController.<span class="fnc">doPrivileged</span>(<span class="kwd">new</span>&#160;<span class="fnc">PrivilegedAction</span>&lt;Void&gt;() {
+  <span class="kwd">public</span> Void <span class="fnc">run</span>() {
+    method.<span class="fnc">setAccessible</span>(<span class="kwd">true</span>);
+    <span class="kwd">return null</span>;
+  }
+});    
+
+method.<span class="fnc">invoke</span>(names);</pre>
         </p>
         <p>
           FEST-Reflect:
@@ -62,7 +71,16 @@ Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span cl
         <p>
           Java Reflection:
           <pre class="prettyprint">
-Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;add&quot;</span>, String.<span class="kwd">class</span>).<span class="fnc">invoke</span>(names, <span class="str">&quot;Yoda&quot;</span>);</pre>        
+<span class="typ">Method</span> method = Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;add&quot;</span>, String.<span class="kwd">class</span>);
+
+AccessController.<span class="fnc">doPrivileged</span>(<span class="kwd">new</span>&#160;<span class="fnc">PrivilegedAction</span>&lt;Void&gt;() {
+  <span class="kwd">public</span> Void <span class="fnc">run</span>() {
+    method.<span class="fnc">setAccessible</span>(<span class="kwd">true</span>);
+    <span class="kwd">return null</span>;
+  }
+});    
+
+method.<span class="fnc">invoke</span>(names, <span class="str">&quot;Yoda&quot;</span>);</pre>        
         </p>
         <p>
           FEST-Reflect:
@@ -75,7 +93,16 @@ Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span cl
         <p>
           Java Reflection:
           <pre class="prettyprint">
-<span class="kwd">int</span> size = (Integer) Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;size&quot;</span>).<span class="fnc">invoke</span>(names);</pre>
+<span class="typ">Method</span> method = Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;size&quot;</span>);
+
+AccessController.<span class="fnc">doPrivileged</span>(<span class="kwd">new</span>&#160;<span class="fnc">PrivilegedAction</span>&lt;Void&gt;() {
+  <span class="kwd">public</span> Void <span class="fnc">run</span>() {
+    method.<span class="fnc">setAccessible</span>(<span class="kwd">true</span>);
+    <span class="kwd">return null</span>;
+  }
+});    
+
+<span class="kwd">int</span> size = (Integer) method.<span class="fnc">invoke</span>(names);</pre>
         </p>
         <p>
           FEST-Reflect:
@@ -90,7 +117,16 @@ Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span cl
         <p>
           Java Reflection:
           <pre class="prettyprint">
-<span class="typ">String</span> name = (String) Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;get&quot;</span>, <span class="kwd">int</span>.<span class="kwd">class</span>).<span class="fnc">invoke</span>(names, 8);</pre>        
+<span class="typ">Method</span> method = Names.<span class="kwd">class</span>.<span class="fnc">getMethod</span>(<span class="str">&quot;get&quot;</span>, <span class="kwd">int</span>.<span class="kwd">class</span>);
+
+AccessController.<span class="fnc">doPrivileged</span>(<span class="kwd">new</span>&#160;<span class="fnc">PrivilegedAction</span>&lt;Void&gt;() {
+  <span class="kwd">public</span> Void <span class="fnc">run</span>() {
+    method.<span class="fnc">setAccessible</span>(<span class="kwd">true</span>);
+    <span class="kwd">return null</span>;
+  }
+});    
+
+<span class="typ">String</span> name = (String) method.<span class="fnc">invoke</span>(names, 8);</pre>        
         </p>
         <p>
           FEST-Reflect:

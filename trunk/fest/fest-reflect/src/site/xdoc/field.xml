@@ -33,7 +33,16 @@
         <p>
           Java Reflection:
           <pre class="prettyprint">
-<span class="typ">String</span> name = (String) Person.<span class="kwd">class</span>.<span class="fnc">getField</span>(<span class="str">&quot;name&quot;</span>).<span class="fnc">get</span>(person);</pre>
+<span class="typ">Field</span> field = Person.<span class="kwd">class</span>.<span class="fnc">getField</span>(<span class="str">&quot;name&quot;</span>);
+
+AccessController.<span class="fnc">doPrivileged</span>(<span class="kwd">new</span>&#160;<span class="fnc">PrivilegedAction</span>&lt;Void&gt;() {
+  <span class="kwd">public</span> Void <span class="fnc">run</span>() {
+    field.<span class="fnc">setAccessible</span>(<span class="kwd">true</span>);
+    <span class="kwd">return null</span>;
+  }
+});    
+
+<span class="typ">String</span> name = (String) field.<span class="fnc">get</span>(person);</pre>
         </p>
         <p>
           FEST-Reflect:
@@ -48,7 +57,16 @@
         <p>
           Java Reflection:
           <pre class="prettyprint">
-Person.<span class="kwd">class</span>.<span class="fnc">getField</span>(<span class="str">&quot;name&quot;</span>).<span class="fnc">set</span>(person, <span class="str">&quot;Leia&quot;</span>);</pre>
+<span class="typ">Field</span> field = Person.<span class="kwd">class</span>.<span class="fnc">getField</span>(<span class="str">&quot;name&quot;</span>);
+
+AccessController.<span class="fnc">doPrivileged</span>(<span class="kwd">new</span>&#160;<span class="fnc">PrivilegedAction</span>&lt;Void&gt;() {
+  <span class="kwd">public</span> Void <span class="fnc">run</span>() {
+    field.<span class="fnc">setAccessible</span>(<span class="kwd">true</span>);
+    <span class="kwd">return null</span>;
+  }
+});    
+
+field.<span class="fnc">set</span>(person, <span class="str">&quot;Leia&quot;</span>);</pre>
         </p>
         <p>
           FEST-Reflect:
