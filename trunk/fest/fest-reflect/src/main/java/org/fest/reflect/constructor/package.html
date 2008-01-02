@@ -23,18 +23,18 @@ constructor invocation via the Reflection API.
 </p>
 <p>
 <strong>Note:</strong> Classes in this package are not intended to be used directly. To use them, you need to use the
-class <code>{@link org.fest.reflect.Reflection org.fest.reflect.Reflection}</code>.
+class <code>{@link org.fest.reflect.core.Reflection org.fest.reflect.core.Reflection}</code>.
 </p>
 <p>
 Here are some examples:
 <pre>
-   // import static {@link org.fest.reflect.Reflection org.fest.reflect.Reflection}.*;
+   // import static {@link org.fest.reflect.core.Reflection org.fest.reflect.core.Reflection}.*;
 
    // Equivalent to call 'new Person()'
-   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
+   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
    
    // Equivalent to call 'new Person("Yoda")'
-   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
+   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
 </pre>
 </p>
 </body>

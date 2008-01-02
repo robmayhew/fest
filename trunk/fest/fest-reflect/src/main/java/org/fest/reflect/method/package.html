@@ -23,23 +23,23 @@ method invocation via the Reflection API.
 </p>
 <p>
 <strong>Note:</strong> Classes in this package are not intended to be used directly. To use them, you need to use the
-class <code>{@link org.fest.reflect.Reflection org.fest.reflect.Reflection}</code>.
+class <code>{@link org.fest.reflect.core.Reflection org.fest.reflect.core.Reflection}</code>.
 </p>
 <p>
 Here are some examples:
 <pre>
-   // import static {@link org.fest.reflect.Reflection org.fest.reflect.Reflection}.*;
+   // import static {@link org.fest.reflect.core.Reflection org.fest.reflect.core.Reflection}.*;
 
    // Equivalent to call 'person.setName("Luke")'
-   {@link org.fest.reflect.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.Name#withParameterTypes(Class...) withParameterTypes}(String.class)
+   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.Name#withParameterTypes(Class...) withParameterTypes}(String.class)
                     .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)
                     .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Luke");
  
    // Equivalent to call 'person.concentrate()'
-   {@link org.fest.reflect.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.Name#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
+   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.Name#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
    
    // Equivalent to call 'person.getName()'
-   String name = {@link org.fest.reflect.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.Name#withReturnType(Class) withReturnType}(String.class)
+   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.Name#withReturnType(Class) withReturnType}(String.class)
                                   .{@link org.fest.reflect.method.ReturnType#in(Object) in}(person)
                                   .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();   
 </pre>
