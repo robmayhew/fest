@@ -5,9 +5,9 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.1" date="2007-28-04" description="First release">
+    <release version="0.2" date="2008-01-02" description="First public release">
       <action dev="alruiz" type="add">
-        Created EasyMockTemplate.
+        Created fluent interface-based versions of constructors, fields and methods.
       </action>
     </release>
   </body>
