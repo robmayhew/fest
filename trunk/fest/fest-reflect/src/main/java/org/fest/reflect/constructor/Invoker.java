@@ -18,6 +18,7 @@ import java.util.Arrays;
 
 import org.fest.reflect.exception.ReflectionError;
 
+import static org.fest.reflect.util.Accessibles.*;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -64,12 +65,13 @@ public final class Invoker<T> {
    */
   public T newInstance(Object... args) {
     try {
-      constructor.setAccessible(true);
+      setAccessible(constructor, true);
       T newInstance = constructor.newInstance(args);
-      constructor.setAccessible(accessible);
       return newInstance;
     } catch (Exception e) {
       throw new ReflectionError("Unable to create a new object from the enclosed constructor", e);
+    } finally {
+      setAccessibleIgnoringExceptions(constructor, accessible);
     }
   }
 

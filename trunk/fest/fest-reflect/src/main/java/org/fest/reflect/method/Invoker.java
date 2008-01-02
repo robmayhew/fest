@@ -18,8 +18,8 @@ import java.util.Arrays;
 
 import org.fest.reflect.exception.ReflectionError;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.reflect.util.Accessibles.*;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands the use of reflection to access a method from an object.
@@ -73,13 +73,13 @@ public final class Invoker<T> {
    */
   @SuppressWarnings("unchecked") public T invoke(Object... args) {
     try {
-      method.setAccessible(true);
+      setAccessible(method, true);
       return (T) method.invoke(target, args);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to invoke method ", quote(method.getName()), " with arguments ",
           Arrays.toString(args)), e);
     } finally {
-      method.setAccessible(accessible);
+      setAccessibleIgnoringExceptions(method, accessible);
     }
   }
   

@@ -16,8 +16,8 @@ package org.fest.reflect.field;
 
 import org.fest.reflect.exception.ReflectionError;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
+import static org.fest.reflect.util.Accessibles.*;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands the use of reflection to access a field from an object.
@@ -66,19 +66,22 @@ public final class Invoker<T> {
   private static java.lang.reflect.Field field(String fieldName, Class<?> targetType) {
     try {
       return targetType.getDeclaredField(fieldName);
-    } catch (Exception e) {
+    } catch (NoSuchFieldException e) {
       return null;
     }
   }
 
   void assertIsInstanceOf(Class<T> expected, String fieldName) {
-    field.setAccessible(true);
-    Class<?> fieldType = field.getType();
-    if (!expected.isAssignableFrom(fieldType)) {
-      throw new ReflectionError(concat("The field ", quote(fieldName), " should be of type <", expected.getName(), 
-          "> but was <", fieldType.getName(), ">"));
+    try {
+      setAccessible(field, true);
+      Class<?> fieldType = field.getType();
+      if (!expected.isAssignableFrom(fieldType)) {
+        throw new ReflectionError(concat("The field ", quote(fieldName), " should be of type <", expected.getName(), 
+            "> but was <", fieldType.getName(), ">"));
+      }
+    } finally {
+      setAccessibleIgnoringExceptions(field, accessible);
     }
-    field.setAccessible(accessible);
   }
 
   /**
@@ -88,12 +91,12 @@ public final class Invoker<T> {
    */
   public void set(T value) {
     try {
-      field.setAccessible(true);
+      setAccessible(field, true);
       field.set(target, value);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to update the value in field ", quote(field.getName())), e);
     } finally {
-      field.setAccessible(accessible);
+      setAccessibleIgnoringExceptions(field, accessible);
     }
   }
 
@@ -104,15 +107,15 @@ public final class Invoker<T> {
    */
   @SuppressWarnings("unchecked") public T get() {
     try {
-      field.setAccessible(true);
+      setAccessible(field, true);
       return (T) field.get(target);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to obtain the value in field " + quote(field.getName())), e);
     } finally {
-      field.setAccessible(accessible);
+      setAccessibleIgnoringExceptions(field, accessible);
     }
   }
-
+ 
   /**
    * Returns the "real" field managed by this class.
    * @return the "real" field managed by this class.

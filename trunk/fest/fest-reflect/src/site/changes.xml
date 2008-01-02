@@ -6,8 +6,14 @@
   </properties>
   <body>
     <release version="0.2" date="2008-01-02" description="First public release">
-      <action dev="alruiz" type="add">
-        Created fluent interface-based versions of constructors, fields and methods.
+      <action dev="alruiz" type="fix">
+        Created class Accessibles to call method 'setAccessible' in an AccessibleObject inside a Privileged Block.
+      </action>
+      <action dev="wanghy" type="fix">
+        Moved class Reflection from package org.fest.reflect to org.fest.reflect.core to remore cyclic dependencies.
+      </action>
+      <action dev="wanghy" type="fix">
+        Moved class ReflectionError from package org.fest.reflect to org.fest.reflect.exception to remore cyclic dependencies.
       </action>
     </release>
   </body>
