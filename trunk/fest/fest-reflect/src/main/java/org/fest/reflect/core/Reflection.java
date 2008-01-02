@@ -12,7 +12,7 @@
  * 
  * Copyright @2006 the original author or authors.
  */
-package org.fest.reflect;
+package org.fest.reflect.core;
 
 import org.fest.reflect.constructor.TargetType;
 
@@ -21,27 +21,27 @@ import org.fest.reflect.constructor.TargetType;
  * The following is an example of proper usage of the classes in this package:
  * <pre>
  *   // Equivalent to call 'new Person()'
- *   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
+ *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
  *   
  *   // Equivalent to call 'new Person("Yoda")'
- *   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
+ *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
  * 
  *   // Retrieves the value of the field "name"
- *   String name = {@link org.fest.reflect.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
+ *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
  *   
  *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
  *   
  *   // Equivalent to call 'person.setName("Luke")'
- *   {@link org.fest.reflect.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.Name#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.Name#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                    .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)
  *                    .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Equivalent to call 'person.concentrate()'
- *   {@link org.fest.reflect.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.Name#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.Name#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *   
  *   // Equivalent to call 'person.getName()'
- *   String name = {@link org.fest.reflect.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.Name#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.Name#withReturnType(Class) withReturnType}(String.class)
  *                                  .{@link org.fest.reflect.method.ReturnType#in(Object) in}(person)
  *                                  .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();   
  * </pre>

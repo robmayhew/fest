@@ -14,7 +14,7 @@
  */
 package org.fest.reflect.field;
 
-import org.fest.reflect.ReflectionError;
+import org.fest.reflect.exception.ReflectionError;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
@@ -25,10 +25,10 @@ import static org.fest.util.Strings.quote;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the field "name"
- *   String name = {@link org.fest.reflect.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#get() get}();
+ *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
  * </pre>
  * </p>
  *

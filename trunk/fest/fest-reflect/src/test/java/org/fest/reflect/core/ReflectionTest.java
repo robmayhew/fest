@@ -13,11 +13,12 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.reflect;
+package org.fest.reflect.core;
 
 import org.testng.annotations.Test;
 
 import org.fest.reflect.constructor.TargetType;
+import org.fest.reflect.core.Reflection;
 
 import static org.fest.assertions.Assertions.assertThat;
 

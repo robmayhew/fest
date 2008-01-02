@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
-import org.fest.reflect.ReflectionError;
+import org.fest.reflect.exception.ReflectionError;
 
 import static org.fest.assertions.Assertions.assertThat;
 

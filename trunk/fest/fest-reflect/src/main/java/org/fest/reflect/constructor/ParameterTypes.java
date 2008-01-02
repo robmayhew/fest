@@ -20,10 +20,10 @@ package org.fest.reflect.constructor;
  * The following is an example of proper usage of the classes in this package:
  * <pre>
  *   // Equivalent to call 'new Person()'
- *   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link TargetType#in in}(Person.class).{@link Invoker#newInstance newInstance}();
+ *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#in in}(Person.class).{@link Invoker#newInstance newInstance}();
  *   
  *   // Equivalent to call 'new Person("Yoda")'
- *   Person p = {@link org.fest.reflect.Reflection#constructor() constructor}().{@link TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link ParameterTypes#in(Class) in}(Person.class).{@link Invoker#newInstance newInstance}("Yoda");
+ *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link ParameterTypes#in(Class) in}(Person.class).{@link Invoker#newInstance newInstance}("Yoda");
  * </pre>
  * </p>
  *

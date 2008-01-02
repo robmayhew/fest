@@ -16,7 +16,7 @@ package org.fest.reflect.method;
 
 import java.util.Arrays;
 
-import org.fest.reflect.ReflectionError;
+import org.fest.reflect.exception.ReflectionError;
 
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
@@ -26,15 +26,15 @@ import static org.fest.util.Strings.quote;
  * <p>
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
- *   {@link org.fest.reflect.Reflection#method(String) method}("setName").{@link Name#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link Name#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                    .{@link ParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Equivalent to call 'person.concentrate()'
- *   {@link org.fest.reflect.Reflection#method(String) method}("concentrate").{@link Name#in(Object) in}(person).{@link Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link Name#in(Object) in}(person).{@link Invoker#invoke(Object...) invoke}();
  *   
  *   // Equivalent to call 'person.getName()'
- *   String name = {@link org.fest.reflect.Reflection#method(String) method}("getName").{@link Name#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link Name#withReturnType(Class) withReturnType}(String.class)
  *                                  .{@link ReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
