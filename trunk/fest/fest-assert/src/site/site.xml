@@ -33,7 +33,7 @@
 		<menu name="FEST Modules">
 			<item name="FEST-Swing" href="../swing/index.html" />
 			<item name="FEST-Assert" href="../assert/index.html" />
-			<item name="FEST-Reflection" href="../reflection/index.html" />
+			<item name="FEST-Reflect" href="../reflect/index.html" />
 			<item name="FEST-Mocks" href="../mocks/index.html" />
 		</menu>
 
