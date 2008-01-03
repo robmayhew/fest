@@ -30,7 +30,7 @@ public class JDialogTest {
   @Test public void shouldFindNestedDialogTwoTimes() throws InterruptedException {
     JDialogStarter optionPaneStarter = new JDialogStarter(null);
     m_window = new DialogFixture(optionPaneStarter);
-    m_window.showingComponentLookup(true);
+    m_window.lookUpShowingComponentsOnly(true);
     m_window.show();
     m_window.requireVisible();
 

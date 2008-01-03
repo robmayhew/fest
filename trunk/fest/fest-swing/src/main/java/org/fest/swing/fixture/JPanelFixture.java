@@ -187,7 +187,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * showing.
    * @return this fixture.
    */
-  public final JPanelFixture showingComponentLookup(boolean newValue) {
-    return (JPanelFixture)doSetShowingComponentLookup(newValue);
+  public final JPanelFixture lookUpShowingComponentsOnly(boolean newValue) {
+    return (JPanelFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

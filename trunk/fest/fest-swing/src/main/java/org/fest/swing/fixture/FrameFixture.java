@@ -346,7 +346,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * showing.
    * @return this fixture.
    */
-  public final FrameFixture showingComponentLookup(boolean newValue) {
-    return (FrameFixture)doSetShowingComponentLookup(newValue);
+  public final FrameFixture lookUpShowingComponentsOnly(boolean newValue) {
+    return (FrameFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

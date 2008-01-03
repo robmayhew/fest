@@ -42,7 +42,7 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public abstract class ContainerFixture<T extends Container> extends ComponentFixture<T> {
 
-  private boolean showingComponentLookup;
+  private boolean lookUpShowingComponentsOnly;
 
   /**
    * Creates a new <code>{@link ContainerFixture}</code>.
@@ -817,11 +817,11 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   protected final <C extends Component> C findByType(Class<C> type) {
-    return finder().findByType(target, type, showingComponentLookup);
+    return finder().findByType(target, type, lookUpShowingComponentsOnly);
   }
 
   protected final <C extends Component> C findByName(String name, Class<C> type) {
-    return finder().findByName(target, name, type, showingComponentLookup);
+    return finder().findByName(target, name, type, lookUpShowingComponentsOnly);
   }
   
   protected final <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
@@ -836,7 +836,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @return <code>true</code> if component lookup (by name and type) is limited to showing components only,
    *         <code>false</code> otherwise.
    */
-  public final boolean showingComponentLookup() { return showingComponentLookup; }
+  public final boolean lookUpShowingComponentsOnly() { return lookUpShowingComponentsOnly; }
   
   /**
    * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
@@ -845,10 +845,10 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * showing.
    * @return this fixture.
    */
-  public abstract ContainerFixture showingComponentLookup(boolean newValue);
+  public abstract ContainerFixture lookUpShowingComponentsOnly(boolean newValue);
   
-  protected final ContainerFixture doSetShowingComponentLookup(boolean newValue) { 
-    showingComponentLookup = newValue;
+  protected final ContainerFixture setLookUpShowingComponentsOnly(boolean newValue) { 
+    lookUpShowingComponentsOnly = newValue;
     return this;
   }
 }

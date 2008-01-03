@@ -236,7 +236,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * showing.
    * @return this fixture.
    */
-  public final JToolBarFixture showingComponentLookup(boolean newValue) {
-    return (JToolBarFixture)doSetShowingComponentLookup(newValue);
+  public final JToolBarFixture lookUpShowingComponentsOnly(boolean newValue) {
+    return (JToolBarFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

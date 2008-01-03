@@ -310,7 +310,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * showing.
    * @return this fixture.
    */
-  public final JInternalFrameFixture showingComponentLookup(boolean newValue) {
-    return (JInternalFrameFixture)doSetShowingComponentLookup(newValue);
+  public final JInternalFrameFixture lookUpShowingComponentsOnly(boolean newValue) {
+    return (JInternalFrameFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

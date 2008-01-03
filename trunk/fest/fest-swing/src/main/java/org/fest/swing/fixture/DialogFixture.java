@@ -284,7 +284,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * showing.
    * @return this fixture.
    */
-  public final DialogFixture showingComponentLookup(boolean newValue) {
-    return (DialogFixture)doSetShowingComponentLookup(newValue);
+  public final DialogFixture lookUpShowingComponentsOnly(boolean newValue) {
+    return (DialogFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

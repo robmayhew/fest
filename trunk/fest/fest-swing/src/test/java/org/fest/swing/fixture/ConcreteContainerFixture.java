@@ -47,5 +47,5 @@ public class ConcreteContainerFixture<T extends Container> extends ContainerFixt
   public ContainerFixture<T> rightClick() { return null; }
   public ContainerFixture<T> pressKey(int keyCode) { return null; }
   public ContainerFixture<T> releaseKey(int keyCode) { return null; }
-  public ContainerFixture<T> showingComponentLookup(boolean newValue) { return null; }
+  public ContainerFixture<T> lookUpShowingComponentsOnly(boolean newValue) { return null; }
 }
