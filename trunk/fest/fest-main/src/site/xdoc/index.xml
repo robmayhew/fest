@@ -46,9 +46,9 @@ dialog.<span class="fnc">optionPane</span>().<span class="fnc">requireErrorMessa
 	        	<li>
 	        	  'Flexible' or 'fluent' assertions:
 	        	  <pre class="prettyprint">
-	<span class="fnc">assertThat</span>(yoda).<span class="fnc">isInstanceOf</span>(Jedi.<span class="kwd">class</span>)
-	                .<span class="fnc">isEqualTo</span>(foundJedi)
-	                .<span class="fnc">isNotEqualTo</span>(foundSith);</pre>
+<span class="fnc">assertThat</span>(yoda).<span class="fnc">isInstanceOf</span>(Jedi.<span class="kwd">class</span>)
+                .<span class="fnc">isEqualTo</span>(foundJedi)
+                .<span class="fnc">isNotEqualTo</span>(foundSith);</pre>
 	        	</li>
 	        	<li>
 	        	  Assertions for <code class="code">Object</code>s, <code class="code">String</code>s, arrays (including 
