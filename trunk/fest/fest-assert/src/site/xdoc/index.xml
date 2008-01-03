@@ -24,49 +24,58 @@
           Currently, this module provides assertions for the following data types:
           <ol>
             <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
             </li>
             <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/String.html">String</a></code>
             </li>
             <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a></code>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Collection.html">Collection</a></code>
             </li>
             <li>Primitives (<code class="code">boolean</code>, <code class="code">int</code>, <code class="code">char</code>, etc.)</li>
             <li>
               Arrays of 
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
             </li>
             <li>Arrays of primitives</li>
             <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a></code>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/image/BufferedImage.html">BufferedImage</a></code>
+            </li>
+            <li>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Throwable.html">Throwable</a></code>
+            </li>
+            <li>
+              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/io/File.html">File</a></code>
             </li>
           </ol>					
 				</p>
 				<p>
-				  FEST-Assert can be downloaded 
+				  It can be downloaded 
 				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
 				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
 				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
 				  (groupId: fest, artifactId: fest-assert).
 				</p>
+				<p>
+				  FEST-Assert is a dependency of <a href="../swing/index.html">FEST-Swing</a>.
+				</p>
 			</subsection>
 			<subsection name="Examples">
 				<p>
 					<pre class="prettyprint">
-int removed = employees.removeFired();
-assertThat(removed).isZero();
+<span class="kwd">int</span> removed = employees.<span class="fnc">removeFired</span>();
+<span class="fnc">assertThat</span>(removed).<span class="fnc">isZero</span>();
  
-List&lt;Employee&gt; newEmployees = employees.hired(TODAY);
-assertThat(newEmployees).hasSize(6)
-                        .contains(frodo, sam);
+<span class="typ">List</span>&lt;Employee&gt; newEmployees = employees.<span class="fnc">hired</span>(TODAY);
+<span class="fnc">assertThat</span>(newEmployees).<span class="fnc">hasSize</span>(6)
+                        .<span class="fnc">contains</span>(frodo, sam);
  
-String[] newHires = employees.newHiresNames();
-assertThat(newHires).containsOnly("Gandalf", "Arwen", "Gimli"); 
+<span class="typ">String</span>[] newHires = employees.<span class="fnc">newHiresNames</span>();
+<span class="fnc">assertThat</span>(newHires).<span class="fnc">containsOnly</span>(<span class="str">&quot;Gandalf&quot;</span>, <span class="str">&quot;Arwen&quot;</span>, <span class="str">&quot;Gimli&quot;</span>); 
  
-assertThat(yoda).isInstanceOf(Jedi.class)
-                .isEqualTo(foundJedi)
-                .isNotEqualTo(foundSith);</pre>
+<span class="fnc">assertThat</span>(yoda).<span class="fnc">isInstanceOf</span>(Jedi.<span class="kwd">class</span>)
+                .<span class="fnc">isEqualTo</span>(foundJedi)
+                .<span class="fnc">isNotEqualTo</span>(foundSith);</pre>
 				</p>
 			</subsection>
 			<subsection name="Links">

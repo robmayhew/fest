@@ -13,20 +13,20 @@
   		  Here is an example using Hamcrest (borrowed from Martin Gilday's example posted at the 
 		    <a href="http://testng.org" target="_blank">TestNG</a> mailing list):
 		    <pre class="prettyprint">
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.testng.Assert.assertTrue;
+<span class="kwd">import static</span> org.hamcrest.MatcherAssert.assertThat;
+<span class="kwd">import static</span> org.hamcrest.Matchers.containsString;
+<span class="kwd">import static</span> org.hamcrest.Matchers.equalTo;
+<span class="kwd">import static</span> org.testng.Assert.assertTrue;
  
-import org.testng.annotations.Test;
+<span class="kwd">import</span> org.testng.annotations.Test;
  
-public class SomeTest {
+<span class="kwd">public class</span> SomeTest {
  
-  @Test public void withHamcrest() {
-    assertTrue(true);
-    int result = 2 + 3;
-    assertThat(&quot;calculation&quot;, 5, equalTo(result));
-    assertThat(&quot;Hello World&quot;, containsString(&quot;World&quot;));
+  <span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;<span class="fnc">withHamcrest</span>() {
+    <span class="fnc">assertTrue</span>(<span class="kwd">true</span>);
+    <span class="kwd">int</span> result = 2 + 3;
+    <span class="fnc">assertThat</span>(<span class="str">&quot;calculation&quot;</span>, 5, <span class="fnc">equalTo</span>(result));
+    <span class="fnc">assertThat</span>(<span class="str">&quot;Hello World&quot;</span>, <span class="fnc">containsString</span>(<span class="str">&quot;World&quot;</span>));
   }
 }</pre>
 		  </p>
@@ -35,17 +35,17 @@ public class SomeTest {
 		  </p>
 		  <p>
 		    <pre class="prettyprint">
-import static org.fest.assertions.Assertions.assertThat;
+<span class="kwd">import static</span> org.fest.assertions.Assertions.assertThat;
  
-import org.testng.annotations.Test;
+<span class="kwd">import</span> org.testng.annotations.Test;
  
-public class SomeTest {
+<span class="kwd">public class</span> SomeTest {
  
-  @Test public void testApp() {
-    assertThat(true).isTrue();
-    int result = 2 + 3;
-    assertThat(result).as(&quot;calculation&quot;).isEqualTo(5);
-    assertThat(&quot;Hello World&quot;).contains(&quot;World&quot;);
+  <span class="lit">@Test</span>&#160;<span class="kwd">public void</span>&#160;testApp() {
+    <span class="fnc">assertThat</span>(<span class="kwd">true</span>).<span class="fnc">isTrue</span>();
+    <span class="kwd">int</span> result = 2 + 3;
+    <span class="fnc">assertThat</span>(result).<span class="fnc">as</span>(<span class="str">&quot;calculation&quot;</span>).<span class="fnc">isEqualTo</span>(5);
+    <span class="fnc">assertThat</span>(<span class="str">&quot;Hello World&quot;</span>).<span class="fnc">contains</span>(<span class="str">&quot;World&quot;</span>);
   }
 }</pre>
 		  </p>
@@ -62,7 +62,9 @@ public class SomeTest {
           <li>
             We can chain related assertion methods:
             <pre class="prettyprint">
-assertThat(yoda).isInstanceOf(Jedi.class).isEqualTo(foundJedi).isNotEqualTo(possibleSith);</pre>
+<span class="fnc">assertThat</span>(yoda).<span class="fnc">isInstanceOf</span>(Jedi.<span class="kwd">class</span>)
+                .<span class="fnc">isEqualTo</span>(foundJedi)
+                .<span class="fnc">isNotEqualTo</span>(possibleSith);</pre>
           </li>
         </ol>
       </p>
