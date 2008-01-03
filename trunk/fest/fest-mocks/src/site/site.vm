@@ -345,6 +345,25 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
+        <div id="downloadbox">
+          <h5>Search FEST Sites</h5>
+<!-- Google CSE Search Box Begins  -->
+<style type="text/css">
+@import url(http://www.google.com/cse/api/branding.css);
+</style>
+<div class="cse-branding-bottom" style="background-color:#eee;color:#000000;padding:4px;">
+  <div class="cse-branding-form">
+    <center>
+    <form action="http://www.google.com/cse" id="searchbox_007537612904510037823:usu_hsci2xi">
+      <input type="hidden" name="cx" value="007537612904510037823:usu_hsci2xi" />
+      <input type="text" name="q" size="20" />
+      <input type="submit" name="sa" value="Search" />
+    </form>
+    </center>
+  </div>
+</div>
+<!-- Google CSE Search Box Ends -->
+        </div>  
         $bodyContent
       </div>
     </div>

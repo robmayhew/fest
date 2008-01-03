@@ -7,33 +7,31 @@
 
 	<body>
 		<section name="Welcome to the FEST Mocks Module">
-		  <subsection name="Introduction">
-				<p>
-				  FEST-Mocks is a Java library which mission is to 
-				  minimize potential shortcomings of <a href="http://www.mockobjects.com/" target="_blank">Mock Objects</a>.
-				</p>
-			  <p>
-			    More information about the potential shortcomings of mocks can be found at:
-			    <ul> 
-	  		    <li><a href="http://dev2dev.bea.com/pub/a/2007/06/mock-shortcomings.html">Mock Objects: Shortcomings and Use Cases</a></li>
-		  	    <li><a href="http://www.jroller.com/page/alexRuiz?entry=mocks_for_concrete_class_can">Mock Objects: the Good, the Bad and the Ugly</a></li>
-			    </ul>
-			  </p>				
-				<p>
-					FEST-Mocks requires 
-					<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
-					and can be used with either 
-				  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
-				  <a href="http://testng.org" target="_blank">TestNG</a>. 
-				</p>
-				<p>  
-				  It can be downloaded 
-				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
-				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
-				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
-				  (groupId: fest, artifactId: fest-mocks).
-				</p>
-			</subsection>
+			<p>
+			  FEST-Mocks is a Java library which mission is to 
+			  minimize potential shortcomings of <a href="http://www.mockobjects.com/" target="_blank">Mock Objects</a>.
+			</p>
+		  <p>
+		    More information about the potential shortcomings of mocks can be found at:
+		    <ul> 
+  		    <li><a href="http://dev2dev.bea.com/pub/a/2007/06/mock-shortcomings.html">Mock Objects: Shortcomings and Use Cases</a></li>
+	  	    <li><a href="http://www.jroller.com/page/alexRuiz?entry=mocks_for_concrete_class_can">Mock Objects: the Good, the Bad and the Ugly</a></li>
+		    </ul>
+		  </p>				
+			<p>
+				FEST-Mocks requires 
+				<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
+				and can be used with either 
+			  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
+			  <a href="http://testng.org" target="_blank">TestNG</a>. 
+			</p>
+			<p>  
+			  It can be downloaded 
+			  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
+			  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
+			  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
+			  (groupId: fest, artifactId: fest-mocks).
+			</p>
 			<subsection name="EasyMockTemplate">
 				<p>
 				  One of the shortcomings of using mocks is introduction of clutter and duplication in our code. Take a look at
