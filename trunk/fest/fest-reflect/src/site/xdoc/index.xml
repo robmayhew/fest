@@ -7,22 +7,20 @@
 
 	<body>
 		<section name="Welcome to the FEST Reflection Module">
-		  <subsection name="Introduction">
-				<p>
-				  FEST-Reflect is a Java library that provides a 
-				  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">Fluent Interface</a>-based
-				  API that simplifies the usage of 
-				  <a href="http://java.sun.com/docs/books/tutorial/reflect/" target="_blank">Java Reflection</a>, resulting in
-				  improved readability and type safety. 
-				</p>
-				<p>  
-				  It can be downloaded 
-				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
-				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
-				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
-				  (groupId: fest, artifactId: fest-reflect).
-				</p>
-			</subsection>
+			<p>
+			  FEST-Reflect is a Java library that provides a 
+			  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">Fluent Interface</a>-based
+			  API that simplifies the usage of 
+			  <a href="http://java.sun.com/docs/books/tutorial/reflect/" target="_blank">Java Reflection</a>, resulting in
+			  improved readability and type safety. 
+			</p>
+			<p>  
+			  It can be downloaded 
+			  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
+			  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
+			  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
+			  (groupId: fest, artifactId: fest-reflect).
+			</p>
 			<subsection name="Examples">
 			  <p>
 			    The following examples demonstrate how easy is to access constructors, methods and fields using 
