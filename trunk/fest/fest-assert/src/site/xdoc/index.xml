@@ -7,59 +7,54 @@
 
 	<body>
 		<section name="Welcome to the FEST Fluent Assertions Module">
-		  <subsection name="Introduction">
-				<p>
-				  <a href="http://code.google.com/p/fest" target="_blank">FEST-Assert</a> is a Java library that provides a 
-				  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
-				  writing assertions. Its main goal is to improve test code readability and make maintenance of tests easier.
-				</p>
-				<p>
-					FEST-Assert requires 
-					<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
-					and can be used with either 
-				  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
-				  <a href="http://testng.org" target="_blank">TestNG</a>.
-				</p>
-				<p>
-          Currently, this module provides assertions for the following data types:
-          <ol>
-            <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
-            </li>
-            <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/String.html">String</a></code>
-            </li>
-            <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Collection.html">Collection</a></code>
-            </li>
-            <li>Primitives (<code class="code">boolean</code>, <code class="code">int</code>, <code class="code">char</code>, etc.)</li>
-            <li>
-              Arrays of 
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
-            </li>
-            <li>Arrays of primitives</li>
-            <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/image/BufferedImage.html">BufferedImage</a></code>
-            </li>
-            <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Throwable.html">Throwable</a></code>
-            </li>
-            <li>
-              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/io/File.html">File</a></code>
-            </li>
-          </ol>					
-				</p>
-				<p>
-				  It can be downloaded 
-				  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
-				  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
-				  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
-				  (groupId: fest, artifactId: fest-assert).
-				</p>
-				<p>
-				  FEST-Assert is a dependency of <a href="../swing/index.html">FEST-Swing</a>.
-				</p>
-			</subsection>
+			<p>
+			  <a href="http://code.google.com/p/fest" target="_blank">FEST-Assert</a> is a Java library that provides a 
+			  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
+			  writing assertions. Its main goal is to improve test code readability and make maintenance of tests easier.
+			</p>
+			<p>
+				FEST-Assert requires 
+				<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
+				and can be used with either 
+			  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
+			  <a href="http://testng.org" target="_blank">TestNG</a>.
+			</p>
+			<p>
+         Currently, this module provides assertions for the following data types:
+         <ol>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
+           </li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/String.html">String</a></code>
+           </li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Collection.html">Collection</a></code>
+           </li>
+           <li>Primitives (<code class="code">boolean</code>, <code class="code">int</code>, <code class="code">char</code>, etc.)</li>
+           <li>
+             Arrays of 
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
+           </li>
+           <li>Arrays of primitives</li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/image/BufferedImage.html">BufferedImage</a></code>
+           </li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Throwable.html">Throwable</a></code>
+           </li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/io/File.html">File</a></code>
+           </li>
+         </ol>					
+			</p>
+			<p>
+			  It can be downloaded 
+			  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
+			  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
+			  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
+			  (groupId: fest, artifactId: fest-assert).
+			</p>
 			<subsection name="Examples">
 				<p>
 					<pre class="prettyprint">

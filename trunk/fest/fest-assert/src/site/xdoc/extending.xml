@@ -7,6 +7,13 @@
 
 	<body>
 		<section name="Extending FEST-Assert">
+		  <p>
+		    FEST-Assert can be easily extended using:
+		    <ul>
+		      <li>Custom conditions</li>
+		      <li>Custom assertion classes</li>
+		    </ul>
+		  </p>
 		  <subsection name="Custom Conditions">
 		    <p>
           Assertions classes provided by FEST-Assert can be extended by using custom conditions (instances of 
