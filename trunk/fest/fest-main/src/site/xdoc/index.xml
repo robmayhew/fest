@@ -53,7 +53,7 @@ dialog.<span class="fnc">optionPane</span>().<span class="fnc">requireErrorMessa
         </ul>      
       </p>
       <p>
-        <a href="./reflection/index.html">Reflection Module</a>:
+        <a href="./reflect/index.html">Reflection Module</a>:
         <ul>
           <li>
             'Fluent interface' for simplifying usage of reflection:
@@ -61,9 +61,11 @@ dialog.<span class="fnc">optionPane</span>().<span class="fnc">requireErrorMessa
 <span class="typ">Person</span> person = <span class="fnc">constructor</span>().<span class="fnc">withParameterTypes</span>(String.<span class="kwd">class</span>)
                              .<span class="fnc">in</span>(Person.<span class="kwd">class</span>)
                              .<span class="fnc">newInstance</span>(<span class="str">&quot;Yoda&quot;</span>);
+
 <span class="fnc">method</span>(<span class="str">&quot;setName&quot;</span>).<span class="fnc">withParameterTypes</span>(String.<span class="kwd">class</span>)
                  .<span class="fnc">in</span>(person)
                  .<span class="fnc">invoke</span>(<span class="str">&quot;Luke&quot;</span>);
+
 <span class="fnc">field</span>(<span class="str">&quot;name&quot;</span>).<span class="fnc">ofType</span>(String.<span class="kwd">class</span>)
              .<span class="fnc">in</span>(person)
              .<span class="fnc">set</span>(<span class="str">&quot;Anakin&quot;</span>);</pre>          
