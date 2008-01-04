@@ -27,17 +27,27 @@ public class ActionFailedException extends RuntimeException {
   /**
    * Creates a new <code>{@link ActionFailedException}</code>.
    * @param message the detail message.
+   * @return the created exception.
    */
-  public ActionFailedException(String message) {
-    super(message);
+  public static ActionFailedException actionFailure(String message) {
+    return new ActionFailedException(message);
   }
-
+  
   /**
    * Creates a new <code>{@link ActionFailedException}</code>.
    * @param message the detail message.
    * @param cause the cause of the error.
+   * @return the created exception.
    */
-  public ActionFailedException(String message, Throwable cause) {
+  public static ActionFailedException actionFailure(String message, Throwable cause) {
+    return new ActionFailedException(message, cause);
+  }
+
+  private ActionFailedException(String message) {
+    super(message);
+  }
+
+  private ActionFailedException(String message, Throwable cause) {
     super(message, cause);
   }
 }

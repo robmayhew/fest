@@ -26,6 +26,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 import static org.fest.util.Strings.*;
@@ -183,7 +184,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   private void validateItemIndex(int index) {
     int itemCount = target.getModel().getSize();
     if (index < 0 || index >= itemCount)
-      throw new ActionFailedException(concat(
+      throw actionFailure(concat(
           quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", quote(valueOf(itemCount))));
   }
 

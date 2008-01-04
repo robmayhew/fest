@@ -17,7 +17,7 @@ package org.fest.swing.util;
 
 import java.util.Map;
 
-import static org.fest.reflect.Reflection.field;
+import static org.fest.reflect.core.Reflection.field;
 
 /**
  * Understands utility methods related to reflection.

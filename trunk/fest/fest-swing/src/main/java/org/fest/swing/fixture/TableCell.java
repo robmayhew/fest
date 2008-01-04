@@ -18,9 +18,10 @@ package org.fest.swing.fixture;
 import javax.swing.JTable;
 
 import static java.lang.String.valueOf;
-import static org.fest.util.Strings.*;
 
-import org.fest.swing.exception.ActionFailedException;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a cell in a <code>{@link JTable}</code>. Intended for creation of <code>{@link JTableCellFixture}</code>s 
@@ -88,14 +89,14 @@ public class TableCell {
    */
   void validateBoundsIn(JTable table) {
     int rowCount = table.getRowCount();
-    if (rowCount == 0) throw new ActionFailedException("Table does not contain any rows");
+    if (rowCount == 0) throw actionFailure("Table does not contain any rows");
     validateIndex(row, rowCount, "row");
     validateIndex(column, table.getColumnCount(), "column");
   }
   
   private void validateIndex(int index, int itemCount, String indexName) {
     if (index < 0 || index >= itemCount) 
-      throw new ActionFailedException(concat(
+      throw actionFailure(concat(
           indexName, " ", quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", quote(valueOf(itemCount))));
   }
 }

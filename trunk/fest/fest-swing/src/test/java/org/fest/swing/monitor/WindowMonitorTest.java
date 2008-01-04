@@ -30,7 +30,7 @@ import static java.awt.AWTEvent.*;
 import static java.awt.Toolkit.getDefaultToolkit;
 import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.Reflection.field;
+import static org.fest.reflect.core.Reflection.field;
 
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
 

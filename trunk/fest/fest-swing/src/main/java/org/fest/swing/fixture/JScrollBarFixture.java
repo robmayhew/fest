@@ -20,9 +20,12 @@ import javax.swing.JScrollBar;
 import abbot.tester.JScrollBarTester;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -58,11 +61,11 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * Simulates a user scrolling up one unit (usually a line,) the given number of times.
    * @param times the number of times to scroll up one unit.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollUnitUp(int times) {
     if (times <= 0) 
-      throw new IllegalArgumentException("The number of times to scroll up one unit should be greater than zero");
+      throw actionFailure("The number of times to scroll up one unit should be greater than zero");
     for (int i = 0; i < times; i++) scrollUnitUp();
     return this;
   }
@@ -80,11 +83,11 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * Simulates a user scrolling down one unit (usually a line,) the given number of times.
    * @param times the number of times to scroll down one unit.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollUnitDown(int times) {
     if (times <= 0) 
-      throw new IllegalArgumentException("The number of times to scroll down one unit should be greater than zero");
+      throw actionFailure("The number of times to scroll down one unit should be greater than zero");
     for (int i = 0; i < times; i++) scrollUnitDown();
     return this;
   }
@@ -102,11 +105,11 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * Simulates a user scrolling up one block (usually a page,) the given number of times.
    * @param times the number of times to scroll up one block.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollBlockUp(int times) {
     if (times <= 0) 
-      throw new IllegalArgumentException("The number of times to scroll up one block should be greater than zero");
+      throw actionFailure("The number of times to scroll up one block should be greater than zero");
     for (int i = 0; i < times; i++) scrollBlockUp();
     return this;
   }
@@ -124,11 +127,11 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * Simulates a user scrolling down one block (usually a page,) the given number of times.
    * @param times the number of times to scroll down one block.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollBlockDown(int times) {
     if (times <= 0) 
-      throw new IllegalArgumentException("The number of times to scroll down one block should be greater than zero");
+      throw actionFailure("The number of times to scroll down one block should be greater than zero");
     for (int i = 0; i < times; i++) scrollBlockDown();
     return this;
   }

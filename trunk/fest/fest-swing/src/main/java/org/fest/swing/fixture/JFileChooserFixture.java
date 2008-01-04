@@ -23,11 +23,15 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import static javax.swing.JFileChooser.*;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
 import static org.fest.util.Strings.*;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -74,16 +78,16 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Selects the given file in this fixture's <code>{@link JFileChooser}</code>.
    * @param file the file to select.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JFileChooser</code> can select directories only and the file to
-   *           select is not a directory.
-   * @throws AssertionError if this fixture's <code>JFileChooser</code> cannot select directories and the file to select
-   *           is a directory.
+   * @throws ActionFailedException if this fixture's <code>JFileChooser</code> can select directories only and the
+   *         file to select is not a directory.
+   * @throws ActionFailedException if this fixture's <code>JFileChooser</code> cannot select directories and the file
+   *         to select is a directory.
    */
   public final JFileChooserFixture selectFile(final File file) {
     int mode = target.getFileSelectionMode();
     boolean isFolder = file.isDirectory();
-    if (mode == FILES_ONLY && isFolder) throw new AssertionError("The file chooser cannot open directories");
-    if (mode == DIRECTORIES_ONLY && !isFolder) throw new AssertionError("The file chooser can only open directories");
+    if (mode == FILES_ONLY && isFolder) throw actionFailure("The file chooser cannot open directories");
+    if (mode == DIRECTORIES_ONLY && !isFolder) throw actionFailure("The file chooser can only open directories");
     robot.invokeAndWait(new Runnable() {
       public void run() {
         target.setSelectedFile(file);
@@ -93,7 +97,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Sets the current diretory of this fixture's <code>{@link JFileChooser}</code> to the given one.
+   * Sets the current directory of this fixture's <code>{@link JFileChooser}</code> to the given one.
    * @param dir the directory to set as current.
    * @return this fixture.
    */
@@ -110,7 +114,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Returns a fixture that manages the textToMatch field where the user can enter the name of the file to select in the
    * <code>{@link JFileChooser}</code> managed by this fixture.
    * @return the created fixture.
-   * @throws org.fest.swing.exception.ComponentLookupException if a matching textToMatch field could not be found.
+   * @throws ComponentLookupException if a matching textToMatch field could not be found.
    */
   public final JTextComponentFixture fileNameTextBox() {
     return new JTextComponentFixture(robot, robot.finder().findByType(target, JTextField.class));
@@ -118,7 +122,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
 
   /**
    * Simulates a user pressing the "Cancel" button in this fixture's <code>{@link JFileChooser}</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if the "Cancel" button cannot be found.
+   * @throws ComponentLookupException if the "Cancel" button cannot be found.
    * @throws AssertionError if the "Cancel" button is disabled.
    */
   public final void cancel() {
@@ -139,7 +143,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
 
   /**
    * Simulates a user pressing the "Approve" button in this fixture's <code>{@link JFileChooser}</code>.
-   * @throws org.fest.swing.exception.ComponentLookupException if the "Approve" button cannot be found.
+   * @throws ComponentLookupException if the "Approve" button cannot be found.
    * @throws AssertionError if the "Approve" button is disabled.
    */
   public final void approve() {
@@ -149,7 +153,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   /**
    * Finds the "Approve" button in this fixture's <code>{@link JFileChooser}</code>.
    * @return the found "Approve" button.
-   * @throws org.fest.swing.exception.ComponentLookupException if the "Approve" button cannot be found.
+   * @throws ComponentLookupException if the "Approve" button cannot be found.
    */
   public final JButtonFixture approveButton() {
     String buttonText = approveButtonText();

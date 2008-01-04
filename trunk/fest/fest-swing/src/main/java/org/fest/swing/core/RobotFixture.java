@@ -39,6 +39,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -158,7 +159,7 @@ public final class RobotFixture {
     while ((Robot.getEventMode() == Robot.EM_ROBOT && !windowTracker.isWindowReady(w)) || !w.isShowing()) {
       long elapsed = currentTimeMillis() - start;
       if (elapsed > WINDOW_DELAY)
-        throw new RuntimeException(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
+        throw new WaitTimedOutError(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
       robot.sleep();
     }
   }

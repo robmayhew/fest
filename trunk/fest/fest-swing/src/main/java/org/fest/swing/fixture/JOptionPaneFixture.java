@@ -25,6 +25,9 @@ import javax.swing.text.JTextComponent;
 
 import static javax.swing.JOptionPane.*;
 import static org.fest.assertions.Assertions.assertThat;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
 import static org.fest.util.Strings.concat;
 
 import org.fest.swing.core.MouseButton;
@@ -279,7 +282,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   
   private String messageTypeAsText(int messageType) {
     if (!messageMap.containsKey(messageType))
-      throw new IllegalArgumentException(concat("The message type <", messageType, "> is not valid"));
+      throw actionFailure(concat("The message type <", messageType, "> is not valid"));
     return messageMap.get(messageType);
   }
 

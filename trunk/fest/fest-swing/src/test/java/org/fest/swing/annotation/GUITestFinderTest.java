@@ -18,7 +18,7 @@ package org.fest.swing.annotation;
 import java.lang.reflect.Method;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.Reflection.method;
+import static org.fest.reflect.core.Reflection.method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

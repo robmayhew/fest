@@ -20,9 +20,12 @@ import javax.swing.JSpinner;
 import abbot.tester.JSpinnerTester;
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -30,6 +33,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * <code>{@link JSpinner}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class JSpinnerFixture extends ComponentFixture<JSpinner> {
 
@@ -68,11 +72,11 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
    * @param value how many times the value of this fixture's <code>JSpinner</code> should be incremented.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>value</code> is less than or equal to zero.
+   * @throws ActionFailedException if <code>value</code> is less than or equal to zero.
    */
   public final JSpinnerFixture increment(int value) {
     if (value <= 0) 
-      throw new IllegalArgumentException("The number of times to increment the value should be greater than zero");
+      throw actionFailure("The number of times to increment the value should be greater than zero");
     for (int i = 0; i < value; i++) increment();
     return this;
   }
@@ -90,11 +94,11 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
    * @param value how many times the value of this fixture's <code>JSpinner</code> should be decremented.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>value</code> is less than or equal to zero.
+   * @throws ActionFailedException if <code>value</code> is less than or equal to zero.
    */
   public final JSpinnerFixture decrement(int value) {
     if (value <= 0) 
-      throw new IllegalArgumentException("The number of times to decrement the value should be greater than zero");
+      throw actionFailure("The number of times to decrement the value should be greater than zero");
     for (int i = 0; i < value; i++) decrement();
     return this;
   }

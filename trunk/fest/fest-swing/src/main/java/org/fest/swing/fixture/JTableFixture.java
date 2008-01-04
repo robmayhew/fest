@@ -21,6 +21,7 @@ import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 import abbot.tester.JTableTester;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 import org.fest.swing.core.MouseButton;
@@ -64,7 +65,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Returns a fixture that manages the table cell specified by the given row and column.
    * @param cell the cell of interest.
    * @return a fixture that manages the table cell specified by the given row and column.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableCellFixture cell(TableCell cell) {
@@ -76,12 +77,12 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Simulates a user selecting the given cells of this fixture's <code>{@link JTable}</code>.
    * @param cells the cells to select.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>cells</code> is <code>null</code>.
-   * @throws IllegalArgumentException if any element in <code>cells</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cells</code> is <code>null</code>.
+   * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public final JTableFixture selectCells(TableCell... cells) {
-    if (cells == null) throw new IllegalArgumentException("Cells to select cannot be null");
+    if (cells == null) throw actionFailure("Cells to select cannot be null");
     int controlOrCommandKey = controlOrCommandKey();
     doPressKey(controlOrCommandKey);
     for (TableCell c : cells) selectCell(c);
@@ -93,7 +94,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Simulates a user selecting the given cell (row and column) of this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to select.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableFixture selectCell(TableCell cell) {
@@ -118,7 +119,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * <code>String</code> representation, or <code>null</code> if one can not be obtained.
    * @param cell the given cell.
    * @return the value of the given cell.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final String contentsAt(TableCell cell) {
@@ -134,7 +135,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Simulates a user dragging an item from this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to drag.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableFixture drag(TableCell cell) {
@@ -146,7 +147,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * Simulates a user dropping an item to this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to drop the dragging item into.
    * @return this fixture.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableFixture drop(TableCell cell) {
@@ -160,7 +161,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
   
   private void validate(TableCell cell) {
-    if (cell == null) throw new IllegalArgumentException("Cell cannot be null");
+    if (cell == null) throw actionFailure("Cell cannot be null");
     cell.validateBoundsIn(target);
   }
 
