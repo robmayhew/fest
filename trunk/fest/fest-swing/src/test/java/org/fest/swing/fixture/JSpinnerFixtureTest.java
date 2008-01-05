@@ -25,6 +25,8 @@ import static org.fest.assertions.Fail.fail;
 
 import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
+import org.fest.swing.exception.ActionFailedException;
+
 import org.testng.annotations.Test;
 
 /**
@@ -64,12 +66,12 @@ public class JSpinnerFixtureTest extends ComponentFixtureTestCase<JSpinner> {
     assertThat(spinnerValue()).isEqualTo("Gandalf");
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfTimesToIncrementIsZero() {
     fixture.increment(0);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfTimesToIncrementIsNegative() {
     fixture.increment(-1);
   }
@@ -86,12 +88,12 @@ public class JSpinnerFixtureTest extends ComponentFixtureTestCase<JSpinner> {
     assertThat(spinnerValue()).isEqualTo("Frodo");
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfTimesToDecrementIsZero() {
     fixture.decrement(0);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfTimesToDecrementIsNegative() {
     fixture.decrement(-1);
   }

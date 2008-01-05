@@ -26,6 +26,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Files.*;
 import static org.fest.util.Strings.isEmpty;
 
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 
 import org.testng.annotations.Test;
@@ -60,7 +61,7 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     temporaryFile.delete();
   }
   
-  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = ActionFailedException.class)
   public void shouldFailIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
     File temporaryFile = newTemporaryFile();
     fixture.target.setFileSelectionMode(DIRECTORIES_ONLY);
@@ -68,7 +69,7 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     temporaryFile.delete();
   }
   
-  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = ActionFailedException.class)
   public void shouldFailIfChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
     File temporaryFolder = newTemporaryFolder();
     fixture.target.setFileSelectionMode(FILES_ONLY);

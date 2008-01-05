@@ -21,6 +21,8 @@ import javax.swing.JScrollBar;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.exception.ActionFailedException;
+
 import org.testng.annotations.Test;
 
 /**
@@ -61,12 +63,12 @@ public class JScrollBarFixtureTest extends ComponentFixtureTestCase<JScrollBar> 
     fixture.requireValue(68);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollUnitUpIsNegative() {
     fixture.scrollUnitUp(-1);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollUnitUpIsZero() {
     fixture.scrollUnitUp(0);
   }
@@ -81,12 +83,12 @@ public class JScrollBarFixtureTest extends ComponentFixtureTestCase<JScrollBar> 
     assertThat(target.getValue()).isEqualTo(VALUE + 1);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollUnitDownIsNegative() {
     fixture.scrollUnitDown(-1);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollUnitDownIsZero() {
     fixture.scrollUnitDown(0);
   }
@@ -101,12 +103,12 @@ public class JScrollBarFixtureTest extends ComponentFixtureTestCase<JScrollBar> 
     assertThat(target.getValue()).isEqualTo(VALUE - 1);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollBlockUpIsNegative() {
     fixture.scrollBlockUp(-1);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollBlockUpIsZero() {
     fixture.scrollBlockUp(0);
   }
@@ -122,12 +124,12 @@ public class JScrollBarFixtureTest extends ComponentFixtureTestCase<JScrollBar> 
     assertThat(target.getValue()).isEqualTo(VALUE + BLOCK_INCREMENT);    
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollBlockDownIsNegative() {
     fixture.scrollBlockDown(-1);
   }
   
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTimesToScrollBlockDownIsZero() {
     fixture.scrollBlockDown(0);
   }
