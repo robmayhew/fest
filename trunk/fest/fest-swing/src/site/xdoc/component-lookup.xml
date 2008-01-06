@@ -16,8 +16,8 @@
           any change in the GUI (as long as the components have not been removed.) For example, to find a button having
           the name &quot;ok,&quot; we need to set that name in the button before we execute our tests:
 <pre class="prettyprint">
-  JButton okButton = new JButton(&quot;OK&quot;);
-  okButton.setName(&quot;ok&quot;);
+<span class="typ">JButton</span> okButton = <span class="kwd">new</span>&#160;<span class="fnc">JButton</span>(<span class="str">&quot;OK&quot;</span>);
+okButton.<span class="fnc">setName</span>(<span class="str">&quot;ok&quot;</span>);
 </pre>
         </p>
       </subsection>
@@ -37,11 +37,11 @@
           In this example we create a <code class="code">GenericTypeMatcher</code> that matches a 
           <code class="code">JButton</code> containing the text &quot;OK&quot;:
           <pre class="prettyprint">
-  GenericTypeMatcher&lt;JButton&gt; textMatcher = new GenericTypeMatcher&lt;JButton&gt;() {
-    @Override protected boolean isMatching(JButton button) {
-      return &quot;OK&quot;.equals(button.getText());
-    }
-  };</pre>
+<span class="typ">GenericTypeMatcher</span>&lt;JButton&gt; textMatcher = <span class="kwd">new</span>&#160;<span class="fnc">GenericTypeMatcher</span>&lt;JButton&gt;() {
+  <span class="lit">@Override</span>&#160;<span class="kwd">protected boolean</span>&#160;<span class="fnc">isMatching</span>(<span class="typ">JButton</span> button) {
+    <span class="kwd">return</span>&#160;<span class="str">&quot;OK&quot;</span>.<span class="fnc">equals</span>(button.<span class="fnc">getText</span>());
+  }
+};</pre>
         </p>
         <p>
           <strong>Note: </strong>
@@ -58,6 +58,21 @@
           <li><a href="./lookup/component-finder.html">Using <code class="code">ComponentFinder</code></a></li>
         </ol>          
       </p>
+      <subsection name="ComponentLookupException">
+        <p>
+          FEST-Swing throws a <code class="code">ComponentLookupException</code> when a component lookup fails.
+          Failures are due to one of the following reasons:
+          <ul>
+            <li>there is no component that matches the specified search criteria</li>
+            <li>there is more than one component that matches the specified search criteria</li>
+          </ul>
+        </p>
+        <p>
+          The thrown <code class="code">ComponentLookupException</code> provides useful information that 
+          can help us determine the source of the problem. For more details, please visit the 
+          <a href="./lookup/troubleshooting.html">Troubleshooting</a> section.
+        </p>
+      </subsection>
     </section>
   </body>
 </document>

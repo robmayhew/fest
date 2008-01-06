@@ -6,27 +6,76 @@
   </properties>
 
   <body>
-    <section name="Using a ContainerFixture to Look up Components">
+    <section name="Using a ContainerFixture to Look Up Components">
       <p>
         The abstract class 
         <code class="code"><a href="http://fest.easytesting.org/swing/apidocs/org/fest/swing/fixture/ContainerFixture.html" target="_blank">org.fest.swing.fixture.ContainerFixture</a></code> 
-        provides shortcuts to look up GUI components inside its managed <code class="code">Container</code>. There are 
-        three overloaded versions of each shortcut method, each for each component lookup type.
+        provides shortcuts to look up GUI components inside the <code class="code">Container</code> being tested. There 
+        are three overloaded versions of each shortcut method, each for each 
+        <a href="../component-lookup.html">component lookup type</a> (by name, type or
+        <code class="code">GenericTypeMatcher</code>.)
       </p>
       <p>
         The following example uses a 
         <code class="code"><a href="http://fest.easytesting.org/swing/apidocs/org/fest/swing/fixture/FrameFixture.html" target="_blank">FrameFixture</a></code>,
         a concrete implementation of <code class="code">ContainerFixture</code>, to look up a &quot;login&quot; 
         <code class="code">JButton</code> by name, type and custom search criteria:
-        <pre class="prettyprint">
-  frame.button(&quot;login&quot;)
-  frame.button();
-  frame.button(new GenericTypeMatcher&lt;JButton&gt;() {
-    @Override protected boolean isMatching(JButton button) {
-      return "Login".equals(button.getText());
-    }  
-  });</pre>         
+        <ul>
+          <li>
+            <p>
+              by name:
+              <pre class="prettyprint">
+<span class="typ">JButtonFixture</span> button = frame.<span class="fnc">button</span>(<span class="str">&quot;login&quot;</span>);</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              by type:            
+              <pre class="prettyprint">
+<span class="typ">JButtonFixture</span> button = frame.<span class="fnc">button</span>();</pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              custom search criteria (using a <code class="code">GenericTypeMatcher</code>):
+              <pre class="prettyprint">
+<span class="typ">JButtonFixture</span> button = frame.<span class="fnc">button</span>(new <span class="fnc">GenericTypeMatcher</span>&lt;JButton&gt;() {
+  <span class="lit">@Override</span>&#160;<span class="kwd">protected boolean</span>&#160;<span class="fnc">isMatching</span>(<span class="typ">JButton</span> button) {
+    <span class="kwd">return</span>&#160;<span class="str">&quot;Login&quot;</span>.<span class="fnc">equals</span>(button.<span class="fnc">getText</span>());
+  }  
+});</pre>         
+            </p>
+          </li>
+        </ul>
       </p>
+      <subsection name="Looking up 'showing' GUI components only">
+        <p>
+          By default, component lookup returns the GUI component that matches the given search criteria, regardless if
+          the component is showing or not (by 'showing' we mean that the component's method 
+          '<code class="code">isShowing()</code>' returns <code class="code">true</code>.) To limit component lookup to
+          <em>showing</em> components only, we need to call the method 
+          '<code class="code">lookUpShowingComponentsOnly(boolean)</code>' in 
+          <code class="code">ContainerFixture</code>.
+        </p>
+        <p>
+          Example:
+          <pre class="prettyprint">
+<span class="typ">FrameFixture</span> frame = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">MyFrame</span>());
+frame.<span class="fnc">lookUpShowingComponentsOnly</span>(<span class="kwd">true</span>);</pre>
+        </p>
+        <p>
+          This setting affects component lookup by name and type <strong>only</strong>. Creators of  
+          <code class="code">GenericTypeMatcher</code>s need to specify if lookup includes non-showing components or not. 
+        </p>
+      </subsection>
+      <subsection name="Links">
+        <p>
+          <ul>
+            <li><a href="../component-lookup.html">Component lookup types</a></li>
+            <li><a href="troubleshooting.html">Component lookup troubleshooting</a></li>
+          </ul>
+        </p>
+      </subsection>
     </section>
   </body>
 </document>  
