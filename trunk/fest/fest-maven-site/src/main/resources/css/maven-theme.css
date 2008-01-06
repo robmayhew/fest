@@ -271,6 +271,7 @@ table {
 .code {
  font-family: "Lucida Console","courier new",courier;
  font-size: 9pt;
+ color: #666666;
 }
 
 .str { color: #080; }
