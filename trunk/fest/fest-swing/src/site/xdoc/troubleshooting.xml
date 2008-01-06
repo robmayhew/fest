@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+
+  <properties>
+    <title>Troubleshooting Component Lookups</title>
+  </properties>
+
+  <body>
+    <section name="TroubleShooting Component Lookups">
+      <p>
+        FEST-Swing throws a <code class="code">ComponentLookupException</code> when a component lookup fails.
+        Failures are due to one of the following reasons:
+        <ul>
+          <li>a component that matches the specified search criteria could not be found</li>
+          <li>there is more than one component that matches the specified search criteria</li>
+        </ul>
+      </p>
+      <p>
+        The following sections describe the information that the thrown 
+        <code class="code">ComponentLookupException</code> provides to help us determine the source of the problem.
+      </p>
+      <subsection name="A matching component could not be found">
+        <p>
+
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>
+

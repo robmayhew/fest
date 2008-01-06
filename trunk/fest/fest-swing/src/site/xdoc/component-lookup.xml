@@ -54,8 +54,8 @@ okButton.<span class="fnc">setName</span>(<span class="str">&quot;ok&quot;</span
       <p>
         Regardless of the lookup type, FEST provides two ways to perform GUI component lookup:
         <ol>
-          <li><a href="./lookup/container-fixture.html">Using a <code class="code">ContainerFixture</code></a></li>
-          <li><a href="./lookup/component-finder.html">Using <code class="code">ComponentFinder</code></a></li>
+          <li><a href="container-fixture.html">Using a <code class="code">ContainerFixture</code></a></li>
+          <li><a href="component-finder.html">Using <code class="code">ComponentFinder</code></a></li>
         </ol>          
       </p>
       <subsection name="ComponentLookupException">
@@ -63,14 +63,14 @@ okButton.<span class="fnc">setName</span>(<span class="str">&quot;ok&quot;</span
           FEST-Swing throws a <code class="code">ComponentLookupException</code> when a component lookup fails.
           Failures are due to one of the following reasons:
           <ul>
-            <li>there is no component that matches the specified search criteria</li>
+            <li>a component that matches the specified search criteria could not be found</li>
             <li>there is more than one component that matches the specified search criteria</li>
           </ul>
         </p>
         <p>
           The thrown <code class="code">ComponentLookupException</code> provides useful information that 
           can help us determine the source of the problem. For more details, please visit the 
-          <a href="./lookup/troubleshooting.html">Troubleshooting</a> section.
+          <a href="troubleshooting.html">Troubleshooting</a> section.
         </p>
       </subsection>
     </section>

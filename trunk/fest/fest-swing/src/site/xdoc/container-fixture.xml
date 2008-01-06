@@ -71,7 +71,7 @@ frame.<span class="fnc">lookUpShowingComponentsOnly</span>(<span class="kwd">tru
       <subsection name="Links">
         <p>
           <ul>
-            <li><a href="../component-lookup.html">Component lookup types</a></li>
+            <li><a href="component-lookup.html">Component lookup types</a></li>
             <li><a href="troubleshooting.html">Component lookup troubleshooting</a></li>
           </ul>
         </p>
