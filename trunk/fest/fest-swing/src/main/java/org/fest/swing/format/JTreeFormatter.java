@@ -16,8 +16,6 @@
 package org.fest.swing.format;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
@@ -27,7 +25,6 @@ import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 import static javax.swing.tree.TreeSelectionModel.*;
-import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Strings.*;
 
 /**
@@ -65,10 +62,14 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
 
   private String[] selectionPaths(JTree tree) {
     TreePath[] paths = tree.getSelectionPaths();
-    if (isEmpty(paths)) return new String[0];
-    List<String> pathList = new ArrayList<String>();
-    for (TreePath path : paths) pathList.add(path != null ? path.toString() : null);
-    return pathList.toArray(new String[0]);
+    int count = paths != null ? paths.length : 0;
+    if (count == 0) return new String[0];
+    String[] pathArray = new String[count];
+    for (int i = 0; i < count; i++) {
+      TreePath path = paths[i];
+      pathArray[i] = path != null ? path.toString() : null;
+    }
+    return pathArray;
   }
   
   private String selectionMode(JTree tree) {

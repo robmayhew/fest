@@ -324,6 +324,7 @@ public class ComponentFinder {
    * @param m the matcher to use to find the component.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   @SuppressWarnings("unchecked") 
   public final <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
@@ -337,6 +338,7 @@ public class ComponentFinder {
    * @param m the matcher to use to find the component.
    * @return the found component.
    * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
    */
   public final Component find(Container root, ComponentMatcher m) {
     return finder.find(root, m);

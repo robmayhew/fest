@@ -17,7 +17,6 @@ package org.fest.swing.format;
 
 import java.awt.Component;
 import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.HashMap;
@@ -25,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.fest.util.Arrays;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.*;
@@ -48,8 +49,10 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
    * @param targetType the type of <code>Component</code> that this formatter supports.
    * @param propertyNames the property names to show as the <code>String</code> representation of a given
    * <code>Component</code>.
+   * @throws IllegalArgumentException if <code>targetType</code> is <code>null</code>.
    */
   public IntrospectionComponentFormatter(Class<? extends Component> targetType, String...propertyNames) {
+    if (targetType == null) throw new IllegalArgumentException("targetType should not be null");
     this.targetType = targetType;
     this.propertyNames = list(propertyNames);
     populate();
@@ -59,7 +62,9 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
     BeanInfo beanInfo = null;
     try {
       beanInfo = Introspector.getBeanInfo(targetType, Object.class);
-    } catch (IntrospectionException e) { return; }
+    } catch (Exception e) { 
+      throw actionFailure(concat("Unable to get BeanInfo for type ", targetType.getName()), e);
+    }
     for (PropertyDescriptor d : beanInfo.getPropertyDescriptors()) register(d);
   }
 

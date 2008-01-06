@@ -16,8 +16,6 @@
 package org.fest.swing.format;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JTabbedPane;
 
@@ -63,9 +61,9 @@ public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
   private String[] tabTitles(JTabbedPane tabbedPane) {
     int count = tabbedPane.getTabCount();
     if (count == 0) return new String[0];
-    List<String> contents = new ArrayList<String>();
-    for (int i = 0; i < count; i++) contents.add(tabbedPane.getTitleAt(i));
-    return contents.toArray(new String[0]);
+    String[] titles = new String[count];
+    for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
+    return titles;
   }
 
   /**
