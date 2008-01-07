@@ -77,6 +77,21 @@
 <span class="typ">IntrospectionComponentFormatter</span> formatter = <span class="kwd">new</span>&#160;<span class="fnc">IntrospectionComponentFormatter</span>(JLabel.<span class="kwd">class</span>, <span class="str">&quot;name&quot;</span>, <span class="str">&quot;text&quot;</span>, <span class="str">&quot;enabled&quot;</span>);</pre>
           </p>
         </subsection>
+        <subsection name="Register your custom formatter">
+          <p>
+            After creating a custom formatter, we need to register it with FEST-Swing. It is very simple, we only
+            need to call the static method '<code class="code">register</code>' in 
+            <code class="code">org.fest.swing.format.Formatting</code>:
+            <pre class="prettyprint">
+Formatting.<span class="fnc">register</span>(myFormatter);</pre>
+          </p>
+          <p>
+            FEST-Swing uses the formatter that supports the type that is the closest to the type of GUI component. For
+            example, if there is a formatter for <code class="code">JButton</code> and another one for 
+            <code class="code">MyOwnButton</code> (a subclass of <code class="code">JButton</code>,) FEST-Assert will 
+            use the latter for formatting an instance of <code class="code">MyOwnButton</code>.
+          </p>
+        </subsection>
       </p>
     </section>
   </body>
