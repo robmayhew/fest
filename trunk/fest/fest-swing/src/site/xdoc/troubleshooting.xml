@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <section name="TroubleShooting Component Lookups">
+    <section name="Troubleshooting Component Lookups">
       <p>
         FEST-Swing throws a <code class="code">ComponentLookupException</code> when a component lookup fails.
         Failures are due to one of the following reasons:
@@ -21,7 +21,90 @@
       </p>
       <subsection name="A matching component could not be found">
         <p>
+          When a matching component could not be found, regardless of the lookup type, the thrown 
+          <code class="code">ComponentLookupException</code> includes a formatted component hierarchy that can help
+          us determine why the component lookup failed.
+        </p>
+        <p>
+          For our example, we are going to use a frame of type <code class="code">org.fest.swing.test.TestFrame</code>
+          that contains a <code class="code">JButton</code> with name 'click'. The following code listing shows a 
+          mistake we made when looking up that button in our test. We accidentally used the name 'ok' instead of 
+          'click':
+          <pre class="prettyprint">
+<span class="typ">FrameFixture</span> frame = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">TestFrame</span>());
+frame.<span class="fnc">show</span>();
 
+frame.<span class="fnc">button</span>(<span class="str">&quot;ok&quot;</span>).<span class="fnc">click</span>();</pre>          
+        </p>
+        <p>
+          When we run our test, it will obviously fail, because the frame does not have any button with name 'ok.' 
+          To help us diagnose the problem, the thrown <code class="code">ComponentLookupException</code> displays a 
+          nicely formatted component hierarchy:
+          <pre class="prettyprint">
+org.fest.swing.exception.ComponentLookupException: Unable to find component using matcher org.fest.swing.core.NameMatcher[name='ok', requireShowing=false].
+
+Component hierarchy:
+org.fest.swing.test.TestFrame[name='testFrame', title='Test', enabled=true, showing=true]
+  javax.swing.JRootPane[]
+    javax.swing.JPanel[name='null.glassPane']
+    javax.swing.JLayeredPane[]
+      javax.swing.JPanel[name='null.contentPane']
+        javax.swing.JButton[name='click', text='Click Me', enabled=true]
+
+  at org.fest.swing.core.BasicComponentFinder.componentNotFound(BasicComponentFinder.java:81)</pre> 
+        </p>
+        <p>
+          The displayed component hierarchy, unlike the default '<code class="code">toString</code>' method in Swing
+          components, does not contain any information related to how the components look (e.g.
+          component sizes, colors, layouts, etc.) That information is pretty much useless, since functional testing
+          focuses on the behavior of the GUI. Instead, FEST-Swing uses custom formatters to show properties that can
+          help us solve problems in our functional tests. For more details about custom component formatters 
+          (including how to override the provided ones with your own,) please visit the 
+          <a href="component-formatter.html">Component Formatter</a> section. 
+        </p>
+      </subsection>
+      <subsection name="More than one matching component was found">
+        <p>
+          There are cases that more than one GUI component matches the search criteria used in a lookup. Typical 
+          examples are:
+          <ul>
+            <li>
+              looking up a component by type and there is more than one component of such type in the frame or dialog
+            </li>
+            <li>
+              looking up a component by name and there is more than one component with the same name in the frame or
+              dialog 
+            </li>
+          </ul>
+        </p>
+        <p>
+          For our example, we are going to use a frame of type <code class="code">org.fest.swing.test.TestFrame</code>
+          that contains two <code class="code">JButton</code>s with names 'first' and 'second'. In the following code 
+          listing we are looking up a <code class="code">JButton</code> by type:
+          <pre class="prettyprint">
+<span class="typ">FrameFixture</span> frame = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">TestFrame</span>());
+frame.<span class="fnc">show</span>();
+
+frame.<span class="fnc">button</span>().<span class="fnc">click</span>();</pre>          
+        </p>
+        <p>
+          This test will fail, because the frame has two components of type <code class="code">JButton</code>. 
+          To help us diagnose the problem, the thrown <code class="code">ComponentLookupException</code> displays
+          all the matching components found:
+          <pre class="prettyprint">
+org.fest.swing.exception.ComponentLookupException: Found more than one component using matcher org.fest.swing.core.TypeMatcher[type=javax.swing.JButton, requireShowing=false].
+
+Found:
+javax.swing.JButton[name='first', text='First Button', enabled=true]
+javax.swing.JButton[name='second', text='Second Button', enabled=true]
+
+  at org.fest.swing.core.BasicComponentFinder.multipleComponentsFound(BasicComponentFinder.java:102)</pre> 
+        </p>
+        <p>
+          As in the previous section, the thrown <code class="code">ComponentLookupException</code> uses component
+          formatters to display information that can help us solve problems in our functional tests. 
+          For more details about custom component formatters (including how to override the provided ones with your 
+          own,) please visit the <a href="component-formatter.html">Component Formatter</a> section. 
         </p>
       </subsection>
     </section>

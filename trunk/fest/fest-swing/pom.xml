@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing</artifactId>
-	<version>0.8-SNAPSHOT</version>
+	<version>0.8</version>
 	<name>FEST Swing</name>
 	<description>Fluent interface for functional GUI testing</description>
 	<inceptionYear>2007</inceptionYear>

@@ -76,7 +76,7 @@ final class BasicComponentFinder {
   private ComponentLookupException componentNotFound(Hierarchy h, ComponentMatcher m) {
     String message = concat(
         "Unable to find component using matcher ", m, ".", 
-        LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, formattedHierarchy(root(h))
+        LINE_SEPARATOR, LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, formattedHierarchy(root(h))
     );
     throw new ComponentLookupException(message);
   }
@@ -97,8 +97,10 @@ final class BasicComponentFinder {
   private ComponentLookupException multipleComponentsFound(Set<Component> found, ComponentMatcher m) {
     StringBuilder message = new StringBuilder();
     message.append("Found more than one component using matcher ").append(m).append(".").append(LINE_SEPARATOR)
+           .append(LINE_SEPARATOR)
            .append("Found:");
     for (Component c : found) message.append(LINE_SEPARATOR).append(format(c));
+    if (!found.isEmpty()) message.append(LINE_SEPARATOR);
     throw new ComponentLookupException(message.toString());    
   }
 }
