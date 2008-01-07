@@ -70,7 +70,7 @@ okButton.<span class="fnc">setName</span>(<span class="str">&quot;ok&quot;</span
         <p>
           The thrown <code class="code">ComponentLookupException</code> provides useful information that 
           can help us determine the source of the problem. For more details, please visit the 
-          <a href="troubleshooting.html">Troubleshooting</a> section.
+          <a href="lookup-troubleshoot.html">Troubleshooting</a> section.
         </p>
       </subsection>
     </section>
