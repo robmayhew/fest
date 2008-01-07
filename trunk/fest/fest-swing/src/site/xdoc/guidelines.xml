@@ -82,7 +82,7 @@
         <p>
           Since we can only have one active instance of <code class="code">RobotFixture</code> per test, we can
           reuse the <code class="code">RobotFixture</code> from any fixture, instead of creating a new one (which can
-          result in a irresponsive test.) 
+          result in an irresponsive test.) 
         </p>
         <p>
           <pre class="prettyprint">
