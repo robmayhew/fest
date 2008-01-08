@@ -71,7 +71,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>.
+   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
+   * the <code>{@link JMenuItem}</code> is showing. If not, please use the method <code>{@link #select()}</code> 
+   * instead.
    * @return this fixture.
    */
   public final JMenuItemFixture click() {
@@ -79,7 +81,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>.
+   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
+   * the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code> first.
    * @param button the button to click.
    * @return this fixture.
    */
@@ -88,7 +91,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>.
+   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
+   * the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code> first.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
@@ -97,7 +101,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user right-clicking this fixture's <code>{@link JMenuItem}</code>.
+   * Simulates a user right-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes 
+   * that the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code> 
+   * first.
    * @return this fixture.
    */
   public final JMenuItemFixture rightClick() {
@@ -105,7 +111,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JMenuItem}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method 
+   * assumes that the <code>{@link JMenuItem}</code> is showing. If not, please call the method 
+   * <code>{@link #select()}</code> first.
    * @return this fixture.
    */
   public final JMenuItemFixture doubleClick() {

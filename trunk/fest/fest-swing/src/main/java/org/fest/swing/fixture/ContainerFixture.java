@@ -332,7 +332,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if a <code>JMenuItem</code> under the given path could not be found.
    * @throws AssertionError if the <code>Component</code> found under the given path is not a <code>JMenuItem</code>.
    */
-  public final JMenuItemFixture menuItem(String... path) {
+  public final JMenuItemFixture menuItemWithPath(String... path) {
     ComponentMatcher m = new JMenuItemMatcher(join(path).with("|"));
     Component item = finder().find(target, m);
     assertThat(item).as(format(item)).isInstanceOf(JMenuItem.class);
