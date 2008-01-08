@@ -77,6 +77,12 @@
 
 <span class="typ">ComponentPrinter</span> printer = robot.<span class="fnc">printer</span>();
 printer.<span class="fnc">printComponents</span>(System.out);</pre>          
+        </p>
+        <p>
+          <code class="code">ComponentPrinter</code> uses component formatters to display information relevant to
+          functional GUI testing. For more information about component formatters (including creating your own and/or
+          overriding existing ones) please visit the section 
+          &quot;<a href="component-formatter.html">component formatters</a>.&quot;
         </p>      
       </answer>
     </faq>
