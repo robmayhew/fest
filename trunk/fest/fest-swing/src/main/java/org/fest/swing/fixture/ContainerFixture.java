@@ -323,7 +323,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * simply call
    *
    * <pre>
-   * JMenuItemFixture menuItem = container.&lt;strong&gt;findMenuItem(&quot;File&quot;, &quot;Menu&quot;)&lt;/strong&gt;;
+   * JMenuItemFixture menuItem = container.&lt;strong&gt;menuItemWithPath(&quot;File&quot;, &quot;Menu&quot;)&lt;/strong&gt;;
    * </pre>
    *
    * </p>
