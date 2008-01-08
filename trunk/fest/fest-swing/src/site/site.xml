@@ -25,7 +25,7 @@
       <item name="Introduction" href="index.html" />
       <item name="Getting Started" href="getting-started.html" />
       <item name="Guidelines" href="guidelines.html" />
-      <item name="Troubleshooting" href="troubleshooting.html" />
+      <item name="FAQ" href="faq.html" />
       <item name="Changelog" href="changes-report.html" />
       <item name="Javadocs" href="apidocs/index.html" />
     </menu>
@@ -36,7 +36,7 @@
       <item name="GUI Component Lookup" href="component-lookup.html">
         <item name="ContainerFixture" href="container-fixture.html" />
         <item name="ComponenFinder" href="component-finder.html" />
-        <item name=" href="troubleshooting.html" />
+        <item name="Troubleshooting" href="lookup-troubleshoot.html" />
       </item>
       <item name="Mouse Input" href="mouse-input.html" />
       <item name="Keyboard Input" href="keyboard-input.html" />

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faqs title="Frequently Asked Questions" toplink="false">
+
+  <part id="troubleshooting">
+    <title>Troubleshooting</title>
+
+    <faq id="irresponsive-tests">
+      <question>
+        My GUI test is frozen. It is not responding. What can I do?
+      </question>
+      <answer>
+        <p>
+          The following are the possible reasons for having a irresponsive GUI tests:
+          <ul>
+            <li>there is more than one active <code class="code">RobotFixture</code> in a test class</li>
+            <li>the method '<code class="code">cleanUp</code>' is never called after each test method</li>
+          </ul>
+        </p>
+        <p>
+          For more information please read the 
+          <a href="guidelines.html">guidelines for writing tests with FEST-Swing</a>.
+        </p>
+      </answer>      
+    </faq>
+    <faq id="lookup-failed">
+      <question>
+        Why FEST-Swing cannot find a component in my GUI?      
+      </question>
+      <answer>
+        <p>
+          A component lookup can fail for two reasons:
+          <ul>
+            <li>a GUI component matching the search criteria cannot be found</li>
+            <li>more than one matching component was found</li>
+          </ul>
+        </p>
+        <p>
+          In either case, the thrown <code class="code">ComponentLookupException</code> contains
+          helpful information (such as the component hierarchy) that can help you diagnose the problem.
+        </p>
+        <p>
+          For more information please read the section
+          &quot;<a href="lookup-troubleshoot.html">troubleshooting component lookups</a>.&quot;
+        </p>
+      </answer>    
+    </faq>
+    <faq id="test-fails-in-other-machine">
+      <question>
+        My GUI test passes on my machine but not in the Continuous Integration server. What's wrong?
+      </question>
+      <answer>
+        <p>
+          This type of failures are usually due to environmental conditions (e.g. operating system, JDK version, etc.) 
+          A good way to diagnose this type of problems is to take a screenshot of the desktop the moment a GUI test 
+          fails, just to confirm that nothing is preventing the <code class="code">RobotFixture</code> from accessing
+          the GUI under test. FEST-Swing can automatically take a screenshot of the desktop, or if you prefer, you can
+          take the screenshot yourself using FEST-Swing's API.
+        </p>
+        <p>
+          For more information, please read the section 
+          &quot;<a href="failure-screenshots">screenshots of failing tests</a>.&quot;
+        </p>
+      </answer>
+    </faq>
+    <faq id="printing-hierarchy">
+      <question>
+        I like the way a ComponentLookupException displays the AWT component hierarchy. How can I print the hierarchy myself?
+      </question>
+      <answer>
+        <p>
+          You can use a <code class="code">org.fest.swing.core.ComponentPrinter</code> to &quot;print&quot; the AWT
+          component hierarchy used in your GUI test. The following code listing shows how to print the component 
+          hierarchy to the &quot;stardard&quot; output stream:
+          <pre class="prettyprint">
+<span class="typ">RobotFixture</span> robot = RobotFixture.<span class="fnc">robotWithNewAwtHierarchy</span>();
+
+<span class="typ">ComponentPrinter</span> printer = robot.<span class="fnc">printer</span>();
+printer.<span class="fnc">printComponents</span>(System.out);</pre>          
+        </p>      
+      </answer>
+    </faq>
+  </part>
+</faqs>
+
