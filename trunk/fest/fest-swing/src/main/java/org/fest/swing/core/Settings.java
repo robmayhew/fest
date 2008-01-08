@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import abbot.tester.Robot;
 
+import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
+
 /**
  * Understands project-wide configuration settings.
  *
@@ -24,6 +26,12 @@ import abbot.tester.Robot;
  */
 public final class Settings {
 
+  private static ComponentLookupScope componentLookupScope;
+
+  static {
+    componentLookupScope(DEFAULT);
+  }
+  
   /**
    * Returns a value representing the millisecond count in between generated events.
    * @return a value representing the millisecond count in between generated events.
@@ -36,6 +44,28 @@ public final class Settings {
    * @param ms the millisecond count in between generated events.
    */
   public static void robotAutoDelay(int ms) { Robot.setAutoDelay(ms); }
+
+  /**
+   * Returns the scope of component lookups. This setting only affects the component fixtures in the package
+   * <code>org.fest.swing.fixture</code>.
+   * @return the scope of component lookups.
+   */
+  public static ComponentLookupScope componentLookupScope() {
+    synchronized (Settings.class) {
+      return componentLookupScope;
+    }
+  }
+  
+  /**
+   * Updates the scope of component lookups.  This setting only affects the component fixtures in the package
+   * <code>org.fest.swing.fixture</code>. The default value is <code>{@link ComponentLookupScope#DEFAULT}</code>.
+   * @param scope the new value for the scope.
+   */
+  public static void componentLookupScope(ComponentLookupScope scope) {
+    synchronized (Settings.class) {
+      componentLookupScope = scope;
+    }
+  }
   
   private Settings() {}
 }
