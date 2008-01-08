@@ -25,6 +25,7 @@
       <item name="Introduction" href="index.html" />
       <item name="Getting Started" href="getting-started.html" />
       <item name="Guidelines" href="guidelines.html" />
+      <item name="Troubleshooting" href="troubleshooting.html" />
       <item name="Changelog" href="changes-report.html" />
       <item name="Javadocs" href="apidocs/index.html" />
     </menu>
