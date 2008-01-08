@@ -24,17 +24,27 @@ public enum ComponentLookupScope {
 
   /**
    * For most of the cases, only GUI components that are being shown on the screen participate in a component lookup.
-   * Exceptions include:
-   * <ul>
-   * <li><code>{@link javax.swing.JMenuItem}</code></li>
-   * </ul>
+   * Currently, the only exception is <code>{@link javax.swing.JMenuItem}</code>, which participates in a component 
+   * lookup regardless if it is showing or not.
    */
-  DEFAULT, 
+  DEFAULT(true), 
   
   /** All GUI components participate in a component lookup, regardless if they are being shown on the screen or not. */
-  ALL, 
+  ALL(false), 
   
   /** Only components that are being shown on the screen can participate in a component lookup. */
-  SHOWING_ONLY 
+  SHOWING_ONLY(true); 
 
+  private final boolean requireShowing;
+  
+  private ComponentLookupScope(boolean requireShowing) {
+    this.requireShowing = requireShowing;
+  }
+  
+  /**
+   * Returns whether showing components are the only ones participating in component lookups.
+   * @return <code>true</code> if only showing components participate in component lookups; <code>false</code> if
+   * any component (showing or not showing) can participate in component lookup.
+   */
+  public boolean requireShowing() { return requireShowing; }
 }
