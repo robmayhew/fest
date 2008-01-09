@@ -1,21 +1,20 @@
 /*
  * Created on Feb 8, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
@@ -36,7 +35,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 /**
  * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such
  * <code>{@link Frame}</code>.
- * 
+ *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -82,7 +81,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   public FrameFixture(RobotFixture robot, Frame target) {
     super(robot, target);
   }
-  
+
   /**
    * Shows this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
@@ -90,7 +89,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   public final FrameFixture show() {
     return (FrameFixture)doShow();
   }
-  
+
   /**
    * Shows this fixture's <code>{@link Frame}</code>, resized to the given size.
    * @param size the size to resize this fixture's <code>Frame</code> to.
@@ -253,10 +252,10 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   }
 
   /**
-   * Asserts that the size of this fixture's <code>{@link Frame}</code> is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link Frame}</code> is equal to given one.
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of this fixture's <code>Frame</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>Frame</code> is not equal to the given size.
    */
   public final FrameFixture requireSize(Dimension size) {
     return (FrameFixture)assertEqualSize(size);
@@ -271,7 +270,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   public final FrameFixture pressAndReleaseKeys(int... keyCodes) {
     return (FrameFixture)doPressAndReleaseKeys(keyCodes);
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link Frame}</code>.
    * @param keyCode the code of the key to press.
@@ -281,7 +280,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   public final FrameFixture pressKey(int keyCode) {
     return (FrameFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link Frame}</code>.
    * @param keyCode the code of the key to release.
@@ -290,7 +289,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public final FrameFixture releaseKey(int keyCode) {
     return (FrameFixture)doReleaseKey(keyCode);
-  }  
+  }
 
   /**
    * Asserts that this fixture's <code>{@link Frame}</code> is visible.
@@ -300,7 +299,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   public final FrameFixture requireVisible() {
     return (FrameFixture)assertVisible();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link Frame}</code> is not visible.
    * @return this fixture.
@@ -318,8 +317,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   public final FrameFixture requireEnabled() {
     return (FrameFixture)assertEnabled();
   }
-  
-  
+
+
   /**
    * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
@@ -337,16 +336,5 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public final FrameFixture requireDisabled() {
     return (FrameFixture)assertDisabled();
-  }
-
-  /**
-   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
-   * the ones showing.
-   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
-   * showing.
-   * @return this fixture.
-   */
-  public final FrameFixture lookUpShowingComponentsOnly(boolean newValue) {
-    return (FrameFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

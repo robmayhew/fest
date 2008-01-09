@@ -1,16 +1,16 @@
 /*
  * Created on Oct 20, 2006
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2006 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -39,9 +39,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws ComponentLookupException if more than one matching <code>JMenuItem</code> is found.
    */
   public JMenuItemFixture(RobotFixture robot, String menuItemName) {
-    super(robot, menuItemName, JMenuItem.class);
+    this(robot, robot.finder().findByName(menuItemName, JMenuItem.class, false));
   }
-  
+
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>. It uses the given <code>{@link Action}</code> to create a new
    * <code>{@link JMenuItem}</code> as the target menu item.
@@ -51,7 +51,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public JMenuItemFixture(RobotFixture robot, Action action) {
     this(robot, new JMenuItem(action));
   }
-  
+
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JMenuItem</code>.
@@ -60,7 +60,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public JMenuItemFixture(RobotFixture robot, JMenuItem target) {
     super(robot, target);
   }
-  
+
   /**
    * Simulates a user selecting this fixture's <code>{@link JMenuItem}</code>.
    * @return this fixture.
@@ -72,12 +72,12 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
 
   /**
    * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
-   * the <code>{@link JMenuItem}</code> is showing. If not, please use the method <code>{@link #select()}</code> 
+   * the <code>{@link JMenuItem}</code> is showing. If not, please use the method <code>{@link #select()}</code>
    * instead.
    * @return this fixture.
    */
   public final JMenuItemFixture click() {
-    return (JMenuItemFixture)doClick(); 
+    return (JMenuItemFixture)doClick();
   }
 
   /**
@@ -101,8 +101,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user right-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes 
-   * that the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code> 
+   * Simulates a user right-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes
+   * that the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code>
    * first.
    * @return this fixture.
    */
@@ -111,8 +111,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   }
 
   /**
-   * Simulates a user double-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method 
-   * assumes that the <code>{@link JMenuItem}</code> is showing. If not, please call the method 
+   * Simulates a user double-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method
+   * assumes that the <code>{@link JMenuItem}</code> is showing. If not, please call the method
    * <code>{@link #select()}</code> first.
    * @return this fixture.
    */
@@ -137,7 +137,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public final JMenuItemFixture pressAndReleaseKeys(int... keyCodes) {
     return (JMenuItemFixture)doPressAndReleaseKeys(keyCodes);
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link JMenuItem}</code>.
    * @param keyCode the code of the key to press.
@@ -147,7 +147,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public final JMenuItemFixture pressKey(int keyCode) {
     return (JMenuItemFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JMenuItem}</code>.
    * @param keyCode the code of the key to release.
@@ -157,7 +157,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public final JMenuItemFixture releaseKey(int keyCode) {
     return (JMenuItemFixture)doReleaseKey(keyCode);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JMenuItem}</code> is visible.
    * @return this fixture.
@@ -184,7 +184,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public final JMenuItemFixture requireEnabled() {
     return (JMenuItemFixture)assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JMenuItem}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
@@ -194,7 +194,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public final JMenuItemFixture requireEnabled(Timeout timeout) {
     return (JMenuItemFixture)assertEnabled(timeout);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JMenuItem}</code> is disabled.
    * @return this fixture.

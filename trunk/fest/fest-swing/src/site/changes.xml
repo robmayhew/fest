@@ -6,9 +6,15 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
-      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe">
-      	Added method 'showingComponentLookup(boolean)' which indicates if component lookup in a container should be
-      	limited to showing components.
+      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe, Volker Berlin">
+        Added global setting 'componentLookupScope' (in class Settings) to configure scope of component lookup
+        (in fixtures only.)
+      </action>
+      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe, Volker Berlin">
+        Added enum ComponentLookupScope to configure component lookup to consider showing components only.
+      </action>
+      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe, Volker Berlin">
+      	Added enum ComponentLookupScope to configure component lookup to consider showing components only.
       </action>
       <action dev="wanghy, alruiz" type="add" issue="75" due-to="Fabien Barbero">
       	Added JScrollBarFixture and JScrollPaneFixture.

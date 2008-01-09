@@ -23,6 +23,7 @@ import javax.swing.text.JTextComponent;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
 import static org.fest.swing.format.Formatting.format;
 
 import static org.fest.util.Strings.join;
@@ -31,6 +32,7 @@ import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Settings;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -41,8 +43,6 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Yvonne Wang
  */
 public abstract class ContainerFixture<T extends Container> extends ComponentFixture<T> {
-
-  private boolean lookUpShowingComponentsOnly;
 
   /**
    * Creates a new <code>{@link ContainerFixture}</code>.
@@ -340,7 +340,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>,
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JMenuItem</code> found.
@@ -348,18 +348,19 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> having a matching name is found.
    */
   public final JMenuItemFixture menuItem(String name) {
-    return new JMenuItemFixture(robot, findByName(name, JMenuItem.class));
+    boolean requireShowing = SHOWING_ONLY.equals(Settings.componentLookupScope());
+    return new JMenuItemFixture(robot, finder().findByName(target, name, JMenuItem.class, requireShowing));
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>,
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.
    * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
-   *         found.
-   * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria is 
-   *         found.
+   *          found.
+   * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria is
+   *          found.
    */
   public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
     return new JMenuItemFixture(robot, find(matcher));
@@ -817,38 +818,16 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
   }
 
   protected final <C extends Component> C findByType(Class<C> type) {
-    return finder().findByType(target, type, lookUpShowingComponentsOnly);
+    return finder().findByType(target, type, requireShowing());
   }
 
   protected final <C extends Component> C findByName(String name, Class<C> type) {
-    return finder().findByName(target, name, type, lookUpShowingComponentsOnly);
+    return finder().findByName(target, name, type, requireShowing());
   }
-  
+
   protected final <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
     return finder().find(target, matcher);
   }
 
   protected final ComponentFinder finder() { return robot.finder(); }
-
-  /**
-   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
-   * the ones showing. The default value is <code>false</code>.
-   * @return <code>true</code> if component lookup (by name and type) is limited to showing components only,
-   *         <code>false</code> otherwise.
-   */
-  public final boolean lookUpShowingComponentsOnly() { return lookUpShowingComponentsOnly; }
-  
-  /**
-   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
-   * the ones showing.
-   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
-   * showing.
-   * @return this fixture.
-   */
-  public abstract ContainerFixture lookUpShowingComponentsOnly(boolean newValue);
-  
-  protected final ContainerFixture setLookUpShowingComponentsOnly(boolean newValue) { 
-    lookUpShowingComponentsOnly = newValue;
-    return this;
-  }
 }

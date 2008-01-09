@@ -1,21 +1,20 @@
 /*
  * Created on Oct 20, 2006
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2006 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -30,7 +29,7 @@ import org.fest.swing.exception.ComponentLookupException;
 /**
  * Understands simulation of user events on a <code>{@link Dialog}</code> and verification of the state of such
  * <code>{@link Dialog}</code>.
- * 
+ *
  * @author Alex Ruiz
  */
 public class DialogFixture extends WindowFixture<Dialog> {
@@ -46,7 +45,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
   }
-  
+
   /**
    * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
@@ -57,7 +56,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public DialogFixture(RobotFixture robot, String dialogName) {
     super(robot, dialogName, Dialog.class);
   }
-  
+
   /**
    * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
@@ -67,7 +66,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public DialogFixture(Dialog target) {
     super(target);
   }
-  
+
   /**
    * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Dialog</code>.
@@ -84,7 +83,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture show() {
     return (DialogFixture)doShow();
   }
-  
+
   /**
    * Shows this fixture's <code>{@link Dialog}</code>, resized to the given size.
    * @param size the size to resize this fixture's <code>Dialog</code> to.
@@ -182,10 +181,10 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Asserts that the size of this fixture's <code>{@link Dialog}</code> is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link Dialog}</code> is equal to given one.
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of this fixture's <code>Dialog</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>Dialog</code> is not equal to the given size.
    */
   public final DialogFixture requireSize(Dimension size) {
     return (DialogFixture)assertEqualSize(size);
@@ -200,7 +199,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture pressAndReleaseKeys(int... keyCodes) {
     return (DialogFixture)doPressAndReleaseKeys(keyCodes);
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link Dialog}</code>.
    * @param keyCode the code of the key to press.
@@ -210,7 +209,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture pressKey(int keyCode) {
     return (DialogFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link Dialog}</code>.
    * @param keyCode the code of the key to release.
@@ -220,7 +219,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture releaseKey(int keyCode) {
     return (DialogFixture)doReleaseKey(keyCode);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link Dialog}</code> is visible.
    * @return this fixture.
@@ -229,7 +228,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture requireVisible() {
     return (DialogFixture)assertVisible();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link Dialog}</code> is not visible.
    * @return this fixture.
@@ -247,7 +246,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture requireEnabled() {
     return (DialogFixture)assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link Dialog}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
@@ -275,16 +274,5 @@ public class DialogFixture extends WindowFixture<Dialog> {
   public final DialogFixture requireModal() {
     assertThat(target.isModal()).as(formattedPropertyName("modal")).isTrue();
     return this;
-  }
-
-  /**
-   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
-   * the ones showing.
-   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
-   * showing.
-   * @return this fixture.
-   */
-  public final DialogFixture lookUpShowingComponentsOnly(boolean newValue) {
-    return (DialogFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

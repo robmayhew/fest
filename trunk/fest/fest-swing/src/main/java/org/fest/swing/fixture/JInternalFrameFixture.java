@@ -1,21 +1,20 @@
 /*
  * Created on Dec 8, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -58,7 +57,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   }
 
   /**
-   * Brings this fixture's <code>{@link JInternalFrame}</code> to the front. 
+   * Brings this fixture's <code>{@link JInternalFrame}</code> to the front.
    * @return this fixture.
    */
   public final JInternalFrameFixture moveToFront() {
@@ -69,7 +68,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   }
 
   /**
-   * Brings this fixture's <code>{@link JInternalFrame}</code> to the back. 
+   * Brings this fixture's <code>{@link JInternalFrame}</code> to the back.
    * @return this fixture.
    */
   public final JInternalFrameFixture moveToBack() {
@@ -123,15 +122,15 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   }
 
   /**
-   * Asserts that the size of this fixture's <code>{@link JInternalFrame}</code> is equal to given one. 
+   * Asserts that the size of this fixture's <code>{@link JInternalFrame}</code> is equal to given one.
    * @param size the given size to match.
    * @return this fixture.
-   * @throws AssertionError if the size of this fixture's <code>JInternalFrame</code> is not equal to the given size. 
+   * @throws AssertionError if the size of this fixture's <code>JInternalFrame</code> is not equal to the given size.
    */
   public final JInternalFrameFixture requireSize(Dimension size) {
     return (JInternalFrameFixture)assertEqualSize(size);
   }
-  
+
   /**
    * Simulates a user resizing horizontally this fixture's <code>{@link JInternalFrame}</code>.
    * @param width the width that this fixture's <code>JInternalFrame</code> should have after being resized.
@@ -149,7 +148,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   public final JInternalFrameFixture resizeHeightTo(int height) {
     return resizeTo(new Dimension(target.getWidth(), height));
   }
-  
+
   /**
    * Simulates a user resizing this fixture's <code>{@link JInternalFrame}</code>.
    * @param size the size that the target <code>JInternalFrame</code> should have after being resized.
@@ -159,7 +158,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
     internalFrameTester().actionResize(target, size.width, size.height);
     return this;
   }
-  
+
   /**
    * Simulates a user moving this fixture's <code>{@link JInternalFrame}</code> to the given point.
    * @param p the point to move this fixture's <code>JInternalFrame</code> to.
@@ -175,7 +174,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   protected final JInternalFrameTester internalFrameTester() {
     return (JInternalFrameTester)tester();
   }
-  
+
   /**
    * Simulates a user clicking this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
@@ -292,7 +291,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   public final JInternalFrameFixture requireEnabled(Timeout timeout) {
     return (JInternalFrameFixture)assertEnabled(timeout);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JInternalFrame}</code> is disabled.
    * @return this fixture.
@@ -300,17 +299,5 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    */
   public final JInternalFrameFixture requireDisabled() {
     return (JInternalFrameFixture)assertDisabled();
-  }
-
-
-  /**
-   * Indicates whether <code>{@link Component}</code>lookup (by name and type) in this container is limited only to
-   * the ones showing.
-   * @param newValue indicates whether component lookup (by name and type) in this container is limited only to the ones
-   * showing.
-   * @return this fixture.
-   */
-  public final JInternalFrameFixture lookUpShowingComponentsOnly(boolean newValue) {
-    return (JInternalFrameFixture)setLookUpShowingComponentsOnly(newValue);
   }
 }

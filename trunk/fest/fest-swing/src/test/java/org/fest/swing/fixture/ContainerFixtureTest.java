@@ -214,7 +214,8 @@ public class ContainerFixtureTest {
     assertThat(comboBox.target).isSameAs(window.comboBox);
   }
 
-  @Test public void shouldThrowErrorWhenFindingDialogByTypeAndMoreThanOneFound() {
+  @Test public void shouldFindDialogByType() {
+    window.dialog.setVisible(true);
     DialogFixture dialog = container.dialog();
     assertThat(dialog.target).isNotNull();
   }
@@ -363,8 +364,7 @@ public class ContainerFixtureTest {
     assertThat(radioButton.target).isSameAs(window.radioButton);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingScrollBarByTypeAndThanOneFound() {
+  @Test public void shouldFindScrollBarByType() {
     JScrollBarFixture scrollBar = container.scrollBar();
     assertThat(scrollBar.target).isNotNull();
   }
