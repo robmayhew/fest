@@ -15,7 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -23,6 +22,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
+import static java.awt.Color.RED;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
@@ -119,7 +119,7 @@ public class ContainerFixtureTest {
       menu.add(subMenu);
       panel.setName("panel");
       panel.setPreferredSize(new Dimension(40, 40));
-      panel.setBackground(Color.RED);
+      panel.setBackground(RED);
       radioButton.setName("radioButton");
       scrollBar.setName("scrollBar");
       scrollBar.setValue(10);
@@ -312,7 +312,7 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindMenuWithGivenPath() {
-    JMenuItemFixture menuItem = container.menuItem("A Menu", "A Submenu");
+    JMenuItemFixture menuItem = container.menuItemWithPath("A Menu", "A Submenu");
     assertThat(menuItem.target).isSameAs(window.subMenu);
   }
 
@@ -324,7 +324,7 @@ public class ContainerFixtureTest {
   @Test public void shouldFindPanelWithGivenMatcher() {
     GenericTypeMatcher<JPanel> colorMatcher = new GenericTypeMatcher<JPanel>() {
       protected boolean isMatching(JPanel panel) {
-        return Color.RED.equals(panel.getBackground());
+        return RED.equals(panel.getBackground());
       }
     };
     JPanelFixture panel = container.panel(colorMatcher);
