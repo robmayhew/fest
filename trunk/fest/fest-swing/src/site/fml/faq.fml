@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <faqs title="Frequently Asked Questions" toplink="false">
+  <part id="configuration">
+    <title>Configuration</title>
+    
+    <faq id="test-delay">
+      <question>
+        My GUI test runs too fast. Is there a way to set a delay between generated events?
+      </question>
+      <answer>
+        <p>
+          To set a delay between generated events, simply call the method '<code class="code">robotAutoDelay(int)</code>'
+          in <code class="code">org.fest.swing.core.Settings</code>. The parameter is the millisecond count in between 
+          generated events. Example:
+          <pre class="prettyprint">
+Settings.<span class="fnc">robotAutoDelay</span>(100);</pre>                  
+        </p>
+      </answer>
+    </faq>
+    <faq id="lookup-scope">
+      <question>
+        The fixtures in FEST-Swing are looking up components that are showing only. How can I change that?
+      </question>
+      <answer>
+        <p>  
+	        By default, the fixtures FEST-Swing look up components that are showing only. To change the scope of the
+	        lookup call the method '<code class="code">componentLookupScope(ComponentLookupScope)</code>' 
+	        in <code class="code">org.fest.swing.core.Settings</code> passing
+	        <code class="code">ComponentLookupScope.ALL</code> as parameter. Example:
+	          <pre class="prettyprint">
+Settings.<span class="fnc">componentLookupScope</span>(ComponentLookupScope.ALL);</pre>
+        </p>                  
+        <p>
+          Please note that this setting only affects FEST-Swing's fixtures only. Lookup methods in 
+          <code class="code">ComponentFinder</code> take a <code class="code">boolean</code> parameter that indicates
+          if the lookup should be limited to showing components or not.
+        </p>
+        <p>
+          For more information, please visit the section 
+          &quot;<a href="component-lookup.html">GUI component lookup</a>&quot;.
+        </p>
+      </answer>
+    </faq>
+  </part>
 
   <part id="troubleshooting">
     <title>Troubleshooting</title>

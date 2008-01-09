@@ -48,20 +48,21 @@
           </li>
         </ul>
       </p>
-      <subsection name="Looking up 'showing' GUI components only">
+      <subsection name="Scope of component lookups">
         <p>
-          By default, component lookup returns the GUI component that matches the given search criteria, regardless if
-          the component is showing or not (by 'showing' we mean that the component's method 
-          '<code class="code">isShowing()</code>' returns <code class="code">true</code>.) To limit component lookup to
-          <em>showing</em> components only, we need to call the method 
-          '<code class="code">lookUpShowingComponentsOnly(boolean)</code>' in 
-          <code class="code">ContainerFixture</code>.
+          By default, only components that are showing on the screen can participate in component lookups (except for
+          <code class="code">JMenuItem</code>s, which are not showing until they are selected.) To change the scope
+          of component lookups, simply call the method 
+          '<code class="code">componentLookupScope(ComponentLookupScope)</code>' in 
+          <code class="code">org.fest.swing.core.Settings</code>. For more information about component lookup scope,
+          please read <code class="code">org.fest.swing.core.ComponentLookupScope</code>&#160;
+          <a href="http://fest.easytesting.org/swing/apidocs/org/fest/swing/core/ComponentLookupScope.html">Javadoc documentation</a>.
         </p>
         <p>
           Example:
           <pre class="prettyprint">
-<span class="typ">FrameFixture</span> frame = <span class="kwd">new</span>&#160;<span class="fnc">FrameFixture</span>(<span class="kwd">new</span>&#160;<span class="fnc">MyFrame</span>());
-frame.<span class="fnc">lookUpShowingComponentsOnly</span>(<span class="kwd">true</span>);</pre>
+<span class="com">// including showing and not-showing components in component lookups</span>&#160;          
+Settings.<span class="fnc">componentLookupScope</span>(ComponentLookupScope.ALL);</pre>
         </p>
         <p>
           This setting affects component lookup by name and type <strong>only</strong>. Creators of  
