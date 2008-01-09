@@ -74,6 +74,7 @@ public class Formatting {
     register(new JTabbedPaneFormatter());
     register(new JTableFormatter());
     register(nameOnly(JToolBar.class));
+    register(new IntrospectionComponentFormatter(JPasswordField.class, NAME, ENABLED));
     register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
     register(new JTreeFormatter());
   }

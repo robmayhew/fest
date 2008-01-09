@@ -214,6 +214,13 @@ public class FormattingTest {
     )));
   }
 
+  @Test public void shouldFormatJPasswordField() {
+    JPasswordField passwordField = new JPasswordField();
+    passwordField.setName("passwordField");
+    String formatted = formatted(passwordField);
+    assertThat(formatted).isEqualTo(expected(passwordField, "[name='passwordField', enabled=true]"));
+  }
+
   @Test public void shouldFormatJTextComponent() {
     JTextField textField = new JTextField("Hello");
     textField.setName("textField");
