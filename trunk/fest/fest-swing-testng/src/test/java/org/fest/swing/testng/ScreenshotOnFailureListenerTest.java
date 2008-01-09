@@ -1,19 +1,26 @@
 /*
  * Created on May 16, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.testng;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.ImageAssert.read;
+import static org.fest.reflect.core.Reflection.field;
+import static org.fest.util.Files.temporaryFolderPath;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.join;
 
 import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
@@ -21,18 +28,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.fest.swing.annotation.GUITest;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import org.fest.swing.annotation.GUITest;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.ImageAssert.read;
-import static org.fest.reflect.Reflection.field;
-import static org.fest.util.Files.temporaryFolderPath;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.join;
 
 /**
  * Tests for <code>{@link ScreenshotOnFailureListener}</code>.
@@ -50,7 +49,7 @@ public class ScreenshotOnFailureListenerTest {
   private TestResultStub testResult;
 
   private ScreenshotOnFailureListener listener;
-  
+
   @BeforeClass public void setUp() {
     testContext = new TestContextStub();
     testResult = new TestResultStub();
@@ -64,7 +63,7 @@ public class ScreenshotOnFailureListenerTest {
     String actualOutputFolder = field("output").ofType(String.class).in(listener).get();
     assertThat(actualOutputFolder).isEqualTo(outputFolder);
   }
-  
+
   @Test(dependsOnMethods = "shouldGetOutputFolderOnStart")
   public void shouldTakeScreenshotOfDesktopOnTestFailure() throws Exception {
     setUpStubsForScreenshot();
@@ -74,7 +73,7 @@ public class ScreenshotOnFailureListenerTest {
     assertThat(read(screenshotPath)).hasSize(Toolkit.getDefaultToolkit().getScreenSize());
     assertScreenshotHyperlinkAddedToReport(imageFileName);
   }
-  
+
   private void setUpStubsForScreenshot() {
     Date now = new GregorianCalendar().getTime();
     ClassStub testClass = testResult.getTestClass();
@@ -82,7 +81,7 @@ public class ScreenshotOnFailureListenerTest {
     testClass.setRealClass(SomeGUITestClass.class);
     testResult.getMethod().setMethodName(new SimpleDateFormat("hhmmss").format(now));
   }
-  
+
   private String screenshotFileName() {
     String className = testResult.getTestClass().getName();
     String methodName = testResult.getMethod().getMethodName();
@@ -93,5 +92,5 @@ public class ScreenshotOnFailureListenerTest {
     List<String> reporterOutput = Reporter.getOutput();
     assertThat(reporterOutput).hasSize(1);
     assertThat(reporterOutput.get(0)).isEqualTo(concat("<a href=\"", imageFileName, "\">Screenshot</a>"));
-  } 
+  }
 }
