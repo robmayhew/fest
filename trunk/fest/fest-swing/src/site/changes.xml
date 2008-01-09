@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.8-SNAPSHOT" date="TBD - Available at FEST Maven Repository" description="Subsequent release">
+      <action dev="alruiz" type="fix" issue="88" due-to="Rich Toulouse">
+        Renamed method 'menuItem(String...)' in ContainerFixture to 'menuItemWithPath(String...)'.
+      </action>
       <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe, Volker Berlin">
         Added global setting 'componentLookupScope' (in class Settings) to configure scope of component lookup
         (in fixtures only.)
