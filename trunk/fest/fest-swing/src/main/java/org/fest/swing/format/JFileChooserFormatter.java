@@ -24,7 +24,7 @@ import static javax.swing.JFileChooser.*;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands a formatter for <code>{@link JFileChooser}</code>es.
+ * Understands a formatter for <code>{@link JFileChooser}</code>s.
  *
  * @author Yvonne Wang
  */

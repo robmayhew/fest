@@ -25,7 +25,7 @@ import static java.lang.String.valueOf;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands a formatter for <code>{@link JTabbedPane}</code>es.
+ * Understands a formatter for <code>{@link JTabbedPane}</code>s.
  *
  * @author Alex Ruiz
  */
