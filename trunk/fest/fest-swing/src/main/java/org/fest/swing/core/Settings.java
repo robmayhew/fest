@@ -51,9 +51,7 @@ public final class Settings {
    * @return the scope of component lookups.
    */
   public static ComponentLookupScope componentLookupScope() {
-    synchronized (Settings.class) {
-      return componentLookupScope;
-    }
+    return componentLookupScope;
   }
   
   /**
@@ -62,9 +60,7 @@ public final class Settings {
    * @param scope the new value for the scope.
    */
   public static void componentLookupScope(ComponentLookupScope scope) {
-    synchronized (Settings.class) {
-      componentLookupScope = scope;
-    }
+    componentLookupScope = scope;
   }
   
   private Settings() {}
