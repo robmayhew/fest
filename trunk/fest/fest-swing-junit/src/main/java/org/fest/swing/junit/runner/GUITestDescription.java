@@ -17,9 +17,8 @@ package org.fest.swing.junit.runner;
 
 import java.lang.reflect.Method;
 
-import org.junit.runner.Description;
-
 import org.fest.swing.annotation.GUITestFinder;
+import org.junit.runner.Description;
 
 /**
  * Understands the description of a test class.

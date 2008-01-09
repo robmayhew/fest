@@ -15,11 +15,9 @@
  */
 package org.fest.swing.junit.runner;
 
+import org.fest.swing.annotation.GUITest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.fest.swing.annotation.GUITest;
-import org.fest.swing.junit.runner.GUITestRunner;
 
 /**
  * Understands a JUnit test to be used to test the TestNG tests in this package.

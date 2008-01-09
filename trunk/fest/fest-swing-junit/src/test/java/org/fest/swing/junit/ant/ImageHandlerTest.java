@@ -15,15 +15,13 @@
  */
 package org.fest.swing.junit.ant;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.awt.image.BufferedImage;
 
+import org.fest.swing.image.ScreenshotTaker;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import org.fest.swing.image.ScreenshotTaker;
-import org.fest.swing.junit.ant.ImageHandler;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link ImageHandler}</code>.

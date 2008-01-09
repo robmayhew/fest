@@ -14,6 +14,27 @@
  */
 package org.fest.swing.junit.ant;
 
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_CLASSNAME;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_ERRORS;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_FAILURES;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_MESSAGE;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_NAME;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_TESTS;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_TIME;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_TYPE;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ATTR_VALUE;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.FAILURE;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.HOSTNAME;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.PROPERTIES;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.PROPERTY;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.SYSTEM_ERR;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.SYSTEM_OUT;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.TESTCASE;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.TESTSUITE;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.TIMESTAMP;
+import static org.fest.util.Strings.isEmpty;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,9 +65,6 @@ import org.apache.tools.ant.util.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
-import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.*;
-import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands a copy of the original <code>XMLJUnitResultFormatter</code>, with flexibility for extension.

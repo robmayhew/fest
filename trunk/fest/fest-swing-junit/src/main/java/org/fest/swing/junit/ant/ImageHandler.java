@@ -15,6 +15,14 @@
  */
 package org.fest.swing.junit.ant;
 
+import static java.io.File.separator;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
+import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
+import static org.fest.util.Files.flushAndClose;
+import static org.fest.util.Files.newFile;
+import static org.fest.util.Strings.isEmpty;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,15 +33,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
-
-import static java.io.File.separator;
-import static java.util.logging.Level.SEVERE;
-import static java.util.logging.Level.WARNING;
-
-import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
-import static org.fest.util.Files.flushAndClose;
-import static org.fest.util.Files.newFile;
-import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands base64 encoding and decoding of an image.

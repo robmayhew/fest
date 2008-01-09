@@ -14,25 +14,23 @@
  */
 package org.fest.swing.junit.ant;
 
+import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testClassName;
+import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testMethodName;
+import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
+import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
+import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.join;
+
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 
 import junit.framework.Test;
 
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
-import org.w3c.dom.Element;
-
 import org.fest.swing.annotation.GUITestFinder;
 import org.fest.swing.image.ImageException;
 import org.fest.swing.image.ScreenshotTaker;
-
-import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testClassName;
-import static org.apache.tools.ant.taskdefs.optional.junit.JUnitVersionHelper2.testMethodName;
-import static org.apache.tools.ant.taskdefs.optional.junit.XMLConstants.ERROR;
-
-import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.join;
+import org.w3c.dom.Element;
 
 /**
  * Understands a JUnit XML report formatter that takes a screenshot when a GUI test fails.

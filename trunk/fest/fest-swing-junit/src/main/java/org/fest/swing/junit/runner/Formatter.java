@@ -15,10 +15,10 @@
  */
 package org.fest.swing.junit.runner;
 
-import java.lang.reflect.Method;
-
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Strings.concat;
+
+import java.lang.reflect.Method;
 
 /**
  * Understands utilities methods that display objects as readable <code>String</code>s.

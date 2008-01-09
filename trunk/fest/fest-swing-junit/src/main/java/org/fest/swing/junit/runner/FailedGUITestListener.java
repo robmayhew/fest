@@ -15,27 +15,25 @@
  */
 package org.fest.swing.junit.runner;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Logger;
-
-import org.junit.runner.Description;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunListener;
-
-import org.fest.swing.image.ScreenshotTaker;
-import org.fest.util.FilesException;
-
 import static java.io.File.separator;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
-
 import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
 import static org.fest.swing.junit.runner.Formatter.format;
 import static org.fest.util.Files.currentFolder;
 import static org.fest.util.Files.delete;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Strings.quote;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import org.fest.swing.image.ScreenshotTaker;
+import org.fest.util.FilesException;
+import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunListener;
 
 /**
  * Understands a JUnit 4 <code>{@link RunListener}</code> that takes a screenshot of failed GUI tests.

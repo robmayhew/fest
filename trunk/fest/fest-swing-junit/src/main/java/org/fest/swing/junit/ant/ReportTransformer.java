@@ -14,6 +14,8 @@
  */
 package org.fest.swing.junit.ant;
 
+import static org.fest.util.Strings.concat;
+
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -34,8 +36,6 @@ import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.URLResource;
 import org.apache.tools.ant.util.FileUtils;
-
-import static org.fest.util.Strings.concat;
 
 /**
  * Transform a JUnit xml report. The default transformation generates an HTML report in either framed or non-framed

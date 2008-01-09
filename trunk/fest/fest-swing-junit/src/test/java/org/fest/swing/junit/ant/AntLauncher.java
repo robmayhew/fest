@@ -15,6 +15,8 @@
  */
 package org.fest.swing.junit.ant;
 
+import static java.util.Arrays.asList;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
@@ -24,8 +26,6 @@ import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
-
-import static java.util.Arrays.asList;
 
 /**
  * Understands programmatic execution of a Ant task.

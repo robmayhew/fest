@@ -15,15 +15,13 @@
  */
 package org.fest.swing.junit.runner;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.concat;
+
 import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.junit.runner.Formatter;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link Formatter}</code>.

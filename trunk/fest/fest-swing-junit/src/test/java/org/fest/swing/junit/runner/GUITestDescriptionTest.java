@@ -15,13 +15,11 @@
  */
 package org.fest.swing.junit.runner;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.lang.reflect.Method;
 
 import org.testng.annotations.Test;
-
-import org.fest.swing.junit.runner.GUITestDescription;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link GUITestDescription}</code>.
