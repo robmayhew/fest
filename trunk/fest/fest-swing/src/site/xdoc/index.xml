@@ -7,14 +7,12 @@
 
 	<body>
 		<section name="Welcome to the FEST Swing Module">
-		  <subsection name="Introduction">
-        <p>
-          <a href="http://code.google.com/p/fest" target="_blank">FEST-Swing</a> is a Java library that provides a
-				  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
-				  functional Swing GUI testing. This library provides an easy-to-use API that makes creation and maintenance of
-          GUI tests easy.
-				</p>
-      </subsection>
+       <p>
+         <a href="http://code.google.com/p/fest" target="_blank">FEST-Swing</a> is a Java library that provides a
+			  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
+			  functional Swing GUI testing. This library provides an easy-to-use API that makes creation and maintenance of
+         GUI tests easy.
+			</p>
       <subsection name="Why do we need to test GUIs?">
         <p>
           Testing GUIs can make the entire system safer and more robust. Any GUI, even one providing only the simplest
