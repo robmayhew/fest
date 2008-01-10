@@ -51,9 +51,21 @@ public class NameAndTypeMatcherTest {
     textField.setName("myTextField");
   }
   
-  @Test public void shouldFindShowingComponentWithMatchingTypeAndName() {
+  @Test public void shouldFindComponentWithIfNameTypeAndShowingMatch() {
     NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class, true);
     textField.setShowing(true);
+    assertThat(matcher.matches(textField)).isTrue();
+  }  
+
+  @Test public void shouldNotFindShowingComponentIfNameAndTypeMatchButNotShowing() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class, true);
+    textField.setShowing(false);
+    assertThat(matcher.matches(textField)).isFalse();
+  }  
+
+  @Test public void shouldFindShowingComponentIfNameAndTypeMatch() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class);
+    textField.setShowing(false);
     assertThat(matcher.matches(textField)).isTrue();
   }  
 }
