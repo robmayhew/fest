@@ -14,9 +14,6 @@
         (in fixtures only.)
       </action>
       <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe, Volker Berlin">
-        Added enum ComponentLookupScope to configure component lookup to consider showing components only.
-      </action>
-      <action dev="alruiz" type="fix" issue="80" due-to="Win Deblauwe, Volker Berlin">
       	Added enum ComponentLookupScope to configure component lookup to consider showing components only.
       </action>
       <action dev="wanghy, alruiz" type="add" issue="75" due-to="Fabien Barbero">
