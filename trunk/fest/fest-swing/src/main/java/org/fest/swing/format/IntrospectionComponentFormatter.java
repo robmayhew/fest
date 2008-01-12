@@ -101,11 +101,12 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
     try {
       b.append(quote(propertyValue(c, name)));
     } catch (Exception e) {
-      b.append(concat("<Unable read property: [", e.getMessage(), "]>"));
+      b.append(concat("<Unable to read property: [", e.getMessage(), "]>"));
     }
   }
 
   private Object propertyValue(Component c, String property) throws Exception {
+    if ("showing".equals(property)) return c.isShowing();
     PropertyDescriptor descriptor = descriptors.get(property);
     Object value = descriptor.getReadMethod().invoke(c);
     if (isOneDimensionalArray(value)) return Arrays.format(value);

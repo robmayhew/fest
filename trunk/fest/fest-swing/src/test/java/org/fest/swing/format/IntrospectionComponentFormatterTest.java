@@ -47,8 +47,7 @@ public class IntrospectionComponentFormatterTest {
   @Test public void shouldFormatComponent() {
     logger.info(formatter.toString());
     String formatted = formatter.format(button);
-    String expected = 
-      concat(button.getClass().getName(), "[name='button', text='Click Me']");
+    String expected = concat(button.getClass().getName(), "[name='button', text='Click Me']");
     assertThat(formatted).isEqualTo(expected);
   }
   
@@ -60,5 +59,12 @@ public class IntrospectionComponentFormatterTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNull() {
     formatter.format(null);
+  }
+  
+  @Test public void shouldFormatPropertyWithNameShowing() {
+    formatter = new IntrospectionComponentFormatter(JButton.class, "showing");
+    String formatted = formatter.format(button);
+    String expected = concat(button.getClass().getName(), "[showing=false]");
+    assertThat(formatted).isEqualTo(expected);
   }
 }
