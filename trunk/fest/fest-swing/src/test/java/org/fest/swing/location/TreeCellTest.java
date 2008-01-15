@@ -26,10 +26,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestTree.node;
 
 import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 import org.fest.swing.testing.TestTree;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -53,6 +55,7 @@ public class TreeCellTest {
           node("node1", 
               node("node11",
                   node("node111"),
+                  node("node111"),
                   node("node111")
                   ), 
               node("node12")
@@ -69,14 +72,23 @@ public class TreeCellTest {
     assertThat(cell.text()).isEqualTo("node111");
   }
 
-  @Test public void shouldCreateStringFromLastComponentInTreePathAndAddIndexIfTextAlreadyPresentInHierarchy() {
+  @Test(dataProvider = "node111Indices") 
+  public void shouldCreateStringFromLastComponentInTreePathAndAddIndexIfTextAlreadyPresentInHierarchy(int index) {
     TreePath node11Path = node11Path();
-    TreeNode node111 = childOf(node11Path.getLastPathComponent(), 1);
+    TreeNode node111 = childOf(node11Path.getLastPathComponent(), index);
     TreePath node111Path = node11Path.pathByAddingChild(node111);
     TreeCell cell = TreeCell.lastInPath(tree, node111Path);
-    assertThat(cell.textWithIndexIfDuplicated()).isEqualTo("node111[1]");
+    assertThat(cell.textWithIndexIfDuplicated()).isEqualTo(concat("node111[", index, "]"));
   }
 
+  @DataProvider(name="node111Indices")
+  public Object[][] node111Indices() {
+    return new Object[][] {
+        { 1 },
+        { 2 }
+    };
+  }
+  
   private TreePath node11Path() {
     DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
     Object root = model.getRoot();

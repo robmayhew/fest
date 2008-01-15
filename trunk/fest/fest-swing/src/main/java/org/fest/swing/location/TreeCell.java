@@ -66,7 +66,7 @@ public final class TreeCell {
    * Returns the <code>String</code> representation of this cell, adding an index at the end if more than one cells
    * in the same hierarchy level have the same <code>String</code> representation. 
    * <p>
-   * For example, if a <code>{@link JTree}</code> has two nodes at the same level with the text "Yoda", 
+   * For example, if a <code>{@link JTree}</code> has two nodes at the same level in the hierarchy with the text "Yoda", 
    * the <code>String</code> representation of the first one will be "Yoda", while the the <code>String</code> of the 
    * second one will be "Yoda[1]".
    * </p>
@@ -112,29 +112,25 @@ public final class TreeCell {
   private boolean leaf() { return model().isLeaf(value); }
   
   private String addIndexIfDuplicatedTextFound(String original) {
-    TreePath parentPath = path.getParentPath();
-    if (parentPath == null) return original;
-    int duplicateCount = duplicateCount(original, parentPath);
-    if (duplicateCount > 0) return concat(original, "[", valueOf(duplicateCount), "]");
-    return original;
+    int duplicateCount = duplicateCount(original);
+    if (duplicateCount == 0) return original;
+    return concat(original, "[", valueOf(duplicateCount), "]");
   }
 
-  private int duplicateCount(String text, TreePath parentPath) {
+  private int duplicateCount(String original) {
+    TreePath parentPath = path.getParentPath();
+    if (parentPath == null) return 0;
     Object parent = parentPath.getLastPathComponent();
     int lastChildIndex = model().getIndexOfChild(parent, value);
     int duplicateCount = 0;
     for (int i = 0; i < lastChildIndex; i++) {
-      Object child = model().getChild(parent, i);
-      TreePath childPath = parentPath.pathByAddingChild(child);
-      if (duplicateFound(text, childPath)) duplicateCount++;
+      Object childValue = model().getChild(parent, i);
+      TreePath childPath = parentPath.pathByAddingChild(childValue);
+      TreeCell child = lastInPath(tree, childPath);
+      if (original.equals(child.text())) duplicateCount++;
     }
     return duplicateCount;
   }
   
   private TreeModel model() { return tree.getModel(); }
-
-  private boolean duplicateFound(String original, TreePath path) {
-    TreeCell cell = new TreeCell(tree, path);
-    return original.equals(cell.text());
-  }
 }
