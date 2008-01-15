@@ -24,6 +24,13 @@ import static org.fest.util.Strings.isEmpty;
  */
 public final class Strings {
 
+  /**
+   * Returns whether the given <code>String</code> is the default <code>toString()</code> implementation of an
+   * <code>Object</code>.
+   * @param s the given <code>String</code>.
+   * @return <code>true</code> if the given <code>String</code> is the default <code>toString()</code> implementation,
+   * <code>false</code> otherwise.
+   */
   public static boolean isDefaultToString(String s) {
     if (isEmpty(s)) return false;
     int at = s.indexOf("@");
