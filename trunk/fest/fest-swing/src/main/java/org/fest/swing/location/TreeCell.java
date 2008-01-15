@@ -40,26 +40,46 @@ public final class TreeCell {
   private static final boolean NODE_SELECTED = false;
   private static final boolean NODE_HAS_FOCUS = false;
   
-  private final JTree tree;
   private final Object value;
   private final int row;
+  private final JTree tree;
   private final TreePath path;
   
+  /**
+   * Creates a new <code>{@link TreeCell}</code> containing the last component in the given <code>{@link TreePath}</code>.
+   * @param tree the <code>JTree</code> containing the cell of interest.
+   * @param path the <code>TreePath</code> which last component will be the base for the created tree cell.
+   * @return the created <code>TreeCell</code>.
+   */
   public static TreeCell lastInPath(JTree tree, TreePath path) {
     return new TreeCell(tree, path);
   }
   
   private TreeCell(JTree tree, TreePath path) {
-    this.tree = tree;
-    this.path = path;
     this.value = path.getLastPathComponent();
     this.row = tree.getRowForPath(path);
+    this.tree = tree;
+    this.path = path;
   }
 
+  /**
+   * Returns the <code>String</code> representation of this cell, adding an index at the end if more than one cells
+   * in the same hierarchy level have the same <code>String</code> representation. 
+   * <p>
+   * For example, if a <code>{@link JTree}</code> has two nodes at the same level with the text "Yoda", 
+   * the <code>String</code> representation of the first one will be "Yoda", while the the <code>String</code> of the 
+   * second one will be "Yoda[1]".
+   * </p>
+   * @return the <code>String</code> representation of this cell.
+   */
   public String textWithIndexIfDuplicated() {
     return addIndexIfDuplicatedTextFound(text());
   }
 
+  /**
+   * Returns the <code>String</code> representation of this cell.
+   * @return the <code>String</code> representation of this cell.
+   */
   public String text() {
     String text = textFrom(cellRendererComponent());
     if (text != null) return text;
