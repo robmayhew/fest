@@ -51,12 +51,30 @@ public class StringAssertTest {
     new StringAssert("Luke").contains("Yoda");
   }
 
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfStringDoesNotStartWithGivenString() {
+    new StringAssert("Luke").startsWith("uke");
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfStringDoesNotEndWithGivenString() {
+    new StringAssert("Luke").endsWith("Luk");
+  }
+
   @Test public void shouldSucceedIfStringContainsGivenString() {
     new StringAssert("Anakin").contains("akin");
   }
 
   @Test public void shouldSucceedIfStringDoesNotContainGivenString() {
     new StringAssert("Luke").excludes("Yoda");
+  }
+
+  @Test public void shouldSucceedIfStringStartsWithGivenString() {
+    new StringAssert("Luke").startsWith("Luk");
+  }
+
+  @Test public void shouldSucceedIfStringEndsWithGivenString() {
+    new StringAssert("Luke").endsWith("uke");
   }
 
   @Test(expectedExceptions = AssertionError.class)
