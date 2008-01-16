@@ -1,15 +1,15 @@
 /*
  * Created on Dec 23, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -21,7 +21,7 @@ import static org.fest.util.Strings.concat;
 /**
  * Understands assertion methods for <code>{@link Throwable}</code>. To create a new instance of this class use the
  * method <code>{@link Assertions#assertThat(Throwable)}</code>.
- * 
+ *
  * @author David DIDIER
  */
 public final class ThrowableAssert extends GenericAssert<Throwable> {
@@ -66,7 +66,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     isNotNull();
     validate(causeClass);
     Throwable actualCause = actual.getCause();
-    if (actualCause == null || !causeClass.isAssignableFrom(actualCause.getClass())) 
+    if (actualCause == null || !causeClass.isAssignableFrom(actualCause.getClass()))
       notMatchingCauseTypeFailure(causeClass, actualCause);
     return this;
   }
@@ -84,7 +84,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     validate(causeClass);
     Throwable actualCause = actual.getCause();
     while (actualCause != null) {
-      if (causeClass.isAssignableFrom(actualCause.getClass())) return this; 
+      if (causeClass.isAssignableFrom(actualCause.getClass())) return this;
       actualCause = actualCause.getCause();
     }
     fail(concat(format(description()), "expected cause as ancestor:", inBrackets(causeClass.getName())));
@@ -103,7 +103,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     isNotNull();
     validate(causeClass);
     Throwable actualCause = actual.getCause();
-    if (actualCause == null || !actualCause.getClass().equals(causeClass)) 
+    if (actualCause == null || !actualCause.getClass().equals(causeClass))
       notMatchingCauseTypeFailure(causeClass, actualCause);
     return this;
   }
@@ -111,11 +111,11 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   private void notMatchingCauseTypeFailure(Class<? extends Throwable> causeClass, Throwable actualCause) {
     String typeName = actualCause != null ? actualCause.getClass().getName() : null;
     fail(concat(
-        format(description()), 
+        format(description()),
         "expected cause:", inBrackets(causeClass.getName()), " but was:", inBrackets(typeName)
     ));
   }
-  
+
   /**
    * Verifies that the actual <code>Throwable</code> has exactly the given class in its ancestor tree of causes. The
    * test is <code>true</code> if <code>causeClass</code> is strictly equal to one of the causes of the actual
@@ -149,7 +149,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   public ThrowableAssert hasNoCause() {
     isNotNull();
     Throwable actualCause = actual.getCause();
-    if (actualCause != null) 
+    if (actualCause != null)
       fail(concat(format(description()), "expected no cause but was:", inBrackets(actualCause.getClass().getName())));
     return this;
   }
@@ -176,9 +176,9 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
 
   /**
    * Verifies that the actual <code>Throwable</code> is not <code>null</code>.
-   * 
+   *
    * @return this assertion object.
-   * 
+   *
    * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
    */
   public ThrowableAssert isNotNull() {
@@ -213,5 +213,20 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    */
   public ThrowableAssert satisfies(Condition<Throwable> condition) {
     return (ThrowableAssert)verify(condition);
+  }
+
+  /**
+   * Verifies that the actual <code>Throwable</code> is an instance of the given type.
+   * @param type the type to check the actual <code>Throwable</code> against.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Throwable</code> is not an instance of the given type.
+   */
+  public ThrowableAssert isInstanceOf(Class<? extends Throwable> type) {
+    isNotNull();
+    Class<? extends Throwable> current = actual.getClass();
+    if (!type.isAssignableFrom(current))
+      fail(concat(format(description()), "expected instance of:", inBrackets(type.getName()),
+          " but was instance of:", inBrackets(current.getName())));
+    return this;
   }
 }

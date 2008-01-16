@@ -197,7 +197,7 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws AssertionError if the content of the actual <code>File</code> is not equal to the content of the given
    *          one.
    */
-  public FileAssert hasSameContentThan(File expected) {
+  public FileAssert hasSameContentAs(File expected) {
     isNotNull();
     failIfNull("expected file should not be null", expected);
     assertExists(actual).assertExists(expected);

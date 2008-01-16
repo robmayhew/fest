@@ -6,6 +6,12 @@
   </properties>
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available at Maven repository" description="Snapshot release">
+      <action dev="alruiz" type="add" issue="84" due-to="David DIDIER">
+        Integrated contribution from David DIDIER. Added class method 'isInstanceOf' to ThrowableAssert.
+      </action>
+      <action dev="alruiz" type="add" issue="84" due-to="David DIDIER">
+        Integrated contribution from David DIDIER. Added class method 'hasSameContentAs' to FileAssert.
+      </action>
       <action dev="wanghy, alruiz" type="add" due-to="Martin Ankerl">
         Added method 'size()' to GroupAssert. This method returns an IntAssert.
       </action>

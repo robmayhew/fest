@@ -86,7 +86,7 @@ public class FileAssertTest {
   @Test(dataProvider = "differentFilesToCompare")
   public void shouldFailIfFilesHaveNotSameContent(String actualFile, String expectedFile, ErrorMessage expectedError) {
     try {
-      new FileAssert(file(actualFile)).hasSameContentThan(file(expectedFile));
+      new FileAssert(file(actualFile)).hasSameContentAs(file(expectedFile));
       fail("Must have raised an AssertionError!");
     } catch (AssertionError e) {
       expectedError.verify(e);
@@ -133,7 +133,7 @@ public class FileAssertTest {
 
   @Test(dataProvider="files")
   public void shouldSucceedIfFilesHaveSameContent(String fileName) {
-    new FileAssert(file(fileName)).hasSameContentThan(file(fileName));
+    new FileAssert(file(fileName)).hasSameContentAs(file(fileName));
   }
 
   @DataProvider(name="files")
