@@ -15,9 +15,9 @@
  */
 package org.fest.util;
 
-import java.lang.reflect.Array;
-
 import static org.fest.util.Strings.quote;
+
+import java.lang.reflect.Array;
 
 
 /**

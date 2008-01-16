@@ -14,12 +14,9 @@
  */
 package org.fest.util;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Strings}</code>.

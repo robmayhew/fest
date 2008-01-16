@@ -14,12 +14,13 @@
  */
 package org.fest.util;
 
-import static org.testng.Assert.*;
-import org.testng.annotations.Test;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
+import static org.testng.Assert.*;
 
 import java.util.Arrays;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests for {@link Objects}.

@@ -15,16 +15,13 @@
  */
 package org.fest.util;
 
+import static java.io.File.separator;
+import static org.fest.util.Strings.*;
+import static org.testng.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import static java.io.File.separator;
-
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
-
-import static org.testng.Assert.assertTrue;
 
 /**
  * Understands creation and deletion of files in the file system.

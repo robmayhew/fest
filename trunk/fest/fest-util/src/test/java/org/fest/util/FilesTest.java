@@ -15,6 +15,11 @@
  */
 package org.fest.util;
 
+import static java.io.File.separator;
+import static org.fest.util.Collections.list;
+import static org.fest.util.Strings.*;
+import static org.testng.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -23,18 +28,6 @@ import java.util.List;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import static java.io.File.separator;
-
-import static org.fest.util.Collections.list;
-import static org.fest.util.Strings.append;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.join;
-import static org.fest.util.Strings.quote;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for <code>{@link Files}</code>.

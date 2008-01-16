@@ -1,18 +1,24 @@
 /*
  * Created on Sep 23, 2006
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2006 the original author or authors.
  */
 package org.fest.util;
+
+import static java.io.File.separator;
+import static org.fest.util.Arrays.isEmpty;
+import static org.fest.util.Closeables.close;
+import static org.fest.util.Flushables.flush;
+import static org.fest.util.Strings.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,16 +27,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.io.File.separator;
-
-import static org.fest.util.Arrays.isEmpty;
-import static org.fest.util.Strings.append;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
-
 /**
  * Understands utility methods related to files.
- * 
+ *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -45,7 +44,7 @@ public class Files {
    */
   public static List<String> fileNamesIn(String dirName, boolean recurse) {
     File dir = new File(dirName);
-    if (!dir.isDirectory()) 
+    if (!dir.isDirectory())
       throw new IllegalArgumentException(concat(quote(dirName), " is not a directory or does not exist"));
     return fileNamesIn(dir, recurse);
   }
@@ -73,7 +72,7 @@ public class Files {
 
   /**
    * Returns the system's temporary folder.
-   * @return the system's temporary folder. 
+   * @return the system's temporary folder.
    * @throws FilesException if this method cannot find or create the system's temporary folder.
    */
   public static File temporaryFolder() {
@@ -81,7 +80,7 @@ public class Files {
     if (!temp.isDirectory()) throw new FilesException("Unable to find temporary folder");
     return temp;
   }
-  
+
   /**
    * Returns the path of the system's temporary folder. This method appends the system's file separator at the end of
    * the path.
@@ -102,7 +101,7 @@ public class Files {
     String tempFileName = concat(String.valueOf(System.currentTimeMillis()), ".txt");
     return newFile(concat(temporaryFolderPath(), tempFileName));
   }
-  
+
   /**
    * Creates a new folder in the system's temporary folder. The name of the folder will be the result of:
    * <pre>
@@ -114,7 +113,7 @@ public class Files {
     String tempFileName = String.valueOf(System.currentTimeMillis());
     return newFolder(concat(temporaryFolderPath(), tempFileName));
   }
-  
+
   /**
    * Creates a new file using the given path.
    * @param path the path of the new file.
@@ -134,7 +133,7 @@ public class Files {
     }
     return file;
   }
-  
+
   /**
    * Creates a new folder using the given path.
    * @param path the path of the new folder.
@@ -169,7 +168,7 @@ public class Files {
     if (cause != null) throw new FilesException(message, cause);
     throw new FilesException(message);
   }
-  
+
   /**
    * Flushes and closes the given <code>{@link Writer}</code>. Any I/O errors catched by this method are ignored and
    * not rethrown.
@@ -177,19 +176,19 @@ public class Files {
    */
   public static void flushAndClose(Writer writer) {
     if (writer == null) return;
-    try { writer.flush(); } catch (Exception e) {}
-    try { writer.close(); } catch (Exception e) {}
+    flush(writer);
+    close(writer);
   }
 
   /**
-   * Flushes and closes the given <code>{@link OutputStream}</code>. Any I/O errors catched by this method are ignored and
-   * not rethrown.
+   * Flushes and closes the given <code>{@link OutputStream}</code>. Any I/O errors catched by this method are ignored
+   * and not rethrown.
    * @param out the output stream to flush and close.
    */
   public static void flushAndClose(OutputStream out) {
     if (out == null) return;
-    try { out.flush(); } catch (Exception e) {}
-    try { out.close(); } catch (Exception e) {}
+    flush(out);
+    close(out);
   }
 
   /**
@@ -204,7 +203,7 @@ public class Files {
       throw new FilesException("Unable to get current directory", e);
     }
   }
-  
+
   /**
    * Deletes the given file or directory.
    * @param file the file or directory to delete.
@@ -215,9 +214,9 @@ public class Files {
       return;
     }
     if (!file.isDirectory()) return;
-    for (File f : file.listFiles()) delete(f); 
+    for (File f : file.listFiles()) delete(f);
     file.delete();
   }
-  
+
   private Files() {}
 }
