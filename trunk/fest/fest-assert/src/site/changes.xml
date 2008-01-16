@@ -5,6 +5,11 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="0.9-SNAPSHOT" date="TBD - Available at Maven repository" description="Snapshot release">
+      <action dev="wanghy, alruiz" type="add" due-to="Martin Ankerl">
+        Added method 'size()' to GroupAssert. This method returns an IntAssert.
+      </action>
+    </release>
     <release version="0.8" date="2008-01-03" description="Subsequent release">
       <action dev="wanghy" type="add" issue="78" due-to="David DIDIER">
         Added method 'excludes' to StringAssert.
