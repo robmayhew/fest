@@ -1,22 +1,21 @@
 /*
  * Created on Mar 19, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
+import static org.fest.assertions.Fail.*;
 
 /**
  * Understands assertion methods for <code>boolean</code> values. To create a new instance of this class use the method
@@ -32,7 +31,7 @@ public final class BooleanAssert extends PrimitiveAssert {
   BooleanAssert(boolean actual) {
     this.actual = actual;
   }
-  
+
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
    * thrown when an assertion fails.
@@ -42,9 +41,9 @@ public final class BooleanAssert extends PrimitiveAssert {
   public BooleanAssert as(String description) {
     return (BooleanAssert) description(description);
   }
-  
+
   /**
-   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in 
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
    * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
    * @param description the description of the actual value.
    * @return this assertion object.
@@ -52,13 +51,13 @@ public final class BooleanAssert extends PrimitiveAssert {
   public BooleanAssert describedAs(String description) {
     return as(description);
   }
-  
+
   /**
    * Verifies that the actual <code>boolean</code> value is <code>true</code>.
    * @throws AssertionError if the actual <code>boolean</code> value is <code>false</code>.
    */
   public void isTrue() {
-    if (!actual) fail(errorMessageIfNotEqual(description(), actual, true));
+    isEqualTo(true);
   }
 
   /**
@@ -66,6 +65,28 @@ public final class BooleanAssert extends PrimitiveAssert {
    * @throws AssertionError if the actual <code>boolean</code> value is <code>true</code>.
    */
   public void isFalse() {
-    if (actual) fail(errorMessageIfNotEqual(description(), actual, false));
+    isEqualTo(false);
+  }
+
+  /**
+   * Verifies that the actual <code>boolean</code> is equal to the given one.
+   * @param expected the given <code>boolean</code> to compare the actual <code>boolean</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>boolean</code> is not equal to the given one.
+   */
+  public BooleanAssert isEqualTo(boolean expected) {
+    failIfNotEqual(description(), actual, expected);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>boolean</code> is not equal to the given one.
+   * @param other the given <code>boolean</code> to compare the actual <code>boolean</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>boolean</code> is equal to the given one.
+   */
+  public BooleanAssert isNotEqualTo(boolean other) {
+    failIfEqual(description(), actual, other);
+    return this;
   }
 }
