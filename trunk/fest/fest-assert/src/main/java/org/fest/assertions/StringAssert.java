@@ -26,6 +26,7 @@ import org.fest.util.Strings;
  * method <code>{@link Assertions#assertThat(String)}</code>.
  *
  * @author Yvonne Wang
+ * @author David DIDIER
  */
 public final class StringAssert extends GroupAssert<String> {
 
@@ -69,7 +70,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public void isEmpty() {
     if (!Strings.isEmpty(actual))
-      fail(concat(format(description()), "the String ", quote(actual), " should be empty or null"));
+      fail(concat(format(description()), actual(), " should be empty or null"));
   }
 
   /**
@@ -79,7 +80,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert isNotEmpty() {
     if (Strings.isEmpty(actual))
-      fail(concat(format(description()), "the String ", quote(actual), " should not be empty"));
+      fail(concat(format(description()), actual(), " should not be empty"));
     return this;
   }
 
@@ -155,7 +156,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert contains(String expected) {
     if (actual.indexOf(expected) == -1)
-      fail(concat(format(description()), "the String ", quote(actual), " should contain the String ", quote(expected)));
+      fail(concat(format(description()), actual(), " should contain the String ", quote(expected)));
     return this;
   }
 
@@ -167,7 +168,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert endsWith(String expected) {
     if (!actual.endsWith(expected))
-      fail(concat(format(description()), "the String ", quote(actual), " should end with the String ", quote(expected)));
+      fail(concat(format(description()), actual(), " should end with ", quote(expected)));
     return this;
   }
 
@@ -179,7 +180,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert startsWith(String expected) {
     if (!actual.startsWith(expected))
-      fail(concat(format(description()), "the String ", quote(actual), " should start with the String ", quote(expected)));
+      fail(concat(format(description()), actual(), " should start with ", quote(expected)));
     return this;
   }
 
@@ -191,9 +192,35 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert excludes(String s) {
     if (actual.indexOf(s) != -1)
-      fail(concat(
-          format(description()), "the String ", quote(actual), " should not contain the String ", quote(s)
-      ));
+      fail(concat(format(description()), actual(), " should not contain the String ", quote(s)));
     return this;
+  }
+
+  /**
+   * Verifies that the actual <code>String</code> matches the given one.
+   * @param regex the given regular expression expected to be matched by the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> does not match the given regular expression.
+   */
+  public StringAssert matches(String regex) {
+    if (!actual.matches(regex))
+      fail(concat(format(description()), actual(), " should match the regular expression ", quote(regex)));
+    return this;
+  }
+  
+  /**
+   * Verifies that the actual <code>String</code> does not match the given one.
+   * @param regex the given regular expression expected not to be matched by the actual one.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> matches the given regular expression.
+   */
+  public StringAssert doesNotMatch(String regex) {
+    if (actual.matches(regex))
+      fail(concat(format(description()), actual(), " should not match the regular expression ", quote(regex)));
+    return this;
+  }
+
+  private String actual() {
+    return concat("the String", quote(actual));
   }
 }

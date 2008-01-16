@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link StringAssert}</code>.
  *
  * @author Yvonne Wang
+ * @author David DIDIER
  */
 public class StringAssertTest {
 
@@ -80,4 +81,23 @@ public class StringAssertTest {
   @Test(expectedExceptions = AssertionError.class)
    public void shouldFailIfStringContainsGivenString() {
     new StringAssert("Anakin").excludes("akin");
-  } }
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfStringDoesNotMatchGivenRegExp() {
+    new StringAssert("Luke 001").matches("^\\d+.*$");
+  }
+
+  @Test public void shouldSucceedIfStringMatchesGivenRegExp() {
+    new StringAssert("Luke 001").matches("^.*\\d+$");
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfStringMatchesGivenRegExp() {
+      new StringAssert("Luke 001").doesNotMatch("^.*\\d+$");
+  }
+
+  @Test public void shouldSucceedIfStringDoesNotMatchGivenRegExp() {
+    new StringAssert("Luke 001").doesNotMatch("^\\d+.*$");
+  }
+}
