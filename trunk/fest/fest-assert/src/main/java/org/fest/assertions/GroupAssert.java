@@ -26,6 +26,7 @@ import static org.fest.util.Strings.concat;
  * @param <T> the type of object implementations of this template can verify.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 abstract class GroupAssert<T> extends GenericAssert<T> {
 
@@ -60,6 +61,14 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
    */
   protected abstract GroupAssert<T> hasSize(int expected);
 
+  /**
+   * Returns an <code>{@link IntAssert}</code> for verification of the size of the actual group.
+   * @return assertion methods for verification of the size of the actual group.
+   */
+  public final IntAssert size() {
+    return new IntAssert(actualGroupSize());
+  }
+  
   protected final GroupAssert<T> assertEqualSize(int expected) {
     if (actual == null) fail("cannot get size of a null object");
     int actualSize = actualGroupSize();
