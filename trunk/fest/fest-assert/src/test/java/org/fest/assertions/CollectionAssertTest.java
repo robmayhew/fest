@@ -15,16 +15,15 @@
  */
 package org.fest.assertions;
 
+import static java.util.logging.Level.INFO;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Collections.list;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.testng.annotations.Test;
-
-import static java.util.logging.Level.INFO;
-
-import static org.fest.assertions.Fail.fail;
-import static org.fest.util.Collections.list;
 
 /**
  * Tests for <code>{@link CollectionAssert}</code>.

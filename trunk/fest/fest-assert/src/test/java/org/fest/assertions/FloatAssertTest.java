@@ -14,8 +14,9 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
 import static org.fest.assertions.FloatAssert.delta;
+
+import org.testng.annotations.Test;
 
 /**
  * Test for <code>{@link FloatAssert}</code>.

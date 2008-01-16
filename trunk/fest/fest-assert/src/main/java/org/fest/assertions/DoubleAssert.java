@@ -1,13 +1,8 @@
 package org.fest.assertions;
 
 import static java.lang.Math.abs;
-
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.PrimitiveFail.errorMessageIfNotEqual;
-import static org.fest.assertions.PrimitiveFail.failIfEqual;
-import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
-import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
+import static org.fest.assertions.PrimitiveFail.*;
 
 /**
  * Understands Assertion methods for <code>Double</code>. To create a new instance of this class use the 

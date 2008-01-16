@@ -15,12 +15,11 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
-
 import static java.io.File.separator;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.concat;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Commons}</code>.

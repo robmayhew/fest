@@ -14,13 +14,11 @@
  */
 package org.fest.assertions;
 
-import org.apache.velocity.VelocityContext;
-
 import static java.util.logging.Level.SEVERE;
 import static org.apache.velocity.util.StringUtils.capitalizeFirstLetter;
+import static org.fest.util.Strings.*;
 
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.join;
+import org.apache.velocity.VelocityContext;
 
 /**
  * Understands generation of assertion methods for arrays of primitives.

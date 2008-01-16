@@ -14,14 +14,13 @@
  */
 package org.fest.assertions;
 
+import static java.awt.Color.*;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import org.testng.annotations.Test;
-
-import static java.awt.Color.BLUE;
-import static java.awt.Color.YELLOW;
 
 /**
  * Tests for <code>{@link ImageAssert}</code>.

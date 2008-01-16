@@ -15,9 +15,9 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
-
 import static org.fest.util.Objects.areEqual;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ObjectAssert}</code>.

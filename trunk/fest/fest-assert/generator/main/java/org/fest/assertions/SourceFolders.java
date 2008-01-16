@@ -15,13 +15,12 @@
  */
 package org.fest.assertions;
 
-import java.io.File;
-import java.io.IOException;
-
 import static java.io.File.separator;
-
 import static org.fest.assertions.Commons.packageNameAsPathFrom;
 import static org.fest.util.Strings.concat;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Understands source folders.

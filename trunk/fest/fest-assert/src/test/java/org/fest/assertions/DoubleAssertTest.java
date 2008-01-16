@@ -1,7 +1,8 @@
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
 import static org.fest.assertions.DoubleAssert.delta;
+
+import org.testng.annotations.Test;
 
 /**
  * Test for <code>{@link DoubleAssert}</code>.

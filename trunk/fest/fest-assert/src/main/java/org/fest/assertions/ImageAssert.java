@@ -15,18 +15,16 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Formatting.format;
+import static org.fest.util.Strings.*;
+
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfNotEqual;
-import static org.fest.assertions.Formatting.format;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
 
 /**
  * Understands assertion methods for images. To create a new instance of this class use the 

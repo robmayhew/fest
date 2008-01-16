@@ -15,12 +15,11 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
-
 import static org.fest.assertions.Fail.fail;
 import static org.fest.util.Strings.isEmpty;
-
 import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests interaction between an <code>{@link GenericAssert}</code> object and a <code>{@link Condition}</code>.

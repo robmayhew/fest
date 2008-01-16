@@ -15,6 +15,13 @@
  */
 package org.fest.assertions;
 
+import static java.io.File.separator;
+import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
+import static org.fest.assertions.Commons.packageNameAsPathFrom;
+import static org.fest.assertions.SourceFolders.*;
+import static org.fest.util.Files.flushAndClose;
+import static org.fest.util.Strings.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,16 +37,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.generic.DateTool;
-
-import static java.io.File.separator;
-import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADER;
-
-import static org.fest.assertions.Commons.packageNameAsPathFrom;
-import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
-import static org.fest.assertions.SourceFolders.TEST_FOLDER;
-import static org.fest.util.Files.flushAndClose;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
 
 /**
  * Understands a template for code generators using Apache Velocity.

@@ -15,11 +15,10 @@
  */
 package org.fest.assertions;
 
-import org.fest.util.Strings;
-
-import static org.fest.assertions.Fail.errorMessageIfNotEqual;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Fail.*;
 import static org.fest.util.Strings.concat;
+
+import org.fest.util.Strings;
 
 /**
  * Understands a template for assertion methods related to arrays or collections.

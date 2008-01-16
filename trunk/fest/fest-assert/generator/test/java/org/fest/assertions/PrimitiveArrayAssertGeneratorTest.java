@@ -15,19 +15,16 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.SourceFolders.*;
+import static org.fest.util.Strings.*;
+import static org.testng.Assert.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import static org.fest.assertions.SourceFolders.MAIN_FOLDER;
-import static org.fest.assertions.SourceFolders.TEST_FOLDER;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.quote;
-
-import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for <code>{@link PrimitiveArrayAssertGenerator}</code>.

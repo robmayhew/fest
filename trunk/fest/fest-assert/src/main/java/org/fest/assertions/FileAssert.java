@@ -15,8 +15,7 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.bracketAround;
-import static org.fest.assertions.Formatting.format;
+import static org.fest.assertions.Formatting.*;
 import static org.fest.util.Strings.concat;
 
 import java.io.File;

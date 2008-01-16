@@ -15,17 +15,9 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Fail.failIfEqual;
-import static org.fest.assertions.Fail.failIfNotEqual;
-import static org.fest.assertions.Fail.failIfNotNull;
-import static org.fest.assertions.Fail.failIfNotSame;
-import static org.fest.assertions.Fail.failIfNull;
-import static org.fest.assertions.Fail.failIfSame;
-import static org.fest.assertions.Formatting.bracketAround;
-import static org.fest.assertions.Formatting.format;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
+import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Formatting.*;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a template for assertion methods.

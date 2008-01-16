@@ -15,12 +15,8 @@
 package org.fest.assertions;
 
 import static java.lang.String.valueOf;
-
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.PrimitiveFail.failIfEqual;
-import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
-import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
+import static org.fest.assertions.PrimitiveFail.*;
 import static org.fest.util.Strings.concat;
 
 /**

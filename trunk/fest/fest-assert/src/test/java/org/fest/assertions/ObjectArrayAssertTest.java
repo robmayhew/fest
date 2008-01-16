@@ -15,9 +15,9 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
-
 import static org.fest.util.Arrays.array;
+
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ObjectArrayAssert}</code>.

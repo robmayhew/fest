@@ -15,16 +15,11 @@
  */
 package org.fest.assertions;
 
+import static org.fest.util.Strings.*;
+import static org.testng.Assert.*;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.quote;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertSame;
-import static org.testng.Assert.fail;
 
 /**
  * Tests for <code>{@link Fail}</code>.

@@ -15,13 +15,12 @@
  */
 package org.fest.assertions;
 
-import java.util.Arrays;
-
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.format;
-import static org.fest.assertions.Formatting.bracketAround;
+import static org.fest.assertions.Formatting.*;
 import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
+
+import java.util.Arrays;
 
 /**
  * Understands assertion methods for objects. To create a new instance of this class use the 

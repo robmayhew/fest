@@ -15,17 +15,16 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.*;
+import static org.fest.util.Collections.duplicatesFrom;
+import static org.fest.util.Strings.concat;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.fest.util.Collections;
-
-import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.bracketAround;
-import static org.fest.assertions.Formatting.format;
-import static org.fest.util.Collections.duplicatesFrom;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands assertions for collections. To create a new instance of this class use the 

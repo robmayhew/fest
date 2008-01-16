@@ -15,9 +15,9 @@
  */
 package org.fest.assertions;
 
-import org.fest.util.Arrays;
-
 import static org.fest.util.Strings.*;
+
+import org.fest.util.Arrays;
 
 /**
  * Understands utility methods related to formatting.

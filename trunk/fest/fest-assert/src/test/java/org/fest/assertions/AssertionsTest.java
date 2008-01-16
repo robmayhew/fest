@@ -17,8 +17,7 @@ package org.fest.assertions;
 
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertSame;
+import static org.testng.Assert.*;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

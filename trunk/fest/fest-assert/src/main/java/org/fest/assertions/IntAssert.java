@@ -15,10 +15,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.PrimitiveFail.failIfEqual;
-import static org.fest.assertions.PrimitiveFail.failIfNotEqual;
-import static org.fest.assertions.PrimitiveFail.failIfNotGreaterThan;
-import static org.fest.assertions.PrimitiveFail.failIfNotLessThan;
+import static org.fest.assertions.PrimitiveFail.*;
 
 /**
  * Understands assert method for <code>int</code>s. To create a new instance of this class use the 
