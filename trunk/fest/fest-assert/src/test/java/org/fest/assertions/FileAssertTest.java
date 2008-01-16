@@ -146,6 +146,24 @@ public class FileAssertTest {
     };
   }
 
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfFileIsNotAbsolute() {
+    new FileAssert(FILE).isAbsolute();
+  }
+
+  @Test public void shouldSucceedIfFileIsAbsolute() {
+      new FileAssert(FILE.getAbsoluteFile()).isAbsolute();
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfFileIsNotRelative() {
+    new FileAssert(FILE.getAbsoluteFile()).isRelative();
+  }
+
+  @Test public void shouldSucceedIfFileIsRelative() {
+      new FileAssert(FILE).isRelative();
+  }
+
   private static File file(String name) {
     return new File(DIRECTORY, name);
   }

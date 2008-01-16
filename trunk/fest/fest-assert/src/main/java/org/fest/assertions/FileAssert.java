@@ -96,7 +96,8 @@ public final class FileAssert extends GenericAssert<File> {
     if (size != expected)
       fail(concat(
           format(description()),
-          "expected file size of " + quotedAbsolutePath() + ":", inBrackets(expected), " but was:", inBrackets(size)
+          "expected file size of " + quotedAbsolutePath() + ":", inBrackets(valueOf(expected)),
+          " but was:", inBrackets(valueOf(size))
       ));
     return this;
   }
@@ -133,10 +134,6 @@ public final class FileAssert extends GenericAssert<File> {
     if (!actual.isFile())
       fail(concat(format(description()), "file should be a regular file:", quotedAbsolutePath()));
     return this;
-  }
-
-  private String quotedAbsolutePath() {
-    return quotedAbsolutePath(actual);
   }
 
   /**
@@ -229,10 +226,6 @@ public final class FileAssert extends GenericAssert<File> {
     return this;
   }
 
-  private String quotedAbsolutePath(File file) {
-    return quote(file.getAbsolutePath());
-  }
-
   /**
    * Asserts that two readers have the same content.
    * @param actual the actual reader.
@@ -258,5 +251,37 @@ public final class FileAssert extends GenericAssert<File> {
 
   private String message(String message, int line) {
     return concat(message, "line [", valueOf(line), "]");
+  }
+
+  /**
+   * Verifies that the actual <code>File</code> is a relative path.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>File</code> is not a relative path.
+   */
+  public FileAssert isRelative() {
+    isNotNull();
+    if (actual.isAbsolute())
+      fail(concat(format(description()), "file should be relative but is ", inBrackets(quotedAbsolutePath())));
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>File</code> is an absolute path.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>File</code> is not an absolute path.
+   */
+  public FileAssert isAbsolute() {
+    isNotNull();
+    if (!actual.isAbsolute())
+      fail(concat(format(description()), "file should be absolute but is ", inBrackets(quotedAbsolutePath())));
+    return this;
+  }
+
+  private String quotedAbsolutePath() {
+    return quotedAbsolutePath(actual);
+  }
+
+  private String quotedAbsolutePath(File file) {
+    return quote(file.getAbsolutePath());
   }
 }
