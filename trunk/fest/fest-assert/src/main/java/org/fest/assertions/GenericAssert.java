@@ -125,8 +125,8 @@ abstract class GenericAssert<T> extends Assert {
   
   private String conditionFailedMessage(Condition<T> condition) {
     String s = condition.description();
-    if (isEmpty(s)) return concat(format(description), "condition failed with: ", bracketAround(actual));
-    return concat(format(description), "expected:", s, " but was:", bracketAround(actual));
+    if (isEmpty(s)) return concat(format(description), "condition failed with: ", inBrackets(actual));
+    return concat(format(description), "expected:", s, " but was:", inBrackets(actual));
   }
   
   protected GenericAssert<T> description(String description) {

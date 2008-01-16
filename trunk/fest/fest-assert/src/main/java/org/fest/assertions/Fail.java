@@ -90,7 +90,7 @@ public final class Fail {
    * @throws AssertionError if the given object is not <code>null</code>.
    */
   static void failIfNotNull(String message, Object o) {
-    if (o != null) fail(concat(format(message), bracketAround(o), " should be null"));
+    if (o != null) fail(concat(format(message), inBrackets(o), " should be null"));
   }
 
   /**
@@ -101,7 +101,7 @@ public final class Fail {
    * @throws AssertionError if the given objects are the same instance.
    */
   static void failIfSame(String message, Object first, Object second) {
-    if (first == second) fail(concat(format(message), "given objects are same:", bracketAround(first)));
+    if (first == second) fail(concat(format(message), "given objects are same:", inBrackets(first)));
   }
   
   /**
@@ -113,7 +113,7 @@ public final class Fail {
    */
   static void failIfNotSame(String message, Object first, Object second) {
     if (first != second) 
-      fail(concat(format(message), "expected same instance but found ", bracketAround(first), " and ", bracketAround(second)));
+      fail(concat(format(message), "expected same instance but found ", inBrackets(first), " and ", inBrackets(second)));
   }
   
   /**
@@ -133,7 +133,7 @@ public final class Fail {
    * @return an error message to be used when two objects that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, Object actual, Object expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -144,7 +144,7 @@ public final class Fail {
    * @return an error message to be used when two objects that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, Object first, Object second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   private Fail() {}

@@ -90,12 +90,12 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty()) 
-      fail(concat("unexpected element(s) ", bracketAround(copy.toArray()), " in array ", bracketAround(actual)));
+      fail(concat("unexpected element(s) ", inBrackets(copy.toArray()), " in array ", inBrackets(actual)));
     return this;
   }
   
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    fail(concat("array ", inBrackets(actual), " does not contain element(s) ", inBrackets(notFound.toArray())));
   }
   
   /**
@@ -108,7 +108,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (hasElement(o)) found.add(o);
     if (!found.isEmpty())
-      fail(concat("array ", bracketAround(actual), " does not exclude element(s) ", bracketAround(found.toArray())));      
+      fail(concat("array ", inBrackets(actual), " does not exclude element(s) ", inBrackets(found.toArray())));      
     return this;
   }
   
@@ -143,7 +143,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public void isEmpty() {
     if (actualGroupSize() > 0) 
-      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(actual)));
+      fail(concat(format(description()), "expecting empty array, but was ", inBrackets(actual)));
   }
 
   /**

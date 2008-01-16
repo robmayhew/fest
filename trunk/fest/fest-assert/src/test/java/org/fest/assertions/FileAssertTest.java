@@ -14,19 +14,27 @@
  */
 package org.fest.assertions;
 
-import java.io.File;
+import static org.fest.assertions.FileAssertTest.ErrorMessage.error;
+import static org.fest.util.Strings.*;
+import static org.testng.Assert.*;
 
+import java.io.File;
+import java.util.logging.Logger;
+
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link FileAssert}</code>.
  *
  * @author David DIDIER
+ * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class FileAssertTest {
 
-  private static final File DIRECTORY = new File("src/main/java/org/fest/assertions");
-  private static final File FILE = new File(DIRECTORY, "FileAssert.java");
+  private static final File DIRECTORY = new File("src/test/resources/org/fest/assertions");
+  private static final File FILE = file("fileAssertTest1.txt");
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfFileDoesExist() {
@@ -73,5 +81,72 @@ public class FileAssertTest {
 
   @Test public void shouldSucceedIfFileSizeIsEqual() {
     new FileAssert(FILE).hasSize(FILE.length());
+  }
+
+  @Test(dataProvider = "differentFilesToCompare")
+  public void shouldFailIfFilesHaveNotSameContent(String actualFile, String expectedFile, ErrorMessage expectedError) {
+    try {
+      new FileAssert(file(actualFile)).hasSameContentThan(file(expectedFile));
+      fail("Must have raised an AssertionError!");
+    } catch (AssertionError e) {
+      expectedError.verify(e);
+    }
+  }
+
+  @DataProvider(name="differentFilesToCompare")
+  public Object[][] differentFilesToCompare() {
+    return new Object[][] {
+        { "fileAssertTest2.txt", "fileAssertTest3.txt", error(1, "abcde fghij z", "abcde fghij") },
+        { "fileAssertTest2.txt", "fileAssertTest4.txt", error(2, "abcde fghij abcde fghij z", "abcde fghij abcde fghij")},
+        { "fileAssertTest2.txt", "fileAssertTest5.txt", error(3, "abcde z", "abcde")},
+        { "fileAssertTest3.txt", "fileAssertTest4.txt", error(1, "abcde fghij", "abcde fghij z") },
+        { "fileAssertTest3.txt", "fileAssertTest5.txt", error(1, "abcde fghij", "abcde fghij z") },
+        { "fileAssertTest4.txt", "fileAssertTest5.txt", error(2, "abcde fghij abcde fghij", "abcde fghij abcde fghij z") },
+    };
+  }
+
+  static class ErrorMessage {
+    private static Logger logger = Logger.getAnonymousLogger();
+
+    private final int lineNumber;
+    private final String actualLine;
+    private final String expectedLine;
+
+    static ErrorMessage error(int lineNumber, String actualLine, String expectedLine) {
+      return new ErrorMessage(lineNumber, actualLine, expectedLine);
+    }
+
+    ErrorMessage(int lineNumber, String actualLine, String expectedLine) {
+      this.lineNumber = lineNumber;
+      this.actualLine = actualLine;
+      this.expectedLine = expectedLine;
+    }
+
+    void verify(AssertionError e) {
+      String message = e.getMessage();
+      logger.info(message);
+      assertTrue(message.contains(concat("line [", lineNumber, "]")));
+      assertTrue(message.contains(concat("expected:<", quote(expectedLine), ">")));
+      assertTrue(message.contains(concat("but was:<", quote(actualLine), ">")));
+    }
+  }
+
+  @Test(dataProvider="files")
+  public void shouldSucceedIfFilesHaveSameContent(String fileName) {
+    new FileAssert(file(fileName)).hasSameContentThan(file(fileName));
+  }
+
+  @DataProvider(name="files")
+  public Object[][] files() {
+    return new Object[][] {
+        { "fileAssertTest2.txt" },
+        { "fileAssertTest3.txt" },
+        { "fileAssertTest4.txt" },
+        { "fileAssertTest5.txt" },
+    };
+  }
+
+  private static File file(String name) {
+    return new File(DIRECTORY, name);
   }
 }

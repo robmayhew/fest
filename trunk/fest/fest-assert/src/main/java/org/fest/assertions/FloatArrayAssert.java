@@ -88,7 +88,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty()) 
-      fail(concat("unexpected element(s) ", bracketAround(copy.toArray()), " in array ", bracketAround(actual)));
+      fail(concat("unexpected element(s) ", inBrackets(copy.toArray()), " in array ", inBrackets(actual)));
     return this;
   }
 
@@ -99,7 +99,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
 	}
   
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array ", bracketAround(actual), " does not contain element(s) ", bracketAround(notFound.toArray())));
+    fail(concat("array ", inBrackets(actual), " does not contain element(s) ", inBrackets(notFound.toArray())));
   }
 
   /**
@@ -112,7 +112,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
     List<Object> found = new ArrayList<Object>();
     for (float value : values) if (hasElement(value)) found.add(value);
     if (!found.isEmpty())
-      fail(concat("array ", bracketAround(actual), " does not exclude element(s) ", bracketAround(found.toArray())));      
+      fail(concat("array ", inBrackets(actual), " does not exclude element(s) ", inBrackets(found.toArray())));      
     return this;
   }
 
@@ -147,7 +147,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    */
   public void isEmpty() {
     if (actual.length > 0) 
-      fail(concat(format(description()), "expecting empty array, but was ", bracketAround(actual)));
+      fail(concat(format(description()), "expecting empty array, but was ", inBrackets(actual)));
   }
 
   /**

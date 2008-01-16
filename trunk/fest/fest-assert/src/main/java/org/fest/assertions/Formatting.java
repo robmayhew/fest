@@ -33,7 +33,7 @@ final class Formatting {
     return concat("[", message, "] ");
   }
 
-  static String bracketAround(Object o) {
+  static String inBrackets(Object o) {
     if (o != null && o.getClass().isArray() && !o.getClass().getComponentType().isArray()) 
       return doBracketAround(Arrays.format(o));
     return doBracketAround(quote(o));

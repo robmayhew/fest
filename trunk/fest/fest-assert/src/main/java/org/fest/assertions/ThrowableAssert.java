@@ -87,7 +87,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
       if (causeClass.isAssignableFrom(actualCause.getClass())) return this; 
       actualCause = actualCause.getCause();
     }
-    fail(concat(format(description()), "expected cause as ancestor:", bracketAround(causeClass.getName())));
+    fail(concat(format(description()), "expected cause as ancestor:", inBrackets(causeClass.getName())));
     return this;
   }
 
@@ -112,7 +112,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     String typeName = actualCause != null ? actualCause.getClass().getName() : null;
     fail(concat(
         format(description()), 
-        "expected cause:", bracketAround(causeClass.getName()), " but was:", bracketAround(typeName)
+        "expected cause:", inBrackets(causeClass.getName()), " but was:", inBrackets(typeName)
     ));
   }
   
@@ -133,7 +133,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
       if (actualCause.getClass().equals(causeClass)) { return this; }
       actualCause = actualCause.getCause();
     }
-    fail(concat(format(description()), "expected exact cause as ancestor:", bracketAround(causeClass.getName())));
+    fail(concat(format(description()), "expected exact cause as ancestor:", inBrackets(causeClass.getName())));
     return this;
   }
 
@@ -150,7 +150,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     isNotNull();
     Throwable actualCause = actual.getCause();
     if (actualCause != null) 
-      fail(concat(format(description()), "expected no cause but was:", bracketAround(actualCause.getClass().getName())));
+      fail(concat(format(description()), "expected no cause but was:", inBrackets(actualCause.getClass().getName())));
     return this;
   }
 

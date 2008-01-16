@@ -14,19 +14,25 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.*;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Closeables.close;
+import static org.fest.util.Strings.*;
 
-import java.io.File;
+import java.io.*;
 
 /**
  * Understands assertion methods for <code>File</code>. To create a new instance of this class use the method <code>
  * {@link Assertions#assertThat(File)}</code>.
  *
  * @author David DIDIER
+ * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public final class FileAssert extends GenericAssert<File> {
+
+  private static final String EOF = "EOF";
 
   /**
    * Creates a new <code>FileAssert</code>.
@@ -63,7 +69,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert doesNotExist() {
     isNotNull();
-    if (actual.exists()) fail(concat(format(description()), "file should not exist:", actual.getAbsolutePath()));
+    if (actual.exists()) fail(concat(format(description()), "file should not exist:", quotedAbsolutePath()));
     return this;
   }
 
@@ -74,7 +80,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert exists() {
     isNotNull();
-    if (!actual.exists()) fail(concat(format(description()), "file should exist:", actual.getAbsolutePath()));
+    assertExists(actual);
     return this;
   }
 
@@ -86,11 +92,11 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert hasSize(long expected) {
     isNotNull();
-    long actualSize = actual.length();
-    if (actualSize != expected)
+    long size = actual.length();
+    if (size != expected)
       fail(concat(
           format(description()),
-          "expected file size of '" + actual + "':", bracketAround(expected), " but was:", bracketAround(actualSize)
+          "expected file size of " + quotedAbsolutePath() + ":", inBrackets(expected), " but was:", inBrackets(size)
       ));
     return this;
   }
@@ -103,7 +109,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isDirectory() {
     isNotNull();
     if (!actual.isDirectory())
-      fail(concat(format(description()), "file should be a directory:", actual.getAbsolutePath()));
+      fail(concat(format(description()), "file should be a directory:", quotedAbsolutePath()));
     return this;
   }
 
@@ -125,8 +131,12 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isFile() {
     isNotNull();
     if (!actual.isFile())
-      fail(concat(format(description()), "file should be a regular file:", actual.getAbsolutePath()));
+      fail(concat(format(description()), "file should be a regular file:", quotedAbsolutePath()));
     return this;
+  }
+
+  private String quotedAbsolutePath() {
+    return quotedAbsolutePath(actual);
   }
 
   /**
@@ -176,5 +186,77 @@ public final class FileAssert extends GenericAssert<File> {
    */
   @Override public FileAssert satisfies(Condition<File> condition) {
     return (FileAssert)verify(condition);
+  }
+
+  /**
+   * Verifies that the content of the actual <code>File</code> is equal to the content of the given one. Adapted from
+   * <a href="http://junit-addons.sourceforge.net/junitx/framework/FileAssert.html" target="_blank">FileAssert</a> (from
+   * <a href="http://sourceforge.net/projects/junit-addons">JUnit-addons</a>.)
+   * @param expected the given <code>File</code> to compare the actual <code>File</code> to.
+   * @return this assertion object.
+   * @throws AssertionError if the content of the actual <code>File</code> is not equal to the content of the given
+   *          one.
+   */
+  public FileAssert hasSameContentThan(File expected) {
+    isNotNull();
+    failIfNull("expected file should not be null", expected);
+    assertExists(actual).assertExists(expected);
+    InputStream expectedInputStream = null;
+    InputStream actualInputStream = null;
+    try {
+      expectedInputStream = new FileInputStream(expected);
+      actualInputStream = new FileInputStream(actual);
+      failIfNotEqual(reader(actualInputStream), reader(expectedInputStream));
+    } catch (Exception e) {
+      String message = concat(
+                        description(),
+                        "unable to compare contents of files:",
+                        quotedAbsolutePath(), " and ", quotedAbsolutePath(expected));
+      fail(message, e);
+    } finally {
+      close(expectedInputStream);
+      close(actualInputStream);
+    }
+    return this;
+  }
+
+  private LineNumberReader reader(InputStream inputStream) {
+    return new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
+  }
+
+  private FileAssert assertExists(File file) {
+    if (!file.exists()) fail(concat(format(description()), "file should exist:", quotedAbsolutePath(file)));
+    return this;
+  }
+
+  private String quotedAbsolutePath(File file) {
+    return quote(file.getAbsolutePath());
+  }
+
+  /**
+   * Asserts that two readers have the same content.
+   * @param actual the actual reader.
+   * @param expected the expected reader.
+   * @throws IOException any I/O error thrown.
+   * @throws AssertionError if the two readers are not equal.
+   */
+  private void failIfNotEqual(LineNumberReader actual, LineNumberReader expected) throws IOException {
+    String formatted = description();
+    formatted = formatted == null ? "" : concat(formatted, " ");
+    while (true) {
+      if (!expected.ready() && !actual.ready()) return;
+      String expectedLine = expected.readLine();
+      String actualLine = actual.readLine();
+      int lineNumber = expected.getLineNumber();
+      if (!actual.ready() && expected.ready())
+        fail(errorMessageIfNotEqual(message(formatted, lineNumber), EOF, expectedLine));
+      if (actual.ready() && !expected.ready())
+        fail(errorMessageIfNotEqual(message(formatted, lineNumber), actualLine, EOF));
+      Fail.failIfNotEqual(message(formatted, lineNumber), expectedLine, actualLine);
+    }
+  }
+
+  private String message(String message, int line) {
+    return concat(message, "line [", valueOf(line), "]");
   }
 }

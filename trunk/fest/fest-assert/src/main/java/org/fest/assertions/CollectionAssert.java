@@ -70,12 +70,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty()) 
-      fail(concat("unexpected element(s) ", bracketAround(copy.toArray()), " in collection ", actual));
+      fail(concat("unexpected element(s) ", inBrackets(copy.toArray()), " in collection ", actual));
     return this;
   }
 
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("collection ", actual, " does not contain element(s) ", bracketAround(notFound.toArray())));
+    fail(concat("collection ", actual, " does not contain element(s) ", inBrackets(notFound.toArray())));
   }
   
   /**
@@ -88,7 +88,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (actual.contains(o)) found.add(o);
     if (!found.isEmpty()) 
-      fail(concat("collection ", actual, " does not exclude element(s) ", bracketAround(found.toArray())));
+      fail(concat("collection ", actual, " does not exclude element(s) ", inBrackets(found.toArray())));
     return this;
   }
 

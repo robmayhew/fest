@@ -122,7 +122,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>boolean</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, boolean first, boolean second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -133,7 +133,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>char</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, char first, char second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -144,7 +144,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>byte</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, byte first, byte second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -155,7 +155,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>short</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, short first, short second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -166,7 +166,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>int</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, int first, int second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -177,7 +177,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>long</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, long first, long second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -188,7 +188,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>float</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, float first, float second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -199,7 +199,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>double</code>s that are not expected to be equal are. 
    */
   static String errorMessageIfEqual(String message, double first, double second) {
-    return concat(format(message), bracketAround(first), " should not be equal to ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
   
   /**
@@ -298,7 +298,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>boolean</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, boolean actual, boolean expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -309,7 +309,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>char</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, char actual, char expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -320,7 +320,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>byte</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, byte actual, byte expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -331,7 +331,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>short</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, short actual, short expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -342,7 +342,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>int</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, int actual, int expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -353,7 +353,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>long</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, long actual, long expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -364,7 +364,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>float</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, float actual, float expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -375,7 +375,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when two <code>double</code>s that are expected to be equal aren't. 
    */
   static String errorMessageIfNotEqual(String message, double actual, double expected) {
-    return concat(format(message), "expected:", bracketAround(expected), " but was:", bracketAround(actual));
+    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
   
   /**
@@ -463,7 +463,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, char first, char second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -474,7 +474,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, byte first, byte second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -485,7 +485,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, short first, short second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -496,7 +496,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, int first, int second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -507,7 +507,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, long first, long second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -518,7 +518,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, float first, float second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -529,7 +529,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not less than the second value. 
    */
   static String errorMessageIfNotLessThan(String message, double first, double second) {
-    return concat(format(message), bracketAround(first), " should be less than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be less than ", inBrackets(second));
   }
   
   /**
@@ -617,7 +617,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, char first, char second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   /**
@@ -628,7 +628,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, byte first, byte second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   /**
@@ -639,7 +639,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, short first, short second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   /**
@@ -650,7 +650,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, int first, int second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   /**
@@ -661,7 +661,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, long first, long second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   /**
@@ -672,7 +672,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, float first, float second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   /**
@@ -683,7 +683,7 @@ public final class PrimitiveFail {
    * @return an error message to be used when the first value is not greater than the second value. 
    */
   static String errorMessageIfNotGreaterThan(String message, double first, double second) {
-    return concat(format(message), bracketAround(first), " should be greater than ", bracketAround(second));
+    return concat(format(message), inBrackets(first), " should be greater than ", inBrackets(second));
   }
   
   private PrimitiveFail() {}
