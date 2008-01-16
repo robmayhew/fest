@@ -39,24 +39,6 @@ import java.util.Collection;
 public final class Assertions {
 
   /**
-   * Creates a new instance of <code>{@link StringAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static StringAssert assertThat(String actual) {
-    return new StringAssert(actual);
-  }
-
-  /**
-   * Creates a new instance of <code>{@link ObjectAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static ObjectAssert assertThat(Object actual) {
-    return new ObjectAssert(actual);
-  }
-
-  /**
    * Creates a new instance of <code>{@link BooleanAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
@@ -75,21 +57,12 @@ public final class Assertions {
   }
 
   /**
-   * Creates a new instance of <code>{@link CharAssert}</code>.
+   * Creates a new instance of <code>{@link ImageAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static CharAssert assertThat(char actual) {
-    return new CharAssert(actual);
-  }
-
-  /**
-   * Creates a new instance of <code>{@link CharArrayAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static CharArrayAssert assertThat(char[] actual) {
-    return new CharArrayAssert(actual);
+  public static ImageAssert assertThat(BufferedImage actual) {
+    return new ImageAssert(actual);
   }
 
   /**
@@ -111,21 +84,75 @@ public final class Assertions {
   }
 
   /**
-   * Creates a new instance of <code>{@link ShortAssert}</code>.
+   * Creates a new instance of <code>{@link CharAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static ShortAssert assertThat(short actual) {
-    return new ShortAssert(actual);
+  public static CharAssert assertThat(char actual) {
+    return new CharAssert(actual);
   }
 
   /**
-   * Creates a new instance of <code>{@link ShortArrayAssert}</code>.
+   * Creates a new instance of <code>{@link CharArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static ShortArrayAssert assertThat(short[] actual) {
-    return new ShortArrayAssert(actual);
+  public static CharArrayAssert assertThat(char[] actual) {
+    return new CharArrayAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link CollectionAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static CollectionAssert assertThat(Collection<?> actual) {
+    return new CollectionAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link DoubleAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static DoubleAssert assertThat(double actual) {
+    return new DoubleAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link DoubleArrayAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static DoubleArrayAssert assertThat(double[] actual) {
+    return new DoubleArrayAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link FileAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static FileAssert assertThat(File actual) {
+    return new FileAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link FloatAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static FloatAssert assertThat(float actual) {
+    return new FloatAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link FloatArrayAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static FloatArrayAssert assertThat(float[] actual) {
+    return new FloatArrayAssert(actual);
   }
 
   /**
@@ -165,39 +192,12 @@ public final class Assertions {
   }
 
   /**
-   * Creates a new instance of <code>{@link FloatAssert}</code>.
+   * Creates a new instance of <code>{@link ObjectAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static FloatAssert assertThat(float actual) {
-    return new FloatAssert(actual);
-  }
-
-  /**
-   * Creates a new instance of <code>{@link FloatArrayAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static FloatArrayAssert assertThat(float[] actual) {
-    return new FloatArrayAssert(actual);
-  }
-
-  /**
-   * Creates a new instance of <code>{@link DoubleAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static DoubleAssert assertThat(double actual) {
-    return new DoubleAssert(actual);
-  }
-
-  /**
-   * Creates a new instance of <code>{@link DoubleArrayAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static DoubleArrayAssert assertThat(double[] actual) {
-    return new DoubleArrayAssert(actual);
+  public static ObjectAssert assertThat(Object actual) {
+    return new ObjectAssert(actual);
   }
 
   /**
@@ -210,39 +210,30 @@ public final class Assertions {
   }
 
   /**
-   * Creates a new instance of <code>{@link CollectionAssert}</code>.
+   * Creates a new instance of <code>{@link ShortAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static CollectionAssert assertThat(Collection<?> actual) {
-    return new CollectionAssert(actual);
+  public static ShortAssert assertThat(short actual) {
+    return new ShortAssert(actual);
   }
 
   /**
-   * Creates a new instance of <code>{@link ImageAssert}</code>.
+   * Creates a new instance of <code>{@link ShortArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static ImageAssert assertThat(BufferedImage actual) {
-    return new ImageAssert(actual);
+  public static ShortArrayAssert assertThat(short[] actual) {
+    return new ShortArrayAssert(actual);
   }
 
   /**
-   * Creates a new instance of <code>{@link ThrowableAssert}</code>.
+   * Creates a new instance of <code>{@link StringAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
    */
-  public static ThrowableAssert assertThat(Throwable actual) {
-    return new ThrowableAssert(actual);
-  }
-
-  /**
-   * Creates a new instance of <code>{@link FileAssert}</code>.
-   * @param actual the value to be the target of the assertions methods.
-   * @return the created assertion object.
-   */
-  public static FileAssert assertThat(File actual) {
-    return new FileAssert(actual);
+  public static StringAssert assertThat(String actual) {
+    return new StringAssert(actual);
   }
 
   /**
@@ -281,6 +272,15 @@ public final class Assertions {
    */
   public static <T extends AssertExtension> T assertThat(T assertion) {
     return assertion;
+  }
+
+  /**
+   * Creates a new instance of <code>{@link ThrowableAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static ThrowableAssert assertThat(Throwable actual) {
+    return new ThrowableAssert(actual);
   }
 
   private Assertions() {}
