@@ -13,15 +13,18 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.testing;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import static org.fest.util.Strings.isEmpty;
+
+import org.fest.swing.fixture.StringTransferHandler;
 
 /**
  * Understands a tree that:
@@ -32,17 +35,27 @@ import static org.fest.util.Strings.isEmpty;
  *
  * @author Alex Ruiz
  */
-final class TestTree extends JTree {
+public final class TestTree extends JTree {
   private static final long serialVersionUID = 1L;
 
-  TestTree(String name, DefaultTreeModel model) {
+  public TestTree(String name) {
+    this(name, null);
+  }
+  
+  public TestTree(String name, TreeModel model) {
     if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");
     setDragEnabled(true);
     setModel(model);
     setName(name);
     setTransferHandler(new TreeTransferHandler());
   }
-  
+
+  public static MutableTreeNode node(String text, MutableTreeNode...children) {
+    DefaultMutableTreeNode node = new DefaultMutableTreeNode(text);
+    for (MutableTreeNode child : children) node.add(child);
+    return node;
+  }
+
   private static class TreeTransferHandler extends StringTransferHandler<JTree> {
     private static final long serialVersionUID = 1L;
 

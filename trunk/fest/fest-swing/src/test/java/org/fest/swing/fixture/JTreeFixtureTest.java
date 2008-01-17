@@ -26,6 +26,7 @@ import javax.swing.tree.TreePath;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.annotation.GUITest;
+import org.fest.swing.testing.TestTree;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
