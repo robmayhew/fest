@@ -1,9 +1,10 @@
 #summary FEST Documentation.
 #labels Featured
 
-Detailed documentation can be found at:
-  * [http://fest.easytesting.org/ Main page] 
-  * [http://fest.easytesting.org/swing Swing module]
-  * [http://fest.easytesting.org/assert Assert module]
-  * [http://fest.easytesting.org/reflect Reflect module]
-  * [http://fest.easytesting.org/mocks Mocks module]
+Detailed documentation can be found at the project's [http://fest.easytesting.org/ main page].
+
+The following are links to each of the project's modules: 
+  * [http://fest.easytesting.org/swing Swing]
+  * [http://fest.easytesting.org/assert Assert]
+  * [http://fest.easytesting.org/reflect Reflect]
+  * [http://fest.easytesting.org/mocks Mocks]
