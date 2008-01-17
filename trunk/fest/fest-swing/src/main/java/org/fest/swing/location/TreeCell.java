@@ -124,12 +124,15 @@ public final class TreeCell {
     int lastChildIndex = model().getIndexOfChild(parent, value);
     int duplicateCount = 0;
     for (int i = 0; i < lastChildIndex; i++) {
-      Object childValue = model().getChild(parent, i);
-      TreePath childPath = parentPath.pathByAddingChild(childValue);
+      TreePath childPath = parentPath.pathByAddingChild(childOf(parent, i));
       TreeCell child = lastInPath(tree, childPath);
       if (original.equals(child.text())) duplicateCount++;
     }
     return duplicateCount;
+  }
+  
+  private Object childOf(Object parent, int index) {
+    return model().getChild(parent, index);   
   }
   
   private TreeModel model() { return tree.getModel(); }
