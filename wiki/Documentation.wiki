@@ -4,7 +4,7 @@
 Detailed documentation can be found at the project's [http://fest.easytesting.org/ main page].
 
 The following are links to each of the project's modules: 
-  * [http://fest.easytesting.org/swing Swing]
-  * [http://fest.easytesting.org/assert Assert]
-  * [http://fest.easytesting.org/reflect Reflect]
-  * [http://fest.easytesting.org/mocks Mocks]
+  * [http://fest.easytesting.org/swing FEST-Swing]
+  * [http://fest.easytesting.org/assert FEST-Assert]
+  * [http://fest.easytesting.org/reflect FEST-Reflect]
+  * [http://fest.easytesting.org/mocks FEST-Mocks]
