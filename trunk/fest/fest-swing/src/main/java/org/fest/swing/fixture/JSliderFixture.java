@@ -138,7 +138,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JSlider}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture doubleClick() {

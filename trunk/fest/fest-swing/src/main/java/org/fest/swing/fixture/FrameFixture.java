@@ -145,7 +145,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link Frame}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
   public final FrameFixture doubleClick() {

@@ -86,7 +86,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JPanel}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
   public final JPanelFixture doubleClick() {

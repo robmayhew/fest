@@ -105,7 +105,7 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JCheckBox}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
    */
   public final JCheckBoxFixture doubleClick() {

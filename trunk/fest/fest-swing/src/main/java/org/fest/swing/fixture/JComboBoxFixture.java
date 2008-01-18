@@ -182,7 +182,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JComboBox}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
    */
   public final JComboBoxFixture doubleClick() {

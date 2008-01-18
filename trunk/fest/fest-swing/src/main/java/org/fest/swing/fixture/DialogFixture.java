@@ -138,7 +138,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link Dialog}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
    */
   public final DialogFixture doubleClick() {

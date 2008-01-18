@@ -105,7 +105,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JToggleButton}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
    */
   public final JToggleButtonFixture doubleClick() {

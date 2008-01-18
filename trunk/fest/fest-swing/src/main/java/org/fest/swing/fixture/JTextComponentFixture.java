@@ -92,7 +92,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JTextComponent}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
   public final JTextComponentFixture doubleClick() {

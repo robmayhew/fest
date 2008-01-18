@@ -161,7 +161,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JSpinner}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
   public final JSpinnerFixture doubleClick() {

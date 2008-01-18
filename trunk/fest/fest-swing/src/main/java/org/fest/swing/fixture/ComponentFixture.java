@@ -132,7 +132,7 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> rightClick();
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link Component}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected abstract ComponentFixture<T> doubleClick();
@@ -232,7 +232,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link Component}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link Component}</code>.
    * @return this fixture.
    */
   protected final ComponentFixture<T> doDoubleClick() {

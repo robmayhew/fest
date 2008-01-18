@@ -195,7 +195,7 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JScrollBar}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JScrollBar}</code>.
    * @return this fixture.
    */
   public final JScrollBarFixture doubleClick() {

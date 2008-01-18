@@ -105,7 +105,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JOptionPane}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
   public final JOptionPaneFixture doubleClick() {

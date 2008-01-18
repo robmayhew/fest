@@ -89,7 +89,7 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JButton}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
   public final JButtonFixture doubleClick() {

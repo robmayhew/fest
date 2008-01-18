@@ -102,7 +102,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JSplitPane}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
   public final JSplitPaneFixture doubleClick() {

@@ -108,7 +108,7 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JScrollPane}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
    */
   public final JScrollPaneFixture doubleClick() {

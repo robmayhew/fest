@@ -210,7 +210,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JInternalFrame}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
    */
   public final JInternalFrameFixture doubleClick() {

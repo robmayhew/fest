@@ -210,7 +210,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JFileChooser}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
    */
   public final JFileChooserFixture doubleClick() {

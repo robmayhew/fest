@@ -126,7 +126,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JTabbedPane}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
   public final JTabbedPaneFixture doubleClick() {

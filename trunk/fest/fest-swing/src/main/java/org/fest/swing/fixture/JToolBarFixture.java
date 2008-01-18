@@ -135,7 +135,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JToolBar}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
   public final JToolBarFixture doubleClick() {

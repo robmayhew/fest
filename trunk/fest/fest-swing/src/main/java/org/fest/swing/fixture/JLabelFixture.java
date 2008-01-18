@@ -104,7 +104,7 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JLabel}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
   public final JLabelFixture doubleClick() {

@@ -88,7 +88,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JRadioButton}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
    */
   public final JRadioButtonFixture doubleClick() {

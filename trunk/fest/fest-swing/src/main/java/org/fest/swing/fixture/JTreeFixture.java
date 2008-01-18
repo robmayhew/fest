@@ -130,7 +130,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JTree}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
   public final JTreeFixture doubleClick() {

@@ -126,7 +126,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JPopupMenu}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JPopupMenu}</code>.
    * @return this fixture.
    */
   public final JPopupMenuFixture doubleClick() {

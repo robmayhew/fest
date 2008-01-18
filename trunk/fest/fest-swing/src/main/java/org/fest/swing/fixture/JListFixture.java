@@ -294,7 +294,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user doble-clicking this fixture's <code>{@link JList}</code>.
+   * Simulates a user double-clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
   public final JListFixture doubleClick() {
