@@ -18,15 +18,15 @@ package org.fest.swing.fixture;
 import javax.swing.JSpinner;
 
 import abbot.tester.JSpinnerTester;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
  * Understands simulation of user events on a <code>{@link JSpinner}</code> and verification of the state of such

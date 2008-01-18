@@ -21,15 +21,15 @@ import java.awt.Dimension;
 
 import javax.swing.JDialog;
 
-import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 
-import org.testng.annotations.Test;
+import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
  * Tests for <code>{@link DialogFixture}</code>.

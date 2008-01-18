@@ -19,14 +19,14 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 
-import abbot.tester.ComponentTester;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import abbot.tester.ComponentTester;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 
 /**
  * Understands programmatic GUI tests for <code>{@link CelsiusConverter}</code>.

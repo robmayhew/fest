@@ -17,9 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JToggleButton;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link org.fest.swing.fixture.JToggleButtonFixture}</code>.

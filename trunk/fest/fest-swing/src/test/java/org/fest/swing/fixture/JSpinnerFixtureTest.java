@@ -18,16 +18,14 @@ package org.fest.swing.fixture;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
+import org.testng.annotations.Test;
+
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-
 import static org.fest.swing.fixture.ErrorMessageAssert.*;
-
-import org.fest.swing.exception.ActionFailedException;
-
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JSpinnerFixture}</code>.

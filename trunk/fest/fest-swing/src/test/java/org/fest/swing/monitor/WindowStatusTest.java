@@ -19,19 +19,18 @@ import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.monitor.MockWindows.mock;
-
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestFrame;
+
+import static org.easymock.EasyMock.expect;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.monitor.MockWindows.mock;
 
 /**
  * Tests for <code>{@link WindowStatus}</code>.

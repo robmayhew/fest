@@ -15,9 +15,9 @@
 package org.fest.swing.testing;
 
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.fest.swing.script.ScriptFailure;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 
 /**

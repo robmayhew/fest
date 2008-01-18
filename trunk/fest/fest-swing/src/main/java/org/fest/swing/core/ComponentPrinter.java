@@ -22,9 +22,9 @@ import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 
-import static org.fest.swing.format.Formatting.format;
-
 import org.fest.swing.format.Formatting;
+
+import static org.fest.swing.format.Formatting.format;
 
 /**
  * Understands printing the <code>String</code> representation of <code>{@link java.awt.Component}</code>s to

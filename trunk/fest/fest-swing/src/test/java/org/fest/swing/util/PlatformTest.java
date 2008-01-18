@@ -15,10 +15,11 @@
  */
 package org.fest.swing.util;
 
-import static java.awt.event.KeyEvent.*;
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static java.awt.event.KeyEvent.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link Platform}</code>

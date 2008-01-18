@@ -17,12 +17,11 @@ package org.fest.swing.core;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-
-import static org.fest.util.Strings.concat;
-
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.TimeoutWatch;
+
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands waiting for period of time or for a particular condition to be satisfied.

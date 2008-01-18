@@ -20,18 +20,20 @@ import java.util.logging.Logger;
 
 import javax.swing.JButton;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
-import static java.util.logging.Level.INFO;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static java.util.logging.Level.INFO;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 /**
  * Tests for <code>{@link BasicComponentFinder}</code>.

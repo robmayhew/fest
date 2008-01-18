@@ -22,6 +22,7 @@ import java.util.Collection;
 import javax.swing.JMenu;
 
 import static java.util.Collections.emptyList;
+
 import static org.fest.util.Collections.list;
 
 /**

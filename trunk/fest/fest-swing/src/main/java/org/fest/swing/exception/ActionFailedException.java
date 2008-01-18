@@ -16,7 +16,7 @@
 package org.fest.swing.exception;
 
 /**
- * Understands an error ocurred when simulation of user input fails.
+ * Understands an error occurred when simulation of user input fails.
  *
  * @author Yvonne Wang
  */

@@ -22,16 +22,16 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.*;
-import static org.fest.assertions.Assertions.assertThat;
-
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestFrame;
+
+import static org.easymock.EasyMock.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link SingleComponentHierarchy}</code>.

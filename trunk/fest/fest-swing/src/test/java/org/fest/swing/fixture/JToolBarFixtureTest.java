@@ -15,11 +15,7 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -27,17 +23,17 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import static javax.swing.SwingUtilities.getWindowAncestor;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static javax.swing.SwingUtilities.getWindowAncestor;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
 
 /**
  * Tests for <code>{@link JToolBarFixture}</code>.

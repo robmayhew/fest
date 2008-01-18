@@ -18,14 +18,13 @@ package org.fest.swing.hierarchy;
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 
 /**
  * Tests for <code>{@link ParentFinder}</code>.

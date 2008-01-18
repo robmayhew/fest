@@ -27,7 +27,6 @@ import static java.lang.String.valueOf;
 
 import static org.fest.swing.util.Objects.toStringOf;
 import static org.fest.swing.util.Strings.isDefaultToString;
-
 import static org.fest.util.Strings.*;
 
 /**
@@ -35,7 +34,7 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public final class TreeCell {
+public final class TreeCell implements Iterable<Object> {
 
   private static final boolean NODE_SELECTED = false;
   private static final boolean NODE_HAS_FOCUS = false;
@@ -136,4 +135,36 @@ public final class TreeCell {
   }
   
   private TreeModel model() { return tree.getModel(); }
+  
+  /**
+   * Returns this cell's value.
+   * @return this cell's value.
+   */
+  public Object value() { return value; }
+
+  /**
+   * Returns this cell's path.
+   * @return this cell's path.
+   */
+  public TreePath path() { return path; }
+  
+  /**
+   * Returns an iterator over the children of the value of this cell.
+   * @return an Iterator over the children of the value of this cell.
+   */
+  public TreeNodeChildrenIterator iterator() {
+    return new TreeNodeChildrenIterator(model(), value);
+  }
+  
+  /**
+   * Returns a new path containing all the elements of this object plus <code>child</code>. <code>child</code> will
+   * be the last element of the newly created <code>{@link TreePath}</code>.
+   * @param child the child to add to new path.
+   * @return the created path.
+   * @throws NullPointerException if <code>child</code> is <code>null</code>.
+   */
+  public TreeCell cellFrom(Object child) {
+    TreePath childPath = path.pathByAddingChild(child);
+    return new TreeCell(tree, childPath);    
+  }
 }

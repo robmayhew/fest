@@ -24,12 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.fest.assertions.AssertExtension;
+import org.fest.swing.core.MouseButton;
 
 import static org.fest.assertions.Assertions.assertThat;
-
 import static org.fest.swing.core.MouseButton.*;
-
-import org.fest.swing.core.MouseButton;
 
 /**
  * Understands a mouse listener that records mouse events.

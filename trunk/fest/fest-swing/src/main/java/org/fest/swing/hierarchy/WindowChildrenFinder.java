@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static java.util.Collections.emptyList;
+
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Collections.list;
 

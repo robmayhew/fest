@@ -19,11 +19,11 @@ import java.awt.Dimension;
 
 import javax.swing.JScrollBar;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ActionFailedException;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JScrollBarFixture}</code>.

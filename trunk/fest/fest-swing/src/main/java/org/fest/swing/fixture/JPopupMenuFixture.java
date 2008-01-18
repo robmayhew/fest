@@ -23,11 +23,7 @@ import javax.swing.JPopupMenu;
 
 import abbot.tester.JPopupMenuTester;
 
-import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 

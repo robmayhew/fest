@@ -18,10 +18,10 @@ package org.fest.swing.fixture;
 import javax.swing.AbstractButton;
 import javax.swing.JToggleButton;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a two-state button and verification of the state of such button.

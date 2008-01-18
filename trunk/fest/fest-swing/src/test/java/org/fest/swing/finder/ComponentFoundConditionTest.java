@@ -19,17 +19,16 @@ import java.awt.Component;
 
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.ComponentFinder.finderWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestFrame.showInTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentFinder.finderWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestFrame.showInTest;
 
 /**
  * Tests for <code>{@link org.fest.swing.finder.ComponentFoundCondition}</code>.

@@ -15,24 +15,18 @@
  */
 package org.fest.swing.location;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.testing.TestTree.node;
-
-import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
-
-import org.fest.swing.testing.TestTree;
+import javax.swing.tree.*;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestTree;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestTree.node;
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link TreeCell}</code>.

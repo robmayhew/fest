@@ -24,25 +24,25 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import abbot.tester.ComponentTester;
-import static javax.swing.JOptionPane.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
-
-import static org.fest.util.Arrays.array;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static javax.swing.JOptionPane.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JOptionPaneFixture}</code>.

@@ -15,11 +15,7 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,15 +23,14 @@ import java.util.Map;
 
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.util.ReflectionUtils.mapField;
-
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.ReflectionUtils.mapField;
 
 /**
  * Tests for <code>{@link Context}</code>.

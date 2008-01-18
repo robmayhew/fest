@@ -21,12 +21,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.swing.SwingUtilities.convertPoint;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Timeout.timeout;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
@@ -35,9 +32,12 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.swing.SwingUtilities.convertPoint;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Timeout.timeout;
 
 /**
  * Tests for <code>{@link ComponentFixture}</code>.

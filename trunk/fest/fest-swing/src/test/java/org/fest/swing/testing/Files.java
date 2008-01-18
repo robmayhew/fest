@@ -18,6 +18,7 @@ package org.fest.swing.testing;
 import java.io.File;
 
 import static java.io.File.separator;
+
 import static org.fest.util.Strings.concat;
 
 /**

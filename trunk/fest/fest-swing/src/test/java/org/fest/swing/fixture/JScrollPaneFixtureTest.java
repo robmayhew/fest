@@ -21,10 +21,11 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import static javax.swing.ScrollPaneConstants.*;
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static javax.swing.ScrollPaneConstants.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JScrollPaneFixture}</code>.

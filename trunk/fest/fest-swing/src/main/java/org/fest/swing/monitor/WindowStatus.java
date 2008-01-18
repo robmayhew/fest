@@ -15,12 +15,7 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.AWTException;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Robot;
-import java.awt.Window;
+import java.awt.*;
 
 import static java.lang.Math.max;
 import static javax.swing.SwingUtilities.invokeLater;

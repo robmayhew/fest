@@ -18,16 +18,14 @@ package org.fest.swing.fixture;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
-
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxFixture}</code>.

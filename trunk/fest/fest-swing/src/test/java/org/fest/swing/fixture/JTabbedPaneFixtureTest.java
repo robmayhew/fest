@@ -18,13 +18,13 @@ package org.fest.swing.fixture;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTabbedPaneFixture}</code>.

@@ -14,12 +14,12 @@
  */
 package org.fest.swing.fixture.bug76;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
+
 import org.fest.swing.finder.JOptionPaneFinder;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JOptionPaneFixture;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=76">Bug 76</a>.

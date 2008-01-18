@@ -19,6 +19,7 @@ import java.awt.event.AWTEventListener;
 import java.lang.ref.WeakReference;
 
 import static java.awt.Toolkit.getDefaultToolkit;
+
 import static org.fest.util.Objects.areEqual;
 
 /**

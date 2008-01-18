@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
-import static java.awt.Toolkit.getDefaultToolkit;
-import static org.fest.util.Objects.*;
-
 import org.fest.swing.listener.WeakEventListener;
+
+import static java.awt.Toolkit.getDefaultToolkit;
+
+import static org.fest.util.Objects.*;
 
 /**
  * Understands utility methods related to <code>{@link Toolkit}</code>.

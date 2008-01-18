@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 
 import static java.lang.String.valueOf;
 import static javax.swing.JOptionPane.*;
+
 import static org.fest.util.Strings.*;
 
 /**

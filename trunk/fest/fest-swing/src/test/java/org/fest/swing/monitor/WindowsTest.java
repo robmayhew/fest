@@ -19,16 +19,15 @@ import java.awt.Window;
 import java.util.Map;
 import java.util.TimerTask;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.ReflectionUtils.mapField;
-
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.util.ReflectionUtils.mapField;
 
 /**
  * Tests for <code>{@link Windows}</code>.

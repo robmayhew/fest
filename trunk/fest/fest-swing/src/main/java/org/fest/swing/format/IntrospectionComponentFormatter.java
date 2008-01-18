@@ -26,7 +26,6 @@ import java.util.Map;
 import org.fest.util.Arrays;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
 import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.*;
 

@@ -15,11 +15,10 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.MouseButton.*;
-
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Tests for <code>{@link MouseClickInfo}</code>.

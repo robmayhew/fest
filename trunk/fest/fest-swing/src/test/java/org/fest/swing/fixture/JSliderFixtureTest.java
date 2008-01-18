@@ -17,11 +17,12 @@ package org.fest.swing.fixture;
 
 import javax.swing.JSlider;
 
-import static javax.swing.SwingConstants.HORIZONTAL;
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import static javax.swing.SwingConstants.HORIZONTAL;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JSliderFixture}</code>.

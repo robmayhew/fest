@@ -24,11 +24,12 @@ import abbot.finder.Hierarchy;
 import abbot.script.Script;
 import abbot.script.StepRunner;
 import abbot.util.AWTFixtureHelper;
+
+import org.fest.swing.core.ScreenLock;
+
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Files.fileNamesIn;
 import static org.fest.util.Strings.*;
-
-import org.fest.swing.core.ScreenLock;
 
 /**
  * Understands how to run one or more <a href="http://abbot.sourceforge.net" target="_blank">Abbot<a/> scripts.

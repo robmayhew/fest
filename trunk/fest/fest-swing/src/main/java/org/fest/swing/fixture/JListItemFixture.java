@@ -19,9 +19,9 @@ import javax.swing.JList;
 
 import abbot.tester.JListLocation;
 
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 
 /**
  * Understands simulation of user events on an item in a <code>{@link JList}</code> and verification of the state of

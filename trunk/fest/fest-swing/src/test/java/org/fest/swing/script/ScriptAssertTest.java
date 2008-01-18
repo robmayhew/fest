@@ -14,10 +14,10 @@
  */
 package org.fest.swing.script;
 
+import org.testng.annotations.Test;
+
 import static org.fest.swing.script.Scripts.*;
 import static org.fest.swing.testing.Assert.assertScriptFailed;
-
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ScriptAssert}</code>.

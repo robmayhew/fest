@@ -22,17 +22,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 
 /**
  * Tests for <code>{@link JMenuItemFixture}</code>.

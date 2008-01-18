@@ -17,11 +17,11 @@ package org.fest.swing.annotation;
 
 import java.lang.reflect.Method;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.core.Reflection.method;
-
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.reflect.core.Reflection.method;
 
 /**
  * Understands <code>{@link GUITestFinder}</code>.

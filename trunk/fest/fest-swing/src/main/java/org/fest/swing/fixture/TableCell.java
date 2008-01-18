@@ -20,7 +20,6 @@ import javax.swing.JTable;
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
 import static org.fest.util.Strings.*;
 
 /**

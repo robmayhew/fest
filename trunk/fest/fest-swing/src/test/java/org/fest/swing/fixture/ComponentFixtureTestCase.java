@@ -22,19 +22,12 @@ import java.awt.Window;
 
 import javax.swing.JButton;
 
-import abbot.tester.ComponentTester;
-import static java.awt.event.KeyEvent.*;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.swing.SwingUtilities.getWindowAncestor;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
-import static org.fest.swing.fixture.MouseClickInfo.*;
+import abbot.tester.ComponentTester;
 
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.RobotFixture;
@@ -43,10 +36,18 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static java.awt.event.KeyEvent.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.swing.SwingUtilities.getWindowAncestor;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.Timeout.timeout;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.swing.fixture.MouseClickInfo.*;
 
 /**
  * Understands test methods for subclasses of <code>{@link ComponentFixture}</code>.

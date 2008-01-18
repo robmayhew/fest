@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import static javax.swing.SwingUtilities.*;
+
 import static org.fest.util.Strings.*;
 
 /**

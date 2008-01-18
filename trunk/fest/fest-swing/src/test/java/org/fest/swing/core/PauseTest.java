@@ -15,15 +15,14 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.util.StopWatch.startNewStopWatch;
+import org.testng.annotations.Test;
 
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.StopWatch;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Timeout.timeout;
+import static org.fest.swing.util.StopWatch.startNewStopWatch;
 
 /**
  * Tests for <code>{@link Pause}</code>.

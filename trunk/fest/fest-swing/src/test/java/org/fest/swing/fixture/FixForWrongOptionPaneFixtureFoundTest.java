@@ -15,14 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import abbot.tester.ComponentTester;
-
-import org.fest.swing.fixture.JOptionPaneFixtureTest.CustomWindow;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import abbot.tester.ComponentTester;
+
+import org.fest.swing.fixture.JOptionPaneFixtureTest.CustomWindow;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=13&can=2&q=" target="_blank">issue 13</a>.

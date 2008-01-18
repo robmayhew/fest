@@ -21,15 +21,16 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
-import static javax.swing.JFileChooser.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Files.*;
-import static org.fest.util.Strings.isEmpty;
+import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 
-import org.testng.annotations.Test;
+import static javax.swing.JFileChooser.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Files.*;
+import static org.fest.util.Strings.isEmpty;
 
 /**
  * Tests for <code>{@link JFileChooserFixture}</code>.

@@ -15,9 +15,9 @@
  */
 package org.fest.swing.util;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link TimeoutWatch}</code>.

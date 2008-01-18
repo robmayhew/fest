@@ -14,11 +14,7 @@
  */
 package org.fest.swing.core;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Point;
-import java.awt.Window;
+import java.awt.*;
 import java.util.Collection;
 
 import javax.swing.JMenuItem;
@@ -32,14 +28,14 @@ import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
-import static java.lang.System.currentTimeMillis;
-
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-
-import static org.fest.util.Strings.concat;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static java.lang.System.currentTimeMillis;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.

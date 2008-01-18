@@ -18,9 +18,9 @@ package org.fest.swing.core;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link GenericTypeMatcher}</code>.

@@ -27,24 +27,23 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static java.awt.AWTEvent.*;
-import static java.awt.event.WindowEvent.*;
-import static org.easymock.EasyMock.expect;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
-import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
-import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
-
-import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.listener.WeakEventListener;
+import org.fest.swing.testing.TestFrame;
+
+import static java.awt.AWTEvent.*;
+import static java.awt.event.WindowEvent.*;
+import static org.easymock.EasyMock.expect;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
+import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
+import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
 
 /**
  * Tests for <code>{@link ContextMonitor}</code>.

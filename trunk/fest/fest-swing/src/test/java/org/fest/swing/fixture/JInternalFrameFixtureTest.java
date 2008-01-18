@@ -21,12 +21,12 @@ import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.concat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JInternalFrameFixture}</code>.

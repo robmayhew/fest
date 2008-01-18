@@ -5,6 +5,11 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="0.9-SNAPSHOT" date="TBD - Available from FEST's Maven Repository" description="Subsequent release">
+      <action dev="alruiz" type="fix">
+        Fixed bug in which IntrospectionComponentFormatter could show the value of the property 'showing'. 
+      </action>
+    </release>
     <release version="0.8" date="2008-01-09" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="88" due-to="Rich Toulouse">
         Renamed method 'menuItem(String...)' in ContainerFixture to 'menuItemWithPath(String...)'.

@@ -19,17 +19,15 @@ import java.awt.Dimension;
 
 import javax.swing.JList;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
-import static org.fest.swing.util.Range.*;
-
-import static org.fest.util.Collections.list;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.ClickRecorder;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.swing.util.Range.*;
+import static org.fest.util.Collections.list;
 /**
  * Tests for <code>{@link JListFixture}</code>.
  *

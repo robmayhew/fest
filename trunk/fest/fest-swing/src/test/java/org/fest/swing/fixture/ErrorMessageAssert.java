@@ -19,11 +19,10 @@ import java.awt.Component;
 import java.util.logging.Logger;
 
 import org.fest.assertions.AssertExtension;
+import org.fest.swing.format.Formatting;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.*;
-
-import org.fest.swing.format.Formatting;
 
 /**
  * Understands assertion methods for error messages.

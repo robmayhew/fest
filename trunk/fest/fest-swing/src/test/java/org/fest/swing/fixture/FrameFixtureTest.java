@@ -19,13 +19,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import static java.awt.Frame.*;
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.Test;
+import static java.awt.Frame.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link FrameFixture}</code>.

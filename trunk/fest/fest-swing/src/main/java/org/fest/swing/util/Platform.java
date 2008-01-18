@@ -15,14 +15,13 @@
  */
 package org.fest.swing.util;
 
-import static org.fest.util.Strings.concat;
-
-import static java.awt.Event.CTRL_MASK;
-import static java.awt.Event.META_MASK;
-import java.awt.*;
+import java.awt.Event;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import static java.awt.event.KeyEvent.VK_CONTROL;
-import static java.awt.event.KeyEvent.VK_META;
+
+import static java.awt.event.KeyEvent.*;
+
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands platform-specific functionality.
@@ -38,8 +37,8 @@ public final class Platform {
    */
   public static int controlOrCommandKey() {
     int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    if (menuShortcutKeyMask == CTRL_MASK) return VK_CONTROL;
-    if (menuShortcutKeyMask == META_MASK) return VK_META;
+    if (menuShortcutKeyMask == Event.CTRL_MASK) return VK_CONTROL;
+    if (menuShortcutKeyMask == Event.META_MASK) return VK_META;
     throw new IllegalStateException(concat("Unable to map event mask '", String.valueOf(menuShortcutKeyMask), "' to a key"));
   }
 

@@ -17,9 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JButton;
 
-import static org.fest.util.Strings.*;
-
 import org.fest.swing.core.GenericTypeMatcher;
+
+import static org.fest.util.Strings.*;
 
 /**
  * Understands matching a <code>{@link JButton}</code> by its displayed text.

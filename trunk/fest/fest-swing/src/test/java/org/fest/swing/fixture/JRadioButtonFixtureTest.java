@@ -17,11 +17,11 @@ package org.fest.swing.fixture;
 
 import javax.swing.JRadioButton;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JRadioButtonFixture}</code>.

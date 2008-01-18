@@ -21,6 +21,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
 import static org.fest.util.Strings.isEmpty;
 
 /**

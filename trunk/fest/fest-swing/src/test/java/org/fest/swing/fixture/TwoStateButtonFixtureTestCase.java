@@ -17,12 +17,11 @@ package org.fest.swing.fixture;
 
 import javax.swing.AbstractButton;
 
+import org.testng.annotations.Test;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-
 import static org.fest.swing.fixture.ErrorMessageAssert.*;
-
-import org.testng.annotations.Test;
 
 /**
  * Understands test methods for subclasses of <code>{@link org.fest.swing.fixture.TwoStateButtonFixture}</code>.

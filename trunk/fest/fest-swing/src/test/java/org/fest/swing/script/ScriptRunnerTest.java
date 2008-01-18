@@ -16,14 +16,13 @@ package org.fest.swing.script;
 
 import java.io.File;
 
+import org.testng.annotations.Test;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-
 import static org.fest.swing.script.Scripts.*;
 import static org.fest.swing.testing.Assert.assertScriptFailed;
 import static org.fest.swing.testing.Files.absolutePath;
-
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ScriptRunner}</code>.

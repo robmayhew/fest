@@ -18,16 +18,15 @@ package org.fest.swing.core;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.format.Formatting.format;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.format.Formatting.format;
 
 /**
  * Tests for <code>{@link ComponentPrinter}</code>.

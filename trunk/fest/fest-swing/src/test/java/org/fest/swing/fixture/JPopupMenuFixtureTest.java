@@ -19,19 +19,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JPopupMenuFixture}</code>.

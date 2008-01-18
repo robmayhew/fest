@@ -18,14 +18,13 @@ package org.fest.swing.fixture;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
  * Tests for <code>{@link JTextComponentFixture}</code>.

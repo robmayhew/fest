@@ -25,18 +25,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import org.fest.assertions.AssertExtension;
-import org.fest.util.Collections;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.assertions.AssertExtension;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
+import org.fest.util.Collections;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JListItemFixture}</code>.

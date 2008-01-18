@@ -21,9 +21,6 @@ import java.awt.Point;
 
 import abbot.tester.FrameTester;
 import abbot.util.Bugs;
-import static java.awt.Frame.*;
-
-import static org.fest.swing.core.Pause.pause;
 
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;
@@ -31,6 +28,10 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static java.awt.Frame.*;
+
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such

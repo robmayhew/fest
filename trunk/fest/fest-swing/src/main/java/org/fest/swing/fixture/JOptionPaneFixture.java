@@ -23,17 +23,16 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
-import static javax.swing.JOptionPane.*;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
-import static org.fest.util.Strings.concat;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static javax.swing.JOptionPane.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JOptionPane}</code> and verification of the state of such

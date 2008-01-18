@@ -22,15 +22,14 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.util.ReflectionUtils.mapField;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.ReflectionUtils.mapField;
 
 /**
  * Tests for <code>{@link WindowFilter}</code>.

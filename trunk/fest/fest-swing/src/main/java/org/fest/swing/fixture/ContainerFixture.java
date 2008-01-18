@@ -21,19 +21,13 @@ import java.awt.Dialog;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.fest.swing.core.*;
+import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
 import static org.fest.swing.format.Formatting.format;
-
 import static org.fest.util.Strings.join;
-
-import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.Settings;
-import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.

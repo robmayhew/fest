@@ -25,20 +25,18 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.assertions.AssertExtension;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
-import static org.fest.swing.fixture.TestTable.cellValue;
-
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
+import static org.fest.swing.fixture.TestTable.cellValue;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.

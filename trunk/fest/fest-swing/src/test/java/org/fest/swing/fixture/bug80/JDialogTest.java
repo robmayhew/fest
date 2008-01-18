@@ -14,9 +14,9 @@
  */
 package org.fest.swing.fixture.bug80;
 
-import org.fest.swing.fixture.DialogFixture;
-
 import org.testng.annotations.Test;
+
+import org.fest.swing.fixture.DialogFixture;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=80">Bug 80</a>.

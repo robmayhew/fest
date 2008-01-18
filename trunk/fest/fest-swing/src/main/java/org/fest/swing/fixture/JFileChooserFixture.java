@@ -22,18 +22,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import static javax.swing.JFileChooser.*;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
-import static org.fest.util.Strings.*;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static javax.swing.JFileChooser.*;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JFileChooser}</code> and verification of the state of such

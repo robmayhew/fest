@@ -21,19 +21,17 @@ import java.util.UUID;
 
 import javax.swing.JButton;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.ImageAssert.read;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestFrame.showInTest;
-
-import static org.fest.util.Files.temporaryFolderPath;
-import static org.fest.util.Strings.concat;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.ImageAssert.read;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestFrame.showInTest;
+import static org.fest.util.Files.temporaryFolderPath;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link ScreenshotTaker}</code>.

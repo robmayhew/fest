@@ -18,10 +18,10 @@ package org.fest.swing.core;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link NameAndTypeMatcher}</code>.

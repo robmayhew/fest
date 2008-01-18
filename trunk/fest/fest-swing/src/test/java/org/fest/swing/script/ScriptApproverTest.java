@@ -16,9 +16,9 @@ package org.fest.swing.script;
 
 import java.io.File;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link ScriptApprover#DEFAULT_APPROVER}</code>.

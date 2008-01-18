@@ -23,23 +23,22 @@ import java.awt.event.AWTEventListenerProxy;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.reflect.field.Invoker;
+import org.fest.swing.listener.WeakEventListener;
+import org.fest.swing.testing.TestFrame;
 
 import static java.awt.AWTEvent.*;
 import static java.awt.Toolkit.getDefaultToolkit;
 import static org.easymock.EasyMock.expect;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.field;
-
 import static org.fest.swing.monitor.WindowVisibilityMonitors.assertWindowVisibilityMonitorCount;
-
-import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.TestFrame;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.

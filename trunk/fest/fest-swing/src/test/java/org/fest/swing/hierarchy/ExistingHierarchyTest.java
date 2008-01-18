@@ -21,21 +21,20 @@ import java.util.Collection;
 
 import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
-
-import static java.util.Collections.emptyList;
-import static org.easymock.EasyMock.expect;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.core.Reflection.field;
-
-import static org.fest.swing.core.Pause.pause;
-
 import org.fest.swing.core.Condition;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static java.util.Collections.emptyList;
+import static org.easymock.EasyMock.expect;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.reflect.core.Reflection.field;
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Tests for <code>{@link ExistingHierarchy}</code>.

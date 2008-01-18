@@ -22,24 +22,23 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
-import static java.awt.Color.RED;
-import static javax.swing.BoxLayout.Y_AXIS;
-import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
-import static javax.swing.SwingConstants.HORIZONTAL;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static java.awt.Color.RED;
+import static javax.swing.BoxLayout.Y_AXIS;
+import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
+import static javax.swing.SwingConstants.HORIZONTAL;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link ContainerFixture}</code>.

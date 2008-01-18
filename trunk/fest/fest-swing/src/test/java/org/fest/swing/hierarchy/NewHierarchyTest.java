@@ -20,18 +20,17 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import static java.awt.AWTEvent.*;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.util.ToolkitUtils.eventListenersInToolkit;
-
-import static org.fest.util.Arrays.array;
-
-import org.fest.swing.testing.TestFrame;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestFrame;
+
+import static java.awt.AWTEvent.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.ToolkitUtils.eventListenersInToolkit;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link NewHierarchy}</code>.

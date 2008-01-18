@@ -22,10 +22,10 @@ import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JMenuChildrenFinder}</code>.

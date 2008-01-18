@@ -20,11 +20,11 @@ import java.awt.Window;
 
 import abbot.tester.WindowTester;
 
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 
 /**
  * Understands simulation of user events on a <code>{@link Window}</code> and verification of the state of such

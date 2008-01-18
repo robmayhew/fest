@@ -19,21 +19,21 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import static java.awt.event.KeyEvent.*;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static java.awt.event.KeyEvent.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.

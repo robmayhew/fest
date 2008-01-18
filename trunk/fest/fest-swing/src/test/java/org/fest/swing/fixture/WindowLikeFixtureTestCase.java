@@ -19,15 +19,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.Condition;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
  * Understands test methods for implementations of <code>{@link WindowLikeFixture}</code>.

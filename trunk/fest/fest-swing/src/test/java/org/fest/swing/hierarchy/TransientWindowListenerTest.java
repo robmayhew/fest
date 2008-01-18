@@ -19,7 +19,13 @@ import java.awt.AWTEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestFrame;
 
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
@@ -27,13 +33,6 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.swing.core.Pause.pause;
-
-import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestFrame;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link TransientWindowListener}</code>.

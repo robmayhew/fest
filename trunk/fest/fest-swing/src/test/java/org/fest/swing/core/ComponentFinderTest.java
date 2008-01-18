@@ -23,16 +23,17 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTree;
 
-import static java.util.logging.Level.INFO;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static java.util.logging.Level.INFO;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.ComponentFinder}</code>.

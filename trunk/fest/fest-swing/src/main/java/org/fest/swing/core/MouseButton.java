@@ -18,6 +18,7 @@ package org.fest.swing.core;
 import java.awt.event.InputEvent;
 
 import static java.awt.event.InputEvent.*;
+
 import static org.fest.util.Strings.concat;
 
 /**

@@ -18,15 +18,14 @@ package org.fest.swing.finder;
 import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
-import static org.fest.swing.core.Pause.pause;
-
-import static org.fest.util.Strings.*;
-
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.NameAndTypeMatcher;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.fixture.ComponentFixture;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a template for <code>{@link Component}</code> finders.

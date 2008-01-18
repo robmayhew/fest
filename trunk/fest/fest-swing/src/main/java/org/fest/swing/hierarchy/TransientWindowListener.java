@@ -23,7 +23,6 @@ import javax.swing.SwingUtilities;
 
 import static org.fest.swing.util.AWTEvents.*;
 import static org.fest.swing.util.Swing.quoteNameOf;
-
 import static org.fest.util.Strings.concat;
 
 /**

@@ -23,12 +23,11 @@ import java.util.Set;
 
 import abbot.finder.Hierarchy;
 
+import org.fest.swing.exception.ComponentLookupException;
+
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.System.LINE_SEPARATOR;
-
 import static org.fest.util.Strings.concat;
-
-import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands basic component lookup, examining each component in turn. Searches all components of interest in a given

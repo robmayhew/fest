@@ -21,13 +21,12 @@ import java.awt.Insets;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.testing.TestFrame.showInTest;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestFrame.showInTest;
 
 /**
  * Tests for <code>{@link Swing}</code>.

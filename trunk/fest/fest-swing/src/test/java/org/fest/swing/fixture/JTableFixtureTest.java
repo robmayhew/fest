@@ -21,16 +21,15 @@ import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
-import static org.fest.swing.fixture.TestTable.*;
-
-import static org.fest.util.Arrays.array;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
+import static org.fest.swing.fixture.TestTable.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.

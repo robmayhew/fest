@@ -21,13 +21,13 @@ import java.util.Collection;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link WindowChildrenFinder}</code>.

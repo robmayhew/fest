@@ -23,13 +23,13 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestFrame;
 
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link Formatting}</code>.

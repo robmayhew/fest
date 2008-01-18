@@ -15,13 +15,14 @@
  */
 package org.fest.swing.core;
 
-import abbot.tester.Robot;
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import abbot.tester.Robot;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link Settings}</code>.

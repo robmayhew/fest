@@ -21,11 +21,11 @@ import javax.swing.JTable;
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 
-import static org.fest.swing.core.MouseButton.*;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of

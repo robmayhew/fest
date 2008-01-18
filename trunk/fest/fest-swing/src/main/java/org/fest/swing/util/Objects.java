@@ -16,7 +16,6 @@
 package org.fest.swing.util;
 
 import static org.fest.swing.util.Strings.isDefaultToString;
-
 import static org.fest.util.Arrays.format;
 
 /**
