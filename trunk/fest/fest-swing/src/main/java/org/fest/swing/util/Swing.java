@@ -14,10 +14,7 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.Insets;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JOptionPane;
@@ -30,13 +27,23 @@ import static org.fest.util.Strings.*;
 /**
  * Understands AWT-related utility methods.
  * <p>
- * Adapted from <code>abbot.util.AWT</code> from <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
+ * Adapted from <code>abbot.util.AWT</code> and <code>abbot.tester.ComponentLocation</code> from 
+ * <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
  * </p>
  */
 public final class Swing {
 
   private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
+
+  /**
+   * Returns a point relative to the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * @return a point relative to the given <code>Component</code>.
+   */
+  public static Point pointAt(Component c) {
+    return new Point(c.getWidth() / 2, c.getHeight() / 2);
+  }
 
   /**
    * Returns the insets of the given container, or an empty one if no insets can be found.
@@ -78,7 +85,7 @@ public final class Swing {
    * have been processed and <code>r.run()</code> returns.
    * @param r the <code>Runnable</code> to execute.
    * @exception InterruptedException if we're interrupted while waiting for the event dispatching thread to finish
-   *              excecuting <code>r.run()</code>.
+   *            executing <code>r.run()</code>.
    * @exception InvocationTargetException if an exception is thrown while running <code>r</code>.
    * @see SwingUtilities#isEventDispatchThread()
    * @see SwingUtilities#invokeAndWait(Runnable)

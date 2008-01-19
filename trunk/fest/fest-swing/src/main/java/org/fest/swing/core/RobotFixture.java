@@ -33,8 +33,8 @@ import org.fest.swing.exception.WaitTimedOutError;
 
 import static java.lang.System.currentTimeMillis;
 
-import static org.fest.swing.core.Locations.pointAt;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.Swing.pointAt;
 import static org.fest.util.Strings.concat;
 
 /**
