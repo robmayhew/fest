@@ -52,16 +52,29 @@ public final class Invoker<T> {
 
   Invoker(String methodName, Object target, Class<?>... parameterTypes) {
     this.target = target;
-    method = method(methodName, target.getClass(), parameterTypes);
+    method = lookupInClassHierarchy(methodName, target.getClass(), parameterTypes);
     accessible = method.isAccessible();
+  }
+
+  private java.lang.reflect.Method lookupInClassHierarchy(String methodName, Class<?> targetType, Class<?>[] parameterTypes) {
+    java.lang.reflect.Method method = null;
+    Class<?> type = targetType;
+    while (type != null) {
+      method = method(methodName, type, parameterTypes);
+      if (method != null) break;
+      type = type.getSuperclass();
+    }
+    if (method == null) 
+      throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
+          targetType.getName(), " with parameter type(s) ", Arrays.toString(parameterTypes)));
+    return method;
   }
 
   private static java.lang.reflect.Method method(String methodName, Class<?> type, Class<?>[] parameterTypes) {
     try {
       return type.getDeclaredMethod(methodName, parameterTypes);
     } catch (Exception e) {
-      throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
-          type.getName(), " with parameter types ", Arrays.toString(parameterTypes)), e);
+      return null;
     }
   }
 
