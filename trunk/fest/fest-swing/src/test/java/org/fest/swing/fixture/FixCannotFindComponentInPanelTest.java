@@ -40,7 +40,7 @@ public class FixCannotFindComponentInPanelTest {
     private final JPanel panel = new JPanel();
     private final JList list = new JList();
     
-    MyFrame(Class testClass) {
+    MyFrame(Class<?> testClass) {
       super(testClass);
       add(panel);
       panel.add(new JScrollPane(list));

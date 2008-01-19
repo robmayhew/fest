@@ -63,8 +63,8 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-reflect</artifactId>
-			<version>0.2</version>
-			<scope>test</scope>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fest</groupId>

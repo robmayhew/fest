@@ -23,7 +23,6 @@ import javax.swing.JPopupMenu;
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
-import abbot.tester.ComponentLocation;
 import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
@@ -34,6 +33,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 
 import static java.lang.System.currentTimeMillis;
 
+import static org.fest.swing.core.Locations.pointAt;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.util.Strings.concat;
 
@@ -253,8 +253,16 @@ public final class RobotFixture {
    * @param times the number of times to click the given mouse button.
    */
   public void click(Component target, MouseButton button, int times) {
-    Point where = new ComponentLocation().getPoint(target);
-    click(target, where, button, times);
+    click(target, pointAt(target), button, times);
+  }
+
+  /**
+   * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
+   * @param target the <code>Component</code> to click on.
+   * @param where the position where to click.
+   */
+  public void click(Component target, Point where) {
+    click(target, where, LEFT_BUTTON, 1);
   }
 
   /**
@@ -267,7 +275,7 @@ public final class RobotFixture {
    */
   public void click(Component target, Point where, MouseButton button, int times) {
     robot.click(target, where.x, where.y, button.mask, times);
-    robot.waitForIdle();
+    waitForIdle();
   }
   
   /**
@@ -277,7 +285,7 @@ public final class RobotFixture {
    * @throws org.fest.swing.exception.ComponentLookupException if a popup menu cannot be found.
    */
   public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, new ComponentLocation().getPoint(invoker));
+    return showPopupMenu(invoker, pointAt(invoker));
   }
   
   /**
@@ -303,7 +311,7 @@ public final class RobotFixture {
   public void pressAndReleaseKeys(int... keyCodes) {
     for (int keyCode : keyCodes) {
       robot.key(keyCode);
-      robot.waitForIdle();
+      waitForIdle();
     }
   }
   
@@ -314,7 +322,7 @@ public final class RobotFixture {
    */
  public void pressKey(int keyCode) {
     robot.keyPress(keyCode);
-    robot.waitForIdle();
+    waitForIdle();
   }
   
   /**
@@ -324,6 +332,16 @@ public final class RobotFixture {
    */
   public void releaseKey(int keyCode) {
     robot.keyRelease(keyCode);
+    waitForIdle();
+  }
+
+  /**
+   * Wait for an idle AWT event queue. Note that this is different from the implementation of
+   * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
+   * use this method if there are animations or other continual refreshes happening, since in that case it may never
+   * return.
+   */
+  public void waitForIdle() {
     robot.waitForIdle();
   }
 

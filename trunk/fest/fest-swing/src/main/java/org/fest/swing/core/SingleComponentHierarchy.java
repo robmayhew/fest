@@ -60,7 +60,7 @@ final class SingleComponentHierarchy implements abbot.finder.Hierarchy {
    * Returns a collection containing only the root <code>{@link Component}</code> in this hierarchy.
    * @return a collection containing only the root <code>{@link Component}</code> in this hierarchy.
    */
-  public Collection getRoots() {
+  public Collection<Component> getRoots() {
     return list;
   }
 
@@ -68,7 +68,8 @@ final class SingleComponentHierarchy implements abbot.finder.Hierarchy {
    * Returns all sub-components of the given <code>{@link Component}</code>.
    * @return all sub-components of the given <code>{@link Component}</code>.
    */
-  public Collection getComponents(Component c) {
+  @SuppressWarnings("unchecked") 
+  public Collection<Component> getComponents(Component c) {
     return hierarchy.getComponents(c);
   }
 

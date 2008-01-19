@@ -153,7 +153,7 @@ public class JTableCellFixtureTest {
     final TestTable table = new TestTable("table", ROW_COUNT, COLUMN_COUNT);
     final JPopupMenu popupMenu = new JPopupMenu();
     
-    MainWindow(Class testClass) {
+    MainWindow(Class<?> testClass) {
       super(testClass);
       addTable(table);
       table.setComponentPopupMenu(popupMenu);

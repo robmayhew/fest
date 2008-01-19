@@ -89,7 +89,7 @@ public class JOptionPaneFinderTest {
 
     JButton messageButton = new JButton("Message");
 
-    public MyFrame(Class testClass) {
+    public MyFrame(Class<?> testClass) {
       super(testClass);
       setUp();
     }

@@ -144,7 +144,7 @@ public class JListItemFixtureTest {
     final TestList list = new TestList("list", Collections.list("first", "second", "third"));
     final JPopupMenu popupMenu = new JPopupMenu();
     
-    MainWindow(Class testClass) {
+    MainWindow(Class<?> testClass) {
       super(testClass);
       addList(list);
       list.setComponentPopupMenu(popupMenu);

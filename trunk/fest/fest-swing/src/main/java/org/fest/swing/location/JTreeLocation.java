@@ -56,7 +56,7 @@ public class JTreeLocation {
   /**
    * Converts the given path to an x, y coordinate.
    * @param path the given path.
-   * @return the coordinates of the given path
+   * @return the coordinates of the given path.
    * @throws LocationUnavailableException if any part of the path is hidden.
    */
   public Point pointAt(TreePath path) {
@@ -67,7 +67,7 @@ public class JTreeLocation {
     throw new LocationUnavailableException(concat("The tree path ", format(path.getPath()), " is not visible"));
   }
 
-  private TreePath findMatchingPath(TreePath path) {
+  public TreePath findMatchingPath(TreePath path) {
     Object[] pathValues = path.getPath();
     TreeCell rootPath = lastInPath(tree, pathToRoot());
     if (!tree.isRootVisible() && !matches(pathValues[0], rootPath)) 

@@ -49,7 +49,7 @@ public class JMenuItemFixtureTest {
 
     boolean newMenuSelected;
     
-    CustomWindow(Class testClass) {
+    CustomWindow(Class<?> testClass) {
       super(testClass);
       setJMenuBar(new JMenuBar());
       newMenu.setName("new");

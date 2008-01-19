@@ -13,36 +13,29 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.location;
+package org.fest.swing.core;
 
 import java.awt.Component;
 import java.awt.Point;
 
 /**
- * Understands encapsulation of a visible <code>{@link Component}</code>-relative location.
+ * Understands utility methods related to visible <code>{@link Component}</code>-relative locations.
  * <p>
  * Adapted from <code>abbot.tester.ComponentLocation</code> from 
  * <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
  * </p>
  * @author Alex Ruiz
  */
-public class ComponentLocation {
-
-  private final Component c;
-
-  /**
-   * Creates a new </code>{@link ComponentLocation}</code>.
-   * @param c the target <code>Component</code>.
-   */
-  public ComponentLocation(Component c) {
-    this.c = c;
-  }
+public final class Locations {
   
   /**
-   * Returns a point relative to this location's <code>{@link Component}</code>.
-   * @return a point relative to this location's <code>Component</code>.
+   * Returns a point relative to the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * @return a point relative to the given <code>Component</code>.
    */
-  public Point point() {
+  public static Point pointAt(Component c) {
     return new Point(c.getWidth() / 2, c.getHeight() / 2);
   }
+
+  private Locations() {}
 }

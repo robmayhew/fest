@@ -30,7 +30,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-final class TreeNodeChildrenIterator implements Iterator {
+final class TreeNodeChildrenIterator implements Iterator<Object> {
 
   private final TreeModel model;
   private final Object parent;

@@ -95,7 +95,7 @@ public class JFileChooserFinderTest {
     JButton browseButton = new JButton("Browse");
     JFileChooser fileChooser = new JFileChooser();
     
-    public MyFrame(Class testClass) {
+    public MyFrame(Class<?> testClass) {
       super(testClass);
       setUp();
     }

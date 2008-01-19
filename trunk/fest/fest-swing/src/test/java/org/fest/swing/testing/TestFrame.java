@@ -33,13 +33,13 @@ public class TestFrame extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestFrame showInTest(Class testClass) {
+  public static TestFrame showInTest(Class<?> testClass) {
     TestFrame f = new TestFrame(testClass);
     f.display();
     return f;
   }
   
-  public TestFrame(Class testClass) {
+  public TestFrame(Class<?> testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
     chooseLookAndFeel();

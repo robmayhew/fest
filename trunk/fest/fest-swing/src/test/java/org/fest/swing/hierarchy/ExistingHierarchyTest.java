@@ -97,7 +97,7 @@ public class ExistingHierarchyTest {
 
       boolean disposed;
       
-      public CustomFrame(Class testClass) {
+      public CustomFrame(Class<?> testClass) {
         super(testClass);
       }
 

@@ -151,7 +151,7 @@ public class SingleComponentHierarchyTest {
 
     final JTextField textField = new JTextField();
 
-    public CustomFrame(Class testClass) {
+    public CustomFrame(Class<?> testClass) {
       super(testClass);
       add(textField);
     }

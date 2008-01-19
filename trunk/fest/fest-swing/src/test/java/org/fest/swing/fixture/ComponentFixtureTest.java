@@ -125,7 +125,7 @@ public class ComponentFixtureTest {
     private final JPopupMenu popupMenu = new JPopupMenu("Popup Menu");
     private final JTextField textBox = new JTextField(20);
     
-    MyFrame(Class testClass) {
+    MyFrame(Class<?> testClass) {
       super(testClass);
       add(textBox);
       textBox.setComponentPopupMenu(popupMenu);

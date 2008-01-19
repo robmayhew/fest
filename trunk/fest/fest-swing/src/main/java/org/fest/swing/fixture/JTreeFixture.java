@@ -20,11 +20,11 @@ import javax.swing.tree.TreePath;
 
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTreeLocation;
-import abbot.tester.JTreeTester;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -38,6 +38,8 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class JTreeFixture extends ComponentFixture<JTree> {
 
+  private final JTreeDriver treeDriver;
+  
   /**
    * Creates a new <code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTree</code>.
@@ -47,6 +49,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    */
   public JTreeFixture(RobotFixture robot, String treeName) {
     super(robot, treeName, JTree.class);
+    treeDriver = treeDriver();
   }
 
   /**
@@ -56,15 +59,20 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    */
   public JTreeFixture(RobotFixture robot, JTree target) {
     super(robot, target);
+    treeDriver = treeDriver();
   }
 
+  private JTreeDriver treeDriver() {
+    return new JTreeDriver(robot, target);
+  }
+  
   /**
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
    */
   public final JTreeFixture selectRow(int row) {
-    treeTester().actionSelectRow(target, new JTreeLocation(row));
+    treeDriver.selectRow(row);
     return this;
   }
 
@@ -74,7 +82,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    */
   public final JTreeFixture toggleRow(int row) {
-    treeTester().actionToggleRow(target, new JTreeLocation(row));
+    treeDriver.toggleRow(row);
     return this;
   }
 
@@ -87,12 +95,8 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    */
   public final JTreeFixture selectPath(TreePath treePath) {
-    treeTester().actionSelectPath(target, treePath);
+    treeDriver.selectPath(treePath);
     return this;
-  }
-
-  private JTreeTester treeTester() {
-    return (JTreeTester)tester();
   }
 
   /**
@@ -248,22 +252,22 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
-   * @param index the index of the item to drag.
+   * Simulates a user dragging a row from this fixture's <code>{@link JTree}</code>.
+   * @param row the index of the row to drag.
    * @return this fixture.
    */
-  public JTreeFixture drag(int index) {
-    tester().actionDrag(target, elementLocation(index));
+  public JTreeFixture drag(int row) {
+    tester().actionDrag(target, elementLocation(row));
     return this;
   }
 
   /**
-   * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
-   * @param index the index of the item to drop.
+   * Simulates a user dropping an item into this fixture's <code>{@link JTree}</code>.
+   * @param row the row to drop the item to.
    * @return this fixture.
    */
-  public JTreeFixture drop(int index) {
-    tester().actionDrop(target, elementLocation(index));
+  public JTreeFixture drop(int row) {
+    tester().actionDrop(target, elementLocation(row));
     return this;
   }
   

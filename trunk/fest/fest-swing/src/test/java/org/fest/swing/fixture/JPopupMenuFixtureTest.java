@@ -83,7 +83,7 @@ public class JPopupMenuFixtureTest {
     private final JMenuItem firstMenuItem = new JMenuItem("First");
     private final JTextField textBox = new JTextField(20);
     
-    MyFrame(Class testClass) {
+    MyFrame(Class<?> testClass) {
       super(testClass);
       add(textBox);
       textBox.setComponentPopupMenu(popupMenu);

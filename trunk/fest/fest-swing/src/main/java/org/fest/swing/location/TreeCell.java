@@ -34,7 +34,7 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public final class TreeCell implements Iterable<Object> {
+final class TreeCell implements Iterable<Object> {
 
   private static final boolean NODE_SELECTED = false;
   private static final boolean NODE_HAS_FOCUS = false;
@@ -50,7 +50,7 @@ public final class TreeCell implements Iterable<Object> {
    * @param path the <code>TreePath</code> which last component will be the base for the created tree cell.
    * @return the created <code>TreeCell</code>.
    */
-  public static TreeCell lastInPath(JTree tree, TreePath path) {
+  static TreeCell lastInPath(JTree tree, TreePath path) {
     return new TreeCell(tree, path);
   }
   
@@ -71,7 +71,7 @@ public final class TreeCell implements Iterable<Object> {
    * </p>
    * @return the <code>String</code> representation of this cell.
    */
-  public String textWithIndexIfDuplicated() {
+  String textWithIndexIfDuplicated() {
     return addIndexIfDuplicatedTextFound(text());
   }
 
@@ -79,7 +79,7 @@ public final class TreeCell implements Iterable<Object> {
    * Returns the <code>String</code> representation of this cell.
    * @return the <code>String</code> representation of this cell.
    */
-  public String text() {
+  String text() {
     String text = textFrom(cellRendererComponent());
     if (text != null) return text;
     text = valueToText();
@@ -140,13 +140,13 @@ public final class TreeCell implements Iterable<Object> {
    * Returns this cell's value.
    * @return this cell's value.
    */
-  public Object value() { return value; }
+  Object value() { return value; }
 
   /**
    * Returns this cell's path.
    * @return this cell's path.
    */
-  public TreePath path() { return path; }
+  TreePath path() { return path; }
   
   /**
    * Returns an iterator over the children of the value of this cell.
@@ -163,7 +163,7 @@ public final class TreeCell implements Iterable<Object> {
    * @return the created path.
    * @throws NullPointerException if <code>child</code> is <code>null</code>.
    */
-  public TreeCell cellFrom(Object child) {
+  TreeCell cellFrom(Object child) {
     TreePath childPath = path.pathByAddingChild(child);
     return new TreeCell(tree, childPath);    
   }

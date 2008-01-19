@@ -16,6 +16,7 @@
 package org.fest.swing.core;
 
 import abbot.tester.Robot;
+import static java.lang.Math.*;
 
 import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
 
@@ -27,8 +28,10 @@ import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
 public final class Settings {
 
   private static ComponentLookupScope componentLookupScope;
-
+  private static int componentDelay;
+  
   static {
+    componentDelay(30000);
     componentLookupScope(DEFAULT);
   }
   
@@ -36,15 +39,35 @@ public final class Settings {
    * Returns a value representing the millisecond count in between generated events.
    * @return a value representing the millisecond count in between generated events.
    */
-  public static int robotAutoDelay() { return Robot.getAutoDelay(); }
+  public static int robotAutoDelay() { 
+    return Robot.getAutoDelay(); 
+  }
   
   /**
    * Updates the value representing the millisecond count in between generated events. Usually just set to 100-200 if
    * you want to slow down the playback to simulate actual user input. The default is zero delay.
    * @param ms the millisecond count in between generated events.
    */
-  public static void robotAutoDelay(int ms) { Robot.setAutoDelay(ms); }
+  public static void robotAutoDelay(int ms) { 
+    Robot.setAutoDelay(ms); 
+  }
 
+  /**
+   * Returns the delay before failing to find a component that should be visible.
+   * @return the delay before failing to find a component that should be visible.
+   */
+  public static int componentDelay() {
+    return componentDelay;
+  }
+  
+  /**
+   * Updates the delay before failing to find a component that should be visible. The default value is 30000 seconds.
+   * @param ms the delay in milliseconds. It should be between 0 and 60000.
+   */
+  public static void componentDelay(int ms) {
+    componentDelay = valueToUpdate(ms, 0, 60000);
+  }
+  
   /**
    * Returns the scope of component lookups. This setting only affects the component fixtures in the package
    * <code>org.fest.swing.fixture</code>.
@@ -61,6 +84,10 @@ public final class Settings {
    */
   public static void componentLookupScope(ComponentLookupScope scope) {
     componentLookupScope = scope;
+  }
+  
+  public static int valueToUpdate(int value, int min, int max) {
+    return max(min, min(max, value));
   }
   
   private Settings() {}

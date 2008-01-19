@@ -76,7 +76,7 @@ public class ContainerFixtureTest {
     final JToggleButton toggleButton = new JToggleButton("A ToggleButton");
     final JToolBar toolBar = new JToolBar(HORIZONTAL);
 
-    CustomWindow(Class testClass) {
+    CustomWindow(Class<?> testClass) {
       setTitle(testClass.getName());
       setLayout(new BoxLayout(getContentPane(), Y_AXIS));
       lookNative();

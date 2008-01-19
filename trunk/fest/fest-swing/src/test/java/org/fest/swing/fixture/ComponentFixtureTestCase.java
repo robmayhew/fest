@@ -67,7 +67,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
     private final ComponentTester tester = new ComponentTester();
     
-    MainWindow(Class testClass) {
+    MainWindow(Class<?> testClass) {
       super(testClass);
       button.setName("button");
       add(button);

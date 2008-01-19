@@ -61,7 +61,7 @@ public class JOptionPaneFixtureTest {
     
     private final ComponentTester tester = new ComponentTester();
     
-    CustomWindow(Class testClass) {
+    CustomWindow(Class<?> testClass) {
       super(testClass);
       add(button);
     }

@@ -31,7 +31,7 @@ public class MDIFrame extends TestFrame {
 
   private static final long serialVersionUID = 1L;
 
-  public static MDIFrame showInTest(Class testClass) {
+  public static MDIFrame showInTest(Class<?> testClass) {
     MDIFrame f = new MDIFrame(testClass);
     f.display();
     return f;
@@ -40,7 +40,7 @@ public class MDIFrame extends TestFrame {
   private JDesktopPane desktop;
   private JInternalFrame internalFrame;
 
-  public MDIFrame(Class testClass) {
+  public MDIFrame(Class<?> testClass) {
     super(testClass);
   }
 

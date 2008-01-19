@@ -116,7 +116,7 @@ public class NewHierarchyTest {
     final JTextField textField = new JTextField(20);
     final JComboBox comboBox = new JComboBox(array("One", "Two"));
 
-    public CustomFrame(Class testClass) {
+    public CustomFrame(Class<?> testClass) {
       super(testClass);
       add(textField);
       add(comboBox);
