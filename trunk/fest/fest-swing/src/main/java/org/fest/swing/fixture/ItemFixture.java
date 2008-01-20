@@ -104,9 +104,9 @@ public interface ItemFixture {
   ItemFixture releaseKey(int keyCode);
 
   /**
-   * Shows a popup menu using this fixture's item as the invoker of the popup menu.
-   * @return a fixture that manages the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
+   * Shows a pop-up menu using this fixture's item as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   JPopupMenuFixture showPopupMenu();
 }

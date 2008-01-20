@@ -204,20 +204,20 @@ public abstract class ComponentFixture<T extends Component> {
   protected abstract ComponentFixture<T> requireDisabled();
 
   /**
-   * Shows a popup menu using this fixture's <code>{@link Component}</code> as the invoker of the popup menu.
-   * @return a fixture that manages the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenu() {
     return new JPopupMenuFixture(robot, robot.showPopupMenu(target));
   }
 
   /**
-   * Shows a popup menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * popup menu.
-   * @param p the given point where to show the popup menu.
-   * @return a fixture that manages the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenuAt(Point p) {
     return new JPopupMenuFixture(robot, robot.showPopupMenu(target, p));

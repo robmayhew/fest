@@ -17,15 +17,13 @@ package org.fest.swing.fixture;
 
 import javax.swing.JList;
 
-import abbot.tester.ComponentLocation;
-import abbot.tester.JListLocation;
-import abbot.tester.JListTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JListDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.Range;
 
@@ -35,9 +33,8 @@ import static java.lang.String.valueOf;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -49,6 +46,8 @@ import static org.fest.util.Strings.*;
  */
 public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture {
 
+  private final JListDriver driver;
+  
   /**
    * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on a <code>JList</code>.
@@ -58,6 +57,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public JListFixture(RobotFixture robot, String listName) {
     super(robot, listName, JList.class);
+    driver = newTreeDriver(robot, target);
   }
   
   /**
@@ -67,6 +67,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public JListFixture(RobotFixture robot, JList target) {
     super(robot, target);
+    driver = newTreeDriver(robot, target);
+  }
+
+  private JListDriver newTreeDriver(RobotFixture robot, JList target) {
+    return new JListDriver(robot, target);
   }
 
   /**
@@ -74,7 +79,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return the elements in this fixture's <code>JList</code>.
    */
   public String[] contents() {
-    return listTester().getContents(target);
+    return driver.contents();
   }
 
   /**
@@ -107,6 +112,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * </ul>
    * @param indices the indices of the items to select.
    * @return this fixture.
+   * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item 
+   *         in the <code>JList</code>.
    */
   public final JListFixture selectItems(int...indices) {
     int controlOrCommand = controlOrCommandKey();
@@ -120,9 +127,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>. 
    * @param index the index of the item to select.
    * @return this fixture.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListFixture selectItem(int index) {
-    clickItem(new JListLocation(index), LEFT_BUTTON, 1);
+    clickItem(index, LEFT_BUTTON, 1);
     return this;
   }
 
@@ -136,6 +145,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * </ul>
    * @param items the text of the items to select.
    * @return this fixture.
+   * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be 
+   *         found.
    */
   public final JListFixture selectItems(String...items) {
     int controlOrCommand = controlOrCommandKey();
@@ -149,9 +160,10 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>. 
    * @param text the text of the item to select.
    * @return this fixture.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
   public final JListFixture selectItem(String text) {
-    clickItem(new JListLocation(text), LEFT_BUTTON, 1);
+    driver.clickItem(text, LEFT_BUTTON, 1);
     return this;
   }
   
@@ -159,9 +171,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user double-clicking an item in this fixture's <code>{@link JList}</code>. 
    * @param index the index of the item to double-click.
    * @return this fixture.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListFixture doubleClickItem(int index) {
-    clickItem(new JListLocation(index), LEFT_BUTTON, 2);
+    clickItem(index, LEFT_BUTTON, 2);
     return this;
   }
 
@@ -171,21 +185,24 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    */
   public final JListFixture doubleClickItem(String text) {
-    clickItem(new JListLocation(text), LEFT_BUTTON, 2);
+    driver.clickItem(text, LEFT_BUTTON, 2);
     return this;
   }
   
-  void clickItem(JListLocation location, MouseButton button, int times) {
-    int index = location.getIndex(target);
-    validateItemIndex(index);
-    robot.click(target, location.getPoint(target), button, times);
+  void clickItem(int index, MouseButton button, int times) {
+    driver.clickItem(index, button, times);
   }
   
-  private void validateItemIndex(int index) {
-    int itemCount = target.getModel().getSize();
-    if (index < 0 || index >= itemCount)
-      throw actionFailure(concat(
-          quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", quote(valueOf(itemCount))));
+  /**
+   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
+   * @param index the index of the item.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public final JPopupMenuFixture showPopupMenuAt(int index) {
+    return showPopupMenuAt(driver.pointAt(index));
   }
 
   /**
@@ -230,13 +247,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
    * @param index the index of the item to return.
    * @return the String representation of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public String valueAt(int index) {
-    return JListTester.valueToString(target, index);
-  }
-
-  private JListTester listTester() {
-    return (JListTester)tester();
+    return driver.text(index);
   }
 
   /**
@@ -253,10 +268,10 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Returns a fixture that manages the list item specified by the given text.
    * @param text the text of the item.
    * @return a fixture that manages the list item specified by the given text.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
   public final JListItemFixture item(String text) {
-    int index = new JListLocation(text).getIndex(target);
-    return new JListItemFixture(this, index);
+    return new JListItemFixture(this, driver.indexOf(text));
   }
 
   /**
@@ -388,10 +403,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   /**
    * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
    * @param text the text of the item to drag.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
    * @return this fixture.
    */
   public final JListFixture drag(String text) {
-    tester().actionDrag(target, elementLocation(text));
+    driver.drag(text);
     return this;
   }
 
@@ -399,18 +415,21 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
    * @param text the text of the item to drop.
    * @return this fixture.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @throws ActionFailedException if there is no drag action in effect.
    */
   public final JListFixture drop(String text) {
-    tester().actionDrop(target, elementLocation(text));
+    driver.drop(text);
     return this;
   }  
 
-  private ComponentLocation elementLocation(String text) {
-    return new ComponentLocation(new JListLocation(text).getPoint(target));
-  }
-
+  /**
+   * Simulates a user dropping an item at the center of this fixture's <code>{@link JList}</code>.
+   * @return this fixture.
+   * @throws ActionFailedException if there is no drag action in effect.
+   */
   public final JListFixture drop() {
-    tester().actionDrop(target, new ComponentLocation(new JListLocation().getPoint(target)));
+    driver.drop();
     return this;
   }
   
@@ -418,9 +437,11 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to drag.
    * @return this fixture.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListFixture drag(int index) {
-    tester().actionDrag(target, elementLocation(index));
+    driver.drag(index);
     return this;
   }
 
@@ -428,13 +449,12 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to drop.
    * @return this fixture.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   * @throws ActionFailedException if there is no drag action in effect.
    */
   public final JListFixture drop(int index) {
-    tester().actionDrop(target, elementLocation(index));
+    driver.drop(index);
     return this;
-  }
-  
-  private ComponentLocation elementLocation(int index) {
-    return new ComponentLocation(new JListLocation(index).getPoint(target));
   }
 }

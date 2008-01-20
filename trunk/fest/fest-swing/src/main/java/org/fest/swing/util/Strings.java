@@ -15,6 +15,7 @@
  */
 package org.fest.swing.util;
 
+import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.isEmpty;
 
 /**
@@ -42,6 +43,22 @@ public final class Strings {
     } catch (NumberFormatException e) {
       return false;
     }
+  }
+  
+  /**
+   * Indicates if the given <code>String</code>s match. To match, one of the following conditions needs to be true:
+   * <ul>
+   * <li>both <code>String</code>s have to be equal</li>
+   * <li>'s' matches the regular expression in 'pattern'</li>
+   * </ul>
+   * @param pattern a <code>String</code> to match (it can be a regular expression.)
+   * @param s the <code>String</code> to verify.
+   * @return <code>true</code> if the given <code>String</code>s match, <code>false</code> otherwise.
+   */
+  public static boolean match(String pattern, String s) {
+    if (areEqual(pattern, s)) return true;
+    if (pattern != null && s != null) return s.matches(pattern);
+    return false;
   }
   
   private Strings() {}

@@ -54,7 +54,7 @@ class ParentFinder {
   }
 
   /**
-   * Returns the invoker, if any, of the given component. Returns <code>null</code> if the component is not on a popup
+   * Returns the invoker, if any, of the given component. Returns <code>null</code> if the component is not on a pop-up
    * of any sort.
    * @param c the given component.
    * @return the invoker of the given component if found. Otherwise, <code>null</code>.
@@ -69,7 +69,7 @@ class ParentFinder {
   /**
    * Similar to
    * <code>{@link javax.swing.SwingUtilities#windowForComponent(Component) SwingUtilities.windowForComponent}</code>),
-   * but returns the component itself if it is a <code>{@link Window}</code>, or the invoker's window if on a popup.
+   * but returns the component itself if it is a <code>{@link Window}</code>, or the invoker's window if on a pop-up.
    * @param c the component whose window ancestor we are looking for.
    * @return the window ancestor of the given component, or given component itself it is a window.
    */

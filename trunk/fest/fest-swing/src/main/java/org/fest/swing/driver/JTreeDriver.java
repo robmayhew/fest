@@ -29,8 +29,6 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 
-import static java.lang.String.valueOf;
-
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
@@ -50,7 +48,7 @@ public final class JTreeDriver {
   private final RobotFixture robot;
   private final JTree tree;
   private final JTreeLocation location;
-  private final DragAndDropDriver dragAndDropDriver;
+  private final DragAndDropDriver dragAndDrop;
 
   /**
    * Creates a new </code>{@link JTreeDriver}</code>.
@@ -61,7 +59,7 @@ public final class JTreeDriver {
     this.robot = robot;
     this.tree = tree;
     location = new JTreeLocation(tree);
-    dragAndDropDriver = new DragAndDropDriver(robot, tree);
+    dragAndDrop = new DragAndDropDriver(robot, tree);
   }
 
   /**
@@ -73,13 +71,13 @@ public final class JTreeDriver {
    * @param row the given row.
    * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if the location of the given row cannot be found.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
    */
   public void toggleRow(int row) {
     // Alternatively, we can reflect into the UI and do a single click on the appropriate expand location, but this is 
     // safer.
-    Point p = location.pointAt(pathFor(row));
+    Point p = location.pointAt(row);
     int toggleClickCount = tree.getToggleClickCount();
     if (toggleClickCount != 0) {
       robot.click(tree, p, LEFT_BUTTON, toggleClickCount);
@@ -96,29 +94,16 @@ public final class JTreeDriver {
    * @param row the row to select.
    * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if the location of the given row cannot be found.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public void selectRow(int row) {
-    selectPath(pathFor(row));
-  }
-
-  private TreePath pathFor(int row) {
-    TreePath path = tree.getPathForRow(validated(row));
-    if (path != null) return path; 
-    throw new LocationUnavailableException(concat("Unable to find tree path for row [", valueOf(row), "]"));
-  }
-
-  private int validated(int row) {
-    int rowCount = tree.getRowCount();
-    if (row >= 0 && row < rowCount) return row;
-    throw new LocationUnavailableException(concat(
-        "The given row (", valueOf(row), ") should be greater than or equal to 0 and less than ", valueOf(rowCount)));
+    selectPath(location.pathFor(row));
   }
    
   /**
    * Selects the given path, expanding parent nodes if necessary.
    * @param path the path to select.
-   * @throws LocationUnavailableException if the location of the given path cannot be found.
+   * @throws LocationUnavailableException if any part of the path is not visible.
    */
   public void selectPath(TreePath path) {
     makeVisible(path, false);
@@ -182,33 +167,43 @@ public final class JTreeDriver {
   /**
    * Starts a drag operation at the location of the given row.
    * @param row the given row.
+   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public void drag(int row) {
-    drag(pathFor(row));
-  }
-
-  /**
-   * Starts a drag operation at the location of the given <code>{@link TreePath}</code>.
-   * @param path the given <code>TreePath</code>.
-   */
-  public void drag(TreePath path) {
-    selectPath(path);
-    dragAndDropDriver.drag(location.pointAt(path));
+    drag(location.pathFor(row));
   }
 
   /**
    * Ends a drag operation at the location of the given row.
    * @param row the given row.
+   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(int row) {
-    drop(pathFor(row));
+    drop(location.pathFor(row));
   }
   
   /**
+   * Starts a drag operation at the location of the given <code>{@link TreePath}</code>.
+   * @param path the given <code>TreePath</code>.
+   * @throws LocationUnavailableException if any part of the path is not visible.
+   */
+  public void drag(TreePath path) {
+    selectPath(path);
+    dragAndDrop.drag(location.pointAt(path));
+  }
+
+  /**
    * Ends a drag operation at the location of the given <code>{@link TreePath}</code>.
    * @param path the given <code>TreePath</code>.
+   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(TreePath path) {
-    dragAndDropDriver.drop(location.pointAt(path));
+    dragAndDrop.drop(location.pointAt(path));
   }
 }

@@ -17,9 +17,9 @@ package org.fest.swing.fixture;
 
 import javax.swing.JList;
 
-import abbot.tester.JListLocation;
-
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.LocationUnavailableException;
 
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 
@@ -48,6 +48,8 @@ public class JListItemFixture implements ItemFixture {
   /**
    * Simulates a user selecting this fixture's list item.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListItemFixture select() {
     list.selectItem(index);
@@ -57,6 +59,8 @@ public class JListItemFixture implements ItemFixture {
   /**
    * Simulates a user clicking this fixture's list item.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListItemFixture click() {
     list.selectItem(index);
@@ -67,15 +71,19 @@ public class JListItemFixture implements ItemFixture {
    * Simulates a user clicking this fixture's list item.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListItemFixture click(MouseClickInfo mouseClickInfo) {
-    list.clickItem(location(), mouseClickInfo.button(), mouseClickInfo.times());
+    list.clickItem(index, mouseClickInfo.button(), mouseClickInfo.times());
     return null;
   }
 
   /**
    * Simulates a user double-clicking this fixture's list item.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListItemFixture doubleClick() {
     list.doubleClickItem(index);
@@ -85,29 +93,31 @@ public class JListItemFixture implements ItemFixture {
   /**
    * Simulates a user right-clicking this fixture's list item.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListItemFixture rightClick() {
-    list.clickItem(location(), RIGHT_BUTTON, 1);
+    list.clickItem(index, RIGHT_BUTTON, 1);
     return this;
   }
 
   /**
-   * Shows a popup menu using this fixture's list item as the invoker of the popup menu.
-   * @return a fixture that manages the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
+   * Shows a pop-up menu using this fixture's list item as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenu() {
-    return list.showPopupMenuAt(location().getPoint(list.target));
+    return list.showPopupMenuAt(index);
   }
   
-  private JListLocation location() {
-    return new JListLocation(index);
-  }
-
   /**
    * Returns the value of this fixture's list item into a reasonable <code>String</code> representation, or
    * <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final String contents() {
     return list.valueAt(index);
@@ -116,6 +126,8 @@ public class JListItemFixture implements ItemFixture {
   /**
    * Simulates a user dragging this fixture's list item.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
    */
   public final JListItemFixture drag() {
     list.drag(index);
@@ -125,6 +137,9 @@ public class JListItemFixture implements ItemFixture {
   /**
    * Simulates a user dropping into this fixture's list item.
    * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   * @throws ActionFailedException if there is no drag action in effect.
    */
   public final JListItemFixture drop() {
     list.drop(index);

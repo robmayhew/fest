@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
@@ -103,6 +104,7 @@ public final class DragAndDropDriver {
    * <code>{@link RobotFixture#mouseMove(Component, int, int)}</code> and
    * <code>{@link RobotFixture#releaseMouseButtons()}</code>.
    * @param where the point where the drag operation ends.
+   * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(Point where) {
     dragOver(where);

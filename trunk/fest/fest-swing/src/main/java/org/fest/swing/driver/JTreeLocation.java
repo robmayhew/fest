@@ -22,9 +22,11 @@ import javax.swing.tree.TreePath;
 
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.swing.driver.TreeCell.lastInPath;
+import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Arrays.format;
-import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -54,10 +56,22 @@ public final class JTreeLocation {
   }
 
   /**
+   * Converts the given row to an x, y coordinate.
+   * @param row the given row.
+   * @return the coordinates of the given row.
+   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  public Point pointAt(int row) {
+    return pointAt(pathFor(row));
+  }
+  
+  /**
    * Converts the given path to an x, y coordinate.
    * @param path the given path.
    * @return the coordinates of the given path.
-   * @throws LocationUnavailableException if any part of the path is hidden.
+   * @throws LocationUnavailableException if any part of the path is not visible.
    */
   public Point pointAt(TreePath path) {
     TreePath realPath = findMatchingPath(path);
@@ -90,11 +104,7 @@ public final class JTreeLocation {
   
   private boolean matches(Object o, TreeCell cell) {
     if (o == null || o.equals(cell.value())) return true;
-    String pattern = o.toString();
-    String cellText = cell.textWithIndexIfDuplicated();
-    if (areEqual(pattern, cellText)) return true;
-    if (pattern != null && cellText != null) return cellText.matches(pattern);
-    return false;
+    return match(o.toString(), cell.textWithIndexIfDuplicated());
   }
   
   private TreePath findMatchingTreeNodePath(Object[] inputPath, TreeCell cell) {
@@ -112,5 +122,26 @@ public final class JTreeLocation {
     Object[] subArray = new Object[array.length - 1];
     System.arraycopy(array, 1, subArray, 0, subArray.length);
     return subArray;
+  }
+
+  /**
+   * Returns the path for the given row.
+   * @param row the given row.
+   * @return the path for the given row.
+   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  public TreePath pathFor(int row) {
+    TreePath path = tree.getPathForRow(validated(row));
+    if (path != null) return path; 
+    throw new LocationUnavailableException(concat("Unable to find tree path for row [", valueOf(row), "]"));
+  }
+
+  private int validated(int row) {
+    int rowCount = tree.getRowCount();
+    if (row >= 0 && row < rowCount) return row;
+    throw new LocationUnavailableException(concat(
+        "The given row (", valueOf(row), ") should be greater than or equal to 0 and less than ", valueOf(rowCount)));
   }
 }

@@ -7,6 +7,14 @@
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available from FEST's Maven Repository" description="Subsequent release">
       <action dev="alruiz" type="add">
+        Added class org.fest.swing.driver.JListDriver to simulate user input related to behavior found only in JLists.
+        JListDriver is intended for internal use only and replaces Abbot's JListTester. 
+      </action> 
+      <action dev="alruiz" type="add">
+        Added class org.fest.swing.driver.JListLocation to obtain the location on the screen of an item in a JListTree. 
+        JListLocation replaces Abbot's JListLocation. 
+      </action> 
+      <action dev="alruiz" type="add">
         Added class org.fest.swing.driver.DragAndDropDriver to simulate drag and drop actions. DragAndDropDriver 
         replaces drag and drop actions from Abbot's ComponentTester.
       </action>
@@ -14,8 +22,8 @@
         Added method 'click(Component, Point)' to org.fest.swing.core.RobotFixture.
       </action>
       <action dev="alruiz" type="add">
-        Added methods to org.fest.swing.core.Settings that indicate the operating system the tests are running on 
-        (e.g. 'isWindows'). 
+        Added several constants to org.fest.swing.core.Settings that indicate the operating system the tests are running 
+        on (e.g. 'IS_WINDOWS', 'IS_OS_X', etc.) 
       </action> 
       <action dev="alruiz" type="fix">
         Renamed method 'robotAutoDelay' to 'delayBetweenEvents' in class org.fest.swing.core.Settings.

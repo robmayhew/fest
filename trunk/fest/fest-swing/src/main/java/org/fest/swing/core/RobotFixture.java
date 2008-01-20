@@ -300,21 +300,21 @@ public final class RobotFixture {
   }
   
   /**
-   * Shows a popup menu.
-   * @param invoker the component to invoke the popup menu from.
-   * @return the displayed popup menu.
-   * @throws org.fest.swing.exception.ComponentLookupException if a popup menu cannot be found.
+   * Shows a pop-up menu.
+   * @param invoker the component to invoke the pop-up menu from.
+   * @return the displayed pop-up menu.
+   * @throws org.fest.swing.exception.ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenu showPopupMenu(Component invoker) {
     return showPopupMenu(invoker, pointAt(invoker));
   }
   
   /**
-   * Shows a popup menu at the given coordinates.
-   * @param invoker the component to invoke the popup menu from.
-   * @param location the given coordinates for the popup menu.
-   * @return the displayed popup menu.
-   * @throws ComponentLookupException if a popup menu cannot be found.
+   * Shows a pop-up menu at the given coordinates.
+   * @param invoker the component to invoke the pop-up menu from.
+   * @param location the given coordinates for the pop-up menu.
+   * @return the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenu showPopupMenu(Component invoker, Point location) {
     try {

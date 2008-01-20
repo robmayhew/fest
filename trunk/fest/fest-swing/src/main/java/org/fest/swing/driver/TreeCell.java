@@ -17,7 +17,6 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -25,9 +24,10 @@ import javax.swing.tree.TreePath;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.util.Objects.toStringOf;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Objects.*;
 import static org.fest.swing.util.Strings.isDefaultToString;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a cell in a <code>{@link JTree}</code>.
@@ -84,20 +84,13 @@ final class TreeCell implements Iterable<Object> {
     if (text != null) return text;
     text = valueToText();
     if (text != null) return text;
-    return toStringOf(value);
+    text = toStringOf(value);
+    return DEFAULT_TO_STRING.equals(text) ? null : text;
   }
 
   private Component cellRendererComponent() {
     TreeCellRenderer r = tree.getCellRenderer();
     return r.getTreeCellRendererComponent(tree, value, NODE_SELECTED, expanded(), leaf(), row, NODE_HAS_FOCUS);
-  }
-
-  private String textFrom(Component cellRendererComponent) {
-    if (!(cellRendererComponent instanceof JLabel)) return null;
-    String text = ((JLabel)cellRendererComponent).getText();
-    if (text != null) text = text.trim();
-    if (isEmpty(text) || isDefaultToString(text)) return null;
-    return text;
   }
 
   private String valueToText() {

@@ -114,8 +114,8 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   }
   
   /** 
-   * Finds and returns the {@link JList} in the popup raised by this fixture's <code>{@link JComboBox}</code>.
-   * @return the <code>JList</code> in the popup raised by this fixture's <code>JComboBox</code>. 
+   * Finds and returns the {@link JList} in the pop-up raised by this fixture's <code>{@link JComboBox}</code>.
+   * @return the <code>JList</code> in the pop-up raised by this fixture's <code>JComboBox</code>. 
    */
   public JList list() {
     target.showPopup();
