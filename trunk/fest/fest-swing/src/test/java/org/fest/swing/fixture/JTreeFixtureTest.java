@@ -96,7 +96,7 @@ public class JTreeFixtureTest extends ComponentFixtureTestCase<JTree> {
     assertThat(textOf(firstChildOf(root))).isEqualTo("branch1.1");    
   }
 
-  @Test public void shouldDragAndDropUsingGivenIndices() {
+  @Test public void shouldDragAndDropUsingGivenRows() {
     targetFixture.drag(2);
     dropTargetFixture.drop(0);
     TreeModel targetModel = target.getModel();
@@ -105,7 +105,7 @@ public class JTreeFixtureTest extends ComponentFixtureTestCase<JTree> {
     TreeModel dropTargetModel = dropTarget.getModel();
     DefaultMutableTreeNode destinationRoot = rootOf(dropTargetModel);
     assertThat(destinationRoot.getChildCount()).isEqualTo(1);
-    assertThat(textOf(firstChildOf(destinationRoot))).isEqualTo("branch2");    
+    assertThat(textOf(firstChildOf(destinationRoot))).isEqualTo("branch2"); 
   }
 
   private DefaultMutableTreeNode rootOf(TreeModel model) {

@@ -42,9 +42,9 @@ public class SettingsTest {
   }
   
   @Test(dataProvider = "autoDelayProvider") 
-  public void shouldUpdateAndReturnRobotAutoDelay(int delay) {
-    Settings.robotAutoDelay(delay);
-    assertThat(Settings.robotAutoDelay()).isEqualTo(Robot.getAutoDelay()).isEqualTo(delay);
+  public void shouldUpdateAndReturnDelayBetweenEvents(int delay) {
+    Settings.delayBetweenEvents(delay);
+    assertThat(Settings.delayBetweenEvents()).isEqualTo(Robot.getAutoDelay()).isEqualTo(delay);
   }
 
   @DataProvider(name="autoDelayProvider")

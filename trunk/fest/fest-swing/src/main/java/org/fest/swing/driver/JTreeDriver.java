@@ -28,20 +28,20 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.location.JTreeLocation;
 
 import static java.lang.String.valueOf;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.componentDelay;
+import static org.fest.swing.core.Settings.timeoutToBeVisible;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
- * driver only focuses on behavior specific to <code>{@link JTree}</code>s.
+ * driver only focuses on behavior present only in <code>{@link JTree}</code>s. This class is intended for internal
+ * use only.
  *
  * @author Alex Ruiz
  */
@@ -50,6 +50,7 @@ public final class JTreeDriver {
   private final RobotFixture robot;
   private final JTree tree;
   private final JTreeLocation location;
+  private final DragAndDropDriver dragAndDropDriver;
 
   /**
    * Creates a new </code>{@link JTreeDriver}</code>.
@@ -60,6 +61,7 @@ public final class JTreeDriver {
     this.robot = robot;
     this.tree = tree;
     location = new JTreeLocation(tree);
+    dragAndDropDriver = new DragAndDropDriver(robot, tree);
   }
 
   /**
@@ -170,10 +172,43 @@ public final class JTreeDriver {
         public boolean test() {
           return tree.getModel().getChildCount(lastInPath) != 0;
         }
-      }, componentDelay());
+      }, timeoutToBeVisible());
     } catch (WaitTimedOutError e) {
       throw new LocationUnavailableException(e.getMessage());
     }
     return true;
+  }
+  
+  /**
+   * Starts a drag operation at the location of the given row.
+   * @param row the given row.
+   */
+  public void drag(int row) {
+    drag(pathFor(row));
+  }
+
+  /**
+   * Starts a drag operation at the location of the given <code>{@link TreePath}</code>.
+   * @param path the given <code>TreePath</code>.
+   */
+  public void drag(TreePath path) {
+    selectPath(path);
+    dragAndDropDriver.drag(location.pointAt(path));
+  }
+
+  /**
+   * Ends a drag operation at the location of the given row.
+   * @param row the given row.
+   */
+  public void drop(int row) {
+    drop(pathFor(row));
+  }
+  
+  /**
+   * Ends a drag operation at the location of the given <code>{@link TreePath}</code>.
+   * @param path the given <code>TreePath</code>.
+   */
+  public void drop(TreePath path) {
+    dragAndDropDriver.drop(location.pointAt(path));
   }
 }

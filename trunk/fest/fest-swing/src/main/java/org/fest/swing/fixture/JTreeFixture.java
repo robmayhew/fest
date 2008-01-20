@@ -18,9 +18,6 @@ package org.fest.swing.fixture;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import abbot.tester.ComponentLocation;
-import abbot.tester.JTreeLocation;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
@@ -232,8 +229,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    */
   public final JTreeFixture drag(TreePath treePath) {
-    selectPath(treePath);
-    tester().actionDrag(target, elementLocation(treePath));
+    treeDriver.drag(treePath);
     return this;
   }
   
@@ -243,21 +239,17 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    */
   public final JTreeFixture drop(TreePath treePath) {
-    tester().actionDrop(target, elementLocation(treePath));
+    treeDriver.drop(treePath);
     return this;
   }
   
-  private ComponentLocation elementLocation(TreePath treePath) {
-    return new ComponentLocation(new JTreeLocation(treePath).getPoint(target));
-  }
-
   /**
    * Simulates a user dragging a row from this fixture's <code>{@link JTree}</code>.
    * @param row the index of the row to drag.
    * @return this fixture.
    */
   public JTreeFixture drag(int row) {
-    tester().actionDrag(target, elementLocation(row));
+    treeDriver.drag(row);
     return this;
   }
 
@@ -267,11 +259,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    */
   public JTreeFixture drop(int row) {
-    tester().actionDrop(target, elementLocation(row));
+    treeDriver.drop(row);
     return this;
-  }
-  
-  private ComponentLocation elementLocation(int index) {
-    return new ComponentLocation(new JTreeLocation(index).getPoint(target));
   }
 }

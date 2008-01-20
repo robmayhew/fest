@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.location;
+package org.fest.swing.driver;
 
 import javax.swing.tree.*;
 
@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.driver.TreeCell;
 import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;

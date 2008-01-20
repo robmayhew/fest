@@ -229,7 +229,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JList}</code> . If such 
    * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
    * @param index the index of the item to return.
-   * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @return the String representation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
   public String valueAt(int index) {
     return JListTester.valueToString(target, index);

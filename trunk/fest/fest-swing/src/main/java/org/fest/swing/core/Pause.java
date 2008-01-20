@@ -93,5 +93,10 @@ public final class Pause {
     }
   }
   
+  /**
+   * Sleeps for 10 milliseconds.
+   */
+  public static void pause() { pause(SLEEP_INTERVAL); }
+  
   private Pause() {}
 }

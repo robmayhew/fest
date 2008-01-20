@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.location;
+package org.fest.swing.driver;
 
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
@@ -26,6 +26,7 @@ import javax.swing.tree.TreeModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.driver.TreeNodeChildrenIterator;
 import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;

@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.location;
+package org.fest.swing.driver;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

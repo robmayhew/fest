@@ -279,6 +279,27 @@ public final class RobotFixture {
   }
   
   /**
+   * Simulates a user pressing the given mouse button on the given <code>{@link Component}</code>.
+   * @param target the <code>Component</code> to click on.
+   * @param where the position where to press the given mouse button.
+   * @param button the mouse button to press.
+   */
+  public void mousePress(Component target, Point where, MouseButton button) {
+    robot.mousePress(target, where.x, where.y, button.mask);
+  }
+  
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
+   * <code>{@link Component}</code>.
+   * @param target the given <code>Component</code>.
+   * @param x horizontal coordinate relative to the given <code>Component</code>.
+   * @param y vertical coordinate relative to the given <code>Component</code>.
+   */
+  public void mouseMove(Component target, int x, int y) {
+    robot.mouseMove(target, x, y);
+  }
+  
+  /**
    * Shows a popup menu.
    * @param invoker the component to invoke the popup menu from.
    * @return the displayed popup menu.
@@ -334,7 +355,14 @@ public final class RobotFixture {
     robot.keyRelease(keyCode);
     waitForIdle();
   }
-
+  
+  /**
+   * Releases any mouse button(s) used by the robot.
+   */
+  public void releaseMouseButtons() {
+    robot.mouseRelease(Robot.getState().getButtons());
+  }
+  
   /**
    * Wait for an idle AWT event queue. Note that this is different from the implementation of
    * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
@@ -345,6 +373,14 @@ public final class RobotFixture {
     robot.waitForIdle();
   }
 
+  /**
+   * Indicates whether the robot is currently in a dragging operation.
+   * @return <code>true</code> if the robot is currently in a dragging operation, <code>false</code> otherwise.
+   */
+  public boolean isDragging() {
+    return Robot.getState().isDragging();
+  }
+  
   /**
    * Simulates a user closing the given window.
    * @param w the window to close.

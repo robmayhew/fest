@@ -6,6 +6,32 @@
   </properties>
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available from FEST's Maven Repository" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Added class org.fest.swing.driver.DragAndDropDriver to simulate drag and drop actions. DragAndDropDriver 
+        replaces drag and drop actions from Abbot's ComponentTester.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'click(Component, Point)' to org.fest.swing.core.RobotFixture.
+      </action>
+      <action dev="alruiz" type="add">
+        Added methods to org.fest.swing.core.Settings that indicate the operating system the tests are running on 
+        (e.g. 'isWindows'). 
+      </action> 
+      <action dev="alruiz" type="fix">
+        Renamed method 'robotAutoDelay' to 'delayBetweenEvents' in class org.fest.swing.core.Settings.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'timeoutToBeVisible' in class org.fest.swing.core.Settings. This method sets the the number of 
+        milliseconds to wait for a component to be visible. 
+      </action> 
+      <action dev="alruiz" type="add">
+        Added class org.fest.swing.driver.JTreeDriver to simulate user input related to behavior found only in JTrees.
+        JTreeDriver is intended for internal use only and replaces Abbot's JTreeTester. 
+      </action> 
+      <action dev="alruiz" type="add">
+        Added class org.fest.swing.driver.JTreeLocation to obtain the location on the screen of a row or path in a
+        JTreeTree. JTreeLocation replaces Abbot's JTreeLocation. 
+      </action> 
       <action dev="alruiz" type="fix">
         Fixed bug in which IntrospectionComponentFormatter could show the value of the property 'showing'. 
       </action>

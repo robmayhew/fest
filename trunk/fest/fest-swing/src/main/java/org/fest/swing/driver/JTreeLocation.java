@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.location;
+package org.fest.swing.driver;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -22,7 +22,7 @@ import javax.swing.tree.TreePath;
 
 import org.fest.swing.exception.LocationUnavailableException;
 
-import static org.fest.swing.location.TreeCell.lastInPath;
+import static org.fest.swing.driver.TreeCell.lastInPath;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
@@ -41,7 +41,7 @@ import static org.fest.util.Strings.concat;
  * 
  * @author Alex Ruiz
  */
-public class JTreeLocation {
+public final class JTreeLocation {
 
   private final JTree tree;
 
