@@ -20,12 +20,14 @@ import java.awt.Point;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Settings.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Platform.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 
 /**
  * Understands drag and drop actions.
@@ -108,10 +110,9 @@ public final class DragAndDropDriver {
    */
   public void drop(Point where) {
     dragOver(where);
-    long start = System.currentTimeMillis();
+    TimeoutWatch watch = startWatchWithTimeoutOf(eventPostingDelay() * 4);
     while (!robot.isDragging()) {
-      if (System.currentTimeMillis() - start > eventPostingDelay() * 4) 
-        throw actionFailure("There is no drag in effect");
+      if (watch.isTimeout()) throw actionFailure("There is no drag in effect");
       pause();
     }
     if (dropDelay() > delayBetweenEvents()) pause(dropDelay() - delayBetweenEvents());

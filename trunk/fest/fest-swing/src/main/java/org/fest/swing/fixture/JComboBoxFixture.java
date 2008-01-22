@@ -18,12 +18,12 @@ package org.fest.swing.fixture;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
-import abbot.tester.JComboBoxTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JComboBoxDriver;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.LocationUnavailableException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -38,6 +38,8 @@ import static org.fest.util.Strings.concat;
  */
 public class JComboBoxFixture extends ComponentFixture<JComboBox> implements ItemGroupFixture {
 
+  private final JComboBoxDriver driver;
+  
   /**
    * Creates a new <code>{@link JComboBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JComboBox</code>.
@@ -47,6 +49,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    */
   public JComboBoxFixture(RobotFixture robot, String comboBoxName) {
     super(robot, comboBoxName, JComboBox.class);
+    driver = newComboBoxDriver();
   }
   
   /**
@@ -56,6 +59,11 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    */
   public JComboBoxFixture(RobotFixture robot, JComboBox target) {
     super(robot, target);
+    driver = newComboBoxDriver();
+  }
+  
+  private JComboBoxDriver newComboBoxDriver() {
+    return new JComboBoxDriver(robot, target);
   }
   
   /**
@@ -63,16 +71,18 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @return the elements in this fixture's <code>JComboBox</code>.
    */
   public final String[] contents() {
-    return comboBoxTester().getContents(target);
+    return driver.contents();
   }
   
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. 
    * @param index the index of the item to select.
    * @return this fixture.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JComboBox</code>.
    */
   public final JComboBoxFixture selectItem(int index) {
-    comboBoxTester().actionSelectIndex(target, index);
+    driver.selectItem(index);
     return this;
   }
 
@@ -80,9 +90,10 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. 
    * @param text the text of the item to select.
    * @return this fixture.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
   public final JComboBoxFixture selectItem(String text) {
-    comboBoxTester().actionSelectItem(target, text);
+    driver.selectItem(text);
     return this;
   }
 
@@ -106,11 +117,10 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JComboBox}</code>. If such 
    * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
    * @param index the index of the item to return.
-   * @return the String reprentation of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @return the String representation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
   public String valueAt(int index) {
-    Object value = target.getItemAt(index);
-    return comboBoxTester().getValueAsString(target, list(), value, index);
+    return driver.text(index);
   }
   
   /** 
@@ -118,8 +128,7 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
    * @return the <code>JList</code> in the pop-up raised by this fixture's <code>JComboBox</code>. 
    */
   public JList list() {
-    target.showPopup();
-    return comboBoxTester().findComboList(target);
+    return driver.dropDownList();
   }
   
   /**
@@ -131,12 +140,8 @@ public class JComboBoxFixture extends ComponentFixture<JComboBox> implements Ite
   public final JComboBoxFixture enterText(String text) {
     if (!target.isEditable()) return this;
     focus();
-    tester().actionKeyString(text);
+    robot.enterText(text);
     return this;
-  }
-
-  private JComboBoxTester comboBoxTester() {
-    return (JComboBoxTester)tester();
   }
 
   /**

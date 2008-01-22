@@ -28,14 +28,18 @@ import static org.fest.swing.util.Platform.*;
  */
 public final class Settings {
 
+  private static final int DEFAULT_DELAY = 30000;
+  
   private static ComponentLookupScope componentLookupScope;
   private static int timeoutToBeVisible;
+  private static int timeoutToFindPopup;
   private static int dragDelay;
   private static int dropDelay;
   private static int eventPostingDelay;
   
   static {
-    timeoutToBeVisible(30000);
+    timeoutToBeVisible(DEFAULT_DELAY);
+    timeoutToFindPopup(DEFAULT_DELAY);
     dragDelay(0);
     dropDelay(0);
     eventPostingDelay(100);
@@ -75,6 +79,23 @@ public final class Settings {
     timeoutToBeVisible = valueToUpdate(ms, 0, 60000);
   }
   
+  /**
+   * Returns the number of milliseconds to wait before failing to find a pop-up menu that should appear.
+   * @return the number of milliseconds to wait before failing to find a pop-up menu that should appear.
+   */
+  public static int timeoutToFindPopup() {
+    return timeoutToFindPopup;
+  }
+
+  /**
+   * Updates the number of milliseconds to wait before failing to find a pop-up menu that should appear. The default
+   * value is 30000 milliseconds.
+   * @param ms the time in milliseconds. It should be between 0 and 60000.
+   */
+  public static void timeoutToFindPopup(int ms) {
+    timeoutToFindPopup = valueToUpdate(ms, 0, 60000);
+  }
+
   /**
    * Returns the number of milliseconds to wait between a pressing a mouse button and moving the mouse.
    * @return the number of milliseconds to wait between a pressing a mouse button and moving the mouse.

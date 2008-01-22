@@ -26,6 +26,8 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Swing;
 
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JList}</code>s. This class is intended for internal
@@ -76,6 +78,16 @@ public final class JListDriver {
    */
   public void clickItem(Object value, MouseButton button, int times) {
     robot.click(list, location.pointAt(value), button, times);
+  }
+
+  /**
+   * Clicks the item under the given index using left mouse button once.
+   * @param index the index of the item to click.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public void clickItem(int index) {
+    clickItem(index, LEFT_BUTTON, 1);
   }
 
   /**

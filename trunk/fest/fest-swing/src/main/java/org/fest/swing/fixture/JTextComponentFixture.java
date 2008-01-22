@@ -126,7 +126,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    */
   public final JTextComponentFixture enterText(String text) {
     focus();
-    tester().actionKeyString(text);
+    robot.enterText(text);
     return this;
   }
   

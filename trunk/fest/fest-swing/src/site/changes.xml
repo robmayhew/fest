@@ -7,6 +7,17 @@
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available from FEST's Maven Repository" description="Subsequent release">
       <action dev="alruiz" type="add">
+        Added method 'enterText(String)' to class org.fest.swing.core.RobotFixture.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'timeoutToFindPopup' to class org.fest.swing.core.Settings. This method sets the number of 
+        milliseconds to wait before failing to find a pop-up menu that should appear.
+      </action>
+      <action dev="alruiz" type="add">
+        Added class org.fest.swing.driver.JComboBoxDriver to simulate user input related to behavior found only in 
+        JComboBoxes. JComboBoxDriver is intended for internal use only and replaces Abbot's JComboBoxDriver. 
+      </action> 
+      <action dev="alruiz" type="add">
         Added class org.fest.swing.driver.JListDriver to simulate user input related to behavior found only in JLists.
         JListDriver is intended for internal use only and replaces Abbot's JListTester. 
       </action> 
@@ -29,7 +40,7 @@
         Renamed method 'robotAutoDelay' to 'delayBetweenEvents' in class org.fest.swing.core.Settings.
       </action>
       <action dev="alruiz" type="add">
-        Added method 'timeoutToBeVisible' in class org.fest.swing.core.Settings. This method sets the the number of 
+        Added method 'timeoutToBeVisible' to class org.fest.swing.core.Settings. This method sets the the number of 
         milliseconds to wait for a component to be visible. 
       </action> 
       <action dev="alruiz" type="add">

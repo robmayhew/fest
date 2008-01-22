@@ -30,11 +30,15 @@ import abbot.util.Bugs;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.TimeoutWatch;
 
 import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.isEventDispatchThread;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.util.Swing.pointAt;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -46,7 +50,8 @@ import static org.fest.util.Strings.concat;
 public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
-
+  private static int POPUP_TIMEOUT = 5000;
+  
   private Robot robot;
   private WindowTracker windowTracker;
 
@@ -325,6 +330,14 @@ public final class RobotFixture {
   }
 
   /**
+   * Simulates a user entering the given text.
+   * @param text the text to enter.
+   */
+  public void enterText(String text) {
+    robot.keyString(text);
+  }
+
+  /**
    * Simulates a user pressing and releasing the given keys. This method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @see java.awt.event.KeyEvent
@@ -341,7 +354,7 @@ public final class RobotFixture {
    * @param keyCode the code of the key to press.
    * @see java.awt.event.KeyEvent
    */
- public void pressKey(int keyCode) {
+  public void pressKey(int keyCode) {
     robot.keyPress(keyCode);
     waitForIdle();
   }
@@ -380,6 +393,31 @@ public final class RobotFixture {
   public boolean isDragging() {
     return Robot.getState().isDragging();
   }
+  
+  /**
+   * Returns the currently active pop-up menu, if any. If no pop-up is currently showing, returns <code>null</code>.
+   * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
+   */
+  public JPopupMenu findActivePopupMenu() {
+    JPopupMenu popup = activePopupMenu();
+    if (popup != null || isEventDispatchThread()) return popup;
+    TimeoutWatch watch = startWatchWithTimeoutOf(POPUP_TIMEOUT);
+    while ((popup = activePopupMenu()) == null) {
+      if (watch.isTimeout()) break;
+      pause(100);
+    }
+    return popup;
+  }
+
+  private JPopupMenu activePopupMenu() {
+    try {
+      return (JPopupMenu)finder.find(POPUP_MATCHER);
+    } catch (ComponentLookupException e) {
+      return null;
+    }
+  }
+
+  private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
   
   /**
    * Simulates a user closing the given window.

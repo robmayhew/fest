@@ -46,9 +46,9 @@ public final class Swing {
   }
 
   /**
-   * Returns the insets of the given container, or an empty one if no insets can be found.
-   * @param c the given container.
-   * @return the insets of the given container, or an empty one if no insets can be found.
+   * Returns the insets of the given <code>{@link Container}</code>, or an empty one if no insets can be found.
+   * @param c the given <code>Container</code>.
+   * @return the insets of the given <code>Container</code>, or an empty one if no insets can be found.
    */
   public static Insets insetsFrom(Container c) {
     try {
