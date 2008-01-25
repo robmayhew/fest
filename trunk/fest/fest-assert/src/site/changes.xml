@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available at Maven repository" description="Snapshot release">
+      <action dev="wanghy" type="add">
+        Changed access of protected methods to package-protected.
+      </action>
       <action dev="wanghy" type="add" issue="96" due-to="David DIDIER">
         Integrated contribution from David DIDIER. Added methods 'isEqualTo' and 'isNotEqualTo' to BooleanAssert.
       </action>
@@ -17,6 +20,10 @@
       </action>
       <action dev="wanghy" type="add" issue="90" due-to="David DIDIER">
         Integrated contribution from David DIDIER. Added class MapAssert.
+      </action>
+      <action dev="wanghy, alruiz" type="add" issue="87" due-to="David DIDER">
+        Integrated contribution from David DIDIER. Added methods 'greaterOrEqualTo' and 'lessOrEqualTo' to
+        ByteAssert, CharAssert, DoubleAssert, FloatAssert, IntAssert, LongAssert and ShortAssert.
       </action>
       <action dev="wanghy" type="add" issue="86" due-to="David DIDIER">
         Integrated contribution from David DIDIER. Added methods 'startsWith' and 'endsWith' to StringAssert.

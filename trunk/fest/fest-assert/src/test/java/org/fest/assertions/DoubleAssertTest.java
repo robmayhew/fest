@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
  * Test for <code>{@link DoubleAssert}</code>.
  *
  * @author Yvonne Wang
+ * @author David DIDIER
  */
 public class DoubleAssertTest {
 
@@ -15,7 +16,7 @@ public class DoubleAssertTest {
     new DoubleAssert(8.68).isEqualTo(8.680);
   }
 
-  @Test(expectedExceptions = AssertionError.class) 
+  @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotEqualAndExpectedEqual() {
     new DoubleAssert(0.0).isEqualTo(-0.0);
   }
@@ -24,7 +25,7 @@ public class DoubleAssertTest {
     new DoubleAssert(8.88).isNotEqualTo(8.68);
   }
 
-  @Test(expectedExceptions = AssertionError.class) 
+  @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfEqualAndExpectedNotEqual() {
     new DoubleAssert(8.88).isNotEqualTo(8.88);
   }
@@ -33,7 +34,7 @@ public class DoubleAssertTest {
     new DoubleAssert(0.00).isGreaterThan(-0.00);
   }
 
-  @Test(expectedExceptions = AssertionError.class) 
+  @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotGreaterThanAndExceptedGreaterThan() {
     new DoubleAssert(8.68).isGreaterThan(8.88);
   }
@@ -42,7 +43,7 @@ public class DoubleAssertTest {
     new DoubleAssert(-0.0).isLessThan(0.0);
   }
 
-  @Test(expectedExceptions = AssertionError.class) 
+  @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotLessThanAndExceptedLessThan() {
     new DoubleAssert(6.68).isLessThan(6.68);
   }
@@ -50,45 +51,65 @@ public class DoubleAssertTest {
   @Test public void shouldPassIfPositiveAndExpectedPositive() {
     new DoubleAssert(6.68).isPositive();
   }
-  
+
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotPositiveAndExpectedPositive() {
     new DoubleAssert(-6.68).isPositive();
   }
-  
+
   @Test public void shouldPassIfNegativeAndExpectedNegative() {
     new DoubleAssert(-6.68).isNegative();
   }
-  
+
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotNegativeAndExpectedNegative() {
     new DoubleAssert(6.68).isNegative();
   }
-  
+
   @Test public void shouldPassIfNaNAndExpectedNaN() {
     new DoubleAssert(Double.NaN).isNaN();
   }
-  
+
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotNaNAndExpectedNaN() {
     new DoubleAssert(6.68).isNaN();
   }
-  
+
   @Test public void shouldPassIfEqualWithDeltaAndExpectedEqual() {
     new DoubleAssert(8.688).isEqualTo(8.68, delta(0.009));
   }
-  
+
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotEqualWithDeltaAndExpectedEqual() {
     new DoubleAssert(8.688).isEqualTo(8.888, delta(0.009));
-  }  
-  
+  }
+
   @Test public void shouldPassIfZeroAndExpectedZero() {
     new DoubleAssert(0).isZero();
   }
-  
+
   @Test(expectedExceptions = AssertionError.class)
   public void shouldFailIfNotZeroAndExpectedZero() {
     new DoubleAssert(9).isZero();
+  }
+
+  @Test public void shouldPassIfGreaterOrEqualToAndExpectedGreaterThan() {
+    new DoubleAssert(8.8).isGreaterOrEqualTo(8.8);
+    new DoubleAssert(8.8).isGreaterOrEqualTo(6.6);
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfLessOrEqualToAndExpectedGreaterThan() {
+    new DoubleAssert(6.6).isGreaterOrEqualTo(8.8);
+  }
+
+  @Test public void shouldPassIfLessOrEqualToAndExpectedLessThan() {
+    new DoubleAssert(8.8).isLessOrEqualTo(8.8);
+    new DoubleAssert(6.6).isLessOrEqualTo(8.8);
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfGreaterOrEqualToAndExpectedLessThan() {
+    new DoubleAssert(8.8).isLessOrEqualTo(6.6);
   }
 }
