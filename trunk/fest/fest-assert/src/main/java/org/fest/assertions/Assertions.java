@@ -17,7 +17,7 @@ package org.fest.assertions;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Understands an entry point for assertion methods for different data types. Each method in this class is a static
@@ -35,8 +35,16 @@ import java.util.Collection;
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
+ * @author David DIDIER
+ * @author Ted Young
  */
 public final class Assertions {
+
+  private static <T> Collection<T> asCollection(Iterator<T> iterator) {
+    List<T> list = new ArrayList<T>();
+    while (iterator.hasNext()) list.add(iterator.next());
+    return list;
+  }
 
   /**
    * Creates a new instance of <code>{@link BooleanAssert}</code>.
@@ -174,6 +182,15 @@ public final class Assertions {
   }
 
   /**
+   * Creates a new instance of <code>{@link CollectionAssert}</code>.
+   * @param actual the value an <code>Iterator</code> that which contents will be added to a new <code>Collection</code>.
+   * @return the created assertion object.
+   */
+  public static CollectionAssert assertThat(Iterator<?> actual) {
+    return assertThat(asCollection(actual));
+  }
+
+  /**
    * Creates a new instance of <code>{@link LongAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
@@ -189,6 +206,15 @@ public final class Assertions {
    */
   public static LongArrayAssert assertThat(long[] actual) {
     return new LongArrayAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link MapAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static MapAssert assertThat(Map<?, ?> actual) {
+    return new MapAssert(actual);
   }
 
   /**

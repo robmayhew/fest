@@ -21,6 +21,8 @@ import static org.testng.Assert.*;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.fest.util.Files;
 import org.testng.annotations.Test;
@@ -32,46 +34,48 @@ import org.testng.annotations.Test;
  */
 public class AssertionsTest {
 
-  @Test public void shouldReturnBooleanAssertIfArgumentIsBoolean() {
-    assertIsInstanceOf(assertThat(false), BooleanAssert.class);
+  private void assertIsInstanceOf(Object target, Class<?> expectedType) {
+    assertEquals(target.getClass(), expectedType);
   }
-  
+
   @Test public void shouldReturnBooleanArrayAssertIfArgumentIsBooleanArray() {
     boolean[] booleans = new boolean[] { false };
     assertIsInstanceOf(assertThat(booleans), BooleanArrayAssert.class);
   }
 
-  @Test public void shouldReturnImageAssertIfArgumentIsBufferedImage() {
-    BufferedImage image = new BufferedImage(10, 10, TYPE_INT_RGB);
-    assertIsInstanceOf(assertThat(image), ImageAssert.class);
+  @Test public void shouldReturnBooleanAssertIfArgumentIsBoolean() {
+    assertIsInstanceOf(assertThat(false), BooleanAssert.class);
   }
-  
+
+  @Test public void shouldReturnByteArrayAssertIfArgumentIsByteArray() {
+    byte[] bytes = new byte[] { 0 };
+    assertIsInstanceOf(assertThat(bytes), ByteArrayAssert.class);
+  }
+
   @Test public void shouldReturnByteAssertIfArgumentIsByte() {
     byte b = 0;
     assertIsInstanceOf(assertThat(b), ByteAssert.class);
   }
-  
-  @Test public void shouldReturnByteArrayAssertIfArgumentIsByteArray() {
-    byte[] bytes = new byte[] { 0 };
-    assertIsInstanceOf(assertThat(bytes), ByteArrayAssert.class);
+
+  @Test public void shouldReturnCharArrayAssertIfArgumentIsCharArray() {
+    char[] chars = new char[] { 0 };
+    assertIsInstanceOf(assertThat(chars), CharArrayAssert.class);
   }
 
   @Test public void shouldReturnCharAssertIfArgumentIsChar() {
     char c = 0;
     assertIsInstanceOf(assertThat(c), CharAssert.class);
   }
-  
-  @Test public void shouldReturnCharArrayAssertIfArgumentIsCharArray() {
-    char[] chars = new char[] { 0 };
-    assertIsInstanceOf(assertThat(chars), CharArrayAssert.class);
-  }
 
   @Test public void shouldReturnCollectionAssertIfArgumentIsCollection() {
     assertIsInstanceOf(assertThat(new ArrayList<Object>()), CollectionAssert.class);
   }
-  
-  @Test public void shouldReturnDoubleAssertIfArgumentIsDouble() {
-    assertIsInstanceOf(assertThat(86.0d), DoubleAssert.class);
+
+  @Test public void shouldReturnCollectionAssertIfArgumentIsIterator() {
+    List<String> list = new ArrayList<String>();
+    list.add("Frodo");
+    CollectionAssert assertion = assertThat(list.iterator());
+    assertEquals(list, assertion.actual);
   }
 
   @Test public void shouldReturnDoubleArrayAssertIfArgumentIsDoubleArray() {
@@ -79,12 +83,12 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(doubles), DoubleArrayAssert.class);
   }
 
-  @Test public void shouldReturnFileAssertIfArgumentIsFile() {
-    assertIsInstanceOf(assertThat(Files.temporaryFolder()), FileAssert.class);
+  @Test public void shouldReturnDoubleAssertIfArgumentIsDouble() {
+    assertIsInstanceOf(assertThat(86.0d), DoubleAssert.class);
   }
 
-  @Test public void shouldReturnFloatAssertIfArgumentIsFloat() {
-    assertIsInstanceOf(assertThat(86.0f), FloatAssert.class);
+  @Test public void shouldReturnFileAssertIfArgumentIsFile() {
+    assertIsInstanceOf(assertThat(Files.temporaryFolder()), FileAssert.class);
   }
 
   @Test public void shouldReturnFloatArrayAssertIfArgumentIsFloatArray() {
@@ -92,8 +96,18 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(floats), FloatArrayAssert.class);
   }
 
-  @Test public void shouldReturnIntAssertIfArgumentIsInt() {
-    assertIsInstanceOf(assertThat(8), IntAssert.class);
+  @Test public void shouldReturnFloatAssertIfArgumentIsFloat() {
+    assertIsInstanceOf(assertThat(86.0f), FloatAssert.class);
+  }
+
+  @Test public void shouldReturnGivenAssertExtension() {
+    AssertExtension extension = new AssertExtension() {};
+    assertSame(assertThat(extension), extension);
+  }
+
+  @Test public void shouldReturnImageAssertIfArgumentIsBufferedImage() {
+    BufferedImage image = new BufferedImage(10, 10, TYPE_INT_RGB);
+    assertIsInstanceOf(assertThat(image), ImageAssert.class);
   }
 
   @Test public void shouldReturnIntArrayAssertIfArgumentIsIntArray() {
@@ -101,17 +115,21 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(ints), IntArrayAssert.class);
   }
 
-  @Test public void shouldReturnLongAssertIfArgumentIsLong() {
-    assertIsInstanceOf(assertThat(8l), LongAssert.class);
+  @Test public void shouldReturnIntAssertIfArgumentIsInt() {
+    assertIsInstanceOf(assertThat(8), IntAssert.class);
   }
 
   @Test public void shouldReturnLongArrayAssertIfArgumentIsLongArray() {
     long[] longs = new long[] { 0 };
     assertIsInstanceOf(assertThat(longs), LongArrayAssert.class);
   }
-  
-  @Test public void shouldReturnObjectAssertIfArgumentIsObject() {
-    assertIsInstanceOf(assertThat(new Object()), ObjectAssert.class);
+
+  @Test public void shouldReturnLongAssertIfArgumentIsLong() {
+    assertIsInstanceOf(assertThat(8l), LongAssert.class);
+  }
+
+  @Test public void shouldReturnMapAssertIfArgumentIsThrowable() {
+    assertIsInstanceOf(assertThat(new HashMap<Object, Object>()), MapAssert.class);
   }
 
   @Test public void shouldReturnObjectArrayAssertIfArgumentIsObjectArray() {
@@ -119,14 +137,18 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(objects), ObjectArrayAssert.class);
   }
 
-  @Test public void shouldReturnShortAssertIfArgumentIsShort() {
-    short s = 8;
-    assertIsInstanceOf(assertThat(s), ShortAssert.class);
+  @Test public void shouldReturnObjectAssertIfArgumentIsObject() {
+    assertIsInstanceOf(assertThat(new Object()), ObjectAssert.class);
   }
 
   @Test public void shouldReturnShortArrayAssertIfArgumentIsShortArray() {
     short[] shorts = new short[] { 0 };
     assertIsInstanceOf(assertThat(shorts), ShortArrayAssert.class);
+  }
+
+  @Test public void shouldReturnShortAssertIfArgumentIsShort() {
+    short s = 8;
+    assertIsInstanceOf(assertThat(s), ShortAssert.class);
   }
 
   @Test public void shouldReturnStringAssertIfArgumentIsString() {
@@ -135,14 +157,5 @@ public class AssertionsTest {
 
   @Test public void shouldReturnThrowableAssertIfArgumentIsThrowable() {
     assertIsInstanceOf(assertThat(new Exception()), ThrowableAssert.class);
-  }
-
-  private void assertIsInstanceOf(Object target, Class<?> expectedType) {
-    assertEquals(target.getClass(), expectedType);
-  }
-
-  @Test public void shouldReturnGivenAssertExtension() {
-    AssertExtension extension = new AssertExtension() {};
-    assertSame(assertThat(extension), extension);
   }
 }
