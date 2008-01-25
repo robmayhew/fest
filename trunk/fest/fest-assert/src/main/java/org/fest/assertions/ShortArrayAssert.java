@@ -186,7 +186,7 @@ public final class ShortArrayAssert extends GroupAssert<short[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

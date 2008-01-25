@@ -267,7 +267,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     return (MapAssert)verify(condition);
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     isNotNull();
     return actual.size();
   }

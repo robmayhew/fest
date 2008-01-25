@@ -143,7 +143,7 @@ public final class StringAssert extends GroupAssert<String> {
     return (StringAssert)assertEqualSize(expected);
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     isNotNull();
     return actual.length();
   }

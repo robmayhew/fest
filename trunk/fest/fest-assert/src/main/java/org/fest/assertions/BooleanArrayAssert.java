@@ -186,7 +186,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

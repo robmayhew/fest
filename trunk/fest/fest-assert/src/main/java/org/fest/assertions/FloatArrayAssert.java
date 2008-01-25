@@ -186,7 +186,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

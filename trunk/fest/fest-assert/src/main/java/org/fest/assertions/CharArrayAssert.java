@@ -186,7 +186,7 @@ public final class CharArrayAssert extends GroupAssert<char[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

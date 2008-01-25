@@ -186,7 +186,7 @@ public final class DoubleArrayAssert extends GroupAssert<double[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

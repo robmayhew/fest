@@ -52,7 +52,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value does not satisfy the given condition.
    */
-  protected abstract GenericAssert<T> satisfies(Condition<T> condition);
+  abstract GenericAssert<T> satisfies(Condition<T> condition);
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
@@ -60,7 +60,7 @@ abstract class GenericAssert<T> extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  protected abstract GenericAssert<T> as(String description);
+  abstract GenericAssert<T> as(String description);
 
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
@@ -68,7 +68,7 @@ abstract class GenericAssert<T> extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  protected abstract GenericAssert<T> describedAs(String description);
+  abstract GenericAssert<T> describedAs(String description);
 
   /**
    * Verifies that the actual value is equal to the given one.
@@ -76,7 +76,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is not equal to the given one.
    */
-  protected abstract GenericAssert<T> isEqualTo(T expected);
+  abstract GenericAssert<T> isEqualTo(T expected);
 
   /**
    * Verifies that the actual value is not equal to the given one.
@@ -84,14 +84,14 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is equal to the given one.
    */
-  protected abstract GenericAssert<T> isNotEqualTo(T other);
+  abstract GenericAssert<T> isNotEqualTo(T other);
 
   /**
    * Verifies that the actual value is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual value is <code>null</code>.
    */
-  protected abstract GenericAssert<T> isNotNull();
+  abstract GenericAssert<T> isNotNull();
 
   /**
    * Verifies that the actual value is the same as the given one.
@@ -99,7 +99,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is not the same as the given one.
    */
-  protected abstract GenericAssert<T> isSameAs(T expected);
+  abstract GenericAssert<T> isSameAs(T expected);
 
   /**
    * Verifies that the actual value is not the same as the given one.
@@ -107,7 +107,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is the same as the given one.
    */
-  protected abstract GenericAssert<T> isNotSameAs(T other);
+  abstract GenericAssert<T> isNotSameAs(T other);
 
   /**
    * Returns the description of the actual value in this assertion.
@@ -117,7 +117,7 @@ abstract class GenericAssert<T> extends Assert {
     return description;
   }
 
-  protected final GenericAssert<T> verify(Condition<T> condition) {
+  final GenericAssert<T> verify(Condition<T> condition) {
     if (condition == null) throw new IllegalArgumentException("condition cannot be null");
     if (!condition.matches(actual)) fail(conditionFailedMessage(condition));
     return this;
@@ -129,41 +129,41 @@ abstract class GenericAssert<T> extends Assert {
     return concat("expected:", s, " but was:", inBrackets(actual));
   }
 
-  protected GenericAssert<T> description(String description) {
+  GenericAssert<T> description(String description) {
     this.description = description;
     return this;
   }
 
-  protected final GenericAssert<T> assertEqualTo(T expected) {
+  final GenericAssert<T> assertEqualTo(T expected) {
     failIfNotEqual(description, actual, expected);
     return this;
   }
 
-  protected final GenericAssert<T> assertNotEqualTo(T obj) {
+  final GenericAssert<T> assertNotEqualTo(T obj) {
     failIfEqual(description, actual, obj);
     return this;
   }
 
-  protected final GenericAssert<T> assertNotNull() {
+  final GenericAssert<T> assertNotNull() {
     failIfNull(description, actual);
     return this;
   }
 
-  protected final GenericAssert<T> assertSameAs(T expected) {
+  final GenericAssert<T> assertSameAs(T expected) {
     failIfNotSame(description, actual, expected);
     return this;
   }
 
-  protected final GenericAssert<T> assertNotSameAs(T expected) {
+  final GenericAssert<T> assertNotSameAs(T expected) {
     failIfSame(description, actual, expected);
     return this;
   }
 
-  protected final void fail(String reason) {
+  final void fail(String reason) {
     Fail.fail(formatted(reason));
   }
 
-  protected final void fail(String reason, Throwable cause) {
+  final void fail(String reason, Throwable cause) {
     Fail.fail(formatted(reason), cause);
   }
 

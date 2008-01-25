@@ -178,7 +178,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     return (CollectionAssert)assertEqualSize(expected);
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     isNotNull();
     return actual.size();
   }

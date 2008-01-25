@@ -28,21 +28,21 @@ public class GroupAssertTest {
   @Test public void shouldReturnIntAssertForSize() {
     GroupAssert<Object> a = new GroupAssert<Object>(new Object()) {
 
-      protected int actualGroupSize() {
+      int actualGroupSize() {
         return 3;
       }
 
-      protected GroupAssert<Object> hasSize(int expected) { return null; }
-      protected void isEmpty() {}
-      protected GroupAssert<Object> isNotEmpty() { return null; }
-      protected GenericAssert<Object> as(String description) { return null; }
-      protected GenericAssert<Object> describedAs(String description) { return null; }
-      protected GenericAssert<Object> isEqualTo(Object expected) { return null; }
-      protected GenericAssert<Object> isNotEqualTo(Object other) { return null; }
-      protected GenericAssert<Object> isNotNull() { return null; }
-      protected GenericAssert<Object> isNotSameAs(Object other) { return null; }
-      protected GenericAssert<Object> isSameAs(Object expected) { return null; }
-      protected GenericAssert<Object> satisfies(Condition<Object> condition) { return null; }
+      GroupAssert<Object> hasSize(int expected) { return null; }
+      void isEmpty() {}
+      GroupAssert<Object> isNotEmpty() { return null; }
+      GenericAssert<Object> as(String description) { return null; }
+      GenericAssert<Object> describedAs(String description) { return null; }
+      GenericAssert<Object> isEqualTo(Object expected) { return null; }
+      GenericAssert<Object> isNotEqualTo(Object other) { return null; }
+      GenericAssert<Object> isNotNull() { return null; }
+      GenericAssert<Object> isNotSameAs(Object other) { return null; }
+      GenericAssert<Object> isSameAs(Object expected) { return null; }
+      GenericAssert<Object> satisfies(Condition<Object> condition) { return null; }
     };
     a.size().isEqualTo(3);
   }

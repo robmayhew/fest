@@ -182,7 +182,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

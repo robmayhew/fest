@@ -30,9 +30,9 @@ abstract class PrimitiveAssert extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  protected abstract PrimitiveAssert as(String description);
+  abstract PrimitiveAssert as(String description);
 
-  protected PrimitiveAssert description(String description) {
+  PrimitiveAssert description(String description) {
     this.description = description;
     return this;
   }
@@ -43,7 +43,7 @@ abstract class PrimitiveAssert extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  protected abstract PrimitiveAssert describedAs(String description);
+  abstract PrimitiveAssert describedAs(String description);
 
   /**
    * Returns the description of the actual <code>boolean</code> value in this assertion.

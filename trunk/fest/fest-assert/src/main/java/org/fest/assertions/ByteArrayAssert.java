@@ -186,7 +186,7 @@ public final class ByteArrayAssert extends GroupAssert<byte[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 

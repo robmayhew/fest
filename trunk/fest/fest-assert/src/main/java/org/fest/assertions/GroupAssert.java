@@ -43,14 +43,14 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
    * Verifies that the actual group of values is <code>null</code> or empty.
    * @throws AssertionError if the actual group of values is not <code>null</code> or not empty.
    */
-  protected abstract void isEmpty();
+  abstract void isEmpty();
 
   /**
    * Verifies that the actual group of values contains at least on value.
    * @return this assertion object.
    * @throws AssertionError if the actual group of values is <code>null</code> or empty.
    */
-  protected abstract GroupAssert<T> isNotEmpty();
+  abstract GroupAssert<T> isNotEmpty();
 
   /**
    * Verifies that the number of values in the actual group is equal to the given one.
@@ -58,7 +58,7 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
    * @return this assertion object.
    * @throws AssertionError if the number of values of the actual group is not equal to the given one.
    */
-  protected abstract GroupAssert<T> hasSize(int expected);
+  abstract GroupAssert<T> hasSize(int expected);
 
   /**
    * Returns an <code>{@link IntAssert}</code> for verification of the size of the actual group.
@@ -68,7 +68,7 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
     return new IntAssert(actualGroupSize());
   }
 
-  protected final GroupAssert<T> assertEqualSize(int expected) {
+  final GroupAssert<T> assertEqualSize(int expected) {
     if (actual == null) fail("cannot get size of a null object");
     int actualSize = actualGroupSize();
     if (actualSize != expected)
@@ -82,5 +82,5 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
     return concat(description, " - ", SIZE);
   }
 
-  protected abstract int actualGroupSize();
+  abstract int actualGroupSize();
 }

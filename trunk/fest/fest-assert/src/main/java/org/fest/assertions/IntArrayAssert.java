@@ -186,7 +186,7 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
     return this;
   }
 
-  protected int actualGroupSize() {
+  int actualGroupSize() {
     return actual.length;
   }
 
