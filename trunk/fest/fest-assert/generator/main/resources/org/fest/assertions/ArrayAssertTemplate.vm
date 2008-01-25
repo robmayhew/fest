@@ -63,6 +63,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    * @throws AssertionError if the actual <code>${arrayType}</code> array does not contain the given values.
    */
   public ${className} contains(${arrayType}...values) {
+    isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     for (${arrayType} value : values) if (!hasElement(value)) notFound.add(value);
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);      
@@ -77,6 +78,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    *           actual <code>${arrayType}</code> array contains elements other than the ones specified.
    */
   public ${className} containsOnly(${arrayType}...values) {
+    isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     List<Object> copy = list(actual);
     for (Object value : list(values)) {
@@ -109,6 +111,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    * @throws AssertionError if the actual <code>Object</code> array contains any of the given values.
    */
   public ${className} excludes(${arrayType}...values) {
+    isNotNull();
     List<Object> found = new ArrayList<Object>();
     for (${arrayType} value : values) if (hasElement(value)) found.add(value);
     if (!found.isEmpty())
@@ -152,7 +155,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    * @throws AssertionError if the actual <code>${arrayType}</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (actual.length > 0) 
+    if (actualGroupSize() > 0) 
       fail(concat("expecting empty array, but was ", inBrackets(actual)));
   }
 
@@ -193,6 +196,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
   }
 
   int actualGroupSize() {
+    isNotNull();
     return actual.length;
   }
 

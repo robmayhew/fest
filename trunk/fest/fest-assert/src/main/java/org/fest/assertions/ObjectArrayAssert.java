@@ -59,12 +59,57 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
 
   /**
+   * Verifies that all the elements in the actual <code>Object</code> array belong to the specified type. Matching
+   * includes subclasses of the given type.
+   * <p>
+   * For example, consider the following code listing:
+   * <pre>
+   * Number[] numbers = { 2, 6 ,8 };
+   * assertThat(numbers).hasComponentType(Integer.class);
+   * </pre>
+   * The assertion <code>hasAllElementsOfType</code> will be successful.
+   * </p>
+   * @param type the expected type.
+   * @return this assertion object.
+   * @throws AssertionError if the component type of the actual <code>Object</code> array is not the same as the
+   *          specified one.
+   */
+  public ObjectArrayAssert hasAllElementsOfType(Class<?> type) {
+    isNotNull();
+    for (Object o : actual)
+      if (!type.isInstance(o))
+        fail(concat("not all the elements in ", inBrackets(actual), " belong to the type ", inBrackets(type.getName())));
+    return this;
+  }
+
+  /**
+   * Verifies that at least one element in the actual <code>Object</code> array belong to the specified type. Matching
+   * includes subclasses of the given type.
+   * @param type the expected type.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> does not have any elements of the given type.
+   */
+  public ObjectArrayAssert hasAtLeastOneElementOfType(Class<?> type) {
+    isNotNull();
+    boolean found = false;
+    for (Object o : actual) {
+      if (!type.isInstance(o)) continue;
+      found = true;
+      break;
+    }
+    if (!found)
+      fail(concat("array ", inBrackets(actual), " does not have any elements of type ", inBrackets(type.getName())));
+    return this;
+  }
+
+  /**
    * Verifies that the actual <code>Object</code> array contains the given objects.
    * @param objects the objects to look for.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array does not contain the given objects.
    */
   public ObjectArrayAssert contains(Object...objects) {
+    isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     for (Object o : objects) if (!hasElement(o)) notFound.add(o);
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
@@ -79,6 +124,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    *           actual <code>Object</code> array contains elements other than the ones specified.
    */
   public ObjectArrayAssert containsOnly(Object...objects) {
+    isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     List<Object> copy = new ArrayList<Object>(list(actual));
     for (Object o : objects) {
@@ -105,6 +151,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array contains any of the given objects.
    */
   public ObjectArrayAssert excludes(Object...objects) {
+    isNotNull();
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (hasElement(o)) found.add(o);
     if (!found.isEmpty())
@@ -183,6 +230,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
 
   int actualGroupSize() {
+    isNotNull();
     return actual.length;
   }
 

@@ -1,5 +1,5 @@
 /*
- * Created on Jan 24, 2008
+ * Created on Jan 25, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -63,6 +63,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
    * @throws AssertionError if the actual <code>boolean</code> array does not contain the given values.
    */
   public BooleanArrayAssert contains(boolean...values) {
+    isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     for (boolean value : values) if (!hasElement(value)) notFound.add(value);
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);      
@@ -77,6 +78,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
    *           actual <code>boolean</code> array contains elements other than the ones specified.
    */
   public BooleanArrayAssert containsOnly(boolean...values) {
+    isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     List<Object> copy = list(actual);
     for (Object value : list(values)) {
@@ -109,6 +111,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
    * @throws AssertionError if the actual <code>Object</code> array contains any of the given values.
    */
   public BooleanArrayAssert excludes(boolean...values) {
+    isNotNull();
     List<Object> found = new ArrayList<Object>();
     for (boolean value : values) if (hasElement(value)) found.add(value);
     if (!found.isEmpty())
@@ -146,7 +149,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
    * @throws AssertionError if the actual <code>boolean</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (actual.length > 0) 
+    if (actualGroupSize() > 0) 
       fail(concat("expecting empty array, but was ", inBrackets(actual)));
   }
 
@@ -187,6 +190,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
   }
 
   int actualGroupSize() {
+    isNotNull();
     return actual.length;
   }
 

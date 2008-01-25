@@ -6,6 +6,12 @@
   </properties>
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available at Maven repository" description="Snapshot release">
+      <action dev="alruiz, wanghy" type="add" issue="100" due-to="Ted Young">
+        Added methods 'hasAllElementsOfType' and 'hasAtLeastOneElementOfType' to ObjectArrayAssert.
+      </action>
+      <action dev="wanghy" type="add">
+        Added check 'isNotNull' to all the methods in all assertion objects that deal with not-null actual values.
+      </action>
       <action dev="wanghy" type="add">
         Changed access of protected methods to package-protected.
       </action>
