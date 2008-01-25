@@ -23,6 +23,7 @@ import static org.fest.assertions.Fail.*;
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
+ * @author David DIDIER
  */
 public final class BooleanAssert extends PrimitiveAssert {
 

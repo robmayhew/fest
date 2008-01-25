@@ -1,5 +1,5 @@
 /*
- * Created on Jan 15, 2008
+ * Created on Jan 24, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -147,7 +147,7 @@ public final class DoubleArrayAssert extends GroupAssert<double[]> {
    */
   public void isEmpty() {
     if (actual.length > 0) 
-      fail(concat(format(description()), "expecting empty array, but was ", inBrackets(actual)));
+      fail(concat("expecting empty array, but was ", inBrackets(actual)));
   }
 
   /**
@@ -156,7 +156,7 @@ public final class DoubleArrayAssert extends GroupAssert<double[]> {
    * @throws AssertionError if the actual <code>double</code> array is empty.
    */
   public DoubleArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail(concat(format(description()), "expecting a non-empty array"));
+    if (actualGroupSize() == 0) fail("expecting a non-empty array");
     return this;
   }
 

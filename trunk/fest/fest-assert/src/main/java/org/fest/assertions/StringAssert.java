@@ -15,8 +15,6 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.format;
 import static org.fest.util.Strings.*;
 
 import org.fest.util.Strings;
@@ -69,8 +67,9 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> is not <code>null</code> or not empty.
    */
   public void isEmpty() {
+    isNotNull();
     if (!Strings.isEmpty(actual))
-      fail(concat(format(description()), actual(), " should be empty or null"));
+      fail(concat(actual(), " should be empty or null"));
   }
 
   /**
@@ -80,7 +79,7 @@ public final class StringAssert extends GroupAssert<String> {
    */
   public StringAssert isNotEmpty() {
     if (Strings.isEmpty(actual))
-      fail(concat(format(description()), actual(), " should not be empty"));
+      fail(concat(actual(), " should not be empty"));
     return this;
   }
 
@@ -145,6 +144,7 @@ public final class StringAssert extends GroupAssert<String> {
   }
 
   protected int actualGroupSize() {
+    isNotNull();
     return actual.length();
   }
 
@@ -155,8 +155,9 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> does not contain the given one.
    */
   public StringAssert contains(String expected) {
+    isNotNull();
     if (actual.indexOf(expected) == -1)
-      fail(concat(format(description()), actual(), " should contain the String ", quote(expected)));
+      fail(concat(actual(), " should contain the String ", quote(expected)));
     return this;
   }
 
@@ -167,8 +168,9 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> does not end with the given one.
    */
   public StringAssert endsWith(String expected) {
+    isNotNull();
     if (!actual.endsWith(expected))
-      fail(concat(format(description()), actual(), " should end with ", quote(expected)));
+      fail(concat(actual(), " should end with ", quote(expected)));
     return this;
   }
 
@@ -179,8 +181,9 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> does not start with the given one.
    */
   public StringAssert startsWith(String expected) {
+    isNotNull();
     if (!actual.startsWith(expected))
-      fail(concat(format(description()), actual(), " should start with ", quote(expected)));
+      fail(concat(actual(), " should start with ", quote(expected)));
     return this;
   }
 
@@ -191,8 +194,9 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> does contain the given one.
    */
   public StringAssert excludes(String s) {
+    isNotNull();
     if (actual.indexOf(s) != -1)
-      fail(concat(format(description()), actual(), " should not contain the String ", quote(s)));
+      fail(concat(actual(), " should not contain the String ", quote(s)));
     return this;
   }
 
@@ -203,11 +207,12 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> does not match the given regular expression.
    */
   public StringAssert matches(String regex) {
+    isNotNull();
     if (!actual.matches(regex))
-      fail(concat(format(description()), actual(), " should match the regular expression ", quote(regex)));
+      fail(concat(actual(), " should match the regular expression ", quote(regex)));
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>String</code> does not match the given one.
    * @param regex the given regular expression expected not to be matched by the actual one.
@@ -215,8 +220,9 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> matches the given regular expression.
    */
   public StringAssert doesNotMatch(String regex) {
+    isNotNull();
     if (actual.matches(regex))
-      fail(concat(format(description()), actual(), " should not match the regular expression ", quote(regex)));
+      fail(concat(actual(), " should not match the regular expression ", quote(regex)));
     return this;
   }
 

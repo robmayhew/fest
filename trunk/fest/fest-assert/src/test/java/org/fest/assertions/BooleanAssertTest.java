@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
  * Tests for <code>{@link BooleanAssert}</code>.
  *
  * @author Alex Ruiz
+ * @author David DIDIER
  */
 public class BooleanAssertTest {
 

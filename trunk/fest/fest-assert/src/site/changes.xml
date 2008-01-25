@@ -15,6 +15,9 @@
       <action dev="wanghy" type="add" issue="93" due-to="David DIDIER">
         Integrated contribution from David DIDIER. Added methods 'isRelative' and 'isAbsolute' to FileAssert.
       </action>
+      <action dev="wanghy" type="add" issue="90" due-to="David DIDIER">
+        Integrated contribution from David DIDIER. Added class MapAssert.
+      </action>
       <action dev="wanghy" type="add" issue="86" due-to="David DIDIER">
         Integrated contribution from David DIDIER. Added methods 'startsWith' and 'endsWith' to StringAssert.
       </action>

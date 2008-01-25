@@ -16,7 +16,7 @@ package org.fest.assertions;
 
 import static java.lang.String.valueOf;
 import static org.fest.assertions.Fail.*;
-import static org.fest.assertions.Formatting.*;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Closeables.close;
 import static org.fest.util.Strings.*;
 
@@ -69,7 +69,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert doesNotExist() {
     isNotNull();
-    if (actual.exists()) fail(concat(format(description()), "file should not exist:", quotedAbsolutePath()));
+    if (actual.exists()) fail(concat("file should not exist:", quotedAbsolutePath()));
     return this;
   }
 
@@ -95,7 +95,6 @@ public final class FileAssert extends GenericAssert<File> {
     long size = actual.length();
     if (size != expected)
       fail(concat(
-          format(description()),
           "expected file size of " + quotedAbsolutePath() + ":", inBrackets(valueOf(expected)),
           " but was:", inBrackets(valueOf(size))
       ));
@@ -110,7 +109,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isDirectory() {
     isNotNull();
     if (!actual.isDirectory())
-      fail(concat(format(description()), "file should be a directory:", quotedAbsolutePath()));
+      fail(concat("file should be a directory:", quotedAbsolutePath()));
     return this;
   }
 
@@ -132,7 +131,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isFile() {
     isNotNull();
     if (!actual.isFile())
-      fail(concat(format(description()), "file should be a regular file:", quotedAbsolutePath()));
+      fail(concat("file should be a regular file:", quotedAbsolutePath()));
     return this;
   }
 
@@ -222,7 +221,7 @@ public final class FileAssert extends GenericAssert<File> {
   }
 
   private FileAssert assertExists(File file) {
-    if (!file.exists()) fail(concat(format(description()), "file should exist:", quotedAbsolutePath(file)));
+    if (!file.exists()) fail(concat("file should exist:", quotedAbsolutePath(file)));
     return this;
   }
 
@@ -261,7 +260,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isRelative() {
     isNotNull();
     if (actual.isAbsolute())
-      fail(concat(format(description()), "file should be relative but is ", inBrackets(quotedAbsolutePath())));
+      fail(concat("file should be relative but is ", inBrackets(quotedAbsolutePath())));
     return this;
   }
 
@@ -273,7 +272,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isAbsolute() {
     isNotNull();
     if (!actual.isAbsolute())
-      fail(concat(format(description()), "file should be absolute but is ", inBrackets(quotedAbsolutePath())));
+      fail(concat("file should be absolute but is ", inBrackets(quotedAbsolutePath())));
     return this;
   }
 

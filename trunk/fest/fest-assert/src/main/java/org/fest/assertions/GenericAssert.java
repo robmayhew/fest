@@ -1,16 +1,16 @@
 /*
  * Created on May 21, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -21,7 +21,7 @@ import static org.fest.util.Strings.*;
 
 /**
  * Understands a template for assertion methods.
- * @param <T> the type of object implementations of this template can verify. 
+ * @param <T> the type of object implementations of this template can verify.
  *
  * @author Yvonne Wang
  */
@@ -47,13 +47,13 @@ abstract class GenericAssert<T> extends Assert {
   }
 
   /**
-   * Verifies that the actual value satisfies the given condition. 
+   * Verifies that the actual value satisfies the given condition.
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual value does not satisfy the given condition.
    */
   protected abstract GenericAssert<T> satisfies(Condition<T> condition);
-  
+
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
    * thrown when an assertion fails.
@@ -63,7 +63,7 @@ abstract class GenericAssert<T> extends Assert {
   protected abstract GenericAssert<T> as(String description);
 
   /**
-   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in 
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
    * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
    * @param description the description of the actual value.
    * @return this assertion object.
@@ -85,7 +85,7 @@ abstract class GenericAssert<T> extends Assert {
    * @throws AssertionError if the actual value is equal to the given one.
    */
   protected abstract GenericAssert<T> isNotEqualTo(T other);
-  
+
   /**
    * Verifies that the actual value is not <code>null</code>.
    * @return this assertion object.
@@ -122,13 +122,13 @@ abstract class GenericAssert<T> extends Assert {
     if (!condition.matches(actual)) fail(conditionFailedMessage(condition));
     return this;
   }
-  
+
   private String conditionFailedMessage(Condition<T> condition) {
     String s = condition.description();
-    if (isEmpty(s)) return concat(format(description), "condition failed with: ", inBrackets(actual));
-    return concat(format(description), "expected:", s, " but was:", inBrackets(actual));
+    if (isEmpty(s)) return concat("condition failed with: ", inBrackets(actual));
+    return concat("expected:", s, " but was:", inBrackets(actual));
   }
-  
+
   protected GenericAssert<T> description(String description) {
     this.description = description;
     return this;
@@ -157,5 +157,17 @@ abstract class GenericAssert<T> extends Assert {
   protected final GenericAssert<T> assertNotSameAs(T expected) {
     failIfSame(description, actual, expected);
     return this;
+  }
+
+  protected final void fail(String reason) {
+    Fail.fail(formatted(reason));
+  }
+
+  protected final void fail(String reason, Throwable cause) {
+    Fail.fail(formatted(reason), cause);
+  }
+
+  private String formatted(String reason) {
+    return concat(format(description()), reason);
   }
 }

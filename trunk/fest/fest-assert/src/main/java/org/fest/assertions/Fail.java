@@ -1,16 +1,16 @@
 /*
  * Created on Mar 19, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -37,7 +37,7 @@ public final class Fail {
   }
 
   /**
-   * Throws an {@link AssertionError} with the given message an with the <code>{@link Throwable}</code> that caused the 
+   * Throws an {@link AssertionError} with the given message an with the <code>{@link Throwable}</code> that caused the
    * failure.
    * @param message error message.
    * @param realCause cause of the error.
@@ -58,7 +58,7 @@ public final class Fail {
   static void failIfEqual(String message, Object first, Object second) {
     if (areEqual(first, second)) fail(errorMessageIfEqual(message, first, second));
   }
-  
+
   /**
    * Fails if the given objects are not equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
@@ -72,7 +72,7 @@ public final class Fail {
     if (comparisonFailure != null) throw comparisonFailure;
     fail(errorMessageIfNotEqual(message, actual, expected));
   }
-  
+
   /**
    * Fails if the given object is <code>null</code>.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
@@ -82,7 +82,7 @@ public final class Fail {
   static void failIfNull(String message, Object o) {
     if (o == null) fail(concat(format(message), "expecting a non-null object"));
   }
-  
+
   /**
    * Fails if the given object is not <code>null</code>.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
@@ -103,7 +103,7 @@ public final class Fail {
   static void failIfSame(String message, Object first, Object second) {
     if (first == second) fail(concat(format(message), "given objects are same:", inBrackets(first)));
   }
-  
+
   /**
    * Fails if the given objects are not the same instance.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
@@ -112,10 +112,10 @@ public final class Fail {
    * @throws AssertionError if the given objects are not the same instance.
    */
   static void failIfNotSame(String message, Object first, Object second) {
-    if (first != second) 
+    if (first != second)
       fail(concat(format(message), "expected same instance but found ", inBrackets(first), " and ", inBrackets(second)));
   }
-  
+
   /**
    * Fails with the given message.
    * @param message error message.
@@ -126,26 +126,26 @@ public final class Fail {
   }
 
   /**
-   * Returns an error message to be used when two objects that are expected to be equal aren't. 
+   * Returns an error message to be used when two objects that are expected to be equal aren't equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the value checked against <code>expected</code>.
    * @param expected expected value.
-   * @return an error message to be used when two objects that are expected to be equal aren't. 
+   * @return an error message to be used when two objects that are expected to be equal aren't.
    */
   static String errorMessageIfNotEqual(String message, Object actual, Object expected) {
     return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
-  
+
   /**
-   * Returns an error message to be used when two objects that are not expected to be equal are. 
+   * Returns an error message to be used when two objects that are not expected to be equal are actually equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param first the value checked against <code>second</code>.
    * @param second second value.
-   * @return an error message to be used when two objects that are not expected to be equal are. 
+   * @return an error message to be used when two objects that are not expected to be equal are.
    */
   static String errorMessageIfEqual(String message, Object first, Object second) {
     return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
   }
-  
+
   private Fail() {}
 }

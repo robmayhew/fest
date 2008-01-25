@@ -14,8 +14,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.Formatting.*;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -87,7 +86,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
       if (causeClass.isAssignableFrom(actualCause.getClass())) return this;
       actualCause = actualCause.getCause();
     }
-    fail(concat(format(description()), "expected cause as ancestor:", inBrackets(causeClass.getName())));
+    fail(concat("expected cause as ancestor:", inBrackets(causeClass.getName())));
     return this;
   }
 
@@ -111,7 +110,6 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   private void notMatchingCauseTypeFailure(Class<? extends Throwable> causeClass, Throwable actualCause) {
     String typeName = actualCause != null ? actualCause.getClass().getName() : null;
     fail(concat(
-        format(description()),
         "expected cause:", inBrackets(causeClass.getName()), " but was:", inBrackets(typeName)
     ));
   }
@@ -133,7 +131,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
       if (actualCause.getClass().equals(causeClass)) { return this; }
       actualCause = actualCause.getCause();
     }
-    fail(concat(format(description()), "expected exact cause as ancestor:", inBrackets(causeClass.getName())));
+    fail(concat("expected exact cause as ancestor:", inBrackets(causeClass.getName())));
     return this;
   }
 
@@ -150,7 +148,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     isNotNull();
     Throwable actualCause = actual.getCause();
     if (actualCause != null)
-      fail(concat(format(description()), "expected no cause but was:", inBrackets(actualCause.getClass().getName())));
+      fail(concat("expected no cause but was:", inBrackets(actualCause.getClass().getName())));
     return this;
   }
 
@@ -225,8 +223,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     isNotNull();
     Class<? extends Throwable> current = actual.getClass();
     if (!type.isAssignableFrom(current))
-      fail(concat(format(description()), "expected instance of:", inBrackets(type.getName()),
-          " but was instance of:", inBrackets(current.getName())));
+      fail(concat("expected instance of:", inBrackets(type.getName()), " but was instance of:",
+          inBrackets(current.getName())));
     return this;
   }
 }

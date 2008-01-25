@@ -34,7 +34,8 @@ public class StringAssertTest {
     new StringAssert("").isEmpty();
   }
 
-  @Test public void shouldSucceedIfStringIsNull() {
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldFailIfStringIsNullAndExpectingEmpty() {
     new StringAssert(null).isEmpty();
   }
 
