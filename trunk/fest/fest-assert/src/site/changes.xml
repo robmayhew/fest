@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available at Maven repository" description="Snapshot release">
+      <action dev="wanghy" type="add" issue="103" due-to="Ted Young">
+        Improved Javadoc documentation of the methods 'as' and 'describedAs' in all assertion classes.
+      </action>
       <action dev="wanghy" type="add" issue="101" due-to="Ted Young">
         Added method 'assertThat(Iterator)' to Assertions. This method returns a CollectionAssert.
       </action>

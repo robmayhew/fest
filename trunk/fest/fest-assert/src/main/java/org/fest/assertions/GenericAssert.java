@@ -28,7 +28,6 @@ import static org.fest.util.Strings.*;
 abstract class GenericAssert<T> extends Assert {
 
   final T actual;
-  private String description;
 
   /**
    * Creates a new <code>{@link GenericAssert}</code>.
@@ -56,7 +55,14 @@ abstract class GenericAssert<T> extends Assert {
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(val).<strong>as</strong>(&quot;name&quot;).isEqualTo(&quot;Frodo&quot;);
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */
@@ -64,7 +70,14 @@ abstract class GenericAssert<T> extends Assert {
 
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
-   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(val).<strong>describedAs</strong>(&quot;name&quot;).isEqualTo(&quot;Frodo&quot;);
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */
@@ -108,14 +121,6 @@ abstract class GenericAssert<T> extends Assert {
    * @throws AssertionError if the actual value is the same as the given one.
    */
   abstract GenericAssert<T> isNotSameAs(T other);
-
-  /**
-   * Returns the description of the actual value in this assertion.
-   * @return the description of the actual value in this assertion.
-   */
-  public final String description() {
-    return description;
-  }
 
   final GenericAssert<T> verify(Condition<T> condition) {
     if (condition == null) throw new IllegalArgumentException("condition cannot be null");

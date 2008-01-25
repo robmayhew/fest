@@ -40,7 +40,14 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(names).<strong>as</strong>(&quot;Jedi Knights&quot;).contains(&quot;Yoda&quot;);
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */
@@ -50,7 +57,14 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
 
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
-   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(names).<strong>describedAs</strong>(&quot;Jedi Knights&quot;).contains(&quot;Yoda&quot;);
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */

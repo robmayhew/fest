@@ -57,7 +57,14 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(picture).<strong>as</strong>(&quot;Vacation Picture&quot;).hasSize(new Dimension(800, 600));
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */
@@ -67,7 +74,14 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
 
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
-   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(picture).<strong>describedAs</strong>(&quot;Vacation Picture&quot;).hasSize(new Dimension(800, 600));
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */

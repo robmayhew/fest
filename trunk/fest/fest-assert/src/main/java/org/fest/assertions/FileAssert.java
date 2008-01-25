@@ -44,7 +44,14 @@ public final class FileAssert extends GenericAssert<File> {
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>.
-   * thrown when an assertion fails.
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(folder).<strong>as</strong>(&quot;Temp Folder&quot;).exists();
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */
@@ -54,7 +61,14 @@ public final class FileAssert extends GenericAssert<File> {
 
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in <a
-   * href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
+   * href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(folder).<strong>describedAs</strong>(&quot;Temp Folder&quot;).exists();
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */

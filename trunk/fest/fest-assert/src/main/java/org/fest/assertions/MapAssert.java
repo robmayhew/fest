@@ -40,12 +40,36 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
-   * thrown when an assertion fails.
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(cache).<strong>as</strong>(&quot;Cached Results&quot;).keySetIncludes(&quot;430-094&quot;, &quot;5094-8&quot;);
+   * </pre>
+   * </p>
    * @param description the description of the actual value.
    * @return this assertion object.
    */
   public MapAssert as(String description) {
     return (MapAssert)description(description);
+  }
+
+  /**
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in <a
+   * href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(cache).<strong>describedAs</strong>(&quot;Cached Results&quot;).keySetIncludes(&quot;430-094&quot;, &quot;5094-8&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public MapAssert describedAs(String description) {
+    return as(description);
   }
 
   /**
@@ -158,16 +182,6 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     for (Map.Entry<?, ?> entry : actual.entrySet())
       actualValues.add(entry.getValue());
     return actualValues;
-  }
-
-  /**
-   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in <a
-   * href="http://groovy.codehaus.org/" target="_blank">Groovy</a>.
-   * @param description the description of the actual value.
-   * @return this assertion object.
-   */
-  public MapAssert describedAs(String description) {
-    return as(description);
   }
 
   /**
