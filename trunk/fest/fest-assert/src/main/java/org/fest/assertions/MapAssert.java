@@ -14,15 +14,15 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Maps.format;
+import static org.fest.util.Strings.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.fest.util.Collections;
 
 /**
  * Understands assertions for <code>{@link Map}</code>. To create a new instance of this class use the method
@@ -73,75 +73,61 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   }
 
   /**
-   * Verifies that the actual <code>{@link Map}</code> contains the given value associated with the given key.
+   * Verifies that the actual <code>{@link Map}</code> contains the given entries.
    * <p>
    * Example:
    * <pre>
    * // static import org.fest.assertions.Assertions.*;
    * // static import org.fest.assertions.MapAssert.*;
    *
-   * assertThat(myMap).contains(key(&quot;name&quot;), value(&quot;Frodo&quot;));
+   * assertThat(myMap).{@link #contains(org.fest.assertions.MapAssert.Entry...) contains}({@link #entry(Object, Object) entry}(&quot;jedi&quot;, yoda), {@link #entry(Object, Object) entry}(&quot;sith&quot;, anakin));
    * </pre>
    * </p>
-   * @param key specifies the given key.
-   * @param value specifies the value expected to be associated with the given key.
+   * @param entries
    * @return this assertion error.
-   * @throws AssertionError if the actual <code>Map</code> does not contain the given key, or if the actual
-   *          <code>Map</code> does not contain the given value under the given key.
+   * @throws AssertionError if the actual <code>Map</code> does not contain any of the given entries.
    */
-  public MapAssert contains(Key key, Value value) {
+  public MapAssert contains(Entry...entries) {
     isNotNull();
-    keySetIncludes(key.value);
-    Object actualValue = actual.get(key.value);
-    if (!areEqual(actualValue, value.value)) {
-      fail(concat(
-          "expecting value:", inBrackets(value.value), " under key:", inBrackets(key.value),
-          " but was:", inBrackets(actualValue)));
-    }
+    List<Entry> notFound = new ArrayList<Entry>();
+    for (Entry e : entries) if (!containsEntry(e)) notFound.add(e);
+    failIfNotFound("entr(y/ies)", notFound);
     return this;
   }
 
-  /**
-   * Creates a new <code>{@link Key}</code>.
-   * @param value the value of the key.
-   * @return the created <code>Key</code>.
-   */
-  public static Key key(Object value) {
-    return new Key(value);
+  private boolean containsEntry(Entry e) {
+    if (!actual.containsKey(e.key)) return false;
+    return actual.containsValue(e.value);
   }
 
   /**
-   * Understands a value expected to be used as a key in a <code>{@link Map}</code>.
+   * Creates a new map entry.
+   * @param key the key of the entry.
+   * @param value the value of the entry.
+   * @return the created entry.
+   * @see #contains(org.fest.assertions.MapAssert.Entry...)
+   */
+  public static Entry entry(Object key, Object value) {
+    return new Entry(key, value);
+  }
+
+  /**
+   * Understands an entry in a <code>{@link Map}</code>.
    *
    * @author Yvonne Wang
    */
-  public static class Key {
+  public static class Entry {
+    final Object key;
     final Object value;
 
-    Key(Object value) {
+    Entry(Object key, Object value) {
+      this.key = key;
       this.value = value;
     }
-  }
 
-  /**
-   * Creates a new <code>{@link Value}</code>.
-   * @param value the value of the entry value.
-   * @return the created <code>Value</code>.
-   */
-  public static Value value(Object value) {
-    return new Value(value);
-  }
-
-  /**
-   * Understands a value expected to be the stored as a <code>{@link Map}</code> entry.
-   *
-   * @author Yvonne Wang
-   */
-  public static class Value {
-    final Object value;
-
-    Value(Object value) {
-      this.value = value;
+    /** @see java.lang.Object#toString() */
+    @Override public String toString() {
+      return concat(quote(key), "=", quote(value));
     }
   }
 
@@ -156,8 +142,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     Set<?> keySet = actual.keySet();
     List<Object> notFound = new ArrayList<Object>();
     for (Object key : keys) if (!keySet.contains(key)) notFound.add(key);
-    if (!notFound.isEmpty())
-      fail(concat("the map ", actual, " does not contain the key(s) ", format(notFound.toArray())));
+    failIfNotFound("keys(s)", notFound);
     return this;
   }
 
@@ -170,18 +155,14 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   public MapAssert valuesInclude(Object... values) {
     isNotNull();
     List<Object> notFound = new ArrayList<Object>();
-    List<Object> actualValues = actualValues();
-    for (Object expected : values) if (!actualValues.contains(expected)) notFound.add(expected);
-    if (!notFound.isEmpty())
-      fail(concat("the map ", actual, " does not contain the value(s) ", format(notFound.toArray())));
+    for (Object expected : values) if (!actual.containsValue(expected)) notFound.add(expected);
+    failIfNotFound("value(s)", notFound);
     return this;
   }
 
-  private List<Object> actualValues() {
-    List<Object> actualValues = new ArrayList<Object>();
-    for (Map.Entry<?, ?> entry : actual.entrySet())
-      actualValues.add(entry.getValue());
-    return actualValues;
+  private void failIfNotFound(String description, List<?> notFound) {
+    if (notFound.isEmpty()) return;
+    fail(concat("the map ", formattedActual(), " does not contain the ", description, " ", Collections.format(notFound)));
   }
 
   /**
@@ -200,8 +181,12 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    */
   public void isEmpty() {
     if ((actual != null) && !actual.isEmpty()) {
-      fail(concat(format(description()), "expecting empty map, but was ", actual));
+      fail(concat("expecting empty map, but was ", formattedActual()));
     }
+  }
+
+  private String formattedActual() {
+    return format(actual);
   }
 
   /**
@@ -224,7 +209,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    */
   public MapAssert isNotEmpty() {
     isNotNull();
-    if (actual.isEmpty()) fail(concat(format(description()), "expecting non-empty map"));
+    if (actual.isEmpty()) fail("expecting non-empty map");
     return this;
   }
 
@@ -244,10 +229,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws AssertionError if the actual <code>Map</code> is <code>null</code>.
    */
   public MapAssert isNotNull() {
-    if (actual == null) {
-      fail(concat(format(description()), "the map is null"));
-    }
-
+    if (actual == null) fail("the map is null");
     return this;
   }
 

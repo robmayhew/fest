@@ -16,7 +16,7 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Collections.duplicatesFrom;
+import static org.fest.util.Collections.*;
 import static org.fest.util.Strings.concat;
 
 import java.util.ArrayList;
@@ -71,12 +71,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty())
-      fail(concat("unexpected element(s) ", inBrackets(copy.toArray()), " in collection ", actual));
+      fail(concat("unexpected element(s) ", formattedInBrackets(copy), " in collection ", actual));
     return this;
   }
 
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("collection ", actual, " does not contain element(s) ", inBrackets(notFound.toArray())));
+    fail(concat("collection ", formattedActual(), " does not contain element(s) ", formattedInBrackets(notFound)));
   }
 
   /**
@@ -90,7 +90,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (actual.contains(o)) found.add(o);
     if (!found.isEmpty())
-      fail(concat("collection ", actual, " does not exclude element(s) ", inBrackets(found.toArray())));
+      fail(concat("collection ", formattedActual(), " does not exclude element(s) ", formattedInBrackets(found)));
     return this;
   }
 
@@ -103,8 +103,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     isNotNull();
     Collection<?> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty())
-      fail(concat("collection ", actual, " contains duplicates (", duplicates, ")"));
+      fail(concat("collection ", formattedActual(), " contains duplicates ", formattedInBrackets(duplicates), ""));
     return this;
+  }
+
+  private String formattedInBrackets(Collection<?> c) {
+    return inBrackets(format(c));
   }
 
   /**
@@ -168,7 +172,11 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public void isEmpty() {
     isNotNull();
     if (!Collections.isEmpty(actual))
-      fail(concat("expecting empty collection, but was ", actual));
+      fail(concat("expecting empty collection, but was ", formattedActual()));
+  }
+
+  private String formattedActual() {
+    return format(actual);
   }
 
   /**

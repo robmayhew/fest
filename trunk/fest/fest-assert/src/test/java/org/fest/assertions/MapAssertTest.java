@@ -15,13 +15,14 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.assertions.MapAssert.*;
+import static org.fest.assertions.MapAssert.entry;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.fest.assertions.MapAssert.Entry;
 import org.testng.annotations.Test;
 
 /**
@@ -67,13 +68,13 @@ public class MapAssertTest {
 
   @Test public void shouldPassIfGivenEntryIsInMap() {
     Map<Object, Object> map = map(entry("key1", "value1"), entry("key2", "value2"));
-    new MapAssert(map).contains(key("key1"), value("value1"));
+    new MapAssert(map).contains(entry("key1", "value1"));
   }
 
   @Test public void shouldFailIfGivenEntryIsNotInMap() {
     Map<Object, Object> map = map(entry("key1", "value1"), entry("key2", "value2"));
     try {
-      new MapAssert(map).contains(key("key6"), value("value6"));
+      new MapAssert(map).contains(entry("key6", "value6"));
       fail();
     } catch (AssertionError e) {
       log(e);
@@ -83,7 +84,7 @@ public class MapAssertTest {
   @Test public void shouldFailIfGivenValueNotAssociatedWithExistingKey() {
     Map<Object, Object> map = map(entry("key1", "value1"), entry("key2", "value2"));
     try {
-      new MapAssert(map).contains(key("key1"), value("value6"));
+      new MapAssert(map).contains(entry("key1", "value6"));
       fail();
     } catch (AssertionError e) {
       log(e);
@@ -166,22 +167,8 @@ public class MapAssertTest {
     new MapAssert(null).isNull();
   }
 
-  private Entry entry(Object key, Object value) {
-    return new Entry(key, value);
-  }
-
   private void log(AssertionError e) {
     logger.info(e.getMessage());
-  }
-
-  private static class Entry {
-    final Object key;
-    final Object value;
-
-    Entry(Object key, Object value) {
-      this.key = key;
-      this.value = value;
-    }
   }
 
   private Map<Object, Object> map(Entry...entries) {

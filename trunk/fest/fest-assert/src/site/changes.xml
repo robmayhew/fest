@@ -5,7 +5,10 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.9-SNAPSHOT" date="TBD - Available at Maven repository" description="Snapshot release">
+    <release version="0.9" date="2008-01-28" description="Snapshot release">
+      <action dev="wanghy" type="add">
+        Updated dependency 'fest-util' to version 0.3.
+      </action>
       <action dev="wanghy" type="add" issue="103" due-to="Ted Young">
         Improved Javadoc documentation of the methods 'as' and 'describedAs' in all assertion classes.
       </action>

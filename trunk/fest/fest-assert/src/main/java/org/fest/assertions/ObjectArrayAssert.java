@@ -17,6 +17,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
+import static org.fest.util.Arrays.format;
 import static org.fest.util.Collections.list;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
@@ -92,7 +93,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     isNotNull();
     for (Object o : actual)
       if (!type.isInstance(o))
-        fail(concat("not all the elements in ", inBrackets(actual), " belong to the type ", inBrackets(type.getName())));
+        fail(concat("not all the elements in ", formattedActualInBrackets(), " belong to the type ",
+            typeNameInBrackets(type)));
     return this;
   }
 
@@ -112,8 +114,13 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
       break;
     }
     if (!found)
-      fail(concat("array ", inBrackets(actual), " does not have any elements of type ", inBrackets(type.getName())));
+      fail(concat("array ", formattedActualInBrackets(), " does not have any elements of type ",
+          typeNameInBrackets(type)));
     return this;
+  }
+
+  private String typeNameInBrackets(Class<?> type) {
+    return inBrackets(type.getName());
   }
 
   /**
@@ -150,12 +157,14 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty())
-      fail(concat("unexpected element(s) ", inBrackets(copy.toArray()), " in array ", inBrackets(actual)));
+      fail(concat(
+          "unexpected element(s) ", formattedInBrackets(copy.toArray()), " in array ", formattedActualInBrackets()));
     return this;
   }
 
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array ", inBrackets(actual), " does not contain element(s) ", inBrackets(notFound.toArray())));
+    fail(concat("array ", formattedActualInBrackets(), " does not contain element(s) ",
+        formattedInBrackets(notFound.toArray())));
   }
 
   /**
@@ -169,7 +178,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (hasElement(o)) found.add(o);
     if (!found.isEmpty())
-      fail(concat("array ", inBrackets(actual), " does not exclude element(s) ", inBrackets(found.toArray())));
+      fail(concat("array ", formattedActualInBrackets(), " does not exclude element(s) ",
+          formattedInBrackets(found.toArray())));
     return this;
   }
 
@@ -204,7 +214,15 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public void isEmpty() {
     if (actualGroupSize() > 0)
-      fail(concat("expecting empty array, but was ", inBrackets(actual)));
+      fail(concat("expecting empty array, but was ", formattedActualInBrackets()));
+  }
+
+  private String formattedActualInBrackets() {
+    return inBrackets(formattedActual());
+  }
+
+  private String formattedInBrackets(Object[] array) {
+    return inBrackets(format(array));
   }
 
   /**
@@ -226,7 +244,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected))
-      fail(errorMessageIfNotEqual(description(), actual, expected));
+      fail(errorMessageIfNotEqual(description(), formattedActual(), format(expected)));
     return this;
   }
 
@@ -239,13 +257,17 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isNotEqualTo(Object[] array) {
     if (Arrays.equals(actual, array))
-      fail(errorMessageIfEqual(description(), actual, array));
+      fail(errorMessageIfEqual(description(), formattedActual(), format(array)));
     return this;
   }
 
   int actualGroupSize() {
     isNotNull();
     return actual.length;
+  }
+
+  private String formattedActual() {
+    return format(actual);
   }
 
   /**
