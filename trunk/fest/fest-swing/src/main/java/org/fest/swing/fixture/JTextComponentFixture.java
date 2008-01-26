@@ -17,11 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.text.JTextComponent;
 
-import abbot.tester.JTextComponentTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -36,6 +35,8 @@ import static org.fest.util.Strings.isEmpty;
  */
 public class JTextComponentFixture extends ComponentFixture<JTextComponent> implements TextInputFixture {
 
+  private final JTextComponentDriver driver;
+  
   /**
    * Creates a new <code>{@link JTextComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTextComponent</code>.
@@ -46,6 +47,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    */
   public JTextComponentFixture(RobotFixture robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);
+    driver = newTextComponentDriver();
   }
   
   /**
@@ -55,8 +57,13 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    */
   public JTextComponentFixture(RobotFixture robot, JTextComponent target) {
     super(robot, target);
+    driver = newTextComponentDriver();
   }
 
+  private JTextComponentDriver newTextComponentDriver() {
+    return new JTextComponentDriver(robot, target);
+  }
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
@@ -205,12 +212,8 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    */
   public final JTextComponentFixture selectText(int start, int end) {
     if (isEmpty(text())) return this;
-    textComponentTester().actionSelectText(target, start, end);
+    driver.selectText(start, end);
     return this;
-  }
-
-  private JTextComponentTester textComponentTester() {
-    return (JTextComponentTester)tester();
   }
 
   /**

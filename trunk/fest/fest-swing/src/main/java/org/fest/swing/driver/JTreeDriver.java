@@ -41,6 +41,11 @@ import static org.fest.util.Strings.concat;
  * driver only focuses on behavior present only in <code>{@link JTree}</code>s. This class is intended for internal
  * use only.
  *
+ * <p>
+ * Adapted from <code>abbot.tester.JTreeTester</code> from <a href="http://abbot.sourceforge.net"
+ * target="_blank">Abbot</a>.
+ * </p>
+ * 
  * @author Alex Ruiz
  */
 public final class JTreeDriver {

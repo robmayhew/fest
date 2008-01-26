@@ -37,7 +37,7 @@ import static javax.swing.SwingUtilities.isEventDispatchThread;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.Swing.pointAt;
+import static org.fest.swing.util.Swing.centerOf;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
@@ -231,8 +231,7 @@ public final class RobotFixture {
 
   private void mouseRelease() {
     if (robot == null) return;
-    int buttons = Robot.getState().getButtons();
-    if (buttons != 0) robot.mouseRelease(buttons);
+    releaseMouseButtons();
   }
 
   /**
@@ -258,7 +257,7 @@ public final class RobotFixture {
    * @param times the number of times to click the given mouse button.
    */
   public void click(Component target, MouseButton button, int times) {
-    click(target, pointAt(target), button, times);
+    click(target, centerOf(target), button, times);
   }
 
   /**
@@ -283,6 +282,15 @@ public final class RobotFixture {
     waitForIdle();
   }
   
+  /**
+   * Simulates a user pressing the left mouse button on the given <code>{@link Component}</code>.
+   * @param target the <code>Component</code> to click on.
+   * @param where the position where to press the left mouse button.
+   */
+  public void mousePress(Component target, Point where) {
+    mousePress(target, where, LEFT_BUTTON);
+  }
+
   /**
    * Simulates a user pressing the given mouse button on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
@@ -311,7 +319,7 @@ public final class RobotFixture {
    * @throws org.fest.swing.exception.ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, pointAt(invoker));
+    return showPopupMenu(invoker, centerOf(invoker));
   }
   
   /**
@@ -368,12 +376,21 @@ public final class RobotFixture {
     robot.keyRelease(keyCode);
     waitForIdle();
   }
+
+  /**
+   * Releases the left mouse button.
+   */
+  public void releaseLeftMouseButton() {
+    robot.mouseRelease();
+  }
   
   /**
    * Releases any mouse button(s) used by the robot.
    */
   public void releaseMouseButtons() {
-    robot.mouseRelease(Robot.getState().getButtons());
+    int buttons = Robot.getState().getButtons();
+    if (buttons == 0) return;
+    robot.mouseRelease(buttons);
   }
   
   /**

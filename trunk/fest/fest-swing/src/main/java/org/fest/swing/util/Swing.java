@@ -37,11 +37,11 @@ public final class Swing {
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
 
   /**
-   * Returns a point relative to the given <code>{@link Component}</code>.
+   * Returns a point at the center of the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @return a point relative to the given <code>Component</code>.
+   * @return a point at the center of the given <code>Component</code>.
    */
-  public static Point pointAt(Component c) {
+  public static Point centerOf(Component c) {
     return new Point(c.getWidth() / 2, c.getHeight() / 2);
   }
 

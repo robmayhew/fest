@@ -57,7 +57,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public JListFixture(RobotFixture robot, String listName) {
     super(robot, listName, JList.class);
-    driver = newListDriver(robot, target);
+    driver = newListDriver();
   }
   
   /**
@@ -67,10 +67,10 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public JListFixture(RobotFixture robot, JList target) {
     super(robot, target);
-    driver = newListDriver(robot, target);
+    driver = newListDriver();
   }
 
-  private JListDriver newListDriver(RobotFixture robot, JList target) {
+  private JListDriver newListDriver() {
     return new JListDriver(robot, target);
   }
 

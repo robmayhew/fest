@@ -24,15 +24,20 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.util.Swing;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.Swing.centerOf;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JList}</code>s. This class is intended for internal
  * use only.
- *
+ * 
+ * <p>
+ * Adapted from <code>abbot.tester.JListTester</code> from <a href="http://abbot.sourceforge.net"
+ * target="_blank">Abbot</a>.
+ * </p>
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
@@ -89,7 +94,7 @@ public final class JListDriver {
   public void clickItem(int index) {
     clickItem(index, LEFT_BUTTON, 1);
   }
-
+  
   /**
    * Clicks the item under the given index, using the specified mouse button, the given number times.
    * @param index the index of the item to click.
@@ -168,7 +173,7 @@ public final class JListDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop() {
-    dragAndDrop.drop(Swing.pointAt(list));
+    dragAndDrop.drop(centerOf(list));
   }
 
   /**

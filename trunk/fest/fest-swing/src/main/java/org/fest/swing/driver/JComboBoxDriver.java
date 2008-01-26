@@ -46,6 +46,11 @@ import static org.fest.util.Strings.*;
  * driver only focuses on behavior present only in <code>{@link JComboBox}</code>s. This class is intended for internal
  * use only.
  *
+ * <p>
+ * Adapted from <code>abbot.tester.JComboBoxTester</code> from <a href="http://abbot.sourceforge.net"
+ * target="_blank">Abbot</a>.
+ * </p>
+ *
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
@@ -140,7 +145,7 @@ public final class JComboBoxDriver {
     final int validatedIndex = validated(index);
     showDropDownList();
     try {
-      new JListDriver(robot, dropDownList()).clickItem(index);
+      selectItem(dropDownList(), index);
     } catch (ComponentLookupException e) {
       robot.invokeAndWait(new Runnable() {
         public void run() {
@@ -149,6 +154,10 @@ public final class JComboBoxDriver {
         }
       });
     }
+  }
+
+  private void selectItem(JList dropDownList, int index) {
+    robot.click(dropDownList, new JListLocation(dropDownList).pointAt(index));    
   }
 
   private int validated(int index) {
