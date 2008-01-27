@@ -40,9 +40,8 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JSpinnerDriver {
+public final class JSpinnerDriver extends JComponentDriver {
 
-  private final RobotFixture robot;
   private final JSpinner spinner;
 
   /**
@@ -51,7 +50,7 @@ public final class JSpinnerDriver {
    * @param spinner the target <code>JSpinner</code>.
    */
   public JSpinnerDriver(RobotFixture robot, JSpinner spinner) {
-    this.robot = robot;
+    super(robot);
     this.spinner = spinner;
   }
 

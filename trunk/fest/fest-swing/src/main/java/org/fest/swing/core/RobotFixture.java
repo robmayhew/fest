@@ -174,7 +174,7 @@ public final class RobotFixture {
    * @param c the component to give focus to.
    */
   public void focus(Component c) {
-    robot.focus(c, true);
+    robot.focus(c);
   }
 
   /**

@@ -34,16 +34,14 @@ import abbot.Log;
  *
  * @author Alex Ruiz
  */
-public abstract class JComponentDriver {
-
-  public final RobotFixture robot;
+public abstract class JComponentDriver extends ComponentDriver {
 
   /**
    * Creates a new </code>{@link JComponentDriver}</code>.
    * @param robot the robot the robot to use to simulate user input.
    */
   public JComponentDriver(RobotFixture robot) {
-    this.robot = robot;
+    super(robot);
   }
 
   /**

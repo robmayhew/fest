@@ -52,9 +52,8 @@ import org.fest.swing.util.TimeoutWatch;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JComboBoxDriver {
+public final class JComboBoxDriver extends JComponentDriver {
 
-  private final RobotFixture robot;
   private final JListDriver listDriver;
 
   /**
@@ -62,7 +61,7 @@ public final class JComboBoxDriver {
    * @param robot the robot to use to simulate user input.
    */
   public JComboBoxDriver(RobotFixture robot) {
-    this.robot = robot;
+    super(robot);
     listDriver = new JListDriver(robot);
   }
 

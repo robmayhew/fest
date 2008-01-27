@@ -41,20 +41,17 @@ import org.fest.swing.exception.LocationUnavailableException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JListDriver {
+public final class JListDriver extends JComponentDriver {
 
-  private final RobotFixture robot;
   private final JListLocation location;
-  private final DragAndDropDriver dragAndDrop;
 
   /**
    * Creates a new </code>{@link JListDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
   public JListDriver(RobotFixture robot) {
-    this.robot = robot;
+    super(robot);
     location = new JListLocation();
-    dragAndDrop = new DragAndDropDriver(robot);
   }
 
   /**
@@ -143,7 +140,7 @@ public final class JListDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void drag(JList list, Object value) {
-    dragAndDrop.drag(list, location.pointAt(list, value));
+    super.drag(list, location.pointAt(list, value));
   }
 
   /**
@@ -154,7 +151,7 @@ public final class JListDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list, Object value) {
-    dragAndDrop.drop(list, location.pointAt(list, value));
+    super.drop(list, location.pointAt(list, value));
   }
 
   /**
@@ -165,7 +162,7 @@ public final class JListDriver {
    *         the <code>JList</code>.
    */
   public void drag(JList list, int index) {
-    dragAndDrop.drag(list, pointAt(list, index));
+    super.drag(list, pointAt(list, index));
   }
 
   /**
@@ -177,7 +174,7 @@ public final class JListDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list, int index) {
-    dragAndDrop.drop(list, pointAt(list, index));
+    super.drop(list, pointAt(list, index));
   }
 
   /**
@@ -186,7 +183,7 @@ public final class JListDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list) {
-    dragAndDrop.drop(list, centerOf(list));
+    super.drop(list, centerOf(list));
   }
 
   /**

@@ -48,20 +48,17 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public final class JTreeDriver {
+public final class JTreeDriver extends JComponentDriver {
 
-  private final RobotFixture robot;
   private final JTreeLocation location;
-  private final DragAndDropDriver dragAndDrop;
 
   /**
    * Creates a new </code>{@link JTreeDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
   public JTreeDriver(RobotFixture robot) {
-    this.robot = robot;
+    super(robot);
     location = new JTreeLocation();
-    dragAndDrop = new DragAndDropDriver(robot);
   }
 
   /**
@@ -203,7 +200,7 @@ public final class JTreeDriver {
    */
   public void drag(JTree tree, TreePath path) {
     selectPath(tree, path);
-    dragAndDrop.drag(tree, location.pointAt(tree, path));
+    drag(tree, location.pointAt(tree, path));
   }
 
   /**
@@ -214,6 +211,6 @@ public final class JTreeDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JTree tree, TreePath path) {
-    dragAndDrop.drop(tree, location.pointAt(tree, path));
+    drop(tree, location.pointAt(tree, path));
   }
 }
