@@ -50,7 +50,7 @@ public class JTextComponentDriverTest {
     robot = robotWithNewAwtHierarchy();
     frame = new MyFrame(getClass());
     robot.showWindow(frame, new Dimension(200, 200));
-    driver = new JTextComponentDriver(robot, frame.textField);
+    driver = new JTextComponentDriver(robot);
   }
 
   @AfterMethod public void tearDown() {
@@ -58,13 +58,13 @@ public class JTextComponentDriverTest {
   }
 
   @Test public void shouldSelectOnlyGivenText() {
-    driver.selectText(8, 14);
+    driver.selectText(frame.textField, 8, 14);
     assertThat(frame.textField.getSelectedText()).isEqualTo("a test");
   }
 
   @Test public void shouldThrowErrorIfIndicesAreOutOfBounds() {
     try {
-      driver.selectText(20, 22);
+      driver.selectText(frame.textField, 20, 22);
       fail();
     } catch (ActionFailedException expected) {
       logger.log(Level.INFO, expected.getMessage(), expected);

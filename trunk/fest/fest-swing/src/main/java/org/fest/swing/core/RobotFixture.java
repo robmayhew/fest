@@ -1,24 +1,36 @@
 /*
  * Created on Sep 29, 2006
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2006 the original author or authors.
  */
 package org.fest.swing.core;
+
+import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.isEventDispatchThread;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.concat;
 
 import java.awt.*;
 import java.util.Collection;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.TimeoutWatch;
 
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
@@ -28,22 +40,9 @@ import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.util.TimeoutWatch;
-
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
-
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.Swing.centerOf;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.concat;
-
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
- * 
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
@@ -51,7 +50,7 @@ public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
   private static int POPUP_TIMEOUT = 5000;
-  
+
   private Robot robot;
   private WindowTracker windowTracker;
 
@@ -96,7 +95,7 @@ public final class RobotFixture {
     if (Bugs.hasMultiClickFrameBug()) robot.delay(500);
     return robot;
   }
-  
+
   /**
    * Returns the <code>{@link ComponentPrinter}</code> used by this fixture.
    * @return the <code>ComponentPrinter</code> used by this fixture.
@@ -107,7 +106,7 @@ public final class RobotFixture {
 
   /**
    * Returns the <code>{@link ComponentFinder}</code> used by this fixture.
-   * @return the object responsible for GUI component lookup and user input simulation. 
+   * @return the object responsible for GUI component lookup and user input simulation.
    */
   public ComponentFinder finder() {
     return finder;
@@ -141,7 +140,7 @@ public final class RobotFixture {
    * Modal dialogs may be shown with this method without blocking.
    * @param w the window to display.
    * @param size the size of the window to display.
-   * @param pack flag that indicates if the window should be packed or not. By packed we mean calling 
+   * @param pack flag that indicates if the window should be packed or not. By packed we mean calling
    * <code>w.pack()</code>.
    */
   public void showWindow(final Window w, final Dimension size, final boolean pack) {
@@ -175,7 +174,7 @@ public final class RobotFixture {
    * @param c the component to give focus to.
    */
   public void focus(Component c) {
-    robot.focus(c);
+    robot.focus(c, true);
   }
 
   /**
@@ -187,7 +186,7 @@ public final class RobotFixture {
   public void invokeLater(Component c, Runnable action) {
     robot.invokeLater(c, action);
   }
-  
+
   /**
    * Runs the given <code>{@link Runnable}</code> on the event dispatch thread, but don't return until it's been run.
    * @param action the <code>Runnable</code> to run.
@@ -205,8 +204,8 @@ public final class RobotFixture {
     robot.invokeAndWait(c, action);
   }
 
-  /** 
-   * Cleans up any used resources (keyboard, mouse, open windows and <code>{@link ScreenLock}</code>) used by this 
+  /**
+   * Cleans up any used resources (keyboard, mouse, open windows and <code>{@link ScreenLock}</code>) used by this
    * robot.
    */
   public void cleanUp() {
@@ -237,19 +236,19 @@ public final class RobotFixture {
   /**
    * Selects the given <code>{@link JMenuItem}</code>.
    * @param target the menu item to select.
-   */  
+   */
   public void selectMenuItem(JMenuItem target) {
     robot.selectMenuItem(target);
   }
 
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
-   * @param target the <code>Component</code> to click on. 
+   * @param target the <code>Component</code> to click on.
    */
   public void click(Component target) {
     click(target, LEFT_BUTTON, 1);
   }
-  
+
   /**
    * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
@@ -270,7 +269,7 @@ public final class RobotFixture {
   }
 
   /**
-   * Simulates a user clicking the given mouse button, the given times at the given position on the given 
+   * Simulates a user clicking the given mouse button, the given times at the given position on the given
    * <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
    * @param where the position where to click.
@@ -281,7 +280,7 @@ public final class RobotFixture {
     robot.click(target, where.x, where.y, button.mask, times);
     waitForIdle();
   }
-  
+
   /**
    * Simulates a user pressing the left mouse button on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
@@ -300,7 +299,7 @@ public final class RobotFixture {
   public void mousePress(Component target, Point where, MouseButton button) {
     robot.mousePress(target, where.x, where.y, button.mask);
   }
-  
+
   /**
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
@@ -311,7 +310,7 @@ public final class RobotFixture {
   public void mouseMove(Component target, int x, int y) {
     robot.mouseMove(target, x, y);
   }
-  
+
   /**
    * Shows a pop-up menu.
    * @param invoker the component to invoke the pop-up menu from.
@@ -321,7 +320,7 @@ public final class RobotFixture {
   public JPopupMenu showPopupMenu(Component invoker) {
     return showPopupMenu(invoker, centerOf(invoker));
   }
-  
+
   /**
    * Shows a pop-up menu at the given coordinates.
    * @param invoker the component to invoke the pop-up menu from.
@@ -356,7 +355,7 @@ public final class RobotFixture {
       waitForIdle();
     }
   }
-  
+
   /**
    * Simulates a user pressing given key. This method does not affect the current focus.
    * @param keyCode the code of the key to press.
@@ -366,7 +365,7 @@ public final class RobotFixture {
     robot.keyPress(keyCode);
     waitForIdle();
   }
-  
+
   /**
    * Simulates a user releasing the given key. This method does not affect the current focus.
    * @param keyCode the code of the key to release.
@@ -383,7 +382,7 @@ public final class RobotFixture {
   public void releaseLeftMouseButton() {
     robot.mouseRelease();
   }
-  
+
   /**
    * Releases any mouse button(s) used by the robot.
    */
@@ -392,7 +391,7 @@ public final class RobotFixture {
     if (buttons == 0) return;
     robot.mouseRelease(buttons);
   }
-  
+
   /**
    * Wait for an idle AWT event queue. Note that this is different from the implementation of
    * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
@@ -410,7 +409,7 @@ public final class RobotFixture {
   public boolean isDragging() {
     return Robot.getState().isDragging();
   }
-  
+
   /**
    * Returns the currently active pop-up menu, if any. If no pop-up is currently showing, returns <code>null</code>.
    * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
@@ -435,7 +434,7 @@ public final class RobotFixture {
   }
 
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
-  
+
   /**
    * Simulates a user closing the given window.
    * @param w the window to close.

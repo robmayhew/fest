@@ -1,19 +1,22 @@
 /*
  * Created on Jan 17, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -25,16 +28,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
+import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import org.fest.swing.driver.JTreeLocation;
-import org.fest.swing.testing.TestFrame;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTreeLocation}</code>.
@@ -46,42 +44,42 @@ public class JTreeLocationTest {
   private MyFrame frame;
   private JTreeLocation location;
   private List<TreePath[]> paths;
-  
+
   @BeforeMethod public void setUp() {
     frame = new MyFrame(getClass());
     frame.display(new Dimension(200, 200));
-    location = new JTreeLocation(frame.tree);
+    location = new JTreeLocation();
     populatePaths();
   }
 
   private void populatePaths() {
     paths = new ArrayList<TreePath[]>();
-    paths.add(array(path("root"), rootPath()));  
-    paths.add(array(path("root", "node1"), node1Path()));  
-    paths.add(array(path("root", "node1", "node11"), node11Path()));  
-    paths.add(array(path("root", "node1", "node11", "node111"), childOf(node11Path(), 0)));  
-    paths.add(array(path("root", "node1", "node11", "node112"), childOf(node11Path(), 1)));  
+    paths.add(array(path("root"), rootPath()));
+    paths.add(array(path("root", "node1"), node1Path()));
+    paths.add(array(path("root", "node1", "node11"), node11Path()));
+    paths.add(array(path("root", "node1", "node11", "node111"), childOf(node11Path(), 0)));
+    paths.add(array(path("root", "node1", "node11", "node112"), childOf(node11Path(), 1)));
     paths.add(array(path("root", "node1", "node12"), childOf(node1Path(), 1)));
-    paths.add(array(path("root", "node2"), childOf(rootPath(), 1))); 
+    paths.add(array(path("root", "node2"), childOf(rootPath(), 1)));
   }
-  
+
   @AfterMethod public void tearDown() {
     frame.destroy();
   }
-  
-  @Test(dataProvider = "pathPairIndices") 
+
+  @Test(dataProvider = "pathPairIndices")
   public void shouldFindLocationOfTreePath(int pathPairIndex) {
     TreePath[] pathPair = paths.get(pathPairIndex);
-    Point actual = location.pointAt(pathPair[0]);
+    Point actual = location.pointAt(frame.tree, pathPair[0]);
     Rectangle pathBounds = frame.tree.getPathBounds(pathPair[1]);
     Point expected = new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
     assertThat(actual).isEqualTo(expected);
   }
-  
+
   @DataProvider(name = "pathPairIndices")
   public Object[][] pathPairIndices() {
     return new Object[][] {
-        { 0 }, { 1 }, { 2 }, { 3 }, { 4 }, { 5 }, { 6 }  
+        { 0 }, { 1 }, { 2 }, { 3 }, { 4 }, { 5 }, { 6 }
     };
   }
 
@@ -96,7 +94,7 @@ public class JTreeLocationTest {
   private TreePath node1Path() {
     return childOf(rootPath(), 0);
   }
-  
+
   private TreePath rootPath() {
     DefaultTreeModel model = (DefaultTreeModel)frame.tree.getModel();
     return new TreePath(array(model.getRoot()));
@@ -108,7 +106,7 @@ public class JTreeLocationTest {
     frame.tree.expandPath(childPath);
     return childPath;
   }
-  
+
   private TreeNode childOf(Object parent, int index) {
     return ((DefaultMutableTreeNode)parent).getChildAt(index);
   }
@@ -117,29 +115,29 @@ public class JTreeLocationTest {
     private static final long serialVersionUID = 1L;
 
     final JTree tree = new JTree();
-    
+
     MyFrame(Class<?> testClass) {
       super(testClass);
       populateTree();
       tree.setPreferredSize(new Dimension(200, 200));
       add(new JScrollPane(tree));
     }
-    
+
     private void populateTree() {
-      MutableTreeNode root = 
-        node("root", 
-            node("node1", 
+      MutableTreeNode root =
+        node("root",
+            node("node1",
                 node("node11",
                     node("node111"),
                     node("node112")
-                    ), 
+                    ),
                 node("node12")
                 ),
             node("node2")
             );
       tree.setModel(new DefaultTreeModel(root));
     }
-    
+
     private MutableTreeNode node(String text, MutableTreeNode...children) {
       DefaultMutableTreeNode node = new DefaultMutableTreeNode(text);
       for (MutableTreeNode child : children) node.add(child);

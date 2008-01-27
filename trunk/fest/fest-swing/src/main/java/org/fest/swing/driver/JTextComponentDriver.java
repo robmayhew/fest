@@ -47,42 +47,36 @@ import org.fest.swing.exception.ActionFailedException;
  *
  * @author Alex Ruiz
  */
-public final class JTextComponentDriver {
-
-  private final RobotFixture robot;
-  private final JTextComponent textBox;
-  private final VisibilityDriver visibility;
+public final class JTextComponentDriver extends JComponentDriver {
 
   /**
    * Creates a new </code>{@link JTextComponentDriver}</code>.
    * @param robot the robot to use to simulate user input.
-   * @param textBox the target <code>JTextComponent</code>.
    */
-  public JTextComponentDriver(RobotFixture robot, JTextComponent textBox) {
-    this.robot = robot;
-    this.textBox = textBox;
-    visibility = new VisibilityDriver(robot);
+  public JTextComponentDriver(RobotFixture robot) {
+    super(robot);
   }
 
   /**
    * Select the given text range.
+   * @param textBox the target <code>JTextComponent</code>.
    * @param start the starting index of the selection.
    * @param end the ending index of the selection.
    * @throws ActionFailedException if the selecting the text in the given range fails.
    */
-  public void selectText(int start, int end) {
-    startSelection(start);
-    endSelection(end);
-    verifySelectionMade(start, end);
+  public void selectText(JTextComponent textBox, int start, int end) {
+    startSelection(textBox, start);
+    endSelection(textBox, end);
+    verifySelectionMade(textBox, start, end);
   }
 
-  private void startSelection(int index) {
+  private void startSelection(JTextComponent textBox, int index) {
     // From Abbot: Equivalent to JTextComponent.setCaretPosition(int), but operates through the UI.
-    avoidAutomaticDragAndDrop();
-    robot.mousePress(textBox, scrollToVisible(index));
+    avoidAutomaticDragAndDrop(textBox);
+    robot.mousePress(textBox, scrollToVisible(textBox, index));
   }
 
-  private void avoidAutomaticDragAndDrop() {
+  private void avoidAutomaticDragAndDrop(final JTextComponent textBox) {
     if (textBox.getSelectionStart() == textBox.getSelectionEnd()) return;
     robot.invokeAndWait(new Runnable() {
       public void run() {
@@ -92,9 +86,9 @@ public final class JTextComponentDriver {
     });
   }
 
-  private void endSelection(int index) {
+  private void endSelection(JTextComponent textBox, int index) {
     // From Abbot: Equivalent to JTextComponent.moveCaretPosition(int), but operates through the UI.
-    Point where = scrollToVisible(index);
+    Point where = scrollToVisible(textBox, index);
     robot.mouseMove(textBox, where.x, where.y);
     if (IS_OS_X) pause(75);
     robot.releaseLeftMouseButton();
@@ -102,22 +96,23 @@ public final class JTextComponentDriver {
 
   /**
    * Move the pointer to the location of the given index. Takes care of auto-scrolling through text.
-   * @param index the given location
+   * @param textBox the target <code>JTextComponent</code>.
+   * @param index the given location.
    * @return the position of the pointer after being moved.
    * @throws ActionFailedException if it was not possible to scroll to the location of the given index.
    */
-  private Point scrollToVisible(int index) {
-    Rectangle indexLocation = locationOf(index);
-    if (isVisible(indexLocation)) return centerOf(indexLocation);
-    scrollToVisible(indexLocation);
-    indexLocation = locationOf(index);
-    if (isVisible(indexLocation)) return centerOf(indexLocation);
+  private Point scrollToVisible(JTextComponent textBox, int index) {
+    Rectangle indexLocation = locationOf(textBox, index);
+    if (isRectangleVisible(textBox, indexLocation)) return centerOf(indexLocation);
+    scrollToVisible(textBox, indexLocation);
+    indexLocation = locationOf(textBox, index);
+    if (isRectangleVisible(textBox, indexLocation)) return centerOf(indexLocation);
     throw actionFailure(concat(
         "Unable to make visible the location of the index '", valueOf(index),
         "' by scrolling the point (", formatOriginOf(indexLocation), ") on ", format(textBox)));
   }
 
-  private Rectangle locationOf(int index) {
+  private Rectangle locationOf(JTextComponent textBox, int index) {
     Rectangle r = null;
     try {
       r = textBox.modelToView(index);
@@ -128,7 +123,7 @@ public final class JTextComponentDriver {
     throw actionFailure(concat("Text component", format(textBox)," has zero size"));
   }
 
-  private boolean isVisible(Rectangle r) {
+  private boolean isRectangleVisible(JTextComponent textBox, Rectangle r) {
     return textBox.getVisibleRect().contains(r.x, r.y);
   }
 
@@ -136,26 +131,26 @@ public final class JTextComponentDriver {
     return concat(valueOf(r.x), ",", valueOf(r.y));
   }
 
-  private void scrollToVisible(Rectangle r) {
-    visibility.scrollToVisible(textBox, r);
+  private void scrollToVisible(JTextComponent textBox, Rectangle r) {
+    super.scrollToVisible(textBox, r);
     // Taken from JComponent
-    if (visibility.isVisible(textBox, r)) return;
-    scrollToVisibleIfIsTextField(r);
+    if (isVisible(textBox, r)) return;
+    scrollToVisibleIfIsTextField(textBox, r);
   }
 
-  private void scrollToVisibleIfIsTextField(Rectangle r) {
+  private void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
-    Point origin = origin();
+    Point origin = origin(textBox);
     Container parent = textBox.getParent();
     while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
       addRectangleCoordinatesToPoint(parent.getBounds(), origin);
       parent = parent.getParent();
     }
     if (parent == null || parent instanceof CellRendererPane) return;
-    visibility.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(origin, r));
+    super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(origin, r));
   }
 
-  private Point origin() {
+  private Point origin(JTextComponent textBox) {
     return new Point(textBox.getX(), textBox.getY());
   }
 
@@ -175,7 +170,7 @@ public final class JTextComponentDriver {
     return new Point(r.x + r.width / 2, r.y + r.height / 2);
   }
 
-  private void verifySelectionMade(int start, int end) {
+  private void verifySelectionMade(JTextComponent textBox, int start, int end) {
     int actualStart = textBox.getSelectionStart();
     int actualEnd = textBox.getSelectionEnd();
     if (actualStart == min(start, end) && actualEnd == max(start, end)) return;

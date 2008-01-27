@@ -1,19 +1,22 @@
 /*
  * Created on Jan 19, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.Swing.centerOf;
 
 import java.awt.Point;
 
@@ -25,165 +28,176 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.Swing.centerOf;
-
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JList}</code>s. This class is intended for internal
  * use only.
- * 
+ *
  * <p>
  * Adapted from <code>abbot.tester.JListTester</code> from <a href="http://abbot.sourceforge.net"
  * target="_blank">Abbot</a>.
  * </p>
- * 
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 public final class JListDriver {
 
   private final RobotFixture robot;
-  private final JList list;
   private final JListLocation location;
   private final DragAndDropDriver dragAndDrop;
 
   /**
    * Creates a new </code>{@link JListDriver}</code>.
    * @param robot the robot to use to simulate user input.
-   * @param list the target <code>JList</code>.
    */
-  public JListDriver(RobotFixture robot, JList list) {
+  public JListDriver(RobotFixture robot) {
     this.robot = robot;
-    this.list = list;
-    location = new JListLocation(list);
-    dragAndDrop = new DragAndDropDriver(robot, list);
+    location = new JListLocation();
+    dragAndDrop = new DragAndDropDriver(robot);
   }
 
-  /** 
-   * Returns an array of <code>String</code>s that represents the list's contents. 
+  /**
+   * Returns an array of <code>String</code>s that represents the list's contents.
+   * @param list the target <code>JList</code>
    * @return an array of <code>String</code>s that represents the list's contents.
    */
-  public String[] contents() {
-    String[] values = new String[size()];
+  public String[] contentsOf(JList list) {
+    String[] values = new String[sizeOf(list)];
     for (int i = 0; i < values.length; i++)
-      values[i] = model().getElementAt(i).toString();
+      values[i] = model(list).getElementAt(i).toString();
     return values;
   }
-  
-  private int size() { return model().getSize(); }
-  private ListModel model() { return list.getModel(); }
-  
+
+  private int sizeOf(JList list) {
+    return model(list).getSize();
+  }
+
+  private ListModel model(JList list) {
+    return list.getModel();
+  }
+
   /**
    * Clicks the first item matching the given value, using the specified mouse button, the given number times.
+   * @param list the target <code>JList</code>
    * @param value the value to match.
    * @param button the button to use.
    * @param times the number of times to click.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void clickItem(Object value, MouseButton button, int times) {
-    robot.click(list, location.pointAt(value), button, times);
+  public void clickItem(JList list, Object value, MouseButton button, int times) {
+    robot.click(list, location.pointAt(list, value), button, times);
   }
 
   /**
    * Clicks the item under the given index using left mouse button once.
+   * @param list the target <code>JList</code>
    * @param index the index of the item to click.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void clickItem(int index) {
-    clickItem(index, LEFT_BUTTON, 1);
+  public void clickItem(JList list, int index) {
+    clickItem(list, index, LEFT_BUTTON, 1);
   }
-  
+
   /**
    * Clicks the item under the given index, using the specified mouse button, the given number times.
+   * @param list the target <code>JList</code>
    * @param index the index of the item to click.
    * @param button the button to use.
    * @param times the number of times to click.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void clickItem(int index, MouseButton button, int times) {
-    robot.click(list, location.pointAt(index), button, times);
+  public void clickItem(JList list, int index, MouseButton button, int times) {
+    robot.click(list, location.pointAt(list, index), button, times);
   }
 
   /**
    * Returns the text of the element under the given index.
+   * @param list the target <code>JList</code>
    * @param index the given index.
    * @return the text of the element under the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public String text(int index) {
-    return location.text(index);
+  public String text(JList list, int index) {
+    return location.text(list, index);
   }
-  
+
   /**
    * Returns the index of the first item matching the given value.
+   * @param list the target <code>JList</code>
    * @param value the value to match.
    * @return the index of the first item matching the given value.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public int indexOf(Object value) {
-    return location.indexOf(value);
+  public int indexOf(JList list, Object value) {
+    return location.indexOf(list, value);
   }
 
   /**
    * Starts a drag operation at the location of the first item matching the given value.
+   * @param list the target <code>JList</code>
    * @param value the value to match.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void drag(Object value) {
-    dragAndDrop.drag(location.pointAt(value));
+  public void drag(JList list, Object value) {
+    dragAndDrop.drag(list, location.pointAt(list, value));
   }
 
   /**
    * Ends a drag operation at the location of the first item matching the given value.
+   * @param list the target <code>JList</code>
    * @param value the value to match.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop(Object value) {
-    dragAndDrop.drop(location.pointAt(value));
+  public void drop(JList list, Object value) {
+    dragAndDrop.drop(list, location.pointAt(list, value));
   }
 
   /**
    * Starts a drag operation at the location of the given index.
+   * @param list the target <code>JList</code>
    * @param index the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void drag(int index) {
-    dragAndDrop.drag(pointAt(index));
+  public void drag(JList list, int index) {
+    dragAndDrop.drag(list, pointAt(list, index));
   }
 
   /**
    * Ends a drag operation at the location of the given index.
+   * @param list the target <code>JList</code>
    * @param index the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop(int index) {
-    dragAndDrop.drop(pointAt(index));
+  public void drop(JList list, int index) {
+    dragAndDrop.drop(list, pointAt(list, index));
   }
-  
+
   /**
    * Ends a drag operation at the center of the <code>{@link JList}</code>.
+   * @param list the target <code>JList</code>
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop() {
-    dragAndDrop.drop(centerOf(list));
+  public void drop(JList list) {
+    dragAndDrop.drop(list, centerOf(list));
   }
 
   /**
    * Returns the coordinates of the item at the given index.
+   * @param list the target <code>JList</code>
    * @param index the given index.
    * @return the coordinates of the item at the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public Point pointAt(int index) {
-    return location.pointAt(index);
+  public Point pointAt(JList list, int index) {
+    return location.pointAt(list, index);
   }
 }

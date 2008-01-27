@@ -62,7 +62,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   private JTextComponentDriver newTextComponentDriver() {
-    return new JTextComponentDriver(robot, target);
+    return new JTextComponentDriver(robot);
   }
 
   /**
@@ -216,7 +216,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    */
   public final JTextComponentFixture selectText(int start, int end) {
     if (isEmpty(text())) return this;
-    driver.selectText(start, end);
+    driver.selectText(target, start, end);
     return this;
   }
 

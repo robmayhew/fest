@@ -1,16 +1,16 @@
 /*
  * Created on May 21, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -29,7 +29,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 /**
  * Understands simulation of user events on a <code>{@link JTree}</code> and verification of the state of such
  * <code>{@link JTree}</code>.
- * 
+ *
  * @author Keith Coughtrey
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -38,7 +38,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 public class JTreeFixture extends ComponentFixture<JTree> {
 
   private final JTreeDriver treeDriver;
-  
+
   /**
    * Creates a new <code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTree</code>.
@@ -62,9 +62,9 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   private JTreeDriver newTreeDriver() {
-    return new JTreeDriver(robot, target);
+    return new JTreeDriver(robot);
   }
-  
+
   /**
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.
@@ -74,7 +74,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public final JTreeFixture selectRow(int row) {
-    treeDriver.selectRow(row);
+    treeDriver.selectRow(target, row);
     return this;
   }
 
@@ -87,21 +87,21 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public final JTreeFixture toggleRow(int row) {
-    treeDriver.toggleRow(row);
+    treeDriver.toggleRow(target, row);
     return this;
   }
 
   /**
    * Select the given path, expanding parent nodes if necessary. TreePath must consist of usable String representations
    * that can be used in later comparisons. The default &lt;classname&gt;@&lt;hashcode&gt; returned by
-   * <code>{@link Object#toString()}</code> is not usable; if that is all that is available, refer to the row number 
+   * <code>{@link Object#toString()}</code> is not usable; if that is all that is available, refer to the row number
    * instead.
    * @param treePath A path comprising an array of Strings that match the toString()'s of the path nodes
    * @return this fixture.
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
   public final JTreeFixture selectPath(TreePath treePath) {
-    treeDriver.selectPath(treePath);
+    treeDriver.selectPath(target, treePath);
     return this;
   }
 
@@ -110,7 +110,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @return this fixture.
    */
   public final JTreeFixture click() {
-    return (JTreeFixture)doClick(); 
+    return (JTreeFixture)doClick();
   }
 
   /**
@@ -175,7 +175,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   public final JTreeFixture pressKey(int keyCode) {
     return (JTreeFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JTree}</code>.
    * @param keyCode the code of the key to release.
@@ -185,7 +185,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   public final JTreeFixture releaseKey(int keyCode) {
     return (JTreeFixture)doReleaseKey(keyCode);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JTree}</code> is visible.
    * @return this fixture.
@@ -212,7 +212,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   public final JTreeFixture requireEnabled() {
     return (JTreeFixture)assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
@@ -222,7 +222,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   public final JTreeFixture requireEnabled(Timeout timeout) {
     return (JTreeFixture)assertEnabled(timeout);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JTree}</code> is disabled.
    * @return this fixture.
@@ -239,10 +239,10 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
   public final JTreeFixture drag(TreePath treePath) {
-    treeDriver.drag(treePath);
+    treeDriver.drag(target, treePath);
     return this;
   }
-  
+
   /**
    * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
    * @param treePath the tree path corresponding to the item to drop.
@@ -251,10 +251,10 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public final JTreeFixture drop(TreePath treePath) {
-    treeDriver.drop(treePath);
+    treeDriver.drop(target, treePath);
     return this;
   }
-  
+
   /**
    * Simulates a user dragging a row from this fixture's <code>{@link JTree}</code>.
    * @param row the index of the row to drag.
@@ -264,7 +264,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public JTreeFixture drag(int row) {
-    treeDriver.drag(row);
+    treeDriver.drag(target, row);
     return this;
   }
 
@@ -278,7 +278,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public JTreeFixture drop(int row) {
-    treeDriver.drop(row);
+    treeDriver.drop(target, row);
     return this;
   }
 }
