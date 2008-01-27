@@ -1,18 +1,26 @@
 /*
  * Created on Jan 21, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
+
+import static java.lang.Math.*;
+import static java.lang.String.valueOf;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.IS_OS_X;
+import static org.fest.util.Strings.concat;
 
 import java.awt.Container;
 import java.awt.Point;
@@ -27,25 +35,16 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 
-import static java.lang.Math.*;
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.IS_OS_X;
-import static org.fest.util.Strings.concat;
-
 /**
  * Understands simulation of user input on a <code>{@link JTextComponent}</code>. Unlike
  * <code>JTextComponentFixture</code>, this driver only focuses on behavior present only in
  * <code>{@link JTextComponent}</code>s. This class is intended for internal use only.
- * 
+ *
  * <p>
  * Adapted from <code>abbot.tester.JTextComponentTester</code> from <a href="http://abbot.sourceforge.net"
  * target="_blank">Abbot</a>.
  * </p>
- * 
+ *
  * @author Alex Ruiz
  */
 public final class JTextComponentDriver {
@@ -65,15 +64,15 @@ public final class JTextComponentDriver {
     visibility = new VisibilityDriver(robot);
   }
 
-  /** 
-   * Select the given text range. 
-   * @param start 
-   * @param end 
+  /**
+   * Select the given text range.
+   * @param start the starting index of the selection.
+   * @param end the ending index of the selection.
+   * @throws ActionFailedException if the selecting the text in the given range fails.
    */
   public void selectText(int start, int end) {
     startSelection(start);
     endSelection(end);
-    // Verify the selection was properly made
     verifySelectionMade(start, end);
   }
 
@@ -123,27 +122,27 @@ public final class JTextComponentDriver {
     try {
       r = textBox.modelToView(index);
     } catch (BadLocationException e) {
-      throw actionFailure(concat("Unable to get location for index '", valueOf(index), "' in ", format(textBox)), e);
+      throw actionFailure(concat("Unable to get location for index '", valueOf(index), "' in ", format(textBox)));
     }
-    if (r != null) return r; 
+    if (r != null) return r;
     throw actionFailure(concat("Text component", format(textBox)," has zero size"));
   }
 
   private boolean isVisible(Rectangle r) {
     return textBox.getVisibleRect().contains(r.x, r.y);
   }
-  
+
   private String formatOriginOf(Rectangle r) {
     return concat(valueOf(r.x), ",", valueOf(r.y));
   }
-  
+
   private void scrollToVisible(Rectangle r) {
     visibility.scrollToVisible(textBox, r);
     // Taken from JComponent
     if (visibility.isVisible(textBox, r)) return;
     scrollToVisibleIfIsTextField(r);
   }
-  
+
   private void scrollToVisibleIfIsTextField(Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
     Point origin = origin();
@@ -155,16 +154,16 @@ public final class JTextComponentDriver {
     if (parent == null || parent instanceof CellRendererPane) return;
     visibility.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(origin, r));
   }
-  
+
   private Point origin() {
     return new Point(textBox.getX(), textBox.getY());
   }
-  
+
   private void addRectangleCoordinatesToPoint(Rectangle r, Point p) {
     p.x += r.x;
     p.y += r.y;
   }
-  
+
   private Rectangle rectangleWithPointAddedToCoordinates(Point p, Rectangle r) {
     Rectangle destination = new Rectangle(r);
     destination.x += p.x;
@@ -181,7 +180,7 @@ public final class JTextComponentDriver {
     int actualEnd = textBox.getSelectionEnd();
     if (actualStart == min(start, end) && actualEnd == max(start, end)) return;
     throw actionFailure(concat(
-        "Unable to select text using indices '", valueOf(start), "' and '", valueOf(end), 
-        ", current selection starts at '", valueOf(actualStart), "' and ends at '", valueOf(actualEnd)));
+        "Unable to select text using indices '", valueOf(start), "' and '", valueOf(end),
+        ", current selection starts at '", valueOf(actualStart), "' and ends at '", valueOf(actualEnd), "'"));
   }
 }
