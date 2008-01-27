@@ -14,14 +14,20 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.event.KeyEvent.VK_UNDEFINED;
+import static org.fest.swing.driver.Actions.findActionKey;
+import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 import org.fest.swing.core.RobotFixture;
-
-import abbot.Log;
+import org.fest.swing.exception.ActionFailedException;
 
 /**
  * Understands simulation of user input on a <code>{@link JComponent}</code>. This class is intended for internal use
@@ -51,7 +57,6 @@ public abstract class JComponentDriver extends ComponentDriver {
    * @param r the visible <code>Rectangle</code>.
    */
   protected final void scrollToVisible(final JComponent c, final Rectangle r) {
-    Log.debug("Scroll to visible: " + r);
     // From Abbot:
     // Ideally, we'd use scrollBar commands to effect the scrolling, but that gets really complicated for no real gain
     // in function. Fortunately, Swing's Scrollable makes for a simple solution.
@@ -90,5 +95,40 @@ public abstract class JComponentDriver extends ComponentDriver {
 
   private Rectangle visibleRectangleOf(JComponent c) {
     return c.getVisibleRect();
+  }
+
+  /**
+   * Invoke an <code>{@link javax.swing.Action}</code> from the <code>{@link JComponent}</code>'s
+   * <code>{@link javax.swing.ActionMap}</code>.
+   * @param c the given <code>JComponent</code>.
+   * @param name the name of the <code>Action</code> to invoke.
+   * @throws ActionFailedException if an <code>Action</code> cannot be found under the given name.
+   * @throws ActionFailedException if a <code>KeyStroke</code> cannot be found for the <code>Action</code> under the
+   *          given name.
+   * @throws ActionFailedException if it is not possible to type any of the found <code>KeyStroke</code>s.
+   */
+  public void invokeAction(JComponent c, String name) {
+    robot.focusAndWaitForFocusGain(c);
+    // From Abbot: On OSX/1.3.1, some action map keys are actions instead of strings.
+    // On XP/1.4.1, all action map keys are strings.
+    // If we can't look it up with the string key we saved, check all the actions for a corresponding name.
+    Object key = findActionKey(name, c.getActionMap());
+    KeyStroke[] keyStrokes = findKeyStrokesForAction(name, key, c.getInputMap());
+    for (KeyStroke keyStroke : keyStrokes) {
+      try {
+        type(keyStroke);
+        robot.waitForIdle();
+        return;
+      } catch (IllegalArgumentException e) { /* try the next one, if any */ }
+    }
+    throw actionFailure(concat("Unable to type any key for the action with key ", quote(name)));
+  }
+
+  private void type(KeyStroke keyStroke) {
+    if (keyStroke.getKeyCode() == VK_UNDEFINED) {
+      robot.type(keyStroke.getKeyChar());
+      return;
+    }
+    robot.pressAndReleaseKey(keyStroke.getKeyCode(), keyStroke.getModifiers());
   }
 }

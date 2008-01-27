@@ -16,11 +16,12 @@ package org.fest.swing.driver;
 
 import static java.lang.Math.*;
 import static java.lang.String.valueOf;
+import static javax.swing.text.DefaultEditorKit.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.Platform.IS_OS_X;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.*;
 
 import java.awt.Container;
 import java.awt.Point;
@@ -47,7 +48,7 @@ import org.fest.swing.exception.ActionFailedException;
  *
  * @author Alex Ruiz
  */
-public final class JTextComponentDriver extends JComponentDriver {
+public class JTextComponentDriver extends JComponentDriver {
 
   /**
    * Creates a new </code>{@link JTextComponentDriver}</code>.
@@ -58,13 +59,30 @@ public final class JTextComponentDriver extends JComponentDriver {
   }
 
   /**
+   * Types the given text into the <code>{@link JTextComponent}</code>, replacing any existing text already there. If
+   * the empty <code>String</code> or <code>null</code> is given, simply removes all existing text.
+   * @param textBox the target <code>JTextComponent</code>.
+   * @param text the text to enter.
+   */
+  public final void replaceText(JTextComponent textBox, String text) {
+    scrollToVisible(textBox, 0);
+    invokeAction(textBox, selectAllAction);
+    if (isEmpty(text) && !isEmpty(textBox.getText())) {
+        invokeAction(textBox, deletePrevCharAction);
+        return;
+    }
+    robot.focus(textBox);
+    robot.enterText(text);
+  }
+
+  /**
    * Select the given text range.
    * @param textBox the target <code>JTextComponent</code>.
    * @param start the starting index of the selection.
    * @param end the ending index of the selection.
    * @throws ActionFailedException if the selecting the text in the given range fails.
    */
-  public void selectText(JTextComponent textBox, int start, int end) {
+  public final void selectText(JTextComponent textBox, int start, int end) {
     startSelection(textBox, start);
     endSelection(textBox, end);
     verifySelectionMade(textBox, start, end);

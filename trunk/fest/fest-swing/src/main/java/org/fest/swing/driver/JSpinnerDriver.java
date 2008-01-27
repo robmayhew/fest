@@ -40,53 +40,60 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JSpinnerDriver extends JComponentDriver {
+public class JSpinnerDriver extends JComponentDriver {
 
-  private final JSpinner spinner;
+  private final JTextComponentDriver textComponentDriver;
 
   /**
    * Creates a new </code>{@link JSpinnerDriver}</code>.
    * @param robot the robot to use to simulate user input.
-   * @param spinner the target <code>JSpinner</code>.
    */
-  public JSpinnerDriver(RobotFixture robot, JSpinner spinner) {
+  public JSpinnerDriver(RobotFixture robot) {
     super(robot);
-    this.spinner = spinner;
+    textComponentDriver = new JTextComponentDriver(robot);
   }
 
   /**
    * Increments the value of the <code>{@link JSpinner}</code> the given number of times.
+   * @param spinner the target <code>JSpinner</code>.
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be incremented.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public void increment(int times) {
+  public final void increment(JSpinner spinner, int times) {
     if (times <= 0)
       throw actionFailure("The number of times to increment the value should be greater than zero");
-    for (int i = 0; i < times; i++) increment();
+    for (int i = 0; i < times; i++) increment(spinner);
   }
 
-  /** Increments the value of the <code>{@link JSpinner}</code>. */
-  public void increment() {
-    pressKey(VK_UP);
+  /**
+   * Increments the value of the <code>{@link JSpinner}</code>.
+   * @param spinner the target <code>JSpinner</code>.
+   */
+  public final void increment(JSpinner spinner) {
+    pressKey(spinner, VK_UP);
   }
 
   /**
    * Decrements the value of the <code>{@link JSpinner}</code> the given number of times.
+   * @param spinner the target <code>JSpinner</code>.
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be decremented.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public void decrement(int times) {
+  public final void decrement(JSpinner spinner, int times) {
     if (times <= 0)
       throw actionFailure("The number of times to decrement the value should be greater than zero");
-    for (int i = 0; i < times; i++) decrement();
+    for (int i = 0; i < times; i++) decrement(spinner);
   }
 
-  /** Decrements the value of the <code>{@link JSpinner}</code>. */
-  public void decrement() {
-    pressKey(VK_DOWN);
+  /**
+   * Decrements the value of the <code>{@link JSpinner}</code>.
+   * @param spinner the target <code>JSpinner</code>.
+   */
+  public final void decrement(JSpinner spinner) {
+    pressKey(spinner, VK_DOWN);
   }
 
-  private void pressKey(int key) {
+  private void pressKey(JSpinner spinner, int key) {
     robot.focus(spinner);
     robot.pressAndReleaseKeys(key);
   }
@@ -94,15 +101,16 @@ public final class JSpinnerDriver extends JComponentDriver {
   /**
    * Enters the given text in the <code>{@link JSpinner}</code>, assuming its editor has a
    * <code>{@link JTextComponent}</code> under it.
+   * @param spinner the target <code>JSpinner</code>.
    * @param text the text to enter.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
    *          cannot be found.
+   * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
-  public void enterText(String text) {
+  public final void enterText(JSpinner spinner, String text) {
     try {
       JTextComponent editor = robot.finder().findByType(spinner, JTextComponent.class);
-      robot.focus(editor);
-      robot.enterText(text);
+      textComponentDriver.replaceText(editor, text);
       robot.pressAndReleaseKeys(VK_ENTER);
     } catch (ComponentLookupException e) {
       throw actionFailure(concat("Unable to find editor for ", format(spinner)));

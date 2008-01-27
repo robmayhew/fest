@@ -41,7 +41,7 @@ import org.fest.swing.exception.LocationUnavailableException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JListDriver extends JComponentDriver {
+public class JListDriver extends JComponentDriver {
 
   private final JListLocation location;
 
@@ -59,7 +59,7 @@ public final class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>
    * @return an array of <code>String</code>s that represents the list's contents.
    */
-  public String[] contentsOf(JList list) {
+  public final String[] contentsOf(JList list) {
     String[] values = new String[sizeOf(list)];
     for (int i = 0; i < values.length; i++)
       values[i] = model(list).getElementAt(i).toString();
@@ -82,7 +82,7 @@ public final class JListDriver extends JComponentDriver {
    * @param times the number of times to click.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void clickItem(JList list, Object value, MouseButton button, int times) {
+  public final void clickItem(JList list, Object value, MouseButton button, int times) {
     robot.click(list, location.pointAt(list, value), button, times);
   }
 
@@ -93,7 +93,7 @@ public final class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void clickItem(JList list, int index) {
+  public final void clickItem(JList list, int index) {
     clickItem(list, index, LEFT_BUTTON, 1);
   }
 
@@ -106,7 +106,7 @@ public final class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void clickItem(JList list, int index, MouseButton button, int times) {
+  public final void clickItem(JList list, int index, MouseButton button, int times) {
     robot.click(list, location.pointAt(list, index), button, times);
   }
 
@@ -118,7 +118,7 @@ public final class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public String text(JList list, int index) {
+  public final String text(JList list, int index) {
     return location.text(list, index);
   }
 
@@ -129,7 +129,7 @@ public final class JListDriver extends JComponentDriver {
    * @return the index of the first item matching the given value.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public int indexOf(JList list, Object value) {
+  public final int indexOf(JList list, Object value) {
     return location.indexOf(list, value);
   }
 
@@ -139,7 +139,7 @@ public final class JListDriver extends JComponentDriver {
    * @param value the value to match.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void drag(JList list, Object value) {
+  public final void drag(JList list, Object value) {
     super.drag(list, location.pointAt(list, value));
   }
 
@@ -150,7 +150,7 @@ public final class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop(JList list, Object value) {
+  public final void drop(JList list, Object value) {
     super.drop(list, location.pointAt(list, value));
   }
 
@@ -161,7 +161,7 @@ public final class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void drag(JList list, int index) {
+  public final void drag(JList list, int index) {
     super.drag(list, pointAt(list, index));
   }
 
@@ -173,7 +173,7 @@ public final class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop(JList list, int index) {
+  public final void drop(JList list, int index) {
     super.drop(list, pointAt(list, index));
   }
 
@@ -182,7 +182,7 @@ public final class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop(JList list) {
+  public final void drop(JList list) {
     super.drop(list, centerOf(list));
   }
 
@@ -194,7 +194,7 @@ public final class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public Point pointAt(JList list, int index) {
+  public final Point pointAt(JList list, int index) {
     return location.pointAt(list, index);
   }
 }

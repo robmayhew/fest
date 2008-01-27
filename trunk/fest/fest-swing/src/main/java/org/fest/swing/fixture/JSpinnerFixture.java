@@ -61,7 +61,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
   }
 
   private JSpinnerDriver newSpinnerDriver() {
-    return new JSpinnerDriver(robot, target);
+    return new JSpinnerDriver(robot);
   }
 
   /**
@@ -82,7 +82,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JSpinnerFixture increment(int times) {
-    driver.increment(times);
+    driver.increment(target, times);
     return this;
   }
 
@@ -91,7 +91,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    */
   public final JSpinnerFixture increment() {
-    driver.increment();
+    driver.increment(target);
     return this;
   }
 
@@ -102,7 +102,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JSpinnerFixture decrement(int times) {
-    driver.decrement(times);
+    driver.decrement(target, times);
     return this;
   }
 
@@ -111,20 +111,21 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    */
   public final JSpinnerFixture decrement() {
-    driver.decrement();
+    driver.decrement(target);
     return this;
   }
 
   /**
-   * Simulates a user entering the given text in this fixture's <code>{@link JSpinner}</code>, assuming its editor has a
-   * <code>{@link JTextComponent}</code> under it.
+   * Simulates a user entering the given text in this fixture's <code>{@link JSpinner}</code> and pressing
+   * &quot;Enter&quot; (assuming its editor has a <code>{@link JTextComponent}</code> under it.)
    * @param text the text to enter.
    * @return this fixture.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
    *          cannot be found.
+   * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
   public final JSpinnerFixture enterText(String text) {
-    driver.enterText(text);
+    driver.enterText(target, text);
     return this;
   }
 

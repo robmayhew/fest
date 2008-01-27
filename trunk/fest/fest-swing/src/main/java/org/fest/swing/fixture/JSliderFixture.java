@@ -1,27 +1,26 @@
 /*
  * Created on Jul 1, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
 
 import javax.swing.JSlider;
 
-import abbot.tester.JSliderTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JSliderDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -33,6 +32,8 @@ import org.fest.swing.exception.WaitTimedOutError;
  */
 public class JSliderFixture extends ComponentFixture<JSlider> {
 
+  private final JSliderDriver driver;
+
   /**
    * Creates a new <code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSlider</code>.
@@ -42,6 +43,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    */
   public JSliderFixture(RobotFixture robot, String sliderName) {
     super(robot, sliderName, JSlider.class);
+    driver = newSliderDriver();
   }
 
   /**
@@ -51,33 +53,38 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    */
   public JSliderFixture(RobotFixture robot, JSlider target) {
     super(robot, target);
+    driver = newSliderDriver();
   }
-  
+
+  private JSliderDriver newSliderDriver() {
+    return new JSliderDriver(robot);
+  }
+
   /**
-   * Simulates a user incrementing the value of this fixture's <code>{@link JSlider}</code>.
+   * Simulates a user clicking at the maximum end of this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture increment() {
-    sliderTester().actionIncrement(target);
+    driver.increment(target);
     return this;
   }
-  
+
   /**
-   * Simulates a user decrementing the value of this fixture's <code>{@link JSlider}</code>.
+   * Simulates a user clicking at the minimum end of this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
   public final JSliderFixture decrement() {
-    sliderTester().actionDecrement(target);
+    driver.decrement(target);
     return this;
   }
-  
+
   /**
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.
    * @return this fixture.
    */
   public JSliderFixture slideTo(int value) {
-    sliderTester().actionSlide(target, value);
+    driver.slide(target, value);
     return this;
   }
 
@@ -86,7 +93,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    */
   public JSliderFixture slideToMax() {
-    sliderTester().actionSlideMaximum(target);
+    driver.slideToMax(target);
     return this;
   }
 
@@ -95,12 +102,8 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    */
   public JSliderFixture slideToMin() {
-    sliderTester().actionSlideMinimum(target);
+    driver.slideToMin(target);
     return this;
-  }
-
-  protected final JSliderTester sliderTester() {
-    return (JSliderTester)tester();
   }
 
   /**
@@ -152,9 +155,9 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture focus() {
     return (JSliderFixture)doFocus();
   }
-  
+
   /**
-   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JSlider}</code>. This method 
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JSlider}</code>. This method
    * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
@@ -163,7 +166,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture pressAndReleaseKeys(int... keyCodes) {
     return (JSliderFixture)doPressAndReleaseKeys(keyCodes);
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link JSlider}</code>.
    * @param keyCode the code of the key to press.
@@ -173,7 +176,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture pressKey(int keyCode) {
     return (JSliderFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JSlider}</code>.
    * @param keyCode the code of the key to release.
@@ -183,7 +186,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture releaseKey(int keyCode) {
     return (JSliderFixture)doReleaseKey(keyCode);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
@@ -192,7 +195,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture requireVisible() {
     return (JSliderFixture)assertVisible();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JSlider}</code> is not visible.
    * @return this fixture.
@@ -201,7 +204,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture requireNotVisible() {
     return (JSliderFixture)assertNotVisible();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JSlider}</code> is enabled.
    * @return this fixture.
@@ -210,7 +213,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   public final JSliderFixture requireEnabled() {
     return (JSliderFixture)assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JSlider}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.

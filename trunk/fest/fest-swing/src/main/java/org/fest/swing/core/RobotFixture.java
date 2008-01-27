@@ -170,11 +170,21 @@ public final class RobotFixture {
   }
 
   /**
-   * Gives input focus to the given <code>{@link Component}</code>.
+   * Gives input focus to the given <code>{@link Component}</code>. Note that the component may not yet have focus when
+   * this method returns.
    * @param c the component to give focus to.
    */
   public void focus(Component c) {
     robot.focus(c);
+  }
+
+  /**
+   * Gives input focus to the given <code>{@link Component}</code> and waits until the <code>{@link Component}</code>
+   * has focus.
+   * @param c the component to give focus to.
+   */
+  public void focusAndWaitForFocusGain(Component c) {
+    robot.focus(c, true);
   }
 
   /**
@@ -337,11 +347,30 @@ public final class RobotFixture {
   }
 
   /**
-   * Simulates a user entering the given text.
+   * Simulates a user entering the given text. Note that this method the key strokes to the component that has input
+   * focus.
    * @param text the text to enter.
    */
   public void enterText(String text) {
     robot.keyString(text);
+  }
+
+  /**
+   * Types the given character. Note that this method sends the key strokes to the component that has input focus.
+   * @param character the character to type.
+   */
+  public void type(char character) {
+    robot.keyStroke(character);
+  }
+
+  /**
+   * Type the given keycode with the given modifiers. Modifiers is a mask from the available
+   * <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyCode the code of the key to press.
+   * @param modifiers the given modifiers.
+   */
+  public void pressAndReleaseKey(int keyCode, int modifiers) {
+    robot.key(keyCode, modifiers);
   }
 
   /**
