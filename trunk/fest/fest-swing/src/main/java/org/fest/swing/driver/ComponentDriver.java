@@ -23,6 +23,8 @@ import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.Point;
 
 import org.fest.swing.core.RobotFixture;
@@ -49,7 +51,7 @@ public abstract class ComponentDriver {
 
   /**
    * Creates a new </code>{@link ComponentDriver}</code>.
-   * @param robot
+   * @param robot the robot to use to simulate user input.
    */
   public ComponentDriver(RobotFixture robot) {
     this.robot = robot;
@@ -139,4 +141,25 @@ public abstract class ComponentDriver {
     for (Point p : points) robot.mouseMove(target, p.x, p.y);
   }
 
+  /**
+   * Indicates whether it is possible for the user to resize the given component.
+   * @param c the target component.
+   * @return <code>true</code> if it is possible for the user to resize the given component, <code>false</code>
+   * otherwise.
+   */
+  protected final boolean isUserResizable(Component c) {
+    if (c instanceof Dialog) return ((Dialog)c).isResizable();
+    if (c instanceof Frame) return ((Frame)c).isResizable();
+    return canResizeWindows(); // most X11 window managers allow arbitrary resizing
+  }
+
+  /**
+   * Indicates whether it is possible for the user to move the given component.
+   * @param c the target component.
+   * @return <code>true</code> if it is possible for the user to move the given component, <code>false</code>
+   * otherwise.
+   */
+  protected final boolean isUserMovable(Component c) {
+    return c instanceof Dialog || c instanceof Frame || canMoveWindows();
+  }
 }

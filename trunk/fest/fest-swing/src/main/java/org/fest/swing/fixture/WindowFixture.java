@@ -24,8 +24,6 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.exception.ComponentLookupException;
 
-import abbot.tester.WindowTester;
-
 /**
  * Understands simulation of user events on a <code>{@link Window}</code> and verification of the state of such
  * <code>{@link Window}</code>.
@@ -140,38 +138,6 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
     robot.showWindow(target, size);
     assertVisible();
     return this;
-  }
-
-  /**
-   * Simulates a user resizing horizontally this fixture's <code>{@link Window}</code>.
-   * @param width the width that this fixture's <code>Window</code> should have after being resized.
-   * @return this fixture.
-   */
-  protected final WindowFixture<T> doResizeWidthTo(int width) {
-    return doResizeTo(new Dimension(width, target.getHeight()));
-  }
-
-  /**
-   * Simulates a user resizing vertically this fixture's <code>{@link Window}</code>.
-   * @param height the height that this fixture's <code>Window</code> should have after being resized.
-   * @return this fixture.
-   */
-  protected final WindowFixture<T> doResizeHeightTo(int height) {
-    return doResizeTo(new Dimension(target.getWidth(), height));
-  }
-
-  /**
-   * Simulates a user resizing this fixture's <code>{@link Window}</code>.
-   * @param size the size that the target window should have after being resized.
-   * @return this fixture.
-   */
-  protected final WindowFixture<T> doResizeTo(Dimension size) {
-    windowTester().resize(target, size.width, size.height);
-    return this;
-  }
-
-  protected final WindowTester windowTester() {
-    return (WindowTester)tester();
   }
 
   /**

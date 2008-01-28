@@ -15,6 +15,8 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -22,9 +24,9 @@ import java.awt.Point;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.WindowDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link Dialog}</code> and verification of the state of such
@@ -33,6 +35,8 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  */
 public class DialogFixture extends WindowFixture<Dialog> {
+
+  private final WindowDriver driver;
 
   /**
    * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
@@ -44,6 +48,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
+    driver = newWindowDriver();
   }
 
   /**
@@ -55,6 +60,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(RobotFixture robot, String dialogName) {
     super(robot, dialogName, Dialog.class);
+    driver = newWindowDriver();
   }
 
   /**
@@ -65,6 +71,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(Dialog target) {
     super(target);
+    driver = newWindowDriver();
   }
 
   /**
@@ -74,6 +81,11 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(RobotFixture robot, Dialog target) {
     super(robot, target);
+    driver = newWindowDriver();
+  }
+
+  private WindowDriver newWindowDriver() {
+    return new WindowDriver(robot);
   }
 
   /**
@@ -97,9 +109,11 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user moving this fixture's <code>{@link Dialog}</code> to the given point.
    * @param p the point to move this fixture's <code>Dialog</code> to.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>Window</code> is not movable.
+   * @throws ActionFailedException if the given <code>Window</code> is not showing on the screen.
    */
   public final DialogFixture moveTo(Point p) {
-    windowTester().actionMove(target, p.x, p.y);
+    driver.moveTo(target, p);
     return this;
   }
 
@@ -157,27 +171,33 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user resizing horizontally this fixture's <code>{@link Dialog}</code>.
    * @param width the width that this fixture's <code>Dialog</code> should have after being resized.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public final DialogFixture resizeWidthTo(int width) {
-    return (DialogFixture)doResizeWidthTo(width);
+    driver.resizeWidthTo(target, width);
+    return this;
   }
 
   /**
    * Simulates a user resizing vertically this fixture's <code>{@link Dialog}</code>.
    * @param height the height that this fixture's <code>Dialog</code> should have after being resized.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public final DialogFixture resizeHeightTo(int height) {
-    return (DialogFixture)doResizeHeightTo(height);
+    driver.resizeHeightTo(target, height);
+    return this;
   }
 
   /**
    * Simulates a user resizing this fixture's <code>{@link Dialog}</code>.
    * @param size the size that the target window should have after being resized.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public final DialogFixture resizeTo(Dimension size) {
-    return (DialogFixture)doResizeTo(size);
+    driver.resizeTo(target, size);
+    return this;
   }
 
   /**

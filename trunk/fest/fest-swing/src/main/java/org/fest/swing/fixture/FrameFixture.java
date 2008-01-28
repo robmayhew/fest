@@ -19,19 +19,13 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 
-import abbot.tester.FrameTester;
-import abbot.util.Bugs;
-
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.FrameDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static java.awt.Frame.*;
-
-import static org.fest.swing.core.Pause.pause;
 
 /**
  * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such
@@ -42,6 +36,8 @@ import static org.fest.swing.core.Pause.pause;
  */
 public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixture {
 
+  private final FrameDriver driver;
+
   /**
    * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
@@ -51,6 +47,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(String name) {
     super(name, Frame.class);
+    driver = newFrameDriver();
   }
 
   /**
@@ -62,6 +59,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(RobotFixture robot, String name) {
     super(robot, name, Frame.class);
+    driver = newFrameDriver();
   }
 
   /**
@@ -72,6 +70,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(Frame target) {
     super(target);
+    driver = newFrameDriver();
   }
 
   /**
@@ -81,6 +80,11 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(RobotFixture robot, Frame target) {
     super(robot, target);
+    driver = newFrameDriver();
+  }
+
+  private FrameDriver newFrameDriver() {
+    return new FrameDriver(robot);
   }
 
   /**
@@ -106,7 +110,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture moveTo(Point p) {
-    windowTester().actionMove(target, p.x, p.y);
+    driver.moveTo(target, p);
     return this;
   }
 
@@ -165,12 +169,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture iconify() {
-    frameTester().iconify(target);
-    pause(new Condition("frame being iconified") {
-      public boolean test() {
-        return target.getExtendedState() == ICONIFIED;
-      }
-    });
+    driver.iconify(target);
     return this;
   }
 
@@ -179,26 +178,17 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture deiconify() {
-    frameTester().deiconify(target);
-    pause(new Condition("frame being deiconified") {
-      public boolean test() {
-        return target.getExtendedState() != ICONIFIED;
-      }
-    });
+    driver.deiconify(target);
     return this;
   }
 
   /**
    * Simulates a user maximizing this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
+   * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
   public final FrameFixture maximize() {
-    frameTester().maximize(target);
-    pause(new Condition("frame being maximized") {
-      public boolean test() {
-        return (target.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
-      }
-    });
+    driver.maximize(target);
     return this;
   }
 
@@ -207,22 +197,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture normalize() {
-    robot.invokeLater(target, new Runnable() {
-      public void run() {
-        target.setExtendedState(NORMAL);
-        if (Bugs.hasFrameDeiconifyBug()) target.setVisible(true);
-      }
-    });
-    pause(new Condition("frame being normalized") {
-      public boolean test() {
-        return target.getExtendedState() == NORMAL;
-      }
-    });
+    driver.normalize(target);
     return this;
-  }
-
-  private FrameTester frameTester() {
-    return (FrameTester)tester();
   }
 
   /**
@@ -231,7 +207,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture resizeWidthTo(int width) {
-    return (FrameFixture)doResizeWidthTo(width);
+    driver.resizeWidthTo(target, width);
+    return this;
   }
 
   /**
@@ -240,7 +217,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture resizeHeightTo(int height) {
-    return (FrameFixture)doResizeHeightTo(height);
+    driver.resizeHeightTo(target, height);
+    return this;
   }
 
   /**
@@ -249,7 +227,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    */
   public final FrameFixture resizeTo(Dimension size) {
-    return (FrameFixture)doResizeTo(size);
+    driver.resizeTo(target, size);
+    return this;
   }
 
   /**

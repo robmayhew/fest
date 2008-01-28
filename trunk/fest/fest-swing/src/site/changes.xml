@@ -9,45 +9,17 @@
       <action dev="alruiz" type="add" issue="104" due-to="Fabien Barbero">
         Added method 'pressAndReleaseKey(int keyCode, int modifiers)' to org.fest.swing.core.RobotFixture.
       </action>
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JComponentDriver to simulate drag and drop actions. JComponentDriver replaces 
-        Abbot's JComponentTester.
+      <action dev="alruiz, wanghy" type="add">
+        Added the following component drivers to replace Abbot's testers: ComponentDriver, ContainerDriver,
+        FrameDriver, JComboBoxDriver, JComponentDriver, JListDriver, JSliderDriver, JSpinnerDriver, 
+        JTextComponentDriver, JTreeDriver. Component drivers are intended for internal use only.
       </action>
-      <action dev="alruiz, wanghy" type="add">
-        Added class org.fest.swing.driver.JSliderDriver to simulate user input related to behavior found only in 
-        JSliders. JSliderDriver is intended for internal use only and replaces Abbot's JSliderDriver. 
-      </action> 
-      <action dev="alruiz, wanghy" type="add">
-        Added class org.fest.swing.driver.JSpinnerDriver to simulate user input related to behavior found only in 
-        JSpinners. JSpinnerDriver is intended for internal use only and replaces Abbot's JSpinnerDriver. 
-      </action> 
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JTextComponentDriver to simulate user input related to behavior found only in 
-        JTextComponents. JTextComponentDriver is intended for internal use only and replaces Abbot's 
-        JTextComponentDriver. 
-      </action> 
       <action dev="alruiz" type="add">
         Added method 'enterText(String)' to class org.fest.swing.core.RobotFixture.
       </action>
       <action dev="alruiz" type="add">
         Added method 'timeoutToFindPopup' to class org.fest.swing.core.Settings. This method sets the number of 
         milliseconds to wait before failing to find a pop-up menu that should appear.
-      </action>
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JComboBoxDriver to simulate user input related to behavior found only in 
-        JComboBoxes. JComboBoxDriver is intended for internal use only and replaces Abbot's JComboBoxDriver. 
-      </action> 
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JListDriver to simulate user input related to behavior found only in JLists.
-        JListDriver is intended for internal use only and replaces Abbot's JListTester. 
-      </action> 
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JListLocation to obtain the location on the screen of an item in a JListTree. 
-        JListLocation replaces Abbot's JListLocation. 
-      </action> 
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.ComponentDriver to simulate drag and drop actions. ComponentDriver replaces 
-        Abbot's ComponentTester.
       </action>
       <action dev="alruiz" type="add">
         Added method 'click(Component, Point)' to org.fest.swing.core.RobotFixture.
@@ -62,14 +34,6 @@
       <action dev="alruiz" type="add">
         Added method 'timeoutToBeVisible' to class org.fest.swing.core.Settings. This method sets the the number of 
         milliseconds to wait for a component to be visible. 
-      </action> 
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JTreeDriver to simulate user input related to behavior found only in JTrees.
-        JTreeDriver is intended for internal use only and replaces Abbot's JTreeTester. 
-      </action> 
-      <action dev="alruiz" type="add">
-        Added class org.fest.swing.driver.JTreeLocation to obtain the location on the screen of a row or path in a
-        JTreeTree. JTreeLocation replaces Abbot's JTreeLocation. 
       </action> 
       <action dev="alruiz" type="fix">
         Fixed bug in which IntrospectionComponentFormatter could show the value of the property 'showing'. 
