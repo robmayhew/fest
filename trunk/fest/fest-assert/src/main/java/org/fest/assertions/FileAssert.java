@@ -14,13 +14,14 @@
  */
 package org.fest.assertions;
 
+import java.io.*;
+
 import static java.lang.String.valueOf;
+
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Closeables.close;
 import static org.fest.util.Strings.*;
-
-import java.io.*;
 
 /**
  * Understands assertion methods for <code>File</code>. To create a new instance of this class use the method <code>
@@ -217,12 +218,10 @@ public final class FileAssert extends GenericAssert<File> {
       expectedInputStream = new FileInputStream(expected);
       actualInputStream = new FileInputStream(actual);
       failIfNotEqual(reader(actualInputStream), reader(expectedInputStream));
-    } catch (Exception e) {
-      String message = concat(
-                        description(),
-                        "unable to compare contents of files:",
-                        quotedAbsolutePath(), " and ", quotedAbsolutePath(expected));
-      fail(message, e);
+    } catch (FileNotFoundException e) {
+      cannotCompareToExpectedFile(expected, e);
+    } catch (IOException e) {
+      cannotCompareToExpectedFile(expected, e);      
     } finally {
       close(expectedInputStream);
       close(actualInputStream);
@@ -230,6 +229,13 @@ public final class FileAssert extends GenericAssert<File> {
     return this;
   }
 
+  private void cannotCompareToExpectedFile(File expected, Exception e) {
+    String message = concat( 
+        "unable to compare contents of files:", quotedAbsolutePath(), " and ", quotedAbsolutePath(expected));
+    fail(message, e);
+  }
+
+  
   private LineNumberReader reader(InputStream inputStream) {
     return new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
   }

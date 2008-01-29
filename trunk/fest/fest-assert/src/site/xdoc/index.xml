@@ -31,6 +31,9 @@
            <li>
              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Collection.html">Collection</a></code>
            </li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Map.html">Map</a></code>
+           </li>
            <li>Primitives (<code class="code">boolean</code>, <code class="code">int</code>, <code class="code">char</code>, etc.)</li>
            <li>
              Arrays of 
