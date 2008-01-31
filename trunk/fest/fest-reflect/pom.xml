@@ -28,23 +28,23 @@
     <system>Google Code</system>
     <url>http://code.google.com/p/fest/issues</url>
   </issueManagement>
-  <parent>
+  <!--parent>
     <groupId>fest</groupId>
     <artifactId>pom-template</artifactId>
     <version>1.0</version>
     <relativePath>../pom-template</relativePath>
-  </parent>
+  </parent-->
 	<dependencies>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-util</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.3</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-assert</artifactId>
-			<version>0.8</version>
+			<version>0.9</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

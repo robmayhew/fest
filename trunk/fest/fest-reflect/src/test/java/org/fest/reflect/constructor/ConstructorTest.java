@@ -33,7 +33,7 @@ public class ConstructorTest {
   @Test public void shouldCreateNewInstanceWithDefaultConstructor() {
     Person person = new TargetType().in(Person.class).newInstance();
     assertThat(person).isNotNull();
-    assertThat(person.getName()).isEmpty();
+    assertThat(person.getName()).isNull();
   }
   
   @Test public void shouldCreateNewInstanceUsingGivenConstructorParameters() {
