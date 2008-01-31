@@ -28,12 +28,12 @@
     <system>Google Code</system>
     <url>http://code.google.com/p/fest/issues</url>
   </issueManagement>
-  <!--parent>
+  <parent>
     <groupId>fest</groupId>
     <artifactId>pom-template</artifactId>
     <version>1.0</version>
     <relativePath>../pom-template</relativePath>
-  </parent-->
+  </parent>
 	<dependencies>
 		<dependency>
 			<groupId>fest</groupId>
