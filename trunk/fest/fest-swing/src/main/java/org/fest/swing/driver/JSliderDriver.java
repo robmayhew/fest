@@ -23,11 +23,6 @@ import org.fest.swing.core.RobotFixture;
  * driver only focuses on behavior present only in <code>{@link JSlider}</code>s. This class is intended for internal
  * use only.
  *
- * <p>
- * Adapted from <code>abbot.tester.JSliderTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
- *
  * @author Alex Ruiz
  */
 public class JSliderDriver extends JComponentDriver {

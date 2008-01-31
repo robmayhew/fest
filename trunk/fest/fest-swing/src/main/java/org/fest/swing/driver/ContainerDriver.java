@@ -14,11 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -27,13 +22,14 @@ import java.awt.Point;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.AWT.locationOnScreenOf;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands simulation of user input on a <code>{@link Container}</code>. This class is intended for internal use
  * only.
- *
- * <p>
- * Adapted from <code>abbot.tester.Robot</code> from <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

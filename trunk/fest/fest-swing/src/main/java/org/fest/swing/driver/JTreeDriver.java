@@ -15,13 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToBeVisible;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -36,15 +29,17 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Settings.timeoutToBeVisible;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JTree}</code>s. This class is intended for internal
  * use only.
- *
- * <p>
- * Adapted from <code>abbot.tester.JTreeTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

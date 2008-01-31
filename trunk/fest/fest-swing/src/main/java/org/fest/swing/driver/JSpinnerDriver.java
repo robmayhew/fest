@@ -15,11 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.*;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
-
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
@@ -27,15 +22,16 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static java.awt.event.KeyEvent.*;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands simulation of user input on a <code>{@link JSpinner}</code>. Unlike <code>JSpinnerFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JSpinner}</code>s. This class is intended for internal
  * use only.
- *
- * <p>
- * Adapted from <code>abbot.tester.JSpinnerTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

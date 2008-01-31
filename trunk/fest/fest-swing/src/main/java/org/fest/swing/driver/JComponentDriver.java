@@ -14,12 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_UNDEFINED;
-import static org.fest.swing.driver.Actions.findActionKey;
-import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -29,14 +23,16 @@ import javax.swing.KeyStroke;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 
+import static java.awt.event.KeyEvent.VK_UNDEFINED;
+
+import static org.fest.swing.driver.Actions.findActionKey;
+import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
+
 /**
  * Understands simulation of user input on a <code>{@link JComponent}</code>. This class is intended for internal use
  * only.
- *
- * <p>
- * Adapted from <code>abbot.tester.JComponentTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

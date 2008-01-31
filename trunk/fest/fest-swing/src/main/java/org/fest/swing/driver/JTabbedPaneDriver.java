@@ -27,11 +27,6 @@ import org.fest.swing.exception.LocationUnavailableException;
  * this driver only focuses on behavior present only in <code>{@link JTabbedPane}</code>s. This class is intended for
  * internal use only.
  *
- * <p>
- * Adapted from <code>abbot.tester.JTabbedPaneTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
- *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */

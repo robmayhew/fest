@@ -15,13 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Objects.*;
-import static org.fest.swing.util.Strings.match;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -30,14 +23,17 @@ import javax.swing.JList;
 
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Objects.*;
+import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
+
 /**
  * Understands encapsulation of the location of a row on a <code>{@link JList}</code> (a coordinate, item index or
  * value.)
- *
- * <p>
- * Adapted from <code>abbot.tester.JListLocation</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

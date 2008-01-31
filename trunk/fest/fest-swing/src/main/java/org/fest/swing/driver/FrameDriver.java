@@ -14,11 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.Frame.*;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.*;
-
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Point;
@@ -28,15 +23,16 @@ import org.fest.swing.core.Condition;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 
+import static java.awt.Frame.*;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Platform.*;
+
 /**
  * Understands simulation of user input on a <code>{@link Frame}</code>. Unlike <code>FrameFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link Frame}</code>s. This class is intended for internal
  * use only.
- *
- * <p>
- * Adapted from <code>abbot.tester.FrameTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

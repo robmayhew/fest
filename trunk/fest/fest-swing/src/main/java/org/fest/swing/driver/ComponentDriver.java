@@ -15,13 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.*;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -31,14 +24,16 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
 
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Settings.*;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Platform.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+
 /**
  * Understands simulation of user input on a <code>{@link Component}</code>. This class is intended for internal use
  * only.
- *
- * <p>
- * Adapted from <code>abbot.tester.ComponentTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

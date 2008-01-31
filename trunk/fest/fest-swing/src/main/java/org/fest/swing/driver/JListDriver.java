@@ -15,9 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.Swing.centerOf;
-
 import java.awt.Point;
 
 import javax.swing.JList;
@@ -28,15 +25,13 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.Swing.centerOf;
+
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JList}</code>s. This class is intended for internal
  * use only.
- *
- * <p>
- * Adapted from <code>abbot.tester.JListTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

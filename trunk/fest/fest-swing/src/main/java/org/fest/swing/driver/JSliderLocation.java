@@ -15,20 +15,15 @@
  */
 package org.fest.swing.driver;
 
-import static javax.swing.SwingConstants.VERTICAL;
-
 import java.awt.Insets;
 import java.awt.Point;
 
 import javax.swing.JSlider;
 
+import static javax.swing.SwingConstants.VERTICAL;
+
 /**
  * Understands encapsulation of a location in a <code>{@link JSlider}</code>.
- *
- * <p>
- * Adapted from <code>abbot.tester.JSliderTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

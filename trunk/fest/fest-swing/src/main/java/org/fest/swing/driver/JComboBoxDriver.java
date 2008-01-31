@@ -15,16 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToFindPopup;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Objects.*;
-import static org.fest.swing.util.Strings.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.awt.Container;
 
@@ -39,15 +29,21 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
 
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Settings.timeoutToFindPopup;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Objects.*;
+import static org.fest.swing.util.Strings.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
+
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JComboBox}</code>s. This class is intended for internal
  * use only.
- *
- * <p>
- * Adapted from <code>abbot.tester.JComboBoxTester</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

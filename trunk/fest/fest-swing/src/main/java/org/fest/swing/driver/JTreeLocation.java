@@ -14,12 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.driver.TreeCell.lastInPath;
-import static org.fest.swing.util.Strings.match;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -28,17 +22,19 @@ import javax.swing.tree.TreePath;
 
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.driver.TreeCell.lastInPath;
+import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands a visible location on a <code>{@link JTree}</code>. A row index or a <code>{@link String}</code>ified
  * <code>{@link TreePath}</code> (i.e. each <code>{@link TreePath}</code> component is a <code>String</code>) or
  * a <code>{@link TreePath}</code> of <code>Object</code> may be used to indicate the location. Note that if a
  * <code>{@link TreePath}</code> is used, the entire path leading up to the designated node must be viewable at the
  * time the location is used.
- *
- * <p>
- * Adapted from <code>abbot.tester.JTreeLocation</code> from
- * <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */
