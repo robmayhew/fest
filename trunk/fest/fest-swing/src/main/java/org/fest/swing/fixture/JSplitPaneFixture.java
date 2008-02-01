@@ -17,11 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JSplitPane;
 
-import abbot.tester.JSplitPaneTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JSplitPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -33,6 +32,8 @@ import org.fest.swing.exception.WaitTimedOutError;
  */
 public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
 
+  private final JSplitPaneDriver driver;
+  
   /**
    * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSplitPane</code>.
@@ -42,6 +43,7 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    */
   public JSplitPaneFixture(RobotFixture robot, String spinnerName) {
     super(robot, spinnerName, JSplitPane.class);
+    driver = newSplitPaneDriver();
   }
 
   /**
@@ -51,22 +53,23 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    */
   public JSplitPaneFixture(RobotFixture robot, JSplitPane target) {
     super(robot, target);
+    driver = newSplitPaneDriver();
   }
 
+  private JSplitPaneDriver newSplitPaneDriver() {
+    return new JSplitPaneDriver(robot);
+  }
+  
   /**
    * Simulates a user moving the divider of this fixture's <code>{@link JSplitPane}</code>.
    * @param location the location to move the divider to.
    * @return this fixture.
    */
   public final JSplitPaneFixture moveDividerTo(int location) {
-    splitPaneTester().actionMoveDividerAbsolute(target, location);
+    driver.moveDividerTo(target, location);
     return this;
   }
   
-  protected final JSplitPaneTester splitPaneTester() {
-    return (JSplitPaneTester)tester();
-  }
-
   /**
    * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.

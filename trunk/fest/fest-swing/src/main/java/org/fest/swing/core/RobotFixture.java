@@ -284,6 +284,14 @@ public final class RobotFixture {
     waitForIdle();
   }
 
+  /** 
+   * Simulates a user pressing a mouse button. 
+   * @param button the button to press.
+   */
+  public void mousePress(MouseButton button) {
+    robot.mousePress(button.mask);
+  }
+
   /**
    * Simulates a user pressing the left mouse button on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
