@@ -1,16 +1,16 @@
 /*
  * Created on Sep 5, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -21,9 +21,8 @@ import java.awt.Container;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import abbot.tester.JPopupMenuTester;
-
 import org.fest.swing.core.*;
+import org.fest.swing.driver.JPopupMenuDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -33,7 +32,9 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Yvonne Wang
  */
 public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
-  
+
+  private final JPopupMenuDriver driver;
+
   /**
    * Creates a new <code>{@link JPopupMenuFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPopupMenu</code>.
@@ -41,10 +42,11 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    */
   public JPopupMenuFixture(RobotFixture robot, JPopupMenu target) {
     super(robot, target);
+    driver = new JPopupMenuDriver(robot);
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>,
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JMenuItem</code> found.
@@ -56,14 +58,14 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>, 
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>,
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.
    * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
-   *         found.
+   *          found.
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria is
-   *         found.
+   *          found.
    */
   public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
     return new JMenuItemFixture(robot, find(matcher));
@@ -72,7 +74,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   private <C extends Component> C findByName(String name, Class<C> type) {
     return finder().findByName(target, name, type);
   }
-  
+
   private <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
     return finder().find(target, matcher);
   }
@@ -81,16 +83,12 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
 
   /**
    * Returns the contents of this fixture's <code>{@link JPopupMenu}</code>.
-   * @return a <code>String</code> array representing the contents of this fixture's <code>JPopupMenu</code>. 
+   * @return a <code>String</code> array representing the contents of this fixture's <code>JPopupMenu</code>.
    */
   public final String[] menuLabels() {
-    return popupMenuTester().getMenuLabels(target);
+    return driver.menuLabelsOf(target);
   }
-  
-  protected final JPopupMenuTester popupMenuTester() {
-    return (JPopupMenuTester)tester();
-  }
-  
+
   /**
    * Simulates a user clicking this fixture's <code>{@link JPopupMenu}</code>.
    * @return this fixture.
@@ -140,9 +138,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   public final JPopupMenuFixture focus() {
     return (JPopupMenuFixture)doFocus();
   }
-  
+
   /**
-   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JPopupMenu}</code>. This 
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JPopupMenu}</code>. This
    * method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
@@ -151,7 +149,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   public final JPopupMenuFixture pressAndReleaseKeys(int... keyCodes) {
     return (JPopupMenuFixture)doPressAndReleaseKeys(keyCodes);
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link JPopupMenu}</code>.
    * @param keyCode the code of the key to press.
@@ -161,7 +159,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   public final JPopupMenuFixture pressKey(int keyCode) {
     return (JPopupMenuFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JPopupMenu}</code>.
    * @param keyCode the code of the key to release.
@@ -171,7 +169,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   public final JPopupMenuFixture releaseKey(int keyCode) {
     return (JPopupMenuFixture)doReleaseKey(keyCode);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JPopupMenu}</code> is enabled.
    * @return this fixture.
@@ -180,7 +178,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   public final JPopupMenuFixture requireEnabled() {
     return (JPopupMenuFixture)assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JPopupMenu}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
@@ -208,7 +206,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
   public final JPopupMenuFixture requireVisible() {
     return (JPopupMenuFixture)assertVisible();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JPopupMenu}</code> is not visible.
    * @return this fixture.
