@@ -193,7 +193,7 @@ public class JComboBoxDriver extends JComponentDriver {
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToFindPopup());
       while ((popup = robot.findActivePopupMenu()) == null) {
-        if (watch.isTimeout()) throw listNotFound();
+        if (watch.isTimeOut()) throw listNotFound();
         pause();
       }
     }

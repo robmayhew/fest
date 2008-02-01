@@ -28,13 +28,13 @@ public class TimeoutWatchTest {
 
   @Test public void shouldNotTimeout() {
     TimeoutWatch watch = TimeoutWatch.startWatchWithTimeoutOf(5000);
-    assertThat(watch.isTimeout()).isFalse();
+    assertThat(watch.isTimeOut()).isFalse();
   }
   
   @Test public void shouldTimeout() throws Exception {
     TimeoutWatch watch = TimeoutWatch.startWatchWithTimeoutOf(10);
     Thread.sleep(100);
-    assertThat(watch.isTimeout()).isTrue();
+    assertThat(watch.isTimeOut()).isTrue();
   }
   
 }

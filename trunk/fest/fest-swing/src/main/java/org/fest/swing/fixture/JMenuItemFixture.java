@@ -21,6 +21,8 @@ import javax.swing.JMenuItem;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JMenuItemDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -31,6 +33,8 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
 
+  private final JMenuItemDriver driver;
+  
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
@@ -59,14 +63,17 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    */
   public JMenuItemFixture(RobotFixture robot, JMenuItem target) {
     super(robot, target);
+    driver = new JMenuItemDriver(robot);
   }
 
   /**
    * Simulates a user selecting this fixture's <code>{@link JMenuItem}</code>.
    * @return this fixture.
+   * @throws ActionFailedException if the menu to select is disabled.
+   * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
    */
   public final JMenuItemFixture select() {
-    robot.selectMenuItem(target);
+    driver.selectMenuItem(target);
     return this;
   }
 

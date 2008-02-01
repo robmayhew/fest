@@ -46,7 +46,7 @@ public final class TimeoutWatch {
     startTime = currentTimeMillis();
   }
 
-  public boolean isTimeout() {
+  public boolean isTimeOut() {
     long timePassed = currentTimeMillis() - startTime;
     return timePassed >= timeout;
   }

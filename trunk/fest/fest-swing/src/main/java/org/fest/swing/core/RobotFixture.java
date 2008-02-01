@@ -14,23 +14,10 @@
  */
 package org.fest.swing.core;
 
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.Swing.centerOf;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.concat;
-
 import java.awt.*;
 import java.util.Collection;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.util.TimeoutWatch;
 
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
@@ -39,6 +26,20 @@ import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
+
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.TimeoutWatch;
+
+import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.isEventDispatchThread;
+
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -244,14 +245,6 @@ public final class RobotFixture {
   }
 
   /**
-   * Selects the given <code>{@link JMenuItem}</code>.
-   * @param target the menu item to select.
-   */
-  public void selectMenuItem(JMenuItem target) {
-    robot.selectMenuItem(target);
-  }
-
-  /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param target the <code>Component</code> to click on.
    */
@@ -308,6 +301,26 @@ public final class RobotFixture {
    */
   public void mousePress(Component target, Point where, MouseButton button) {
     robot.mousePress(target, where.x, where.y, button.mask);
+  }
+  
+  /**
+   * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   */
+  public void jitter(Component c) {
+    Point center = centerOf(c);
+    int x = center.x;
+    int y = center.y;
+    mouseMove(c, (x > 0 ? x - 1 : x + 1), y);
+  }
+
+  /**
+   * Simulates a user moving the mouse pointer to the center of the given <code>{@link Component}</code>.
+   * @param target the given <code>Component</code>.
+   */
+  public void mouseMove(Component target) {
+    Point center = centerOf(target);
+    robot.mouseMove(target, center.x, center.y);
   }
 
   /**
@@ -448,7 +461,7 @@ public final class RobotFixture {
     if (popup != null || isEventDispatchThread()) return popup;
     TimeoutWatch watch = startWatchWithTimeoutOf(POPUP_TIMEOUT);
     while ((popup = activePopupMenu()) == null) {
-      if (watch.isTimeout()) break;
+      if (watch.isTimeOut()) break;
       pause(100);
     }
     return popup;
@@ -463,6 +476,16 @@ public final class RobotFixture {
   }
 
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
+
+  /** 
+   * Indicates whether the given <code>{@link Component}</code> is ready for input. 
+   * @param c the given <code>Component</code>.
+   * @return <code>true</code> if the given <code>Component</code> is ready for input, <code>false</code> otherwise.
+   */
+  public boolean isReadyForInput(Component c) {
+     return method("isReadyForInput").withReturnType(Boolean.class).withParameterTypes(Component.class).in(robot)
+                                     .invoke(c);
+  }
 
   /**
    * Simulates a user closing the given window.

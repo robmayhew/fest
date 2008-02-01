@@ -20,6 +20,10 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Point;
 
+import javax.accessibility.AccessibleAction;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
@@ -28,8 +32,10 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Settings.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link Component}</code>. This class is intended for internal use
@@ -109,7 +115,7 @@ public abstract class ComponentDriver {
     dragOver(target, where);
     TimeoutWatch watch = startWatchWithTimeoutOf(eventPostingDelay() * 4);
     while (!robot.isDragging()) {
-      if (watch.isTimeout()) throw actionFailure("There is no drag in effect");
+      if (watch.isTimeOut()) throw actionFailure("There is no drag in effect");
       pause();
     }
     if (dropDelay() > delayBetweenEvents()) pause(dropDelay() - delayBetweenEvents());
@@ -156,5 +162,44 @@ public abstract class ComponentDriver {
    */
   protected final boolean isUserMovable(Component c) {
     return c instanceof Dialog || c instanceof Frame || canMoveWindows();
+  }
+
+  /**
+   * Performs the specified <code>{@link AccessibleAction}</code> in the given <code>{@link Component}</code>'s event
+   * queue.
+   * @param c the given <code>Component</code>.
+   * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty. 
+   */
+  protected final void performAccessibleActionOf(Component c) {
+    final AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
+    if (action == null || action.getAccessibleActionCount() == 0)
+      throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
+    robot.invokeLater(c, new Runnable() {
+      public void run() {
+        action.doAccessibleAction(0);
+      }
+    });
+  }
+
+  /**
+   * Wait the given number of milliseconds for the <code>{@link Component}</code> to be showing and ready. Returns
+   * <code>false</code> if the operation times out.
+   * @param c the given <code>Component</code>.
+   * @param timeout the time in milliseconds to wait for the <code>Component</code> to be showing and ready.
+   * @return <code>true</code> if the <code>Component</code> is showing and ready, <code>false</code> otherwise.
+   */
+  protected boolean waitForShowing(Component c, long timeout) {
+    if (robot.isReadyForInput(c)) return true;
+    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
+    while (!robot.isReadyForInput(c)) {
+      if (c instanceof JPopupMenu) {
+        // move the mouse over the parent menu item to ensure the sub-menu shows
+        Component invoker = ((JPopupMenu)c).getInvoker();
+        if (invoker instanceof JMenu) robot.jitter(invoker);
+      }
+      if (watch.isTimeOut()) return false;
+      pause();
+    }
+    return true;
   }
 }

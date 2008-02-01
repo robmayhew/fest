@@ -16,6 +16,12 @@ package org.fest.swing.util;
 
 import java.awt.*;
 
+import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
+
+import abbot.finder.AWTHierarchy;
+import abbot.finder.Hierarchy;
+
 /**
  * Understands utility methods related to AWT.
  *
@@ -28,13 +34,46 @@ import java.awt.*;
  */
 public class AWT {
 
+  private static Hierarchy hierarchy = new AWTHierarchy();
+  
+  /**
+   * Similar to <code>{@link javax.swing.SwingUtilities#getWindowAncestor(Component)}</code>, but returns the
+   * <code>{@link Component}</code> itself if it is a <code>{@link Window}</code>, or the invoker's
+   * <code>Window</code> if on a pop-up.
+   * @param c the <code>Component</code> to get the <code>Window</code> ancestor of.
+   * @return the <code>Window</code> ancestor of the given <code>Component</code>, the <code>Component</code> itself
+   * if it is a <code>Window</code>, or the invoker's <code>Window</code> if on a pop-up.
+   */
+  public static Window ancestorOf(Component c) {
+    if (c == null) return null;
+    if (c instanceof Window) return (Window) c;
+    if (c instanceof MenuElement) {
+      Component invoker = invokerOf(c);
+      if (invoker != null) return ancestorOf(invoker);
+    }
+    return ancestorOf(hierarchy.getParent(c));
+  }
+
+  /**
+   * Returns the invoker, if any, of the given <code>{@link Component}</code>; or <code>null</code>, if the
+   * <code>Component</code> is not on a pop-up of any sort.
+   * @param c the given <code>Component</code>.
+   * @return the invoker, if any, of the given <code>Component</code>; or <code>null</code>, if the
+   *         <code>Component</code> is not on a pop-up of any sort.
+   */
+  public static Component invokerOf(Component c) {
+    if (c instanceof JPopupMenu) return ((JPopupMenu) c).getInvoker();
+    Container parent = c.getParent();
+    return parent != null ? invokerOf(parent) : null;
+  }
+
   /**
    * Safe version of <code>{@link Component#getLocationOnScreen}</code>, which avoids lockup if an AWT pop-up menu is
    * showing. The AWT pop-up holds the AWT tree lock when showing, which lock is required by
    * <code>{@link Component#getLocationOnScreen}.</code>
    * @param c the given <code>Component</code>.
    * @return the a point specifying the <code>Component</code>'s top-left corner in the screen's coordinate space, or
-   *          <code>null</code>, if the <code>Component</code> is not showing on the screen.
+   *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
   public static Point locationOnScreenOf(Component c) {
     if (!isAWTTreeLockHeld()) new Point(c.getLocationOnScreen());
@@ -56,9 +95,9 @@ public class AWT {
     Frame[] frames = Frame.getFrames();
     if (frames.length == 0) return false;
     // From Abbot: Hack based on 1.4.2 java.awt.PopupMenu implementation, which blocks the event dispatch thread while
-    // the popup is visible, while holding the AWT tree lock.
+    // the pop-up is visible, while holding the AWT tree lock.
     // Start another thread which attempts to get the tree lock.
-    // If it can't get the tree lock, then there is a popup active in the current tree.
+    // If it can't get the tree lock, then there is a pop-up active in the current tree.
     // Any component can provide the tree lock.
     ThreadStateChecker checker = new ThreadStateChecker(frames[0].getTreeLock());
     try {
@@ -95,8 +134,7 @@ public class AWT {
         notifyAll();
       }
       synchronized (lock) {
-        // dummy operation
-        setName(super.getName());
+        setName(super.getName()); // dummy operation
       }
     }
   }
