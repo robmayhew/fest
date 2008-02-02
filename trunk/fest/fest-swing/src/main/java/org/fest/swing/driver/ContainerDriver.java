@@ -50,7 +50,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param width the width to resize the <code>Container</code> to.
    * @param height the height to resize the <code>Container</code> to.
    */
-  protected final void resize(Container container, int width, int height) {
+  public final void resize(Container container, int width, int height) {
     Dimension size = container.getSize();
     resizeBy(container, width - size.width, height - size.height);
   }
@@ -104,7 +104,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param y the vertical coordinate.
    * @throws ActionFailedException if the given container is not showing on the screen.
    */
-  public void move(Container c, int x, int y) {
+  public final void move(Container c, int x, int y) {
     Point onScreen = locationOnScreenOf(c);
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     moveBy(c, x - onScreen.x, y - onScreen.y);
@@ -117,7 +117,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param vertically
    * @throws ActionFailedException if the given container is not showing on the screen.
    */
-  public void moveBy(final Container c, final int horizontally, final int vertically) {
+  protected final void moveBy(final Container c, final int horizontally, final int vertically) {
     final Point onScreen = locationOnScreenOf(c);
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     simulateMoveStarted(c, horizontally, vertically);

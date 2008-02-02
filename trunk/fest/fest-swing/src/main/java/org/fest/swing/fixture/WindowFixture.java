@@ -31,7 +31,7 @@ import org.fest.swing.exception.ComponentLookupException;
  *
  * @author Alex Ruiz
  */
-public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> implements WindowLikeFixture {
+public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> implements WindowLikeContainerFixture {
 
   /**
    * Creates a new <code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>

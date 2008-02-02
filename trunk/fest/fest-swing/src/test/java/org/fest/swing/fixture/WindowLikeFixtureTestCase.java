@@ -29,7 +29,7 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
- * Understands test methods for implementations of <code>{@link WindowLikeFixture}</code>.
+ * Understands test methods for implementations of <code>{@link WindowLikeContainerFixture}</code>.
  * @param <T> the type of window tested by this test class. 
  *
  * @author Alex Ruiz 
@@ -102,5 +102,5 @@ public abstract class WindowLikeFixtureTestCase<T extends Component> extends Com
 
   protected abstract Component target();
   
-  protected final WindowLikeFixture windowLikeFixture() { return (WindowLikeFixture)fixture(); }
+  protected final WindowLikeContainerFixture windowLikeFixture() { return (WindowLikeContainerFixture)fixture(); }
 }

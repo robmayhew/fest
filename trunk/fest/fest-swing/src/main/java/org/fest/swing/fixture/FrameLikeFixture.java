@@ -22,7 +22,7 @@ package org.fest.swing.fixture;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public interface FrameLikeFixture extends WindowLikeFixture {
+public interface FrameLikeFixture extends WindowLikeContainerFixture {
 
   /**
    * Simulates a user iconifying this fixture's frame-like component.

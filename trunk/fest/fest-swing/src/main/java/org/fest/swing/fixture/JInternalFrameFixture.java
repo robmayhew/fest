@@ -20,11 +20,11 @@ import java.awt.Point;
 
 import javax.swing.JInternalFrame;
 
-import abbot.tester.JInternalFrameTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JInternalFrameDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -36,6 +36,8 @@ import org.fest.swing.exception.WaitTimedOutError;
  */
 public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> implements FrameLikeFixture {
 
+  private final JInternalFrameDriver driver;
+  
   /**
    * Creates a new <code>{@link JInternalFrameFixture}</code>.
    * @param robot performs simulation of user events on a <code>JInternalFrame</code>.
@@ -45,6 +47,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    */
   public JInternalFrameFixture(RobotFixture robot, String internalFrameName) {
     super(robot, internalFrameName, JInternalFrame.class);
+    driver = newInternalFrameDriver();
   }
 
   /**
@@ -54,8 +57,13 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    */
   public JInternalFrameFixture(RobotFixture robot, JInternalFrame target) {
     super(robot, target);
+    driver = newInternalFrameDriver();
   }
 
+  private JInternalFrameDriver newInternalFrameDriver() {
+    return new JInternalFrameDriver(robot);
+  }
+  
   /**
    * Brings this fixture's <code>{@link JInternalFrame}</code> to the front.
    * @return this fixture.
@@ -81,44 +89,53 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   /**
    * Simulates a user deiconifying this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
   public final JInternalFrameFixture deiconify() {
-    internalFrameTester().actionDeiconify(target);
+    driver.deiconify(target);
     return this;
   }
 
   /**
    * Simulates a user iconifying this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
+   * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
+   * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
   public final JInternalFrameFixture iconify() {
-    internalFrameTester().actionIconify(target);
+    driver.iconify(target);
     return this;
   }
 
   /**
-   * Simulates a user maximizing this fixture's <code>{@link JInternalFrame}</code>.
+   * Simulates a user maximizing this fixture's <code>{@link JInternalFrame}</code>, deconifying it first if it is 
+   * iconified.
    * @return this fixture.
+   * @throws ActionFailedException if the given <code>JInternalFrame</code> is not maximizable.
+   * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
   public final JInternalFrameFixture maximize() {
-    internalFrameTester().actionMaximize(target);
+    driver.maximize(target);
     return this;
   }
 
   /**
-   * Simulates a user normalizing this fixture's <code>{@link JInternalFrame}</code>.
+   * Simulates a user normalizing this fixture's <code>{@link JInternalFrame}</code>, deconifying it first if it is 
+   * iconified.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
   public final JInternalFrameFixture normalize() {
-    internalFrameTester().actionNormalize(target);
+    driver.normalize(target);
     return this;
   }
 
   /**
    * Simulates a user closing this fixture's <code>{@link JInternalFrame}</code>.
+   * @throws ActionFailedException if the <code>JInternalFrame</code> is not closable.
    */
   public final void close() {
-    internalFrameTester().actionClose(target);
+    driver.close(target);
   }
 
   /**
@@ -155,7 +172,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public final JInternalFrameFixture resizeTo(Dimension size) {
-    internalFrameTester().actionResize(target, size.width, size.height);
+    driver.resize(target, size.width, size.height);
     return this;
   }
 
@@ -167,12 +184,8 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   public final JInternalFrameFixture moveTo(Point p) {
     Point locationOnScreen = target.getLocationOnScreen();
     Point destination = new Point(p.x - locationOnScreen.x, p.y - locationOnScreen.y);
-    internalFrameTester().actionMove(target, destination.x, destination.y);
+    driver.move(target, destination.x, destination.y);
     return this;
-  }
-
-  protected final JInternalFrameTester internalFrameTester() {
-    return (JInternalFrameTester)tester();
   }
 
   /**

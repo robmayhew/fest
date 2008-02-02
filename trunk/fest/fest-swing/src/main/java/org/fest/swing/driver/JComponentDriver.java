@@ -36,7 +36,7 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public class JComponentDriver extends ComponentDriver {
+public class JComponentDriver extends ContainerDriver {
 
   /**
    * Creates a new </code>{@link JComponentDriver}</code>.

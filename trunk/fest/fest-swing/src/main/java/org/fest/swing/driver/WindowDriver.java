@@ -14,16 +14,16 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link Window}</code>. Unlike <code>WindowFixture</code>, this
@@ -37,7 +37,7 @@ import org.fest.swing.exception.ActionFailedException;
  *
  * @author Alex Ruiz
  */
-public class WindowDriver extends ContainerDriver {
+public class WindowDriver extends WindowLikeContainerDriver {
 
   /**
    * Creates a new </code>{@link WindowDriver}</code>.
