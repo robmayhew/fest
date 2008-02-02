@@ -1,41 +1,41 @@
 /*
  * Created on Dec 25, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JScrollBar;
+import static org.fest.assertions.Assertions.assertThat;
 
-import abbot.tester.JScrollBarTester;
+import javax.swing.JScrollBar;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JScrollBarDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
 /**
- * Understands simulation of user events on a <code>{@link JScrollBar}</code> and verification of the state of such 
+ * Understands simulation of user events on a <code>{@link JScrollBar}</code> and verification of the state of such
  * <code>{@link JScrollBar}</code>.
  *
  * @author Alex Ruiz
  */
 public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
+
+  private final JScrollBarDriver driver;
 
   /**
    * Creates a new <code>{@link JScrollBarFixture}</code>.
@@ -46,6 +46,7 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    */
   public JScrollBarFixture(RobotFixture robot, String scrollBarName) {
     super(robot, scrollBarName, JScrollBar.class);
+    driver = newScrollBarDriver();
   }
 
   /**
@@ -55,6 +56,11 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    */
   public JScrollBarFixture(RobotFixture robot, JScrollBar target) {
     super(robot, target);
+    driver = newScrollBarDriver();
+  }
+
+  private JScrollBarDriver newScrollBarDriver() {
+    return new JScrollBarDriver(robot);
   }
 
   /**
@@ -64,18 +70,16 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollUnitUp(int times) {
-    if (times <= 0) 
-      throw actionFailure("The number of times to scroll up one unit should be greater than zero");
-    for (int i = 0; i < times; i++) scrollUnitUp();
+    driver.scrollUnitUp(target, times);
     return this;
   }
-  
+
   /**
    * Simulates a user scrolling up one unit (usually a line.)
    * @return this fixture.
    */
   public final JScrollBarFixture scrollUnitUp() {
-    scrollBarTester().actionScrollUnitUp(target);
+    driver.scrollUnitUp(target);
     return this;
   }
 
@@ -86,21 +90,19 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollUnitDown(int times) {
-    if (times <= 0) 
-      throw actionFailure("The number of times to scroll down one unit should be greater than zero");
-    for (int i = 0; i < times; i++) scrollUnitDown();
+    driver.scrollUnitDown(target, times);
     return this;
   }
-  
+
   /**
    * Simulates a user scrolling down one unit (usually a line.)
    * @return this fixture.
    */
   public final JScrollBarFixture scrollUnitDown() {
-    scrollBarTester().actionScrollUnitDown(target);
+    driver.scrollUnitDown(target);
     return this;
   }
-  
+
   /**
    * Simulates a user scrolling up one block (usually a page,) the given number of times.
    * @param times the number of times to scroll up one block.
@@ -108,18 +110,16 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollBlockUp(int times) {
-    if (times <= 0) 
-      throw actionFailure("The number of times to scroll up one block should be greater than zero");
-    for (int i = 0; i < times; i++) scrollBlockUp();
+    driver.scrollBlockUp(target, times);
     return this;
   }
-  
+
   /**
    * Simulates a user scrolling up one block (usually a page.)
    * @return this fixture.
    */
   public final JScrollBarFixture scrollBlockUp() {
-    scrollBarTester().actionScrollBlockUp(target);
+    driver.scrollBlockUp(target);
     return this;
   }
 
@@ -130,27 +130,21 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final JScrollBarFixture scrollBlockDown(int times) {
-    if (times <= 0) 
-      throw actionFailure("The number of times to scroll down one block should be greater than zero");
-    for (int i = 0; i < times; i++) scrollBlockDown();
+    driver.scrollBlockDown(target, times);
     return this;
   }
-  
+
   /**
    * Simulates a user scrolling down one block (usually a page.)
    * @return this fixture.
    */
   public final JScrollBarFixture scrollBlockDown() {
-    scrollBarTester().actionScrollBlockDown(target);
+    driver.scrollBlockDown(target);
     return this;
   }
-  
-  protected final JScrollBarTester scrollBarTester() {
-    return (JScrollBarTester)tester();
-  }
-  
+
   /**
-   * Asserts that the value of this fixture's <code>{@link JScrollBar}</code> is equal to the given one. 
+   * Asserts that the value of this fixture's <code>{@link JScrollBar}</code> is equal to the given one.
    * @param value the expected value.
    * @return this fixture.
    * @throws AssertionError if the value of this fixture's <code>JScrollBar</code> is not equal to the given one.
@@ -159,7 +153,7 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
     assertThat(target.getValue()).isEqualTo(value);
     return this;
   }
-  
+
   /**
    * Simulates a user clicking this fixture's <code>{@link JScrollBar}</code>.
    * @return this fixture.
@@ -267,7 +261,7 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
   public final JScrollBarFixture requireEnabled() {
     return (JScrollBarFixture) assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JScrollBar}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.
