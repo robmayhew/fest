@@ -51,7 +51,8 @@ import static org.fest.util.Strings.*;
 public class JComboBoxDriver extends JComponentDriver {
 
   private final JListDriver listDriver;
-
+  private final JPopupMenuDriver popupMenuDriver;
+  
   /**
    * Creates a new </code>{@link JComboBoxDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -59,6 +60,7 @@ public class JComboBoxDriver extends JComponentDriver {
   public JComboBoxDriver(RobotFixture robot) {
     super(robot);
     listDriver = new JListDriver(robot);
+    popupMenuDriver = new JPopupMenuDriver(robot);
   }
 
   /**
@@ -184,15 +186,16 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Find the <code>{@link JList}</code> in the pop-up raised by the <code>{@link JComboBox}</code>, if the LAF actually uses one.
+   * Find the <code>{@link JList}</code> in the pop-up raised by the <code>{@link JComboBox}</code>, if the LAF actually 
+   * uses one.
    * @return the found <code>JList</code>.
    * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.
    */
   public final JList dropDownList() {
-    JPopupMenu popup = robot.findActivePopupMenu();
+    JPopupMenu popup = popupMenuDriver.findActivePopupMenu();
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToFindPopup());
-      while ((popup = robot.findActivePopupMenu()) == null) {
+      while ((popup = popupMenuDriver.findActivePopupMenu()) == null) {
         if (watch.isTimeOut()) throw listNotFound();
         pause();
       }

@@ -22,6 +22,7 @@ import java.awt.Point;
 import abbot.tester.ComponentTester;
 
 import org.fest.swing.core.*;
+import org.fest.swing.driver.JPopupMenuDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -49,6 +50,8 @@ public abstract class ComponentFixture<T extends Component> {
 
   private final ComponentTester tester;
 
+  private final JPopupMenuDriver popupMenuDriver;
+  
   /**
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
@@ -81,6 +84,7 @@ public abstract class ComponentFixture<T extends Component> {
     this.robot = robot;
     this.target = target;
     tester = ComponentTester.getTester(target);
+    popupMenuDriver = new JPopupMenuDriver(robot);
   }
 
   /**
@@ -209,7 +213,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, robot.showPopupMenu(target));
+    return new JPopupMenuFixture(robot, popupMenuDriver.showPopupMenu(target));
   }
 
   /**
@@ -220,7 +224,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, robot.showPopupMenu(target, p));
+    return new JPopupMenuFixture(robot, popupMenuDriver.showPopupMenu(target, p));
   }
 
   /**

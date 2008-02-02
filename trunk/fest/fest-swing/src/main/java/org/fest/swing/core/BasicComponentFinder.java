@@ -100,6 +100,6 @@ final class BasicComponentFinder {
            .append("Found:");
     for (Component c : found) message.append(LINE_SEPARATOR).append(format(c));
     if (!found.isEmpty()) message.append(LINE_SEPARATOR);
-    throw new ComponentLookupException(message.toString());    
+    throw new ComponentLookupException(message.toString(), found);    
   }
 }

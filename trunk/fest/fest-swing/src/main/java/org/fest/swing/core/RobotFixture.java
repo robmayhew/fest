@@ -17,28 +17,20 @@ package org.fest.swing.core;
 import java.awt.*;
 import java.util.Collection;
 
-import javax.swing.JPopupMenu;
-
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
-import abbot.tester.ComponentMissingException;
 import abbot.tester.Robot;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.util.TimeoutWatch;
 
 import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.util.Swing.centerOf;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -50,7 +42,6 @@ import static org.fest.util.Strings.concat;
 public final class RobotFixture {
 
   private static final int WINDOW_DELAY = 20000;
-  private static int POPUP_TIMEOUT = 5000;
 
   private Robot robot;
   private WindowTracker windowTracker;
@@ -343,31 +334,6 @@ public final class RobotFixture {
   }
 
   /**
-   * Shows a pop-up menu.
-   * @param invoker the component to invoke the pop-up menu from.
-   * @return the displayed pop-up menu.
-   * @throws org.fest.swing.exception.ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, centerOf(invoker));
-  }
-
-  /**
-   * Shows a pop-up menu at the given coordinates.
-   * @param invoker the component to invoke the pop-up menu from.
-   * @param location the given coordinates for the pop-up menu.
-   * @return the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenu showPopupMenu(Component invoker, Point location) {
-    try {
-      return (JPopupMenu) robot.showPopupMenu(invoker, location.x, location.y);
-    } catch (ComponentMissingException e) {
-      throw new ComponentLookupException(e);
-    }
-  }
-
-  /**
    * Simulates a user entering the given text. Note that this method the key strokes to the component that has input
    * focus.
    * @param text the text to enter.
@@ -459,31 +425,6 @@ public final class RobotFixture {
   public boolean isDragging() {
     return Robot.getState().isDragging();
   }
-
-  /**
-   * Returns the currently active pop-up menu, if any. If no pop-up is currently showing, returns <code>null</code>.
-   * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
-   */
-  public JPopupMenu findActivePopupMenu() {
-    JPopupMenu popup = activePopupMenu();
-    if (popup != null || isEventDispatchThread()) return popup;
-    TimeoutWatch watch = startWatchWithTimeoutOf(POPUP_TIMEOUT);
-    while ((popup = activePopupMenu()) == null) {
-      if (watch.isTimeOut()) break;
-      pause(100);
-    }
-    return popup;
-  }
-
-  private JPopupMenu activePopupMenu() {
-    try {
-      return (JPopupMenu)finder.find(POPUP_MATCHER);
-    } catch (ComponentLookupException e) {
-      return null;
-    }
-  }
-
-  private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
 
   /** 
    * Indicates whether the given <code>{@link Component}</code> is ready for input. 

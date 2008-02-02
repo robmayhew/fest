@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 
 import javax.swing.*;
 
@@ -37,8 +38,10 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link ContainerFixture}</code>.
@@ -153,11 +156,19 @@ public class ContainerFixtureTest {
     robot.showWindow(window);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingButtonByTypeAndMoreThanOneFound() {
-    container.button();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
+  @Test public void shouldFindButtonByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.button();
+      }
+    };
+    find(finder, window.button);
+  }
+  
   @Test public void shouldFindButtonWithGivenMatcher() {
     GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
@@ -174,8 +185,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindCheckBoxByType() {
-    JCheckBoxFixture checkBox = container.checkBox();
-    assertThat(checkBox.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.checkBox();
+      }
+    };
+    find(finder, window.checkBox);
   }
 
   @Test public void shouldFindCheckBoxWithGivenMatcher() {
@@ -193,9 +208,13 @@ public class ContainerFixtureTest {
     assertThat(checkBox.target).isSameAs(window.checkBox);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingComboBoxByTypeAndMoreThanOneFound() {
-    container.comboBox();
+  @Test public void shouldFindComboBoxByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.comboBox();
+      }
+    };
+    find(finder, window.comboBox);
   }
 
   @Test public void shouldFindComboBoxWithGivenMatcher() {
@@ -215,8 +234,12 @@ public class ContainerFixtureTest {
 
   @Test public void shouldFindDialogByType() {
     window.dialog.setVisible(true);
-    DialogFixture dialog = container.dialog();
-    assertThat(dialog.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.dialog();
+      }
+    };
+    find(finder, window.dialog);
   }
 
   @Test public void shouldFindDialogWithGivenMatcher() {
@@ -237,8 +260,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindFileChooserByType() {
-    JFileChooserFixture fileChooser = container.fileChooser();
-    assertThat(fileChooser.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.fileChooser();
+      }
+    };
+    find(finder, window.fileChooser);
   }
 
   @Test public void shouldFindFileChooserWithGivenMatcher() {
@@ -256,9 +283,13 @@ public class ContainerFixtureTest {
     assertThat(fileChooser.target).isSameAs(window.fileChooser);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingLabelByTypeAndMoreThanOneFound() {
-    container.label();
+  @Test public void shouldFindLabelByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.label();
+      }
+    };
+    find(finder, window.label);
   }
 
   @Test public void shouldFindLabelWithGivenMatcher() {
@@ -276,9 +307,13 @@ public class ContainerFixtureTest {
     assertThat(label.target).isSameAs(window.label);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingListByTypeAndMoreThanOneFound() {
-    container.list();
+  @Test public void shouldFindListByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.list();
+      }
+    };
+    find(finder, window.list);
   }
 
   @Test public void shouldFindListWithGivenMatcher() {
@@ -316,9 +351,13 @@ public class ContainerFixtureTest {
     assertThat(menuItem.target).isSameAs(window.subMenu);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingPanelByTypeAndMoreThanOneFound() {
-    container.panel();
+  @Test public void shouldFindPanelByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.panel();
+      }
+    };
+    find(finder, window.panel);
   }
 
   @Test public void shouldFindPanelWithGivenMatcher() {
@@ -344,8 +383,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindRadioButtonByType() {
-    JRadioButtonFixture radioButton = container.radioButton();
-    assertThat(radioButton.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.radioButton();
+      }
+    };
+    find(finder, window.radioButton);
   }
 
   @Test public void shouldFindRadioButtonWithGivenMatcher() {
@@ -364,8 +407,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindScrollBarByType() {
-    JScrollBarFixture scrollBar = container.scrollBar();
-    assertThat(scrollBar.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.scrollBar();
+      }
+    };
+    find(finder, window.scrollBar);
   }
 
   @Test public void shouldFindScrollBarWithGivenMatcher() {
@@ -383,10 +430,13 @@ public class ContainerFixtureTest {
     assertThat(scrollBar.target).isSameAs(window.scrollBar);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingScrollPaneByTypeAndThanOneFound() {
-    JScrollPaneFixture scrollPane = container.scrollPane();
-    assertThat(scrollPane.target).isNotNull();
+  @Test public void shouldFindScrollPane() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.scrollPane();
+      }
+    };
+    find(finder, window.scrollPane);
   }
 
   @Test public void shouldFindScrollPaneWithGivenMatcher() {
@@ -403,9 +453,14 @@ public class ContainerFixtureTest {
     JScrollPaneFixture scrollPane = container.scrollPane("scrollPane");
     assertThat(scrollPane.target).isSameAs(window.scrollPane);
   }
-    @Test public void shouldFindSliderByType() {
-    JSliderFixture slider = container.slider();
-    assertThat(slider.target).isNotNull();
+
+  @Test public void shouldFindSliderByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.slider();
+      }
+    };
+    find(finder, window.slider);
   }
 
   @Test public void shouldFindSliderWithGivenMatcher() {
@@ -424,8 +479,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindSpinnerByType() {
-    JSpinnerFixture spinner = container.spinner();
-    assertThat(spinner.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.spinner();
+      }
+    };
+    find(finder, window.spinner);
   }
 
   @Test public void shouldFindSpinnerWithGivenMatcher() {
@@ -444,8 +503,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindSplitPaneByType() {
-    JSplitPaneFixture splitPane = container.splitPane();
-    assertThat(splitPane.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.splitPane();
+      }
+    };
+    find(finder, window.splitPane);
   }
 
   @Test public void shouldFindSplitPaneWithGivenMatcher() {
@@ -464,8 +527,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindTabbedPaneByType() {
-    JTabbedPaneFixture tabbedPane = container.tabbedPane();
-    assertThat(tabbedPane.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.tabbedPane();
+      }
+    };
+    find(finder, window.tabbedPane);
   }
 
   @Test public void shouldFindTabbedPaneWithGivenMatcher() {
@@ -484,8 +551,12 @@ public class ContainerFixtureTest {
   }
 
   @Test public void shouldFindTableByType() {
-    JTableFixture table = container.table();
-    assertThat(table.target).isNotNull();
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.table();
+      }
+    };
+    find(finder, window.table);
   }
 
   @Test public void shouldFindTableWithGivenMatcher() {
@@ -503,9 +574,13 @@ public class ContainerFixtureTest {
     assertThat(table.target).isSameAs(window.table);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingTextComponentByTypeAndMoreThanOneFound() {
-    container.textBox();
+  @Test public void shouldFindTextComponentByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.textBox();
+      }
+    };
+    find(finder, window.textField);
   }
 
   @Test public void shouldFindTextComponentWithGivenMatcher() {
@@ -523,9 +598,13 @@ public class ContainerFixtureTest {
     assertThat(textField.target).isSameAs(window.textField);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingToggleButtonByTypeAndMoreThanOneFound() {
-    container.toggleButton();
+  @Test public void shouldFindToggleButtonByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.toggleButton();
+      }
+    };
+    find(finder, window.toggleButton);
   }
 
   @Test public void shouldFindToggleButtonWithGivenMatcher() {
@@ -543,9 +622,13 @@ public class ContainerFixtureTest {
     assertThat(toggleButton.target).isSameAs(window.toggleButton);
   }
 
-  @Test(expectedExceptions=ComponentLookupException.class)
-  public void shouldThrowErrorWhenFindingToolBarByTypeAndMoreThanOneFound() {
-    container.toolBar();
+  @Test public void shouldFindToolBarByType() {
+    FindFunction finder = new FindFunction() {
+      @Override ComponentFixture<? extends Component> perform() {
+        return container.toolBar();
+      }
+    };
+    find(finder, window.toolBar);
   }
 
   @Test public void shouldFindToolBarWithGivenMatcher() {
@@ -563,7 +646,19 @@ public class ContainerFixtureTest {
     assertThat(toolBar.target).isSameAs(window.toolBar);
   }
 
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+  private void find(FindFunction findFunction, Component expected) {
+    try {
+      ComponentFixture<? extends Component> fixture = findFunction.perform();
+      assertThat(fixture.target).isSameAs(expected);        
+    } catch (ComponentLookupException e) {
+      Collection<? extends Component> found = e.found();
+      assertThat(found).isNotEmpty();
+      for (Component c : found) if (c == expected) return;
+      fail(concat("Unable to find ", expected));
+    }
+  }
+  
+  private static abstract class FindFunction {
+    abstract ComponentFixture<? extends Component> perform();
   }
 }

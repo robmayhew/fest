@@ -15,14 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import abbot.tester.ComponentLocation;
 import abbot.tester.JTableLocation;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.swing.core.MouseButton.*;
@@ -181,10 +179,7 @@ public class JTableCellFixture implements ItemFixture {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenu() {
-    RobotFixture robot = table.robot;
-    JTable target = table.target;
-    JPopupMenu popupMenu = robot.showPopupMenu(target, new JTableLocation(row(), column()).getPoint(table.target));
-    return new JPopupMenuFixture(robot, popupMenu);
+    return table.showPopupMenuAt(new JTableLocation(row(), column()).getPoint(table.target));
   }
   
   /**

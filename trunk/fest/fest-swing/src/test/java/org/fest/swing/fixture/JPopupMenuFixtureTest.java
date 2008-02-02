@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.driver.JPopupMenuDriver;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -46,7 +47,8 @@ public class JPopupMenuFixtureTest {
     robot = robotWithNewAwtHierarchy();
     frame = new MyFrame(getClass());
     robot.showWindow(frame);
-    fixture = new JPopupMenuFixture(robot, robot.showPopupMenu(frame.textBox));
+    JPopupMenu popupMenu = new JPopupMenuDriver(robot).showPopupMenu(frame.textBox);
+    fixture = new JPopupMenuFixture(robot, popupMenu);
   }
   
   @AfterMethod public void tearDown() {

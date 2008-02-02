@@ -36,7 +36,7 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public abstract class JComponentDriver extends ComponentDriver {
+public class JComponentDriver extends ComponentDriver {
 
   /**
    * Creates a new </code>{@link JComponentDriver}</code>.
@@ -100,10 +100,10 @@ public abstract class JComponentDriver extends ComponentDriver {
    * @param name the name of the <code>Action</code> to invoke.
    * @throws ActionFailedException if an <code>Action</code> cannot be found under the given name.
    * @throws ActionFailedException if a <code>KeyStroke</code> cannot be found for the <code>Action</code> under the
-   *          given name.
+   *         given name.
    * @throws ActionFailedException if it is not possible to type any of the found <code>KeyStroke</code>s.
    */
-  public void invokeAction(JComponent c, String name) {
+  public final void invokeAction(JComponent c, String name) {
     robot.focusAndWaitForFocusGain(c);
     // From Abbot: On OSX/1.3.1, some action map keys are actions instead of strings.
     // On XP/1.4.1, all action map keys are strings.

@@ -15,8 +15,6 @@
  */
 package org.fest.swing.core;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
@@ -24,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
@@ -56,11 +53,6 @@ public class RobotFixtureTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldShowPopupMenuInTextFieldContainingPopupMenu() {
-    JPopupMenu menu = robot.showPopupMenu(frame.textBoxWithPopupMenu);
-    assertThat(menu).isSameAs(frame.popupMenu);
-  }
-
   @Test(dataProvider = "clickingData") 
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
     ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
@@ -104,11 +96,6 @@ public class RobotFixtureTest {
     assertThat(recorder).keysReleased(VK_A);
   }
 
-  @Test(expectedExceptions = ComponentLookupException.class)
-  public void shouldNotShowPopupMenuInTextFieldNotContainingPopupMenu() {
-    robot.showPopupMenu(frame.textBox);
-  }
-
   @Test public void shouldCloseWindow() {
     final TestFrame w = new TestFrame(getClass());
     w.display();
@@ -124,17 +111,11 @@ public class RobotFixtureTest {
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    private final JPopupMenu popupMenu = new JPopupMenu("Popup Menu");
-    private final JTextField textBoxWithPopupMenu = new JTextField(20);
     private final JTextField textBox = new JTextField(20);
     
     MyFrame(Class<?> testClass) {
       super(testClass);
-      add(textBoxWithPopupMenu);
       add(textBox);
-      textBoxWithPopupMenu.setComponentPopupMenu(popupMenu);
-      popupMenu.add(new JMenuItem("First"));
-      popupMenu.add(new JMenuItem("Second"));
     }
   }
 }
