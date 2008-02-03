@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="lib/ant-1.7.0.jar" sourcepath="C:/Java/apache-ant-1.7.0/src/main"/>
 	<classpathentry kind="lib" path="lib/ant-junit-1.7.0.jar" sourcepath="lib/ant-junit-1.7-src.zip"/>
 	<classpathentry kind="lib" path="lib/ant-launcher-1.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/fest-util-0.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/gnu-regexp-1.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/MRJToolkitStubs-1.0.jar"/>
@@ -21,8 +20,9 @@
 	<classpathentry kind="lib" path="lib/easymock-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/easymockclassextension-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/fest-mocks-0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/fest-assert-0.8.jar"/>
-	<classpathentry kind="lib" path="lib/fest-reflect-0.2.jar"/>
-	<classpathentry kind="lib" path="lib/fest-swing-0.8.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-0.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-reflect-0.3.jar"/>
+	<classpathentry kind="lib" path="lib/fest-swing-0.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
