@@ -15,6 +15,15 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Settings.timeoutToFindPopup;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Strings.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 import java.awt.Container;
 
@@ -29,17 +38,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
 
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToFindPopup;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Objects.*;
-import static org.fest.swing.util.Strings.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JComboBox}</code>s. This class is intended for internal
@@ -52,7 +50,7 @@ public class JComboBoxDriver extends JComponentDriver {
 
   private final JListDriver listDriver;
   private final JPopupMenuDriver popupMenuDriver;
-  
+
   /**
    * Creates a new </code>{@link JComboBoxDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -91,10 +89,7 @@ public class JComboBoxDriver extends JComponentDriver {
     Object item = itemAt(comboBox, index);
     String text = item.toString();
     if (!isDefaultToString(text)) return text;
-    text = textFrom(cellRendererComponent(comboBox, index, text));
-    if (text != null) return text;
-    text = toStringOf(text);
-    return DEFAULT_TO_STRING.equals(text) ? null : text;
+    return textFrom(cellRendererComponent(comboBox, index, text));
   }
 
   private Component cellRendererComponent(JComboBox comboBox, int index, Object item) {
@@ -186,7 +181,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Find the <code>{@link JList}</code> in the pop-up raised by the <code>{@link JComboBox}</code>, if the LAF actually 
+   * Find the <code>{@link JList}</code> in the pop-up raised by the <code>{@link JComboBox}</code>, if the LAF actually
    * uses one.
    * @return the found <code>JList</code>.
    * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.

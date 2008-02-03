@@ -1,35 +1,34 @@
 /*
  * Created on Jul 12, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTable;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
-import abbot.tester.ComponentLocation;
-import abbot.tester.JTableLocation;
-import abbot.tester.JTableTester;
+import java.awt.Point;
+
+import javax.swing.JTable;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -41,6 +40,8 @@ import static org.fest.swing.util.Platform.controlOrCommandKey;
  */
 public class JTableFixture extends ComponentFixture<JTable> {
 
+  private final JTableDriver driver;
+
   /**
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTable</code>.
@@ -50,8 +51,9 @@ public class JTableFixture extends ComponentFixture<JTable> {
    */
   public JTableFixture(RobotFixture robot, String tableName) {
     super(robot, tableName, JTable.class);
+    driver = newTableDriver(robot);
   }
-  
+
   /**
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTable</code>.
@@ -59,6 +61,11 @@ public class JTableFixture extends ComponentFixture<JTable> {
    */
   public JTableFixture(RobotFixture robot, JTable target) {
     super(robot, target);
+    driver = newTableDriver(robot);
+  }
+
+  private JTableDriver newTableDriver(RobotFixture robot) {
+    return new JTableDriver(robot);
   }
 
   /**
@@ -72,7 +79,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
     validate(cell);
     return new JTableCellFixture(this, cell);
   }
-  
+
   /**
    * Simulates a user selecting the given cells of this fixture's <code>{@link JTable}</code>.
    * @param cells the cells to select.
@@ -99,12 +106,12 @@ public class JTableFixture extends ComponentFixture<JTable> {
    */
   public final JTableFixture selectCell(TableCell cell) {
     validate(cell);
-    tableTester().actionSelectCell(target, cell.row, cell.column);
+    driver.selectCell(target, cell.row, cell.column);
     return this;
   }
 
   /**
-   * Returns the value of the selected cell in this fixture's <code>{@link JTable}</code> into a reasonable 
+   * Returns the value of the selected cell in this fixture's <code>{@link JTable}</code> into a reasonable
    * <code>String</code> representation. Returns <code>null</code> if one can not be obtained or if the
    * <code>{@link JTable}</code> does not have any selected cell.
    * @return the value of the selected cell.
@@ -115,7 +122,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Returns the value of the given cell in this fixture's <code>{@link JTable}</code> into a reasonable 
+   * Returns the value of the given cell in this fixture's <code>{@link JTable}</code> into a reasonable
    * <code>String</code> representation, or <code>null</code> if one can not be obtained.
    * @param cell the given cell.
    * @return the value of the given cell.
@@ -128,7 +135,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   private String contentsAt(int row, int column) {
-    return JTableTester.valueToString(target, row, column);
+    return driver.text(target, row, column);
   }
 
   /**
@@ -139,7 +146,8 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableFixture drag(TableCell cell) {
-    tester().actionDrag(target, cellLocation(cell));
+    validate(cell);
+    driver.drag(target, cell.row, cell.column);
     return this;
   }
 
@@ -151,22 +159,56 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public final JTableFixture drop(TableCell cell) {
-    tester().actionDrop(target, cellLocation(cell));
-    return this;
-  }  
-
-  private ComponentLocation cellLocation(TableCell cell) {
     validate(cell);
-    return new ComponentLocation(new JTableLocation(cell.row, cell.column).getPoint(target));
+    driver.drop(target, cell.row, cell.column);
+    return this;
   }
-  
+
+  /**
+   * Simulates a user clicking a cell in this fixture's <code>{@link JTable}</code> once, using the specified mouse
+   * button.
+   * @param cell the cell to click.
+   * @param mouseButton the mouse button to use.
+   * @return this fixture.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public final JTableFixture click(TableCell cell, MouseButton mouseButton) {
+    validate(cell);
+    driver.click(target, cell.row, cell.column, mouseButton, 1);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking a cell in this fixture's <code>{@link JTable}</code>, using the specified mouse button
+   * the given number of times.
+   * @param cell the cell to click.
+   * @param mouseClickInfo specifies the mouse button to use and how many times to click.
+   * @return this fixture.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public final JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
+    validate(cell);
+    driver.click(target, cell.row, cell.column, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
+  }
+
+  /**
+   * Converts the given cell into a coordinate pair.
+   * @param cell the given cell.
+   * @return the coordinates of the given cell.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public final Point pointAt(TableCell cell) {
+    validate(cell);
+    return driver.pointAt(target, cell.row, cell.column);
+  }
+
   private void validate(TableCell cell) {
     if (cell == null) throw actionFailure("Cell cannot be null");
     cell.validateBoundsIn(target);
-  }
-
-  protected final JTableTester tableTester() {
-    return (JTableTester)tester();
   }
 
   /**
@@ -176,7 +218,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   public final JTableFixture click() {
     return (JTableFixture)doClick();
   }
-  
+
   /**
    * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
    * @param button the button to click.
@@ -206,12 +248,12 @@ public class JTableFixture extends ComponentFixture<JTable> {
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTable}</code>.
    * <p>
-   * <b>Note:</b> This method will not be successful if the double-clicking occurs on an editable table cell. For this 
+   * <b>Note:</b> This method will not be successful if the double-clicking occurs on an editable table cell. For this
    * particular case, this method will start edition of the table cell located under the mouse pointer.
    * </p>
    * @return this fixture.
    */
-  public final JTableFixture doubleClick() {    
+  public final JTableFixture doubleClick() {
     return (JTableFixture)doDoubleClick();
   }
 
@@ -224,7 +266,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   }
 
   /**
-   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JTable}</code>. This method 
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JTable}</code>. This method
    * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
@@ -243,7 +285,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   public final JTableFixture pressKey(int keyCode) {
     return (JTableFixture)doPressKey(keyCode);
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JTable}</code>.
    * @param keyCode the code of the key to release.
@@ -253,7 +295,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   public final JTableFixture releaseKey(int keyCode) {
     return (JTableFixture)doReleaseKey(keyCode);
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JTable}</code> is visible.
    * @return this fixture.
@@ -280,7 +322,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
   public final JTableFixture requireEnabled() {
     return (JTableFixture)assertEnabled();
   }
-  
+
   /**
    * Asserts that this fixture's <code>{@link JTable}</code> is enabled.
    * @param timeout the time this fixture will wait for the component to be enabled.

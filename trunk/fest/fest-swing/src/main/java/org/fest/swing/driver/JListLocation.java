@@ -15,6 +15,12 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -22,14 +28,6 @@ import java.awt.Rectangle;
 import javax.swing.JList;
 
 import org.fest.swing.exception.LocationUnavailableException;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Objects.*;
-import static org.fest.swing.util.Strings.match;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands encapsulation of the location of a row on a <code>{@link JList}</code> (a coordinate, item index or
@@ -86,10 +84,7 @@ public class JListLocation {
   public String text(JList list, int index) {
     validate(list, index);
     Object value = elementAt(list, index);
-    String text = textFrom(cellRendererComponent(list, index, value));
-    if (text != null) return text;
-    text = toStringOf(value);
-    return DEFAULT_TO_STRING.equals(text) ? null : text;
+    return textFrom(cellRendererComponent(list, index, value));
   }
 
   private Object elementAt(JList list, int index) {

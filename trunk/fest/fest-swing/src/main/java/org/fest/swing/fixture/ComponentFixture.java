@@ -15,22 +15,20 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Point;
-
-import abbot.tester.ComponentTester;
-
-import org.fest.swing.core.*;
-import org.fest.swing.driver.JPopupMenuDriver;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.*;
+
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
+
+import org.fest.swing.core.*;
+import org.fest.swing.driver.JPopupMenuDriver;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
@@ -48,10 +46,8 @@ public abstract class ComponentFixture<T extends Component> {
   /** This fixture's <code>{@link Component}</code>. */
   public final T target;
 
-  private final ComponentTester tester;
-
   private final JPopupMenuDriver popupMenuDriver;
-  
+
   /**
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
@@ -83,7 +79,6 @@ public abstract class ComponentFixture<T extends Component> {
   public ComponentFixture(RobotFixture robot, T target) {
     this.robot = robot;
     this.target = target;
-    tester = ComponentTester.getTester(target);
     popupMenuDriver = new JPopupMenuDriver(robot);
   }
 
@@ -404,7 +399,4 @@ public abstract class ComponentFixture<T extends Component> {
   protected String formattedTarget() {
     return format(target);
   }
-
-  /** @return a tester for the target component */
-  protected final ComponentTester tester() { return tester; }
 }
