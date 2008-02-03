@@ -9,6 +9,9 @@
       <action dev="alruiz" type="fix" issue="108" due-to="Wim Boffe">
         ComponentFinderTemplate uses the specified name to find a component.
       </action>
+      <action dev="alruiz" type="fix" issue="105" due-to="Woody Folsom">
+        Fixed constructors in ContainerFixture to use lookup scope from org.fest.swing.core.Settings.
+      </action>
       <action dev="wanghy, alruiz" type="add">
         Added method 'click(TableCell, MouseButton)' to JTableFixture.
       </action>

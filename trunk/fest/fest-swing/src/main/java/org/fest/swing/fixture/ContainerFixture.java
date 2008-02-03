@@ -14,6 +14,11 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.join;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
@@ -23,11 +28,6 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.*;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.join;
 
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
@@ -47,7 +47,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @see org.fest.swing.core.ComponentFinder#findByType(Class)
    */
   public ContainerFixture(RobotFixture robot, Class<? extends T> type) {
-    super(robot, robot.finder().findByType(type));
+    super(robot, type);
   }
 
   /**
@@ -60,7 +60,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @see org.fest.swing.core.ComponentFinder#findByName(String, Class)
    */
   public ContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
-    super(robot, robot.finder().findByName(name, type));
+    super(robot, name, type);
   }
 
   /**
