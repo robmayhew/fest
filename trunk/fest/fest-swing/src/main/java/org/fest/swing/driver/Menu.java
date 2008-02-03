@@ -17,7 +17,6 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -29,52 +28,32 @@ import javax.swing.JPopupMenu;
  */
 final class Menu {
 
-  private Component parent;
+  private Component parentOrInvoker;
   private JPopupMenu parentPopup;
   
-  private final boolean isMenu;
   private final boolean inMenuBar;
   
   Menu(JMenuItem menuItem) {
-    parent = menuItem.getParent();
-    if (parent instanceof JPopupMenu) {
-      parentPopup = (JPopupMenu)parent;
-      parent = ((JPopupMenu)parent).getInvoker();
+    parentOrInvoker = menuItem.getParent();
+    if (parentOrInvoker instanceof JPopupMenu) {
+      parentPopup = (JPopupMenu)parentOrInvoker;
+      parentOrInvoker = ((JPopupMenu)parentOrInvoker).getInvoker();
     }
-    isMenu = menuItem instanceof JMenu;
-    inMenuBar = parent instanceof JMenuBar;
+    inMenuBar = parentOrInvoker instanceof JMenuBar;
   }
   
-  /**
-   * Indicates whether the parent of this menu is another menu.
-   * @return <code>true</code> if the parent of this menu is another menu, <code>false</code> otherwise.
-   */
+  // Indicates whether the parent of this menu is another menu.
   boolean parentIsMenu() {
-    if (!(parent instanceof JMenuItem)) return false;
+    if (!(parentOrInvoker instanceof JMenuItem)) return false;
     return parentPopup == null || !parentPopup.isShowing();
   }
   
-  /**
-   * Returns the parent of this menu, or its invoker, if the menu is in a pop-up.
-   * @return the parent of this menu, or its invoker, if the menu is in a pop-up.
-   */
-  Component parent() { return parent; }
+   // Returns the parent of this menu, or its invoker, if the menu is in a pop-up.
+  Component parentOrInvoker() { return parentOrInvoker; }
 
-  /**
-   * Returns the parent pop-up menu, or <code>null</code> if this menu is not in a pop-up.
-   * @return the parent pop-up menu, or <code>null</code> if this menu is not in a pop-up.
-   */
+  // Returns the parent pop-up menu, or null if this menu is not in a pop-up.
   JPopupMenu parentPopup() { return parentPopup; }
 
-  /**
-   * Indicates whether this menu is an instance of <code>{@link JMenu}</code>.
-   * @return <code>true</code> if this menu is an instance of <code>JMenu</code>, <code>false</code> otherwise.
-   */
-  boolean isMenu() { return isMenu; }
-
-  /**
-   * Indicates whether this menu is in a <code>{@link JMenuBar}</code>.
-   * @return <code>true</code> if this menu is in a <code>JMenuBar</code>, <code>false</code> otherwise.
-   */
+  // Indicates whether this menu is in a <code>{@link JMenuBar}</code>.
   boolean inMenuBar() { return inMenuBar; }
 }

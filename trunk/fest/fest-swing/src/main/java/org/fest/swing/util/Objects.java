@@ -45,7 +45,6 @@ public final class Objects {
     if (o == null) return NULL;
     if (o.getClass().isArray()) return format(o);
     String s = o.toString();
-    if (s == null) return NULL;
     if (isDefaultToString(s)) return DEFAULT_TO_STRING;
     return s;
   }
