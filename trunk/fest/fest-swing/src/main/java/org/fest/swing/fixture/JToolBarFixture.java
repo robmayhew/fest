@@ -20,11 +20,11 @@ import java.awt.Point;
 
 import javax.swing.JToolBar;
 
-import abbot.tester.JToolBarTester;
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JToolBarDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -51,6 +51,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
     }
   }
 
+  private final JToolBarDriver driver;
+
   /**
    * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToolBar</code>.
@@ -61,6 +63,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public JToolBarFixture(RobotFixture robot, String toolbarName) {
     super(robot, toolbarName, JToolBar.class);
+    driver = newToolBarDriver(robot);
   }
 
   /**
@@ -70,34 +73,44 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public JToolBarFixture(RobotFixture robot, JToolBar target) {
     super(robot, target);
+    driver = newToolBarDriver(robot);
+  }
+
+  private JToolBarDriver newToolBarDriver(RobotFixture robot) {
+    return new JToolBarDriver(robot);
   }
 
   /**
-   * Simulates a user floating this fixture's <code>{@link JToolBar}</code>.
+   * Simulates a user dragging this fixture's <code>{@link JToolBar}</code> to the given location, causing it to float.
    * @param point the point where the <code>JToolBar</code> will be floating to.
    * @return this fixture.
+   * @throws ActionFailedException if the <code>JToolBar</code> is not floatable.
+   * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
   public final JToolBarFixture floatTo(Point point) {
-    toolbarTester().actionFloat(target, point.x, point.y);
+    driver.floatTo(target, point.x, point.y);
     return this;
   }
 
   /**
    * Simulates a user unfloating this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
+   * @throws ActionFailedException if the dock container cannot be found.
    */
   public final JToolBarFixture unfloat() {
-    toolbarTester().actionUnfloat(target);
+    driver.unfloat(target);
     return this;
   }
 
+  /**
+   * Simulates a user dropping this fixture's  {@link JToolBar} to the requested constraint position.
+   * @param constraint the constraint position.
+   * @return this fixture.
+   * @throws ActionFailedException if the dock container cannot be found.
+   */
   public JToolBarFixture unfloat(UnfloatConstraint constraint) {
-    toolbarTester().actionUnfloat(target, constraint.value);
+    driver.unfloat(target, constraint.value);
     return this;
-  }
-
-  protected final JToolBarTester toolbarTester() {
-    return (JToolBarTester)tester();
   }
 
   /**

@@ -84,6 +84,17 @@ public class JScrollBarFixture extends ComponentFixture<JScrollBar> {
   }
 
   /**
+   * Simulates a user scrolling to the given position.
+   * @param position the position to scroll to.
+   * @return this fixture.
+   * @throws ActionFailedException if the given position is not within the <code>JScrollBar</code> bounds.
+   */
+  public final JScrollBarFixture scrollTo(int position) {
+    driver.scrollTo(target, position);
+    return this;
+  }
+
+  /**
    * Simulates a user scrolling down one unit (usually a line,) the given number of times.
    * @param times the number of times to scroll down one unit.
    * @return this fixture.

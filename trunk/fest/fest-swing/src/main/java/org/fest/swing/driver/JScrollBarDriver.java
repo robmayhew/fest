@@ -140,6 +140,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * Scrolls to the given position.
    * @param scrollBar the target <code>JScrollBar</code>.
    * @param position the position to scroll to.
+   * @throws ActionFailedException if the given position is not within the <code>JScrollBar</code> bounds.
    */
   public final void scrollTo(JScrollBar scrollBar, final int position) {
     validatePosition(scrollBar, position);
