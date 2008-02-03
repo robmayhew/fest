@@ -103,7 +103,7 @@ public class ObjectArrayAssertTest {
       new ObjectArrayAssert("Luke", "Leia").as("Skywalker").isEqualTo(array("Anakin"));
       fail();
     } catch (AssertionError expected) {
-      assertEquals(expected.getMessage(), "[Skywalker] expected:<'['Anakin']'> but was:<'['Luke', 'Leia']'>");
+      assertEquals(expected.getMessage(), "[Skywalker] expected:<['Anakin']> but was:<['Luke', 'Leia']>");
     }
   }
 
@@ -111,13 +111,13 @@ public class ObjectArrayAssertTest {
     new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Yoda"));
   }
 
-  @Test(/*dependsOnMethods = "shouldPassIfNotEqualArrays"*/)
+  @Test(dependsOnMethods = "shouldPassIfNotEqualArrays")
   public void shouldFailIfEqualArrays() {
     try {
       new ObjectArrayAssert("Luke", "Leia").as("Skywalker").isNotEqualTo(array("Luke", "Leia"));
       fail();
     } catch (AssertionError expected) {
-      assertEquals(expected.getMessage(), "[Skywalker] <'['Luke', 'Leia']'> should not be equal to <'['Luke', 'Leia']'>");
+      assertEquals(expected.getMessage(), "[Skywalker] <['Luke', 'Leia']> should not be equal to <['Luke', 'Leia']>");
     }
   }
 

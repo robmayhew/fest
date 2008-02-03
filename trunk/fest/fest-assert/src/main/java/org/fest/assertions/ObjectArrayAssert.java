@@ -21,7 +21,6 @@ import java.util.List;
 
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Arrays.format;
 import static org.fest.util.Collections.list;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
@@ -218,11 +217,11 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
   }
 
   private String formattedActualInBrackets() {
-    return inBrackets(formattedActual());
+    return inBrackets(actual);
   }
 
   private String formattedInBrackets(Object[] array) {
-    return inBrackets(format(array));
+    return inBrackets(array);
   }
 
   /**
@@ -244,7 +243,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected))
-      fail(errorMessageIfNotEqual(formattedActual(), format(expected)));
+      fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
 
@@ -257,17 +256,13 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isNotEqualTo(Object[] array) {
     if (Arrays.equals(actual, array))
-      fail(errorMessageIfEqual(formattedActual(), format(array)));
+      fail(errorMessageIfEqual(actual, array));
     return this;
   }
 
   int actualGroupSize() {
     isNotNull();
     return actual.length;
-  }
-
-  private String formattedActual() {
-    return format(actual);
   }
 
   /**

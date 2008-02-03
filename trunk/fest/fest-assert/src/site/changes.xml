@@ -10,6 +10,9 @@
         Error messages in ObjectArrayAssert and all the assertion objects dealing with array of primitives where
         including the description of the assertion object twice.
       </action>
+      <action dev="alruiz" type="fix">
+        Error messages in ObjectArrayAssert were using quotes around array of Strings.
+      </action>
     </release>
     <release version="0.9" date="2008-01-30" description="Snapshot release">
       <action dev="wanghy" type="add">
