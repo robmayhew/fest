@@ -133,7 +133,17 @@ public final class Fail {
    * @return an error message to be used when two objects that are expected to be equal aren't.
    */
   static String errorMessageIfNotEqual(String message, Object actual, Object expected) {
-    return concat(format(message), "expected:", inBrackets(expected), " but was:", inBrackets(actual));
+    return concat(format(message), errorMessageIfNotEqual(actual, expected));
+  }
+  
+  /**
+   * Returns an error message to be used when two objects that are expected to be equal aren't equal.
+   * @param actual the value checked against <code>expected</code>.
+   * @param expected expected value.
+   * @return an error message to be used when two objects that are expected to be equal aren't.
+   */
+  static String errorMessageIfNotEqual(Object actual, Object expected) {
+    return concat("expected:", inBrackets(expected), " but was:", inBrackets(actual));
   }
 
   /**
@@ -144,7 +154,17 @@ public final class Fail {
    * @return an error message to be used when two objects that are not expected to be equal are.
    */
   static String errorMessageIfEqual(String message, Object first, Object second) {
-    return concat(format(message), inBrackets(first), " should not be equal to ", inBrackets(second));
+    return concat(format(message), errorMessageIfEqual(first, second));
+  }
+
+  /**
+   * Returns an error message to be used when two objects that are not expected to be equal are actually equal.
+   * @param first the value checked against <code>second</code>.
+   * @param second second value.
+   * @return an error message to be used when two objects that are not expected to be equal are.
+   */
+  static String errorMessageIfEqual(Object first, Object second) {
+    return concat(inBrackets(first), " should not be equal to ", inBrackets(second));
   }
 
   private Fail() {}

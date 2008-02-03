@@ -192,7 +192,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    */
   public ${className} isEqualTo(${arrayType}[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), actual, expected));
+      fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
 
@@ -205,7 +205,7 @@ public final class ${className} extends GroupAssert<${arrayType}[]> {
    */
   public ${className} isNotEqualTo(${arrayType}[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(description(), actual, array));
+      fail(errorMessageIfEqual(actual, array));
     return this;
   }
 

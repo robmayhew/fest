@@ -15,16 +15,16 @@
  */
 package org.fest.assertions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Collections.list;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the
@@ -244,7 +244,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isEqualTo(Object[] expected) {
     if (!Arrays.equals(actual, expected))
-      fail(errorMessageIfNotEqual(description(), formattedActual(), format(expected)));
+      fail(errorMessageIfNotEqual(formattedActual(), format(expected)));
     return this;
   }
 
@@ -257,7 +257,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert isNotEqualTo(Object[] array) {
     if (Arrays.equals(actual, array))
-      fail(errorMessageIfEqual(description(), formattedActual(), format(array)));
+      fail(errorMessageIfEqual(formattedActual(), format(array)));
     return this;
   }
 

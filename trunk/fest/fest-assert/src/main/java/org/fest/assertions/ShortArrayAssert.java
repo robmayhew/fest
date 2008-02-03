@@ -1,5 +1,5 @@
 /*
- * Created on Jan 25, 2008
+ * Created on Feb 3, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -186,7 +186,7 @@ public final class ShortArrayAssert extends GroupAssert<short[]> {
    */
   public ShortArrayAssert isEqualTo(short[] expected) {
     if (!Arrays.equals(actual, expected)) 
-      fail(errorMessageIfNotEqual(description(), actual, expected));
+      fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
 
@@ -199,7 +199,7 @@ public final class ShortArrayAssert extends GroupAssert<short[]> {
    */
   public ShortArrayAssert isNotEqualTo(short[] array) {
     if (Arrays.equals(actual, array)) 
-      fail(errorMessageIfEqual(description(), actual, array));
+      fail(errorMessageIfEqual(actual, array));
     return this;
   }
 

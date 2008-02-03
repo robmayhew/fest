@@ -15,9 +15,11 @@
  */
 package org.fest.assertions;
 
+import org.testng.annotations.Test;
+
 import static org.fest.util.Arrays.array;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ObjectArrayAssert}</code>.
@@ -95,18 +97,28 @@ public class ObjectArrayAssertTest {
     new ObjectArrayAssert("Luke", "Leia").isEqualTo(array("Luke", "Leia"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class)
+  @Test(dependsOnMethods = "shouldPassIfEqualArrays")
   public void shouldFailIfNotEqualArrays() {
-    new ObjectArrayAssert("Luke", "Leia").isEqualTo(array("Anakin"));
+    try {
+      new ObjectArrayAssert("Luke", "Leia").as("Skywalker").isEqualTo(array("Anakin"));
+      fail();
+    } catch (AssertionError expected) {
+      assertEquals(expected.getMessage(), "[Skywalker] expected:<'['Anakin']'> but was:<'['Luke', 'Leia']'>");
+    }
   }
 
   @Test public void shouldPassIfNotEqualArrays() {
     new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Yoda"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class)
+  @Test(/*dependsOnMethods = "shouldPassIfNotEqualArrays"*/)
   public void shouldFailIfEqualArrays() {
-    new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Luke", "Leia"));
+    try {
+      new ObjectArrayAssert("Luke", "Leia").as("Skywalker").isNotEqualTo(array("Luke", "Leia"));
+      fail();
+    } catch (AssertionError expected) {
+      assertEquals(expected.getMessage(), "[Skywalker] <'['Luke', 'Leia']'> should not be equal to <'['Luke', 'Leia']'>");
+    }
   }
 
   @Test(expectedExceptions = AssertionError.class)

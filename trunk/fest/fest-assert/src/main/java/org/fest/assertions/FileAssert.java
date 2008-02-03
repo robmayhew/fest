@@ -254,7 +254,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   private void failIfNotEqual(LineNumberReader actual, LineNumberReader expected) throws IOException {
     String formatted = description();
-    formatted = formatted == null ? "" : concat(formatted, " ");
+    formatted = formatted == null ? "" : concat(formatted, " - ");
     while (true) {
       if (!expected.ready() && !actual.ready()) return;
       String expectedLine = expected.readLine();

@@ -14,15 +14,16 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.FileAssertTest.ErrorMessage.error;
-import static org.fest.util.Strings.*;
-import static org.testng.Assert.*;
-
 import java.io.File;
 import java.util.logging.Logger;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.FileAssertTest.ErrorMessage.error;
+import static org.fest.util.Strings.*;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link FileAssert}</code>.
@@ -86,7 +87,7 @@ public class FileAssertTest {
   @Test(dataProvider = "differentFilesToCompare")
   public void shouldFailIfFilesHaveNotSameContent(String actualFile, String expectedFile, ErrorMessage expectedError) {
     try {
-      new FileAssert(file(actualFile)).hasSameContentAs(file(expectedFile));
+      new FileAssert(file(actualFile)).as("Some file").hasSameContentAs(file(expectedFile));
       fail("Must have raised an AssertionError!");
     } catch (AssertionError e) {
       expectedError.verify(e);

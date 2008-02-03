@@ -17,6 +17,8 @@ package org.fest.assertions;
 
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
+
 /**
  * Tests for <code>{@link StringAssert}</code>.
  *
@@ -39,9 +41,13 @@ public class StringAssertTest {
     new StringAssert(null).isEmpty();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfStringsAreNotEqual() {
-    new StringAssert("Luke").isEqualTo("Yoda");
+  @Test public void shouldFailIfStringsAreNotEqual() {
+    try {
+      new StringAssert("Luke").as("Jedi").isEqualTo("Yoda");
+      fail();
+    } catch (AssertionError expected) {
+      assertEquals(expected.getMessage(), "[Jedi] expected:<'Yoda'> but was:<'Luke'>");
+    }
   }
 
   @Test public void shouldSucceedIfStringsAreEqual() {
