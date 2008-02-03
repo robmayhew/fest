@@ -15,14 +15,13 @@
  */
 package org.fest.swing.format;
 
+import static java.lang.String.valueOf;
+import static javax.swing.JOptionPane.*;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 
 import javax.swing.JOptionPane;
-
-import static java.lang.String.valueOf;
-import static javax.swing.JOptionPane.*;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JOptionPane}</code>s.
@@ -34,19 +33,19 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
   private static final IntEnum MESSAGE_TYPES = new IntEnum();
   static {
     MESSAGE_TYPES.put(ERROR_MESSAGE, "ERROR_MESSAGE")
-                 .put(INFORMATION_MESSAGE, "INFORMATION_MESSAGE") 
-                 .put(WARNING_MESSAGE, "WARNING_MESSAGE") 
-                 .put(QUESTION_MESSAGE, "QUESTION_MESSAGE") 
-                 .put(PLAIN_MESSAGE, "PLAIN_MESSAGE"); 
+                 .put(INFORMATION_MESSAGE, "INFORMATION_MESSAGE")
+                 .put(WARNING_MESSAGE, "WARNING_MESSAGE")
+                 .put(QUESTION_MESSAGE, "QUESTION_MESSAGE")
+                 .put(PLAIN_MESSAGE, "PLAIN_MESSAGE");
   }
-  
+
   private static final IntEnum OPTION_TYPES = new IntEnum();
   static {
     OPTION_TYPES.put(DEFAULT_OPTION, "DEFAULT_OPTION")
-                .put(YES_NO_OPTION, "YES_NO_OPTION") 
-                .put(YES_NO_CANCEL_OPTION, "YES_NO_CANCEL_OPTION") 
-                .put(QUESTION_MESSAGE, "QUESTION_MESSAGE") 
-                .put(OK_CANCEL_OPTION, "OK_CANCEL_OPTION"); 
+                .put(YES_NO_OPTION, "YES_NO_OPTION")
+                .put(YES_NO_CANCEL_OPTION, "YES_NO_CANCEL_OPTION")
+                .put(QUESTION_MESSAGE, "QUESTION_MESSAGE")
+                .put(OK_CANCEL_OPTION, "OK_CANCEL_OPTION");
   }
 
   /**
@@ -63,6 +62,7 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
         "messageType=", MESSAGE_TYPES.get(optionPane.getMessageType()), ", ",
         "optionType=", OPTION_TYPES.get(optionPane.getOptionType()), ", ",
         "enabled=", valueOf(optionPane.isEnabled()), ", ",
+        "visible=", valueOf(optionPane.isVisible()), ", ",
         "showing=", valueOf(optionPane.isShowing()),
         "]"
     );

@@ -15,15 +15,14 @@
  */
 package org.fest.swing.format;
 
+import static java.lang.String.valueOf;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 
 import javax.swing.JTabbedPane;
 
 import org.fest.util.Arrays;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JTabbedPane}</code>s.
@@ -47,7 +46,9 @@ public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
         "selectedTabTitle=", quote(selectedTab(tabbedPane)), ", ",
         "tabCount=", valueOf(tabbedPane.getTabCount()), ", ",
         "tabTitles=", Arrays.format(tabTitles(tabbedPane)),  ", ",
-        "enabled=", valueOf(tabbedPane.isEnabled()),
+        "enabled=", valueOf(tabbedPane.isEnabled()), ", ",
+        "visible=", valueOf(tabbedPane.isVisible()), ", ",
+        "showing=", valueOf(tabbedPane.isShowing()),
         "]"
     );
   }

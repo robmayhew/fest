@@ -15,14 +15,13 @@
  */
 package org.fest.swing.format;
 
+import static java.lang.String.valueOf;
+import static javax.swing.JFileChooser.*;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 
 import javax.swing.JFileChooser;
-
-import static java.lang.String.valueOf;
-import static javax.swing.JFileChooser.*;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JFileChooser}</code>s.
@@ -37,7 +36,7 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
                 .put(SAVE_DIALOG, "SAVE_DIALOG")
                 .put(CUSTOM_DIALOG, "CUSTOM_DIALOG");
   }
-  
+
   /**
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
    * <code>{@link JFileChooser}</code> (or subclass.)
@@ -52,7 +51,9 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
         "dialogTitle=", quote(fileChooser.getDialogTitle()), ", ",
         "dialogType=", DIALOG_TYPES.get(fileChooser.getDialogType()), ", ",
         "currentDirectory=", fileChooser.getCurrentDirectory(), ", ",
-        "enabled=", valueOf(fileChooser.isEnabled()),
+        "enabled=", valueOf(fileChooser.isEnabled()), ", ",
+        "visible=", valueOf(fileChooser.isVisible()), ", ",
+        "showing=", valueOf(fileChooser.isShowing()),
         "]"
     );
   }

@@ -15,6 +15,10 @@
  */
 package org.fest.swing.format;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Adjustable;
 import java.awt.Component;
 import java.util.logging.Logger;
@@ -23,13 +27,8 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.testng.annotations.Test;
-
 import org.fest.swing.testing.TestFrame;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Formatting}</code>.
@@ -46,15 +45,16 @@ public class FormattingTest {
     dialog.setTitle("A dialog");
     dialog.setName("dialog");
     String formatted = formatted(dialog);
-    assertThat(formatted).isEqualTo(expected(dialog, "[name='dialog', title='A dialog', enabled=true, modal=false, showing=false]"));
+    String expected = "[name='dialog', title='A dialog', enabled=true, modal=false, visible=false, showing=false]";
+    assertThat(formatted).isEqualTo(expected(dialog, expected));
   }
 
   @Test public void shouldFormatFrame() {
     TestFrame frame = TestFrame.showInTest(getClass());
     frame.setName("frame");
     String formatted = formatted(frame);
-    assertThat(formatted).isEqualTo(
-        expected(frame, "[name='frame', title='FormattingTest', enabled=true, showing=true]"));
+    String expected = "[name='frame', title='FormattingTest', enabled=true, visible=true, showing=true]";
+    assertThat(formatted).isEqualTo(expected(frame, expected));
     frame.destroy();
   }
 
@@ -65,8 +65,9 @@ public class FormattingTest {
     comboBox.setSelectedIndex(1);
     comboBox.setEditable(true);
     String formatted = formatted(comboBox);
-    assertThat(formatted).isEqualTo(
-        expected(comboBox, "[name='comboBox', selectedItem=2, contents=['One', 2, 'Three', 4], enabled=true, editable=true]"));
+    String expected = "[name='comboBox', selectedItem=2, contents=['One', 2, 'Three', 4], editable=true, " +
+    		"enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(comboBox, expected));
   }
 
   @Test public void shouldFormatJButton() {
@@ -74,7 +75,8 @@ public class FormattingTest {
     button.setName("button");
     button.setEnabled(false);
     String formatted = formatted(button);
-    assertThat(formatted).isEqualTo(expected(button, "[name='button', text='A button', enabled=false]"));
+    String expected = "[name='button', text='A button', enabled=false, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(button, expected));
   }
 
   @Test public void shouldFormatJFileChooser() {
@@ -86,14 +88,15 @@ public class FormattingTest {
     assertThat(formatted).isEqualTo(
         expected(fileChooser,
             concat("[name='fileChooser', dialogTitle='A file chooser', dialogType=OPEN_DIALOG, currentDirectory=",
-                fileChooser.getCurrentDirectory(), ", enabled=true]")));
+                fileChooser.getCurrentDirectory(), ", enabled=true, visible=true, showing=false]")));
   }
 
   @Test public void shouldFormatJLabel() {
     JLabel label = new JLabel("A label");
     label.setName("label");
     String formatted = formatted(label);
-    assertThat(formatted).isEqualTo(expected(label, "[name='label', text='A label', enabled=true]"));
+    String expected = "[name='label', text='A label', enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(label, expected));
   }
 
   @Test public void shouldFormatJLayeredPane() {
@@ -109,10 +112,9 @@ public class FormattingTest {
     list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     list.setSelectedIndices(new int[] { 0, 1 });
     String formatted = formatted(list);
-    assertThat(formatted).isEqualTo(
-        expected(list,
-            concat("[name='list', selectedValues=['One', 2], contents=['One', 2, 'Three', 4], ",
-                   "selectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true]")));
+    String expected = "[name='list', selectedValues=['One', 2], contents=['One', 2, 'Three', 4], " +
+    		"selectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(list, expected));
   }
 
   @Test public void shouldFormatJMenuBar() {
@@ -127,16 +129,17 @@ public class FormattingTest {
     menuItem.setName("menuItem");
     menuItem.setSelected(true);
     String formatted = formatted(menuItem);
-    assertThat(formatted).isEqualTo(expected(menuItem, "[name='menuItem', text='a Menu Item', selected=true, enabled=true]"));
+    String expected = "[name='menuItem', text='a Menu Item', selected=true, enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(menuItem, expected));
   }
 
   @Test public void shouldFormatJOptionPane() {
     JOptionPane optionPane = new JOptionPane("A message", JOptionPane.ERROR_MESSAGE);
     optionPane.setOptionType(JOptionPane.DEFAULT_OPTION);
     String formatted = formatted(optionPane);
-    assertThat(formatted).isEqualTo(
-        expected(optionPane,
-            "[message='A message', messageType=ERROR_MESSAGE, optionType=DEFAULT_OPTION, enabled=true, showing=false]"));
+    String expected = "[message='A message', messageType=ERROR_MESSAGE, optionType=DEFAULT_OPTION, enabled=true, " +
+    		"visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(optionPane, expected));
   }
 
   @Test public void shouldFormatJPanel() {
@@ -150,7 +153,8 @@ public class FormattingTest {
     JPopupMenu popupMenu = new JPopupMenu("Menu");
     popupMenu.setName("popupMenu");
     String formatted = formatted(popupMenu);
-    assertThat(formatted).isEqualTo(expected(popupMenu, "[name='popupMenu', label='Menu', enabled=true]"));
+    String expected = "[name='popupMenu', label='Menu', enabled=true, visible=false, showing=false]";
+    assertThat(formatted).isEqualTo(expected(popupMenu, expected));
   }
 
   @Test public void shouldFormatJRootPane() {
@@ -163,30 +167,33 @@ public class FormattingTest {
     JScrollBar scrollBar = new JScrollBar(Adjustable.VERTICAL, 20, 10, 0, 60);
     scrollBar.setName("scrollBar");
     String formatted = formatted(scrollBar);
-    assertThat(formatted).isEqualTo(expected(scrollBar,
-        "[name='scrollBar', value=20, blockIncrement=10, minimum=0, maximum=60, enabled=true]"
-    ));
+    String expected = "[name='scrollBar', value=20, blockIncrement=10, minimum=0, maximum=60, enabled=true, " +
+    		"visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(scrollBar, expected));
   }
 
   @Test public void shouldFormatJScrollPane() {
     JScrollPane scrollPane = new JScrollPane();
     scrollPane.setName("scrollPane");
     String formatted = formatted(scrollPane);
-    assertThat(formatted).isEqualTo(expected(scrollPane, "[name='scrollPane', enabled=true]"));
+    String expected = "[name='scrollPane', enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(scrollPane, expected));
   }
 
   @Test public void shouldFormatJSlider() {
     JSlider slider = new JSlider(2, 8, 6);
     slider.setName("slider");
     String formatted = formatted(slider);
-    assertThat(formatted).isEqualTo(expected(slider, "[name='slider', value=6, minimum=2, maximum=8, enabled=true]"));
+    String expected = "[name='slider', value=6, minimum=2, maximum=8, enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(slider, expected));
   }
 
   @Test public void shouldFormatJSpinner() {
     JSpinner spinner = new JSpinner(new SpinnerNumberModel(6, 2, 8, 1));
     spinner.setName("spinner");
     String formatted = formatted(spinner);
-    assertThat(formatted).isEqualTo(expected(spinner, "[name='spinner', value=6, enabled=true]"));
+    String expected = "[name='spinner', value=6, enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(spinner, expected));
   }
 
   @Test public void shouldFormatJTabbedPane() {
@@ -199,7 +206,7 @@ public class FormattingTest {
     String formatted = formatted(tabbedPane);
     assertThat(formatted).isEqualTo(expected(tabbedPane, concat(
         "[name='tabbedPane', selectedTabIndex=1, selectedTabTitle='Second', tabCount=3, ",
-        "tabTitles=['First', 'Second', 'Third'], enabled=true]"
+        "tabTitles=['First', 'Second', 'Third'], enabled=true, visible=true, showing=false]"
     )));
   }
 
@@ -210,7 +217,8 @@ public class FormattingTest {
     String formatted = formatted(table);
     assertThat(formatted).isEqualTo(expected(table, concat(
         "[name='table', rowCount=8, columnCount=6, selectedRows=[], selectedColumns=[], ",
-        "rowSelectionMode=MULTIPLE_INTERVAL_SELECTION, columnSelectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true]"
+        "rowSelectionMode=MULTIPLE_INTERVAL_SELECTION, columnSelectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true, ",
+        "visible=true, showing=false]"
     )));
   }
 
@@ -218,14 +226,16 @@ public class FormattingTest {
     JPasswordField passwordField = new JPasswordField();
     passwordField.setName("passwordField");
     String formatted = formatted(passwordField);
-    assertThat(formatted).isEqualTo(expected(passwordField, "[name='passwordField', enabled=true]"));
+    String expected = "[name='passwordField', enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(passwordField, expected));
   }
 
   @Test public void shouldFormatJTextComponent() {
     JTextField textField = new JTextField("Hello");
     textField.setName("textField");
     String formatted = formatted(textField);
-    assertThat(formatted).isEqualTo(expected(textField, "[name='textField', text='Hello', enabled=true]"));
+    String expected = "[name='textField', text='Hello', enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(textField, expected));
   }
 
   @Test public void shouldFormatJToggleButton() {
@@ -234,7 +244,8 @@ public class FormattingTest {
     radio.setName("radio");
     radio.setSelected(true);
     String formatted = formatted(radio);
-    assertThat(formatted).isEqualTo(expected(radio, "[name='radio', text='a Radio', selected=true, enabled=true]"));
+    String expected = "[name='radio', text='a Radio', selected=true, enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(radio, expected));
   }
 
   @Test public void shouldFormatJTree() {
@@ -245,9 +256,9 @@ public class FormattingTest {
     tree.setSelectionModel(model);
     tree.setSelectionRow(1);
     String formatted = formatted(tree);
-    assertThat(formatted).isEqualTo(expected(tree, concat(
-        "[name='tree', selectionCount=1, selectionPaths=['[root, Two]'], selectionMode=CONTIGUOUS_TREE_SELECTION, enabled=true]"
-    )));
+    String expected = "[name='tree', selectionCount=1, selectionPaths=['[root, Two]'], " +
+    		"selectionMode=CONTIGUOUS_TREE_SELECTION, enabled=true, visible=true, showing=false]";
+    assertThat(formatted).isEqualTo(expected(tree, expected));
   }
 
   private String formatted(Component c) {

@@ -15,6 +15,10 @@
  */
 package org.fest.swing.format;
 
+import static java.lang.String.valueOf;
+import static javax.swing.tree.TreeSelectionModel.*;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 
 import javax.swing.JTree;
@@ -22,11 +26,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.fest.util.Arrays;
-
-import static java.lang.String.valueOf;
-import static javax.swing.tree.TreeSelectionModel.*;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JTree}</code>s.
@@ -38,8 +37,8 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
   private static final IntEnum SELECTION_MODES = new IntEnum();
   static {
     SELECTION_MODES.put(SINGLE_TREE_SELECTION, "SINGLE_TREE_SELECTION")
-                 .put(CONTIGUOUS_TREE_SELECTION, "CONTIGUOUS_TREE_SELECTION") 
-                 .put(DISCONTIGUOUS_TREE_SELECTION, "DISCONTIGUOUS_TREE_SELECTION"); 
+                 .put(CONTIGUOUS_TREE_SELECTION, "CONTIGUOUS_TREE_SELECTION")
+                 .put(DISCONTIGUOUS_TREE_SELECTION, "DISCONTIGUOUS_TREE_SELECTION");
   }
 
   /**
@@ -56,7 +55,9 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
         "selectionCount=", valueOf(tree.getSelectionCount()), ", ",
         "selectionPaths=", Arrays.format(selectionPaths(tree)), ", ",
         "selectionMode=", selectionMode(tree), ", ",
-        "enabled=", valueOf(tree.isEnabled()),
+        "enabled=", valueOf(tree.isEnabled()), ", ",
+        "visible=", valueOf(tree.isVisible()), ", ",
+        "showing=", valueOf(tree.isShowing()),
         "]"
     );
   }
@@ -72,13 +73,13 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
     }
     return pathArray;
   }
-  
+
   private String selectionMode(JTree tree) {
     TreeSelectionModel model = tree.getSelectionModel();
     if (model == null) return null;
     return SELECTION_MODES.get(model.getSelectionMode());
   }
-  
+
   /**
    * Indicates that this formatter supports <code>{@link JTree}</code> only.
    * @return <code>JTree.class</code>.

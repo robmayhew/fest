@@ -15,6 +15,10 @@
  */
 package org.fest.swing.format;
 
+import static java.lang.String.valueOf;
+import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -22,11 +26,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
 import org.fest.util.Arrays;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JTable}</code>s.
@@ -53,7 +52,9 @@ public class JTableFormatter extends ComponentFormatterTemplate {
         "selectedColumns=", Arrays.format(table.getSelectedColumns()), ", ",
         "rowSelectionMode=", selectionMode(table.getSelectionModel()), ", ",
         "columnSelectionMode=", selectionMode(table.getColumnModel()), ", ",
-        "enabled=", valueOf(table.isEnabled()),
+        "enabled=", valueOf(table.isEnabled()), ", ",
+        "visible=", valueOf(table.isVisible()), ", ",
+        "showing=", valueOf(table.isShowing()),
         "]"
     );
   }
@@ -62,12 +63,12 @@ public class JTableFormatter extends ComponentFormatterTemplate {
     if (model == null) return null;
     return selectionMode(model.getSelectionModel());
   }
-  
+
   private String selectionMode(ListSelectionModel model) {
     if (model == null) return null;
     return SELECTION_MODES.get(model.getSelectionMode());
   }
-  
+
   /**
    * Indicates that this formatter supports <code>{@link JTable}</code> only.
    * @return <code>JTable.class</code>.

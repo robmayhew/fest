@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.9-SNAPSHOT" date="TBD - Available from FEST's Maven Repository" description="Subsequent release">
+      <action dev="alruiz" type="add" due-to="Win Deblauwe">
+        All component formatters in org.fest.swing.formatter display the properties 'visible' and 'showing'.
+      </action>
       <action dev="alruiz" type="fix" issue="108" due-to="Wim Boffe">
         ComponentFinderTemplate uses the specified name to find a component.
       </action>

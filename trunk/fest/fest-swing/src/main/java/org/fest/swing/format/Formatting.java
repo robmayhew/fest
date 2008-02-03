@@ -15,6 +15,8 @@
  */
 package org.fest.swing.format;
 
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -24,8 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
-
-import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to formatting.
@@ -47,36 +47,41 @@ public class Formatting {
   private static final String TEXT = "text";
   private static final String TITLE = "title";
   private static final String VALUE = "value";
+  private static final String VISIBLE = "visible";
 
   private static final Map<Class<?>, ComponentFormatter> FORMATTERS = new ConcurrentHashMap<Class<?>, ComponentFormatter>();
 
   private static Logger logger = Logger.getLogger(Formatting.class.getName());
 
   static {
-    register(new IntrospectionComponentFormatter(AbstractButton.class, NAME, TEXT, "selected", ENABLED));
-    register(new IntrospectionComponentFormatter(Dialog.class, NAME, TITLE, ENABLED, "modal", SHOWING));
-    register(new IntrospectionComponentFormatter(Frame.class, NAME, TITLE, ENABLED, SHOWING));
+    register(instrospect(AbstractButton.class, NAME, TEXT, "selected", ENABLED, VISIBLE, SHOWING));
+    register(instrospect(Dialog.class, NAME, TITLE, ENABLED, "modal", VISIBLE, SHOWING));
+    register(instrospect(Frame.class, NAME, TITLE, ENABLED, VISIBLE, SHOWING));
     register(new JComboBoxFormatter());
-    register(new IntrospectionComponentFormatter(JButton.class, NAME, TEXT, ENABLED));
+    register(instrospect(JButton.class, NAME, TEXT, ENABLED, VISIBLE, SHOWING));
     register(new JFileChooserFormatter());
-    register(new IntrospectionComponentFormatter(JLabel.class, NAME, TEXT, ENABLED));
+    register(instrospect(JLabel.class, NAME, TEXT, ENABLED, VISIBLE, SHOWING));
     register(empty(JLayeredPane.class));
     register(new JListFormatter());
     register(empty(JMenuBar.class));
     register(new JOptionPaneFormatter());
     register(nameOnly(JPanel.class));
-    register(new IntrospectionComponentFormatter(JPopupMenu.class, NAME, "label", ENABLED));
+    register(instrospect(JPopupMenu.class, NAME, "label", ENABLED, VISIBLE, SHOWING));
     register(empty(JRootPane.class));
-    register(new IntrospectionComponentFormatter(JScrollBar.class, NAME, VALUE, "blockIncrement", MINIMUM, MAXIMUM, ENABLED));
-    register(new IntrospectionComponentFormatter(JScrollPane.class, NAME, ENABLED));
-    register(new IntrospectionComponentFormatter(JSlider.class, NAME, VALUE, MINIMUM, MAXIMUM, ENABLED));
-    register(new IntrospectionComponentFormatter(JSpinner.class, NAME, VALUE, ENABLED));
+    register(instrospect(JScrollBar.class, NAME, VALUE, "blockIncrement", MINIMUM, MAXIMUM, ENABLED, VISIBLE, SHOWING));
+    register(instrospect(JScrollPane.class, NAME, ENABLED, VISIBLE, SHOWING));
+    register(instrospect(JSlider.class, NAME, VALUE, MINIMUM, MAXIMUM, ENABLED, VISIBLE, SHOWING));
+    register(instrospect(JSpinner.class, NAME, VALUE, ENABLED, VISIBLE, SHOWING));
     register(new JTabbedPaneFormatter());
     register(new JTableFormatter());
     register(nameOnly(JToolBar.class));
-    register(new IntrospectionComponentFormatter(JPasswordField.class, NAME, ENABLED));
-    register(new IntrospectionComponentFormatter(JTextComponent.class, NAME, TEXT, ENABLED));
+    register(instrospect(JPasswordField.class, NAME, ENABLED, VISIBLE, SHOWING));
+    register(instrospect(JTextComponent.class, NAME, TEXT, ENABLED, VISIBLE, SHOWING));
     register(new JTreeFormatter());
+  }
+
+  private static ComponentFormatter instrospect(Class<? extends Component> targetType, String...propertyNames) {
+    return new IntrospectionComponentFormatter(targetType, propertyNames);
   }
 
   private static ComponentFormatter empty(Class<? extends Component> targetType) {
