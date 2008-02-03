@@ -75,14 +75,24 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    * @param value the requested value.
    */
-  public final void slide(final JSlider slider, final int value) {
+  public final void slide(JSlider slider, int value) {
     drag(slider, location.pointAt(slider, slider.getValue()));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        slider.setValue(value);
-      }
-    });
+    robot.invokeAndWait(new SetValueTask(slider, value));
+  }
+
+  private static class SetValueTask implements Runnable {
+    private final JSlider target;
+    private final int value;
+
+    SetValueTask(JSlider target, int value) {
+      this.target = target;
+      this.value = value;
+    }
+
+    public void run() {
+      target.setValue(value);
+    }
   }
 }

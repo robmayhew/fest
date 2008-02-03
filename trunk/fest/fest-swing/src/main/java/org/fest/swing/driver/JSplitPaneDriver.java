@@ -45,14 +45,24 @@ public class JSplitPaneDriver extends JComponentDriver {
    * @param splitPane the target <code>JSplitPane</code>.
    * @param location the location to move the divider to.
    */
-  public void moveDividerTo(final JSplitPane splitPane, final int location) {
+  public void moveDividerTo(JSplitPane splitPane, int location) {
     // Move as close as possible, then set the position
     simulateMovingDivider(splitPane, location);
-    robot.invokeAndWait(splitPane, new Runnable() {
-      public void run() {
-        splitPane.setDividerLocation(location);
-      }
-    });
+    robot.invokeAndWait(splitPane, new SetDividerLocationTask(splitPane, location));
+  }
+
+  private static class SetDividerLocationTask implements Runnable {
+    private final JSplitPane target;
+    private final int location;
+
+    SetDividerLocationTask(JSplitPane target, int location) {
+      this.target = target;
+      this.location = location;
+    }
+
+    public void run() {
+      target.setDividerLocation(location);
+    }
   }
 
   private void simulateMovingDivider(final JSplitPane split, final int location) {

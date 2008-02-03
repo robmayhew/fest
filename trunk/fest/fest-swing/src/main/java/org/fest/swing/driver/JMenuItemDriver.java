@@ -82,15 +82,25 @@ public final class JMenuItemDriver extends JComponentDriver {
     if (menu.inMenuBar()) moveToFront(ancestorOf(menu.parent()));
   }
   
-  private void moveToFront(final Window w) {
+  private void moveToFront(Window w) {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
-    robot.invokeAndWait(w, new Runnable() { 
-      public void run() { w.toFront(); }
-    });
+    robot.invokeAndWait(w, new MoveToFrontTask(w));
     robot.mouseMove(w);
   }
   
+  private static class MoveToFrontTask implements Runnable {
+    private final Window target;
+
+    MoveToFrontTask(Window target) {
+      this.target = target;
+    }
+
+    public void run() {
+      target.toFront();
+    }
+  }
+
   private void waitForSubMenuToShow() {
     int delayBetweenEvents = delayBetweenEvents();
     if (SUBMENU_DELAY > delayBetweenEvents) pause(SUBMENU_DELAY - delayBetweenEvents);

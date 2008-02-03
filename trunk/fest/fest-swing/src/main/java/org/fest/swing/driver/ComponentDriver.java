@@ -117,14 +117,22 @@ public abstract class ComponentDriver {
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty. 
    */
   protected final void performAccessibleActionOf(Component c) {
-    final AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
+    AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
     if (action == null || action.getAccessibleActionCount() == 0)
       throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
-    robot.invokeLater(c, new Runnable() {
-      public void run() {
-        action.doAccessibleAction(0);
-      }
-    });
+    robot.invokeLater(c, new PerformAccessibleActionTask(action));
+  }
+
+  private static class PerformAccessibleActionTask implements Runnable {
+    private final AccessibleAction action;
+
+    PerformAccessibleActionTask(AccessibleAction action) {
+      this.action = action;
+    }
+
+    public void run() {
+      action.doAccessibleAction(0);
+    }
   }
 
   /**

@@ -92,12 +92,22 @@ public class JTextComponentDriver extends JComponentDriver {
 
   private void avoidAutomaticDragAndDrop(final JTextComponent textBox) {
     if (textBox.getSelectionStart() == textBox.getSelectionEnd()) return;
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        textBox.setCaretPosition(0);
-        textBox.moveCaretPosition(0);
-      }
-    });
+    robot.invokeAndWait(new SetAndMoveCaretPositionTask(textBox, 0));
+  }
+
+  private static class SetAndMoveCaretPositionTask implements Runnable {
+    private final JTextComponent target;
+    private final int position;
+
+    SetAndMoveCaretPositionTask(JTextComponent target, int position) {
+      this.target = target;
+      this.position = position;
+    }
+
+    public void run() {
+      target.setCaretPosition(position);
+      target.moveCaretPosition(position);
+    }
   }
 
   private void endSelection(JTextComponent textBox, int index) {

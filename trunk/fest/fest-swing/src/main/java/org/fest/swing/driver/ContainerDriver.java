@@ -46,43 +46,54 @@ public abstract class ContainerDriver extends ComponentDriver {
 
   /**
    * Resizes the <code>{@link Container}</code> to the given size.
-   * @param container the target <code>Container</code>.
+   * @param c the target <code>Container</code>.
    * @param width the width to resize the <code>Container</code> to.
    * @param height the height to resize the <code>Container</code> to.
    */
-  public final void resize(Container container, int width, int height) {
-    Dimension size = container.getSize();
-    resizeBy(container, width - size.width, height - size.height);
+  public final void resize(Container c, int width, int height) {
+    Dimension size = c.getSize();
+    resizeBy(c, width - size.width, height - size.height);
   }
 
   /**
    * Resizes the <code>{@link Container}</code> by the given amounts.
-   * @param container the target <code>Container</code>.
+   * @param c the target <code>Container</code>.
    * @param horizontally the horizontal amount to resize the <code>Container</code> by.
    * @param vertically the vertical amount to resize the <code>Container</code> by.
    */
-  protected final void resizeBy(final Container container, final int horizontally, final int vertically) {
-    simulateResizeStarted(container, horizontally, vertically);
-    robot.invokeAndWait(container, new Runnable() {
-      public void run() {
-        container.setSize(container.getWidth() + horizontally, container.getHeight() + vertically);
-      }
-    });
-    simulateResizeComplete(container);
+  protected final void resizeBy(Container c, int horizontally, int vertically) {
+    simulateResizeStarted(c, horizontally, vertically);
+    Dimension size = new Dimension(c.getWidth() + horizontally, c.getHeight() + vertically);
+    robot.invokeAndWait(c, new SetSizeTask(c, size));
+    simulateResizeComplete(c);
     robot.waitForIdle();
   }
 
-  private void simulateResizeStarted(Container container, int horizontally, int vertically) {
-    if (!isUserResizable(container)) return;
-    Point p = resizeLocationOf(container);
-    robot.mouseMove(container, p.x, p.y);
-    robot.mouseMove(container, p.x + horizontally, p.y + vertically);
+  private static class SetSizeTask implements Runnable {
+    private final Container target;
+    private final Dimension size;
+
+    SetSizeTask(Container target, Dimension size) {
+      this.target = target;
+      this.size = size;
+    }
+
+    public void run() {
+      target.setSize(size);
+    }
+  }
+  
+  private void simulateResizeStarted(Container c, int horizontally, int vertically) {
+    if (!isUserResizable(c)) return;
+    Point p = resizeLocationOf(c);
+    robot.mouseMove(c, p.x, p.y);
+    robot.mouseMove(c, p.x + horizontally, p.y + vertically);
   }
 
-  private void simulateResizeComplete(final Container container) {
-    if (!isUserResizable(container)) return;
-    Point p = resizeLocationOf(container);
-    robot.mouseMove(container, p.x, p.y);
+  private void simulateResizeComplete(Container c) {
+    if (!isUserResizable(c)) return;
+    Point p = resizeLocationOf(c);
+    robot.mouseMove(c, p.x, p.y);
   }
 
   /**
@@ -117,20 +128,31 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param vertically
    * @throws ActionFailedException if the given container is not showing on the screen.
    */
-  protected final void moveBy(final Container c, final int horizontally, final int vertically) {
-    final Point onScreen = locationOnScreenOf(c);
+  protected final void moveBy(Container c, int horizontally, int vertically) {
+    Point onScreen = locationOnScreenOf(c);
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     simulateMoveStarted(c, horizontally, vertically);
-    robot.invokeAndWait(c, new Runnable() {
-      public void run() {
-        c.setLocation(new Point(onScreen.x + horizontally, onScreen.y + vertically));
-      }
-    });
+    Point location = new Point(onScreen.x + horizontally, onScreen.y + vertically);
+    robot.invokeAndWait(c, new SetLocationTask(c, location));
     simulateMoveComplete(c);
     robot.waitForIdle();
   }
 
-  private ActionFailedException componentNotShowingOnScreen(final Container c) {
+  private static class SetLocationTask implements Runnable {
+    private final Container target;
+    private final Point location;
+
+    SetLocationTask(Container target, Point location) {
+      this.target = target;
+      this.location = location;
+    }
+
+    public void run() {
+      target.setLocation(location);
+    }
+  }
+
+  private ActionFailedException componentNotShowingOnScreen(Container c) {
     throw actionFailure(concat("The component ", format(c), " is not showing on the screen"));
   }
 

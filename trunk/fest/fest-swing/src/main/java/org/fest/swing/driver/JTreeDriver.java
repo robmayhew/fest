@@ -143,24 +143,47 @@ public class JTreeDriver extends JComponentDriver {
   private void expand(final JTree tree, final TreePath path) {
     if (tree.isExpanded(path)) return;
     // Use this method instead of a toggle action to avoid any component visibility requirements
-    robot.invokeAndWait(new Runnable() {
-      public void run() { tree.expandPath(path); }
-    });
+    robot.invokeAndWait(new ExpandPathTask(tree, path));
   }
 
-  private boolean waitForChildrenToShowUp(final JTree tree, TreePath path, String pathDescription) {
-    final Object lastInPath = path.getLastPathComponent();
+  private static class ExpandPathTask implements Runnable {
+    private final JTree target;
+    private final TreePath path;
+
+    private ExpandPathTask(JTree target, TreePath path) {
+      this.target = target;
+      this.path = path;
+    }
+
+    public void run() {
+      target.expandPath(path);
+    }
+  }
+
+  private boolean waitForChildrenToShowUp(JTree tree, TreePath path, String pathDescription) {
     try {
-      pause(new Condition(concat(pathDescription, " to show")) {
-        public boolean test() {
-          return tree.getModel().getChildCount(lastInPath) != 0;
-        }
-      }, timeoutToBeVisible());
+      pause(new UntilChildrenShowUp(tree, path, pathDescription), timeoutToBeVisible());
     } catch (WaitTimedOutError e) {
       throw new LocationUnavailableException(e.getMessage());
     }
     return true;
   }
+
+  private static class UntilChildrenShowUp extends Condition {
+    private final JTree tree;
+    private final Object lastInPath;
+
+    UntilChildrenShowUp(JTree tree, TreePath path, String pathDescription) {
+      super(concat(pathDescription, " to show"));
+      this.tree = tree;
+      this.lastInPath = path.getLastPathComponent();
+    }
+
+    public boolean test() {
+      return tree.getModel().getChildCount(lastInPath) != 0;
+    }
+  }
+
 
   /**
    * Starts a drag operation at the location of the given row.

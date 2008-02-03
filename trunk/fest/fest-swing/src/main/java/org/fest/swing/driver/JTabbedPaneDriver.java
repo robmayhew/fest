@@ -71,17 +71,27 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @param tabbedPane the target <code>JTabbedPane</code>.
    * @param index the index of the tab to select.
    */
-  public final void selectTab(final JTabbedPane tabbedPane, final int index) {
+  public final void selectTab(JTabbedPane tabbedPane, int index) {
     try {
       Point p = location.pointAt(tabbedPane, index);
       robot.click(tabbedPane, p);
     } catch (LocationUnavailableException e) {
       // Set the tab directly
-      robot.invokeAndWait(new Runnable() {
-        public void run() {
-          tabbedPane.setSelectedIndex(index);
-        }
-      });
+      robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));
+    }
+  }
+
+  private static class SetSelectedIndexTask implements Runnable {
+    private final JTabbedPane target;
+    private final int index;
+
+    SetSelectedIndexTask(JTabbedPane target, int index) {
+      this.target = target;
+      this.index = index;
+    }
+
+    public void run() {
+      target.setSelectedIndex(index);
     }
   }
 }

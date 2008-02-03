@@ -52,17 +52,27 @@ public class JComponentDriver extends ContainerDriver {
    * @param c the given <code>JComponent</code>.
    * @param r the visible <code>Rectangle</code>.
    */
-  protected final void scrollToVisible(final JComponent c, final Rectangle r) {
+  protected final void scrollToVisible(JComponent c, Rectangle r) {
     // From Abbot:
     // Ideally, we'd use scrollBar commands to effect the scrolling, but that gets really complicated for no real gain
     // in function. Fortunately, Swing's Scrollable makes for a simple solution.
     // NOTE: absolutely MUST wait for idle in order for the scroll to finish, and the UI to update so that the next
     // action goes to the proper location within the scrolled component.
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        c.scrollRectToVisible(r);
-      }
-    });
+    robot.invokeAndWait(new ScrollToVisibleTask(c, r));
+  }
+
+  private static class ScrollToVisibleTask implements Runnable {
+    private final JComponent target;
+    private final Rectangle visible;
+
+    ScrollToVisibleTask(JComponent target, Rectangle visible) {
+      this.target = target;
+      this.visible = visible;
+    }
+
+    public void run() {
+      target.scrollRectToVisible(visible);
+    }
   }
 
   /**

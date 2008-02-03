@@ -48,41 +48,68 @@ public class FrameDriver extends WindowDriver {
    * Iconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  public final void iconify(final Frame frame) {
+  public final void iconify(Frame frame) {
     Point p = iconifyLocation(frame);
     if (p != null) robot.mouseMove(frame, p.x, p.y);
     updateFrameExtendedState(frame, ICONIFIED);
-    pause(new Condition("frame being iconified") {
-      public boolean test() {
-        return frame.getExtendedState() == ICONIFIED;
-      }
-    });
+    pause(new UntilIconified(frame));
+  }
+
+  private static class UntilIconified extends Condition {
+    private final Frame target;
+
+    UntilIconified(Frame target) {
+      super("frame being iconified");
+      this.target = target;
+    }
+
+    public boolean test() {
+      return target.getExtendedState() == ICONIFIED;
+    }
   }
 
   /**
    * Deiconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  public final void deiconify(final Frame frame) {
+  public final void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    pause(new Condition("frame being deiconified") {
-      public boolean test() {
-        return frame.getExtendedState() != ICONIFIED;
-      }
-    });
+    pause(new UntilDeiconified(frame));
+  }
+
+  private static class UntilDeiconified extends Condition {
+    private final Frame target;
+
+    UntilDeiconified(Frame target) {
+      super("frame being deiconified");
+      this.target = target;
+    }
+
+    public boolean test() {
+      return target.getExtendedState() != ICONIFIED;
+    }
   }
 
   /**
    * Normalizes the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  public final void normalize(final Frame frame) {
+  public final void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    pause(new Condition("frame being normalized") {
-      public boolean test() {
-        return frame.getExtendedState() == NORMAL;
-      }
-    });
+    pause(new UntilNormalized(frame));
+  }
+
+  private static class UntilNormalized extends Condition {
+    private final Frame target;
+
+    UntilNormalized(Frame target) {
+      super("frame being normalized");
+      this.target = target;
+    }
+
+    public boolean test() {
+      return target.getExtendedState() == NORMAL;
+    }
   }
 
   /**
@@ -90,24 +117,43 @@ public class FrameDriver extends WindowDriver {
    * @param frame the target <code>Frame</code>.
    * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
-  public final void maximize(final Frame frame) {
+  public final void maximize(Frame frame) {
     Point p = maximizeLocation(frame);
     if (p != null) robot.mouseMove(frame, p.x, p.y);
     if (!supportsMaximize()) throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
-    pause(new Condition("frame being maximized") {
-      public boolean test() {
-        return (frame.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
-      }
-    });
+    pause(new UntilMaximized(frame));
   }
 
-  private void updateFrameExtendedState(final Frame frame, final int state) {
-    robot.invokeLater(frame, new Runnable() {
-      public void run() {
-        frame.setExtendedState(state);
-      }
-    });
+  private static class UntilMaximized extends Condition {
+    private final Frame target;
+
+    UntilMaximized(Frame target) {
+      super("frame being maximized");
+      this.target = target;
+    }
+
+    public boolean test() {
+      return (target.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
+    }
+  }
+
+  private void updateFrameExtendedState(Frame frame, int state) {
+    robot.invokeLater(frame, new SetExtendedStateTask(frame, state));
+  }
+
+  private static class SetExtendedStateTask implements Runnable {
+    private final Frame target;
+    private final int state;
+
+    SetExtendedStateTask(Frame target, int state) {
+      this.target = target;
+      this.state = state;
+    }
+
+    public void run() {
+      target.setExtendedState(state);
+    }
   }
 
   private boolean supportsMaximize() {

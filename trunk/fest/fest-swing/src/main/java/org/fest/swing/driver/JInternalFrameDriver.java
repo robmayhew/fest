@@ -66,23 +66,27 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     maximizeOrNormalize(frame, NORMALIZE);
   }
 
-  private void maximizeOrNormalize(final JInternalFrame frame, final Action action) {
+  private void maximizeOrNormalize(JInternalFrame frame, Action action) {
     Container clickTarget = frame;
     if (frame.isIcon()) clickTarget = frame.getDesktopIcon();
     Point p = maximizeLocation(clickTarget);
     robot.mouseMove(clickTarget, p.x, p.y);
     if (frame.isIcon()) deiconify(frame);
-    final VetoExceptionHolder veto = new VetoExceptionHolder();
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        try {
-          frame.setMaximum(action.value);
-        } catch (PropertyVetoException e) {
-          veto.e = e;
-        }
+    setProperty(new SetMaximumTask(frame, action));
+  }
+
+  private static class SetMaximumTask extends SetPropertyTask {
+    SetMaximumTask(JInternalFrame target, Action action) {
+      super(target, action);
+    }
+
+    public void run() {
+      try {
+        target.setMaximum(action.value);
+      } catch (PropertyVetoException e) {
+        veto.cause = e;
       }
-    });
-    checkIfActionWasVetoed(frame, action, veto);
+    }
   }
 
   /** 
@@ -97,7 +101,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not iconifiable"));
     Point p = iconifyLocation(frame);
     robot.mouseMove(frame, p.x, p.y);
-    setIconProperty(frame, ICONIFY);
+    setProperty(new SetIconTask(frame, ICONIFY));
   }
 
   /** 
@@ -110,28 +114,40 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     Container c = frame.getDesktopIcon();
     Point p = iconifyLocation(c);
     robot.mouseMove(c, p.x, p.y);
-    setIconProperty(frame, DEICONIFY);
+    setProperty(new SetIconTask(frame, DEICONIFY));
   }
 
-  private void setIconProperty(final JInternalFrame frame, final Action action) {
-    final VetoExceptionHolder veto = new VetoExceptionHolder();
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        try {
-          frame.setIcon(action.value);
-        } catch (PropertyVetoException e) {
-          veto.e = e;
-        }
+  private static class SetIconTask extends SetPropertyTask {
+    SetIconTask(JInternalFrame target, Action action) {
+      super(target, action);
+    }
+
+    public void run() {
+      try {
+        target.setIcon(action.value);
+      } catch (PropertyVetoException e) {
+        veto.cause = e;
       }
-    });
-    checkIfActionWasVetoed(frame, action, veto);
+    }
+  }  
+  private void setProperty(SetPropertyTask task) {
+    robot.invokeAndWait(task);
+    PropertyVetoException vetoError = task.veto.cause;
+    if (vetoError == null) return;
+    throw actionFailure(concat(task.action.name, " of ", format(task.target), " was vetoed: ", vetoError.getMessage()));    
   }
+  
+  private static abstract class SetPropertyTask implements Runnable {
+    final JInternalFrame target;
+    final Action action;
+    final PropertyVeto veto = new PropertyVeto();
 
-  private void checkIfActionWasVetoed(JInternalFrame frame, Action action, VetoExceptionHolder veto) {
-    if (veto.e == null) return;
-    throw actionFailure(concat(action.name, " of ", format(frame), " was vetoed: ", veto.e.getMessage()));    
+    SetPropertyTask(JInternalFrame target, Action action) {
+      this.target = target;
+      this.action = action;
+    }
   }
-
+  
   /** 
    * Closes the given <code>{@link JInternalFrame}</code>. 
    * @param frame the target <code>JInternalFrame</code>. 
@@ -143,13 +159,21 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     // This is LAF-specific, so it must be done programmatically.
     Point p = closeLocation(frame);
     robot.mouseMove(frame, p.x, p.y);
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        frame.doDefaultCloseAction();
-      }
-    });
+    robot.invokeAndWait(new CloseFrameTask(frame));
   }
   
+  private static class CloseFrameTask implements Runnable {
+    private final JInternalFrame target;
+
+    CloseFrameTask(JInternalFrame target) {
+      this.target = target;
+    }
+
+    public void run() {
+      target.doDefaultCloseAction();
+    }
+  }
+
   static enum Action {
     MAXIMIZE("Maximize", true), NORMALIZE("Normalize", false), ICONIFY("Iconify", true), DEICONIFY("Deiconify", false);
     
@@ -162,7 +186,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     }
   }
   
-  private static class VetoExceptionHolder {
-    PropertyVetoException e = null;
+  private static class PropertyVeto {
+    PropertyVetoException cause = null;
   }
 }

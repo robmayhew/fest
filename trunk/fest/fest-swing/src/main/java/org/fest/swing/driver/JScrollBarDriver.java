@@ -14,16 +14,17 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JScrollBar}</code>. Unlike <code>JScrollBarFixture</code>,
@@ -159,12 +160,22 @@ public class JScrollBarDriver extends JComponentDriver {
           valueOf(min), "' and '", valueOf(max), "'"));
   }
 
-  private void setValueProperty(final JScrollBar bar, final int value) {
-    robot.invokeLater(bar, new Runnable() {
-      public void run() {
-        bar.setValue(value);
-      }
-    });
+  private void setValueProperty(final JScrollBar scrollBar, final int value) {
+    robot.invokeLater(scrollBar, new SetValueTask(scrollBar, value));
     robot.waitForIdle();
+  }
+
+  private static class SetValueTask implements Runnable {
+    private final JScrollBar target;
+    private final int value;
+
+    SetValueTask(JScrollBar target, int value) {
+      this.target = target;
+      this.value = value;
+    }
+
+    public void run() {
+      target.setValue(value);
+    }
   }
 }
