@@ -98,7 +98,7 @@ public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextCom
   public void shouldNotSelectAllTextIfTextFieldIsEmpty() {
     fixture.target.setText("");
     fixture.selectAll();
-    assertThat(fixture.target.getSelectedText()).isEmpty();
+    assertThat(fixture.target.getSelectedText()).isNull();
   }
   
   @Test public void shouldSelectOnlyGivenText() {

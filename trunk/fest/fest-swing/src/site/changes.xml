@@ -5,7 +5,13 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.9-SNAPSHOT" date="TBD - Available from FEST's Maven Repository" description="Subsequent release">
+    <release version="0.8.1" date="2008-02-04" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Updated dependency versions: fest-assert-0.9.1, fest-reflect-0.3, fest-util-0.3.
+      </action>
+      <action dev="alruiz" type="add">
+        Due to the introduction of component drivers, fest-reflect is a required, compile-time dependency.
+      </action>
       <action dev="alruiz" type="add" due-to="Win Deblauwe">
         All component formatters in org.fest.swing.formatter display the properties 'visible' and 'showing'.
       </action>

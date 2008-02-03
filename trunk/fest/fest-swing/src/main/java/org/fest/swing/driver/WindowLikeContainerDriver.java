@@ -25,10 +25,11 @@ import org.fest.swing.core.RobotFixture;
 import static org.fest.swing.util.Platform.*;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands simulation of user input on a <code>{@link Container}</code> that looks/behaves like a window. This class 
+ * is intended for internal use only.
  *
- * @author 
- *
+ * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public abstract class WindowLikeContainerDriver extends ContainerDriver {
 

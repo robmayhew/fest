@@ -124,7 +124,7 @@ public class AWT {
     @Override public synchronized void start() {
       super.start();
       try {
-        while(true) wait(30000);
+        wait(30000);
       } catch (InterruptedException e) {}
     }
 

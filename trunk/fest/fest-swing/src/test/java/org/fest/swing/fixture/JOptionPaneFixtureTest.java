@@ -246,7 +246,7 @@ public class JOptionPaneFixtureTest {
     fixture.requireOptions(array("First", "Second"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfMatchingOptions")
+  @Test(/*dependsOnMethods = "shouldPassIfMatchingOptions"*/)
   public void shouldFailIfNotMatchingOptions() {
     window.showMessageWithOptions(array("First", "Second"));
     createFixture();
@@ -254,6 +254,7 @@ public class JOptionPaneFixtureTest {
       fixture.requireOptions(array("Third"));
       fail();
     } catch (AssertionError e) {
+      System.out.println(e.getMessage());
       ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
       assertThat(errorMessage).contains(property("options"), expected("['Third']"), actual("['First', 'Second']"));
     }

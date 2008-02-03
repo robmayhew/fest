@@ -14,8 +14,8 @@
 	<classpathentry kind="lib" path="lib/easymock-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/easymockclassextension-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/fest-mocks-0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/fest-assert-0.9.jar" sourcepath="lib/fest-assert-0.9-sources.jar"/>
 	<classpathentry kind="lib" path="lib/fest-reflect-0.3.jar" sourcepath="lib/fest-reflect-0.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/fest-util-0.3.jar" sourcepath="lib/fest-util-0.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-0.9.1.jar" sourcepath="lib/fest-assert-0.9.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
