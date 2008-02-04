@@ -43,6 +43,7 @@ public final class Accessibles {
    * <code>boolean</code> value.
    * @param o the given <code>AccessibleObject</code>,
    * @param accessible the value to set the <code>accessible</code> flag to.
+   * @throws SecurityException if the request is denied.
    */
   public static void setAccessible(final AccessibleObject o, final boolean accessible) {
     AccessController.doPrivileged(new PrivilegedAction<Void>() {
