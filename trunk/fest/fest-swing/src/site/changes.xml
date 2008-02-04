@@ -12,7 +12,7 @@
       <action dev="alruiz" type="add">
         Due to the introduction of component drivers, fest-reflect is a required, compile-time dependency.
       </action>
-      <action dev="alruiz" type="add" due-to="Win Deblauwe">
+      <action dev="alruiz" type="add" due-to="Wim Deblauwe">
         All component formatters in org.fest.swing.formatter display the properties 'visible' and 'showing'.
       </action>
       <action dev="alruiz" type="fix" issue="108" due-to="Wim Boffe">
