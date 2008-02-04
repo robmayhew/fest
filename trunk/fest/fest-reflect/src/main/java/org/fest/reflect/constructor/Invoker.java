@@ -41,11 +41,9 @@ import static org.fest.util.Strings.concat;
 public final class Invoker<T> {
 
   private final java.lang.reflect.Constructor<T> constructor;
-  private final boolean accessible;
   
   Invoker(Class<T> target, Class<?>... parameterTypes) {
     this.constructor = constructor(target, parameterTypes);
-    this.accessible = constructor.isAccessible();
   }
 
   private java.lang.reflect.Constructor<T> constructor(Class<T> target, Class<?>... parameterTypes) {
@@ -64,6 +62,7 @@ public final class Invoker<T> {
    * @throws ReflectionError if a new instance cannot be created.
    */
   public T newInstance(Object... args) {
+    boolean accessible = constructor.isAccessible();
     try {
       setAccessible(constructor, true);
       T newInstance = constructor.newInstance(args);

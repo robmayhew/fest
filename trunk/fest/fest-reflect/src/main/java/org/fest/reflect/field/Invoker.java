@@ -40,14 +40,12 @@ public final class Invoker<T> {
 
   private final Object target;
   private final java.lang.reflect.Field field;
-  private final boolean accessible;
 
   Invoker(String fieldName, Object target) {
     this.target = target;
     if (target == null) throw new IllegalArgumentException("Target should not be null");
     Class<?> type = target.getClass();
     field = lookupInClassHierarchy(fieldName, type);
-    accessible = field.isAccessible();
   }
 
   private java.lang.reflect.Field lookupInClassHierarchy(String fieldName, Class<?> targetType) {
@@ -72,6 +70,7 @@ public final class Invoker<T> {
   }
 
   void assertIsInstanceOf(Class<T> expected, String fieldName) {
+    boolean accessible = field.isAccessible();
     try {
       setAccessible(field, true);
       Class<?> fieldType = field.getType();
@@ -90,6 +89,7 @@ public final class Invoker<T> {
    * @throws ReflectionError if the given value cannot be set.
    */
   public void set(T value) {
+    boolean accessible = field.isAccessible();
     try {
       setAccessible(field, true);
       field.set(target, value);
@@ -106,6 +106,7 @@ public final class Invoker<T> {
    * @throws ReflectionError if the value of the field cannot be retrieved.
    */
   @SuppressWarnings("unchecked") public T get() {
+    boolean accessible = field.isAccessible();
     try {
       setAccessible(field, true);
       return (T) field.get(target);

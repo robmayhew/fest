@@ -48,12 +48,10 @@ public final class Invoker<T> {
 
   private final Object target;
   private final java.lang.reflect.Method method;
-  private final boolean accessible;
 
   Invoker(String methodName, Object target, Class<?>... parameterTypes) {
     this.target = target;
     method = lookupInClassHierarchy(methodName, target.getClass(), parameterTypes);
-    accessible = method.isAccessible();
   }
 
   private java.lang.reflect.Method lookupInClassHierarchy(String methodName, Class<?> targetType, Class<?>[] parameterTypes) {
@@ -85,6 +83,7 @@ public final class Invoker<T> {
    * @throws ReflectionError if the method cannot be invoked.
    */
   @SuppressWarnings("unchecked") public T invoke(Object... args) {
+    boolean accessible = method.isAccessible();
     try {
       setAccessible(method, true);
       return (T) method.invoke(target, args);
