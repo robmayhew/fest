@@ -22,6 +22,8 @@ package org.fest.reflect;
  */
 public class Person {
 
+  private static int count;
+  
   private String name;
   
   public Person() {}
@@ -36,5 +38,13 @@ public class Person {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public static int getCount() {
+    return count;
+  }
+
+  public static void setCount(int count) {
+    Person.count = count;
   }
 }

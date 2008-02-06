@@ -14,6 +14,8 @@
  */
 package org.fest.reflect.field;
 
+import java.lang.reflect.Field;
+
 import org.fest.reflect.exception.ReflectionError;
 
 import static org.fest.reflect.util.Accessibles.*;
@@ -38,49 +40,12 @@ import static org.fest.util.Strings.*;
  */
 public final class Invoker<T> {
 
+  private final Field field;
   private final Object target;
-  private final java.lang.reflect.Field field;
 
-  Invoker(String fieldName, Object target) {
+  Invoker(Field field, Object target) {
+    this.field = field;
     this.target = target;
-    if (target == null) throw new IllegalArgumentException("Target should not be null");
-    Class<?> type = target.getClass();
-    field = lookupInClassHierarchy(fieldName, type);
-  }
-
-  private java.lang.reflect.Field lookupInClassHierarchy(String fieldName, Class<?> targetType) {
-    java.lang.reflect.Field field = null;
-    Class<?> type = targetType;
-    while (type != null) {
-      field = field(fieldName, type);
-      if (field != null) break;
-      type = type.getSuperclass();
-    }
-    if (field == null) 
-      throw new ReflectionError(concat("Unable to find field ", quote(fieldName), " in class ", targetType.getName()));
-    return field;
-  }
-
-  private static java.lang.reflect.Field field(String fieldName, Class<?> targetType) {
-    try {
-      return targetType.getDeclaredField(fieldName);
-    } catch (NoSuchFieldException e) {
-      return null;
-    }
-  }
-
-  void assertIsInstanceOf(Class<T> expected, String fieldName) {
-    boolean accessible = field.isAccessible();
-    try {
-      setAccessible(field, true);
-      Class<?> fieldType = field.getType();
-      if (!expected.isAssignableFrom(fieldType)) {
-        throw new ReflectionError(concat("The field ", quote(fieldName), " should be of type <", expected.getName(), 
-            "> but was <", fieldType.getName(), ">"));
-      }
-    } finally {
-      setAccessibleIgnoringExceptions(field, accessible);
-    }
   }
 
   /**

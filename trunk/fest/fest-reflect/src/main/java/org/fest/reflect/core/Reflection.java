@@ -62,6 +62,15 @@ public final class Reflection {
   }
 
   /**
+   * Starting point for the fluent interface for accessing static fields via reflection.
+   * @param name the name of the static field to access.
+   * @return the starting point of the method chain.
+   */
+  public static org.fest.reflect.field.StaticName staticField(String name) {
+    return new org.fest.reflect.field.StaticName(name);
+  }
+
+  /**
    * Starting point for the fluent interface for invoking methods via reflection.
    * @param name the name of the method to invoke.
    * @return the starting point of the method chain.

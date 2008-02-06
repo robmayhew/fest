@@ -25,7 +25,7 @@ import org.fest.reflect.exception.ReflectionError;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for the fluent interface for fields.
+ * Tests for the fluent interface for fields and static fields.
  *
  * @author Alex Ruiz
  */
@@ -55,7 +55,7 @@ public class FieldTest {
   }
   
   @Test(expectedExceptions = ReflectionError.class)
-  public void shouldThrowErrorIfWrongTypeSpecified() {
+  public void shouldThrowErrorIfWrongFieldTypeSpecified() {
     Class<Integer> invalidType = Integer.class;
     new Name("name").ofType(invalidType).in(person).get();
   }
@@ -69,5 +69,40 @@ public class FieldTest {
     Jedi jedi = new Jedi("Yoda");
     String jediName = new Name("name").ofType(String.class).in(jedi).get();
     assertThat(jediName).isEqualTo("Yoda");
+  }
+  
+  @Test public void shouldGetStaticFieldValue() {
+    Person.setCount(6);
+    int count = new StaticName("count").ofType(int.class).in(Person.class).get();
+    assertThat(count).isEqualTo(6);
+  }
+  
+  @Test public void shouldSetStaticFieldValue() {
+    new StaticName("count").ofType(int.class).in(Person.class).set(8);
+    assertThat(Person.getCount()).isEqualTo(8);
+  }
+  
+  @Test public void shouldReturnStaticFieldInfo() {
+    java.lang.reflect.Field field = new StaticName("count").ofType(int.class).in(Person.class).info();
+    assertThat(field).isNotNull();
+    assertThat(field.getName()).isEqualTo("count");
+    assertThat(field.getType()).isEqualTo(int.class);
+  }
+  
+  @Test(expectedExceptions = ReflectionError.class)
+  public void shouldThrowErrorIfWrongStaticFieldTypeSpecified() {
+    Class<Float> invalidType = Float.class;
+    new StaticName("count").ofType(invalidType).in(Person.class).get();
+  }
+
+  @Test(expectedExceptions = ReflectionError.class)
+  public void shouldThrowErrorIfInvalidStaticFieldName() {
+    new StaticName("age").ofType(int.class).in(Person.class);
+  }
+  
+  @Test public void shouldGetStaticFieldInSuperType() {
+    Person.setCount(8);
+    int count = new StaticName("count").ofType(int.class).in(Person.class).get();
+    assertThat(count).isEqualTo(8);
   }
 }

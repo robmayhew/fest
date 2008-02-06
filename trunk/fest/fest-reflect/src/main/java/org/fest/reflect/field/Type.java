@@ -14,6 +14,12 @@
  */
 package org.fest.reflect.field;
 
+import static org.fest.reflect.field.Fields.*;
+
+import java.lang.reflect.Field;
+
+import org.fest.reflect.exception.ReflectionError;
+
 /**
  * Understands the type of a field to access using Java Reflection.
  * <p>
@@ -44,10 +50,11 @@ public class Type<T> {
    * Creates a new field invoker.
    * @param target the object containing the field of interest.
    * @return the created field invoker.
+   * @throws ReflectionError if a field with a matching name and type cannot be found.
    */
   public Invoker<T> in(Object target) {
-    Invoker<T> field = new Invoker<T>(fieldName.name, target);
-    field.assertIsInstanceOf(type, fieldName.name);
-    return field;
+    Field field = lookupInClassHierarchy(fieldName.name, target.getClass());
+    assertIsInstanceOf(field, type);
+    return new Invoker<T>(field, target);
   }
 }

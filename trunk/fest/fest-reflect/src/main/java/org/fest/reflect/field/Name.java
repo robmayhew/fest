@@ -20,10 +20,10 @@ package org.fest.reflect.field;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the field "name"
- *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link #ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#get() get}();
+ *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link #ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
  * </pre>
  * </p>
  *
