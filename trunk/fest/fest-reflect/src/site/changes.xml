@@ -6,7 +6,7 @@
   </properties>
   <body>
     <release version="0.4" date="TBD" description="Subsequent release">
-      <action dev="alruiz" type="add">
+      <action dev="alruiz" type="add" issue="111">
         Added support for calling static fields.
       </action>
       <action dev="alruiz" type="fix">
