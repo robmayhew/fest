@@ -14,10 +14,6 @@
  */
 package org.fest.reflect.field;
 
-import static org.fest.reflect.field.Fields.*;
-
-import java.lang.reflect.Field;
-
 import org.fest.reflect.exception.ReflectionError;
 
 /**
@@ -26,10 +22,10 @@ import org.fest.reflect.exception.ReflectionError;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the static field "count"
- *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(String.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
  *   
- *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link StaticName#ofType(Class) ofType}(String.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   // Sets the value of the static field "count" to 3
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  * </pre>
  * </p>
  *
@@ -37,24 +33,19 @@ import org.fest.reflect.exception.ReflectionError;
  *
  * @author Alex Ruiz
  */
-public class StaticType<T> {
-  private final Class<T> type;
-  private final StaticName fieldName;
+public class StaticType<T> extends TypeTemplate<T> {
 
   StaticType(Class<T> type, StaticName fieldName) {
-    this.type = type;
-    this.fieldName = fieldName;
+    super(type, fieldName);
   }
 
   /**
-   * Creates a new field invoker.
+   * Returns a new field invoker. A field invoker is capable of accessing (read/write) the underlying field.
    * @param target the type containing the static field of interest.
    * @return the created field invoker.
    * @throws ReflectionError if a static field with a matching name and type cannot be found.
    */
   public Invoker<T> in(Class<?> target) {
-    Field field = lookupInClassHierarchy(fieldName.name, target);
-    assertIsInstanceOf(field, type);
-    return new Invoker<T>(field, target);
+    return fieldInvoker(target, target);
   }
 }

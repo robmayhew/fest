@@ -29,26 +29,35 @@ public final class Accessibles {
   /**
    * Sets the <code>accessible</code> flag of the given <code>{@link AccessibleObject}</code> to the given 
    * <code>boolean</code> value, ignoring any thrown exception.
-   * @param o the given <code>AccessibleObject</code>,
+   * @param o the given <code>AccessibleObject</code>.
    * @param accessible the value to set the <code>accessible</code> flag to.
    */
-  public static void setAccessibleIgnoringExceptions(final AccessibleObject o, final boolean accessible) {
+  public static void setAccessibleIgnoringExceptions(AccessibleObject o, boolean accessible) {
     try {
       setAccessible(o, accessible);
     } catch (RuntimeException ignored) {}    
   }
 
   /**
+   * Sets the <code>accessible</code> flag of the given <code>{@link AccessibleObject}</code> to <code>true</code>.
+   * @param o the given <code>AccessibleObject</code>.
+   * @throws SecurityException if the request is denied.
+   */
+  public static void makeAccessible(AccessibleObject o) {
+    setAccessible(o, true);
+  }
+  
+  /**
    * Sets the <code>accessible</code> flag of the given <code>{@link AccessibleObject}</code> to the given 
    * <code>boolean</code> value.
-   * @param o the given <code>AccessibleObject</code>,
+   * @param o the given <code>AccessibleObject</code>.
    * @param accessible the value to set the <code>accessible</code> flag to.
    * @throws SecurityException if the request is denied.
    */
   public static void setAccessible(final AccessibleObject o, final boolean accessible) {
     AccessController.doPrivileged(new PrivilegedAction<Void>() {
       public Void run() {
-        o.setAccessible(true);
+        o.setAccessible(accessible);
         return null;
       }
     });    

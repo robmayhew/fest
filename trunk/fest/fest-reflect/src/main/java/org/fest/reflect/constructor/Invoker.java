@@ -64,7 +64,7 @@ public final class Invoker<T> {
   public T newInstance(Object... args) {
     boolean accessible = constructor.isAccessible();
     try {
-      setAccessible(constructor, true);
+      makeAccessible(constructor);
       T newInstance = constructor.newInstance(args);
       return newInstance;
     } catch (Exception e) {

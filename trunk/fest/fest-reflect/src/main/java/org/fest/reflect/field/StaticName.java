@@ -14,30 +14,32 @@
  */
 package org.fest.reflect.field;
 
+import org.fest.reflect.exception.ReflectionError;
+
 /**
  * Understands the name of a static field to access using Java Reflection.
  * <p>
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the static field "count"
- *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(String.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
  *   
- *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link StaticName#ofType(Class) ofType}(String.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   // Sets the value of the static field "count" to 3
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  * </pre>
  * </p>
  *
  * @author Alex Ruiz
  */
-public final class StaticName {
-  final String name;
+public final class StaticName extends NameTemplate {
 
   /**
    * Creates a new <code>{@link StaticName}</code>.
    * @param name the name of the field to access using Java Reflection.
+   * @throws ReflectionError if the given name is <code>null</code> or empty.
    */
   public StaticName(String name) {
-    this.name = name;
+    super(name);
   }
 
   /**
@@ -45,6 +47,7 @@ public final class StaticName {
    * @param <T> the generic type of the field type.
    * @param type the type of the field to access.
    * @return a recipient for the field type.
+   * @throws ReflectionError if the given type is <code>null</code>.
    */
   public <T> StaticType<T> ofType(Class<T> type) {
     return new StaticType<T>(type, this);

@@ -23,6 +23,8 @@ import org.fest.reflect.Person;
 import org.fest.reflect.exception.ReflectionError;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for the fluent interface for fields and static fields.
@@ -54,15 +56,27 @@ public class FieldTest {
     assertThat(field.getType()).isEqualTo(String.class);
   }
   
-  @Test(expectedExceptions = ReflectionError.class)
-  public void shouldThrowErrorIfWrongFieldTypeSpecified() {
+  @Test public void shouldThrowErrorIfWrongFieldTypeSpecified() {
     Class<Integer> invalidType = Integer.class;
-    new Name("name").ofType(invalidType).in(person).get();
+    try {
+      new Name("name").ofType(invalidType).in(person).get();
+      fail();
+    } catch (ReflectionError e) {
+      String expectedMessage = concat(
+          "The type of the field 'name' in class org.fest.reflect.Person should be <java.lang.Integer> ",
+          "but was <java.lang.String>");
+      assertThat(e.getMessage()).isEqualTo(expectedMessage);
+    }
   }
 
-  @Test(expectedExceptions = ReflectionError.class)
-  public void shouldThrowErrorIfInvalidFieldName() {
-    new Name("age").ofType(Integer.class).in(person);
+  @Test public void shouldThrowErrorIfInvalidFieldName() {
+    try {
+      new Name("age").ofType(Integer.class).in(person);
+      fail();
+    } catch (ReflectionError e) {
+      String expectedMessage = "Unable to find field 'age' in class org.fest.reflect.Person";
+      assertThat(e.getMessage()).isEqualTo(expectedMessage);
+    }
   }
   
   @Test public void shouldGetFieldInSuperType() {
@@ -89,15 +103,26 @@ public class FieldTest {
     assertThat(field.getType()).isEqualTo(int.class);
   }
   
-  @Test(expectedExceptions = ReflectionError.class)
-  public void shouldThrowErrorIfWrongStaticFieldTypeSpecified() {
+  @Test public void shouldThrowErrorIfWrongStaticFieldTypeSpecified() {
     Class<Float> invalidType = Float.class;
-    new StaticName("count").ofType(invalidType).in(Person.class).get();
+    try {
+      new StaticName("count").ofType(invalidType).in(Person.class).get();
+      fail();
+    } catch (ReflectionError e) {
+      String expectedMessage = 
+        "The type of the field 'count' in class org.fest.reflect.Person should be <java.lang.Float> but was <int>";
+      assertThat(e.getMessage()).isEqualTo(expectedMessage);
+    }
   }
 
-  @Test(expectedExceptions = ReflectionError.class)
-  public void shouldThrowErrorIfInvalidStaticFieldName() {
-    new StaticName("age").ofType(int.class).in(Person.class);
+  @Test public void shouldThrowErrorIfInvalidStaticFieldName() {
+    try {
+      new StaticName("age").ofType(int.class).in(Person.class);
+      fail();
+    } catch (ReflectionError e) {
+      String expectedMessage = "Unable to find field 'age' in class org.fest.reflect.Person";
+      assertThat(e.getMessage()).isEqualTo(expectedMessage);
+    }
   }
   
   @Test public void shouldGetStaticFieldInSuperType() {

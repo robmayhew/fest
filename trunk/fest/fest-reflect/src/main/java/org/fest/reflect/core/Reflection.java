@@ -15,6 +15,9 @@
 package org.fest.reflect.core;
 
 import org.fest.reflect.constructor.TargetType;
+import org.fest.reflect.field.Invoker;
+import org.fest.reflect.field.StaticName;
+import org.fest.reflect.field.StaticType;
 
 /**
  * Understands the entry point for the classes in this package.
@@ -37,6 +40,12 @@ import org.fest.reflect.constructor.TargetType;
  *                    .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)
  *                    .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Luke");
  * 
+ *   // Retrieves the value of the static field "count"
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   
+ *   // Sets the value of the static field "count" to 3
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   
  *   // Equivalent to call 'person.concentrate()'
  *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.Name#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *   

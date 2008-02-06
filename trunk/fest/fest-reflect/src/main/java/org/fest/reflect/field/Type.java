@@ -14,10 +14,6 @@
  */
 package org.fest.reflect.field;
 
-import static org.fest.reflect.field.Fields.*;
-
-import java.lang.reflect.Field;
-
 import org.fest.reflect.exception.ReflectionError;
 
 /**
@@ -37,24 +33,19 @@ import org.fest.reflect.exception.ReflectionError;
  *
  * @author Alex Ruiz
  */
-public class Type<T> {
-  private final Class<T> type;
-  private final Name fieldName;
+public class Type<T> extends TypeTemplate<T> {
 
   Type(Class<T> type, Name fieldName) {
-    this.type = type;
-    this.fieldName = fieldName;
+    super(type, fieldName);
   }
 
   /**
-   * Creates a new field invoker.
+   * Returns a new field invoker. A field invoker is capable of accessing (read/write) the underlying field.
    * @param target the object containing the field of interest.
    * @return the created field invoker.
    * @throws ReflectionError if a field with a matching name and type cannot be found.
    */
   public Invoker<T> in(Object target) {
-    Field field = lookupInClassHierarchy(fieldName.name, target.getClass());
-    assertIsInstanceOf(field, type);
-    return new Invoker<T>(field, target);
+    return fieldInvoker(target, target.getClass());
   }
 }

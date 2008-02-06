@@ -14,6 +14,8 @@
  */
 package org.fest.reflect.field;
 
+import org.fest.reflect.exception.ReflectionError;
+
 /**
  * Understands the name of a field to access using Java Reflection.
  * <p>
@@ -29,15 +31,15 @@ package org.fest.reflect.field;
  *
  * @author Alex Ruiz
  */
-public final class Name {
-  final String name;
+public final class Name extends NameTemplate {
 
   /**
    * Creates a new <code>{@link Name}</code>.
    * @param name the name of the field to access using Java Reflection.
+   * @throws ReflectionError if the given name is <code>null</code> or empty.
    */
   public Name(String name) {
-    this.name = name;
+    super(name);
   }
 
   /**
@@ -45,6 +47,7 @@ public final class Name {
    * @param <T> the generic type of the field type.
    * @param type the type of the field to access.
    * @return a recipient for the field type.
+   * @throws ReflectionError if the given type is <code>null</code>.
    */
   public <T> Type<T> ofType(Class<T> type) {
     return new Type<T>(type, this);

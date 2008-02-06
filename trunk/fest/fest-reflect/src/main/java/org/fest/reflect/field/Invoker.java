@@ -31,6 +31,12 @@ import static org.fest.util.Strings.*;
  *   
  *   // Sets the value of the field "name" to "Yoda"
  *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
+ *   
+ *   // Retrieves the value of the static field "count"
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   
+ *   // Sets the value of the static field "count" to 3
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  * </pre>
  * </p>
  *
@@ -56,7 +62,7 @@ public final class Invoker<T> {
   public void set(T value) {
     boolean accessible = field.isAccessible();
     try {
-      setAccessible(field, true);
+      makeAccessible(field);
       field.set(target, value);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to update the value in field ", quote(field.getName())), e);
@@ -73,7 +79,7 @@ public final class Invoker<T> {
   @SuppressWarnings("unchecked") public T get() {
     boolean accessible = field.isAccessible();
     try {
-      setAccessible(field, true);
+      makeAccessible(field);
       return (T) field.get(target);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to obtain the value in field " + quote(field.getName())), e);

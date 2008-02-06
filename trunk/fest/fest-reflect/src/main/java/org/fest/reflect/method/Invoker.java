@@ -85,7 +85,7 @@ public final class Invoker<T> {
   @SuppressWarnings("unchecked") public T invoke(Object... args) {
     boolean accessible = method.isAccessible();
     try {
-      setAccessible(method, true);
+      makeAccessible(method);
       return (T) method.invoke(target, args);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to invoke method ", quote(method.getName()), " with arguments ",
