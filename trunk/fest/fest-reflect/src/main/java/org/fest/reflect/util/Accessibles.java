@@ -54,14 +54,24 @@ public final class Accessibles {
    * @param accessible the value to set the <code>accessible</code> flag to.
    * @throws SecurityException if the request is denied.
    */
-  public static void setAccessible(final AccessibleObject o, final boolean accessible) {
-    AccessController.doPrivileged(new PrivilegedAction<Void>() {
-      public Void run() {
-        o.setAccessible(accessible);
-        return null;
-      }
-    });    
+  public static void setAccessible(AccessibleObject o, boolean accessible) {
+    AccessController.doPrivileged(new SetAccessibleAction(o, accessible));    
   }
   
+  private static class SetAccessibleAction implements PrivilegedAction<Void> {
+    private final AccessibleObject o;
+    private final boolean accessible;
+
+    SetAccessibleAction(AccessibleObject o, boolean accessible) {
+      this.o = o;
+      this.accessible = accessible;
+    }
+
+    public Void run() {
+      o.setAccessible(accessible);
+      return null;
+    }
+  }
+
   private Accessibles() {}
 }

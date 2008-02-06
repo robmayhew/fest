@@ -40,13 +40,10 @@ package org.fest.reflect.method;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ParameterTypes<T> {
-  private final Class<?>[] values;
-  private final ReturnType<T> returnType;
+public final class ParameterTypes<T> extends ParameterTypesTemplate<T> {
 
   ParameterTypes(Class<?>[] parameterTypes, ReturnType<T> returnType) {
-    this.values = parameterTypes;
-    this.returnType = returnType;
+    super(parameterTypes, returnType);
   }
 
   /**
@@ -55,6 +52,6 @@ public final class ParameterTypes<T> {
    * @return the created method invoker.
    */
   public Invoker<T> in(Object target) {
-    return new Invoker<T>(returnType.fieldName.name, target, values);
+    return new Invoker<T>(methodName, target, parameterTypes);
   }
 }

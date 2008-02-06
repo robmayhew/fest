@@ -14,11 +14,10 @@
  */
 package org.fest.reflect.method;
 
-import java.util.Arrays;
-
 import org.fest.reflect.exception.ReflectionError;
 
 import static org.fest.reflect.util.Accessibles.*;
+import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
 /**
@@ -64,7 +63,7 @@ public final class Invoker<T> {
     }
     if (method == null) 
       throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
-          targetType.getName(), " with parameter type(s) ", Arrays.toString(parameterTypes)));
+          targetType.getName(), " with parameter type(s) ", format(parameterTypes)));
     return method;
   }
 
@@ -89,7 +88,7 @@ public final class Invoker<T> {
       return (T) method.invoke(target, args);
     } catch (Exception e) {
       throw new ReflectionError(concat("Unable to invoke method ", quote(method.getName()), " with arguments ",
-          Arrays.toString(args)), e);
+          format(args)), e);
     } finally {
       setAccessibleIgnoringExceptions(method, accessible);
     }

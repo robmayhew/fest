@@ -40,11 +40,9 @@ package org.fest.reflect.method;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class ReturnType<T> {
-  final Name fieldName;
-
-  ReturnType(Class<T> type, Name fieldName) {
-    this.fieldName = fieldName;
+public class ReturnType<T> extends ReturnTypeTemplate<T> {
+  ReturnType(Class<T> type, Name methodName) {
+    super(type, methodName);
   }
 
   /**
@@ -53,13 +51,13 @@ public class ReturnType<T> {
    * @return the created method invoker.
    */
   public Invoker<T> in(Object target) {
-    return new Invoker<T>(fieldName.name, target);
+    return new Invoker<T>(methodName, target);
   }
 
   /**
    * Specifies the parameter types of the method to invoke. This method call is optional if the method to invoke does 
    * not take arguments.
-   * @param parameterTypes the paramater types of the method to invoke.
+   * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
    */
   public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {

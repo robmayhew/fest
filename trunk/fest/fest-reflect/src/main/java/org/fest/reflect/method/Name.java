@@ -15,6 +15,8 @@
  */
 package org.fest.reflect.method;
 
+import org.fest.reflect.exception.ReflectionError;
+
 
 /**
  * Understands the name of a method to invoke using Java Reflection.
@@ -39,15 +41,15 @@ package org.fest.reflect.method;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class Name {
-  final String name;
+public final class Name extends NameTemplate {
 
   /**
    * Creates a new <code>{@link Name}</code>.
    * @param name the name of the method to invoke.
+   * @throws ReflectionError if the given name is <code>null</code> or empty.
    */
   public Name(String name) {
-    this.name = name;
+    super(name);
   }
 
   /**
@@ -64,7 +66,7 @@ public final class Name {
   /**
    * Specifies the parameter types of the method to invoke. This method call is optional if the method to invoke does 
    * not take arguments.
-   * @param parameterTypes the paramater types of the method to invoke.
+   * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
    */
   public ParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
