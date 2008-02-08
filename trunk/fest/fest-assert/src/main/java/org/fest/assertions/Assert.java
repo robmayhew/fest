@@ -38,7 +38,7 @@ abstract class Assert {
    * @throws UnsupportedOperationException
    */
   @Override public final boolean equals(Object obj) {
-    throw new UnsupportedOperationException("Hmmm...maybe you intended to call 'isEqualTo'");
+    throw new UnsupportedOperationException("'equals' is not supported...maybe you intended to call 'isEqualTo'");
   }
 
   /**

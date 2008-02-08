@@ -149,22 +149,22 @@ public final class Fail {
   /**
    * Returns an error message to be used when two objects that are not expected to be equal are actually equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
+   * @param actual the actual value.
+   * @param second the value checked against <code>actual</code>.
    * @return an error message to be used when two objects that are not expected to be equal are.
    */
-  static String errorMessageIfEqual(String message, Object first, Object second) {
-    return concat(format(message), errorMessageIfEqual(first, second));
+  static String errorMessageIfEqual(String message, Object actual, Object second) {
+    return concat(format(message), errorMessageIfEqual(actual, second));
   }
 
   /**
    * Returns an error message to be used when two objects that are not expected to be equal are actually equal.
-   * @param first the value checked against <code>second</code>.
-   * @param second second value.
+   * @param actual the actual value.
+   * @param second the value checked against <code>actual</code>.
    * @return an error message to be used when two objects that are not expected to be equal are.
    */
-  static String errorMessageIfEqual(Object first, Object second) {
-    return concat(inBrackets(first), " should not be equal to ", inBrackets(second));
+  static String errorMessageIfEqual(Object actual, Object second) {
+    return concat("actual value:", inBrackets(actual), " should not be equal to:", inBrackets(second));
   }
 
   private Fail() {}

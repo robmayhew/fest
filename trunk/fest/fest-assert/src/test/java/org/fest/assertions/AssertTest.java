@@ -18,6 +18,8 @@ package org.fest.assertions;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
+
 /**
  * Tests for {@link Assert}.
  *
@@ -31,8 +33,12 @@ public class AssertTest {
     assertion = new Assert() {};
   }
   
-  @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void shouldThrowErrorIfEqualsCalled() {
-    assertion.equals(null);
+  @Test public void shouldThrowErrorIfEqualsCalled() {
+    try {
+      assertion.equals(null);
+      fail();
+    } catch (UnsupportedOperationException e) {
+      assertEquals(e.getMessage(), "'equals' is not supported...maybe you intended to call 'isEqualTo'");
+    }
   }
 }
