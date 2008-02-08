@@ -15,9 +15,10 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
+import static org.fest.test.ExpectedFailure.expect;
 
-import static org.testng.Assert.*;
+import org.fest.test.CodeToTest;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link BooleanAssert}</code>.
@@ -27,91 +28,85 @@ import static org.testng.Assert.*;
  */
 public class BooleanAssertTest {
 
-  @Test public void shouldPassIfActualValueIsTrueAsExpected() {
+  @Test public void shouldPassIfActualValueIsTrueAsAnticipated() {
     new BooleanAssert(true).isTrue();
   }
 
   @Test public void shouldFailIfActualValueIsTrueAndExpectingFalse() {
-    try {
-      new BooleanAssert(true).isFalse();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "expected:<false> but was:<true>");
-    }
+    expect(AssertionError.class).withMessage("expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(true).isFalse();
+      }
+    });
   }
 
-  @Test public void shouldFailShowingDescriptionIfActualValueIsTrueAndExceptingFalse() {
-    try {
-      new BooleanAssert(true).as("A Test").isFalse();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] expected:<false> but was:<true>");
-    }
+  @Test public void shouldFailShowingDescriptionIfActualValueIsTrueAndExpectingFalse() {
+    expect(AssertionError.class).withMessage("[A Test] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(true).as("A Test").isFalse();
+      }
+    });
   }
 
-  @Test public void shouldPassIfActualValueIsFalseAsExpected() {
+  @Test public void shouldPassIfActualValueIsFalseAsAnticipated() {
     new BooleanAssert(false).isFalse();
   }
 
   @Test public void shouldFailIfActualValueIsFalseAndExpectingTrue() {
-    try {
-      new BooleanAssert(false).isTrue();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "expected:<true> but was:<false>");
-    }
+    expect(AssertionError.class).withMessage("expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(false).isTrue();
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualValueIsFalseAndExpectingTrue() {
-    try {
-      new BooleanAssert(false).as("A Test").isTrue();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] expected:<true> but was:<false>");
-    }
+    expect(AssertionError.class).withMessage("[A Test] expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(false).as("A Test").isTrue();
+      }
+    });
   }
 
   @Test public void shouldFailIfValuesAreNotEqualAndExpectingEqual() {
-    try {
-      new BooleanAssert(false).isEqualTo(true);
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "expected:<true> but was:<false>");
-    }
+    expect(AssertionError.class).withMessage("expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(false).isEqualTo(true);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotEqualAndExpectingEqual() {
-    try {
-      new BooleanAssert(false).as("A Test").isEqualTo(true);
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] expected:<true> but was:<false>");
-    }
+    expect(AssertionError.class).withMessage("[A Test] expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(false).as("A Test").isEqualTo(true);
+      }
+    });
   }
 
   @Test public void shouldFailIfValuesAreEqualAndExpectedToBeNotEqual() {
-    try {
-      new BooleanAssert(false).isNotEqualTo(false);
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "actual value:<false> should not be equal to:<false>");
-    }
+    expect(AssertionError.class)
+      .withMessage("actual value:<false> should not be equal to:<false>").on(new CodeToTest() {
+        public void run() {
+          new BooleanAssert(false).isNotEqualTo(false);
+        }
+      });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqualAndExpectedToBeNotEqual() {
-    try {
-      new BooleanAssert(false).as("A Test").isNotEqualTo(false);
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] actual value:<false> should not be equal to:<false>");
-    }
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<false> should not be equal to:<false>").on(new CodeToTest() {
+        public void run() {
+          new BooleanAssert(false).as("A Test").isNotEqualTo(false);
+        }
+      });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsExpected() {
+  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
     new BooleanAssert(false).isNotEqualTo(true);
   }
 
-  @Test public void shouldPassIfValuesAreEqualAsExpected() {
+  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
     new BooleanAssert(false).isEqualTo(false);
   }
 }

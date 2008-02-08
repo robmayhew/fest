@@ -14,9 +14,10 @@
  */
 package org.fest.assertions;
 
-import org.testng.annotations.Test;
+import static org.fest.test.ExpectedFailure.expect;
 
-import static org.testng.Assert.*;
+import org.fest.test.CodeToTest;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ByteAssert}</code>.
@@ -26,178 +27,192 @@ import static org.testng.Assert.*;
  */
 public class ByteAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualAsExpected() {
+  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
     new ByteAssert(asByte(6)).isEqualTo(asByte(6));
   }
 
   @Test public void shouldFailIfValuesAreNotEqualAndExpectedEqual() {
-    try {
-      new ByteAssert(asByte(6)).isEqualTo(asByte(8));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "expected:<8> but was:<6>");
-    }
+    expect(AssertionError.class).withMessage("expected:<8> but was:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isEqualTo(asByte(8));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotEqualAndExpectedEqual() {
-    try {
-      new ByteAssert(asByte(6)).as("A Test").isEqualTo(asByte(8));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] expected:<8> but was:<6>");
-    }
+    expect(AssertionError.class).withMessage("[A Test] expected:<8> but was:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).as("A Test").isEqualTo(asByte(8));
+      }
+    });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsExpected() {
+  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
     new ByteAssert(asByte(6)).isNotEqualTo(asByte(8));
   }
 
   @Test public void shouldFailIfValuesAreEqualAndExpectingNotEqual() {
-    try {
-      new ByteAssert(asByte(6)).isNotEqualTo(asByte(6));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "actual value:<6> should not be equal to:<6>");
-    }
+    expect(AssertionError.class).withMessage("actual value:<6> should not be equal to:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isNotEqualTo(asByte(6));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqualAndExpectingNotEqual() {
-    try {
-      new ByteAssert(asByte(6)).as("A Test").isNotEqualTo(asByte(6));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] actual value:<6> should not be equal to:<6>");
-    }
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<6> should not be equal to:<6>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(6)).as("A Test").isNotEqualTo(asByte(6));
+        }
+      });
   }
 
-  @Test public void shouldPassIfActualIsZeroAsExpected() {
+  @Test public void shouldPassIfActualIsZeroAsAnticipated() {
     new ByteAssert(asByte(0)).isZero();
   }
 
   @Test public void shouldFailIfActualIsNotZeroAndExpectingZero() {
-    try {
-      new ByteAssert(asByte(6)).isZero();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "expected:<0> but was:<6>");
-    }
+    expect(AssertionError.class).withMessage("expected:<0> but was:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isZero();
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotZeroAndExpectingZero() {
-    try {
-      new ByteAssert(asByte(6)).as("A Test").isZero();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] expected:<0> but was:<6>");
-    }
+    expect(AssertionError.class).withMessage("[A Test] expected:<0> but was:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).as("A Test").isZero();
+      }
+    });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanExpectedAsExpected() {
+  @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
     new ByteAssert(asByte(6)).isGreaterThan(asByte(2));
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingToBeGreater() {
-    try {
-      new ByteAssert(asByte(6)).isGreaterThan(asByte(10));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "actual value:<6> should be greater than <10>");
-    }
+    expect(AssertionError.class).withMessage("actual value:<6> should be greater than <10>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isGreaterThan(asByte(10));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingToBeGreater() {
-    try {
-      new ByteAssert(asByte(6)).as("A Test").isGreaterThan(asByte(10));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] actual value:<6> should be greater than <10>");
-    }
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<6> should be greater than <10>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(6)).as("A Test").isGreaterThan(asByte(10));
+        }
+      });
   }
 
-  @Test public void shouldPassIfActualLessThanExpectedAsExpected() {
+  @Test public void shouldPassIfActualLessThanExpectedAsAnticipated() {
     new ByteAssert(asByte(2)).isLessThan(asByte(6));
   }
 
   @Test public void shouldFailIfActualIsNotLessThanExpectedAndExpectingToBeLess() {
-    try {
-      new ByteAssert(asByte(10)).isLessThan(asByte(6));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "actual value:<10> should be less than <6>");
-    }
+    expect(AssertionError.class).withMessage("actual value:<10> should be less than <6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(10)).isLessThan(asByte(6));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotLessThanExpectedAndExpectingToBeLess() {
-    try {
-      new ByteAssert(asByte(10)).as("A Test").isLessThan(asByte(6));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] actual value:<10> should be less than <6>");
-    }
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<10> should be less than <6>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(10)).as("A Test").isLessThan(asByte(6));
+        }
+      });
   }
 
-  @Test public void shouldPassIfActualIsPositiveAsExpected() {
+  @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
     new ByteAssert(asByte(6)).isPositive();
   }
 
   @Test public void shouldFailIfActualIsNotPositiveAndExpectingPositive() {
-    try {
-      new ByteAssert(asByte(-2)).isPositive();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "actual value:<-2> should be greater than <0>");
-    }
+    expect(AssertionError.class).withMessage("actual value:<-2> should be greater than <0>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(-2)).isPositive();
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotPositiveAndExpectingPositive() {
-    try {
-      new ByteAssert(asByte(-2)).as("A Test").isPositive();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] actual value:<-2> should be greater than <0>");
-    }
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<-2> should be greater than <0>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(-2)).as("A Test").isPositive();
+        }
+      });
   }
 
-  @Test public void shouldPassIfActualIsNegativeAsExpected() {
+  @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
     new ByteAssert(asByte(-2)).isNegative();
   }
 
   @Test public void shoudlFailIfActualIsNotNegativeAndExpectingNegative() {
-    try {
-      new ByteAssert(asByte(6)).isNegative();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "actual value:<6> should be less than <0>");
-    }
+    expect(AssertionError.class).withMessage("actual value:<6> should be less than <0>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isNegative();
+      }
+    });
   }
 
   @Test public void shoudlFailShowingDescriptionIfActualIsNotNegativeAndExpectingNegative() {
-    try {
-      new ByteAssert(asByte(6)).as("A Test").isNegative();
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[A Test] actual value:<6> should be less than <0>");
-    }
+    expect(AssertionError.class).withMessage("[A Test] actual value:<6> should be less than <0>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).as("A Test").isNegative();
+      }
+    });
   }
 
-  @Test public void shouldPassIfGreaterOrEqualToAndExpectedGreaterThan() {
-    new ByteAssert(asByte(8)).isGreaterOrEqualTo(asByte(8));
-    new ByteAssert(asByte(8)).isGreaterOrEqualTo(asByte(6));
+  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpectedAsAnticipated() {
+    new ByteAssert(asByte(8)).isGreaterOrEqualTo(asByte(8)).isGreaterOrEqualTo(asByte(6));
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfLessOrEqualToAndExpectedGreaterThan() {
-    new ByteAssert(asByte(6)).isGreaterOrEqualTo(asByte(8));
+  @Test public void shouldFailIfActualValueIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
+    expect(AssertionError.class)
+      .withMessage("actual value:<6> should be greater than or equal to <8>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(6)).isGreaterOrEqualTo(asByte(8));
+        }
+      });
   }
 
-  @Test public void shouldPassIfLessOrEqualToAndExpectedLessThan() {
-    new ByteAssert(asByte(8)).isLessOrEqualTo(asByte(8));
-    new ByteAssert(asByte(6)).isLessOrEqualTo(asByte(8));
+  @Test public void shouldFailShowingDescriptionIfActualValueIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<6> should be greater than or equal to <8>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(6)).as("A Test").isGreaterOrEqualTo(asByte(8));
+        }
+      });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfGreaterOrEqualToAndExpectedLessThan() {
-    new ByteAssert(asByte(8)).isLessOrEqualTo(asByte(6));
+  @Test public void shouldPassIfActualValueIsLessThanOrEqualToExpectedAsAnticipated() {
+    new ByteAssert(asByte(6)).isLessOrEqualTo(asByte(8)).isLessOrEqualTo(asByte(6));
+  }
+
+  @Test public void shouldFailIfActualValueIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
+    expect(AssertionError.class)
+      .withMessage("actual value:<8> should be less than or equal to <6>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(8)).isLessOrEqualTo(asByte(6));
+        }
+      });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualValueIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<8> should be less than or equal to <6>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(8)).as("A Test").isLessOrEqualTo(asByte(6));
+        }
+      });
   }
 
   private static byte asByte(int i) {

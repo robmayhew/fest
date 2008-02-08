@@ -42,6 +42,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>fest</groupId>
+      <artifactId>fest-test</artifactId>
+      <version>0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
       <version>1.5</version>
