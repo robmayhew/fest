@@ -25,7 +25,7 @@ public interface CodeToTest {
 
   /**
    * Executes the code to test.
-   * @throws Exception any exception thrown when running the code to test.
+   * @throws Throwable any exception thrown when running the code to test.
    */
-  void run() throws Exception;
+  void run() throws Throwable;
 }
