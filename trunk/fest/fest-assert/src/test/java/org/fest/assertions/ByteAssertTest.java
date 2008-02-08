@@ -109,7 +109,7 @@ public class ByteAssertTest {
       });
   }
 
-  @Test public void shouldPassIfActualLessThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
     new ByteAssert(asByte(2)).isLessThan(asByte(6));
   }
 
@@ -177,7 +177,7 @@ public class ByteAssertTest {
 
   @Test public void shouldFailIfActualValueIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expect(AssertionError.class)
-      .withMessage("actual value:<6> should be greater than or equal to <8>").on(new CodeToTest() {
+      .withMessage("actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
         public void run() {
           new ByteAssert(asByte(6)).isGreaterOrEqualTo(asByte(8));
         }
@@ -186,7 +186,7 @@ public class ByteAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualValueIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6> should be greater than or equal to <8>").on(new CodeToTest() {
+      .withMessage("[A Test] actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
         public void run() {
           new ByteAssert(asByte(6)).as("A Test").isGreaterOrEqualTo(asByte(8));
         }
@@ -199,7 +199,7 @@ public class ByteAssertTest {
 
   @Test public void shouldFailIfActualValueIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expect(AssertionError.class)
-      .withMessage("actual value:<8> should be less than or equal to <6>").on(new CodeToTest() {
+      .withMessage("actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
         public void run() {
           new ByteAssert(asByte(8)).isLessOrEqualTo(asByte(6));
         }
@@ -208,7 +208,7 @@ public class ByteAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualValueIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8> should be less than or equal to <6>").on(new CodeToTest() {
+      .withMessage("[A Test] actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
         public void run() {
           new ByteAssert(asByte(8)).as("A Test").isLessOrEqualTo(asByte(6));
         }
