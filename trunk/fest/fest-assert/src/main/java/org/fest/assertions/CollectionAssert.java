@@ -16,7 +16,7 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Collections.*;
+import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
 
 import java.util.ArrayList;
@@ -71,12 +71,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty())
-      fail(concat("unexpected element(s) ", formattedInBrackets(copy), " in collection ", actual));
+      fail(concat("unexpected element(s):", format(copy), " in collection:", format(actual)));
     return this;
   }
 
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("collection ", formattedActual(), " does not contain element(s) ", formattedInBrackets(notFound)));
+    fail(concat("collection:", format(actual), " does not contain element(s):", format(notFound)));
   }
 
   /**
@@ -90,7 +90,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (actual.contains(o)) found.add(o);
     if (!found.isEmpty())
-      fail(concat("collection ", formattedActual(), " does not exclude element(s) ", formattedInBrackets(found)));
+      fail(concat("collection:", format(actual), " does not exclude element(s):", format(found)));
     return this;
   }
 
@@ -103,12 +103,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     isNotNull();
     Collection<?> duplicates = duplicatesFrom(actual);
     if (!duplicates.isEmpty())
-      fail(concat("collection ", formattedActual(), " contains duplicates ", formattedInBrackets(duplicates), ""));
+      fail(concat("collection:", format(actual), " contains duplicate(s):", format(duplicates)));
     return this;
   }
 
-  private String formattedInBrackets(Collection<?> c) {
-    return inBrackets(format(c));
+  private String format(Collection<?> c) {
+    return inBrackets(c);
   }
 
   /**
@@ -161,7 +161,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the actual collection is <code>null</code>.
    */
   public CollectionAssert isNotNull() {
-    if (actual == null) fail("the collection is null");
+    if (actual == null) fail("expecting a non-null collection but it was null");
     return this;
   }
 
@@ -172,11 +172,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public void isEmpty() {
     isNotNull();
     if (!Collections.isEmpty(actual))
-      fail(concat("expecting empty collection, but was ", formattedActual()));
-  }
-
-  private String formattedActual() {
-    return format(actual);
+      fail(concat("expecting empty collection, but was:", format(actual)));
   }
 
   /**
@@ -186,7 +182,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    */
   public CollectionAssert isNotEmpty() {
     isNotNull();
-    if (actual.isEmpty()) fail("expecting non-empty collection");
+    if (actual.isEmpty()) fail("expecting a non-empty collection but it was empty");
     return this;
   }
 
@@ -197,7 +193,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the number of elements of the actual collection is not equal to the given one.
    */
   public CollectionAssert hasSize(int expected) {
-    return (CollectionAssert)assertEqualSize(expected);
+    isNotNull();
+    int actualSize = actual.size();
+    if (actualSize != expected)
+      fail(concat(
+          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for collection:", format(actual)));
+    return this;
   }
 
   int actualGroupSize() {

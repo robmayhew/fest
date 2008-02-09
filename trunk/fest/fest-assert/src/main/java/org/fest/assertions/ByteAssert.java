@@ -91,45 +91,45 @@ public final class ByteAssert extends PrimitiveAssert {
 
   /**
    * Verifies that the actual <code>byte</code> value is greater than the given one.
-   * @param smaller the value expected to be smaller than the actual one.
+   * @param value the value expected to be smaller than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> value is less than or equal to the given one.
    */
-  public ByteAssert isGreaterThan(byte smaller) {
-    failIfNotGreaterThan(description(), actual, smaller);
+  public ByteAssert isGreaterThan(byte value) {
+    failIfNotGreaterThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>byte</code> value is less than the given one.
-   * @param bigger the value expected to be bigger than the actual one.
+   * @param value the value expected to be bigger than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> value is greater than or equal to the given one.
    */
-  public ByteAssert isLessThan(byte bigger) {
-    failIfNotLessThan(description(), actual, bigger);
+  public ByteAssert isLessThan(byte value) {
+    failIfNotLessThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>byte</code> value is greater or equal to the given one.
-   * @param smaller the value expected to be smaller or equal to the actual one.
+   * @param value the value expected to be smaller or equal to the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> value is strictly less than or equal to the given one.
    */
-  public ByteAssert isGreaterOrEqualTo(byte smaller) {
-    failIfNotGreaterOrEqualTo(description(), actual, smaller);
+  public ByteAssert isGreaterOrEqualTo(byte value) {
+    failIfNotGreaterOrEqualTo(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>byte</code> value is less or equal to the given one.
-   * @param bigger the value expected to be bigger or equal to the actual one.
+   * @param value the value expected to be bigger or equal to the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>byte</code> value is strictly greater than or equal to the given one.
    */
-  public ByteAssert isLessOrEqualTo(byte bigger) {
-    failIfNotLessOrEqualTo(description(), actual, bigger);
+  public ByteAssert isLessOrEqualTo(byte value) {
+    failIfNotLessOrEqualTo(description(), actual, value);
     return this;
   }
 

@@ -1,9 +1,10 @@
 package org.fest.assertions;
 
 import static java.lang.Math.abs;
-import static java.lang.String.valueOf;
 import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.assertions.PrimitiveFail.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands Assertion methods for <code>Double</code>. To create a new instance of this class use the
@@ -78,45 +79,45 @@ public final class DoubleAssert extends PrimitiveAssert {
 
   /**
    * Verifies that the actual <code>double</code> value is greater than the given one.
-   * @param smaller the value expected to be smaller than the actual one.
+   * @param value the value expected to be smaller than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>double</code> value is less than or equal to the given one.
    */
-  public DoubleAssert isGreaterThan(double smaller) {
-    failIfNotGreaterThan(description(), actual, smaller);
+  public DoubleAssert isGreaterThan(double value) {
+    failIfNotGreaterThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>double</code> value is less than the given one.
-   * @param bigger the value expected to be bigger than the actual one.
+   * @param value the value expected to be bigger than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>double</code> value is greater than or equal to the given one.
    */
-  public DoubleAssert isLessThan(double bigger) {
-    failIfNotLessThan(description(), actual, bigger);
+  public DoubleAssert isLessThan(double value) {
+    failIfNotLessThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>double</code> value is greater or equal to the given one.
-   * @param smaller the value expected to be smaller or equal to the actual one.
+   * @param value the value expected to be smaller or equal to the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>double</code> value is strictly less than or equal to the given one.
    */
-  public DoubleAssert isGreaterOrEqualTo(double smaller) {
-    failIfNotGreaterOrEqualTo(description(), actual, smaller);
+  public DoubleAssert isGreaterOrEqualTo(double value) {
+    failIfNotGreaterOrEqualTo(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>double</code> value is less or equal to the given one.
-   * @param bigger the value expected to be bigger or equal to the actual one.
+   * @param value the value expected to be bigger or equal to the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>double</code> value is strictly greater than or equal to the given one.
    */
-  public DoubleAssert isLessOrEqualTo(double bigger) {
-    failIfNotLessOrEqualTo(description(), actual, bigger);
+  public DoubleAssert isLessOrEqualTo(double value) {
+    failIfNotLessOrEqualTo(description(), actual, value);
     return this;
   }
 
@@ -158,7 +159,7 @@ public final class DoubleAssert extends PrimitiveAssert {
   public DoubleAssert isEqualTo(double expected, Delta delta) {
     if (Double.compare(expected, actual) == 0) return this;
     if (!(abs(expected - actual) <= delta.value))
-      fail(errorMessageIfNotEqual(description(), valueOf(actual), valueOf(expected)));
+      fail(concat(errorMessageIfNotEqual(description(), actual, expected), " using delta:", inBrackets(delta.value)));
     return this;
   }
 

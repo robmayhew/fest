@@ -15,142 +15,288 @@
  */
 package org.fest.assertions;
 
-import static java.util.logging.Level.INFO;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.test.ExpectedFailure.expect;
 import static org.fest.util.Collections.list;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link CollectionAssert}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class CollectionAssertTest {
 
-  private static Logger logger = Logger.getAnonymousLogger();
-
-  @Test public void shouldPassIfGivenObjectIsInCollection() {
+  @Test public void shouldPassIfActualContainsValueAsAnticipated() {
     new CollectionAssert(list("Luke", "Leia")).contains("Luke");
   }
 
-  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection")
-  public void shouldPassIfGivenObjectsAreInCollection() {
+  @Test public void shouldPassIfActualContainsValuesAsAnticipated() {
     new CollectionAssert(list("Luke", "Leia", "Anakin")).contains("Luke", "Leia");
   }
 
-  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection", expectedExceptions = AssertionError.class)
-  public void shouldFailIfGivenObjectIsNotInCollection() {
-    new CollectionAssert(new ArrayList<String>()).contains("Luke");
+  @Test public void shouldFailIfActualExcludesValueAndExpectingToContain() {
+    expect(AssertionError.class)
+      .withMessage("collection:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(new ArrayList<String>()).contains("Luke");
+        }
+      });
   }
 
+  @Test public void shouldFailShowingDescriptionIfActualExcludesValueAndExpectingToContain() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] collection:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(new ArrayList<String>()).as("A Test").contains("Luke");
+        }
+      });
+  }
 
-  @Test public void shouldPassIfGivenObjectIsNotInCollection() {
+  @Test public void shouldPassIfActualExcludesValueAsAnticipated() {
     new CollectionAssert(list("Luke", "Leia")).excludes("Anakin");
   }
 
-  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsNotInCollection")
-  public void shouldPassIfGivenObjectsAreNotInCollection() {
+  @Test public void shouldPassIfActualExcludesGivenValuesAsAnticipated() {
     new CollectionAssert(list("Luke", "Leia", "Anakin")).excludes("Han", "Yoda");
   }
 
-  @Test(dependsOnMethods = "shouldPassIfGivenObjectIsInCollection", expectedExceptions = AssertionError.class)
-  public void shouldFailIfGivenObjectIsInCollection() {
-    new CollectionAssert(list("Luke", "Leia")).excludes("Luke");
+  @Test public void shouldFailIfActualContainsValueAndExpectingToExclude() {
+    expect(AssertionError.class)
+      .withMessage("collection:<['Luke', 'Leia']> does not exclude element(s):<['Luke']>").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(list("Luke", "Leia")).excludes("Luke");
+        }
+      });
   }
 
-  @Test public void shouldFailIfCollectionHasDuplicates() {
-    List<String> list = list("Luke", "Yoda", "Luke");
-    try {
-      new CollectionAssert(list).doesNotHaveDuplicates();
-      fail("Should have failed");
-    } catch (AssertionError e) {
-      String message = e.getMessage();
-      logger.log(INFO, message);
-      new StringAssert(message).contains("Luke");
-    }
+  @Test public void shouldFailShowingDescriptionIfActualContainsValueAndExpectingToExclude() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] collection:<['Luke', 'Leia']> does not exclude element(s):<['Luke']>")
+      .on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(list("Luke", "Leia")).as("A Test").excludes("Luke");
+        }
+      });
   }
 
-  @Test public void shouldSucceedIfCollectionDoesNotHaveDuplicates() {
+  @Test public void shouldFailIfActualHasDuplicatesAndExpectingNoDuplicates() {
+    expect(AssertionError.class)
+      .withMessage("collection:<['Luke', 'Yoda', 'Luke']> contains duplicate(s):<['Luke']>").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(list("Luke", "Yoda", "Luke")).doesNotHaveDuplicates();
+        }
+      });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualHasDuplicatesAndExpectingNoDuplicates() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] collection:<['Luke', 'Yoda', 'Luke']> contains duplicate(s):<['Luke']>")
+      .on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(list("Luke", "Yoda", "Luke")).as("A Test").doesNotHaveDuplicates();
+        }
+      });
+  }
+
+  @Test public void shouldPassIfActualContainsNoDuplicatesAsAnticipated() {
     new CollectionAssert(list("Luke", "Yoda")).doesNotHaveDuplicates();
   }
 
-  @Test public void shouldSucceedIfCollectionIsEmpty() {
+  @Test public void shouldPassIfEmptyActualContainsNoDuplicatesAsAnticipated() {
     new CollectionAssert(new ArrayList<String>()).doesNotHaveDuplicates();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsNotEmptyAndExpectingEmpty() {
-    new CollectionAssert(list("Yoda")).isEmpty();
+  @Test public void shouldFailIfActualIsNotEmptyAndExpectingEmpty() {
+    expect(AssertionError.class)
+    .withMessage("expecting empty collection, but was:<['Yoda']>").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(list("Yoda")).isEmpty();
+      }
+    });
   }
 
-  @Test public void shouldPassIfCollectionIsEmptyAndExpectingEmpty() {
+  @Test public void shouldFailShowingDescriptionIfActualIsNotEmptyAndExpectingEmpty() {
+    expect(AssertionError.class)
+    .withMessage("[A Test] expecting empty collection, but was:<['Yoda']>").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(list("Yoda")).as("A Test").isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsEmptyAsAnticipated() {
     new CollectionAssert(new ArrayList<String>()).isEmpty();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsNullAndExpectingEmpty() {
-    List<String> nullList = null;
-    new CollectionAssert(nullList).isEmpty();
+  @Test public void shouldFailIfActualIsNullAndExpectingEmpty() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection but it was null").on(new CodeToTest() {
+      public void run() {
+        List<String> nullList = null;
+        new CollectionAssert(nullList).isEmpty();
+      }
+    });
   }
 
-  @Test public void shouldPassIfCollectionHasExpectedSize() {
-    List<String> names = list("Gandalf", "Frodo", "Sam");
-    new CollectionAssert(names).hasSize(3);
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingEmpty() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection but it was null").on(new CodeToTest() {
+        public void run() {
+          List<String> nullList = null;
+          new CollectionAssert(nullList).as("A Test").isEmpty();
+        }
+      });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionDoesNotHaveExpectedSize() {
-    List<String> names = list("Frodo");
-    new CollectionAssert(names).hasSize(2);
+  @Test public void shouldPassIfActualHasExpectedSize() {
+    new CollectionAssert(list("Gandalf", "Frodo", "Sam")).hasSize(3);
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsNullAndExpectingSomeSize() {
-    new CollectionAssert(null).hasSize(0);
+  @Test public void shouldFailIfActualDoesNotHaveExpectedSize() {
+    expect(AssertionError.class)
+      .withMessage("expected size:<2> but was:<1> for collection:<['Frodo']>").on(new CodeToTest() {
+        public void run() {
+          List<String> names = list("Frodo");
+          new CollectionAssert(names).hasSize(2);
+        }
+      });
   }
 
-  @Test public void shouldPassIfCollectionIsNotEmptyAndExpectingNotEmpty() {
+  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveExpectedSize() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expected size:<2> but was:<1> for collection:<['Frodo']>").on(new CodeToTest() {
+        public void run() {
+          List<String> names = list("Frodo");
+          new CollectionAssert(names).as("A Test").hasSize(2);
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsNullAndExpectingSomeSize() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection but it was null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(null).hasSize(0);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingSomeSize() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).as("A Test").hasSize(0);
+        }
+      });
+  }
+
+  @Test public void shouldPassIfActualIsNotEmptyAsAnticipated() {
     List<String> names = list("Frodo", "Sam");
     new CollectionAssert(names).isNotEmpty();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsNotEmptyAndExpectingNotEmpty() {
-    new CollectionAssert(new ArrayList<String>()).isNotEmpty();
+  @Test public void shouldFailIfActualIsEmptyAndExpectingNotEmpty() {
+    expect(AssertionError.class).withMessage("expecting a non-empty collection but it was empty").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(new ArrayList<String>()).isNotEmpty();
+      }
+    });
   }
 
-  @Test public void shouldPassIfCollectionIsNullAndExpectingNull() {
+  @Test public void shouldFailShowingDescriptionIfActualIsEmptyAndExpectingNotEmpty() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-empty collection but it was empty").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(new ArrayList<String>()).as("A Test").isNotEmpty();
+        }
+      });
+  }
+
+  @Test public void shouldPassIfActualIsNullAsAnticipated() {
     new CollectionAssert(null).isNull();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsNotNullAndExpectingNull() {
-    new CollectionAssert(new ArrayList<String>()).isNull();
+  @Test public void shouldFailIfActualIsNotNullAndExpectingNull() {
+    expect(AssertionError.class).withMessage("<[]> should be null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(new ArrayList<String>()).isNull();
+      }
+    });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionIsEmpty() {
-    new CollectionAssert(new ArrayList<String>()).containsOnly("Sam");
+  @Test public void shouldFailShowingDescriptionIfActualIsNotNullAndExpectingNull() {
+    expect(AssertionError.class).withMessage("[A Test] <[]> should be null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(new ArrayList<String>()).as("A Test").isNull();
+      }
+    });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionHasExtraElements() {
-    List<String> names = list("Gandalf", "Frodo", "Sam");
-    new CollectionAssert(names).containsOnly("Gandalf", "Frodo");
+  @Test public void shouldFailIfActualIsEmptyAndExpectingToContainValue() {
+    expect(AssertionError.class)
+      .withMessage("collection:<[]> does not contain element(s):<['Sam']>").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(new ArrayList<String>()).containsOnly("Sam");
+        }
+      });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfCollectionDoesNotContainElement() {
-    List<String> names = list("Gandalf", "Frodo");
-    new CollectionAssert(names).containsOnly("Gandalf", "Frodo", "Sam");
+  @Test public void shouldFailShowingDescriptionIfActualIsEmptyAndExpectingToContainValue() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] collection:<[]> does not contain element(s):<['Sam']>").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(new ArrayList<String>()).as("A Test").containsOnly("Sam");
+        }
+      });
   }
 
-  @Test public void shouldPassIfCollectionHasOnlySpecifiedElements() {
+  @Test public void shouldFailIfActualHasNotExpectedValues() {
+    expect(AssertionError.class)
+      .withMessage("unexpected element(s):<['Sam']> in collection:<['Gandalf', 'Frodo', 'Sam']>").on(new CodeToTest() {
+        public void run() {
+          List<String> names = list("Gandalf", "Frodo", "Sam");
+          new CollectionAssert(names).containsOnly("Gandalf", "Frodo");
+        }
+      });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualHasNotExpectedValues() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] unexpected element(s):<['Sam']> in collection:<['Gandalf', 'Frodo', 'Sam']>")
+      .on(new CodeToTest() {
+        public void run() {
+          List<String> names = list("Gandalf", "Frodo", "Sam");
+          new CollectionAssert(names).as("A Test").containsOnly("Gandalf", "Frodo");
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualDoesNotContainExpectedElement() {
+    expect(AssertionError.class)
+    .withMessage("collection:<['Gandalf', 'Frodo']> does not contain element(s):<['Sam']>").on(new CodeToTest() {
+      public void run() {
+        List<String> names = list("Gandalf", "Frodo");
+        new CollectionAssert(names).containsOnly("Gandalf", "Frodo", "Sam");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualDoesNotContainExpectedElement() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] collection:<['Gandalf', 'Frodo']> does not contain element(s):<['Sam']>")
+      .on(new CodeToTest() {
+        public void run() {
+          List<String> names = list("Gandalf", "Frodo");
+          new CollectionAssert(names).as("A Test").containsOnly("Gandalf", "Frodo", "Sam");
+        }
+      });
+  }
+
+  @Test public void shouldPassIfActualHasExpectedElementsOnly() {
     List<String> names = list("Gandalf", "Frodo");
     new CollectionAssert(names).containsOnly("Gandalf", "Frodo");
   }

@@ -92,23 +92,23 @@ public final class CharAssert extends PrimitiveAssert {
 
   /**
    * Verifies that the actual <code>char</code> value is greater than the given one.
-   * @param smaller the value expected to be smaller than the actual one.
+   * @param value the value expected to be smaller than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>char</code> value is less than or equal to the given one.
    */
-  public CharAssert isGreaterThan(char smaller) {
-    failIfNotGreaterThan(description(), actual, smaller);
+  public CharAssert isGreaterThan(char value) {
+    failIfNotGreaterThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>char</code> value is less than the given one.
-   * @param bigger the value expected to be bigger than the actual one.
+   * @param value the value expected to be bigger than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>char</code> value is greater than or equal to the given one.
    */
-  public CharAssert isLessThan(char bigger) {
-    failIfNotLessThan(description(), actual, bigger);
+  public CharAssert isLessThan(char value) {
+    failIfNotLessThan(description(), actual, value);
     return this;
   }
 

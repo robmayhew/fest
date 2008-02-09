@@ -17,7 +17,10 @@ package org.fest.assertions;
 
 import static org.fest.util.Strings.*;
 
+import java.util.Collection;
+
 import org.fest.util.Arrays;
+import org.fest.util.Collections;
 
 /**
  * Understands utility methods related to formatting.
@@ -36,6 +39,7 @@ final class Formatting {
   static String inBrackets(Object o) {
     if (o != null && o.getClass().isArray() && !o.getClass().getComponentType().isArray()) 
       return doBracketAround(Arrays.format(o));
+    if (o instanceof Collection<?>) return doBracketAround(Collections.format((Collection<?>)o));
     return doBracketAround(quote(o));
   }
   

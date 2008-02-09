@@ -74,7 +74,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<A> should be greater than <a>").on(new CodeToTest() {
+    expect(AssertionError.class).withMessage("actual value:<A> should be greater than:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('A').isGreaterThan('a');
       }
@@ -83,7 +83,7 @@ public class CharAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThan() {
     expect(AssertionError.class)
-    .withMessage("[A Test] actual value:<A> should be greater than <a>").on(new CodeToTest() {
+    .withMessage("[A Test] actual value:<A> should be greater than:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('A').as("A Test").isGreaterThan('a');
       }
@@ -95,7 +95,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfNotLessThanAndExpectedLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<a> should be less than <A>").on(new CodeToTest() {
+    expect(AssertionError.class).withMessage("actual value:<a> should be less than:<A>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').isLessThan('A');
       }
@@ -103,7 +103,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfNotLessThanAndExpectedLessThan() {
-    expect(AssertionError.class).withMessage("[A Test] actual value:<a> should be less than <A>").on(new CodeToTest() {
+    expect(AssertionError.class).withMessage("[A Test] actual value:<a> should be less than:<A>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').as("A Test").isLessThan('A');
       }

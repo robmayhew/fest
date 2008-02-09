@@ -15,10 +15,10 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.fail;
+import static org.fest.test.ExpectedFailure.expect;
 import static org.fest.util.Strings.isEmpty;
-import static org.testng.Assert.assertEquals;
 
+import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
 
 /**
@@ -37,20 +37,18 @@ public class ConditionTest {
   }
     
   @Test public void shouldFailIfConditionNotSatisfied() {
-    try {
-      new StringAssert("hello").as("Test").satisfies(new UpperCaseCondition());
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[Test] condition failed with: <'hello'>");
-    }
+    expect(AssertionError.class).withMessage("[Test] condition failed with: <'hello'>").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("hello").as("Test").satisfies(new UpperCaseCondition());
+      }
+    });
   }
   
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    try {
-      new StringAssert("hello").as("Test").satisfies(new UpperCaseCondition().as("Uppercase"));
-      fail();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), "[Test] expected:Uppercase but was:<'hello'>");
-    }    
+    expect(AssertionError.class).withMessage("[Test] expected:Uppercase but was:<'hello'>").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("hello").as("Test").satisfies(new UpperCaseCondition().as("Uppercase"));
+      }
+    });
   }
 }

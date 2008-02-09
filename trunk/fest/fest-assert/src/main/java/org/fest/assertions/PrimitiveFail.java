@@ -263,7 +263,7 @@ public final class PrimitiveFail {
   }
 
   private static String errorMessageIfNotLessThan(String message, Object actual, Object second) {
-    return concat(format(message), "actual value:", inBrackets(actual), " should be less than ", inBrackets(second));
+    return concat(format(message), "actual value:", inBrackets(actual), " should be less than:", inBrackets(second));
   }
 
   /**
@@ -339,7 +339,7 @@ public final class PrimitiveFail {
   }
 
   private static String errorMessageIfNotGreaterThan(String message, Object actual, Object second) {
-    return concat(format(message), "actual value:", inBrackets(actual), " should be greater than ", inBrackets(second));
+    return concat(format(message), "actual value:", inBrackets(actual), " should be greater than:", inBrackets(second));
   }
 
   /**

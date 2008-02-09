@@ -68,6 +68,7 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
     return new IntAssert(actualGroupSize());
   }
 
+  @Deprecated
   final GroupAssert<T> assertEqualSize(int expected) {
     if (actual == null) fail("cannot get size of a null object");
     int actualSize = actualGroupSize();
