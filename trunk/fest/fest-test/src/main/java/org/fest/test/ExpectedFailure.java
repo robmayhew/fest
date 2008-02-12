@@ -38,6 +38,15 @@ public final class ExpectedFailure {
   }
 
   /**
+   * Specifies the expected message of an expected <code>{@link AssertionError}</code>.
+   * @param message the expected failure message.
+   * @return a holder of the expected failure message.
+   */
+  public static Message expectAssertionError(String message) {
+    return new ExpectedFailure(AssertionError.class).withMessage(message);
+  }
+
+  /**
    * Specifies the expected failure message.
    * @param message the expected failure message.
    * @return a holder of the expected failure message.
