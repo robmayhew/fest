@@ -266,16 +266,71 @@ public class ObjectArrayAssertTest {
         });
   }
 
-  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
-    new ObjectArrayAssert(EMPTY_ARRAY).containsOnly("Yoda");
+  @Test public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    expectAssertionError("array:<[]> does not contain element(s):<['Yoda']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).containsOnly("Yoda");
+      }
+    });
   }
 
-  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfArrayHasExtraElements() {
-    new ObjectArrayAssert("Luke", "Leia", "Anakin").containsOnly("Luke", "Leia");
+  @Test public void shouldFailShowingDescriptionIfArrayIsEmptyWhenLookingForSpecificElements() {
+    expectAssertionError("[A Test] array:<[]> does not contain element(s):<['Yoda']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).as("A Test").containsOnly("Yoda");
+      }
+    });
   }
 
-  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfArrayIsMissingElements() {
-    new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia", "Anakin");
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsOnly() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ObjectArrayAssert(NULL_ARRAY).containsOnly("Yoda");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsOnly() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ObjectArrayAssert(NULL_ARRAY).as("A Test").containsOnly("Yoda");
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualHasExtraElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("unexpected element(s):<['Anakin']> in array:<['Luke', 'Leia', 'Anakin']>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectArrayAssert("Luke", "Leia", "Anakin").containsOnly("Luke", "Leia");
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualHasExtraElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("[A Test] unexpected element(s):<['Anakin']> in array:<['Luke', 'Leia', 'Anakin']>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectArrayAssert("Luke", "Leia", "Anakin").as("A Test").containsOnly("Luke", "Leia");
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualIsMissingElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("array:<['Luke', 'Leia']> does not contain element(s):<['Anakin']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia", "Anakin");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsMissingElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("[A Test] array:<['Luke', 'Leia']> does not contain element(s):<['Anakin']>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectArrayAssert("Luke", "Leia").as("A Test").containsOnly("Luke", "Leia", "Anakin");
+          }
+        });
   }
 
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
@@ -292,9 +347,14 @@ public class ObjectArrayAssertTest {
     Assertions.assertThat(numbers).hasAllElementsOfType(Integer.class);
   }
 
-  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfOneOrMoreElementsDoNotBelongToGivenType() {
-    Number[] numbers = { 2d, 4, 5 };
-    Assertions.assertThat(numbers).hasAllElementsOfType(Double.class);
+  @Test public void shouldFailIfOneOrMoreElementsDoNotBelongToGivenType() {
+    expectAssertionError("not all elements in array:<[2.0, 4, 5]> belong to the type:<java.lang.Double>").on(
+        new CodeToTest() {
+          public void run() {
+            Number[] numbers = { 2d, 4, 5 };
+            Assertions.assertThat(numbers).hasAllElementsOfType(Double.class);
+          }
+        });
   }
 
   @Test public void shouldPassIfAllElementsBelongToGivenType() {

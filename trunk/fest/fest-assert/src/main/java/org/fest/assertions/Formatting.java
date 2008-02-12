@@ -42,6 +42,7 @@ final class Formatting {
 
   static String inBrackets(Object o) {
     if (isOneDimensionalArray(o)) return doBracketAround(Arrays.format(o));
+    if (o instanceof Class<?>) return doBracketAround((Class<?>)o);
     if (o instanceof Collection<?>) return doBracketAround((Collection<?>)o);
     if (o instanceof Map<?, ?>) return doBracketAround((Map<?, ?>)o);
     if (o instanceof File) return doBracketAround((File)o);
@@ -51,6 +52,10 @@ final class Formatting {
 
   private static boolean isOneDimensionalArray(Object o) {
     return o != null && o.getClass().isArray() && !o.getClass().getComponentType().isArray();
+  }
+
+  private static String doBracketAround(Class<?> c) {
+    return doBracketAround(c.getName());
   }
 
   private static String doBracketAround(Collection<?> c) {

@@ -92,8 +92,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     isNotNull();
     for (Object o : actual)
       if (!type.isInstance(o))
-        fail(concat("not all the elements in ", actualInBrackets(), " belong to the type ",
-            typeNameInBrackets(type)));
+        fail(concat("not all elements in array:", actualInBrackets(), " belong to the type:", inBrackets(type)));
     return this;
   }
 
@@ -141,8 +140,9 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * Verifies that the actual <code>Object</code> array contains the given objects <strong>only</strong>.
    * @param objects the objects to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> array does not contain the given objects, or if the
-   *           actual <code>Object</code> array contains elements other than the ones specified.
+   *          actual <code>Object</code> array contains elements other than the ones specified.
    */
   public ObjectArrayAssert containsOnly(Object...objects) {
     isNotNull();
@@ -157,8 +157,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty())
-      fail(concat(
-          "unexpected element(s) ", inBrackets(copy.toArray()), " in array ", actualInBrackets()));
+      fail(concat("unexpected element(s):", inBrackets(copy.toArray()), " in array:", actualInBrackets()));
     return this;
   }
 
