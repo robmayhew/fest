@@ -1,23 +1,21 @@
 /*
  * Created on Mar 1, 2007
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Arrays.array;
-import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -30,6 +28,9 @@ import org.testng.annotations.Test;
  */
 public class ObjectArrayAssertTest {
 
+  private static final Object[] NULL_ARRAY = null;
+  private static final Object[] EMPTY_ARRAY = new Object[0];
+
   @Test public void shouldPassIfGivenObjectIsInArrayAsAnticipated() {
     new ObjectArrayAssert("Luke", "Leia").contains("Luke");
   }
@@ -39,39 +40,36 @@ public class ObjectArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsValues() {
-    expect(AssertionError.class).withMessage("expecting a non-null array, but it was null").on(new CodeToTest() {
+    shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
-        Object[] array = null;
-        new ObjectArrayAssert(array).contains("Luke");
+        new ObjectArrayAssert(NULL_ARRAY).contains("Luke");
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsValues() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] expecting a non-null array, but it was null").on(new CodeToTest() {
-        public void run() {
-          Object[] array = null;
-          new ObjectArrayAssert(array).as("A Test").contains("Luke");
-        }
-      });
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        Object[] array = null;
+        new ObjectArrayAssert(array).as("A Test").contains("Luke");
+      }
+    });
   }
 
   @Test public void shouldFailIfGivenObjectIsNotInArray() {
-    expect(AssertionError.class).withMessage("array:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
+    expectAssertionError("array:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert(new Object[0]).contains("Luke");
+        new ObjectArrayAssert(EMPTY_ARRAY).contains("Luke");
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfGivenObjectIsNotInArray() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] array:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
-        public void run() {
-          new ObjectArrayAssert(new Object[0]).as("A Test").contains("Luke");
-        }
-      });
+    expectAssertionError("[A Test] array:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).as("A Test").contains("Luke");
+      }
+    });
   }
 
   @Test public void shouldPassIfGivenObjectIsNotInArrayAsAnticipated() {
@@ -82,99 +80,201 @@ public class ObjectArrayAssertTest {
     new ObjectArrayAssert("Luke", "Leia", "Anakin").excludes("Han", "Yoda");
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIncludesValues() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ObjectArrayAssert(NULL_ARRAY).excludes("Han");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowindDescriptionIfActualIsNullWhenCheckingIfIncludesValues() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ObjectArrayAssert(NULL_ARRAY).as("A Test").excludes("Han");
+      }
+    });
+  }
+
   @Test public void shouldFailIfActualIncludesValueAndExpectingExclude() {
-    expect(AssertionError.class)
-      .withMessage("array:<['Luke']> does not exclude element(s):<['Luke']>").on(new CodeToTest() {
-        public void run() {
-          new ObjectArrayAssert("Luke").excludes("Luke");
-        }
-      });
+    expectAssertionError("array:<['Luke']> does not exclude element(s):<['Luke']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke").excludes("Luke");
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIncludesValueAndExpectingExclude() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] array:<['Luke']> does not exclude element(s):<['Luke']>").on(new CodeToTest() {
-        public void run() {
-          new ObjectArrayAssert("Luke").as("A Test").excludes("Luke");
-        }
-      });
+    expectAssertionError("[A Test] array:<['Luke']> does not exclude element(s):<['Luke']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke").as("A Test").excludes("Luke");
+      }
+    });
   }
 
-  @Test public void shouldPassIfArrayIsNullAsAnticipated() {
-    new ObjectArrayAssert((Object[])null).isNull();
+  @Test public void shouldPassIfActualIsNullAsAnticipated() {
+    new ObjectArrayAssert(NULL_ARRAY).isNull();
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsNotNull() {
-    new ObjectArrayAssert(new Object[0]).isNull();
+  @Test public void shouldFailIfActualIsNotNullAndExpectingNull() {
+    expectAssertionError("<[]> should be null").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).isNull();
+      }
+    });
   }
 
-  @Test public void shouldPassIfArrayIsNotNull() {
-    new ObjectArrayAssert(new Object[0]).isNotNull();
+  @Test public void shouldFailShowingDescriptionIfActualIsNotNullAndExpectingNull() {
+    expectAssertionError("[A Test] <[]> should be null").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).as("A Test").isNull();
+      }
+    });
   }
 
-  @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsNull() {
-    new ObjectArrayAssert((Object[])null).isNotNull();
+  @Test public void shouldPassIfActualIsNotNullAsAnticipated() {
+    new ObjectArrayAssert(EMPTY_ARRAY).isNotNull();
   }
 
-  @Test public void shouldPassIfArrayIsEmpty() {
-    new ObjectArrayAssert(new Object[0]).isEmpty();
+  @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(NULL_ARRAY).isNotNull();
+      }
+    });
   }
 
-  @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsNotEmpty() {
-    new ObjectArrayAssert("Luke", "Leia").isEmpty();
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotNull() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(NULL_ARRAY).as("A Test").isNotNull();
+      }
+    });
   }
 
-  @Test public void shouldPassIfArrayIsNotEmpty() {
+  @Test public void shouldPassIfActualIsEmptyAsAnticipated() {
+    new ObjectArrayAssert(EMPTY_ARRAY).isEmpty();
+  }
+
+  @Test public void shouldFailIfActualIsNullAndExpectingEmpty() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(NULL_ARRAY).isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingEmpty() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(NULL_ARRAY).as("A Test").isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNotEmptyAndExpectingEmpty() {
+    expectAssertionError("expecting empty array, but was:<['Luke', 'Leia']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke", "Leia").isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotEmptyAndExpectingEmpty() {
+    expectAssertionError("[A Test] expecting empty array, but was:<['Luke', 'Leia']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke", "Leia").as("A Test").isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNotEmptyAsAnticipated() {
     new ObjectArrayAssert("Luke", "Leia").isNotEmpty();
   }
 
-  @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsEmpty() {
-    new ObjectArrayAssert(new Object[0]).isNotEmpty();
+  @Test public void shouldFailIfArrayIsEmpty() {
+    expectAssertionError("expecting a non-empty array, but it was empty").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).isNotEmpty();
+      }
+    });
   }
 
-  @Test public void shouldPassIfEqualArrays() {
+  @Test public void shouldFailShowingDescriptionIfArrayIsEmpty() {
+    expectAssertionError("[A Test] expecting a non-empty array, but it was empty").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).as("A Test").isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingForNotEmpty() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ObjectArrayAssert(NULL_ARRAY).isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingForNotEmpty() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ObjectArrayAssert(NULL_ARRAY).as("A Test").isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfArraysAreEqualAsAnticipated() {
     new ObjectArrayAssert("Luke", "Leia").isEqualTo(array("Luke", "Leia"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfEqualArrays")
-  public void shouldFailIfNotEqualArrays() {
-    try {
-      new ObjectArrayAssert("Luke", "Leia").as("Skywalker").isEqualTo(array("Anakin"));
-      fail();
-    } catch (AssertionError expected) {
-      assertEquals(expected.getMessage(), "[Skywalker] expected:<['Anakin']> but was:<['Luke', 'Leia']>");
-    }
+  @Test public void shouldFailIfArraysAreNotEqualAndExpectingEqual() {
+    expectAssertionError("expected:<['Anakin']> but was:<['Luke', 'Leia']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke", "Leia").isEqualTo(array("Anakin"));
+      }
+    });
   }
 
-  @Test public void shouldPassIfNotEqualArrays() {
+  @Test public void shouldFailShowingDescriptionIfArraysAreNotEqualAndExpectingEqual() {
+    expectAssertionError("[A Test] expected:<['Anakin']> but was:<['Luke', 'Leia']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke", "Leia").as("A Test").isEqualTo(array("Anakin"));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfArraysAreNotEqualAsAnticipated() {
     new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Yoda"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfNotEqualArrays")
-  public void shouldFailIfEqualArrays() {
-    try {
-      new ObjectArrayAssert("Luke", "Leia").as("Skywalker").isNotEqualTo(array("Luke", "Leia"));
-      fail();
-    } catch (AssertionError expected) {
-    }
+  @Test public void shouldFailIfArraysAreEqualAndExpectingNotEqual() {
+    expectAssertionError("actual value:<['Luke', 'Leia']> should not be equal to:<['Luke', 'Leia']>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectArrayAssert("Luke", "Leia").isNotEqualTo(array("Luke", "Leia"));
+          }
+        });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
-    new ObjectArrayAssert(new Object[0]).containsOnly("Yoda");
+  @Test public void shouldFailShowingDescriptionIfArraysAreEqualAndExpectingNotEqual() {
+    expectAssertionError("[A Test] actual value:<['Luke', 'Leia']> should not be equal to:<['Luke', 'Leia']>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectArrayAssert("Luke", "Leia").as("A Test").isNotEqualTo(array("Luke", "Leia"));
+          }
+        });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayHasExtraElements() {
+  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    new ObjectArrayAssert(EMPTY_ARRAY).containsOnly("Yoda");
+  }
+
+  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfArrayHasExtraElements() {
     new ObjectArrayAssert("Luke", "Leia", "Anakin").containsOnly("Luke", "Leia");
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsMissingElements() {
+  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfArrayIsMissingElements() {
     new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia", "Anakin");
   }
 
@@ -192,8 +292,7 @@ public class ObjectArrayAssertTest {
     Assertions.assertThat(numbers).hasAllElementsOfType(Integer.class);
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfOneOrMoreElementsDoNotBelongToGivenType() {
+  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfOneOrMoreElementsDoNotBelongToGivenType() {
     Number[] numbers = { 2d, 4, 5 };
     Assertions.assertThat(numbers).hasAllElementsOfType(Double.class);
   }
@@ -208,9 +307,16 @@ public class ObjectArrayAssertTest {
     Assertions.assertThat(numbers).hasAtLeastOneElementOfType(Integer.class);
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfElementsDoNotBelongToGivenType() {
+  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfElementsDoNotBelongToGivenType() {
     Number[] numbers = { 2, 4, 5 };
     Assertions.assertThat(numbers).hasAtLeastOneElementOfType(Double.class);
+  }
+
+  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("expecting a non-null array, but it was null").on(codeToTest);
+  }
+
+  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("[A Test] expecting a non-null array, but it was null").on(codeToTest);
   }
 }

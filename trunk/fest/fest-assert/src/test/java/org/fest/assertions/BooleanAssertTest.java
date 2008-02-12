@@ -15,7 +15,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -33,7 +33,7 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailIfActualValueIsTrueAndExpectingFalse() {
-    expect(AssertionError.class).withMessage("expected:<false> but was:<true>").on(new CodeToTest() {
+    expectAssertionError("expected:<false> but was:<true>").on(new CodeToTest() {
       public void run() {
         new BooleanAssert(true).isFalse();
       }
@@ -41,7 +41,7 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualValueIsTrueAndExpectingFalse() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<false> but was:<true>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<false> but was:<true>").on(new CodeToTest() {
       public void run() {
         new BooleanAssert(true).as("A Test").isFalse();
       }
@@ -53,7 +53,7 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailIfActualValueIsFalseAndExpectingTrue() {
-    expect(AssertionError.class).withMessage("expected:<true> but was:<false>").on(new CodeToTest() {
+    expectAssertionError("expected:<true> but was:<false>").on(new CodeToTest() {
       public void run() {
         new BooleanAssert(false).isTrue();
       }
@@ -61,7 +61,7 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualValueIsFalseAndExpectingTrue() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<true> but was:<false>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<true> but was:<false>").on(new CodeToTest() {
       public void run() {
         new BooleanAssert(false).as("A Test").isTrue();
       }
@@ -69,7 +69,7 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("expected:<true> but was:<false>").on(new CodeToTest() {
+    expectAssertionError("expected:<true> but was:<false>").on(new CodeToTest() {
       public void run() {
         new BooleanAssert(false).isEqualTo(true);
       }
@@ -77,7 +77,7 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<true> but was:<false>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<true> but was:<false>").on(new CodeToTest() {
       public void run() {
         new BooleanAssert(false).as("A Test").isEqualTo(true);
       }
@@ -85,21 +85,19 @@ public class BooleanAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreEqualAndExpectedToBeNotEqual() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<false> should not be equal to:<false>").on(new CodeToTest() {
-        public void run() {
-          new BooleanAssert(false).isNotEqualTo(false);
-        }
-      });
+    expectAssertionError("actual value:<false> should not be equal to:<false>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(false).isNotEqualTo(false);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqualAndExpectedToBeNotEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<false> should not be equal to:<false>").on(new CodeToTest() {
-        public void run() {
-          new BooleanAssert(false).as("A Test").isNotEqualTo(false);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<false> should not be equal to:<false>").on(new CodeToTest() {
+      public void run() {
+        new BooleanAssert(false).as("A Test").isNotEqualTo(false);
+      }
+    });
   }
 
   @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {

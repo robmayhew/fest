@@ -15,7 +15,7 @@
 package org.fest.assertions;
 
 import static java.awt.Color.*;
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -39,7 +39,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailIfImageWidthsAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("image size, expected:<(3, 5)> but was:<(5, 5)>").on(new CodeToTest() {
+    expectAssertionError("image size, expected:<(3, 5)> but was:<(5, 5)>").on(new CodeToTest() {
       public void run() {
         BufferedImage a = image(5, 5, BLUE);
         BufferedImage e = image(3, 5, BLUE);
@@ -49,18 +49,17 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfImageWidthsAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] image size, expected:<(3, 5)> but was:<(5, 5)>").on(new CodeToTest() {
-        public void run() {
-          BufferedImage a = image(5, 5, BLUE);
-          BufferedImage e = image(3, 5, BLUE);
-          new ImageAssert(a).as("A Test").isEqualTo(e);
-        }
-      });
+    expectAssertionError("[A Test] image size, expected:<(3, 5)> but was:<(5, 5)>").on(new CodeToTest() {
+      public void run() {
+        BufferedImage a = image(5, 5, BLUE);
+        BufferedImage e = image(3, 5, BLUE);
+        new ImageAssert(a).as("A Test").isEqualTo(e);
+      }
+    });
   }
 
   @Test public void shouldFailIfImageHeightsAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("image size, expected:<(5, 2)> but was:<(5, 5)>").on(new CodeToTest() {
+    expectAssertionError("image size, expected:<(5, 2)> but was:<(5, 5)>").on(new CodeToTest() {
       public void run() {
         BufferedImage a = image(5, 5, BLUE);
         BufferedImage e = image(5, 2, BLUE);
@@ -70,18 +69,17 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfImageHeightsAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] image size, expected:<(5, 2)> but was:<(5, 5)>").on(new CodeToTest() {
-        public void run() {
-          BufferedImage a = image(5, 5, BLUE);
-          BufferedImage e = image(5, 2, BLUE);
-          new ImageAssert(a).as("A Test").isEqualTo(e);
-        }
-      });
+    expectAssertionError("[A Test] image size, expected:<(5, 2)> but was:<(5, 5)>").on(new CodeToTest() {
+      public void run() {
+        BufferedImage a = image(5, 5, BLUE);
+        BufferedImage e = image(5, 2, BLUE);
+        new ImageAssert(a).as("A Test").isEqualTo(e);
+      }
+    });
   }
 
   @Test public void shouldFailIfImageColorsAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("images do not have the same color(s)").on(new CodeToTest() {
+    expectAssertionError("images do not have the same color(s)").on(new CodeToTest() {
       public void run() {
         BufferedImage a = image(5, 5, BLUE);
         BufferedImage e = image(5, 5, YELLOW);
@@ -91,7 +89,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfImageColorsAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("[A Test] images do not have the same color(s)").on(new CodeToTest() {
+    expectAssertionError("[A Test] images do not have the same color(s)").on(new CodeToTest() {
       public void run() {
         BufferedImage a = image(5, 5, BLUE);
         BufferedImage e = image(5, 5, YELLOW);
@@ -119,7 +117,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailIfImagesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class).withMessage("images are equal").on(new CodeToTest() {
+    expectAssertionError("images are equal").on(new CodeToTest() {
       public void run() {
         BufferedImage a = image(5, 5, BLUE);
         BufferedImage e = image(5, 5, BLUE);
@@ -129,7 +127,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfImagesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class).withMessage("[A Test] images are equal").on(new CodeToTest() {
+    expectAssertionError("[A Test] images are equal").on(new CodeToTest() {
       public void run() {
         BufferedImage a = image(5, 5, BLUE);
         BufferedImage e = image(5, 5, BLUE);

@@ -14,7 +14,8 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expect;
+
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -33,7 +34,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("expected:<b> but was:<a>").on(new CodeToTest() {
+    expectAssertionError("expected:<b> but was:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').isEqualTo('b');
       }
@@ -41,7 +42,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<b> but was:<a>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<b> but was:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').as("A Test").isEqualTo('b');
       }
@@ -53,7 +54,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class).withMessage("actual value:<a> should not be equal to:<a>").on(new CodeToTest() {
+    expectAssertionError("actual value:<a> should not be equal to:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').isNotEqualTo('a');
       }
@@ -61,12 +62,11 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<a> should not be equal to:<a>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('a').as("A Test").isNotEqualTo('a');
-        }
-      });
+    expectAssertionError("[A Test] actual value:<a> should not be equal to:<a>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').as("A Test").isNotEqualTo('a');
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
@@ -74,7 +74,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfActualIsEqualtoExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<a> should be greater than:<a>").on(new CodeToTest() {
+    expectAssertionError("actual value:<a> should be greater than:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').isGreaterThan('a');
       }
@@ -82,16 +82,15 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsEqualtoExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<a> should be greater than:<a>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('a').as("A Test").isGreaterThan('a');
-        }
-      });
+    expectAssertionError("[A Test] actual value:<a> should be greater than:<a>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').as("A Test").isGreaterThan('a');
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<A> should be greater than:<a>").on(new CodeToTest() {
+    expectAssertionError("actual value:<A> should be greater than:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('A').isGreaterThan('a');
       }
@@ -99,8 +98,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class)
-    .withMessage("[A Test] actual value:<A> should be greater than:<a>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<A> should be greater than:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('A').as("A Test").isGreaterThan('a');
       }
@@ -112,7 +110,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<a> should be less than:<a>").on(new CodeToTest() {
+    expectAssertionError("actual value:<a> should be less than:<a>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').isLessThan('a');
       }
@@ -120,16 +118,15 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingLessThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<a> should be less than:<a>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('a').as("A Test").isLessThan('a');
-        }
-      });
+    expectAssertionError("[A Test] actual value:<a> should be less than:<a>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').as("A Test").isLessThan('a');
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<a> should be less than:<A>").on(new CodeToTest() {
+    expectAssertionError("actual value:<a> should be less than:<A>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').isLessThan('A');
       }
@@ -137,7 +134,7 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanExpectedAndExpectingLessThan() {
-    expect(AssertionError.class).withMessage("[A Test] actual value:<a> should be less than:<A>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<a> should be less than:<A>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').as("A Test").isLessThan('A');
       }
@@ -149,21 +146,19 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<A> should be greater than or equal to:<a>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('A').isGreaterOrEqualTo('a');
-        }
-      });
+    expectAssertionError("actual value:<A> should be greater than or equal to:<a>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('A').isGreaterOrEqualTo('a');
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<A> should be greater than or equal to:<a>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('A').as("A Test").isGreaterOrEqualTo('a');
-        }
-      });
+    expectAssertionError("[A Test] actual value:<A> should be greater than or equal to:<a>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('A').as("A Test").isGreaterOrEqualTo('a');
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsLessOrEqualToExpectedAsAnticipated() {
@@ -171,20 +166,18 @@ public class CharAssertTest {
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('a').isLessOrEqualTo('A');
-        }
-      });
+    expectAssertionError("actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').isLessOrEqualTo('A');
+      }
+    });
   }
 
   @Test public void shouldFailShowingMessageIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
-        public void run() {
-          new CharAssert('a').as("A Test").isLessOrEqualTo('A');
-        }
-      });
+    expectAssertionError("[A Test] actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').as("A Test").isLessOrEqualTo('A');
+      }
+    });
   }
 }

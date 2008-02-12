@@ -14,7 +14,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -27,12 +27,12 @@ import org.testng.annotations.Test;
  */
 public class LongAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualAsAnticipated(){
+  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
     new LongAssert(8).isEqualTo(8);
   }
 
   @Test public void shouldFailIfValuesAreNotEqualAndExpectedEqual() {
-    expect(AssertionError.class).withMessage("expected:<8> but was:<6>").on(new CodeToTest() {
+    expectAssertionError("expected:<8> but was:<6>").on(new CodeToTest() {
       public void run() {
         new LongAssert(6).isEqualTo(8);
       }
@@ -40,7 +40,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotEqualAndExpectedEqual() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<8> but was:<6>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<8> but was:<6>").on(new CodeToTest() {
       public void run() {
         new LongAssert(6).as("A Test").isEqualTo(8);
       }
@@ -52,7 +52,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class).withMessage("actual value:<8> should not be equal to:<8>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8> should not be equal to:<8>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).isNotEqualTo(8);
       }
@@ -60,8 +60,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class)
-    .withMessage("[A Test] actual value:<8> should not be equal to:<8>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<8> should not be equal to:<8>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).as("A Test").isNotEqualTo(8);
       }
@@ -73,7 +72,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<8> should be greater than:<8>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8> should be greater than:<8>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).isGreaterThan(8);
       }
@@ -81,16 +80,15 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8> should be greater than:<8>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(8).as("A Test").isGreaterThan(8);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8> should be greater than:<8>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(8).as("A Test").isGreaterThan(8);
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<6> should be greater than:<8>").on(new CodeToTest() {
+    expectAssertionError("actual value:<6> should be greater than:<8>").on(new CodeToTest() {
       public void run() {
         new LongAssert(6).isGreaterThan(8);
       }
@@ -98,12 +96,11 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6> should be greater than:<8>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(6).as("A Test").isGreaterThan(8);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<6> should be greater than:<8>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(6).as("A Test").isGreaterThan(8);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
@@ -111,7 +108,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<8> should be less than:<8>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8> should be less than:<8>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).isLessThan(8);
       }
@@ -119,16 +116,15 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingLessThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8> should be less than:<8>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(8).as("A Test").isLessThan(8);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8> should be less than:<8>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(8).as("A Test").isLessThan(8);
+      }
+    });
   }
 
   @Test public void shouldFailIfGreaterThanAndExpectedLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<8> should be less than:<6>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8> should be less than:<6>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).isLessThan(6);
       }
@@ -136,12 +132,11 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfGreaterThanAndExpectedLessThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8> should be less than:<6>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(8).as("A Test").isLessThan(6);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8> should be less than:<6>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(8).as("A Test").isLessThan(6);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
@@ -149,7 +144,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfActualIsZeroAndExpectingPositive() {
-    expect(AssertionError.class).withMessage("actual value:<0> should be greater than:<0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<0> should be greater than:<0>").on(new CodeToTest() {
       public void run() {
         new LongAssert(0).isPositive();
       }
@@ -157,16 +152,15 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingPositive() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<0> should be greater than:<0>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(0).as("A Test").isPositive();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<0> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(0).as("A Test").isPositive();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualLessToZeroAndExpectingPositive() {
-    expect(AssertionError.class).withMessage("actual value:<-8> should be greater than:<0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<-8> should be greater than:<0>").on(new CodeToTest() {
       public void run() {
         new LongAssert(-8).isPositive();
       }
@@ -174,12 +168,11 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualLessToZeroAndExpectingPositive() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<-8> should be greater than:<0>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(-8).as("A Test").isPositive();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<-8> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(-8).as("A Test").isPositive();
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
@@ -187,7 +180,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfActualIsZeroAndExpectingNegative() {
-    expect(AssertionError.class).withMessage("actual value:<0> should be less than:<0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<0> should be less than:<0>").on(new CodeToTest() {
       public void run() {
         new LongAssert(0).isNegative();
       }
@@ -195,16 +188,15 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingNegative() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<0> should be less than:<0>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(0).as("A Test").isNegative();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<0> should be less than:<0>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(0).as("A Test").isNegative();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsGreaterThanZeroAndExpectedNegative() {
-    expect(AssertionError.class).withMessage("actual value:<8> should be less than:<0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8> should be less than:<0>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).isNegative();
       }
@@ -212,7 +204,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanZeroAndExpectedNegative() {
-    expect(AssertionError.class).withMessage("[A Test] actual value:<8> should be less than:<0>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<8> should be less than:<0>").on(new CodeToTest() {
       public void run() {
         new LongAssert(8).as("A Test").isNegative();
       }
@@ -224,7 +216,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfNotZeroAndExpectedZero() {
-    expect(AssertionError.class).withMessage("expected:<0> but was:<9>").on(new CodeToTest() {
+    expectAssertionError("expected:<0> but was:<9>").on(new CodeToTest() {
       public void run() {
         new LongAssert(9).isZero();
       }
@@ -232,7 +224,7 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfNotZeroAndExpectedZero() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<0> but was:<9>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<0> but was:<9>").on(new CodeToTest() {
       public void run() {
         new LongAssert(9).as("A Test").isZero();
       }
@@ -244,21 +236,19 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(6).isGreaterOrEqualTo(8);
-        }
-      });
+    expectAssertionError("actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(6).isGreaterOrEqualTo(8);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(6).as("A Test").isGreaterOrEqualTo(8);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(6).as("A Test").isGreaterOrEqualTo(8);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsLessThanOrEqualToExpectedAsAnticipated() {
@@ -266,20 +256,18 @@ public class LongAssertTest {
   }
 
   @Test public void shouldFailIfGreaterOrEqualToAndExpectedLessThan() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(8).isLessOrEqualTo(6);
-        }
-      });
+    expectAssertionError("actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(8).isLessOrEqualTo(6);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfGreaterOrEqualToAndExpectedLessThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
-        public void run() {
-          new LongAssert(8).as("A Test").isLessOrEqualTo(6);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
+      public void run() {
+        new LongAssert(8).as("A Test").isLessOrEqualTo(6);
+      }
+    });
   }
 }

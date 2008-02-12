@@ -14,7 +14,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Systems.LINE_SEPARATOR;
 
@@ -42,7 +42,7 @@ public class FileAssertTest {
 
   @Test public void shouldFailIfActualExistsAndExpectingNotToExist() {
     file.exists(true);
-    expect(AssertionError.class).withMessage("file:<c:\\temp\\file.txt> should not exist").on(new CodeToTest() {
+    expectAssertionError("file:<c:\\temp\\file.txt> should not exist").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).doesNotExist();
       }
@@ -51,8 +51,7 @@ public class FileAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualExistsAndExpectingNotToExist() {
     file.exists(true);
-    expect(AssertionError.class)
-    .withMessage("[A Test] file:<c:\\temp\\file.txt> should not exist").on(new CodeToTest() {
+    expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should not exist").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).as("A Test").doesNotExist();
       }
@@ -61,7 +60,7 @@ public class FileAssertTest {
 
   @Test public void shouldFailIfActualDoesNotExistAndExpectingToExist() {
     file.exists(false);
-    expect(AssertionError.class).withMessage("file:<c:\\temp\\file.txt> should exist").on(new CodeToTest() {
+    expectAssertionError("file:<c:\\temp\\file.txt> should exist").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).exists();
       }
@@ -70,7 +69,7 @@ public class FileAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualDoesNotExistAndExpectingToExist() {
     file.exists(false);
-    expect(AssertionError.class).withMessage("[A Test] file:<c:\\temp\\file.txt> should exist").on(new CodeToTest() {
+    expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should exist").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).as("A Test").exists();
       }
@@ -79,7 +78,7 @@ public class FileAssertTest {
 
   @Test public void shouldFailIfActualIsNotDirectoryAndExpectingDirectory() {
     file.directory(false);
-    expect(AssertionError.class).withMessage("file:<c:\\temp\\file.txt> should be a directory").on(new CodeToTest() {
+    expectAssertionError("file:<c:\\temp\\file.txt> should be a directory").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).isDirectory();
       }
@@ -88,17 +87,16 @@ public class FileAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotDirectoryAndExpectingDirectory() {
     file.directory(false);
-    expect(AssertionError.class)
-      .withMessage("[A Test] file:<c:\\temp\\file.txt> should be a directory").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).as("A Test").isDirectory();
-        }
-      });
+    expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should be a directory").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isDirectory();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsNotFileAndExpectingFile() {
     file.file(false);
-    expect(AssertionError.class).withMessage("file:<c:\\temp\\file.txt> should be a file").on(new CodeToTest() {
+    expectAssertionError("file:<c:\\temp\\file.txt> should be a file").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).isFile();
       }
@@ -107,32 +105,29 @@ public class FileAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotFileAndExpectingFile() {
     file.file(false);
-    expect(AssertionError.class)
-      .withMessage("[A Test] file:<c:\\temp\\file.txt> should be a file").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).as("A Test").isFile();
-        }
-      });
+    expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should be a file").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isFile();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualSizeIsNotEqualToExpectedAndExpectingEqual() {
     file.length(8);
-    expect(AssertionError.class)
-      .withMessage("size of file:<c:\\temp\\file.txt> expected:<6> but was:<8>").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).hasSize(6);
-        }
-      });
+    expectAssertionError("size of file:<c:\\temp\\file.txt> expected:<6> but was:<8>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).hasSize(6);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualSizeIsNotEqualToExpectedAndExpectingEqual() {
     file.length(8);
-    expect(AssertionError.class)
-      .withMessage("[A Test] size of file:<c:\\temp\\file.txt> expected:<6> but was:<8>").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).as("A Test").hasSize(6);
-        }
-      });
+    expectAssertionError("[A Test] size of file:<c:\\temp\\file.txt> expected:<6> but was:<8>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").hasSize(6);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualExistsAsAnticipated() {
@@ -168,7 +163,7 @@ public class FileAssertTest {
       concat("file:<c:\\temp\\file.txt> and file:<c:\\temp\\expected.txt> do not have same contents:",
           LINE_SEPARATOR, "line:<6>, expected:<'xyz'> but was:<'abc'>",
           LINE_SEPARATOR, "line:<8>, expected:<'abc'> but was:<'xyz'>");
-    expect(AssertionError.class).withMessage(message).on(new CodeToTest() {
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         FileStub expected = new FileStub("c:\\temp\\expected.txt");
         expected.exists(true);
@@ -185,7 +180,7 @@ public class FileAssertTest {
       concat("[A Test] file:<c:\\temp\\file.txt> and file:<c:\\temp\\expected.txt> do not have same contents:",
           LINE_SEPARATOR, "line:<6>, expected:<'xyz'> but was:<'abc'>",
           LINE_SEPARATOR, "line:<8>, expected:<'abc'> but was:<'xyz'>");
-    expect(AssertionError.class).withMessage(message).on(new CodeToTest() {
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         FileStub expected = new FileStub("c:\\temp\\expected.txt");
         expected.exists(true);
@@ -216,22 +211,20 @@ public class FileAssertTest {
 
   @Test public void shouldFailIfActualIsNotAbsoluteAndExpectingAbsolute() {
     file.absolute(false);
-    expect(AssertionError.class)
-      .withMessage("file:<c:\\temp\\file.txt> should be an absolute path").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).isAbsolute();
-        }
-      });
+    expectAssertionError("file:<c:\\temp\\file.txt> should be an absolute path").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).isAbsolute();
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotAbsoluteAndExpectingAbsolute() {
     file.absolute(false);
-    expect(AssertionError.class)
-      .withMessage("[A Test] file:<c:\\temp\\file.txt> should be an absolute path").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).as("A Test").isAbsolute();
-        }
-      });
+    expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should be an absolute path").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isAbsolute();
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsAbsoluteAsAnticipated() {
@@ -241,22 +234,20 @@ public class FileAssertTest {
 
   @Test public void shouldFailIfActualIsNotRelativeAndExpectingRelative() {
     file.absolute(true);
-    expect(AssertionError.class)
-      .withMessage("file:<c:\\temp\\file.txt> should be a relative path").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).isRelative();
-        }
-      });
+    expectAssertionError("file:<c:\\temp\\file.txt> should be a relative path").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).isRelative();
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotRelativeAndExpectingRelative() {
     file.absolute(true);
-    expect(AssertionError.class)
-      .withMessage("[A Test] file:<c:\\temp\\file.txt> should be a relative path").on(new CodeToTest() {
-        public void run() {
-          new FileAssert(file).as("A Test").isRelative();
-        }
-      });
+    expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should be a relative path").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isRelative();
+      }
+    });
   }
 
   @Test public void shouldSPassIfActualIsRelativeAsAnticipated() {

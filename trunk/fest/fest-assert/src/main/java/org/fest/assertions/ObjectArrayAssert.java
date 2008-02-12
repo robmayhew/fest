@@ -214,7 +214,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public void isEmpty() {
     if (actualGroupSize() > 0)
-      fail(concat("expecting empty array, but was ", actualInBrackets()));
+      fail(concat("expecting empty array, but was:", actualInBrackets()));
   }
 
   private String actualInBrackets() {
@@ -227,7 +227,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is empty.
    */
   public ObjectArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail("expecting a non-empty array");
+    if (actualGroupSize() == 0) fail("expecting a non-empty array, but it was empty");
     return this;
   }
 

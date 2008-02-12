@@ -1,7 +1,7 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.DoubleAssert.delta;
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -20,7 +20,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("expected:<-0.0> but was:<0.0>").on(new CodeToTest() {
+    expectAssertionError("expected:<-0.0> but was:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(0.0).isEqualTo(-0.0);
       }
@@ -28,7 +28,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfNotEqualAndExpectingEqual() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<-0.0> but was:<0.0>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<-0.0> but was:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(0.0).as("A Test").isEqualTo(-0.0);
       }
@@ -40,7 +40,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class).withMessage("actual value:<8.88> should not be equal to:<8.88>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8.88> should not be equal to:<8.88>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(8.88).isNotEqualTo(8.88);
       }
@@ -48,12 +48,11 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqualAndExpectingNotEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8.88> should not be equal to:<8.88>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.88).as("A Test").isNotEqualTo(8.88);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8.88> should not be equal to:<8.88>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.88).as("A Test").isNotEqualTo(8.88);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
@@ -61,7 +60,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<8.68> should be greater than:<8.88>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8.68> should be greater than:<8.88>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(8.68).isGreaterThan(8.88);
       }
@@ -69,16 +68,15 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8.68> should be greater than:<8.88>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.68).as("A Test").isGreaterThan(8.88);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8.68> should be greater than:<8.88>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.68).as("A Test").isGreaterThan(8.88);
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class).withMessage("actual value:<8.68> should be greater than:<8.68>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8.68> should be greater than:<8.68>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(8.68).isGreaterThan(8.68);
       }
@@ -86,12 +84,11 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingGreaterThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8.68> should be greater than:<8.68>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.68).as("A Test").isGreaterThan(8.68);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8.68> should be greater than:<8.68>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.68).as("A Test").isGreaterThan(8.68);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
@@ -99,7 +96,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<6.68> should be less than:<6.68>").on(new CodeToTest() {
+    expectAssertionError("actual value:<6.68> should be less than:<6.68>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(6.68).isLessThan(6.68);
       }
@@ -107,16 +104,15 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingLessThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6.68> should be less than:<6.68>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(6.68).as("A Test").isLessThan(6.68);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<6.68> should be less than:<6.68>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(6.68).as("A Test").isLessThan(6.68);
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThan() {
-    expect(AssertionError.class).withMessage("actual value:<6.88> should be less than:<6.68>").on(new CodeToTest() {
+    expectAssertionError("actual value:<6.88> should be less than:<6.68>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(6.88).isLessThan(6.68);
       }
@@ -124,12 +120,11 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanExpectedAndExpectingLessThan() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6.88> should be less than:<6.68>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(6.88).as("A Test").isLessThan(6.68);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<6.88> should be less than:<6.68>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(6.88).as("A Test").isLessThan(6.68);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
@@ -137,7 +132,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsZeroAndExpectingPositive() {
-    expect(AssertionError.class).withMessage("actual value:<0.0> should be greater than:<0.0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<0.0> should be greater than:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(0.0).isPositive();
       }
@@ -145,16 +140,15 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingPositive() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<0.0> should be greater than:<0.0>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(0.0).as("A Test").isPositive();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<0.0> should be greater than:<0.0>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(0.0).as("A Test").isPositive();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsLessThanZeroAndExpectingPositive() {
-    expect(AssertionError.class).withMessage("actual value:<-6.68> should be greater than:<0.0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<-6.68> should be greater than:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(-6.68).isPositive();
       }
@@ -162,12 +156,11 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriiptionIfActualIsLessThanZeroAndExpectingPositive() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<-6.68> should be greater than:<0.0>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(-6.68).as("A Test").isPositive();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<-6.68> should be greater than:<0.0>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(-6.68).as("A Test").isPositive();
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
@@ -175,7 +168,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsZeroAndExpectingNegative() {
-    expect(AssertionError.class).withMessage("actual value:<0.0> should be less than:<0.0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<0.0> should be less than:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(0.0).isNegative();
       }
@@ -183,16 +176,15 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingNegative() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<0.0> should be less than:<0.0>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(0.0).as("A Test").isNegative();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<0.0> should be less than:<0.0>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(0.0).as("A Test").isNegative();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsGreaterThanZeroAndExpectingNegative() {
-    expect(AssertionError.class).withMessage("actual value:<6.68> should be less than:<0.0>").on(new CodeToTest() {
+    expectAssertionError("actual value:<6.68> should be less than:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(6.68).isNegative();
       }
@@ -200,12 +192,11 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanZeroAndExpectingNegative() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6.68> should be less than:<0.0>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(6.68).as("A Test").isNegative();
-        }
-      });
+    expectAssertionError("[A Test] actual value:<6.68> should be less than:<0.0>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(6.68).as("A Test").isNegative();
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsNaNAsAnticipated() {
@@ -213,7 +204,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNotNaNAndExpectingNaN() {
-    expect(AssertionError.class).withMessage("expected:<NaN> but was:<6.68>").on(new CodeToTest() {
+    expectAssertionError("expected:<NaN> but was:<6.68>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(6.68).isNaN();
       }
@@ -221,7 +212,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotNaNAndExpectingNaN() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<NaN> but was:<6.68>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<NaN> but was:<6.68>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(6.68).as("A Test").isNaN();
       }
@@ -233,21 +224,19 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfValuesNotEqualUsingDeltaAndExpectingEqual() {
-    expect(AssertionError.class)
-      .withMessage("expected:<8.888> but was:<8.688> using delta:<0.0090>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.688).isEqualTo(8.888, delta(0.009));
-        }
-      });
+    expectAssertionError("expected:<8.888> but was:<8.688> using delta:<0.0090>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.688).isEqualTo(8.888, delta(0.009));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesNotEqualUsingDeltaAndExpectingEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] expected:<8.888> but was:<8.688> using delta:<0.0090>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.688).as("A Test").isEqualTo(8.888, delta(0.009));
-        }
-      });
+    expectAssertionError("[A Test] expected:<8.888> but was:<8.688> using delta:<0.0090>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.688).as("A Test").isEqualTo(8.888, delta(0.009));
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsZeroAsAnticipated() {
@@ -255,7 +244,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNotZeroAndExpectingZero() {
-    expect(AssertionError.class).withMessage("expected:<0.0> but was:<9.0>").on(new CodeToTest() {
+    expectAssertionError("expected:<0.0> but was:<9.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(9).isZero();
       }
@@ -263,7 +252,7 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotZeroAndExpectingZero() {
-    expect(AssertionError.class).withMessage("[A Test] expected:<0.0> but was:<9.0>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<0.0> but was:<9.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(9).as("A Test").isZero();
       }
@@ -275,21 +264,19 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqual() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(6.6).isGreaterOrEqualTo(8.8);
-        }
-      });
+    expectAssertionError("actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(6.6).isGreaterOrEqualTo(8.8);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqual() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(6.6).as("A Test").isGreaterOrEqualTo(8.8);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(6.6).as("A Test").isGreaterOrEqualTo(8.8);
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsLessThanOrEqualToExpectedAsAnticipated() {
@@ -297,20 +284,18 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.8).isLessOrEqualTo(6.6);
-        }
-      });
+    expectAssertionError("actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.8).isLessOrEqualTo(6.6);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
-    expect(AssertionError.class)
-      .withMessage("[A Test] actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
-        public void run() {
-          new DoubleAssert(8.8).as("A Test").isLessOrEqualTo(6.6);
-        }
-      });
+    expectAssertionError("[A Test] actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(8.8).as("A Test").isLessOrEqualTo(6.6);
+      }
+    });
   }
 }

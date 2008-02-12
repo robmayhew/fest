@@ -15,7 +15,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expect;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.*;
 import static org.testng.Assert.*;
 
@@ -51,7 +51,7 @@ public class FailTest {
   @Test(dataProvider = "messageProvider")
   public void shouldThrowErrorWithMessageIfValuesAreEqualAsAnticipated(final String message) {
     String expectedMessage = concat(format(message), "actual value:<'Yoda'> should not be equal to:<'Yoda'>");
-    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+    expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfEqual(message, "Yoda", "Yoda");
       }
@@ -65,7 +65,7 @@ public class FailTest {
   @Test(dataProvider = "messageProvider")
   public void shouldFailIfValuesAreNotEqualAsAnticipated(final String message) {
     String expectedMessage = concat(format(message), "expected:<'Luke'> but was:<'Yoda'>");
-    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+    expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfNotEqual(message, "Yoda", "Luke");
       }
@@ -79,7 +79,7 @@ public class FailTest {
   @Test(dataProvider = "messageProvider")
   public void failIfNullShouldFailIfNull(final String message) {
     String expectedMessage = concat(format(message), "expecting a non-null object");
-    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+    expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfNull(message, null);
       }
@@ -93,7 +93,7 @@ public class FailTest {
   @Test(dataProvider = "messageProvider")
   public void shouldFailIfValueIsNotNullAsAnticipated(final String message) {
     String expectedMessage = concat(format(message), "<'Leia'> should be null");
-    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+    expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfNotNull(message, "Leia");
       }
@@ -108,7 +108,7 @@ public class FailTest {
   public void shouldFailIfValuesAreSameAsAnticipated(final String message) {
     final Object o = new Object();
     String expectedMessage = concat(format(message), "given objects are same:<", o, ">");
-    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+    expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfSame(message, o, o);
       }
@@ -122,7 +122,7 @@ public class FailTest {
   @Test(dataProvider = "messageProvider")
   public void failIfNotSameShouldFailIfNotSame(final String message) {
     String expectedMessage = concat(format(message), "expected same instance but found <'Ben'> and <'Han'>");
-    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+    expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfNotSame(message, "Ben", "Han");
       }
@@ -136,7 +136,7 @@ public class FailTest {
 
   @Test public void shouldIncludeMessageWhenFailing() {
     final String message = "Failed :(";
-    expect(AssertionError.class).withMessage(message).on(new CodeToTest() {
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         Fail.fail(message);
       }
