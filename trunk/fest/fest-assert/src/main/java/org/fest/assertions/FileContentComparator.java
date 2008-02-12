@@ -38,7 +38,7 @@ class FileContentComparator {
    * <a href="http://sourceforge.net/projects/junit-addons">JUnit-addons</a>.)
    * @param actual the first <code>File</code> to compare.
    * @param expected the given <code>File</code> to compare <code>actual</code> to.
-   * @return
+   * @return the differences between the given files, if any.
    * @throws IOException any I/O error.
    */
   LineDiff[] compareContents(File actual, File expected) throws IOException {
