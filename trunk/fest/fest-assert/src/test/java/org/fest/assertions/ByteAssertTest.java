@@ -92,7 +92,24 @@ public class ByteAssertTest {
     new ByteAssert(asByte(6)).isGreaterThan(asByte(2));
   }
 
-  @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingToBeGreater() {
+  @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingGreaterThan() {
+    expect(AssertionError.class).withMessage("actual value:<6> should be greater than:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isGreaterThan(asByte(6));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingGreaterThan() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<6> should be greater than:<6>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(6)).as("A Test").isGreaterThan(asByte(6));
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThan() {
     expect(AssertionError.class).withMessage("actual value:<6> should be greater than:<10>").on(new CodeToTest() {
       public void run() {
         new ByteAssert(asByte(6)).isGreaterThan(asByte(10));
@@ -100,7 +117,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingToBeGreater() {
+  @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThan() {
     expect(AssertionError.class)
       .withMessage("[A Test] actual value:<6> should be greater than:<10>").on(new CodeToTest() {
         public void run() {
@@ -113,7 +130,24 @@ public class ByteAssertTest {
     new ByteAssert(asByte(2)).isLessThan(asByte(6));
   }
 
-  @Test public void shouldFailIfActualIsNotLessThanExpectedAndExpectingToBeLess() {
+  @Test public void shouldFailIfActualIsEqualToExpectedAndExpectingLessThan() {
+    expect(AssertionError.class).withMessage("actual value:<6> should be less than:<6>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(6)).isLessThan(asByte(6));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsEqualToExpectedAndExpectingLessThan() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<6> should be less than:<6>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(6)).as("A Test").isLessThan(asByte(6));
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThan() {
     expect(AssertionError.class).withMessage("actual value:<10> should be less than:<6>").on(new CodeToTest() {
       public void run() {
         new ByteAssert(asByte(10)).isLessThan(asByte(6));
@@ -121,7 +155,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfActualIsNotLessThanExpectedAndExpectingToBeLess() {
+  @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanExpectedAndExpectingLessThan() {
     expect(AssertionError.class)
       .withMessage("[A Test] actual value:<10> should be less than:<6>").on(new CodeToTest() {
         public void run() {
@@ -134,7 +168,24 @@ public class ByteAssertTest {
     new ByteAssert(asByte(6)).isPositive();
   }
 
-  @Test public void shouldFailIfActualIsNotPositiveAndExpectingPositive() {
+  @Test public void shouldFailIfActualIsZeroAndExpectingPositive() {
+    expect(AssertionError.class).withMessage("actual value:<0> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(0)).isPositive();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingPositive() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<0> should be greater than:<0>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(0)).as("A Test").isPositive();
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsLessThanZeroAndExpectingPositive() {
     expect(AssertionError.class).withMessage("actual value:<-2> should be greater than:<0>").on(new CodeToTest() {
       public void run() {
         new ByteAssert(asByte(-2)).isPositive();
@@ -142,7 +193,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfActualIsNotPositiveAndExpectingPositive() {
+  @Test public void shouldFailShowingDescriptionIfActualIsLessThanZeroAndExpectingPositive() {
     expect(AssertionError.class)
       .withMessage("[A Test] actual value:<-2> should be greater than:<0>").on(new CodeToTest() {
         public void run() {
@@ -155,7 +206,24 @@ public class ByteAssertTest {
     new ByteAssert(asByte(-2)).isNegative();
   }
 
-  @Test public void shoudlFailIfActualIsNotNegativeAndExpectingNegative() {
+  @Test public void shoudlFailIfActualIsZeroAndExpectingNegative() {
+    expect(AssertionError.class).withMessage("actual value:<0> should be less than:<0>").on(new CodeToTest() {
+      public void run() {
+        new ByteAssert(asByte(0)).isNegative();
+      }
+    });
+  }
+
+  @Test public void shoudlFailShowingDescriptionIfActualIsZeroAndExpectingNegative() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<0> should be less than:<0>").on(new CodeToTest() {
+        public void run() {
+          new ByteAssert(asByte(0)).as("A Test").isNegative();
+        }
+      });
+  }
+
+  @Test public void shoudlFailIfActualIsGreaterThanZeroAndExpectingNegative() {
     expect(AssertionError.class).withMessage("actual value:<6> should be less than:<0>").on(new CodeToTest() {
       public void run() {
         new ByteAssert(asByte(6)).isNegative();
@@ -163,7 +231,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shoudlFailShowingDescriptionIfActualIsNotNegativeAndExpectingNegative() {
+  @Test public void shoudlFailShowingDescriptionIfActualIsGreaterThanZeroAndExpectingNegative() {
     expect(AssertionError.class).withMessage("[A Test] actual value:<6> should be less than:<0>").on(new CodeToTest() {
       public void run() {
         new ByteAssert(asByte(6)).as("A Test").isNegative();

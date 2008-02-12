@@ -14,15 +14,13 @@
  */
 package org.fest.assertions;
 
-import static org.fest.util.Maps.format;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.fest.util.Collections;
 
 /**
  * Understands assertions for <code>{@link Map}</code>. To create a new instance of this class use the method
@@ -33,6 +31,11 @@ import org.fest.util.Collections;
  * @author Alex Ruiz
  */
 public final class MapAssert extends GroupAssert<Map<?, ?>> {
+
+  private static final String KEYS = "key(s)";
+  private static final String VALUES = "value(s)";
+  private static final String ENTRY = "entry";
+  private static final String ENTRIES= "entries";
 
   MapAssert(Map<?, ?> actual) {
     super(actual);
@@ -85,17 +88,25 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * </p>
    * @param entries
    * @return this assertion error.
+   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the given array of entries is <code>null</code>.
+   * @throws AssertionError if any of the entries in the given array is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain any of the given entries.
    */
   public MapAssert contains(Entry...entries) {
     isNotNull();
+    failIfNull(ENTRIES, entries);
     List<Entry> notFound = new ArrayList<Entry>();
     for (Entry e : entries) if (!containsEntry(e)) notFound.add(e);
-    failIfNotFound("entr(y/ies)", notFound);
+    if (!notFound.isEmpty()) failIfNotFound(notFound.size() == 1 ? ENTRY : ENTRIES, notFound);
     return this;
   }
 
   private boolean containsEntry(Entry e) {
+    if (e == null) {
+      fail("the entry to check should not be null");
+      return false;
+    }
     if (!actual.containsKey(e.key)) return false;
     return actual.containsValue(e.value);
   }
@@ -135,14 +146,17 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * Verifies that the actual <code>{@link Map}</code> contains the given keys.
    * @param keys the keys to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the given array of keys is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain all the given keys.
    */
   public MapAssert keySetIncludes(Object... keys) {
     isNotNull();
+    failIfNull("keys", keys);
     Set<?> keySet = actual.keySet();
     List<Object> notFound = new ArrayList<Object>();
     for (Object key : keys) if (!keySet.contains(key)) notFound.add(key);
-    failIfNotFound("keys(s)", notFound);
+    if (!notFound.isEmpty()) failIfNotFound(KEYS, notFound);
     return this;
   }
 
@@ -150,43 +164,58 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * Verifies that the actual <code>{@link Map}</code> contains the given values.
    * @param values the values to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the given array of values is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain all the given values.
    */
   public MapAssert valuesInclude(Object... values) {
     isNotNull();
+    failIfNull("values", values);
     List<Object> notFound = new ArrayList<Object>();
     for (Object expected : values) if (!actual.containsValue(expected)) notFound.add(expected);
-    failIfNotFound("value(s)", notFound);
+    if (!notFound.isEmpty()) failIfNotFound(VALUES, notFound);
     return this;
   }
 
+  private void failIfNull(String description, Object[] objects) {
+    if (objects == null)
+      fail(concat("the given array of ", description, " should not be null"));
+  }
+
   private void failIfNotFound(String description, List<?> notFound) {
-    if (notFound.isEmpty()) return;
-    fail(concat("the map ", formattedActual(), " does not contain the ", description, " ", Collections.format(notFound)));
+    fail(concat("the map:", formattedActual(), " does not contain the ", description, ":", inBrackets(notFound)));
   }
 
   /**
    * Verifies that the number of elements in the actual <code>{@link Map}</code> is equal to the given one.
    * @param expected the expected number of elements in the actual <code>Map</code>.
    * @return this assertion object.
+   * @throws AssertionError if the actual map is <code>null</code>.
    * @throws AssertionError if the number of elements of the actual <code>Map</code> is not equal to the given one.
    */
   public MapAssert hasSize(int expected) {
-    return (MapAssert)assertEqualSize(expected);
+    isNotNull();
+    int actualSize = actualGroupSize();
+    if (actualSize != expected)
+      fail(concat(
+          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for map:", inBrackets(actual)));
+    return this;
   }
 
   /**
    * Verifies that the actual <code>{@link Map}</code> is empty.
+   * @throws AssertionError if the actual map is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> is <code>null</code> or not empty.
    */
   public void isEmpty() {
+    isNotNull();
     if ((actual != null) && !actual.isEmpty()) {
-      fail(concat("expecting empty map, but was ", formattedActual()));
+      fail(concat("expecting empty map, but was:", formattedActual()));
     }
   }
 
   private String formattedActual() {
-    return format(actual);
+    return inBrackets(actual);
   }
 
   /**
@@ -209,7 +238,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    */
   public MapAssert isNotEmpty() {
     isNotNull();
-    if (actual.isEmpty()) fail("expecting non-empty map");
+    if (actual.isEmpty()) fail("expecting non-empty map, but it was empty");
     return this;
   }
 
@@ -229,7 +258,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws AssertionError if the actual <code>Map</code> is <code>null</code>.
    */
   public MapAssert isNotNull() {
-    if (actual == null) fail("the map is null");
+    if (actual == null) fail("expecting a non-null map, but it was null");
     return this;
   }
 

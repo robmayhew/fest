@@ -16,6 +16,8 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.failIfNotEqual;
+import static org.fest.assertions.Formatting.inBrackets;
+import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
 import java.awt.Dimension;
@@ -104,11 +106,21 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * pixels at the same coordinates have the same color.
    * @param expected the given image to compare the actual image to.
    * @return this assertion object.
+   * @throws AssertionError if the actual image is <code>null</code>.
+   * @throws AssertionError if the expected image is <code>null</code>.
    * @throws AssertionError if the actual image is not equal to the given one.
    */
   public ImageAssert isEqualTo(BufferedImage expected) {
-    if (!areEqual(actual, expected)) fail("images are not equal");
+    isNotNull();
+    failIfNull(expected);
+    failIfEqual(sizeOf(actual), sizeOf(expected));
+    if (!hasEqualColor(expected)) fail("images do not have the same color(s)");
     return this;
+  }
+
+  private void failIfEqual(Dimension actual, Dimension expected) {
+    if (!areEqual(actual, expected))
+      fail(concat("image size, expected:", inBrackets(expected), " but was:", inBrackets(actual)));
   }
 
   /**
@@ -116,22 +128,31 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * the pixels at the same coordinates have the same color.
    * @param image the given image to compare the actual image to.
    * @return this assertion object.
+   * @throws AssertionError if the actual image is <code>null</code>.
+   * @throws AssertionError if the expected image is <code>null</code>.
    * @throws AssertionError if the actual image is equal to the given one.
    */
   public ImageAssert isNotEqualTo(BufferedImage image) {
-    if (areEqual(actual, image)) fail("images are equal");
+    isNotNull();
+    failIfNull(image);
+    if (areEqual(sizeOf(actual), sizeOf(image)) && hasEqualColor(image)) fail("images are equal");
     return this;
   }
 
-  private static boolean areEqual(BufferedImage first, BufferedImage second) {
-    if (first == null) return second == null;
-    int w = first.getWidth();
-    int h = first.getHeight();
-    if (w != second.getWidth()) return false;
-    if (h != second.getHeight()) return false;
+  private void failIfNull(BufferedImage image) {
+    if (image == null) fail("image to compare to should not be null");
+  }
+
+  private static Dimension sizeOf(BufferedImage image) {
+    return new Dimension(image.getWidth(), image.getHeight());
+  }
+
+  private boolean hasEqualColor(BufferedImage expected) {
+    int w = actual.getWidth();
+    int h = actual.getHeight();
     for (int x = 0; x < w; x++)
       for (int y = 0; y < h; y++)
-        if (first.getRGB(x, y) != second.getRGB(x, y)) return false;
+        if (actual.getRGB(x, y) != expected.getRGB(x, y)) return false;
     return true;
   }
 

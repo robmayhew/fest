@@ -40,6 +40,43 @@ public class CollectionAssertTest {
     new CollectionAssert(list("Luke", "Leia", "Anakin")).contains("Luke", "Leia");
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfActualContainsObjects() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(null).contains("Luke");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfActualContainsObjects() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).as("A Test").contains("Luke");
+        }
+      });
+  }
+
+  @Test public void shouldFailIfArrayOfObjectsToContainIsNull() {
+    expect(AssertionError.class)
+      .withMessage("the given array of objects should not be null").on(new CodeToTest() {
+        public void run() {
+          Object[] objects = null;
+          new CollectionAssert(new ArrayList<String>()).contains(objects);
+        }
+      });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfArrayOfObjectsToContainIsNull() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] the given array of objects should not be null").on(new CodeToTest() {
+        public void run() {
+          Object[] objects = null;
+          new CollectionAssert(new ArrayList<String>()).as("A Test").contains(objects);
+        }
+      });
+  }
+
   @Test public void shouldFailIfActualExcludesValueAndExpectingToContain() {
     expect(AssertionError.class)
       .withMessage("collection:<[]> does not contain element(s):<['Luke']>").on(new CodeToTest() {
@@ -66,6 +103,43 @@ public class CollectionAssertTest {
     new CollectionAssert(list("Luke", "Leia", "Anakin")).excludes("Han", "Yoda");
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfActualExcludesObjects() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(null).excludes("Luke");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfActualExcludesObjects() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).as("A Test").excludes("Luke");
+        }
+      });
+  }
+
+  @Test public void shouldFailIfArrayOfObjectsToExcludeIsNull() {
+    expect(AssertionError.class)
+      .withMessage("the given array of objects should not be null").on(new CodeToTest() {
+        public void run() {
+          Object[] objects = null;
+          new CollectionAssert(new ArrayList<String>()).excludes(objects);
+        }
+      });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfArrayOfObjectsToExcludeIsNull() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] the given array of objects should not be null").on(new CodeToTest() {
+        public void run() {
+          Object[] objects = null;
+          new CollectionAssert(new ArrayList<String>()).as("A Test").excludes(objects);
+        }
+      });
+  }
+
   @Test public void shouldFailIfActualContainsValueAndExpectingToExclude() {
     expect(AssertionError.class)
       .withMessage("collection:<['Luke', 'Leia']> does not exclude element(s):<['Luke']>").on(new CodeToTest() {
@@ -81,6 +155,23 @@ public class CollectionAssertTest {
       .on(new CodeToTest() {
         public void run() {
           new CollectionAssert(list("Luke", "Leia")).as("A Test").excludes("Luke");
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingItDoesNotHaveDuplicates() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).doesNotHaveDuplicates();
+        }
+      });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingItDoesNotHaveDuplicates() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).as("A Test").doesNotHaveDuplicates();
         }
       });
   }
@@ -135,17 +226,16 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingEmpty() {
-    expect(AssertionError.class).withMessage("expecting a non-null collection but it was null").on(new CodeToTest() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
       public void run() {
-        List<String> nullList = null;
-        new CollectionAssert(nullList).isEmpty();
+        new CollectionAssert(null).isEmpty();
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingEmpty() {
     expect(AssertionError.class)
-      .withMessage("[A Test] expecting a non-null collection but it was null").on(new CodeToTest() {
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
         public void run() {
           List<String> nullList = null;
           new CollectionAssert(nullList).as("A Test").isEmpty();
@@ -178,7 +268,7 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingSomeSize() {
-    expect(AssertionError.class).withMessage("expecting a non-null collection but it was null").on(new CodeToTest() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
       public void run() {
         new CollectionAssert(null).hasSize(0);
       }
@@ -187,7 +277,7 @@ public class CollectionAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingSomeSize() {
     expect(AssertionError.class)
-      .withMessage("[A Test] expecting a non-null collection but it was null").on(new CodeToTest() {
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
         public void run() {
           new CollectionAssert(null).as("A Test").hasSize(0);
         }
@@ -199,8 +289,25 @@ public class CollectionAssertTest {
     new CollectionAssert(names).isNotEmpty();
   }
 
+  @Test public void shouldFailIfActualIsNullAndExpectingNotEmpty() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(null).isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotEmpty() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).as("A Test").isNotEmpty();
+        }
+      });
+  }
+
   @Test public void shouldFailIfActualIsEmptyAndExpectingNotEmpty() {
-    expect(AssertionError.class).withMessage("expecting a non-empty collection but it was empty").on(new CodeToTest() {
+    expect(AssertionError.class).withMessage("expecting a non-empty collection, but it was empty").on(new CodeToTest() {
       public void run() {
         new CollectionAssert(new ArrayList<String>()).isNotEmpty();
       }
@@ -209,7 +316,7 @@ public class CollectionAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfActualIsEmptyAndExpectingNotEmpty() {
     expect(AssertionError.class)
-      .withMessage("[A Test] expecting a non-empty collection but it was empty").on(new CodeToTest() {
+      .withMessage("[A Test] expecting a non-empty collection, but it was empty").on(new CodeToTest() {
         public void run() {
           new CollectionAssert(new ArrayList<String>()).as("A Test").isNotEmpty();
         }
@@ -292,6 +399,23 @@ public class CollectionAssertTest {
         public void run() {
           List<String> names = list("Gandalf", "Frodo");
           new CollectionAssert(names).as("A Test").containsOnly("Gandalf", "Frodo", "Sam");
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingThatItContainsExpectedElement() {
+    expect(AssertionError.class).withMessage("expecting a non-null collection, but it was null").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(null).containsOnly("Gandalf", "Frodo", "Sam");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingThatItContainsExpectedElement() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] expecting a non-null collection, but it was null").on(new CodeToTest() {
+        public void run() {
+          new CollectionAssert(null).as("A Test").containsOnly("Gandalf", "Frodo", "Sam");
         }
       });
   }

@@ -136,7 +136,24 @@ public class DoubleAssertTest {
     new DoubleAssert(6.68).isPositive();
   }
 
-  @Test public void shouldFailIfNotPositiveAndExpectingPositive() {
+  @Test public void shouldFailIfActualIsZeroAndExpectingPositive() {
+    expect(AssertionError.class).withMessage("actual value:<0.0> should be greater than:<0.0>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(0.0).isPositive();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingPositive() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<0.0> should be greater than:<0.0>").on(new CodeToTest() {
+        public void run() {
+          new DoubleAssert(0.0).as("A Test").isPositive();
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsLessThanZeroAndExpectingPositive() {
     expect(AssertionError.class).withMessage("actual value:<-6.68> should be greater than:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(-6.68).isPositive();
@@ -144,7 +161,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfNotPositiveAndExpectingPositive() {
+  @Test public void shouldFailShowingDescriiptionIfActualIsLessThanZeroAndExpectingPositive() {
     expect(AssertionError.class)
       .withMessage("[A Test] actual value:<-6.68> should be greater than:<0.0>").on(new CodeToTest() {
         public void run() {
@@ -157,7 +174,24 @@ public class DoubleAssertTest {
     new DoubleAssert(-6.68).isNegative();
   }
 
-  @Test public void shouldFailIfNotNegativeAndExpectingNegative() {
+  @Test public void shouldFailIfActualIsZeroAndExpectingNegative() {
+    expect(AssertionError.class).withMessage("actual value:<0.0> should be less than:<0.0>").on(new CodeToTest() {
+      public void run() {
+        new DoubleAssert(0.0).isNegative();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingNegative() {
+    expect(AssertionError.class)
+      .withMessage("[A Test] actual value:<0.0> should be less than:<0.0>").on(new CodeToTest() {
+        public void run() {
+          new DoubleAssert(0.0).as("A Test").isNegative();
+        }
+      });
+  }
+
+  @Test public void shouldFailIfActualIsGreaterThanZeroAndExpectingNegative() {
     expect(AssertionError.class).withMessage("actual value:<6.68> should be less than:<0.0>").on(new CodeToTest() {
       public void run() {
         new DoubleAssert(6.68).isNegative();
@@ -165,7 +199,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfNotNegativeAndExpectingNegative() {
+  @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanZeroAndExpectingNegative() {
     expect(AssertionError.class)
       .withMessage("[A Test] actual value:<6.68> should be less than:<0.0>").on(new CodeToTest() {
         public void run() {

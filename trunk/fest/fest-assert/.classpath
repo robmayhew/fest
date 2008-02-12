@@ -13,7 +13,7 @@
 	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-tools-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/fest-util-0.3.jar" sourcepath="lib/fest-util-0.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/fest-test-0.1.jar" sourcepath="lib/fest-test-0.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-0.4.jar" sourcepath="lib/fest-util-0.4-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

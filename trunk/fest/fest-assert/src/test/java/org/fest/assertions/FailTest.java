@@ -1,23 +1,25 @@
 /*
  * Created on Sep 16, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
 
+import static org.fest.test.ExpectedFailure.expect;
 import static org.fest.util.Strings.*;
 import static org.testng.Assert.*;
 
+import org.fest.test.CodeToTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -29,150 +31,118 @@ import org.testng.annotations.Test;
  */
 public class FailTest {
 
-  @Test(expectedExceptions = AssertionError.class) 
+  @Test(expectedExceptions = AssertionError.class)
   public void shouldThrowExceptionWhenFailing() {
     Fail.fail();
   }
-  
-  @Test public void shouldThrowExceptionWithGivenMessageAndCause() {
+
+  @Test public void shouldThrowErrorWithGivenMessageAndCause() {
     Throwable t = new Throwable();
     String message = "Some Throwable";
     try {
       Fail.fail(message, t);
-      shouldHaveFailed();
+      fail(concat(AssertionError.class.getSimpleName(), " should have been thrown"));
     } catch (AssertionError e) {
       assertSame(e.getCause(), t);
       assertEquals(e.getMessage(), message);
     }
   }
 
-  @Test(dataProvider = "messageProvider") 
-  public void failIfEqualShouldFailIfEqual(String message) {
-    try {
-      Fail.failIfEqual(message, "Yoda", "Yoda");
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      String expectedMessage = concat(messageFrom(message), "<'Yoda'> should not be equal to <'Yoda'>");
-      assertEquals(e.getMessage(), expectedMessage);
-    }
-  }
-  
-  @Test public void failIfEqualShouldNotFailIfNotEqual() {
-    try {
-      Fail.failIfEqual("", "Yoda", "Ben");
-    } catch (AssertionError e) {
-      unexpected(e);
-    }
-  }
-  
-  @Test(dataProvider = "messageProvider") 
-  public void failIfNotEqualShouldFailIfNotEqual(String message) {
-    try {
-      Fail.failIfNotEqual(message, "Yoda", "Luke");
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      String expectedMessage = concat(messageFrom(message), "expected:<'Luke'> but was:<'Yoda'>");
-      assertEquals(e.getMessage(), expectedMessage);
-    }
-  }
-  
-  @Test void failIfNotEqualShouldNotFailIfEqual() {
-    try {
-      Fail.failIfNotEqual("", "Yoda", "Yoda");
-    } catch (AssertionError e) {
-      unexpected(e);
-    }
+  @Test(dataProvider = "messageProvider")
+  public void shouldThrowErrorWithMessageIfValuesAreEqualAsAnticipated(final String message) {
+    String expectedMessage = concat(format(message), "actual value:<'Yoda'> should not be equal to:<'Yoda'>");
+    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+      public void run() {
+        Fail.failIfEqual(message, "Yoda", "Yoda");
+      }
+    });
   }
 
-  @Test(dataProvider = "messageProvider") 
-  public void failIfNullShouldFailIfNull(String message) {
-    try {
-      Fail.failIfNull(message, null);
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      String expectedMessage = concat(messageFrom(message), "expecting a non-null object");
-      assertEquals(e.getMessage(), expectedMessage);
-    }
-  }
-  
-  @Test void failIfNullShouldNotFailIfNotNull() {
-    try {
-      Fail.failIfNull("", "Luke");
-    } catch (AssertionError e) {
-      unexpected(e);
-    }
+  @Test public void shouldNotThrowErrorIfValuesAreNotEqualAndExpectingEqual() {
+    Fail.failIfEqual("", "Yoda", "Ben");
   }
 
-  @Test(dataProvider = "messageProvider") 
-  public void failIfNotNullShouldFailIfNotNull(String message) {
-    try {
-      Fail.failIfNotNull(message, "Leia");
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      String expectedMessage = concat(messageFrom(message), "<'Leia'> should be null");
-      assertEquals(e.getMessage(), expectedMessage);
-    }
-  }
-  
-  @Test void failIfNotNullShouldNotFailIfNull() {
-    try {
-      Fail.failIfNotNull("", null);
-    } catch (AssertionError e) {
-      unexpected(e);
-    }
+  @Test(dataProvider = "messageProvider")
+  public void shouldFailIfValuesAreNotEqualAsAnticipated(final String message) {
+    String expectedMessage = concat(format(message), "expected:<'Luke'> but was:<'Yoda'>");
+    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+      public void run() {
+        Fail.failIfNotEqual(message, "Yoda", "Luke");
+      }
+    });
   }
 
-  @Test(dataProvider = "messageProvider") 
-  public void failIfSameShouldFailIfSame(String message) {
+  @Test void shouldPassIfValuesAreEqualAndExpectingNotEqual() {
+    Fail.failIfNotEqual("", "Yoda", "Yoda");
+  }
+
+  @Test(dataProvider = "messageProvider")
+  public void failIfNullShouldFailIfNull(final String message) {
+    String expectedMessage = concat(format(message), "expecting a non-null object");
+    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+      public void run() {
+        Fail.failIfNull(message, null);
+      }
+    });
+  }
+
+  @Test void shouldPassIfValueIsNotNullAndExpectingNull() {
+    Fail.failIfNull("", "Luke");
+  }
+
+  @Test(dataProvider = "messageProvider")
+  public void shouldFailIfValueIsNotNullAsAnticipated(final String message) {
+    String expectedMessage = concat(format(message), "<'Leia'> should be null");
+    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+      public void run() {
+        Fail.failIfNotNull(message, "Leia");
+      }
+    });
+  }
+
+  @Test void shouldPassIfValueIsNullAndExpectingNotNull() {
+    Fail.failIfNotNull("", null);
+  }
+
+  @Test(dataProvider = "messageProvider")
+  public void shouldFailIfValuesAreSameAsAnticipated(final String message) {
+    final Object o = new Object();
+    String expectedMessage = concat(format(message), "given objects are same:<", o, ">");
+    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+      public void run() {
+        Fail.failIfSame(message, o, o);
+      }
+    });
+  }
+
+  @Test void shouldPassIfValuesAreNotSameAndExpectingSame() {
+    Fail.failIfSame("", "Luke", "Anakin");
+  }
+
+  @Test(dataProvider = "messageProvider")
+  public void failIfNotSameShouldFailIfNotSame(final String message) {
+    String expectedMessage = concat(format(message), "expected same instance but found <'Ben'> and <'Han'>");
+    expect(AssertionError.class).withMessage(expectedMessage).on(new CodeToTest() {
+      public void run() {
+        Fail.failIfNotSame(message, "Ben", "Han");
+      }
+    });
+  }
+
+  @Test void shouldPassIfValuesAreSameAndExpectingNotSame() {
     Object o = new Object();
-    try {
-      Fail.failIfSame(message, o, o);
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      String expectedMessage = concat(messageFrom(message), "given objects are same:<", o, ">");
-      assertEquals(e.getMessage(), expectedMessage);
-    }
-  }
-  
-  @Test void failIfSameShouldNotFailIfNotSame() {
-    try {
-      Fail.failIfSame("", "Luke", "Anakin");
-    } catch (AssertionError e) {
-      unexpected(e);
-    }
+    Fail.failIfNotSame("", o, o);
   }
 
-  @Test(dataProvider = "messageProvider") 
-  public void failIfNotSameShouldFailIfNotSame(String message) {
-    try {
-      Fail.failIfNotSame(message, "Ben", "Han");
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      String expectedMessage = concat(messageFrom(message), "expected same instance but found <'Ben'> and <'Han'>");
-      assertEquals(e.getMessage(), expectedMessage);
-    }
-  }
-  
-  @Test void failIfNotSameShouldNotFailIfSame() {
-    Object o = new Object();
-    try {
-      Fail.failIfNotSame("", o, o);
-    } catch (AssertionError e) {
-      unexpected(e);
-    }
+  @Test public void shouldIncludeMessageWhenFailing() {
+    final String message = "Failed :(";
+    expect(AssertionError.class).withMessage(message).on(new CodeToTest() {
+      public void run() {
+        Fail.fail(message);
+      }
+    });
   }
 
-  @Test
-  public void shouldFailWithGivenMessage() {
-    String message = "Failed :(";
-    try {
-      Fail.fail(message);
-      shouldHaveFailed();
-    } catch (AssertionError e) {
-      assertEquals(e.getMessage(), message);
-    }
-  }
-  
   @DataProvider(name = "messageProvider")
   public Object[][] messageProvider() {
     return new Object[][] {
@@ -182,16 +152,8 @@ public class FailTest {
     };
   }
 
-  private void shouldHaveFailed() {
-    fail(concat(AssertionError.class.getSimpleName(), " should have been thrown"));
-  }
-
-  private String messageFrom(String s) {
+  private String format(String s) {
     if (isEmpty(s)) return "";
     return concat("[", s, "] ");
-  }
-
-  private void unexpected(AssertionError e) {
-    fail(concat("Unexpected exception: ", quote(e.getMessage())), e);
   }
 }

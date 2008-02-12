@@ -41,10 +41,13 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * Verifies that the actual collection contains the given objects.
    * @param objects the objects to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
+   * @throws AssertionError if the given object array is <code>null</code>.
    * @throws AssertionError if the actual collection does not contain the given objects.
    */
   public CollectionAssert contains(Object...objects) {
     isNotNull();
+    failIfNull(objects);
     List<Object> notFound = new ArrayList<Object>();
     for (Object o : objects) if (!actual.contains(o)) notFound.add(o);
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
@@ -55,11 +58,14 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * Verifies that the actual collection contains the given objects <strong>only</strong>.
    * @param objects the objects to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
+   * @throws AssertionError if the given object array is <code>null</code>.
    * @throws AssertionError if the actual collection does not contain the given objects, or if the actual collection
    *           contains elements other than the ones specified.
    */
   public CollectionAssert containsOnly(Object...objects) {
     isNotNull();
+    failIfNull(objects);
     List<Object> notFound = new ArrayList<Object>();
     List<Object> copy = new ArrayList<Object>(actual);
     for (Object o : objects) {
@@ -83,10 +89,13 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * Verifies that the actual collection does not contain the given objects.
    * @param objects the objects that the collection should exclude.
    * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
+   * @throws AssertionError if the given object array is <code>null</code>.
    * @throws AssertionError if the actual collection contains any of the given objects.
    */
   public CollectionAssert excludes(Object...objects) {
     isNotNull();
+    failIfNull(objects);
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (actual.contains(o)) found.add(o);
     if (!found.isEmpty())
@@ -94,9 +103,14 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     return this;
   }
 
+  private void failIfNull(Object[] objects) {
+    if (objects == null) fail("the given array of objects should not be null");
+  }
+
   /**
    * Verifies that the actual collection does not have duplicates.
    * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
    * @throws AssertionError if the actual collection has duplicates.
    */
   public CollectionAssert doesNotHaveDuplicates() {
@@ -161,12 +175,13 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws AssertionError if the actual collection is <code>null</code>.
    */
   public CollectionAssert isNotNull() {
-    if (actual == null) fail("expecting a non-null collection but it was null");
+    if (actual == null) fail("expecting a non-null collection, but it was null");
     return this;
   }
 
   /**
    * Verifies that the actual collection is empty (not <code>null</code> with zero elements.)
+   * @throws AssertionError if the actual collection is <code>null</code>.
    * @throws AssertionError if the actual collection is <code>null</code> or not empty.
    */
   public void isEmpty() {
@@ -178,11 +193,12 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   /**
    * Verifies that the actual collection contains at least on element.
    * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
    * @throws AssertionError if the actual collection is empty.
    */
   public CollectionAssert isNotEmpty() {
     isNotNull();
-    if (actual.isEmpty()) fail("expecting a non-empty collection but it was empty");
+    if (actual.isEmpty()) fail("expecting a non-empty collection, but it was empty");
     return this;
   }
 
@@ -190,11 +206,11 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * Verifies that the number of elements in the actual collection is equal to the given one.
    * @param expected the expected number of elements in the actual collection.
    * @return this assertion object.
+   * @throws AssertionError if the actual collection is <code>null</code>.
    * @throws AssertionError if the number of elements of the actual collection is not equal to the given one.
    */
   public CollectionAssert hasSize(int expected) {
-    isNotNull();
-    int actualSize = actual.size();
+    int actualSize = actualGroupSize();
     if (actualSize != expected)
       fail(concat(
           "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for collection:", format(actual)));

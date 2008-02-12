@@ -14,14 +14,15 @@
  */
 package org.fest.assertions;
 
-import java.io.*;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Closeables.close;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Arrays.isEmpty;
+import static org.fest.util.Strings.concat;
+import static org.fest.util.Systems.LINE_SEPARATOR;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.fest.assertions.FileContentComparator.LineDiff;
 
 /**
  * Understands assertion methods for <code>File</code>. To create a new instance of this class use the method <code>
@@ -33,14 +34,19 @@ import static org.fest.util.Strings.*;
  */
 public final class FileAssert extends GenericAssert<File> {
 
-  private static final String EOF = "EOF";
+  private final FileContentComparator comparator;
 
   /**
    * Creates a new <code>FileAssert</code>.
    * @param actual the actual <code>File</code> to test.
    */
   FileAssert(File actual) {
+    this(actual, new FileContentComparator());
+  }
+
+  FileAssert(File actual, FileContentComparator comparator) {
     super(actual);
+    this.comparator = comparator;
   }
 
   /**
@@ -84,7 +90,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert doesNotExist() {
     isNotNull();
-    if (actual.exists()) fail(concat("file should not exist:", quotedAbsolutePath()));
+    if (actual.exists()) fail(concat("file:", inBrackets(actual), " should not exist"));
     return this;
   }
 
@@ -110,9 +116,7 @@ public final class FileAssert extends GenericAssert<File> {
     long size = actual.length();
     if (size != expected)
       fail(concat(
-          "expected file size of " + quotedAbsolutePath() + ":", inBrackets(valueOf(expected)),
-          " but was:", inBrackets(valueOf(size))
-      ));
+          "size of file:", inBrackets(actual), " expected:", inBrackets(expected), " but was:", inBrackets(size)));
     return this;
   }
 
@@ -124,7 +128,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isDirectory() {
     isNotNull();
     if (!actual.isDirectory())
-      fail(concat("file should be a directory:", quotedAbsolutePath()));
+      fail(concat("file:", inBrackets(actual), " should be a directory"));
     return this;
   }
 
@@ -146,7 +150,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isFile() {
     isNotNull();
     if (!actual.isFile())
-      fail(concat("file should be a regular file:", quotedAbsolutePath()));
+      fail(concat("file:", inBrackets(actual), " should be a file"));
     return this;
   }
 
@@ -210,66 +214,37 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert hasSameContentAs(File expected) {
     isNotNull();
-    failIfNull("expected file should not be null", expected);
+    if (expected == null) fail("file to compare to should not be null");
     assertExists(actual).assertExists(expected);
-    InputStream expectedInputStream = null;
-    InputStream actualInputStream = null;
     try {
-      expectedInputStream = new FileInputStream(expected);
-      actualInputStream = new FileInputStream(actual);
-      failIfNotEqual(reader(actualInputStream), reader(expectedInputStream));
-    } catch (FileNotFoundException e) {
-      cannotCompareToExpectedFile(expected, e);
+      LineDiff[] diffs = comparator.compareContents(actual, expected);
+      if (!isEmpty(diffs)) fail(expected, diffs);
     } catch (IOException e) {
-      cannotCompareToExpectedFile(expected, e);      
-    } finally {
-      close(expectedInputStream);
-      close(actualInputStream);
+      cannotCompareToExpectedFile(expected, e);
     }
     return this;
+  }
+
+  private void fail(File expected, LineDiff[] diffs) {
+    StringBuilder b = new StringBuilder();
+    b.append("file:").append(inBrackets(actual)).append(" and file:").append(inBrackets(expected))
+      .append(" do not have same contents:");
+    for (LineDiff diff : diffs) {
+      b.append(LINE_SEPARATOR).append("line:").append(inBrackets(diff.lineNumber))
+        .append(", expected:").append(inBrackets(diff.expected)).append(" but was:").append(inBrackets(diff.actual));
+    }
+    fail(b.toString());
   }
 
   private void cannotCompareToExpectedFile(File expected, Exception e) {
-    String message = concat( 
-        "unable to compare contents of files:", quotedAbsolutePath(), " and ", quotedAbsolutePath(expected));
+    String message = concat(
+        "unable to compare contents of files:", inBrackets(actual), " and ", inBrackets(expected));
     fail(message, e);
   }
 
-  
-  private LineNumberReader reader(InputStream inputStream) {
-    return new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
-  }
-
   private FileAssert assertExists(File file) {
-    if (!file.exists()) fail(concat("file should exist:", quotedAbsolutePath(file)));
+    if (!file.exists()) fail(concat("file:", inBrackets(file), " should exist"));
     return this;
-  }
-
-  /**
-   * Asserts that two readers have the same content.
-   * @param actual the actual reader.
-   * @param expected the expected reader.
-   * @throws IOException any I/O error thrown.
-   * @throws AssertionError if the two readers are not equal.
-   */
-  private void failIfNotEqual(LineNumberReader actual, LineNumberReader expected) throws IOException {
-    String formatted = description();
-    formatted = formatted == null ? "" : concat(formatted, " - ");
-    while (true) {
-      if (!expected.ready() && !actual.ready()) return;
-      String expectedLine = expected.readLine();
-      String actualLine = actual.readLine();
-      int lineNumber = expected.getLineNumber();
-      if (!actual.ready() && expected.ready())
-        fail(errorMessageIfNotEqual(message(formatted, lineNumber), EOF, expectedLine));
-      if (actual.ready() && !expected.ready())
-        fail(errorMessageIfNotEqual(message(formatted, lineNumber), actualLine, EOF));
-      Fail.failIfNotEqual(message(formatted, lineNumber), expectedLine, actualLine);
-    }
-  }
-
-  private String message(String message, int line) {
-    return concat(message, "line [", valueOf(line), "]");
   }
 
   /**
@@ -280,7 +255,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isRelative() {
     isNotNull();
     if (actual.isAbsolute())
-      fail(concat("file should be relative but is ", inBrackets(quotedAbsolutePath())));
+      fail(concat("file:", inBrackets(actual), " should be a relative path"));
     return this;
   }
 
@@ -292,15 +267,7 @@ public final class FileAssert extends GenericAssert<File> {
   public FileAssert isAbsolute() {
     isNotNull();
     if (!actual.isAbsolute())
-      fail(concat("file should be absolute but is ", inBrackets(quotedAbsolutePath())));
+      fail(concat("file:", inBrackets(actual), " should be an absolute path"));
     return this;
-  }
-
-  private String quotedAbsolutePath() {
-    return quotedAbsolutePath(actual);
-  }
-
-  private String quotedAbsolutePath(File file) {
-    return quote(file.getAbsolutePath());
   }
 }

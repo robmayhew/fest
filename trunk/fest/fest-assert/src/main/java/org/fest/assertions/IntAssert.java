@@ -26,6 +26,8 @@ import static org.fest.assertions.PrimitiveFail.*;
  */
 public final class IntAssert extends PrimitiveAssert {
 
+  private static final int ZERO = 0;
+
   private final int actual;
 
   IntAssert(int actual) {
@@ -137,19 +139,19 @@ public final class IntAssert extends PrimitiveAssert {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>int</code> value is not positive.
    */
-  public IntAssert isPositive() { return isGreaterThan(0); }
+  public IntAssert isPositive() { return isGreaterThan(ZERO); }
 
   /**
    * Verifies that the actual <code>int</code> value is negative.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>int</code> value is not negative.
    */
-  public IntAssert isNegative() { return isLessThan(0); }
+  public IntAssert isNegative() { return isLessThan(ZERO); }
 
   /**
    * Verifies that the actual <code>int</code> value is equal to zero.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>int</code> value is not equal to zero.
    */
-  public IntAssert isZero() { return isEqualTo(0); }
+  public IntAssert isZero() { return isEqualTo(ZERO); }
 }

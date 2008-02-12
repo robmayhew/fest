@@ -15,9 +15,10 @@
 package org.fest.assertions;
 
 import static java.lang.Math.abs;
-import static java.lang.String.valueOf;
 import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.assertions.PrimitiveFail.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands assertion methods for <code>float</code>s. To create a new instance of this class use the
@@ -90,7 +91,7 @@ public final class FloatAssert extends PrimitiveAssert {
   public FloatAssert isEqualTo(float expected, Delta delta) {
     if (Float.compare(expected, actual) == 0) return this;
     if (!(abs(expected - actual) <= delta.value))
-      fail(errorMessageIfNotEqual(description(), valueOf(actual), valueOf(expected)));
+      fail(concat(errorMessageIfNotEqual(description(), actual, expected), " using delta:", inBrackets(delta.value)));
     return this;
   }
 
@@ -107,45 +108,45 @@ public final class FloatAssert extends PrimitiveAssert {
 
   /**
    * Verifies that the actual <code>float</code> value is greater than the given one.
-   * @param smaller the value expected to be smaller than the actual one.
+   * @param value the value expected to be smaller than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> value is less than or equal to the given one.
    */
-  public FloatAssert isGreaterThan(float smaller) {
-    failIfNotGreaterThan(description(), actual, smaller);
+  public FloatAssert isGreaterThan(float value) {
+    failIfNotGreaterThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>float</code> value is less than the given one.
-   * @param bigger the value expected to be bigger than the actual one.
+   * @param value the value expected to be bigger than the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> value is greater than or equal to the given one.
    */
-  public FloatAssert isLessThan(float bigger) {
-    failIfNotLessThan(description(), actual, bigger);
+  public FloatAssert isLessThan(float value) {
+    failIfNotLessThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>float</code> value is greater or equal to the given one.
-   * @param smaller the value expected to be smaller or equal to the actual one.
+   * @param value the value expected to be smaller or equal to the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> value is strictly less than or equal to the given one.
    */
-  public FloatAssert isGreaterOrEqualTo(float smaller) {
-    failIfNotGreaterOrEqualTo(description(), actual, smaller);
+  public FloatAssert isGreaterOrEqualTo(float value) {
+    failIfNotGreaterOrEqualTo(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>float</code> value is less or equal to the given one.
-   * @param bigger the value expected to be bigger or equal to the actual one.
+   * @param value the value expected to be bigger or equal to the actual one.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> value is strictly greater than or equal to the given one.
    */
-  public FloatAssert isLessOrEqualTo(float bigger) {
-    failIfNotLessOrEqualTo(description(), actual, bigger);
+  public FloatAssert isLessOrEqualTo(float value) {
+    failIfNotLessOrEqualTo(description(), actual, value);
     return this;
   }
 
@@ -154,7 +155,7 @@ public final class FloatAssert extends PrimitiveAssert {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> value is not equal to <code>NaN</code>.
    */
-  public FloatAssert isNaN() { return isEqualTo(Float.NaN, delta(Float.NaN)); }
+  public FloatAssert isNaN() { return isEqualTo(Float.NaN); }
 
   /**
    * Verifies that the actual <code>float</code> value is positive.

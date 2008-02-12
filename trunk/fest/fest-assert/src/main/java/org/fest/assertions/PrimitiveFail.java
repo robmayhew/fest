@@ -29,7 +29,7 @@ import static org.fest.util.Strings.concat;
 public final class PrimitiveFail {
 
   /**
-   * Fails if the given $<code>boolean</code>s are equal.
+   * Fails if the given <code>boolean</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -39,7 +39,7 @@ public final class PrimitiveFail {
     if (actual == second) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>char</code>s are equal.
+   * Fails if the given <code>char</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -49,7 +49,7 @@ public final class PrimitiveFail {
     if (actual == second) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>byte</code>s are equal.
+   * Fails if the given <code>byte</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -59,7 +59,7 @@ public final class PrimitiveFail {
     if (actual == second) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>short</code>s are equal.
+   * Fails if the given <code>short</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -69,7 +69,7 @@ public final class PrimitiveFail {
     if (actual == second) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>int</code>s are equal.
+   * Fails if the given <code>int</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -79,7 +79,7 @@ public final class PrimitiveFail {
     if (actual == second) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>long</code>s are equal.
+   * Fails if the given <code>long</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -89,7 +89,7 @@ public final class PrimitiveFail {
     if (actual == second) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>float</code>s are equal.
+   * Fails if the given <code>float</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
@@ -99,7 +99,7 @@ public final class PrimitiveFail {
     if (Float.compare(actual, second) == 0) fail(errorMessageIfEqual(message, actual, second));
   }
   /**
-   * Fails if the given $<code>double</code>s are equal.
+   * Fails if the given <code>double</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
    * @param second the value checked against <code>actual</code>.
