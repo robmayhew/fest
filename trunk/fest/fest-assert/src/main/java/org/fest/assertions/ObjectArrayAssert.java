@@ -15,15 +15,15 @@
  */
 package org.fest.assertions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Collections.list;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the
@@ -92,7 +92,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     isNotNull();
     for (Object o : actual)
       if (!type.isInstance(o))
-        fail(concat("not all the elements in ", formattedActualInBrackets(), " belong to the type ",
+        fail(concat("not all the elements in ", actualInBrackets(), " belong to the type ",
             typeNameInBrackets(type)));
     return this;
   }
@@ -113,7 +113,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
       break;
     }
     if (!found)
-      fail(concat("array ", formattedActualInBrackets(), " does not have any elements of type ",
+      fail(concat("array ", actualInBrackets(), " does not have any elements of type ",
           typeNameInBrackets(type)));
     return this;
   }
@@ -126,6 +126,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * Verifies that the actual <code>Object</code> array contains the given objects.
    * @param objects the objects to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> array does not contain the given objects.
    */
   public ObjectArrayAssert contains(Object...objects) {
@@ -157,19 +158,19 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty())
       fail(concat(
-          "unexpected element(s) ", formattedInBrackets(copy.toArray()), " in array ", formattedActualInBrackets()));
+          "unexpected element(s) ", inBrackets(copy.toArray()), " in array ", actualInBrackets()));
     return this;
   }
 
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array ", formattedActualInBrackets(), " does not contain element(s) ",
-        formattedInBrackets(notFound.toArray())));
+    fail(concat("array:", actualInBrackets(), " does not contain element(s):", inBrackets(notFound.toArray())));
   }
 
   /**
    * Verifies that the actual <code>Object</code> array does not contain the given objects.
    * @param objects the objects the array should exclude.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> array contains any of the given objects.
    */
   public ObjectArrayAssert excludes(Object...objects) {
@@ -177,8 +178,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     List<Object> found = new ArrayList<Object>();
     for (Object o : objects) if (hasElement(o)) found.add(o);
     if (!found.isEmpty())
-      fail(concat("array ", formattedActualInBrackets(), " does not exclude element(s) ",
-          formattedInBrackets(found.toArray())));
+      fail(concat("array:", actualInBrackets(), " does not exclude element(s):", inBrackets(found.toArray())));
     return this;
   }
 
@@ -204,7 +204,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    */
   public ObjectArrayAssert isNotNull() {
-    return (ObjectArrayAssert)assertNotNull();
+    if (actual == null) fail("expecting a non-null array, but it was null");
+    return this;
   }
 
   /**
@@ -213,15 +214,11 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public void isEmpty() {
     if (actualGroupSize() > 0)
-      fail(concat("expecting empty array, but was ", formattedActualInBrackets()));
+      fail(concat("expecting empty array, but was ", actualInBrackets()));
   }
 
-  private String formattedActualInBrackets() {
+  private String actualInBrackets() {
     return inBrackets(actual);
-  }
-
-  private String formattedInBrackets(Object[] array) {
-    return inBrackets(array);
   }
 
   /**
