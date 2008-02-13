@@ -111,14 +111,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
       found = true;
       break;
     }
-    if (!found)
-      fail(concat("array ", actualInBrackets(), " does not have any elements of type ",
-          typeNameInBrackets(type)));
+    if (!found) fail(concat("array:", actualInBrackets(), " does not have any elements of type:", inBrackets(type)));
     return this;
-  }
-
-  private String typeNameInBrackets(Class<?> type) {
-    return inBrackets(type.getName());
   }
 
   /**
@@ -209,6 +203,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
 
   /**
    * Verifies that the actual <code>Object</code> array is empty (not <code>null</code> with zero elements.)
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
@@ -216,13 +211,10 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
       fail(concat("expecting empty array, but was:", actualInBrackets()));
   }
 
-  private String actualInBrackets() {
-    return inBrackets(actual);
-  }
-
   /**
    * Verifies that the actual <code>Object</code> array contains at least on element.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> array is empty.
    */
   public ObjectArrayAssert isNotEmpty() {
@@ -256,20 +248,29 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
     return this;
   }
 
+  /**
+   * Verifies that the number of elements in the actual <code>Object</code> array is equal to the given one.
+   * @param expected the expected number of elements in the actual <code>Object</code> array.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
+   * @throws AssertionError if the number of elements in the actual <code>Object</code> array is not equal to the given
+   * one.
+   */
+  public ObjectArrayAssert hasSize(int expected) {
+    int actualSize = actualGroupSize();
+    if (actualSize != expected)
+      fail(concat(
+          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for array:", actualInBrackets()));
+    return this;
+  }
+
   int actualGroupSize() {
     isNotNull();
     return actual.length;
   }
 
-  /**
-   * Verifies that the number of elements in the actual <code>Object</code> array is equal to the given one.
-   * @param expected the expected number of elements in the actual <code>Object</code> array.
-   * @return this assertion object.
-   * @throws AssertionError if the number of elements in the actual <code>Object</code> array is not equal to the given
-   * one.
-   */
-  public ObjectArrayAssert hasSize(int expected) {
-    return (ObjectArrayAssert)assertEqualSize(expected);
+  private String actualInBrackets() {
+    return inBrackets(actual);
   }
 
   /**

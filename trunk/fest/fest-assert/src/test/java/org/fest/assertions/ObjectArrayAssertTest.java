@@ -333,43 +333,91 @@ public class ObjectArrayAssertTest {
         });
   }
 
+  @Test public void shouldPassIfActualHasExpectedSize() {
+    Object[] array = array("Gandalf", "Frodo", "Sam");
+    new ObjectArrayAssert(array).hasSize(3);
+  }
+
+  @Test public void shouldFailIfActualDoesNotHaveExpectedSize() {
+    expectAssertionError("expected size:<2> but was:<1> for array:<['Gandalf']>").on(new CodeToTest() {
+      public void run() {
+        Object[] array = array("Gandalf");
+        new ObjectArrayAssert(array).hasSize(2);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveExpectedSize() {
+    expectAssertionError("[A Test] expected size:<2> but was:<1> for array:<['Gandalf']>").on(new CodeToTest() {
+      public void run() {
+        Object[] array = array("Gandalf");
+        new ObjectArrayAssert(array).as("A Test").hasSize(2);
+      }
+    });
+  }
+
   @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
     new ObjectArrayAssert("Luke", "Leia").containsOnly("Luke", "Leia");
   }
 
   @Test public void shouldPassIfElementsBelongToGivenType() {
-    Number[] numbers = { 2, 4, 5 };
-    Assertions.assertThat(numbers).hasAllElementsOfType(Number.class);
+    Object[] numbers = { 2, 4, 5 };
+    new ObjectArrayAssert(numbers).hasAllElementsOfType(Number.class);
   }
 
   @Test public void shouldPassIfElementsBelongToSubtypeOfGivenType() {
-    Number[] numbers = { 2, 4, 5 };
-    Assertions.assertThat(numbers).hasAllElementsOfType(Integer.class);
+    Object[] numbers = { 2, 4, 5 };
+    new ObjectArrayAssert(numbers).hasAllElementsOfType(Integer.class);
   }
 
   @Test public void shouldFailIfOneOrMoreElementsDoNotBelongToGivenType() {
     expectAssertionError("not all elements in array:<[2.0, 4, 5]> belong to the type:<java.lang.Double>").on(
         new CodeToTest() {
           public void run() {
-            Number[] numbers = { 2d, 4, 5 };
-            Assertions.assertThat(numbers).hasAllElementsOfType(Double.class);
+            Object[] numbers = { 2d, 4, 5 };
+            new ObjectArrayAssert(numbers).hasAllElementsOfType(Double.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfOneOrMoreElementsDoNotBelongToGivenType() {
+    expectAssertionError("[A Test] not all elements in array:<[2.0, 4, 5]> belong to the type:<java.lang.Double>").on(
+        new CodeToTest() {
+          public void run() {
+            Object[] numbers = { 2d, 4, 5 };
+            new ObjectArrayAssert(numbers).as("A Test").hasAllElementsOfType(Double.class);
           }
         });
   }
 
   @Test public void shouldPassIfAllElementsBelongToGivenType() {
-    Number[] numbers = { 2, 4, 5 };
-    Assertions.assertThat(numbers).hasAtLeastOneElementOfType(Integer.class);
+    Object[] numbers = { 2, 4, 5 };
+    new ObjectArrayAssert(numbers).hasAtLeastOneElementOfType(Integer.class);
   }
 
   @Test public void shouldPassIfOneElementBelongToSubtypeOfGivenType() {
-    Number[] numbers = { 2, 4.0f, 5 };
-    Assertions.assertThat(numbers).hasAtLeastOneElementOfType(Integer.class);
+    Object[] numbers = { 2, 4.0f, 5 };
+    new ObjectArrayAssert(numbers).hasAtLeastOneElementOfType(Integer.class);
   }
 
-  @Test(expectedExceptions = AssertionError.class) public void shouldFailIfElementsDoNotBelongToGivenType() {
-    Number[] numbers = { 2, 4, 5 };
-    Assertions.assertThat(numbers).hasAtLeastOneElementOfType(Double.class);
+  @Test public void shouldFailIfElementsDoNotBelongToGivenType() {
+    expectAssertionError("array:<[2, 4, 5]> does not have any elements of type:<java.lang.Double>").on(
+        new CodeToTest() {
+          public void run() {
+            Object[] numbers = { 2, 4, 5 };
+            new ObjectArrayAssert(numbers).hasAtLeastOneElementOfType(Double.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfElementsDoNotBelongToGivenType() {
+    expectAssertionError("[A Test] array:<[2, 4, 5]> does not have any elements of type:<java.lang.Double>").on(
+        new CodeToTest() {
+          public void run() {
+            Object[] numbers = { 2, 4, 5 };
+            new ObjectArrayAssert(numbers).as("A Test").hasAtLeastOneElementOfType(Double.class);
+          }
+        });
   }
 
   private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
