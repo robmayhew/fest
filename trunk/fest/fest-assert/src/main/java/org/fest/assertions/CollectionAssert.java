@@ -42,7 +42,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @param objects the objects to look for.
    * @return this assertion object.
    * @throws AssertionError if the actual collection is <code>null</code>.
-   * @throws AssertionError if the given object array is <code>null</code>.
+   * @throws AssertionError if the given collection is <code>null</code>.
    * @throws AssertionError if the actual collection does not contain the given objects.
    */
   public CollectionAssert contains(Object...objects) {
@@ -59,7 +59,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @param objects the objects to look for.
    * @return this assertion object.
    * @throws AssertionError if the actual collection is <code>null</code>.
-   * @throws AssertionError if the given object array is <code>null</code>.
+   * @throws AssertionError if the given collection is <code>null</code>.
    * @throws AssertionError if the actual collection does not contain the given objects, or if the actual collection
    *           contains elements other than the ones specified.
    */
@@ -90,7 +90,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @param objects the objects that the collection should exclude.
    * @return this assertion object.
    * @throws AssertionError if the actual collection is <code>null</code>.
-   * @throws AssertionError if the given object array is <code>null</code>.
+   * @throws AssertionError if the given collection is <code>null</code>.
    * @throws AssertionError if the actual collection contains any of the given objects.
    */
   public CollectionAssert excludes(Object...objects) {
@@ -104,7 +104,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
 
   private void failIfNull(Object[] objects) {
-    if (objects == null) fail("the given array of objects should not be null");
+    if (objects == null) fail("the given collection of objects should not be null");
   }
 
   /**

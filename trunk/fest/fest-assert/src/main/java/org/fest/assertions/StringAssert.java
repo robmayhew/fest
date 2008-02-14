@@ -15,7 +15,8 @@
  */
 package org.fest.assertions;
 
-import static org.fest.util.Strings.*;
+import static org.fest.assertions.Formatting.inBrackets;
+import static org.fest.util.Strings.concat;
 
 import org.fest.util.Strings;
 
@@ -78,22 +79,23 @@ public final class StringAssert extends GroupAssert<String> {
 
   /**
    * Verifies that the actual <code>String</code> is empty (not <code>null</code> with zero characters.)
-   * @throws AssertionError if the actual <code>String</code> is not <code>null</code> or not empty.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
+   * @throws AssertionError if the actual <code>String</code> is not empty.
    */
   public void isEmpty() {
     isNotNull();
-    if (!Strings.isEmpty(actual))
-      fail(concat(actual(), " should be empty or null"));
+    if (!Strings.isEmpty(actual)) fail(concat("expecting empty String but was:", inBrackets(actual)));
   }
 
   /**
    * Verifies that the actual <code>String</code> contains at least on character.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>String</code> is <code>null</code> or empty.
    */
   public StringAssert isNotEmpty() {
-    if (Strings.isEmpty(actual))
-      fail(concat(actual(), " should not be empty"));
+    isNotNull();
+    if (Strings.isEmpty(actual)) fail(concat("expecting a non-empty String, but it was empty"));
     return this;
   }
 
@@ -154,7 +156,11 @@ public final class StringAssert extends GroupAssert<String> {
    * one.
    */
   public StringAssert hasSize(int expected) {
-    return (StringAssert)assertEqualSize(expected);
+    int actualSize = actualGroupSize();
+    if (actualSize != expected)
+      fail(concat(
+          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for String:", actual()));
+    return this;
   }
 
   int actualGroupSize() {
@@ -166,12 +172,13 @@ public final class StringAssert extends GroupAssert<String> {
    * Verifies that the actual <code>String</code> contains the given one.
    * @param expected the given <code>String</code> expected to be contained in the actual one.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>String</code> does not contain the given one.
    */
   public StringAssert contains(String expected) {
     isNotNull();
     if (actual.indexOf(expected) == -1)
-      fail(concat(actual(), " should contain the String ", quote(expected)));
+      fail(concat(actual(), " should contain the String:", inBrackets(expected)));
     return this;
   }
 
@@ -179,12 +186,13 @@ public final class StringAssert extends GroupAssert<String> {
    * Verifies that the actual <code>String</code> ends with the given one.
    * @param expected the given <code>String</code> expected to be at the end of the actual one.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>String</code> does not end with the given one.
    */
   public StringAssert endsWith(String expected) {
     isNotNull();
     if (!actual.endsWith(expected))
-      fail(concat(actual(), " should end with ", quote(expected)));
+      fail(concat(actual(), " should end with:", inBrackets(expected)));
     return this;
   }
 
@@ -192,12 +200,13 @@ public final class StringAssert extends GroupAssert<String> {
    * Verifies that the actual <code>String</code> starts with the given one.
    * @param expected the given <code>String</code> expected to be at the beginning of the actual one.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>String</code> does not start with the given one.
    */
   public StringAssert startsWith(String expected) {
     isNotNull();
     if (!actual.startsWith(expected))
-      fail(concat(actual(), " should start with ", quote(expected)));
+      fail(concat(actual(), " should start with:", inBrackets(expected)));
     return this;
   }
 
@@ -205,12 +214,13 @@ public final class StringAssert extends GroupAssert<String> {
    * Verifies that the actual <code>String</code> does not contains the given one.
    * @param s the given <code>String</code> expected not to be contained in the actual one.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>String</code> does contain the given one.
    */
   public StringAssert excludes(String s) {
     isNotNull();
     if (actual.indexOf(s) != -1)
-      fail(concat(actual(), " should not contain the String ", quote(s)));
+      fail(concat(actual(), " should not contain the String:", inBrackets(s)));
     return this;
   }
 
@@ -223,7 +233,7 @@ public final class StringAssert extends GroupAssert<String> {
   public StringAssert matches(String regex) {
     isNotNull();
     if (!actual.matches(regex))
-      fail(concat(actual(), " should match the regular expression ", quote(regex)));
+      fail(concat(actual(), " should match the regular expression:", inBrackets(regex)));
     return this;
   }
 
@@ -236,11 +246,11 @@ public final class StringAssert extends GroupAssert<String> {
   public StringAssert doesNotMatch(String regex) {
     isNotNull();
     if (actual.matches(regex))
-      fail(concat(actual(), " should not match the regular expression ", quote(regex)));
+      fail(concat(actual(), " should not match the regular expression:", inBrackets(regex)));
     return this;
   }
 
   private String actual() {
-    return concat("the String", quote(actual));
+    return inBrackets(actual);
   }
 }

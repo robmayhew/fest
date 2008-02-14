@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  */
 public class ImageAssertTest {
 
-  @Test public void shouldPassIfImagesAreEqualAsAnticipated() {
+  @Test public void shouldPassIfImagesAreEqual() {
     BufferedImage a = image(5, 5, BLUE);
     BufferedImage e = image(5, 5, BLUE);
     new ImageAssert(a).isEqualTo(e);
@@ -98,19 +98,19 @@ public class ImageAssertTest {
     });
   }
 
-  @Test public void shouldPassIfImageWidthsAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfImageWidthsAreNotEqual() {
     BufferedImage a = image(3, 5, BLUE);
     BufferedImage e = image(5, 5, BLUE);
     new ImageAssert(a).isNotEqualTo(e);
   }
 
-  @Test public void shouldPassIfImageHeightsAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfImageHeightsAreNotEqual() {
     BufferedImage a = image(5, 3, BLUE);
     BufferedImage e = image(5, 5, BLUE);
     new ImageAssert(a).isNotEqualTo(e);
   }
 
-  @Test public void shouldPassIfImageColorsAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfImageColorsAreNotEqual() {
     BufferedImage a = image(5, 5, BLUE);
     BufferedImage e = image(5, 5, YELLOW);
     new ImageAssert(a).isNotEqualTo(e);

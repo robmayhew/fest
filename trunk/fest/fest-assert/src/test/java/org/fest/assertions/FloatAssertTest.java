@@ -16,6 +16,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.FloatAssert.delta;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -28,8 +29,26 @@ import org.testng.annotations.Test;
  */
 public class FloatAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualUsingDeltaAsAnticipated() {
+  @Test public void shouldSetDescription() {
+    FloatAssert assertion = new FloatAssert(8.0f);
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    FloatAssert assertion = new FloatAssert(8.0f);
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldPassIfValuesAreEqualUsingDelta() {
     new FloatAssert(6.6f).isEqualTo(6.6f, delta(0.0f));
+  }
+
+  @Test public void shouldPassIfActualIsEqualToExpectedUsingDelta() {
+    new FloatAssert(8.688f).isEqualTo(8.68f, delta(0.009f));
   }
 
   @Test public void shouldFailIfValuesAreNotEqualUsingDeltaAndExpectingEqual() {
@@ -48,7 +67,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfValuesAreNotEqual() {
     new FloatAssert(0.0f).isNotEqualTo(-0.0f);
   }
 
@@ -68,7 +87,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanExpected() {
     new FloatAssert(0.0f).isGreaterThan(-0.0f);
   }
 
@@ -96,7 +115,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanExpected() {
     new FloatAssert(6.6f).isLessThan(6.8f);
   }
 
@@ -124,7 +143,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsZeroAsAnticipated() {
+  @Test public void shouldPassIfActualIsZero() {
     new FloatAssert(0.0f).isZero();
   }
 
@@ -144,7 +163,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsNaNAsAnticipated() {
+  @Test public void shouldPassIfActualIsNaN() {
     new FloatAssert(Float.NaN).isNaN();
   }
 
@@ -164,7 +183,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
+  @Test public void shouldPassIfActualIsPositive() {
     new FloatAssert(6.6f).isPositive();
   }
 
@@ -200,7 +219,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
+  @Test public void shouldPassIfActualIsNegative() {
     new FloatAssert(-6.6f).isNegative();
   }
 
@@ -236,7 +255,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
     new FloatAssert(8.8f).isGreaterOrEqualTo(8.8f).isGreaterOrEqualTo(6.6f);
   }
 
@@ -256,7 +275,7 @@ public class FloatAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
     new FloatAssert(6.6f).isLessOrEqualTo(6.6f).isLessOrEqualTo(8.8f);
   }
 

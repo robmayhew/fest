@@ -16,6 +16,7 @@ package org.fest.assertions;
 
 
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -29,7 +30,22 @@ import org.testng.annotations.Test;
  */
 public class CharAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
+  @Test public void shouldSetDescription() {
+    CharAssert assertion = new CharAssert('a');
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    CharAssert assertion = new CharAssert('a');
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+
+  @Test public void shouldPassIfValuesAreEqual() {
     new CharAssert('a').isEqualTo('a');
   }
 
@@ -49,7 +65,7 @@ public class CharAssertTest {
     });
   }
 
-  @Test public void shouldPassIfValueAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfValueAreNotEqual() {
     new CharAssert('a').isNotEqualTo('b');
   }
 
@@ -69,7 +85,7 @@ public class CharAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanExpected() {
     new CharAssert('a').isGreaterThan('A');
   }
 
@@ -105,7 +121,7 @@ public class CharAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanExpected() {
     new CharAssert('A').isLessThan('a');
   }
 
@@ -141,7 +157,7 @@ public class CharAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
     new CharAssert('a').isGreaterOrEqualTo('a').isGreaterOrEqualTo('A');
   }
 
@@ -161,7 +177,7 @@ public class CharAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessOrEqualToExpected() {
     new CharAssert('A').isLessOrEqualTo('a').isLessOrEqualTo('A');
   }
 

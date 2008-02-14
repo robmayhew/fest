@@ -15,6 +15,7 @@
 package org.fest.assertions;
 
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -27,7 +28,22 @@ import org.testng.annotations.Test;
  */
 public class ByteAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
+  @Test public void shouldSetDescription() {
+    ByteAssert assertion = new ByteAssert(asByte(8));
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ByteAssert assertion = new ByteAssert(asByte(8));
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+
+  @Test public void shouldPassIfValuesAreEqual() {
     new ByteAssert(asByte(6)).isEqualTo(asByte(6));
   }
 
@@ -47,7 +63,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfValuesAreNotEqual() {
     new ByteAssert(asByte(6)).isNotEqualTo(asByte(8));
   }
 
@@ -67,7 +83,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsZeroAsAnticipated() {
+  @Test public void shouldPassIfActualIsZero() {
     new ByteAssert(asByte(0)).isZero();
   }
 
@@ -87,7 +103,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanExpected() {
     new ByteAssert(asByte(6)).isGreaterThan(asByte(2));
   }
 
@@ -123,7 +139,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanExpected() {
     new ByteAssert(asByte(2)).isLessThan(asByte(6));
   }
 
@@ -159,7 +175,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
+  @Test public void shouldPassIfActualIsPositive() {
     new ByteAssert(asByte(6)).isPositive();
   }
 
@@ -195,7 +211,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
+  @Test public void shouldPassIfActualIsNegative() {
     new ByteAssert(asByte(-2)).isNegative();
   }
 
@@ -231,7 +247,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
     new ByteAssert(asByte(8)).isGreaterOrEqualTo(asByte(8)).isGreaterOrEqualTo(asByte(6));
   }
 
@@ -251,7 +267,7 @@ public class ByteAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualValueIsLessThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualValueIsLessThanOrEqualToExpected() {
     new ByteAssert(asByte(6)).isLessOrEqualTo(asByte(8)).isLessOrEqualTo(asByte(6));
   }
 

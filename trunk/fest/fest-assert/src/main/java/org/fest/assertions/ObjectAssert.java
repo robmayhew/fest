@@ -26,6 +26,7 @@ import java.util.Arrays;
  * method <code>{@link Assertions#assertThat(Object)}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public final class ObjectAssert extends GenericAssert<Object> {
 
@@ -37,14 +38,14 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * Verifies that the actual <code>Object</code> is an instance of the given type.
    * @param type the type to check the actual <code>Object</code> against.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> is not an instance of the given type.
    */
   public ObjectAssert isInstanceOf(Class<?> type) {
     isNotNull();
     Class<?> current = actual.getClass();
     if (!type.isAssignableFrom(current))
-      fail(concat("expected instance of:", inBrackets(type.getName()),
-          " but was instance of:", inBrackets(current.getName())));
+      fail(concat("expected instance of:", inBrackets(type), " but was instance of:", inBrackets(current)));
     return this;
   }
 
@@ -52,15 +53,24 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * Verifies that the actual <code>Object</code> is an instance of any of the given types.
    * @param types the types to check the actual <code>Object</code> against.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> is not an instance of any of the given types.
    */
   public ObjectAssert isInstanceOfAny(Class<?>...types) {
     isNotNull();
-    Class<?> current = actual.getClass();
-    for (Class<?> type : types) if (type.isAssignableFrom(current)) return this;
-    fail(concat("expected instance of any:",
-        inBrackets(Arrays.toString(namesOf(types))), " but was instance of:", inBrackets(current.getName())));
+    if (!foundInstanceOfAny(types))
+      fail(concat("expected instance of any:<", typeNames(types), "> but was instance of:", inBrackets(actual.getClass())));
     return this;
+  }
+
+  private boolean foundInstanceOfAny(Class<?>...types) {
+    Class<?> current = actual.getClass();
+    for (Class<?> type : types) if (type.isAssignableFrom(current)) return true;
+    return false;
+  }
+
+  private String typeNames(Class<?>... types) {
+    return Arrays.toString(namesOf(types));
   }
 
   /**

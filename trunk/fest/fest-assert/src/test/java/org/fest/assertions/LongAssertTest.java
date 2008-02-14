@@ -15,6 +15,7 @@
 package org.fest.assertions;
 
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -27,7 +28,21 @@ import org.testng.annotations.Test;
  */
 public class LongAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
+  @Test public void shouldSetDescription() {
+    LongAssert assertion = new LongAssert(8);
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    LongAssert assertion = new LongAssert(8);
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldPassIfValuesAreEqual() {
     new LongAssert(8).isEqualTo(8);
   }
 
@@ -47,7 +62,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfValuesAreNotEqual() {
     new LongAssert(6).isNotEqualTo(8);
   }
 
@@ -67,7 +82,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanExpected() {
     new LongAssert(8).isGreaterThan(6);
   }
 
@@ -103,7 +118,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanExpected() {
     new LongAssert(6).isLessThan(8);
   }
 
@@ -139,7 +154,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
+  @Test public void shouldPassIfActualIsPositive() {
     new LongAssert(6).isPositive();
   }
 
@@ -175,7 +190,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
+  @Test public void shouldPassIfActualIsNegative() {
     new LongAssert(-6).isNegative();
   }
 
@@ -211,7 +226,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsZeroAsAnticipated() {
+  @Test public void shouldPassIfActualIsZero() {
     new LongAssert(0).isZero();
   }
 
@@ -231,7 +246,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualGreaterThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualGreaterThanOrEqualToExpected() {
     new LongAssert(8).isGreaterOrEqualTo(8).isGreaterOrEqualTo(6);
   }
 
@@ -251,7 +266,7 @@ public class LongAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
     new LongAssert(6).isLessOrEqualTo(6).isLessOrEqualTo(8);
   }
 

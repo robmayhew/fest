@@ -130,27 +130,27 @@ public class FileAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualExistsAsAnticipated() {
+  @Test public void shouldPassIfActualExists() {
     file.exists(true);
     new FileAssert(file).exists();
   }
 
-  @Test public void shouldPassIfActualDoesNotExistAsAnticipated() {
+  @Test public void shouldPassIfActualDoesNotExist() {
     file.exists(false);
     new FileAssert(file).doesNotExist();
   }
 
-  @Test public void shouldPassIfActualIsDirectoryAsAnticipated() {
+  @Test public void shouldPassIfActualIsDirectory() {
     file.directory(true);
     new FileAssert(file).isDirectory();
   }
 
-  @Test public void shouldPassIfActualIsFileAsAnticipated() {
+  @Test public void shouldPassIfActualIsFile() {
     file.file(true);
     new FileAssert(file).isFile();
   }
 
-  @Test public void shouldPassIfSizeOfActualIsEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfSizeOfActualIsEqualToExpected() {
     file.length(8);
     new FileAssert(file).hasSize(8);
   }
@@ -189,7 +189,7 @@ public class FileAssertTest {
     });
   }
 
-  @Test public void shouldSucceedIfFilesHaveSameContentAsAnticipated() {
+  @Test public void shouldSucceedIfFilesHaveSameContent() {
     file.exists(true);
     FileContentComparatorStub comparator = new FileContentComparatorStub();
     FileStub expected = new FileStub("c:\\temp\\expected.txt");
@@ -227,7 +227,7 @@ public class FileAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsAbsoluteAsAnticipated() {
+  @Test public void shouldPassIfActualIsAbsolute() {
     file.absolute(true);
     new FileAssert(file).isAbsolute();
   }
@@ -250,7 +250,7 @@ public class FileAssertTest {
     });
   }
 
-  @Test public void shouldSPassIfActualIsRelativeAsAnticipated() {
+  @Test public void shouldSPassIfActualIsRelative() {
     file.absolute(false);
     new FileAssert(file).isRelative();
   }

@@ -2,6 +2,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.DoubleAssert.delta;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -15,7 +16,21 @@ import org.testng.annotations.Test;
  */
 public class DoubleAssertTest {
 
-  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
+  @Test public void shouldSetDescription() {
+    DoubleAssert assertion = new DoubleAssert(8.0);
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    DoubleAssert assertion = new DoubleAssert(8.0);
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldPassIfValuesAreEqual() {
     new DoubleAssert(8.68).isEqualTo(8.680);
   }
 
@@ -35,7 +50,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfValuesAreNotEqual() {
     new DoubleAssert(8.88).isNotEqualTo(8.68);
   }
 
@@ -55,7 +70,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanExpected() {
     new DoubleAssert(0.00).isGreaterThan(-0.00);
   }
 
@@ -91,7 +106,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanExpected() {
     new DoubleAssert(-0.0).isLessThan(0.0);
   }
 
@@ -127,7 +142,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsPositiveAsAnticipated() {
+  @Test public void shouldPassIfActualIsPositive() {
     new DoubleAssert(6.68).isPositive();
   }
 
@@ -163,7 +178,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsNegativeAsAnticipated() {
+  @Test public void shouldPassIfActualIsNegative() {
     new DoubleAssert(-6.68).isNegative();
   }
 
@@ -199,7 +214,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsNaNAsAnticipated() {
+  @Test public void shouldPassIfActualIsNaN() {
     new DoubleAssert(Double.NaN).isNaN();
   }
 
@@ -219,7 +234,11 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsEqualToExpectedUsingDeltaAsAnticipated() {
+  @Test public void shouldPassIfActualIsEqaulToExpectedUsingZeroAsDelta() {
+    new DoubleAssert(8.0).isEqualTo(8.0, delta(0.0));
+  }
+
+  @Test public void shouldPassIfActualIsEqualToExpectedUsingDelta() {
     new DoubleAssert(8.688).isEqualTo(8.68, delta(0.009));
   }
 
@@ -239,7 +258,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsZeroAsAnticipated() {
+  @Test public void shouldPassIfActualIsZero() {
     new DoubleAssert(0).isZero();
   }
 
@@ -259,7 +278,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
     new DoubleAssert(8.8).isGreaterOrEqualTo(8.8).isGreaterOrEqualTo(6.6);
   }
 
@@ -279,7 +298,7 @@ public class DoubleAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualIsLessThanOrEqualToExpectedAsAnticipated() {
+  @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
     new DoubleAssert(6.6).isLessOrEqualTo(6.6).isLessOrEqualTo(8.8);
   }
 

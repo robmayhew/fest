@@ -49,7 +49,7 @@ public class FailTest {
   }
 
   @Test(dataProvider = "messageProvider")
-  public void shouldThrowErrorWithMessageIfValuesAreEqualAsAnticipated(final String message) {
+  public void shouldThrowErrorWithMessageIfValuesAreEqual(final String message) {
     String expectedMessage = concat(format(message), "actual value:<'Yoda'> should not be equal to:<'Yoda'>");
     expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
@@ -63,7 +63,7 @@ public class FailTest {
   }
 
   @Test(dataProvider = "messageProvider")
-  public void shouldFailIfValuesAreNotEqualAsAnticipated(final String message) {
+  public void shouldFailIfValuesAreNotEqual(final String message) {
     String expectedMessage = concat(format(message), "expected:<'Luke'> but was:<'Yoda'>");
     expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
@@ -78,7 +78,7 @@ public class FailTest {
 
   @Test(dataProvider = "messageProvider")
   public void failIfNullShouldFailIfNull(final String message) {
-    String expectedMessage = concat(format(message), "expecting a non-null object");
+    String expectedMessage = concat(format(message), "expecting a non-null object, but it was null");
     expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfNull(message, null);
@@ -91,7 +91,7 @@ public class FailTest {
   }
 
   @Test(dataProvider = "messageProvider")
-  public void shouldFailIfValueIsNotNullAsAnticipated(final String message) {
+  public void shouldFailIfValueIsNotNull(final String message) {
     String expectedMessage = concat(format(message), "<'Leia'> should be null");
     expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
@@ -105,7 +105,7 @@ public class FailTest {
   }
 
   @Test(dataProvider = "messageProvider")
-  public void shouldFailIfValuesAreSameAsAnticipated(final String message) {
+  public void shouldFailIfValuesAreSame(final String message) {
     final Object o = new Object();
     String expectedMessage = concat(format(message), "given objects are same:<", o, ">");
     expectAssertionError(expectedMessage).on(new CodeToTest() {
@@ -121,7 +121,7 @@ public class FailTest {
 
   @Test(dataProvider = "messageProvider")
   public void failIfNotSameShouldFailIfNotSame(final String message) {
-    String expectedMessage = concat(format(message), "expected same instance but found <'Ben'> and <'Han'>");
+    String expectedMessage = concat(format(message), "expected same instance but found:<'Ben'> and:<'Han'>");
     expectAssertionError(expectedMessage).on(new CodeToTest() {
       public void run() {
         Fail.failIfNotSame(message, "Ben", "Han");

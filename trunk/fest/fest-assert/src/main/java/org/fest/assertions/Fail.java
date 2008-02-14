@@ -80,7 +80,7 @@ public final class Fail {
    * @throws AssertionError if the given object is <code>null</code>.
    */
   static void failIfNull(String message, Object o) {
-    if (o == null) fail(concat(format(message), "expecting a non-null object"));
+    if (o == null) fail(concat(format(message), "expecting a non-null object, but it was null"));
   }
 
   /**
@@ -113,7 +113,7 @@ public final class Fail {
    */
   static void failIfNotSame(String message, Object first, Object second) {
     if (first != second)
-      fail(concat(format(message), "expected same instance but found ", inBrackets(first), " and ", inBrackets(second)));
+      fail(concat(format(message), "expected same instance but found:", inBrackets(first), " and:", inBrackets(second)));
   }
 
   /**
@@ -135,7 +135,7 @@ public final class Fail {
   static String errorMessageIfNotEqual(String message, Object actual, Object expected) {
     return concat(format(message), errorMessageIfNotEqual(actual, expected));
   }
-  
+
   /**
    * Returns an error message to be used when two objects that are expected to be equal aren't equal.
    * @param actual the value checked against <code>expected</code>.

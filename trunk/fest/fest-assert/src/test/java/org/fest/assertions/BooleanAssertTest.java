@@ -16,6 +16,7 @@
 package org.fest.assertions;
 
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -28,7 +29,21 @@ import org.testng.annotations.Test;
  */
 public class BooleanAssertTest {
 
-  @Test public void shouldPassIfActualValueIsTrueAsAnticipated() {
+  @Test public void shouldSetDescription() {
+    BooleanAssert assertion = new BooleanAssert(true);
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    BooleanAssert assertion = new BooleanAssert(true);
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldPassIfActualValueIsTrue() {
     new BooleanAssert(true).isTrue();
   }
 
@@ -48,7 +63,7 @@ public class BooleanAssertTest {
     });
   }
 
-  @Test public void shouldPassIfActualValueIsFalseAsAnticipated() {
+  @Test public void shouldPassIfActualValueIsFalse() {
     new BooleanAssert(false).isFalse();
   }
 
@@ -100,11 +115,11 @@ public class BooleanAssertTest {
     });
   }
 
-  @Test public void shouldPassIfValuesAreNotEqualAsAnticipated() {
+  @Test public void shouldPassIfValuesAreNotEqual() {
     new BooleanAssert(false).isNotEqualTo(true);
   }
 
-  @Test public void shouldPassIfValuesAreEqualAsAnticipated() {
+  @Test public void shouldPassIfValuesAreEqual() {
     new BooleanAssert(false).isEqualTo(false);
   }
 }

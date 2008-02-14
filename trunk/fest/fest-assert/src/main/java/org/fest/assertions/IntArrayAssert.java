@@ -1,5 +1,5 @@
 /*
- * Created on Feb 3, 2008
+ * Created on Feb 14, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -88,8 +88,9 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
    * Verifies that the actual <code>int</code> array contains the given values <strong>only</strong>.
    * @param values the values to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>int</code> array does not contain the given objects, or if the
-   *           actual <code>int</code> array contains elements other than the ones specified.
+   *          actual <code>int</code> array contains elements other than the ones specified.
    */
   public IntArrayAssert containsOnly(int...values) {
     isNotNull();
@@ -104,7 +105,7 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     if (!copy.isEmpty()) 
-      fail(concat("unexpected element(s) ", inBrackets(copy.toArray()), " in array ", inBrackets(actual)));
+      fail(concat("unexpected element(s):", inBrackets(copy.toArray()), " in array:", actualInBrackets()));
     return this;
   }
 
@@ -115,13 +116,14 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
 	}
   
   private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array ", inBrackets(actual), " does not contain element(s) ", inBrackets(notFound.toArray())));
+    fail(concat("array:", actualInBrackets(), " does not contain element(s):", inBrackets(notFound.toArray())));
   }
 
   /**
    * Verifies that the actual <code>int</code> array does not contain the given values.
    * @param values the values the array should exclude.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> array contains any of the given values.
    */
   public IntArrayAssert excludes(int...values) {
@@ -129,7 +131,7 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
     List<Object> found = new ArrayList<Object>();
     for (int value : values) if (hasElement(value)) found.add(value);
     if (!found.isEmpty())
-      fail(concat("array ", inBrackets(actual), " does not exclude element(s) ", inBrackets(found.toArray())));      
+      fail(concat("array:", actualInBrackets(), " does not exclude element(s):", inBrackets(found.toArray())));
     return this;
   }
 
@@ -155,25 +157,28 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
    * @throws AssertionError if the actual <code>int</code> array is <code>null</code>.
    */
   public IntArrayAssert isNotNull() {
-    return (IntArrayAssert)assertNotNull();
+    if (actual == null) fail("expecting a non-null array, but it was null");
+    return this;
   }
   
   /**
    * Verifies that the actual <code>int</code> array is empty (not <code>null</code> with zero elements.)
+   * @throws AssertionError if the actual <code>int</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>int</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
     if (actualGroupSize() > 0) 
-      fail(concat("expecting empty array, but was ", inBrackets(actual)));
+      fail(concat("expecting empty array, but was:", actualInBrackets()));
   }
 
   /**
    * Verifies that the actual <code>int</code> array contains at least on element.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>int</code> array is empty.
    */
   public IntArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail("expecting a non-empty array");
+    if (actualGroupSize() == 0) fail("expecting a non-empty array, but it was empty");
     return this;
   }
 
@@ -203,20 +208,29 @@ public final class IntArrayAssert extends GroupAssert<int[]> {
     return this;
   }
 
+  /**
+   * Verifies that the number of elements in the actual <code>int</code> array is equal to the given one.
+   * @param expected the expected number of elements in the actual <code>int</code> array.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>int</code> array is <code>null</code>.
+   * @throws AssertionError if the number of elements in the actual <code>int</code> array is not equal to the given 
+   *          one.
+   */
+  public IntArrayAssert hasSize(int expected) {
+    int actualSize = actualGroupSize();
+    if (actualSize != expected)
+      fail(concat(
+          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for array:", actualInBrackets()));
+    return this;
+  }
+  
   int actualGroupSize() {
     isNotNull();
     return actual.length;
   }
 
-  /**
-   * Verifies that the number of elements in the actual <code>int</code> array is equal to the given one.
-   * @param expected the expected number of elements in the actual <code>int</code> array.
-   * @return this assertion object.
-   * @throws AssertionError if the number of elements in the actual <code>int</code> array is not equal to the given 
-   * one.
-   */
-  public IntArrayAssert hasSize(int expected) {
-    return (IntArrayAssert)assertEqualSize(expected);
+  private String actualInBrackets() {
+    return inBrackets(actual);
   }
   
   /**

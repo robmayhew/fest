@@ -15,11 +15,6 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.errorMessageIfNotEqual;
-import static org.fest.util.Strings.concat;
-
-import org.fest.util.Strings;
-
 /**
  * Understands a template for assertion methods related to arrays or collections.
  * @param <T> the type of object implementations of this template can verify.
@@ -28,8 +23,6 @@ import org.fest.util.Strings;
  * @author Alex Ruiz
  */
 abstract class GroupAssert<T> extends GenericAssert<T> {
-
-  private static final String SIZE = "size";
 
   /**
    * Creates a new <code>{@link GroupAssert}</code>.
@@ -66,21 +59,6 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
    */
   public final IntAssert size() {
     return new IntAssert(actualGroupSize());
-  }
-
-  @Deprecated
-  final GroupAssert<T> assertEqualSize(int expected) {
-    if (actual == null) fail("cannot get size of a null object");
-    int actualSize = actualGroupSize();
-    if (actualSize != expected)
-      fail(errorMessageIfNotEqual(descriptionForSize(), String.valueOf(actualSize), String.valueOf(expected)));
-    return this;
-  }
-
-  private String descriptionForSize() {
-    String description = description();
-    if (Strings.isEmpty(description)) return SIZE;
-    return concat(description, " - ", SIZE);
   }
 
   abstract int actualGroupSize();
