@@ -44,7 +44,7 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    */
   public static BufferedImage read(String imageFilePath) {
     File imageFile = new File(imageFilePath);
-    if (!imageFile.isFile()) Fail.fail(concat("The path ", quote(imageFilePath), "does not belong to a file"));
+    if (!imageFile.isFile()) Fail.fail(concat("The path ", quote(imageFilePath), " does not belong to a file"));
     try {
       return ImageIO.read(imageFile);
     } catch (IOException e) {

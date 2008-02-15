@@ -16,6 +16,7 @@ package org.fest.assertions;
 
 import static java.awt.Color.*;
 import static org.fest.assertions.CommonFailures.*;
+import static org.fest.assertions.Resources.file;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.concat;
 import static org.testng.Assert.*;
@@ -35,6 +36,27 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  */
 public class ImageAssertTest {
+
+  @Test public void shouldReadImageFile() {
+    String filePath = file("red.png").getPath();
+    BufferedImage image = ImageAssert.read(filePath);
+    assertNotNull(image);
+    int w = image.getWidth();
+    assertEquals(w, 6);
+    int h = image.getHeight();
+    assertEquals(h, 6);
+    for (int x = 0; x < w; x++)
+      for (int y = 0; y < h; y++)
+        assertEquals(image.getRGB(x, y), RED.getRGB());
+  }
+
+  @Test public void shouldFailIfImagePathIsNotFileWhenReadingImage() {
+    expectAssertionError("The path 'blah' does not belong to a file").on(new CodeToTest() {
+      public void run() {
+        ImageAssert.read("blah");
+      }
+    });
+  }
 
   @Test public void shouldSetDescription() {
     ImageAssert assertion = new ImageAssert(fivePixelBlueImage());
