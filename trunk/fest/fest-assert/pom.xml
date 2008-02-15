@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-assert</artifactId>
-  <version>0.9.1</version>
+  <version>alpha-1-SNAPSHOT</version>
   <name>FEST Fluent Assertions</name>
   <description>'Flexible' or 'fluent' assertions for testing</description>
   <inceptionYear>2007</inceptionYear>
@@ -46,18 +46,6 @@
       <artifactId>fest-test</artifactId>
       <version>0.1</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>velocity</groupId>
-      <artifactId>velocity</artifactId>
-      <version>1.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>velocity-tools</groupId>
-      <artifactId>velocity-tools</artifactId>
-      <version>1.2</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>

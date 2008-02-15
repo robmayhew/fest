@@ -44,7 +44,6 @@ public class CharAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-
   @Test public void shouldPassIfValuesAreEqual() {
     new CharAssert('a').isEqualTo('a');
   }
@@ -193,6 +192,46 @@ public class CharAssertTest {
     expectAssertionError("[A Test] actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
       public void run() {
         new CharAssert('a').as("A Test").isLessOrEqualTo('A');
+      }
+    });
+  }
+  
+  @Test public void shouldPassIfActualIsUpperCase() {
+    new CharAssert('A').isUpperCase();
+  }
+
+  @Test public void shouldFailIfActualIsNotUpperCaseAndExpectingUpperCase() {
+    expectAssertionError("<a> should be an uppercase character").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').isUpperCase();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotUpperCaseAndExpectingUpperCase() {
+    expectAssertionError("[A Test] <a> should be an uppercase character").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('a').as("A Test").isUpperCase();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsLowerCase() {
+    new CharAssert('a').isLowerCase();
+  }
+
+  @Test public void shouldFailIfActualIsNotLowerCaseAndExpectingLowerCase() {
+    expectAssertionError("<A> should be a lowercase character").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('A').isLowerCase();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotLowerCaseAndExpectingLowerCase() {
+    expectAssertionError("[A Test] <A> should be a lowercase character").on(new CodeToTest() {
+      public void run() {
+        new CharAssert('A').as("A Test").isLowerCase();
       }
     });
   }

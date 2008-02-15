@@ -14,8 +14,7 @@
  */
 package org.fest.assertions;
 
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.assertions.PrimitiveFail.*;
 import static org.fest.util.Strings.concat;
 
@@ -140,7 +139,7 @@ public final class CharAssert extends PrimitiveAssert {
    * @throws AssertionError if the actual <code>char</code> value is not an uppercase value.
    */
   public CharAssert isUpperCase() {
-    if (!Character.isUpperCase(actual)) fail(concat(valueOf(actual), " should be an uppercase character"));
+    if (!Character.isUpperCase(actual)) fail(concat(inBrackets(actual), " should be an uppercase character"));
     return this;
   }
 
@@ -150,7 +149,7 @@ public final class CharAssert extends PrimitiveAssert {
    * @throws AssertionError if the actual <code>char</code> value is not an lowercase value.
    */
   public CharAssert isLowerCase() {
-    if (!Character.isLowerCase(actual)) fail(concat(valueOf(actual), " should be a lowercase character"));
+    if (!Character.isLowerCase(actual)) fail(concat(inBrackets(actual), " should be a lowercase character"));
     return this;
   }
 }
