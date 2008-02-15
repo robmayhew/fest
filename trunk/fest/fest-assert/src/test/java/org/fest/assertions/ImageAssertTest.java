@@ -15,12 +15,13 @@
 package org.fest.assertions;
 
 import static java.awt.Color.*;
-import static org.fest.assertions.CommonFailures.expectIllegalArgumentExceptionIfConditionIsNull;
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.fest.util.Strings.concat;
 import static org.testng.Assert.*;
-import static org.fest.util.Strings.*;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -115,7 +116,7 @@ public class ImageAssertTest {
       }
     });
   }
-  
+
   @Test public void shouldFailShowingDescriptionIfExpectedIsNullWhenCheckingEqual() {
     final BufferedImage a = fivePixelBlueImage();
     expectAssertionError(concat("[A Test] expected:<null> but was:<", a, ">")).on(new CodeToTest() {
@@ -288,6 +289,91 @@ public class ImageAssertTest {
     });
   }
 
+  @Test public void shouldPassIfEqualSize() {
+    new ImageAssert(fivePixelBlueImage()).hasSize(new Dimension(5, 5));
+  }
+
+  @Test public void shouldThrowErrorIfGivenSizeIsNull() {
+    expectIllegalArgumentException("The size to compare to should not be null").on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(fivePixelBlueImage()).hasSize(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfWidthNotEqual() {
+    expectAssertionError("expected:<(3, 5)> but was:<(5, 5)>").on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(fivePixelBlueImage()).hasSize(new Dimension(3, 5));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfWidthNotEqual() {
+    expectAssertionError("[A Test] expected:<(3, 5)> but was:<(5, 5)>").on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(fivePixelBlueImage()).as("A Test").hasSize(new Dimension(3, 5));
+      }
+    });
+  }
+
+  @Test public void shouldFailIfHeightNotEqual() {
+    expectAssertionError("expected:<(5, 3)> but was:<(5, 5)>").on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(fivePixelBlueImage()).hasSize(new Dimension(5, 3));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfHeightNotEqual() {
+    expectAssertionError("[A Test] expected:<(5, 3)> but was:<(5, 5)>").on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(fivePixelBlueImage()).as("A Test").hasSize(new Dimension(5, 3));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNull() {
+    new ImageAssert(null).isNull();
+  }
+
+  @Test public void shouldFailIfActualIsNotNullAndExpectingNull() {
+    final BufferedImage a = fivePixelBlueImage();
+    expectAssertionError(concat("<", a, "> should be null")).on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(a).isNull();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotNullAndExpectingNull() {
+    final BufferedImage a = fivePixelBlueImage();
+    expectAssertionError(concat("[A Test] <", a, "> should be null")).on(new CodeToTest() {
+      public void run() {
+        new ImageAssert(a).as("A Test").isNull();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNotNull() {
+    new ImageAssert(fivePixelBlueImage()).isNotNull();
+  }
+
+  @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new ImageAssert(null).isNotNull();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotNull() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ImageAssert(null).as("A Test").isNotNull();
+      }
+    });
+  }
 
   private BufferedImage fivePixelBlueImage() {
     return image(5, 5, BLUE);
