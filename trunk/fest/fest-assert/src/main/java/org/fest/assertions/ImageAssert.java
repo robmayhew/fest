@@ -15,7 +15,7 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.failIfNotEqual;
+import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
@@ -107,19 +107,17 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * pixels at the same coordinates have the same color.
    * @param expected the given image to compare the actual image to.
    * @return this assertion object.
-   * @throws AssertionError if the actual image is <code>null</code>.
-   * @throws AssertionError if the expected image is <code>null</code>.
    * @throws AssertionError if the actual image is not equal to the given one.
    */
   public ImageAssert isEqualTo(BufferedImage expected) {
-    isNotNull();
-    failIfNull(expected);
-    failIfEqual(sizeOf(actual), sizeOf(expected));
+    if (areEqual(actual, expected)) return this;
+    if (expected == null) fail(errorMessageIfNotEqual(actual, expected));
+    failIfNotEqual(sizeOf(actual), sizeOf(expected));
     if (!hasEqualColor(expected)) fail("images do not have the same color(s)");
     return this;
   }
 
-  private void failIfEqual(Dimension actual, Dimension expected) {
+  private void failIfNotEqual(Dimension actual, Dimension expected) {
     if (!areEqual(actual, expected))
       fail(concat("image size, expected:", inBrackets(expected), " but was:", inBrackets(actual)));
   }
@@ -129,19 +127,13 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * the pixels at the same coordinates have the same color.
    * @param image the given image to compare the actual image to.
    * @return this assertion object.
-   * @throws AssertionError if the actual image is <code>null</code>.
-   * @throws AssertionError if the expected image is <code>null</code>.
    * @throws AssertionError if the actual image is equal to the given one.
    */
   public ImageAssert isNotEqualTo(BufferedImage image) {
-    isNotNull();
-    failIfNull(image);
+    if (areEqual(actual, image)) fail(errorMessageIfEqual(actual, image));
+    if (image == null) return this;
     if (areEqual(sizeOf(actual), sizeOf(image)) && hasEqualColor(image)) fail("images are equal");
     return this;
-  }
-
-  private void failIfNull(BufferedImage image) {
-    if (image == null) fail("image to compare to should not be null");
   }
 
   private static Dimension sizeOf(BufferedImage image) {
@@ -195,7 +187,7 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
   public ImageAssert hasSize(Dimension expected) {
     isNotNull();
     Dimension actual = new Dimension(this.actual.getWidth(), this.actual.getHeight());
-    failIfNotEqual(description(), actual, expected);
+    Fail.failIfNotEqual(description(), actual, expected);
     return this;
   }
 }
