@@ -6,12 +6,15 @@
   </properties>
   <body>
     <release version="alpha-1" date="TBD" description="Subsequent release">
-      <action dev="alruiz">
+      <action dev="alruiz, wanghy" tpe="fix">
+        Fixed bug in FileContentComparator where EOF was determined at the wrong time.
+      </action>
+      <action dev="alruiz" type="add">
         Replaced methods 'hasCauseAsAncestor' and 'hasExactCauseAsAncestor' in ThrowableAssert with the methods
         'hasCauseOfType' and 'hasCauseOfExactType' in CauseHierarchyAssert. To get a CauseHierarchyAssert, users need to 
         call the method 'causeHierarchy' in ThrowableAssert.
       </action>
-      <action dev="alruiz">
+      <action dev="alruiz" type="add">
         Replaced method 'hasCauseOfType' in ThrowableAssert with method 'cause', which returns another ThrowableAssert
         for the cause of the actual Throwable. Users can call 'isInstanceOf' in the returned ThrowableAssert.
       </action>

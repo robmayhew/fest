@@ -73,9 +73,12 @@ public class FileContentComparatorTest {
 
   @DataProvider(name = "differentFiles") public Object[][] differentFiles() {
     return new Object[][] {
-        { "fileAssertTest2.txt", "fileAssertTest3.txt", diffs(diff(1, "abcde fghij abcde fghij", "abcde fghij abcde fghij z")) },
-        { "fileAssertTest1.txt", "fileAssertTest2.txt", diffs(diff(0, "EOF", "abcde fghij")) },
-        { "fileAssertTest2.txt", "fileAssertTest1.txt", diffs(diff(0, "abcde fghij", "EOF")) }
+        { "fileAssertTest2.txt", "fileAssertTest3.txt",
+          diffs(diff(1, "abcde fghij abcde fghij", "abcde fghij abcde fghij z")) },
+        { "fileAssertTest1.txt", "fileAssertTest2.txt",
+          diffs(diff(0, "this file is 22 bytes.", "abcde fghij"), diff(0, "EOF", "abcde fghij")) },
+        { "fileAssertTest2.txt", "fileAssertTest1.txt",
+          diffs(diff(0, "abcde fghij", "this file is 22 bytes."), diff(0, "abcde fghij", "EOF")) }
     };
   }
 

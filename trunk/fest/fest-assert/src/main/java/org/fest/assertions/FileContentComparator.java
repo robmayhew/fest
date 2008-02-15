@@ -66,6 +66,8 @@ class FileContentComparator {
       int lineNumber = expected.getLineNumber();
       String actualLine = actual.readLine();
       String expectedLine = expected.readLine();
+      if (areEqual(actualLine, expectedLine)) continue;
+      diffs.add(new LineDiff(lineNumber, actualLine, expectedLine));
       if (!actual.ready() && expected.ready()) {
         diffs.add(new LineDiff(lineNumber, EOF, expectedLine));
         return diffs;
@@ -74,8 +76,6 @@ class FileContentComparator {
         diffs.add(new LineDiff(lineNumber, actualLine, EOF));
         return diffs;
       }
-      if (areEqual(actualLine, expectedLine)) continue;
-      diffs.add(new LineDiff(lineNumber, actualLine, expectedLine));
     }
   }
 
