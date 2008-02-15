@@ -73,7 +73,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @param causeClass the cause to check the actual <code>Throwable</code> against.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> has not the given class for cause.
-   * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>causeClass</code> is <code>null</code>.
    */
   public ThrowableAssert hasCause(Class<? extends Throwable> causeClass) {
     isNotNull();
@@ -90,7 +90,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @param causeClass the cause to check the actual <code>Throwable</code> against.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> has not the given class in its ancestor tree of causes.
-   * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>causeClass</code> is <code>null</code>.
    */
   public ThrowableAssert hasCauseAsAncestor(Class<? extends Throwable> causeClass) {
     isNotNull();
@@ -110,7 +110,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @param causeClass the cause to check the actual <code>Throwable</code> against.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> has not the given class for cause.
-   * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>causeClass</code> is <code>null</code>.
    */
   public ThrowableAssert hasExactCause(Class<? extends Throwable> causeClass) {
     isNotNull();
@@ -135,7 +135,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @param causeClass the cause to check the actual <code>Throwable</code> against.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> has not the given class in its ancestor tree of causes.
-   * @throws IllegalArgumentException if <tt>causeClass</tt> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>causeClass</code> is <code>null</code>.
    */
   public ThrowableAssert hasExactCauseAsAncestor(Class<? extends Throwable> causeClass) {
     isNotNull();
@@ -156,13 +156,14 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   /**
    * Verifies that the actual <code>Throwable</code> has no cause.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>Throwable</code> has a cause.
    */
   public ThrowableAssert hasNoCause() {
     isNotNull();
     Throwable actualCause = actual.getCause();
     if (actualCause != null)
-      fail(concat("expected no cause but was:", inBrackets(actualCause.getClass().getName())));
+      fail(concat("expected exception without cause, but cause was:", inBrackets(actualCause.getClass())));
     return this;
   }
 

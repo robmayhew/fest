@@ -14,23 +14,118 @@
  */
 package org.fest.assertions;
 
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ThrowableAssert}</code>.
  *
  * @author David DIDIER
+ * @author Alex Ruiz
  */
 public class ThrowableAssertTest {
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasACause() {
-    new ThrowableAssert(new Exception(new IOException())).hasNoCause();
+  @Test public void shouldSetDescription() {
+    ThrowableAssert assertion = new ThrowableAssert(new Exception());
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
   }
 
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ThrowableAssert assertion = new ThrowableAssert(new Exception());
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  private static class NotNullThrowable extends Condition<Throwable> {
+    @Override public boolean matches(Throwable t) {
+      return t != null;
+    }
+  }
+
+  @Test public void shouldPassIfConditionSatisfied() {
+    new ThrowableAssert(new Exception()).satisfies(new NotNullThrowable());
+  }
+
+  @Test public void shouldFailIfConditionNotSatisfied() {
+    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).satisfies(new NotNullThrowable());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
+    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").satisfies(new NotNullThrowable());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("expected:<non-null throwable> but was:<null>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).satisfies(new NotNullThrowable().as("non-null throwable"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[Test] expected:<non-null throwable> but was:<null>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("Test").satisfies(new NotNullThrowable().as("non-null throwable"));
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenCheckingHasNoCause() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).hasNoCause();
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingHasNoCause() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").hasNoCause();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfThrowableHasCauseAndExpectingNoCause() {
+    expectAssertionError("expected exception without cause, but cause was:<java.io.IOException>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception(new IOException())).hasNoCause();
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfThrowableHasCauseAndExpectingNoCause() {
+    expectAssertionError("[A Test] expected exception without cause, but cause was:<java.io.IOException>").on(
+        new CodeToTest() {
+          public void run() {
+            Exception e = new Exception(new IOException());
+            new ThrowableAssert(e).as("A Test").hasNoCause();
+          }
+        });
+  }
+
+  @Test public void shouldPassIfActualHasCauseOfExpectedType() {
+    new ThrowableAssert(new Exception(new NullPointerException())).hasCause(NullPointerException.class);
+  }
+  
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldFailIfThrowableHasNotExpectedCause1() {
     new ThrowableAssert(new Exception()).hasCause(null);
@@ -211,5 +306,13 @@ public class ThrowableAssertTest {
   @Test public void shouldPassIfThrowableIsInstanceOfExpectedClass() {
       new ThrowableAssert(new IllegalStateException()).isInstanceOf(Exception.class);
       new ThrowableAssert(new IllegalStateException()).isInstanceOf(Throwable.class);
+  }
+
+  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("expecting a non-null object, but it was null").on(codeToTest);
+  }
+
+  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("[A Test] expecting a non-null object, but it was null").on(codeToTest);
   }
 }
