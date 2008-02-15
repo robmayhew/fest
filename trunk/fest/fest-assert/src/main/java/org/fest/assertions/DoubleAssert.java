@@ -1,7 +1,7 @@
 package org.fest.assertions;
 
 import static java.lang.Math.abs;
-import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Fail.errorMessageIfNotEqual;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.assertions.PrimitiveFail.*;
 import static org.fest.util.Strings.concat;
@@ -159,7 +159,7 @@ public final class DoubleAssert extends PrimitiveAssert {
   public DoubleAssert isEqualTo(double expected, Delta delta) {
     if (Double.compare(expected, actual) == 0) return this;
     if (!(abs(expected - actual) <= delta.value))
-      fail(concat(errorMessageIfNotEqual(description(), actual, expected), " using delta:", inBrackets(delta.value)));
+      fail(concat(errorMessageIfNotEqual(actual, expected), " using delta:", inBrackets(delta.value)));
     return this;
   }
 

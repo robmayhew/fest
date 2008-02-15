@@ -40,9 +40,11 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> is not an instance of the given type.
+   * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
   public ObjectAssert isInstanceOf(Class<?> type) {
     isNotNull();
+    validateTypeToCheckAgainst(type);
     Class<?> current = actual.getClass();
     if (!type.isAssignableFrom(current))
       fail(concat("expected instance of:", inBrackets(type), " but was instance of:", inBrackets(current)));
@@ -55,9 +57,13 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>Object</code> is not an instance of any of the given types.
+   * @throws IllegalArgumentException if the given array of types is <code>null</code>.
+   * @throws IllegalArgumentException if the given array of types contains <code>null</code>s.
    */
   public ObjectAssert isInstanceOfAny(Class<?>...types) {
     isNotNull();
+    if (types == null)
+      throw new IllegalArgumentException("The given array of types to check against should not be null");
     if (!foundInstanceOfAny(types))
       fail(concat("expected instance of any:<", typeNames(types), "> but was instance of:", inBrackets(actual.getClass())));
     return this;
@@ -65,8 +71,15 @@ public final class ObjectAssert extends GenericAssert<Object> {
 
   private boolean foundInstanceOfAny(Class<?>...types) {
     Class<?> current = actual.getClass();
-    for (Class<?> type : types) if (type.isAssignableFrom(current)) return true;
+    for (Class<?> type : types) {
+      validateTypeToCheckAgainst(type);
+      if (type.isAssignableFrom(current)) return true;
+    }
     return false;
+  }
+
+  void validateTypeToCheckAgainst(Class<?> type) {
+    if (type == null) throw new IllegalArgumentException("The given type to check against should not be null");
   }
 
   private String typeNames(Class<?>... types) {
@@ -112,6 +125,7 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectAssert satisfies(Condition<Object> condition) {
     return (ObjectAssert)verify(condition);

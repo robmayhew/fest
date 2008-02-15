@@ -5,6 +5,39 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="alpha-1" date="TBD" description="Subsequent release">
+      <action dev="alruiz">
+        Replaced methods 'hasCauseAsAncestor' and 'hasExactCauseAsAncestor' in ThrowableAssert with the methods
+        'hasCauseOfType' and 'hasCauseOfExactType' in CauseHierarchyAssert. To get a CauseHierarchyAssert, users need to 
+        call the method 'causeHierarchy' in ThrowableAssert.
+      </action>
+      <action dev="alruiz">
+        Replaced method 'hasCauseOfType' in ThrowableAssert with method 'cause', which returns another ThrowableAssert
+        for the cause of the actual Throwable. Users can call 'isInstanceOf' in the returned ThrowableAssert.
+      </action>
+      <action dev="wanghy=" type="add">
+        Method 'isInstanceOf' throws IllegalArgumentException if the given class is null.        
+      </action>
+      <action dev="wanghy=" type="add">
+        Method 'isInstanceOfAny' throws IllegalArgumentException if the given class array is null or if any element
+        in the class array is null.        
+      </action>
+      <action dev="alruiz" type="fix" due-to="Ted Young">
+        Fixed typos in javadocs for class PrimitiveFail.
+      </action>
+      <action dev="alruiz" type="remove">
+        Removed dependency on Apache Velocity.
+      </action>
+      <action dev="alruiz" type="remove">
+        Removed code generators for assertions for primitive arrays and failure methods for primitives.
+      </action>
+      <action dev="alruiz, wanghy" type="fix">
+        Added missing declaration of exceptions in Javadocs.
+      </action>
+      <action dev="alruiz, wanghy" type="fix">
+        Eliminated inconsistencies and typos in error messages.
+      </action>
+    </release>
     <release version="0.9.1" date="2008-02-04" description="Subsequent release">
       <action dev="alruiz" type="fix">
         Error messages in ObjectArrayAssert and all the assertion objects dealing with array of primitives where

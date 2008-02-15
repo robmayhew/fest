@@ -89,13 +89,13 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @param entries
    * @return this assertion error.
    * @throws AssertionError if the actual map is <code>null</code>.
-   * @throws AssertionError if the given array of entries is <code>null</code>.
-   * @throws AssertionError if any of the entries in the given array is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain any of the given entries.
+   * @throws IllegalArgumentException if the given array of entries is <code>null</code>.
+   * @throws IllegalArgumentException if any of the entries in the given array is <code>null</code>.
    */
   public MapAssert contains(Entry...entries) {
     isNotNull();
-    failIfNull(ENTRIES, entries);
+    validate(ENTRIES, entries);
     List<Entry> notFound = new ArrayList<Entry>();
     for (Entry e : entries) if (!containsEntry(e)) notFound.add(e);
     if (!notFound.isEmpty()) failIfNotFound(notFound.size() == 1 ? ENTRY : ENTRIES, notFound);
@@ -103,7 +103,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   }
 
   private boolean containsEntry(Entry e) {
-    if (e == null) throw new AssertionError("the entry to check should not be null");
+    if (e == null) throw new IllegalArgumentException("The entry to check should not be null");
     if (!actual.containsKey(e.key)) return false;
     return actual.containsValue(e.value);
   }
@@ -144,12 +144,12 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @param keys the keys to look for.
    * @return this assertion object.
    * @throws AssertionError if the actual map is <code>null</code>.
-   * @throws AssertionError if the given array of keys is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain all the given keys.
+   * @throws IllegalArgumentException if the given array of keys is <code>null</code>.
    */
   public MapAssert keySetIncludes(Object... keys) {
     isNotNull();
-    failIfNull("keys", keys);
+    validate("keys", keys);
     Set<?> keySet = actual.keySet();
     List<Object> notFound = new ArrayList<Object>();
     for (Object key : keys) if (!keySet.contains(key)) notFound.add(key);
@@ -162,21 +162,21 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @param values the values to look for.
    * @return this assertion object.
    * @throws AssertionError if the actual map is <code>null</code>.
-   * @throws AssertionError if the given array of values is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain all the given values.
+   * @throws IllegalArgumentException if the given array of values is <code>null</code>.
    */
   public MapAssert valuesInclude(Object... values) {
     isNotNull();
-    failIfNull("values", values);
+    validate("values", values);
     List<Object> notFound = new ArrayList<Object>();
     for (Object expected : values) if (!actual.containsValue(expected)) notFound.add(expected);
     if (!notFound.isEmpty()) failIfNotFound(VALUES, notFound);
     return this;
   }
 
-  private void failIfNull(String description, Object[] objects) {
+  private void validate(String description, Object[] objects) {
     if (objects == null)
-      fail(concat("the given array of ", description, " should not be null"));
+      throw new IllegalArgumentException(concat("The given array of ", description, " should not be null"));
   }
 
   private void failIfNotFound(String description, List<?> notFound) {
@@ -281,6 +281,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Map</code> does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   public MapAssert satisfies(Condition<Map<?, ?>> condition) {
     return (MapAssert)verify(condition);

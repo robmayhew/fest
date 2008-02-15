@@ -86,6 +86,7 @@ public final class FileAssert extends GenericAssert<File> {
   /**
    * Verifies that the actual <code>File</code> does not exist.
    * @return this assertion object.
+   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>File</code> exists.
    */
   public FileAssert doesNotExist() {
@@ -97,6 +98,7 @@ public final class FileAssert extends GenericAssert<File> {
   /**
    * Verifies that the actual <code>File</code> does exist.
    * @return this assertion object.
+   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>File</code> does not exist.
    */
   public FileAssert exists() {
@@ -109,6 +111,7 @@ public final class FileAssert extends GenericAssert<File> {
    * Verifies that the size of the actual <code>File</code> is equal to the given one.
    * @param expected the expected size of the actual <code>File</code>.
    * @return this assertion object.
+   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
    * @throws AssertionError if the size of the actual <code>File</code> is not equal to the given one.
    */
   public FileAssert hasSize(long expected) {
@@ -123,6 +126,7 @@ public final class FileAssert extends GenericAssert<File> {
   /**
    * Verifies that the actual <code>File</code> is a directory.
    * @return this assertion object.
+   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>File</code> is not a directory.
    */
   public FileAssert isDirectory() {
@@ -145,6 +149,7 @@ public final class FileAssert extends GenericAssert<File> {
   /**
    * Verifies that the actual <code>File</code> is a regular file.
    * @return this assertion object.
+   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>File</code> is not a regular file.
    */
   public FileAssert isFile() {
@@ -198,6 +203,7 @@ public final class FileAssert extends GenericAssert<File> {
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>File</code> does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   @Override public FileAssert satisfies(Condition<File> condition) {
     return (FileAssert)verify(condition);
@@ -209,12 +215,14 @@ public final class FileAssert extends GenericAssert<File> {
    * <a href="http://sourceforge.net/projects/junit-addons">JUnit-addons</a>.)
    * @param expected the given <code>File</code> to compare the actual <code>File</code> to.
    * @return this assertion object.
+   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
    * @throws AssertionError if the content of the actual <code>File</code> is not equal to the content of the given
    *          one.
+   * @throws IllegalArgumentException if the file to compare to is <code>null</code>.
    */
   public FileAssert hasSameContentAs(File expected) {
     isNotNull();
-    if (expected == null) fail("file to compare to should not be null");
+    if (expected == null) throw new IllegalArgumentException("File to compare to should not be null");
     assertExists(actual).assertExists(expected);
     try {
       LineDiff[] diffs = comparator.compareContents(actual, expected);
@@ -254,8 +262,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert isRelative() {
     isNotNull();
-    if (actual.isAbsolute())
-      fail(concat("file:", inBrackets(actual), " should be a relative path"));
+    if (actual.isAbsolute()) fail(concat("file:", inBrackets(actual), " should be a relative path"));
     return this;
   }
 
@@ -266,8 +273,7 @@ public final class FileAssert extends GenericAssert<File> {
    */
   public FileAssert isAbsolute() {
     isNotNull();
-    if (!actual.isAbsolute())
-      fail(concat("file:", inBrackets(actual), " should be an absolute path"));
+    if (!actual.isAbsolute()) fail(concat("file:", inBrackets(actual), " should be an absolute path"));
     return this;
   }
 }

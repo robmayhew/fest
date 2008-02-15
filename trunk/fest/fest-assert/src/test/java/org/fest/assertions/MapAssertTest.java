@@ -14,6 +14,7 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.assertions.MapAssert.entry;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.testng.Assert.*;
@@ -59,6 +60,14 @@ public class MapAssertTest {
 
   @Test public void shouldPassIfConditionSatisfied() {
     new MapAssert(null).satisfies(new NullMap());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new MapAssert(EMPTY_MAP).satisfies(null);
+      }
+    });
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
@@ -115,22 +124,12 @@ public class MapAssertTest {
     });
   }
 
-  @Test public void shouldFailIfArrayOfKeysIsNullWhenCheckingIfContainsKeys() {
-    expectAssertionError("the given array of keys should not be null").on(new CodeToTest() {
+  @Test public void shouldThrowErrorIfArrayOfKeysIsNullWhenCheckingIfContainsKeys() {
+    expectIllegalArgumentException("The given array of keys should not be null").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Object[] keys = null;
         new MapAssert(map).keySetIncludes(keys);
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfArrayOfKeysIsNullWhenCheckingIfContainsKeys() {
-    expectAssertionError("[A Test] the given array of keys should not be null").on(new CodeToTest() {
-      public void run() {
-        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-        Object[] keys = null;
-        new MapAssert(map).as("A Test").keySetIncludes(keys);
       }
     });
   }
@@ -176,22 +175,12 @@ public class MapAssertTest {
     });
   }
 
-  @Test public void shouldFailIfArrayOfKeysIsNullWhenCheckingIfContainsValues() {
-    expectAssertionError("the given array of values should not be null").on(new CodeToTest() {
+  @Test public void shouldThrowErrorIfArrayOfKeysIsNullWhenCheckingIfContainsValues() {
+    expectIllegalArgumentException("The given array of values should not be null").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Object[] values = null;
         new MapAssert(map).valuesInclude(values);
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfArrayOfKeysIsNullWhenCheckingIfContainsValues() {
-    expectAssertionError("[A Test] the given array of values should not be null").on(new CodeToTest() {
-      public void run() {
-        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-        Object[] values = null;
-        new MapAssert(map).as("A Test").valuesInclude(values);
       }
     });
   }
@@ -220,22 +209,12 @@ public class MapAssertTest {
     new MapAssert(map).contains(entry("key1", 1));
   }
 
-  @Test public void shouldFailIfEntryIsNullwhenCheckingIfContainsEntry() {
-    expectAssertionError("the entry to check should not be null").on(new CodeToTest() {
+  @Test public void shouldThrowErrorIfEntryIsNullwhenCheckingIfContainsEntry() {
+    expectIllegalArgumentException("The entry to check should not be null").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Entry[] entries = { entry("key6", 6), null };
         new MapAssert(map).contains(entries);
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfEntryIsNullwhenCheckingIfContainsEntry() {
-    expectAssertionError("[A Test] the entry to check should not be null").on(new CodeToTest() {
-      public void run() {
-        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-        Entry[] entries = { entry("key6", 6), null };
-        new MapAssert(map).as("A Test").contains(entries);
       }
     });
   }
@@ -256,8 +235,8 @@ public class MapAssertTest {
     });
   }
 
-  @Test public void shouldFailIfEntryArrayIsNullWhenCheckingIfContainsEntry() {
-    expectAssertionError("the given array of entries should not be null").on(new CodeToTest() {
+  @Test public void shouldThrowErrorIfEntryArrayIsNullWhenCheckingIfContainsEntry() {
+    expectIllegalArgumentException("The given array of entries should not be null").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Entry[] entry = null;
@@ -266,18 +245,8 @@ public class MapAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfEntryArrayIsNullWhenCheckingIfContainsEntry() {
-    expectAssertionError("[A Test] the given array of entries should not be null").on(new CodeToTest() {
-      public void run() {
-        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-        Entry[] entries = null;
-        new MapAssert(map).as("A Test").contains(entries);
-      }
-    });
-  }
-
-  @Test public void shouldFailIfEntryIsNullWhenCheckingIfContainsEntry() {
-    expectAssertionError("the entry to check should not be null").on(new CodeToTest() {
+  @Test public void shouldThrowErrorIfEntryIsNullWhenCheckingIfContainsEntry() {
+    expectIllegalArgumentException("The entry to check should not be null").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Entry entry = null;

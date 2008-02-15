@@ -15,6 +15,7 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.expectIllegalArgumentExceptionIfConditionIsNull;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Collections.*;
 import static org.testng.Assert.*;
@@ -58,6 +59,14 @@ public class CollectionAssertTest {
 
   @Test public void shouldPassIfConditionSatisfied() {
     new CollectionAssert(EMPTY_COLLECTION).satisfies(new EmptyOrNullCollectionCondition());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(EMPTY_COLLECTION).satisfies(null);
+      }
+    });
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {

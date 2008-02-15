@@ -186,6 +186,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectArrayAssert satisfies(Condition<Object[]> condition) {
     return (ObjectArrayAssert)verify(condition);

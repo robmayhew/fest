@@ -96,6 +96,7 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual image does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   public ImageAssert satisfies(Condition<BufferedImage> condition) {
     return (ImageAssert)verify(condition);

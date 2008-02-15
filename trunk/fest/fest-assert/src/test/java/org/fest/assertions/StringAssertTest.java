@@ -15,6 +15,7 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.isEmpty;
 import static org.testng.Assert.*;
@@ -58,6 +59,14 @@ public class StringAssertTest {
     new StringAssert("HELLO").satisfies(new UpperCaseCondition());
   }
 
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new StringAssert("").satisfies(null);
+      }
+    });
+  }
+
   @Test public void shouldFailIfConditionNotSatisfied() {
     expectAssertionError("condition failed with:<'hello'>").on(new CodeToTest() {
       public void run() {
@@ -95,7 +104,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfEmpty() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).isEmpty();
       }
@@ -103,7 +112,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfEmpty() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").isEmpty();
       }
@@ -151,7 +160,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() {
         new StringAssert(null).isNotNull();
       }
@@ -159,7 +168,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotNull() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() {
         new StringAssert(null).as("A Test").isNotNull();
       }
@@ -171,7 +180,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfNotEmpty() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).isNotEmpty();
       }
@@ -179,7 +188,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfNotEmpty() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").isNotEmpty();
       }
@@ -248,7 +257,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsString() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).contains("Yoda");
       }
@@ -256,7 +265,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsString() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").contains("Yoda");
       }
@@ -284,7 +293,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfStartsWith() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).startsWith("Leia");
       }
@@ -292,7 +301,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfStartsWith() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").startsWith("Leia");
       }
@@ -320,7 +329,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfEndsWith() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).endsWith("Leia");
       }
@@ -328,7 +337,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfEndsWith() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").endsWith("Leia");
       }
@@ -356,7 +365,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndCheckingIfExcludes() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).excludes("Leia");
       }
@@ -364,7 +373,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndCheckingIfExcludes() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").excludes("Leia");
       }
@@ -392,7 +401,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfMatching() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).matches(EMPTY_STRING);
       }
@@ -400,7 +409,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfMatching() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).as("A Test").matches(EMPTY_STRING);
       }
@@ -505,13 +514,5 @@ public class StringAssertTest {
 
   @Test public void shouldPassIfStringsAreNotSame() {
     new StringAssert("Leia").isNotSameAs(EMPTY_STRING);
-  }
-
-  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("expecting a non-null object, but it was null").on(codeToTest);
-  }
-
-  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("[A Test] expecting a non-null object, but it was null").on(codeToTest);
   }
 }

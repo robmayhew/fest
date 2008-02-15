@@ -164,6 +164,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual collection does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   public CollectionAssert satisfies(Condition<Collection<?>> condition) {
     return (CollectionAssert)verify(condition);

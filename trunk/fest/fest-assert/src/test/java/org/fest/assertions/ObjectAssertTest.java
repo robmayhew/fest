@@ -14,6 +14,7 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
@@ -52,6 +53,14 @@ public class ObjectAssertTest {
 
   @Test public void shouldPassIfConditionSatisfied() {
     new ObjectAssert("Frodo").satisfies(new NotNullObjectCondition());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("").satisfies(null);
+      }
+    });
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
@@ -111,16 +120,16 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
-    shouldFailIfActualIsNull(new CodeToTest() {
-      public void run() throws Throwable {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
         new ObjectAssert(null).isNotNull();
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotNull() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
-      public void run() throws Throwable {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
         new ObjectAssert(null).as("A Test").isNotNull();
       }
     });
@@ -128,6 +137,14 @@ public class ObjectAssertTest {
 
   @Test public void shouldPassIfActualIsInstanceOfExpectedClass() {
     new ObjectAssert(yoda()).isInstanceOf(Person.class);
+  }
+
+  @Test public void shouldThrowErrorIfGivenClassIsNullWhenCheckingIfInstanceOf() {
+    shouldThrowErrorIfTypeIsNullWhenCheckingIfInstanceOf(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("Yoda").isInstanceOf(null);
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsNotInstanceOfExpectedClass() {
@@ -151,24 +168,43 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIsInstanceOfExpectedClass() {
-    shouldFailIfActualIsNull(new CodeToTest() {
-      public void run() throws Throwable {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
         new ObjectAssert(null).isInstanceOf(String.class);
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIsInstanceOfExpectedClass() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
-      public void run() throws Throwable {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
         new ObjectAssert(null).as("A Test").isInstanceOf(String.class);
       }
     });
   }
 
-  // /
   @Test public void shouldPassIfActualIsInstanceOfAnyExpectedClass() {
     new ObjectAssert(yoda()).isInstanceOfAny(Person.class, String.class, Integer.class);
+  }
+
+  @Test public void shouldThrowErrorIfArrayOfTypesIsNullWhenCheckingIfInstanceOfAny() {
+    expectIllegalArgumentException("The given array of types to check against should not be null").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("Yoda").isInstanceOfAny((Class<?>[]) null);
+      }
+    });
+  }
+
+  @Test public void shouldThrowErrorIfTypeInArrayIsNullWhenCheckingIfInstanceOfAny() {
+    shouldThrowErrorIfTypeIsNullWhenCheckingIfInstanceOf(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("Yoda").isInstanceOfAny(new Class<?>[] { null });
+      }
+    });
+  }
+
+  private void shouldThrowErrorIfTypeIsNullWhenCheckingIfInstanceOf(CodeToTest codeToTest) {
+    expectIllegalArgumentException("The given type to check against should not be null").on(codeToTest);
   }
 
   @Test public void shouldFailIfActualIsNotInstanceOfAnyExpectedClass() {
@@ -192,16 +228,16 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIsInstanceOfAnyExpectedClass() {
-    shouldFailIfActualIsNull(new CodeToTest() {
-      public void run() throws Throwable {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
         new ObjectAssert(null).isInstanceOfAny(String.class, Integer.class);
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIsInstanceOfAnyExpectedClass() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
-      public void run() throws Throwable {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
         new ObjectAssert(null).as("A Test").isInstanceOfAny(String.class, Integer.class);
       }
     });
@@ -299,14 +335,6 @@ public class ObjectAssertTest {
         new ObjectAssert("Yoda").as("A Test").isNotEqualTo("Yoda");
       }
     });
-  }
-
-  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("expecting a non-null object, but it was null").on(codeToTest);
-  }
-
-  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("[A Test] expecting a non-null object, but it was null").on(codeToTest);
   }
 
   private Person yoda() {

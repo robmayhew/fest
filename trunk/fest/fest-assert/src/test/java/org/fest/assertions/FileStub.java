@@ -89,4 +89,24 @@ class FileStub extends File {
   void length(long length) {
     this.length = length;
   }
+
+  /** @see java.lang.Object#hashCode() */
+  @Override public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((absolutePath == null) ? 0 : absolutePath.hashCode());
+    return result;
+  }
+
+  /** @see java.lang.Object#equals(java.lang.Object) */
+  @Override public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (!super.equals(obj)) return false;
+    if (!(obj instanceof FileStub)) return false;
+    final FileStub other = (FileStub) obj;
+    if (absolutePath == null) {
+      if (other.absolutePath != null) return false;
+    } else if (!absolutePath.equals(other.absolutePath)) return false;
+    return true;
+  }
 }

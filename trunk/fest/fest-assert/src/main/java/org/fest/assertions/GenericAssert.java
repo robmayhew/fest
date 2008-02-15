@@ -123,7 +123,7 @@ abstract class GenericAssert<T> extends Assert {
   abstract GenericAssert<T> isNotSameAs(T other);
 
   final GenericAssert<T> verify(Condition<T> condition) {
-    if (condition == null) throw new IllegalArgumentException("condition cannot be null");
+    if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
     if (!condition.matches(actual)) fail(conditionFailedMessage(condition));
     return this;
   }

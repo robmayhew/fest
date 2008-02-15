@@ -14,11 +14,14 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Systems.LINE_SEPARATOR;
+import static org.testng.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.fest.assertions.FileContentComparator.LineDiff;
 import org.fest.test.CodeToTest;
@@ -40,6 +43,86 @@ public class FileAssertTest {
     file = new FileStub("c:\\temp\\file.txt");
   }
 
+  @Test public void shouldSetDescription() {
+    FileAssert assertion = new FileAssert(file);
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    FileAssert assertion = new FileAssert(file);
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  private static class NotNullFileCondition extends Condition<File> {
+    @Override public boolean matches(File f) {
+      return f != null;
+    }
+  }
+
+  @Test public void shouldPassIfConditionSatisfied() {
+    new FileAssert(file).satisfies(new NotNullFileCondition());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).satisfies(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionNotSatisfied() {
+    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).satisfies(new NotNullFileCondition());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
+    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").satisfies(new NotNullFileCondition());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("expected:<non-null object> but was:<null>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).satisfies(new NotNullFileCondition().as("non-null object"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] expected:<non-null object> but was:<null>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").satisfies(new NotNullFileCondition().as("non-null object"));
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfNotExist() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).doesNotExist();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfNotExist() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").doesNotExist();
+      }
+    });
+  }
+
   @Test public void shouldFailIfActualExistsAndExpectingNotToExist() {
     file.exists(true);
     expectAssertionError("file:<c:\\temp\\file.txt> should not exist").on(new CodeToTest() {
@@ -54,6 +137,22 @@ public class FileAssertTest {
     expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should not exist").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).as("A Test").doesNotExist();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfExist() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).exists();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfExist() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").exists();
       }
     });
   }
@@ -76,6 +175,22 @@ public class FileAssertTest {
     });
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsDirectory() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).isDirectory();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsDirectory() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").isDirectory();
+      }
+    });
+  }
+
   @Test public void shouldFailIfActualIsNotDirectoryAndExpectingDirectory() {
     file.directory(false);
     expectAssertionError("file:<c:\\temp\\file.txt> should be a directory").on(new CodeToTest() {
@@ -94,6 +209,22 @@ public class FileAssertTest {
     });
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsFile() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).isFile();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsFile() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").isFile();
+      }
+    });
+  }
+
   @Test public void shouldFailIfActualIsNotFileAndExpectingFile() {
     file.file(false);
     expectAssertionError("file:<c:\\temp\\file.txt> should be a file").on(new CodeToTest() {
@@ -108,6 +239,22 @@ public class FileAssertTest {
     expectAssertionError("[A Test] file:<c:\\temp\\file.txt> should be a file").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).as("A Test").isFile();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingSize() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).hasSize(8);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingSize() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").hasSize(8);
       }
     });
   }
@@ -155,6 +302,22 @@ public class FileAssertTest {
     new FileAssert(file).hasSize(8);
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingSameContent() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).hasSameContentAs(file);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingSameContent() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").hasSameContentAs(file);
+      }
+    });
+  }
+
   @Test public void shouldFailIfFilesHaveDifferentContentAndExpectingSame() {
     file.exists(true);
     final FileContentComparatorStub comparator = new FileContentComparatorStub();
@@ -197,16 +360,80 @@ public class FileAssertTest {
     new FileAssert(file, comparator).hasSameContentAs(expected);
   }
 
+  @Test public void shouldFailIfIOExceptionThrownWhenComparingFiles() {
+    file.exists(true);
+    FileContentComparatorStub comparator = new FileContentComparatorStub();
+    IOException toThrow = new IOException();
+    comparator.exceptionToThrow(toThrow);
+    FileStub expected = new FileStub("c:\\temp\\expected.txt");
+    expected.exists(true);
+    try {
+      new FileAssert(file, comparator).hasSameContentAs(expected);
+      fail();
+    } catch (AssertionError e) {
+      assertEquals(e.getMessage(),
+          "unable to compare contents of files:<c:\\temp\\file.txt> and <c:\\temp\\expected.txt>");
+      assertSame(e.getCause(), toThrow);
+    }
+  }
+
+  @Test public void shouldFailShowingDescriptionIfIOExceptionThrownWhenComparingFiles() {
+    file.exists(true);
+    FileContentComparatorStub comparator = new FileContentComparatorStub();
+    IOException toThrow = new IOException();
+    comparator.exceptionToThrow(toThrow);
+    FileStub expected = new FileStub("c:\\temp\\expected.txt");
+    expected.exists(true);
+    try {
+      new FileAssert(file, comparator).as("A Test").hasSameContentAs(expected);
+      fail();
+    } catch (AssertionError e) {
+      assertEquals(e.getMessage(),
+          "[A Test] unable to compare contents of files:<c:\\temp\\file.txt> and <c:\\temp\\expected.txt>");
+      assertSame(e.getCause(), toThrow);
+    }
+  }
+
+  @Test public void shouldThrowErrorIfFileToCompareToIsNull() {
+    expectIllegalArgumentException("File to compare to should not be null").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new FileAssert(file).hasSameContentAs(null);
+      }
+    });
+  }
+
   static class FileContentComparatorStub extends FileContentComparator {
     private LineDiff[] diffs = new LineDiff[0];
+    private IOException e;
 
     void lineDiffs(LineDiff...diffs) {
       this.diffs = diffs;
     }
 
-    @Override LineDiff[] compareContents(File actual, File expected) {
+    void exceptionToThrow(IOException e) {
+      this.e = e;
+    }
+
+    @Override LineDiff[] compareContents(File actual, File expected) throws IOException {
+      if (e != null) throw e;
       return diffs;
     }
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsAbsolute() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).isAbsolute();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsAbsolute() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").isAbsolute();
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsNotAbsoluteAndExpectingAbsolute() {
@@ -232,6 +459,22 @@ public class FileAssertTest {
     new FileAssert(file).isAbsolute();
   }
 
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsRelative() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).isRelative();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsRelative() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").isRelative();
+      }
+    });
+  }
+
   @Test public void shouldFailIfActualIsNotRelativeAndExpectingRelative() {
     file.absolute(true);
     expectAssertionError("file:<c:\\temp\\file.txt> should be a relative path").on(new CodeToTest() {
@@ -253,5 +496,87 @@ public class FileAssertTest {
   @Test public void shouldSPassIfActualIsRelative() {
     file.absolute(false);
     new FileAssert(file).isRelative();
+  }
+
+
+  @Test public void shouldPassIfFilesAreSame() {
+    new FileAssert(file).isSameAs(file);
+  }
+
+  @Test public void shouldFailIfFilesAreNotSameAndExpectingSame() {
+    expectAssertionError("expected same instance but found:<c:\\temp\\file.txt> and:<c:\\>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).isSameAs(new FileStub("c:\\"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFilesAreNotSameAndExpectingSame() {
+    expectAssertionError("[A Test] expected same instance but found:<c:\\temp\\file.txt> and:<c:\\>").on(
+        new CodeToTest() {
+          public void run() {
+            new FileAssert(file).as("A Test").isSameAs(new FileStub("c:\\"));
+          }
+        });
+  }
+
+  @Test public void shouldPassIfFilesAreNotSame() {
+    new FileAssert(file).isNotSameAs(new FileStub("c:\\"));
+  }
+
+  @Test public void shouldFailIfFilesAreSameAndExpectingNotSame() {
+    expectAssertionError("given objects are same:<c:\\temp\\file.txt>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).isNotSameAs(file);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFilesAreSameAndExpectingNotSame() {
+    expectAssertionError("[A Test] given objects are same:<c:\\temp\\file.txt>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isNotSameAs(file);
+      }
+    });
+  }
+
+  @Test public void shouldPassIfFilesAreEqual() {
+    new FileAssert(file).isEqualTo(new FileStub("c:\\temp\\file.txt"));
+  }
+
+  @Test public void shouldFailIfActualsAreNotEqual() {
+    expectAssertionError("expected:<c:\\> but was:<c:\\temp\\file.txt>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).isEqualTo(new FileStub("c:\\"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualsAreNotEqual() {
+    expectAssertionError("[A Test] expected:<c:\\> but was:<c:\\temp\\file.txt>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isEqualTo(new FileStub("c:\\"));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfFilesAreNotEqual() {
+    new FileAssert(file).isNotEqualTo(new FileStub("c:\\"));
+  }
+
+  @Test public void shouldFailIfActualsAreEqual() {
+    expectAssertionError("actual value:<c:\\temp\\file.txt> should not be equal to:<c:\\temp\\file.txt>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).isNotEqualTo(new FileStub("c:\\temp\\file.txt"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualsAreEqual() {
+    expectAssertionError("[A Test] actual value:<c:\\temp\\file.txt> should not be equal to:<c:\\temp\\file.txt>").on(new CodeToTest() {
+      public void run() {
+        new FileAssert(file).as("A Test").isNotEqualTo(new FileStub("c:\\temp\\file.txt"));
+      }
+    });
   }
 }

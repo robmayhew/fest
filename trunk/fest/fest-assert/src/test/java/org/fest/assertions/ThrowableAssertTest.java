@@ -14,12 +14,14 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.testng.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.fest.assertions.ThrowableAssert.CauseHierarchyAssert;
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
 
@@ -46,6 +48,12 @@ public class ThrowableAssertTest {
   }
 
   private static class NotNullThrowable extends Condition<Throwable> {
+    public NotNullThrowable() {}
+
+    public NotNullThrowable(String description) {
+      super(description);
+    }
+
     @Override public boolean matches(Throwable t) {
       return t != null;
     }
@@ -53,6 +61,14 @@ public class ThrowableAssertTest {
 
   @Test public void shouldPassIfConditionSatisfied() {
     new ThrowableAssert(new Exception()).satisfies(new NotNullThrowable());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).satisfies(null);
+      }
+    });
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
@@ -74,7 +90,7 @@ public class ThrowableAssertTest {
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("expected:<non-null throwable> but was:<null>").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).satisfies(new NotNullThrowable().as("non-null throwable"));
+        new ThrowableAssert(null).satisfies(new NotNullThrowable("non-null throwable"));
       }
     });
   }
@@ -82,21 +98,47 @@ public class ThrowableAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("[Test] expected:<non-null throwable> but was:<null>").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).as("Test").satisfies(new NotNullThrowable().as("non-null throwable"));
+        new ThrowableAssert(null).as("Test").satisfies(new NotNullThrowable("non-null throwable"));
       }
     });
   }
-  
+
+  @Test public void shouldReturnCauseInThrowableAssert() {
+    Exception cause = new Exception();
+    ThrowableAssert root = new ThrowableAssert(new Exception(cause));
+    assertSame(root.cause().actual, cause);
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenGettingCause() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).cause();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenGettingCause() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").cause();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfThrowableHasNoCause() {
+    new ThrowableAssert(new Exception()).hasNoCause();
+  }
+
   @Test public void shouldFailIfActualIsNullWhenCheckingHasNoCause() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).hasNoCause();
       }
     });
   }
-  
+
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingHasNoCause() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).as("A Test").hasNoCause();
       }
@@ -104,12 +146,11 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfThrowableHasCauseAndExpectingNoCause() {
-    expectAssertionError("expected exception without cause, but cause was:<java.io.IOException>").on(
-        new CodeToTest() {
-          public void run() {
-            new ThrowableAssert(new Exception(new IOException())).hasNoCause();
-          }
-        });
+    expectAssertionError("expected exception without cause, but cause was:<java.io.IOException>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception(new IOException())).hasNoCause();
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfThrowableHasCauseAndExpectingNoCause() {
@@ -122,197 +163,295 @@ public class ThrowableAssertTest {
         });
   }
 
-  @Test public void shouldPassIfActualHasCauseOfExpectedType() {
-    new ThrowableAssert(new Exception(new NullPointerException())).hasCause(NullPointerException.class);
-  }
-  
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedCause1() {
-    new ThrowableAssert(new Exception()).hasCause(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedCause2() {
-    new ThrowableAssert(new Exception()).hasCause(IOException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedCause3() {
-    new ThrowableAssert(new Exception(new IOException())).hasCause(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedCause4() {
-    new ThrowableAssert(new Exception(new IOException())).hasCause(FileNotFoundException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedCauseAsAncestor1() {
-    new ThrowableAssert(new Exception()).hasCauseAsAncestor(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedCauseAsAncestor2() {
-    new ThrowableAssert(new Exception()).hasCauseAsAncestor(IOException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedCauseAsAncestor3() {
-    new ThrowableAssert(new Exception(new RuntimeException(new IllegalStateException()))).hasCauseAsAncestor(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedCauseAsAncestor4() {
-    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
-    new ThrowableAssert(e).hasCauseAsAncestor(FileNotFoundException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCause1() {
-    new ThrowableAssert(new Exception()).hasExactCause(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCause2() {
-    new ThrowableAssert(new Exception()).hasExactCause(IOException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCause3() {
-    new ThrowableAssert(new Exception(new IOException())).hasExactCause(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCause4() {
-    new ThrowableAssert(new Exception(new IOException())).hasExactCause(FileNotFoundException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCause5() {
-    new ThrowableAssert(new Exception(new FileNotFoundException())).hasExactCause(IOException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor1() {
-    new ThrowableAssert(new Exception()).hasExactCauseAsAncestor(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor2() {
-    new ThrowableAssert(new Exception()).hasExactCauseAsAncestor(IOException.class);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor3() {
-    new ThrowableAssert(new Exception(new RuntimeException(new IllegalStateException()))).hasExactCauseAsAncestor(null);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor4() {
-    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
-    new ThrowableAssert(e).hasExactCauseAsAncestor(FileNotFoundException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableHasNotExpectedExactCauseAsAncestor5() {
-    Exception e = new Exception(new IllegalStateException(new FileNotFoundException()));
-    new ThrowableAssert(e).hasExactCauseAsAncestor(IOException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNull1() {
-    new ThrowableAssert(null).hasCause(IOException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNull2() {
-    new ThrowableAssert(null).hasExactCauseAsAncestor(IOException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNull3() {
-    new ThrowableAssert(null).hasNoCause();
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNull4() {
-    new ThrowableAssert(null).hasExactCause(IOException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNull5() {
-    new ThrowableAssert(null).hasCauseAsAncestor(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedCause1() {
-    new ThrowableAssert(new Exception(new IOException())).hasCause(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedCause2() {
-    new ThrowableAssert(new Exception(new FileNotFoundException())).hasCause(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor1() {
-    new ThrowableAssert(new Exception(new IOException())).hasCauseAsAncestor(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor2() {
-    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
-    new ThrowableAssert(e).hasCauseAsAncestor(IllegalStateException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor3() {
-    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
-    new ThrowableAssert(e).hasCauseAsAncestor(RuntimeException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedCauseAsAncestor4() {
-    Exception e = new Exception(new IllegalStateException(new FileNotFoundException()));
-    new ThrowableAssert(e).hasCauseAsAncestor(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedExactCause() {
-    new ThrowableAssert(new Exception(new IOException())).hasExactCause(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedExactCauseAsAncestor1() {
-    new ThrowableAssert(new Exception(new IOException())).hasExactCauseAsAncestor(IOException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedExactCauseAsAncestor2() {
-    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
-    new ThrowableAssert(e).hasExactCauseAsAncestor(IllegalStateException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasExpectedExactCauseAsAncestor3() {
-    Exception e = new Exception(new RuntimeException(new IllegalStateException()));
-    new ThrowableAssert(e).hasExactCauseAsAncestor(RuntimeException.class);
-  }
-
-  @Test public void shouldPassIfThrowableHasNoCause() {
-    new ThrowableAssert(new Exception()).hasNoCause();
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNotInstanceOfExpectedClass1() {
-      new ThrowableAssert(new IllegalStateException()).isInstanceOf(IllegalArgumentException.class);
-  }
-
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfThrowableIsNotInstanceOfExpectedClass2() {
-      new ThrowableAssert(new Exception()).isInstanceOf(IllegalStateException.class);
-  }
-
   @Test public void shouldPassIfThrowableIsInstanceOfExpectedClass() {
-      new ThrowableAssert(new IllegalStateException()).isInstanceOf(Exception.class);
-      new ThrowableAssert(new IllegalStateException()).isInstanceOf(Throwable.class);
+    new ThrowableAssert(new IllegalStateException()).isInstanceOf(Exception.class).isInstanceOf(Throwable.class);
   }
 
-  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("expecting a non-null object, but it was null").on(codeToTest);
+  @Test public void shouldThrowErrorIfGivenClassIsNullWhenCheckingIfInstanceOf() {
+    shouldThrowErrorIfTypeIsNullWhenCheckingIfInstanceOf(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).isInstanceOf(null);
+      }
+    });
   }
 
-  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("[A Test] expecting a non-null object, but it was null").on(codeToTest);
+  @Test public void shouldFailIfActualIsNotInstanceOfExpectedClass() {
+    expectAssertionError(
+        "expected instance of:<java.lang.NullPointerException> but was instance of:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).isInstanceOf(NullPointerException.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotInstanceOfExpectedClass() {
+    expectAssertionError(
+        "[A Test] expected instance of:<java.lang.NullPointerException> but was instance of:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).as("A Test").isInstanceOf(NullPointerException.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIsInstanceOfExpectedClass() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).isInstanceOf(NullPointerException.class);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIsInstanceOfExpectedClass() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").isInstanceOf(NullPointerException.class);
+      }
+    });
+  }
+
+  @Test public void shouldPassIfThrowableIsExactlyInstanceOfExpectedClass() {
+    new ThrowableAssert(new IllegalStateException()).isExactlyInstanceOf(IllegalStateException.class);
+  }
+
+  @Test public void shouldThrowErrorIfGivenClassIsNullWhenCheckingIfExactlyInstanceOf() {
+    shouldThrowErrorIfTypeIsNullWhenCheckingIfInstanceOf(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).isExactlyInstanceOf(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsInstanceOfExpectedClassButNotExactly() {
+    expectAssertionError(
+        "expected exactly the same type:<java.lang.Exception> but was:<java.lang.NullPointerException>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new NullPointerException()).isExactlyInstanceOf(Exception.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualIsNotExactlyInstanceOfExpectedClass() {
+    expectAssertionError(
+        "expected exactly the same type:<java.lang.NullPointerException> but was:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).isExactlyInstanceOf(NullPointerException.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotExactlyInstanceOfExpectedClass() {
+    expectAssertionError(
+        "[A Test] expected exactly the same type:<java.lang.NullPointerException> but was:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).as("A Test").isExactlyInstanceOf(NullPointerException.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIsExactlyInstanceOfExpectedClass() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).isExactlyInstanceOf(NullPointerException.class);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIsExactlyInstanceOfExpectedClass() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").isExactlyInstanceOf(NullPointerException.class);
+      }
+    });
+  }
+
+  @Test public void shouldPassIfThrowablesAreSame() {
+    Exception e = new Exception();
+    new ThrowableAssert(e).isSameAs(e);
+  }
+
+  @Test public void shouldFailIfThrowablesAreNotSameAndExpectingSame() {
+    expectAssertionError(
+        "expected same instance but found:<java.lang.Exception> and:<java.lang.IllegalArgumentException>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).isSameAs(new IllegalArgumentException());
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfThrowablesAreNotSameAndExpectingSame() {
+    expectAssertionError(
+        "[A Test] expected same instance but found:<java.lang.Exception> and:<java.lang.IllegalArgumentException>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).as("A Test").isSameAs(new IllegalArgumentException());
+          }
+        });
+  }
+
+  @Test public void shouldPassIfThrowablesAreNotSame() {
+    new ThrowableAssert(new Exception()).isNotSameAs(new Exception());
+  }
+
+  @Test public void shouldFailIfThrowablesAreSameAndExpectingNotSame() {
+    expectAssertionError("given objects are same:<java.lang.Exception>")
+        .on(new CodeToTest() {
+          public void run() {
+            Exception e = new Exception();
+            new ThrowableAssert(e).isNotSameAs(e);
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfThrowablesAreSameAndExpectingNotSame() {
+    expectAssertionError(
+        "[A Test] given objects are same:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            Exception e = new Exception();
+            new ThrowableAssert(e).as("A Test").isNotSameAs(e);
+          }
+        });
+  }
+
+  @Test public void shouldPassIfThrowablesAreEqual() {
+    Exception e = new Exception();
+    new ThrowableAssert(e).isEqualTo(e);
+  }
+
+  @Test public void shouldFailIfActualsAreNotEqual() {
+    expectAssertionError("expected:<java.lang.NullPointerException> but was:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).isEqualTo(new NullPointerException());
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualsAreNotEqual() {
+    expectAssertionError("[A Test] expected:<java.lang.NullPointerException> but was:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).as("A Test").isEqualTo(new NullPointerException());
+          }
+        });
+  }
+
+  @Test public void shouldPassIfThrowablesAreNotEqual() {
+    new ThrowableAssert(new Exception()).isNotEqualTo(new NullPointerException());
+  }
+
+  @Test public void shouldFailIfActualsAreEqual() {
+    expectAssertionError("actual value:<java.lang.Exception> should not be equal to:<java.lang.Exception>").on(
+        new CodeToTest() {
+          public void run() {
+            Exception e = new Exception();
+            new ThrowableAssert(e).isNotEqualTo(e);
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualsAreEqual() {
+    expectAssertionError("[A Test] actual value:<java.lang.Exception> should not be equal to:<java.lang.Exception>")
+        .on(new CodeToTest() {
+          public void run() {
+            Exception e = new Exception();
+            new ThrowableAssert(e).as("A Test").isNotEqualTo(e);
+          }
+        });
+  }
+
+  @Test public void shouldReturnCauseHierarchy() {
+    CauseHierarchyAssert causeHierarchy = new ThrowableAssert(new Exception()).causeHierarchy();
+    assertNotNull(causeHierarchy);
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenGettingCauseHierarchy() {
+    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).causeHierarchy();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenGettingCauseHierarchy() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").causeHierarchy();
+      }
+    });
+  }
+
+  @Test public void shouldPassIsCauseHierarchyHasCauseOfType() {
+    Exception e = new Exception(new IllegalArgumentException(new FileNotFoundException()));
+    new ThrowableAssert(e).causeHierarchy().hasCauseOfType(IOException.class);
+  }
+
+  @Test public void shouldFailIfActualDoesNotHaveCauseWhenCheckingForCauseOfType() {
+    expectAssertionError("expected a cause of type:<java.lang.Exception>, but found none").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).causeHierarchy().hasCauseOfType(Exception.class);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveCauseWhenCheckingForCauseOfType() {
+    expectAssertionError("[A Test] expected a cause of type:<java.lang.Exception>, but found none").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).as("A Test").causeHierarchy().hasCauseOfType(Exception.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualDoesNotHaveCauseOfGivenType() {
+    expectAssertionError("expected a cause of type:<java.lang.NullPointerException>, but found none").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception(new Exception())).causeHierarchy().hasCauseOfType(
+                NullPointerException.class);
+          }
+        });
+  }
+
+  @Test public void shouldPassIsCauseHierarchyHasCauseOfExactType() {
+    Exception e = new Exception(new IllegalArgumentException(new NullPointerException()));
+    new ThrowableAssert(e).causeHierarchy().hasCauseOfExactType(NullPointerException.class);
+  }
+
+  @Test public void shouldFailIfActualDoesNotHaveCauseWhenCheckingForCauseOfExactType() {
+    expectAssertionError("expected a cause of exact type:<java.lang.Exception>, but found none").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).causeHierarchy().hasCauseOfExactType(Exception.class);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveCauseWhenCheckingForCauseOfExactType() {
+    expectAssertionError("[A Test] expected a cause of exact type:<java.lang.Exception>, but found none").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception()).as("A Test").causeHierarchy().hasCauseOfExactType(Exception.class);
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualDoesNotHaveCauseOfExactGivenType() {
+    expectAssertionError("expected a cause of exact type:<java.lang.NullPointerException>, but found none").on(
+        new CodeToTest() {
+          public void run() {
+            new ThrowableAssert(new Exception(new Exception())).causeHierarchy().hasCauseOfExactType(
+                NullPointerException.class);
+          }
+        });
+  }
+
+  private void shouldThrowErrorIfTypeIsNullWhenCheckingIfInstanceOf(CodeToTest codeToTest) {
+    expectIllegalArgumentException("The given type to check against should not be null").on(codeToTest);
   }
 }

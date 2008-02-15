@@ -1,22 +1,22 @@
 /*
  * Created on Feb 14, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.*;
-import static org.fest.assertions.Formatting.*;
+import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.concat;
 
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Understands assertion methods for <code>boolean</code> arrays. To create a new instance of this class use the 
+ * Understands assertion methods for <code>boolean</code> arrays. To create a new instance of this class use the
  * method <code>{@link Assertions#assertThat(boolean[])}</code>.
- * 
+ *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -54,8 +54,8 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
   }
 
   /**
-   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in 
-   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion 
+   * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
    * method, otherwise any assertion failure will not show the provided description.
    * <p>
    * For example:
@@ -69,7 +69,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
   public BooleanArrayAssert describedAs(String description) {
     return as(description);
   }
-  
+
   /**
    * Verifies that the actual <code>boolean</code> array contains the given values.
    * @param values the values to look for.
@@ -80,10 +80,10 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
     isNotNull();
     List<Object> notFound = new ArrayList<Object>();
     for (boolean value : values) if (!hasElement(value)) notFound.add(value);
-    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);      
+    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>boolean</code> array contains the given values <strong>only</strong>.
    * @param values the values to look for.
@@ -104,7 +104,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
       copy.remove(value);
     }
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
-    if (!copy.isEmpty()) 
+    if (!copy.isEmpty())
       fail(concat("unexpected element(s):", inBrackets(copy.toArray()), " in array:", actualInBrackets()));
     return this;
   }
@@ -114,7 +114,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
 	  for (boolean value : values) list.add(value);
 	  return list;
 	}
-  
+
   private void failIfElementsNotFound(List<Object> notFound) {
     fail(concat("array:", actualInBrackets(), " does not contain element(s):", inBrackets(notFound.toArray())));
   }
@@ -140,12 +140,13 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
       if (value == actualElement) return true;
     return false;
   }
-  
+
   /**
-   * Verifies that the actual <code>boolean</code> array satisfies the given condition. 
+   * Verifies that the actual <code>boolean</code> array satisfies the given condition.
    * @param condition the condition to satisfy.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>boolean</code> array does not satisfy the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
    */
   public BooleanArrayAssert satisfies(Condition<boolean[]> condition) {
     return (BooleanArrayAssert)verify(condition);
@@ -160,14 +161,14 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
     if (actual == null) fail("expecting a non-null array, but it was null");
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>boolean</code> array is empty (not <code>null</code> with zero elements.)
    * @throws AssertionError if the actual <code>boolean</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>boolean</code> array is <code>null</code> or not empty.
    */
   public void isEmpty() {
-    if (actualGroupSize() > 0) 
+    if (actualGroupSize() > 0)
       fail(concat("expecting empty array, but was:", actualInBrackets()));
   }
 
@@ -183,27 +184,27 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
   }
 
   /**
-   * Verifies that the actual <code>boolean</code> array is equal to the given array. Array equality is checked by 
+   * Verifies that the actual <code>boolean</code> array is equal to the given array. Array equality is checked by
    * <code>{@link Arrays#equals(boolean[], boolean[])}</code>.
    * @param expected the given array to compare the actual array to.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>boolean</code> array is not equal to the given one.
    */
   public BooleanArrayAssert isEqualTo(boolean[] expected) {
-    if (!Arrays.equals(actual, expected)) 
+    if (!Arrays.equals(actual, expected))
       fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
 
   /**
-   * Verifies that the actual <code>boolean</code> array is not equal to the given array. Array equality is checked by 
+   * Verifies that the actual <code>boolean</code> array is not equal to the given array. Array equality is checked by
    * <code>{@link Arrays#equals(boolean[], boolean[])}</code>.
    * @param array the given array to compare the actual array to.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>boolean</code> array is equal to the given one.
    */
   public BooleanArrayAssert isNotEqualTo(boolean[] array) {
-    if (Arrays.equals(actual, array)) 
+    if (Arrays.equals(actual, array))
       fail(errorMessageIfEqual(actual, array));
     return this;
   }
@@ -213,7 +214,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
    * @param expected the expected number of elements in the actual <code>boolean</code> array.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>boolean</code> array is <code>null</code>.
-   * @throws AssertionError if the number of elements in the actual <code>boolean</code> array is not equal to the given 
+   * @throws AssertionError if the number of elements in the actual <code>boolean</code> array is not equal to the given
    *          one.
    */
   public BooleanArrayAssert hasSize(int expected) {
@@ -223,7 +224,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
           "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for array:", actualInBrackets()));
     return this;
   }
-  
+
   int actualGroupSize() {
     isNotNull();
     return actual.length;
@@ -232,7 +233,7 @@ public final class BooleanArrayAssert extends GroupAssert<boolean[]> {
   private String actualInBrackets() {
     return inBrackets(actual);
   }
-  
+
   /**
    * Verifies that the actual <code>boolean</code> array is the same as the given array.
    * @param expected the given array to compare the actual array to.

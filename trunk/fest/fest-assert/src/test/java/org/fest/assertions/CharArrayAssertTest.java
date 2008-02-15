@@ -15,6 +15,7 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.testng.Assert.*;
 
@@ -56,6 +57,14 @@ public class CharArrayAssertTest {
     new CharArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
   }
 
+  @Test public void shouldThrowErrorIfConditionIsNull() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new CharArrayAssert(EMPTY_ARRAY).satisfies(null);
+      }
+    });
+  }
+
   @Test public void shouldFailIfConditionNotSatisfied() {
     expectAssertionError("condition failed with:<[a, b]>").on(new CodeToTest() {
       public void run() {
@@ -93,7 +102,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsValues() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
       public void run() {
         new CharArrayAssert(NULL_ARRAY).contains('a', 'b');
       }
@@ -101,7 +110,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsValues() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
       public void run() {
         new CharArrayAssert(NULL_ARRAY).as("A Test").contains('a', 'b');
       }
@@ -129,7 +138,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfIncludesValues() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new CharArrayAssert(NULL_ARRAY).excludes('a', 'b');
       }
@@ -137,7 +146,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailShowindDescriptionIfActualIsNullWhenCheckingIfIncludesValues() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new CharArrayAssert(NULL_ARRAY).as("A Test").excludes('a', 'b');
       }
@@ -185,7 +194,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
       public void run() {
         new CharArrayAssert(NULL_ARRAY).isNotNull();
       }
@@ -193,7 +202,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotNull() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
       public void run() {
         new CharArrayAssert(NULL_ARRAY).as("A Test").isNotNull();
       }
@@ -205,7 +214,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingEmpty() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
       public void run() {
         new CharArrayAssert(NULL_ARRAY).isEmpty();
       }
@@ -213,7 +222,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingEmpty() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
       public void run() {
         new CharArrayAssert(NULL_ARRAY).as("A Test").isEmpty();
       }
@@ -257,7 +266,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingForNotEmpty() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new CharArrayAssert(NULL_ARRAY).isNotEmpty();
       }
@@ -265,7 +274,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingForNotEmpty() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new CharArrayAssert(NULL_ARRAY).as("A Test").isNotEmpty();
       }
@@ -335,7 +344,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsOnly() {
-    shouldFailIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new CharArrayAssert(NULL_ARRAY).containsOnly(array('c', 'd'));
       }
@@ -343,7 +352,7 @@ public class CharArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsOnly() {
-    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new CharArrayAssert(NULL_ARRAY).as("A Test").containsOnly(array('c', 'd'));
       }
@@ -449,14 +458,6 @@ public class CharArrayAssertTest {
 
   @Test public void shouldPassIfArraysAreNotSame() {
     new CharArrayAssert('a').isNotSameAs(EMPTY_ARRAY);
-  }
-
-  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("expecting a non-null array, but it was null").on(codeToTest);
-  }
-
-  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
-    expectAssertionError("[A Test] expecting a non-null array, but it was null").on(codeToTest);
   }
 
   private char[] array(char... args) { return args; }
