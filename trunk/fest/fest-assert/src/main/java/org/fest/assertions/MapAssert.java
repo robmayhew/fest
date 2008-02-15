@@ -103,10 +103,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   }
 
   private boolean containsEntry(Entry e) {
-    if (e == null) {
-      fail("the entry to check should not be null");
-      return false;
-    }
+    if (e == null) throw new AssertionError("the entry to check should not be null");
     if (!actual.containsKey(e.key)) return false;
     return actual.containsValue(e.value);
   }
@@ -220,11 +217,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
 
   /**
    * Verifies that the actual <code>{@link Map}</code> is equal to the given one.
-   *
    * @param expected the given map to compare the actual <code>Map</code> to.
-   *
    * @return this assertion object.
-   *
    * @throws AssertionError if the actual <code>Map</code> is not equal to the given one.
    */
   public MapAssert isEqualTo(Map<?, ?> expected) {

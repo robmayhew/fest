@@ -323,6 +323,10 @@ public class ObjectArrayAssertTest {
         });
   }
 
+  @Test public void shouldPassIfActualContainsOnlyExpectedElements() {
+    new ObjectArrayAssert("Luke").containsOnly("Luke");
+  }
+
   @Test public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
     expectAssertionError("array:<[]> does not contain element(s):<['Yoda']>").on(new CodeToTest() {
       public void run() {

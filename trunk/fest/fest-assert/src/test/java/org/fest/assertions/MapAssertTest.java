@@ -16,6 +16,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.MapAssert.entry;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,13 +37,70 @@ public class MapAssertTest {
 
   private static final Map<Object, Object> EMPTY_MAP = new HashMap<Object, Object>();
 
+  @Test public void shouldSetDescription() {
+    MapAssert assertion = new MapAssert(EMPTY_MAP);
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    MapAssert assertion = new MapAssert(EMPTY_MAP);
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  private static class NullMap extends Condition<Map<?, ?>> {
+    @Override public boolean matches(Map<?, ?> m) {
+      return m == null;
+    }
+  }
+
+  @Test public void shouldPassIfConditionSatisfied() {
+    new MapAssert(null).satisfies(new NullMap());
+  }
+
+  @Test public void shouldFailIfConditionNotSatisfied() {
+    expectAssertionError("condition failed with:<{}>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(EMPTY_MAP).satisfies(new NullMap());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
+    expectAssertionError("[A Test] condition failed with:<{}>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(EMPTY_MAP).as("A Test").satisfies(new NullMap());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("expected:<Empty or null list> but was:<{}>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(EMPTY_MAP).satisfies(new NullMap().as("Empty or null list"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] expected:<Empty or null list> but was:<{}>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(EMPTY_MAP).as("A Test").satisfies(
+            new NullMap().as("Empty or null list"));
+      }
+    });
+  }
+
   @Test public void shouldPassIfGivenKeysAreInMap() {
     Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
     new MapAssert(map).keySetIncludes("key1", "key2");
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsKeys() {
-    expectAssertionError("expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).keySetIncludes("key1");
       }
@@ -50,7 +108,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsKeys() {
-    expectAssertionError("[A Test] expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).as("A Test").keySetIncludes("key1");
       }
@@ -103,7 +161,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsValues() {
-    expectAssertionError("expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).valuesInclude(8);
       }
@@ -111,7 +169,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldShowingDescriptionFailIfActualIsNullWhenCheckingIfContainsValues() {
-    expectAssertionError("[A Test] expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).as("A Test").valuesInclude(8);
       }
@@ -162,8 +220,28 @@ public class MapAssertTest {
     new MapAssert(map).contains(entry("key1", 1));
   }
 
+  @Test public void shouldFailIfEntryIsNullwhenCheckingIfContainsEntry() {
+    expectAssertionError("the entry to check should not be null").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
+        Entry[] entries = { entry("key6", 6), null };
+        new MapAssert(map).contains(entries);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfEntryIsNullwhenCheckingIfContainsEntry() {
+    expectAssertionError("[A Test] the entry to check should not be null").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
+        Entry[] entries = { entry("key6", 6), null };
+        new MapAssert(map).as("A Test").contains(entries);
+      }
+    });
+  }
+
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsEntry() {
-    expectAssertionError("expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).contains(entry("key6", 6));
       }
@@ -171,7 +249,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsEntry() {
-    expectAssertionError("[A Test] expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).as("A Test").contains(entry("key6", 6));
       }
@@ -300,7 +378,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingSize() {
-    expectAssertionError("expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).hasSize(2);
       }
@@ -308,7 +386,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingSize() {
-    expectAssertionError("[A Test] expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).as("A Test").hasSize(2);
       }
@@ -334,7 +412,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfEmpty() {
-    expectAssertionError("expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).isEmpty();
       }
@@ -342,7 +420,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfEmpty() {
-    expectAssertionError("[A Test] expecting a non-null map, but it was null").on(new CodeToTest() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
       public void run() {
         new MapAssert(null).as("A Test").isEmpty();
       }
@@ -419,6 +497,57 @@ public class MapAssertTest {
 
   @Test public void shouldPassIfMapIsNullAndExpectingNull() {
     new MapAssert(null).isNull();
+  }
+
+  @Test public void shouldPassIfMapsAreSame() {
+    Map<Object, Object> map = map(entry("key1", 1));
+    new MapAssert(map).isSameAs(map);
+  }
+
+  @Test public void shouldFailIfActualIsNotSameAsExpectedAndExpectingSame() {
+    expectAssertionError("expected same instance but found:<{'key1'=1}> and:<{}>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(map(entry("key1", 1))).isSameAs(EMPTY_MAP);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotSameAsExpectedAndExpectingSame() {
+    expectAssertionError("[A Test] expected same instance but found:<{'key1'=1}> and:<{}>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(map(entry("key1", 1))).as("A Test").isSameAs(EMPTY_MAP);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsSameAsExpectedAndExpectingNotSame() {
+    expectAssertionError("given objects are same:<{'key1'=1}>").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1));
+        new MapAssert(map).isNotSameAs(map);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsSameAsExpectedAndExpectingNotSame() {
+    expectAssertionError("[A Test] given objects are same:<{'key1'=1}>").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1));
+        new MapAssert(map).as("A Test").isNotSameAs(map);
+      }
+    });
+  }
+
+  @Test public void shouldPassIfMapsAreNotSame() {
+    new MapAssert(map(entry("key1", 1))).isNotSameAs(EMPTY_MAP);
+  }
+
+  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("expecting a non-null map, but it was null").on(codeToTest);
+  }
+
+  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("[A Test] expecting a non-null map, but it was null").on(codeToTest);
   }
 
   private Map<Object, Object> map(Entry... entries) {

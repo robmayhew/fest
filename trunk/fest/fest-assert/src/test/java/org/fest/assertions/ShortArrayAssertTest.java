@@ -1,20 +1,24 @@
 /*
  * Created on Feb 14, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.assertions;
 
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.testng.Assert.*;
+
+import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
 
 /**
@@ -25,100 +29,439 @@ import org.testng.annotations.Test;
  */
 public class ShortArrayAssertTest {
 
-  @Test public void shouldPassIfGivenValuesAreInArray() {
-    new ShortArrayAssert((short)43, (short)68).contains((short)43, (short)68);
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenValueIsNotInArray() {
-    new ShortArrayAssert(emptyArray()).contains((short)43, (short)68);
+  private static final short[] NULL_ARRAY = null;
+  private static final short[] EMPTY_ARRAY = new short[0];
+
+  @Test public void shouldSetDescription() {
+    ShortArrayAssert assertion = new ShortArrayAssert(asShort(459), asShort(23));
+    assertNull(assertion.description());
+    assertion.as("A Test");
+    assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldPassIfGivenValuesAreNotInArray() {
-    new ShortArrayAssert((short)43, (short)68).excludes((short)98);
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfGivenValuesAreNotInArray", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfGivenValueIsInArray() {
-    new ShortArrayAssert((short)43, (short)68).excludes((short)43, (short)68);
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ShortArrayAssert assertion = new ShortArrayAssert(asShort(459), asShort(23));
+    assertNull(assertion.description());
+    assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldPassIfArrayIsNull() {
-    new ShortArrayAssert(nullArray()).isNull();
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfArrayIsNull", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfArrayIsNotNull() {
-    new ShortArrayAssert(emptyArray()).isNull();
+  private static class EmptyOrNullArrayCondition extends Condition<short[]> {
+    @Override public boolean matches(short[] array) {
+      return array == null || array.length == 0;
+    }
   }
 
-  @Test public void shouldPassIfArrayIsNotNull() {
-    new ShortArrayAssert(emptyArray()).isNotNull();
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfArrayIsNotNull", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfArrayIsNull() {
-    new ShortArrayAssert(nullArray()).isNotNull();
+  @Test public void shouldPassIfConditionSatisfied() {
+    new ShortArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
   }
 
-  @Test public void shouldPassIfArrayIsEmpty() {
-    new ShortArrayAssert(emptyArray()).isEmpty();
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfArrayIsEmpty" , expectedExceptions = AssertionError.class) 
-  public void shouldFailIfArrayIsNotEmpty() {
-    new ShortArrayAssert((short)43, (short)68).isEmpty();
-  }
-
-  @Test public void shouldPassIfArrayIsNotEmpty() {
-    new ShortArrayAssert((short)43, (short)68).isNotEmpty();
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfArrayIsNotEmpty", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfArrayIsEmpty() {
-    new ShortArrayAssert(emptyArray()).isNotEmpty();
+  @Test public void shouldFailIfConditionNotSatisfied() {
+    expectAssertionError("condition failed with:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).satisfies(new EmptyOrNullArrayCondition());
+      }
+    });
   }
 
-  @Test public void shouldPassIfEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isEqualTo(array((short)43, (short)68));
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfEqualArrays", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfNotEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isEqualTo(array((short)98));
-  }
-
-  @Test public void shouldPassIfNotEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(array((short)98));
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfNotEqualArrays", expectedExceptions = AssertionError.class) 
-  public void shouldFailIfEqualArrays() {
-    new ShortArrayAssert((short)43, (short)68).isNotEqualTo(array((short)43, (short)68));
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
+    expectAssertionError("[A Test] condition failed with:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").satisfies(new EmptyOrNullArrayCondition());
+      }
+    });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
-    new ShortArrayAssert(emptyArray()).containsOnly((short)43, (short)68);
+  @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("expected:<Empty or null array> but was:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+      }
+    });
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayHasExtraElements() {
-    new ShortArrayAssert((short)43, (short)68, (short)98).containsOnly(array((short)43, (short)68));
-  }
-  
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfArrayIsMissingElements() {
-    new ShortArrayAssert((short)43, (short)68).containsOnly(array((short)98));
+  @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] expected:<Empty or null array> but was:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+      }
+    });
   }
 
-  @Test public void shouldPassIfArrayHasOnlySpecifiedElements() {
-    new ShortArrayAssert((short)43, (short)68).containsOnly(array((short)43, (short)68));    
+  @Test public void shouldPassIfGivenObjectsIsInArray() {
+    new ShortArrayAssert(asShort(459), asShort(23)).contains(asShort(459), asShort(23));
   }
-  
-  private short[] nullArray() { return null; }
 
-  private short[] emptyArray() { return new short[0]; }
-  
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsValues() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(NULL_ARRAY).contains(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsValues() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(NULL_ARRAY).as("A Test").contains(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldFailIfGivenObjectIsNotInArray() {
+    expectAssertionError("array:<[]> does not contain element(s):<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).contains(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfGivenObjectIsNotInArray() {
+    expectAssertionError("[A Test] array:<[]> does not contain element(s):<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).as("A Test").contains(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfGivenObjectsAreNotInArray() {
+    new ShortArrayAssert(asShort(459), asShort(23)).excludes(asShort(90), asShort(82));
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIncludesValues() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ShortArrayAssert(NULL_ARRAY).excludes(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowindDescriptionIfActualIsNullWhenCheckingIfIncludesValues() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ShortArrayAssert(NULL_ARRAY).as("A Test").excludes(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIncludesValueAndExpectingExclude() {
+    expectAssertionError("array:<[459, 23]> does not exclude element(s):<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).excludes(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIncludesValueAndExpectingExclude() {
+    expectAssertionError("[A Test] array:<[459, 23]> does not exclude element(s):<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").excludes(asShort(459), asShort(23));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNull() {
+    new ShortArrayAssert(NULL_ARRAY).isNull();
+  }
+
+  @Test public void shouldFailIfActualIsNotNullAndExpectingNull() {
+    expectAssertionError("<[]> should be null").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).isNull();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotNullAndExpectingNull() {
+    expectAssertionError("[A Test] <[]> should be null").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).as("A Test").isNull();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNotNull() {
+    new ShortArrayAssert(EMPTY_ARRAY).isNotNull();
+  }
+
+  @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(NULL_ARRAY).isNotNull();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingNotNull() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(NULL_ARRAY).as("A Test").isNotNull();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsEmpty() {
+    new ShortArrayAssert(EMPTY_ARRAY).isEmpty();
+  }
+
+  @Test public void shouldFailIfActualIsNullAndExpectingEmpty() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(NULL_ARRAY).isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullAndExpectingEmpty() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(NULL_ARRAY).as("A Test").isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNotEmptyAndExpectingEmpty() {
+    expectAssertionError("expecting empty array, but was:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotEmptyAndExpectingEmpty() {
+    expectAssertionError("[A Test] expecting empty array, but was:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").isEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNotEmpty() {
+    new ShortArrayAssert(asShort(459), asShort(23)).isNotEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsEmpty() {
+    expectAssertionError("expecting a non-empty array, but it was empty").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfArrayIsEmpty() {
+    expectAssertionError("[A Test] expecting a non-empty array, but it was empty").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).as("A Test").isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingForNotEmpty() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ShortArrayAssert(NULL_ARRAY).isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingForNotEmpty() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ShortArrayAssert(NULL_ARRAY).as("A Test").isNotEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfArraysAreEqual() {
+    new ShortArrayAssert(asShort(459), asShort(23)).isEqualTo(array(asShort(459), asShort(23)));
+  }
+
+  @Test public void shouldFailIfArraysAreNotEqualAndExpectingEqual() {
+    expectAssertionError("expected:<[90, 82]> but was:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).isEqualTo(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfArraysAreNotEqualAndExpectingEqual() {
+    expectAssertionError("[A Test] expected:<[90, 82]> but was:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").isEqualTo(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfArraysAreNotEqual() {
+    new ShortArrayAssert(asShort(459), asShort(23)).isNotEqualTo(array(asShort(86)));
+  }
+
+  @Test public void shouldFailIfArraysAreEqualAndExpectingNotEqual() {
+    expectAssertionError("actual value:<[459, 23]> should not be equal to:<[459, 23]>").on(
+        new CodeToTest() {
+          public void run() {
+            new ShortArrayAssert(asShort(459), asShort(23)).isNotEqualTo(array(asShort(459), asShort(23)));
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfArraysAreEqualAndExpectingNotEqual() {
+    expectAssertionError("[A Test] actual value:<[459, 23]> should not be equal to:<[459, 23]>").on(
+        new CodeToTest() {
+          public void run() {
+            new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").isNotEqualTo(array(asShort(459), asShort(23)));
+          }
+        });
+  }
+
+  @Test public void shouldPassIfActualContainsOnlyExpectedElements() {
+    new ShortArrayAssert(asShort(8)).containsOnly(asShort(8));
+  }
+
+  @Test public void shouldFailIfArrayIsEmptyWhenLookingForSpecificElements() {
+    expectAssertionError("array:<[]> does not contain element(s):<[90, 82]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).containsOnly(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfArrayIsEmptyWhenLookingForSpecificElements() {
+    expectAssertionError("[A Test] array:<[]> does not contain element(s):<[90, 82]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).as("A Test").containsOnly(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsOnly() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ShortArrayAssert(NULL_ARRAY).containsOnly(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsOnly() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() throws Throwable {
+        new ShortArrayAssert(NULL_ARRAY).as("A Test").containsOnly(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualHasExtraElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("unexpected element(s):<[23]> in array:<[459, 23]>").on(
+        new CodeToTest() {
+          public void run() {
+            new ShortArrayAssert(asShort(459), asShort(23)).containsOnly(array(asShort(459)));
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualHasExtraElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("[A Test] unexpected element(s):<[23]> in array:<[459, 23]>").on(
+        new CodeToTest() {
+          public void run() {
+            new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").containsOnly(array(asShort(459)));
+          }
+        });
+  }
+
+  @Test public void shouldFailIfActualIsMissingElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("array:<[459, 23]> does not contain element(s):<[90, 82]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).containsOnly(array(asShort(90), asShort(82)));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsMissingElementsWhenCheckingIfContainsOnly() {
+    expectAssertionError("[A Test] array:<[459, 23]> does not contain element(s):<[90, 82]>").on(
+        new CodeToTest() {
+          public void run() {
+            new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").containsOnly(array(asShort(90), asShort(82)));
+          }
+        });
+  }
+
+  @Test public void shouldPassIfActualHasExpectedSize() {
+    short[] array = array(asShort(86), asShort(59), asShort(98));
+    new ShortArrayAssert(array).hasSize(3);
+  }
+
+  @Test public void shouldFailIfActualDoesNotHaveExpectedSize() {
+    expectAssertionError("expected size:<2> but was:<1> for array:<[459]>").on(new CodeToTest() {
+      public void run() {
+        short[] array = array(asShort(459));
+        new ShortArrayAssert(array).hasSize(2);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveExpectedSize() {
+    expectAssertionError("[A Test] expected size:<2> but was:<1> for array:<[459]>").on(new CodeToTest() {
+      public void run() {
+        short[] array = array(asShort(459));
+        new ShortArrayAssert(array).as("A Test").hasSize(2);
+      }
+    });
+  }
+
+  @Test public void shouldPassIfArraysAreSame() {
+    short[] array = array(asShort(459), asShort(23));
+    new ShortArrayAssert(array).isSameAs(array);
+  }
+
+  @Test public void shouldFailIfActualIsNotSameAsExpectedAndExpectingSame() {
+    expectAssertionError("expected same instance but found:<[459, 23]> and:<[]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).isSameAs(EMPTY_ARRAY);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotSameAsExpectedAndExpectingSame() {
+    expectAssertionError("[A Test] expected same instance but found:<[459, 23]> and:<[]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").isSameAs(EMPTY_ARRAY);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsSameAsExpectedAndExpectingNotSame() {
+    expectAssertionError("given objects are same:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        short[] array = array(asShort(459), asShort(23));
+        new ShortArrayAssert(array).isNotSameAs(array);
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsSameAsExpectedAndExpectingNotSame() {
+    expectAssertionError("[A Test] given objects are same:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        short[] array = array(asShort(459), asShort(23));
+        new ShortArrayAssert(array).as("A Test").isNotSameAs(array);
+      }
+    });
+  }
+
+  @Test public void shouldPassIfArraysAreNotSame() {
+    new ShortArrayAssert(asShort(459)).isNotSameAs(EMPTY_ARRAY);
+  }
+
+  private short asShort(int i) {
+    return (short)i;
+  }
+
+  private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("expecting a non-null array, but it was null").on(codeToTest);
+  }
+
+  private void shouldFailShowingDescriptionIfActualIsNull(CodeToTest codeToTest) {
+    expectAssertionError("[A Test] expecting a non-null array, but it was null").on(codeToTest);
+  }
+
   private short[] array(short... args) { return args; }
 }

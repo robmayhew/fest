@@ -516,8 +516,7 @@ public class CollectionAssertTest {
         });
   }
 
-
-  @Test public void shouldPassIfArraysAreSame() {
+  @Test public void shouldPassIfCollectionsAreSame() {
     List<String> list = list("Leia");
     new CollectionAssert(list).isSameAs(list);
   }
@@ -556,10 +555,9 @@ public class CollectionAssertTest {
     });
   }
 
-  @Test public void shouldPassIfArraysAreNotSame() {
+  @Test public void shouldPassIfCollectionsAreNotSame() {
     new CollectionAssert(list("Leia")).isNotSameAs(EMPTY_COLLECTION);
   }
-
 
   private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
     expectAssertionError("expecting a non-null collection, but it was null").on(codeToTest);
