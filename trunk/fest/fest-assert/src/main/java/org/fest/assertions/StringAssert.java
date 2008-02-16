@@ -91,6 +91,15 @@ public final class StringAssert extends GroupAssert<String> {
   }
 
   /**
+   * Verifies that the actual <code>String</code> is <code>null</code> or empty.
+   * @throws AssertionError if the actual <code>String</code> is not <code>null</code> or not empty.
+   */
+  public final void isNullOrEmpty() {
+    if (Strings.isEmpty(actual)) return;
+    fail(concat("expecting a null or empty String, but was:", inBrackets(actual)));
+  }
+
+  /**
    * Verifies that the actual <code>String</code> contains at least on character.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> is <code>null</code>.

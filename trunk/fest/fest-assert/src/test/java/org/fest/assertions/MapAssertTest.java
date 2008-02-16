@@ -511,6 +511,32 @@ public class MapAssertTest {
     new MapAssert(map(entry("key1", 1))).isNotSameAs(EMPTY_MAP);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new MapAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new MapAssert(EMPTY_MAP).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty map, but was:<{'key1'=1}>").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1));
+        new MapAssert(map).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty map, but was:<{'key1'=1}>").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1));
+        new MapAssert(map).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
     expectAssertionError("expecting a non-null map, but it was null").on(codeToTest);
   }

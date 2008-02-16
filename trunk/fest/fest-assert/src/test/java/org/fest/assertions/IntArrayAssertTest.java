@@ -460,5 +460,29 @@ public class IntArrayAssertTest {
     new IntArrayAssert(459).isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new IntArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new IntArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[8]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(8).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[8]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(8).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private int[] array(int... args) { return args; }
 }

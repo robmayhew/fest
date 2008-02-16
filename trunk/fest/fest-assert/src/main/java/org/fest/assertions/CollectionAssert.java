@@ -173,6 +173,15 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   }
 
   /**
+   * Verifies that the actual collection is <code>null</code> or empty.
+   * @throws AssertionError if the actual collection is not <code>null</code> or not empty.
+   */
+  public final void isNullOrEmpty() {
+    if (Collections.isEmpty(actual)) return;
+    fail(concat("expecting a null or empty collection, but was:", format(actual)));
+  }
+
+  /**
    * Verifies that the actual collection is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual collection is <code>null</code>.

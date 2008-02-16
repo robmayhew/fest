@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.fest.util.Maps;
+
 /**
  * Understands assertions for <code>{@link Map}</code>. To create a new instance of this class use the method
  * <code>{@link Assertions#assertThat(Map)}</code>.
@@ -201,8 +203,17 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   }
 
   /**
+   * Verifies that the actual <code>{@link Map}</code> is <code>null</code> or empty.
+   * @throws AssertionError if the actual <code>Map</code> is not <code>null</code> or not empty.
+   */
+  public final void isNullOrEmpty() {
+    if (Maps.isEmpty(actual)) return;
+    fail(concat("expecting a null or empty map, but was:", formattedActual()));
+  }
+
+  /**
    * Verifies that the actual <code>{@link Map}</code> is empty.
-   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the actual <code>Map</code> is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> is <code>null</code> or not empty.
    */
   public void isEmpty() {

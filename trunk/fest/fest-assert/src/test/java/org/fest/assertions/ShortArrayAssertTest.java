@@ -460,6 +460,30 @@ public class ShortArrayAssertTest {
     new ShortArrayAssert(asShort(459)).isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new ShortArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new ShortArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[8]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(8)).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[8]>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(asShort(8)).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private short asShort(int i) {
     return (short)i;
   }

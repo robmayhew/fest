@@ -460,5 +460,29 @@ public class CharArrayAssertTest {
     new CharArrayAssert('a').isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new CharArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new CharArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[a]>").on(new CodeToTest() {
+      public void run() {
+        new CharArrayAssert('a').isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[a]>").on(new CodeToTest() {
+      public void run() {
+        new CharArrayAssert('a').as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private char[] array(char... args) { return args; }
 }

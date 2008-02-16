@@ -459,6 +459,30 @@ public class DoubleArrayAssertTest {
     new DoubleArrayAssert(55.03).isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new DoubleArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new DoubleArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[66.88]>").on(new CodeToTest() {
+      public void run() {
+        new DoubleArrayAssert(66.88).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[66.88]>").on(new CodeToTest() {
+      public void run() {
+        new DoubleArrayAssert(66.88).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private double[] array(double... args) {
     return args;
   }

@@ -580,4 +580,28 @@ public class CollectionAssertTest {
     List<String> names = list("Gandalf", "Frodo");
     new CollectionAssert(names).containsOnly("Gandalf", "Frodo");
   }
+
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new CollectionAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new CollectionAssert(EMPTY_COLLECTION).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty collection, but was:<[8]>").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(list(8)).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty collection, but was:<[8]>").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(list(8)).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
 }

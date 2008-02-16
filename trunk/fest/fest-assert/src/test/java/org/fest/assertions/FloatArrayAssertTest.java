@@ -460,5 +460,29 @@ public class FloatArrayAssertTest {
     new FloatArrayAssert(36.9f).isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new FloatArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new FloatArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[66.8]>").on(new CodeToTest() {
+      public void run() {
+        new FloatArrayAssert(66.8f).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[66.8]>").on(new CodeToTest() {
+      public void run() {
+        new FloatArrayAssert(66.8f).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private float[] array(float... args) { return args; }
 }

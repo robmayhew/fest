@@ -460,6 +460,30 @@ public class ByteArrayAssertTest {
     new ByteArrayAssert(asByte(8)).isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new ByteArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new ByteArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[6]>").on(new CodeToTest() {
+      public void run() {
+        new ByteArrayAssert(asByte(6)).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[6]>").on(new CodeToTest() {
+      public void run() {
+        new ByteArrayAssert(asByte(6)).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private byte asByte(int i) { return (byte)i; }
 
   private byte[] array(byte... args) { return args; }

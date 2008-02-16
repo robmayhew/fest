@@ -36,6 +36,12 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
    * Verifies that the actual group of values is <code>null</code> or empty.
    * @throws AssertionError if the actual group of values is not <code>null</code> or not empty.
    */
+  abstract void isNullOrEmpty();
+
+  /**
+   * Verifies that the actual group of values is empty.
+   * @throws AssertionError if the actual group of values is <code>null</code> or not empty.
+   */
   abstract void isEmpty();
 
   /**

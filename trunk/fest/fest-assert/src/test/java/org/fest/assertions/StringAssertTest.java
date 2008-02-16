@@ -512,6 +512,30 @@ public class StringAssertTest {
     });
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new StringAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new StringAssert("").isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty String, but was:<'Yoda'>").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("Yoda").isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty String, but was:<'Yoda'>").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("Yoda").as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   @Test public void shouldPassIfStringsAreNotSame() {
     new StringAssert("Leia").isNotSameAs(EMPTY_STRING);
   }

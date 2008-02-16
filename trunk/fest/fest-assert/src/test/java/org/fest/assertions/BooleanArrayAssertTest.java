@@ -460,5 +460,29 @@ public class BooleanArrayAssertTest {
     new BooleanArrayAssert(true).isNotSameAs(EMPTY_ARRAY);
   }
 
+  @Test public void shouldPassIfArrayIsNullAndExpectingNullOrEmpty() {
+    new BooleanArrayAssert(null).isNullOrEmpty();
+  }
+
+  @Test public void shouldPassIfArrayIsEmptyAndExpectingNullOrEmpty() {
+    new BooleanArrayAssert(EMPTY_ARRAY).isNullOrEmpty();
+  }
+
+  @Test public void shouldFailIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("expecting a null or empty array, but was:<[true]>").on(new CodeToTest() {
+      public void run() {
+        new BooleanArrayAssert(true).isNullOrEmpty();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescritptionIfArrayIsNotNullOrEmptyAndExpectingNullOrEmpty() {
+    expectAssertionError("[A Test] expecting a null or empty array, but was:<[true]>").on(new CodeToTest() {
+      public void run() {
+        new BooleanArrayAssert(true).as("A Test").isNullOrEmpty();
+      }
+    });
+  }
+
   private boolean[] array(boolean... args) { return args; }
 }
