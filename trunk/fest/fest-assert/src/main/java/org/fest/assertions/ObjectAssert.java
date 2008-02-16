@@ -100,7 +100,8 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @return this assertion object.
    */
   public ObjectAssert as(String description) {
-    return (ObjectAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -128,7 +129,8 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectAssert satisfies(Condition<Object> condition) {
-    return (ObjectAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   /**
@@ -137,7 +139,8 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws AssertionError if the actual <code>Object</code> is <code>null</code>.
    */
   public ObjectAssert isNotNull() {
-    return (ObjectAssert)assertNotNull();
+    assertNotNull();
+    return this;
   }
 
   /**
@@ -147,7 +150,8 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws AssertionError if the actual <code>Object</code> is not the same as the given one.
    */
   public ObjectAssert isSameAs(Object expected) {
-    return (ObjectAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -157,7 +161,8 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws AssertionError if the actual <code>Object</code> is the same as the given one.
    */
   public ObjectAssert isNotSameAs(Object other) {
-    return (ObjectAssert)assertNotSameAs(other);
+    assertNotSameAs(other);
+    return this;
   }
 
   /**
@@ -167,7 +172,8 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws AssertionError if the actual <code>Object</code> is not equal to the given one.
    */
   public ObjectAssert isEqualTo(Object expected) {
-    return (ObjectAssert)assertEqualTo(expected);
+    assertEqualTo(expected);
+    return this;
   }
 
   /**
@@ -177,6 +183,7 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws AssertionError if the actual <code>Object</code> is equal to the given one.
    */
   public ObjectAssert isNotEqualTo(Object other) {
-    return (ObjectAssert)assertNotEqualTo(other);
+    assertNotEqualTo(other);
+    return this;
   }
 }

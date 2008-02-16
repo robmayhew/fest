@@ -72,7 +72,8 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @return this assertion object.
    */
   public ImageAssert as(String description) {
-    return (ImageAssert) description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -100,7 +101,8 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ImageAssert satisfies(Condition<BufferedImage> condition) {
-    return (ImageAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   /**
@@ -156,7 +158,8 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @throws AssertionError if the actual image is <code>null</code>.
    */
   public ImageAssert isNotNull() {
-    return (ImageAssert)assertNotNull();
+    assertNotNull();
+    return this;
   }
 
   /**
@@ -166,7 +169,8 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @throws AssertionError if the actual image is the same as the given one.
    */
   public ImageAssert isNotSameAs(BufferedImage expected) {
-    return (ImageAssert)assertNotSameAs(expected);
+    assertNotSameAs(expected);
+    return this;
   }
 
   /**
@@ -176,7 +180,8 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @throws AssertionError if the actual image is not the same as the given one.
    */
   public ImageAssert isSameAs(BufferedImage expected) {
-    return (ImageAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**

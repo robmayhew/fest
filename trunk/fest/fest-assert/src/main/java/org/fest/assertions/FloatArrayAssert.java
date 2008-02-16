@@ -16,8 +16,6 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.*;
-import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Strings.concat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +28,7 @@ import java.util.List;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class FloatArrayAssert extends GroupAssert<float[]> {
+public final class FloatArrayAssert extends ArrayAssert<float[]> {
 
   FloatArrayAssert(float... actual) {
     super(actual);
@@ -50,7 +48,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @return this assertion object.
    */
   public FloatArrayAssert as(String description) {
-    return (FloatArrayAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -74,13 +73,12 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * Verifies that the actual <code>float</code> array contains the given values.
    * @param values the values to look for.
    * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> array is <code>null</code>.
    * @throws AssertionError if the actual <code>float</code> array does not contain the given values.
    */
   public FloatArrayAssert contains(float...values) {
     isNotNull();
-    List<Object> notFound = new ArrayList<Object>();
-    for (float value : values) if (!hasElement(value)) notFound.add(value);
-    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
+    assertContains(list(values));
     return this;
   }
 
@@ -94,29 +92,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    */
   public FloatArrayAssert containsOnly(float...values) {
     isNotNull();
-    List<Object> notFound = new ArrayList<Object>();
-    List<Object> copy = list(actual);
-    for (Object value : list(values)) {
-      if (!copy.contains(value)) {
-        notFound.add(value);
-        continue;
-      }
-      copy.remove(value);
-    }
-    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
-    if (!copy.isEmpty())
-      fail(concat("unexpected element(s):", inBrackets(copy.toArray()), " in array:", actualInBrackets()));
+    assertContainsOnly(list(values));
     return this;
-  }
-
-	private List<Object> list(float[] values) {
-	  List<Object> list = new ArrayList<Object>();
-	  for (float value : values) list.add(value);
-	  return list;
-	}
-
-  private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array:", actualInBrackets(), " does not contain element(s):", inBrackets(notFound.toArray())));
   }
 
   /**
@@ -128,17 +105,18 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    */
   public FloatArrayAssert excludes(float...values) {
     isNotNull();
-    List<Object> found = new ArrayList<Object>();
-    for (float value : values) if (hasElement(value)) found.add(value);
-    if (!found.isEmpty())
-      fail(concat("array:", actualInBrackets(), " does not exclude element(s):", inBrackets(found.toArray())));
+    assertExcludes(list(values));
     return this;
   }
 
-  private boolean hasElement(float value) {
-    for (float actualElement : actual)
-      if (Float.floatToIntBits(value) == Float.floatToIntBits(actualElement)) return true;
-    return false;
+  List<Object> copyActual() {
+    return list(actual);
+  }
+
+  private List<Object> list(float[] values) {
+    List<Object> list = new ArrayList<Object>();
+    for (float value : values) list.add(value);
+    return list;
   }
 
   /**
@@ -149,7 +127,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public FloatArrayAssert satisfies(Condition<float[]> condition) {
-    return (FloatArrayAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   /**
@@ -158,18 +137,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is <code>null</code>.
    */
   public FloatArrayAssert isNotNull() {
-    if (actual == null) fail("expecting a non-null array, but it was null");
+    assertArrayNotNull();
     return this;
-  }
-
-  /**
-   * Verifies that the actual <code>float</code> array is empty (not <code>null</code> with zero elements.)
-   * @throws AssertionError if the actual <code>float</code> array is <code>null</code>.
-   * @throws AssertionError if the actual <code>float</code> array is <code>null</code> or not empty.
-   */
-  public void isEmpty() {
-    if (actualGroupSize() > 0)
-      fail(concat("expecting empty array, but was:", actualInBrackets()));
   }
 
   /**
@@ -179,7 +148,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is empty.
    */
   public FloatArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail("expecting a non-empty array, but it was empty");
+    assertNotEmpty();
     return this;
   }
 
@@ -191,8 +160,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is not equal to the given one.
    */
   public FloatArrayAssert isEqualTo(float[] expected) {
-    if (!Arrays.equals(actual, expected))
-      fail(errorMessageIfNotEqual(actual, expected));
+    if (!Arrays.equals(actual, expected)) fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
 
@@ -204,8 +172,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is equal to the given one.
    */
   public FloatArrayAssert isNotEqualTo(float[] array) {
-    if (Arrays.equals(actual, array))
-      fail(errorMessageIfEqual(actual, array));
+    if (Arrays.equals(actual, array)) fail(errorMessageIfEqual(actual, array));
     return this;
   }
 
@@ -218,20 +185,13 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    *          one.
    */
   public FloatArrayAssert hasSize(int expected) {
-    int actualSize = actualGroupSize();
-    if (actualSize != expected)
-      fail(concat(
-          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for array:", actualInBrackets()));
+    assertHasSize(expected);
     return this;
   }
 
   int actualGroupSize() {
     isNotNull();
     return actual.length;
-  }
-
-  private String actualInBrackets() {
-    return inBrackets(actual);
   }
 
   /**
@@ -241,7 +201,8 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is not the same as the given one.
    */
   public FloatArrayAssert isSameAs(float[] expected) {
-    return (FloatArrayAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -251,6 +212,7 @@ public final class FloatArrayAssert extends GroupAssert<float[]> {
    * @throws AssertionError if the actual <code>float</code> array is the same as the given one.
    */
   public FloatArrayAssert isNotSameAs(float[] expected) {
-    return (FloatArrayAssert)assertNotSameAs(expected);
+    assertNotSameAs(expected);
+    return this;
   }
 }

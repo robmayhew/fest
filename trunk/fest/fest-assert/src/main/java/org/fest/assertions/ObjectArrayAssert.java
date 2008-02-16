@@ -18,10 +18,8 @@ package org.fest.assertions;
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Collections.list;
-import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +30,7 @@ import java.util.List;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ObjectArrayAssert extends GroupAssert<Object[]> {
+public final class ObjectArrayAssert extends ArrayAssert<Object[]> {
 
   ObjectArrayAssert(Object... actual) {
     super(actual);
@@ -52,7 +50,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @return this assertion object.
    */
   public ObjectArrayAssert as(String description) {
-    return (ObjectArrayAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -124,9 +123,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert contains(Object...objects) {
     isNotNull();
-    List<Object> notFound = new ArrayList<Object>();
-    for (Object o : objects) if (!hasElement(o)) notFound.add(o);
-    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
+    assertContains(list(objects));
     return this;
   }
 
@@ -140,23 +137,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert containsOnly(Object...objects) {
     isNotNull();
-    List<Object> notFound = new ArrayList<Object>();
-    List<Object> copy = new ArrayList<Object>(list(actual));
-    for (Object o : objects) {
-      if (!copy.contains(o)) {
-        notFound.add(o);
-        continue;
-      }
-      copy.remove(o);
-    }
-    if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
-    if (!copy.isEmpty())
-      fail(concat("unexpected element(s):", inBrackets(copy.toArray()), " in array:", actualInBrackets()));
+    assertContainsOnly(list(objects));
     return this;
-  }
-
-  private void failIfElementsNotFound(List<Object> notFound) {
-    fail(concat("array:", actualInBrackets(), " does not contain element(s):", inBrackets(notFound.toArray())));
   }
 
   /**
@@ -168,17 +150,12 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    */
   public ObjectArrayAssert excludes(Object...objects) {
     isNotNull();
-    List<Object> found = new ArrayList<Object>();
-    for (Object o : objects) if (hasElement(o)) found.add(o);
-    if (!found.isEmpty())
-      fail(concat("array:", actualInBrackets(), " does not exclude element(s):", inBrackets(found.toArray())));
+    assertExcludes(list(objects));
     return this;
   }
 
-  private boolean hasElement(Object o) {
-    for (Object actualElement : actual)
-      if (areEqual(o, actualElement)) return true;
-    return false;
+  List<Object> copyActual() {
+    return list(actual);
   }
 
   /**
@@ -189,7 +166,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectArrayAssert satisfies(Condition<Object[]> condition) {
-    return (ObjectArrayAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   /**
@@ -198,18 +176,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
    */
   public ObjectArrayAssert isNotNull() {
-    if (actual == null) fail("expecting a non-null array, but it was null");
+    assertArrayNotNull();
     return this;
-  }
-
-  /**
-   * Verifies that the actual <code>Object</code> array is empty (not <code>null</code> with zero elements.)
-   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
-   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code> or not empty.
-   */
-  public void isEmpty() {
-    if (actualGroupSize() > 0)
-      fail(concat("expecting empty array, but was:", actualInBrackets()));
   }
 
   /**
@@ -219,7 +187,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is empty.
    */
   public ObjectArrayAssert isNotEmpty() {
-    if (actualGroupSize() == 0) fail("expecting a non-empty array, but it was empty");
+    assertNotEmpty();
     return this;
   }
 
@@ -231,8 +199,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is not equal to the given one.
    */
   public ObjectArrayAssert isEqualTo(Object[] expected) {
-    if (!Arrays.equals(actual, expected))
-      fail(errorMessageIfNotEqual(actual, expected));
+    if (!Arrays.equals(actual, expected)) fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
 
@@ -244,8 +211,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is equal to the given one.
    */
   public ObjectArrayAssert isNotEqualTo(Object[] array) {
-    if (Arrays.equals(actual, array))
-      fail(errorMessageIfEqual(actual, array));
+    if (Arrays.equals(actual, array)) fail(errorMessageIfEqual(actual, array));
     return this;
   }
 
@@ -258,20 +224,13 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * one.
    */
   public ObjectArrayAssert hasSize(int expected) {
-    int actualSize = actualGroupSize();
-    if (actualSize != expected)
-      fail(concat(
-          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for array:", actualInBrackets()));
+    assertHasSize(expected);
     return this;
   }
 
   int actualGroupSize() {
     isNotNull();
     return actual.length;
-  }
-
-  private String actualInBrackets() {
-    return inBrackets(actual);
   }
 
   /**
@@ -281,7 +240,8 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is not the same as the given one.
    */
   public ObjectArrayAssert isSameAs(Object[] expected) {
-    return (ObjectArrayAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -291,6 +251,7 @@ public final class ObjectArrayAssert extends GroupAssert<Object[]> {
    * @throws AssertionError if the actual <code>Object</code> array is the same as the given one.
    */
   public ObjectArrayAssert isNotSameAs(Object[] expected) {
-    return (ObjectArrayAssert)assertNotSameAs(expected);
+    assertNotSameAs(expected);
+    return this;
   }
 }

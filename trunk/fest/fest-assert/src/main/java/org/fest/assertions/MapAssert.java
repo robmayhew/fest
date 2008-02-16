@@ -55,7 +55,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @return this assertion object.
    */
   public MapAssert as(String description) {
-    return (MapAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -222,7 +223,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws AssertionError if the actual <code>Map</code> is not equal to the given one.
    */
   public MapAssert isEqualTo(Map<?, ?> expected) {
-    return (MapAssert)assertEqualTo(expected);
+    assertEqualTo(expected);
+    return this;
   }
 
   /**
@@ -243,7 +245,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws AssertionError if the actual <code>Map</code> is equal to the given one.
    */
   public MapAssert isNotEqualTo(Map<?, ?> other) {
-    return (MapAssert)assertNotEqualTo(other);
+    assertNotEqualTo(other);
+    return this;
   }
 
   /**
@@ -263,7 +266,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws AssertionError if the actual <code>Map</code> is the same as the given one.
    */
   public MapAssert isNotSameAs(Map<?, ?> other) {
-    return (MapAssert)assertNotSameAs(other);
+    assertNotSameAs(other);
+    return this;
   }
 
   /**
@@ -273,7 +277,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws AssertionError if the actual <code>Map</code> is not the same as the given one.
    */
   public MapAssert isSameAs(Map<?, ?> expected) {
-    return (MapAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -284,7 +289,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public MapAssert satisfies(Condition<Map<?, ?>> condition) {
-    return (MapAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   int actualGroupSize() {

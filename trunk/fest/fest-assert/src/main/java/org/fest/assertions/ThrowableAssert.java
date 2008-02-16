@@ -14,9 +14,9 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Fail.failIfNotEqual;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.concat;
-import static org.fest.assertions.Fail.*;
 
 /**
  * Understands assertion methods for <code>{@link Throwable}</code>. To create a new instance of this class use the
@@ -53,7 +53,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    */
   public ThrowableAssert as(String description) {
     objectAssert.as(description);
-    return (ThrowableAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -116,7 +117,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     failIfNotEqual(description(), actual.getMessage(), message);
     return this;
   }
-  
+
   /**
    * Returns a <code>{@link StringAssert}</code> wrapping the message of the actual <code>Throwable</code>.
    * @return a <code>StringAssert</code> wrapping the message of the actual <code>Throwable</code>.
@@ -126,7 +127,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     isNotNull();
     return new StringAssert(actual.getMessage());
   }
-  
+
   /**
    * Returns the cause of the actual <code>Throwable</code>, wrapped in a <code>{@link ThrowableAssert}</code>.
    * @return a <code>ThrowableAssert</code> containing the cause of the actual <code>Throwable</code>.
@@ -240,7 +241,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws AssertionError if the actual <code>Throwable</code> is not equal to the given one.
    */
   public ThrowableAssert isEqualTo(Throwable expected) {
-    return (ThrowableAssert)assertEqualTo(expected);
+    assertEqualTo(expected);
+    return this;
   }
 
   /**
@@ -250,7 +252,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws AssertionError if the actual <code>Throwable</code> is equal to the given one.
    */
   public ThrowableAssert isNotEqualTo(Throwable other) {
-    return (ThrowableAssert)assertNotEqualTo(other);
+    assertNotEqualTo(other);
+    return this;
   }
 
   /**
@@ -261,7 +264,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
    */
   public ThrowableAssert isNotNull() {
-    return (ThrowableAssert)assertNotNull();
+    assertNotNull();
+    return this;
   }
 
   /**
@@ -271,7 +275,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws AssertionError if the actual <code>Throwable</code> is the same as the given one.
    */
   public ThrowableAssert isNotSameAs(Throwable other) {
-    return (ThrowableAssert)assertNotSameAs(other);
+    assertNotSameAs(other);
+    return this;
   }
 
   /**
@@ -281,7 +286,8 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws AssertionError if the actual <code>Throwable</code> is not the same as the given one.
    */
   public ThrowableAssert isSameAs(Throwable expected) {
-    return (ThrowableAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -292,6 +298,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ThrowableAssert satisfies(Condition<Throwable> condition) {
-    return (ThrowableAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 }

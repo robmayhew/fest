@@ -63,7 +63,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @return this assertion object.
    */
   @Override public FileAssert as(String description) {
-    return (FileAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -132,7 +133,7 @@ public final class FileAssert extends GenericAssert<File> {
     isNotNull();
     return new LongAssert(actual.length());
   }
-  
+
   /**
    * Verifies that the actual <code>File</code> is a directory.
    * @return this assertion object.
@@ -153,7 +154,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws AssertionError if the actual <code>File</code> is not equal to the given one.
    */
   public FileAssert isEqualTo(File expected) {
-    return (FileAssert)assertEqualTo(expected);
+    assertEqualTo(expected);
+    return this;
   }
 
   /**
@@ -176,7 +178,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws AssertionError if the actual <code>File</code> is equal to the given one.
    */
   public FileAssert isNotEqualTo(File other) {
-    return (FileAssert)assertNotEqualTo(other);
+    assertNotEqualTo(other);
+    return this;
   }
 
   /**
@@ -185,7 +188,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws AssertionError if the actual <code>File</code> is <code>null</code>.
    */
   @Override public FileAssert isNotNull() {
-    return (FileAssert)assertNotNull();
+    assertNotNull();
+    return this;
   }
 
   /**
@@ -195,7 +199,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws AssertionError if the actual <code>File</code> is the same as the given one.
    */
   public FileAssert isNotSameAs(File other) {
-    return (FileAssert)assertNotSameAs(other);
+    assertNotSameAs(other);
+    return this;
   }
 
   /**
@@ -205,7 +210,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws AssertionError if the actual <code>File</code> is not the same as the given one.
    */
   public FileAssert isSameAs(File expected) {
-    return (FileAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -216,7 +222,8 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   @Override public FileAssert satisfies(Condition<File> condition) {
-    return (FileAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   /**

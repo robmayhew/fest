@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="alpha-1" date="TBD" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="add">
+        Added fest-mocks-0.1 as a 'test' scoped dependency.
+      </action>
       <action dev="alruiz" type="add">
         Added method 'message' to ThrowableAssert. This method returns a StringAssert.
       </action>

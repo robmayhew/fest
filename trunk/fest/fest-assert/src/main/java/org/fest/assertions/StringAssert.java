@@ -47,7 +47,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @return this assertion object.
    */
   public StringAssert as(String description) {
-    return (StringAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -75,7 +76,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public StringAssert satisfies(Condition<String> condition) {
-    return (StringAssert)verify(condition);
+    verify(condition);
+    return this;
   }
 
   /**
@@ -107,7 +109,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> is not equal to the given one.
    */
   public StringAssert isEqualTo(String expected) {
-    return (StringAssert)assertEqualTo(expected);
+    assertEqualTo(expected);
+    return this;
   }
 
   /**
@@ -117,7 +120,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> is equal to the given one.
    */
   public StringAssert isNotEqualTo(String other) {
-    return (StringAssert)assertNotEqualTo(other);
+    assertNotEqualTo(other);
+    return this;
   }
 
   /**
@@ -126,7 +130,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> is <code>null</code>.
    */
   public StringAssert isNotNull() {
-    return (StringAssert)assertNotNull();
+    assertNotNull();
+    return this;
   }
 
   /**
@@ -136,7 +141,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> is the same as the given one.
    */
   public StringAssert isNotSameAs(String other) {
-    return (StringAssert)assertNotSameAs(other);
+    assertNotSameAs(other);
+    return this;
   }
 
   /**
@@ -146,7 +152,8 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws AssertionError if the actual <code>String</code> is not the same as the given one.
    */
   public StringAssert isSameAs(String expected) {
-    return (StringAssert)assertSameAs(expected);
+    assertSameAs(expected);
+    return this;
   }
 
   /**
@@ -159,8 +166,7 @@ public final class StringAssert extends GroupAssert<String> {
   public StringAssert hasSize(int expected) {
     int actualSize = actualGroupSize();
     if (actualSize != expected)
-      fail(concat(
-          "expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for String:", actual()));
+      fail(concat("expected size:", inBrackets(expected)," but was:", inBrackets(actualSize), " for String:", actual()));
     return this;
   }
 
