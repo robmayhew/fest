@@ -103,6 +103,63 @@ public class ThrowableAssertTest {
     });
   }
 
+  @Test public void shouldPassIfActualMessageIsEqualToGivenOne() {
+    new ThrowableAssert(new Exception("An exception")).hasMessage("An exception");
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenCheckingMessage() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).hasMessage("");
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingMessage() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").hasMessage("");
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualMessageIsNotEqualToExpectedAndExpectingEqual() {
+    expectAssertionError("expected:<'Hi'> but was:<'An exception'>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception("An exception")).hasMessage("Hi");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualMessageIsNotEqualToExpectedAndExpectingEqual() {
+    expectAssertionError("[A Test] expected:<'Hi'> but was:<'An exception'>").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception("An exception")).as("A Test").hasMessage("Hi");
+      }
+    });
+  }
+  
+  @Test public void shouldReturnStringAssertWithActualMessage() {
+    StringAssert message = new ThrowableAssert(new Exception("Hi")).message();
+    message.isEqualTo("Hi");
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenReturningMessage() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).message();
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenReturningMessage() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(null).as("A Test").message();
+      }
+    });
+  }
+
   @Test public void shouldReturnCauseInThrowableAssert() {
     Exception cause = new Exception();
     ThrowableAssert root = new ThrowableAssert(new Exception(cause));
@@ -110,7 +167,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenGettingCause() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).cause();
       }
@@ -130,7 +187,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingHasNoCause() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).hasNoCause();
       }
@@ -196,7 +253,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIsInstanceOfExpectedClass() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).isInstanceOf(NullPointerException.class);
       }
@@ -254,7 +311,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIsExactlyInstanceOfExpectedClass() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).isExactlyInstanceOf(NullPointerException.class);
       }
@@ -372,7 +429,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenGettingCauseHierarchy() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).causeHierarchy();
       }

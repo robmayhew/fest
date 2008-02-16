@@ -382,7 +382,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ImageAssert(null).isNotNull();
       }

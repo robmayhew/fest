@@ -28,7 +28,7 @@ import org.fest.test.ExpectedFailure.Message;
  */
 public final class CommonFailures {
 
-  public static void expectAssertionErrorIfObjectlIsNull(CodeToTest codeToTest) {
+  public static void expectAssertionErrorIfObjectIsNull(CodeToTest codeToTest) {
     expectAssertionError("expecting a non-null object, but it was null").on(codeToTest);
   }
 

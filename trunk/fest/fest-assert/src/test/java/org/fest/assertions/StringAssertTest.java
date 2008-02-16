@@ -104,7 +104,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfEmpty() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).isEmpty();
       }
@@ -160,7 +160,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new StringAssert(null).isNotNull();
       }
@@ -180,7 +180,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfNotEmpty() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).isNotEmpty();
       }
@@ -257,7 +257,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsString() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).contains("Yoda");
       }
@@ -293,7 +293,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfStartsWith() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).startsWith("Leia");
       }
@@ -329,7 +329,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfEndsWith() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).endsWith("Leia");
       }
@@ -365,7 +365,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndCheckingIfExcludes() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).excludes("Leia");
       }
@@ -401,7 +401,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfMatching() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() throws Throwable {
         new StringAssert(null).matches(EMPTY_STRING);
       }

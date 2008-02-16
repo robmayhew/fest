@@ -120,7 +120,7 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullAndExpectingNotNull() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ObjectAssert(null).isNotNull();
       }
@@ -168,7 +168,7 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIsInstanceOfExpectedClass() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ObjectAssert(null).isInstanceOf(String.class);
       }
@@ -228,7 +228,7 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIsInstanceOfAnyExpectedClass() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new ObjectAssert(null).isInstanceOfAny(String.class, Integer.class);
       }

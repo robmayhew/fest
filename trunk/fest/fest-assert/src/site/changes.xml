@@ -6,6 +6,15 @@
   </properties>
   <body>
     <release version="alpha-1" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Added method 'message' to ThrowableAssert. This method returns a StringAssert.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'hasMessage(String)' to ThrowableAssert.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'size' to FileAssert. This method returns a LongAssert.
+      </action>
       <action dev="alruiz, wanghy" tpe="fix">
         Fixed bug in FileContentComparator where EOF was determined at the wrong time.
       </action>

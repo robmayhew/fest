@@ -108,7 +108,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfNotExist() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).doesNotExist();
       }
@@ -142,7 +142,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfExist() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).exists();
       }
@@ -176,7 +176,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfIsDirectory() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).isDirectory();
       }
@@ -210,7 +210,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfIsFile() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).isFile();
       }
@@ -244,7 +244,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingSize() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).hasSize(8);
       }
@@ -297,13 +297,34 @@ public class FileAssertTest {
     new FileAssert(file).isFile();
   }
 
+  @Test public void shouldReturnLongAssertForFileSize() {
+    file.length(8);
+    new FileAssert(file).size().isEqualTo(8);
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenGettingSize() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).size();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenGettingSize() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new FileAssert(null).as("A Test").size();
+      }
+    });
+  }
+
   @Test public void shouldPassIfSizeOfActualIsEqualToExpected() {
     file.length(8);
     new FileAssert(file).hasSize(8);
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingSameContent() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).hasSameContentAs(file);
       }
@@ -421,7 +442,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfIsAbsolute() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).isAbsolute();
       }
@@ -460,7 +481,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNullWhenCheckingIfIsRelative() {
-    expectAssertionErrorIfObjectlIsNull(new CodeToTest() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
         new FileAssert(null).isRelative();
       }

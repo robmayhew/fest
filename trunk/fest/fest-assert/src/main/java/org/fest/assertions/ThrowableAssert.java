@@ -16,6 +16,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.concat;
+import static org.fest.assertions.Fail.*;
 
 /**
  * Understands assertion methods for <code>{@link Throwable}</code>. To create a new instance of this class use the
@@ -103,6 +104,29 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     return this;
   }
 
+  /**
+   * Verifies that the message of the actual <code>Throwable</code> is equal to the given one.
+   * @param message the expected message.
+   * @return this assertion error.
+   * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
+   * @throws AssertionError if the message of the actual <code>Throwable</code> is not equal to the given one.
+   */
+  public ThrowableAssert hasMessage(String message) {
+    isNotNull();
+    failIfNotEqual(description(), actual.getMessage(), message);
+    return this;
+  }
+  
+  /**
+   * Returns a <code>{@link StringAssert}</code> wrapping the message of the actual <code>Throwable</code>.
+   * @return a <code>StringAssert</code> wrapping the message of the actual <code>Throwable</code>.
+   * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
+   */
+  public StringAssert message() {
+    isNotNull();
+    return new StringAssert(actual.getMessage());
+  }
+  
   /**
    * Returns the cause of the actual <code>Throwable</code>, wrapped in a <code>{@link ThrowableAssert}</code>.
    * @return a <code>ThrowableAssert</code> containing the cause of the actual <code>Throwable</code>.
