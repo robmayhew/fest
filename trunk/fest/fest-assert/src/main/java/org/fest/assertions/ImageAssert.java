@@ -25,8 +25,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 /**
  * Understands assertion methods for images. To create a new instance of this class use the
  * method <code>{@link Assertions#assertThat(BufferedImage)}</code>.
@@ -36,20 +34,23 @@ import javax.imageio.ImageIO;
  */
 public final class ImageAssert extends GenericAssert<BufferedImage> {
 
+  private static ImageReader imageReader = new ImageReader();
+
   /**
    * Reads the image in the specified path.
    * @param imageFilePath the path of the image to read.
    * @return the read image.
-   * @throws AssertionError wrapping any errors thrown when reading the image.
+   * @throws IllegalArgumentException if the given path does not belong to a file.
+   * @throws IOException wrapping any I/O errors thrown when reading the image.
    */
-  public static BufferedImage read(String imageFilePath) {
+  public static BufferedImage read(String imageFilePath) throws IOException {
     File imageFile = new File(imageFilePath);
-    if (!imageFile.isFile()) Fail.fail(concat("The path ", quote(imageFilePath), " does not belong to a file"));
+    if (!imageFile.isFile())
+      throw new IllegalArgumentException(concat("The path ", quote(imageFilePath), " does not belong to a file"));
     try {
-      return ImageIO.read(imageFile);
+      return imageReader.read(imageFile);
     } catch (IOException e) {
-      Fail.fail(concat("Unable to read image from file ", quote(imageFilePath)), e);
-      return null;
+      throw new IOException(concat("Unable to read image from file ", quote(imageFilePath)), e);
     }
   }
 
@@ -192,4 +193,6 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
     Fail.failIfNotEqual(description(), actual, expected);
     return this;
   }
+
+  static void imageReader(ImageReader newImageReader) { imageReader = newImageReader; }
 }

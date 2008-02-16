@@ -25,8 +25,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import org.fest.test.CodeToTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -37,22 +40,37 @@ import org.testng.annotations.Test;
  */
 public class ImageAssertTest {
 
-  @Test public void shouldReadImageFile() {
+  @AfterClass public void tearDown() {
+    ImageAssert.imageReader(new ImageReader());
+  }
+
+  @Test public void shouldReadImageFile() throws IOException {
+    ImageReaderStub imageReader = new ImageReaderStub();
+    BufferedImage read = fivePixelBlueImage();
+    imageReader.imageRead(read);
+    ImageAssert.imageReader(imageReader);
     String filePath = file("red.png").getPath();
     BufferedImage image = ImageAssert.read(filePath);
-    assertNotNull(image);
-    int w = image.getWidth();
-    assertEquals(w, 6);
-    int h = image.getHeight();
-    assertEquals(h, 6);
-    for (int x = 0; x < w; x++)
-      for (int y = 0; y < h; y++)
-        assertEquals(image.getRGB(x, y), RED.getRGB());
+    assertSame(image, read);
+  }
+
+  @Test public void shouldReturnNullImageFileIfIOExceptionThrown() {
+    ImageReaderStub imageReader = new ImageReaderStub();
+    IOException toThrow = new IOException();
+    imageReader.toThrow(toThrow);
+    ImageAssert.imageReader(imageReader);
+    String filePath = file("red.png").getPath();
+    try {
+      ImageAssert.read(filePath);
+      fail();
+    } catch (IOException e) {
+      assertSame(e.getCause(), toThrow);
+    }
   }
 
   @Test public void shouldFailIfImagePathIsNotFileWhenReadingImage() {
-    expectAssertionError("The path 'blah' does not belong to a file").on(new CodeToTest() {
-      public void run() {
+    expectIllegalArgumentException("The path 'blah' does not belong to a file").on(new CodeToTest() {
+      public void run() throws Throwable {
         ImageAssert.read("blah");
       }
     });
@@ -411,5 +429,23 @@ public class ImageAssertTest {
     graphics.setColor(color);
     graphics.fillRect(0, 0, width, height);
     return image;
+  }
+
+  private static class ImageReaderStub extends ImageReader {
+    private BufferedImage imageRead;
+    private IOException toThrow;
+
+    void imageRead(BufferedImage imageRead) {
+      this.imageRead = imageRead;
+    }
+
+    void toThrow(IOException toThrow) {
+      this.toThrow = toThrow;
+    }
+
+    @Override BufferedImage read(File imageFile) throws IOException {
+      if (toThrow != null) throw toThrow;
+      return imageRead;
+    }
   }
 }
