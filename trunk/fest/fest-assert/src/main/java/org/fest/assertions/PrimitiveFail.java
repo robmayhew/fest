@@ -15,8 +15,6 @@
 package org.fest.assertions;
 
 import static org.fest.assertions.Fail.*;
-import static org.fest.assertions.Formatting.*;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands failure methods for primitive types.
@@ -31,77 +29,77 @@ public final class PrimitiveFail {
    * Fails if the given <code>char</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>char</code>s are equal.
    */
-  static void failIfEqual(String message, char actual, char second) {
-    if (actual == second) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, char actual, char value) {
+    if (actual == value) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
    * Fails if the given <code>byte</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>byte</code>s are equal.
    */
-  static void failIfEqual(String message, byte actual, byte second) {
-    if (actual == second) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, byte actual, byte value) {
+    if (actual == value) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
    * Fails if the given <code>short</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>short</code>s are equal.
    */
-  static void failIfEqual(String message, short actual, short second) {
-    if (actual == second) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, short actual, short value) {
+    if (actual == value) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
    * Fails if the given <code>int</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>int</code>s are equal.
    */
-  static void failIfEqual(String message, int actual, int second) {
-    if (actual == second) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, int actual, int value) {
+    if (actual == value) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
    * Fails if the given <code>long</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>long</code>s are equal.
    */
-  static void failIfEqual(String message, long actual, long second) {
-    if (actual == second) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, long actual, long value) {
+    if (actual == value) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
    * Fails if the given <code>float</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>float</code>s are equal.
    */
-  static void failIfEqual(String message, float actual, float second) {
-    if (Float.compare(actual, second) == 0) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, float actual, float value) {
+    if (Float.compare(actual, value) == 0) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
    * Fails if the given <code>double</code>s are equal.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
+   * @param value the value checked against <code>actual</code>.
    * @throws AssertionError if the given <code>double</code>s are equal.
    */
-  static void failIfEqual(String message, double actual, double second) {
-    if (Double.compare(actual, second) == 0) fail(errorMessageIfEqual(message, actual, second));
+  static void failIfEqual(String message, double actual, double value) {
+    if (Double.compare(actual, value) == 0) fail(errorMessageIfEqual(message, actual, value));
   }
 
   /**
@@ -182,329 +180,311 @@ public final class PrimitiveFail {
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, char actual, char second) {
-    if (actual >= second) fail(errorMessageIfNotLessThan(message, actual, second));
+  static void failIfNotLessThan(String message, char actual, char value) {
+    if (actual >= value) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, byte actual, byte second) {
-    if (actual >= second) fail(errorMessageIfNotLessThan(message, actual, second));
+  static void failIfNotLessThan(String message, byte actual, byte value) {
+    if (actual >= value) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, short actual, short second) {
-    if (actual >= second) fail(errorMessageIfNotLessThan(message, actual, second));
+  static void failIfNotLessThan(String message, short actual, short value) {
+    if (actual >= value) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, int actual, int second) {
-    if (actual >= second) fail(errorMessageIfNotLessThan(message, actual, second));
+  static void failIfNotLessThan(String message, int actual, int value) {
+    if (actual >= value) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, long actual, long second) {
-    if (actual >= second) fail(errorMessageIfNotLessThan(message, actual, second));
+  static void failIfNotLessThan(String message, long actual, long value) {
+    if (actual >= value) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, float actual, float second) {
-    if (Float.compare(actual, second) >= 0) fail(errorMessageIfNotLessThan(message, actual, second));
+  static void failIfNotLessThan(String message, float actual, float value) {
+    if (Float.compare(actual, value) >= 0) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less than the second value.
+   * Fails if the first value is not less than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than the value value.
    */
-  static void failIfNotLessThan(String message, double actual, double second) {
-    if (Double.compare(actual, second) >= 0) fail(errorMessageIfNotLessThan(message, actual, second));
-  }
-
-  private static String errorMessageIfNotLessThan(String message, Object actual, Object second) {
-    return concat(format(message), "actual value:", inBrackets(actual), " should be less than:", inBrackets(second));
+  static void failIfNotLessThan(String message, double actual, double value) {
+    if (Double.compare(actual, value) >= 0) fail(errorMessageIfNotLessThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, char actual, char second) {
-    if (actual <= second) fail(errorMessageIfNotGreaterThan(message, actual, second));
+  static void failIfNotGreaterThan(String message, char actual, char value) {
+    if (actual <= value) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, byte actual, byte second) {
-    if (actual <= second) fail(errorMessageIfNotGreaterThan(message, actual, second));
+  static void failIfNotGreaterThan(String message, byte actual, byte value) {
+    if (actual <= value) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, short actual, short second) {
-    if (actual <= second) fail(errorMessageIfNotGreaterThan(message, actual, second));
+  static void failIfNotGreaterThan(String message, short actual, short value) {
+    if (actual <= value) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, int actual, int second) {
-    if (actual <= second) fail(errorMessageIfNotGreaterThan(message, actual, second));
+  static void failIfNotGreaterThan(String message, int actual, int value) {
+    if (actual <= value) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, long actual, long second) {
-    if (actual <= second) fail(errorMessageIfNotGreaterThan(message, actual, second));
+  static void failIfNotGreaterThan(String message, long actual, long value) {
+    if (actual <= value) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, float actual, float second) {
-    if (Float.compare(actual, second) <= 0) fail(errorMessageIfNotGreaterThan(message, actual, second));
+  static void failIfNotGreaterThan(String message, float actual, float value) {
+    if (Float.compare(actual, value) <= 0) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater than the second value.
+   * Fails if the first value is not greater than the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater than the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than the value value.
    */
-  static void failIfNotGreaterThan(String message, double actual, double second) {
-    if (Double.compare(actual, second) <= 0) fail(errorMessageIfNotGreaterThan(message, actual, second));
-  }
-
-  private static String errorMessageIfNotGreaterThan(String message, Object actual, Object second) {
-    return concat(format(message), "actual value:", inBrackets(actual), " should be greater than:", inBrackets(second));
+  static void failIfNotGreaterThan(String message, double actual, double value) {
+    if (Double.compare(actual, value) <= 0) fail(errorMessageIfNotGreaterThan(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, char actual, char second) {
-    if (actual > second) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
+  static void failIfNotLessThanOrEqualTo(String message, char actual, char value) {
+    if (actual > value) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, byte actual, byte second) {
-    if (actual > second) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
+  static void failIfNotLessThanOrEqualTo(String message, byte actual, byte value) {
+    if (actual > value) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, short actual, short second) {
-    if (actual > second) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
+  static void failIfNotLessThanOrEqualTo(String message, short actual, short value) {
+    if (actual > value) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, int actual, int second) {
-    if (actual > second) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
+  static void failIfNotLessThanOrEqualTo(String message, int actual, int value) {
+    if (actual > value) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, long actual, long second) {
-    if (actual > second) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
+  static void failIfNotLessThanOrEqualTo(String message, long actual, long value) {
+    if (actual > value) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, float actual, float second) {
-    if (Float.compare(actual, second) > 0) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
+  static void failIfNotLessThanOrEqualTo(String message, float actual, float value) {
+    if (Float.compare(actual, value) > 0) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not less or equal to the second value.
+   * Fails if the first value is not less than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not less or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not less than or equal to the value value.
    */
-  static void failIfNotLessOrEqualTo(String message, double actual, double second) {
-    if (Double.compare(actual, second) > 0) fail(errorMessageIfNotLessOrEqualTo(message, actual, second));
-  }
-
-  private static String errorMessageIfNotLessOrEqualTo(String message, Object first, Object second) {
-    return concat(format(message), "actual value:", inBrackets(first), " should be less than or equal to:",
-        inBrackets(second));
+  static void failIfNotLessThanOrEqualTo(String message, double actual, double value) {
+    if (Double.compare(actual, value) > 0) fail(errorMessageIfNotLessThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, char actual, char second) {
-    if (actual < second) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
+  static void failIfNotGreaterThanOrEqualTo(String message, char actual, char value) {
+    if (actual < value) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, byte actual, byte second) {
-    if (actual < second) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
+  static void failIfNotGreaterThanOrEqualTo(String message, byte actual, byte value) {
+    if (actual < value) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, short actual, short second) {
-    if (actual < second) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
+  static void failIfNotGreaterThanOrEqualTo(String message, short actual, short value) {
+    if (actual < value) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, int actual, int second) {
-    if (actual < second) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
+  static void failIfNotGreaterThanOrEqualTo(String message, int actual, int value) {
+    if (actual < value) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, long actual, long second) {
-    if (actual < second) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
+  static void failIfNotGreaterThanOrEqualTo(String message, long actual, long value) {
+    if (actual < value) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, float actual, float second) {
-    if (Float.compare(actual, second) < 0) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
+  static void failIfNotGreaterThanOrEqualTo(String message, float actual, float value) {
+    if (Float.compare(actual, value) < 0) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   /**
-   * Fails if the first value is not greater or equal to the second value.
+   * Fails if the first value is not greater than or equal to the value value.
    * @param message the identifying message or <code>null</code> for the <code>AssertionError</code>.
    * @param actual the actual value.
-   * @param second the value checked against <code>actual</code>.
-   * @throws AssertionError if the first value is not greater or equal to the second value.
+   * @param value the value checked against <code>actual</code>.
+   * @throws AssertionError if the first value is not greater than or equal to the value value.
    */
-  static void failIfNotGreaterOrEqualTo(String message, double actual, double second) {
-    if (Double.compare(actual, second) < 0) fail(errorMessageIfNotGreaterOrEqualTo(message, actual, second));
-  }
-
-  private static String errorMessageIfNotGreaterOrEqualTo(String message, Object first, Object second) {
-    return concat(format(message), "actual value:", inBrackets(first), " should be greater than or equal to:",
-        inBrackets(second));
+  static void failIfNotGreaterThanOrEqualTo(String message, double actual, double value) {
+    if (Double.compare(actual, value) < 0) fail(errorMessageIfNotGreaterThanOrEqualTo(message, actual, value));
   }
 
   private PrimitiveFail() {}

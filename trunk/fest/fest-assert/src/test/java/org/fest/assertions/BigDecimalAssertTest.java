@@ -19,6 +19,7 @@ import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.testng.Assert.*;
 
 import java.math.BigDecimal;
+import static java.math.BigDecimal.*;
 
 import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
@@ -26,6 +27,8 @@ import org.testng.annotations.Test;
 /**
  * Tests for <code>{@link BigDecimalAssert}</code>.
  *
+ * @author David DIDIER
+ * @author Ted M. Young
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -100,7 +103,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfActualIsNotNullAndExpectingNull() {
-    expectAssertionError("<8> should be null").on(new CodeToTest() {
+    expectAssertionError("<8.0> should be null").on(new CodeToTest() {
       public void run() {
         new BigDecimalAssert(eight()).isNull();
       }
@@ -108,7 +111,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsNotNullAndExpectingNull() {
-    expectAssertionError("[A Test] <8> should be null").on(new CodeToTest() {
+    expectAssertionError("[A Test] <8.0> should be null").on(new CodeToTest() {
       public void run() {
         new BigDecimalAssert(eight()).as("A Test").isNull();
       }
@@ -141,7 +144,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreNotSameAndExpectingSame() {
-    expectAssertionError("expected same instance but found:<8> and:<8>").on(new CodeToTest() {
+    expectAssertionError("expected same instance but found:<8.0> and:<8.0>").on(new CodeToTest() {
       public void run() {
         new BigDecimalAssert(eight()).isSameAs(eight());
       }
@@ -149,7 +152,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotSameAndExpectingSame() {
-    expectAssertionError("[A Test] expected same instance but found:<8> and:<8>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected same instance but found:<8.0> and:<8.0>").on(new CodeToTest() {
       public void run() {
         new BigDecimalAssert(eight()).as("A Test").isSameAs(eight());
       }
@@ -161,7 +164,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreSameAndExpectingNotSame() {
-    expectAssertionError("given objects are same:<8>").on(new CodeToTest() {
+    expectAssertionError("given objects are same:<8.0>").on(new CodeToTest() {
       public void run() {
         BigDecimal eight = eight();
         new BigDecimalAssert(eight).isNotSameAs(eight);
@@ -170,7 +173,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreSameAndExpectingNotSame() {
-    expectAssertionError("[A Test] given objects are same:<8>").on(new CodeToTest() {
+    expectAssertionError("[A Test] given objects are same:<8.0>").on(new CodeToTest() {
       public void run() {
         BigDecimal eight = eight();
         new BigDecimalAssert(eight).as("A Test").isNotSameAs(eight);
@@ -183,17 +186,17 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreNotEqual() {
-    expectAssertionError("expected:<9> but was:<8>").on(new CodeToTest() {
+    expectAssertionError("expected:<8.00> but was:<8.0>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(eight()).isEqualTo(nine());
+        new BigDecimalAssert(eight()).isEqualTo(new BigDecimal("8.00"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreNotEqual() {
-    expectAssertionError("[A Test] expected:<9> but was:<8>").on(new CodeToTest() {
+    expectAssertionError("[A Test] expected:<8.00> but was:<8.0>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(eight()).as("A Test").isEqualTo(new BigDecimal(9));
+        new BigDecimalAssert(eight()).as("A Test").isEqualTo(new BigDecimal("8.00"));
       }
     });
   }
@@ -203,7 +206,7 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfValuesAreEqual() {
-    expectAssertionError("actual value:<8> should not be equal to:<8>").on(new CodeToTest() {
+    expectAssertionError("actual value:<8.0> should not be equal to:<8.0>").on(new CodeToTest() {
       public void run() {
         new BigDecimalAssert(eight()).isNotEqualTo(eight());
       }
@@ -211,18 +214,377 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfValuesAreEqual() {
-    expectAssertionError("[A Test] actual value:<8> should not be equal to:<8>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<8.0> should not be equal to:<8.0>").on(new CodeToTest() {
       public void run() {
         new BigDecimalAssert(eight()).as("A Test").isNotEqualTo(eight());
       }
     });
   }
 
+  @Test public void shouldPassIfValuesAreEqualByComparison() {
+    new BigDecimalAssert(eight()).isEqualByComparingTo(eight());
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfEqualByComparison() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isEqualByComparingTo(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfEqualByComparison() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isEqualByComparingTo(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsNotEqualToExpectedAndExpectingEqualByComparison() {
+    expectAssertionError("expected:<9.0> but was:<8.0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(eight()).isEqualByComparingTo(nine());
+      }      
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNotEqualToExpectedAndExpectingEqualByComparison() {
+    expectAssertionError("[A Test] expected:<9.0> but was:<8.0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(eight()).as("A Test").isEqualByComparingTo(nine());
+      }      
+    });
+  }
+
+  @Test public void shouldPassIfActualIsLessThanGivenValue() {
+    new BigDecimalAssert(eight()).isLessThan(nine());
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfLessThan() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isLessThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfLessThan() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isLessThan(eight());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsEqualToValueAndExpectingLessThan() {
+    expectAssertionError("actual value:<8.0> should be less than:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).isLessThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsEqualToValueAndExpectingLessThan() {
+    expectAssertionError("[A Test] actual value:<8.0> should be less than:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).as("A Test").isLessThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsGreaterThanValueAndExpectingLessThan() {
+    expectAssertionError("actual value:<9.0> should be less than:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(nine()).isLessThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanValueAndExpectingLessThan() {
+    expectAssertionError("[A Test] actual value:<9.0> should be less than:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(nine()).as("A Test").isLessThan(eight());
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsGreaterThanGivenValue() {
+    new BigDecimalAssert(nine()).isGreaterThan(eight());
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfGreaterThan() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isGreaterThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfGreaterThan() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isGreaterThan(eight());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsEqualToValueAndExpectingGreaterThan() {
+    expectAssertionError("actual value:<8.0> should be greater than:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).isGreaterThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsEqualToValueAndExpectingGreaterThan() {
+    expectAssertionError("[A Test] actual value:<8.0> should be greater than:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).as("A Test").isGreaterThan(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsLessThanValueAndExpectingGreaterThan() {
+    expectAssertionError("actual value:<8.0> should be greater than:<9.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).isGreaterThan(nine());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsLessThanValueAndExpectingGreaterThan() {
+    expectAssertionError("[A Test] actual value:<8.0> should be greater than:<9.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).as("A Test").isGreaterThan(nine());
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsLessThanOrEqualToGivenValue() {
+    new BigDecimalAssert(eight()).isLessThanOrEqualTo(eight()).isLessThanOrEqualTo(nine());
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfLessThanOrEqualTo() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isLessThanOrEqualTo(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfLessThanOrEqualTo() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isLessThanOrEqualTo(eight());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsGreaterThanValueAndExpectingLessThanOrEqualTo() {
+    expectAssertionError("actual value:<9.0> should be less than or equal to:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(nine()).isLessThanOrEqualTo(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanValueAndExpectingLessThanOrEqualTo() {
+    expectAssertionError("[A Test] actual value:<9.0> should be less than or equal to:<8.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(nine()).as("A Test").isLessThanOrEqualTo(eight());
+      }
+    });
+  }
+
+  @Test public void shouldPassIfActualIsGreaterThanOrEqualToGivenValue() {
+    new BigDecimalAssert(nine()).isGreaterThanOrEqualTo(eight()).isGreaterThanOrEqualTo(nine());
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfGreaterThanOrEqualTo() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isGreaterThanOrEqualTo(eight());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfGreaterThanOrEqualTo() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isGreaterThanOrEqualTo(eight());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualIsLessThanValueAndExpectingGreaterThanOrEqualTo() {
+    expectAssertionError("actual value:<8.0> should be greater than or equal to:<9.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).isGreaterThanOrEqualTo(nine());
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsLessThanValueAndExpectingGreaterThanOrEqualTo() {
+    expectAssertionError("[A Test] actual value:<8.0> should be greater than or equal to:<9.0>").on(new CodeToTest() {
+      public void run() throws Throwable {
+        new BigDecimalAssert(eight()).as("A Test").isGreaterThanOrEqualTo(nine());
+      }
+    });
+  }
+  
+  @Test public void shouldPassIfActualIsPositive() {
+    new BigDecimalAssert(eight()).isPositive();
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsPositive() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isPositive();
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsPositive() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isPositive();
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsNegativeAndExpectingPositive() {
+    expectAssertionError("actual value:<-8> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(negativeEight()).isPositive();
+      }      
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNegativeAndExpectingPositive() {
+    expectAssertionError("[A Test] actual value:<-8> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(negativeEight()).as("A Test").isPositive();
+      }      
+    });
+  }
+
+  @Test public void shouldFailIfActualIsZeroAndExpectingPositive() {
+    expectAssertionError("actual value:<0> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(ZERO).isPositive();
+      }      
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingPositive() {
+    expectAssertionError("[A Test] actual value:<0> should be greater than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(ZERO).as("A Test").isPositive();
+      }      
+    });
+  }
+
+  @Test public void shouldPassIfActualIsNegative() {
+    new BigDecimalAssert(negativeEight()).isNegative();
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsNegative() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isNegative();
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsNegative() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isNegative();
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsPositiveAndExpectingNegative() {
+    expectAssertionError("actual value:<8.0> should be less than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(eight()).isNegative();
+      }      
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsPositiveAndExpectingNegative() {
+    expectAssertionError("[A Test] actual value:<8.0> should be less than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(eight()).as("A Test").isNegative();
+      }      
+    });
+  }
+
+  @Test public void shouldFailIfActualIsZeroAndExpectingNegative() {
+    expectAssertionError("actual value:<0> should be less than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(ZERO).isNegative();
+      }      
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsZeroAndExpectingNegative() {
+    expectAssertionError("[A Test] actual value:<0> should be less than:<0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(ZERO).as("A Test").isNegative();
+      }      
+    });
+  }
+
+  ///
+  
+  @Test public void shouldPassIfActualIsZero() {
+    new BigDecimalAssert(ZERO).isZero();
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfIsZero() {
+    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).isZero();
+      }
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfIsZero() {
+    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(null).as("A Test").isZero();
+      }
+    });
+  }
+  
+  @Test public void shouldFailIfActualIsNotZeroAndExpectingZero() {
+    expectAssertionError("expected:<0> but was:<8.0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(eight()).isZero();
+      }      
+    });
+  }
+  
+  @Test public void shouldFailShowingDescriptionIfActualIsNotZeroAndExpectingZero() {
+    expectAssertionError("[A Test] expected:<0> but was:<8.0>").on(new CodeToTest() {
+      public void run() {
+        new BigDecimalAssert(eight()).as("A Test").isZero();
+      }      
+    });
+  }
+  
+  
   private BigDecimal eight() {
-    return new BigDecimal(8.0);
+    return new BigDecimal("8.0");
   }
 
   private BigDecimal nine() {
-    return new BigDecimal(9.0);
+    return new BigDecimal("9.0");
+  }
+
+  private BigDecimal negativeEight() {
+    return new BigDecimal(-8);
   }
 }

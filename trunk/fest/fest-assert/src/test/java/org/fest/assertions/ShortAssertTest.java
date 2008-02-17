@@ -247,13 +247,13 @@ public class ShortAssertTest {
   }
 
   @Test public void shouldPassIfActualGreaterThanOrEqualToExpected() {
-    new ShortAssert(asShort(8)).isGreaterOrEqualTo(asShort(8)).isGreaterOrEqualTo(asShort(6));
+    new ShortAssert(asShort(8)).isGreaterThanOrEqualTo(asShort(8)).isGreaterThanOrEqualTo(asShort(6));
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
       public void run() {
-        new ShortAssert(asShort(6)).isGreaterOrEqualTo(asShort(8));
+        new ShortAssert(asShort(6)).isGreaterThanOrEqualTo(asShort(8));
       }
     });
   }
@@ -261,19 +261,19 @@ public class ShortAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
       public void run() {
-        new ShortAssert(asShort(6)).as("A Test").isGreaterOrEqualTo(asShort(8));
+        new ShortAssert(asShort(6)).as("A Test").isGreaterThanOrEqualTo(asShort(8));
       }
     });
   }
 
   @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
-    new ShortAssert(asShort(6)).isLessOrEqualTo(asShort(6)).isLessOrEqualTo(asShort(8));
+    new ShortAssert(asShort(6)).isLessThanOrEqualTo(asShort(6)).isLessThanOrEqualTo(asShort(8));
   }
 
   @Test public void shouldFailIfGreaterOrEqualToAndExpectedLessThan() {
     expectAssertionError("actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
       public void run() {
-        new ShortAssert(asShort(8)).isLessOrEqualTo(asShort(6));
+        new ShortAssert(asShort(8)).isLessThanOrEqualTo(asShort(6));
       }
     });
   }
@@ -281,7 +281,7 @@ public class ShortAssertTest {
   @Test public void shouldFailShowingDescriptionIfGreaterOrEqualToAndExpectedLessThan() {
     expectAssertionError("[A Test] actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
       public void run() {
-        new ShortAssert(asShort(8)).as("A Test").isLessOrEqualTo(asShort(6));
+        new ShortAssert(asShort(8)).as("A Test").isLessThanOrEqualTo(asShort(6));
       }
     });
   }

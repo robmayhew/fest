@@ -17,6 +17,7 @@ package org.fest.assertions;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -44,6 +45,15 @@ public final class Assertions {
     List<T> list = new ArrayList<T>();
     while (iterator.hasNext()) list.add(iterator.next());
     return list;
+  }
+
+  /**
+   * Creates a new instance of <code>{@link BigDecimalAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static BigDecimalAssert assertThat(BigDecimal actual) {
+    return new BigDecimalAssert(actual);
   }
 
   /**

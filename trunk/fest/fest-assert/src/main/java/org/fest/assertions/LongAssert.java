@@ -80,56 +80,56 @@ public final class LongAssert extends PrimitiveAssert {
 
   /**
    * Verifies that the actual <code>long</code> value is not equal to the given one.
-   * @param other the value to compare the actual one to.
+   * @param value the value to compare the actual one to.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>long</code> value is equal to the given one.
    */
-  public LongAssert isNotEqualTo(long other) {
-    failIfEqual(description(), actual, other);
+  public LongAssert isNotEqualTo(long value) {
+    failIfEqual(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>long</code> value is greater than the given one.
-   * @param smaller the value expected to be smaller than the actual one.
+   * @param value the given value.
    * @return this assertion object.
-   * @throws AssertionError if the actual <code>long</code> value is less than or equal to the given one.
+   * @throws AssertionError if the actual <code>long</code> value is not greater than the given one.
    */
-  public LongAssert isGreaterThan(long smaller) {
-    failIfNotGreaterThan(description(), actual, smaller);
+  public LongAssert isGreaterThan(long value) {
+    failIfNotGreaterThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>long</code> value is less than the given one.
-   * @param bigger the value expected to be bigger than the actual one.
+   * @param value the given value.
    * @return this assertion object.
-   * @throws AssertionError if the actual <code>long</code> value is greater than or equal to the given one.
+   * @throws AssertionError if the actual <code>long</code> value is not less than the given one.
    */
-  public LongAssert isLessThan(long bigger) {
-    failIfNotLessThan(description(), actual, bigger);
+  public LongAssert isLessThan(long value) {
+    failIfNotLessThan(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>long</code> value is greater or equal to the given one.
-   * @param smaller the value expected to be smaller or equal to the actual one.
+   * @param value the given value.
    * @return this assertion object.
-   * @throws AssertionError if the actual <code>long</code> value is strictly less than or equal to the given one.
+   * @throws AssertionError if the actual <code>long</code> value is not greater than or equal to the given one.
    */
-  public LongAssert isGreaterOrEqualTo(long smaller) {
-    failIfNotGreaterOrEqualTo(description(), actual, smaller);
+  public LongAssert isGreaterThanOrEqualTo(long value) {
+    failIfNotGreaterThanOrEqualTo(description(), actual, value);
     return this;
   }
 
   /**
    * Verifies that the actual <code>long</code> value is less or equal to the given one.
-   * @param bigger the value expected to be bigger or equal to the actual one.
+   * @param value the given value.
    * @return this assertion object.
-   * @throws AssertionError if the actual <code>long</code> value is strictly greater than or equal to the given one.
+   * @throws AssertionError if the actual <code>long</code> value is not less than or equal to the given one.
    */
-  public LongAssert isLessOrEqualTo(long bigger) {
-    failIfNotLessOrEqualTo(description(), actual, bigger);
+  public LongAssert isLessThanOrEqualTo(long value) {
+    failIfNotLessThanOrEqualTo(description(), actual, value);
     return this;
   }
 

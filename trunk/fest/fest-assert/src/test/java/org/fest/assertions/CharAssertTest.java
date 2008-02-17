@@ -157,13 +157,13 @@ public class CharAssertTest {
   }
 
   @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
-    new CharAssert('a').isGreaterOrEqualTo('a').isGreaterOrEqualTo('A');
+    new CharAssert('a').isGreaterThanOrEqualTo('a').isGreaterThanOrEqualTo('A');
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("actual value:<A> should be greater than or equal to:<a>").on(new CodeToTest() {
       public void run() {
-        new CharAssert('A').isGreaterOrEqualTo('a');
+        new CharAssert('A').isGreaterThanOrEqualTo('a');
       }
     });
   }
@@ -171,19 +171,19 @@ public class CharAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<A> should be greater than or equal to:<a>").on(new CodeToTest() {
       public void run() {
-        new CharAssert('A').as("A Test").isGreaterOrEqualTo('a');
+        new CharAssert('A').as("A Test").isGreaterThanOrEqualTo('a');
       }
     });
   }
 
   @Test public void shouldPassIfActualIsLessOrEqualToExpected() {
-    new CharAssert('A').isLessOrEqualTo('a').isLessOrEqualTo('A');
+    new CharAssert('A').isLessThanOrEqualTo('a').isLessThanOrEqualTo('A');
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expectAssertionError("actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
       public void run() {
-        new CharAssert('a').isLessOrEqualTo('A');
+        new CharAssert('a').isLessThanOrEqualTo('A');
       }
     });
   }
@@ -191,7 +191,7 @@ public class CharAssertTest {
   @Test public void shouldFailShowingMessageIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<a> should be less than or equal to:<A>").on(new CodeToTest() {
       public void run() {
-        new CharAssert('a').as("A Test").isLessOrEqualTo('A');
+        new CharAssert('a').as("A Test").isLessThanOrEqualTo('A');
       }
     });
   }

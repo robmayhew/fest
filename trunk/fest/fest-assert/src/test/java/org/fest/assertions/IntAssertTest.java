@@ -247,13 +247,13 @@ public class IntAssertTest {
   }
 
   @Test public void shouldPassIfActualGreaterThanOrEqualToExpected() {
-    new IntAssert(8).isGreaterOrEqualTo(8).isGreaterOrEqualTo(6);
+    new IntAssert(8).isGreaterThanOrEqualTo(8).isGreaterThanOrEqualTo(6);
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
       public void run() {
-        new IntAssert(6).isGreaterOrEqualTo(8);
+        new IntAssert(6).isGreaterThanOrEqualTo(8);
       }
     });
   }
@@ -261,19 +261,19 @@ public class IntAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<6> should be greater than or equal to:<8>").on(new CodeToTest() {
       public void run() {
-        new IntAssert(6).as("A Test").isGreaterOrEqualTo(8);
+        new IntAssert(6).as("A Test").isGreaterThanOrEqualTo(8);
       }
     });
   }
 
   @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
-    new IntAssert(6).isLessOrEqualTo(6).isLessOrEqualTo(8);
+    new IntAssert(6).isLessThanOrEqualTo(6).isLessThanOrEqualTo(8);
   }
 
   @Test public void shouldFailIfGreaterOrEqualToAndExpectedLessThan() {
     expectAssertionError("actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
       public void run() {
-        new IntAssert(8).isLessOrEqualTo(6);
+        new IntAssert(8).isLessThanOrEqualTo(6);
       }
     });
   }
@@ -281,7 +281,7 @@ public class IntAssertTest {
   @Test public void shouldFailShowingDescriptionIfGreaterOrEqualToAndExpectedLessThan() {
     expectAssertionError("[A Test] actual value:<8> should be less than or equal to:<6>").on(new CodeToTest() {
       public void run() {
-        new IntAssert(8).as("A Test").isLessOrEqualTo(6);
+        new IntAssert(8).as("A Test").isLessThanOrEqualTo(6);
       }
     });
   }

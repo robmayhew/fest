@@ -256,13 +256,13 @@ public class FloatAssertTest {
   }
 
   @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
-    new FloatAssert(8.8f).isGreaterOrEqualTo(8.8f).isGreaterOrEqualTo(6.6f);
+    new FloatAssert(8.8f).isGreaterThanOrEqualTo(8.8f).isGreaterThanOrEqualTo(6.6f);
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
       public void run() {
-        new FloatAssert(6.6f).isGreaterOrEqualTo(8.8f);
+        new FloatAssert(6.6f).isGreaterThanOrEqualTo(8.8f);
       }
     });
   }
@@ -270,19 +270,19 @@ public class FloatAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
       public void run() {
-        new FloatAssert(6.6f).as("A Test").isGreaterOrEqualTo(8.8f);
+        new FloatAssert(6.6f).as("A Test").isGreaterThanOrEqualTo(8.8f);
       }
     });
   }
 
   @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
-    new FloatAssert(6.6f).isLessOrEqualTo(6.6f).isLessOrEqualTo(8.8f);
+    new FloatAssert(6.6f).isLessThanOrEqualTo(6.6f).isLessThanOrEqualTo(8.8f);
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expectAssertionError("actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
       public void run() {
-        new FloatAssert(8.8f).isLessOrEqualTo(6.6f);
+        new FloatAssert(8.8f).isLessThanOrEqualTo(6.6f);
       }
     });
   }
@@ -290,7 +290,7 @@ public class FloatAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
       public void run() {
-        new FloatAssert(8.8f).as("A Test").isLessOrEqualTo(6.6f);
+        new FloatAssert(8.8f).as("A Test").isLessThanOrEqualTo(6.6f);
       }
     });
   }

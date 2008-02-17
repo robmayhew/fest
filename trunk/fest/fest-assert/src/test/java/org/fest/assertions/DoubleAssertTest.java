@@ -279,13 +279,13 @@ public class DoubleAssertTest {
   }
 
   @Test public void shouldPassIfActualIsGreaterThanOrEqualToExpected() {
-    new DoubleAssert(8.8).isGreaterOrEqualTo(8.8).isGreaterOrEqualTo(6.6);
+    new DoubleAssert(8.8).isGreaterThanOrEqualTo(8.8).isGreaterThanOrEqualTo(6.6);
   }
 
   @Test public void shouldFailIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqual() {
     expectAssertionError("actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
       public void run() {
-        new DoubleAssert(6.6).isGreaterOrEqualTo(8.8);
+        new DoubleAssert(6.6).isGreaterThanOrEqualTo(8.8);
       }
     });
   }
@@ -293,19 +293,19 @@ public class DoubleAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsLessThanExpectedAndExpectingGreaterThanOrEqual() {
     expectAssertionError("[A Test] actual value:<6.6> should be greater than or equal to:<8.8>").on(new CodeToTest() {
       public void run() {
-        new DoubleAssert(6.6).as("A Test").isGreaterOrEqualTo(8.8);
+        new DoubleAssert(6.6).as("A Test").isGreaterThanOrEqualTo(8.8);
       }
     });
   }
 
   @Test public void shouldPassIfActualIsLessThanOrEqualToExpected() {
-    new DoubleAssert(6.6).isLessOrEqualTo(6.6).isLessOrEqualTo(8.8);
+    new DoubleAssert(6.6).isLessThanOrEqualTo(6.6).isLessThanOrEqualTo(8.8);
   }
 
   @Test public void shouldFailIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expectAssertionError("actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
       public void run() {
-        new DoubleAssert(8.8).isLessOrEqualTo(6.6);
+        new DoubleAssert(8.8).isLessThanOrEqualTo(6.6);
       }
     });
   }
@@ -313,7 +313,7 @@ public class DoubleAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsGreaterThanExpectedAndExpectingLessThanOrEqualTo() {
     expectAssertionError("[A Test] actual value:<8.8> should be less than or equal to:<6.6>").on(new CodeToTest() {
       public void run() {
-        new DoubleAssert(8.8).as("A Test").isLessOrEqualTo(6.6);
+        new DoubleAssert(8.8).as("A Test").isLessThanOrEqualTo(6.6);
       }
     });
   }

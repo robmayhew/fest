@@ -20,6 +20,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.testng.Assert.*;
 
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,10 @@ public class AssertionsTest {
 
   private void assertIsInstanceOf(Object target, Class<?> expectedType) {
     assertEquals(target.getClass(), expectedType);
+  }
+
+  @Test public void shouldReturnBigDecimalAssertIfArgumentIsBigDecimal() {
+    assertIsInstanceOf(assertThat(new BigDecimal("8")), BigDecimalAssert.class);
   }
 
   @Test public void shouldReturnBooleanArrayAssertIfArgumentIsBooleanArray() {
