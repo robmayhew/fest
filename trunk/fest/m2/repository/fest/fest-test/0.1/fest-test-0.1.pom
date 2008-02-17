@@ -8,7 +8,7 @@
   <artifactId>fest-test</artifactId>
   <version>0.1</version>
   <name>FEST Testing</name>
-  <description>Utility methods related to testing</description>
+  <description>Utility methods for software testing</description>
   <inceptionYear>2008</inceptionYear>
   <url>http://code.google.com/p/fest/</url>
   <mailingLists>
