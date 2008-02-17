@@ -7,7 +7,7 @@
   <body>
     <release version="alpha-1" date="TBD" description="Subsequent release">
       <action dev="wanghy, alruiz" type="add" due-to="Ted Young, David DIDIER">
-        Added support for BigDecimal.
+        Patch: Added support for BigDecimal.
       </action>
       <action dev="alruiz, wanghy" type="add">
         Added method 'isEmptyOrNull' to BooleanArrayAssert, ByteAssertArray, CharArrayAssert, CollectionAssert,
