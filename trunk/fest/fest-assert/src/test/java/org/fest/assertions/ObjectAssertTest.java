@@ -1,15 +1,15 @@
 /*
  * Created on Jan 10, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ObjectAssert}</code>.
- * 
+ *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -55,7 +55,7 @@ public class ObjectAssertTest {
     new ObjectAssert("Frodo").satisfies(new NotNullObject());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new ObjectAssert("").satisfies(null);
@@ -80,20 +80,64 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("actual value:<null> should satisfy condition:<non-null object>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<Non-null>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).satisfies(new NotNullObject().as("non-null object"));
+        new ObjectAssert(null).satisfies(new NotNullObject().as("Non-null"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<non-null object>").on(
-        new CodeToTest() {
-          public void run() {
-            new ObjectAssert(null).as("A Test").satisfies(new NotNullObject().as("non-null object"));
-          }
-        });
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<Non-null>").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert(null).as("A Test").satisfies(new NotNullObject().as("Non-null"));
+      }
+    });
+  }
+
+  //
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new ObjectAssert(null).doesNotSatisfy(new NotNullObject());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("").doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<''> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("").doesNotSatisfy(new NotNullObject());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    expectAssertionError("[A Test] actual value:<''> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("").as("A Test").doesNotSatisfy(new NotNullObject());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("actual value:<''> should not satisfy condition:<Non-null>").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("").doesNotSatisfy(new NotNullObject().as("Non-null"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] actual value:<''> should not satisfy condition:<Non-null>").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert("").as("A Test").doesNotSatisfy(new NotNullObject().as("Non-null"));
+      }
+    });
   }
 
   @Test public void shouldPassIfActualIsNull() {

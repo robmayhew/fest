@@ -292,13 +292,25 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
 
   /**
    * Verifies that the actual <code>Throwable</code> satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ThrowableAssert satisfies(Condition<Throwable> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>Throwable</code> does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Throwable</code> satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public ThrowableAssert doesNotSatisfy(Condition<Throwable> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 }

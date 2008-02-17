@@ -16,7 +16,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.fest.util.Arrays.*;
+import static org.fest.util.Arrays.array;
 import static org.testng.Assert.*;
 
 import org.fest.test.CodeToTest;
@@ -57,7 +57,7 @@ public class ObjectArrayAssertTest {
     new ObjectArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new ObjectArrayAssert(EMPTY_ARRAY).satisfies(null);
@@ -82,20 +82,65 @@ public class ObjectArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("actual value:<['Han']> should satisfy condition:<Empty array>").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition:<Empty>").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert("Han").satisfies(new EmptyArray().as("Empty array"));
+        new ObjectArrayAssert("Han").satisfies(new EmptyArray().as("Empty"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition:<Empty array>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition:<Empty>").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert("Han").as("A Test").satisfies(new EmptyArray().as("Empty array"));
+        new ObjectArrayAssert("Han").as("A Test").satisfies(new EmptyArray().as("Empty"));
       }
     });
   }
+
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new ObjectArrayAssert("Leia").doesNotSatisfy(new EmptyArray());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<Empty>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray().as("Empty"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<Empty>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray().as("Empty"));
+      }
+    });
+  }
+
 
   @Test public void shouldPassIfGivenObjectIsInArray() {
     new ObjectArrayAssert("Luke", "Leia").contains("Luke");

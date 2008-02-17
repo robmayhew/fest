@@ -216,13 +216,25 @@ public final class FileAssert extends GenericAssert<File> {
 
   /**
    * Verifies that the actual <code>File</code> satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>File</code> does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
-  @Override public FileAssert satisfies(Condition<File> condition) {
+  public FileAssert satisfies(Condition<File> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>File</code> does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>File</code> satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public FileAssert doesNotSatisfy(Condition<File> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

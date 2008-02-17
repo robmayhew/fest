@@ -160,13 +160,25 @@ public final class ObjectArrayAssert extends ArrayAssert<Object[]> {
 
   /**
    * Verifies that the actual <code>Object</code> array satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Object</code> array does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectArrayAssert satisfies(Condition<Object[]> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>Object</code> array does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public ObjectArrayAssert doesNotSatisfy(Condition<Object[]> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

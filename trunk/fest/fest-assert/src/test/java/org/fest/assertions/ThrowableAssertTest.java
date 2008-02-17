@@ -1,15 +1,15 @@
 /*
  * Created on Dec 23, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ThrowableAssert}</code>.
- * 
+ *
  * @author David DIDIER
  * @author Alex Ruiz
  */
@@ -47,10 +47,10 @@ public class ThrowableAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullThrowable extends Condition<Throwable> {
-    public NotNullThrowable() {}
+  private static class NotNull extends Condition<Throwable> {
+    public NotNull() {}
 
-    public NotNullThrowable(String description) {
+    public NotNull(String description) {
       super(description);
     }
 
@@ -60,10 +60,10 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new ThrowableAssert(new Exception()).satisfies(new NotNullThrowable());
+    new ThrowableAssert(new Exception()).satisfies(new NotNull());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(new Exception()).satisfies(null);
@@ -74,7 +74,7 @@ public class ThrowableAssertTest {
   @Test public void shouldFailIfConditionNotSatisfied() {
     expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).satisfies(new NotNullThrowable());
+        new ThrowableAssert(null).satisfies(new NotNull());
       }
     });
   }
@@ -82,7 +82,7 @@ public class ThrowableAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
     expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).as("A Test").satisfies(new NotNullThrowable());
+        new ThrowableAssert(null).as("A Test").satisfies(new NotNull());
       }
     });
   }
@@ -90,7 +90,7 @@ public class ThrowableAssertTest {
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("actual value:<null> should satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).satisfies(new NotNullThrowable("non-null"));
+        new ThrowableAssert(null).satisfies(new NotNull("non-null"));
       }
     });
   }
@@ -98,7 +98,55 @@ public class ThrowableAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("[Test] actual value:<null> should satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).as("Test").satisfies(new NotNullThrowable("non-null"));
+        new ThrowableAssert(null).as("Test").satisfies(new NotNull("non-null"));
+      }
+    });
+  }
+
+  //
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new ThrowableAssert(null).doesNotSatisfy(new NotNull());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<java.lang.Exception> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).doesNotSatisfy(new NotNull());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    String message = "[A Test] actual value:<java.lang.Exception> should not satisfy condition";
+    expectAssertionError(message).on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).as("A Test").doesNotSatisfy(new NotNull());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    String message = "actual value:<java.lang.Exception> should not satisfy condition:<non-null>";
+    expectAssertionError(message).on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).doesNotSatisfy(new NotNull("non-null"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    String message = "[Test] actual value:<java.lang.Exception> should not satisfy condition:<non-null>";
+    expectAssertionError(message).on(new CodeToTest() {
+      public void run() {
+        new ThrowableAssert(new Exception()).as("Test").doesNotSatisfy(new NotNull("non-null"));
       }
     });
   }

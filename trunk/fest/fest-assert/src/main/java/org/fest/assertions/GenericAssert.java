@@ -17,13 +17,14 @@ package org.fest.assertions;
 
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.*;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a template for assertion methods.
  * @param <T> the type of object implementations of this template can verify.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 abstract class GenericAssert<T> extends Assert {
 
@@ -47,11 +48,19 @@ abstract class GenericAssert<T> extends Assert {
 
   /**
    * Verifies that the actual value satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual value does not satisfy the given condition.
    */
   abstract GenericAssert<T> satisfies(Condition<T> condition);
+
+  /**
+   * Verifies that the actual value does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value does satisfies the given condition.
+   */
+  abstract GenericAssert<T> doesNotSatisfy(Condition<T> condition);
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
@@ -128,15 +137,24 @@ abstract class GenericAssert<T> extends Assert {
     fail(errorMessageIfConditionNotSatisfied(condition));
   }
 
-  private void validate(Condition<T> condition) {
-    if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
-  }
-
   private String errorMessageIfConditionNotSatisfied(Condition<T> condition) {
     String message = concat("actual value:", inBrackets(actual), " should satisfy condition");
-    String s = condition.description();
-    if (!isEmpty(s)) message = concat(message, ":<", s, ">");
-    return message;
+    return condition.addDescriptionTo(message);
+  }
+
+  final void assertDoesNotSatisfy(Condition<T> condition) {
+    validate(condition);
+    if (!condition.matches(actual)) return;
+    fail(errorMessageIfConditionSatisfied(condition));
+  }
+
+  private String errorMessageIfConditionSatisfied(Condition<T> condition) {
+    String message = concat("actual value:", inBrackets(actual), " should not satisfy condition");
+    return condition.addDescriptionTo(message);
+  }
+
+  private void validate(Condition<T> condition) {
+    if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
   }
 
   void description(String description) {

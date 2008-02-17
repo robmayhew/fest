@@ -121,13 +121,25 @@ public final class FloatArrayAssert extends ArrayAssert<float[]> {
 
   /**
    * Verifies that the actual <code>float</code> array satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>float</code> array does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public FloatArrayAssert satisfies(Condition<float[]> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>float</code> array does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>float</code> array satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public FloatArrayAssert doesNotSatisfy(Condition<float[]> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

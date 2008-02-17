@@ -17,7 +17,7 @@ package org.fest.assertions;
 
 import static org.fest.assertions.CommonFailures.expectIllegalArgumentExceptionIfConditionIsNull;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.fest.util.Collections.*;
+import static org.fest.util.Collections.list;
 import static org.testng.Assert.*;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class CollectionAssertTest {
     new CollectionAssert(EMPTY_COLLECTION).satisfies(new EmptyCollection());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new CollectionAssert(EMPTY_COLLECTION).satisfies(null);
@@ -86,17 +86,61 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("actual value:<['Han']> should satisfy condition:<Empty list>").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition:<Empty>").on(new CodeToTest() {
       public void run() {
-        new CollectionAssert(list("Han")).satisfies(new EmptyCollection().as("Empty list"));
+        new CollectionAssert(list("Han")).satisfies(new EmptyCollection().as("Empty"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition:<Empty list>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition:<Empty>").on(new CodeToTest() {
       public void run() {
-        new CollectionAssert(list("Han")).as("A Test").satisfies(new EmptyCollection().as("Empty list"));
+        new CollectionAssert(list("Han")).as("A Test").satisfies(new EmptyCollection().as("Empty"));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new CollectionAssert(list("Leia")).doesNotSatisfy(new EmptyCollection());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(EMPTY_COLLECTION).doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(EMPTY_COLLECTION).doesNotSatisfy(new EmptyCollection());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(EMPTY_COLLECTION).as("A Test").doesNotSatisfy(new EmptyCollection());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<Empty>").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(EMPTY_COLLECTION).doesNotSatisfy(new EmptyCollection().as("Empty"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<Empty>").on(new CodeToTest() {
+      public void run() {
+        new CollectionAssert(EMPTY_COLLECTION).as("A Test").doesNotSatisfy(new EmptyCollection().as("Empty"));
       }
     });
   }

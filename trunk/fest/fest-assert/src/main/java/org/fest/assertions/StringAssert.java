@@ -70,13 +70,25 @@ public final class StringAssert extends GroupAssert<String> {
 
   /**
    * Verifies that the actual <code>String</code> satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>String</code> does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public StringAssert satisfies(Condition<String> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>String</code> does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>String</code> satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public StringAssert doesNotSatisfy(Condition<String> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

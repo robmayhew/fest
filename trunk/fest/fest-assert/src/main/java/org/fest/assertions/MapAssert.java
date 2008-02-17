@@ -294,13 +294,25 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
 
   /**
    * Verifies that the actual <code>{@link Map}</code> satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Map</code> does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public MapAssert satisfies(Condition<Map<?, ?>> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>{@link Map}</code> does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Map</code> satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public MapAssert doesNotSatisfy(Condition<Map<?, ?>> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

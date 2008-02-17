@@ -15,9 +15,10 @@
  */
 package org.fest.assertions;
 
-import java.math.BigDecimal;
-import static org.fest.assertions.Fail.*;
 import static java.math.BigDecimal.ZERO;
+import static org.fest.assertions.Fail.*;
+
+import java.math.BigDecimal;
 
 /**
  * Understands assertion methods for <code>{@link BigDecimal}</code>. To create a new instance of this class use the
@@ -70,14 +71,25 @@ public final class BigDecimalAssert extends GenericAssert<BigDecimal> {
   }
 
   /**
-   * Verifies that the actual <<code>{@link BigDecimal}</code> satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * Verifies that the actual <code>{@link BigDecimal}</code> satisfies the given condition.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>BigDecimal</code> does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public BigDecimalAssert satisfies(Condition<BigDecimal> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>{@link BigDecimal}</code> does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual value does satisfies the given condition.
+   */
+  public BigDecimalAssert doesNotSatisfy(Condition<BigDecimal> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 
@@ -103,7 +115,7 @@ public final class BigDecimalAssert extends GenericAssert<BigDecimal> {
 
   /**
    * Verifies that the actual <code>{@link BigDecimal}</code> is equal to zero, regardless of precision.
-   * Essentially, this is the same as 
+   * Essentially, this is the same as
    * <code>{@link #isEqualByComparingTo(BigDecimal) isEqualByComparingTo}</code>(<code>{@link BigDecimal#ZERO BigDecimal.ZERO}</code>).
    * @return this assertion object.
    * @throws AssertionError if the actual <code>BigDecimal</code> is <code>null</code>.
@@ -122,7 +134,7 @@ public final class BigDecimalAssert extends GenericAssert<BigDecimal> {
     assertNotNull();
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>{@link BigDecimal}</code> is the same as the given one.
    * @param expected the given <code>BigDecimal</code> to compare the actual <code>BigDecimal</code> to.
@@ -171,7 +183,7 @@ public final class BigDecimalAssert extends GenericAssert<BigDecimal> {
     assertNotEqualTo(other);
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>{@link BigDecimal}</code> is equal to the given one. Two
    * <code>{@link BigDecimal}</code> objects that are equal in value but have a different scale (like 2.0 and 2.00)
@@ -187,7 +199,7 @@ public final class BigDecimalAssert extends GenericAssert<BigDecimal> {
     if (actual.compareTo(expected) != 0) fail(errorMessageIfNotEqual(actual, expected));
     return this;
   }
-  
+
   /**
    * Verifies that the actual <code>{@link BigDecimal}</code> value is less than the given one.
    * @param value the value the given value.

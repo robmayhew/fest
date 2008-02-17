@@ -120,13 +120,25 @@ public final class DoubleArrayAssert extends ArrayAssert<double[]> {
 
   /**
    * Verifies that the actual <code>double</code> array satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>double</code> array does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public DoubleArrayAssert satisfies(Condition<double[]> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>double</code> array does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>double</code> array satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public DoubleArrayAssert doesNotSatisfy(Condition<double[]> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

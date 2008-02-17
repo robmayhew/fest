@@ -1,15 +1,15 @@
 /*
  * Created on Jan 24, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.assertions;
@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link MapAssert}</code>.
- * 
+ *
  * @author David DIDIER
  * @author Yvonne Wang
  * @author Alex Ruiz
@@ -62,7 +62,7 @@ public class MapAssertTest {
     new MapAssert(null).satisfies(new NullMap());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new MapAssert(EMPTY_MAP).satisfies(null);
@@ -98,6 +98,51 @@ public class MapAssertTest {
     expectAssertionError("[A Test] actual value:<{}> should satisfy condition:<Null map>").on(new CodeToTest() {
       public void run() {
         new MapAssert(EMPTY_MAP).as("A Test").satisfies(new NullMap().as("Null map"));
+      }
+    });
+  }
+
+  //
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new MapAssert(EMPTY_MAP).doesNotSatisfy(new NullMap());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new MapAssert(EMPTY_MAP).doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<null> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).doesNotSatisfy(new NullMap());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    expectAssertionError("[A Test] actual value:<null> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).as("A Test").doesNotSatisfy(new NullMap());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("actual value:<null> should not satisfy condition:<Null map>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).doesNotSatisfy(new NullMap().as("Null map"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] actual value:<null> should not satisfy condition:<Null map>").on(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).as("A Test").doesNotSatisfy(new NullMap().as("Null map"));
       }
     });
   }

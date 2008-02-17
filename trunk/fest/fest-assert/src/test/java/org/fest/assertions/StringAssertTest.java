@@ -59,7 +59,7 @@ public class StringAssertTest {
     new StringAssert("HELLO").satisfies(new UpperCase());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new StringAssert("").satisfies(null);
@@ -98,6 +98,51 @@ public class StringAssertTest {
       }
     });
   }
+
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new StringAssert("a").doesNotSatisfy(new UpperCase());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new StringAssert("").doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<'A'> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("A").doesNotSatisfy(new UpperCase());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    expectAssertionError("[Test] actual value:<'A'> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("A").as("Test").doesNotSatisfy(new UpperCase());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("actual value:<'A'> should not satisfy condition:<Uppercase>").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("A").doesNotSatisfy(new UpperCase().as("Uppercase"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[Test] actual value:<'A'> should not satisfy condition:<Uppercase>").on(new CodeToTest() {
+      public void run() {
+        new StringAssert("A").as("Test").doesNotSatisfy(new UpperCase().as("Uppercase"));
+      }
+    });
+  }
+
 
   @Test public void shouldPassIfStringIsEmpty() {
     new StringAssert(EMPTY_STRING).isEmpty();

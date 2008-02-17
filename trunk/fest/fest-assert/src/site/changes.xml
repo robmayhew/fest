@@ -6,7 +6,10 @@
   </properties>
   <body>
     <release version="alpha-1" date="TBD" description="Subsequent release">
-      <action dev="wanghy, alruiz" type="add" due-to="Ted Young, David DIDIER">
+      <action dev="wanghy, alruiz" type="add" issue="46" due-to="Mark Derricutt">
+        Added method 'doesNotSatisfy' to all assertions.
+      </action>
+      <action dev="wanghy, alruiz" type="add" issue="107" due-to="Ted Young, David DIDIER">
         Patch: Added support for BigDecimal.
       </action>
       <action dev="alruiz, wanghy" type="add">

@@ -44,6 +44,7 @@ public class GroupAssertTest {
       GenericAssert<Object> isNotSameAs(Object other) { return null; }
       GenericAssert<Object> isSameAs(Object expected) { return null; }
       GenericAssert<Object> satisfies(Condition<Object> condition) { return null; }
+      GenericAssert<Object> doesNotSatisfy(Condition<Object> condition) { return null; }
     };
     a.size().isEqualTo(3);
   }

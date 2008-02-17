@@ -121,13 +121,25 @@ public final class CharArrayAssert extends ArrayAssert<char[]> {
 
   /**
    * Verifies that the actual <code>char</code> array satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>char</code> array does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public CharArrayAssert satisfies(Condition<char[]> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>char</code> array does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>char</code> array satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public CharArrayAssert doesNotSatisfy(Condition<char[]> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

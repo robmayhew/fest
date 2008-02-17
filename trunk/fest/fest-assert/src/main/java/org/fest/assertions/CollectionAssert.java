@@ -162,13 +162,25 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
 
   /**
    * Verifies that the actual collection satisfies the given condition.
-   * @param condition the condition to satisfy.
+   * @param condition the given condition.
    * @return this assertion object.
    * @throws AssertionError if the actual collection does not satisfy the given condition.
    * @throws IllegalArgumentException if the given condition is null.
    */
   public CollectionAssert satisfies(Condition<Collection<?>> condition) {
     assertSatisfies(condition);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual collection does not satisfy the given condition.
+   * @param condition the given condition.
+   * @return this assertion object.
+   * @throws AssertionError if the actual collection satisfies the given condition.
+   * @throws IllegalArgumentException if the given condition is null.
+   */
+  public CollectionAssert doesNotSatisfy(Condition<Collection<?>> condition) {
+    assertDoesNotSatisfy(condition);
     return this;
   }
 

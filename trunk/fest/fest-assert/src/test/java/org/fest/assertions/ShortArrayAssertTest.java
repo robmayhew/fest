@@ -49,7 +49,7 @@ public class ShortArrayAssertTest {
 
   private static class EmptyArray extends Condition<short[]> {
     @Override public boolean matches(short[] array) {
-      return array == null || array.length == 0;
+      return array != null && array.length == 0;
     }
   }
 
@@ -57,7 +57,7 @@ public class ShortArrayAssertTest {
     new ShortArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
-  @Test public void shouldThrowErrorIfConditionIsNull() {
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
     expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
       public void run() {
         new ShortArrayAssert(EMPTY_ARRAY).satisfies(null);
@@ -82,17 +82,61 @@ public class ShortArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("actual value:<[23]> should satisfy condition:<Empty array>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[23]> should satisfy condition:<Empty>").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(23)).satisfies(new EmptyArray().as("Empty array"));
+        new ShortArrayAssert(asShort(23)).satisfies(new EmptyArray().as("Empty"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] actual value:<[23]> should satisfy condition:<Empty array>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[23]> should satisfy condition:<Empty>").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(23)).as("A Test").satisfies(new EmptyArray().as("Empty array"));
+        new ShortArrayAssert(asShort(23)).as("A Test").satisfies(new EmptyArray().as("Empty"));
+      }
+    });
+  }
+
+  @Test public void shouldPassIfConditionNotSatisfied() {
+    new ShortArrayAssert(asShort(23)).doesNotSatisfy(new EmptyArray());
+  }
+
+  @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
+    expectIllegalArgumentExceptionIfConditionIsNull().on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).doesNotSatisfy(null);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfied() {
+    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray());
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray());
+      }
+    });
+  }
+
+  @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<Empty>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray().as("Empty"));
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<Empty>").on(new CodeToTest() {
+      public void run() {
+        new ShortArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray().as("Empty"));
       }
     });
   }
