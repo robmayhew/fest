@@ -297,7 +297,7 @@ public class ObjectAssertTest {
     new ObjectAssert(yoda()).isEqualTo(yoda());
   }
 
-  @Test public void shouldFailIfActualsAreNotEqual() {
+  @Test public void shouldFailIfObjectsAreNotEqual() {
     expectAssertionError(
         "expected:<'Yoda'> but was:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]>").on(
         new CodeToTest() {
@@ -307,7 +307,7 @@ public class ObjectAssertTest {
         });
   }
 
-  @Test public void shouldFailShowingDescriptionIfActualsAreNotEqual() {
+  @Test public void shouldFailShowingDescriptionIfObjectsAreNotEqual() {
     expectAssertionError(
         "[A Test] expected:<'Yoda'> but was:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]>").on(
         new CodeToTest() {
@@ -321,7 +321,7 @@ public class ObjectAssertTest {
     new ObjectAssert(yoda()).isNotEqualTo(new Person("Yoda", 900));
   }
 
-  @Test public void shouldFailIfActualsAreEqual() {
+  @Test public void shouldFailIfObjectsAreEqual() {
     expectAssertionError("actual value:<'Yoda'> should not be equal to:<'Yoda'>").on(new CodeToTest() {
       public void run() {
         new ObjectAssert("Yoda").isNotEqualTo("Yoda");
@@ -329,7 +329,7 @@ public class ObjectAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfActualsAreEqual() {
+  @Test public void shouldFailShowingDescriptionIfObjectsAreEqual() {
     expectAssertionError("[A Test] actual value:<'Yoda'> should not be equal to:<'Yoda'>").on(new CodeToTest() {
       public void run() {
         new ObjectAssert("Yoda").as("A Test").isNotEqualTo("Yoda");
