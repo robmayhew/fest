@@ -157,6 +157,22 @@
           <templateFile>${basedir}/src/site/site.vm</templateFile>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover-plugin</artifactId>
+        <configuration>
+          <licenseLocation>../clover.license</licenseLocation>
+          <includesTestSourceRoots>false</includesTestSourceRoots>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <pluginRepositories>
@@ -167,6 +183,14 @@
   </pluginRepositories>
   <reporting>
     <plugins>
+      <plugin>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover-plugin</artifactId>
+        <configuration>
+          <licenseLocation>../clover.license</licenseLocation>
+          <includesTestSourceRoots>false</includesTestSourceRoots>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -195,22 +219,6 @@
           </reportSet>
         </reportSets>
       </plugin>
-      <!--  
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>clean</goal>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
-        </configuration>
-      </plugin>
-      -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jdepend-maven-plugin</artifactId>
