@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="alpha-1" date="TBD" description="Subsequent release">
+    <release version="alpha-1" date="2008-02-18" description="Subsequent release">
       <action dev="alruiz" type="add">
         Exceptions thrown by methods 'satisfies' and 'doesNotSatisfy' include the name of Condition class if the
         Condition's description is not specified.
@@ -33,7 +33,7 @@
       <action dev="alruiz" type="add">
         Added method 'size' to FileAssert. This method returns a LongAssert.
       </action>
-      <action dev="alruiz, wanghy" tpe="fix">
+      <action dev="alruiz, wanghy" type="fix">
         Fixed bug in FileContentComparator where EOF was determined at the wrong time.
       </action>
       <action dev="alruiz" type="add">

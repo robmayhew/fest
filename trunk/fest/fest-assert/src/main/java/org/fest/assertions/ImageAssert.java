@@ -15,15 +15,15 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.*;
-import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import static org.fest.assertions.Fail.*;
+import static org.fest.assertions.Formatting.inBrackets;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands assertion methods for images. To create a new instance of this class use the
@@ -126,10 +126,15 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    */
   public ImageAssert isEqualTo(BufferedImage expected) {
     if (areEqual(actual, expected)) return this;
-    if (expected == null) fail(errorMessageIfNotEqual(actual, expected));
+    failIfNull(expected);
     failIfNotEqual(sizeOf(actual), sizeOf(expected));
     if (!hasEqualColor(expected)) fail("images do not have the same color(s)");
     return this;
+  }
+
+  private void failIfNull(BufferedImage expected) {
+    if (expected != null) return;
+    fail(errorMessageIfNotEqual(actual, null));
   }
 
   private void failIfNotEqual(Dimension actual, Dimension expected) {

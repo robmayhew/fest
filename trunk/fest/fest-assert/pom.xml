@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-assert</artifactId>
-  <version>alpha-1-SNAPSHOT</version>
+  <version>alpha-1</version>
   <name>FEST Fluent Assertions</name>
   <description>'Flexible' or 'fluent' assertions for testing</description>
   <inceptionYear>2007</inceptionYear>

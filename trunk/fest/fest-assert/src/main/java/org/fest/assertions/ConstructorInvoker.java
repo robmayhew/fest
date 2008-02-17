@@ -41,12 +41,22 @@ class ConstructorInvoker {
     }
   }
 
-  private void setAccessible(final AccessibleObject accessible, final boolean value) {
-    AccessController.doPrivileged(new PrivilegedAction<Void>() {
-      public Void run() {
-        accessible.setAccessible(value);
-        return null;
-      }
-    });
+  private void setAccessible(AccessibleObject accessible, boolean value) {
+    AccessController.doPrivileged(new SetAccessibleValueAction(accessible, value));
+  }
+
+  private static class SetAccessibleValueAction implements PrivilegedAction<Void> {
+    private final AccessibleObject accessible;
+    private final boolean value;
+
+    private SetAccessibleValueAction(AccessibleObject accessible, boolean value) {
+      this.accessible = accessible;
+      this.value = value;
+    }
+
+    public Void run() {
+      accessible.setAccessible(value);
+      return null;
+    }
   }
 }

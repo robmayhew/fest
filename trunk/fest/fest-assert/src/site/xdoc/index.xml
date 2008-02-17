@@ -49,6 +49,9 @@
            <li>
              <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/io/File.html">File</a></code>
            </li>
+           <li>
+             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/math/BigDecimal.html">BigDecimal</a></code>
+           </li>
          </ol>					
 			</p>
 			<p>
