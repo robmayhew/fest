@@ -68,7 +68,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<'hello'> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<'hello'> should satisfy condition:<UpperCase>").on(new CodeToTest() {
       public void run() {
         new StringAssert("hello").satisfies(new UpperCase());
       }
@@ -76,7 +76,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[Test] actual value:<'hello'> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[Test] actual value:<'hello'> should satisfy condition:<UpperCase>").on(new CodeToTest() {
       public void run() {
         new StringAssert("hello").as("Test").satisfies(new UpperCase());
       }
@@ -84,17 +84,17 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("actual value:<'hello'> should satisfy condition:<Uppercase>").on(new CodeToTest() {
+    expectAssertionError("actual value:<'hello'> should satisfy condition:<uppercase>").on(new CodeToTest() {
       public void run() {
-        new StringAssert("hello").satisfies(new UpperCase().as("Uppercase"));
+        new StringAssert("hello").satisfies(new UpperCase().as("uppercase"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[Test] actual value:<'hello'> should satisfy condition:<Uppercase>").on(new CodeToTest() {
+    expectAssertionError("[Test] actual value:<'hello'> should satisfy condition:<uppercase>").on(new CodeToTest() {
       public void run() {
-        new StringAssert("hello").as("Test").satisfies(new UpperCase().as("Uppercase"));
+        new StringAssert("hello").as("Test").satisfies(new UpperCase().as("uppercase"));
       }
     });
   }
@@ -112,7 +112,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<'A'> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<'A'> should not satisfy condition:<UpperCase>").on(new CodeToTest() {
       public void run() {
         new StringAssert("A").doesNotSatisfy(new UpperCase());
       }
@@ -120,7 +120,7 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[Test] actual value:<'A'> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[Test] actual value:<'A'> should not satisfy condition:<UpperCase>").on(new CodeToTest() {
       public void run() {
         new StringAssert("A").as("Test").doesNotSatisfy(new UpperCase());
       }
@@ -128,17 +128,17 @@ public class StringAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("actual value:<'A'> should not satisfy condition:<Uppercase>").on(new CodeToTest() {
+    expectAssertionError("actual value:<'A'> should not satisfy condition:<uppercase>").on(new CodeToTest() {
       public void run() {
-        new StringAssert("A").doesNotSatisfy(new UpperCase().as("Uppercase"));
+        new StringAssert("A").doesNotSatisfy(new UpperCase().as("uppercase"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[Test] actual value:<'A'> should not satisfy condition:<Uppercase>").on(new CodeToTest() {
+    expectAssertionError("[Test] actual value:<'A'> should not satisfy condition:<uppercase>").on(new CodeToTest() {
       public void run() {
-        new StringAssert("A").as("Test").doesNotSatisfy(new UpperCase().as("Uppercase"));
+        new StringAssert("A").as("Test").doesNotSatisfy(new UpperCase().as("uppercase"));
       }
     });
   }

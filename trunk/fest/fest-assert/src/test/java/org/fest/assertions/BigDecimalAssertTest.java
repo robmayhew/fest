@@ -48,14 +48,14 @@ public class BigDecimalAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullBigDecimal extends Condition<BigDecimal> {
+  private static class NotNull extends Condition<BigDecimal> {
     @Override public boolean matches(BigDecimal o) {
       return o != null;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new BigDecimalAssert(eight()).satisfies(new NotNullBigDecimal());
+    new BigDecimalAssert(eight()).satisfies(new NotNull());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
@@ -67,17 +67,17 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).satisfies(new NotNullBigDecimal());
+        new BigDecimalAssert(null).satisfies(new NotNull());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).as("A Test").satisfies(new NotNullBigDecimal());
+        new BigDecimalAssert(null).as("A Test").satisfies(new NotNull());
       }
     });
   }
@@ -85,7 +85,7 @@ public class BigDecimalAssertTest {
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("actual value:<null> should satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).satisfies(new NotNullBigDecimal().as("non-null"));
+        new BigDecimalAssert(null).satisfies(new NotNull().as("non-null"));
       }
     });
   }
@@ -94,14 +94,14 @@ public class BigDecimalAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("[A Test] actual value:<null> should satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).as("A Test").satisfies(new NotNullBigDecimal().as("non-null"));
+        new BigDecimalAssert(null).as("A Test").satisfies(new NotNull().as("non-null"));
       }
     });
   }
 
   //
   @Test public void shouldPassIfConditionNotSatisfied() {
-    new BigDecimalAssert(null).doesNotSatisfy(new NotNullBigDecimal());
+    new BigDecimalAssert(null).doesNotSatisfy(new NotNull());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
@@ -113,17 +113,17 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<8.0> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<8.0> should not satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(eight()).doesNotSatisfy(new NotNullBigDecimal());
+        new BigDecimalAssert(eight()).doesNotSatisfy(new NotNull());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<8.0> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<8.0> should not satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(eight()).as("A Test").doesNotSatisfy(new NotNullBigDecimal());
+        new BigDecimalAssert(eight()).as("A Test").doesNotSatisfy(new NotNull());
       }
     });
   }
@@ -131,7 +131,7 @@ public class BigDecimalAssertTest {
   @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("actual value:<8.0> should not satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(eight()).doesNotSatisfy(new NotNullBigDecimal().as("non-null"));
+        new BigDecimalAssert(eight()).doesNotSatisfy(new NotNull().as("non-null"));
       }
     });
   }
@@ -139,7 +139,7 @@ public class BigDecimalAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("[A Test] actual value:<8.0> should not satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(eight()).as("A Test").doesNotSatisfy(new NotNullBigDecimal().as("non-null"));
+        new BigDecimalAssert(eight()).as("A Test").doesNotSatisfy(new NotNull().as("non-null"));
       }
     });
   }

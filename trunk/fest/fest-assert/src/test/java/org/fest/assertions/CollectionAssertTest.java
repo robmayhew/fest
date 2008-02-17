@@ -70,7 +70,7 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<['Han']> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition:<EmptyCollection>").on(new CodeToTest() {
       public void run() {
         new CollectionAssert(list("Han")).satisfies(new EmptyCollection());
       }
@@ -78,7 +78,8 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition").on(new CodeToTest() {
+    String message = "[A Test] actual value:<['Han']> should satisfy condition:<EmptyCollection>";
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new CollectionAssert(list("Han")).as("A Test").satisfies(new EmptyCollection());
       }
@@ -114,7 +115,7 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<EmptyCollection>").on(new CodeToTest() {
       public void run() {
         new CollectionAssert(EMPTY_COLLECTION).doesNotSatisfy(new EmptyCollection());
       }
@@ -122,7 +123,8 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    String message = "[A Test] actual value:<[]> should not satisfy condition:<EmptyCollection>";
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new CollectionAssert(EMPTY_COLLECTION).as("A Test").doesNotSatisfy(new EmptyCollection());
       }

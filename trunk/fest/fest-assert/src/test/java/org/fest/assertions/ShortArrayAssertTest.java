@@ -66,17 +66,17 @@ public class ShortArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<[459, 23]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[23]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(459), asShort(23)).satisfies(new EmptyArray());
+        new ShortArrayAssert(asShort(23)).satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<[459, 23]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[23]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").satisfies(new EmptyArray());
+        new ShortArrayAssert(asShort(23)).as("A Test").satisfies(new EmptyArray());
       }
     });
   }
@@ -110,7 +110,7 @@ public class ShortArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new ShortArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray());
       }
@@ -118,7 +118,7 @@ public class ShortArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new ShortArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray());
       }

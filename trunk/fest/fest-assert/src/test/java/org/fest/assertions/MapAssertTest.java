@@ -71,7 +71,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<{}> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<{}> should satisfy condition:<NullMap>").on(new CodeToTest() {
       public void run() {
         new MapAssert(EMPTY_MAP).satisfies(new NullMap());
       }
@@ -79,7 +79,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<{}> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<{}> should satisfy condition:<NullMap>").on(new CodeToTest() {
       public void run() {
         new MapAssert(EMPTY_MAP).as("A Test").satisfies(new NullMap());
       }
@@ -116,7 +116,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<null> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should not satisfy condition:<NullMap>").on(new CodeToTest() {
       public void run() {
         new MapAssert(null).doesNotSatisfy(new NullMap());
       }
@@ -124,7 +124,7 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<null> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should not satisfy condition:<NullMap>").on(new CodeToTest() {
       public void run() {
         new MapAssert(null).as("A Test").doesNotSatisfy(new NullMap());
       }

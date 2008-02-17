@@ -72,7 +72,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).satisfies(new NotNull());
       }
@@ -80,7 +80,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).as("A Test").satisfies(new NotNull());
       }
@@ -117,7 +117,8 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<java.lang.Exception> should not satisfy condition").on(new CodeToTest() {
+    String message = "actual value:<java.lang.Exception> should not satisfy condition:<NotNull>";
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(new Exception()).doesNotSatisfy(new NotNull());
       }
@@ -125,7 +126,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    String message = "[A Test] actual value:<java.lang.Exception> should not satisfy condition";
+    String message = "[A Test] actual value:<java.lang.Exception> should not satisfy condition:<NotNull>";
     expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(new Exception()).as("A Test").doesNotSatisfy(new NotNull());

@@ -65,17 +65,17 @@ public class DoubleArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<[55.03, 4345.91]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[6.88]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
-        new DoubleArrayAssert(55.03, 4345.91).satisfies(new EmptyArray());
+        new DoubleArrayAssert(6.88).satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<[55.03, 4345.91]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[6.88]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
-        new DoubleArrayAssert(55.03, 4345.91).as("A Test").satisfies(new EmptyArray());
+        new DoubleArrayAssert(6.88).as("A Test").satisfies(new EmptyArray());
       }
     });
   }
@@ -109,7 +109,7 @@ public class DoubleArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new DoubleArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray());
       }
@@ -117,7 +117,7 @@ public class DoubleArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new DoubleArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray());
       }

@@ -66,7 +66,7 @@ public class FloatArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<[36.9]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[36.9]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new FloatArrayAssert(36.9f).satisfies(new EmptyArray());
       }
@@ -74,7 +74,7 @@ public class FloatArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<[36.9]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[36.9]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new FloatArrayAssert(36.9f).as("A Test").satisfies(new EmptyArray());
       }
@@ -110,7 +110,7 @@ public class FloatArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new FloatArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray());
       }
@@ -118,7 +118,7 @@ public class FloatArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new FloatArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray());
       }

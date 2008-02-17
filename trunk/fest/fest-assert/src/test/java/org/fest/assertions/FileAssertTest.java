@@ -76,7 +76,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new FileAssert(null).satisfies(new NotNull());
       }
@@ -84,7 +84,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new FileAssert(null).as("A Test").satisfies(new NotNull());
       }
@@ -122,7 +122,7 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<c:\\f.txt> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<c:\\f.txt> should not satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new FileAssert(file).doesNotSatisfy(new NotNull());
       }
@@ -130,7 +130,8 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<c:\\f.txt> should not satisfy condition").on(new CodeToTest() {
+    String message = "[A Test] actual value:<c:\\f.txt> should not satisfy condition:<NotNull>";
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new FileAssert(file).as("A Test").doesNotSatisfy(new NotNull());
       }

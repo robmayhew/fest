@@ -45,14 +45,14 @@ public class ObjectAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullObject extends Condition<Object> {
+  private static class NotNull extends Condition<Object> {
     @Override public boolean matches(Object o) {
       return o != null;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new ObjectAssert("Frodo").satisfies(new NotNullObject());
+    new ObjectAssert("Frodo").satisfies(new NotNull());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfSatisfied() {
@@ -64,17 +64,17 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).satisfies(new NotNullObject());
+        new ObjectAssert(null).satisfies(new NotNull());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).as("A Test").satisfies(new NotNullObject());
+        new ObjectAssert(null).as("A Test").satisfies(new NotNull());
       }
     });
   }
@@ -82,7 +82,7 @@ public class ObjectAssertTest {
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("actual value:<null> should satisfy condition:<Non-null>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).satisfies(new NotNullObject().as("Non-null"));
+        new ObjectAssert(null).satisfies(new NotNull().as("Non-null"));
       }
     });
   }
@@ -90,14 +90,14 @@ public class ObjectAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("[A Test] actual value:<null> should satisfy condition:<Non-null>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).as("A Test").satisfies(new NotNullObject().as("Non-null"));
+        new ObjectAssert(null).as("A Test").satisfies(new NotNull().as("Non-null"));
       }
     });
   }
 
   //
   @Test public void shouldPassIfConditionNotSatisfied() {
-    new ObjectAssert(null).doesNotSatisfy(new NotNullObject());
+    new ObjectAssert(null).doesNotSatisfy(new NotNull());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNullWhenCheckingIfNotSatisfied() {
@@ -109,17 +109,17 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<''> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<''> should not satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert("").doesNotSatisfy(new NotNullObject());
+        new ObjectAssert("").doesNotSatisfy(new NotNull());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<''> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<''> should not satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert("").as("A Test").doesNotSatisfy(new NotNullObject());
+        new ObjectAssert("").as("A Test").doesNotSatisfy(new NotNull());
       }
     });
   }
@@ -127,7 +127,7 @@ public class ObjectAssertTest {
   @Test public void shouldFailIfConditionSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("actual value:<''> should not satisfy condition:<Non-null>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert("").doesNotSatisfy(new NotNullObject().as("Non-null"));
+        new ObjectAssert("").doesNotSatisfy(new NotNull().as("Non-null"));
       }
     });
   }
@@ -135,7 +135,7 @@ public class ObjectAssertTest {
   @Test public void shouldFailShowingDescriptionIfConditionSatisfiedShowingDescriptionOfCondition() {
     expectAssertionError("[A Test] actual value:<''> should not satisfy condition:<Non-null>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert("").as("A Test").doesNotSatisfy(new NotNullObject().as("Non-null"));
+        new ObjectAssert("").as("A Test").doesNotSatisfy(new NotNull().as("Non-null"));
       }
     });
   }

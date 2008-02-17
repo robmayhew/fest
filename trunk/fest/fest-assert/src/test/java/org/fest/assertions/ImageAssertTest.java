@@ -109,7 +109,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new ImageAssert(null).satisfies(new NotNull());
       }
@@ -117,7 +117,7 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<NotNull>").on(new CodeToTest() {
       public void run() {
         new ImageAssert(null).as("A Test").satisfies(new NotNull());
       }
@@ -154,7 +154,8 @@ public class ImageAssertTest {
 
   @Test public void shouldFailIfConditionSatisfied() {
     final BufferedImage image = fivePixelBlueImage();
-    expectAssertionError(concat("actual value:<", image, "> should not satisfy condition")).on(new CodeToTest() {
+    String message = concat("actual value:<", image, "> should not satisfy condition:<NotNull>");
+    expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new ImageAssert(image).doesNotSatisfy(new NotNull());
       }
@@ -163,7 +164,7 @@ public class ImageAssertTest {
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
     final BufferedImage image = fivePixelBlueImage();
-    String message = concat("[A Test] actual value:<", image, "> should not satisfy condition");
+    String message = concat("[A Test] actual value:<", image, "> should not satisfy condition:<NotNull>");
     expectAssertionError(message).on(new CodeToTest() {
       public void run() {
         new ImageAssert(image).as("A Test").doesNotSatisfy(new NotNull());

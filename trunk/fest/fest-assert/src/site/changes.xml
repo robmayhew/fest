@@ -6,6 +6,10 @@
   </properties>
   <body>
     <release version="alpha-1" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Exceptions thrown by methods 'satisfies' and 'doesNotSatisfy' include the name of Condition class if the
+        Condition's description is not specified.
+      </action>
       <action dev="wanghy, alruiz" type="add" issue="46" due-to="Mark Derricutt">
         Added method 'doesNotSatisfy' to all assertions.
       </action>

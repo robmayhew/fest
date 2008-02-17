@@ -52,8 +52,8 @@ public abstract class Condition<T> {
   }
 
   final String addDescriptionTo(String s) {
-    if (isEmpty(description)) return s;
-    return concat(s, ":<", description, ">");
+    String descriptionToAdd = isEmpty(description) ? getClass().getSimpleName() : description;
+    return concat(s, ":<", descriptionToAdd, ">");
   }
 
   /**

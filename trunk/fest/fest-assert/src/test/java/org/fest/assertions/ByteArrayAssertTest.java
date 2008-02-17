@@ -65,7 +65,7 @@ public class ByteArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("actual value:<[8, 6]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[8, 6]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new ByteArrayAssert(asByte(8), asByte(6)).satisfies(new EmptyArray());
       }
@@ -73,7 +73,7 @@ public class ByteArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] actual value:<[8, 6]> should satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[8, 6]> should satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new ByteArrayAssert(asByte(8), asByte(6)).as("A Test").satisfies(new EmptyArray());
       }
@@ -109,7 +109,7 @@ public class ByteArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionSatisfied() {
-    expectAssertionError("actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new ByteArrayAssert(EMPTY_ARRAY).doesNotSatisfy(new EmptyArray());
       }
@@ -117,7 +117,7 @@ public class ByteArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionSatisfied() {
-    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[]> should not satisfy condition:<EmptyArray>").on(new CodeToTest() {
       public void run() {
         new ByteArrayAssert(EMPTY_ARRAY).as("A Test").doesNotSatisfy(new EmptyArray());
       }
