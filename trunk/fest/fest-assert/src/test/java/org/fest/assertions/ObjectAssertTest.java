@@ -1,15 +1,15 @@
 /*
  * Created on Jan 10, 2007
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- *
+ * 
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ObjectAssert}</code>.
- *
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -45,14 +45,14 @@ public class ObjectAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullObjectCondition extends Condition<Object> {
+  private static class NotNullObject extends Condition<Object> {
     @Override public boolean matches(Object o) {
       return o != null;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new ObjectAssert("Frodo").satisfies(new NotNullObjectCondition());
+    new ObjectAssert("Frodo").satisfies(new NotNullObject());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -64,35 +64,36 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).satisfies(new NotNullObjectCondition());
+        new ObjectAssert(null).satisfies(new NotNullObject());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).as("A Test").satisfies(new NotNullObjectCondition());
+        new ObjectAssert(null).as("A Test").satisfies(new NotNullObject());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<non-null object> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<non-null object>").on(new CodeToTest() {
       public void run() {
-        new ObjectAssert(null).satisfies(new NotNullObjectCondition().as("non-null object"));
+        new ObjectAssert(null).satisfies(new NotNullObject().as("non-null object"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<non-null object> but was:<null>").on(new CodeToTest() {
-      public void run() {
-        new ObjectAssert(null).as("A Test").satisfies(new NotNullObjectCondition().as("non-null object"));
-      }
-    });
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<non-null object>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectAssert(null).as("A Test").satisfies(new NotNullObject().as("non-null object"));
+          }
+        });
   }
 
   @Test public void shouldPassIfActualIsNull() {
@@ -249,9 +250,8 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfObjectsAreNotSameAndExpectingSame() {
-    expectAssertionError(
-        "expected same instance but found:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]> and:<'Yoda'>")
-        .on(new CodeToTest() {
+    expectAssertionError("expected same instance but found:<Person[name=Yoda, age=600]> and:<'Yoda'>").on(
+        new CodeToTest() {
           public void run() {
             new ObjectAssert(yoda()).isSameAs("Yoda");
           }
@@ -259,9 +259,8 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfObjectsAreNotSameAndExpectingSame() {
-    expectAssertionError(
-        "[A Test] expected same instance but found:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]> and:<'Yoda'>")
-        .on(new CodeToTest() {
+    expectAssertionError("[A Test] expected same instance but found:<Person[name=Yoda, age=600]> and:<'Yoda'>").on(
+        new CodeToTest() {
           public void run() {
             new ObjectAssert(yoda()).as("A Test").isSameAs("Yoda");
           }
@@ -273,24 +272,21 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfObjectsAreSameAndExpectingNotSame() {
-    expectAssertionError("given objects are same:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]>")
-        .on(new CodeToTest() {
-          public void run() {
-            Person yoda = yoda();
-            new ObjectAssert(yoda).isNotSameAs(yoda);
-          }
-        });
+    expectAssertionError("given objects are same:<Person[name=Yoda, age=600]>").on(new CodeToTest() {
+      public void run() {
+        Person yoda = yoda();
+        new ObjectAssert(yoda).isNotSameAs(yoda);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfObjectsAreSameAndExpectingNotSame() {
-    expectAssertionError(
-        "[A Test] given objects are same:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]>").on(
-        new CodeToTest() {
-          public void run() {
-            Person yoda = yoda();
-            new ObjectAssert(yoda).as("A Test").isNotSameAs(yoda);
-          }
-        });
+    expectAssertionError("[A Test] given objects are same:<Person[name=Yoda, age=600]>").on(new CodeToTest() {
+      public void run() {
+        Person yoda = yoda();
+        new ObjectAssert(yoda).as("A Test").isNotSameAs(yoda);
+      }
+    });
   }
 
   @Test public void shouldPassIfObjectsAreEqual() {
@@ -298,23 +294,19 @@ public class ObjectAssertTest {
   }
 
   @Test public void shouldFailIfObjectsAreNotEqual() {
-    expectAssertionError(
-        "expected:<'Yoda'> but was:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]>").on(
-        new CodeToTest() {
-          public void run() {
-            new ObjectAssert(yoda()).isEqualTo("Yoda");
-          }
-        });
+    expectAssertionError("expected:<'Yoda'> but was:<Person[name=Yoda, age=600]>").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert(yoda()).isEqualTo("Yoda");
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfObjectsAreNotEqual() {
-    expectAssertionError(
-        "[A Test] expected:<'Yoda'> but was:<org.fest.assertions.ObjectAssertTest$Person[name=Yoda, age=600]>").on(
-        new CodeToTest() {
-          public void run() {
-            new ObjectAssert(yoda()).as("A Test").isEqualTo("Yoda");
-          }
-        });
+    expectAssertionError("[A Test] expected:<'Yoda'> but was:<Person[name=Yoda, age=600]>").on(new CodeToTest() {
+      public void run() {
+        new ObjectAssert(yoda()).as("A Test").isEqualTo("Yoda");
+      }
+    });
   }
 
   @Test public void shouldPassIfObjectsAreNotEqual() {
@@ -368,7 +360,7 @@ public class ObjectAssertTest {
     }
 
     @Override public String toString() {
-      return concat(Person.class.getName(), "[name=", name, ", age=", age, "]");
+      return concat(Person.class.getSimpleName(), "[name=", name, ", age=", age, "]");
     }
   }
 }

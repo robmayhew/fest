@@ -47,14 +47,14 @@ public class ObjectArrayAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class EmptyOrNullArrayCondition extends Condition<Object[]> {
+  private static class EmptyArray extends Condition<Object[]> {
     @Override public boolean matches(Object[] array) {
-      return (isEmpty(array));
+      return array != null && array.length == 0;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new ObjectArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
+    new ObjectArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -66,33 +66,33 @@ public class ObjectArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert("Han").satisfies(new EmptyOrNullArrayCondition());
+        new ObjectArrayAssert("Han").satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert("Han").as("A Test").satisfies(new EmptyOrNullArrayCondition());
+        new ObjectArrayAssert("Han").as("A Test").satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<Empty or null array> but was:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert("Han").satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new ObjectArrayAssert("Han").satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<Empty or null array> but was:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new ObjectArrayAssert("Han").as("A Test").satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new ObjectArrayAssert("Han").as("A Test").satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }

@@ -298,7 +298,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ThrowableAssert satisfies(Condition<Throwable> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 }

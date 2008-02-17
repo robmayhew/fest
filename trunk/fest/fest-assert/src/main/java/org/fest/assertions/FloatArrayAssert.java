@@ -127,7 +127,7 @@ public final class FloatArrayAssert extends ArrayAssert<float[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public FloatArrayAssert satisfies(Condition<float[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

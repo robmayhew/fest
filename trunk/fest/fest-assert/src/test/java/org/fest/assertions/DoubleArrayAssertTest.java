@@ -1,15 +1,15 @@
 /*
  * Created on Feb 14, 2008
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.assertions;
@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link DoubleArrayAssert}</code>.
- *
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -46,14 +46,14 @@ public class DoubleArrayAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class EmptyOrNullArrayCondition extends Condition<double[]> {
+  private static class EmptyArray extends Condition<double[]> {
     @Override public boolean matches(double[] array) {
       return array == null || array.length == 0;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new DoubleArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
+    new DoubleArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -65,34 +65,33 @@ public class DoubleArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<[55.03, 4345.91]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[55.03, 4345.91]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new DoubleArrayAssert(55.03, 4345.91).satisfies(new EmptyOrNullArrayCondition());
+        new DoubleArrayAssert(55.03, 4345.91).satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<[55.03, 4345.91]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[55.03, 4345.91]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new DoubleArrayAssert(55.03, 4345.91).as("A Test").satisfies(new EmptyOrNullArrayCondition());
+        new DoubleArrayAssert(55.03, 4345.91).as("A Test").satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<Empty or null array> but was:<[55.03, 4345.91]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[55.03]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new DoubleArrayAssert(55.03, 4345.91).satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new DoubleArrayAssert(55.03).satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<Empty or null array> but was:<[55.03, 4345.91]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[55.03]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new DoubleArrayAssert(55.03, 4345.91).as("A Test").satisfies(
-            new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new DoubleArrayAssert(55.03).as("A Test").satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }

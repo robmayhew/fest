@@ -168,7 +168,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public CollectionAssert satisfies(Condition<Collection<?>> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

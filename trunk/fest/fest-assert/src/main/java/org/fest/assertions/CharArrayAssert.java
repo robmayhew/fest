@@ -127,7 +127,7 @@ public final class CharArrayAssert extends ArrayAssert<char[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public CharArrayAssert satisfies(Condition<char[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

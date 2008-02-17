@@ -300,7 +300,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public MapAssert satisfies(Condition<Map<?, ?>> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

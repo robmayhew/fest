@@ -127,7 +127,7 @@ public final class BooleanArrayAssert extends ArrayAssert<boolean[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public BooleanArrayAssert satisfies(Condition<boolean[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

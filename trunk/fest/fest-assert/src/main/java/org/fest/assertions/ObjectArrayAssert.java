@@ -166,7 +166,7 @@ public final class ObjectArrayAssert extends ArrayAssert<Object[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectArrayAssert satisfies(Condition<Object[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

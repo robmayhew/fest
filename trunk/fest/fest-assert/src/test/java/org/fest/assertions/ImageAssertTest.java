@@ -90,14 +90,14 @@ public class ImageAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullImageCondition extends Condition<BufferedImage> {
+  private static class NotNullImage extends Condition<BufferedImage> {
     @Override public boolean matches(BufferedImage image) {
       return image != null;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new ImageAssert(fivePixelBlueImage()).satisfies(new NotNullImageCondition());
+    new ImageAssert(fivePixelBlueImage()).satisfies(new NotNullImage());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -109,33 +109,33 @@ public class ImageAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ImageAssert(null).satisfies(new NotNullImageCondition());
+        new ImageAssert(null).satisfies(new NotNullImage());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ImageAssert(null).as("A Test").satisfies(new NotNullImageCondition());
+        new ImageAssert(null).as("A Test").satisfies(new NotNullImage());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<non-null image> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<non-null image>").on(new CodeToTest() {
       public void run() {
-        new ImageAssert(null).satisfies(new NotNullImageCondition().as("non-null image"));
+        new ImageAssert(null).satisfies(new NotNullImage().as("non-null image"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<non-null image> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<non-null image>").on(new CodeToTest() {
       public void run() {
-        new ImageAssert(null).as("A Test").satisfies(new NotNullImageCondition().as("non-null image"));
+        new ImageAssert(null).as("A Test").satisfies(new NotNullImage().as("non-null image"));
       }
     });
   }

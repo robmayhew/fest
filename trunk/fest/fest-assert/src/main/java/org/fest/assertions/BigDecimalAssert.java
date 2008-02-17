@@ -77,7 +77,7 @@ public final class BigDecimalAssert extends GenericAssert<BigDecimal> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public BigDecimalAssert satisfies(Condition<BigDecimal> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

@@ -48,14 +48,14 @@ public class BigDecimalAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullBigDecimalCondition extends Condition<BigDecimal> {
+  private static class NotNullBigDecimal extends Condition<BigDecimal> {
     @Override public boolean matches(BigDecimal o) {
       return o != null;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new BigDecimalAssert(eight()).satisfies(new NotNullBigDecimalCondition());
+    new BigDecimalAssert(eight()).satisfies(new NotNullBigDecimal());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -67,33 +67,33 @@ public class BigDecimalAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).satisfies(new NotNullBigDecimalCondition());
+        new BigDecimalAssert(null).satisfies(new NotNullBigDecimal());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).as("A Test").satisfies(new NotNullBigDecimalCondition());
+        new BigDecimalAssert(null).as("A Test").satisfies(new NotNullBigDecimal());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<non-null object> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<non-null object>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).satisfies(new NotNullBigDecimalCondition().as("non-null object"));
+        new BigDecimalAssert(null).satisfies(new NotNullBigDecimal().as("non-null object"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<non-null object> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<non-null object>").on(new CodeToTest() {
       public void run() {
-        new BigDecimalAssert(null).as("A Test").satisfies(new NotNullBigDecimalCondition().as("non-null object"));
+        new BigDecimalAssert(null).as("A Test").satisfies(new NotNullBigDecimal().as("non-null object"));
       }
     });
   }

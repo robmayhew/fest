@@ -47,14 +47,14 @@ public class ShortArrayAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class EmptyOrNullArrayCondition extends Condition<short[]> {
+  private static class EmptyArray extends Condition<short[]> {
     @Override public boolean matches(short[] array) {
       return array == null || array.length == 0;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new ShortArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
+    new ShortArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -66,33 +66,33 @@ public class ShortArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[459, 23]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(459), asShort(23)).satisfies(new EmptyOrNullArrayCondition());
+        new ShortArrayAssert(asShort(459), asShort(23)).satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[459, 23]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").satisfies(new EmptyOrNullArrayCondition());
+        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<Empty or null array> but was:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[23]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(459), asShort(23)).satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new ShortArrayAssert(asShort(23)).satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<Empty or null array> but was:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[23]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new ShortArrayAssert(asShort(459), asShort(23)).as("A Test").satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new ShortArrayAssert(asShort(23)).as("A Test").satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }

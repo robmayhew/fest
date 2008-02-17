@@ -1,16 +1,15 @@
 /*
  * Created on Feb 14, 2008
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- *
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.assertions;
@@ -24,7 +23,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link IntArrayAssert}</code>.
- *
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -47,14 +46,14 @@ public class IntArrayAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class EmptyOrNullArrayCondition extends Condition<int[]> {
+  private static class EmptyArray extends Condition<int[]> {
     @Override public boolean matches(int[] array) {
       return array == null || array.length == 0;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new IntArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
+    new IntArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -66,33 +65,33 @@ public class IntArrayAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[459, 23]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new IntArrayAssert(459, 23).satisfies(new EmptyOrNullArrayCondition());
+        new IntArrayAssert(459, 23).satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[459, 23]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new IntArrayAssert(459, 23).as("A Test").satisfies(new EmptyOrNullArrayCondition());
+        new IntArrayAssert(459, 23).as("A Test").satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<Empty or null array> but was:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[23]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new IntArrayAssert(459, 23).satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new IntArrayAssert(23).satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<Empty or null array> but was:<[459, 23]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[23]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new IntArrayAssert(459, 23).as("A Test").satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new IntArrayAssert(23).as("A Test").satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }
@@ -306,21 +305,19 @@ public class IntArrayAssertTest {
   }
 
   @Test public void shouldFailIfArraysAreEqualAndExpectingNotEqual() {
-    expectAssertionError("actual value:<[459, 23]> should not be equal to:<[459, 23]>").on(
-        new CodeToTest() {
-          public void run() {
-            new IntArrayAssert(459, 23).isNotEqualTo(array(459, 23));
-          }
-        });
+    expectAssertionError("actual value:<[459, 23]> should not be equal to:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(459, 23).isNotEqualTo(array(459, 23));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfArraysAreEqualAndExpectingNotEqual() {
-    expectAssertionError("[A Test] actual value:<[459, 23]> should not be equal to:<[459, 23]>").on(
-        new CodeToTest() {
-          public void run() {
-            new IntArrayAssert(459, 23).as("A Test").isNotEqualTo(array(459, 23));
-          }
-        });
+    expectAssertionError("[A Test] actual value:<[459, 23]> should not be equal to:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(459, 23).as("A Test").isNotEqualTo(array(459, 23));
+      }
+    });
   }
 
   @Test public void shouldPassIfActualContainsOnlyExpectedElements() {
@@ -360,21 +357,19 @@ public class IntArrayAssertTest {
   }
 
   @Test public void shouldFailIfActualHasExtraElementsWhenCheckingIfContainsOnly() {
-    expectAssertionError("unexpected element(s):<[23]> in array:<[459, 23]>").on(
-        new CodeToTest() {
-          public void run() {
-            new IntArrayAssert(459, 23).containsOnly(array(459));
-          }
-        });
+    expectAssertionError("unexpected element(s):<[23]> in array:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(459, 23).containsOnly(array(459));
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfActualHasExtraElementsWhenCheckingIfContainsOnly() {
-    expectAssertionError("[A Test] unexpected element(s):<[23]> in array:<[459, 23]>").on(
-        new CodeToTest() {
-          public void run() {
-            new IntArrayAssert(459, 23).as("A Test").containsOnly(array(459));
-          }
-        });
+    expectAssertionError("[A Test] unexpected element(s):<[23]> in array:<[459, 23]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(459, 23).as("A Test").containsOnly(array(459));
+      }
+    });
   }
 
   @Test public void shouldFailIfActualIsMissingElementsWhenCheckingIfContainsOnly() {
@@ -386,12 +381,11 @@ public class IntArrayAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfActualIsMissingElementsWhenCheckingIfContainsOnly() {
-    expectAssertionError("[A Test] array:<[459, 23]> does not contain element(s):<[90, 82]>").on(
-        new CodeToTest() {
-          public void run() {
-            new IntArrayAssert(459, 23).as("A Test").containsOnly(array(90, 82));
-          }
-        });
+    expectAssertionError("[A Test] array:<[459, 23]> does not contain element(s):<[90, 82]>").on(new CodeToTest() {
+      public void run() {
+        new IntArrayAssert(459, 23).as("A Test").containsOnly(array(90, 82));
+      }
+    });
   }
 
   @Test public void shouldPassIfActualHasExpectedSize() {
@@ -484,5 +478,7 @@ public class IntArrayAssertTest {
     });
   }
 
-  private int[] array(int... args) { return args; }
+  private int[] array(int... args) {
+    return args;
+  }
 }

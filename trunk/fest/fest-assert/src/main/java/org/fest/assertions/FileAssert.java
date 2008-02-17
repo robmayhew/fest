@@ -222,7 +222,7 @@ public final class FileAssert extends GenericAssert<File> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   @Override public FileAssert satisfies(Condition<File> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

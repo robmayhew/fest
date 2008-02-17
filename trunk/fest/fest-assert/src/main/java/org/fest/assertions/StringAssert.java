@@ -76,7 +76,7 @@ public final class StringAssert extends GroupAssert<String> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public StringAssert satisfies(Condition<String> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

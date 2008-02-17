@@ -129,7 +129,7 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ObjectAssert satisfies(Condition<Object> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

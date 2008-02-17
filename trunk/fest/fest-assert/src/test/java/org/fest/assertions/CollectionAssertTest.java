@@ -51,14 +51,14 @@ public class CollectionAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class EmptyOrNullCollectionCondition extends Condition<Collection<?>> {
+  private static class EmptyCollection extends Condition<Collection<?>> {
     @Override public boolean matches(Collection<?> c) {
-      return (isEmpty(c));
+      return c != null && c.isEmpty();
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new CollectionAssert(EMPTY_COLLECTION).satisfies(new EmptyOrNullCollectionCondition());
+    new CollectionAssert(EMPTY_COLLECTION).satisfies(new EmptyCollection());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -70,34 +70,33 @@ public class CollectionAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new CollectionAssert(list("Han")).satisfies(new EmptyOrNullCollectionCondition());
+        new CollectionAssert(list("Han")).satisfies(new EmptyCollection());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new CollectionAssert(list("Han")).as("A Test").satisfies(new EmptyOrNullCollectionCondition());
+        new CollectionAssert(list("Han")).as("A Test").satisfies(new EmptyCollection());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<Empty or null list> but was:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("actual value:<['Han']> should satisfy condition:<Empty list>").on(new CodeToTest() {
       public void run() {
-        new CollectionAssert(list("Han")).satisfies(new EmptyOrNullCollectionCondition().as("Empty or null list"));
+        new CollectionAssert(list("Han")).satisfies(new EmptyCollection().as("Empty list"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<Empty or null list> but was:<['Han']>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<['Han']> should satisfy condition:<Empty list>").on(new CodeToTest() {
       public void run() {
-        new CollectionAssert(list("Han")).as("A Test").satisfies(
-            new EmptyOrNullCollectionCondition().as("Empty or null list"));
+        new CollectionAssert(list("Han")).as("A Test").satisfies(new EmptyCollection().as("Empty list"));
       }
     });
   }

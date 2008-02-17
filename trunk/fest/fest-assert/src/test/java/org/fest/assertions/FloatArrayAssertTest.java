@@ -47,7 +47,7 @@ public class FloatArrayAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class EmptyOrNullArrayCondition extends Condition<float[]> {
+  private static class EmptyArray extends Condition<float[]> {
     @Override public boolean matches(float[] array) {
       return array == null || array.length == 0;
     }
@@ -62,37 +62,37 @@ public class FloatArrayAssertTest {
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new FloatArrayAssert(EMPTY_ARRAY).satisfies(new EmptyOrNullArrayCondition());
+    new FloatArrayAssert(EMPTY_ARRAY).satisfies(new EmptyArray());
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<[36.9]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[36.9]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new FloatArrayAssert(36.9f).satisfies(new EmptyOrNullArrayCondition());
+        new FloatArrayAssert(36.9f).satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<[36.9]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[36.9]> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new FloatArrayAssert(36.9f).as("A Test").satisfies(new EmptyOrNullArrayCondition());
+        new FloatArrayAssert(36.9f).as("A Test").satisfies(new EmptyArray());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<Empty or null array> but was:<[36.9]>").on(new CodeToTest() {
+    expectAssertionError("actual value:<[36.9]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new FloatArrayAssert(36.9f).satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new FloatArrayAssert(36.9f).satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<Empty or null array> but was:<[36.9]>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<[36.9]> should satisfy condition:<Empty array>").on(new CodeToTest() {
       public void run() {
-        new FloatArrayAssert(36.9f).as("A Test").satisfies(new EmptyOrNullArrayCondition().as("Empty or null array"));
+        new FloatArrayAssert(36.9f).as("A Test").satisfies(new EmptyArray().as("Empty array"));
       }
     });
   }

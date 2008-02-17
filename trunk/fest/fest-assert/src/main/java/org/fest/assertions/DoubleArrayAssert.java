@@ -126,7 +126,7 @@ public final class DoubleArrayAssert extends ArrayAssert<double[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public DoubleArrayAssert satisfies(Condition<double[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

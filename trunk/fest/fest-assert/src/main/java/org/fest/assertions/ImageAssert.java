@@ -101,7 +101,7 @@ public final class ImageAssert extends GenericAssert<BufferedImage> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ImageAssert satisfies(Condition<BufferedImage> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

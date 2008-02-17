@@ -127,7 +127,7 @@ public final class ShortArrayAssert extends ArrayAssert<short[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ShortArrayAssert satisfies(Condition<short[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

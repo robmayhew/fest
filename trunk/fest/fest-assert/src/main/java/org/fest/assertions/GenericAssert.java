@@ -122,15 +122,21 @@ abstract class GenericAssert<T> extends Assert {
    */
   abstract GenericAssert<T> isNotSameAs(T other);
 
-  final void verify(Condition<T> condition) {
-    if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
-    if (!condition.matches(actual)) fail(conditionFailedMessage(condition));
+  final void assertSatisfies(Condition<T> condition) {
+    validate(condition);
+    if (condition.matches(actual)) return;
+    fail(errorMessageIfConditionNotSatisfied(condition));
   }
 
-  private String conditionFailedMessage(Condition<T> condition) {
+  private void validate(Condition<T> condition) {
+    if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
+  }
+
+  private String errorMessageIfConditionNotSatisfied(Condition<T> condition) {
+    String message = concat("actual value:", inBrackets(actual), " should satisfy condition");
     String s = condition.description();
-    if (isEmpty(s)) return concat("condition failed with:", inBrackets(actual));
-    return concat("expected:<", s, "> but was:", inBrackets(actual));
+    if (!isEmpty(s)) message = concat(message, ":<", s, ">");
+    return message;
   }
 
   void description(String description) {

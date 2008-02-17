@@ -127,7 +127,7 @@ public final class ByteArrayAssert extends ArrayAssert<byte[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public ByteArrayAssert satisfies(Condition<byte[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

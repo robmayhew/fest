@@ -57,14 +57,14 @@ public class FileAssertTest {
     assertEquals(assertion.description(), "A Test");
   }
 
-  private static class NotNullFileCondition extends Condition<File> {
+  private static class NotNullFile extends Condition<File> {
     @Override public boolean matches(File f) {
       return f != null;
     }
   }
 
   @Test public void shouldPassIfConditionSatisfied() {
-    new FileAssert(file).satisfies(new NotNullFileCondition());
+    new FileAssert(file).satisfies(new NotNullFile());
   }
 
   @Test public void shouldThrowErrorIfConditionIsNull() {
@@ -76,33 +76,33 @@ public class FileAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new FileAssert(null).satisfies(new NotNullFileCondition());
+        new FileAssert(null).satisfies(new NotNullFile());
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
-        new FileAssert(null).as("A Test").satisfies(new NotNullFileCondition());
+        new FileAssert(null).as("A Test").satisfies(new NotNullFile());
       }
     });
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<non-null object> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<non-null object>").on(new CodeToTest() {
       public void run() {
-        new FileAssert(null).satisfies(new NotNullFileCondition().as("non-null object"));
+        new FileAssert(null).satisfies(new NotNullFile().as("non-null object"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[A Test] expected:<non-null object> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition:<non-null object>").on(new CodeToTest() {
       public void run() {
-        new FileAssert(null).as("A Test").satisfies(new NotNullFileCondition().as("non-null object"));
+        new FileAssert(null).as("A Test").satisfies(new NotNullFile().as("non-null object"));
       }
     });
   }

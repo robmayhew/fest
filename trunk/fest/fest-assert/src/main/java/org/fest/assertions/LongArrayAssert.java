@@ -127,7 +127,7 @@ public final class LongArrayAssert extends ArrayAssert<long[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public LongArrayAssert satisfies(Condition<long[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 

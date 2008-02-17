@@ -45,7 +45,7 @@
         </p>
         <p>
           which will fail with the message 
-          &quot;<code class="code">[Greeting] expected:Uppercase but was:&lt;'hello'&gt;</code>&quot;
+          &quot;<code class="code">[Greeting] actual value:&lt;'hello'&gt; should satisfy condition:&lt;Uppercase&gt;</code>&quot;
 		    </p>
 			</subsection>
 			<subsection name="Custom Assertion Classes">

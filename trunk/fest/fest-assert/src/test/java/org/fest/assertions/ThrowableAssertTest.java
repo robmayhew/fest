@@ -1,15 +1,15 @@
 /*
  * Created on Dec 23, 2007
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- *
+ * 
  * Copyright @2007 the original author or authors.
  */
 package org.fest.assertions;
@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ThrowableAssert}</code>.
- *
+ * 
  * @author David DIDIER
  * @author Alex Ruiz
  */
@@ -72,7 +72,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfied() {
-    expectAssertionError("condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).satisfies(new NotNullThrowable());
       }
@@ -80,7 +80,7 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfied() {
-    expectAssertionError("[A Test] condition failed with:<null>").on(new CodeToTest() {
+    expectAssertionError("[A Test] actual value:<null> should satisfy condition").on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(null).as("A Test").satisfies(new NotNullThrowable());
       }
@@ -88,17 +88,17 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("expected:<non-null throwable> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("actual value:<null> should satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).satisfies(new NotNullThrowable("non-null throwable"));
+        new ThrowableAssert(null).satisfies(new NotNullThrowable("non-null"));
       }
     });
   }
 
   @Test public void shouldFailShowingDescriptionIfConditionNotSatisfiedShowingDescriptionOfCondition() {
-    expectAssertionError("[Test] expected:<non-null throwable> but was:<null>").on(new CodeToTest() {
+    expectAssertionError("[Test] actual value:<null> should satisfy condition:<non-null>").on(new CodeToTest() {
       public void run() {
-        new ThrowableAssert(null).as("Test").satisfies(new NotNullThrowable("non-null throwable"));
+        new ThrowableAssert(null).as("Test").satisfies(new NotNullThrowable("non-null"));
       }
     });
   }
@@ -106,7 +106,7 @@ public class ThrowableAssertTest {
   @Test public void shouldPassIfActualMessageIsEqualToGivenOne() {
     new ThrowableAssert(new Exception("An exception")).hasMessage("An exception");
   }
-  
+
   @Test public void shouldFailIfActualIsNullWhenCheckingMessage() {
     expectAssertionErrorIfObjectIsNull(new CodeToTest() {
       public void run() {
@@ -114,7 +114,7 @@ public class ThrowableAssertTest {
       }
     });
   }
-  
+
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingMessage() {
     expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() {
@@ -122,7 +122,7 @@ public class ThrowableAssertTest {
       }
     });
   }
-  
+
   @Test public void shouldFailIfActualMessageIsNotEqualToExpectedAndExpectingEqual() {
     expectAssertionError("expected:<'Hi'> but was:<'An exception'>").on(new CodeToTest() {
       public void run() {
@@ -138,7 +138,7 @@ public class ThrowableAssertTest {
       }
     });
   }
-  
+
   @Test public void shouldReturnStringAssertWithActualMessage() {
     StringAssert message = new ThrowableAssert(new Exception("Hi")).message();
     message.isEqualTo("Hi");
@@ -151,7 +151,7 @@ public class ThrowableAssertTest {
       }
     });
   }
-  
+
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenReturningMessage() {
     expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
       public void run() {
@@ -356,24 +356,21 @@ public class ThrowableAssertTest {
   }
 
   @Test public void shouldFailIfThrowablesAreSameAndExpectingNotSame() {
-    expectAssertionError("given objects are same:<java.lang.Exception>")
-        .on(new CodeToTest() {
-          public void run() {
-            Exception e = new Exception();
-            new ThrowableAssert(e).isNotSameAs(e);
-          }
-        });
+    expectAssertionError("given objects are same:<java.lang.Exception>").on(new CodeToTest() {
+      public void run() {
+        Exception e = new Exception();
+        new ThrowableAssert(e).isNotSameAs(e);
+      }
+    });
   }
 
   @Test public void shouldFailShowingDescriptionIfThrowablesAreSameAndExpectingNotSame() {
-    expectAssertionError(
-        "[A Test] given objects are same:<java.lang.Exception>").on(
-        new CodeToTest() {
-          public void run() {
-            Exception e = new Exception();
-            new ThrowableAssert(e).as("A Test").isNotSameAs(e);
-          }
-        });
+    expectAssertionError("[A Test] given objects are same:<java.lang.Exception>").on(new CodeToTest() {
+      public void run() {
+        Exception e = new Exception();
+        new ThrowableAssert(e).as("A Test").isNotSameAs(e);
+      }
+    });
   }
 
   @Test public void shouldPassIfThrowablesAreEqual() {

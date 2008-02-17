@@ -127,7 +127,7 @@ public final class IntArrayAssert extends ArrayAssert<int[]> {
    * @throws IllegalArgumentException if the given condition is null.
    */
   public IntArrayAssert satisfies(Condition<int[]> condition) {
-    verify(condition);
+    assertSatisfies(condition);
     return this;
   }
 
