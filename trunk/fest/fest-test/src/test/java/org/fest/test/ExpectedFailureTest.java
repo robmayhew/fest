@@ -14,10 +14,11 @@
  */
 package org.fest.test;
 
-import static org.fest.test.ExpectedFailure.expect;
-import static org.testng.Assert.*;
-
 import org.testng.annotations.Test;
+
+import static org.fest.test.ExpectedFailure.expect;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ExpectedFailure}</code>.
@@ -28,7 +29,7 @@ public class ExpectedFailureTest {
 
   @Test public void shouldPassIfErrorTypeAndMessageMatchExpected() {
     expect(IllegalArgumentException.class).withMessage("A Test").on(new CodeToTest() {
-      @Override public void run() throws Exception {
+      public void run() throws Exception {
         throw new IllegalArgumentException("A Test");
       }
     });
@@ -37,7 +38,7 @@ public class ExpectedFailureTest {
   @Test public void shouldFailIfErrorTypeIsNotEqualToExpected() {
     try {
       expect(IndexOutOfBoundsException.class).withMessage("A Test").on(new CodeToTest() {
-        @Override public void run() throws Exception {
+        public void run() throws Exception {
           throw new IllegalArgumentException("A Test");
         }
       });
@@ -51,7 +52,7 @@ public class ExpectedFailureTest {
   @Test public void shouldFailIfMessageIsNotEqualToExpected() {
     try {
       expect(IllegalArgumentException.class).withMessage("Some Test").on(new CodeToTest() {
-        @Override public void run() throws Exception {
+        public void run() throws Exception {
           throw new IllegalArgumentException("A Test");
         }
       });
