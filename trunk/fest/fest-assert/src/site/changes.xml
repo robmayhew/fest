@@ -22,7 +22,7 @@
         StringAssert.
       </action>
       <action dev="alruiz, wanghy" type="add">
-        Added fest-mocks-0.1 as a 'test' scoped dependency.
+        Added fest-mocks-0.1 and fest-test-0.1 as a 'test' scoped dependencies.
       </action>
       <action dev="alruiz" type="add">
         Added method 'message' to ThrowableAssert. This method returns a StringAssert.
@@ -34,7 +34,7 @@
         Added method 'size' to FileAssert. This method returns a LongAssert.
       </action>
       <action dev="alruiz, wanghy" type="fix">
-        Fixed bug in FileContentComparator where EOF was determined at the wrong time.
+        Fixed bug in FileContentComparator where EOF (end of file) was determined at the wrong time.
       </action>
       <action dev="alruiz" type="add">
         Replaced methods 'hasCauseAsAncestor' and 'hasExactCauseAsAncestor' in ThrowableAssert with the methods
@@ -45,15 +45,16 @@
         Replaced method 'hasCauseOfType' in ThrowableAssert with method 'cause', which returns another ThrowableAssert
         for the cause of the actual Throwable. Users can call 'isInstanceOf' in the returned ThrowableAssert.
       </action>
-      <action dev="wanghy=" type="add">
-        Method 'isInstanceOf' throws IllegalArgumentException if the given class is null.        
+      <action dev="wanghy" type="add">
+        Method 'isInstanceOf' in ObjectAssert and ThrowableAssert throws IllegalArgumentException if the given Class is 
+        null.        
       </action>
-      <action dev="wanghy=" type="add">
-        Method 'isInstanceOfAny' throws IllegalArgumentException if the given class array is null or if any element
-        in the class array is null.        
+      <action dev="wanghy" type="add">
+        Method 'isInstanceOfAny' in ObjectAssert throws IllegalArgumentException if the given Class array is null or if 
+        any element in the given Class array is null.        
       </action>
       <action dev="alruiz" type="fix" due-to="Ted Young">
-        Fixed typos in javadocs for class PrimitiveFail.
+        Fixed typos in Javadocs for class PrimitiveFail.
       </action>
       <action dev="alruiz" type="remove">
         Removed dependency on Apache Velocity.
@@ -65,7 +66,7 @@
         Added missing declaration of exceptions in Javadocs.
       </action>
       <action dev="alruiz, wanghy" type="fix">
-        Eliminated inconsistencies and typos in error messages.
+        Eliminated inconsistencies and typos in exception messages.
       </action>
     </release>
     <release version="0.9.1" date="2008-02-04" description="Subsequent release">
