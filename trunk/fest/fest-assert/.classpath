@@ -5,11 +5,11 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/fest-test-0.1.jar" sourcepath="lib/fest-test-0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/fest-util-0.4.jar" sourcepath="lib/fest-util-0.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/fest-mocks-0.1-SNAPSHOT.jar" sourcepath="lib/fest-mocks-0.1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="lib/easymock-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/easymockclassextension-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/fest-test-0.1.jar" sourcepath="lib/fest-test-0.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
