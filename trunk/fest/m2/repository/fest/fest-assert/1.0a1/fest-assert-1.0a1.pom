@@ -45,7 +45,7 @@
       <groupId>fest</groupId>
       <artifactId>fest-test</artifactId>
       <version>0.1</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>fest</groupId>
