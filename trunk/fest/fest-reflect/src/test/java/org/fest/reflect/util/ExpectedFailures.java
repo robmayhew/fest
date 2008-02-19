@@ -1,5 +1,5 @@
 /*
- * Created on Feb 6, 2008
+ * Created on Feb 18, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,20 +13,27 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.reflect.field;
+package org.fest.reflect.util;
 
-import static org.fest.util.Strings.isEmpty;
+import org.fest.reflect.exception.ReflectionError;
+import org.fest.test.ExpectedFailure.Message;
+
+import static org.fest.test.ExpectedFailure.expect;
 
 /**
- * Understands a template for the name of a field to access using Java Reflection.
+ * Understands expected failures.
  *
  * @author Alex Ruiz
  */
-class NameTemplate {
-  final String name;
+public final class ExpectedFailures {
 
-  public NameTemplate(String name) {
-    if (isEmpty(name)) throw new IllegalArgumentException("The name of the field to access should not be null or empty");
-    this.name = name;
+  public static Message expectReflectionError(String message) {
+    return expect(ReflectionError.class).withMessage(message);
   }
+  
+  public static Message expectIllegalArgumentException(String message) {
+    return expect(IllegalArgumentException.class).withMessage(message);
+  }
+
+  private ExpectedFailures() {}
 }

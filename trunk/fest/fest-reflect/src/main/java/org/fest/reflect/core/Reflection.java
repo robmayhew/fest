@@ -65,6 +65,7 @@ public final class Reflection {
    * Starting point for the fluent interface for accessing fields via reflection.
    * @param name the name of the field to access.
    * @return the starting point of the method chain.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
   public static org.fest.reflect.field.Name field(String name) {
     return new org.fest.reflect.field.Name(name);
@@ -74,6 +75,7 @@ public final class Reflection {
    * Starting point for the fluent interface for accessing static fields via reflection.
    * @param name the name of the static field to access.
    * @return the starting point of the method chain.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
   public static org.fest.reflect.field.StaticName staticField(String name) {
     return new org.fest.reflect.field.StaticName(name);

@@ -82,7 +82,7 @@ public final class Invoker<T> {
       makeAccessible(field);
       return (T) field.get(target);
     } catch (Exception e) {
-      throw new ReflectionError(concat("Unable to obtain the value in field " + quote(field.getName())), e);
+      throw new ReflectionError(concat("Unable to obtain the value in field ", quote(field.getName())), e);
     } finally {
       setAccessibleIgnoringExceptions(field, accessible);
     }

@@ -14,7 +14,6 @@
  */
 package org.fest.reflect.field;
 
-import org.fest.reflect.exception.ReflectionError;
 
 /**
  * Understands the name of a static field to access using Java Reflection.
@@ -36,7 +35,7 @@ public final class StaticName extends NameTemplate {
   /**
    * Creates a new <code>{@link StaticName}</code>.
    * @param name the name of the field to access using Java Reflection.
-   * @throws ReflectionError if the given name is <code>null</code> or empty.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
   public StaticName(String name) {
     super(name);
@@ -47,7 +46,7 @@ public final class StaticName extends NameTemplate {
    * @param <T> the generic type of the field type.
    * @param type the type of the field to access.
    * @return a recipient for the field type.
-   * @throws ReflectionError if the given type is <code>null</code>.
+   * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
   public <T> StaticType<T> ofType(Class<T> type) {
     return new StaticType<T>(type, this);

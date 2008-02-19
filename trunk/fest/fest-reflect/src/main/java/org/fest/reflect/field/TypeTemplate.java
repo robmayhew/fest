@@ -34,7 +34,7 @@ abstract class TypeTemplate<T> {
 
   TypeTemplate(Class<T> type, NameTemplate fieldName) {
     name = fieldName.name;
-    if (type == null) throw new ReflectionError("The type of the field to access should not be null");
+    if (type == null) throw new IllegalArgumentException("The type of the field to access should not be null");
     this.type = type;
   }
 
@@ -53,7 +53,7 @@ abstract class TypeTemplate<T> {
       target = target.getSuperclass();
     }
     if (field != null) return field; 
-    throw new ReflectionError(concat("Unable to find field ", quote(name), " in class ", declaringType.getName()));
+    throw new ReflectionError(concat("Unable to find field ", quote(name), " in ", declaringType.getName()));
   }
 
   private Field field(Class<?> declaringType) {
@@ -69,14 +69,16 @@ abstract class TypeTemplate<T> {
     try {
       makeAccessible(field);
       Class<?> fieldType = field.getType();
-      if (!type.isAssignableFrom(fieldType)) {
-        throw new ReflectionError(concat(
-            "The type of the field ", quote(field.getName()), " in class ", field.getDeclaringClass().getName(),
-            " should be <", type.getName(), "> but was <",
-            fieldType.getName(), ">"));
-      }
+      if (!type.isAssignableFrom(fieldType)) throw incorrectFieldType(field, fieldType);
     } finally {
       setAccessibleIgnoringExceptions(field, accessible);
     }
+  }
+
+  private ReflectionError incorrectFieldType(Field field, Class<?> fieldType) {
+    String fieldTypeName = field.getDeclaringClass().getName();
+    String message = concat("The type of the field ", quote(field.getName()), " in ", fieldTypeName, " should be <",
+        type.getName(), "> but was <", fieldType.getName(), ">");
+    throw new ReflectionError(message);
   }
 }
