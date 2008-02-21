@@ -1,16 +1,16 @@
 /*
  * Created on Feb 20, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.reflect.method;
@@ -36,4 +36,34 @@ public class StaticName extends NameTemplate {
     super(name);
   }
 
+  /**
+   * Specifies the return type of the static method to invoke. This method call is optional if the return type of the
+   * method to invoke is <code>void</code>.
+   * @param <T> the generic type of the method's return type.
+   * @param type the return type of the method to invoke.
+   * @return the created return type holder.
+   */
+  public <T> StaticReturnType<T> withReturnType(Class<T> type) {
+    return new StaticReturnType<T>(type, this);
+  }
+
+  /**
+   * Specifies the parameter types of the static method to invoke. This method call is optional if the method to invoke
+   * does not take arguments.
+   * @param parameterTypes the parameter types of the method to invoke.
+   * @return the created parameter types holder.
+   */
+  public StaticParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
+    StaticReturnType<Void> returnType = new StaticReturnType<Void>(Void.class, this);
+    return new StaticParameterTypes<Void>(parameterTypes, returnType);
+  }
+
+  /**
+   * Creates a new invoker for a static method that takes no parameters and return value <code>void</code>.
+   * @param target the object containing the method to invoke.
+   * @return the created method invoker.
+   */
+  public Invoker<Void> in(Class<?> target) {
+    return new Invoker<Void>(name, target);
+  }
 }
