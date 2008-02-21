@@ -42,11 +42,21 @@
 			  </p>
 			</subsection>
 			<subsection name="Links">
-			 <ul>
-			   <li><a href="constructor.html">Invoking Constructors</a></li>
-         <li><a href="method.html">Invoking Methods</a></li>
-         <li><a href="field.html">Accessing Fields</a></li>
-			 </ul>
+			 <p>
+				 <ul>
+				   <li><a href="constructor.html">Invoking Constructors</a></li>
+	         <li><a href="method.html">Invoking Methods</a></li>
+	         <li><a href="field.html">Accessing Fields</a></li>
+				 </ul>
+			 </p>
+			</subsection>
+			<subsection name="References">
+			 <p>
+	       <ul>
+	         <li><a href="http://www.infoq.com/articles/internal-dsls-java" target="_blank">An Approach to Internal Domain-Specific Languages in Java</a></li>
+	         <li><a href="http://java.sun.com/docs/books/tutorial/reflect/" target="_blank">Java Reflection</a></li>
+	       </ul>
+			 </p>
 			</subsection>
 		</section>
 	</body>

@@ -15,14 +15,15 @@
  */
 package org.fest.reflect.method;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.util.ExpectedFailures.*;
-
-import org.fest.reflect.Jedi;
-import org.fest.test.CodeToTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.reflect.Jedi;
+import org.fest.test.CodeToTest;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.reflect.util.ExpectedFailures.*;
 
 /**
  * Tests for the fluent interface for methods.
@@ -58,6 +59,18 @@ public class MethodTest {
     assertThat(personName).isEqualTo("Luke");
   }
 
+  @Test public void shouldCallMethodWithArgsAndReturnType() {
+    jedi.addPower("Healing");
+    String power = new Name("powerAt").withReturnType(String.class).withParameterTypes(int.class).in(jedi).invoke(0);
+    assertThat(power).isEqualTo("Healing");
+  }
+
+  @Test public void shouldCallMethodWithNoArgsAndNoReturnValue() {
+    assertThat(jedi.isMaster()).isFalse();
+    new Name("makeMaster").in(jedi).invoke();
+    assertThat(jedi.isMaster()).isTrue();
+  }
+
   @Test public void shouldReturnMethodInfo() {
     java.lang.reflect.Method method = new Name("setName").withParameterTypes(String.class).in(jedi).info();
     assertThat(method).isNotNull();
@@ -65,12 +78,6 @@ public class MethodTest {
     Class<?>[] parameterTypes = method.getParameterTypes();
     assertThat(parameterTypes).hasSize(1);
     assertThat(parameterTypes[0]).isEqualTo(String.class);
-  }
-
-  @Test public void shouldCallMethodWithNoArgsAndNoReturnValue() {
-    assertThat(jedi.isMaster()).isFalse();
-    new Name("makeMaster").in(jedi).invoke();
-    assertThat(jedi.isMaster()).isTrue();
   }
 
   @Test public void shouldThrowErrorIfInvalidMethodName() {
@@ -90,12 +97,6 @@ public class MethodTest {
         new Name("setName").withParameterTypes(String.class).in(jedi).invoke(invalidArg);
       }
     });
-  }
-
-  @Test public void shouldCallMethodWithArgsAndReturnType() {
-    jedi.addPower("Healing");
-    String power = new Name("powerAt").withReturnType(String.class).withParameterTypes(int.class).in(jedi).invoke(0);
-    assertThat(power).isEqualTo("Healing");
   }
 
   @Test(dataProvider = "emptyAndNullNames")
@@ -126,6 +127,31 @@ public class MethodTest {
     assertThat(Jedi.commonPowerAt(0)).isEqualTo("Jump");
     new StaticName("clearCommonPowers").in(Jedi.class).invoke();
     assertThat(Jedi.commonPowerCount()).isEqualTo(0);
+  }
+
+  @Test public void shouldCallStaticMethodWithReturnValueAndNoArgs() {
+    Jedi.addCommonPower("Jump");
+    int count = new StaticName("commonPowerCount").withReturnType(int.class).in(Jedi.class).invoke();
+    assertThat(count).isEqualTo(Jedi.commonPowerCount());
+  }
+  
+  @Test public void shouldThrowErrorIfInvalidStaticMethodName() {
+    String message = "Unable to find method 'powerSize' in org.fest.reflect.Jedi with parameter type(s) []";
+    expectReflectionError(message).on(new CodeToTest() {
+      public void run() {
+        String invalidName = "powerSize";
+        new StaticName(invalidName).in(Jedi.class);
+      }
+    });
+  }
+
+  @Test public void shouldThrowErrorIfInvalidArgsForStaticMethod() {
+    expectReflectionError("Unable to invoke method 'addCommonPower' with arguments [8]").on(new CodeToTest() {
+      public void run() {
+        int invalidArg = 8;
+        new StaticName("addCommonPower").withParameterTypes(String.class).in(Jedi.class).invoke(invalidArg);
+      }
+    });
   }
 
   @DataProvider(name = "emptyAndNullNames") public Object[][] emptyAndNullNames() {
