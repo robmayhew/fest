@@ -62,7 +62,7 @@ public final class Invoker<T> {
       type = type.getSuperclass();
     }
     if (method == null) 
-      throw new ReflectionError(concat("Unable to find method with name ", quote(methodName), " in type ", 
+      throw new ReflectionError(concat("Unable to find method ", quote(methodName), " in ", 
           targetType.getName(), " with parameter type(s) ", format(parameterTypes)));
     return method;
   }

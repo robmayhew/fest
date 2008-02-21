@@ -16,18 +16,21 @@
 package org.fest.reflect.method;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
-import org.fest.reflect.exception.ReflectionError;
+import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.reflect.util.ExpectedFailures.*;
 
 /**
  * Tests for the fluent interface for methods.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class MethodTest {
 
@@ -37,6 +40,15 @@ public class MethodTest {
     person = new Person("Luke");
   }
 
+  @Test(dataProvider = "emptyAndNullNames") 
+  public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
+    expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
+      public void run() {
+        new Name(name);
+      }
+    });
+  }
+  
   @Test public void shouldCallMethodWithArgs() {
     new Name("setName").withParameterTypes(String.class).in(person).invoke("Leia");
     assertThat(person.getName()).isEqualTo("Leia");
@@ -63,16 +75,23 @@ public class MethodTest {
     assertThat(jedi.isMaster()).isTrue();
   }
   
-  @Test(expectedExceptions = ReflectionError.class) 
-  public void shouldThrowErrorIfInvalidMethodName() {
-    String invalidName = "getAge";
-    new Name(invalidName).withReturnType(Integer.class).in(person);
+  @Test public void shouldThrowErrorIfInvalidMethodName() {
+    String message = "Unable to find method 'getAge' in org.fest.reflect.Person with parameter type(s) []";
+    expectReflectionError(message).on(new CodeToTest() {
+      public void run() {
+        String invalidName = "getAge";
+        new Name(invalidName).withReturnType(Integer.class).in(person);
+      }
+    });
   }
   
-  @Test(expectedExceptions = ReflectionError.class)
-  public void shouldThrowErrorIfInvalidArgs() {
-    int invalidArg = 8;
-    new Name("setName").withParameterTypes(String.class).in(person).invoke(invalidArg);
+  @Test public void shouldThrowErrorIfInvalidArgs() {
+    expectReflectionError("Unable to invoke method 'setName' with arguments [8]").on(new CodeToTest() {
+      public void run() {
+        int invalidArg = 8;
+        new Name("setName").withParameterTypes(String.class).in(person).invoke(invalidArg);
+      }
+    });
   }
   
   @Test public void shouldCallMethodWithReturnTypeAndArgs() {
@@ -80,5 +99,18 @@ public class MethodTest {
     new Name("addPower").withReturnType(Boolean.class).withParameterTypes(String.class).in(jedi).invoke("Heal");
     assertThat(jedi.powerCount()).isEqualTo(1);
     assertThat(jedi.powerAt(0)).isEqualTo("Heal");
+  }
+
+  @Test(dataProvider = "emptyAndNullNames") 
+  public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty(final String name) {
+    expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
+      public void run() {
+        new StaticName(name);
+      }
+    });
+  }
+
+  @DataProvider(name = "emptyAndNullNames") public Object[][] emptyAndNullNames() {
+    return new Object[][] { { "" }, { null } };
   }
 }
