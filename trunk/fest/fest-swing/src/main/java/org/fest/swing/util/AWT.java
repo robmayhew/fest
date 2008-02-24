@@ -15,12 +15,15 @@
 package org.fest.swing.util;
 
 import java.awt.*;
+import java.util.Iterator;
 
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
+
+import static org.fest.reflect.core.Reflection.staticField;
 
 /**
  * Understands utility methods related to AWT.
@@ -87,6 +90,34 @@ public class AWT {
     return location;
   }
 
+  /**
+   * Returns the focus owner.
+   * @return the focus owner.
+   */
+  @SuppressWarnings("unchecked") 
+  public static Component focusOwner() {
+    try {
+      return staticField("focusOwner").ofType(Component.class).in(KeyboardFocusManager.class).get();
+    } catch (Exception e) {
+      Iterator<Window> i = new AWTHierarchy().getRoots().iterator();
+      Component focus = null;
+      while (i.hasNext()) {
+        Window w = i.next();
+        if (w.isShowing() && (focus = focusOwner(w)) != null) break;
+      }
+      return focus;
+    }
+  }
+
+  private static Component focusOwner(Window w) {
+    Component focus = w.getFocusOwner();
+    if (focus != null) return focus;
+    Window[] owned = w.getOwnedWindows();
+    for (int i = 0; i < owned.length; i++) 
+      if ((focus = owned[i].getFocusOwner()) != null) return focus;
+    return focus;
+  }
+  
   /**
    * Indicates whether the AWT Tree Lock is currently held.
    * @return <code>true</code> if the AWT Tree Lock is currently held, <code>false</code> otherwise.

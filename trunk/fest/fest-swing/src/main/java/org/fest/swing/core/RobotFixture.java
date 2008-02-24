@@ -25,12 +25,22 @@ import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.task.ActivateWindowTask;
+import org.fest.swing.task.RequestFocusTask;
+import org.fest.swing.util.TimeoutWatch;
 
 import static java.lang.System.currentTimeMillis;
 
 import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Settings.timeoutToBeVisible;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -167,7 +177,7 @@ public final class RobotFixture {
    * @param c the component to give focus to.
    */
   public void focus(Component c) {
-    robot.focus(c);
+    focus(c, false);
   }
 
   /**
@@ -176,7 +186,44 @@ public final class RobotFixture {
    * @param c the component to give focus to.
    */
   public void focusAndWaitForFocusGain(Component c) {
-    robot.focus(c, true);
+    focus(c, true);
+  }
+
+  private void focus(final Component c, boolean wait) {
+    Component currentOwner = focusOwner();
+    if (currentOwner == c) return;
+    FocusMonitor focusMonitor = addFocusMonitorTo(c);
+    // for pointer focus
+    mouseMove(c);
+    waitForIdle();
+    // Make sure the correct window is in front
+    Window currentOwnerAncestor = currentOwner != null ? ancestorOf(currentOwner) : null;
+    Window componentAncestor = ancestorOf(c);
+    if (currentOwnerAncestor != componentAncestor) {
+      activate(componentAncestor);
+      waitForIdle();
+    }
+    invokeAndWait(c, new RequestFocusTask(c));
+    try {
+      if (wait) {
+        TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToBeVisible());
+        while (!focusMonitor.hasFocus()) {
+          if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(c), " failed"));
+          pause();
+        }
+      }
+    } finally {
+      c.removeFocusListener(focusMonitor);
+    }
+  }
+
+  /**
+   * Activates the given <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
+   * @param w the window to activate. 
+   */
+  public void activate(final Window w) {
+    invokeAndWait(w, new ActivateWindowTask(w));
+    mouseMove(w); // For pointer-focus systems
   }
 
   /**
@@ -319,7 +366,7 @@ public final class RobotFixture {
    */
   public void mouseMove(Component target) {
     Point center = centerOf(target);
-    robot.mouseMove(target, center.x, center.y);
+    mouseMove(target, center.x, center.y);
   }
 
   /**

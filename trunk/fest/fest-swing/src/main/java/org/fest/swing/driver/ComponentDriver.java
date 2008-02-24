@@ -26,14 +26,12 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.task.PerformAccessibleActionTask;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link Component}</code>. This class is intended for internal use
@@ -111,28 +109,12 @@ public abstract class ComponentDriver {
   }
 
   /**
-   * Performs the specified <code>{@link AccessibleAction}</code> in the given <code>{@link Component}</code>'s event
-   * queue.
+   * Performs the <code>{@link AccessibleAction}</code> in the given <code>{@link Component}</code>'s event queue.
    * @param c the given <code>Component</code>.
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty. 
    */
   protected final void performAccessibleActionOf(Component c) {
-    AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
-    if (action == null || action.getAccessibleActionCount() == 0)
-      throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
-    robot.invokeLater(c, new PerformAccessibleActionTask(action));
-  }
-
-  private static class PerformAccessibleActionTask implements Runnable {
-    private final AccessibleAction action;
-
-    PerformAccessibleActionTask(AccessibleAction action) {
-      this.action = action;
-    }
-
-    public void run() {
-      action.doAccessibleAction(0);
-    }
+    robot.invokeLater(c, new PerformAccessibleActionTask(c));
   }
 
   /**
