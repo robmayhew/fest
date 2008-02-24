@@ -14,6 +14,11 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.AWT.locationOnScreenOf;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -21,11 +26,8 @@ import java.awt.Point;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
-import static org.fest.util.Strings.concat;
+import org.fest.swing.task.SetLocationTask;
+import org.fest.swing.task.SetSizeTask;
 
 /**
  * Understands simulation of user input on a <code>{@link Container}</code>. This class is intended for internal use
@@ -69,20 +71,6 @@ public abstract class ContainerDriver extends ComponentDriver {
     robot.waitForIdle();
   }
 
-  private static class SetSizeTask implements Runnable {
-    private final Container target;
-    private final Dimension size;
-
-    SetSizeTask(Container target, Dimension size) {
-      this.target = target;
-      this.size = size;
-    }
-
-    public void run() {
-      target.setSize(size);
-    }
-  }
-  
   private void simulateResizeStarted(Container c, int horizontally, int vertically) {
     if (!isUserResizable(c)) return;
     Point p = resizeLocationOf(c);
@@ -136,20 +124,6 @@ public abstract class ContainerDriver extends ComponentDriver {
     robot.invokeAndWait(c, new SetLocationTask(c, location));
     simulateMoveComplete(c);
     robot.waitForIdle();
-  }
-
-  private static class SetLocationTask implements Runnable {
-    private final Container target;
-    private final Point location;
-
-    SetLocationTask(Container target, Point location) {
-      this.target = target;
-      this.location = location;
-    }
-
-    public void run() {
-      target.setLocation(location);
-    }
   }
 
   private ActionFailedException componentNotShowingOnScreen(Container c) {

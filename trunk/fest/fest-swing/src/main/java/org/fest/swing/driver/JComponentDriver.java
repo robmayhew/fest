@@ -14,6 +14,12 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.event.KeyEvent.VK_UNDEFINED;
+import static org.fest.swing.driver.Actions.findActionKey;
+import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -22,13 +28,7 @@ import javax.swing.KeyStroke;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
-
-import static java.awt.event.KeyEvent.VK_UNDEFINED;
-
-import static org.fest.swing.driver.Actions.findActionKey;
-import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
+import org.fest.swing.task.ScrollRectToVisibleTask;
 
 /**
  * Understands simulation of user input on a <code>{@link JComponent}</code>. This class is intended for internal use
@@ -58,21 +58,7 @@ public class JComponentDriver extends ContainerDriver {
     // in function. Fortunately, Swing's Scrollable makes for a simple solution.
     // NOTE: absolutely MUST wait for idle in order for the scroll to finish, and the UI to update so that the next
     // action goes to the proper location within the scrolled component.
-    robot.invokeAndWait(new ScrollToVisibleTask(c, r));
-  }
-
-  private static class ScrollToVisibleTask implements Runnable {
-    private final JComponent target;
-    private final Rectangle visible;
-
-    ScrollToVisibleTask(JComponent target, Rectangle visible) {
-      this.target = target;
-      this.visible = visible;
-    }
-
-    public void run() {
-      target.scrollRectToVisible(visible);
-    }
+    robot.invokeAndWait(new ScrollRectToVisibleTask(c, r));
   }
 
   /**

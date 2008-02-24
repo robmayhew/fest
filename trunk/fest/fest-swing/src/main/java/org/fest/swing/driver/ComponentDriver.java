@@ -26,7 +26,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.task.PerformAccessibleActionTask;
+import org.fest.swing.task.PerformDefaultAccessibleActionTask;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.core.Pause.pause;
@@ -114,7 +114,7 @@ public abstract class ComponentDriver {
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty. 
    */
   protected final void performAccessibleActionOf(Component c) {
-    robot.invokeLater(c, new PerformAccessibleActionTask(c));
+    robot.invokeLater(c, new PerformDefaultAccessibleActionTask(c));
   }
 
   /**
