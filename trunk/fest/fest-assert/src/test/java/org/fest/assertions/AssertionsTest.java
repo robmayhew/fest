@@ -15,18 +15,21 @@
  */
 package org.fest.assertions;
 
-import static java.awt.image.BufferedImage.TYPE_INT_RGB;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.testng.Assert.*;
-
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.fest.util.Files;
 import org.testng.annotations.Test;
+
+import org.fest.util.Files;
+
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link Assertions}</code>.
@@ -52,6 +55,10 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(false), BooleanAssert.class);
   }
 
+  @Test public void shouldReturnBooleanAssertIfArgumentIsBooleanWrapper() {
+    assertIsInstanceOf(assertThat(Boolean.FALSE), BooleanAssert.class);
+  }
+
   @Test public void shouldReturnByteArrayAssertIfArgumentIsByteArray() {
     byte[] bytes = new byte[] { 0 };
     assertIsInstanceOf(assertThat(bytes), ByteArrayAssert.class);
@@ -62,14 +69,22 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(b), ByteAssert.class);
   }
 
+  @Test public void shouldReturnByteAssertIfArgumentIsByteWrapper() {
+    byte b = 0;
+    assertIsInstanceOf(assertThat(new Byte(b)), ByteAssert.class);
+  }
+
   @Test public void shouldReturnCharArrayAssertIfArgumentIsCharArray() {
     char[] chars = new char[] { 0 };
     assertIsInstanceOf(assertThat(chars), CharArrayAssert.class);
   }
 
   @Test public void shouldReturnCharAssertIfArgumentIsChar() {
-    char c = 0;
-    assertIsInstanceOf(assertThat(c), CharAssert.class);
+    assertIsInstanceOf(assertThat('a'), CharAssert.class);
+  }
+
+  @Test public void shouldReturnCharAssertIfArgumentIsCharacter() {
+    assertIsInstanceOf(assertThat(new Character('a')), CharAssert.class);
   }
 
   @Test public void shouldReturnCollectionAssertIfArgumentIsCollection() {
@@ -92,6 +107,10 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(86.0d), DoubleAssert.class);
   }
 
+  @Test public void shouldReturnDoubleAssertIfArgumentIsDoubleWrapper() {
+    assertIsInstanceOf(assertThat(new Double(86.0d)), DoubleAssert.class);
+  }
+
   @Test public void shouldReturnFileAssertIfArgumentIsFile() {
     assertIsInstanceOf(assertThat(Files.temporaryFolder()), FileAssert.class);
   }
@@ -103,6 +122,10 @@ public class AssertionsTest {
 
   @Test public void shouldReturnFloatAssertIfArgumentIsFloat() {
     assertIsInstanceOf(assertThat(86.0f), FloatAssert.class);
+  }
+
+  @Test public void shouldReturnFloatAssertIfArgumentIsFloatWrapper() {
+    assertIsInstanceOf(assertThat(new Float(86.0f)), FloatAssert.class);
   }
 
   @Test public void shouldReturnGivenAssertExtension() {
@@ -124,6 +147,10 @@ public class AssertionsTest {
     assertIsInstanceOf(assertThat(8), IntAssert.class);
   }
 
+  @Test public void shouldReturnIntAssertIfArgumentIsInteger() {
+    assertIsInstanceOf(assertThat(new Integer(8)), IntAssert.class);
+  }
+
   @Test public void shouldReturnLongArrayAssertIfArgumentIsLongArray() {
     long[] longs = new long[] { 0 };
     assertIsInstanceOf(assertThat(longs), LongArrayAssert.class);
@@ -131,6 +158,10 @@ public class AssertionsTest {
 
   @Test public void shouldReturnLongAssertIfArgumentIsLong() {
     assertIsInstanceOf(assertThat(8l), LongAssert.class);
+  }
+
+  @Test public void shouldReturnLongAssertIfArgumentIsLongWrapper() {
+    assertIsInstanceOf(assertThat(new Long(86)), LongAssert.class);
   }
 
   @Test public void shouldReturnMapAssertIfArgumentIsThrowable() {
@@ -154,6 +185,11 @@ public class AssertionsTest {
   @Test public void shouldReturnShortAssertIfArgumentIsShort() {
     short s = 8;
     assertIsInstanceOf(assertThat(s), ShortAssert.class);
+  }
+
+  @Test public void shouldReturnShortAssertIfArgumentIsShortWrapper() {
+    short s = 8;
+    assertIsInstanceOf(assertThat(new Short(s)), ShortAssert.class);
   }
 
   @Test public void shouldReturnStringAssertIfArgumentIsString() {

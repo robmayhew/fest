@@ -66,6 +66,15 @@ public final class Assertions {
   }
 
   /**
+   * Creates a new instance of <code>{@link BooleanAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static BooleanAssert assertThat(Boolean actual) {
+    return new BooleanAssert(actual);
+  }
+
+  /**
    * Creates a new instance of <code>{@link BooleanArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
@@ -93,6 +102,15 @@ public final class Assertions {
   }
 
   /**
+   * Creates a new instance of <code>{@link ByteAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static ByteAssert assertThat(Byte actual) {
+    return new ByteAssert(actual);
+  }
+
+  /**
    * Creates a new instance of <code>{@link ByteArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
@@ -107,6 +125,15 @@ public final class Assertions {
    * @return the created assertion object.
    */
   public static CharAssert assertThat(char actual) {
+    return new CharAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link CharAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static CharAssert assertThat(Character actual) {
     return new CharAssert(actual);
   }
 
@@ -138,6 +165,15 @@ public final class Assertions {
   }
 
   /**
+   * Creates a new instance of <code>{@link DoubleAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static DoubleAssert assertThat(Double actual) {
+    return new DoubleAssert(actual);
+  }
+
+  /**
    * Creates a new instance of <code>{@link DoubleArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
@@ -165,6 +201,15 @@ public final class Assertions {
   }
 
   /**
+   * Creates a new instance of <code>{@link FloatAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static FloatAssert assertThat(Float actual) {
+    return new FloatAssert(actual);
+  }
+
+  /**
    * Creates a new instance of <code>{@link FloatArrayAssert}</code>.
    * @param actual the value to be the target of the assertions methods.
    * @return the created assertion object.
@@ -179,6 +224,15 @@ public final class Assertions {
    * @return the created assertion object.
    */
   public static IntAssert assertThat(int actual) {
+    return new IntAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link IntAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static IntAssert assertThat(Integer actual) {
     return new IntAssert(actual);
   }
 
@@ -206,6 +260,15 @@ public final class Assertions {
    * @return the created assertion object.
    */
   public static LongAssert assertThat(long actual) {
+    return new LongAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link LongAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static LongAssert assertThat(Long actual) {
     return new LongAssert(actual);
   }
 
@@ -251,6 +314,15 @@ public final class Assertions {
    * @return the created assertion object.
    */
   public static ShortAssert assertThat(short actual) {
+    return new ShortAssert(actual);
+  }
+
+  /**
+   * Creates a new instance of <code>{@link ShortAssert}</code>.
+   * @param actual the value to be the target of the assertions methods.
+   * @return the created assertion object.
+   */
+  public static ShortAssert assertThat(Short actual) {
     return new ShortAssert(actual);
   }
 
