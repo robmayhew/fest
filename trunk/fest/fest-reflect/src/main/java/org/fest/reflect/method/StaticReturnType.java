@@ -22,16 +22,16 @@ package org.fest.reflect.method;
  * <pre>
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                    .{@link StaticParameterTypes#in(Class) in}(Jedi.class)
- *                    .{@link Invoker#invoke(Object...) invoke}("Jump");
+ *                                 .{@link StaticParameterTypes#in(Class) in}(Jedi.class)
+ *                                 .{@link Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("addPadawan").{@link StaticName#in(Class) in}(Jedi.class).{@link Invoker#invoke(Object...) invoke}();
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
- *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) method}("commonPowerCount").{@link StaticName#withReturnType(Class) withReturnType}(String.class)
- *                                  .{@link StaticReturnType#in(Class) in}(Jedi.class)
- *                                  .{@link Invoker#invoke(Object...) invoke}();
+ *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticName#withReturnType(Class) withReturnType}(String.class)
+ *                                                 .{@link StaticReturnType#in(Class) in}(Jedi.class)
+ *                                                 .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
  * </p>
  *

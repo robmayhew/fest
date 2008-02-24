@@ -85,7 +85,9 @@ method.<span class="fnc">invoke</span>(names, <span class="str">&quot;Yoda&quot;
         <p>
           FEST-Reflect:
           <pre class="prettyprint">
-<span class="fnc">method</span>(<span class="str">&quot;add&quot;</span>).<span class="fnc">withParameterTypes</span>(String.<span class="kwd">class</span>).<span class="fnc">in</span>(names).<span class="fnc">invoke</span>(<span class="str">&quot;Yoda&quot;</span>);</pre>
+<span class="fnc">method</span>(<span class="str">&quot;add&quot;</span>).<span class="fnc">withParameterTypes</span>(String.<span class="kwd">class</span>)
+             .<span class="fnc">in</span>(names)
+             .<span class="fnc">invoke</span>(<span class="str">&quot;Yoda&quot;</span>);</pre>
         </p>      
       </subsection>
       

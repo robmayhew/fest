@@ -5,13 +5,13 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.4" date="2008-02-22" description="Subsequent release">
+    <release version="0.4" date="2008-02-25" description="Subsequent release">
       <action dev="alruiz" type="add" issue="111">
         Added support for calling static fields and static methods.
       </action>
       <action dev="alruiz" type="fix">
-        Fixed bug in method setAccessible(AccessibleObject, boolean) in org.fest.reflect.util.Accessibles where the
-        boolean value was not used.
+        Fixed bug in method setAccessible(AccessibleObject, boolean) in org.fest.reflect.util.Accessibles where 'true'
+        was used instead of the specified boolean value.
       </action>
     </release>
     <release version="0.3" date="2008-01-31" description="Subsequent release">

@@ -27,7 +27,9 @@
 		<menu name="Features">
       <item name="Constructors" href="constructor.html" />
       <item name="Methods" href="method.html" />
+      <item name="Static Methods" href="static-method.html" />
       <item name="Fields" href="field.html" />
+      <item name="Static Fields" href="static-field.html" />
 		</menu>
 
 		<menu name="FEST Modules">

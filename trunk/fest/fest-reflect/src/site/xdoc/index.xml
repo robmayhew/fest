@@ -46,7 +46,9 @@
 				 <ul>
 				   <li><a href="constructor.html">Invoking Constructors</a></li>
 	         <li><a href="method.html">Invoking Methods</a></li>
+           <li><a href="static-method.html">Invoking Static Methods</a></li>
 	         <li><a href="field.html">Accessing Fields</a></li>
+           <li><a href="static-field.html">Accessing Static Fields</a></li>
 				 </ul>
 			 </p>
 			</subsection>
