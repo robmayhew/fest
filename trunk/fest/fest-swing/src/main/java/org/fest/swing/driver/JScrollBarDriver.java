@@ -14,16 +14,17 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JScrollBar}</code>. Unlike <code>JScrollBarFixture</code>,
@@ -49,7 +50,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * Scrolls up (or right) one unit (usually a line).
    * @param scrollBar the target <code>JScrollBar</code>.
    */
-  public final void scrollUnitUp(JScrollBar scrollBar) {
+  public void scrollUnitUp(JScrollBar scrollBar) {
     scrollUnitUp(scrollBar, 1);
   }
 
@@ -59,10 +60,8 @@ public class JScrollBarDriver extends JComponentDriver {
    * @param times the number of times to scroll up one unit.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final void scrollUnitUp(JScrollBar scrollBar, int times) {
-    if (times <= 0)
-      throw actionFailure(concat(
-          "The number of times to scroll up one unit should be greater than zero, but was ", times));
+  public void scrollUnitUp(JScrollBar scrollBar, int times) {
+    validateTimes(times, "scroll up one unit");
     Point where = location.unitLocationToScrollUp(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getUnitIncrement());
   }
@@ -71,7 +70,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * Scroll down (or left) one unit (usually a line).
    * @param scrollBar the target <code>JScrollBar</code>.
    */
-  public final void scrollUnitDown(JScrollBar scrollBar) {
+  public void scrollUnitDown(JScrollBar scrollBar) {
     scrollUnitDown(scrollBar, 1);
   }
 
@@ -81,10 +80,8 @@ public class JScrollBarDriver extends JComponentDriver {
    * @param times the number of times to scroll down one unit.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final void scrollUnitDown(JScrollBar scrollBar, int times) {
-    if (times <= 0)
-      throw actionFailure(concat(
-          "The number of times to scroll down one unit should be greater than zero, but was ", times));
+  public void scrollUnitDown(JScrollBar scrollBar, int times) {
+    validateTimes(times, "scroll down one unit");
     Point where = location.unitLocationToScrollDown(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getUnitIncrement() * -1);
   }
@@ -93,7 +90,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * Scrolls up (or right) one block (usually a page).
    * @param scrollBar the target <code>JScrollBar</code>.
    */
-  public final void scrollBlockUp(JScrollBar scrollBar) {
+  public void scrollBlockUp(JScrollBar scrollBar) {
     scrollBlockUp(scrollBar, 1);
   }
 
@@ -103,9 +100,8 @@ public class JScrollBarDriver extends JComponentDriver {
    * @param times the number of times to scroll up one block.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final void scrollBlockUp(JScrollBar scrollBar, int times) {
-    if (times <= 0)
-      throw actionFailure("The number of times to scroll up one block should be greater than zero");
+  public void scrollBlockUp(JScrollBar scrollBar, int times) {
+    validateTimes(times, "scroll up one block");
     Point where = location.blockLocationToScrollUp(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getBlockIncrement());
   }
@@ -114,7 +110,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * Scrolls down (or left) one block (usually a page).
    * @param scrollBar the target <code>JScrollBar</code>.
    */
-  public final void scrollBlockDown(JScrollBar scrollBar) {
+  public void scrollBlockDown(JScrollBar scrollBar) {
     scrollBlockDown(scrollBar, 1);
   }
 
@@ -124,11 +120,17 @@ public class JScrollBarDriver extends JComponentDriver {
    * @param times the number of times to scroll down one block.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final void scrollBlockDown(JScrollBar scrollBar, int times) {
-    if (times <= 0)
-      throw actionFailure("The number of times to scroll down one block should be greater than zero");
+  public void scrollBlockDown(JScrollBar scrollBar, int times) {
+    validateTimes(times, "scroll down one block");
     Point where = location.blockLocationToScrollDown(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getBlockIncrement() * -1);
+  }
+  
+  private void validateTimes(int times, String action) {
+    if (times > 0) return;
+    String message = concat(
+        "The number of times to ", action, " should be greater than zero, but was <", valueOf(times), ">");
+    throw actionFailure(message);
   }
 
   private void scroll(JScrollBar scrollBar, Point where, int count) {
@@ -137,14 +139,14 @@ public class JScrollBarDriver extends JComponentDriver {
     int value = scrollBar.getValue() + count;
     setValueProperty(scrollBar, value);
   }
-
+  
   /**
    * Scrolls to the given position.
    * @param scrollBar the target <code>JScrollBar</code>.
    * @param position the position to scroll to.
    * @throws ActionFailedException if the given position is not within the <code>JScrollBar</code> bounds.
    */
-  public final void scrollTo(JScrollBar scrollBar, final int position) {
+  public void scrollTo(JScrollBar scrollBar, final int position) {
     validatePosition(scrollBar, position);
     Point thumb = location.thumbLocation(scrollBar, scrollBar.getValue());
     robot.mouseMove(scrollBar, thumb.x, thumb.y);
@@ -156,9 +158,10 @@ public class JScrollBarDriver extends JComponentDriver {
   private void validatePosition(JScrollBar scrollBar, final int position) {
     int min = scrollBar.getMinimum();
     int max = scrollBar.getMaximum();
-    if (position < min || position > max)
-      throw actionFailure(concat("Position '", valueOf(position), "' is not within the JScrollBar bounds of '",
-          valueOf(min), "' and '", valueOf(max), "'"));
+    if (position >= min && position <= max) return;
+    throw actionFailure(concat(
+        "Position <", valueOf(position), "> is not within the JScrollBar bounds of <",
+        valueOf(min), "> and <", valueOf(max), ">"));
   }
 
   private void setValueProperty(final JScrollBar scrollBar, final int value) {

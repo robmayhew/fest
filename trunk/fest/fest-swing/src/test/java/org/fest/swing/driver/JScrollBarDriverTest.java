@@ -15,23 +15,23 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+
+import javax.swing.JScrollBar;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 import static org.fest.util.Strings.concat;
-
-import java.awt.Dimension;
-
-import javax.swing.JScrollBar;
-
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JScrollBarDriver}</code>.
@@ -40,9 +40,6 @@ import org.testng.annotations.Test;
  */
 @Test(groups = FUNCTIONAL)
 public class JScrollBarDriverTest {
-
-  private static final int VALUE = 30;
-  private static final int BLOCK_INCREMENT = 10;
 
   private RobotFixture robot;
   private JScrollBar scrollBar;
@@ -60,109 +57,119 @@ public class JScrollBarDriverTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "negativeAndZero")
-  public void shouldThrowErrorIfTimesToScrollUnitUpIsNegativeOrZero(int times) {
+  @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
+  public void shouldThrowErrorIfTimesToScrollUnitUpIsZeroOrNegative(int times) {
     try {
       driver.scrollUnitUp(scrollBar, times);
       fail();
     } catch (ActionFailedException expected) {
-      String message = concat("The number of times to scroll up one unit should be greater than zero, but was ", times);
+      String message = concat(
+          "The number of times to scroll up one unit should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
     }
   }
 
   @Test public void shouldScrollUnitUpTheGivenNumberOfTimes() {
     driver.scrollUnitUp(scrollBar, 6);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE + 6);
+    assertThatScrollBarValueIsEqualTo(36);
   }
 
   @Test public void shouldScrollUnitUp() {
     driver.scrollUnitUp(scrollBar);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE + 1);
+    assertThatScrollBarValueIsEqualTo(31);
   }
 
-  @Test(dataProvider = "negativeAndZero")
-  public void shouldThrowErrorIfTimesToScrollUnitDownIsNegativeOrZero(int times) {
+  @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
+  public void shouldThrowErrorIfTimesToScrollUnitDownIsZeroOrNegative(int times) {
     try {
       driver.scrollUnitDown(scrollBar, times);
       fail();
     } catch (ActionFailedException expected) {
       String message = concat(
-          "The number of times to scroll down one unit should be greater than zero, but was ", times);
+          "The number of times to scroll down one unit should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
     }
   }
 
   @Test public void shouldScrollUnitDownTheGivenNumberOfTimes() {
     driver.scrollUnitDown(scrollBar, 8);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE - 8);
+    assertThatScrollBarValueIsEqualTo(22);
   }
 
   @Test public void shouldScrollUnitDown() {
     driver.scrollUnitDown(scrollBar);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE - 1);
+    assertThatScrollBarValueIsEqualTo(29);
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockUpIsNegative() {
-    driver.scrollBlockUp(scrollBar, -1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockUpIsZero() {
-    driver.scrollBlockUp(scrollBar, 0);
+  @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
+  public void shouldThrowErrorIfTimesToScrollBlockUpIsZeroOrNegative(int times) {
+    try {
+      driver.scrollBlockUp(scrollBar, times);
+      fail();
+    } catch (ActionFailedException expected) {
+      String message = concat(
+          "The number of times to scroll up one block should be greater than zero, but was <", times, ">");
+      assertThat(expected).message().isEqualTo(message);
+    }
   }
 
   @Test public void shouldScrollBlockUpTheGivenNumberOfTimes() {
-    int times = 2;
-    driver.scrollBlockUp(scrollBar, times);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE + (BLOCK_INCREMENT * times));
+    driver.scrollBlockUp(scrollBar, 2);
+    assertThatScrollBarValueIsEqualTo(50);
   }
 
   @Test public void shouldScrollBlockUp() {
     driver.scrollBlockUp(scrollBar);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE + BLOCK_INCREMENT);
+    assertThatScrollBarValueIsEqualTo(40);
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockDownIsNegative() {
-    driver.scrollBlockDown(scrollBar, -1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockDownIsZero() {
-    driver.scrollBlockDown(scrollBar, 0);
+  @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
+  public void shouldThrowErrorIfTimesToScrollBlockDownIsZeroOrNegative(int times) {
+    try {
+      driver.scrollBlockDown(scrollBar, times);
+      fail();
+    } catch (ActionFailedException expected) {
+      String message = concat(
+          "The number of times to scroll down one block should be greater than zero, but was <", times, ">");
+      assertThat(expected).message().isEqualTo(message);
+    }
   }
 
   @Test public void shouldScrollBlockUpDownTheGivenNumberOfTimes() {
-    int times = 2;
-    driver.scrollBlockDown(scrollBar, times);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE - (BLOCK_INCREMENT * times));
+    driver.scrollBlockDown(scrollBar, 2);
+    assertThatScrollBarValueIsEqualTo(10);
   }
 
   @Test public void shouldScrollBlockDown() {
     driver.scrollBlockDown(scrollBar);
-    assertThat(scrollBar.getValue()).isEqualTo(VALUE - BLOCK_INCREMENT);
+    assertThatScrollBarValueIsEqualTo(20);
   }
 
   @Test public void shouldScrollToGivenPosition() {
     driver.scrollTo(scrollBar, 68);
-    assertThat(scrollBar.getValue()).isEqualTo(68);
+    assertThatScrollBarValueIsEqualTo(68);
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfPositionIsLessThanMinimum() {
-    driver.scrollTo(scrollBar, scrollBar.getMinimum() - 10);
+  private void assertThatScrollBarValueIsEqualTo(int expected) {
+    assertThat(scrollBar.getValue()).isEqualTo(expected);
+  }
+  
+  @Test public void shouldThrowErrorIfPositionIsLessThanMinimum() {
+    try {
+      driver.scrollTo(scrollBar, 0);
+      fail();
+    } catch (ActionFailedException expected) {
+      assertThat(expected).message().isEqualTo("Position <0> is not within the JScrollBar bounds of <10> and <80>");
+    }
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfPositionIsGreaterThanMaximum() {
-    driver.scrollTo(scrollBar, scrollBar.getMaximum() + 10);
-  }
-
-  @DataProvider(name = "negativeAndZero")
-  public Object[][] negativeAndZero() {
-    return new Object[][] { { -1 }, { 0 } };
+  @Test public void shouldThrowErrorIfPositionIsGreaterThanMaximum() {
+    try {
+      driver.scrollTo(scrollBar, 90);
+      fail();
+    } catch (ActionFailedException expected) {
+      assertThat(expected).message().isEqualTo("Position <90> is not within the JScrollBar bounds of <10> and <80>");
+    }
   }
 
   private static class MyFrame extends TestFrame {
@@ -174,8 +181,8 @@ public class JScrollBarDriverTest {
       super(JScrollBarDriverTest.class);
       add(scrollBar);
       scrollBar.setPreferredSize(new Dimension(20, 100));
-      scrollBar.setBlockIncrement(BLOCK_INCREMENT);
-      scrollBar.setValue(VALUE);
+      scrollBar.setBlockIncrement(10);
+      scrollBar.setValue(30);
       scrollBar.setMinimum(10);
       scrollBar.setMaximum(80);
       setPreferredSize(new Dimension(60, 200));

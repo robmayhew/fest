@@ -15,11 +15,11 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.Adjustable.HORIZONTAL;
-
 import java.awt.Point;
 
 import javax.swing.JScrollBar;
+
+import static java.awt.Adjustable.HORIZONTAL;
 
 /**
  * Understands encapsulation of a location in a <code>{@link JScrollBar}</code>.
@@ -80,8 +80,7 @@ public final class JScrollBarLocation {
    */
   public Point unitLocationToScrollUp(JScrollBar scrollBar) {
     int arrow = arrow(scrollBar);
-    if (isHorizontal(scrollBar))
-      return new Point(scrollBar.getWidth() - arrow / 2, arrow / 2);
+    if (isHorizontal(scrollBar)) return new Point(scrollBar.getWidth() - arrow / 2, arrow / 2);
     return new Point(arrow / 2, scrollBar.getHeight() - arrow / 2);
   }
 

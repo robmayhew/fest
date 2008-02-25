@@ -77,12 +77,12 @@ public class JComboBoxDriverTest {
   @Test public void shouldReturnDropDownList() {
     robot.click(comboBox);
     JList dropDownList = driver.dropDownList();
-    assertThat(dropDownList).isNotNull();
-    assertModelContains(dropDownList.getModel(), "first", "second", "third");
+    assertThatListContains(dropDownList, "first", "second", "third");
   }
   
-  private void assertModelContains(ListModel model, Object...expected) {
+  private void assertThatListContains(JList list, Object...expected) {
     int expectedSize = expected.length;
+    ListModel model = list.getModel();
     assertThat(model.getSize()).isEqualTo(expectedSize);
     for (int i = 0; i < expectedSize; i++)
       assertThat(model.getElementAt(i)).isEqualTo(expected[i]);

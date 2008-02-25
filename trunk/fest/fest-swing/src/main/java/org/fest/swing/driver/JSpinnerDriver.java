@@ -23,6 +23,7 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static java.awt.event.KeyEvent.*;
+import static java.lang.String.valueOf;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -56,8 +57,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final void increment(JSpinner spinner, int times) {
-    if (times <= 0)
-      throw actionFailure("The number of times to increment the value should be greater than zero");
+    validate(times, "increment the value");
     for (int i = 0; i < times; i++) increment(spinner);
   }
 
@@ -76,11 +76,16 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
   public final void decrement(JSpinner spinner, int times) {
-    if (times <= 0)
-      throw actionFailure("The number of times to decrement the value should be greater than zero");
+    validate(times, "decrement the value");
     for (int i = 0; i < times; i++) decrement(spinner);
   }
 
+  private void validate(int times, String action) {
+    if (times > 0) return;
+    throw actionFailure(concat(
+        "The number of times to ", action, " should be greater than zero, but was <", valueOf(times), ">"));
+  }
+  
   /**
    * Decrements the value of the <code>{@link JSpinner}</code>.
    * @param spinner the target <code>JSpinner</code>.

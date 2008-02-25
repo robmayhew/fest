@@ -17,6 +17,12 @@ package org.fest.swing.driver;
 import javax.swing.JSlider;
 
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ActionFailedException;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JSlider}</code>. Unlike <code>JSliderFixture</code>, this
@@ -42,7 +48,7 @@ public class JSliderDriver extends JComponentDriver {
    * Clicks at the maximum end of the <code>{@link JSlider}</code>.
    * @param slider the target <code>JSlider</code>.
    */
-  public final void increment(JSlider slider) {
+  public void increment(JSlider slider) {
     robot.click(slider, location.pointAt(slider, slider.getMaximum()));
   }
 
@@ -50,7 +56,7 @@ public class JSliderDriver extends JComponentDriver {
    * Clicks at the minimum end of the <code>{@link JSlider}</code>.
    * @param slider the target <code>JSlider</code>.
    */
-  public final void decrement(JSlider slider) {
+  public void decrement(JSlider slider) {
     robot.click(slider, location.pointAt(slider, slider.getMinimum()));
   }
 
@@ -58,7 +64,7 @@ public class JSliderDriver extends JComponentDriver {
    * Slides the knob to its maximum.
    * @param slider the target <code>JSlider</code>.
    */
-  public final void slideToMax(JSlider slider) {
+  public void slideToMax(JSlider slider) {
     slide(slider, slider.getMaximum());
   }
 
@@ -66,7 +72,7 @@ public class JSliderDriver extends JComponentDriver {
    * Slides the knob to its minimum.
    * @param slider the target <code>JSlider</code>.
    */
-  public final void slideToMin(JSlider slider) {
+  public void slideToMin(JSlider slider) {
     slide(slider, slider.getMinimum());
   }
 
@@ -74,14 +80,24 @@ public class JSliderDriver extends JComponentDriver {
    * Slides the knob to the requested value.
    * @param slider the target <code>JSlider</code>.
    * @param value the requested value.
+   * @throws ActionFailedException if the given position is not within the <code>JSlider</code> bounds.
    */
-  public final void slide(JSlider slider, int value) {
+  public void slide(JSlider slider, int value) {
+    validateValue(slider, value);
     drag(slider, location.pointAt(slider, slider.getValue()));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
     robot.invokeAndWait(new SetValueTask(slider, value));
   }
 
+  private void validateValue(JSlider slider, int value) {
+    int min = slider.getMinimum();
+    int max = slider.getMaximum();
+    if (value >= min && value <= max) return;
+    throw actionFailure(concat(
+        "Value <", valueOf(value), "> is not within the JSlider bounds of <", valueOf(min), "> and <", valueOf(max), ">"));
+  }
+  
   private static class SetValueTask implements Runnable {
     private final JSlider target;
     private final int value;

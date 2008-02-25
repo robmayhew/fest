@@ -21,6 +21,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JSliderDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -82,6 +83,7 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.
    * @return this fixture.
+   * @throws ActionFailedException if the given position is not within the <code>JSlider</code> bounds.
    */
   public JSliderFixture slideTo(int value) {
     driver.slide(target, value);
