@@ -14,17 +14,16 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JScrollBar}</code>. Unlike <code>JScrollBarFixture</code>,
@@ -62,7 +61,8 @@ public class JScrollBarDriver extends JComponentDriver {
    */
   public final void scrollUnitUp(JScrollBar scrollBar, int times) {
     if (times <= 0)
-      throw actionFailure("The number of times to scroll up one unit should be greater than zero");
+      throw actionFailure(concat(
+          "The number of times to scroll up one unit should be greater than zero, but was ", times));
     Point where = location.unitLocationToScrollUp(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getUnitIncrement());
   }
@@ -83,7 +83,8 @@ public class JScrollBarDriver extends JComponentDriver {
    */
   public final void scrollUnitDown(JScrollBar scrollBar, int times) {
     if (times <= 0)
-      throw actionFailure("The number of times to scroll down one unit should be greater than zero");
+      throw actionFailure(concat(
+          "The number of times to scroll down one unit should be greater than zero, but was ", times));
     Point where = location.unitLocationToScrollDown(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getUnitIncrement() * -1);
   }
