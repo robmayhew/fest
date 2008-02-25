@@ -19,10 +19,12 @@ import java.awt.Rectangle;
 
 import javax.swing.JTabbedPane;
 
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Strings.*;
 
@@ -52,11 +54,11 @@ public final class JTabbedPaneLocation {
    * @param tabbedPane the target <code>JTabbedPane</code>.
    * @param index the given index.
    * @return the coordinates of the tab under the given index.
-   * @throws LocationUnavailableException if the given index is negative or out of bounds.
+   * @throws ActionFailedException if the given index is negative or out of bounds.
    * @throws LocationUnavailableException if the tab under the given index is not visible.
    */
   public Point pointAt(JTabbedPane tabbedPane, int index) {
-    validatedIndex(tabbedPane, index);
+    validateIndex(tabbedPane, index);
     Rectangle rect = tabbedPane.getUI().getTabBounds(tabbedPane, index);
     // From Abbot: TODO figure out the effects of tab layout policy sometimes tabs are not directly visible
     if (rect == null || rect.x < 0)
@@ -64,11 +66,10 @@ public final class JTabbedPaneLocation {
     return new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
   }
 
-  private void validatedIndex(JTabbedPane tabbedPane, int index) {
-    int tabCount = tabbedPane.getTabCount() - 1;
-    if (index < 0 || index > tabCount)
-      throw new LocationUnavailableException(
-          concat("The tab index '", valueOf(index), "' should be between 0 and ", valueOf(tabCount), " (inclusive)"));
+  private void validateIndex(JTabbedPane tabbedPane, int index) {
+    int max = tabbedPane.getTabCount() - 1;
+    if (index >= 0 && index <= max) return;
+    throw actionFailure(concat(
+        "Index <", valueOf(index), "> is not within the JTabbedPane bounds of <0> and <", valueOf(max), "> (inclusive)"));
   }
-
 }

@@ -20,6 +20,7 @@ import java.awt.Point;
 import javax.swing.JTabbedPane;
 
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 /**
@@ -70,6 +71,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * Simulates a user selecting the tab located at the given index.
    * @param tabbedPane the target <code>JTabbedPane</code>.
    * @param index the index of the tab to select.
+   * @throws ActionFailedException if the given index is not within the <code>JTabbedPane</code> bounds.
    */
   public final void selectTab(JTabbedPane tabbedPane, int index) {
     try {
@@ -79,7 +81,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
       // Set the tab directly
       robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));
     }
-  }
+  }  
 
   private static class SetSelectedIndexTask implements Runnable {
     private final JTabbedPane target;

@@ -21,6 +21,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTabbedPaneDriver;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -64,6 +65,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * Simulates a user selecting the tab located at the given index.
    * @param index the index of the tab to select.
    * @return this fixture.
+   * @throws ActionFailedException if the given index is not within the <code>JTabbedPane</code> bounds.
    */
   public final JTabbedPaneFixture selectTab(int index) {
     driver.selectTab(target, index);
