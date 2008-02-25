@@ -61,10 +61,10 @@ public final class JMenuItemDriver extends JComponentDriver {
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
    */
   public void selectMenuItem(JMenuItem menuItem) {
-    Menu menu = new Menu(menuItem);
-    activateParentIfIsMenu(menu);
-    ensureWindowIsInFront(menu);
-    if (menuItem instanceof JMenu && !menu.inMenuBar()) waitForSubMenuToShow();
+    JMenuItemLocation location = new JMenuItemLocation(menuItem);
+    activateParentIfIsAMenu(location);
+    moveParentWindowToFront(location);
+    if (menuItem instanceof JMenu && !location.inMenuBar()) waitForSubMenuToShow();
     click(menuItem);
     ensurePopupIsShowing(menuItem);
   }
@@ -77,12 +77,14 @@ public final class JMenuItemDriver extends JComponentDriver {
     waitForSubMenuToShow();
   }
   
-  private void activateParentIfIsMenu(Menu menu) {
-    if (menu.parentIsMenu()) selectMenuItem((JMenuItem)menu.parentOrInvoker());
+  private void activateParentIfIsAMenu(JMenuItemLocation location) {
+    if (!location.isParentAMenu()) return;
+    selectMenuItem((JMenuItem)location.parentOrInvoker());
   }
   
-  private void ensureWindowIsInFront(Menu menu) {
-    if (menu.inMenuBar()) moveToFront(ancestorOf(menu.parentOrInvoker()));
+  private void moveParentWindowToFront(JMenuItemLocation location) {
+    if (!location.inMenuBar()) return;
+    moveToFront(ancestorOf(location.parentOrInvoker()));
   }
   
   private void moveToFront(Window w) {
