@@ -13,16 +13,17 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.testing;
 
 import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import org.fest.swing.fixture.StringTransferHandler;
+import org.fest.util.Collections;
 
-import static org.fest.util.Strings.isEmpty;
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 /**
  * Understands a list that:
@@ -36,13 +37,16 @@ import static org.fest.util.Strings.isEmpty;
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
-final class TestList extends JList {
+public final class TestList extends JList {
   private static final long serialVersionUID = 1L;
 
   private final DefaultListModel model = new DefaultListModel();
 
-  TestList(String name, List<String> elements) {
-    if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");
+  public TestList(String...elements) {
+    this(null, Collections.list(elements));
+  }
+  
+  public TestList(String name, List<String> elements) {
     setDragEnabled(true);
     setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     for (String e : elements) model.addElement(e);
@@ -51,14 +55,14 @@ final class TestList extends JList {
     setTransferHandler(new ListTransferHandler());
   }
   
-  String[] elements() {
+  public String[] elements() {
     int count = model.getSize();
     String[] elements = new String[count];
     for (int i = 0; i < count; i++) elements[i] = (String)model.get(i);
     return elements;
   }
   
-  String itemValue(int index) {
+  public String itemValue(int index) {
     return getModel().getElementAt(index).toString();
   }
 

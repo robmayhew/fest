@@ -33,6 +33,7 @@ import org.fest.assertions.AssertExtension;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestList;
 import org.fest.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;

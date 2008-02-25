@@ -15,22 +15,22 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-
 import java.awt.Dimension;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JTextField;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 
 /**
  * Tests for <code>{@link JTextComponentDriver}</code>.
@@ -38,17 +38,16 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test(groups = FUNCTIONAL)
 public class JTextComponentDriverTest {
 
   private RobotFixture robot;
   private MyFrame frame;
   private JTextComponentDriver driver;
 
-  private static Logger logger = Logger.getAnonymousLogger();
-
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new MyFrame(getClass());
+    frame = new MyFrame();
     robot.showWindow(frame, new Dimension(200, 200));
     driver = new JTextComponentDriver(robot);
   }
@@ -58,17 +57,27 @@ public class JTextComponentDriverTest {
   }
 
   @Test public void shouldSelectOnlyGivenText() {
-    driver.selectText(frame.textField, 8, 14);
-    assertThat(frame.textField.getSelectedText()).isEqualTo("a test");
+    driver.selectText(target(), 8, 14);
+    assertThat(target().getSelectedText()).isEqualTo("a test");
   }
 
+  @Test public void shouldReplaceText() {
+    target().setText("Hi");
+    driver.replaceText(target(), "Bye");
+    assertThat(target().getText()).isEqualTo("Bye");
+  }
+  
   @Test public void shouldThrowErrorIfIndicesAreOutOfBounds() {
     try {
-      driver.selectText(frame.textField, 20, 22);
+      driver.selectText(target(), 20, 22);
       fail();
     } catch (ActionFailedException expected) {
-      logger.log(Level.INFO, expected.getMessage(), expected);
+      assertThat(expected).message().contains("Unable to get location for index '20' in javax.swing.JTextField");
     }
+  }
+
+  private JTextField target() {
+    return frame.textField;
   }
 
   private static class MyFrame extends TestFrame {
@@ -76,8 +85,8 @@ public class JTextComponentDriverTest {
 
     final JTextField textField = new JTextField("This is a test");
 
-    MyFrame(Class<?> testClass) {
-      super(testClass);
+    MyFrame() {
+      super(JTextComponentDriverTest.class);
       add(textField);
     }
   }

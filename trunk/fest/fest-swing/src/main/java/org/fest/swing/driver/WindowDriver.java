@@ -53,7 +53,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param width the width that this fixture's <code>Window</code> should have after being resized.
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
-  public final void resizeWidthTo(Window w, int width) {
+  public void resizeWidthTo(Window w, int width) {
     resizeTo(w, new Dimension(width, w.getHeight()));
   }
 
@@ -63,7 +63,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param height the height that this fixture's <code>Window</code> should have after being resized.
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
-  public final void resizeHeightTo(Window w, int height) {
+  public void resizeHeightTo(Window w, int height) {
     resizeTo(w, new Dimension(w.getWidth(), height));
   }
 
@@ -73,7 +73,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param size the size to resize the <code>Window</code> to.
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
-  public final void resizeTo(Window w, Dimension size) {
+  public void resizeTo(Window w, Dimension size) {
     if (!isUserResizable(w))
       throw actionFailure(concat("The window ", format(w), " is not resizable by the user"));
     resize(w, size.width, size.height);
@@ -86,7 +86,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>Window</code> is not movable.
    * @throws ActionFailedException if the given <code>Window</code> is not showing on the screen.
    */
-  public final void moveTo(Window w, Point where) {
+  public void moveTo(Window w, Point where) {
     if (!isUserMovable(w))
       throw actionFailure(concat("The window ", format(w), " is not movable by the user"));
     move(w, where.x, where.y);

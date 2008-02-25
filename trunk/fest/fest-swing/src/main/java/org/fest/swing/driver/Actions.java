@@ -15,17 +15,18 @@
  */
 package org.fest.swing.driver;
 
-import static java.util.Collections.sort;
-import static javax.swing.Action.NAME;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Collections.isEmpty;
-import static org.fest.util.Strings.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
+
+import static java.util.Collections.sort;
+import static javax.swing.Action.NAME;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Collections.isEmpty;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to <code>{@link Action}</code>s.
@@ -46,7 +47,6 @@ final class Actions {
     if (!isEmpty(allKeys)) message = concat(message, ", available actions:", allKeys);
     throw actionFailure(message);
   }
-
 
   private static List<String> formatAllActionKeys(ActionMap actionMap) {
     List<String> keys = new ArrayList<String>();

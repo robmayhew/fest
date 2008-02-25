@@ -15,10 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.util.Objects.*;
-import static org.fest.swing.util.Strings.isDefaultToString;
-import static org.fest.util.Strings.isEmpty;
-
 import java.awt.Component;
 
 import javax.swing.JLabel;
@@ -36,9 +32,7 @@ final class CellRendererComponents {
     if (!(cellRendererComponent instanceof JLabel)) return null;
     String text = ((JLabel)cellRendererComponent).getText();
     if (text != null) text = text.trim();
-    if (!isEmpty(text) && !isDefaultToString(text)) return text;
-    text = toStringOf(text);
-    return DEFAULT_TO_STRING.equals(text) ? null : text;
+    return text;
   }
 
   private CellRendererComponents() {}

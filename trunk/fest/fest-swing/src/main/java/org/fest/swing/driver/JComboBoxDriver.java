@@ -15,15 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToFindPopup;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Strings.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.awt.Container;
 
@@ -37,6 +28,16 @@ import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Settings.timeoutToFindPopup;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Strings.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
@@ -68,7 +69,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @return an array of <code>String</code>s that represent the <code>JComboBox</code> list.
    */
-  public final String[] contentsOf(JComboBox comboBox) {
+  public String[] contentsOf(JComboBox comboBox) {
     int itemCount = size(comboBox);
     String[] items = new String[itemCount];
     for (int i = 0; i < itemCount; i++)
@@ -84,7 +85,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JComboBox</code>.
    */
-  public final String text(JComboBox comboBox, int index) {
+  public String text(JComboBox comboBox, int index) {
     validatedIndex(comboBox, index);
     Object item = itemAt(comboBox, index);
     String text = item.toString();
@@ -102,7 +103,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param text the text to match
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
-  public final void selectItem(JComboBox comboBox, String text) {
+  public void selectItem(JComboBox comboBox, String text) {
     if (areEqual(comboBox.getSelectedItem(), text)) return;
     int itemCount = size(comboBox);
     for (int i = 0; i < itemCount; i++) {
@@ -135,11 +136,11 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *           the <code>JComboBox</code>.
    */
-  public final void selectItem(final JComboBox comboBox, int index) {
+  public void selectItem(final JComboBox comboBox, int index) {
     final int validatedIndex = validatedIndex(comboBox, index);
     showDropDownList(comboBox);
     try {
-      listDriver.clickItem(dropDownList(), index);
+      listDriver.selectItem(dropDownList(), index);
     } catch (ComponentLookupException e) {
       robot.invokeAndWait(new Runnable() {
         public void run() {
@@ -186,7 +187,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @return the found <code>JList</code>.
    * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.
    */
-  public final JList dropDownList() {
+  public JList dropDownList() {
     JPopupMenu popup = popupMenuDriver.findActivePopupMenu();
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToFindPopup());

@@ -15,14 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.util.Strings.concat;
-
 import javax.swing.JList;
 
 import org.fest.swing.core.MouseButton;
@@ -34,6 +26,13 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.Range;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -82,43 +81,25 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
   }
 
   /**
-   * Simulates a user selecting the items (in the specified range) in this fixture's <code>{@link JList}</code>. The
-   * simulated user actions are:
-   * <ul>
-   * <li>pressing the "Shift" key</li>
-   * <li>selecting the items (in the specified range) in this fixture's <code>{@link JList}</code></li>
-   * <li>releasing the "Shift"</li>
-   * </ul>
+   * Simulates a user selecting the items (in the specified range) in this fixture's <code>{@link JList}</code>.
    * @param from the starting point of the selection.
    * @param to the last item to select (inclusive.)
    * @return this fixture.
    */
   public final JListFixture selectItems(Range.From from, Range.To to) {
-    int shift = VK_SHIFT;
-    doPressKey(shift);
-    for (int i = from.value; i <= to.value; i++) selectItem(i);
-    doReleaseKey(shift);
+    driver.selectItems(target, from.value, to.value);
     return this;
   }
 
   /**
-   * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>. The simulated user
-   * actions are:
-   * <ul>
-   * <li>pressing the "Control" or "Command" key (depending on the OS)</li>
-   * <li>selecting the specified items in this fixture's <code>{@link JList}</code></li>
-   * <li>releasing the "Control" or "Command" key</li>
-   * </ul>
+   * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
    * @param indices the indices of the items to select.
    * @return this fixture.
    * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
    *         in the <code>JList</code>.
    */
   public final JListFixture selectItems(int...indices) {
-    int controlOrCommand = controlOrCommandKey();
-    doPressKey(controlOrCommand);
-    for (int index : indices) selectItem(index);
-    doReleaseKey(controlOrCommand);
+    driver.selectItems(target, indices);
     return this;
   }
 
@@ -130,28 +111,19 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    *         the <code>JList</code>.
    */
   public final JListFixture selectItem(int index) {
-    driver.clickItem(target, index);
+    driver.selectItem(target, index);
     return this;
   }
 
   /**
-   * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>. The simulated user
-   * actions are:
-   * <ul>
-   * <li>pressing the "Control" or "Command" key (depending on the OS)</li>
-   * <li>selecting the specified items in this fixture's <code>{@link JList}</code></li>
-   * <li>releasing the "Control" or "Command" key</li>
-   * </ul>
+   * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
    * @param items the text of the items to select.
    * @return this fixture.
    * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
    *         found.
    */
   public final JListFixture selectItems(String...items) {
-    int controlOrCommand = controlOrCommandKey();
-    doPressKey(controlOrCommand);
-    for (String item : items) selectItem(item);
-    doReleaseKey(controlOrCommand);
+    driver.selectItems(target, items);
     return this;
   }
 
@@ -162,7 +134,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
   public final JListFixture selectItem(String text) {
-    driver.clickItem(target, text, LEFT_BUTTON, 1);
+    driver.selectItem(target, text, LEFT_BUTTON, 1);
     return this;
   }
 
@@ -184,12 +156,12 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    */
   public final JListFixture doubleClickItem(String text) {
-    driver.clickItem(target, text, LEFT_BUTTON, 2);
+    driver.selectItem(target, text, LEFT_BUTTON, 2);
     return this;
   }
 
   void clickItem(int index, MouseButton button, int times) {
-    driver.clickItem(target, index, button, times);
+    driver.selectItem(target, index, button, times);
   }
 
   /**

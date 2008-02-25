@@ -60,7 +60,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the target <code>JTextComponent</code>.
    * @param text the text to enter.
    */
-  public final void replaceText(JTextComponent textBox, String text) {
+  public void replaceText(JTextComponent textBox, String text) {
     scrollToVisible(textBox, 0);
     invokeAction(textBox, selectAllAction);
     if (isEmpty(text) && !isEmpty(textBox.getText())) {
@@ -78,7 +78,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param end the ending index of the selection.
    * @throws ActionFailedException if the selecting the text in the given range fails.
    */
-  public final void selectText(JTextComponent textBox, int start, int end) {
+  public void selectText(JTextComponent textBox, int start, int end) {
     startSelection(textBox, start);
     endSelection(textBox, end);
     verifySelectionMade(textBox, start, end);

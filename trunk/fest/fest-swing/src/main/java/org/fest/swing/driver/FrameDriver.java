@@ -48,7 +48,7 @@ public class FrameDriver extends WindowDriver {
    * Iconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  public final void iconify(Frame frame) {
+  public void iconify(Frame frame) {
     Point p = iconifyLocation(frame);
     if (p != null) robot.mouseMove(frame, p.x, p.y);
     updateFrameExtendedState(frame, ICONIFIED);
@@ -72,7 +72,7 @@ public class FrameDriver extends WindowDriver {
    * Deiconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  public final void deiconify(Frame frame) {
+  public void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
     pause(new UntilDeiconified(frame));
   }
@@ -94,7 +94,7 @@ public class FrameDriver extends WindowDriver {
    * Normalizes the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  public final void normalize(Frame frame) {
+  public void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
     pause(new UntilNormalized(frame));
   }
@@ -117,7 +117,7 @@ public class FrameDriver extends WindowDriver {
    * @param frame the target <code>Frame</code>.
    * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
-  public final void maximize(Frame frame) {
+  public void maximize(Frame frame) {
     Point p = maximizeLocation(frame);
     if (p != null) robot.mouseMove(frame, p.x, p.y);
     if (!supportsMaximize()) throw actionFailure("Platform does not support maximizing frames");

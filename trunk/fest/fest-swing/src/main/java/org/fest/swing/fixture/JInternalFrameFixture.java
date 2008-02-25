@@ -69,9 +69,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public final JInternalFrameFixture moveToFront() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() { target.toFront(); }
-    });
+    driver.moveToFront(target);
     return this;
   }
 
@@ -80,9 +78,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public final JInternalFrameFixture moveToBack() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() { target.toBack(); }
-    });
+    driver.moveToBack(target);
     return this;
   }
 

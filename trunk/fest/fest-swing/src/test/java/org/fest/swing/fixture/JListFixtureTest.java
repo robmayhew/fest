@@ -22,6 +22,7 @@ import javax.swing.JList;
 import org.testng.annotations.Test;
 
 import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestList;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;

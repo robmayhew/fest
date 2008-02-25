@@ -45,13 +45,54 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     super(robot);
   }
 
+
+  /**
+   * Brings the given <code>{@link JInternalFrame}</code> to the front.
+   * @param frame the target <code>JInternalFrame</code>.
+   */
+  public void moveToFront(JInternalFrame frame) {
+    robot.invokeAndWait(new MoveToFrontTask(frame));
+  }
+
+  private static class MoveToFrontTask implements Runnable {
+    private final JInternalFrame f;
+
+    MoveToFrontTask(JInternalFrame f) {
+      this.f = f;
+    }
+    
+    public void run() {
+      f.toFront();
+    }
+  }
+  
+  /**
+   * Brings the given <code>{@link JInternalFrame}</code> to the back.
+   * @param frame the target <code>JInternalFrame</code>.
+   */
+  public void moveToBack(JInternalFrame frame) {
+    robot.invokeAndWait(new MoveToBackTask(frame));
+  }
+
+  private static class MoveToBackTask implements Runnable {
+    private final JInternalFrame f;
+
+    MoveToBackTask(JInternalFrame f) { 
+      this.f = f;
+    }
+    
+    public void run() {
+      f.toBack();
+    }
+  }
+
   /**
    * Maximizes the given <code>{@link JInternalFrame}</code>, deconifying it first if it is iconified.
    * @param frame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not maximizable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final void maximize(JInternalFrame frame) {
+  public void maximize(JInternalFrame frame) {
     if (!frame.isMaximizable())
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not maximizable"));
     maximizeOrNormalize(frame, MAXIMIZE);
@@ -62,7 +103,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param frame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final void normalize(JInternalFrame frame) {
+  public void normalize(JInternalFrame frame) {
     maximizeOrNormalize(frame, NORMALIZE);
   }
 
@@ -95,7 +136,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final void iconify(JInternalFrame frame) {
+  public void iconify(JInternalFrame frame) {
     if (frame.isIcon()) return;
     if (!frame.isIconifiable()) 
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not iconifiable"));
@@ -109,7 +150,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param frame the target <code>JInternalFrame</code>. 
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final void deiconify(JInternalFrame frame) {
+  public void deiconify(JInternalFrame frame) {
     if (!frame.isIcon()) return;
     Container c = frame.getDesktopIcon();
     Point p = iconifyLocation(c);
@@ -153,7 +194,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param frame the target <code>JInternalFrame</code>. 
    * @throws ActionFailedException if the <code>JInternalFrame</code> is not closable.
    */
-  public final void close(final JInternalFrame frame) {
+  public void close(final JInternalFrame frame) {
     if (!frame.isClosable()) 
       throw actionFailure(concat("The given JInternalFrame <", format(frame), "> is not closable"));
     // This is LAF-specific, so it must be done programmatically.
