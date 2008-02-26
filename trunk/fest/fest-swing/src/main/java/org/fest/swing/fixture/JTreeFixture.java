@@ -69,7 +69,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -82,7 +82,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * Simulates a user toggling the open/closed state of the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -259,7 +259,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * Simulates a user dragging a row from this fixture's <code>{@link JTree}</code>.
    * @param row the index of the row to drag.
    * @return this fixture.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -272,7 +272,7 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * Simulates a user dropping an item into this fixture's <code>{@link JTree}</code>.
    * @param row the row to drop the item to.
    * @return this fixture.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.

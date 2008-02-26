@@ -56,11 +56,11 @@ public final class TestTable extends JTable {
     Object[][] data = new Object[rowCount][columnCount];
     for (int i = 0; i < rowCount; i++)
       for (int j = 0; j < columnCount; j++)
-        data[i][j] = cellValue(i, j);
+        data[i][j] = createCellTextUsing(i, j);
     return data;
   }
 
-  public static String cellValue(int row, int column) {
+  public static String createCellTextUsing(int row, int column) {
     return concat(String.valueOf(row), "-", String.valueOf(column));
   }
 

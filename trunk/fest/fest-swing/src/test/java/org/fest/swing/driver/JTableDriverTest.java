@@ -15,22 +15,25 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
-import static org.fest.swing.testing.TestTable.*;
-
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestTable;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestTable;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestTable.*;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.
@@ -67,14 +70,14 @@ public class JTableDriverTest {
   @Test(dataProvider = "cellsToSelect")
   public void shouldReturnValueOfGivenCell(int row, int column) {
     String text = driver.text(dragTable, row, column);
-    assertThat(text).isEqualTo(cellValue(row, column));
+    assertThat(text).isEqualTo(createCellTextUsing(row, column));
   }
 
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
     driver.selectCell(dragTable, row, column);
     String text = driver.selectionText(dragTable);
-    assertThat(text).isEqualTo(cellValue(row, column));
+    assertThat(text).isEqualTo(createCellTextUsing(row, column));
   }
 
   @DataProvider(name = "cellsToSelect") public Object[][] cellsToSelect() {
@@ -92,34 +95,41 @@ public class JTableDriverTest {
     driver.drag(dragTable, 3, 0);
     driver.drop(dropTable, 1, 0);
     assertThat(dragTable.getRowCount()).isEqualTo(dragRowCount - 1);
-    assertThat(dropTable.getValueAt(3, 0)).isEqualTo(cellValue(4, 0));
+    assertThat(dragTable.getValueAt(3, 0)).isEqualTo(createCellTextUsing(4, 0));
     assertThat(dropTable.getRowCount()).isEqualTo(dropRowCount + 1);
-    assertThat(dropTable.getValueAt(2, 0)).isEqualTo(cellValue(3, 0));
+    assertThat(dropTable.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
+    private static final Dimension TABLE_SIZE = new Dimension(400, 200);
+    
     private static final int COLUMN_COUNT = 6;
     private static final int ROW_COUNT = 10;
 
     final TestTable dragTable = new TestTable(ROW_COUNT, COLUMN_COUNT);
-    final TestTable dropTable = new TestTable(data(2, COLUMN_COUNT), columnNames(COLUMN_COUNT));
+    final TestTable dropTable = new TestTable(dropTableData(2, COLUMN_COUNT), columnNames(COLUMN_COUNT));
 
-
-    MyFrame() {
-      super(JTableDriverTest.class);
-      add(new JScrollPane(dragTable));
-      add(new JScrollPane(dropTable));
-      setPreferredSize(new Dimension(600, 400));
-    }
-
-    private static Object[][] data(int rowCount, int columnCount) {
+    private static Object[][] dropTableData(int rowCount, int columnCount) {
       Object[][] data = new Object[rowCount][columnCount];
       for (int i = 0; i < rowCount; i++)
         for (int j = 0; j < columnCount; j++)
-          data[i][j] = cellValue(i, j);
+          data[i][j] = createCellTextUsing(ROW_COUNT + i, j);
       return data;
+    }
+
+    MyFrame() {
+      super(JTableDriverTest.class);
+      add(decorate(dragTable));
+      add(decorate(dropTable));
+      setPreferredSize(new Dimension(600, 400));
+    }
+
+    private Component decorate(JTable table) {
+      JScrollPane scrollPane = new JScrollPane(table);
+      scrollPane.setPreferredSize(TABLE_SIZE);
+      return scrollPane;
     }
   }
 }

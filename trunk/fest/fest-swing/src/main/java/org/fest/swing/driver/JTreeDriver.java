@@ -64,7 +64,7 @@ public class JTreeDriver extends JComponentDriver {
    * </p>
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
@@ -88,7 +88,7 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the row to select.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -184,12 +184,11 @@ public class JTreeDriver extends JComponentDriver {
     }
   }
 
-
   /**
    * Starts a drag operation at the location of the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -201,7 +200,7 @@ public class JTreeDriver extends JComponentDriver {
    * Ends a drag operation at the location of the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.

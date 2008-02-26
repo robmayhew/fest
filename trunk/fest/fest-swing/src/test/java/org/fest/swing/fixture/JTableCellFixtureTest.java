@@ -37,7 +37,7 @@ import org.fest.swing.testing.TestTable;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
-import static org.fest.swing.testing.TestTable.cellValue;
+import static org.fest.swing.testing.TestTable.createCellTextUsing;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.
@@ -96,7 +96,7 @@ public class JTableCellFixtureTest {
   }
 
   @Test public void shouldReturnCellContent() {
-    assertThat(cell.contents()).isEqualTo(cellValue(ROW, COLUMN));
+    assertThat(cell.contents()).isEqualTo(createCellTextUsing(ROW, COLUMN));
   }
   
   @Test public void shouldShowPopupMenuFromCell() {

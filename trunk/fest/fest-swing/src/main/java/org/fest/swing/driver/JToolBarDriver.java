@@ -14,12 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static javax.swing.SwingUtilities.getWindowAncestor;
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.*;
 
 import javax.swing.JToolBar;
@@ -29,6 +23,13 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+
+import static javax.swing.SwingUtilities.getWindowAncestor;
+
+import static org.fest.reflect.core.Reflection.field;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JToolBar}</code>. Unlike <code>JToolBarFixture</code>, this
@@ -118,7 +119,8 @@ public class JToolBarDriver extends JComponentDriver {
   }
 
   /**
-   * Closes a floating <code>{@link JToolBar}</code>, making it go back to its original container in its last known location.
+   * Closes a floating <code>{@link JToolBar}</code>, making it go back to its original container in its last known
+   * location.
    * @param toolBar the target <code>JToolBar</code>.
    */
   public final void unfloat(JToolBar toolBar) {

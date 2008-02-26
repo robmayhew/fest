@@ -42,14 +42,15 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 public class JTextComponentDriverTest {
 
   private RobotFixture robot;
-  private MyFrame frame;
+  private JTextField textField;
   private JTextComponentDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new MyFrame();
-    robot.showWindow(frame, new Dimension(200, 200));
     driver = new JTextComponentDriver(robot);
+    MyFrame frame = new MyFrame();
+    textField = frame.textField;
+    robot.showWindow(frame);
   }
 
   @AfterMethod public void tearDown() {
@@ -57,27 +58,23 @@ public class JTextComponentDriverTest {
   }
 
   @Test public void shouldSelectOnlyGivenText() {
-    driver.selectText(target(), 8, 14);
-    assertThat(target().getSelectedText()).isEqualTo("a test");
+    driver.selectText(textField, 8, 14);
+    assertThat(textField.getSelectedText()).isEqualTo("a test");
   }
 
   @Test public void shouldReplaceText() {
-    target().setText("Hi");
-    driver.replaceText(target(), "Bye");
-    assertThat(target().getText()).isEqualTo("Bye");
+    textField.setText("Hi");
+    driver.replaceText(textField, "Bye");
+    assertThat(textField.getText()).isEqualTo("Bye");
   }
   
-  @Test public void shouldThrowErrorIfIndicesAreOutOfBounds() {
+  @Test public void shouldThrowErrorIfIndicesAreOutOfBoundsWhenSelectingText() {
     try {
-      driver.selectText(target(), 20, 22);
+      driver.selectText(textField, 20, 22);
       fail();
     } catch (ActionFailedException expected) {
       assertThat(expected).message().contains("Unable to get location for index '20' in javax.swing.JTextField");
     }
-  }
-
-  private JTextField target() {
-    return frame.textField;
   }
 
   private static class MyFrame extends TestFrame {
@@ -88,6 +85,7 @@ public class JTextComponentDriverTest {
     MyFrame() {
       super(JTextComponentDriverTest.class);
       add(textField);
+      setPreferredSize(new Dimension(200, 200));
     }
   }
 }

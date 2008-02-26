@@ -26,8 +26,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.fixture.FluentDimension;
-import org.fest.swing.fixture.FluentPoint;
+import org.fest.swing.testing.FluentDimension;
+import org.fest.swing.testing.FluentPoint;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;

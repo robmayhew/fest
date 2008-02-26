@@ -73,9 +73,9 @@ public final class JToolBarLocation {
     if (NORTH.equals(constraint))
       return new Point(dock.getWidth() / 2, insets.top);
     if (EAST.equals(constraint))
-      return new Point(dock.getWidth() - insets.right - 1, verticalDockingVerticalCoordinate(dock, insets, offset));
+      return new Point(dock.getWidth() - insets.right - 1, verticalDockingYCoordinate(dock, insets, offset));
     if (WEST.equals(constraint))
-      return new Point(insets.left, verticalDockingVerticalCoordinate(dock, insets, offset));
+      return new Point(insets.left, verticalDockingYCoordinate(dock, insets, offset));
     int x = dock.getWidth() / 2;
     // Make sure we don't get mistaken for EAST or WEST
     if (x < insets.left + offset)
@@ -96,7 +96,7 @@ public final class JToolBarLocation {
     return toolBar.getOrientation() == HORIZONTAL;
   }
 
-  private int verticalDockingVerticalCoordinate(Container dock, Insets insets, int offset) {
+  private int verticalDockingYCoordinate(Container dock, Insets insets, int offset) {
     int y = dock.getHeight() / 2;
     // Make sure we don't get mistaken for NORTH
     if (y < insets.top + offset) y = insets.top + offset;

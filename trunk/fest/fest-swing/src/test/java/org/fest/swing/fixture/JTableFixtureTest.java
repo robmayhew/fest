@@ -56,13 +56,13 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
 
   @Test(dataProvider = "cellsToSelect")
   public void shouldReturnValueOfGivenCell(TableCell cell) {
-    assertThat(targetFixture.contentsAt(cell)).isEqualTo(cellValue(cell.row, cell.column));
+    assertThat(targetFixture.contentsAt(cell)).isEqualTo(createCellTextUsing(cell.row, cell.column));
   }
 
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
   public void shouldReturnValueOfSelectedCell(TableCell cell) {
     targetFixture.selectCell(cell);
-    assertThat(targetFixture.selectionContents()).isEqualTo(cellValue(cell.row, cell.column));
+    assertThat(targetFixture.selectionContents()).isEqualTo(createCellTextUsing(cell.row, cell.column));
   }
 
   @DataProvider(name = "cellsToSelect")
@@ -105,9 +105,9 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     targetFixture.drag(row(3).column(0));
     dropTargetFixture.drop(row(1).column(0));
     assertThat(target.getRowCount()).isEqualTo(sourceRowCount - 1);
-    assertThat(target.getValueAt(3, 0)).isEqualTo(cellValue(4, 0));
+    assertThat(target.getValueAt(3, 0)).isEqualTo(createCellTextUsing(4, 0));
     assertThat(dropTarget.getRowCount()).isEqualTo(destinationRowCount + 1);
-    assertThat(dropTarget.getValueAt(2, 0)).isEqualTo(cellValue(3, 0));
+    assertThat(dropTarget.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
   protected ComponentFixture<JTable> createFixture() {
@@ -129,7 +129,7 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     Object[][] data = new Object[rowCount][COLUMN_COUNT];
     for (int i = 0; i < rowCount; i++)
       for (int j = 0; j < COLUMN_COUNT; j++)
-        data[i][j] = cellValue(i + ROW_COUNT, j);
+        data[i][j] = createCellTextUsing(i + ROW_COUNT, j);
     dropTarget = new TestTable("dropTarget", data, columnNames(COLUMN_COUNT));
     dropTargetFixture = new JTableFixture(robot(), dropTarget);
     window().add(decorate(dropTarget));

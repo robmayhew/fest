@@ -18,9 +18,6 @@ package org.fest.swing.testing;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-
-import static org.fest.util.Strings.isEmpty;
-
 /**
  * Understands a tree that:
  * <ul>
@@ -36,9 +33,12 @@ public final class TestTree extends JTree {
   public TestTree(String name) {
     this(name, null);
   }
-  
+
+  public TestTree(TreeModel model) {
+    this(null, model);
+  }
+
   public TestTree(String name, TreeModel model) {
-    if (isEmpty(name)) throw new IllegalArgumentException("'name' cannot be null");
     setDragEnabled(true);
     setModel(model);
     setName(name);

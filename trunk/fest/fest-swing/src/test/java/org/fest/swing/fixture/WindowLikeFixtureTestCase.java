@@ -22,6 +22,8 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Condition;
+import org.fest.swing.testing.FluentDimension;
+import org.fest.swing.testing.FluentPoint;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;

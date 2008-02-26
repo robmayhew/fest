@@ -20,11 +20,13 @@ import java.awt.Rectangle;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.driver.TreeCell.lastInPath;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
@@ -45,8 +47,8 @@ public final class JTreeLocation {
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
    * @return the coordinates of the given row.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number
-   *          of visible rows in the <code>JTree</code>.
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of 
+   *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public Point pointAt(JTree tree, int row) {
@@ -116,7 +118,7 @@ public final class JTreeLocation {
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
    * @return the path for the given row.
-   * @throws LocationUnavailableException if the given row is less than zero or equal than or greater than the number of
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -129,7 +131,7 @@ public final class JTreeLocation {
   private int validated(JTree tree, int row) {
     int rowCount = tree.getRowCount();
     if (row >= 0 && row < rowCount) return row;
-    throw new LocationUnavailableException(concat(
+    throw actionFailure(concat(
         "The given row (", valueOf(row), ") should be greater than or equal to 0 and less than ", valueOf(rowCount)));
   }
 }
