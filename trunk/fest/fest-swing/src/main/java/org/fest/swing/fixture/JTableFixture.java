@@ -117,8 +117,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return the value of the selected cell.
    */
   public final String selectionContents() {
-    if (target.getSelectedRowCount() == 0) return null;
-    return contentsAt(target.getSelectedRow(), target.getSelectedColumn());
+    return driver.selectionText(target);
   }
 
   /**

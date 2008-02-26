@@ -18,7 +18,6 @@ package org.fest.swing.testing;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.fest.swing.fixture.StringTransferHandler;
 
 import static org.fest.util.Strings.isEmpty;
 

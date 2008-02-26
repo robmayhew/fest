@@ -20,7 +20,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import org.fest.swing.fixture.StringTransferHandler;
 import org.fest.util.Collections;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;

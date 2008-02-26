@@ -45,6 +45,18 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
+   * Returns the value of the selected cell into a reasonable <code>String</code> representation. Returns
+   * <code>null</code> if one can not be obtained or if the <code>{@link JTable}</code> does not have any selected
+   * cell.
+   * @param table the target <code>JTable</code>.
+   * @return the value of the selected cell.
+   */
+  public String selectionText(JTable table) {
+    if (table.getSelectedRowCount() == 0) return null;
+    return text(table, table.getSelectedRow(), table.getSelectedColumn());
+  }
+
+  /**
    * Convert the value at the given row and row into a reasonable <code>String</code> representation, or
    * <code>null</code> if one cannot be obtained.
    * @param table the target <code>JTable</code>.
@@ -53,7 +65,7 @@ public class JTableDriver extends JComponentDriver {
    * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code> if
    * one cannot be obtained.
    */
-  public final String text(JTable table, int row, int column) {
+  public String text(JTable table, int row, int column) {
     return textFrom(cellRendererComponent(table, row, column));
   }
 
@@ -68,7 +80,7 @@ public class JTableDriver extends JComponentDriver {
    * @param row the given row.
    * @param column the given column.
    */
-  public final void selectCell(JTable table, int row, int column) {
+  public void selectCell(JTable table, int row, int column) {
     if (isCellSelected(table, row, column)) return;
     robot.click(table, pointAt(table, row, column));
   }
@@ -85,7 +97,7 @@ public class JTableDriver extends JComponentDriver {
    * @param mouseButton the mouse button to use.
    * @param times the number of times to click the cell.
    */
-  public final void click(JTable table, int row, int column, MouseButton mouseButton, int times) {
+  public void click(JTable table, int row, int column, MouseButton mouseButton, int times) {
     robot.click(table, pointAt(table, row, column), mouseButton, times);
   }
 
@@ -95,7 +107,7 @@ public class JTableDriver extends JComponentDriver {
    * @param row the given row.
    * @param column the given column.
    */
-  public final void drag(JTable table, int row, int column) {
+  public void drag(JTable table, int row, int column) {
     drag(table, pointAt(table, row, column));
   }
 
@@ -105,7 +117,7 @@ public class JTableDriver extends JComponentDriver {
    * @param row the given row.
    * @param column the given column.
    */
-  public final void drop(JTable table, int row, int column) {
+  public void drop(JTable table, int row, int column) {
     drop(table, pointAt(table, row, column));
   }
 
@@ -117,9 +129,7 @@ public class JTableDriver extends JComponentDriver {
    * @param column the given column.
    * @return the coordinates of the given row and column.
    */
-  public final Point pointAt(JTable table, int row, int column) {
+  public Point pointAt(JTable table, int row, int column) {
     return location.pointAt(table, row, column);
   }
-
-
 }

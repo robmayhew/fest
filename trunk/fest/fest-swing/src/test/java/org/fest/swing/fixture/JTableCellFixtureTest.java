@@ -33,10 +33,11 @@ import org.fest.assertions.AssertExtension;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestTable;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
-import static org.fest.swing.fixture.TestTable.cellValue;
+import static org.fest.swing.testing.TestTable.cellValue;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.
