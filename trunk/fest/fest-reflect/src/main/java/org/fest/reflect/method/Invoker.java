@@ -14,13 +14,13 @@
  */
 package org.fest.reflect.method;
 
-import static org.fest.reflect.util.Accessibles.*;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 import java.lang.reflect.Method;
 
 import org.fest.reflect.exception.ReflectionError;
+
+import static org.fest.reflect.util.Accessibles.*;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands the use of reflection to access a method from an object.
@@ -77,7 +77,9 @@ public final class Invoker<T> {
   private static Method method(String methodName, Class<?> type, Class<?>[] parameterTypes) {
     try {
       return type.getDeclaredMethod(methodName, parameterTypes);
-    } catch (Exception e) {
+    } catch (SecurityException e) {
+      return null;
+    } catch (NoSuchMethodException e) {
       return null;
     }
   }
