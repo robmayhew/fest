@@ -15,20 +15,21 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JTable;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -38,9 +39,19 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JTableFixture extends ComponentFixture<JTable> {
+public class JTableFixture extends ComponentFixture<JTable> implements JPopupMenuInvokerFixture {
 
-  private final JTableDriver driver;
+  private JTableDriver driver;
+
+  /**
+   * Creates a new <code>{@link JTableFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JTable</code>.
+   * @param target the <code>JTable</code> to be managed by this fixture.
+   */
+  public JTableFixture(Robot robot, JTable target) {
+    super(robot, target);
+    createDriver();
+  }
 
   /**
    * Creates a new <code>{@link JTableFixture}</code>.
@@ -49,23 +60,17 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ComponentLookupException if a matching <code>JTable</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTable</code> is found.
    */
-  public JTableFixture(RobotFixture robot, String tableName) {
+  public JTableFixture(Robot robot, String tableName) {
     super(robot, tableName, JTable.class);
-    driver = newTableDriver(robot);
+    createDriver();
   }
 
-  /**
-   * Creates a new <code>{@link JTableFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JTable</code>.
-   * @param target the <code>JTable</code> to be managed by this fixture.
-   */
-  public JTableFixture(RobotFixture robot, JTable target) {
-    super(robot, target);
-    driver = newTableDriver(robot);
+  private void createDriver() {
+    updateDriver(new JTableDriver(robot));
   }
 
-  private JTableDriver newTableDriver(RobotFixture robot) {
-    return new JTableDriver(robot);
+  final void updateDriver(JTableDriver driver) {
+    this.driver = driver;
   }
 
   /**
@@ -75,9 +80,22 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public final JTableCellFixture cell(TableCell cell) {
+  public JTableCellFixture cell(TableCell cell) {
     validate(cell);
     return new JTableCellFixture(this, cell);
+  }
+
+  /**
+   * Simulates a user selecting the given cell (row and column) of this fixture's <code>{@link JTable}</code>.
+   * @param cell the cell to select.
+   * @return this fixture.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public JTableFixture selectCell(TableCell cell) {
+    validate(cell);
+    driver.selectCell(target, cell.row, cell.column);
+    return this;
   }
 
   /**
@@ -88,25 +106,12 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
-  public final JTableFixture selectCells(TableCell... cells) {
+  public JTableFixture selectCells(TableCell... cells) {
     if (cells == null) throw actionFailure("Cells to select cannot be null");
     int controlOrCommandKey = controlOrCommandKey();
-    doPressKey(controlOrCommandKey);
+    driver.pressKey(target, controlOrCommandKey);
     for (TableCell c : cells) selectCell(c);
-    doReleaseKey(controlOrCommandKey);
-    return this;
-  }
-
-  /**
-   * Simulates a user selecting the given cell (row and column) of this fixture's <code>{@link JTable}</code>.
-   * @param cell the cell to select.
-   * @return this fixture.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
-   */
-  public final JTableFixture selectCell(TableCell cell) {
-    validate(cell);
-    driver.selectCell(target, cell.row, cell.column);
+    driver.releaseKey(target, controlOrCommandKey);
     return this;
   }
 
@@ -116,25 +121,8 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * <code>{@link JTable}</code> does not have any selected cell.
    * @return the value of the selected cell.
    */
-  public final String selectionContents() {
+  public String selectionContents() {
     return driver.selectionText(target);
-  }
-
-  /**
-   * Returns the value of the given cell in this fixture's <code>{@link JTable}</code> into a reasonable
-   * <code>String</code> representation, or <code>null</code> if one can not be obtained.
-   * @param cell the given cell.
-   * @return the value of the given cell.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
-   */
-  public final String contentsAt(TableCell cell) {
-    validate(cell);
-    return contentsAt(cell.row, cell.column);
-  }
-
-  private String contentsAt(int row, int column) {
-    return driver.text(target, row, column);
   }
 
   /**
@@ -144,7 +132,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public final JTableFixture drag(TableCell cell) {
+  public JTableFixture drag(TableCell cell) {
     validate(cell);
     driver.drag(target, cell.row, cell.column);
     return this;
@@ -157,9 +145,76 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public final JTableFixture drop(TableCell cell) {
+  public JTableFixture drop(TableCell cell) {
     validate(cell);
     driver.drop(target, cell.row, cell.column);
+    return this;
+  }
+
+  /**
+   * Gives input focus to this fixture's <code>{@link JTable}</code>.
+   * @return this fixture.
+   */
+  public JTableFixture focus() {
+    driver.focus(target);
+    return this;
+  }
+
+  /**
+   * Converts the given cell into a coordinate pair.
+   * @param cell the given cell.
+   * @return the coordinates of the given cell.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public Point pointAt(TableCell cell) {
+    validate(cell);
+    return driver.pointAt(target, cell.row, cell.column);
+  }
+
+  /**
+   * Returns the value of the given cell in this fixture's <code>{@link JTable}</code> into a reasonable
+   * <code>String</code> representation, or <code>null</code> if one can not be obtained.
+   * @param cell the given cell.
+   * @return the value of the given cell.
+   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   */
+  public String contentsAt(TableCell cell) {
+    validate(cell);
+    return contentsAt(cell.row, cell.column);
+  }
+
+  private String contentsAt(int row, int column) {
+    return driver.text(target, row, column);
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
+   * @return this fixture.
+   */
+  public JTableFixture click() {
+    driver.click(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
+   * @param button the button to click.
+   * @return this fixture.
+   */
+  public JTableFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   */
+  public JTableFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
 
@@ -172,7 +227,7 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public final JTableFixture click(TableCell cell, MouseButton mouseButton) {
+  public JTableFixture click(TableCell cell, MouseButton mouseButton) {
     validate(cell);
     driver.click(target, cell.row, cell.column, mouseButton, 1);
     return this;
@@ -187,61 +242,15 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public final JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
+  public JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
     validate(cell);
     driver.click(target, cell.row, cell.column, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
 
-  /**
-   * Converts the given cell into a coordinate pair.
-   * @param cell the given cell.
-   * @return the coordinates of the given cell.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
-   */
-  public final Point pointAt(TableCell cell) {
-    validate(cell);
-    return driver.pointAt(target, cell.row, cell.column);
-  }
-
   private void validate(TableCell cell) {
     if (cell == null) throw actionFailure("Cell cannot be null");
     cell.validateBoundsIn(target);
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
-   * @return this fixture.
-   */
-  public final JTableFixture click() {
-    return (JTableFixture)doClick();
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
-   * @param button the button to click.
-   * @return this fixture.
-   */
-  public final JTableFixture click(MouseButton button) {
-    return (JTableFixture)doClick(button);
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @return this fixture.
-   */
-  public final JTableFixture click(MouseClickInfo mouseClickInfo) {
-    return (JTableFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JTable}</code>.
-   * @return this fixture.
-   */
-  public final JTableFixture rightClick() {
-    return (JTableFixture)doRightClick();
   }
 
   /**
@@ -252,16 +261,18 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * </p>
    * @return this fixture.
    */
-  public final JTableFixture doubleClick() {
-    return (JTableFixture)doDoubleClick();
+  public JTableFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
-   * Gives input focus to this fixture's <code>{@link JTable}</code>.
+   * Simulates a user right-clicking this fixture's <code>{@link JTable}</code>.
    * @return this fixture.
    */
-  public final JTableFixture focus() {
-    return (JTableFixture)doFocus();
+  public JTableFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
@@ -271,8 +282,9 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JTableFixture)doPressAndReleaseKeys(keyCodes);
+  public JTableFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -281,8 +293,9 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableFixture pressKey(int keyCode) {
-    return (JTableFixture)doPressKey(keyCode);
+  public JTableFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -291,26 +304,19 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableFixture releaseKey(int keyCode) {
-    return (JTableFixture)doReleaseKey(keyCode);
+  public JTableFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTable}</code> is visible.
+   * Asserts that this fixture's <code>{@link JTable}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JTable</code> is not visible.
+   * @throws AssertionError is the managed <code>JTable</code> is enabled.
    */
-  public final JTableFixture requireVisible() {
-    return (JTableFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTable}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>JTable</code> is visible.
-   */
-  public final JTableFixture requireNotVisible() {
-    return (JTableFixture)assertNotVisible();
+  public JTableFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -318,8 +324,9 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @throws AssertionError is the managed <code>JTable</code> is disabled.
    */
-  public final JTableFixture requireEnabled() {
-    return (JTableFixture)assertEnabled();
+  public JTableFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -328,16 +335,48 @@ public class JTableFixture extends ComponentFixture<JTable> {
    * @return this fixture.
    * @throws WaitTimedOutError if the managed <code>JTable</code> is never enabled.
    */
-  public final JTableFixture requireEnabled(Timeout timeout) {
-    return (JTableFixture)assertEnabled(timeout);
+  public JTableFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTable}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JTable}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError is the managed <code>JTable</code> is enabled.
+   * @throws AssertionError if the managed <code>JTable</code> is visible.
    */
-  public final JTableFixture requireDisabled() {
-    return (JTableFixture)assertDisabled();
+  public JTableFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTable}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JTable</code> is not visible.
+   */
+  public JTableFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

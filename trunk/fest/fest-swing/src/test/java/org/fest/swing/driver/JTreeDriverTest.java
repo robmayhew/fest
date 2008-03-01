@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
 
@@ -41,7 +41,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
  */
 public class JTreeDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JTree dragTree;
   private JTree dropTree;
   private JTreeDriver driver;

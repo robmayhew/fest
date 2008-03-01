@@ -14,11 +14,15 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JPanel;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -29,8 +33,10 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JPanelFixture extends ContainerFixture<JPanel> {
+public class JPanelFixture extends ContainerFixture<JPanel> implements JPopupMenuInvokerFixture {
 
+  private JComponentDriver driver;
+  
   /**
    * Creates a new <code>{@link JPanelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JPanel</code>.
@@ -38,8 +44,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @throws ComponentLookupException if a matching <code>JPanel</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JPanel</code> is found.
    */
-  public JPanelFixture(RobotFixture robot, String panelName) {
+  public JPanelFixture(Robot robot, String panelName) {
     super(robot, panelName, JPanel.class);
+    createDriver();
   }
 
   /**
@@ -47,16 +54,26 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @param robot performs simulation of user events on the given <code>JPanel</code>.
    * @param target the <code>JPanel</code> to be managed by this fixture.
    */
-  public JPanelFixture(RobotFixture robot, JPanel target) {
+  public JPanelFixture(Robot robot, JPanel target) {
     super(robot, target);
+    createDriver();
   }
 
+  private void createDriver() {
+    updateDriver(new JComponentDriver(robot));
+  }
+  
+  final void updateDriver(JComponentDriver driver) {
+    this.driver = driver;
+  }
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
-  public final JPanelFixture click() {
-    return (JPanelFixture) doClick();
+  public JPanelFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -64,8 +81,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JPanelFixture click(MouseButton button) {
-    return (JPanelFixture) doClick(button);
+  public JPanelFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -73,32 +91,36 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JPanelFixture click(MouseClickInfo mouseClickInfo) {
-    return (JPanelFixture) doClick(mouseClickInfo);
+  public JPanelFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
-  public final JPanelFixture rightClick() {
-    return (JPanelFixture) doRightClick();
+  public JPanelFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
-  public final JPanelFixture doubleClick() {
-    return (JPanelFixture) doDoubleClick();
+  public JPanelFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JPanel}</code>.
    * @return this fixture.
    */
-  public final JPanelFixture focus() {
-    return (JPanelFixture) doFocus();
+  public JPanelFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -108,8 +130,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPanelFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JPanelFixture) doPressAndReleaseKeys(keyCodes);
+  public JPanelFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -118,8 +141,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPanelFixture pressKey(int keyCode) {
-    return (JPanelFixture) doPressKey(keyCode);
+  public JPanelFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -128,8 +152,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPanelFixture releaseKey(int keyCode) {
-    return (JPanelFixture) doReleaseKey(keyCode);
+  public JPanelFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -137,8 +162,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPanel</code> is not visible.
    */
-  public final JPanelFixture requireVisible() {
-    return (JPanelFixture) assertVisible();
+  public JPanelFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -146,8 +172,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPanel</code> is visible.
    */
-  public final JPanelFixture requireNotVisible() {
-    return (JPanelFixture) assertNotVisible();
+  public JPanelFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -155,8 +182,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPanel</code> is disabled.
    */
-  public final JPanelFixture requireEnabled() {
-    return (JPanelFixture) assertEnabled();
+  public JPanelFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -165,8 +193,9 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JPanel</code> is never enabled.
    */
-  public final JPanelFixture requireEnabled(Timeout timeout) {
-    return (JPanelFixture)assertEnabled(timeout);
+  public JPanelFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -174,7 +203,28 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPanel</code> is enabled.
    */
-  public final JPanelFixture requireDisabled() {
-    return (JPanelFixture) assertDisabled();
+  public JPanelFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

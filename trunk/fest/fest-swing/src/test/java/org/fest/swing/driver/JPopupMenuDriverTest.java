@@ -15,21 +15,23 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
-import static org.fest.util.Arrays.array;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JPopupMenuDriver}</code>.
@@ -39,7 +41,7 @@ import org.testng.annotations.Test;
 @Test(groups = FUNCTIONAL)
 public class JPopupMenuDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JPopupMenuDriver driver;
   private MyFrame frame;
 
@@ -47,7 +49,6 @@ public class JPopupMenuDriverTest {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
     frame = new MyFrame();
     robot.showWindow(frame);
-    assertThat(frame.isVisible()).isTrue();
     driver = new JPopupMenuDriver(robot);
   }
 

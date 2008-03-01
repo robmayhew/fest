@@ -5,6 +5,11 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="0.9" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Added method 'showPopupMenuAt(String)' to JListFixture.
+      </action>
+    </release>
     <release version="0.8.1" date="2008-02-04" description="Subsequent release">
       <action dev="alruiz" type="add">
         Updated dependency versions: fest-assert-0.9.1, fest-reflect-0.3, fest-util-0.3.

@@ -31,6 +31,7 @@ import static java.awt.event.KeyEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.util.Swing.centerOf;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.
@@ -39,7 +40,7 @@ import static org.fest.swing.core.Pause.pause;
  */
 public class RobotFixtureTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private MyFrame frame;
   
   @BeforeMethod public void setUp() {
@@ -56,7 +57,7 @@ public class RobotFixtureTest {
   @Test(dataProvider = "clickingData") 
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
     ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
-    robot.click(frame.textBox, button, times);
+    robot.click(frame.textBox, centerOf(frame.textBox), button, times);
     assertThat(recorder).clicked(button).timesClicked(times);
   }
   

@@ -15,13 +15,20 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JPanel;
+import java.awt.Point;
+
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.GUITest;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JTabbedPaneDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Arrays.array;
@@ -32,47 +39,89 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest
 public class JTabbedPaneFixtureTest extends ComponentFixtureTestCase<JTabbedPane> {
 
+  private JTabbedPaneDriver driver;
+  private JTabbedPane target;
   private JTabbedPaneFixture fixture;
   
-  @Test(dataProvider = "tabIndexProvider") 
-  public void shouldSelectTabWithGivenIndex(int index) {
-    fixture.selectTab(index);
-    assertThat(fixture.target.getSelectedIndex()).isEqualTo(index);
-  }
-  
-  @DataProvider(name = "tabIndexProvider")
-  public Object[][] tabIndexProvider() {
-   return new Object[][] { { 0 }, { 1 } };
-  }
-  
-  @Test(dataProvider = "tabTextProvider") 
-  public void shouldSelectTabWithGivenText(String tabName, int expectedIndex) {
-    fixture.selectTab(tabName);
-    assertThat(fixture.target.getSelectedIndex()).isEqualTo(expectedIndex);
-  }
-  
-  @DataProvider(name = "tabTextProvider")
-  public Object[][] tabTextProvider() {
-   return new Object[][] { { "First", 0 }, { "Second", 1 } };
+  void onSetUp(Robot robot) {
+    driver = createMock(JTabbedPaneDriver.class);
+    target = new JTabbedPane();
+    fixture = new JTabbedPaneFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  @Test public void shouldReturnAllTabs() {
-    assertThat(fixture.tabTitles()).isEqualTo(array("First", "Second"));
+  @Test public void shouldSelectTabWithIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectTab(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectTab(8));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldSelectTabWithText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectTab(target, "A Tab");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectTab("A Tab"));
+      }
+    }.run();
   }
 
-  protected ComponentFixture<JTabbedPane> createFixture() {
-    fixture = new JTabbedPaneFixture(robot(), "target");
-    return fixture;
+  @Test public void shouldReturnTabTitles() {
+    final String[] titles = array("One", "Two");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.tabTitles(target)).andReturn(titles);
+      }
+      
+      protected void codeToTest() {
+        String[] result = fixture.tabTitles();
+        assertThat(result).isSameAs(titles);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  protected JTabbedPane createTarget() {
-    JTabbedPane target = new JTabbedPane();
-    target.setName("target");
-    target.addTab("First", new JPanel());
-    target.addTab("Second", new JPanel());
-    return target;
-  }
+  ComponentDriver driver() { return driver; }
+  JTabbedPane target() { return target; }
+  ComponentFixture<JTabbedPane> fixture() { return fixture; }
 }

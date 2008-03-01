@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.lang.String.valueOf;
@@ -39,7 +39,7 @@ public class JSliderDriver extends JComponentDriver {
    * Creates a new </code>{@link JSliderDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JSliderDriver(RobotFixture robot) {
+  public JSliderDriver(Robot robot) {
     super(robot);
     location = new JSliderLocation();
   }
@@ -49,7 +49,7 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    */
   public void increment(JSlider slider) {
-    robot.click(slider, location.pointAt(slider, slider.getMaximum()));
+    click(slider, location.pointAt(slider, slider.getMaximum()));
   }
 
   /**
@@ -57,7 +57,7 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    */
   public void decrement(JSlider slider) {
-    robot.click(slider, location.pointAt(slider, slider.getMinimum()));
+    click(slider, location.pointAt(slider, slider.getMinimum()));
   }
 
   /**

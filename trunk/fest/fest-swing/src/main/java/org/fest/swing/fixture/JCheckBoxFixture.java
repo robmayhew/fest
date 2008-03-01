@@ -15,14 +15,16 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JCheckBox;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JCheckBox}</code> and verification of the state of such 
@@ -32,6 +34,18 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
 
+  private AbstractButtonDriver driver;
+  
+  /**
+   * Creates a new <code>{@link JCheckBoxFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JCheckBox</code>.
+   * @param target the <code>JCheckBox</code> to be managed by this fixture.
+   */
+  public JCheckBoxFixture(Robot robot, JCheckBox target) {
+    super(robot, target);
+    createDriver();
+  }
+
   /**
    * Creates a new <code>{@link JCheckBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JCheckBox</code>.
@@ -39,43 +53,44 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @throws ComponentLookupException if a matching <code>JCheckBox</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JCheckBox</code> is found.
    */
-  public JCheckBoxFixture(RobotFixture robot, String checkBoxName) {
+  public JCheckBoxFixture(Robot robot, String checkBoxName) {
     super(robot, checkBoxName, JCheckBox.class);
-  }
-  
-  /**
-   * Creates a new <code>{@link JCheckBoxFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JCheckBox</code>.
-   * @param target the <code>JCheckBox</code> to be managed by this fixture.
-   */
-  public JCheckBoxFixture(RobotFixture robot, JCheckBox target) {
-    super(robot, target);
+    createDriver();
   }
 
+  private void createDriver() {
+    updateDriver(new AbstractButtonDriver(robot));
+  }
+  
+  final void updateDriver(AbstractButtonDriver driver) {
+    this.driver = driver;
+  }
+  
   /**
    * Checks (or selects) this fixture's <code>{@link JCheckBox}</code> only it is not already checked.
    * @return this fixture.
    */
-  public final JCheckBoxFixture check() {
-    if (target.isSelected()) return this;
-    return click();
+  public JCheckBoxFixture check() {
+    driver.select(target);
+    return this;
   }
 
   /**
    * Unchecks this fixture's <code>{@link JCheckBox}</code> only if it is checked.
    * @return this fixture.
    */
-  public final JCheckBoxFixture uncheck() {
-    if (!target.isSelected()) return this;
-    return click();
+  public JCheckBoxFixture uncheck() {
+    driver.unselect(target);
+    return this;
   }
-
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
    */
-  public final JCheckBoxFixture click() {
-    return (JCheckBoxFixture)doClick();
+  public JCheckBoxFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -83,8 +98,9 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JCheckBoxFixture click(MouseButton button) {
-    return (JCheckBoxFixture)doClick(button);
+  public JCheckBoxFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -92,34 +108,38 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JCheckBoxFixture click(MouseClickInfo mouseClickInfo) {
-    return (JCheckBoxFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JCheckBox}</code>.
-   * @return this fixture.
-   */
-  public final JCheckBoxFixture rightClick() {
-    return (JCheckBoxFixture)doRightClick();
+  public JCheckBoxFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
    */
-  public final JCheckBoxFixture doubleClick() {
-    return (JCheckBoxFixture)doDoubleClick();
+  public JCheckBoxFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JCheckBox}</code>.
+   * @return this fixture.
+   */
+  public JCheckBoxFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
    */
-  public final JCheckBoxFixture focus() {
-    return (JCheckBoxFixture)doFocus();
+  public JCheckBoxFixture focus() {
+    driver.focus(target);
+    return this;
   }
-  
+
   /**
    * Simulates a user pressing and releasing the given keys on the <code>{@link JCheckBox}</code> managed by this
    * fixture.
@@ -127,18 +147,20 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JCheckBoxFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JCheckBoxFixture)doPressAndReleaseKeys(keyCodes);
+  public JCheckBoxFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link JCheckBox}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JCheckBoxFixture pressKey(int keyCode) {
-    return (JCheckBoxFixture)doPressKey(keyCode);
+  public JCheckBoxFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
   
   /**
@@ -147,55 +169,29 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JCheckBoxFixture releaseKey(int keyCode) {
-    return (JCheckBoxFixture)doReleaseKey(keyCode);
+  public JCheckBoxFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
   
   /**
-   * Asserts that the text of this fixture's <code>{@link JCheckBox}</code> is equal to the specified 
-   * <code>String</code>. 
-   * @param expected the text to match.
+   * Asserts that this fixture's <code>{@link JCheckBox}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if the text of the target JCheckBox is not equal to the given one.
+   * @throws AssertionError if this fixture's <code>JCheckBox</code> is enabled.
    */
-  public final JCheckBoxFixture requireText(String expected) {
-    assertThat(text()).as(formattedPropertyName("text")).isEqualTo(expected);
+  public JCheckBoxFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
-
-  /**
-   * Returns the text of this fixture's <code>{@link JCheckBox}</code>. 
-   * @return the text of this fixture's <code>JCheckBox</code>. 
-   */
-  public final String text() {
-    return target.getText();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JCheckBox}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JCheckBox</code> is not visible.
-   */
-  public final JCheckBoxFixture requireVisible() {
-    return (JCheckBoxFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JCheckBox}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JCheckBox</code> is visible.
-   */
-  public final JCheckBoxFixture requireNotVisible() {
-    return (JCheckBoxFixture)assertNotVisible();
-  }
-
+  
   /**
    * Asserts that this fixture's <code>{@link JCheckBox}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JCheckBox</code> is disabled.
    */
-  public final JCheckBoxFixture requireEnabled() {
-    return (JCheckBoxFixture)assertEnabled();
+  public JCheckBoxFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
   
   /**
@@ -204,26 +200,9 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JCheckBox</code> is never enabled.
    */
-  public final JCheckBoxFixture requireEnabled(Timeout timeout) {
-    return (JCheckBoxFixture)assertEnabled(timeout);
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JCheckBox}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JCheckBox</code> is enabled.
-   */
-  public final JCheckBoxFixture requireDisabled() {
-    return (JCheckBoxFixture)assertDisabled();
-  }
-
-  /**
-   * Verifies that this fixture's <code>{@link JCheckBox}</code> is selected.
-   * @return this fixture.
-   * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is not selected.
-   */
-  public final JCheckBoxFixture requireSelected() {
-    return (JCheckBoxFixture)assertSelected();
+  public JCheckBoxFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -231,7 +210,78 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is selected.
    */
-  public final JCheckBoxFixture requireNotSelected() {
-    return (JCheckBoxFixture)assertNotSelected();
+  public JCheckBoxFixture requireNotSelected() {
+    driver.requireNotSelected(target);
+    return this;
+  }
+
+  /**
+   * Verifies that this fixture's <code>{@link JCheckBox}</code> is selected.
+   * @return this fixture.
+   * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is not selected.
+   */
+  public JCheckBoxFixture requireSelected() {
+    driver.requireSelected(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JCheckBox}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JCheckBox</code> is visible.
+   */
+  public JCheckBoxFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JCheckBox}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JCheckBox</code> is not visible.
+   */
+  public JCheckBoxFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that the text of this fixture's <code>{@link JCheckBox}</code> is equal to the specified 
+   * <code>String</code>. 
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target JCheckBox is not equal to the given one.
+   */
+  public JCheckBoxFixture requireText(String expected) {
+    driver.requireText(target, expected);
+    return this;
+  }
+  
+  /**
+   * Returns the text of this fixture's <code>{@link JCheckBox}</code>. 
+   * @return the text of this fixture's <code>JCheckBox</code>. 
+   */
+  public String text() {
+    return target.getText();
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

@@ -15,12 +15,20 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Point;
+
+import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static javax.swing.SwingConstants.HORIZONTAL;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JSliderDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -31,60 +39,112 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class JSliderFixtureTest extends ComponentFixtureTestCase<JSlider> {
   
+  private JSliderDriver driver;
+  private JSlider target;
   private JSliderFixture fixture;
-
-  @Test public void shouldIncrementValue() {
-    fixture.increment();
-    assertThat(fixture.target.getValue()).isGreaterThan(15);
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JSliderDriver.class);
+    target = new JSlider();
+    fixture = new JSliderFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  @Test public void shouldDecrementValue() {
-    fixture.decrement();
-    assertThat(fixture.target.getValue()).isLessThan(15);
+  @Test public void shouldSlideToValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.slide(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.slideTo(8));
+      }
+    }.run();
   }
   
-  @Test(dataProvider = "valueProvider")
-  public void shouldSlideToValue(int value) {
-    fixture.slideTo(value);
-    assertThat(fixture.target.getValue()).isEqualTo(value);
+  @Test public void shouldSlideToMax() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.slideToMax(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.slideToMax());
+      }
+    }.run();
   }
 
-  @DataProvider(name = "valueProvider")
-  public Object[][] valueProvider() {
-    return new Object[][] { 
-        { 5 }, 
-        { 10 },
-        { 28 },
-        { 20 }
-    };
+  @Test public void shouldSlideToMin() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.slideToMin(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.slideToMin());
+      }
+    }.run();
+  }
+
+  @Test public void shouldIncrement() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.increment(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.increment());
+      }
+    }.run();
+  }
+
+  @Test public void shouldDecrement() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.decrement(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.decrement());
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
   
-  @Test public void shouldSlideToMaximum() {
-    fixture.slideToMax();
-    JSlider slider = fixture.target;
-    assertThat(slider.getValue()).isEqualTo(slider.getMaximum());
-  }
-  
-  @Test public void shouldSlideToMinimum() {
-    fixture.slideToMin();
-    JSlider slider = fixture.target;
-    assertThat(slider.getValue()).isEqualTo(slider.getMinimum());
-  }
-  
-  protected ComponentFixture<JSlider> createFixture() {
-    fixture = new JSliderFixture(robot(), "target");
-    return fixture;
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  protected JSlider createTarget() {
-    JSlider target = new JSlider();
-    target.setName("target");
-    target.setOrientation(HORIZONTAL);
-    target.setMinimum(0);
-    target.setMaximum(30);
-    target.setValue(15);
-    return target;
-  }
-
-
+  ComponentDriver driver() { return driver; }
+  JSlider target() { return target; }
+  ComponentFixture<JSlider> fixture() { return fixture; }
 }

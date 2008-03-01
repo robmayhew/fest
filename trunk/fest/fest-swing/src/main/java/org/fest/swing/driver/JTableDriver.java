@@ -14,15 +14,15 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-
 import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JTable;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>,
@@ -40,7 +40,7 @@ public class JTableDriver extends JComponentDriver {
    * Creates a new </code>{@link JTableDriver}</code>.
    * @param robot the robot to use to simulate user events.
    */
-  public JTableDriver(RobotFixture robot) {
+  public JTableDriver(Robot robot) {
     super(robot);
   }
 
@@ -82,7 +82,7 @@ public class JTableDriver extends JComponentDriver {
    */
   public void selectCell(JTable table, int row, int column) {
     if (isCellSelected(table, row, column)) return;
-    robot.click(table, pointAt(table, row, column));
+    click(table, pointAt(table, row, column));
   }
 
   private boolean isCellSelected(JTable table, int row, int column) {

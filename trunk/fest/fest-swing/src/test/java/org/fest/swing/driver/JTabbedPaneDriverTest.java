@@ -26,7 +26,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.assertions.IntAssert;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestFrame;
 
@@ -46,7 +46,7 @@ import static org.fest.util.Strings.concat;
 @Test(groups = FUNCTIONAL)
 public class JTabbedPaneDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JTabbedPane tabbedPane;
   private JTabbedPaneDriver driver;
   

@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import java.awt.Component;
 import java.awt.Point;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
@@ -36,13 +37,13 @@ import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
  */
 final class DragAndDrop {
 
-  private final RobotFixture robot;
+  private final Robot robot;
 
   /**
    * Creates a new </code>{@link DragAndDrop}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  DragAndDrop(RobotFixture robot) {
+  DragAndDrop(Robot robot) {
     this.robot = robot;
   }
 

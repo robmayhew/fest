@@ -19,18 +19,18 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.UIManager;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.ClickRecorder;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JFileChooserDriver;
 
-import static javax.swing.JFileChooser.*;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Files.*;
-import static org.fest.util.Strings.isEmpty;
 
 /**
  * Tests for <code>{@link JFileChooserFixture}</code>.
@@ -39,93 +39,100 @@ import static org.fest.util.Strings.isEmpty;
  */
 public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChooser> {
 
+  private JFileChooserDriver driver;
+  private JFileChooser target;
   private JFileChooserFixture fixture;
-
-  @Test public void shouldFindCancelButton() {
-    JButtonFixture cancelButton = fixture.cancelButton();
-    assertThat(cancelButton.target).isNotNull();
-    cancelButton.requireText(UIManager.getString("FileChooser.cancelButtonText"));
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JFileChooserDriver.class);
+    target = new JFileChooser();
+    fixture = new JFileChooserFixture(robot, target);
+    fixture.updateDriver(driver);
   }
   
-  @Test(dependsOnMethods = "shouldFindCancelButton")
-  public void shouldCancelFileSelection() {
-    JButton cancelButton = fixture.cancelButton().target;
-    ClickRecorder recorder = ClickRecorder.attachTo(cancelButton);
-    fixture.cancel();
-    assertThat(recorder).wasClicked();
+  @Test public void shouldClickApproveButton() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.clickApproveButton(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        fixture.approve();
+      }
+    }.run();
+  }
+  
+  @Test public void shouldReturnApproveButton() {
+    final JButton approveButton = new JButton();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.approveButton(target)).andReturn(approveButton);
+      }
+
+      protected void codeToTest() {
+        JButtonFixture result = fixture.approveButton();
+        assertThat(result.target).isSameAs(approveButton);
+      }
+    }.run();
+  }
+
+  @Test public void shouldClickCancelButton() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.clickCancelButton(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        fixture.cancel();
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnCancelButton() {
+    final JButton cancelButton = new JButton();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.cancelButton(target)).andReturn(cancelButton);
+      }
+
+      protected void codeToTest() {
+        JButtonFixture result = fixture.cancelButton();
+        assertThat(result.target).isSameAs(cancelButton);
+      }
+    }.run();
   }
   
   @Test public void shouldSelectFile() {
-    File temporaryFile = newTemporaryFile();
-    fixture.selectFile(temporaryFile);
-    assertThat(fixture.target.getSelectedFile()).isSameAs(temporaryFile);
-    temporaryFile.delete();
-  }
-  
-  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = ActionFailedException.class)
-  public void shouldFailIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
-    File temporaryFile = newTemporaryFile();
-    fixture.target.setFileSelectionMode(DIRECTORIES_ONLY);
-    fixture.selectFile(temporaryFile);
-    temporaryFile.delete();
-  }
-  
-  @Test(dependsOnMethods = "shouldSelectFile", expectedExceptions = ActionFailedException.class)
-  public void shouldFailIfChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
-    File temporaryFolder = newTemporaryFolder();
-    fixture.target.setFileSelectionMode(FILES_ONLY);
-    fixture.selectFile(temporaryFolder);
-    temporaryFolder.delete();
-  }
-  
-  @Test public void shouldFindApproveButton() {
-    JButtonFixture approveButton = fixture.approveButton();
-    assertThat(approveButton.target).isNotNull();
-    approveButton.requireText(approveButtonText());
-  }
-  
-  @Test(dependsOnMethods = { "shouldSelectFile", "shouldFindApproveButton" })
-  public void shouldApproveFileSelection() {
-    File temporaryFile = newTemporaryFile();
-    fixture.selectFile(temporaryFile);
-    JButton approveButton = fixture.approveButton().target;
-    ClickRecorder recorder = ClickRecorder.attachTo(approveButton);
-    fixture.approve();
-    assertThat(recorder).wasClicked();
-    temporaryFile.delete();
+    final File file = new File("fake");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectFile(target, file);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectFile(file));
+      }
+    }.run();
   }
 
-  private String approveButtonText() {
-    JFileChooser fileChooser = fixture.target;
-    String text = fileChooser.getApproveButtonText();
-    if (!isEmpty(text)) return text;
-    return fileChooser.getUI().getApproveButtonText(fileChooser);
-  }
-  
-  @Test public void shouldFindFileNameTextBox() {
-    JTextComponentFixture fileNameTextBox = fixture.fileNameTextBox();
-    assertThat(fileNameTextBox).isNotNull();
-  }
-  
   @Test public void shouldSetCurrentDirectory() {
-    String homePath = System.getProperty("user.home");
-    File userHome = new File(homePath);
-    assertThat(userHome.isDirectory()).isTrue();
-    assertThat(userHome.getAbsolutePath()).isNotEqualTo(fixture.target.getCurrentDirectory().getAbsolutePath());
-    fixture.setCurrentDirectory(userHome);
-    assertThat(userHome.getAbsolutePath()).isEqualTo(fixture.target.getCurrentDirectory().getAbsolutePath());
-  }
-  
-  protected JFileChooser createTarget() {
-    JFileChooser target = new JFileChooser();
-    target.setName("target");
-    target.setCurrentDirectory(temporaryFolder());
-    target.setDialogType(OPEN_DIALOG);
-    return target;
+    final File file = new File("fake");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.setCurrentDirectory(target(), file);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.setCurrentDirectory(file));
+      }
+    }.run();
   }
 
-  protected ComponentFixture<JFileChooser> createFixture() {
-    fixture = new JFileChooserFixture(robot(), "target");
-    return fixture;
-  }
+  ComponentDriver driver() { return driver; }
+  JFileChooser target() { return target; }
+  ComponentFixture<JFileChooser> fixture() { return fixture; }
 }

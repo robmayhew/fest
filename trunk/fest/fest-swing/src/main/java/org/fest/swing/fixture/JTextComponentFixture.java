@@ -15,13 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.isEmpty;
+import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -34,9 +34,20 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JTextComponentFixture extends ComponentFixture<JTextComponent> implements TextInputFixture {
+public class JTextComponentFixture extends ComponentFixture<JTextComponent> 
+    implements TextInputFixture, JPopupMenuInvokerFixture {
 
   private final JTextComponentDriver driver;
+
+  /**
+   * Creates a new <code>{@link JTextComponentFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JTextComponent</code>.
+   * @param target the <code>JTextComponent</code> to be managed by this fixture.
+   */
+  public JTextComponentFixture(Robot robot, JTextComponent target) {
+    super(robot, target);
+    driver = newTextComponentDriver();
+  }
 
   /**
    * Creates a new <code>{@link JTextComponentFixture}</code>.
@@ -46,18 +57,8 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @throws ComponentLookupException if a matching <code>JTextComponent</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTextComponent</code> is found.
    */
-  public JTextComponentFixture(RobotFixture robot, String textComponentName) {
+  public JTextComponentFixture(Robot robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);
-    driver = newTextComponentDriver();
-  }
-
-  /**
-   * Creates a new <code>{@link JTextComponentFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JTextComponent</code>.
-   * @param target the <code>JTextComponent</code> to be managed by this fixture.
-   */
-  public JTextComponentFixture(RobotFixture robot, JTextComponent target) {
-    super(robot, target);
     driver = newTextComponentDriver();
   }
 
@@ -66,11 +67,45 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
   }
 
   /**
+   * Simulates a user selecting the given text contained in this fixture's <code>{@link JTextComponent}</code>.
+   * @param text the text to select.
+   * @return this fixture.
+   * @throws ActionFailedException if the selecting the text in the given range fails.
+   */
+  public JTextComponentFixture select(String text) {
+    driver.selectText(target, text);
+    return this;
+  }
+
+  /**
+   * Simulates a user selecting a portion of the text contained in this fixture's <code>{@link JTextComponent}</code>.
+   * @param start index where selection should start.
+   * @param end index where selection should end.
+   * @return this fixture.
+   * @throws ActionFailedException if the selecting the text in the given range fails.
+   */
+  public JTextComponentFixture selectText(int start, int end) {
+    driver.selectText(target, start, end);
+    return this;
+  }
+
+  /**
+   * Simulates a user selecting all the text contained in this fixture's <code>{@link JTextComponent}</code>.
+   * @return this fixture.
+   * @throws ActionFailedException if the selecting the text in the given range fails.
+   */
+  public JTextComponentFixture selectAll() {
+    driver.selectAll(target);
+    return this;
+  }
+
+  /**
    * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
-  public final JTextComponentFixture click() {
-    return (JTextComponentFixture)doClick();
+  public JTextComponentFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -78,8 +113,9 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JTextComponentFixture click(MouseButton button) {
-    return (JTextComponentFixture)doClick(button);
+  public JTextComponentFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -87,43 +123,35 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JTextComponentFixture click(MouseClickInfo mouseClickInfo) {
-    return (JTextComponentFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JTextComponent}</code>.
-   * @return this fixture.
-   */
-  public final JTextComponentFixture rightClick() {
-    return (JTextComponentFixture)doRightClick();
+  public JTextComponentFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
-  public final JTextComponentFixture doubleClick() {
-    return (JTextComponentFixture)doDoubleClick();
+  public JTextComponentFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
-   * Gives input focus to this fixture's <code>{@link JTextComponent}</code>.
+   * Simulates a user right-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
-  public final JTextComponentFixture focus() {
-    return (JTextComponentFixture)doFocus();
+  public JTextComponentFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
-   * Asserts that the text of this fixture's <code>{@link JTextComponent}</code> is equal to the specified
-   * <code>String</code>.
-   * @param expected the text to match.
+   * Simulates a user deleting all the text in this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
-   * @throws AssertionError if the text of the target component is not equal to the given one.
    */
-  public final JTextComponentFixture requireText(String expected) {
-    assertThat(text()).as(textProperty()).isEqualTo(expected);
+  public JTextComponentFixture deleteText() {
+    driver.deleteText(target);
     return this;
   }
 
@@ -132,18 +160,17 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @param text the text to enter.
    * @return this fixture.
    */
-  public final JTextComponentFixture enterText(String text) {
-    focus();
-    robot.enterText(text);
+  public JTextComponentFixture enterText(String text) {
+    driver.enterText(target, text);
     return this;
   }
 
   /**
-   * Simulates a user deleting all the text in this fixture's <code>{@link JTextComponent}</code>.
+   * Gives input focus to this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */
-  public final JTextComponentFixture deleteText() {
-    target.setText("");
+  public JTextComponentFixture focus() {
+    driver.focus(target);
     return this;
   }
 
@@ -154,8 +181,9 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTextComponentFixture pressAndReleaseKeys(int...keyCodes) {
-    return (JTextComponentFixture)doPressAndReleaseKeys(keyCodes);
+  public JTextComponentFixture pressAndReleaseKeys(int...keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -164,8 +192,9 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTextComponentFixture pressKey(int keyCode) {
-    return (JTextComponentFixture)doPressKey(keyCode);
+  public JTextComponentFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -174,68 +203,21 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTextComponentFixture releaseKey(int keyCode) {
-    return (JTextComponentFixture)doReleaseKey(keyCode);
-  }
-
-  /**
-   * Returns the text of this fixture's <code>{@link JTextComponent}</code>.
-   * @return the text of this fixture's <code>JTextComponent</code>.
-   */
-  public final String text() {
-    return target.getText();
-  }
-
-  /**
-   * Simulates a user selecting all the text contained in this fixture's <code>{@link JTextComponent}</code>.
-   * @return this fixture.
-   * @throws ActionFailedException if the selecting the text in the given range fails.
-   */
-  public final JTextComponentFixture selectAll() {
-    return selectText(0, target.getDocument().getLength());
-  }
-
-  /**
-   * Simulates a user selecting the given text contained in this fixture's <code>{@link JTextComponent}</code>.
-   * @param text the text to select.
-   * @return this fixture.
-   * @throws ActionFailedException if the selecting the text in the given range fails.
-   */
-  public final JTextComponentFixture select(String text) {
-    int indexFound = text().indexOf(text);
-    if (indexFound == -1) return this;
-    return selectText(indexFound, indexFound + text.length());
-  }
-
-  /**
-   * Simulates a user selecting a portion of the text contained in this fixture's <code>{@link JTextComponent}</code>.
-   * @param start index where selection should start.
-   * @param end index where selection should end.
-   * @return this fixture.
-   * @throws ActionFailedException if the selecting the text in the given range fails.
-   */
-  public final JTextComponentFixture selectText(int start, int end) {
-    if (isEmpty(text())) return this;
-    driver.selectText(target, start, end);
+  public JTextComponentFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
     return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTextComponent}</code> is visible.
+   * Asserts that the text of this fixture's <code>{@link JTextComponent}</code> is equal to the specified
+   * <code>String</code>.
+   * @param expected the text to match.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is not visible.
+   * @throws AssertionError if the text of the target component is not equal to the given one.
    */
-  public final JTextComponentFixture requireVisible() {
-    return (JTextComponentFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTextComponent}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is visible.
-   */
-  public final JTextComponentFixture requireNotVisible() {
-    return (JTextComponentFixture)assertNotVisible();
+  public JTextComponentFixture requireText(String expected) {
+    driver.requireText(target, expected);
+    return this;
   }
 
   /**
@@ -243,20 +225,29 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @throws AssertionError if the target text component is not empty.
    */
-  public final JTextComponentFixture requireEmpty() {
-    assertThat(text()).as(textProperty()).isEmpty();
+  public JTextComponentFixture requireEmpty() {
+    driver.requireEmpty(target);
     return this;
   }
 
-  private String textProperty() { return formattedPropertyName("text"); }
+  /**
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is disabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>Component</code> is enabled.
+   */
+  public JTextComponentFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
 
   /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>Component</code> is disabled.
    */
-  public final JTextComponentFixture requireEnabled() {
-    return (JTextComponentFixture)assertEnabled();
+  public JTextComponentFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -265,16 +256,56 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent> impl
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JTextComponent</code> is never enabled.
    */
-  public final JTextComponentFixture requireEnabled(Timeout timeout) {
-    return (JTextComponentFixture)assertEnabled(timeout);
+  public JTextComponentFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTextComponent}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is enabled.
+   * @throws AssertionError if this fixture's <code>Component</code> is visible.
    */
-  public final JTextComponentFixture requireDisabled() {
-    return (JTextComponentFixture)assertDisabled();
+  public JTextComponentFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>Component</code> is not visible.
+   */
+  public JTextComponentFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Returns the text of this fixture's <code>{@link JTextComponent}</code>.
+   * @return the text of this fixture's <code>JTextComponent</code>.
+   */
+  public String text() {
+    return target.getText();
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

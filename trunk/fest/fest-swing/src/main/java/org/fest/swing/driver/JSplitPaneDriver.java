@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSplitPane;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
@@ -36,7 +36,7 @@ public class JSplitPaneDriver extends JComponentDriver {
    * Creates a new </code>{@link JSplitPaneDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JSplitPaneDriver(RobotFixture robot) {
+  public JSplitPaneDriver(Robot robot) {
     super(robot);
   }
 

@@ -14,21 +14,22 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_UNDEFINED;
-import static org.fest.swing.driver.Actions.findActionKey;
-import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.task.ScrollRectToVisibleTask;
+
+import static java.awt.event.KeyEvent.VK_UNDEFINED;
+
+import static org.fest.swing.driver.Actions.findActionKey;
+import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JComponent}</code>. This class is intended for internal use
@@ -42,7 +43,7 @@ public class JComponentDriver extends ContainerDriver {
    * Creates a new </code>{@link JComponentDriver}</code>.
    * @param robot the robot the robot to use to simulate user input.
    */
-  public JComponentDriver(RobotFixture robot) {
+  public JComponentDriver(Robot robot) {
     super(robot);
   }
 
@@ -100,7 +101,7 @@ public class JComponentDriver extends ContainerDriver {
    * @throws ActionFailedException if it is not possible to type any of the found <code>KeyStroke</code>s.
    */
   public final void invokeAction(JComponent c, String name) {
-    robot.focusAndWaitForFocusGain(c);
+    focusAndWaitForFocusGain(c);
     // From Abbot: On OSX/1.3.1, some action map keys are actions instead of strings.
     // On XP/1.4.1, all action map keys are strings.
     // If we can't look it up with the string key we saved, check all the actions for a corresponding name.

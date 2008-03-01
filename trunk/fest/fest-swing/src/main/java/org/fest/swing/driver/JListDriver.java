@@ -18,18 +18,26 @@ package org.fest.swing.driver;
 import java.awt.Point;
 
 import javax.swing.JList;
+import javax.swing.JPopupMenu;
 import javax.swing.ListModel;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.util.Range.From;
+import org.fest.swing.util.Range.To;
 
 import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -47,7 +55,7 @@ public class JListDriver extends JComponentDriver {
    * Creates a new </code>{@link JListDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JListDriver(RobotFixture robot) {
+  public JListDriver(Robot robot) {
     super(robot);
     location = new JListLocation();
   }
@@ -93,7 +101,7 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void selectItem(JList list, Object value) {
-    selectItem(list, value, LEFT_BUTTON, 1);
+    clickItem(list, value, LEFT_BUTTON, 1);
   }
 
   /**
@@ -104,8 +112,8 @@ public class JListDriver extends JComponentDriver {
    * @param times the number of times to click.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void selectItem(JList list, Object value, MouseButton button, int times) {
-    robot.click(list, location.pointAt(list, value), button, times);
+  public void clickItem(JList list, Object value, MouseButton button, int times) {
+    robot.click(list, pointAt(list, value), button, times);
   }
 
   /**
@@ -120,6 +128,18 @@ public class JListDriver extends JComponentDriver {
     robot.pressKey(controlOrCommand);
     for (int index : indices) selectItem(list, index);
     robot.releaseKey(controlOrCommand);
+  }
+
+  /**
+   * Selects the items in the specified range.
+   * @param list the target <code>JList</code>.
+   * @param from the starting point of the selection.
+   * @param to the last item to select.
+   * @throws LocationUnavailableException if the any index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public void selectItems(JList list, From from, To to) {
+    selectItems(list, from.value, to.value);
   }
 
   /**
@@ -145,7 +165,7 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void selectItem(JList list, int index) {
-    selectItem(list, index, LEFT_BUTTON, 1);
+    clickItem(list, index, LEFT_BUTTON, 1);
   }
 
   /**
@@ -157,7 +177,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void selectItem(JList list, int index, MouseButton button, int times) {
+  public void clickItem(JList list, int index, MouseButton button, int times) {
     robot.click(list, location.pointAt(list, index), button, times);
   }
 
@@ -185,13 +205,52 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
+   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JList}</code> matches 
+   * the given text.
+   * @param list the target <code>JList</code>.
+   * @param text the text to match.
+   * @throws AssertionError if the selected item does not match the given text.
+   */
+  public void requireSelection(JList list, String text) {
+    int selectedIndex = list.getSelectedIndex();
+    if (selectedIndex == -1) failNoSelection(list);
+    assertThat(text(list, selectedIndex)).as(selectedIndexProperty(list)).isEqualTo(text);
+  }
+
+  /**
+   * Verifies that the <code>String</code> representations of the selected items in the <code>{@link JList}</code> match 
+   * the given text items.
+   * @param list the target <code>JList</code>.
+   * @param items text items to match.
+   * @throws AssertionError if the selected items do not match the given text items.
+   */
+  public void requireSelectedItems(JList list, String... items) {
+    int[] selectedIndices = list.getSelectedIndices();
+    int currentSelectionCount = selectedIndices.length;
+    if (currentSelectionCount == 0) failNoSelection(list);
+    assertThat(currentSelectionCount).as(propertyName(list, "selectedIndices#length")).isEqualTo(items.length);
+    for (int i = 0; i < currentSelectionCount; i++) {
+      String description = propertyName(list, concat("selectedIndices[", valueOf(i), "]"));
+      assertThat(text(list, selectedIndices[i])).as(description).isEqualTo(items[i]);
+    }
+  }
+
+  private void failNoSelection(JList list) { 
+    fail(concat("[", selectedIndexProperty(list), "] No selection")); 
+  }
+
+  private String selectedIndexProperty(JList list) { 
+    return propertyName(list, "selectedIndex"); 
+  }
+  
+  /**
    * Starts a drag operation at the location of the first item matching the given value.
    * @param list the target <code>JList</code>.
    * @param value the value to match.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void drag(JList list, Object value) {
-    super.drag(list, location.pointAt(list, value));
+    super.drag(list, pointAt(list, value));
   }
 
   /**
@@ -202,7 +261,7 @@ public class JListDriver extends JComponentDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list, Object value) {
-    super.drop(list, location.pointAt(list, value));
+    super.drop(list, pointAt(list, value));
   }
 
   /**
@@ -238,14 +297,35 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the coordinates of the item at the given index.
+   * Shows a pop-up menu at the location of the specified item in the <code>{@link JList}</code>.
    * @param list the target <code>JList</code>.
-   * @param index the given index.
-   * @return the coordinates of the item at the given index.
+   * @param index the index of the item.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public Point pointAt(JList list, int index) {
+  public JPopupMenu showPopupMenuAt(JList list, int index) {
+    return showPopupMenu(list, pointAt(list, index));
+  }
+
+  private Point pointAt(JList list, int index) {
     return location.pointAt(list, index);
+  }
+
+  /**
+   * Shows a pop-up menu at the location of the specified item in the <code>{@link JList}</code>.
+   * @param list the target <code>JList</code>.
+   * @param value the value to match.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   */
+  public JPopupMenu showPopupMenuAt(JList list, Object value) {
+    return showPopupMenu(list, pointAt(list, value));
+  }
+
+  private Point pointAt(JList list, Object value) {
+    return location.pointAt(list, value);
   }
 }

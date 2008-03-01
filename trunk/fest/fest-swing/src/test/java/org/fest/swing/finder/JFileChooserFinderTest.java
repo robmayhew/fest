@@ -26,6 +26,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JFileChooserFixture;
@@ -35,20 +36,23 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.util.Swing.centerOf;
 
 /**
  * Tests for <code>{@link JFileChooserFinder}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = FUNCTIONAL)
 public class JFileChooserFinderTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private MyFrame frame;
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    frame = new MyFrame(getClass());
+    frame = new MyFrame();
     robot.showWindow(frame);
   }
   
@@ -74,7 +78,8 @@ public class JFileChooserFinderTest {
   }
 
   private void clickBrowseButton() {
-    robot.click(frame.browseButton, MouseButton.LEFT_BUTTON, 1);
+    JButton button = frame.browseButton;
+    robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
   }
 
   @Test(expectedExceptions = WaitTimedOutError.class)
@@ -89,14 +94,13 @@ public class JFileChooserFinderTest {
   }
   
   private static class MyFrame extends TestFrame {
-    
     private static final long serialVersionUID = 1L;
 
-    JButton browseButton = new JButton("Browse");
-    JFileChooser fileChooser = new JFileChooser();
+    final JButton browseButton = new JButton("Browse");
+    final JFileChooser fileChooser = new JFileChooser();
     
-    public MyFrame(Class<?> testClass) {
-      super(testClass);
+    public MyFrame() {
+      super(JFileChooserFinderTest.class);
       setUp();
     }
 

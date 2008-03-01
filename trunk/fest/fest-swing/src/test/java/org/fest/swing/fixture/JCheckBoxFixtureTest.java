@@ -15,9 +15,20 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Point;
+
 import javax.swing.JCheckBox;
+import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.AbstractButtonDriver;
+import org.fest.swing.driver.ComponentDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -26,42 +37,92 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest extends TwoStateButtonFixtureTestCase<JCheckBox> {
+public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
 
+  private AbstractButtonDriver driver;
+  private JCheckBox target;
   private JCheckBoxFixture fixture;
   
-  @Test public void shouldSelectCheckBoxIfNotSelected() {
-    fixture.target.setSelected(false);
-    fixture.check();
-    assertThat(fixture.target.isSelected()).isTrue();
-  }
-  
-  @Test public void shouldNotSelectCheckboxIfAlreadySelected() {
-    fixture.target.setSelected(true);
-    fixture.check();
-    assertThat(fixture.target.isSelected()).isTrue();
-  }
-  
-  @Test public void shouldUnselectCheckBoxIfSelected() {
-    fixture.target.setSelected(true);
-    fixture.uncheck();
-    assertThat(fixture.target.isSelected()).isFalse();
-  }
-  
-  @Test public void shouldNotUnselectCheckboxIfAlreadyUnselected() {
-    fixture.target.setSelected(false);
-    fixture.uncheck();
-    assertThat(fixture.target.isSelected()).isFalse();
+  void onSetUp(Robot robot) {
+    driver = createMock(AbstractButtonDriver.class);
+    target = new JCheckBox("A CheckBox");
+    fixture = new JCheckBoxFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  protected ComponentFixture<JCheckBox> createFixture() {
-    fixture = new JCheckBoxFixture(robot(), "target");
-    return fixture;
+  @Test public void shouldReturnText() {
+    assertThat(fixture.text()).isEqualTo(target.getText());
+  }
+  
+  @Test public void shouldRequireText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireText(target, "A CheckBox");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireText("A CheckBox"));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireNotSelected() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNotSelected(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNotSelected());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireSelected() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelected(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelected());
+      }
+    }.run();
   }
 
-  protected JCheckBox createTarget() {
-    JCheckBox target = new JCheckBox("Target");
-    target.setName("target");
-    return target;
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  ComponentDriver driver() { return driver; }
+  JCheckBox target() { return target; }
+  ComponentFixture<JCheckBox> fixture() { return fixture; }
 }

@@ -33,6 +33,8 @@ import static org.fest.util.Strings.*;
  */
 public final class Swing {
 
+  // TODO Move methods in this class to AWT
+  
   private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
 

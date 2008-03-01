@@ -15,107 +15,162 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.Point;
 
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JInternalFrameDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JInternalFrameFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixtureTest extends WindowLikeFixtureTestCase<JInternalFrame> {
+public class JInternalFrameFixtureTest extends ComponentFixtureTestCase<JInternalFrame> {
 
-  private TestFrame mainFrame;
+  private JInternalFrameDriver driver;
+  private JInternalFrame target;
   private JInternalFrameFixture fixture;
-  private MyInternalFrame target;
-  private JDesktopPane desktop;
-
-  protected JInternalFrame createTarget() {
-    target = new MyInternalFrame();
-    return target;
-  }
   
-  protected ComponentFixture<JInternalFrame> createFixture() {
-    showMainFrame();
-    fixture = new JInternalFrameFixture(robot(), "target");
-    return fixture;
+  void onSetUp(Robot robot) {
+    driver = createMock(JInternalFrameDriver.class);
+    target = new JInternalFrame();
+    fixture = new JInternalFrameFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  private void showMainFrame() {
-    mainFrame = new TestFrame(getClass());
-    desktop = new JDesktopPane();
-    add(target);
-    mainFrame.setContentPane(desktop);
-    robot().showWindow(mainFrame, new Dimension(400, 300));
-  }
-
-  @Test public void shouldIconifyAndDeiconifyInternalFrame() {
-    fixture.iconify();
-    assertThat(target.isIcon()).isTrue();
-    fixture.deiconify();
-    assertThat(target.isIcon()).isFalse();
-  }
-  
-  @Test public void shouldMaximizeInternalFrame() {
-    fixture.maximize();
-    assertThat(target.isMaximum()).isTrue();
-  }
-
-  @Test(dependsOnMethods = "shouldMaximizeInternalFrame") 
-  public void shouldNormalizeInternalFrame() {
-    fixture.maximize();
-    fixture.normalize();
-    assertThat(target.isIcon()).isFalse();
-    assertThat(target.isMaximum()).isFalse();
-  }
-  
-  @Test public void shouldMoveInternalFrameToFront() {
-    add(new MyInternalFrame());
-    fixture.moveToFront();
-    assertThat(desktop.getComponentZOrder(target)).isEqualTo(0);
-  }
-  
-  @Test(dependsOnMethods = "shouldMoveInternalFrameToFront")
-  public void shouldMoveInternalFrameToBack() {
-    add(new MyInternalFrame());
-    fixture.moveToFront();
-    fixture.moveToBack();
-    assertThat(desktop.getComponentZOrder(target)).isEqualTo(1);
-  }
-
-  private void add(final MyInternalFrame frame) {
-    robot().invokeAndWait(new Runnable() {
-      public void run() {
-        frame.setVisible(true);
-        desktop.add(frame);
-        frame.toFront();        
+  @Test public void shouldMoveToFront() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.moveToFront(target);
+        expectLastCall().once();
       }
-    });
-  }
 
-  protected Component target() {
-    return target;
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.moveToFront());
+      }
+    }.run();
   }
   
-  private static class MyInternalFrame extends JInternalFrame {
-    private static final long serialVersionUID = 1L;
+  @Test public void shouldMoveToBack() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.moveToBack(target);
+        expectLastCall().once();
+      }
 
-    private static int index;
-    
-    MyInternalFrame() {
-      super(concat("Internal Frame ", String.valueOf(index++)), true, true, true, true);
-      setName("target");
-      setSize(200, 100);
-    }
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.moveToBack());
+      }
+    }.run();
   }
+
+  @Test public void shouldDeiconify() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.deiconify(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.deiconify());
+      }
+    }.run();
+  }
+
+  @Test public void shouldIconify() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.iconify(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.iconify());
+      }
+    }.run();
+  }
+
+  @Test public void shouldMaximize() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.maximize(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.maximize());
+      }
+    }.run();
+  }
+
+  @Test public void shouldNormalize() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.normalize(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.normalize());
+      }
+    }.run();
+  }
+
+  @Test public void shouldClose() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.close(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        fixture.close();
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  ComponentDriver driver() { return driver; }
+  JInternalFrame target() { return target; }
+  ComponentFixture<JInternalFrame> fixture() { return fixture; }
 }

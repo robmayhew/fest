@@ -15,20 +15,28 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JList;
+import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestList;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JListDriver;
+import org.fest.swing.util.Range.From;
+import org.fest.swing.util.Range.To;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.Range.*;
-import static org.fest.util.Collections.list;
+import static org.fest.util.Arrays.array;
+
 /**
  * Tests for <code>{@link JListFixture}</code>.
  *
@@ -37,175 +45,308 @@ import static org.fest.util.Collections.list;
  */
 public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
 
-  private TestList target;
-  private JListFixture targetFixture;
-
-  private TestList dropTarget;
-  private JListFixture dropTargetFixture;
+  private JListDriver driver;
+  private JList target;
+  private JListFixture fixture;
   
-  @Test public void shouldReturnListContents() {
-    assertThat(targetFixture.contents()).containsOnly("one", "two", "three");
-  }
-  
-  @Test public void shouldSelectItemAtGivenIndex() {
-    targetFixture.selectItem(2);
-    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("three");
-  }
-
-  @Test public void shouldSelectItemWithGivenText() {
-    targetFixture.selectItem("two");
-    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
-  }
-
-  @Test public void shouldSelectItemsWithGivenText() {
-    targetFixture.selectItems("two", "three");
-    assertThat(targetFixture.target.getSelectedValues()).containsOnly("two", "three");
+  void onSetUp(Robot robot) {
+    driver = createMock(JListDriver.class);
+    target = new JList();
+    fixture = new JListFixture(robot, target);
+    fixture.updateDriver(driver);
   }
   
-  @Test public void shouldSelectItemsWithGivenIndices() {
-    targetFixture.selectItems(1, 2);
-    assertThat(targetFixture.target.getSelectedValues()).containsOnly("two", "three");
+  @Test public void shouldReturnContents() {
+    final String[] contents = array("Luke", "Leia");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.contentsOf(target)).andReturn(contents);
+      }
+      
+      protected void codeToTest() {
+        String[] result = fixture.contents();
+        assertThat(result).isSameAs(contents);
+      }
+    }.run();
   }
 
-  @Test public void shouldSelectItemsInGivenRange() {
-    targetFixture.selectItems(from(0), to(1));
-    assertThat(targetFixture.target.getSelectedValues()).containsOnly("one", "two");
+  @Test public void shouldSelectItemsInRange() {
+    final From from = from(6);
+    final To to = to(8);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItems(target, from, to);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItems(from, to));
+      }
+    }.run();
   }
 
-  @Test public void shouldPassIfSingleSelectionMatches() {
-    target.setSelectedIndex(1);
-    targetFixture.requireSelection("two");
+  @Test public void shouldSelectItemsUnderIndices() {
+    final int[] indices = new int[] { 6, 8 };
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItems(target, indices);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItems(indices));
+      }
+    }.run();
   }
   
-  @Test public void shouldFailIfNoSingleSelection() {
-    target.setSelectedIndex(-1);
-    try {
-      targetFixture.requireSelection("one");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndex"), message("No selection"));
-    }
-  }
-  
-  @Test public void shouldFailIfSingleSelectionNotMatching() {
-    target.setSelectedIndex(1);
-    try {
-      targetFixture.requireSelection("one");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndex"), expected("'one'"), actual("'two'"));
-    }
+  @Test public void shouldSelectItemUnderIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItem(target, 6);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItem(6));
+      }
+    }.run();
   }
 
-  @Test public void shouldPassIfMultipleSelectionMatches() {
-    target.setSelectedIndices(new int[] { 0 , 1});
-    targetFixture.requireSelectedItems("one", "two");
-  }
-  
-  @Test public void shouldFailIfNoMultipleSelection() {
-    target.setSelectedIndex(-1);
-    try {
-      targetFixture.requireSelectedItems("one");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndex"), message("No selection"));
-    }
-  }
-  
-  @Test public void shouldFailIfMultipleSelectionCountNotMatching() {
-    target.setSelectedIndex(1);
-    try {
-      targetFixture.requireSelectedItems("one", "two");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndices#length"), expected("2"), actual("1"));
-    }
-  }
-  
-  @Test public void shouldFailIfMultipleSelectionNotMatching() {
-    target.setSelectedIndices(new int[] {1});
-    try {
-      targetFixture.requireSelectedItems("one");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndices[0]"), expected("'one'"), actual("'two'"));
-    }
+  @Test public void shouldSelectItemsWithValues() {
+    final String[] values = array("Frodo", "Sam");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItems(target, values);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItems(values));
+      }
+    }.run();
   }
 
-  @Test public void shouldDoubleClickItemAtGivenIndex() {
-    ClickRecorder recorder = ClickRecorder.attachTo(targetFixture.target);
-    targetFixture.doubleClickItem(2);
-    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("three");
-    assertThat(recorder).wasDoubleClicked();
+  @Test public void shouldSelectItemWithValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItem(target, "Frodo");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItem("Frodo"));
+      }
+    }.run();
   }
 
-  @Test public void shouldDoubleClickItemWithGivenText() {
-    ClickRecorder recorder = ClickRecorder.attachTo(targetFixture.target);
-    targetFixture.doubleClickItem("two");
-    assertThat(targetFixture.target.getSelectedValue()).isEqualTo("two");
-    assertThat(recorder).wasDoubleClicked();
+  @Test public void shouldDoubleClickItemUnderIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.clickItem(target, 6, LEFT_BUTTON, 2);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.doubleClickItem(6));
+      }
+    }.run();
   }
 
-  @Test public void shouldReturnValueAtGivenIndex() {
-    assertThat(targetFixture.valueAt(2)).isEqualTo("three");
+  @Test public void shouldDoubleClickItemWithValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.clickItem(target, "Frodo", LEFT_BUTTON, 2);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.doubleClickItem("Frodo"));
+      }
+    }.run();
+  }
+
+  @Test public void shouldRequireSelection() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelection(target, "Frodo");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelection("Frodo"));
+      }
+    }.run();
   }
   
-  @Test public void shouldDragAndDropValueUsingGivenNames() {
-    targetFixture.drag("two");
-    dropTargetFixture.drop("six");
-    assertThat(target.elements()).containsOnly("one", "three");
-    assertThat(dropTarget.elements()).containsOnly("four", "five", "six", "two");
+  @Test public void shouldRequireSelectedItems() {
+    final String[] items = array("Frodo", "Sam");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelectedItems(target, items);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelectedItems(items));
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnValueAtIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.text(target, 6)).andReturn("Frodo");
+      }
+      
+      protected void codeToTest() {
+        assertThat(fixture.valueAt(6)).isEqualTo("Frodo");
+      }
+    }.run();
   }
   
+  @Test public void shouldReturnJListItemFixture() {
+    JListItemFixture item = fixture.item(6);
+    assertThat(item.index).isEqualTo(6);
+    assertThat(item.list).isSameAs(fixture);
+  }
+
+  @Test public void shouldReturnJListItemFixtureUsingValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.indexOf(target, "Frodo")).andReturn(8);
+      }
+      
+      protected void codeToTest() {
+        JListItemFixture item = fixture.item("Frodo");
+        assertThat(item.index).isEqualTo(8);
+        assertThat(item.list).isSameAs(fixture);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldDragElementWithElement() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.drag(target, "Frodo");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.drag("Frodo"));
+      }
+    }.run();
+  }
+
+  @Test public void shouldDropElementWithElement() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.drop(target, "Frodo");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.drop("Frodo"));
+      }
+    }.run();
+  }
+
+  @Test public void shouldDragElementUnderIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.drag(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.drag(8));
+      }
+    }.run();
+  }
+
   @Test public void shouldDrop() {
-    targetFixture.drag("two");
-    dropTargetFixture.drop();
-    assertThat(target.elements()).containsOnly("one", "three");
-    assertThat(dropTarget.elements()).hasSize(4);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.drop(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.drop());
+      }
+    }.run();
+  }
+
+  @Test public void shouldDropElementUnderIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.drop(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.drop(8));
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowJPopupMenuAtItemUnderIndex() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenuAt(target, 6)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(6);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowJPopupMenuAtItemWithValue() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenuAt(target, "Frodo")).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt("Frodo");
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
   
-  @Test public void shouldDragAndDropValueUsingGivenIndices() {
-    targetFixture.drag(2);
-    dropTargetFixture.drop(1);
-    assertThat(target.elements()).containsOnly("one", "two");
-    assertThat(dropTarget.elements()).containsOnly("four", "five", "three", "six");
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  @Test public void shouldReturnItemFixtureWithIndex() {
-    JListItemFixture item = targetFixture.item(1);
-    assertThat(item.index()).isEqualTo(1);
-    assertThat(item.contents()).isEqualTo("two");
-  }
-  
-  @Test public void shouldReturnItemFixtureWithText() {
-    JListItemFixture item = targetFixture.item("three");
-    assertThat(item.index()).isEqualTo(2);
-    assertThat(item.contents()).isEqualTo("three");
-  }
-
-  protected ComponentFixture<JList> createFixture() {
-    targetFixture = new JListFixture(robot(), "target");
-    return targetFixture;
-  }
-
-  protected JList createTarget() {
-    target = new TestList("target", list("one", "two", "three"));
-    target.setPreferredSize(listSize());
-    return target;
-  }
-
-  @Override protected void afterSetUp() {
-    dropTarget = new TestList("dropTarget", list("four", "five", "six"));
-    dropTarget.setPreferredSize(listSize());
-    dropTargetFixture = new JListFixture(robot(), dropTarget);
-    window().add(dropTarget);
-    window().setSize(new Dimension(600, 400));
-  }
-
-  private Dimension listSize() { return new Dimension(50, 100); }
+  ComponentDriver driver() { return driver; }
+  JList target() { return target; }
+  ComponentFixture<JList> fixture() { return fixture; }
 }

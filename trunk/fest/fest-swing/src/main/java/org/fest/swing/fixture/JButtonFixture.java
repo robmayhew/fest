@@ -15,15 +15,17 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JButton;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JButton}</code> and verification of the state of such 
@@ -32,8 +34,20 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JButtonFixture extends ComponentFixture<JButton> implements TextDisplayFixture {
+public class JButtonFixture extends ComponentFixture<JButton> implements JPopupMenuInvokerFixture, TextDisplayFixture {
 
+  private AbstractButtonDriver driver;
+  
+  /**
+   * Creates a new <code>{@link JButtonFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JButton</code>.
+   * @param target the <code>JButton</code> to be managed by this fixture.
+   */
+  public JButtonFixture(Robot robot, JButton target) {
+    super(robot, target);
+    createDriver();
+  }
+  
   /**
    * Creates a new <code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JButton</code>.
@@ -41,34 +55,36 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @throws ComponentLookupException if a matching <code>JButton</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JButton</code> is found.
    */
-  public JButtonFixture(RobotFixture robot, String buttonName) {
+  public JButtonFixture(Robot robot, String buttonName) {
     super(robot, buttonName, JButton.class);
+    createDriver();
+  }
+
+  private void createDriver() {
+    updateDriver(new AbstractButtonDriver(robot));
   }
   
-  /**
-   * Creates a new <code>{@link JButtonFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JButton</code>.
-   * @param target the <code>JButton</code> to be managed by this fixture.
-   */
-  public JButtonFixture(RobotFixture robot, JButton target) {
-    super(robot, target);
+  final void updateDriver(AbstractButtonDriver driver) {
+    this.driver = driver;
   }
 
   /**
    * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
-  public final JButtonFixture click() {
-    return (JButtonFixture)doClick();
+  public JButtonFixture click() {
+    driver.click(target);
+    return this;
   }
-
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JButtonFixture click(MouseButton button) {
-    return (JButtonFixture)doClick(button);
+  public JButtonFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -76,51 +92,36 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JButtonFixture click(MouseClickInfo mouseClickInfo) {
-    return (JButtonFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JButton}</code>.
-   * @return this fixture.
-   */
-  public final JButtonFixture rightClick() {
-    return (JButtonFixture)doRightClick();
+  public JButtonFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
-  public final JButtonFixture doubleClick() {
-    return (JButtonFixture)doDoubleClick();
+  public JButtonFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JButton}</code>.
+   * @return this fixture.
+   */
+  public JButtonFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    */
-  public final JButtonFixture focus() {
-    return (JButtonFixture)doFocus();
-  }
-
-  /**
-   * Asserts that the text of this fixture's <code>{@link JButton}</code> is equal to the specified <code>String</code>.
-   * @param expected the text to match.
-   * @return this fixture.
-   * @throws AssertionError if the text of the target JButton is not equal to the given one.
-   */
-  public final JButtonFixture requireText(String expected) {
-    assertThat(text()).as(formattedPropertyName("text")).isEqualTo(expected);
+  public JButtonFixture focus() {
+    driver.focus(target);
     return this;
-  }
-
-  /**
-   * Returns the text of this fixture's <code>{@link JButton}</code>. 
-   * @return the text of this fixture's <code>JButton</code>. 
-   */
-  public final String text() {
-    return target.getText();
   }
 
   /**
@@ -129,55 +130,51 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JButtonFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JButtonFixture)doPressAndReleaseKeys(keyCodes);
+  public JButtonFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link JButton}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JButtonFixture pressKey(int keyCode) {
-    return (JButtonFixture)doPressKey(keyCode);
+  public JButtonFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JButton}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JButtonFixture releaseKey(int keyCode) {
-    return (JButtonFixture)doReleaseKey(keyCode);
+  public JButtonFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JButton}</code> is disabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JButton</code> is enabled.
+   */
+  public JButtonFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
   
-  /**
-   * Asserts that this fixture's <code>{@link JButton}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JButton</code> is not visible.
-   */
-  public final JButtonFixture requireVisible() {
-    return (JButtonFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JButton}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JButton</code> is visible.
-   */
-  public final JButtonFixture requireNotVisible() {
-    return (JButtonFixture)assertNotVisible();
-  }
-
   /**
    * Asserts that this fixture's <code>{@link JButton}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JButton</code> is disabled.
    */
-  public final JButtonFixture requireEnabled() {
-    return (JButtonFixture)assertEnabled();
+  public JButtonFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
   
   /**
@@ -186,16 +183,68 @@ public class JButtonFixture extends ComponentFixture<JButton> implements TextDis
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JButton</code> is never enabled.
    */
-  public final JButtonFixture requireEnabled(Timeout timeout) {
-    return (JButtonFixture)assertEnabled(timeout);
+  public JButtonFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
+  }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JButton}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JButton</code> is visible.
+   */
+  public JButtonFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JButton}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JButton}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JButton</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JButton</code> is not visible.
    */
-  public final JButtonFixture requireDisabled() {
-    return (JButtonFixture)assertDisabled();
+  public JButtonFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+  
+  /**
+   * Asserts that the text of this fixture's <code>{@link JButton}</code> is equal to the specified <code>String</code>.
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target JButton is not equal to the given one.
+   */
+  public JButtonFixture requireText(String expected) {
+    driver.requireText(target, expected);
+    return this;
+  }
+
+  /**
+   * Returns the text of this fixture's <code>{@link JButton}</code>. 
+   * @return the text of this fixture's <code>JButton</code>. 
+   */
+  public String text() {
+    return target.getText();
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }
+

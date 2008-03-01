@@ -18,8 +18,8 @@ package org.fest.swing.fixture;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JMenuItemDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -33,7 +33,7 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
 
-  private final JMenuItemDriver driver;
+  private JMenuItemDriver driver;
   
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
@@ -42,7 +42,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws ComponentLookupException if a matching <code>JMenuItem</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JMenuItem</code> is found.
    */
-  public JMenuItemFixture(RobotFixture robot, String menuItemName) {
+  public JMenuItemFixture(Robot robot, String menuItemName) {
     this(robot, robot.finder().findByName(menuItemName, JMenuItem.class, false));
   }
 
@@ -52,7 +52,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param action the <code>Action</code> to assign to the created <code>JMenuItem</code>.
    */
-  public JMenuItemFixture(RobotFixture robot, Action action) {
+  public JMenuItemFixture(Robot robot, Action action) {
     this(robot, new JMenuItem(action));
   }
 
@@ -61,9 +61,13 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @param robot performs simulation of user events on the given <code>JMenuItem</code>.
    * @param target the <code>JMenuItem</code> to be managed by this fixture.
    */
-  public JMenuItemFixture(RobotFixture robot, JMenuItem target) {
+  public JMenuItemFixture(Robot robot, JMenuItem target) {
     super(robot, target);
-    driver = new JMenuItemDriver(robot);
+    updateDriver(new JMenuItemDriver(robot));
+  }
+
+  final void updateDriver(JMenuItemDriver driver) {
+    this.driver = driver;
   }
 
   /**
@@ -72,7 +76,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws ActionFailedException if the menu to select is disabled.
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
    */
-  public final JMenuItemFixture select() {
+  public JMenuItemFixture select() {
     driver.selectMenuItem(target);
     return this;
   }
@@ -83,8 +87,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * instead.
    * @return this fixture.
    */
-  public final JMenuItemFixture click() {
-    return (JMenuItemFixture)doClick();
+  public JMenuItemFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -93,8 +98,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JMenuItemFixture click(MouseButton button) {
-    return (JMenuItemFixture)doClick(button);
+  public JMenuItemFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -103,8 +109,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JMenuItemFixture click(MouseClickInfo mouseClickInfo) {
-    return (JMenuItemFixture)doClick(mouseClickInfo);
+  public JMenuItemFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
@@ -113,8 +120,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * first.
    * @return this fixture.
    */
-  public final JMenuItemFixture rightClick() {
-    return (JMenuItemFixture)doRightClick();
+  public JMenuItemFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
@@ -123,16 +131,18 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * <code>{@link #select()}</code> first.
    * @return this fixture.
    */
-  public final JMenuItemFixture doubleClick() {
-    return (JMenuItemFixture)doDoubleClick();
+  public JMenuItemFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JMenuItem}</code>.
    * @return this fixture.
    */
-  public final JMenuItemFixture focus() {
-    return (JMenuItemFixture)doFocus();
+  public JMenuItemFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -141,8 +151,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JMenuItemFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JMenuItemFixture)doPressAndReleaseKeys(keyCodes);
+  public JMenuItemFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -151,8 +162,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JMenuItemFixture pressKey(int keyCode) {
-    return (JMenuItemFixture)doPressKey(keyCode);
+  public JMenuItemFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -161,8 +173,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JMenuItemFixture releaseKey(int keyCode) {
-    return (JMenuItemFixture)doReleaseKey(keyCode);
+  public JMenuItemFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -170,8 +183,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JMenuItem</code> is not visible.
    */
-  public final JMenuItemFixture requireVisible() {
-    return (JMenuItemFixture)assertVisible();
+  public JMenuItemFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -179,8 +193,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JMenuItem</code> is visible.
    */
-  public final JMenuItemFixture requireNotVisible() {
-    return (JMenuItemFixture)assertNotVisible();
+  public JMenuItemFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -188,8 +203,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JMenuItem</code> is disabled.
    */
-  public final JMenuItemFixture requireEnabled() {
-    return (JMenuItemFixture)assertEnabled();
+  public JMenuItemFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -198,8 +214,9 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JMenuItem</code> is never enabled.
    */
-  public final JMenuItemFixture requireEnabled(Timeout timeout) {
-    return (JMenuItemFixture)assertEnabled(timeout);
+  public JMenuItemFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -207,7 +224,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JMenuItem</code> is enabled.
    */
-  public final JMenuItemFixture requireDisabled() {
-    return (JMenuItemFixture)assertDisabled();
+  public JMenuItemFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 }

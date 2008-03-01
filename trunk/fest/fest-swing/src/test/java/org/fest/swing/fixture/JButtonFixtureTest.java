@@ -15,15 +15,22 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Point;
+
 import javax.swing.JButton;
+import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.GUITest;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.AbstractButtonDriver;
+import org.fest.swing.driver.ComponentDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
  * Tests for <code>{@link JButtonFixture}</code>.
@@ -31,38 +38,66 @@ import static org.fest.swing.fixture.ErrorMessageAssert.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@GUITest
 public class JButtonFixtureTest extends ComponentFixtureTestCase<JButton> {
 
+  private AbstractButtonDriver driver;
+  private JButton target;
   private JButtonFixture fixture;
   
-  @Test public void shouldPassIfButtonHasMatchingText() {
-    fixture.requireText("Target");
-  }
-  
-  @Test(dependsOnMethods = "shouldPassIfButtonHasMatchingText") 
-  public void shouldFailIfButtonHasNotMatchingText() {
-    try {
-      fixture.requireText("A Button");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture.target);
-      assertThat(errorMessage).contains(property("text"), expected("'A Button'"), actual("'Target'"));
-    }
-  }
-  
-  @Test public void shouldReturnButtonText() {
-    assertThat(fixture.text()).isEqualTo("Target");
-  }
-  
-  protected ComponentFixture<JButton> createFixture() { 
-    fixture = new JButtonFixture(robot(), "target");
-    return fixture;
+  void onSetUp(Robot robot) {
+    driver = createMock(AbstractButtonDriver.class);
+    target = new JButton("A Button");
+    fixture = new JButtonFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  protected JButton createTarget() { 
-    JButton target = new JButton("Target");
-    target.setName("target");    
-    return target;
+  @Test public void shouldReturnText() {
+    assertThat(fixture.text()).isEqualTo(target.getText());
   }
+  
+  @Test public void shouldRequireText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireText(target, "A Button");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireText("A Button"));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  ComponentDriver driver() { return driver; }
+  JButton target() { return target; }
+  ComponentFixture<JButton> fixture() { return fixture; }
 }

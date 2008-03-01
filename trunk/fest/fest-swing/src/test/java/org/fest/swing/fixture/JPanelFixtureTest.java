@@ -15,11 +15,22 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JComponentDriver;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JPanelFixture}</code>.
@@ -28,18 +39,47 @@ import org.testng.annotations.Test;
  */
 public class JPanelFixtureTest extends ComponentFixtureTestCase<JPanel> {
 
-  /** ${@inheritDoc} */
-  @Override protected ComponentFixture<JPanel> createFixture() {
-    return new JPanelFixture(robot(), "panel");
+  private JComponentDriver driver;
+  private JPanel target;
+  private JPanelFixture fixture;
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JComponentDriver.class);
+    target = new JPanel();
+    fixture = new JPanelFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  /** ${@inheritDoc} */
-  @Override protected JPanel createTarget() {
-    JPanel panel = new JPanel();
-    panel.setName("panel");
-    panel.setPreferredSize(new Dimension(100, 100));
-    return panel;
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  @Test public void justAddedToRunClassAsTest() {}
+  ComponentDriver driver() { return driver; }
+  JPanel target() { return target; }
+  ComponentFixture<JPanel> fixture() { return fixture; }
 }

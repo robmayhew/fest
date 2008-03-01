@@ -15,14 +15,20 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
-import javax.swing.JList;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 
 import org.testng.annotations.Test;
 
-import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JSplitPaneDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -33,45 +39,60 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class JSplitPaneFixtureTest extends ComponentFixtureTestCase<JSplitPane> {
 
+  private JSplitPaneDriver driver;
+  private JSplitPane target;
   private JSplitPaneFixture fixture;
   
-  private JSplitPane target;
-  
-  @Test public void shouldMoveDividerToGivenLocation() {
-    PanesWidth before = new PanesWidth(target);
-    int delta = 100;
-    fixture.moveDividerTo(target.getDividerLocation() + delta);
-    PanesWidth after = new PanesWidth(target);
-    assertThat(after.left).isEqualTo(before.left + delta);
-    assertThat(after.right).isEqualTo(before.right - delta);
+  void onSetUp(Robot robot) {
+    driver = createMock(JSplitPaneDriver.class);
+    target = new JSplitPane();
+    fixture = new JSplitPaneFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  
-  
-  private static class PanesWidth {
-    final int left;
-    final int right;
-
-    PanesWidth(JSplitPane splitPane) {
-      this.left = splitPane.getLeftComponent().getWidth();
-      this.right = splitPane.getRightComponent().getWidth();
-    }
+  @Test public void shouldMoveDivider() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.moveDividerTo(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.moveDividerTo(8));
+      }
+    }.run();
   }
   
-  protected ComponentFixture<JSplitPane> createFixture() {
-    fixture = new JSplitPaneFixture(robot(), "target");
-    return fixture;
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  protected JSplitPane createTarget() {
-    target = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
-    target.setDividerLocation(200);
-    target.setName("target");
-    target.setPreferredSize(new Dimension(400, 200));
-    return target;
-  }
-
-  @Override protected void afterSetUp() {
-    window().setSize(new Dimension(600, 400));
-  }
+  ComponentDriver driver() { return driver; }
+  JSplitPane target() { return target; }
+  ComponentFixture<JSplitPane> fixture() { return fixture; }
 }

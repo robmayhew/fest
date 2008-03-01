@@ -24,7 +24,7 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -51,7 +51,7 @@ public class JTreeDriver extends JComponentDriver {
    * Creates a new </code>{@link JTreeDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JTreeDriver(RobotFixture robot) {
+  public JTreeDriver(Robot robot) {
     super(robot);
     location = new JTreeLocation();
   }
@@ -109,7 +109,7 @@ public class JTreeDriver extends JComponentDriver {
     if (alreadySelected(tree, row)) return;
     // NOTE: the row bounds *do not* include the expansion handle
     Rectangle rowBounds = tree.getRowBounds(row);
-    robot.click(tree, new Point(rowBounds.x + 1, rowBounds.y + rowBounds.height / 2));
+    click(tree, new Point(rowBounds.x + 1, rowBounds.y + rowBounds.height / 2));
   }
 
   private boolean alreadySelected(JTree tree, int row) {

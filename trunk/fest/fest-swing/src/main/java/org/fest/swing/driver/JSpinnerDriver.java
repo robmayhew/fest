@@ -18,13 +18,14 @@ package org.fest.swing.driver;
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static java.awt.event.KeyEvent.*;
 import static java.lang.String.valueOf;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
@@ -39,13 +40,14 @@ import static org.fest.util.Strings.concat;
  */
 public class JSpinnerDriver extends JComponentDriver {
 
+  private static final String VALUE_PROPERTY = "value";
   private final JTextComponentDriver textComponentDriver;
 
   /**
    * Creates a new </code>{@link JSpinnerDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JSpinnerDriver(RobotFixture robot) {
+  public JSpinnerDriver(Robot robot) {
     super(robot);
     textComponentDriver = new JTextComponentDriver(robot);
   }
@@ -56,7 +58,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be incremented.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final void increment(JSpinner spinner, int times) {
+  public void increment(JSpinner spinner, int times) {
     validate(times, "increment the value");
     for (int i = 0; i < times; i++) increment(spinner);
   }
@@ -65,7 +67,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * Increments the value of the <code>{@link JSpinner}</code>.
    * @param spinner the target <code>JSpinner</code>.
    */
-  public final void increment(JSpinner spinner) {
+  public void increment(JSpinner spinner) {
     pressKey(spinner, VK_UP);
   }
 
@@ -75,7 +77,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be decremented.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final void decrement(JSpinner spinner, int times) {
+  public void decrement(JSpinner spinner, int times) {
     validate(times, "decrement the value");
     for (int i = 0; i < times; i++) decrement(spinner);
   }
@@ -90,12 +92,12 @@ public class JSpinnerDriver extends JComponentDriver {
    * Decrements the value of the <code>{@link JSpinner}</code>.
    * @param spinner the target <code>JSpinner</code>.
    */
-  public final void decrement(JSpinner spinner) {
+  public void decrement(JSpinner spinner) {
     pressKey(spinner, VK_DOWN);
   }
 
   private void pressKey(JSpinner spinner, int key) {
-    robot.focus(spinner);
+    focus(spinner);
     robot.pressAndReleaseKeys(key);
   }
 
@@ -108,7 +110,7 @@ public class JSpinnerDriver extends JComponentDriver {
    *          cannot be found.
    * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
-  public final void enterText(JSpinner spinner, String text) {
+  public void enterText(JSpinner spinner, String text) {
     try {
       JTextComponent editor = robot.finder().findByType(spinner, JTextComponent.class);
       textComponentDriver.replaceText(editor, text);
@@ -116,5 +118,15 @@ public class JSpinnerDriver extends JComponentDriver {
     } catch (ComponentLookupException e) {
       throw actionFailure(concat("Unable to find editor for ", format(spinner)));
     }
+  }
+
+  /**
+   * Verifies that the value of the <code>{@link JSpinner}</code> is equal to the given one.
+   * @param spinner the target <code>JSpinner</code>.
+   * @param value the expected value of this fixture's <code>JSpinner</code>.
+   * @throws AssertionError if the value of the <code>JSpinner</code> is not equal to the given one.
+   */
+  public void requireValue(JSpinner spinner, Object value) {
+    assertThat(spinner.getValue()).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

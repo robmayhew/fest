@@ -23,7 +23,7 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -31,6 +31,8 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Settings.timeoutToFindPopup;
 import static org.fest.swing.driver.CellRendererComponents.textFrom;
@@ -49,17 +51,16 @@ import static org.fest.util.Strings.*;
  */
 public class JComboBoxDriver extends JComponentDriver {
 
+  private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
   private final JListDriver listDriver;
-  private final JPopupMenuDriver popupMenuDriver;
 
   /**
    * Creates a new </code>{@link JComboBoxDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JComboBoxDriver(RobotFixture robot) {
+  public JComboBoxDriver(Robot robot) {
     super(robot);
     listDriver = new JListDriver(robot);
-    popupMenuDriver = new JPopupMenuDriver(robot);
   }
 
   /**
@@ -130,6 +131,24 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
+   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JComboBox}</code> 
+   * matches the given text.
+   * @param comboBox the target <code>JComboBox</code>.
+   * @param text the text to match.
+   * @throws AssertionError if the selected item does not match the given text.
+   */
+  public void requireSelection(JComboBox comboBox, String text) {
+    int selectedIndex = comboBox.getSelectedIndex();
+    if (selectedIndex == -1) 
+      fail(concat("[", selectedIndexProperty(comboBox), "] No selection"));
+    assertThat(text(comboBox, selectedIndex)).as(selectedIndexProperty(comboBox)).isEqualTo(text);
+  }
+
+  private String selectedIndexProperty(JComboBox comboBox) {
+    return propertyName(comboBox, SELECTED_INDEX_PROPERTY);
+  }
+
+  /**
    * Selects the item under the given index in the <code>{@link JComboBox}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
@@ -164,7 +183,7 @@ public class JComboBoxDriver extends JComponentDriver {
   private void showDropDownList(final JComboBox comboBox) {
     if (isDropDownVisible(comboBox)) return;
     if (!comboBox.isEditable()) {
-      robot.click(comboBox);
+      click(comboBox);
       return;
     }
     // Location of pop-up button activator is LAF-dependent
@@ -182,16 +201,27 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
+   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code> only if it is editable.
+   * @param comboBox the target <code>JComboBox</code>.
+   * @param text the text to enter.
+   */
+  public void enterText(JComboBox comboBox, String text) {
+    if (!comboBox.isEditable()) return;
+    focus(comboBox);
+    robot.enterText(text);
+  }
+
+  /**
    * Find the <code>{@link JList}</code> in the pop-up raised by the <code>{@link JComboBox}</code>, if the LAF actually
    * uses one.
    * @return the found <code>JList</code>.
    * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.
    */
   public JList dropDownList() {
-    JPopupMenu popup = popupMenuDriver.findActivePopupMenu();
+    JPopupMenu popup = findActivePopupMenu();
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToFindPopup());
-      while ((popup = popupMenuDriver.findActivePopupMenu()) == null) {
+      while ((popup = findActivePopupMenu()) == null) {
         if (watch.isTimeOut()) throw listNotFound();
         pause();
       }

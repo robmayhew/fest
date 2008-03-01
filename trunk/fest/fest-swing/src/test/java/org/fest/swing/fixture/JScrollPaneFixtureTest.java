@@ -15,15 +15,22 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
-import javax.swing.JScrollBar;
+import javax.swing.JList;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JComponentDriver;
+
 import static javax.swing.ScrollPaneConstants.*;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -35,50 +42,57 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class JScrollPaneFixtureTest extends ComponentFixtureTestCase<JScrollPane> {
 
+  private JComponentDriver driver;
   private JScrollPane target;
   private JScrollPaneFixture fixture;
-
-  @Override protected ComponentFixture<JScrollPane> createFixture() {
-    fixture = new JScrollPaneFixture(robot(), target);
-    return fixture;
-  }
-
-  @Override protected JScrollPane createTarget() {
-    target = new JScrollPane(new JTable(30, 20), VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
-    target.setName("target");
-    target.setPreferredSize(new Dimension(200, 100));
-    return target;
-  }
-
-  @Test public void shouldReturnVerticalScrollBar() {
-    assertReturnsVerticalScrollBar();
-  }
-
-  @Test public void shouldReturnVerticalScrollBarIfNotVisible() {
-    target.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
-    assertReturnsVerticalScrollBar();
-  }
-
-  private void assertReturnsVerticalScrollBar() {
-    assertReturnsScrollBar(fixture.verticalScrollBar(), target.getVerticalScrollBar());
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JComponentDriver.class);
+    target = new JScrollPane(new JList(), VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
+    fixture = new JScrollPaneFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
   @Test public void shouldReturnHorizontalScrollBar() {
-    assertReturnsHorizontalScrollBar();
+    JScrollBarFixture scrollBar = fixture.horizontalScrollBar();
+    assertThat(scrollBar.target).isSameAs(target.getHorizontalScrollBar());
+  }
+  
+  @Test public void shouldReturnVerticalalScrollBar() {
+    JScrollBarFixture scrollBar = fixture.verticalScrollBar();
+    assertThat(scrollBar.target).isSameAs(target.getVerticalScrollBar());
+  }
+  
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  @Test public void shouldReturnHorizontalScrollBarIfNotVisible() {
-    target.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
-    assertReturnsHorizontalScrollBar();
-  }
-
-  private void assertReturnsHorizontalScrollBar() {
-    assertReturnsScrollBar(fixture.horizontalScrollBar(), target.getHorizontalScrollBar());
-  }
-
-  private void assertReturnsScrollBar(JScrollBarFixture scrollBarFixture, JScrollBar expected) {
-    assertThat(scrollBarFixture.robot).isSameAs(fixture.robot);
-    assertThat(scrollBarFixture.target).isSameAs(expected);
-
-  }
+  ComponentDriver driver() { return driver; }
+  JScrollPane target() { return target; }
+  ComponentFixture<JScrollPane> fixture() { return fixture; }
 }

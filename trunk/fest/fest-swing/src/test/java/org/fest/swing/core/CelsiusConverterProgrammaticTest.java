@@ -35,7 +35,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
  */
 public class CelsiusConverterProgrammaticTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();

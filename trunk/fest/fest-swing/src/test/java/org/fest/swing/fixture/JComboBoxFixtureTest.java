@@ -15,16 +15,23 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
+import java.awt.Point;
 
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.JPopupMenu;
+
+import org.easymock.classextension.EasyMock;
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.GUITest;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JComboBoxDriver;
+
+import static org.easymock.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -33,81 +40,129 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest
 public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
 
-  private JComboBoxFixture fixture;
+  private JComboBoxDriver driver;
   private JComboBox target;
-  
-  @Test public void shouldReturnComboBoxContents() {
-    assertThat(fixture.contents()).isEqualTo(array("first", "second", "third"));
-  }
-  
-  @Test public void shouldSelectItemAtGivenIndex() {
-    fixture.selectItem(2);
-    assertThat(fixture.target.getSelectedItem()).isEqualTo("third");
-  }
+  private JComboBoxFixture fixture;
 
-  @Test public void shouldSelectItemWithGivenText() {
-    fixture.selectItem("second");
-    assertThat(fixture.target.getSelectedItem()).isEqualTo("second");
-  }
-
-  @Test public void shouldPassIfSelectionMatches() {
-    target.setSelectedIndex(1);
-    fixture.requireSelection("second");
+  void onSetUp(Robot robot) {
+    driver = EasyMock.createMock(JComboBoxDriver.class);
+    target = new JComboBox();
+    fixture = new JComboBoxFixture(robot, target);
+    fixture.updateDriver(driver);
   }
   
-  @Test public void shouldFailIfNoSelection() {
-    target.setSelectedIndex(-1);
-    try {
-      fixture.requireSelection("first");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndex"), message("No selection"));
-    }
+  @Test public void shouldReturnContents() {
+    final String[] contents = array("Frodo", "Sam");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.contentsOf(target)).andReturn(contents);
+      }
+
+      protected void codeToTest() {
+        String[] result = fixture.contents();
+        assertThat(result).isSameAs(contents);
+      }
+    }.run();
   }
   
-  @Test public void shouldFailIfSelectionNotMatching() {
-    target.setSelectedIndex(1);
-    try {
-      fixture.requireSelection("first");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("selectedIndex"), expected("'first'"), actual("'second'"));
-    }
+  @Test public void shouldEnterText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.enterText(target, "Hello");
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.enterText("Hello"));
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnList() {
+    final JList list = new JList();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.dropDownList()).andReturn(list);
+      }
+
+      protected void codeToTest() {
+        JList result = fixture.list();
+        assertThat(result).isSameAs(list);
+      }
+    }.run();
+  }
+
+  @Test public void shouldSelectItemUnderIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItem(target, 6);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItem(6));
+      }
+    }.run();
+  }
+
+  @Test public void shouldSelectItemWithText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectItem(target, "Frodo");
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectItem("Frodo"));
+      }
+    }.run();
   }
   
-  @Test public void shouldReturnValueAtGivenIndex() {
-    assertThat(fixture.valueAt(2)).isEqualTo("third");
+  @Test public void shouldReturnValueAtIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.text(target, 8)).andReturn("Sam");
+      }
+
+      protected void codeToTest() {
+        String result = fixture.valueAt(8);
+        assertThat(result).isEqualTo("Sam");
+      }
+    }.run();    
   }
 
-  @Test public void shouldEnterTextInEditableComboBox() {
-    fixture.target.setEditable(true);
-    fixture.enterText("Text entered by FEST");
-    assertThat(targetEditor().getText()).contains("Text entered by FEST");
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
   
-  @Test public void shouldNotEnterTextInNonEditableComboBox() {
-    fixture.target.setEditable(false);
-    fixture.enterText("Text entered by FEST");
-    assertThat(targetEditor().getText()).isEmpty();
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  private JTextField targetEditor() {
-    return (JTextField)fixture.target.getEditor().getEditorComponent();
-  }
-
-  protected ComponentFixture<JComboBox> createFixture() {
-    fixture = new JComboBoxFixture(robot(), "target");
-    return fixture;
-  }
-
-  protected JComboBox createTarget() {
-    target = new JComboBox(array("first", "second", "third"));
-    target.setName("target");
-    return target;
-  }
+  ComponentDriver driver() { return driver; }
+  JComboBox target() { return target; }
+  ComponentFixture<JComboBox> fixture() { return fixture; }
 }

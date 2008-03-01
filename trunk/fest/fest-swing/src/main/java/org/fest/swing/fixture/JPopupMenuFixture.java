@@ -15,13 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JPopupMenuDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -33,16 +35,20 @@ import org.fest.swing.exception.WaitTimedOutError;
  */
 public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
 
-  private final JPopupMenuDriver driver;
+  private JPopupMenuDriver driver;
 
   /**
    * Creates a new <code>{@link JPopupMenuFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPopupMenu</code>.
    * @param target the <code>JPopupMenu</code> to be managed by this fixture.
    */
-  public JPopupMenuFixture(RobotFixture robot, JPopupMenu target) {
+  public JPopupMenuFixture(Robot robot, JPopupMenu target) {
     super(robot, target);
-    driver = new JPopupMenuDriver(robot);
+    updateDriver(new JPopupMenuDriver(robot));
+  }
+
+  final void updateDriver(JPopupMenuDriver driver) {
+    this.driver = driver;
   }
 
   /**
@@ -53,8 +59,8 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> having a matching name is found.
    */
-  public final JMenuItemFixture menuItem(String name) {
-    return new JMenuItemFixture(robot, findByName(name, JMenuItem.class));
+  public JMenuItemFixture menuItem(String name) {
+    return new JMenuItemFixture(robot, driver.menuItem(target, name));
   }
 
   /**
@@ -63,29 +69,19 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.
    * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
-   *          found.
+   *         found.
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria is
-   *          found.
+   *         found.
    */
-  public final JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
-    return new JMenuItemFixture(robot, find(matcher));
+  public JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
+    return new JMenuItemFixture(robot, driver.menuItem(target, matcher));
   }
-
-  private <C extends Component> C findByName(String name, Class<C> type) {
-    return finder().findByName(target, name, type);
-  }
-
-  private <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
-    return finder().find(target, matcher);
-  }
-
-  private ComponentFinder finder() { return robot.finder(); }
 
   /**
    * Returns the contents of this fixture's <code>{@link JPopupMenu}</code>.
    * @return a <code>String</code> array representing the contents of this fixture's <code>JPopupMenu</code>.
    */
-  public final String[] menuLabels() {
+  public String[] menuLabels() {
     return driver.menuLabelsOf(target);
   }
 
@@ -93,8 +89,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * Simulates a user clicking this fixture's <code>{@link JPopupMenu}</code>.
    * @return this fixture.
    */
-  public final JPopupMenuFixture click() {
-    return (JPopupMenuFixture)doClick();
+  public JPopupMenuFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -102,8 +99,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JPopupMenuFixture click(MouseButton button) {
-    return (JPopupMenuFixture)doClick(button);
+  public JPopupMenuFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -111,32 +109,36 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JPopupMenuFixture click(MouseClickInfo mouseClickInfo) {
-    return (JPopupMenuFixture)doClick(mouseClickInfo);
+  public JPopupMenuFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JPopupMenu}</code>.
    * @return this fixture.
    */
-  public final JPopupMenuFixture rightClick() {
-    return (JPopupMenuFixture)doRightClick();
+  public JPopupMenuFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JPopupMenu}</code>.
    * @return this fixture.
    */
-  public final JPopupMenuFixture doubleClick() {
-    return (JPopupMenuFixture)doDoubleClick();
+  public JPopupMenuFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JPopupMenu}</code>.
    * @return this fixture.
    */
-  public final JPopupMenuFixture focus() {
-    return (JPopupMenuFixture)doFocus();
+  public JPopupMenuFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -146,8 +148,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPopupMenuFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JPopupMenuFixture)doPressAndReleaseKeys(keyCodes);
+  public JPopupMenuFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -156,8 +159,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPopupMenuFixture pressKey(int keyCode) {
-    return (JPopupMenuFixture)doPressKey(keyCode);
+  public JPopupMenuFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -166,8 +170,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JPopupMenuFixture releaseKey(int keyCode) {
-    return (JPopupMenuFixture)doReleaseKey(keyCode);
+  public JPopupMenuFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -175,8 +180,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPopupMenu</code> is disabled.
    */
-  public final JPopupMenuFixture requireEnabled() {
-    return (JPopupMenuFixture)assertEnabled();
+  public JPopupMenuFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -185,8 +191,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JPopupMenu</code> is never enabled.
    */
-  public final JPopupMenuFixture requireEnabled(Timeout timeout) {
-    return (JPopupMenuFixture)assertEnabled(timeout);
+  public JPopupMenuFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -194,8 +201,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPopupMenu</code> is enabled.
    */
-  public final JPopupMenuFixture requireDisabled() {
-    return (JPopupMenuFixture)assertDisabled();
+  public JPopupMenuFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -203,8 +211,9 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPopupMenu</code> is not visible.
    */
-  public final JPopupMenuFixture requireVisible() {
-    return (JPopupMenuFixture)assertVisible();
+  public JPopupMenuFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -212,7 +221,8 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JPopupMenu</code> is visible.
    */
-  public final JPopupMenuFixture requireNotVisible() {
-    return (JPopupMenuFixture)assertNotVisible();
+  public JPopupMenuFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 }

@@ -25,7 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
@@ -40,7 +40,7 @@ import org.testng.annotations.Test;
 @Test(groups = FUNCTIONAL)
 public class JMenuItemDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JMenuItem menuItem;
   private JMenuItemDriver driver;
 

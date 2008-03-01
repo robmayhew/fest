@@ -15,25 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JToolBar;
-
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
-import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
-
-import static javax.swing.SwingUtilities.getWindowAncestor;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
 
 /**
  * Tests for <code>{@link JToolBarFixture}</code>.
@@ -41,110 +22,6 @@ import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
-
-  private static class MyToolBar extends JToolBar {
-    private static final long serialVersionUID = 1L;
-
-    public final JButton button;
-
-    public MyToolBar(String name) {
-      super(name);
-      Action action = new AbstractAction() {
-        private static final long serialVersionUID = 1L;
-        public void actionPerformed(ActionEvent e) {}
-      };
-      button = add(action);
-      button.setName("button");
-      button.setText("A Button");
-    }
-  }
-  
-  private TestFrame toolbarFrame;
-  private BorderLayout borderLayout;
-  private JToolBarFixture fixture;
-  private MyToolBar target;
-
-  @Test public void shouldFloatToolbar() {
-    Window oldAncestor = toolbarAncestor();
-    fixture.floatTo(whereToFloatTo());
-    assertToolBarIsFloating(oldAncestor);
-  }
-  
-  private void assertToolBarIsFloating(Window oldAncestor) {
-    Window newAncestor = toolbarAncestor();
-    assertThat(newAncestor).isNotSameAs(oldAncestor);
-    Point newAncestorLocation = newAncestor.getLocation();
-    // TODO add a inBetween(int, int) to IntAssert.
-    Point oldAncestorLocation = oldAncestor.getLocation();
-    assertThat(newAncestorLocation.x).isGreaterThan(oldAncestorLocation.x);
-    assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
-  }
-
-  @Test(dependsOnMethods = "shouldFloatToolbar")
-  public void shouldUnfloatToolbar() {
-    Window oldAncestor = toolbarAncestor();
-    fixture.floatTo(whereToFloatTo());
-    fixture.unfloat();
-    assertThat(toolbarAncestor()).isSameAs(oldAncestor);
-  }
-  
-  @Test(dependsOnMethods = "shouldFloatToolbar", dataProvider = "unfloatConstraints")
-  public void shouldUnfloatToolbarToGivenPosition(UnfloatConstraint constraint) {
-    Window originalParent = toolbarAncestor();
-    fixture.floatTo(whereToFloatTo());
-    fixture.unfloat(constraint);
-    assertThat(toolbarAncestor()).isSameAs(originalParent);
-    assertThat(borderLayout.getLayoutComponent(constraint.value)).isSameAs(target);
-  }
-
-  private Point whereToFloatTo() {
-    Rectangle bounds = toolbarAncestor().getBounds();
-    int x = bounds.x + bounds.width + 10;
-    int y = bounds.y + bounds.height + 10;
-    return new Point(x, y);
-  }
-  
-  @DataProvider(name = "unfloatConstraints")
-  public Object[][] unfloatConstraints() {
-    return new Object[][] { 
-        { NORTH }, 
-        { EAST },
-        { SOUTH },
-        { WEST }
-    };  
-  }
-  
-  private Window toolbarAncestor() {
-    return getWindowAncestor(fixture.target);
-  }
-  
-  @Test public void shouldFindToolbarSubcomponents() {
-    ClickRecorder recorder = ClickRecorder.attachTo(target.button);
-    fixture.button("button").click();
-    assertThat(recorder).wasClicked();
-  }
-  
-  @Override protected boolean targetBlocksMainWindow() { return true; }
-  @Override protected boolean addTargetToWindow() { return false; }
-  
-  protected JToolBar createTarget() {
-    target = new MyToolBar("target");
-    target.setFloatable(true);
-    return target;
-  }
-
-  protected ComponentFixture<JToolBar> createFixture() {
-    showToolbarFrame();
-    fixture = new JToolBarFixture(robot(), "target");
-    return fixture;
-  }
-
-  private void showToolbarFrame() {
-    toolbarFrame = new TestFrame(getClass());
-    borderLayout = new BorderLayout();
-    toolbarFrame.setLayout(borderLayout);
-    toolbarFrame.add(target, BorderLayout.NORTH);
-    robot().showWindow(toolbarFrame, new Dimension(300, 200));
-  }
+// TODO Implement
+public class JToolBarFixtureTest  {
 }

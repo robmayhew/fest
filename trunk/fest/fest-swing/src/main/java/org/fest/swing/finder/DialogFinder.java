@@ -18,7 +18,7 @@ package org.fest.swing.finder;
 import java.awt.Dialog;
 import java.util.concurrent.TimeUnit;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.DialogFixture;
 
 /**
@@ -64,7 +64,7 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
    * @return a <code>DialogFixture</code> managing the found <code>Dialog</code>.
    * @throws org.fest.swing.exception.WaitTimedOutError if a <code>Dialog</code> could not be found.
    */
-  public DialogFixture using(RobotFixture robot) {
+  public DialogFixture using(Robot robot) {
     return new DialogFixture(robot, findComponentWith(robot));
   }
 

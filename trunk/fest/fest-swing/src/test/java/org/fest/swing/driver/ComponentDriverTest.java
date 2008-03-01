@@ -25,7 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -39,7 +39,7 @@ import static org.fest.swing.util.Platform.*;
 public class ComponentDriverTest {
 
   private ComponentDriver driver;
-  private RobotFixture robot;
+  private Robot robot;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();

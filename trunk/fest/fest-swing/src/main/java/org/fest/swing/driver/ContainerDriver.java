@@ -24,7 +24,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.task.SetLocationTask;
 import org.fest.swing.task.SetSizeTask;
@@ -42,7 +42,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * Creates a new </code>{@link ContainerDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public ContainerDriver(RobotFixture robot) {
+  public ContainerDriver(Robot robot) {
     super(robot);
   }
 

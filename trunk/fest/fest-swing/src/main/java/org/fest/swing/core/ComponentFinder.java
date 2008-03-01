@@ -65,7 +65,7 @@ public class ComponentFinder {
    * Returns the <code>{@link ComponentPrinter}</code> in this finder.
    * @return the <code>ComponentPrinter</code> in this finder.
    */
-  public final ComponentPrinter printer() { return printer; }
+  public ComponentPrinter printer() { return printer; }
   
   /**
    * Finds a <code>{@link Component}</code> by type. The component to find does not have to be showing. 
@@ -81,7 +81,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public final <T extends Component> T findByType(Class<T> type) {
+  public <T extends Component> T findByType(Class<T> type) {
     return findByType(type, false);
   }
 
@@ -95,7 +95,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByType(Class)
    */
-  public final <T extends Component> T findByType(Class<T> type, boolean showing) {
+  public <T extends Component> T findByType(Class<T> type, boolean showing) {
     return type.cast(find(new TypeMatcher(type, showing)));
   }
   
@@ -131,7 +131,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public final <T extends Component> T findByType(Container root, Class<T> type) {
+  public <T extends Component> T findByType(Container root, Class<T> type) {
     return findByType(root, type, false);
   }
 
@@ -146,7 +146,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByType(Container, Class)
    */
-  public final <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
+  public <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
     return type.cast(find(root, new TypeMatcher(type, showing)));
   }
 
@@ -159,7 +159,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String)
    */
-  public final <T extends Component> T findByName(String name, Class<T> type) {
+  public <T extends Component> T findByName(String name, Class<T> type) {
     return findByName(name, type, false);
   }
 
@@ -173,7 +173,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String, Class)
    */
-  public final <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
+  public <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
     Component found = find(new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
@@ -214,7 +214,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public final Component findByName(String name) {
+  public Component findByName(String name) {
     return findByName(name, false);
   }
 
@@ -227,7 +227,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    */
-  public final Component findByName(String name, boolean showing) {
+  public Component findByName(String name, boolean showing) {
     return find(new NameMatcher(name, showing));
   }
 
@@ -239,7 +239,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
   @SuppressWarnings("unchecked") 
-  public final <T extends Component> T find(GenericTypeMatcher<T> m) {
+  public <T extends Component> T find(GenericTypeMatcher<T> m) {
     return (T)find((ComponentMatcher)m);
   }
 
@@ -249,7 +249,7 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
-  public final Component find(ComponentMatcher m) {
+  public Component find(ComponentMatcher m) {
     return finder.find(m);
   }
   
@@ -266,7 +266,7 @@ public class ComponentFinder {
    * @see #findByName(String)
    * @see #findByType(Container, Class)
    */
-  public final <T extends Component> T findByName(Container root, String name, Class<T> type) {
+  public <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return findByName(root, name, type, false);
   }
 
@@ -283,7 +283,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(Container, String, Class)
    */
-  public final <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
+  public <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
     Component found = find(root, new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
@@ -298,7 +298,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    */
-  public final Component findByName(Container root, String name) {
+  public Component findByName(Container root, String name) {
     return findByName(root, name, false);
   }
 
@@ -312,7 +312,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    */
-  public final Component findByName(Container root, String name, boolean showing) {
+  public Component findByName(Container root, String name, boolean showing) {
     return find(root, new NameMatcher(name, showing));
   }
   
@@ -327,7 +327,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    */
   @SuppressWarnings("unchecked") 
-  public final <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
+  public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
     return (T)find(root, (ComponentMatcher)m);
   }
 
@@ -340,7 +340,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public final Component find(Container root, ComponentMatcher m) {
+  public Component find(Container root, ComponentMatcher m) {
     return finder.find(root, m);
   }
 }

@@ -15,11 +15,14 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -35,9 +38,19 @@ import org.fest.swing.exception.LocationUnavailableException;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JTreeFixture extends ComponentFixture<JTree> {
+public class JTreeFixture extends ComponentFixture<JTree> implements JPopupMenuInvokerFixture {
 
-  private final JTreeDriver treeDriver;
+  private final JTreeDriver driver;
+
+  /**
+   * Creates a new <code>{@link JTreeFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JTree</code>.
+   * @param target the <code>JTree</code> to be managed by this fixture.
+   */
+  public JTreeFixture(Robot robot, JTree target) {
+    super(robot, target);
+    driver = newTreeDriver();
+  }
 
   /**
    * Creates a new <code>{@link JTreeFixture}</code>.
@@ -46,19 +59,9 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws ComponentLookupException if a matching <code>JTree</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTree</code> is found.
    */
-  public JTreeFixture(RobotFixture robot, String treeName) {
+  public JTreeFixture(Robot robot, String treeName) {
     super(robot, treeName, JTree.class);
-    treeDriver = newTreeDriver();
-  }
-
-  /**
-   * Creates a new <code>{@link JTreeFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JTree</code>.
-   * @param target the <code>JTree</code> to be managed by this fixture.
-   */
-  public JTreeFixture(RobotFixture robot, JTree target) {
-    super(robot, target);
-    treeDriver = newTreeDriver();
+    driver = newTreeDriver();
   }
 
   private JTreeDriver newTreeDriver() {
@@ -66,51 +69,12 @@ public class JTreeFixture extends ComponentFixture<JTree> {
   }
 
   /**
-   * Simulates a user selecting the tree node at the given row.
-   * @param row the index of the row to select.
-   * @return this fixture.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
-   */
-  public final JTreeFixture selectRow(int row) {
-    treeDriver.selectRow(target, row);
-    return this;
-  }
-
-  /**
-   * Simulates a user toggling the open/closed state of the tree node at the given row.
-   * @param row the index of the row to select.
-   * @return this fixture.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
-   */
-  public final JTreeFixture toggleRow(int row) {
-    treeDriver.toggleRow(target, row);
-    return this;
-  }
-
-  /**
-   * Select the given path, expanding parent nodes if necessary. TreePath must consist of usable String representations
-   * that can be used in later comparisons. The default &lt;classname&gt;@&lt;hashcode&gt; returned by
-   * <code>{@link Object#toString()}</code> is not usable; if that is all that is available, refer to the row number
-   * instead.
-   * @param treePath A path comprising an array of Strings that match the toString()'s of the path nodes
-   * @return this fixture.
-   * @throws LocationUnavailableException if any part of the path is not visible.
-   */
-  public final JTreeFixture selectPath(TreePath treePath) {
-    treeDriver.selectPath(target, treePath);
-    return this;
-  }
-
-  /**
    * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
-  public final JTreeFixture click() {
-    return (JTreeFixture)doClick();
+  public JTreeFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -118,8 +82,9 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JTreeFixture click(MouseButton button) {
-    return (JTreeFixture)doClick(button);
+  public JTreeFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -127,131 +92,26 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JTreeFixture click(MouseClickInfo mouseClickInfo) {
-    return (JTreeFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JTree}</code>.
-   * @return this fixture.
-   */
-  public final JTreeFixture rightClick() {
-    return (JTreeFixture)doRightClick();
+  public JTreeFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
    */
-  public final JTreeFixture doubleClick() {
-    return (JTreeFixture)doDoubleClick();
-  }
-
-  /**
-   * Gives input focus to this fixture's <code>{@link JTree}</code>.
-   * @return this fixture.
-   */
-  public final JTreeFixture focus() {
-    return (JTreeFixture)doFocus();
-  }
-
-  /**
-   * Simulates a user pressing and releasing the given keys in this fixture's <code>{@link JTree}</code>.
-   * This method does not affect the current focus.
-   * @param keyCodes the codes of the keys to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final JTreeFixture pressAndReleaseKeys(int...keyCodes) {
-    return (JTreeFixture)doPressAndReleaseKeys(keyCodes);
-  }
-
-  /**
-   * Simulates a user pressing the given key on this fixture's <code>{@link JTree}</code>.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final JTreeFixture pressKey(int keyCode) {
-    return (JTreeFixture)doPressKey(keyCode);
-  }
-
-  /**
-   * Simulates a user releasing the given key on this fixture's <code>{@link JTree}</code>.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final JTreeFixture releaseKey(int keyCode) {
-    return (JTreeFixture)doReleaseKey(keyCode);
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTree</code> is not visible.
-   */
-  public final JTreeFixture requireVisible() {
-    return (JTreeFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTree</code> is visible.
-   */
-  public final JTreeFixture requireNotVisible() {
-    return (JTreeFixture)assertNotVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTree</code> is disabled.
-   */
-  public final JTreeFixture requireEnabled() {
-    return (JTreeFixture)assertEnabled();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
-   * @param timeout the time this fixture will wait for the component to be enabled.
-   * @return this fixture.
-   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JTree</code> is never enabled.
-   */
-  public final JTreeFixture requireEnabled(Timeout timeout) {
-    return (JTreeFixture)assertEnabled(timeout);
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTree</code> is enabled.
-   */
-  public final JTreeFixture requireDisabled() {
-    return (JTreeFixture)assertDisabled();
-  }
-
-  /**
-   * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
-   * @param treePath the tree path corresponding to the item to drag.
-   * @return this fixture.
-   * @throws LocationUnavailableException if any part of the path is not visible.
-   */
-  public final JTreeFixture drag(TreePath treePath) {
-    treeDriver.drag(target, treePath);
+  public JTreeFixture doubleClick() {
+    driver.doubleClick(target);
     return this;
   }
 
   /**
-   * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
-   * @param treePath the tree path corresponding to the item to drop.
+   * Simulates a user right-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
-   * @throws LocationUnavailableException if any part of the path is not visible.
-   * @throws ActionFailedException if there is no drag action in effect.
    */
-  public final JTreeFixture drop(TreePath treePath) {
-    treeDriver.drop(target, treePath);
+  public JTreeFixture rightClick() {
+    driver.rightClick(target);
     return this;
   }
 
@@ -264,7 +124,18 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public JTreeFixture drag(int row) {
-    treeDriver.drag(target, row);
+    driver.drag(target, row);
+    return this;
+  }
+
+  /**
+   * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
+   * @param treePath the tree path corresponding to the item to drag.
+   * @return this fixture.
+   * @throws LocationUnavailableException if any part of the path is not visible.
+   */
+  public JTreeFixture drag(TreePath treePath) {
+    driver.drag(target, treePath);
     return this;
   }
 
@@ -278,7 +149,173 @@ public class JTreeFixture extends ComponentFixture<JTree> {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public JTreeFixture drop(int row) {
-    treeDriver.drop(target, row);
+    driver.drop(target, row);
     return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
+   * @param treePath the tree path corresponding to the item to drop.
+   * @return this fixture.
+   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @throws ActionFailedException if there is no drag action in effect.
+   */
+  public JTreeFixture drop(TreePath treePath) {
+    driver.drop(target, treePath);
+    return this;
+  }
+
+  /**
+   * Select the given path, expanding parent nodes if necessary. TreePath must consist of usable String representations
+   * that can be used in later comparisons. The default &lt;classname&gt;@&lt;hashcode&gt; returned by
+   * <code>{@link Object#toString()}</code> is not usable; if that is all that is available, refer to the row number
+   * instead.
+   * @param treePath A path comprising an array of Strings that match the toString()'s of the path nodes
+   * @return this fixture.
+   * @throws LocationUnavailableException if any part of the path is not visible.
+   */
+  public JTreeFixture selectPath(TreePath treePath) {
+    driver.selectPath(target, treePath);
+    return this;
+  }
+
+  /**
+   * Simulates a user selecting the tree node at the given row.
+   * @param row the index of the row to select.
+   * @return this fixture.
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  public JTreeFixture selectRow(int row) {
+    driver.selectRow(target, row);
+    return this;
+  }
+
+  /**
+   * Simulates a user toggling the open/closed state of the tree node at the given row.
+   * @param row the index of the row to select.
+   * @return this fixture.
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  public JTreeFixture toggleRow(int row) {
+    driver.toggleRow(target, row);
+    return this;
+  }
+
+  /**
+   * Gives input focus to this fixture's <code>{@link JTree}</code>.
+   * @return this fixture.
+   */
+  public JTreeFixture focus() {
+    driver.focus(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing and releasing the given keys in this fixture's <code>{@link JTree}</code>.
+   * This method does not affect the current focus.
+   * @param keyCodes the codes of the keys to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public JTreeFixture pressAndReleaseKeys(int...keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing the given key on this fixture's <code>{@link JTree}</code>.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public JTreeFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Simulates a user releasing the given key on this fixture's <code>{@link JTree}</code>.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public JTreeFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is disabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> is enabled.
+   */
+  public JTreeFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> is disabled.
+   */
+  public JTreeFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JTree</code> is never enabled.
+   */
+  public JTreeFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> is visible.
+   */
+  public JTreeFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> is not visible.
+   */
+  public JTreeFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

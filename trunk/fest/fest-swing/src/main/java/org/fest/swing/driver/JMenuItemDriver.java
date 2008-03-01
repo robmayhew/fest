@@ -20,7 +20,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.Pause.pause;
@@ -38,7 +38,7 @@ import static org.fest.util.Strings.concat;
  * 
  * @author Alex Ruiz
  */
-public final class JMenuItemDriver extends JComponentDriver {
+public class JMenuItemDriver extends JComponentDriver {
 
   /**
    * With decreased robot auto delay, OSX pop-up menus don't activate properly. Indicate the minimum delay for proper
@@ -50,7 +50,7 @@ public final class JMenuItemDriver extends JComponentDriver {
    * Creates a new </code>{@link JMenuItemDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JMenuItemDriver(RobotFixture robot) {
+  public JMenuItemDriver(Robot robot) {
     super(robot);
   }
 
@@ -113,7 +113,7 @@ public final class JMenuItemDriver extends JComponentDriver {
 
   private void click(JMenuItem menuItem) {
     if (!menuItem.isEnabled()) actionFailure(concat("Menu item <", format(menuItem), "> is disabled"));
-    robot.click(menuItem);
+    super.click(menuItem);
     robot.waitForIdle();
   }
 }

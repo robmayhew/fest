@@ -18,7 +18,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -43,14 +43,14 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Creates a new </code>{@link WindowDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public WindowDriver(RobotFixture robot) {
+  public WindowDriver(Robot robot) {
     super(robot);
   }
 
   /**
    * Resizes the <code>{@link Window}</code> horizontally.
    * @param w the target <code>Window</code>.
-   * @param width the width that this fixture's <code>Window</code> should have after being resized.
+   * @param width the width that the <code>Window</code> should have after being resized.
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public void resizeWidthTo(Window w, int width) {
@@ -60,7 +60,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
   /**
    * Resizes the <code>{@link Window}</code> vertically.
    * @param w the target <code>Window</code>.
-   * @param height the height that this fixture's <code>Window</code> should have after being resized.
+   * @param height the height that the <code>Window</code> should have after being resized.
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public void resizeHeightTo(Window w, int height) {
@@ -90,5 +90,32 @@ public class WindowDriver extends WindowLikeContainerDriver {
     if (!isUserMovable(w))
       throw actionFailure(concat("The window ", format(w), " is not movable by the user"));
     move(w, where.x, where.y);
+  }
+
+  /**
+   * Closing the <code>{@link Window}</code>.
+   * @param w the target <code>Window</code>.
+   */
+  public final void close(Window w) {
+    robot.close(w);
+  }
+
+  /**
+   * Shows the <code>{@link Window}</code>.
+   * @param w the target <code>Window</code>.
+   */
+  public void show(Window w) {
+    robot.showWindow(w);
+    requireVisible(w);
+  }
+
+  /**
+   * Shows the <code>{@link Window}</code>, resized to the given size.
+   * @param w the target <code>Window</code>.
+   * @param size the size to resize the <code>Window</code> to.
+   */
+  public void show(Window w, Dimension size) {
+    robot.showWindow(w, size);
+    requireVisible(w);
   }
 }

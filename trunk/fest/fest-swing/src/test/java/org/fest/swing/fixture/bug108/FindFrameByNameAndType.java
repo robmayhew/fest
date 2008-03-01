@@ -19,7 +19,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
@@ -34,7 +34,7 @@ import org.testng.annotations.Test;
 public class FindFrameByNameAndType {
 
   private MyFrame frame;
-  private RobotFixture robot;
+  private Robot robot;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();

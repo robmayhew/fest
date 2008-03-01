@@ -26,6 +26,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
@@ -35,6 +36,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.util.Swing.centerOf;
 
 /**
  * Tests for <code>{@link JOptionPaneFinder}</code>.
@@ -42,14 +45,15 @@ import static org.fest.swing.core.Pause.pause;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Test(groups = FUNCTIONAL)
 public class JOptionPaneFinderTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private MyFrame frame;
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    frame = new MyFrame(getClass());
+    frame = new MyFrame();
     robot.showWindow(frame);
   }
 
@@ -75,7 +79,8 @@ public class JOptionPaneFinderTest {
   }
 
   private void clickMessageButton() {
-    robot.click(frame.messageButton, MouseButton.LEFT_BUTTON, 1);
+    JButton button = frame.messageButton;
+    robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
   }
 
   @Test(expectedExceptions = WaitTimedOutError.class)
@@ -84,13 +89,12 @@ public class JOptionPaneFinderTest {
   }
 
   private static class MyFrame extends TestFrame {
-
     private static final long serialVersionUID = 1L;
 
-    JButton messageButton = new JButton("Message");
+    final JButton messageButton = new JButton("Message");
 
-    public MyFrame(Class<?> testClass) {
-      super(testClass);
+    public MyFrame() {
+      super(JOptionPaneFinderTest.class);
       setUp();
     }
 

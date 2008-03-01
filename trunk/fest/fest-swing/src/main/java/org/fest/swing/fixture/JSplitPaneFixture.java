@@ -15,10 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JSplitPane;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JSplitPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
@@ -30,10 +33,20 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang 
  */
-public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
+public class JSplitPaneFixture extends ComponentFixture<JSplitPane> implements JPopupMenuInvokerFixture {
 
-  private final JSplitPaneDriver driver;
+  private JSplitPaneDriver driver;
   
+  /**
+   * Creates a new <code>{@link JSplitPaneFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JSplitPane</code>.
+   * @param target the <code>JSplitPane</code> to be managed by this fixture.
+   */
+  public JSplitPaneFixture(Robot robot, JSplitPane target) {
+    super(robot, target);
+    createDriver();
+  }
+
   /**
    * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSplitPane</code>.
@@ -41,83 +54,83 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @throws ComponentLookupException if a matching <code>JSplitPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSplitPane</code> is found.
    */
-  public JSplitPaneFixture(RobotFixture robot, String spinnerName) {
+  public JSplitPaneFixture(Robot robot, String spinnerName) {
     super(robot, spinnerName, JSplitPane.class);
-    driver = newSplitPaneDriver();
+    createDriver();
   }
 
-  /**
-   * Creates a new <code>{@link JSplitPaneFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JSplitPane</code>.
-   * @param target the <code>JSplitPane</code> to be managed by this fixture.
-   */
-  public JSplitPaneFixture(RobotFixture robot, JSplitPane target) {
-    super(robot, target);
-    driver = newSplitPaneDriver();
+  private void createDriver() {
+    updateDriver(new JSplitPaneDriver(robot));
   }
 
-  private JSplitPaneDriver newSplitPaneDriver() {
-    return new JSplitPaneDriver(robot);
+  final void updateDriver(JSplitPaneDriver driver) {
+    this.driver = driver;
   }
-  
+
   /**
    * Simulates a user moving the divider of this fixture's <code>{@link JSplitPane}</code>.
    * @param location the location to move the divider to.
    * @return this fixture.
    */
-  public final JSplitPaneFixture moveDividerTo(int location) {
+  public JSplitPaneFixture moveDividerTo(int location) {
     driver.moveDividerTo(target, location);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
+   * @return this fixture.
+   */
+  public JSplitPaneFixture click() {
+    driver.click(target);
     return this;
   }
   
   /**
    * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
-   * @return this fixture.
-   */
-  public final JSplitPaneFixture click() {
-    return (JSplitPaneFixture)doClick();
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JSplitPaneFixture click(MouseButton button) {
-    return (JSplitPaneFixture)doClick(button);
+  public JSplitPaneFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
-
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JSplitPaneFixture click(MouseClickInfo mouseClickInfo) {
-    return (JSplitPaneFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JSplitPane}</code>.
-   * @return this fixture.
-   */
-  public final JSplitPaneFixture rightClick() {
-    return (JSplitPaneFixture)doRightClick();
+  public JSplitPaneFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
-  public final JSplitPaneFixture doubleClick() {
-    return (JSplitPaneFixture)doDoubleClick();
+  public JSplitPaneFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
-  
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JSplitPane}</code>.
+   * @return this fixture.
+   */
+  public JSplitPaneFixture rightClick() {
+    driver.rightClick(target);
+    return this;
+  }
+
   /**
    * Gives input focus to this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
    */
-  public final JSplitPaneFixture focus() {
-    return (JSplitPaneFixture)doFocus();
+  public JSplitPaneFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -127,18 +140,20 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSplitPaneFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JSplitPaneFixture)doPressAndReleaseKeys(keyCodes);
+  public JSplitPaneFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
-  
+
   /**
    * Simulates a user pressing the given key on this fixture's <code>{@link JSplitPane}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSplitPaneFixture pressKey(int keyCode) {
-    return (JSplitPaneFixture)doPressKey(keyCode);
+  public JSplitPaneFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
   
   /**
@@ -147,45 +162,9 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSplitPaneFixture releaseKey(int keyCode) {
-    return (JSplitPaneFixture)doReleaseKey(keyCode);
-  }
-  
-  /**
-   * Asserts that this fixture's <code>{@link JSplitPane}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSplitPane</code> is not visible.
-   */
-  public final JSplitPaneFixture requireVisible() {
-    return (JSplitPaneFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSplitPane}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSplitPane</code> is visible.
-   */
-  public final JSplitPaneFixture requireNotVisible() {
-    return (JSplitPaneFixture)assertNotVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSplitPane</code> is disabled.
-   */
-  public final JSplitPaneFixture requireEnabled() {
-    return (JSplitPaneFixture)assertEnabled();
-  }
-  
-  /**
-   * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
-   * @param timeout the time this fixture will wait for the component to be enabled.
-   * @return this fixture.
-   * @throws WaitTimedOutError if this fixture's <code>JSplitPane</code> is never enabled.
-   */
-  public final JSplitPaneFixture requireEnabled(Timeout timeout) {
-    return (JSplitPaneFixture)assertEnabled(timeout);
+  public JSplitPaneFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
   
   /**
@@ -193,7 +172,69 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSplitPane</code> is enabled.
    */
-  public final JSplitPaneFixture requireDisabled() {
-    return (JSplitPaneFixture)assertDisabled();
+  public JSplitPaneFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is disabled.
+   */
+  public JSplitPaneFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if this fixture's <code>JSplitPane</code> is never enabled.
+   */
+  public JSplitPaneFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is visible.
+   */
+  public JSplitPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is not visible.
+   */
+  public JSplitPaneFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

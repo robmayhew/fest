@@ -15,14 +15,22 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
+import java.awt.Point;
 
-import java.awt.Dimension;
-
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 
-import org.fest.swing.exception.ActionFailedException;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JScrollBarDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JScrollBarFixture}</code>.
@@ -31,133 +39,177 @@ import org.testng.annotations.Test;
  */
 public class JScrollBarFixtureTest extends ComponentFixtureTestCase<JScrollBar> {
 
-  private static final int VALUE = 30;
-  private static final int BLOCK_INCREMENT = 10;
-
+  private JScrollBarDriver driver;
   private JScrollBar target;
   private JScrollBarFixture fixture;
-
-  @Override protected ComponentFixture<JScrollBar> createFixture() {
-    fixture = new JScrollBarFixture(robot(), target);
-    return fixture;
-  }
-
-  @Override protected JScrollBar createTarget() {
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JScrollBarDriver.class);
     target = new JScrollBar();
-    target.setPreferredSize(new Dimension(20, 200));
-    target.setName("target");
-    target.setBlockIncrement(BLOCK_INCREMENT);
-    target.setValue(VALUE);
-    target.setMinimum(10);
-    target.setMaximum(80);
-    return target;
+    fixture = new JScrollBarFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  @Test(expectedExceptions = AssertionError.class)
-  public void shouldFailIfNotMatchingValue() {
-    target.setValue(10);
-    fixture.requireValue(60);
-  }
-
-  @Test public void shouldPassIfMatchingValue() {
-    target.setValue(68);
-    fixture.requireValue(68);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollUnitUpIsNegative() {
-    fixture.scrollUnitUp(-1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollUnitUpIsZero() {
-    fixture.scrollUnitUp(0);
-  }
-
-  @Test public void shouldScrollUnitUpTheGivenNumberOfTimes() {
-    fixture.scrollUnitUp(6);
-    assertThat(target.getValue()).isEqualTo(VALUE + 6);
-  }
-
-  @Test public void shouldScrollUnitUp() {
-    fixture.scrollUnitUp();
-    assertThat(target.getValue()).isEqualTo(VALUE + 1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollUnitDownIsNegative() {
-    fixture.scrollUnitDown(-1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollUnitDownIsZero() {
-    fixture.scrollUnitDown(0);
-  }
-
-  @Test public void shouldScrollUnitDownTheGivenNumberOfTimes() {
-    fixture.scrollUnitDown(8);
-    assertThat(target.getValue()).isEqualTo(VALUE - 8);
-  }
-
-  @Test public void shouldScrollUnitDown() {
-    fixture.scrollUnitDown();
-    assertThat(target.getValue()).isEqualTo(VALUE - 1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockUpIsNegative() {
-    fixture.scrollBlockUp(-1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockUpIsZero() {
-    fixture.scrollBlockUp(0);
-  }
-
-  @Test public void shouldScrollBlockUpTheGivenNumberOfTimes() {
-    int times = 2;
-    fixture.scrollBlockUp(times);
-    assertThat(target.getValue()).isEqualTo(VALUE + (BLOCK_INCREMENT * times));
-  }
-
-  @Test public void shouldScrollBlockUp() {
-    fixture.scrollBlockUp();
-    assertThat(target.getValue()).isEqualTo(VALUE + BLOCK_INCREMENT);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockDownIsNegative() {
-    fixture.scrollBlockDown(-1);
-  }
-
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToScrollBlockDownIsZero() {
-    fixture.scrollBlockDown(0);
-  }
-
-  @Test public void shouldScrollBlockUpDownTheGivenNumberOfTimes() {
-    int times = 2;
-    fixture.scrollBlockDown(times);
-    assertThat(target.getValue()).isEqualTo(VALUE - (BLOCK_INCREMENT * times));
+  @Test public void shouldRequireValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireValue(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireValue(8));
+      }
+    }.run();
   }
 
   @Test public void shouldScrollBlockDown() {
-    fixture.scrollBlockDown();
-    assertThat(target.getValue()).isEqualTo(VALUE - BLOCK_INCREMENT);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollBlockDown(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollBlockDown());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldScrollBlockDownTheGivenTimes() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollBlockDown(target, 6);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollBlockDown(6));
+      }
+    }.run();
   }
 
-  @Test public void shouldScrollToGivenPosition() {
-    fixture.scrollTo(68);
-    assertThat(target.getValue()).isEqualTo(68);
+  @Test public void shouldScrollBlockUp() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollBlockUp(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollBlockUp());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldScrollBlockUpTheGivenTimes() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollBlockUp(target, 6);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollBlockUp(6));
+      }
+    }.run();
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfPositionIsLessThanMinimum() {
-    fixture.scrollTo(target.getMinimum() - 10);
+  @Test public void shouldScrollToPosition() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollTo(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollTo(8));
+      }
+    }.run();
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfPositionIsGreaterThanMaximum() {
-    fixture.scrollTo(target.getMaximum() + 10);
+  @Test public void shouldScrollUnitDown() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollUnitDown(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollUnitDown());
+      }
+    }.run();
   }
+  
+  @Test public void shouldScrollUnitDownTheGivenTimes() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollUnitDown(target, 6);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollUnitDown(6));
+      }
+    }.run();
+  }
+
+  @Test public void shouldScrollUnitUp() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollUnitUp(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollUnitUp());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldScrollUnitUpTheGivenTimes() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollUnitUp(target, 6);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollUnitUp(6));
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  ComponentDriver driver() { return driver; }
+  JScrollBar target() { return target; }
+  ComponentFixture<JScrollBar> fixture() { return fixture; }
 }

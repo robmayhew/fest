@@ -17,19 +17,19 @@ package org.fest.swing.fixture;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JPopupMenuDriver;
-import org.fest.swing.testing.TestFrame;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -37,62 +37,64 @@ import static org.fest.util.Arrays.array;
  *
  * @author Yvonne Wang
  */
-public class JPopupMenuFixtureTest {
+public class JPopupMenuFixtureTest extends ComponentFixtureTestCase<JPopupMenu> {
 
+  private JPopupMenuDriver driver;
+  private JPopupMenu target;
   private JPopupMenuFixture fixture;
-  private RobotFixture robot;
-  private MyFrame frame;
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JPopupMenuDriver.class);
+    target = new JPopupMenu();
+    fixture = new JPopupMenuFixture(robot, target);
+    fixture.updateDriver(driver);
+  }
 
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    frame = new MyFrame(getClass());
-    robot.showWindow(frame);
-    JPopupMenu popupMenu = new JPopupMenuDriver(robot).showPopupMenu(frame.textBox);
-    fixture = new JPopupMenuFixture(robot, popupMenu);
-  }
-  
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
-  }
-  
   @Test public void shouldReturnMenuLabels() {
-    String[] menuLabels = fixture.menuLabels();
-    assertThat(menuLabels).isEqualTo(array("First", "Second", "Third"));
-    frame.popupMenu.setVisible(false);
-  }
-
-  @Test public void shouldFindMenuWithGivenMatcher() {
-    GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
-      protected boolean isMatching(JMenuItem menuItem) {
-        return "First".equals(menuItem.getText());
+    final String[] labels = array("Ben", "Leia"); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.menuLabelsOf(target)).andReturn(labels);
       }
-    };
-    JMenuItemFixture menuItem = fixture.menuItem(textMatcher);
-    assertThat(menuItem.target).isSameAs(frame.firstMenuItem);
-    frame.popupMenu.setVisible(false);
+      
+      protected void codeToTest() {
+        String[] result = fixture.menuLabels();
+        assertThat(result).isSameAs(labels);
+      }
+    }.run();
   }
 
-  @Test public void shouldFindMenuWithGivenName() {
-    JMenuItemFixture menuItem = fixture.menuItem("first");
-    assertThat(menuItem.target).isSameAs(frame.firstMenuItem);
-    frame.popupMenu.setVisible(false);
+  @Test public void shouldReturnMenuItemByName() {
+    final JMenuItem menuItem = new JMenuItem();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.menuItem(target, "menuItem")).andReturn(menuItem);
+      }
+      
+      protected void codeToTest() {
+        JMenuItemFixture result = fixture.menuItem("menuItem");
+        assertThat(result.target).isSameAs(menuItem);
+      }
+    }.run();
   }
   
-  private static class MyFrame extends TestFrame {
-    private static final long serialVersionUID = 1L;
-
-    private final JPopupMenu popupMenu = new JPopupMenu("Popup Menu");
-    private final JMenuItem firstMenuItem = new JMenuItem("First");
-    private final JTextField textBox = new JTextField(20);
-    
-    MyFrame(Class<?> testClass) {
-      super(testClass);
-      add(textBox);
-      textBox.setComponentPopupMenu(popupMenu);
-      firstMenuItem.setName("first");
-      popupMenu.add(firstMenuItem);
-      popupMenu.add(new JMenuItem("Second"));
-      popupMenu.add(new JMenuItem("Third"));
-    }
+  @SuppressWarnings("unchecked") 
+  @Test public void shouldReturnMenuItemUsingSearchCriteria() {
+    final GenericTypeMatcher<? extends JMenuItem> matcher = createMock(GenericTypeMatcher.class);
+    final JMenuItem menuItem = new JMenuItem();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.menuItem(target, matcher)).andReturn(menuItem);
+      }
+      
+      protected void codeToTest() {
+        JMenuItemFixture result = fixture.menuItem(matcher);
+        assertThat(result.target).isSameAs(menuItem);
+      }
+    }.run();
   }
+
+  ComponentDriver driver() { return driver; }
+  JPopupMenu target() { return target; }
+  ComponentFixture<JPopupMenu> fixture() { return fixture; }  
 }

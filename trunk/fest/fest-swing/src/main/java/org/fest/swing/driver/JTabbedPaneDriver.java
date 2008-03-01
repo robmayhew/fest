@@ -19,7 +19,7 @@ import java.awt.Point;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
@@ -39,7 +39,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * Creates a new </code>{@link JTabbedPaneDriver}</code>.
    * @param robot
    */
-  public JTabbedPaneDriver(RobotFixture robot) {
+  public JTabbedPaneDriver(Robot robot) {
     super(robot);
     location = new JTabbedPaneLocation();
   }
@@ -50,10 +50,10 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @return the titles of all the tabs.
    */
   public String[] tabTitles(JTabbedPane tabbedPane) {
-      int count = tabbedPane.getTabCount();
-      String[] titles = new String[count];
-      for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
-      return titles;
+    int count = tabbedPane.getTabCount();
+    String[] titles = new String[count];
+    for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
+    return titles;
   }
 
   /**
@@ -76,7 +76,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
   public final void selectTab(JTabbedPane tabbedPane, int index) {
     try {
       Point p = location.pointAt(tabbedPane, index);
-      robot.click(tabbedPane, p);
+      click(tabbedPane, p);
     } catch (LocationUnavailableException e) {
       // Set the tab directly
       robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));

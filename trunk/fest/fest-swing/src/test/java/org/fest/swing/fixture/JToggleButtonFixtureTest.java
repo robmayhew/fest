@@ -15,53 +15,115 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Point;
+
+import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.AbstractButtonDriver;
+import org.fest.swing.driver.ComponentDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link org.fest.swing.fixture.JToggleButtonFixture}</code>.
+ * Tests for <code>{@link JToggleButtonFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JToggleButtonFixtureTest extends TwoStateButtonFixtureTestCase<JToggleButton> {
+//TODO Implement
+public class JToggleButtonFixtureTest extends ComponentFixtureTestCase<JToggleButton> {
 
+  private AbstractButtonDriver driver;
+  private JToggleButton target;
   private JToggleButtonFixture fixture;
-
-  @Test public void shouldSelectCheckBoxIfNotSelected() {
-    fixture.target.setSelected(false);
-    fixture.check();
-    assertThat(fixture.target.isSelected()).isTrue();
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(AbstractButtonDriver.class);
+    target = new JToggleButton("A ToggleButton");
+    fixture = new JToggleButtonFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  @Test public void shouldNotSelectCheckboxIfAlreadySelected() {
-    fixture.target.setSelected(true);
-    fixture.check();
-    assertThat(fixture.target.isSelected()).isTrue();
+  @Test public void shouldReturnText() {
+    assertThat(fixture.text()).isEqualTo(target.getText());
+  }
+  
+  @Test public void shouldRequireText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireText(target, "A ToggleButton");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireText("A ToggleButton"));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireNotSelected() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNotSelected(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNotSelected());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireSelected() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelected(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelected());
+      }
+    }.run();
   }
 
-  @Test public void shouldUnselectCheckBoxIfSelected() {
-    fixture.target.setSelected(true);
-    fixture.uncheck();
-    assertThat(fixture.target.isSelected()).isFalse();
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  @Test public void shouldNotUnselectCheckboxIfAlreadyUnselected() {
-    fixture.target.setSelected(false);
-    fixture.uncheck();
-    assertThat(fixture.target.isSelected()).isFalse();
-  }
-
-  protected ComponentFixture<JToggleButton> createFixture() {
-    fixture = new JToggleButtonFixture(robot(), "target");
-    return fixture;
-  }
-
-  protected JToggleButton createTarget() {
-    JToggleButton target = new JToggleButton("Target");
-    target.setName("target");
-    return target;
-  }
+  ComponentDriver driver() { return driver; }
+  JToggleButton target() { return target; }
+  ComponentFixture<JToggleButton> fixture() { return fixture; }
 }

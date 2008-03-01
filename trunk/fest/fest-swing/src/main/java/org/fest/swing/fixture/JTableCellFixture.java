@@ -15,13 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.fixture.MouseClickInfo.button;
-
 import javax.swing.JTable;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.fixture.MouseClickInfo.button;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
@@ -41,6 +41,8 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class JTableCellFixture implements ItemFixture {
 
+  // TODO Test!
+  
   private final JTableFixture table;
   private final TableCell cell;
 

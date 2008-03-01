@@ -15,10 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JList;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -27,12 +30,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.Range;
 
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
@@ -42,9 +40,9 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture {
+public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture, JPopupMenuInvokerFixture {
 
-  private final JListDriver driver;
+  private JListDriver driver;
 
   /**
    * Creates a new <code>{@link JListFixture}</code>.
@@ -53,9 +51,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws ComponentLookupException if a matching <code>JList</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JList</code> is found.
    */
-  public JListFixture(RobotFixture robot, String listName) {
+  public JListFixture(Robot robot, String listName) {
     super(robot, listName, JList.class);
-    driver = newListDriver();
+    createDriver();
   }
 
   /**
@@ -63,13 +61,17 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param robot performs simulation of user events on the given <code>JList</code>.
    * @param target the <code>JList</code> to be managed by this fixture.
    */
-  public JListFixture(RobotFixture robot, JList target) {
+  public JListFixture(Robot robot, JList target) {
     super(robot, target);
-    driver = newListDriver();
+    createDriver();
   }
 
-  private JListDriver newListDriver() {
-    return new JListDriver(robot);
+  private void createDriver() {
+    updateDriver(new JListDriver(robot));
+  }
+  
+  final void updateDriver(JListDriver driver) {
+    this.driver = driver;
   }
 
   /**
@@ -86,8 +88,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param to the last item to select (inclusive.)
    * @return this fixture.
    */
-  public final JListFixture selectItems(Range.From from, Range.To to) {
-    driver.selectItems(target, from.value, to.value);
+  public JListFixture selectItems(Range.From from, Range.To to) {
+    driver.selectItems(target, from, to);
     return this;
   }
 
@@ -98,7 +100,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
    *         in the <code>JList</code>.
    */
-  public final JListFixture selectItems(int...indices) {
+  public JListFixture selectItems(int...indices) {
     driver.selectItems(target, indices);
     return this;
   }
@@ -110,7 +112,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public final JListFixture selectItem(int index) {
+  public JListFixture selectItem(int index) {
     driver.selectItem(target, index);
     return this;
   }
@@ -122,7 +124,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
    *         found.
    */
-  public final JListFixture selectItems(String...items) {
+  public JListFixture selectItems(String...items) {
     driver.selectItems(target, items);
     return this;
   }
@@ -133,8 +135,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
-  public final JListFixture selectItem(String text) {
-    driver.selectItem(target, text, LEFT_BUTTON, 1);
+  public JListFixture selectItem(String text) {
+    driver.selectItem(target, text);
     return this;
   }
 
@@ -145,8 +147,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public final JListFixture doubleClickItem(int index) {
-    clickItem(index, LEFT_BUTTON, 2);
+  public JListFixture doubleClickItem(int index) {
+    driver.clickItem(target, index, LEFT_BUTTON, 2);
     return this;
   }
 
@@ -155,25 +157,13 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param text the text of the item to double-click.
    * @return this fixture.
    */
-  public final JListFixture doubleClickItem(String text) {
-    driver.selectItem(target, text, LEFT_BUTTON, 2);
+  public JListFixture doubleClickItem(String text) {
+    driver.clickItem(target, text, LEFT_BUTTON, 2);
     return this;
   }
 
   void clickItem(int index, MouseButton button, int times) {
-    driver.selectItem(target, index, button, times);
-  }
-
-  /**
-   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
-   * @param index the index of the item.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   */
-  public final JPopupMenuFixture showPopupMenuAt(int index) {
-    return showPopupMenuAt(driver.pointAt(target, index));
+    driver.clickItem(target, index, button, times);
   }
 
   /**
@@ -183,10 +173,8 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if the selected item does not match the given text.
    */
-  public final JListFixture requireSelection(String text) {
-    int selectedIndex = target.getSelectedIndex();
-    if (selectedIndex == -1) failNoSelection();
-    assertThat(valueAt(selectedIndex)).as(selectedIndexProperty()).isEqualTo(text);
+  public JListFixture requireSelection(String text) {
+    driver.requireSelection(target, text);
     return this;
   }
 
@@ -197,21 +185,10 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if the selected items do not match the given text items.
    */
-  public final JListFixture requireSelectedItems(String... items) {
-    int[] selectedIndices = target.getSelectedIndices();
-    int currentSelectionCount = selectedIndices.length;
-    if (currentSelectionCount == 0) failNoSelection();
-    assertThat(currentSelectionCount).as(formattedPropertyName("selectedIndices#length")).isEqualTo(items.length);
-    for (int i = 0; i < currentSelectionCount; i++) {
-      String description = formattedPropertyName(concat("selectedIndices[", valueOf(i), "]"));
-      assertThat(valueAt(selectedIndices[i])).as(description).isEqualTo(items[i]);
-    }
+  public JListFixture requireSelectedItems(String... items) {
+    driver.requireSelectedItems(target, items);
     return this;
   }
-
-  private void failNoSelection() { fail(concat("[", selectedIndexProperty(), "] No selection")); }
-
-  private String selectedIndexProperty() { return formattedPropertyName("selectedIndex"); }
 
   /**
    * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JList}</code> . If such
@@ -231,7 +208,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return a fixture that manages the list item specified by the given index.
    * @throws ActionFailedException if the index is out of bounds.
    */
-  public final JListItemFixture item(int index) {
+  public JListItemFixture item(int index) {
     return new JListItemFixture(this, index);
   }
 
@@ -241,7 +218,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return a fixture that manages the list item specified by the given text.
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
-  public final JListItemFixture item(String text) {
+  public JListItemFixture item(String text) {
     return new JListItemFixture(this, driver.indexOf(target, text));
   }
 
@@ -249,8 +226,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * Simulates a user clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
-  public final JListFixture click() {
-    return (JListFixture)doClick();
+  public JListFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -258,8 +236,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JListFixture click(MouseButton button) {
-    return (JListFixture)doClick(button);
+  public JListFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -267,32 +246,36 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JListFixture click(MouseClickInfo mouseClickInfo) {
-    return (JListFixture)doClick(mouseClickInfo);
+  public JListFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
-  public final JListFixture rightClick() {
-    return (JListFixture)doRightClick();
+  public JListFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
-  public final JListFixture doubleClick() {
-    return (JListFixture)doDoubleClick();
+  public JListFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JList}</code>.
    * @return this fixture.
    */
-  public final JListFixture focus() {
-    return (JListFixture)doFocus();
+  public JListFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -301,8 +284,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JListFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JListFixture)doPressAndReleaseKeys(keyCodes);
+  public JListFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -311,8 +295,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JListFixture pressKey(int keyCode) {
-    return (JListFixture)doPressKey(keyCode);
+  public JListFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -321,8 +306,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JListFixture releaseKey(int keyCode) {
-    return (JListFixture)doReleaseKey(keyCode);
+  public JListFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -330,8 +316,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JList</code> is not visible.
    */
-  public final JListFixture requireVisible() {
-    return (JListFixture)assertVisible();
+  public JListFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -339,8 +326,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JList</code> is visible.
    */
-  public final JListFixture requireNotVisible() {
-    return (JListFixture)assertNotVisible();
+  public JListFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -348,8 +336,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JList</code> is disabled.
    */
-  public final JListFixture requireEnabled() {
-    return (JListFixture)assertEnabled();
+  public JListFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -358,8 +347,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JList</code> is never enabled.
    */
-  public final JListFixture requireEnabled(Timeout timeout) {
-    return (JListFixture)assertEnabled(timeout);
+  public JListFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -367,8 +357,9 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JList</code> is enabled.
    */
-  public final JListFixture requireDisabled() {
-    return (JListFixture)assertDisabled();
+  public JListFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -377,7 +368,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    * @return this fixture.
    */
-  public final JListFixture drag(String text) {
+  public JListFixture drag(String text) {
     driver.drag(target, text);
     return this;
   }
@@ -389,7 +380,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public final JListFixture drop(String text) {
+  public JListFixture drop(String text) {
     driver.drop(target, text);
     return this;
   }
@@ -399,7 +390,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @return this fixture.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public final JListFixture drop() {
+  public JListFixture drop() {
     driver.drop(target);
     return this;
   }
@@ -411,7 +402,7 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public final JListFixture drag(int index) {
+  public JListFixture drag(int index) {
     driver.drag(target, index);
     return this;
   }
@@ -424,8 +415,51 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    *         the <code>JList</code>.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public final JListFixture drop(int index) {
+  public JListFixture drop(int index) {
     driver.drop(target, index);
     return this;
+  }
+
+  /**
+   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
+   * @param index the index of the item.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public JPopupMenuFixture showPopupMenuAt(int index) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, index));
+  }
+
+  /**
+   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
+   * @param text the text of the item.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(String text) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, text));
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

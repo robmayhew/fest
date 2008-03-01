@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JFileChooserFixture;
 
 /**
@@ -82,7 +82,7 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
    * @return a <code>JFileChooserFixture</code> managing the found <code>JFileChooser</code>.
    * @throws org.fest.swing.exception.WaitTimedOutError if a <code>JFileChooser</code> could not be found.
    */
-  public JFileChooserFixture using(RobotFixture robot) {
+  public JFileChooserFixture using(Robot robot) {
     return new JFileChooserFixture(robot, findComponentWith(robot));
   }
 

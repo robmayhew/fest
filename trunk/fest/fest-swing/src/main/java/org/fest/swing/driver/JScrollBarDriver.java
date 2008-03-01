@@ -18,11 +18,12 @@ import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 
@@ -42,7 +43,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * Creates a new </code>{@link JScrollBarDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JScrollBarDriver(RobotFixture robot) {
+  public JScrollBarDriver(Robot robot) {
     super(robot);
   }
 
@@ -181,5 +182,15 @@ public class JScrollBarDriver extends JComponentDriver {
     public void run() {
       target.setValue(value);
     }
+  }
+
+  /**
+   * Asserts that the value of the <code>{@link JScrollBar}</code> is equal to the given one.
+   * @param scrollBar the target <code>JScrollBar</code>.
+   * @param value the expected value.
+   * @throws AssertionError if the value of the <code>JScrollBar</code> is not equal to the given one.
+   */
+  public void requireValue(JScrollBar scrollBar, int value) {
+    assertThat(scrollBar.getValue()).isEqualTo(value);
   }
 }

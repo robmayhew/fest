@@ -15,13 +15,14 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JInternalFrameDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -34,9 +35,9 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> implements FrameLikeFixture {
+public class JInternalFrameFixture extends ComponentFixture<JInternalFrame> implements FrameLikeFixture {
 
-  private final JInternalFrameDriver driver;
+  private JInternalFrameDriver driver;
   
   /**
    * Creates a new <code>{@link JInternalFrameFixture}</code>.
@@ -45,9 +46,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @throws ComponentLookupException if a matching <code>JInternalFrame</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JInternalFrame</code> is found.
    */
-  public JInternalFrameFixture(RobotFixture robot, String internalFrameName) {
+  public JInternalFrameFixture(Robot robot, String internalFrameName) {
     super(robot, internalFrameName, JInternalFrame.class);
-    driver = newInternalFrameDriver();
+    createDriver();
   }
 
   /**
@@ -55,20 +56,24 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param robot performs simulation of user events on the given <code>JInternalFrame</code>.
    * @param target the <code>JInternalFrame</code> to be managed by this fixture.
    */
-  public JInternalFrameFixture(RobotFixture robot, JInternalFrame target) {
+  public JInternalFrameFixture(Robot robot, JInternalFrame target) {
     super(robot, target);
-    driver = newInternalFrameDriver();
+    createDriver();
   }
 
-  private JInternalFrameDriver newInternalFrameDriver() {
-    return new JInternalFrameDriver(robot);
+  private void createDriver() {
+    updateDriver(new JInternalFrameDriver(robot));
+  }
+  
+  final void updateDriver(JInternalFrameDriver driver) {
+    this.driver = driver;
   }
   
   /**
    * Brings this fixture's <code>{@link JInternalFrame}</code> to the front.
    * @return this fixture.
    */
-  public final JInternalFrameFixture moveToFront() {
+  public JInternalFrameFixture moveToFront() {
     driver.moveToFront(target);
     return this;
   }
@@ -77,7 +82,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * Brings this fixture's <code>{@link JInternalFrame}</code> to the back.
    * @return this fixture.
    */
-  public final JInternalFrameFixture moveToBack() {
+  public JInternalFrameFixture moveToBack() {
     driver.moveToBack(target);
     return this;
   }
@@ -87,7 +92,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final JInternalFrameFixture deiconify() {
+  public JInternalFrameFixture deiconify() {
     driver.deiconify(target);
     return this;
   }
@@ -98,7 +103,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final JInternalFrameFixture iconify() {
+  public JInternalFrameFixture iconify() {
     driver.iconify(target);
     return this;
   }
@@ -110,7 +115,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not maximizable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final JInternalFrameFixture maximize() {
+  public JInternalFrameFixture maximize() {
     driver.maximize(target);
     return this;
   }
@@ -121,7 +126,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public final JInternalFrameFixture normalize() {
+  public JInternalFrameFixture normalize() {
     driver.normalize(target);
     return this;
   }
@@ -130,7 +135,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * Simulates a user closing this fixture's <code>{@link JInternalFrame}</code>.
    * @throws ActionFailedException if the <code>JInternalFrame</code> is not closable.
    */
-  public final void close() {
+  public void close() {
     driver.close(target);
   }
 
@@ -140,8 +145,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws AssertionError if the size of this fixture's <code>JInternalFrame</code> is not equal to the given size.
    */
-  public final JInternalFrameFixture requireSize(Dimension size) {
-    return (JInternalFrameFixture)assertEqualSize(size);
+  public JInternalFrameFixture requireSize(Dimension size) {
+    driver.requireSize(target, size);
+    return this;
   }
 
   /**
@@ -149,7 +155,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param width the width that this fixture's <code>JInternalFrame</code> should have after being resized.
    * @return this fixture.
    */
-  public final JInternalFrameFixture resizeWidthTo(int width) {
+  public JInternalFrameFixture resizeWidthTo(int width) {
     return resizeTo(new Dimension(width, target.getHeight()));
   }
 
@@ -158,7 +164,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param height the height that this fixture's <code>JInternalFrame</code> should have after being resized.
    * @return this fixture.
    */
-  public final JInternalFrameFixture resizeHeightTo(int height) {
+  public JInternalFrameFixture resizeHeightTo(int height) {
     return resizeTo(new Dimension(target.getWidth(), height));
   }
 
@@ -167,7 +173,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param size the size that the target <code>JInternalFrame</code> should have after being resized.
    * @return this fixture.
    */
-  public final JInternalFrameFixture resizeTo(Dimension size) {
+  public JInternalFrameFixture resizeTo(Dimension size) {
     driver.resize(target, size.width, size.height);
     return this;
   }
@@ -177,10 +183,8 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param p the point to move this fixture's <code>JInternalFrame</code> to.
    * @return this fixture.
    */
-  public final JInternalFrameFixture moveTo(Point p) {
-    Point locationOnScreen = target.getLocationOnScreen();
-    Point destination = new Point(p.x - locationOnScreen.x, p.y - locationOnScreen.y);
-    driver.move(target, destination.x, destination.y);
+  public JInternalFrameFixture moveTo(Point p) {
+    driver.move(target, p.x, p.y);
     return this;
   }
 
@@ -188,8 +192,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * Simulates a user clicking this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
    */
-  public final JInternalFrameFixture click() {
-    return (JInternalFrameFixture)doClick();
+  public JInternalFrameFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -197,8 +202,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JInternalFrameFixture click(MouseButton button) {
-    return (JInternalFrameFixture)doClick(button);
+  public JInternalFrameFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -206,32 +212,36 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JInternalFrameFixture click(MouseClickInfo mouseClickInfo) {
-    return (JInternalFrameFixture)doClick(mouseClickInfo);
+  public JInternalFrameFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
    */
-  public final JInternalFrameFixture rightClick() {
-    return (JInternalFrameFixture)doRightClick();
+  public JInternalFrameFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
    */
-  public final JInternalFrameFixture doubleClick() {
-    return (JInternalFrameFixture)doDoubleClick();
+  public JInternalFrameFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JInternalFrame}</code>.
    * @return this fixture.
    */
-  public final JInternalFrameFixture focus() {
-    return (JInternalFrameFixture)doFocus();
+  public JInternalFrameFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -240,8 +250,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JInternalFrameFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JInternalFrameFixture)doPressAndReleaseKeys(keyCodes);
+  public JInternalFrameFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -250,8 +261,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JInternalFrameFixture pressKey(int keyCode) {
-    return (JInternalFrameFixture)doPressKey(keyCode);
+  public JInternalFrameFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -260,8 +272,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JInternalFrameFixture releaseKey(int keyCode) {
-    return (JInternalFrameFixture)doReleaseKey(keyCode);
+  public JInternalFrameFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -269,8 +282,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws AssertionError if the managed <code>JInternalFrame</code> is not visible.
    */
-  public final JInternalFrameFixture requireVisible() {
-    return (JInternalFrameFixture)assertVisible();
+  public JInternalFrameFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -278,8 +292,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws AssertionError if the managed <code>JInternalFrame</code> is visible.
    */
-  public final JInternalFrameFixture requireNotVisible() {
-    return (JInternalFrameFixture)assertNotVisible();
+  public JInternalFrameFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -287,8 +302,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws AssertionError if the managed <code>JInternalFrame</code> is disabled.
    */
-  public final JInternalFrameFixture requireEnabled() {
-    return (JInternalFrameFixture)assertEnabled();
+  public JInternalFrameFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -297,8 +313,9 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws WaitTimedOutError if the managed <code>JInternalFrame</code> is never enabled.
    */
-  public final JInternalFrameFixture requireEnabled(Timeout timeout) {
-    return (JInternalFrameFixture)assertEnabled(timeout);
+  public JInternalFrameFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -306,7 +323,28 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @return this fixture.
    * @throws AssertionError if the managed <code>JInternalFrame</code> is enabled.
    */
-  public final JInternalFrameFixture requireDisabled() {
-    return (JInternalFrameFixture)assertDisabled();
+  public JInternalFrameFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

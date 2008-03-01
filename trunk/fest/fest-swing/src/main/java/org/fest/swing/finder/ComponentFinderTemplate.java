@@ -22,8 +22,8 @@ import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.NameAndTypeMatcher;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.ComponentFixture;
@@ -71,7 +71,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
    * @return a fixture capable of managing the found component.
    * @throws WaitTimedOutError if a component with the given name or of the given type could not be found.
    */
-  public abstract ComponentFixture<T> using(RobotFixture robot);
+  public abstract ComponentFixture<T> using(Robot robot);
 
   /**
    * Finds the component using either by name or type.
@@ -80,7 +80,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
    * @throws WaitTimedOutError if a component with the given name or of the given type could not be found.
    */
   @SuppressWarnings("unchecked")
-  protected final T findComponentWith(RobotFixture robot) {
+  protected final T findComponentWith(Robot robot) {
     ComponentFoundCondition condition = new ComponentFoundCondition(searchDescription(), robot.finder(), matcher());
     pause(condition, timeout);
     return (T)condition.found();

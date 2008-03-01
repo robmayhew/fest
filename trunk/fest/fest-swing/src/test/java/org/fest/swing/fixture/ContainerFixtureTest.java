@@ -27,9 +27,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static java.awt.Color.RED;
@@ -40,6 +39,7 @@ import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
@@ -48,7 +48,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-@GUITest
+@Test(groups = FUNCTIONAL)
 public class ContainerFixtureTest {
 
   private static class CustomWindow extends JFrame {
@@ -142,7 +142,7 @@ public class ContainerFixtureTest {
   }
 
   private ContainerFixture<CustomWindow> container;
-  private RobotFixture robot;
+  private Robot robot;
   private CustomWindow window;
 
   private JButtonFixture findButton() {

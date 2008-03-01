@@ -15,17 +15,22 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Point;
+
+import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerListModel;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.util.Collections;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JSpinnerDriver;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
  * Tests for <code>{@link JSpinnerFixture}</code>.
@@ -34,85 +39,125 @@ import static org.fest.swing.fixture.ErrorMessageAssert.*;
  */
 public class JSpinnerFixtureTest extends ComponentFixtureTestCase<JSpinner> {
 
+  private JSpinnerDriver driver;
+  private JSpinner target;
   private JSpinnerFixture fixture;
-
-  @Test public void shouldPassIfMatchingValue() {
-    fixture.target.setValue("Gandalf");
-    fixture.requireValue("Gandalf");
-  }
   
-  @Test public void shouldFailIfNotMatchingValue() {
-    assertThat(spinnerValue()).isEqualTo("Frodo");
-    try {
-      fixture.requireValue("Sam");
-      fail();
-    } catch (AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, fixture().target);
-      assertThat(errorMessage).contains(property("value"), expected("'Sam'"), actual("'Frodo'"));
-    }
-  }
-  
-  @Test public void shouldIncrementValue() {
-    assertThat(spinnerValue()).isEqualTo("Frodo");
-    fixture.increment();
-    assertThat(spinnerValue()).isEqualTo("Sam");
+  void onSetUp(Robot robot) {
+    driver = createMock(JSpinnerDriver.class);
+    target = new JSpinner();
+    fixture = new JSpinnerFixture(robot, target);
+    fixture.updateDriver(driver);
   }
 
-  @Test public void shouldIncrementValueTheGivenTimes() {
-    assertThat(spinnerValue()).isEqualTo("Frodo");
-    fixture.increment(2);
-    assertThat(spinnerValue()).isEqualTo("Gandalf");
+  @Test public void shouldRequireValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireValue(target, "A Value");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireValue("A Value"));
+      }
+    }.run();
   }
   
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToIncrementIsZero() {
-    fixture.increment(0);
+  @Test public void shouldIncrementTheGivenTimes() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.increment(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.increment(8));
+      }
+    }.run();
   }
-  
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToIncrementIsNegative() {
-    fixture.increment(-1);
+
+  @Test public void shouldIncrement() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.increment(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.increment());
+      }
+    }.run();
   }
-  
-  @Test public void shouldDecrementValue() {
-    fixture.increment();
-    fixture.decrement();
-    assertThat(spinnerValue()).isEqualTo("Frodo");
+
+  @Test public void shouldDecrementTheGivenTimes() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.decrement(target, 8);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.decrement(8));
+      }
+    }.run();
   }
-  
-  @Test public void shouldDecrementValueTheGivenTimes() {
-    fixture.target.setValue("Gandalf");
-    fixture.decrement(2);
-    assertThat(spinnerValue()).isEqualTo("Frodo");
-  }
-  
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToDecrementIsZero() {
-    fixture.decrement(0);
-  }
-  
-  @Test(expectedExceptions = ActionFailedException.class)
-  public void shouldThrowErrorIfTimesToDecrementIsNegative() {
-    fixture.decrement(-1);
+
+  @Test public void shouldDecrement() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.decrement(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.decrement());
+      }
+    }.run();
   }
 
   @Test public void shouldEnterText() {
-    fixture.enterText("Gandalf");
-    assertThat(spinnerValue()).isEqualTo("Gandalf");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.enterText(target, "Some Text");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.enterText("Some Text"));
+      }
+    }.run();
   }
 
-  private Object spinnerValue() {
-    return fixture.target.getValue();
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
   }
 
-  protected ComponentFixture<JSpinner> createFixture() {
-    fixture = new JSpinnerFixture(robot(), "target");
-    return fixture;
-  }
-
-  protected JSpinner createTarget() {
-    JSpinner target = new JSpinner(new SpinnerListModel(Collections.list("Frodo", "Sam", "Gandalf")));
-    target.setName("target");
-    return target;
-  }
+  ComponentDriver driver() { return driver; }
+  JSpinner target() { return target; }
+  ComponentFixture<JSpinner> fixture() { return fixture; }
 }

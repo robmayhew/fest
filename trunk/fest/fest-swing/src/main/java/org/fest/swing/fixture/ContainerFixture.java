@@ -46,7 +46,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if more than one matching component is found.
    * @see org.fest.swing.core.ComponentFinder#findByType(Class)
    */
-  public ContainerFixture(RobotFixture robot, Class<? extends T> type) {
+  public ContainerFixture(Robot robot, Class<? extends T> type) {
     super(robot, type);
   }
 
@@ -59,7 +59,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @throws ComponentLookupException if more than one matching component is found.
    * @see org.fest.swing.core.ComponentFinder#findByName(String, Class)
    */
-  public ContainerFixture(RobotFixture robot, String name, Class<? extends T> type) {
+  public ContainerFixture(Robot robot, String name, Class<? extends T> type) {
     super(robot, name, type);
   }
 
@@ -68,7 +68,7 @@ public abstract class ContainerFixture<T extends Container> extends ComponentFix
    * @param robot performs simulation of user events on the given <code>Container</code>.
    * @param target the <code>Container</code> to be.
    */
-  public ContainerFixture(RobotFixture robot, T target) {
+  public ContainerFixture(Robot robot, T target) {
     super(robot, target);
   }
 

@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestFrame;
 
@@ -44,7 +44,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 @Test(groups = FUNCTIONAL)
 public class JSliderDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JSlider slider;
   private JSliderDriver driver;
 

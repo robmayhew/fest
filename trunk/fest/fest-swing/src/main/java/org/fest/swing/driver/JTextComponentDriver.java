@@ -24,13 +24,14 @@ import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.lang.Math.*;
 import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.*;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -46,12 +47,22 @@ import static org.fest.util.Strings.*;
  */
 public class JTextComponentDriver extends JComponentDriver {
 
+  private static final String TEXT_PROPERTY = "text";
+
   /**
    * Creates a new </code>{@link JTextComponentDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JTextComponentDriver(RobotFixture robot) {
+  public JTextComponentDriver(Robot robot) {
     super(robot);
+  }
+
+  /**
+   * Deletes the text of the <code>{@link JTextComponent}</code>.
+   * @param textBox the target <code>JTextComponent</code>.
+   */
+  public void deleteText(JTextComponent textBox) {
+    replaceText(textBox, "");
   }
 
   /**
@@ -61,24 +72,56 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void replaceText(JTextComponent textBox, String text) {
-    scrollToVisible(textBox, 0);
-    invokeAction(textBox, selectAllAction);
+    selectAll(textBox);
     if (isEmpty(text) && !isEmpty(textBox.getText())) {
         invokeAction(textBox, deletePrevCharAction);
         return;
     }
-    robot.focus(textBox);
+    enterText(textBox, text);
+  }
+
+  /**
+   * Selects the text in the <code>{@link JTextComponent}</code>.
+   * @param textBox the target <code>JTextComponent</code>.
+   */
+  public void selectAll(JTextComponent textBox) {
+    scrollToVisible(textBox, 0);
+    invokeAction(textBox, selectAllAction);
+  }
+
+  /**
+   * Types the given text into the <code>{@link JTextComponent}</code>.
+   * @param textBox the target <code>JTextComponent</code>.
+   * @param text the text to enter.
+   */
+  public void enterText(JTextComponent textBox, String text) {
+    focus(textBox);
     robot.enterText(text);
   }
 
   /**
    * Select the given text range.
    * @param textBox the target <code>JTextComponent</code>.
+   * @param text the text to select.
+   * @throws ActionFailedException if selecting the text fails.
+   */
+  public void selectText(JTextComponent textBox, String text) {
+    String actualText = textBox.getText();
+    if (isEmpty(actualText)) return;
+    int indexFound = actualText.indexOf(text);
+    if (indexFound == -1) return;
+    selectText(textBox, indexFound, indexFound + text.length());
+  }
+  
+  /**
+   * Select the given text range.
+   * @param textBox the target <code>JTextComponent</code>.
    * @param start the starting index of the selection.
    * @param end the ending index of the selection.
-   * @throws ActionFailedException if the selecting the text in the given range fails.
+   * @throws ActionFailedException if selecting the text in the given range fails.
    */
   public void selectText(JTextComponent textBox, int start, int end) {
+    if (isEmpty(textBox.getText())) return;
     startSelection(textBox, start);
     endSelection(textBox, end);
     verifySelectionMade(textBox, start, end);
@@ -201,5 +244,24 @@ public class JTextComponentDriver extends JComponentDriver {
     throw actionFailure(concat(
         "Unable to select text using indices '", valueOf(start), "' and '", valueOf(end),
         ", current selection starts at '", valueOf(actualStart), "' and ends at '", valueOf(actualEnd), "'"));
+  }
+
+  /**
+   * Asserts that the text in the given <code>{@link JTextComponent}</code> is equal to the specified <code>String</code>.
+   * @param textBox the given <code>JTextComponent</code>.
+   * @param expected the text to match.
+   * @throws AssertionError if the text of the <code>JTextComponent</code> is not equal to the given one.
+   */
+  public void requireText(JTextComponent textBox, String expected) {
+    assertThat(textBox.getText()).as(propertyName(textBox, TEXT_PROPERTY)).isEqualTo(expected);
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTextComponent}</code> is empty.
+   * @param textBox the given <code>JTextComponent</code>.
+   * @throws AssertionError if the <code>JTextComponent</code> is not empty.
+   */
+  public void requireEmpty(JTextComponent textBox) {
+    assertThat(textBox.getText()).as(propertyName(textBox, TEXT_PROPERTY)).isEmpty();
   }
 }

@@ -20,7 +20,7 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.driver.JInternalFrameDriver.Action.*;
@@ -41,10 +41,9 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * Creates a new </code>{@link JInternalFrameDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JInternalFrameDriver(RobotFixture robot) {
+  public JInternalFrameDriver(Robot robot) {
     super(robot);
   }
-
 
   /**
    * Brings the given <code>{@link JInternalFrame}</code> to the front.

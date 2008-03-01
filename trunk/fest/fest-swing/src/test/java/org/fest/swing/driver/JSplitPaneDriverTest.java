@@ -24,7 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestFrame;
 
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
@@ -42,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 @Test(groups = FUNCTIONAL)
 public class JSplitPaneDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JSplitPane splitPane;
   private JSplitPaneDriver driver;
   

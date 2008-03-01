@@ -15,10 +15,12 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
@@ -41,30 +43,6 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   /**
    * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
    * containing the current AWT hierarchy.
-   * @param name the name of the <code>Frame</code> to find.
-   * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
-   * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
-   */
-  public FrameFixture(String name) {
-    super(name, Frame.class);
-    driver = newFrameDriver();
-  }
-
-  /**
-   * Creates a new <code>{@link FrameFixture}</code>.
-   * @param robot performs user events on the given window and verifies expected output.
-   * @param name the name of the <code>Frame</code> to find using the given <code>RobotFixture</code>.
-   * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
-   * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
-   */
-  public FrameFixture(RobotFixture robot, String name) {
-    super(robot, name, Frame.class);
-    driver = newFrameDriver();
-  }
-
-  /**
-   * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
-   * containing the current AWT hierarchy.
    * @param target the <code>Frame</code> to be managed by this fixture.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
@@ -78,8 +56,32 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @param robot performs user events on the given window and verifies expected output.
    * @param target the <code>Frame</code> to be managed by this fixture.
    */
-  public FrameFixture(RobotFixture robot, Frame target) {
+  public FrameFixture(Robot robot, Frame target) {
     super(robot, target);
+    driver = newFrameDriver();
+  }
+
+  /**
+   * Creates a new <code>{@link FrameFixture}</code>.
+   * @param robot performs user events on the given window and verifies expected output.
+   * @param name the name of the <code>Frame</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
+   */
+  public FrameFixture(Robot robot, String name) {
+    super(robot, name, Frame.class);
+    driver = newFrameDriver();
+  }
+
+  /**
+   * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * containing the current AWT hierarchy.
+   * @param name the name of the <code>Frame</code> to find.
+   * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
+   */
+  public FrameFixture(String name) {
+    super(name, Frame.class);
     driver = newFrameDriver();
   }
 
@@ -88,38 +90,12 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   }
 
   /**
-   * Shows this fixture's <code>{@link Frame}</code>.
-   * @return this fixture.
-   */
-  public final FrameFixture show() {
-    return (FrameFixture)doShow();
-  }
-
-  /**
-   * Shows this fixture's <code>{@link Frame}</code>, resized to the given size.
-   * @param size the size to resize this fixture's <code>Frame</code> to.
-   * @return this fixture.
-   */
-  public final FrameFixture show(Dimension size) {
-    return (FrameFixture)doShow(size);
-  }
-
-  /**
-   * Simulates a user moving this fixture's <code>{@link Frame}</code> to the given point.
-   * @param p the point to move this fixture's <code>Frame</code> to.
-   * @return this fixture.
-   */
-  public final FrameFixture moveTo(Point p) {
-    driver.moveTo(target, p);
-    return this;
-  }
-
-  /**
    * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public final FrameFixture click() {
-    return (FrameFixture)doClick();
+  public FrameFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -127,8 +103,9 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @param button the button to click.
    * @return this fixture.
    */
-  public final FrameFixture click(MouseButton button) {
-    return (FrameFixture)doClick(button);
+  public FrameFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -136,48 +113,43 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final FrameFixture click(MouseClickInfo mouseClickInfo) {
-    return (FrameFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link Frame}</code>.
-   * @return this fixture.
-   */
-  public final FrameFixture rightClick() {
-    return (FrameFixture)doRightClick();
+  public FrameFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public final FrameFixture doubleClick() {
-    return (FrameFixture)doDoubleClick();
+  public FrameFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
-   * Gives input focus to this fixture's <code>{@link Frame}</code>.
+   * Simulates a user right-clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public FrameFixture focus() {
-    return (FrameFixture)doFocus();
+  public FrameFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user iconifying this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public final FrameFixture iconify() {
+  public FrameFixture iconify() {
     driver.iconify(target);
     return this;
   }
-
+  
   /**
    * Simulates a user deiconifying this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public final FrameFixture deiconify() {
+  public FrameFixture deiconify() {
     driver.deiconify(target);
     return this;
   }
@@ -187,7 +159,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
-  public final FrameFixture maximize() {
+  public FrameFixture maximize() {
     driver.maximize(target);
     return this;
   }
@@ -196,38 +168,101 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Simulates a user normalizing this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public final FrameFixture normalize() {
+  public FrameFixture normalize() {
     driver.normalize(target);
     return this;
   }
 
   /**
-   * Simulates a user resizing horizontally this fixture's <code>{@link Frame}</code>.
-   * @param width the width that this fixture's <code>Frame</code> should have after being resized.
+   * Gives input focus to this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
    */
-  public final FrameFixture resizeWidthTo(int width) {
-    driver.resizeWidthTo(target, width);
+  public FrameFixture focus() {
+    driver.focus(target);
     return this;
   }
 
   /**
-   * Simulates a user resizing vertically this fixture's <code>{@link Frame}</code>.
-   * @param height the height that this fixture's <code>Frame</code> should have after being resized.
+   * Simulates a user moving this fixture's <code>{@link Frame}</code> to the given point.
+   * @param p the point to move this fixture's <code>Frame</code> to.
    * @return this fixture.
    */
-  public final FrameFixture resizeHeightTo(int height) {
-    driver.resizeHeightTo(target, height);
+  public FrameFixture moveTo(Point p) {
+    driver.moveTo(target, p);
     return this;
   }
 
   /**
-   * Simulates a user resizing this fixture's <code>{@link Frame}</code>.
-   * @param size the size that the target window should have after being resized.
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Frame}</code>.
+   * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @see java.awt.event.KeyEvent
    */
-  public final FrameFixture resizeTo(Dimension size) {
-    driver.resizeTo(target, size);
+  public FrameFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing the given key on this fixture's <code>{@link Frame}</code>.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public FrameFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Simulates a user releasing the given key on this fixture's <code>{@link Frame}</code>.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @see java.awt.event.KeyEvent
+   */
+  public FrameFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link Frame}</code> is disabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>Frame</code> is enabled.
+   */
+  public FrameFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>Frame</code> is disabled.
+   */
+  public FrameFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if this fixture's <code>Frame</code> is never enabled.
+   */
+  public FrameFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link Frame}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>Frame</code> is visible.
+   */
+  public FrameFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 
@@ -237,38 +272,9 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    * @throws AssertionError if the size of this fixture's <code>Frame</code> is not equal to the given size.
    */
-  public final FrameFixture requireSize(Dimension size) {
-    return (FrameFixture)assertEqualSize(size);
-  }
-
-  /**
-   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Frame}</code>.
-   * @param keyCodes one or more codes of the keys to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final FrameFixture pressAndReleaseKeys(int... keyCodes) {
-    return (FrameFixture)doPressAndReleaseKeys(keyCodes);
-  }
-
-  /**
-   * Simulates a user pressing the given key on this fixture's <code>{@link Frame}</code>.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final FrameFixture pressKey(int keyCode) {
-    return (FrameFixture)doPressKey(keyCode);
-  }
-
-  /**
-   * Simulates a user releasing the given key on this fixture's <code>{@link Frame}</code>.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final FrameFixture releaseKey(int keyCode) {
-    return (FrameFixture)doReleaseKey(keyCode);
+  public FrameFixture requireSize(Dimension size) {
+    driver.requireSize(target, size);
+    return this;
   }
 
   /**
@@ -276,45 +282,84 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>Frame</code> is not visible.
    */
-  public final FrameFixture requireVisible() {
-    return (FrameFixture)assertVisible();
+  public FrameFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link Frame}</code> is not visible.
+   * Simulates a user resizing vertically this fixture's <code>{@link Frame}</code>.
+   * @param height the height that this fixture's <code>Frame</code> should have after being resized.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Frame</code> is visible.
    */
-  public final FrameFixture requireNotVisible() {
-    return (FrameFixture)assertNotVisible();
+  public FrameFixture resizeHeightTo(int height) {
+    driver.resizeHeightTo(target, height);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
+   * Simulates a user resizing this fixture's <code>{@link Frame}</code>.
+   * @param size the size that the target window should have after being resized.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Frame</code> is disabled.
    */
-  public final FrameFixture requireEnabled() {
-    return (FrameFixture)assertEnabled();
-  }
-
-
-  /**
-   * Asserts that this fixture's <code>{@link Frame}</code> is enabled.
-   * @param timeout the time this fixture will wait for the component to be enabled.
-   * @return this fixture.
-   * @throws WaitTimedOutError if this fixture's <code>Frame</code> is never enabled.
-   */
-  public final FrameFixture requireEnabled(Timeout timeout) {
-    return (FrameFixture)assertEnabled(timeout);
+  public FrameFixture resizeTo(Dimension size) {
+    driver.resizeTo(target, size);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link Frame}</code> is disabled.
+   * Simulates a user resizing horizontally this fixture's <code>{@link Frame}</code>.
+   * @param width the width that this fixture's <code>Frame</code> should have after being resized.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Frame</code> is enabled.
    */
-  public final FrameFixture requireDisabled() {
-    return (FrameFixture)assertDisabled();
+  public FrameFixture resizeWidthTo(int width) {
+    driver.resizeWidthTo(target, width);
+    return this;
+  }
+
+  /**
+   * Shows this fixture's <code>{@link Frame}</code>.
+   * @return this fixture.
+   */
+  public FrameFixture show() {
+    driver.show(target);
+    return this;
+  }
+
+  /**
+   * Shows this fixture's <code>{@link Frame}</code>, resized to the given size.
+   * @param size the size to resize this fixture's <code>Frame</code> to.
+   * @return this fixture.
+   */
+  public FrameFixture show(Dimension size) {
+    driver.show(target, size);
+    return this;
+  }
+
+  /**
+   * Simulates a user closing this fixture's <code>{@link Frame}</code>.
+   */
+  public void close() {
+    driver.close(target);
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

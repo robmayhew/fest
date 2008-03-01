@@ -17,8 +17,8 @@ package org.fest.swing.fixture;
 
 import java.awt.Container;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 
 /**
@@ -29,7 +29,7 @@ import org.fest.swing.core.Timeout;
  */
 public class ConcreteContainerFixture<T extends Container> extends ContainerFixture<T> {
 
-  public ConcreteContainerFixture(RobotFixture robot, T target) {
+  public ConcreteContainerFixture(Robot robot, T target) {
     super(robot, target);
   }
 

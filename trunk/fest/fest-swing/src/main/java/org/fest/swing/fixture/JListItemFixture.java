@@ -32,8 +32,8 @@ import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
  */
 public class JListItemFixture implements ItemFixture {
 
-  private final JListFixture list;
-  private final int index;
+  final JListFixture list;
+  final int index;
 
   /**
    * Creates a new </code>{@link JListItemFixture}</code>.
@@ -76,7 +76,7 @@ public class JListItemFixture implements ItemFixture {
    */
   public final JListItemFixture click(MouseClickInfo mouseClickInfo) {
     list.clickItem(index, mouseClickInfo.button(), mouseClickInfo.times());
-    return null;
+    return this;
   }
 
   /**

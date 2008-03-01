@@ -21,7 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.plaf.ToolBarUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static javax.swing.SwingUtilities.getWindowAncestor;
@@ -47,7 +47,7 @@ public class JToolBarDriver extends JComponentDriver {
    * Creates a new </code>{@link JToolBarDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JToolBarDriver(RobotFixture robot) {
+  public JToolBarDriver(Robot robot) {
     super(robot);
   }
 

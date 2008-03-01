@@ -26,7 +26,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
 
@@ -43,7 +43,7 @@ import static org.fest.swing.testing.TestTable.*;
 @Test(groups = FUNCTIONAL)
 public class JTableDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private TestTable dragTable;
   private TestTable dropTable;
   private JTableDriver driver;

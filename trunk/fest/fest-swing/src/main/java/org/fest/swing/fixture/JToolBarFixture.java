@@ -16,12 +16,13 @@
 package org.fest.swing.fixture;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JToolBar;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JToolBarDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -34,7 +35,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JToolBarFixture extends ContainerFixture<JToolBar> {
+public class JToolBarFixture extends ContainerFixture<JToolBar> implements JPopupMenuInvokerFixture {
 
   /**
    * Understands constraints used to unfloat a floating <code>{@link JToolBar}</code>.
@@ -55,28 +56,28 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
 
   /**
    * Creates a new <code>{@link JToolBarFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JToolBar</code>.
+   * @param target the <code>JToolBar</code> to be managed by this fixture.
+   */
+  public JToolBarFixture(Robot robot, JToolBar target) {
+    super(robot, target);
+    driver = newToolBarDriver(robot);
+  }
+
+  /**
+   * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToolBar</code>.
    * @param toolbarName the name of the <code>JToolBar</code> to find using the given
    * <code>RobotFixture</code>.
    * @throws ComponentLookupException if a matching <code>JToolBar</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JToolBar</code> is found.
    */
-  public JToolBarFixture(RobotFixture robot, String toolbarName) {
+  public JToolBarFixture(Robot robot, String toolbarName) {
     super(robot, toolbarName, JToolBar.class);
     driver = newToolBarDriver(robot);
   }
 
-  /**
-   * Creates a new <code>{@link JToolBarFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JToolBar</code>.
-   * @param target the <code>JToolBar</code> to be managed by this fixture.
-   */
-  public JToolBarFixture(RobotFixture robot, JToolBar target) {
-    super(robot, target);
-    driver = newToolBarDriver(robot);
-  }
-
-  private JToolBarDriver newToolBarDriver(RobotFixture robot) {
+  private JToolBarDriver newToolBarDriver(Robot robot) {
     return new JToolBarDriver(robot);
   }
 
@@ -87,7 +88,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @throws ActionFailedException if the <code>JToolBar</code> is not floatable.
    * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
-  public final JToolBarFixture floatTo(Point point) {
+  public JToolBarFixture floatTo(Point point) {
     driver.floatTo(target, point.x, point.y);
     return this;
   }
@@ -97,7 +98,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws ActionFailedException if the dock container cannot be found.
    */
-  public final JToolBarFixture unfloat() {
+  public JToolBarFixture unfloat() {
     driver.unfloat(target);
     return this;
   }
@@ -117,8 +118,9 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Simulates a user clicking this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
-  public final JToolBarFixture click() {
-    return (JToolBarFixture)doClick();
+  public JToolBarFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -126,8 +128,9 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JToolBarFixture click(MouseButton button) {
-    return (JToolBarFixture)doClick(button);
+  public JToolBarFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -135,32 +138,36 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JToolBarFixture click(MouseClickInfo mouseClickInfo) {
-    return (JToolBarFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JToolBar}</code>.
-   * @return this fixture.
-   */
-  public final JToolBarFixture rightClick() {
-    return (JToolBarFixture)doRightClick();
+  public JToolBarFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
-  public final JToolBarFixture doubleClick() {
-    return (JToolBarFixture)doDoubleClick();
+  public JToolBarFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JToolBar}</code>.
+   * @return this fixture.
+   */
+  public JToolBarFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JToolBar}</code>.
    * @return this fixture.
    */
-  public final JToolBarFixture focus() {
-    return (JToolBarFixture)doFocus();
+  public JToolBarFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -170,8 +177,9 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JToolBarFixture pressAndReleaseKeys(int...keyCodes) {
-    return (JToolBarFixture)doPressAndReleaseKeys(keyCodes);
+  public JToolBarFixture pressAndReleaseKeys(int...keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -180,8 +188,9 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JToolBarFixture pressKey(int keyCode) {
-    return (JToolBarFixture)doPressKey(keyCode);
+  public JToolBarFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -190,26 +199,19 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JToolBarFixture releaseKey(int keyCode) {
-    return (JToolBarFixture)doReleaseKey(keyCode);
+  public JToolBarFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JToolBar}</code> is visible.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToolBar</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is enabled.
    */
-  public final JToolBarFixture requireVisible() {
-    return (JToolBarFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JToolBar}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToolBar</code> is visible.
-   */
-  public final JToolBarFixture requireNotVisible() {
-    return (JToolBarFixture)assertNotVisible();
+  public JToolBarFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -217,8 +219,9 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JToolBar</code> is disabled.
    */
-  public final JToolBarFixture requireEnabled() {
-    return (JToolBarFixture)assertEnabled();
+  public JToolBarFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -227,16 +230,48 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JToolBar</code> is never enabled.
    */
-  public final JToolBarFixture requireEnabled(Timeout timeout) {
-    return (JToolBarFixture)assertEnabled(timeout);
+  public JToolBarFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JToolBar}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToolBar</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is visible.
    */
-  public final JToolBarFixture requireDisabled() {
-    return (JToolBarFixture)assertDisabled();
+  public JToolBarFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is not visible.
+   */
+  public JToolBarFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

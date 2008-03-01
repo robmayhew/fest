@@ -19,7 +19,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.Frame.*;
@@ -40,7 +40,7 @@ public class FrameDriver extends WindowDriver {
    * Creates a new </code>{@link FrameDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public FrameDriver(RobotFixture robot) {
+  public FrameDriver(Robot robot) {
     super(robot);
   }
 

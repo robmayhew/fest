@@ -15,24 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Dialog;
-import java.util.HashMap;
-
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static javax.swing.JOptionPane.*;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JOptionPane}</code> and verification of the state of such
@@ -42,22 +33,15 @@ import static org.fest.util.Strings.concat;
  */
 public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
 
-  private static final HashMap<Integer, String> messageMap = new HashMap<Integer, String>();
-  static {
-    messageMap.put(ERROR_MESSAGE, "Error Message");
-    messageMap.put(INFORMATION_MESSAGE, "Information Message");
-    messageMap.put(WARNING_MESSAGE, "Warning Message");
-    messageMap.put(QUESTION_MESSAGE, "Question Message");
-    messageMap.put(PLAIN_MESSAGE, "Plain Message");
-  }
-
+  private JOptionPaneDriver driver;
+  
   /**
    * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot finds a showing <code>JOptionPane</code>, which will be managed by this fixture.
    * @throws ComponentLookupException if a showing <code>JOptionPane</code> could not be found.
    * @throws ComponentLookupException if more than one showing <code>JOptionPane</code> is found.
    */
-  public JOptionPaneFixture(RobotFixture robot) {
+  public JOptionPaneFixture(Robot robot) {
     this(robot, robot.finder().findByType(JOptionPane.class, true));
   }
 
@@ -66,16 +50,22 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @param robot performs simulation of user events on the given <code>JOptionPane</code>.
    * @param target the <code>JOptionPane</code> to be managed by this fixture.
    */
-  public JOptionPaneFixture(RobotFixture robot, JOptionPane target) {
+  public JOptionPaneFixture(Robot robot, JOptionPane target) {
     super(robot, target);
+    updateDriver(new JOptionPaneDriver(robot));
+  }
+
+  final void updateDriver(JOptionPaneDriver driver) {
+    this.driver = driver;
   }
 
   /**
    * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
-  public final JOptionPaneFixture click() {
-    return (JOptionPaneFixture)doClick();
+  public JOptionPaneFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -83,8 +73,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JOptionPaneFixture click(MouseButton button) {
-    return (JOptionPaneFixture)doClick(button);
+  public JOptionPaneFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -92,32 +83,36 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
-    return (JOptionPaneFixture)doClick(mouseClickInfo);
+  public JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
-  public final JOptionPaneFixture rightClick() {
-    return (JOptionPaneFixture)doRightClick();
+  public JOptionPaneFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
-  public final JOptionPaneFixture doubleClick() {
-    return (JOptionPaneFixture)doDoubleClick();
+  public JOptionPaneFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JOptionPane}</code>.
    * @return this fixture.
    */
-  public final JOptionPaneFixture focus() {
-    return (JOptionPaneFixture)doFocus();
+  public JOptionPaneFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -126,9 +121,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given title.
    */
-  public final JOptionPaneFixture requireTitle(String title) {
-    String actualTitle = ((Dialog)target.getRootPane().getParent()).getTitle();
-    assertThat(actualTitle).as(formattedPropertyName("title")).isEqualTo(title);
+  public JOptionPaneFixture requireTitle(String title) {
+    driver.requireTitle(target, title);
     return this;
   }
 
@@ -138,8 +132,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not show the given message.
    */
-  public final JOptionPaneFixture requireMessage(Object message) {
-    assertThat(target.getMessage()).as(formattedPropertyName("message")).isEqualTo(message);
+  public JOptionPaneFixture requireMessage(Object message) {
+    driver.requireMessage(target, message);
     return this;
   }
 
@@ -149,8 +143,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given options.
    */
-  public final JOptionPaneFixture requireOptions(Object[] options) {
-    assertThat(target.getOptions()).as(formattedPropertyName("options")).isEqualTo(options);
+  public JOptionPaneFixture requireOptions(Object[] options) {
+    driver.requireOptions(target, options);
     return this;
   }
 
@@ -160,8 +154,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return a fixture wrapping the "OK" button.
    * @throws ComponentLookupException if the a "OK" button cannot be found.
    */
-  public final JButtonFixture okButton() {
-    return buttonWithTextFromUIManager("OptionPane.okButtonText");
+  public JButtonFixture okButton() {
+    return new JButtonFixture(robot, driver.okButton(target));
   }
 
   /**
@@ -170,8 +164,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return a fixture wrapping the "Cancel" button.
    * @throws ComponentLookupException if the a "Cancel" button cannot be found.
    */
-  public final JButtonFixture cancelButton() {
-    return buttonWithTextFromUIManager("OptionPane.cancelButtonText");
+  public JButtonFixture cancelButton() {
+    return new JButtonFixture(robot, driver.cancelButton(target));
   }
 
   /**
@@ -180,8 +174,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return a fixture wrapping the "Yes" button.
    * @throws ComponentLookupException if the a "Yes" button cannot be found.
    */
-  public final JButtonFixture yesButton() {
-    return buttonWithTextFromUIManager("OptionPane.yesButtonText");
+  public JButtonFixture yesButton() {
+    return new JButtonFixture(robot, driver.yesButton(target));
   }
 
   /**
@@ -190,12 +184,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return a fixture wrapping the "No" button.
    * @throws ComponentLookupException if the a "No" button cannot be found.
    */
-  public final JButtonFixture noButton() {
-    return buttonWithTextFromUIManager("OptionPane.noButtonText");
-  }
-
-  private JButtonFixture buttonWithTextFromUIManager(String key) {
-    return buttonWithText(UIManager.getString(key));
+  public JButtonFixture noButton() {
+    return new JButtonFixture(robot, driver.noButton(target));
   }
 
   /**
@@ -205,17 +195,16 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return a fixture wrapping a button containing the given text.
    * @throws ComponentLookupException if the a button with the given text cannot be found.
    */
-  public final JButtonFixture buttonWithText(String text) {
-    JButton button = robot.finder().find(target, new JButtonMatcher(text));
-    return new JButtonFixture(robot, button);
+  public JButtonFixture buttonWithText(String text) {
+    return new JButtonFixture(robot, driver.buttonWithText(target, text));
   }
 
   /**
    * Finds the first <code>{@link JButton}</code> in this fixture's <code>{@link JOptionPane}</code>.
    * @return a fixture wrapping the first <code>JButton</code> contained in this fixture's <code>JOptionPane</code>.
    */
-  public final JButtonFixture button() {
-    return new JButtonFixture(robot, robot.finder().findByType(target, JButton.class));
+  public JButtonFixture button() {
+    return new JButtonFixture(robot, driver.button(target));
   }
 
   /**
@@ -223,17 +212,17 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return the text component in the given message.
    * @throws ComponentLookupException if the message type is not input and therefore it does not contain a text component.
    */
-  public final JTextComponentFixture textBox() throws ComponentLookupException {
-    JTextComponent textComponent = robot.finder().findByType(target, JTextComponent.class);
-    return new JTextComponentFixture(robot, textComponent);
+  public JTextComponentFixture textBox() throws ComponentLookupException {
+    return new JTextComponentFixture(robot, driver.textBox(target));
   }
 
   /**
    * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying an error message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture requireErrorMessage() {
-    return assertEqualMessageType(ERROR_MESSAGE);
+  public JOptionPaneFixture requireErrorMessage() {
+    driver.requireErrorMessage(target);
+    return this;
   }
 
   /**
@@ -241,47 +230,36 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture requireInformationMessage() {
-    return assertEqualMessageType(INFORMATION_MESSAGE);
+  public JOptionPaneFixture requireInformationMessage() {
+    driver.requireInformationMessage(target);
+    return this;
   }
 
   /**
    * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying a warning message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture requireWarningMessage() {
-    return assertEqualMessageType(WARNING_MESSAGE);
+  public JOptionPaneFixture requireWarningMessage() {
+    driver.requireWarningMessage(target);
+    return this;
   }
 
   /**
    * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying a question.
    * @return this fixture.
    */
-  public final JOptionPaneFixture requireQuestionMessage() {
-    return assertEqualMessageType(QUESTION_MESSAGE);
+  public JOptionPaneFixture requireQuestionMessage() {
+    driver.requireQuestionMessage(target);
+    return this;
   }
 
   /**
    * Asserts that this fixture's <code>{@link JOptionPane}</code> is displaying a plain message.
    * @return this fixture.
    */
-  public final JOptionPaneFixture requirePlainMessage() {
-    return assertEqualMessageType(PLAIN_MESSAGE);
-  }
-
-  private JOptionPaneFixture assertEqualMessageType(int expected) {
-    assertThat(actualMessageTypeAsText()).as(formattedPropertyName("messageType")).isEqualTo(messageTypeAsText(expected));
+  public JOptionPaneFixture requirePlainMessage() {
+    driver.requirePlainMessage(target);
     return this;
-  }
-
-  private String actualMessageTypeAsText() {
-    return messageTypeAsText(target.getMessageType());
-  }
-
-  private String messageTypeAsText(int messageType) {
-    if (!messageMap.containsKey(messageType))
-      throw actionFailure(concat("The message type <", messageType, "> is not valid"));
-    return messageMap.get(messageType);
   }
 
   /**
@@ -291,8 +269,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JOptionPaneFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JOptionPaneFixture)doPressAndReleaseKeys(keyCodes);
+  public JOptionPaneFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -301,8 +280,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JOptionPaneFixture pressKey(int keyCode) {
-    return (JOptionPaneFixture)doPressKey(keyCode);
+  public JOptionPaneFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -311,8 +291,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JOptionPaneFixture releaseKey(int keyCode) {
-    return (JOptionPaneFixture)doReleaseKey(keyCode);
+  public JOptionPaneFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -320,8 +301,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JOptionPane</code> is not visible.
    */
-  public final JOptionPaneFixture requireVisible() {
-    return (JOptionPaneFixture)assertVisible();
+  public JOptionPaneFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -329,8 +311,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JOptionPane</code> is visible.
    */
-  public final JOptionPaneFixture requireNotVisible() {
-    return (JOptionPaneFixture)assertNotVisible();
+  public JOptionPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -338,8 +321,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JOptionPane</code> is disabled.
    */
-  public final JOptionPaneFixture requireEnabled() {
-    return (JOptionPaneFixture)assertEnabled();
+  public JOptionPaneFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -348,8 +332,9 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JOptionPane</code> is never enabled.
    */
-  public final JOptionPaneFixture requireEnabled(Timeout timeout) {
-    return (JOptionPaneFixture)assertEnabled(timeout);
+  public JOptionPaneFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -357,7 +342,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JOptionPane</code> is enabled.
    */
-  public final JOptionPaneFixture requireDisabled() {
-    return (JOptionPaneFixture)assertDisabled();
+  public JOptionPaneFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 }

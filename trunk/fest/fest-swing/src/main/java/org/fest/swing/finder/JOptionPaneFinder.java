@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JOptionPaneFixture;
 
 /**
@@ -71,7 +71,7 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
    * @return a <code>JOptionPaneFixture</code> managing the found <code>JOptionPane</code>.
    * @throws org.fest.swing.exception.WaitTimedOutError if a <code>JOptionPane</code> could not be found.
    */
-  public JOptionPaneFixture using(RobotFixture robot) {
+  public JOptionPaneFixture using(Robot robot) {
     return new JOptionPaneFixture(robot, findComponentWith(robot));
   }
 

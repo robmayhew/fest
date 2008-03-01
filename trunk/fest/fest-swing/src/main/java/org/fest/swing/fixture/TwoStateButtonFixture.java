@@ -18,10 +18,8 @@ package org.fest.swing.fixture;
 import javax.swing.AbstractButton;
 import javax.swing.JToggleButton;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a two-state button and verification of the state of such button.
@@ -30,10 +28,9 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public abstract class TwoStateButtonFixture<T extends AbstractButton> extends ComponentFixture<T> implements TextDisplayFixture {
+public abstract class TwoStateButtonFixture<T extends AbstractButton> extends ComponentFixture<T> 
+    implements TextDisplayFixture, JPopupMenuInvokerFixture {
 
-  private static final String SELECTED_PROPERTY = "selected";
-  
   /**
    * Creates a new <code>{@link TwoStateButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
@@ -41,7 +38,7 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends Co
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public TwoStateButtonFixture(RobotFixture robot, Class<? extends T> type) {
+  public TwoStateButtonFixture(Robot robot, Class<? extends T> type) {
     super(robot, type);
   }
 
@@ -53,7 +50,7 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends Co
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public TwoStateButtonFixture(RobotFixture robot, String name, Class<? extends T> type) {
+  public TwoStateButtonFixture(Robot robot, String name, Class<? extends T> type) {
     super(robot, name, type);
   }
   
@@ -62,31 +59,21 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends Co
    * @param robot performs simulation of user events on the given <code>JToggleButton</code>.
    * @param target the <code>JToggleButton</code> to be managed by this fixture.
    */
-  public TwoStateButtonFixture(RobotFixture robot, T target) {
+  public TwoStateButtonFixture(Robot robot, T target) {
     super(robot, target);
   }
 
   /**
-   * Verifies that the <code>{@link JToggleButton}</code> managed by this fixture is selected.
+   * Verifies that this fixture's <code>{@link JToggleButton}</code> is selected.
    * @return this fixture.
-   * @throws AssertionError if the <code>JToggleButton</code> managed by this fixture is not selected.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is not selected.
    */
   protected abstract TwoStateButtonFixture<T> requireSelected();
 
   /**
-   * Verifies that the <code>{@link JToggleButton}</code> managed by this fixture is not selected.
+   * Verifies that this fixture's <code>{@link JToggleButton}</code> is not selected.
    * @return this fixture.
-   * @throws AssertionError if the <code>JToggleButton</code> managed by this fixture is selected.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is selected.
    */
   protected abstract TwoStateButtonFixture<T> requireNotSelected();
-  
-  protected final TwoStateButtonFixture<T> assertSelected() {
-    assertThat(target.isSelected()).as(formattedPropertyName(SELECTED_PROPERTY)).isTrue();
-    return this;
-  }
-  
-  protected final TwoStateButtonFixture<T> assertNotSelected() {
-    assertThat(target.isSelected()).as(formattedPropertyName(SELECTED_PROPERTY)).isFalse();
-    return this;
-  }
 }

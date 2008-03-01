@@ -24,7 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
 
@@ -42,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 @Test(groups = FUNCTIONAL)
 public class FrameDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private Frame frame;
   private FrameDriver driver;
   

@@ -23,6 +23,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestFrame;
 
@@ -38,7 +39,7 @@ import static org.fest.util.Arrays.array;
 @Test(groups = FUNCTIONAL)
 public class JComboBoxDriverTest {
 
-  private RobotFixture robot;
+  private Robot robot;
   private JComboBox comboBox;
   private JComboBoxDriver driver;
   
@@ -75,7 +76,7 @@ public class JComboBoxDriverTest {
   }
 
   @Test public void shouldReturnDropDownList() {
-    robot.click(comboBox);
+    driver.click(comboBox);
     JList dropDownList = driver.dropDownList();
     assertThatListContains(dropDownList, "first", "second", "third");
   }

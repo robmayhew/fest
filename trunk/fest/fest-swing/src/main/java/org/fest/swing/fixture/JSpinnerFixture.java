@@ -15,13 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
+import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JSpinnerDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -34,9 +35,9 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JSpinnerFixture extends ComponentFixture<JSpinner> {
+public class JSpinnerFixture extends ComponentFixture<JSpinner> implements JPopupMenuInvokerFixture {
 
-  private final JSpinnerDriver driver;
+  private JSpinnerDriver driver;
 
   /**
    * Creates a new <code>{@link JSpinnerFixture}</code>.
@@ -45,9 +46,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @throws ComponentLookupException if a matching <code>JSpinner</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSpinner</code> is found.
    */
-  public JSpinnerFixture(RobotFixture robot, String spinnerName) {
+  public JSpinnerFixture(Robot robot, String spinnerName) {
     super(robot, spinnerName, JSpinner.class);
-    driver = newSpinnerDriver();
+    createDriver();
   }
 
   /**
@@ -55,23 +56,27 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @param robot performs simulation of user events on the given <code>JSpinner</code>.
    * @param target the <code>JSpinner</code> to be managed by this fixture.
    */
-  public JSpinnerFixture(RobotFixture robot, JSpinner target) {
+  public JSpinnerFixture(Robot robot, JSpinner target) {
     super(robot, target);
-    driver = newSpinnerDriver();
+    createDriver();
   }
 
-  private JSpinnerDriver newSpinnerDriver() {
-    return new JSpinnerDriver(robot);
+  private void createDriver() {
+    updateDriver(new JSpinnerDriver(robot));
   }
-
+  
+  final void updateDriver(JSpinnerDriver driver) {
+    this.driver = driver;
+  }
+  
   /**
    * Verifies that the value of this fixture's <code>{@link JSpinner}</code> is equal to the given one.
    * @param value the expected value of this fixture's <code>JSpinner</code>.
    * @return this fixture.
    * @throws AssertionError if the value of this fixture's <code>JSpinner</code> is not equal to the given one.
    */
-  public final JSpinnerFixture requireValue(Object value) {
-    assertThat(target.getValue()).as(formattedPropertyName("value")).isEqualTo(value);
+  public JSpinnerFixture requireValue(Object value) {
+    driver.requireValue(target, value);
     return this;
   }
 
@@ -81,7 +86,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final JSpinnerFixture increment(int times) {
+  public JSpinnerFixture increment(int times) {
     driver.increment(target, times);
     return this;
   }
@@ -90,7 +95,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> one time.
    * @return this fixture.
    */
-  public final JSpinnerFixture increment() {
+  public JSpinnerFixture increment() {
     driver.increment(target);
     return this;
   }
@@ -101,7 +106,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
    */
-  public final JSpinnerFixture decrement(int times) {
+  public JSpinnerFixture decrement(int times) {
     driver.decrement(target, times);
     return this;
   }
@@ -110,7 +115,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> one time.
    * @return this fixture.
    */
-  public final JSpinnerFixture decrement() {
+  public JSpinnerFixture decrement() {
     driver.decrement(target);
     return this;
   }
@@ -124,7 +129,7 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    *          cannot be found.
    * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
-  public final JSpinnerFixture enterText(String text) {
+  public JSpinnerFixture enterText(String text) {
     driver.enterText(target, text);
     return this;
   }
@@ -133,8 +138,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
-  public final JSpinnerFixture click() {
-    return (JSpinnerFixture)doClick();
+  public JSpinnerFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -142,8 +148,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JSpinnerFixture click(MouseButton button) {
-    return (JSpinnerFixture)doClick(button);
+  public JSpinnerFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -151,32 +158,36 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JSpinnerFixture click(MouseClickInfo mouseClickInfo) {
-    return (JSpinnerFixture)doClick(mouseClickInfo);
+  public JSpinnerFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
-  public final JSpinnerFixture rightClick() {
-    return (JSpinnerFixture)doRightClick();
+  public JSpinnerFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
-  public final JSpinnerFixture doubleClick() {
-    return (JSpinnerFixture)doDoubleClick();
+  public JSpinnerFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
    */
-  public final JSpinnerFixture focus() {
-    return (JSpinnerFixture)doFocus();
+  public JSpinnerFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -186,8 +197,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSpinnerFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JSpinnerFixture)doPressAndReleaseKeys(keyCodes);
+  public JSpinnerFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -196,8 +208,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSpinnerFixture pressKey(int keyCode) {
-    return (JSpinnerFixture)doPressKey(keyCode);
+  public JSpinnerFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -206,8 +219,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSpinnerFixture releaseKey(int keyCode) {
-    return (JSpinnerFixture)doReleaseKey(keyCode);
+  public JSpinnerFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -215,8 +229,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSpinner</code> is not visible.
    */
-  public final JSpinnerFixture requireVisible() {
-    return (JSpinnerFixture)assertVisible();
+  public JSpinnerFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
   }
 
   /**
@@ -224,8 +239,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSpinner</code> is visible.
    */
-  public final JSpinnerFixture requireNotVisible() {
-    return (JSpinnerFixture)assertNotVisible();
+  public JSpinnerFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -233,8 +249,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSpinner</code> is disabled.
    */
-  public final JSpinnerFixture requireEnabled() {
-    return (JSpinnerFixture)assertEnabled();
+  public JSpinnerFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -243,8 +260,9 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JSpinner</code> is never enabled.
    */
-  public final JSpinnerFixture requireEnabled(Timeout timeout) {
-    return (JSpinnerFixture)assertEnabled(timeout);
+  public JSpinnerFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
@@ -252,7 +270,28 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSpinner</code> is enabled.
    */
-  public final JSpinnerFixture requireDisabled() {
-    return (JSpinnerFixture)assertDisabled();
+  public JSpinnerFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

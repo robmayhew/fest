@@ -15,77 +15,50 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.GUITest;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.TestFrame;
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JMenuItemDriver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
 
 /**
  * Tests for <code>{@link JMenuItemFixture}</code>.
  *
  * @author Alex Ruiz
  */
-@GUITest
-public class JMenuItemFixtureTest {
+public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> {
 
-  private static class CustomWindow extends TestFrame {
-    private static final long serialVersionUID = 1L;
-    
-    final JMenu fileMenu = new JMenu("File");
-    final JMenuItem newMenu = new JMenuItem("New");
+  private JMenuItemDriver driver;
+  private JMenuItem target;
+  private JMenuItemFixture fixture;
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JMenuItemDriver.class);
+    target = new JMenuItem("A Button");
+    fixture = new JMenuItemFixture(robot, target);
+    fixture.updateDriver(driver);
+  }
 
-    boolean newMenuSelected;
-    
-    CustomWindow(Class<?> testClass) {
-      super(testClass);
-      setJMenuBar(new JMenuBar());
-      newMenu.setName("new");
-      newMenu.addMouseListener(new MouseAdapter() {
-        @Override public void mousePressed(MouseEvent e) {
-          newMenuSelected = true;
-        }
-      });
-      fileMenu.setName("file");
-      fileMenu.add(newMenu);
-      getJMenuBar().add(fileMenu);
-    }
+  @Test public void shouldSelectMenuItem() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectMenuItem(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.select());
+      }
+    }.run();
   }
-  
-  private CustomWindow window;
-  private RobotFixture robot;
-  
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-    window = new CustomWindow(getClass());
-    robot.showWindow(window);
-  }
-  
-  @Test public void shouldFindMenuByName() {
-    JMenuItemFixture fixture = new JMenuItemFixture(robot, "new");
-    assertThat(fixture.target).isSameAs(window.newMenu);
-  }
-  
-  @Test(dependsOnMethods = "shouldFindMenuByName")
-  public void shouldSelectMenu() {
-    JMenuItemFixture fixture = new JMenuItemFixture(robot, "new");
-    fixture.select();
-    assertThat(window.newMenuSelected).isTrue();
-  }
-  
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
-  }
+
+  ComponentDriver driver() { return driver; }
+  JMenuItem target() { return target; }
+  ComponentFixture<JMenuItem> fixture() { return fixture; }
 }

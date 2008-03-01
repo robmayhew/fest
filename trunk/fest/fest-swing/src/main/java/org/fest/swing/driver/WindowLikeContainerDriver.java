@@ -20,7 +20,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 
 import static org.fest.swing.util.Platform.*;
 
@@ -39,7 +39,7 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
    * Creates a new </code>{@link WindowLikeContainerDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public WindowLikeContainerDriver(RobotFixture robot) {
+  public WindowLikeContainerDriver(Robot robot) {
     super(robot);
   }
 

@@ -15,10 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JTabbedPane;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTabbedPaneDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -31,9 +34,19 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
+public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> implements JPopupMenuInvokerFixture {
 
-  private final JTabbedPaneDriver driver;
+  private JTabbedPaneDriver driver;
+
+  /**
+   * Creates a new <code>{@link JTabbedPaneFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JTabbedPane</code>.
+   * @param target the <code>JTabbedPane</code> to be managed by this fixture.
+   */
+  public JTabbedPaneFixture(Robot robot, JTabbedPane target) {
+    super(robot, target);
+    createDriver();
+  }
 
   /**
    * Creates a new <code>{@link JTabbedPaneFixture}</code>.
@@ -42,23 +55,17 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @throws ComponentLookupException if a matching <code>JTabbedPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTabbedPane</code> is found.
    */
-  public JTabbedPaneFixture(RobotFixture robot, String tabbedPaneName) {
+  public JTabbedPaneFixture(Robot robot, String tabbedPaneName) {
     super(robot, tabbedPaneName, JTabbedPane.class);
-    driver = newTabbedPaneDriver();
+    createDriver();
   }
 
-  /**
-   * Creates a new <code>{@link JTabbedPaneFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JTabbedPane</code>.
-   * @param target the <code>JTabbedPane</code> to be managed by this fixture.
-   */
-  public JTabbedPaneFixture(RobotFixture robot, JTabbedPane target) {
-    super(robot, target);
-    driver = newTabbedPaneDriver();
+  private void createDriver() {
+    updateDriver(new JTabbedPaneDriver(robot));
   }
 
-  private JTabbedPaneDriver newTabbedPaneDriver() {
-    return new JTabbedPaneDriver(robot);
+  final void updateDriver(JTabbedPaneDriver driver) {
+    this.driver = driver;
   }
 
   /**
@@ -67,7 +74,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws ActionFailedException if the given index is not within the <code>JTabbedPane</code> bounds.
    */
-  public final JTabbedPaneFixture selectTab(int index) {
+  public JTabbedPaneFixture selectTab(int index) {
     driver.selectTab(target, index);
     return this;
   }
@@ -77,7 +84,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @param title the title to match.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture selectTab(String title) {
+  public JTabbedPaneFixture selectTab(String title) {
     driver.selectTab(target, title);
     return this;
   }
@@ -86,7 +93,7 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * Returns the titles of all the tabs in this fixture's <code>{@link JTabbedPane}</code>.
    * @return the titles of all the tabs.
    */
-  public final String[] tabTitles() {
+  public String[] tabTitles() {
     return driver.tabTitles(target);
   }
 
@@ -94,8 +101,9 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * Simulates a user clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture click() {
-    return (JTabbedPaneFixture)doClick();
+  public JTabbedPaneFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -103,8 +111,9 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture click(MouseButton button) {
-    return (JTabbedPaneFixture)doClick(button);
+  public JTabbedPaneFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -112,32 +121,36 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture click(MouseClickInfo mouseClickInfo) {
-    return (JTabbedPaneFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JTabbedPane}</code>.
-   * @return this fixture.
-   */
-  public final JTabbedPaneFixture rightClick() {
-    return (JTabbedPaneFixture)doRightClick();
+  public JTabbedPaneFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture doubleClick() {
-    return (JTabbedPaneFixture)doDoubleClick();
+  public JTabbedPaneFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JTabbedPane}</code>.
+   * @return this fixture.
+   */
+  public JTabbedPaneFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JTabbedPane}</code>.
    * @return this fixture.
    */
-  public final JTabbedPaneFixture focus() {
-    return (JTabbedPaneFixture)doFocus();
+  public JTabbedPaneFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -147,8 +160,9 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTabbedPaneFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JTabbedPaneFixture)doPressAndReleaseKeys(keyCodes);
+  public JTabbedPaneFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -157,8 +171,9 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTabbedPaneFixture pressKey(int keyCode) {
-    return (JTabbedPaneFixture)doPressKey(keyCode);
+  public JTabbedPaneFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -167,26 +182,19 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTabbedPaneFixture releaseKey(int keyCode) {
-    return (JTabbedPaneFixture)doReleaseKey(keyCode);
+  public JTabbedPaneFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is visible.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is enabled.
    */
-  public final JTabbedPaneFixture requireVisible() {
-    return (JTabbedPaneFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is visible.
-   */
-  public final JTabbedPaneFixture requireNotVisible() {
-    return (JTabbedPaneFixture)assertNotVisible();
+  public JTabbedPaneFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -194,8 +202,9 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JTabbedPane</code> is disabled.
    */
-  public final JTabbedPaneFixture requireEnabled() {
-    return (JTabbedPaneFixture)assertEnabled();
+  public JTabbedPaneFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -204,16 +213,48 @@ public class JTabbedPaneFixture extends ComponentFixture<JTabbedPane> {
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JTabbedPane</code> is never enabled.
    */
-  public final JTabbedPaneFixture requireEnabled(Timeout timeout) {
-    return (JTabbedPaneFixture)assertEnabled(timeout);
+  public JTabbedPaneFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is visible.
    */
-  public final JTabbedPaneFixture requireDisabled() {
-    return (JTabbedPaneFixture)assertDisabled();
+  public JTabbedPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> is not visible.
+   */
+  public JTabbedPaneFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

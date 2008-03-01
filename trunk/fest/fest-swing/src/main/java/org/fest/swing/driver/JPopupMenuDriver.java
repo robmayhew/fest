@@ -15,27 +15,15 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Point;
+import java.awt.Container;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
-import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.TypeMatcher;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.util.TimeoutWatch;
-
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.*;
-
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Swing.centerOf;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JPopupMenu}</code>. Unlike <code>JPopupMenuFixture</code>,
@@ -44,19 +32,13 @@ import static org.fest.util.Strings.concat;
  *
  * @author Yvonne Wang
  */
-public final class JPopupMenuDriver extends JComponentDriver {
-
-  private static final int POPUP_DELAY = 10000;
-
-  private static int POPUP_TIMEOUT = 5000;
-
-  private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
+public class JPopupMenuDriver extends JComponentDriver {
 
   /**
    * Creates a new </code>{@link JPopupMenuDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  public JPopupMenuDriver(RobotFixture robot) {
+  public JPopupMenuDriver(Robot robot) {
     super(robot);
   }
 
@@ -79,52 +61,30 @@ public final class JPopupMenuDriver extends JComponentDriver {
   }
 
   /**
-   * Shows a pop-up menu.
-   * @param invoker the component to invoke the pop-up menu from.
-   * @return the displayed pop-up menu.
-   * @throws org.fest.swing.exception.ComponentLookupException if a pop-up menu cannot be found.
+   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code>, which name matches
+   * the specified one.
+   * @param popupMenu the target <code>JPopupMenu</code>.
+   * @param name the name to match.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
+   * @throws ComponentLookupException if more than one <code>JMenuItem</code> having a matching name is found.
    */
-  public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, centerOf(invoker));
+  public JMenuItem menuItem(JPopupMenu popupMenu, String name) {
+    return robot.finder().findByName(popupMenu, name, JMenuItem.class);
   }
 
   /**
-   * Shows a pop-up menu at the given coordinates.
-   * @param invoker the component to invoke the pop-up menu from.
-   * @param location the given coordinates for the pop-up menu.
-   * @return the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * Finds a <code>{@link JMenuItem}</code>, contained in the <code>{@link Container}</code>, that matches the
+   * specified search criteria.
+   * @param popupMenu the target <code>JPopupMenu</code>.
+   * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
+   *         found.
+   * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria
+   *         is found.
    */
-  public JPopupMenu showPopupMenu(Component invoker, Point location) {
-    robot.click(invoker, location, RIGHT_BUTTON, 1);
-    JPopupMenu popup = findActivePopupMenu();
-    if (popup == null) 
-      throw new ComponentLookupException(concat("Unable to show popup at ", location, " on ", format(invoker)));
-    long start = currentTimeMillis();
-    while (!robot.isReadyForInput(getWindowAncestor(popup)) && currentTimeMillis() - start > POPUP_DELAY) pause();
-    return popup;
-  }
-
-  /**
-   * Returns the currently active pop-up menu, if any. If no pop-up is currently showing, returns <code>null</code>.
-   * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
-   */
-  public JPopupMenu findActivePopupMenu() {
-    JPopupMenu popup = activePopupMenu();
-    if (popup != null || isEventDispatchThread()) return popup;
-    TimeoutWatch watch = startWatchWithTimeoutOf(POPUP_TIMEOUT);
-    while ((popup = activePopupMenu()) == null) {
-      if (watch.isTimeOut()) break;
-      pause(100);
-    }
-    return popup;
-  }
-
-  private JPopupMenu activePopupMenu() {
-    try {
-      return (JPopupMenu)robot.finder().find(POPUP_MATCHER);
-    } catch (ComponentLookupException e) {
-      return null;
-    }
+  public JMenuItem menuItem(JPopupMenu popupMenu, GenericTypeMatcher<? extends JMenuItem> matcher) {
+    return robot.finder().find(popupMenu, matcher);
   }
 }

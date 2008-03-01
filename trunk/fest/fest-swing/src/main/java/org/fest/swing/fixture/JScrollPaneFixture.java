@@ -14,12 +14,17 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JComponentDriver;
+import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -29,7 +34,23 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang
  */
-public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
+public class JScrollPaneFixture extends ComponentFixture<JScrollPane> implements JPopupMenuInvokerFixture {
+
+  private JComponentDriver driver;
+  
+  /**
+   * Creates a new <code>{@link JScrollPaneFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JScrollPane</code>.
+   * @param target the <code>JScrollPane</code> to be managed by this fixture.
+   */
+  public JScrollPaneFixture(Robot robot, JScrollPane target) {
+    super(robot, target);
+    updateDriver(newComponentDriver());
+  }
+
+  final void updateDriver(JComponentDriver driver) {
+    this.driver = driver;
+  }
 
   /**
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
@@ -38,17 +59,22 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @throws ComponentLookupException if a matching <code>JScrollPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JScrollPane</code> is found.
    */
-  public JScrollPaneFixture(RobotFixture robot, String panelName) {
+  public JScrollPaneFixture(Robot robot, String panelName) {
     super(robot, panelName, JScrollPane.class);
+    driver = newComponentDriver();
   }
 
+  private JComponentDriver newComponentDriver() {
+    return new JOptionPaneDriver(robot);
+  }
+  
   /**
-   * Creates a new <code>{@link JScrollPaneFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JScrollPane</code>.
-   * @param target the <code>JScrollPane</code> to be managed by this fixture.
+   * Returns a <code>{@link JScrollBarFixture}</code> managing the horizontal <code>{@link JScrollBar}</code> of this
+   * target's <code>{@link JScrollPane}</code>.
+   * @return a fixture managing the horizontal <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
    */
-  public JScrollPaneFixture(RobotFixture robot, JScrollPane target) {
-    super(robot, target);
+  public JScrollBarFixture horizontalScrollBar() {
+    return scrollBarFixture(target.getHorizontalScrollBar());
   }
 
   /**
@@ -56,17 +82,8 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * target's <code>{@link JScrollPane}</code>.
    * @return a fixture managing the vertical <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
    */
-  public final JScrollBarFixture verticalScrollBar() {
+  public JScrollBarFixture verticalScrollBar() {
     return scrollBarFixture(target.getVerticalScrollBar());
-  }
-
-  /**
-   * Returns a <code>{@link JScrollBarFixture}</code> managing the horizontal <code>{@link JScrollBar}</code> of this
-   * target's <code>{@link JScrollPane}</code>.
-   * @return a fixture managing the horizontal <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
-   */
-  public final JScrollBarFixture horizontalScrollBar() {
-    return scrollBarFixture(target.getHorizontalScrollBar());
   }
 
   private JScrollBarFixture scrollBarFixture(JScrollBar scrollBar) {
@@ -77,8 +94,9 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * Simulates a user clicking this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
    */
-  public final JScrollPaneFixture click() {
-    return (JScrollPaneFixture)doClick();
+  public JScrollPaneFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -86,8 +104,9 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JScrollPaneFixture click(MouseButton button) {
-    return (JScrollPaneFixture)doClick(button);
+  public JScrollPaneFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -95,32 +114,36 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JScrollPaneFixture click(MouseClickInfo mouseClickInfo) {
-    return (JScrollPaneFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JScrollPane}</code>.
-   * @return this fixture.
-   */
-  public final JScrollPaneFixture rightClick() {
-    return (JScrollPaneFixture)doRightClick();
+  public JScrollPaneFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
    */
-  public final JScrollPaneFixture doubleClick() {
-    return (JScrollPaneFixture)doDoubleClick();
+  public JScrollPaneFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JScrollPane}</code>.
+   * @return this fixture.
+   */
+  public JScrollPaneFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
    */
-  public final JScrollPaneFixture focus() {
-    return (JScrollPaneFixture)doFocus();
+  public JScrollPaneFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -130,8 +153,9 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JScrollPaneFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JScrollPaneFixture)doPressAndReleaseKeys(keyCodes);
+  public JScrollPaneFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -140,8 +164,9 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JScrollPaneFixture pressKey(int keyCode) {
-    return (JScrollPaneFixture)doPressKey(keyCode);
+  public JScrollPaneFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -150,26 +175,19 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JScrollPaneFixture releaseKey(int keyCode) {
-    return (JScrollPaneFixture)doReleaseKey(keyCode);
+  public JScrollPaneFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JScrollPane}</code> is visible.
+   * Asserts that this fixture's <code>{@link JScrollPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JScrollPane</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JScrollPane</code> is enabled.
    */
-  public final JScrollPaneFixture requireVisible() {
-    return (JScrollPaneFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JScrollPane}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JScrollPane</code> is visible.
-   */
-  public final JScrollPaneFixture requireNotVisible() {
-    return (JScrollPaneFixture)assertNotVisible();
+  public JScrollPaneFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -177,8 +195,9 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JScrollPane</code> is disabled.
    */
-  public final JScrollPaneFixture requireEnabled() {
-    return (JScrollPaneFixture)assertEnabled();
+  public JScrollPaneFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -187,16 +206,48 @@ public class JScrollPaneFixture extends ComponentFixture<JScrollPane> {
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JScrollPane</code> is never enabled.
    */
-  public final JScrollPaneFixture requireEnabled(Timeout timeout) {
-    return (JScrollPaneFixture)assertEnabled(timeout);
+  public JScrollPaneFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JScrollPane}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JScrollPane}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JScrollPane</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JScrollPane</code> is visible.
    */
-  public final JScrollPaneFixture requireDisabled() {
-    return (JScrollPaneFixture)assertDisabled();
+  public JScrollPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JScrollPane}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JScrollPane</code> is not visible.
+   */
+  public JScrollPaneFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

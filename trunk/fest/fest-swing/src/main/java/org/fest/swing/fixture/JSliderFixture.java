@@ -15,10 +15,13 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JSlider;
 
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JSliderDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -31,9 +34,19 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang
  */
-public class JSliderFixture extends ComponentFixture<JSlider> {
+public class JSliderFixture extends ComponentFixture<JSlider> implements JPopupMenuInvokerFixture {
 
-  private final JSliderDriver driver;
+  private JSliderDriver driver;
+
+  /**
+   * Creates a new <code>{@link JSliderFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JSlider</code>.
+   * @param target the <code>JSlider</code> to be managed <code>{@link JSlider}</code> by this fixture.
+   */
+  public JSliderFixture(Robot robot, JSlider target) {
+    super(robot, target);
+    createDriver();
+  }
 
   /**
    * Creates a new <code>{@link JSliderFixture}</code>.
@@ -42,43 +55,19 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @throws ComponentLookupException if a matching <code>JSlider</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSlider</code> is found.
    */
-  public JSliderFixture(RobotFixture robot, String sliderName) {
+  public JSliderFixture(Robot robot, String sliderName) {
     super(robot, sliderName, JSlider.class);
-    driver = newSliderDriver();
+    createDriver();
   }
 
-  /**
-   * Creates a new <code>{@link JSliderFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JSlider</code>.
-   * @param target the <code>JSlider</code> to be managed <code>{@link JSlider}</code> by this fixture.
-   */
-  public JSliderFixture(RobotFixture robot, JSlider target) {
-    super(robot, target);
-    driver = newSliderDriver();
+  private void createDriver() {
+    updateDriver(new JSliderDriver(robot));
   }
-
-  private JSliderDriver newSliderDriver() {
-    return new JSliderDriver(robot);
+  
+  final void updateDriver(JSliderDriver driver) {
+    this.driver = driver;
   }
-
-  /**
-   * Simulates a user clicking at the maximum end of this fixture's <code>{@link JSlider}</code>.
-   * @return this fixture.
-   */
-  public final JSliderFixture increment() {
-    driver.increment(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking at the minimum end of this fixture's <code>{@link JSlider}</code>.
-   * @return this fixture.
-   */
-  public final JSliderFixture decrement() {
-    driver.decrement(target);
-    return this;
-  }
-
+  
   /**
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.
@@ -109,11 +98,30 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
   }
 
   /**
+   * Simulates a user clicking at the maximum end of this fixture's <code>{@link JSlider}</code>.
+   * @return this fixture.
+   */
+  public JSliderFixture increment() {
+    driver.increment(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking at the minimum end of this fixture's <code>{@link JSlider}</code>.
+   * @return this fixture.
+   */
+  public JSliderFixture decrement() {
+    driver.decrement(target);
+    return this;
+  }
+
+  /**
    * Simulates a user clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
-  public final JSliderFixture click() {
-    return (JSliderFixture)doClick();
+  public JSliderFixture click() {
+    driver.click(target);
+    return this;
   }
 
   /**
@@ -121,8 +129,9 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JSliderFixture click(MouseButton button) {
-    return (JSliderFixture)doClick(button);
+  public JSliderFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
 
   /**
@@ -130,32 +139,36 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JSliderFixture click(MouseClickInfo mouseClickInfo) {
-    return (JSliderFixture)doClick(mouseClickInfo);
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JSlider}</code>.
-   * @return this fixture.
-   */
-  public final JSliderFixture rightClick() {
-    return (JSliderFixture)doRightClick();
+  public JSliderFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
   }
 
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
-  public final JSliderFixture doubleClick() {
-    return (JSliderFixture)doDoubleClick();
+  public JSliderFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JSlider}</code>.
+   * @return this fixture.
+   */
+  public JSliderFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
 
   /**
    * Gives input focus to this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
    */
-  public final JSliderFixture focus() {
-    return (JSliderFixture)doFocus();
+  public JSliderFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -165,8 +178,9 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSliderFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JSliderFixture)doPressAndReleaseKeys(keyCodes);
+  public JSliderFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -175,8 +189,9 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSliderFixture pressKey(int keyCode) {
-    return (JSliderFixture)doPressKey(keyCode);
+  public JSliderFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
 
   /**
@@ -185,26 +200,19 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JSliderFixture releaseKey(int keyCode) {
-    return (JSliderFixture)doReleaseKey(keyCode);
+  public JSliderFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JSlider}</code>.
+   * Asserts that this fixture's <code>{@link JSlider}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSlider</code> is not visible.
+   * @throws AssertionError is this fixture's <code>JSlider</code> is enabled.
    */
-  public final JSliderFixture requireVisible() {
-    return (JSliderFixture)assertVisible();
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSlider}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSlider</code> is visible.
-   */
-  public final JSliderFixture requireNotVisible() {
-    return (JSliderFixture)assertNotVisible();
+  public JSliderFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -212,8 +220,9 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @throws AssertionError is this fixture's <code>JSlider</code> is disabled.
    */
-  public final JSliderFixture requireEnabled() {
-    return (JSliderFixture)assertEnabled();
+  public JSliderFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
 
   /**
@@ -222,16 +231,48 @@ public class JSliderFixture extends ComponentFixture<JSlider> {
    * @return this fixture.
    * @throws WaitTimedOutError if this fixture's <code>JSlider</code> is never enabled.
    */
-  public final JSliderFixture requireEnabled(Timeout timeout) {
-    return (JSliderFixture)assertEnabled(timeout);
+  public JSliderFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JSlider}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JSlider}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError is this fixture's <code>JSlider</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JSlider</code> is visible.
    */
-  public final JSliderFixture requireDisabled() {
-    return (JSliderFixture)assertDisabled();
+  public JSliderFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JSlider}</code>.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSlider</code> is not visible.
+   */
+  public JSliderFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

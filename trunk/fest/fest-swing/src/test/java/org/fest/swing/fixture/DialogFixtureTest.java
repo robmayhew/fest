@@ -15,21 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Dimension;
-
-import javax.swing.JDialog;
-
-import org.testng.annotations.Test;
-
-import org.fest.swing.annotation.GUITest;
-
-import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.fixture.ErrorMessageAssert.*;
 
 /**
  * Tests for <code>{@link DialogFixture}</code>.
@@ -37,45 +22,6 @@ import static org.fest.swing.fixture.ErrorMessageAssert.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@GUITest
-public class DialogFixtureTest extends WindowLikeFixtureTestCase<Dialog> {
-
-  private DialogFixture fixture;
-  private JDialog target;
-
-  @Test public void shouldPassIfModalAndExpectingModal() {
-    target.setModal(true);
-    fixture.requireModal();
-  }
-
-  @Test public void shouldFailIfNotModalAndExpectingModal() {
-    target.setModal(false);
-    try {
-      fixture.requireModal();
-      fail();
-    } catch(AssertionError e) {
-      ErrorMessageAssert errorMessage = new ErrorMessageAssert(e, target);
-      assertThat(errorMessage).contains(property("modal"), expected("true"), actual("false"));
-    }
-  }
-  
-  protected Component target() {
-    return target;
-  }
-
-  @Override protected void afterSetUp() {
-    fixture.show();
-    target.setSize(new Dimension(400, 200));
-  }
-
-  protected ComponentFixture<Dialog> createFixture() {
-    fixture = new DialogFixture(robot(), target);
-    return fixture;
-  }
-
-  protected Dialog createTarget() {
-    target = new JDialog(window());
-    target.setDefaultCloseOperation(HIDE_ON_CLOSE);
-    return target;
-  }
+// TODO Implement
+public class DialogFixtureTest {
 }

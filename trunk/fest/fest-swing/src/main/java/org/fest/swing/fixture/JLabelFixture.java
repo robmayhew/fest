@@ -15,14 +15,16 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+import java.awt.Point;
+
 import javax.swing.JLabel;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.JLabelDriver;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JLabel}</code> and verification of the state of such
@@ -30,7 +32,19 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JLabelFixture extends ComponentFixture<JLabel> implements TextDisplayFixture {
+public class JLabelFixture extends ComponentFixture<JLabel> implements TextDisplayFixture, JPopupMenuInvokerFixture {
+  
+  private JLabelDriver driver;
+  
+  /**
+   * Creates a new <code>{@link JLabelFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>JLabel</code>.
+   * @param target the <code>JLabel</code> to be managed by this fixture.
+   */
+  public JLabelFixture(Robot robot, JLabel target) {
+    super(robot, target);
+    createDriver();
+  }
   
   /**
    * Creates a new <code>{@link JLabelFixture}</code>.
@@ -39,84 +53,73 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @throws ComponentLookupException if a matching <code>JLabel</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JLabel</code> is found.
    */
-  public JLabelFixture(RobotFixture robot, String labelName) {
+  public JLabelFixture(Robot robot, String labelName) {
     super(robot, labelName, JLabel.class);
+    createDriver();
   }
   
-  /**
-   * Creates a new <code>{@link JLabelFixture}</code>.
-   * @param robot performs simulation of user events on the given <code>JLabel</code>.
-   * @param target the <code>JLabel</code> to be managed by this fixture.
-   */
-  public JLabelFixture(RobotFixture robot, JLabel target) {
-    super(robot, target);
+  private void createDriver() {
+    updateDriver(new JLabelDriver(robot));
   }
   
-  /**
-   * Asserts that the text of this fixture's <code>{@link JLabel}</code> is equal to the specified <code>String</code>. 
-   * @param expected the text to match.
-   * @return this fixture.
-   * @throws AssertionError if the text of the target component is not equal to the given one.
-   */
-  public final JLabelFixture requireText(String expected) {
-    assertThat(text()).as(formattedPropertyName("text")).isEqualTo(expected);
-    return this;
+  final void updateDriver(JLabelDriver driver) {
+    this.driver = driver;
   }
-  
-  /**
-   * Returns the text of this fixture's <code>{@link JLabel}</code>. 
-   * @return the text of this fixture's <code>JLabel</code>. 
-   */
-  public final String text() { return target.getText(); }
   
   /**
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
-  public final JLabelFixture click() {
-    return (JLabelFixture)doClick(); 
+  public JLabelFixture click() {
+    driver.click(target);
+    return this;
   }
-
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @param button the button to click.
    * @return this fixture.
    */
-  public final JLabelFixture click(MouseButton button) {
-    return (JLabelFixture)doClick(button);
+  public JLabelFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
   }
-
+  
   /**
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JLabelFixture click(MouseClickInfo mouseClickInfo) {
-    return (JLabelFixture)doClick(mouseClickInfo);
+  public JLabelFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    return this;
+  }
+  
+  /**
+   * Simulates a user double-clicking this fixture's <code>{@link JLabel}</code>.
+   * @return this fixture.
+   */
+  public JLabelFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
   }
 
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
-  public final JLabelFixture rightClick() {
-    return (JLabelFixture)doRightClick();
+  public JLabelFixture rightClick() {
+    driver.rightClick(target);
+    return this;
   }
-
-  /**
-   * Simulates a user double-clicking this fixture's <code>{@link JLabel}</code>.
-   * @return this fixture.
-   */
-  public final JLabelFixture doubleClick() {
-    return (JLabelFixture)doDoubleClick();
-  }
-
+  
   /**
    * Gives input focus to this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    */
-  public final JLabelFixture focus() {
-    return (JLabelFixture)doFocus();
+  public JLabelFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -125,8 +128,9 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JLabelFixture pressAndReleaseKeys(int... keyCodes) {
-    return (JLabelFixture)doPressAndReleaseKeys(keyCodes);
+  public JLabelFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
   }
 
   /**
@@ -135,36 +139,30 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JLabelFixture pressKey(int keyCode) {
-    return (JLabelFixture)doPressKey(keyCode);
+  public JLabelFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
   }
-  
+
   /**
    * Simulates a user releasing the given key on this fixture's <code>{@link JLabel}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JLabelFixture releaseKey(int keyCode) {
-    return (JLabelFixture)doReleaseKey(keyCode);
-  }
-  
-  /**
-   * Asserts that this fixture's <code>{@link JLabel}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JLabel</code> is not visible.
-   */
-  public final JLabelFixture requireVisible() {
-    return (JLabelFixture)assertVisible();
+  public JLabelFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JLabel}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JLabel</code> is visible.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is enabled.
    */
-  public final JLabelFixture requireNotVisible() {
-    return (JLabelFixture)assertNotVisible();
+  public JLabelFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
   }
 
   /**
@@ -172,8 +170,9 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JLabel</code> is disabled.
    */
-  public final JLabelFixture requireEnabled() {
-    return (JLabelFixture)assertEnabled();
+  public JLabelFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
   }
   
   /**
@@ -182,16 +181,67 @@ public class JLabelFixture extends ComponentFixture<JLabel> implements TextDispl
    * @return this fixture.
    * @throws org.fest.swing.exception.WaitTimedOutError if this fixture's <code>JLabel</code> is never enabled.
    */
-  public final JLabelFixture requireEnabled(Timeout timeout) {
-    return (JLabelFixture)assertEnabled(timeout);
+  public JLabelFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
   }
   
   /**
-   * Asserts that this fixture's <code>{@link JLabel}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JLabel</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is visible.
    */
-  public final JLabelFixture requireDisabled() {
-    return (JLabelFixture)assertDisabled();
+  public JLabelFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JLabel}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is not visible.
+   */
+  public JLabelFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+  
+  /**
+   * Returns the text of this fixture's <code>{@link JLabel}</code>.
+   * @return the text of this fixture's <code>JLabel</code>.
+   */
+  public String text() {
+    return target.getText();
+  }
+
+  /**
+   * Asserts that the text of this fixture's <code>{@link JLabel}</code> is equal to the specified <code>String</code>. 
+   * @param expected the text to match.
+   * @return this fixture.
+   * @throws AssertionError if the text of the target component is not equal to the given one.
+   */
+  public JLabelFixture requireText(String expected) {
+    driver.requireText(target, expected);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
+  }
+
+  /**
+   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
+   * pop-up menu.
+   * @param p the given point where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

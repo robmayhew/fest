@@ -31,7 +31,7 @@ import static org.fest.swing.core.ComponentFinder.finderWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestFrame.showInTest;
 
 /**
- * Tests for <code>{@link org.fest.swing.finder.ComponentFoundCondition}</code>.
+ * Tests for <code>{@link ComponentFoundCondition}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
