@@ -13,47 +13,46 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
-import java.awt.Window;
+import java.awt.Component;
 import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.driver.RequestFocusTask;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 /**
- * Tests for <code>{@link ActivateWindowTask}</code>.
+ * Tests for <code>{@link RequestFocusTask}</code>.
  *
  * @author Alex Ruiz
  */
-public class ActivateWindowTaskTest {
+public class RequestFocusTaskTest {
 
-  private ActivateWindowTask task;
-  private Window w;
+  private RequestFocusTask task;
+  private Component component;
   
   @BeforeMethod public void setUp() throws Exception {
-    Method toFront = Window.class.getDeclaredMethod("toFront");
-    w = createMock(Window.class, new Method[] { toFront });
-    task = new ActivateWindowTask(w);
+    Method requestFocusInWindow = Component.class.getDeclaredMethod("requestFocusInWindow");
+    component = createMock(Component.class, new Method[] { requestFocusInWindow });
+    task = new RequestFocusTask(component);
   }
   
-  @Test public void shouldActivateWindow() {
-    new EasyMockTemplate(w) {
+  @Test public void shouldCallRequestFocusInWindow() {
+    new EasyMockTemplate(component) {
 
       protected void expectations() {
-        w.toFront();
-        expectLastCall().atLeastOnce();
+        expect(component.requestFocusInWindow()).andReturn(true);
       }
-
+      
       protected void codeToTest() {
         task.run();
       }
-
     }.run();
   }
 }

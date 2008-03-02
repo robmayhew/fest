@@ -36,7 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Strings.concat;
 
 /**

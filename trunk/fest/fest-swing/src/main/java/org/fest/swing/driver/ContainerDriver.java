@@ -26,8 +26,6 @@ import java.awt.Point;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.task.SetLocationTask;
-import org.fest.swing.task.SetSizeTask;
 
 /**
  * Understands simulation of user input on a <code>{@link Container}</code>. This class is intended for internal use

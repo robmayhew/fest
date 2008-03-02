@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Rectangle;
 
@@ -25,20 +25,19 @@ import javax.swing.JComponent;
  *
  * @author Alex Ruiz
  */
-public class ScrollRectToVisibleTask implements Runnable {
+class ScrollRectToVisibleTask implements Runnable {
 
-  private final JComponent c;
-  private final Rectangle r;
+  private final JComponent component;
+  private final Rectangle visibleRectangle;
 
   /**
    * Creates a new </code>{@link ScrollRectToVisibleTask}</code>.
-   * @param c the given <code>JComponent</code>.
-   * @param r the given visible <code>Rectangle</code>.
+   * @param component the given <code>JComponent</code>.
+   * @param visibleRectangle the given visible <code>Rectangle</code>.
    */
-  public ScrollRectToVisibleTask(JComponent c, Rectangle r) {
-    this.c = c;
-    this.r = r;
-
+  ScrollRectToVisibleTask(JComponent component, Rectangle visibleRectangle) {
+    this.component = component;
+    this.visibleRectangle = visibleRectangle;
   }
 
   /**
@@ -46,6 +45,6 @@ public class ScrollRectToVisibleTask implements Runnable {
    * <code>{@link JComponent}</code>.
    */
   public void run() {
-    c.scrollRectToVisible(r);
+    component.scrollRectToVisible(visibleRectangle);
   }
 }

@@ -13,11 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
+package org.fest.swing.driver;
 
 import java.awt.Component;
 
@@ -26,13 +22,17 @@ import javax.swing.Action;
 
 import org.fest.swing.exception.ActionFailedException;
 
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands execution of the default (first) <code>{@link Action}</code> in a <code>{@link Component}</code>'s
  * <code>{@link AccessibleAction}</code>.
  *
  * @author Alex Ruiz
  */
-public class PerformDefaultAccessibleActionTask implements Runnable {
+class PerformDefaultAccessibleActionTask implements Runnable {
 
   private static final int DEFAULT_ACTION_INDEX = 0;
   private static final AccessibleActionFinder FINDER = new AccessibleActionFinder();
@@ -45,7 +45,7 @@ public class PerformDefaultAccessibleActionTask implements Runnable {
    * @throws ActionFailedException if the <code>Component</code> does not contain an <code>AccessibleAction</code>
    *         or if the <code>AccessibleAction</code> is empty.
    */
-  public PerformDefaultAccessibleActionTask(Component c) {
+  PerformDefaultAccessibleActionTask(Component c) {
     this(FINDER, c);
   }
 

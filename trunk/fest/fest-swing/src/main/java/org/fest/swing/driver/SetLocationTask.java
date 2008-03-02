@@ -13,35 +13,33 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.Point;
 
 /**
- * Understands setting the size of a <code>{@link Component}</code>.
+ * Understands setting the location of a <code>{@link Component}</code>.
  *
  * @author Alex Ruiz
  */
-public class SetSizeTask implements Runnable {
+class SetLocationTask implements Runnable {
 
-  private final Component c;
-  private final Dimension size;
+  private final Component component;
+  private final Point location;
 
   /**
-   * Creates a new </code>{@link SetSizeTask}</code>.
-   * @param c the given <code>Component</code>.
-   * @param size the size to set.
+   * Creates a new </code>{@link SetLocationTask}</code>.
+   * @param component the given <code>Component</code>.
+   * @param location the location to set.
    */
-  public SetSizeTask(Component c, Dimension size) {
-    this.c = c;
-    this.size = size;
+  SetLocationTask(Component component, Point location) {
+    this.component = component;
+    this.location = location;
   }
 
-  /**
-   * Sets the size of this task's <code>{@link Component}</code>.
-   */
+  /** Sets the location of this task's <code>{@link Component}</code> */
   public void run() {
-    c.setSize(size);
+    component.setLocation(location);
   }
 }

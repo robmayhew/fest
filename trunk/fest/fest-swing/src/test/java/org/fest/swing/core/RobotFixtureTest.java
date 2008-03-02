@@ -31,13 +31,15 @@ import static java.awt.event.KeyEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.util.AWT.centerOf;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.
  *
  * @author Yvonne Wang
  */
+@Test(groups = FUNCTIONAL)
 public class RobotFixtureTest {
 
   private Robot robot;
@@ -45,7 +47,7 @@ public class RobotFixtureTest {
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new MyFrame(getClass());
+    frame = new MyFrame();
     robot.showWindow(frame);
     assertThat(frame.isVisible()).isTrue();
   }
@@ -114,8 +116,8 @@ public class RobotFixtureTest {
 
     private final JTextField textBox = new JTextField(20);
     
-    MyFrame(Class<?> testClass) {
-      super(testClass);
+    MyFrame() {
+      super(RobotFixtureTest.class);
       add(textBox);
     }
   }

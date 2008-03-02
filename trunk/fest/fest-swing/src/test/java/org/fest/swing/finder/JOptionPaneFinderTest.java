@@ -37,7 +37,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
-import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.util.AWT.centerOf;
 
 /**
  * Tests for <code>{@link JOptionPaneFinder}</code>.

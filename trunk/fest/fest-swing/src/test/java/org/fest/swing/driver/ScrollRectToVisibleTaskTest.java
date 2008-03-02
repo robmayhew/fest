@@ -13,41 +13,44 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import java.awt.Component;
-import java.awt.Point;
+import java.awt.Rectangle;
 import java.lang.reflect.Method;
 
+import javax.swing.JComponent;
+
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.driver.ScrollRectToVisibleTask;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Test for <code>{@link SetLocationTask}</code>.
+ * Tests for <code>{@link ScrollRectToVisibleTask}</code>.
  *
  * @author Alex Ruiz
  */
-public class SetLocationTaskTest {
+public class ScrollRectToVisibleTaskTest {
 
-  private Component c;
-  private Point location;
-  private SetLocationTask task;
+  private JComponent c;
+  private Rectangle rectangle;
+  private ScrollRectToVisibleTask task;
 
   @BeforeMethod public void setUp() throws Exception {
-    Method setLocation = Component.class.getDeclaredMethod("setLocation", Point.class);
-    c = createMock(Component.class, new Method[] { setLocation });
-    location = new Point(80, 60);
-    task = new SetLocationTask(c, location);
+    Method scrollRectToVisible = JComponent.class.getDeclaredMethod("scrollRectToVisible", Rectangle.class);
+    c = createMock(JComponent.class, new Method[] { scrollRectToVisible });
+    rectangle = new Rectangle(80, 60);
+    task = new ScrollRectToVisibleTask(c, rectangle);
   }
 
-  @Test public void shouldSetLocation() {
+  @Test public void shouldScrollRectToVisible() {
     new EasyMockTemplate(c) {
       protected void expectations() {
-        c.setLocation(location);
+        c.scrollRectToVisible(rectangle);
         expectLastCall();
       }
 
@@ -56,4 +59,5 @@ public class SetLocationTaskTest {
       }
     }.run();
   }
+
 }

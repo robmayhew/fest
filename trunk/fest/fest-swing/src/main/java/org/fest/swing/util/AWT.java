@@ -15,15 +15,20 @@
 package org.fest.swing.util;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
+import javax.swing.SwingUtilities;
 
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
+import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.staticField;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to AWT.
@@ -39,6 +44,82 @@ public class AWT {
 
   private static Hierarchy hierarchy = new AWTHierarchy();
   
+  private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
+  private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
+
+  /**
+   * Returns a point at the center of the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * @return a point at the center of the given <code>Component</code>.
+   */
+  public static Point centerOf(Component c) {
+    return new Point(c.getWidth() / 2, c.getHeight() / 2);
+  }
+
+  /**
+   * Returns the insets of the given <code>{@link Container}</code>, or an empty one if no insets can be found.
+   * @param c the given <code>Container</code>.
+   * @return the insets of the given <code>Container</code>, or an empty one if no insets can be found.
+   */
+  public static Insets insetsFrom(Container c) {
+    try {
+      Insets insets = c.getInsets();
+      if (insets != null) return insets;
+    } catch (Exception e) {}
+    return new Insets(0, 0, 0, 0);
+  }
+  
+  /**
+   * Returns <code>true</code> if the given component is an Applet viewer.
+   * @param c the component to check.
+   * @return <code>true</code> if the given component is an Applet viewer, <code>false</code> otherwise.
+   */
+  public static boolean isAppletViewer(Component c) {
+    return c != null && APPLET_APPLET_VIEWER_CLASS.equals(c.getClass().getName());
+  }
+
+  /**
+   * Returns whether the given component is the default Swing hidden frame.
+   * @param c the component to check.
+   * @return <code>true</code> if the given component is the default hidden frame, <code>false</code> otherwise.
+   */
+  public static boolean isSharedInvisibleFrame(Component c) {
+    if (c == null) return false;
+    // Must perform an additional check, since applets may have their own version in their AppContext
+    return c instanceof Frame
+        && (c == JOptionPane.getRootFrame() || c.getClass().getName().startsWith(ROOT_FRAME_CLASSNAME));
+  }
+
+  /**
+   * If the current thread is the AWT event thread, this method will simple execute the <code>{@link Runnable}</code>,
+   * otherwise the <code>{@link Runnable}</code> will be executed synchronously, blocking until all pending AWT events
+   * have been processed and <code>r.run()</code> returns.
+   * @param r the <code>Runnable</code> to execute.
+   * @exception InterruptedException if we're interrupted while waiting for the event dispatching thread to finish
+   *            executing <code>r.run()</code>.
+   * @exception InvocationTargetException if an exception is thrown while running <code>r</code>.
+   * @see SwingUtilities#isEventDispatchThread()
+   * @see SwingUtilities#invokeAndWait(Runnable)
+   */
+  public static void runInEventThreadAndWait(Runnable r) throws InterruptedException, InvocationTargetException {
+    if (isEventDispatchThread()) {
+      r.run();
+      return;
+    }
+    invokeAndWait(r);
+  }
+
+  /**
+   * Returns the name of the given component. If the component is <code>null</code>, this method will return
+   * <code>null</code>.
+   * @param c the given component.
+   * @return the name of the given component, or <code>null</code> if the component is <code>null</code>.
+   */
+  public static String quoteNameOf(Component c) {
+    if (c == null) return null;
+    return quote(c.getName());
+  }
+
   /**
    * Similar to <code>{@link javax.swing.SwingUtilities#getWindowAncestor(Component)}</code>, but returns the
    * <code>{@link Component}</code> itself if it is a <code>{@link Window}</code>, or the invoker's

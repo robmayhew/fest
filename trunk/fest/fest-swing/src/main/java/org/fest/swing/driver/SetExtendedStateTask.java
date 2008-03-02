@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Frame;
 
@@ -24,24 +24,23 @@ import javax.swing.JFrame;
  *
  * @author Alex Ruiz
  */
-public class SetExtendedStateTask implements Runnable {
+class SetExtendedStateTask implements Runnable {
 
-  private final Frame f;
+  private final Frame frame;
   private final int state;
 
   /**
    * Creates a new </code>{@link SetExtendedStateTask}</code>.
-   * @param f the given <code>Frame</code>.
+   * @param frame the given <code>Frame</code>.
    * @param state the state to set.
    */
-  public SetExtendedStateTask(Frame f, int state) {
-    this.f = f;
+  SetExtendedStateTask(Frame frame, int state) {
+    this.frame = frame;
     this.state = state;
   }
 
   /** Sets the extended state of this task's <code>{@link Frame}</code> */
   public void run() {
-    f.setExtendedState(state);
+    frame.setExtendedState(state);
   }
-
 }

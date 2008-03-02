@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import static java.awt.Frame.NORMAL;
 import static org.easymock.EasyMock.expectLastCall;
@@ -23,6 +23,8 @@ import java.awt.Frame;
 import java.lang.reflect.Method;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.driver.SetExtendedStateTask;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

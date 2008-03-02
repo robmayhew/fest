@@ -30,7 +30,7 @@ import static java.lang.System.currentTimeMillis;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.Swing.centerOf;
+import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Strings.concat;
 
 /**

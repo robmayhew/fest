@@ -20,7 +20,7 @@ import java.awt.*;
 import static java.lang.Math.max;
 import static javax.swing.SwingUtilities.invokeLater;
 
-import static org.fest.swing.util.Swing.insetsFrom;
+import static org.fest.swing.util.AWT.insetsFrom;
 
 /**
  * Understands verification of the state of a window.

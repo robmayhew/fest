@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Window;
 
@@ -22,7 +22,7 @@ import java.awt.Window;
  *
  * @author Alex Ruiz
  */
-public class ActivateWindowTask implements Runnable {
+class ActivateWindowTask implements Runnable {
 
   private final Window w;
 
@@ -30,7 +30,7 @@ public class ActivateWindowTask implements Runnable {
    * Creates a new </code>{@link ActivateWindowTask}</code>.
    * @param w the <code>Window</code> to activate.
    */
-  public ActivateWindowTask(Window w) {
+  ActivateWindowTask(Window w) {
     this.w = w;
   }
 

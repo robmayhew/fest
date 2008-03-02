@@ -13,33 +13,25 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Point;
+
+import javax.accessibility.AccessibleAction;
 
 /**
- * Understands setting the location of a <code>{@link Component}</code>.
+ * Understands finding <code>{@link AccessibleAction}</code>s associated to <code>{@link Component}</code>s.
  *
  * @author Alex Ruiz
  */
-public class SetLocationTask implements Runnable {
-
-  private final Component c;
-  private final Point location;
+class AccessibleActionFinder {
 
   /**
-   * Creates a new </code>{@link SetLocationTask}</code>.
+   * Returns the <code>{@link AccessibleAction}</code> associated to the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @param location the location to set.
+   * @return the <code>AccessibleAction</code> associated to the given <code>Component</code>.
    */
-  public SetLocationTask(Component c, Point location) {
-    this.c = c;
-    this.location = location;
-  }
-
-  /** Sets the location of this task's <code>{@link Component}</code> */
-  public void run() {
-    c.setLocation(location);
+  AccessibleAction accessibleActionFrom(Component c) {
+    return c.getAccessibleContext().getAccessibleAction();
   }
 }

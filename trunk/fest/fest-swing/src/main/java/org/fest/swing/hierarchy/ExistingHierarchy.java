@@ -26,7 +26,7 @@ import org.fest.swing.monitor.WindowMonitor;
 import static java.util.logging.Level.*;
 
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Swing.*;
+import static org.fest.swing.util.AWT.*;
 import static org.fest.util.Strings.concat;
 
 /**

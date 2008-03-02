@@ -26,9 +26,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.task.ActivateWindowTask;
-import org.fest.swing.task.PerformDefaultAccessibleActionTask;
-import org.fest.swing.task.RequestFocusTask;
 import org.fest.swing.util.TimeoutWatch;
 
 import static java.lang.System.currentTimeMillis;
@@ -43,7 +40,6 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Platform.*;
-import static org.fest.swing.util.Swing.centerOf;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
 

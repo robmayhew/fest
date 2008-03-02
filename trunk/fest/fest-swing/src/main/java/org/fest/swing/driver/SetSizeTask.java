@@ -13,25 +13,35 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Component;
-
-import javax.accessibility.AccessibleAction;
+import java.awt.Dimension;
 
 /**
- * Understands finding <code>{@link AccessibleAction}</code>s associated to <code>{@link Component}</code>s.
+ * Understands setting the size of a <code>{@link Component}</code>.
  *
  * @author Alex Ruiz
  */
-class AccessibleActionFinder {
+class SetSizeTask implements Runnable {
+
+  private final Component c;
+  private final Dimension size;
 
   /**
-   * Returns the <code>{@link AccessibleAction}</code> associated to the given <code>{@link Component}</code>.
+   * Creates a new </code>{@link SetSizeTask}</code>.
    * @param c the given <code>Component</code>.
-   * @return the <code>AccessibleAction</code> associated to the given <code>Component</code>.
+   * @param size the size to set.
    */
-  AccessibleAction accessibleActionFrom(Component c) {
-    return c.getAccessibleContext().getAccessibleAction();
+  SetSizeTask(Component c, Dimension size) {
+    this.c = c;
+    this.size = size;
+  }
+
+  /**
+   * Sets the size of this task's <code>{@link Component}</code>.
+   */
+  public void run() {
+    c.setSize(size);
   }
 }

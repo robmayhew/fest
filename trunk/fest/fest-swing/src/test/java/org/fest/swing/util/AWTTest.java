@@ -29,23 +29,23 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestFrame.showInTest;
 
 /**
- * Tests for <code>{@link Swing}</code>.
+ * Tests for <code>{@link AWT}</code>.
  *
  * @author Alex Ruiz 
  */
-public class SwingTest {
+public class AWTTest {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0); 
   
   @Test public void shouldReturnInsetsFromContainer() {
     TestFrame frame = showInTest(getClass());
-    Insets insets = Swing.insetsFrom(frame);
+    Insets insets = AWT.insetsFrom(frame);
     assertThat(insets).isEqualTo(frame.getInsets());
     frame.destroy();
   }
   
   @Test public void shouldReturnEmptyInsetsIfExceptionThrown() {
-    Insets insets = Swing.insetsFrom(null);
+    Insets insets = AWT.insetsFrom(null);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
 
@@ -56,21 +56,21 @@ public class SwingTest {
         return null;
       }
     };
-    Insets insets = Swing.insetsFrom(frame);
+    Insets insets = AWT.insetsFrom(frame);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
   
   @Test public void shouldReturnFalseIfComponentIsNotAppletViewer() {
-    assertThat(Swing.isAppletViewer(new JTextField())).isFalse();
+    assertThat(AWT.isAppletViewer(new JTextField())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfComponentIsNull() {
-    assertThat(Swing.isAppletViewer(null)).isFalse();
+    assertThat(AWT.isAppletViewer(null)).isFalse();
   }
   
   @Test public void shouldReturnTrueIfComponentIsSharedInvisibleFrame() {
     JDialog dialog = dialogWithSharedInvisibleFrameAsOwner(); 
-    assertThat(Swing.isSharedInvisibleFrame(dialog.getOwner())).isTrue();
+    assertThat(AWT.isSharedInvisibleFrame(dialog.getOwner())).isTrue();
   }
 
   private JDialog dialogWithSharedInvisibleFrameAsOwner() {
@@ -78,20 +78,20 @@ public class SwingTest {
   }
   
   @Test public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrame() {
-    assertThat(Swing.isSharedInvisibleFrame(new JTextField())).isFalse();
+    assertThat(AWT.isSharedInvisibleFrame(new JTextField())).isFalse();
   }
   
   @Test public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrameAndNull() {
-    assertThat(Swing.isSharedInvisibleFrame(null)).isFalse();
+    assertThat(AWT.isSharedInvisibleFrame(null)).isFalse();
   }
 
   @Test public void shouldReturnNullAsNameIfComponentIsNull() {
-    assertThat(Swing.quoteNameOf(null)).isNull();
+    assertThat(AWT.quoteNameOf(null)).isNull();
   }
 
   @Test public void shouldReturnComponentNameInQuotes() {
     JTextField textField = new JTextField();
     textField.setName("firstName");
-    assertThat(Swing.quoteNameOf(textField)).isEqualTo("'firstName'");
+    assertThat(AWT.quoteNameOf(textField)).isEqualTo("'firstName'");
   }
 }

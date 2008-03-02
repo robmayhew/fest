@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Component;
 
@@ -22,14 +22,14 @@ import java.awt.Component;
  *
  * @author Alex Ruiz
  */
-public class RequestFocusTask implements Runnable {
+class RequestFocusTask implements Runnable {
   private final Component c;
 
   /**
    * Creates a new </code>{@link RequestFocusTask}</code>.
    * @param c the <code>Component</code> to request focus for.
    */
-  public RequestFocusTask(Component c) {
+  RequestFocusTask(Component c) {
     this.c = c;
   }
 

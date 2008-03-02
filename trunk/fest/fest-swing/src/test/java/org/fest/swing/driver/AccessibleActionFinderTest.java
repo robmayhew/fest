@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -26,6 +26,8 @@ import javax.accessibility.AccessibleAction;
 import javax.accessibility.AccessibleContext;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.driver.AccessibleActionFinder;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

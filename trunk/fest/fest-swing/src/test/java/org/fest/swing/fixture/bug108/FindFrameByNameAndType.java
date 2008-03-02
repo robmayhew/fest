@@ -15,22 +15,25 @@
  */
 package org.fest.swing.fixture.bug108;
 
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.finder.WindowFinder.findFrame;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.finder.WindowFinder.findFrame;
+import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=108">Bug 108</a>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = FUNCTIONAL)
 public class FindFrameByNameAndType {
 
   private MyFrame frame;
