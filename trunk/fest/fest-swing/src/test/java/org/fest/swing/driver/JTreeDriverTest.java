@@ -37,7 +37,9 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 /**
  * Test for <code>{@link JTreeDriver}</code>.
  *
+ * @author Keith Coughtrey
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class JTreeDriverTest {
 

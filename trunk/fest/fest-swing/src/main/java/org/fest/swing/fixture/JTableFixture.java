@@ -28,9 +28,6 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
  * <code>{@link JTable}</code>.
@@ -81,7 +78,7 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableCellFixture cell(TableCell cell) {
-    validate(cell);
+    driver.validate(target, cell);
     return new JTableCellFixture(this, cell);
   }
 
@@ -93,8 +90,7 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableFixture selectCell(TableCell cell) {
-    validate(cell);
-    driver.selectCell(target, cell.row, cell.column);
+    driver.selectCell(target, cell);
     return this;
   }
 
@@ -107,11 +103,7 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public JTableFixture selectCells(TableCell... cells) {
-    if (cells == null) throw actionFailure("Cells to select cannot be null");
-    int controlOrCommandKey = controlOrCommandKey();
-    driver.pressKey(target, controlOrCommandKey);
-    for (TableCell c : cells) selectCell(c);
-    driver.releaseKey(target, controlOrCommandKey);
+    driver.selectCells(target, cells);
     return this;
   }
 
@@ -133,8 +125,7 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableFixture drag(TableCell cell) {
-    validate(cell);
-    driver.drag(target, cell.row, cell.column);
+    driver.drag(target, cell);
     return this;
   }
 
@@ -146,8 +137,7 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableFixture drop(TableCell cell) {
-    validate(cell);
-    driver.drop(target, cell.row, cell.column);
+    driver.drop(target, cell);
     return this;
   }
 
@@ -168,8 +158,7 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public Point pointAt(TableCell cell) {
-    validate(cell);
-    return driver.pointAt(target, cell.row, cell.column);
+    return driver.pointAt(target, cell);
   }
 
   /**
@@ -180,13 +169,8 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public String contentsAt(TableCell cell) {
-    validate(cell);
-    return contentsAt(cell.row, cell.column);
-  }
-
-  private String contentsAt(int row, int column) {
-    return driver.text(target, row, column);
+  public String contentAt(TableCell cell) {
+    return driver.text(target, cell);
   }
 
   /**
@@ -222,17 +206,16 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * Simulates a user clicking a cell in this fixture's <code>{@link JTable}</code> once, using the specified mouse
    * button.
    * @param cell the cell to click.
-   * @param mouseButton the mouse button to use.
+   * @param button the mouse button to use.
    * @return this fixture.
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
-  public JTableFixture click(TableCell cell, MouseButton mouseButton) {
-    validate(cell);
-    driver.click(target, cell.row, cell.column, mouseButton, 1);
+  public JTableFixture click(TableCell cell, MouseButton button) {
+    click(cell, button, 1);
     return this;
   }
-
+  
   /**
    * Simulates a user clicking a cell in this fixture's <code>{@link JTable}</code>, using the specified mouse button
    * the given number of times.
@@ -243,16 +226,14 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
-    validate(cell);
-    driver.click(target, cell.row, cell.column, mouseClickInfo.button(), mouseClickInfo.times());
+    click(cell, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
-
-  private void validate(TableCell cell) {
-    if (cell == null) throw actionFailure("Cell cannot be null");
-    cell.validateBoundsIn(target);
+  
+  void click(TableCell cell, MouseButton button, int times) {
+    driver.click(target, cell, button, times);    
   }
-
+  
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTable}</code>.
    * <p>
@@ -378,5 +359,15 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
    */
   public JPopupMenuFixture showPopupMenuAt(Point p) {
     return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
+  }
+
+  /**
+   * Shows a pop-up menu at the given cell.
+   * @param cell the table cell where to show the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(TableCell cell) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, cell));
   }
 }

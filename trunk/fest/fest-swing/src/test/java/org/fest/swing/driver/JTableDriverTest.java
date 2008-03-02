@@ -63,7 +63,7 @@ public class JTableDriverTest {
 
   @Test(dataProvider = "cellsToSelect")
   public void shouldSelectCell(int row, int column) {
-    driver.selectCell(dragTable, row, column);
+    driver.selectCell(dragTable, new TableCell(row, column));
     assertThat(dragTable.isCellSelected(row, column));
   }
 
@@ -75,7 +75,7 @@ public class JTableDriverTest {
 
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
-    driver.selectCell(dragTable, row, column);
+    driver.selectCell(dragTable, new TableCell(row, column));
     String text = driver.selectionText(dragTable);
     assertThat(text).isEqualTo(createCellTextUsing(row, column));
   }
@@ -92,8 +92,8 @@ public class JTableDriverTest {
   @Test public void shouldDragAndDrop() throws Exception {
     int dragRowCount = dragTable.getRowCount();
     int dropRowCount = dropTable.getRowCount();
-    driver.drag(dragTable, 3, 0);
-    driver.drop(dropTable, 1, 0);
+    driver.drag(dragTable, new TableCell(3, 0));
+    driver.drop(dropTable, new TableCell(1, 0));
     assertThat(dragTable.getRowCount()).isEqualTo(dragRowCount - 1);
     assertThat(dragTable.getValueAt(3, 0)).isEqualTo(createCellTextUsing(4, 0));
     assertThat(dropTable.getRowCount()).isEqualTo(dropRowCount + 1);
@@ -130,6 +130,12 @@ public class JTableDriverTest {
       JScrollPane scrollPane = new JScrollPane(table);
       scrollPane.setPreferredSize(TABLE_SIZE);
       return scrollPane;
+    }
+  }
+  
+  private static class TableCell extends JTableCell {
+    public TableCell(int row, int column) {
+      super(row, column);
     }
   }
 }

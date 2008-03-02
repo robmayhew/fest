@@ -69,7 +69,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
    */
-  public final void toggleRow(JTree tree, int row) {
+  public void toggleRow(JTree tree, int row) {
     // Alternatively, we can reflect into the UI and do a single click on the appropriate expand location, but this is
     // safer.
     Point p = location.pointAt(tree, row);
@@ -92,7 +92,7 @@ public class JTreeDriver extends JComponentDriver {
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
-  public final void selectRow(JTree tree, int row) {
+  public void selectRow(JTree tree, int row) {
     selectPath(tree, location.pathFor(tree, row));
   }
 
@@ -102,7 +102,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param path the path to select.
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
-  public final void selectPath(JTree tree, TreePath path) {
+  public void selectPath(JTree tree, TreePath path) {
     makeVisible(tree, path, false);
     Point p = location.pointAt(tree, path);
     int row = tree.getRowForLocation(p.x, p.y);
@@ -192,7 +192,7 @@ public class JTreeDriver extends JComponentDriver {
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
-  public final void drag(JTree tree, int row) {
+  public void drag(JTree tree, int row) {
     drag(tree, location.pathFor(tree, row));
   }
 
@@ -205,7 +205,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public final void drop(JTree tree, int row) {
+  public void drop(JTree tree, int row) {
     drop(tree, location.pathFor(tree, row));
   }
 
@@ -215,7 +215,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param path the given <code>TreePath</code>.
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
-  public final void drag(JTree tree, TreePath path) {
+  public void drag(JTree tree, TreePath path) {
     selectPath(tree, path);
     drag(tree, location.pointAt(tree, path));
   }
@@ -227,7 +227,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if any part of the path is not visible.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public final void drop(JTree tree, TreePath path) {
+  public void drop(JTree tree, TreePath path) {
     drop(tree, location.pointAt(tree, path));
   }
 }

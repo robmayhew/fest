@@ -56,7 +56,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @param toolBar the target <code>JToolBar</code>.
    * @return <code>true</code> if the <code>JToolBar</code> is floating, <code>false</code> otherwise.
    */
-  public final boolean isFloating(JToolBar toolBar) {
+  public boolean isFloating(JToolBar toolBar) {
     ToolBarUI ui = toolBar.getUI();
     if (ui instanceof BasicToolBarUI) return ((BasicToolBarUI) ui).isFloating();
     // Have to guess; probably ought to check for sibling components
@@ -72,7 +72,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @throws ActionFailedException if the <code>JToolBar</code> is not floatable.
    * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
-  public final void floatTo(JToolBar toolBar, int x, int y) {
+  public void floatTo(JToolBar toolBar, int x, int y) {
     if (!toolBar.isFloatable()) throw actionFailure(concat("JToolbar <", format(toolBar), "> is not floatable"));
     Window w = getWindowAncestor(toolBar);
     drag(toolBar, location.pointToGrab(toolBar));
@@ -86,7 +86,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @throws ActionFailedException if the <code>JToolBar</code> is not floatable.
    * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
-  public final void floatTo(JToolBar toolBar) {
+  public void floatTo(JToolBar toolBar) {
     Window w = SwingUtilities.getWindowAncestor(toolBar);
     Point where = w.getLocation();
     floatTo(toolBar, where.x, where.y);
@@ -101,7 +101,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @throws IllegalArgumentException if the constraint has an invalid value.
    * @throws ActionFailedException if the dock container cannot be found.
    */
-  public final void unfloat(JToolBar toolBar, String constraint) {
+  public void unfloat(JToolBar toolBar, String constraint) {
     Container dock = dockFor(toolBar);
     drag(toolBar, location.pointToGrab(toolBar));
     drop(dock, location.dockLocation(toolBar, dock, constraint));
@@ -123,7 +123,7 @@ public class JToolBarDriver extends JComponentDriver {
    * location.
    * @param toolBar the target <code>JToolBar</code>.
    */
-  public final void unfloat(JToolBar toolBar) {
+  public void unfloat(JToolBar toolBar) {
     Window w = getWindowAncestor(toolBar);
     robot.close(w);
     robot.waitForIdle();

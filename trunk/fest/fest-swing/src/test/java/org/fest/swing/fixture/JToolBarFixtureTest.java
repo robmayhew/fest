@@ -15,6 +15,26 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Point;
+
+import javax.swing.JPopupMenu;
+import javax.swing.JToolBar;
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JToolBarDriver;
+import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
+
 
 /**
  * Tests for <code>{@link JToolBarFixture}</code>.
@@ -23,5 +43,94 @@ package org.fest.swing.fixture;
  * @author Yvonne Wang
  */
 // TODO Implement
-public class JToolBarFixtureTest  {
+public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
+
+  private JToolBarDriver driver;
+  private JToolBar target;
+  private JToolBarFixture fixture;
+  
+  void onSetUp(Robot robot) {
+    driver = createMock(JToolBarDriver.class);
+    target = new JToolBar();
+    fixture = new JToolBarFixture(robot, target);
+    fixture.updateDriver(driver);
+  }
+
+  @Test public void shouldFloatToPoint() {
+    final Point p = new Point(8, 6);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.floatTo(target, p.x, p.y);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.floatTo(p));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldUnfloat() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.unfloat(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.unfloat());
+      }
+    }.run();
+  }
+
+  @Test(dataProvider = "unfloatConstraints")
+  public void shouldUnfloatUsingGivingConstraint(final UnfloatConstraint constraint) {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.unfloat(target, constraint.value);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.unfloat(constraint));
+      }
+    }.run();
+  }
+  
+  @DataProvider(name = "unfloatConstraints") public Object[][] unfloatConstraints() {
+    return new Object[][] { { NORTH }, { EAST }, { SOUTH }, { WEST } };
+  }
+
+  @Test public void shouldShowJPopupMenu() {
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenu();
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldShowJPopupMenuAtPoint() {
+    final Point p = new Point(8, 6);
+    final JPopupMenu popup = new JPopupMenu(); 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, p)).andReturn(popup);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
+        assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  ComponentDriver driver() { return driver; }
+  JToolBar target() { return target; }
+  ComponentFixture<JToolBar> fixture() { return fixture; }
 }

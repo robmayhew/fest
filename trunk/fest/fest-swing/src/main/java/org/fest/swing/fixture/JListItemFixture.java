@@ -119,7 +119,7 @@ public class JListItemFixture implements ItemFixture {
    * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public final String contents() {
+  public final String content() {
     return list.valueAt(index);
   }
 

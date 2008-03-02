@@ -20,8 +20,8 @@ import java.awt.Point;
 
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -37,7 +37,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JTextComponentFixture extends ComponentFixture<JTextComponent> 
     implements TextInputFixture, JPopupMenuInvokerFixture {
 
-  private final JTextComponentDriver driver;
+  private JTextComponentDriver driver;
 
   /**
    * Creates a new <code>{@link JTextComponentFixture}</code>.
@@ -46,7 +46,7 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent>
    */
   public JTextComponentFixture(Robot robot, JTextComponent target) {
     super(robot, target);
-    driver = newTextComponentDriver();
+    createDriver();
   }
 
   /**
@@ -59,11 +59,15 @@ public class JTextComponentFixture extends ComponentFixture<JTextComponent>
    */
   public JTextComponentFixture(Robot robot, String textComponentName) {
     super(robot, textComponentName, JTextComponent.class);
-    driver = newTextComponentDriver();
+    createDriver();
   }
 
-  private JTextComponentDriver newTextComponentDriver() {
-    return new JTextComponentDriver(robot);
+  private void createDriver() {
+    updateDriver(new JTextComponentDriver(robot));
+  }
+
+  void updateDriver(JTextComponentDriver driver) {
+    this.driver = driver;
   }
 
   /**

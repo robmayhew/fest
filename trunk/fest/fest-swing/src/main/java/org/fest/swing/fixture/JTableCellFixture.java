@@ -21,7 +21,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.fixture.MouseClickInfo.button;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
@@ -70,7 +69,8 @@ public class JTableCellFixture implements ItemFixture {
    * @return this fixture.
    */
   public final JTableCellFixture click() {
-    return click(LEFT_BUTTON);
+    table.selectCell(cell);
+    return this;
   }
 
   /**
@@ -79,15 +79,8 @@ public class JTableCellFixture implements ItemFixture {
    * @return this fixture.
    */
   public final JTableCellFixture click(MouseClickInfo mouseClickInfo) {
-    return click(mouseClickInfo.button(), mouseClickInfo.times());
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's table cell.
-   * @return this fixture.
-   */
-  public final JTableCellFixture rightClick() {
-    return click(RIGHT_BUTTON);
+    table.click(cell, mouseClickInfo);
+    return this;
   }
 
   /**
@@ -98,13 +91,21 @@ public class JTableCellFixture implements ItemFixture {
     return click(LEFT_BUTTON, 2);
   }
 
+  /**
+   * Simulates a user right-clicking this fixture's table cell.
+   * @return this fixture.
+   */
+  public final JTableCellFixture rightClick() {
+    return click(RIGHT_BUTTON);
+  }
+
   private JTableCellFixture click(MouseButton button) {
     table.click(cell, button);
     return this;
   }
 
   private JTableCellFixture click(MouseButton button, int times) {
-    table.click(cell, button(button).times(times));
+    table.click(cell, button, times);
     return this;
   }
 
@@ -113,8 +114,8 @@ public class JTableCellFixture implements ItemFixture {
    * <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
    */
-  public final String contents() {
-    return table.contentsAt(cell);
+  public final String content() {
+    return table.contentAt(cell);
   }
 
   /**
@@ -175,7 +176,7 @@ public class JTableCellFixture implements ItemFixture {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public final JPopupMenuFixture showPopupMenu() {
-    return table.showPopupMenuAt(table.pointAt(cell));
+    return table.showPopupMenuAt(cell);
   }
 
   /**

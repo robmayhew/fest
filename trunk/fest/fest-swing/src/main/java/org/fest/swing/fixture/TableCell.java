@@ -17,25 +17,35 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
+import org.fest.swing.driver.JTableCell;
 
 /**
- * Understands a cell in a <code>{@link JTable}</code>. Intended for creation of <code>{@link JTableCellFixture}</code>s 
- * only.
+ * Understands a cell in a <code>{@link JTable}</code>.
  * <p>
  * Example:
  * <pre>
- * // import static org.fest.swing.fixture.TableCellBuilder.row;
- * {@link JTableCellFixture} cell = dialog.{@link JTableFixture table}("records").cell({@link TableCell.TableCellBuilder#row(int) row}(3).column(0));
+ * // import static org.fest.swing.fixture.TableCell.row;
+ * {@link JTableCellFixture} cell = dialog.{@link JTableFixture table}("records").cell({@link TableCell#row(int) row}(3).column(0));
  * </pre>
  * </p>
  * 
  * @author Alex Ruiz
  */
-public class TableCell {
+public class TableCell extends JTableCell {
+
+  /**
+   * Starting point for the creation of a <code>{@link TableCell}</code>.
+   * <p>
+   * Example:
+   * <pre>
+   * // import static org.fest.swing.fixture.TableCell.row;
+   * TableCell cell = row(5).column(3);
+   * </pre>
+   * </p>
+   * @param row the row index of the table cell to create.
+   * @return the created builder.
+   */
+  public static TableCellBuilder row(int row) { return new TableCellBuilder(row); }
 
   /**
    * Understands creation of <code>{@link TableCell}</code>s.
@@ -45,21 +55,7 @@ public class TableCell {
   public static class TableCellBuilder {
     private final int row;
     
-    /**
-     * Starting point for the creation of a <code>{@link TableCell}</code>.
-     * <p>
-     * Example:
-     * <pre>
-     * // import static org.fest.swing.fixture.TableCell.TableCellBuilder.row;
-     * TableCell cell = row(5).column(3);
-     * </pre>
-     * </p>
-     * @param row the row index of the table cell to create.
-     * @return the created builder.
-     */
-    public static TableCellBuilder row(int row) { return new TableCellBuilder(row); }
-   
-    private TableCellBuilder(int row) { this.row = row; }
+    TableCellBuilder(int row) { this.row = row; }
     
     /**
      * Creates a new table cell using the row index specified in <code>{@link TableCellBuilder#row(int)}</code> and the 
@@ -70,32 +66,7 @@ public class TableCell {
     public TableCell column(int column) { return new TableCell(row, column); }
   }
   
-  /** The row of the cell. */
-  public final int row;
-  
-  /** The column of the cell. */
-  public final int column;
-
-  private TableCell(int row, int column) {
-    this.row = row;
-    this.column = column;
-  }
-
-  /**
-   * Validates the indices of this cell regarding the given table.
-   * @param table the table to use to validate this cell's indices.
-   * @throw ActionFailedException if any of the indices is out of bounds. 
-   */
-  void validateBoundsIn(JTable table) {
-    int rowCount = table.getRowCount();
-    if (rowCount == 0) throw actionFailure("Table does not contain any rows");
-    validateIndex(row, rowCount, "row");
-    validateIndex(column, table.getColumnCount(), "column");
-  }
-  
-  private void validateIndex(int index, int itemCount, String indexName) {
-    if (index < 0 || index >= itemCount) 
-      throw actionFailure(concat(
-          indexName, " ", quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", quote(valueOf(itemCount))));
+  TableCell(int row, int column) {
+    super(row, column);
   }
 }

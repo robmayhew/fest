@@ -1,5 +1,5 @@
 /*
- * Created on Sep 10, 2007
+ * Created on Mar 2, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.fixture;
 
@@ -27,28 +27,29 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
 
 /**
- * Tests for <code>{@link JListItemFixture}</code>.
+ * Tests for <code>{@link JTableCellFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JListItemFixtureTest {
+public class JTableCellFixtureTest {
 
-  private JListFixture list;
-  private int index;
-  private JListItemFixture fixture;
+  private JTableFixture table;
+  private TableCell cell;
+  private JTableCellFixture fixture;
   
   @BeforeMethod public void setUp() {
-    list = createMock(JListFixture.class);
-    index = 8;
-    fixture = new JListItemFixture(list, index);
+    table = createMock(JTableFixture.class);
+    cell = row(8).column(6);
+    fixture = new JTableCellFixture(table, cell);
   }
 
   @Test public void shouldSelect() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.selectItem(index)).andReturn(list);
+        expect(table.selectCell(cell)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -58,9 +59,9 @@ public class JListItemFixtureTest {
   }
   
   @Test public void shouldClick() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.selectItem(index)).andReturn(list);
+        expect(table.selectCell(cell)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -70,22 +71,23 @@ public class JListItemFixtureTest {
   }
 
   @Test public void shouldClickUsingMouseClickInfo() {
-    new EasyMockTemplate(list) {
+    final MouseClickInfo mouseClickInfo = leftButton().times(2);
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        list.clickItem(index, LEFT_BUTTON, 2);
-        expectLastCall().once();
+        expect(table.click(cell, mouseClickInfo)).andReturn(table);
       }
 
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.click(leftButton().times(2)));
+        assertThatReturnsThis(fixture.click(mouseClickInfo));
       }
     }.run();
   }
   
   @Test public void shouldDoubleClick() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.doubleClickItem(index)).andReturn(list);
+        table.click(cell, LEFT_BUTTON, 2);
+        expectLastCall().once();
       }
 
       protected void codeToTest() {
@@ -95,10 +97,9 @@ public class JListItemFixtureTest {
   }
 
   @Test public void shouldRightClick() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        list.clickItem(index, RIGHT_BUTTON, 1);
-        expectLastCall().once();
+        expect(table.click(cell, RIGHT_BUTTON)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -109,9 +110,9 @@ public class JListItemFixtureTest {
   
   @Test public void shouldShowPopupMenu() {
     final JPopupMenuFixture popup = createMock(JPopupMenuFixture.class);
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.showPopupMenuAt(index)).andReturn(popup);
+        expect(table.showPopupMenuAt(cell)).andReturn(popup);
       }
 
       protected void codeToTest() {
@@ -123,9 +124,9 @@ public class JListItemFixtureTest {
   
   @Test public void shouldReturnContents() {
     final String content = "Hello"; 
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.valueAt(index)).andReturn(content);
+        expect(table.contentAt(cell)).andReturn(content);
       }
 
       protected void codeToTest() {
@@ -136,9 +137,9 @@ public class JListItemFixtureTest {
   }
   
   @Test public void shouldDrag() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.drag(index)).andReturn(list);
+        expect(table.drag(cell)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -148,9 +149,9 @@ public class JListItemFixtureTest {
   }
 
   @Test public void shouldDrop() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.drop(index)).andReturn(list);
+        expect(table.drop(cell)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -161,9 +162,9 @@ public class JListItemFixtureTest {
   
   @Test public void shouldPressAndReleaseKeys() {
     final int[] keys = { VK_A, VK_B };
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.pressAndReleaseKeys(keys)).andReturn(list);
+        expect(table.pressAndReleaseKeys(keys)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -173,9 +174,9 @@ public class JListItemFixtureTest {
   }
 
   @Test public void shouldPressKey() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.pressKey(VK_A)).andReturn(list);
+        expect(table.pressKey(VK_A)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -185,9 +186,9 @@ public class JListItemFixtureTest {
   }
   
   @Test public void shouldReleaseKey() {
-    new EasyMockTemplate(list) {
+    new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(list.releaseKey(VK_A)).andReturn(list);
+        expect(table.releaseKey(VK_A)).andReturn(table);
       }
 
       protected void codeToTest() {
@@ -196,11 +197,16 @@ public class JListItemFixtureTest {
     }.run();
   }
 
-  @Test public void shouldReturnIndex() {
-    assertThat(fixture.index()).isEqualTo(index);
+  @Test public void shouldReturnRow() {
+    assertThat(fixture.row()).isEqualTo(cell.row);
   }
 
-  private void assertThatReturnsThis(JListItemFixture result) {
+  @Test public void shouldReturnColumn() {
+    assertThat(fixture.column()).isEqualTo(cell.column);
+  }
+
+  private void assertThatReturnsThis(JTableCellFixture result) {
     assertThat(result).isSameAs(fixture);
   }
+
 }

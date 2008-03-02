@@ -21,8 +21,8 @@ import java.awt.Point;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -40,7 +40,7 @@ import org.fest.swing.exception.LocationUnavailableException;
  */
 public class JTreeFixture extends ComponentFixture<JTree> implements JPopupMenuInvokerFixture {
 
-  private final JTreeDriver driver;
+  private JTreeDriver driver;
 
   /**
    * Creates a new <code>{@link JTreeFixture}</code>.
@@ -49,7 +49,7 @@ public class JTreeFixture extends ComponentFixture<JTree> implements JPopupMenuI
    */
   public JTreeFixture(Robot robot, JTree target) {
     super(robot, target);
-    driver = newTreeDriver();
+    createDriver();
   }
 
   /**
@@ -61,11 +61,15 @@ public class JTreeFixture extends ComponentFixture<JTree> implements JPopupMenuI
    */
   public JTreeFixture(Robot robot, String treeName) {
     super(robot, treeName, JTree.class);
-    driver = newTreeDriver();
+    createDriver();
   }
 
-  private JTreeDriver newTreeDriver() {
-    return new JTreeDriver(robot);
+  private void createDriver() {
+    updateDriver(new JTreeDriver(robot));
+  }
+
+  void updateDriver(JTreeDriver driver) {
+    this.driver = driver;
   }
 
   /**

@@ -33,38 +33,38 @@ public class TableCellTest {
   @Test public void shouldCreateTableCellWithGivenRowAndColumn() {
     int row = 6;
     int column = 8;
-    TableCell cell = TableCell.TableCellBuilder.row(row).column(column);
+    TableCell cell = TableCell.row(row).column(column);
     assertThat(cell.row).isEqualTo(row);
     assertThat(cell.column).isEqualTo(column);
   }
   
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfTableIsEmpty() {
-    TableCell cell = TableCell.TableCellBuilder.row(2).column(3);
+    TableCell cell = TableCell.row(2).column(3);
     cell.validateBoundsIn(new JTable());
   }
 
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfRowIndexIsNegative() {
-    TableCell cell = TableCell.TableCellBuilder.row(-2).column(3);
+    TableCell cell = TableCell.row(-2).column(3);
     cell.validateBoundsIn(new JTable(4, 3));
   }
 
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfColumnIndexIsNegative() {
-    TableCell cell = TableCell.TableCellBuilder.row(2).column(-3);
+    TableCell cell = TableCell.row(2).column(-3);
     cell.validateBoundsIn(new JTable(4, 3));
   }
   
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfRowIsOutOfBounds() {
-    TableCell cell = TableCell.TableCellBuilder.row(4).column(2);
+    TableCell cell = TableCell.row(4).column(2);
     cell.validateBoundsIn(new JTable(4, 3));
   }  
   
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfColumnIsOutOfBounds() {
-    TableCell cell = TableCell.TableCellBuilder.row(0).column(3);
+    TableCell cell = TableCell.row(0).column(3);
     cell.validateBoundsIn(new JTable(4, 3));
   }  
 }

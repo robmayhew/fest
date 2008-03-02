@@ -17,12 +17,17 @@ package org.fest.swing.driver;
 import java.awt.Component;
 import java.awt.Point;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>,
@@ -57,13 +62,28 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Convert the value at the given row and row into a reasonable <code>String</code> representation, or
+   * Convert the value at the given table cell into a reasonable <code>String</code> representation, or
+   * <code>null</code> if one cannot be obtained.
+   * @param table the target <code>JTable</code>.
+   * @param cell the table cell.
+   * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code>
+   *         if one cannot be obtained.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
+   */
+  public String text(JTable table, JTableCell cell) {
+    validate(table, cell);
+    return textFrom(cellRendererComponent(table, cell.row, cell.column));
+  }
+
+  /**
+   * Convert the value at the given row and column into a reasonable <code>String</code> representation, or
    * <code>null</code> if one cannot be obtained.
    * @param table the target <code>JTable</code>.
    * @param row the given row.
    * @param column the given column.
-   * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code> if
-   * one cannot be obtained.
+   * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code>
+   *         if one cannot be obtained.
    */
   public String text(JTable table, int row, int column) {
     return textFrom(cellRendererComponent(table, row, column));
@@ -75,61 +95,109 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Selects the given cell, if it is not selected already.
+   * Selects the given cells of the <code>{@link JTable}</code>.
    * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
+   * @param cells the cells to select.
+   * @throws ActionFailedException if <code>cells</code> is <code>null</code>.
+   * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
+   * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
-  public void selectCell(JTable table, int row, int column) {
-    if (isCellSelected(table, row, column)) return;
-    click(table, pointAt(table, row, column));
+  public void selectCells(JTable table, JTableCell... cells) {
+    if (cells == null) throw actionFailure("Table cells to select cannot be null");
+    int controlOrCommandKey = controlOrCommandKey();
+    pressKey(table, controlOrCommandKey);
+    for (JTableCell c : cells) selectCell(table, c);
+    releaseKey(table, controlOrCommandKey);
   }
 
-  private boolean isCellSelected(JTable table, int row, int column) {
-    return table.isRowSelected(row) && table.isColumnSelected(column) && table.getSelectedRowCount() == 1;
+  /**
+   * Selects the given cell, if it is not selected already.
+   * @param table the target <code>JTable</code>.
+   * @param cell the cell to select.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
+   */
+  public void selectCell(JTable table, JTableCell cell) {
+    validate(table, cell);
+    if (isCellSelected(table, cell)) return;
+    click(table, pointAt(table, cell));
+  }
+  
+  private boolean isCellSelected(JTable table, JTableCell cell) {
+    return table.isRowSelected(cell.row) && table.isColumnSelected(cell.column) && table.getSelectedRowCount() == 1;
   }
 
   /**
    * Clicks the given cell, using the specified mouse button, the given number of times.
    * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
+   * @param cell the table cell.
    * @param mouseButton the mouse button to use.
    * @param times the number of times to click the cell.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
    */
-  public void click(JTable table, int row, int column, MouseButton mouseButton, int times) {
-    robot.click(table, pointAt(table, row, column), mouseButton, times);
+  public void click(JTable table, JTableCell cell, MouseButton mouseButton, int times) {
+    validate(table, cell);
+    robot.click(table, pointAt(table, cell), mouseButton, times);
   }
 
   /**
-   * Starts a drag operation at the location of the given row and column.
+   * Starts a drag operation at the location of the given table cell.
    * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
+   * @param cell the table cell.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
    */
-  public void drag(JTable table, int row, int column) {
-    drag(table, pointAt(table, row, column));
+  public void drag(JTable table, JTableCell cell) {
+    validate(table, cell);
+    drag(table, pointAt(table, cell));
   }
 
   /**
-   * Ends a drag operation at the location of the given row and column.
+   * Starts a drop operation at the location of the given table cell.
    * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
+   * @param cell the table cell.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
    */
-  public void drop(JTable table, int row, int column) {
-    drop(table, pointAt(table, row, column));
+  public void drop(JTable table, JTableCell cell) {
+    validate(table, cell);
+    drop(table, pointAt(table, cell));
   }
 
   /**
-   * Converts the given row and column into a coordinate pair. It is assumed that the row and column indices are
-   * in the <code>{@link JTable}</code>'s bounds.
+   * Shows a pop-up menu at the given table cell.
    * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
+   * @param cell the table cell.
+   * @return the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenu showPopupMenuAt(JTable table, JTableCell cell) {
+    return showPopupMenu(table, pointAt(table, cell));
+  }
+
+  /**
+   * Converts the given table cell into a coordinate pair.
+   * @param table the target <code>JTable</code>.
+   * @param cell the table cell.
    * @return the coordinates of the given row and column.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
    */
-  public Point pointAt(JTable table, int row, int column) {
-    return location.pointAt(table, row, column);
+  public Point pointAt(JTable table, JTableCell cell) {
+    validate(table, cell);
+    return location.pointAt(table, cell.row, cell.column);
+  }
+
+  /**
+   * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
+   * @param table the target <code>JTable</code>.
+   * @param cell to validate.
+   * @throw ActionFailedException if the cell is <code>null</code>. 
+   * @throw ActionFailedException if any of the indices (row and column) is out of bounds. 
+   */
+  public void validate(JTable table, JTableCell cell) {
+    if (cell == null) throw actionFailure("Table cell cannot be null");
+    cell.validateBoundsIn(table);
   }
 }

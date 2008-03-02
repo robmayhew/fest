@@ -37,7 +37,6 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-//TODO Implement
 public class JToggleButtonFixtureTest extends ComponentFixtureTestCase<JToggleButton> {
 
   private AbstractButtonDriver driver;

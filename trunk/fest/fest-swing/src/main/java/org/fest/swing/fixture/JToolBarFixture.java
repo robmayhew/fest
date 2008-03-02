@@ -21,8 +21,8 @@ import java.awt.Point;
 
 import javax.swing.JToolBar;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JToolBarDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -52,7 +52,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements JPopu
     }
   }
 
-  private final JToolBarDriver driver;
+  private JToolBarDriver driver;
 
   /**
    * Creates a new <code>{@link JToolBarFixture}</code>.
@@ -61,7 +61,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements JPopu
    */
   public JToolBarFixture(Robot robot, JToolBar target) {
     super(robot, target);
-    driver = newToolBarDriver(robot);
+    createDriver(robot);
   }
 
   /**
@@ -74,11 +74,15 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements JPopu
    */
   public JToolBarFixture(Robot robot, String toolbarName) {
     super(robot, toolbarName, JToolBar.class);
-    driver = newToolBarDriver(robot);
+    createDriver(robot);
   }
 
-  private JToolBarDriver newToolBarDriver(Robot robot) {
-    return new JToolBarDriver(robot);
+  private void createDriver(Robot robot) {
+    updateDriver(new JToolBarDriver(robot));
+  }
+
+  void updateDriver(JToolBarDriver driver) {
+    this.driver = driver;
   }
 
   /**

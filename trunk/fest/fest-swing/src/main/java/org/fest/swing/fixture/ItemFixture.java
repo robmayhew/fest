@@ -64,7 +64,7 @@ public interface ItemFixture {
    * if one can not be obtained.
    * @return the value of the given cell.
    */
-  String contents();
+  String content();
 
   /**
    * Simulates a user dragging this fixture's item.
