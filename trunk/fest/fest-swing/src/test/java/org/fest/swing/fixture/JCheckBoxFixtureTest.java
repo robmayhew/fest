@@ -50,6 +50,32 @@ public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCheck() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.select(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.check());
+      }
+    }.run();
+  }
+  
+  @Test public void shoulUncheck() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.unselect(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.uncheck());
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnText() {
     assertThat(fixture.text()).isEqualTo(target.getText());
   }

@@ -52,7 +52,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   abstract void onSetUp(Robot robot);
-  
+
   @Test public void shouldClick() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
