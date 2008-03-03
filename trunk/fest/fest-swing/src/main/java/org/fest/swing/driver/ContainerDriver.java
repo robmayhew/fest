@@ -14,11 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -26,6 +21,11 @@ import java.awt.Point;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.AWT.locationOnScreenOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link Container}</code>. This class is intended for internal use
@@ -50,7 +50,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param width the width to resize the <code>Container</code> to.
    * @param height the height to resize the <code>Container</code> to.
    */
-  public final void resize(Container c, int width, int height) {
+  public void resize(Container c, int width, int height) {
     Dimension size = c.getSize();
     resizeBy(c, width - size.width, height - size.height);
   }
@@ -61,7 +61,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param horizontally the horizontal amount to resize the <code>Container</code> by.
    * @param vertically the vertical amount to resize the <code>Container</code> by.
    */
-  protected final void resizeBy(Container c, int horizontally, int vertically) {
+  protected void resizeBy(Container c, int horizontally, int vertically) {
     simulateResizeStarted(c, horizontally, vertically);
     Dimension size = new Dimension(c.getWidth() + horizontally, c.getHeight() + vertically);
     robot.invokeAndWait(c, new SetSizeTask(c, size));
@@ -88,7 +88,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param c the target <code>Container</code>.
    * @return where the mouse usually grabs to resize a window.
    */
-  protected final Point resizeLocationOf(Container c) {
+  protected Point resizeLocationOf(Container c) {
     Dimension size = c.getSize();
     Insets insets = c.getInsets();
     return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
@@ -101,7 +101,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param y the vertical coordinate.
    * @throws ActionFailedException if the given container is not showing on the screen.
    */
-  public final void move(Container c, int x, int y) {
+  public void move(Container c, int x, int y) {
     Point onScreen = locationOnScreenOf(c);
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     moveBy(c, x - onScreen.x, y - onScreen.y);
@@ -114,7 +114,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param vertically
    * @throws ActionFailedException if the given container is not showing on the screen.
    */
-  protected final void moveBy(Container c, int horizontally, int vertically) {
+  protected void moveBy(Container c, int horizontally, int vertically) {
     Point onScreen = locationOnScreenOf(c);
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     simulateMoveStarted(c, horizontally, vertically);

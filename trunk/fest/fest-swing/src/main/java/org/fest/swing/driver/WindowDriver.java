@@ -96,7 +96,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Closing the <code>{@link Window}</code>.
    * @param w the target <code>Window</code>.
    */
-  public final void close(Window w) {
+  public void close(Window w) {
     robot.close(w);
   }
 

@@ -20,8 +20,8 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.DialogDriver;
@@ -36,7 +36,7 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class DialogFixture extends WindowFixture<Dialog> {
 
-  private final DialogDriver driver;
+  private DialogDriver driver;
 
   /**
    * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
@@ -46,7 +46,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(Dialog target) {
     super(target);
-    driver = newDialogDriver();
+    createDriver();
   }
 
   /**
@@ -56,7 +56,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(Robot robot, Dialog target) {
     super(robot, target);
-    driver = newDialogDriver();
+    createDriver();
   }
 
   /**
@@ -68,7 +68,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(Robot robot, String dialogName) {
     super(robot, dialogName, Dialog.class);
-    driver = newDialogDriver();
+    createDriver();
   }
 
   /**
@@ -81,11 +81,15 @@ public class DialogFixture extends WindowFixture<Dialog> {
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);
-    driver = newDialogDriver();
+    createDriver();
   }
 
-  private DialogDriver newDialogDriver() {
-    return new DialogDriver(robot);
+  private void createDriver() {
+    updateDriver(new DialogDriver(robot));
+  }
+
+  void updateDriver(DialogDriver driver) {
+    this.driver = driver;
   }
 
   /**

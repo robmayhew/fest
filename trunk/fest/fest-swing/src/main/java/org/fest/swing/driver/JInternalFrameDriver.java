@@ -15,6 +15,7 @@
 package org.fest.swing.driver;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyVetoException;
 
@@ -186,6 +187,43 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
       this.target = target;
       this.action = action;
     }
+  }
+
+  /**
+   * Resizes the <code>{@link JInternalFrame}</code> horizontally.
+   * @param w the target <code>JInternalFrame</code>.
+   * @param width the width that the <code>JInternalFrame</code> should have after being resized.
+   */
+  public void resizeWidthTo(JInternalFrame w, int width) {
+    resizeTo(w, new Dimension(width, w.getHeight()));
+  }
+
+  /**
+   * Resizes the <code>{@link JInternalFrame}</code> vertically.
+   * @param w the target <code>JInternalFrame</code>.
+   * @param height the height that the <code>JInternalFrame</code> should have after being resized.
+   */
+  public void resizeHeightTo(JInternalFrame w, int height) {
+    resizeTo(w, new Dimension(w.getWidth(), height));
+  }
+
+  /**
+   * Resizes the <code>{@link JInternalFrame}</code> to the given size.
+   * @param w the target <code>JInternalFrame</code>.
+   * @param size the size to resize the <code>JInternalFrame</code> to.
+   */
+  public void resizeTo(JInternalFrame w, Dimension size) {
+    resize(w, size.width, size.height);
+  }
+
+  /**
+   * Moves the <code>{@link JInternalFrame}</code> to the given location.
+   * @param w the target <code>JInternalFrame</code>.
+   * @param where the location to move the <code>JInternalFrame</code> to.
+   * @throws ActionFailedException if the given <code>JInternalFrame</code> is not showing on the screen.
+   */
+  public void moveTo(JInternalFrame w, Point where) {
+    move(w, where.x, where.y);
   }
   
   /** 

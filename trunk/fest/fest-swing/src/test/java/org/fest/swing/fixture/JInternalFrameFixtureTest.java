@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
 import javax.swing.JInternalFrame;
@@ -141,6 +142,76 @@ public class JInternalFrameFixtureTest extends ComponentFixtureTestCase<JInterna
     }.run();
   }
 
+  @Test public void shouldRequireSize() {
+    final Dimension size = new Dimension(800, 600);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSize(target, size);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSize(size));
+      }
+    }.run();
+  }
+
+  @Test public void shouldMoveToPoint() {
+    final Point p = new Point(6, 8);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.moveTo(target, p);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.moveTo(p));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldResizeHeight() {
+    final int height = 68;
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.resizeHeightTo(target, height);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.resizeHeightTo(height));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldResizeWidth() {
+    final int width = 68;
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.resizeWidthTo(target, width);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.resizeWidthTo(width));
+      }
+    }.run();
+  }
+
+  @Test public void shouldResizeWidthAndHeight() {
+    final Dimension size = new Dimension(800, 600);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.resizeTo(target, size);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.resizeTo(size));
+      }
+    }.run();
+  }
+  
   @Test public void shouldShowJPopupMenu() {
     final JPopupMenu popup = new JPopupMenu(); 
     new EasyMockTemplate(driver) {

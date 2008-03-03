@@ -21,8 +21,8 @@ import java.awt.Point;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JInternalFrameDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -156,7 +156,8 @@ public class JInternalFrameFixture extends ComponentFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public JInternalFrameFixture resizeWidthTo(int width) {
-    return resizeTo(new Dimension(width, target.getHeight()));
+    driver.resizeWidthTo(target, width);
+    return this;
   }
 
   /**
@@ -165,7 +166,8 @@ public class JInternalFrameFixture extends ComponentFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public JInternalFrameFixture resizeHeightTo(int height) {
-    return resizeTo(new Dimension(target.getWidth(), height));
+    driver.resizeHeightTo(target, height);
+    return this;
   }
 
   /**
@@ -174,7 +176,7 @@ public class JInternalFrameFixture extends ComponentFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public JInternalFrameFixture resizeTo(Dimension size) {
-    driver.resize(target, size.width, size.height);
+    driver.resizeTo(target, size);
     return this;
   }
 
@@ -184,7 +186,7 @@ public class JInternalFrameFixture extends ComponentFixture<JInternalFrame> impl
    * @return this fixture.
    */
   public JInternalFrameFixture moveTo(Point p) {
-    driver.move(target, p.x, p.y);
+    driver.moveTo(target, p);
     return this;
   }
 

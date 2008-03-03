@@ -20,8 +20,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.FrameDriver;
@@ -38,7 +38,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  */
 public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixture {
 
-  private final FrameDriver driver;
+  private FrameDriver driver;
 
   /**
    * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
@@ -48,7 +48,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(Frame target) {
     super(target);
-    driver = newFrameDriver();
+    createDriver();
   }
 
   /**
@@ -58,7 +58,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(Robot robot, Frame target) {
     super(robot, target);
-    driver = newFrameDriver();
+    createDriver();
   }
 
   /**
@@ -70,7 +70,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(Robot robot, String name) {
     super(robot, name, Frame.class);
-    driver = newFrameDriver();
+    createDriver();
   }
 
   /**
@@ -82,11 +82,15 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    */
   public FrameFixture(String name) {
     super(name, Frame.class);
-    driver = newFrameDriver();
+    createDriver();
   }
 
-  private FrameDriver newFrameDriver() {
-    return new FrameDriver(robot);
+  private void createDriver() {
+    updateDriver(new FrameDriver(robot));
+  }
+
+  void updateDriver(FrameDriver driver) {
+    this.driver = driver;
   }
 
   /**

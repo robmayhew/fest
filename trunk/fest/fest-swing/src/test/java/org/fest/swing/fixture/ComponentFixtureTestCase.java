@@ -21,8 +21,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.ComponentDriver;
 
 import static java.awt.event.KeyEvent.*;
@@ -31,7 +32,9 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.fixture.MouseClickInfo.middleButton;
+
 
 /**
  * Understands test methods for subclasses of <code>{@link ComponentFixture}</code>.
@@ -191,6 +194,20 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture().requireEnabled());
+      }
+    }.run();
+  }
+
+  @Test public void shouldRequireEnabledUsingTimeout() {
+    final Timeout timeout = timeout(2000);
+    new EasyMockTemplate(driver()) {
+      protected void expectations() {
+        driver().requireEnabled(target(), timeout);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture().requireEnabled(timeout));
       }
     }.run();
   }
