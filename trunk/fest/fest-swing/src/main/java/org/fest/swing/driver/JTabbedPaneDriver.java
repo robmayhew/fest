@@ -62,7 +62,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @param title the given text to match.
    * @throws LocationUnavailableException if a tab matching the given title could not be found.
    */
-  public final void selectTab(JTabbedPane tabbedPane, String title) {
+  public void selectTab(JTabbedPane tabbedPane, String title) {
     int index = location.titleToIndex(tabbedPane, title);
     selectTab(tabbedPane, index);
   }
@@ -73,7 +73,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @param index the index of the tab to select.
    * @throws ActionFailedException if the given index is not within the <code>JTabbedPane</code> bounds.
    */
-  public final void selectTab(JTabbedPane tabbedPane, int index) {
+  public void selectTab(JTabbedPane tabbedPane, int index) {
     try {
       Point p = location.pointAt(tabbedPane, index);
       click(tabbedPane, p);
