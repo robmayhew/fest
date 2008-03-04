@@ -1,25 +1,22 @@
 /*
- * Created on May 14, 2007
+ * Created on Mar 4, 2008
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.core;
 
 import java.awt.Component;
 import java.awt.Container;
-
-import abbot.finder.AWTHierarchy;
-import abbot.finder.Hierarchy;
-import abbot.finder.TestHierarchy;
 
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -28,45 +25,14 @@ import org.fest.swing.exception.ComponentLookupException;
  * 
  * @author Alex Ruiz
  */
-public class ComponentFinder {
-
-  private final ComponentPrinter printer;
-  private final BasicComponentFinder finder;
-
-  /**
-   * Creates a new <code>{@link ComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
-   * created before the created <code>{@link ComponentFinder}</code> cannot be accessed by the created
-   * <code>{@link ComponentFinder}</code>.
-   * @return the created finder.
-   */
-  public static ComponentFinder finderWithNewAwtHierarchy() {
-    return new ComponentFinder(new TestHierarchy());
-  }
-
-  /**
-   * Creates a new <code>{@link ComponentFinder}</code> that has access to all the GUI components in the AWT
-   * hierarchy.
-   * @return the created finder.
-   */
-  public static ComponentFinder finderWithCurrentAwtHierarchy() {
-    return new ComponentFinder(new AWTHierarchy());
-  }
-
-  /**
-   * Creates a new <code>{@link ComponentFinder}</code>.
-   * @param hierarchy provides access to the components in the AWT hierarchy.
-   */
-  ComponentFinder(Hierarchy hierarchy) {
-    printer = new ComponentPrinter(hierarchy);
-    finder = new BasicComponentFinder(printer);
-  }
+public interface ComponentFinder {
 
   /**
    * Returns the <code>{@link ComponentPrinter}</code> in this finder.
    * @return the <code>ComponentPrinter</code> in this finder.
    */
-  public ComponentPrinter printer() { return printer; }
-  
+  ComponentPrinter printer();
+
   /**
    * Finds a <code>{@link Component}</code> by type. The component to find does not have to be showing. 
    * <p>
@@ -81,9 +47,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public <T extends Component> T findByType(Class<T> type) {
-    return findByType(type, false);
-  }
+  <T extends Component> T findByType(Class<T> type);
 
   /**
    * Finds a <code>showing</code> <code>{@link Component}</code> by type. For example:
@@ -95,10 +59,8 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByType(Class)
    */
-  public <T extends Component> T findByType(Class<T> type, boolean showing) {
-    return type.cast(find(new TypeMatcher(type, showing)));
-  }
-  
+  <T extends Component> T findByType(Class<T> type, boolean showing);
+
   /**
    * <p>
    * Finds a <code>{@link Component}</code> by type in the hierarchy under the given root. The component to find does 
@@ -131,9 +93,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public <T extends Component> T findByType(Container root, Class<T> type) {
-    return findByType(root, type, false);
-  }
+  <T extends Component> T findByType(Container root, Class<T> type);
 
   /**
    * Finds a <strong>showing</strong> <code>{@link Component}</code> by type in the hierarchy under the given root.
@@ -146,9 +106,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByType(Container, Class)
    */
-  public <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
-    return type.cast(find(root, new TypeMatcher(type, showing)));
-  }
+  <T extends Component> T findByType(Container root, Class<T> type, boolean showing);
 
   /**
    * Finds a <code>{@link Component}</code> by name and type. The component to find does not have to be showing.
@@ -159,9 +117,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String)
    */
-  public <T extends Component> T findByName(String name, Class<T> type) {
-    return findByName(name, type, false);
-  }
+  <T extends Component> T findByName(String name, Class<T> type);
 
   /**
    * Finds a <strong>showing</code> <code>{@link Component}</code> by name and type.
@@ -173,10 +129,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @see #findByName(String, Class)
    */
-  public <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
-    Component found = find(new NameAndTypeMatcher(name, type, showing));
-    return type.cast(found);
-  }
+  <T extends Component> T findByName(String name, Class<T> type, boolean showing);
 
   /**
    * <p>
@@ -214,9 +167,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public Component findByName(String name) {
-    return findByName(name, false);
-  }
+  Component findByName(String name);
 
   /**
    * Finds a <strong>showing</strong> <code>{@link Component}</code> by name.
@@ -227,9 +178,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    */
-  public Component findByName(String name, boolean showing) {
-    return find(new NameMatcher(name, showing));
-  }
+  Component findByName(String name, boolean showing);
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code>.
@@ -238,10 +187,7 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
-  @SuppressWarnings("unchecked") 
-  public <T extends Component> T find(GenericTypeMatcher<T> m) {
-    return (T)find((ComponentMatcher)m);
-  }
+  @SuppressWarnings("unchecked") <T extends Component> T find(GenericTypeMatcher<T> m);
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>.
@@ -249,10 +195,8 @@ public class ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
-  public Component find(ComponentMatcher m) {
-    return finder.find(m);
-  }
-  
+  Component find(ComponentMatcher m);
+
   /**
    * Finds a <code>{@link Component}</code> by name and type in the hierarchy under the given root. The component to 
    * find does not have to be showing.
@@ -266,9 +210,7 @@ public class ComponentFinder {
    * @see #findByName(String)
    * @see #findByType(Container, Class)
    */
-  public <T extends Component> T findByName(Container root, String name, Class<T> type) {
-    return findByName(root, name, type, false);
-  }
+  <T extends Component> T findByName(Container root, String name, Class<T> type);
 
   /**
    * Finds a <strong>showing</strong> <code>{@link Component}</code> by name and type in the hierarchy under the given 
@@ -283,10 +225,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(Container, String, Class)
    */
-  public <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
-    Component found = find(root, new NameAndTypeMatcher(name, type, showing));
-    return type.cast(found);
-  }
+  <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing);
 
   /**
    * Finds a <code>{@link Component}</code> by name in the hierarchy under the given root. The component to find does
@@ -298,9 +237,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    */
-  public Component findByName(Container root, String name) {
-    return findByName(root, name, false);
-  }
+  Component findByName(Container root, String name);
 
   /**
    * Finds a <strong>showing</strong> <code>{@link Component}</code> by name in the hierarchy under the given root.
@@ -312,10 +249,8 @@ public class ComponentFinder {
    * @throws ComponentLookupException if more than one matching component is found.
    * @see #findByName(String)
    */
-  public Component findByName(Container root, String name, boolean showing) {
-    return find(root, new NameMatcher(name, showing));
-  }
-  
+  Component findByName(Container root, String name, boolean showing);
+
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code> in the hierarchy
    * under the given root.
@@ -326,10 +261,7 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  @SuppressWarnings("unchecked") 
-  public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
-    return (T)find(root, (ComponentMatcher)m);
-  }
+  @SuppressWarnings("unchecked") <T extends Component> T find(Container root, GenericTypeMatcher<T> m);
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code> in the hierarchy
@@ -340,7 +272,6 @@ public class ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  public Component find(Container root, ComponentMatcher m) {
-    return finder.find(root, m);
-  }
+  Component find(Container root, ComponentMatcher m);
+
 }

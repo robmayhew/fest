@@ -18,10 +18,7 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JTree;
+import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -47,16 +44,20 @@ public class ComponentFinderTest {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A Button");
+    final JTextField textField = new JTextField("A TextField");
+    final JTextField anotherTextField = new JTextField("Another TextField");
 
-    static MainWindow show(Class<?> testClass) {
-      MainWindow window = new MainWindow(testClass);
+    static MainWindow beVisible() {
+      MainWindow window = new MainWindow();
       window.display();
       return window;
     }
     
-    MainWindow(Class<?> testClass) {
-      super(testClass);
+    MainWindow() {
+      super(ComponentFinderTest.class);
       add(button);
+      add(textField);
+      add(anotherTextField);
       button.setName("button");
     }
   }
@@ -68,8 +69,8 @@ public class ComponentFinderTest {
   private MainWindow anotherWindow;
   
   @BeforeMethod public void setUp() {
-    finder = ComponentFinder.finderWithNewAwtHierarchy();
-    window = MainWindow.show(getClass());
+    finder = BasicComponentFinder.finderWithNewAwtHierarchy();
+    window = MainWindow.beVisible();
   }
   
   @AfterMethod public void tearDown() {
@@ -90,7 +91,7 @@ public class ComponentFinderTest {
   }
 
   @Test public void shouldFindComponentByTypeAndContainer() {
-    anotherWindow = MainWindow.show(getClass());
+    anotherWindow = MainWindow.beVisible();
     JButton button = finder.findByType(anotherWindow, JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -115,7 +116,7 @@ public class ComponentFinderTest {
   }
   
   @Test public void shouldFindComponentByNameAndContainer() {
-    anotherWindow = MainWindow.show(getClass());
+    anotherWindow = MainWindow.beVisible();
     anotherWindow.button.setName("anotherButton");
     Component button = finder.findByName(anotherWindow, "anotherButton");
     assertThat(button).isSameAs(anotherWindow.button);
@@ -148,7 +149,7 @@ public class ComponentFinderTest {
   }
   
   @Test public void shouldFindComponentByNameAndTypeAndContainer() {
-    anotherWindow = MainWindow.show(getClass());
+    anotherWindow = MainWindow.beVisible();
     JButton button = finder.findByName(anotherWindow, "button", JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -166,7 +167,6 @@ public class ComponentFinderTest {
       fail();
     } catch (ComponentLookupException e) { log(e); }
   }
-
   
   @Test public void shouldFindComponentUsingGenericTypeMatcher() {
     JButton button = finder.find(new GenericTypeMatcher<JButton>() {
@@ -220,6 +220,13 @@ public class ComponentFinderTest {
         return true;
       }
     });
+  }
+  
+  @Test public void shouldThrowErrorIfMoreThanOneComponentMatch() {
+    try {
+      finder.find(new TypeMatcher(JTextField.class));
+      fail();
+    } catch (ComponentLookupException e) { log(e); }    
   }
   
   private void log(ComponentLookupException e) {

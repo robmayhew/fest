@@ -76,7 +76,7 @@ public class RobotFixture implements Robot {
   private RobotFixture(Hierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
-    finder = new ComponentFinder(this.hierarchy);
+    finder = new BasicComponentFinder(this.hierarchy);
     windowTracker = WindowTracker.getTracker();
     robot = newRobot();
   }

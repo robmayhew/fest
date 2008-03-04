@@ -1,5 +1,5 @@
 /*
- * Created on Dec 22, 2007
+ * Created on May 14, 2007
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -21,7 +21,9 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
+import abbot.finder.TestHierarchy;
 
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -30,32 +32,132 @@ import static org.fest.swing.util.System.LINE_SEPARATOR;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands basic component lookup, examining each component in turn. Searches all components of interest in a given
- * hierarchy.
- * 
- * Adapted from <code>abbot.finder.BasicFinder</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
+ * Understands GUI <code>{@link java.awt.Component}</code> lookup.
  * 
  * @author Alex Ruiz
  */
-final class BasicComponentFinder {
+public class BasicComponentFinder implements ComponentFinder {
 
+  private final Hierarchy hierarchy;
   private final ComponentPrinter printer;
-  
-  BasicComponentFinder(ComponentPrinter printer) {
-    this.printer = printer;
+
+  /**
+   * Creates a new <code>{@link BasicComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
+   * created before the created <code>{@link BasicComponentFinder}</code> cannot be accessed by the created
+   * <code>{@link BasicComponentFinder}</code>.
+   * @return the created finder.
+   */
+  public static ComponentFinder finderWithNewAwtHierarchy() {
+    return new BasicComponentFinder(new TestHierarchy());
   }
 
-  Component find(ComponentMatcher m) {
-    return find(printer.hierarchy(), m);
+  /**
+   * Creates a new <code>{@link BasicComponentFinder}</code> that has access to all the GUI components in the AWT
+   * hierarchy.
+   * @return the created finder.
+   */
+  public static ComponentFinder finderWithCurrentAwtHierarchy() {
+    return new BasicComponentFinder(new AWTHierarchy());
+  }
+
+  /**
+   * Creates a new <code>{@link BasicComponentFinder}</code>.
+   * @param hierarchy provides access to the components in the AWT hierarchy.
+   */
+  BasicComponentFinder(Hierarchy hierarchy) {
+    this.hierarchy = hierarchy;
+    printer = new ComponentPrinter(hierarchy);
+  }
+
+  /** ${@inheritDoc} */
+  public ComponentPrinter printer() { return printer; }
+  
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByType(Class<T> type) {
+    return findByType(type, false);
+  }
+
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByType(Class<T> type, boolean showing) {
+    return type.cast(find(new TypeMatcher(type, showing)));
   }
   
-  Component find(Container root, ComponentMatcher m)  {
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByType(Container root, Class<T> type) {
+    return findByType(root, type, false);
+  }
+
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
+    return type.cast(find(root, new TypeMatcher(type, showing)));
+  }
+
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByName(String name, Class<T> type) {
+    return findByName(name, type, false);
+  }
+
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
+    Component found = find(new NameAndTypeMatcher(name, type, showing));
+    return type.cast(found);
+  }
+
+  /** ${@inheritDoc} */
+  public Component findByName(String name) {
+    return findByName(name, false);
+  }
+
+  /** ${@inheritDoc} */
+  public Component findByName(String name, boolean showing) {
+    return find(new NameMatcher(name, showing));
+  }
+
+  /** ${@inheritDoc} */
+  @SuppressWarnings("unchecked") 
+  public <T extends Component> T find(GenericTypeMatcher<T> m) {
+    return (T)find((ComponentMatcher)m);
+  }
+
+  /** ${@inheritDoc} */
+  public Component find(ComponentMatcher m) {
+    return find(hierarchy, m);
+  }
+  
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByName(Container root, String name, Class<T> type) {
+    return findByName(root, name, type, false);
+  }
+
+  /** ${@inheritDoc} */
+  public <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
+    Component found = find(root, new NameAndTypeMatcher(name, type, showing));
+    return type.cast(found);
+  }
+
+  /** ${@inheritDoc} */
+  public Component findByName(Container root, String name) {
+    return findByName(root, name, false);
+  }
+
+  /** ${@inheritDoc} */
+  public Component findByName(Container root, String name, boolean showing) {
+    return find(root, new NameMatcher(name, showing));
+  }
+  
+  /** ${@inheritDoc} */
+  @SuppressWarnings("unchecked") 
+  public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
+    return (T)find(root, (ComponentMatcher)m);
+  }
+
+  /** ${@inheritDoc} */
+  public Component find(Container root, ComponentMatcher m) {
     return find(hierarchy(root), m);
   }
-  
+
   private Hierarchy hierarchy(Container root) {
-    if (root == null) return printer.hierarchy();
+    if (root == null) return hierarchy;
     return new SingleComponentHierarchy(root, printer.hierarchy());
   }
   
