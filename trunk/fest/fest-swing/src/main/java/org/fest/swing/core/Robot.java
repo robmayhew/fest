@@ -14,10 +14,10 @@ import java.awt.Window;
 public interface Robot {
 
   /**
-   * Returns the <code>{@link ComponentPrinter}</code> used by this fixture.
+   * Returns the <code>{@link BasicComponentPrinter}</code> used by this fixture.
    * @return the <code>ComponentPrinter</code> used by this fixture.
    */
-  ComponentPrinter printer();
+  BasicComponentPrinter printer();
 
   /**
    * Returns the <code>{@link ComponentFinder}</code> used by this fixture.

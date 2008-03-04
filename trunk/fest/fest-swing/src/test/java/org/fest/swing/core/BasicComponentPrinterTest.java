@@ -29,11 +29,11 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.format.Formatting.format;
 
 /**
- * Tests for <code>{@link ComponentPrinter}</code>.
+ * Tests for <code>{@link BasicComponentPrinter}</code>.
  *
  * @author Alex Ruiz
  */
-public class ComponentPrinterTest {
+public class BasicComponentPrinterTest {
 
   protected static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
@@ -52,13 +52,13 @@ public class ComponentPrinterTest {
     }
   }
 
-  private ComponentPrinter printer;
+  private BasicComponentPrinter printer;
   
   private MainWindow firstWindow;
   private MainWindow secondWindow;
   
   @BeforeMethod public void setUp() {
-    printer = ComponentPrinter.printerWithNewAwtHierarchy();
+    printer = BasicComponentPrinter.printerWithNewAwtHierarchy();
     firstWindow = MainWindow.show(getClass());
     firstWindow.button.setName("firstButton");
     secondWindow = MainWindow.show(getClass());

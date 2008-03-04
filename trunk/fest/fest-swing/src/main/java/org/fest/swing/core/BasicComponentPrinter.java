@@ -32,34 +32,34 @@ import static org.fest.swing.format.Formatting.format;
  * 
  * @author Alex Ruiz
  */
-public final class ComponentPrinter {
+public final class BasicComponentPrinter {
 
   private final Hierarchy hierarchy;
 
   /**
-   * Creates a new <code>{@link ComponentPrinter}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
-   * created before the created <code>{@link ComponentPrinter}</code> cannot be accessed by the created
-   * <code>{@link ComponentPrinter}</code>.
+   * Creates a new <code>{@link BasicComponentPrinter}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
+   * created before the created <code>{@link BasicComponentPrinter}</code> cannot be accessed by the created
+   * <code>{@link BasicComponentPrinter}</code>.
    * @return the created finder.
    */
-  public static ComponentPrinter printerWithNewAwtHierarchy() {
-    return new ComponentPrinter(new TestHierarchy());
+  public static BasicComponentPrinter printerWithNewAwtHierarchy() {
+    return new BasicComponentPrinter(new TestHierarchy());
   }
 
   /**
-   * Creates a new <code>{@link ComponentPrinter}</code> that has access to all the GUI components in the AWT
+   * Creates a new <code>{@link BasicComponentPrinter}</code> that has access to all the GUI components in the AWT
    * hierarchy.
    * @return the created printer.
    */
-  public static ComponentPrinter printerWithCurrentAwtHierarchy() {
-    return new ComponentPrinter(new AWTHierarchy());
+  public static BasicComponentPrinter printerWithCurrentAwtHierarchy() {
+    return new BasicComponentPrinter(new AWTHierarchy());
   }
 
   /**
-   * Creates a new <code>{@link ComponentPrinter}</code>.
+   * Creates a new <code>{@link BasicComponentPrinter}</code>.
    * @param hierarchy provides access to the components in the AWT hierarchy.
    */
-  ComponentPrinter(Hierarchy hierarchy) {
+  BasicComponentPrinter(Hierarchy hierarchy) {
     this.hierarchy = hierarchy;
   }
   

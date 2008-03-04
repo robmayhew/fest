@@ -33,12 +33,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
 /**
- * Tests for <code>{@link org.fest.swing.core.ComponentFinder}</code>.
+ * Tests for <code>{@link BasicComponentFinder}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class ComponentFinderTest {
+public class BasicComponentFinderTest {
 
   protected static class MainWindow extends TestFrame {
     private static final long serialVersionUID = 1L;
@@ -54,7 +54,7 @@ public class ComponentFinderTest {
     }
     
     MainWindow() {
-      super(ComponentFinderTest.class);
+      super(BasicComponentFinderTest.class);
       add(button);
       add(textField);
       add(anotherTextField);

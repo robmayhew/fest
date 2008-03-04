@@ -39,7 +39,7 @@ import static org.fest.util.Strings.concat;
 public class BasicComponentFinder implements ComponentFinder {
 
   private final Hierarchy hierarchy;
-  private final ComponentPrinter printer;
+  private final BasicComponentPrinter printer;
 
   /**
    * Creates a new <code>{@link BasicComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
@@ -66,11 +66,11 @@ public class BasicComponentFinder implements ComponentFinder {
    */
   BasicComponentFinder(Hierarchy hierarchy) {
     this.hierarchy = hierarchy;
-    printer = new ComponentPrinter(hierarchy);
+    printer = new BasicComponentPrinter(hierarchy);
   }
 
   /** ${@inheritDoc} */
-  public ComponentPrinter printer() { return printer; }
+  public BasicComponentPrinter printer() { return printer; }
   
   /** ${@inheritDoc} */
   public <T extends Component> T findByType(Class<T> type) {

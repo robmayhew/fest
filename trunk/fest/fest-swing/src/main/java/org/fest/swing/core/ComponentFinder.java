@@ -28,10 +28,10 @@ import org.fest.swing.exception.ComponentLookupException;
 public interface ComponentFinder {
 
   /**
-   * Returns the <code>{@link ComponentPrinter}</code> in this finder.
+   * Returns the <code>{@link BasicComponentPrinter}</code> in this finder.
    * @return the <code>ComponentPrinter</code> in this finder.
    */
-  ComponentPrinter printer();
+  BasicComponentPrinter printer();
 
   /**
    * Finds a <code>{@link Component}</code> by type. The component to find does not have to be showing. 
