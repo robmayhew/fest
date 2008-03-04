@@ -28,10 +28,10 @@ import org.fest.swing.exception.ComponentLookupException;
 public interface ComponentFinder {
 
   /**
-   * Returns the <code>{@link BasicComponentPrinter}</code> in this finder.
+   * Returns the <code>{@link ComponentPrinter}</code> in this finder.
    * @return the <code>ComponentPrinter</code> in this finder.
    */
-  BasicComponentPrinter printer();
+  ComponentPrinter printer();
 
   /**
    * Finds a <code>{@link Component}</code> by type. The component to find does not have to be showing. 
@@ -261,7 +261,7 @@ public interface ComponentFinder {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
-  @SuppressWarnings("unchecked") <T extends Component> T find(Container root, GenericTypeMatcher<T> m);
+  <T extends Component> T find(Container root, GenericTypeMatcher<T> m);
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code> in the hierarchy

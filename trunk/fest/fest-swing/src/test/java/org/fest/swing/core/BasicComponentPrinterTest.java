@@ -52,7 +52,7 @@ public class BasicComponentPrinterTest {
     }
   }
 
-  private BasicComponentPrinter printer;
+  private ComponentPrinter printer;
   
   private MainWindow firstWindow;
   private MainWindow secondWindow;

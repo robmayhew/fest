@@ -7,6 +7,10 @@
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
       <action dev="alruiz" type="add">
+        Renamed ComponentPrinter to BasicComponentPrinter (in package org.fest.swing.core). Introduced interface 
+        ComponentPrinter.
+      </action>
+      <action dev="alruiz" type="add">
         Renamed ComponentFinder to BasicComponentFinder (in package org.fest.swing.core). Introduced interface 
         ComponentFinder.
       </action>

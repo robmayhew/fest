@@ -89,7 +89,7 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public BasicComponentPrinter printer() {
+  public ComponentPrinter printer() {
     return finder().printer();
   }
 

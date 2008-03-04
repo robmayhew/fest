@@ -22,8 +22,6 @@ import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 
-import org.fest.swing.format.Formatting;
-
 import static org.fest.swing.format.Formatting.format;
 
 /**
@@ -32,7 +30,7 @@ import static org.fest.swing.format.Formatting.format;
  * 
  * @author Alex Ruiz
  */
-public final class BasicComponentPrinter {
+public final class BasicComponentPrinter implements ComponentPrinter {
 
   private final Hierarchy hierarchy;
 
@@ -42,7 +40,7 @@ public final class BasicComponentPrinter {
    * <code>{@link BasicComponentPrinter}</code>.
    * @return the created finder.
    */
-  public static BasicComponentPrinter printerWithNewAwtHierarchy() {
+  public static ComponentPrinter printerWithNewAwtHierarchy() {
     return new BasicComponentPrinter(new TestHierarchy());
   }
 
@@ -51,7 +49,7 @@ public final class BasicComponentPrinter {
    * hierarchy.
    * @return the created printer.
    */
-  public static BasicComponentPrinter printerWithCurrentAwtHierarchy() {
+  public static ComponentPrinter printerWithCurrentAwtHierarchy() {
     return new BasicComponentPrinter(new AWTHierarchy());
   }
 
@@ -65,42 +63,22 @@ public final class BasicComponentPrinter {
   
   Hierarchy hierarchy() { return hierarchy; }
   
-  /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy.
-   * @param out the output stream where to print the components to.
-   * @see Formatting#format(Component)
-   */
+  /** ${@inheritDoc} */
   public void printComponents(PrintStream out) {
     printComponents(out, (Container)null);
   }
 
-  /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy under the given root.
-   * @param out the output stream where to print the components to.
-   * @param root the root used as the starting point of the search.
-   * @see Formatting#format(Component)
-   */
+  /** ${@inheritDoc} */
   public void printComponents(PrintStream out, Container root) {
     printComponents(out, null, root);
   }
 
-  /**
-   * Prints only the components of the given type (as <code>String</code>s) in the hierarchy.
-   * @param out the output stream where to print the components to.
-   * @param type the type of components to print.
-   * @see Formatting#format(Component)
-   */
+  /** ${@inheritDoc} */
   public void printComponents(PrintStream out, Class<? extends Component> type) {
     printComponents(out, type, null);
   }
   
-  /**
-   * Prints all the components of the given type (as <code>String</code>s) in the hierarchy under the given root.
-   * @param out the output stream where to print the components to.
-   * @param type the type of components to print.
-   * @param root the root used as the starting point of the search.
-   * @see Formatting#format(Component)
-   */
+  /** ${@inheritDoc} */
   public void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
     print(hierarchy(root), type, out);
   }

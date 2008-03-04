@@ -17,7 +17,7 @@ public interface Robot {
    * Returns the <code>{@link BasicComponentPrinter}</code> used by this fixture.
    * @return the <code>ComponentPrinter</code> used by this fixture.
    */
-  BasicComponentPrinter printer();
+  ComponentPrinter printer();
 
   /**
    * Returns the <code>{@link ComponentFinder}</code> used by this fixture.
