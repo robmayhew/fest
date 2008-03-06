@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/substance.jar"/>
+	<classpathentry kind="lib" path="lib/flamingo.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-0.4.jar" sourcepath="lib/fest-util-0.4-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
