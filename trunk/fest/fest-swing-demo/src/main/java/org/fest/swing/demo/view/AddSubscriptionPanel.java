@@ -18,11 +18,10 @@ package org.fest.swing.demo.view;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-import static java.awt.GridBagConstraints.NORTHWEST;
+import static java.awt.GridBagConstraints.*;
+import static javax.swing.Box.*;
 
 /**
  * Understands the panel where users can add a new subscription.
@@ -41,22 +40,83 @@ public class AddSubscriptionPanel extends JPanel {
     GridBagConstraints c = new GridBagConstraints();
     c.anchor = NORTHWEST;
     c.gridx = c.gridy = 0;
-    JTextField addressField = addressField();
-    add(addressLabel(addressField), c);
-    c.gridx++;
-    add(addressField, c);
+    c.fill = NONE;
+    addAddressField(c);
+    addNameField(c);
+    addfolderField(c);
+  }
+
+  private void addAddressField(GridBagConstraints c) {
+    addInputField(addressLabel(), addressField(), c);
+  }
+
+  private JLabel addressLabel() {
+    JLabel label = new JLabel("Address:");
+    label.setDisplayedMnemonic('A');
+    return label;
   }
   
   private JTextField addressField() {
-    JTextField field = new JTextField(20);
+    JTextField field = new JTextField(30);
     field.setName("address");
     return field;
   }
 
-  private JLabel addressLabel(JTextField addressField) {
-    JLabel label = new JLabel("Address:");
-    label.setDisplayedMnemonic('A');
-    label.setLabelFor(addressField);
+  private void addNameField(GridBagConstraints c) {
+    addInputField(nameLabel(), nameField(), c);
+  }
+
+  private JLabel nameLabel() {
+    JLabel label = new JLabel("Name:");
+    label.setDisplayedMnemonic('N');
     return label;
+  }
+  
+  private JTextField nameField() {
+    JTextField field = new JTextField(30);
+    field.setName("name");
+    return field;
+  }
+
+  private void addfolderField(GridBagConstraints c) {
+    addInputField(folderLabel(), folderComboBox(), c);
+  }
+
+  private JLabel folderLabel() {
+    JLabel label = new JLabel("Folder:");
+    label.setDisplayedMnemonic('d');
+    return label;
+  }
+  
+  private JComboBox folderComboBox() {
+    JComboBox comboBox = new JComboBox();
+    comboBox.setName("folders");
+    comboBox.setEditable(true);
+    return comboBox;
+  }
+
+  private void addInputField(JLabel label, JComponent inputField, GridBagConstraints c) {
+    label.setLabelFor(inputField);
+    add(createHorizontalStrut(20), c);
+    c.gridx++;
+    add(label, c);
+    c.gridx++;
+    add(createHorizontalStrut(10), c);
+    c.gridx++;
+    add(inputField, c);
+    c.gridx++;
+    c.fill = BOTH;
+    c.weightx = 1.0;
+    add(createHorizontalGlue(), c);
+    c.gridy++;
+    add(createVerticalStrut(10), c);
+    c.gridy++;
+    restore(c);
+  }
+
+  private void restore(GridBagConstraints c) {
+    c.fill = NONE;
+    c.weightx = 0.0;
+    c.gridx = 0;
   }
 }

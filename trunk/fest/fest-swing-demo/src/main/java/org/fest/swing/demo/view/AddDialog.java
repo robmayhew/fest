@@ -48,7 +48,8 @@ public class AddDialog extends JDialog {
     setLayout(new BorderLayout());
     add(optionPanel(), BorderLayout.NORTH);
     add(inputPanel(), BorderLayout.CENTER);
-    setPreferredSize(new Dimension(400, 200));
+    setPreferredSize(new Dimension(350, 220));
+    setResizable(false);
     pack();
     center(this);
   }
@@ -77,6 +78,7 @@ public class AddDialog extends JDialog {
   private AbstractButton addWebFeedButton() {
     AbstractButton button = actionButton("Web Feed", INTERNET_FEEDS_ICON);
     button.setName("addWebFeed");
+    button.setMnemonic('W');
     button.setSelected(true);
     return button;
   }
@@ -84,6 +86,7 @@ public class AddDialog extends JDialog {
   private AbstractButton addFolderButton() {
     AbstractButton button = actionButton("Folder", FOLDER_ICON);
     button.setName("addFolder");
+    button.setMnemonic('F');
     return button;
   }
 
@@ -91,6 +94,7 @@ public class AddDialog extends JDialog {
     JToggleButton button = new JToggleButton(text, icon);
     button.setBorderPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    button.setFocusable(false);
     button.setFocusPainted(false);
     button.setVerticalTextPosition(AbstractButton.BOTTOM);
     button.setHorizontalTextPosition(AbstractButton.CENTER);
