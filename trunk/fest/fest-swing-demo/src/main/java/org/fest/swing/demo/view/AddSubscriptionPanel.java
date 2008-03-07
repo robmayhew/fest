@@ -21,6 +21,7 @@ import java.awt.GridBagLayout;
 import javax.swing.*;
 
 import static java.awt.GridBagConstraints.*;
+import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.Box.*;
 
 /**
@@ -37,6 +38,7 @@ public class AddSubscriptionPanel extends JPanel {
    */
   public AddSubscriptionPanel() {
     super(new GridBagLayout());
+    setBorder(createEmptyBorder(20, 20, 20, 20));
     GridBagConstraints c = new GridBagConstraints();
     c.anchor = NORTHWEST;
     c.gridx = c.gridy = 0;
@@ -57,7 +59,7 @@ public class AddSubscriptionPanel extends JPanel {
   }
   
   private JTextField addressField() {
-    JTextField field = new JTextField(30);
+    JTextField field = new JTextField();
     field.setName("address");
     return field;
   }
@@ -73,7 +75,7 @@ public class AddSubscriptionPanel extends JPanel {
   }
   
   private JTextField nameField() {
-    JTextField field = new JTextField(30);
+    JTextField field = new JTextField();
     field.setName("name");
     return field;
   }
@@ -97,26 +99,18 @@ public class AddSubscriptionPanel extends JPanel {
 
   private void addInputField(JLabel label, JComponent inputField, GridBagConstraints c) {
     label.setLabelFor(inputField);
-    add(createHorizontalStrut(20), c);
-    c.gridx++;
     add(label, c);
     c.gridx++;
     add(createHorizontalStrut(10), c);
     c.gridx++;
-    add(inputField, c);
-    c.gridx++;
-    c.fill = BOTH;
+    c.fill = HORIZONTAL;
     c.weightx = 1.0;
-    add(createHorizontalGlue(), c);
+    add(inputField, c);
+    c.weightx = 0.0;
+    c.fill = NONE;
+    c.gridx = 0;
     c.gridy++;
     add(createVerticalStrut(10), c);
     c.gridy++;
-    restore(c);
-  }
-
-  private void restore(GridBagConstraints c) {
-    c.fill = NONE;
-    c.weightx = 0.0;
-    c.gridx = 0;
   }
 }

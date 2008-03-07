@@ -20,7 +20,8 @@ import java.awt.*;
 import javax.swing.*;
 
 import static java.awt.GridBagConstraints.*;
-import static javax.swing.Box.createHorizontalGlue;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
 
 import static org.fest.swing.demo.view.Icons.*;
 import static org.fest.swing.demo.view.Swing.center;
@@ -43,12 +44,13 @@ public class AddDialog extends JDialog {
    * @param owner
    */
   public AddDialog(MainFrame owner) {
-    super(owner, "Add", DEFAULT_MODALITY_TYPE);
+    super(owner, "Add New", DEFAULT_MODALITY_TYPE);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     add(optionPanel(), BorderLayout.NORTH);
     add(inputPanel(), BorderLayout.CENTER);
-    setPreferredSize(new Dimension(350, 220));
+    add(actionPanel(), BorderLayout.SOUTH);
+    setPreferredSize(new Dimension(320, 250));
     setResizable(false);
     pack();
     center(this);
@@ -76,7 +78,7 @@ public class AddDialog extends JDialog {
   }
 
   private AbstractButton addWebFeedButton() {
-    AbstractButton button = actionButton("Web Feed", INTERNET_FEEDS_ICON);
+    AbstractButton button = optionButton("Web Feed", INTERNET_FEEDS_ICON);
     button.setName("addWebFeed");
     button.setMnemonic('W');
     button.setSelected(true);
@@ -84,13 +86,13 @@ public class AddDialog extends JDialog {
   }
 
   private AbstractButton addFolderButton() {
-    AbstractButton button = actionButton("Folder", FOLDER_ICON);
+    AbstractButton button = optionButton("Folder", FOLDER_ICON);
     button.setName("addFolder");
     button.setMnemonic('F');
     return button;
   }
 
-  private AbstractButton actionButton(String text, Icon icon) {
+  private AbstractButton optionButton(String text, Icon icon) {
     JToggleButton button = new JToggleButton(text, icon);
     button.setBorderPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -111,5 +113,38 @@ public class AddDialog extends JDialog {
     panel.add(new AddSubscriptionPanel(), WEB_FEED_CARD);
     cardLayout.show(panel, WEB_FEED_CARD);
     return panel;
+  }
+  
+  private JPanel actionPanel() {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(createEmptyBorder(10, 10, 10, 10));
+    GridBagConstraints c = new GridBagConstraints();
+    c.anchor = NORTHWEST;
+    c.gridx = c.gridy = 0;
+    c.weightx = 1.0;
+    panel.add(createHorizontalGlue(), c);
+    c.gridx++;
+    c.weightx = 0.0;
+    panel.add(cancelButton(), c);
+    c.gridx++;
+    panel.add(createHorizontalStrut(10), c);
+    c.gridx++;
+    panel.add(okButton(), c);
+    return panel;
+  }
+  
+  private JButton cancelButton() {
+    JButton button = new JButton("Cancel");
+    button.setMnemonic('C');
+    button.setName("cancel");
+    return button;
+  }
+
+  private JButton okButton() {
+    JButton button = new JButton("OK");
+    button.setDefaultCapable(true);
+    button.setMnemonic('O');
+    button.setName("ok");
+    return button;
   }
 }
