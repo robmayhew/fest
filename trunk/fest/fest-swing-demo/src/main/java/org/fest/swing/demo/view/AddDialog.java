@@ -16,20 +16,24 @@
 package org.fest.swing.demo.view;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 import static java.awt.GridBagConstraints.*;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.Box.*;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
 
 import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.center;
+import static org.fest.swing.demo.view.Swing.*;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands the dialog where users can create new web feeds and/or folders.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class AddDialog extends JDialog {
   
@@ -41,14 +45,14 @@ public class AddDialog extends JDialog {
   
   /**
    * Creates a new </code>{@link AddDialog}</code>.
-   * @param owner
+   * @param owner the owner of this dialog.
    */
   public AddDialog(MainFrame owner) {
     super(owner, "Add New", DEFAULT_MODALITY_TYPE);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     add(optionPanel(), BorderLayout.NORTH);
-    add(inputPanel(), BorderLayout.CENTER);
+    add(inputFormPanel(), BorderLayout.CENTER);
     add(actionPanel(), BorderLayout.SOUTH);
     setPreferredSize(new Dimension(320, 250));
     setResizable(false);
@@ -108,9 +112,9 @@ public class AddDialog extends JDialog {
     for (AbstractButton button : buttons) group.add(button);
   }
   
-  private JPanel inputPanel() {
+  private JPanel inputFormPanel() {
     JPanel panel = new JPanel(cardLayout);
-    panel.add(new AddSubscriptionPanel(), WEB_FEED_CARD);
+    panel.add(new AddWebFeedPanel(), WEB_FEED_CARD);
     cardLayout.show(panel, WEB_FEED_CARD);
     return panel;
   }
@@ -137,6 +141,7 @@ public class AddDialog extends JDialog {
     JButton button = new JButton("Cancel");
     button.setMnemonic('C');
     button.setName("cancel");
+    button.addActionListener(new CloseWindowActionListener(this));
     return button;
   }
 
@@ -146,5 +151,13 @@ public class AddDialog extends JDialog {
     button.setMnemonic('O');
     button.setName("ok");
     return button;
+  }
+
+  @Override public JRootPane getRootPane() {
+    ActionListener closeAction = new CloseWindowActionListener(this);
+    JRootPane rootPane = super.getRootPane();
+    KeyStroke stroke = KeyStroke.getKeyStroke(VK_ESCAPE, 0);
+    rootPane.registerKeyboardAction(closeAction, stroke, WHEN_IN_FOCUSED_WINDOW);
+    return rootPane;
   }
 }

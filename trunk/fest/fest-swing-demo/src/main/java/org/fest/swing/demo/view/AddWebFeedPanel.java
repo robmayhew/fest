@@ -25,18 +25,19 @@ import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.Box.*;
 
 /**
- * Understands the panel where users can add a new subscription.
+ * Understands the panel where users can add a new web feed.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class AddSubscriptionPanel extends JPanel {
+public class AddWebFeedPanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates a new </code>{@link AddSubscriptionPanel}</code>.
+   * Creates a new </code>{@link AddWebFeedPanel}</code>.
    */
-  public AddSubscriptionPanel() {
+  public AddWebFeedPanel() {
     super(new GridBagLayout());
     setBorder(createEmptyBorder(20, 20, 20, 20));
     GridBagConstraints c = new GridBagConstraints();
