@@ -16,13 +16,10 @@
 package org.fest.swing.demo.view;
 
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 
-import javax.swing.*;
-
-import static java.awt.GridBagConstraints.*;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  * Understands the panel where users can add a new web feed.
@@ -30,7 +27,7 @@ import static javax.swing.Box.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class AddWebFeedPanel extends JPanel {
+public class AddWebFeedPanel extends InputFormPanel {
 
   private static final long serialVersionUID = 1L;
 
@@ -38,17 +35,15 @@ public class AddWebFeedPanel extends JPanel {
    * Creates a new </code>{@link AddWebFeedPanel}</code>.
    */
   public AddWebFeedPanel() {
-    super(new GridBagLayout());
-    setBorder(createEmptyBorder(20, 20, 20, 20));
-    GridBagConstraints c = new GridBagConstraints();
-    c.anchor = NORTHWEST;
-    c.gridx = c.gridy = 0;
-    c.fill = NONE;
+    super();
+  }
+
+  void addInputFields(GridBagConstraints c) {
     addAddressField(c);
     addNameField(c);
     addfolderField(c);
   }
-
+  
   private void addAddressField(GridBagConstraints c) {
     addInputField(addressLabel(), addressField(), c);
   }
@@ -77,7 +72,7 @@ public class AddWebFeedPanel extends JPanel {
   
   private JTextField nameField() {
     JTextField field = new JTextField();
-    field.setName("name");
+    field.setName("feedName");
     return field;
   }
 
@@ -96,22 +91,5 @@ public class AddWebFeedPanel extends JPanel {
     comboBox.setName("folders");
     comboBox.setEditable(true);
     return comboBox;
-  }
-
-  private void addInputField(JLabel label, JComponent inputField, GridBagConstraints c) {
-    label.setLabelFor(inputField);
-    add(label, c);
-    c.gridx++;
-    add(createHorizontalStrut(10), c);
-    c.gridx++;
-    c.fill = HORIZONTAL;
-    c.weightx = 1.0;
-    add(inputField, c);
-    c.weightx = 0.0;
-    c.fill = NONE;
-    c.gridx = 0;
-    c.gridy++;
-    add(createVerticalStrut(10), c);
-    c.gridy++;
   }
 }

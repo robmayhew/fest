@@ -16,6 +16,7 @@
 package org.fest.swing.demo.view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
@@ -40,8 +41,10 @@ public class AddDialog extends JDialog {
   private static final long serialVersionUID = 1L;
 
   private static final String WEB_FEED_CARD = "WebFeed";
+  private static final String FOLDER_CARD = "Folder";
 
   private final CardLayout cardLayout = new CardLayout();
+  private final JPanel inputFormCardPanel = new JPanel(cardLayout);
   
   /**
    * Creates a new </code>{@link AddDialog}</code>.
@@ -52,12 +55,19 @@ public class AddDialog extends JDialog {
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     add(optionPanel(), BorderLayout.NORTH);
-    add(inputFormPanel(), BorderLayout.CENTER);
+    addPanelsToInputFormCardPanel();
+    add(inputFormCardPanel, BorderLayout.CENTER);
     add(actionPanel(), BorderLayout.SOUTH);
     setPreferredSize(new Dimension(320, 250));
     setResizable(false);
     pack();
     center(this);
+  }
+
+  private void addPanelsToInputFormCardPanel() {
+    inputFormCardPanel.add(new AddWebFeedPanel(), WEB_FEED_CARD);
+    inputFormCardPanel.add(new AddFolderPanel(), FOLDER_CARD);
+    cardLayout.show(inputFormCardPanel, WEB_FEED_CARD);
   }
 
   private JPanel optionPanel() {
@@ -82,7 +92,7 @@ public class AddDialog extends JDialog {
   }
 
   private AbstractButton addWebFeedButton() {
-    AbstractButton button = optionButton("Web Feed", INTERNET_FEEDS_ICON);
+    AbstractButton button = optionButton("Web Feed", INTERNET_FEEDS_ICON, WEB_FEED_CARD);
     button.setName("addWebFeed");
     button.setMnemonic('W');
     button.setSelected(true);
@@ -90,33 +100,32 @@ public class AddDialog extends JDialog {
   }
 
   private AbstractButton addFolderButton() {
-    AbstractButton button = optionButton("Folder", FOLDER_ICON);
+    AbstractButton button = optionButton("Folder", FOLDER_ICON, FOLDER_CARD);
     button.setName("addFolder");
     button.setMnemonic('F');
     return button;
   }
 
-  private AbstractButton optionButton(String text, Icon icon) {
-    JToggleButton button = new JToggleButton(text, icon);
+  private AbstractButton optionButton(String text, Icon icon, final String cardName) {
+    final JToggleButton button = new JToggleButton(text, icon);
     button.setBorderPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     button.setFocusable(false);
     button.setFocusPainted(false);
     button.setVerticalTextPosition(AbstractButton.BOTTOM);
     button.setHorizontalTextPosition(AbstractButton.CENTER);
+    button.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        cardLayout.show(inputFormCardPanel, cardName);
+        FocusManager.getCurrentManager().focusNextComponent(button);
+      }
+    });
     return button;
   }
   
   private void addToButtonGroup(AbstractButton...buttons) {
     ButtonGroup group = new ButtonGroup();
     for (AbstractButton button : buttons) group.add(button);
-  }
-  
-  private JPanel inputFormPanel() {
-    JPanel panel = new JPanel(cardLayout);
-    panel.add(new AddWebFeedPanel(), WEB_FEED_CARD);
-    cardLayout.show(panel, WEB_FEED_CARD);
-    return panel;
   }
   
   private JPanel actionPanel() {
