@@ -15,16 +15,16 @@
  */
 package org.fest.swing.demo.view;
 
-import static java.awt.GridBagConstraints.*;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import static java.awt.GridBagConstraints.*;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
 
 /**
  * Understands a base panel for input forms.
@@ -34,12 +34,19 @@ import javax.swing.JPanel;
  */
 abstract class InputFormPanel extends JPanel {
 
+  final I18n i18n; 
+  
   /**
    * Creates a new </code>{@link InputFormPanel}</code>.
    */
   public InputFormPanel() {
     super(new GridBagLayout());
+    i18n = new I18n(this);
     setBorder(createEmptyBorder(20, 20, 20, 20));
+    addContent();
+  }
+
+  private void addContent() {
     GridBagConstraints c = new GridBagConstraints();
     c.anchor = NORTHWEST;
     c.gridx = c.gridy = 0;
@@ -66,6 +73,9 @@ abstract class InputFormPanel extends JPanel {
     c.fill = NONE;
     c.gridx = 0;
     c.gridy++;
+  }
+
+  void addSpaceBetweenLines(GridBagConstraints c) {
     add(createVerticalStrut(10), c);
     c.gridy++;
   }

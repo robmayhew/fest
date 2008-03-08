@@ -30,6 +30,8 @@ public class AddFolderPanel extends InputFormPanel {
 
   private static final long serialVersionUID = 1L;
 
+  private static final String LABEL_NAME_KEY = "label.name";
+
   /**
    * Creates a new </code>{@link AddFolderPanel}</code>.
    */
@@ -42,9 +44,7 @@ public class AddFolderPanel extends InputFormPanel {
   }
   
   private JLabel nameLabel() {
-    JLabel label = new JLabel("Name:");
-    label.setDisplayedMnemonic('N');
-    return label;
+    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_NAME_KEY);
   }
   
   private JTextField nameField() {

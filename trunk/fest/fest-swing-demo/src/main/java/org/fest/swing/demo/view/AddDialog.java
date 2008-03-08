@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.FocusManager;
 
 import static java.awt.GridBagConstraints.*;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
@@ -28,7 +29,7 @@ import static javax.swing.Box.*;
 import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
 
 import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.*;
+import static org.fest.swing.demo.view.Swing.center;
 
 /**
  * Understands the dialog where users can create new web feeds and/or folders.
@@ -43,8 +44,13 @@ public class AddDialog extends JDialog {
   private static final String WEB_FEED_CARD = "WebFeed";
   private static final String FOLDER_CARD = "Folder";
 
+  private static final String BUTTON_WEB_FEED_KEY = "button.webfeed";
+  private static final String BUTTON_FOLDER_KEY = "button.folder";
+  
   private final CardLayout cardLayout = new CardLayout();
   private final JPanel inputFormCardPanel = new JPanel(cardLayout);
+
+  private final I18n i18n;
   
   /**
    * Creates a new </code>{@link AddDialog}</code>.
@@ -52,16 +58,21 @@ public class AddDialog extends JDialog {
    */
   public AddDialog(MainFrame owner) {
     super(owner, "Add New", DEFAULT_MODALITY_TYPE);
+    i18n = new I18n(this);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
+    addContent();
+    setPreferredSize(new Dimension(320, 260));
+    setResizable(false);
+    pack();
+    center(this);
+  }
+
+  private void addContent() {
     add(optionPanel(), BorderLayout.NORTH);
     addPanelsToInputFormCardPanel();
     add(inputFormCardPanel, BorderLayout.CENTER);
     add(actionPanel(), BorderLayout.SOUTH);
-    setPreferredSize(new Dimension(320, 250));
-    setResizable(false);
-    pack();
-    center(this);
   }
 
   private void addPanelsToInputFormCardPanel() {
@@ -91,23 +102,22 @@ public class AddDialog extends JDialog {
     return panel;
   }
 
-  private AbstractButton addWebFeedButton() {
-    AbstractButton button = optionButton("Web Feed", INTERNET_FEEDS_ICON, WEB_FEED_CARD);
+  private JToggleButton addWebFeedButton() {
+    JToggleButton button = optionButton(BUTTON_WEB_FEED_KEY, INTERNET_FEEDS_ICON, WEB_FEED_CARD);
     button.setName("addWebFeed");
-    button.setMnemonic('W');
     button.setSelected(true);
     return button;
   }
 
-  private AbstractButton addFolderButton() {
-    AbstractButton button = optionButton("Folder", FOLDER_ICON, FOLDER_CARD);
+  private JToggleButton addFolderButton() {
+    JToggleButton button = optionButton(BUTTON_FOLDER_KEY, FOLDER_ICON, FOLDER_CARD);
     button.setName("addFolder");
-    button.setMnemonic('F');
     return button;
   }
 
-  private AbstractButton optionButton(String text, Icon icon, final String cardName) {
-    final JToggleButton button = new JToggleButton(text, icon);
+  private JToggleButton optionButton(String i18nKey, Icon icon, final String cardName) {
+    final JToggleButton button = JComponentFactory.instance().toggleButtonWithMnemonic(i18n, i18nKey);
+    button.setIcon(icon);
     button.setBorderPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     button.setFocusable(false);

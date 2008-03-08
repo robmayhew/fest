@@ -36,7 +36,10 @@ public class MainActionPanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
 
+  private static final String BUTTON_ADD_KEY = "button.add";
+  
   private final MainFrame mainFrame;
+  private final I18n i18n;
   
   /**
    * Creates a new </code>{@link MainActionPanel}</code>.
@@ -45,6 +48,7 @@ public class MainActionPanel extends JPanel {
   public MainActionPanel(MainFrame mainFrame) {
     super(new GridBagLayout());
     this.mainFrame = mainFrame;
+    i18n = new I18n(this);
     GridBagConstraints c = new GridBagConstraints();
     c.anchor = NORTHWEST;
     c.gridx = c.gridy = 0;
@@ -56,7 +60,7 @@ public class MainActionPanel extends JPanel {
   }
   
   private JButton addButton() {
-    JButton button = new JButton("Add");
+    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_ADD_KEY);
     button.setName("add");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {

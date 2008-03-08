@@ -31,6 +31,10 @@ public class AddWebFeedPanel extends InputFormPanel {
 
   private static final long serialVersionUID = 1L;
 
+  private static final String LABEL_ADDRESS_KEY = "label.address";
+  private static final String LABEL_NAME_KEY = "label.name";
+  private static final String FOLDER_NAME_KEY = "label.folder";
+
   /**
    * Creates a new </code>{@link AddWebFeedPanel}</code>.
    */
@@ -40,7 +44,9 @@ public class AddWebFeedPanel extends InputFormPanel {
 
   void addInputFields(GridBagConstraints c) {
     addAddressField(c);
+    addSpaceBetweenLines(c);
     addNameField(c);
+    addSpaceBetweenLines(c);
     addfolderField(c);
   }
   
@@ -49,9 +55,7 @@ public class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JLabel addressLabel() {
-    JLabel label = new JLabel("Address:");
-    label.setDisplayedMnemonic('A');
-    return label;
+    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_ADDRESS_KEY);
   }
   
   private JTextField addressField() {
@@ -65,9 +69,7 @@ public class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JLabel nameLabel() {
-    JLabel label = new JLabel("Name:");
-    label.setDisplayedMnemonic('N');
-    return label;
+    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_NAME_KEY);
   }
   
   private JTextField nameField() {
@@ -81,9 +83,7 @@ public class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JLabel folderLabel() {
-    JLabel label = new JLabel("Folder:");
-    label.setDisplayedMnemonic('d');
-    return label;
+    return JComponentFactory.instance().labelWithMnemonic(i18n, FOLDER_NAME_KEY);
   }
   
   private JComboBox folderComboBox() {

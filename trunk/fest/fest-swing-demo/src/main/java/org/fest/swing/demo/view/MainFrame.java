@@ -35,16 +35,21 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 public class MainFrame extends JFrame {
 
   private static final long serialVersionUID = 1L;
+  
+  private static final String FRAME_TITLE_KEY = "frame.title";
 
+  private final I18n i18n;
+  
   /**
    * Creates a new </code>{@link MainFrame}</code>.
    */
   public MainFrame() {
     setLayout(new BorderLayout());
+    i18n = new I18n(this);
     add(splitPane(), CENTER);
     add(new MainActionPanel(this), SOUTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setTitle("NewsFEST");
+    setTitle(i18n.message(FRAME_TITLE_KEY));
     setPreferredSize(new Dimension(600, 400));
     pack();
     center();
