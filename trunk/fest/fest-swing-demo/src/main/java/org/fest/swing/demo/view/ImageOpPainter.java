@@ -40,12 +40,11 @@ class ImageOpPainter<V extends JComponent> extends BufferedPainter<V> {
 
   @Override protected void paintToBuffer(Graphics2D g2, JXLayer<V> layer) {
     super.paintToBuffer(g2, layer);
-    if (layer.isLocked()) {
-      // the view is hidden, so we need to paint it manually, it is important to call print() instead of paint() here
-      // because print() doesn't affect the frame's double buffer
-      layer.getView().print(g2);
-      disablingEffect.apply(getBuffer(), g2.getClip());
-    }
+    if (!layer.isLocked()) return;
+    // the view is hidden, so we need to paint it manually, it is important to call print() instead of paint() here
+    // because print() doesn't affect the frame's double buffer
+    layer.getView().print(g2);
+    disablingEffect.apply(getBuffer(), g2.getClip());
   }
 
   // Child components of a locked layer are locked as well, so we can speed the painting up. Moreover EmbossFilter 

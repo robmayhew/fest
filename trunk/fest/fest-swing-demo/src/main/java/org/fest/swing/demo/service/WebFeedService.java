@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.demo.manager;
+package org.fest.swing.demo.service;
 
 import org.fest.swing.demo.model.WebFeed;
 
@@ -22,7 +22,7 @@ import org.fest.swing.demo.model.WebFeed;
  *
  * @author Alex Ruiz
  */
-public interface WebFeedManager {
+public interface WebFeedService {
   
   /**
    * Obtains the name of the feed at the given address.
