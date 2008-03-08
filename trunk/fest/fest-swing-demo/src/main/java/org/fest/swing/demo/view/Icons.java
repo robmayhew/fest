@@ -30,9 +30,10 @@ import static org.fest.util.Strings.concat;
 final class Icons {
 
   private static final String IMAGE_LOCATION = "org/fest/swing/demo/images/";
-  
-  static final Icon INTERNET_FEEDS_ICON = new ImageIcon(iconURL("internet-feeds.png")); 
+
+  static final Icon DIALOG_ERROR_ICON = new ImageIcon(iconURL("dialog-error.png"));
   static final Icon FOLDER_ICON = new ImageIcon(iconURL("folder.png")); 
+  static final Icon INTERNET_FEEDS_ICON = new ImageIcon(iconURL("internet-feeds.png")); 
   
   private static URL iconURL(String imageName) {
     return Icons.class.getClassLoader().getResource(concat(IMAGE_LOCATION, imageName));

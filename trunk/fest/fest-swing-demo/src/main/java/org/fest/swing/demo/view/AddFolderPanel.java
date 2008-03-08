@@ -20,6 +20,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import static org.fest.util.Strings.isEmpty;
+
 /**
  * Understands the panel where users can add a new folder.
  *
@@ -31,7 +33,11 @@ class AddFolderPanel extends InputFormPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String LABEL_NAME_KEY = "label.name";
+  private static final String LABEL_NAME_MISSING_KEY = "label.name.missing";
 
+  private JTextField nameField;
+  private ErrorMessageLabel nameMissingLabel;
+  
   /**
    * Creates a new </code>{@link AddFolderPanel}</code>.
    */
@@ -40,7 +46,15 @@ class AddFolderPanel extends InputFormPanel {
   }
 
   void addInputFields(GridBagConstraints c) {
-    addInputField(nameLabel(), nameField(), c);
+    nameField = nameField();
+    nameMissingLabel = nameMissingLabel();
+    addInputField(nameMissingLabel, nameLabel(), nameField, c);
+  }
+  
+  private ErrorMessageLabel nameMissingLabel() {
+    ErrorMessageLabel label = new ErrorMessageLabel(nameField);
+    label.setName("nameMissing");
+    return label;
   }
   
   private JLabel nameLabel() {
@@ -51,5 +65,12 @@ class AddFolderPanel extends InputFormPanel {
     JTextField field = new JTextField();
     field.setName("folderName");
     return field;
+  }
+  
+  boolean validInput() {
+    String name = nameField.getText();
+    if (!isEmpty(name)) return true;
+    nameMissingLabel.errorMessage(i18n.message(LABEL_NAME_MISSING_KEY));
+    return false;
   }
 }

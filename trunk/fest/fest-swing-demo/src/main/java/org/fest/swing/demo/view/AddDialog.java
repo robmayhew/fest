@@ -54,6 +54,11 @@ class AddDialog extends JDialog {
 
   private final MainFrame owner;
   private final I18n i18n;
+
+  private String selectedForm;
+
+  private AddWebFeedPanel addWebFeedPanel;
+  private AddFolderPanel addFolderPanel;
   
   /**
    * Creates a new </code>{@link AddDialog}</code>.
@@ -67,7 +72,7 @@ class AddDialog extends JDialog {
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     addContent();
-    setPreferredSize(new Dimension(320, 260));
+    setPreferredSize(new Dimension(320, 280));
     setResizable(false);
     addWindowListener(new WindowAdapter() {
       @Override public void windowClosing(WindowEvent e) {
@@ -86,9 +91,12 @@ class AddDialog extends JDialog {
   }
 
   private void addPanelsToInputFormCardPanel() {
-    inputFormCardPanel.add(new AddWebFeedPanel(), WEB_FEED_CARD);
-    inputFormCardPanel.add(new AddFolderPanel(), FOLDER_CARD);
-    cardLayout.show(inputFormCardPanel, WEB_FEED_CARD);
+    addWebFeedPanel = new AddWebFeedPanel();
+    addFolderPanel = new AddFolderPanel();
+    inputFormCardPanel.add(addWebFeedPanel, WEB_FEED_CARD);
+    inputFormCardPanel.add(addFolderPanel, FOLDER_CARD);
+    selectedForm = WEB_FEED_CARD;
+    cardLayout.show(inputFormCardPanel, selectedForm);
   }
 
   private JPanel optionPanel() {
@@ -136,6 +144,7 @@ class AddDialog extends JDialog {
     button.setHorizontalTextPosition(AbstractButton.CENTER);
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        selectedForm = cardName;
         cardLayout.show(inputFormCardPanel, cardName);
         FocusManager.getCurrentManager().focusNextComponent(button);
       }
@@ -179,9 +188,19 @@ class AddDialog extends JDialog {
     button.setDefaultCapable(true);
     button.setMnemonic('O');
     button.setName("ok");
+    button.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        selectedPanel().validInput();
+      }
+    });
     return button;
   }
 
+  private InputFormPanel selectedPanel() {
+    if (WEB_FEED_CARD.equals(selectedForm)) return addWebFeedPanel;
+    return addFolderPanel;
+  }
+  
   @Override public JRootPane getRootPane() {
     ActionListener closeAction = new CloseAddDialogActionListener();
     JRootPane rootPane = super.getRootPane();

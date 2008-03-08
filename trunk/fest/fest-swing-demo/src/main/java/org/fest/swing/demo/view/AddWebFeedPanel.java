@@ -21,6 +21,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import static org.fest.util.Strings.isEmpty;
+
 /**
  * Understands the panel where users can add a new web feed.
  *
@@ -32,8 +34,14 @@ class AddWebFeedPanel extends InputFormPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String LABEL_ADDRESS_KEY = "label.address";
+  private static final String LABEL_ADDRESS_MISSING_KEY = "label.address.missing";
   private static final String LABEL_NAME_KEY = "label.name";
   private static final String FOLDER_NAME_KEY = "label.folder";
+  
+  private ErrorMessageLabel addressMissingLabel;
+  private JTextField addressField;
+  private JTextField nameField;
+  private JComboBox folderComboBox;
 
   /**
    * Creates a new </code>{@link AddWebFeedPanel}</code>.
@@ -51,21 +59,30 @@ class AddWebFeedPanel extends InputFormPanel {
   }
   
   private void addAddressField(GridBagConstraints c) {
-    addInputField(addressLabel(), addressField(), c);
+    addressField = addressField();
+    addressMissingLabel = addressMissingLabel();
+    addInputField(addressMissingLabel, addressLabel(), addressField, c);
   }
 
-  private JLabel addressLabel() {
-    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_ADDRESS_KEY);
-  }
-  
   private JTextField addressField() {
     JTextField field = new JTextField();
     field.setName("address");
     return field;
   }
 
+  private ErrorMessageLabel addressMissingLabel() {
+    ErrorMessageLabel label = new ErrorMessageLabel(addressField);
+    label.setName("addressMissing");
+    return label;
+  }
+
+  private JLabel addressLabel() {
+    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_ADDRESS_KEY);
+  }
+  
   private void addNameField(GridBagConstraints c) {
-    addInputField(nameLabel(), nameField(), c);
+    nameField = nameField();
+    addInputField(nameLabel(), nameField, c);
   }
 
   private JLabel nameLabel() {
@@ -79,7 +96,8 @@ class AddWebFeedPanel extends InputFormPanel {
   }
 
   private void addfolderField(GridBagConstraints c) {
-    addInputField(folderLabel(), folderComboBox(), c);
+    folderComboBox = folderComboBox();
+    addInputField(folderLabel(), folderComboBox, c);
   }
 
   private JLabel folderLabel() {
@@ -91,5 +109,11 @@ class AddWebFeedPanel extends InputFormPanel {
     comboBox.setName("folders");
     comboBox.setEditable(true);
     return comboBox;
+  }
+
+  boolean validInput() {
+    if (!isEmpty(addressField.getText())) return true;
+    addressMissingLabel.errorMessage(i18n.message(LABEL_ADDRESS_MISSING_KEY));
+    return false;
   }
 }

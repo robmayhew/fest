@@ -17,6 +17,7 @@ package org.fest.swing.demo.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -34,6 +35,8 @@ import static javax.swing.Box.*;
  */
 abstract class InputFormPanel extends JPanel {
 
+  private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
+  
   final I18n i18n; 
   
   /**
@@ -60,9 +63,21 @@ abstract class InputFormPanel extends JPanel {
 
   abstract void addInputFields(GridBagConstraints c);
 
-  final void addInputField(JLabel label, JComponent inputField, GridBagConstraints c) {
-    label.setLabelFor(inputField);
-    add(label, c);
+  final void addInputField(JLabel errorLabel, JLabel fieldLabel, JComponent inputField, GridBagConstraints c) {
+    c.gridx = 0;
+    c.insets = new Insets(0, 0, 6, 0);
+    c.gridwidth = 3;
+    add(errorLabel, c);
+    c.gridwidth = 1;
+    c.gridx = 0;
+    c.gridy++;
+    c.insets = EMPTY_INSETS;
+    addInputField(fieldLabel, inputField, c);
+  }
+
+  final void addInputField(JLabel fieldLabel, JComponent inputField, GridBagConstraints c) {
+    fieldLabel.setLabelFor(inputField);
+    add(fieldLabel, c);
     c.gridx++;
     add(createHorizontalStrut(10), c);
     c.gridx++;
@@ -79,4 +94,6 @@ abstract class InputFormPanel extends JPanel {
     add(createVerticalStrut(10), c);
     c.gridy++;
   }
+  
+  abstract boolean validInput();
 }
