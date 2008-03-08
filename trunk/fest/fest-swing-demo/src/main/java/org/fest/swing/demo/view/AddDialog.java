@@ -185,8 +185,8 @@ class AddDialog extends JDialog {
 
   private JButton okButton() {
     JButton button = new JButton("OK");
-    button.setDefaultCapable(true);
     button.setMnemonic('O');
+    getRootPane().setDefaultButton(button);
     button.setName("ok");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
