@@ -19,10 +19,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JFrame;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
+import javax.swing.*;
+
+import org.jdesktop.swinghelper.layer.JXLayer;
+
+import com.jhlabs.image.BlurFilter;
 
 import static java.awt.BorderLayout.*;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
@@ -39,6 +40,7 @@ public class MainFrame extends JFrame {
   private static final String FRAME_TITLE_KEY = "frame.title";
 
   private final I18n i18n;
+  private final JXLayer<JComponent> layer;
   
   /**
    * Creates a new </code>{@link MainFrame}</code>.
@@ -46,13 +48,22 @@ public class MainFrame extends JFrame {
   public MainFrame() {
     setLayout(new BorderLayout());
     i18n = new I18n(this);
-    add(splitPane(), CENTER);
-    add(new MainActionPanel(this), SOUTH);
+    layer = new JXLayer<JComponent>(content());
+    layer.setPainter(new ImageOpPainter<JComponent>(new BlurFilter()));
+    layer.setLocked(false);
+    add(layer, CENTER);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle(i18n.message(FRAME_TITLE_KEY));
     setPreferredSize(new Dimension(600, 400));
     pack();
     center();
+  }
+  
+  private JPanel content() {
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.add(splitPane(), CENTER);
+    panel.add(new MainActionPanel(this), SOUTH);
+    return panel;
   }
   
   private void center() {
@@ -66,5 +77,13 @@ public class MainFrame extends JFrame {
     splitPane.setLeftComponent(new JTree());
     splitPane.setRightComponent(new JTable(10, 4));
     return splitPane;
+  }
+
+  void lock() {
+    layer.setLocked(true);
+  }
+  
+  void unlock() {
+    layer.setLocked(false);
   }
 }

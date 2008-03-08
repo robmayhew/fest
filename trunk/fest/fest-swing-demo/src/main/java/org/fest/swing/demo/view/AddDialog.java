@@ -18,6 +18,8 @@ package org.fest.swing.demo.view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 import javax.swing.FocusManager;
@@ -37,7 +39,7 @@ import static org.fest.swing.demo.view.Swing.center;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class AddDialog extends JDialog {
+class AddDialog extends JDialog {
   
   private static final long serialVersionUID = 1L;
 
@@ -50,20 +52,28 @@ public class AddDialog extends JDialog {
   private final CardLayout cardLayout = new CardLayout();
   private final JPanel inputFormCardPanel = new JPanel(cardLayout);
 
+  private final MainFrame owner;
   private final I18n i18n;
   
   /**
    * Creates a new </code>{@link AddDialog}</code>.
    * @param owner the owner of this dialog.
    */
-  public AddDialog(MainFrame owner) {
+  AddDialog(MainFrame owner) {
     super(owner, "Add New", DEFAULT_MODALITY_TYPE);
+    setDefaultCloseOperation(HIDE_ON_CLOSE);
+    this.owner = owner;
     i18n = new I18n(this);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     addContent();
     setPreferredSize(new Dimension(320, 260));
     setResizable(false);
+    addWindowListener(new WindowAdapter() {
+      @Override public void windowClosing(WindowEvent e) {
+        AddDialog.this.owner.unlock();
+      }
+    });
     pack();
     center(this);
   }
@@ -160,7 +170,7 @@ public class AddDialog extends JDialog {
     JButton button = new JButton("Cancel");
     button.setMnemonic('C');
     button.setName("cancel");
-    button.addActionListener(new CloseWindowActionListener(this));
+    button.addActionListener(new CloseAddDialogActionListener());
     return button;
   }
 
@@ -173,10 +183,21 @@ public class AddDialog extends JDialog {
   }
 
   @Override public JRootPane getRootPane() {
-    ActionListener closeAction = new CloseWindowActionListener(this);
+    ActionListener closeAction = new CloseAddDialogActionListener();
     JRootPane rootPane = super.getRootPane();
     KeyStroke stroke = KeyStroke.getKeyStroke(VK_ESCAPE, 0);
     rootPane.registerKeyboardAction(closeAction, stroke, WHEN_IN_FOCUSED_WINDOW);
     return rootPane;
   }
+  
+  private class CloseAddDialogActionListener extends CloseWindowActionListener {
+    public CloseAddDialogActionListener() {
+      super(AddDialog.this);
+    }
+
+    @Override public void actionPerformed(ActionEvent e) {
+      owner.unlock();
+      super.actionPerformed(e);
+    }
+  };
 }

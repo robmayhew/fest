@@ -32,7 +32,7 @@ import static javax.swing.Box.createHorizontalGlue;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class MainActionPanel extends JPanel {
+class MainActionPanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class MainActionPanel extends JPanel {
    * Creates a new </code>{@link MainActionPanel}</code>.
    * @param mainFrame the main application window.
    */
-  public MainActionPanel(MainFrame mainFrame) {
+  MainActionPanel(MainFrame mainFrame) {
     super(new GridBagLayout());
     this.mainFrame = mainFrame;
     i18n = new I18n(this);
@@ -64,6 +64,7 @@ public class MainActionPanel extends JPanel {
     button.setName("add");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        mainFrame.lock();
         AddDialog addDialog = new AddDialog(mainFrame);
         addDialog.setVisible(true);
       }

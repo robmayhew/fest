@@ -27,7 +27,7 @@ import javax.swing.JTextField;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class AddWebFeedPanel extends InputFormPanel {
+class AddWebFeedPanel extends InputFormPanel {
 
   private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class AddWebFeedPanel extends InputFormPanel {
   /**
    * Creates a new </code>{@link AddWebFeedPanel}</code>.
    */
-  public AddWebFeedPanel() {
+  AddWebFeedPanel() {
     super();
   }
 

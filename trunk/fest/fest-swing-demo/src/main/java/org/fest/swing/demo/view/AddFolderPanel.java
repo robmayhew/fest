@@ -26,7 +26,7 @@ import javax.swing.JTextField;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class AddFolderPanel extends InputFormPanel {
+class AddFolderPanel extends InputFormPanel {
 
   private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public class AddFolderPanel extends InputFormPanel {
   /**
    * Creates a new </code>{@link AddFolderPanel}</code>.
    */
-  public AddFolderPanel() {
+  AddFolderPanel() {
     super();
   }
 

@@ -33,7 +33,7 @@ class CloseWindowActionListener implements ActionListener {
    * Creates a new </code>{@link CloseWindowActionListener}</code>.
    * @param w the <code>Window</code> to close.
    */
-  public CloseWindowActionListener(Window w) {
+  CloseWindowActionListener(Window w) {
     this.window = w;
   }
 
