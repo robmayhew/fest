@@ -23,8 +23,6 @@ import javax.swing.*;
 
 import org.jdesktop.swinghelper.layer.JXLayer;
 
-import com.jhlabs.image.BlurFilter;
-
 import static java.awt.BorderLayout.*;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 
@@ -40,7 +38,7 @@ public class MainFrame extends JFrame {
   private static final String FRAME_TITLE_KEY = "frame.title";
 
   private final I18n i18n;
-  private final JXLayer<JComponent> layer;
+  private final JXLayer<JPanel> layer;
   
   /**
    * Creates a new </code>{@link MainFrame}</code>.
@@ -48,9 +46,7 @@ public class MainFrame extends JFrame {
   public MainFrame() {
     setLayout(new BorderLayout());
     i18n = new I18n(this);
-    layer = new JXLayer<JComponent>(content());
-    layer.setPainter(new ImageOpPainter<JComponent>(new BlurFilter()));
-    layer.setLocked(false);
+    layer = JComponentFactory.instance().blurFilteredLayer(content());
     add(layer, CENTER);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle(i18n.message(FRAME_TITLE_KEY));

@@ -16,9 +16,12 @@
 package org.fest.swing.demo.view;
 
 import java.awt.GridBagConstraints;
+import java.awt.Window;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import org.fest.swing.demo.model.Folder;
 
 import static org.fest.util.Strings.isEmpty;
 
@@ -68,9 +71,16 @@ class AddFolderPanel extends InputFormPanel {
   }
   
   boolean validInput() {
-    String name = nameField.getText();
-    if (!isEmpty(name)) return true;
+    if (!isEmpty(folderName())) return true;
     nameMissingLabel.errorMessage(i18n.message(LABEL_NAME_MISSING_KEY));
     return false;
+  }
+
+  void save(Window owner) {
+    new SaveFolderWorker(new Folder(folderName())).execute();
+  }
+
+  private String folderName() {
+    return nameField.getText();
   }
 }

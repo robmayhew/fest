@@ -16,8 +16,13 @@
 package org.fest.swing.demo.view;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
+
+import org.jdesktop.swinghelper.layer.JXLayer;
+
+import com.jhlabs.image.BlurFilter;
 
 /**
  * Understands a factory of <code>{@link javax.swing.JComponent}</code>s.
@@ -38,6 +43,13 @@ final class JComponentFactory {
     label.setDisplayedMnemonic(i18n.mnemonic(key));
     label.setText(i18n.message(key));
     return label;
+  }
+  
+  <T extends JComponent> JXLayer<T> blurFilteredLayer(T content) {
+    JXLayer<T> layer = new JXLayer<T>(content);
+    layer.setPainter(new ImageOpPainter<T>(new BlurFilter()));
+    layer.setLocked(false);
+    return layer;
   }
   
   JToggleButton toggleButtonWithMnemonic(I18n i18n, String key) {

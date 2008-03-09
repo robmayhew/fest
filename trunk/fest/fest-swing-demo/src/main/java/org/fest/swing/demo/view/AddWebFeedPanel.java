@@ -16,6 +16,7 @@
 package org.fest.swing.demo.view;
 
 import java.awt.GridBagConstraints;
+import java.awt.Window;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -115,5 +116,8 @@ class AddWebFeedPanel extends InputFormPanel {
     if (!isEmpty(addressField.getText())) return true;
     addressMissingLabel.errorMessage(i18n.message(LABEL_ADDRESS_MISSING_KEY));
     return false;
+  }
+
+  void save(Window owner) {
   }
 }

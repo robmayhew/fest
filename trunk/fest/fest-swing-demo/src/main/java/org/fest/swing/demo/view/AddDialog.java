@@ -46,8 +46,11 @@ class AddDialog extends JDialog {
   private static final String WEB_FEED_CARD = "WebFeed";
   private static final String FOLDER_CARD = "Folder";
 
+  private static final String DIALOG_TITLE_KEY = "dialog.title";
   private static final String BUTTON_WEB_FEED_KEY = "button.webfeed";
   private static final String BUTTON_FOLDER_KEY = "button.folder";
+  private static final String BUTTON_CANCEL_KEY = "button.cancel";
+  private static final String BUTTON_OK_KEY = "button.ok";
   
   private final CardLayout cardLayout = new CardLayout();
   private final JPanel inputFormCardPanel = new JPanel(cardLayout);
@@ -65,15 +68,16 @@ class AddDialog extends JDialog {
    * @param owner the owner of this dialog.
    */
   AddDialog(MainFrame owner) {
-    super(owner, "Add New", DEFAULT_MODALITY_TYPE);
-    setDefaultCloseOperation(HIDE_ON_CLOSE);
+    super(owner, DEFAULT_MODALITY_TYPE);
     this.owner = owner;
     i18n = new I18n(this);
+    setDefaultCloseOperation(HIDE_ON_CLOSE);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     addContent();
     setPreferredSize(new Dimension(320, 280));
     setResizable(false);
+    setTitle(i18n.message(DIALOG_TITLE_KEY));
     addWindowListener(new WindowAdapter() {
       @Override public void windowClosing(WindowEvent e) {
         AddDialog.this.owner.unlock();
@@ -176,26 +180,33 @@ class AddDialog extends JDialog {
   }
   
   private JButton cancelButton() {
-    JButton button = new JButton("Cancel");
-    button.setMnemonic('C');
+    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_CANCEL_KEY);
     button.setName("cancel");
     button.addActionListener(new CloseAddDialogActionListener());
     return button;
   }
 
   private JButton okButton() {
-    JButton button = new JButton("OK");
-    button.setMnemonic('O');
+    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_OK_KEY);
     getRootPane().setDefaultButton(button);
     button.setName("ok");
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        selectedPanel().validInput();
+        save();
       }
     });
     return button;
   }
 
+  private void save() {
+    InputFormPanel selectedPanel = selectedPanel();
+    if (!selectedPanel.validInput()) return;
+    SaveProgressDialog progressDialog = new SaveProgressDialog(this);
+    progressDialog.setVisible(true);
+//    selectedPanel.save(null);
+//    progressDialog.setVisible(false);
+  }
+  
   private InputFormPanel selectedPanel() {
     if (WEB_FEED_CARD.equals(selectedForm)) return addWebFeedPanel;
     return addFolderPanel;

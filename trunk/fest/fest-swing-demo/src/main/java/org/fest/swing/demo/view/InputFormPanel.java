@@ -18,6 +18,7 @@ package org.fest.swing.demo.view;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -96,4 +97,6 @@ abstract class InputFormPanel extends JPanel {
   }
   
   abstract boolean validInput();
+  
+  abstract void save(Window owner);
 }

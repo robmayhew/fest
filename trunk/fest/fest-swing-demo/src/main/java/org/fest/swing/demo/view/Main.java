@@ -17,9 +17,10 @@ package org.fest.swing.demo.view;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.UIManager;
 
-import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
+import org.fest.swing.demo.model.Folder;
+import org.fest.swing.demo.service.FolderService;
+import org.fest.swing.demo.service.Services;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
@@ -36,8 +37,18 @@ public class Main {
    * @throws Exception 
    */
   public static void main(String[] args) throws Exception {
-    UIManager.setLookAndFeel(new SubstanceRavenGraphiteGlassLookAndFeel());
+    //UIManager.setLookAndFeel(new SubstanceRavenGraphiteGlassLookAndFeel());
     makeWindowDecorationsUseLookAndFeel();
+    Services.instance().updateFolderService(new FolderService() {
+      public void saveFolder(Folder folder) {
+        try {
+          Thread.sleep(20000);
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    });
     invokeLater(new Runnable() {
       public void run() {
         new MainFrame().setVisible(true);

@@ -9,5 +9,7 @@
 	<classpathentry kind="lib" path="lib/fest-util-0.4.jar" sourcepath="lib/fest-util-0.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/layer.jar"/>
 	<classpathentry kind="lib" path="lib/filters.jar"/>
+	<classpathentry kind="lib" path="lib/swingx-0.9.2.jar" sourcepath="lib/swingx-0.9.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/substance-swingx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -23,7 +23,16 @@ package org.fest.swing.demo.service;
  */
 public class Services {
 
+  private FolderService folderService;
   private WebFeedService webFeedService;
+
+  public FolderService folderService() {
+    return folderService;
+  }
+
+  public void updateFolderService(FolderService folderService) {
+    this.folderService = folderService;
+  }
 
   public WebFeedService webFeedService() {
     return webFeedService;

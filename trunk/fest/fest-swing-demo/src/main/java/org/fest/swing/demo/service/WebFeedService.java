@@ -18,7 +18,7 @@ package org.fest.swing.demo.service;
 import org.fest.swing.demo.model.WebFeed;
 
 /**
- * Understands a manager of web feeds.
+ * Understands a service that manages web feeds.
  *
  * @author Alex Ruiz
  */

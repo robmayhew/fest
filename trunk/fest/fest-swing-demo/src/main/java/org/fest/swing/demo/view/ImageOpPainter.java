@@ -25,11 +25,11 @@ import org.jdesktop.swinghelper.layer.effect.ImageOpEffect;
 import org.jdesktop.swinghelper.layer.painter.BufferedPainter;
 
 /**
- * Adapted from <code>LockedLayerDemo</code> from <a href="https://swinghelper.dev.java.net/" target="_blank">JXLayer
- * Project</a>.
+ * A <code>BufferedPainter</code> that uses a <code>BufferedImageOp</code> as the effect to apply to a 
+ * <code>BufferedImage</code>.
  * @param <V> the type of component decorated by a <code>JXLayer</code>.
  * 
- * @author Alex Ruiz
+ * @author Alexander Potochkin
  */
 class ImageOpPainter<V extends JComponent> extends BufferedPainter<V> {
   private final Effect disablingEffect;
