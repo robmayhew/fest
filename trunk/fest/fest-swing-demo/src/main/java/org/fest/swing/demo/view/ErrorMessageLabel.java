@@ -42,7 +42,7 @@ public class ErrorMessageLabel extends JLabel {
     setVisible(false);
   }
 
-  void errorMessage(String errorMessage) {
+  void showErrorMessage(String errorMessage) {
     super.setText(errorMessage);
     setVisible(true);
     inputField.requestFocusInWindow();

@@ -72,7 +72,7 @@ class AddFolderPanel extends InputFormPanel {
   
   boolean validInput() {
     if (!isEmpty(folderName())) return true;
-    nameMissingLabel.errorMessage(i18n.message(LABEL_NAME_MISSING_KEY));
+    nameMissingLabel.showErrorMessage(i18n.message(LABEL_NAME_MISSING_KEY));
     return false;
   }
 

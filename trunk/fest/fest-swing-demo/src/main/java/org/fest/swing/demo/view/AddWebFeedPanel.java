@@ -114,7 +114,7 @@ class AddWebFeedPanel extends InputFormPanel {
 
   boolean validInput() {
     if (!isEmpty(addressField.getText())) return true;
-    addressMissingLabel.errorMessage(i18n.message(LABEL_ADDRESS_MISSING_KEY));
+    addressMissingLabel.showErrorMessage(i18n.message(LABEL_ADDRESS_MISSING_KEY));
     return false;
   }
 
