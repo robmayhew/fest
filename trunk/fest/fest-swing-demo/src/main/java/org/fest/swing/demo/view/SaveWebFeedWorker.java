@@ -17,30 +17,30 @@ package org.fest.swing.demo.view;
 
 import java.awt.Window;
 
-import org.fest.swing.demo.model.Folder;
+import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.Services;
 
 /**
- * Understands saving a folder in a database using worker thread.
+ * Understands saving a web feed in a database using worker thread.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class SaveFolderWorker extends SaveWorkerTemplate<Folder> {
+class SaveWebFeedWorker extends SaveWorkerTemplate<WebFeed> {
 
   /**
-   * Creates a new </code>{@link SaveFolderWorker}</code>.
-   * @param target the folder to save.
-   * @param saveListener listener to be notified when saving the folder to the database is complete. 
+   * Creates a new </code>{@link SaveWebFeedWorker}</code>.
+   * @param target the web feed to save.
+   * @param saveListener listener to be notified when saving the web feed to the database is complete. 
    * @param progressWindow the window showing progress made by this worker.
    */
-  SaveFolderWorker(Folder target, SaveListener saveListener, Window progressWindow) {
+  SaveWebFeedWorker(WebFeed target, SaveListener saveListener, Window progressWindow) {
     super(target, saveListener, progressWindow);
   }
 
   /** @see javax.swing.SwingWorker#doInBackground() */
   protected Void doInBackground() throws Exception {
-    Services.instance().folderService().saveFolder(target);
+    Services.instance().webFeedService().saveWebFeed(target);
     return null;
   }
 }

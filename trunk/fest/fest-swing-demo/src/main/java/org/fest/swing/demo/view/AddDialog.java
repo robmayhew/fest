@@ -75,7 +75,7 @@ class AddDialog extends JDialog implements SaveListener {
     super(owner, DEFAULT_MODALITY_TYPE);
     i18n = new I18n(this);
     this.owner = owner;
-    setDefaultCloseOperation(HIDE_ON_CLOSE);
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
     layer = JComponentFactory.instance().blurFilteredLayer(content());
@@ -89,7 +89,6 @@ class AddDialog extends JDialog implements SaveListener {
       }
     });
     pack();
-    center(this);
   }
 
   private JPanel content() {
@@ -218,9 +217,9 @@ class AddDialog extends JDialog implements SaveListener {
     layer.setLocked(true);
   }
 
-  public void saveComplete() {
-    layer.setLocked(false);
-    setEnabled(true);
+  public void saveComplete(Object saved) {
+    owner.addContentToWebFeedTree(saved);
+    closeAndDispose();
   }
 
   public InputFormPanel selectedPanel() {
@@ -236,14 +235,21 @@ class AddDialog extends JDialog implements SaveListener {
     return rootPane;
   }
 
-  private class CloseAddDialogActionListener extends CloseWindowActionListener {
-    public CloseAddDialogActionListener() {
-      super(AddDialog.this);
+  private class CloseAddDialogActionListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      closeAndDispose();
     }
+  }
 
-    @Override public void actionPerformed(ActionEvent e) {
-      owner.unlock();
-      super.actionPerformed(e);
-    }
+  private void closeAndDispose() {
+    setVisible(false);
+    dispose();
+    owner.unlock();    
+  }
+  
+  /** @see java.awt.Dialog#setVisible(boolean) */
+  @Override public void setVisible(boolean visible) {
+    if (visible) center(this);
+    super.setVisible(visible);
   }
 }

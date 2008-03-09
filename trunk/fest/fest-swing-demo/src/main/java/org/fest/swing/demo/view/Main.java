@@ -44,14 +44,11 @@ public class Main {
     makeWindowDecorationsUseLookAndFeel();
     Services.instance().updateFolderService(new FolderService() {
       public void saveFolder(Folder folder) {
-        System.out.println("Start saving");
         try {
-          Thread.sleep(5000);
+          Thread.sleep(2000);
         } catch (InterruptedException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
-        System.out.println("Stop saving");
       }
     });
     invokeLater(new Runnable() {

@@ -20,9 +20,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import static java.awt.GridBagConstraints.*;
 import static javax.swing.BorderFactory.createEmptyBorder;
@@ -37,6 +35,8 @@ import static javax.swing.Box.*;
 abstract class InputFormPanel extends JPanel {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
+  
+  static final String EMPTY_TEXT = "";
   
   final I18n i18n; 
   
@@ -95,6 +95,16 @@ abstract class InputFormPanel extends JPanel {
     add(createVerticalStrut(10), c);
     c.gridy++;
   }
+  
+  static void clear(JComboBox comboBox) {
+    comboBox.setSelectedIndex(-1);
+  }
+  
+  static void clear(JTextField textField) {
+    textField.setText(EMPTY_TEXT);
+  }
+  
+  abstract void clear();
   
   abstract boolean validInput();
   

@@ -15,16 +15,20 @@
  */
 package org.fest.swing.demo.view;
 
-import static java.awt.BorderLayout.*;
-import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
-import static org.fest.swing.demo.view.Swing.center;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
 
 import org.jdesktop.swinghelper.layer.JXLayer;
+
+import static java.awt.BorderLayout.*;
+import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
+
+import static org.fest.swing.demo.view.Swing.center;
 
 /**
  * Understands the main window of the application.
@@ -39,6 +43,7 @@ public class MainFrame extends JFrame {
 
   private final I18n i18n;
   private final JXLayer<JPanel> layer;
+  private final WebFeedTree webFeedTree = new WebFeedTree();
 
   /**
    * Creates a new </code>{@link MainFrame}</code>.
@@ -52,7 +57,6 @@ public class MainFrame extends JFrame {
     setTitle(i18n.message(FRAME_TITLE_KEY));
     setPreferredSize(new Dimension(600, 400));
     pack();
-    center(this);
   }
 
   private JPanel content() {
@@ -64,8 +68,9 @@ public class MainFrame extends JFrame {
 
   private JSplitPane splitPane() {
     JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
-    splitPane.setLeftComponent(new JTree());
+    splitPane.setLeftComponent(webFeedTree);
     splitPane.setRightComponent(new JTable(10, 4));
+    splitPane.setDividerLocation(120);
     return splitPane;
   }
 
@@ -75,5 +80,15 @@ public class MainFrame extends JFrame {
 
   void unlock() {
     layer.setLocked(false);
+  }
+
+  void addContentToWebFeedTree(Object content) {
+    webFeedTree.addContent(content);
+  }
+  
+  /** @see java.awt.Window#setVisible(boolean) */
+  @Override public void setVisible(boolean visible) {
+    center(this);
+    super.setVisible(visible);
   }
 }

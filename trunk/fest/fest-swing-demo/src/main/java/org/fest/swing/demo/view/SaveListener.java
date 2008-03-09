@@ -24,5 +24,5 @@ interface SaveListener {
 
   InputFormPanel selectedPanel();
   
-  void saveComplete();
+  void saveComplete(Object saved);
 }

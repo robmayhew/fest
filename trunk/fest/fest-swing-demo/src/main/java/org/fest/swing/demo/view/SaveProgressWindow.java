@@ -79,9 +79,14 @@ class SaveProgressWindow extends JWindow {
   }
 
   void save(SaveListener saveListener) {
-    center(this);
     setVisible(true);
     InputFormPanel source = saveListener.selectedPanel();
     source.save(saveListener, this);
+  }
+
+  /** @see java.awt.Window#setVisible(boolean) */
+  @Override public void setVisible(boolean visible) {
+    if (visible) center(this);
+    super.setVisible(visible);
   }
 }

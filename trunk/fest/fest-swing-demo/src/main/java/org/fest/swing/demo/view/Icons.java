@@ -32,7 +32,9 @@ final class Icons {
   private static final String IMAGE_LOCATION = "org/fest/swing/demo/images/";
 
   static final Icon DIALOG_ERROR_ICON = new ImageIcon(iconURL("dialog-error.png"));
-  static final Icon FOLDER_ICON = new ImageIcon(iconURL("folder.png")); 
+  static final Icon FOLDER_ICON = new ImageIcon(iconURL("folder.png"));
+  static final Icon FOLDER_OPEN_ICON = new ImageIcon(iconURL("folder-open.png"));
+  static final Icon FOLDER_CLOSE_ICON = new ImageIcon(iconURL("folder-close.png"));
   static final Icon INTERNET_FEEDS_ICON = new ImageIcon(iconURL("internet-feeds.png")); 
   
   private static URL iconURL(String imageName) {

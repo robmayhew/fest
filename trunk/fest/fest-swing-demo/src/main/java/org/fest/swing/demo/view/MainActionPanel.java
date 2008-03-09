@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import static java.awt.GridBagConstraints.*;
+import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.Box.createHorizontalGlue;
 
 /**
@@ -49,6 +50,7 @@ class MainActionPanel extends JPanel {
     super(new GridBagLayout());
     this.mainFrame = mainFrame;
     i18n = new I18n(this);
+    setBorder(createEmptyBorder(8, 8, 8, 8));
     GridBagConstraints c = new GridBagConstraints();
     c.anchor = NORTHWEST;
     c.gridx = c.gridy = 0;

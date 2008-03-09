@@ -23,7 +23,7 @@ import static org.fest.util.Strings.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class Folder {
+public class Folder implements Comparable<Folder> {
 
   private String name;
 
@@ -74,5 +74,10 @@ public class Folder {
   /** @see java.lang.Object#toString() */
   @Override public String toString() {
     return concat(getClass().getSimpleName(), "[name=", quote(name), "]");
+  }
+
+  public int compareTo(Folder folder) {
+    if (name == null) return -1;
+    return name.compareTo(folder.name);
   }
 }

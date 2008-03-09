@@ -112,6 +112,12 @@ class AddWebFeedPanel extends InputFormPanel {
     return comboBox;
   }
 
+  void clear() {
+    clear(addressField);
+    clear(nameField);
+    clear(folderComboBox);
+  }
+  
   boolean validInput() {
     if (!isEmpty(addressField.getText())) return true;
     addressMissingLabel.showErrorMessage(i18n.message(LABEL_ADDRESS_MISSING_KEY));
