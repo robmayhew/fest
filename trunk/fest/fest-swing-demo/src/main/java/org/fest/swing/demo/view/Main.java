@@ -15,16 +15,17 @@
  */
 package org.fest.swing.demo.view;
 
-import static javax.swing.SwingUtilities.invokeLater;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
+
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.service.FolderService;
 import org.fest.swing.demo.service.Services;
-import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
+
+import static javax.swing.SwingUtilities.invokeLater;
 
 /**
  * Launches the application.
@@ -45,7 +46,7 @@ public class Main {
       public void saveFolder(Folder folder) {
         System.out.println("Start saving");
         try {
-          Thread.sleep(20000);
+          Thread.sleep(5000);
         } catch (InterruptedException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();

@@ -76,8 +76,8 @@ class AddFolderPanel extends InputFormPanel {
     return false;
   }
 
-  void save(Window owner) {
-    new SaveFolderWorker(new Folder(folderName())).execute();
+  void save(SaveListener saveListener, Window progressWindow) {
+    new SaveFolderWorker(new Folder(folderName()), saveListener, progressWindow).execute();
   }
 
   private String folderName() {

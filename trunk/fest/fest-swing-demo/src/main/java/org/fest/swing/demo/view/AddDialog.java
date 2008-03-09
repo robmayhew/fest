@@ -15,15 +15,6 @@
  */
 package org.fest.swing.demo.view;
 
-import static java.awt.BorderLayout.CENTER;
-import static java.awt.GridBagConstraints.*;
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
-import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.center;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,13 +26,23 @@ import javax.swing.FocusManager;
 
 import org.jdesktop.swinghelper.layer.JXLayer;
 
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.GridBagConstraints.*;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+
+import static org.fest.swing.demo.view.Icons.*;
+import static org.fest.swing.demo.view.Swing.center;
+
 /**
  * Understands the dialog where users can create new web feeds and/or folders.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class AddDialog extends JDialog {
+class AddDialog extends JDialog implements SaveListener {
 
   private static final long serialVersionUID = 1L;
 
@@ -207,16 +208,22 @@ class AddDialog extends JDialog {
   private void save() {
     InputFormPanel selectedPanel = selectedPanel();
     if (!selectedPanel.validInput()) return;
+    lock();
+    SaveProgressWindow progressWindow = new SaveProgressWindow(this);
+    progressWindow.save(this);
+  }
+
+  private void lock() {
     setEnabled(false);
     layer.setLocked(true);
-    SaveProgressWindow progressWindow = new SaveProgressWindow(this);
-    progressWindow.process(selectedPanel);
-    System.out.println("Process done");
+  }
+
+  public void saveComplete() {
     layer.setLocked(false);
     setEnabled(true);
   }
 
-  private InputFormPanel selectedPanel() {
+  public InputFormPanel selectedPanel() {
     if (WEB_FEED_CARD.equals(selectedForm)) return addWebFeedPanel;
     return addFolderPanel;
   }
@@ -238,5 +245,5 @@ class AddDialog extends JDialog {
       owner.unlock();
       super.actionPerformed(e);
     }
-  };
+  }
 }

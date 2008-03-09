@@ -15,9 +15,6 @@
  */
 package org.fest.swing.demo.view;
 
-import static javax.swing.BorderFactory.createLineBorder;
-import static org.fest.swing.demo.view.Swing.center;
-
 import java.awt.*;
 
 import javax.swing.JLabel;
@@ -26,10 +23,15 @@ import javax.swing.JWindow;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
+import static javax.swing.BorderFactory.createLineBorder;
+
+import static org.fest.swing.demo.view.Swing.center;
+
 /**
- * Understands SOMETHING DUMMY.
+ * Understands a window that shows progress when data is saved to the database.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 class SaveProgressWindow extends JWindow {
 
@@ -46,7 +48,6 @@ class SaveProgressWindow extends JWindow {
     add(content(), BorderLayout.CENTER);
     setPreferredSize(new Dimension(200, 100));
     pack();
-    center(this);
   }
 
   private JPanel content() {
@@ -77,9 +78,10 @@ class SaveProgressWindow extends JWindow {
     return new JLabel(i18n.message(LABEL_SAVING_KEY));
   }
 
-  void process(InputFormPanel source) {
+  void save(SaveListener saveListener) {
+    center(this);
     setVisible(true);
-    source.save(null);
-    setVisible(false);
+    InputFormPanel source = saveListener.selectedPanel();
+    source.save(saveListener, this);
   }
 }

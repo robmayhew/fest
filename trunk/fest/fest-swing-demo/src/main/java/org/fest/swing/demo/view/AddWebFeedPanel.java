@@ -118,6 +118,6 @@ class AddWebFeedPanel extends InputFormPanel {
     return false;
   }
 
-  void save(Window owner) {
+  void save(SaveListener saveListener, Window progressWindow) {
   }
 }

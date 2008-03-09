@@ -15,6 +15,8 @@
  */
 package org.fest.swing.demo.view;
 
+import java.awt.Window;
+
 import javax.swing.SwingWorker;
 
 import org.fest.swing.demo.model.Folder;
@@ -29,18 +31,30 @@ import org.fest.swing.demo.service.Services;
 class SaveFolderWorker extends SwingWorker<Void, Void> {
 
   private final Folder folder;
+  private final SaveListener saveListener;
+  private final Window progressWindow;
 
   /**
    * Creates a new </code>{@link SaveFolderWorker}</code>.
    * @param folder the folder to save.
+   * @param saveListener listener to be notified when saving the folder to the database is complete. 
+   * @param progressWindow the window showing progress made by this worker.
    */
-  SaveFolderWorker(Folder folder) {
+  SaveFolderWorker(Folder folder, SaveListener saveListener, Window progressWindow) {
     this.folder = folder;
+    this.saveListener = saveListener;
+    this.progressWindow = progressWindow;
   }
 
   /** @see javax.swing.SwingWorker#doInBackground() */
   protected Void doInBackground() throws Exception {
     Services.instance().folderService().saveFolder(folder);
     return null;
+  }
+
+  /** @see javax.swing.SwingWorker#done() */
+  @Override protected void done() {
+    if (progressWindow != null) progressWindow.setVisible(false);
+    saveListener.saveComplete();
   }
 }
