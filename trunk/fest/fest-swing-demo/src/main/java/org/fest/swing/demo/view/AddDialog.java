@@ -1,19 +1,28 @@
 /*
  * Created on Mar 5, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.demo.view;
+
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.GridBagConstraints.*;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+import static org.fest.swing.demo.view.Icons.*;
+import static org.fest.swing.demo.view.Swing.center;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,14 +33,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 import javax.swing.FocusManager;
 
-import static java.awt.GridBagConstraints.*;
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
-
-import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.center;
+import org.jdesktop.swinghelper.layer.JXLayer;
 
 /**
  * Understands the dialog where users can create new web feeds and/or folders.
@@ -40,7 +42,7 @@ import static org.fest.swing.demo.view.Swing.center;
  * @author Yvonne Wang
  */
 class AddDialog extends JDialog {
-  
+
   private static final long serialVersionUID = 1L;
 
   private static final String WEB_FEED_CARD = "WebFeed";
@@ -51,30 +53,32 @@ class AddDialog extends JDialog {
   private static final String BUTTON_FOLDER_KEY = "button.folder";
   private static final String BUTTON_CANCEL_KEY = "button.cancel";
   private static final String BUTTON_OK_KEY = "button.ok";
-  
+
   private final CardLayout cardLayout = new CardLayout();
   private final JPanel inputFormCardPanel = new JPanel(cardLayout);
 
   private final MainFrame owner;
+  private final JXLayer<JPanel> layer;
   private final I18n i18n;
 
   private String selectedForm;
 
   private AddWebFeedPanel addWebFeedPanel;
   private AddFolderPanel addFolderPanel;
-  
+
   /**
    * Creates a new </code>{@link AddDialog}</code>.
    * @param owner the owner of this dialog.
    */
   AddDialog(MainFrame owner) {
     super(owner, DEFAULT_MODALITY_TYPE);
-    this.owner = owner;
     i18n = new I18n(this);
+    this.owner = owner;
     setDefaultCloseOperation(HIDE_ON_CLOSE);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
-    addContent();
+    layer = JComponentFactory.instance().blurFilteredLayer(content());
+    add(layer, CENTER);
     setPreferredSize(new Dimension(320, 280));
     setResizable(false);
     setTitle(i18n.message(DIALOG_TITLE_KEY));
@@ -87,11 +91,13 @@ class AddDialog extends JDialog {
     center(this);
   }
 
-  private void addContent() {
-    add(optionPanel(), BorderLayout.NORTH);
+  private JPanel content() {
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.add(optionPanel(), BorderLayout.NORTH);
     addPanelsToInputFormCardPanel();
-    add(inputFormCardPanel, BorderLayout.CENTER);
-    add(actionPanel(), BorderLayout.SOUTH);
+    panel.add(inputFormCardPanel, BorderLayout.CENTER);
+    panel.add(actionPanel(), BorderLayout.SOUTH);
+    return panel;
   }
 
   private void addPanelsToInputFormCardPanel() {
@@ -144,8 +150,8 @@ class AddDialog extends JDialog {
     button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     button.setFocusable(false);
     button.setFocusPainted(false);
-    button.setVerticalTextPosition(AbstractButton.BOTTOM);
-    button.setHorizontalTextPosition(AbstractButton.CENTER);
+    button.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button.setHorizontalTextPosition(SwingConstants.CENTER);
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         selectedForm = cardName;
@@ -155,12 +161,12 @@ class AddDialog extends JDialog {
     });
     return button;
   }
-  
+
   private void addToButtonGroup(AbstractButton...buttons) {
     ButtonGroup group = new ButtonGroup();
     for (AbstractButton button : buttons) group.add(button);
   }
-  
+
   private JPanel actionPanel() {
     JPanel panel = new JPanel(new GridBagLayout());
     panel.setBorder(createEmptyBorder(10, 10, 10, 10));
@@ -178,7 +184,7 @@ class AddDialog extends JDialog {
     panel.add(okButton(), c);
     return panel;
   }
-  
+
   private JButton cancelButton() {
     JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_CANCEL_KEY);
     button.setName("cancel");
@@ -201,17 +207,20 @@ class AddDialog extends JDialog {
   private void save() {
     InputFormPanel selectedPanel = selectedPanel();
     if (!selectedPanel.validInput()) return;
-    SaveProgressDialog progressDialog = new SaveProgressDialog(this);
-    progressDialog.setVisible(true);
-//    selectedPanel.save(null);
-//    progressDialog.setVisible(false);
+    setEnabled(false);
+    layer.setLocked(true);
+    SaveProgressWindow progressWindow = new SaveProgressWindow(this);
+    progressWindow.process(selectedPanel);
+    System.out.println("Process done");
+    layer.setLocked(false);
+    setEnabled(true);
   }
-  
+
   private InputFormPanel selectedPanel() {
     if (WEB_FEED_CARD.equals(selectedForm)) return addWebFeedPanel;
     return addFolderPanel;
   }
-  
+
   @Override public JRootPane getRootPane() {
     ActionListener closeAction = new CloseAddDialogActionListener();
     JRootPane rootPane = super.getRootPane();
@@ -219,7 +228,7 @@ class AddDialog extends JDialog {
     rootPane.registerKeyboardAction(closeAction, stroke, WHEN_IN_FOCUSED_WINDOW);
     return rootPane;
   }
-  
+
   private class CloseAddDialogActionListener extends CloseWindowActionListener {
     public CloseAddDialogActionListener() {
       super(AddDialog.this);
