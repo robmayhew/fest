@@ -15,10 +15,7 @@
  */
 package org.fest.swing.demo.view;
 
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Window;
+import java.awt.*;
 
 /**
  * Understands SOMETHING DUMMY.
@@ -29,6 +26,10 @@ final class Swing {
 
   static void center(Window window) {
     Container parent = window.getParent();
+    if (parent == null) {
+      centerWithoutParent(window);
+      return;
+    }
     Point topLeft = parent.getLocationOnScreen();
     Dimension parentSize = parent.getSize();
     Dimension dialogSize = window.getSize();
@@ -39,6 +40,12 @@ final class Swing {
     int dialogHeight = dialogSize.height;
     int y = parentHeight > dialogHeight ? ((parentHeight - dialogHeight) / 2) + topLeft.y : topLeft.y;
     window.setLocation(x, y);
+  }
+
+  private static void centerWithoutParent(Window window) {
+    Dimension screenSize = window.getToolkit().getScreenSize();
+    Rectangle bounds = window.getBounds();
+    window.setLocation((screenSize.width - bounds.width) / 2, (screenSize.height - bounds.height) / 2);
   }
 
   private Swing() {}
