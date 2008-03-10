@@ -15,17 +15,18 @@
  */
 package org.fest.swing.demo.view;
 
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.jvnet.substance.SubstanceLookAndFeel.TREE_DECORATIONS_ANIMATION_KIND;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
-
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.service.FolderService;
 import org.fest.swing.demo.service.Services;
-
-import static javax.swing.SwingUtilities.invokeLater;
+import org.jvnet.lafwidget.animation.FadeConfigurationManager;
+import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
 
 /**
  * Launches the application.
@@ -40,12 +41,13 @@ public class Main {
    * @throws Exception
    */
   public static void main(String[] args) throws Exception {
+    FadeConfigurationManager.getInstance().allowFades(TREE_DECORATIONS_ANIMATION_KIND);
     UIManager.setLookAndFeel(new SubstanceRavenGraphiteGlassLookAndFeel());
     makeWindowDecorationsUseLookAndFeel();
     Services.instance().updateFolderService(new FolderService() {
       public void saveFolder(Folder folder) {
         try {
-          Thread.sleep(2000);
+          Thread.sleep(1000);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
