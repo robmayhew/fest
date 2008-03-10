@@ -42,7 +42,7 @@ import static org.fest.swing.demo.view.Swing.center;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class AddDialog extends JDialog implements SaveListener {
+class AddDialog extends JDialog implements InputForm {
 
   private static final long serialVersionUID = 1L;
 

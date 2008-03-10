@@ -31,11 +31,11 @@ class SaveWebFeedWorker extends SaveWorkerTemplate<WebFeed> {
   /**
    * Creates a new </code>{@link SaveWebFeedWorker}</code>.
    * @param target the web feed to save.
-   * @param saveListener listener to be notified when saving the web feed to the database is complete. 
+   * @param inputForm form to be notified when saving the web feed to the database is complete. 
    * @param progressWindow the window showing progress made by this worker.
    */
-  SaveWebFeedWorker(WebFeed target, SaveListener saveListener, Window progressWindow) {
-    super(target, saveListener, progressWindow);
+  SaveWebFeedWorker(WebFeed target, InputForm inputForm, Window progressWindow) {
+    super(target, inputForm, progressWindow);
   }
 
   /** @see javax.swing.SwingWorker#doInBackground() */

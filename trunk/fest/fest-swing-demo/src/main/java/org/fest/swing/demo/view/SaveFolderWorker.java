@@ -31,11 +31,11 @@ class SaveFolderWorker extends SaveWorkerTemplate<Folder> {
   /**
    * Creates a new </code>{@link SaveFolderWorker}</code>.
    * @param target the folder to save.
-   * @param saveListener listener to be notified when saving the folder to the database is complete. 
+   * @param inputForm form to be notified when saving the folder to the database is complete. 
    * @param progressWindow the window showing progress made by this worker.
    */
-  SaveFolderWorker(Folder target, SaveListener saveListener, Window progressWindow) {
-    super(target, saveListener, progressWindow);
+  SaveFolderWorker(Folder target, InputForm inputForm, Window progressWindow) {
+    super(target, inputForm, progressWindow);
   }
 
   /** @see javax.swing.SwingWorker#doInBackground() */

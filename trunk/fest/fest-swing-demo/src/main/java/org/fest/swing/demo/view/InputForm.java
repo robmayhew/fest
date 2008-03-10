@@ -16,13 +16,21 @@
 package org.fest.swing.demo.view;
 
 /**
- * Understands a listener notified when saving data to the database is complete.
+ * Understands a window where users enter data to be processed.
  *
  * @author Alex Ruiz
  */
-interface SaveListener {
+interface InputForm {
 
+  /**
+   * Returns the selected panel containing the information to process.
+   * @return the selected panel containing the information to process.
+   */
   InputFormPanel selectedPanel();
   
+  /**
+   * Notification that the data entered by the user has been successfully saved.
+   * @param saved the data entered by the user.
+   */
   void saveComplete(Object saved);
 }

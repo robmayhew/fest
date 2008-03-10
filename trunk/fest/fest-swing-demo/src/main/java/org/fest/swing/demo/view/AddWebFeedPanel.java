@@ -126,8 +126,8 @@ class AddWebFeedPanel extends InputFormPanel {
     return false;
   }
 
-  void save(SaveListener saveListener, Window progressWindow) {
+  void save(InputForm inputForm, Window progressWindow) {
     WebFeed webFeed = new WebFeed(addressField.getText(), nameField.getText());
-    new SaveWebFeedWorker(webFeed, saveListener, progressWindow);
+    new SaveWebFeedWorker(webFeed, inputForm, progressWindow);
   }
 }

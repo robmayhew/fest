@@ -15,17 +15,7 @@
  */
 package org.fest.swing.demo.view;
 
-import java.awt.*;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JWindow;
-
-import org.jdesktop.swingx.JXBusyLabel;
-
-import static javax.swing.BorderFactory.createLineBorder;
-
-import static org.fest.swing.demo.view.Swing.center;
+import java.awt.Window;
 
 /**
  * Understands a window that shows progress when data is saved to the database.
@@ -33,60 +23,19 @@ import static org.fest.swing.demo.view.Swing.center;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class SaveProgressWindow extends JWindow {
+class SaveProgressWindow extends ProgressWindow {
 
   private static final long serialVersionUID = 1L;
 
   private static final String LABEL_SAVING_KEY = "label.saving";
 
-  private final I18n i18n;
-
   SaveProgressWindow(Window owner) {
-    super(owner);
-    i18n = new I18n(this);
-    setLayout(new BorderLayout());
-    add(content(), BorderLayout.CENTER);
-    setPreferredSize(new Dimension(200, 100));
-    pack();
+    super(owner, LABEL_SAVING_KEY);
   }
 
-  private JPanel content() {
-    JPanel panel = new JPanel(new GridBagLayout());
-    panel.setBorder(createLineBorder(darkerBackground(4), 2));
-    GridBagConstraints c = new GridBagConstraints();
-    c.gridx = c.gridy = 0;
-    panel.add(busyLabel(), c);
-    c.gridy++;
-    c.insets = new Insets(10, 0, 0, 0);
-    panel.add(messageLabel(), c);
-    return panel;
-  }
-
-  private Color darkerBackground(int times) {
-    Color c = getBackground();
-    for (int i = 0; i < times; i++) c = c.darker();
-    return c;
-  }
-
-  private JXBusyLabel busyLabel() {
-    JXBusyLabel busyLabel = new JXBusyLabel(new Dimension(26,26));
-    busyLabel.setBusy(true);
-    return busyLabel;
-  }
-
-  private JLabel messageLabel() {
-    return new JLabel(i18n.message(LABEL_SAVING_KEY));
-  }
-
-  void save(SaveListener saveListener) {
+  void save(InputForm inputForm) {
     setVisible(true);
-    InputFormPanel source = saveListener.selectedPanel();
-    source.save(saveListener, this);
-  }
-
-  /** @see java.awt.Window#setVisible(boolean) */
-  @Override public void setVisible(boolean visible) {
-    if (visible) center(this);
-    super.setVisible(visible);
+    InputFormPanel source = inputForm.selectedPanel();
+    source.save(inputForm, this);
   }
 }

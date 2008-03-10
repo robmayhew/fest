@@ -28,7 +28,7 @@ import javax.swing.SwingWorker;
  */
 abstract class SaveWorkerTemplate<T> extends SwingWorker<Void, Void> {
 
-  private final SaveListener saveListener;
+  private final InputForm inputForm;
   private final Window progressWindow;
 
   final T target;
@@ -36,18 +36,18 @@ abstract class SaveWorkerTemplate<T> extends SwingWorker<Void, Void> {
   /**
    * Creates a new </code>{@link SaveWorkerTemplate}</code>.
    * @param target the data to save.
-   * @param saveListener listener to be notified when saving the data to the database is complete. 
+   * @param inputForm form to be notified when saving the data to the database is complete. 
    * @param progressWindow the window showing progress made by this worker.
    */
-  SaveWorkerTemplate(T target, SaveListener saveListener, Window progressWindow) {
+  SaveWorkerTemplate(T target, InputForm inputForm, Window progressWindow) {
     this.target = target;
-    this.saveListener = saveListener;
+    this.inputForm = inputForm;
     this.progressWindow = progressWindow;
   }
 
   /** @see javax.swing.SwingWorker#done() */
   @Override protected void done() {
     if (progressWindow != null) progressWindow.setVisible(false);
-    saveListener.saveComplete(target);
+    inputForm.saveComplete(target);
   }
 }

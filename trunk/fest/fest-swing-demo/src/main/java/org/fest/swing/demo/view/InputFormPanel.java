@@ -108,5 +108,5 @@ abstract class InputFormPanel extends JPanel {
   
   abstract boolean validInput();
   
-  abstract void save(SaveListener saveListener, Window progressWindow);
+  abstract void save(InputForm inputForm, Window progressWindow);
 }
