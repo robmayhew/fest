@@ -42,6 +42,20 @@ final class I18n {
   }
 
   /**
+   * Finds the messages stored under the given keys.
+   * @param keys the given keys.
+   * @return the found messages.
+   * @throws MissingResourceException if no message for the given key can be found.
+   */
+  String[] messages(String...keys) {
+    int keyCount = keys.length;
+    String[] messages = new String[keyCount];
+    for (int i = 0; i < keyCount; i++)
+      messages[i] = message(keys[i]);
+    return messages;
+  }  
+  
+  /**
    * Finds the message stored under the given key.
    * @param key the given key.
    * @return the found message.

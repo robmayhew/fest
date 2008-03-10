@@ -22,6 +22,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.fest.swing.demo.model.WebFeed;
+
 import static org.fest.util.Strings.isEmpty;
 
 /**
@@ -125,5 +127,7 @@ class AddWebFeedPanel extends InputFormPanel {
   }
 
   void save(SaveListener saveListener, Window progressWindow) {
+    WebFeed webFeed = new WebFeed(addressField.getText(), nameField.getText());
+    new SaveWebFeedWorker(webFeed, saveListener, progressWindow);
   }
 }

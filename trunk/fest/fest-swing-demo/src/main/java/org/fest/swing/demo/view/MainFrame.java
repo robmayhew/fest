@@ -20,8 +20,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
 
 import org.jdesktop.swinghelper.layer.JXLayer;
 
@@ -43,7 +43,9 @@ public class MainFrame extends JFrame {
 
   private final I18n i18n;
   private final JXLayer<JPanel> layer;
+  
   private final WebFeedTree webFeedTree = new WebFeedTree();
+  private final WebFeedItemsTable webFeedItemsTable = new WebFeedItemsTable();
 
   /**
    * Creates a new </code>{@link MainFrame}</code>.
@@ -68,8 +70,8 @@ public class MainFrame extends JFrame {
 
   private JSplitPane splitPane() {
     JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
-    splitPane.setLeftComponent(webFeedTree);
-    splitPane.setRightComponent(new JTable(10, 4));
+    splitPane.setLeftComponent(new JScrollPane(webFeedTree));
+    splitPane.setRightComponent(new JScrollPane(webFeedItemsTable));
     splitPane.setDividerLocation(120);
     return splitPane;
   }
