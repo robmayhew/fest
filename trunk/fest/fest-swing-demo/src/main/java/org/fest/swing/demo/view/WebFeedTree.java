@@ -16,6 +16,8 @@
 package org.fest.swing.demo.view;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -48,6 +50,8 @@ class WebFeedTree extends JXTree {
   
   private final I18n i18n;
   
+  private final Map<String, FolderNode> folderNodes = new HashMap<String, FolderNode>();
+  
   WebFeedTree() {
     i18n = new I18n(this);
     root = new DefaultMutableTreeNode(i18n.message(TREE_ROOT_KEY));
@@ -62,13 +66,21 @@ class WebFeedTree extends JXTree {
     if (content instanceof Folder) addFolder((Folder)content);
   }
   
-  void addFolder(Folder folder) {
+  private FolderNode addFolder(Folder folder) {
+    String folderName = folder.name();
+    if (folderNodes.containsKey(folderName)) return folderNodes.get(folderName);
     FolderNode folderNode = new FolderNode(folder);
+    addFolderNode(folderNode);
+    return folderNode;
+  }
+
+  private void addFolderNode(FolderNode folderNode) {
     int insertIndex = indexForNewNodeInsertion(folderNode);
     model.insertNodeInto(folderNode, root, insertIndex);
     setSelectionPath(new TreePath(array(root, folderNode)));
+    folderNodes.put(folderNode.folder.name(), folderNode);
   }
-
+  
   private int indexForNewNodeInsertion(TreeNode nodeToInsert) {
     int childCount = root.getChildCount();
     if (childCount == 0) return 0;
