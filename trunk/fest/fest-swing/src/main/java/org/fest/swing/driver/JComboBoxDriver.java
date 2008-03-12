@@ -51,6 +51,7 @@ import static org.fest.util.Strings.*;
  */
 public class JComboBoxDriver extends JComponentDriver {
 
+  private static final String EDITABLE_PROPERTY = "editable";
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
   private final JListDriver listDriver;
 
@@ -153,7 +154,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *           the <code>JComboBox</code>.
+   *         the <code>JComboBox</code>.
    */
   public void selectItem(final JComboBox comboBox, int index) {
     final int validatedIndex = validatedIndex(comboBox, index);
@@ -244,4 +245,22 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   private static final ComponentMatcher LIST_MATCHER = new TypeMatcher(JList.class);
+
+  /**
+   * Asserts that the given <code>{@link JComboBox}</code> is editable.
+   * @param comboBox the target <code>JComboBox</code>.
+   * @throws AssertionError if the <code>JComboBox</code> is not editable.
+   */
+  public void requireEditable(JComboBox comboBox) {
+    assertThat(comboBox.isEditable()).as(propertyName(comboBox, EDITABLE_PROPERTY)).isTrue();
+  }
+
+  /**
+   * Asserts that the given <code>{@link JComboBox}</code> is not editable.
+   * @param comboBox the given <code>JComboBox</code>.
+   * @throws AssertionError if the <code>JComboBox</code> is editable.
+   */
+  public void requireNotEditable(JComboBox comboBox) {
+    assertThat(comboBox.isEditable()).as(propertyName(comboBox, EDITABLE_PROPERTY)).isFalse();
+  }
 }

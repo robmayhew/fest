@@ -47,6 +47,7 @@ import static org.fest.util.Strings.*;
  */
 public class JTextComponentDriver extends JComponentDriver {
 
+  private static final String EDITABLE_PROPERTY = "editable";
   private static final String TEXT_PROPERTY = "text";
 
   /**
@@ -263,5 +264,23 @@ public class JTextComponentDriver extends JComponentDriver {
    */
   public void requireEmpty(JTextComponent textBox) {
     assertThat(textBox.getText()).as(propertyName(textBox, TEXT_PROPERTY)).isEmpty();
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTextComponent}</code> is editable.
+   * @param textBox the given <code>JTextComponent</code>.
+   * @throws AssertionError if the <code>JTextComponent</code> is not editable.
+   */
+  public void requireEditable(JTextComponent textBox) {
+    assertThat(textBox.isEditable()).as(propertyName(textBox, EDITABLE_PROPERTY)).isTrue();
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTextComponent}</code> is not editable.
+   * @param textBox the given <code>JTextComponent</code>.
+   * @throws AssertionError if the <code>JTextComponent</code> is editable.
+   */
+  public void requireNotEditable(JTextComponent textBox) {
+    assertThat(textBox.isEditable()).as(propertyName(textBox, EDITABLE_PROPERTY)).isFalse();
   }
 }

@@ -6,8 +6,12 @@
   </properties>
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="95" due-to="Fabien Barbero">
+        Added methods 'requireEditable' and 'requireNotEditable' to JComboBoxFixture, JTextComponentFixture and
+        JTreeFixture.
+      </action>
       <action dev="alruiz, wanghy" type="add" issue="92" due-to="Wim Deblauwe">
-        Added method requireNoJOptionPaneIsShowing to RobotFixture.
+        Added method 'requireNoJOptionPaneIsShowing' to RobotFixture.
       </action>
       <action dev="alruiz" type="add">
         Renamed ComponentPrinter to BasicComponentPrinter (in package org.fest.swing.core). Introduced interface 

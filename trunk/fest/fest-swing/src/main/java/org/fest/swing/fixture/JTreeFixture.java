@@ -299,4 +299,24 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
     driver.requireVisible(target);
     return this;
   }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is editable.
+   * @throws AssertionError if this fixture's <code>JTree</code> is not editable.
+   * @return this fixture. 
+   */
+  public JTreeFixture requireEditable() {
+    driver.requireEditable(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is not editable.
+   * @throws AssertionError if this fixture's <code>JTree</code> is editable.
+   * @return this fixture. 
+   */
+  public JTreeFixture requireNotEditable() {
+    driver.requireNotEditable(target);
+    return this;
+  }
 }

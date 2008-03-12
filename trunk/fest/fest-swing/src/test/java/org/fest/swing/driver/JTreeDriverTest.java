@@ -32,6 +32,7 @@ import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -138,6 +139,36 @@ public class JTreeDriverTest {
   
   private TreePath path(String... path) {
     return new TreePath(path);
+  }
+
+  @Test public void shouldPassIfTreeIsEditable() {
+    dragTree.setEditable(true);
+    driver.requireEditable(dragTree);
+  }
+
+  @Test public void shouldFailIfTreeIsNotEditableAndExpectingEditable() {
+    dragTree.setEditable(false);
+    try {
+      driver.requireEditable(dragTree);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
+    }
+  }
+
+  @Test public void shouldPassIfTreeIsNotEditable() {
+    dragTree.setEditable(false);
+    driver.requireNotEditable(dragTree);
+  }
+
+  @Test public void shouldFailIfTreeIsEditableAndExpectingNotEditable() {
+    dragTree.setEditable(true);
+    try {
+      driver.requireNotEditable(dragTree);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+    }
   }
 
   private static class MyFrame extends TestFrame {

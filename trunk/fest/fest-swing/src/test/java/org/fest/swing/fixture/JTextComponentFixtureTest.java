@@ -117,6 +117,32 @@ public class JTextComponentFixtureTest extends JPopupMenuInvokerFixtureTestCase<
     }.run();
   }
   
+  @Test public void shouldRequireEditable() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireEditable(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireEditable());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireNotEditable() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNotEditable(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNotEditable());
+      }
+    }.run();
+  }
+
   ComponentDriver driver() { return driver; }
   JTextComponent target() { return target; }
   JPopupMenuInvokerFixture<JTextComponent> fixture() { return fixture; }

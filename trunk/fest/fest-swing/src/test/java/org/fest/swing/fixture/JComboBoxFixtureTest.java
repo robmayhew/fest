@@ -129,6 +129,32 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();    
   }
 
+  @Test public void shouldRequireEditable() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireEditable(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireEditable());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireNotEditable() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNotEditable(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNotEditable());
+      }
+    }.run();
+  }
+
   ComponentDriver driver() { return driver; }
   JComboBox target() { return target; }
   JPopupMenuInvokerFixture<JComboBox> fixture() { return fixture; }

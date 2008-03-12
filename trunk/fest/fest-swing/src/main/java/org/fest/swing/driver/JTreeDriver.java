@@ -29,6 +29,7 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
@@ -44,6 +45,8 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 public class JTreeDriver extends JComponentDriver {
+
+  private static final String EDITABLE_PROPERTY = "editable";
 
   private final JTreeLocation location;
 
@@ -229,5 +232,23 @@ public class JTreeDriver extends JComponentDriver {
    */
   public void drop(JTree tree, TreePath path) {
     drop(tree, location.pointAt(tree, path));
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTree}</code> is editable.
+   * @param tree the given <code>JTree</code>.
+   * @throws AssertionError if the <code>JTree</code> is not editable.
+   */
+  public void requireEditable(JTree tree) {
+    assertThat(tree.isEditable()).as(propertyName(tree, EDITABLE_PROPERTY)).isTrue();
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTree}</code> is not editable.
+   * @param tree the given <code>JTree</code>.
+   * @throws AssertionError if the <code>JTree</code> is editable.
+   */
+  public void requireNotEditable(JTree tree) {
+    assertThat(tree.isEditable()).as(propertyName(tree, EDITABLE_PROPERTY)).isFalse();
   }
 }

@@ -28,6 +28,7 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -81,6 +82,36 @@ public class JComboBoxDriverTest {
     assertThatListContains(dropDownList, "first", "second", "third");
   }
   
+  @Test public void shouldPassIfComboBoxIsEditable() {
+    comboBox.setEditable(true);
+    driver.requireEditable(comboBox);
+  }
+
+  @Test public void shouldFailIfComboBoxIsNotEditableAndExpectingEditable() {
+    comboBox.setEditable(false);
+    try {
+      driver.requireEditable(comboBox);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
+    }
+  }
+
+  @Test public void shouldPassIfComboBoxIsNotEditable() {
+    comboBox.setEditable(false);
+    driver.requireNotEditable(comboBox);
+  }
+
+  @Test public void shouldFailIfComboBoxIsEditableAndExpectingNotEditable() {
+    comboBox.setEditable(true);
+    try {
+      driver.requireNotEditable(comboBox);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+    }
+  }
+
   private void assertThatListContains(JList list, Object...expected) {
     int expectedSize = expected.length;
     ListModel model = list.getModel();

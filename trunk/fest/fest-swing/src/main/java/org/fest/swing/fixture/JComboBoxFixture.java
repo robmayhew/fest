@@ -32,7 +32,8 @@ import org.fest.swing.exception.LocationUnavailableException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implements ItemGroupFixture {
+public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implements ItemGroupFixture,
+    EditableComponentFixture {
 
   private JComboBoxDriver driver;
 
@@ -276,5 +277,25 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    */
   public String valueAt(int index) {
     return driver.text(target, index);
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is editable.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is not editable.
+   * @return this fixture. 
+   */
+  public JComboBoxFixture requireEditable() {
+    driver.requireEditable(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is not editable.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is editable.
+   * @return this fixture. 
+   */
+  public JComboBoxFixture requireNotEditable() {
+    driver.requireNotEditable(target);
+    return this;
   }
 }

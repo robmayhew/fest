@@ -76,6 +76,36 @@ public class JTextComponentDriverTest {
       assertThat(expected).message().contains("Unable to get location for index '20' in javax.swing.JTextField");
     }
   }
+  
+  @Test public void shouldPassIfTextComponentIsEditable() {
+    textField.setEditable(true);
+    driver.requireEditable(textField);
+  }
+
+  @Test public void shouldFailIfTextComponentIsNotEditableAndExpectingEditable() {
+    textField.setEditable(false);
+    try {
+      driver.requireEditable(textField);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
+    }
+  }
+
+  @Test public void shouldPassIfTextComponentIsNotEditable() {
+    textField.setEditable(false);
+    driver.requireNotEditable(textField);
+  }
+
+  @Test public void shouldFailIfTextComponentIsEditableAndExpectingNotEditable() {
+    textField.setEditable(true);
+    try {
+      driver.requireNotEditable(textField);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+    }
+  }
 
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;

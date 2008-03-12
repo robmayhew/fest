@@ -214,7 +214,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * <code>String</code>.
    * @param expected the text to match.
    * @return this fixture.
-   * @throws AssertionError if the text of the target component is not equal to the given one.
+   * @throws AssertionError if the text of this fixture's <code>JTextComponent</code> is not equal to the given one.
    */
   public JTextComponentFixture requireText(String expected) {
     driver.requireText(target, expected);
@@ -234,7 +234,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is enabled.
    */
   public JTextComponentFixture requireDisabled() {
     driver.requireDisabled(target);
@@ -244,7 +244,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is enabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is disabled.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is disabled.
    */
   public JTextComponentFixture requireEnabled() {
     driver.requireEnabled(target);
@@ -265,7 +265,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is visible.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is visible.
    */
   public JTextComponentFixture requireNotVisible() {
     driver.requireNotVisible(target);
@@ -275,7 +275,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is visible.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>Component</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is not visible.
    */
   public JTextComponentFixture requireVisible() {
     driver.requireVisible(target);
@@ -288,5 +288,25 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    */
   public String text() {
     return target.getText();
+  }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is editable.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is not editable.
+   * @return this fixture. 
+   */
+  public JTextComponentFixture requireEditable() {
+    driver.requireEditable(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is not editable.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is editable.
+   * @return this fixture. 
+   */
+  public JTextComponentFixture requireNotEditable() {
+    driver.requireNotEditable(target);
+    return this;
   }
 }

@@ -23,7 +23,7 @@ import java.awt.Component;
  * 
  * @author Alex Ruiz
  */
-public interface TextInputFixture extends TextDisplayFixture {
+public interface TextInputFixture extends TextDisplayFixture, EditableComponentFixture {
 
   /**
    * Simulates a user entering the given text in the <code>{@link Component}</code> managed by this fixture.
