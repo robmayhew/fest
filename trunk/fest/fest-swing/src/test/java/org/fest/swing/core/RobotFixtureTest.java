@@ -15,9 +15,10 @@
  */
 package org.fest.swing.core;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -148,22 +149,44 @@ public class RobotFixtureTest {
   private JPopupMenu popupMenu() {
     return frame.popupMenu;
   }
+  
+  @Test public void shouldPassIfNoJOptionPaneIsShowing() {
+    robot.requireNoJOptionPaneIsShowing();
+  }
+
+  @Test public void shouldFailIfJOptionPaneIsShowingAndExpectingNotShowing() throws Exception {
+    robot.click(frame.button);
+    pause(500);
+    try {
+      robot.requireNoJOptionPaneIsShowing();
+      fail("Expecting AssertionError");
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("Expecting no JOptionPane to be showing");
+    }
+  }
 
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    private final JTextField withPopup = new JTextField("With Pop-up Menu");
-    private final JTextField withoutPopup = new JTextField("Without Pop-up Menu");
-    private final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
+    final JTextField withPopup = new JTextField("With Pop-up Menu");
+    final JTextField withoutPopup = new JTextField("Without Pop-up Menu");
+    final JButton button = new JButton("Click Me");
+    final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
     MyFrame() {
       super(JPopupMenuDriverTest.class);
       add(withPopup);
       add(withoutPopup);
+      add(button);
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          JOptionPane.showMessageDialog(MyFrame.this, "A Message");
+        }
+      });
       withPopup.setComponentPopupMenu(popupMenu);
       withoutPopup.setName("withoutPopup");
-      popupMenu.add(new JMenuItem("First"));
-      popupMenu.add(new JMenuItem("Second"));
+      popupMenu.add(new JMenuItem("Luke"));
+      popupMenu.add(new JMenuItem("Leia"));
     }
   }
 }

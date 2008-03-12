@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="add" issue="92" due-to="Wim Deblauwe">
+        Added method requireNoJOptionPaneIsShowing to RobotFixture.
+      </action>
       <action dev="alruiz" type="add">
         Renamed ComponentPrinter to BasicComponentPrinter (in package org.fest.swing.core). Introduced interface 
         ComponentPrinter.
@@ -17,11 +20,6 @@
       <action dev="alruiz" type="fix">
         Moved methods from org.fest.swing.util.Swing to org.fest.swing.util.AWT. Deleted class 
         org.fest.swing.util.Swing. 
-      </action>
-      <action dev="alruiz, wanghy" type="add">
-        Moved methods 'click(Component)', 'click(Component, MouseButton)', 'click(Component, MouseButton, int)',  
-        'click(Component, Point)', 'doubleClick(Component)' and 'rightClick(Component)' from 
-        org.fest.swing.core.RobotFixture to org.fest.swing.driver.ComponentDriver.
       </action>
       <action dev="alruiz" type="add">
         Created interface org.fest.swing.core.Robot and made RobotFixture implement it, to facilitate unit testing.

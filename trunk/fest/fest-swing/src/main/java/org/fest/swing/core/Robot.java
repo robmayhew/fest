@@ -197,7 +197,7 @@ public interface Robot {
   void type(char character);
 
   /**
-   * Type the given keycode with the given modifiers. Modifiers is a mask from the available
+   * Type the given key code with the given modifiers. Modifiers is a mask from the available
    * <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyCode the code of the key to press.
    * @param modifiers the given modifiers.
@@ -278,4 +278,9 @@ public interface Robot {
    * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
    */
   JPopupMenu findActivePopupMenu();
+  
+  /**
+   * Ensures that there is no <code>{@link javax.swing.JOptionPane}</code> showing, and potentially blocking GUI tests.
+   */
+  void requireNoJOptionPaneIsShowing();
 }

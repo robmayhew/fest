@@ -81,7 +81,7 @@ public class WindowMonitorTest {
     windowsStatusField().set(windowStatus);
   }
 
-  @Test public void shouldAttachMonitors() {
+  @Test(enabled = false) public void shouldAttachMonitors() {
     assertThat(listenersInToolkit(ContextMonitor.class, CONTEXT_MONITOR_EVENT_MASK)).isEqualTo(1);
     assertThat(listenersInToolkit(WindowAvailabilityMonitor.class, WINDOWS_AVAILABILITY_MONITOR_EVENT_MASK)).isEqualTo(1);
     assertPopulatedExistingWindows();

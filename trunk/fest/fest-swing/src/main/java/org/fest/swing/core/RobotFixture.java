@@ -17,6 +17,7 @@ package org.fest.swing.core;
 import java.awt.*;
 import java.util.Collection;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import abbot.finder.AWTHierarchy;
@@ -33,6 +34,7 @@ import static abbot.tester.Robot.*;
 import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
+import static org.fest.assertions.Fail.fail;
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
@@ -366,5 +368,14 @@ public class RobotFixture implements Robot {
     } catch (ComponentLookupException e) {
       return null;
     }
+  }
+  
+  /** ${@inheritDoc} */
+  public void requireNoJOptionPaneIsShowing() {
+    try {
+      JOptionPane found = finder().findByType(JOptionPane.class, true);
+      if (found == null) return;
+      fail(concat("Expecting no JOptionPane to be showing, but found:<", format(found), ">"));
+    } catch (ComponentLookupException expected) {}
   }
 }
