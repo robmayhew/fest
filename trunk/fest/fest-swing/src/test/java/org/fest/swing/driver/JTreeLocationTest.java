@@ -15,9 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -28,17 +25,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTreeLocation}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class JTreeLocationTest {
 
   private MyFrame frame;

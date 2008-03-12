@@ -15,13 +15,10 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Point;
-
 import javax.swing.JList;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -40,7 +37,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JListFixture extends ComponentFixture<JList> implements ItemGroupFixture, JPopupMenuInvokerFixture {
+public class JListFixture extends JPopupMenuInvokerFixture<JList> implements ItemGroupFixture {
 
   private JListDriver driver;
 
@@ -441,25 +438,5 @@ public class JListFixture extends ComponentFixture<JList> implements ItemGroupFi
    */
   public JPopupMenuFixture showPopupMenuAt(String text) {
     return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, text));
-  }
-
-  /**
-   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
-  }
-
-  /**
-   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * pop-up menu.
-   * @param p the given point where to show the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

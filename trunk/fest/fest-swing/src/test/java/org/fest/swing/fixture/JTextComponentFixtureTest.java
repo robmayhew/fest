@@ -15,20 +15,16 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTextComponentDriver;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -39,16 +35,16 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextComponent> {
+public class JTextComponentFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTextComponent> {
 
   private JTextComponentDriver driver;
   private JTextComponent target;
   private JTextComponentFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JTextComponentDriver.class);
     target = new JTextField("A Label");
-    fixture = new JTextComponentFixture(robot, target);
+    fixture = new JTextComponentFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -121,37 +117,8 @@ public class JTextComponentFixtureTest extends ComponentFixtureTestCase<JTextCom
     }.run();
   }
   
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JTextComponent target() { return target; }
-  ComponentFixture<JTextComponent> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JTextComponent> fixture() { return fixture; }
 }
 

@@ -33,6 +33,7 @@ import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Test for <code>{@link JTreeDriver}</code>.
@@ -41,6 +42,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test(groups = GUI)
 public class JTreeDriverTest {
 
   private Robot robot;

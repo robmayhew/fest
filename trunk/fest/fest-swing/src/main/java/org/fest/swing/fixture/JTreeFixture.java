@@ -15,9 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Point;
-
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
@@ -38,7 +35,7 @@ import org.fest.swing.exception.LocationUnavailableException;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JTreeFixture extends ComponentFixture<JTree> implements JPopupMenuInvokerFixture {
+public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
 
   private JTreeDriver driver;
 
@@ -301,25 +298,5 @@ public class JTreeFixture extends ComponentFixture<JTree> implements JPopupMenuI
   public JTreeFixture requireVisible() {
     driver.requireVisible(target);
     return this;
-  }
-
-  /**
-   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
-  }
-
-  /**
-   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * pop-up menu.
-   * @param p the given point where to show the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

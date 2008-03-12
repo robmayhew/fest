@@ -24,7 +24,7 @@ import java.awt.Point;
  *
  * @author Yvonne Wang
  */
-public interface WindowLikeContainerFixture extends JPopupMenuInvokerFixture {
+public interface WindowLikeContainerFixture {
 
   /**
    * Simulates a user closing this fixture's window-like container.

@@ -17,20 +17,28 @@ package org.fest.swing.core;
 import java.awt.*;
 import java.util.Collection;
 
+import javax.swing.JPopupMenu;
+
 import abbot.finder.AWTHierarchy;
 import abbot.finder.Hierarchy;
 import abbot.finder.TestHierarchy;
 import abbot.tester.WindowTracker;
 import abbot.util.Bugs;
 
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.TimeoutWatch;
 
 import static abbot.tester.Robot.*;
 import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -42,6 +50,12 @@ import static org.fest.util.Strings.concat;
 public class RobotFixture implements Robot {
 
   private static final int WINDOW_DELAY = 20000;
+
+  private static final int POPUP_TIMEOUT = 5000;
+  private static final int POPUP_DELAY = 10000;
+
+  private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
+  
 
   private abbot.tester.Robot robot;
   private WindowTracker windowTracker;
@@ -57,7 +71,7 @@ public class RobotFixture implements Robot {
    * before the created <code>{@link RobotFixture}</code> cannot be accessed by such <code>{@link RobotFixture}</code>.
    * @return the created robot fixture.
    */
-  public static Robot robotWithNewAwtHierarchy() {
+  public static RobotFixture robotWithNewAwtHierarchy() {
     return new RobotFixture(new TestHierarchy());
   }
 
@@ -65,7 +79,7 @@ public class RobotFixture implements Robot {
    * Creates a new <code>{@link RobotFixture}</code> that has access to all the GUI components in the AWT hierarchy.
    * @return the created robot fixture.
    */
-  public static Robot robotWithCurrentAwtHierarchy() {
+  public static RobotFixture robotWithCurrentAwtHierarchy() {
     return new RobotFixture(new AWTHierarchy());
   }
 
@@ -130,6 +144,12 @@ public class RobotFixture implements Robot {
     }
   }
 
+  /** ${@inheritDoc} */
+  public void close(Window w) {
+    robot.focus(w);
+    robot.close(w);
+  }
+
   private void packAndEnsureSafePosition(Window w) {
     w.pack();
     w.setLocation(100, 100);
@@ -174,6 +194,39 @@ public class RobotFixture implements Robot {
   private void mouseRelease() {
     if (robot == null) return;
     releaseMouseButtons();
+  }
+
+  /**
+   * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
+   * @param c the <code>Component</code> to click on.
+   */
+  public void click(Component c) {
+    click(c, LEFT_BUTTON);
+  }
+  
+  /** ${@inheritDoc} */
+  public void rightClick(Component c) {
+    click(c, RIGHT_BUTTON);
+  }
+
+  /** ${@inheritDoc} */
+  public void click(Component c, MouseButton button) {
+    click(c, button, 1);
+  }
+
+  /** ${@inheritDoc} */
+  public void doubleClick(Component c) {
+    click(c, LEFT_BUTTON, 2);
+  }
+  
+  /** ${@inheritDoc} */
+  public void click(Component c, MouseButton button, int times) {
+    click(c, centerOf(c), button, times);
+  }
+
+  /** ${@inheritDoc} */
+  public void click(Component target, Point where) {
+    click(target, where, LEFT_BUTTON, 1);
   }
 
   /** ${@inheritDoc} */
@@ -280,8 +333,38 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public void close(Window w) {
-    robot.focus(w);
-    robot.close(w);
+  public JPopupMenu showPopupMenu(Component invoker) {
+    return showPopupMenu(invoker, centerOf(invoker));
+  }
+
+  /** ${@inheritDoc} */
+  public JPopupMenu showPopupMenu(Component invoker, Point location) {
+    click(invoker, location, RIGHT_BUTTON, 1);
+    JPopupMenu popup = findActivePopupMenu();
+    if (popup == null) 
+      throw new ComponentLookupException(concat("Unable to show popup at ", location, " on ", format(invoker)));
+    long start = currentTimeMillis();
+    while (!isReadyForInput(getWindowAncestor(popup)) && currentTimeMillis() - start > POPUP_DELAY) pause();
+    return popup;
+  }
+
+  /** ${@inheritDoc} */
+  public JPopupMenu findActivePopupMenu() {
+    JPopupMenu popup = activePopupMenu();
+    if (popup != null || isEventDispatchThread()) return popup;
+    TimeoutWatch watch = startWatchWithTimeoutOf(POPUP_TIMEOUT);
+    while ((popup = activePopupMenu()) == null) {
+      if (watch.isTimeOut()) break;
+      pause(100);
+    }
+    return popup;
+  }
+
+  private JPopupMenu activePopupMenu() {
+    try {
+      return (JPopupMenu)finder().find(POPUP_MATCHER);
+    } catch (ComponentLookupException e) {
+      return null;
+    }
   }
 }

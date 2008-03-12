@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JOptionPaneDriver;
 
@@ -42,10 +41,10 @@ public class JOptionPaneFixtureTest extends ComponentFixtureTestCase<JOptionPane
   private JOptionPane target;
   private JOptionPaneFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JOptionPaneDriver.class);
     target = new JOptionPane("A Button");
-    fixture = new JOptionPaneFixture(robot, target);
+    fixture = new JOptionPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 

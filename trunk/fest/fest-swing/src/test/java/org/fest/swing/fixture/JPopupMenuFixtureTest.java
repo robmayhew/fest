@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JPopupMenuDriver;
 
@@ -43,10 +42,10 @@ public class JPopupMenuFixtureTest extends ComponentFixtureTestCase<JPopupMenu> 
   private JPopupMenu target;
   private JPopupMenuFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JPopupMenuDriver.class);
     target = new JPopupMenu();
-    fixture = new JPopupMenuFixture(robot, target);
+    fixture = new JPopupMenuFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 

@@ -15,38 +15,32 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSplitPaneDriver;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JSplitPaneFixture}</code>.
  *
  * @author Yvonne Wang
  */
-public class JSplitPaneFixtureTest extends ComponentFixtureTestCase<JSplitPane> {
+public class JSplitPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSplitPane> {
 
   private JSplitPaneDriver driver;
   private JSplitPane target;
   private JSplitPaneFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JSplitPaneDriver.class);
     target = new JSplitPane();
-    fixture = new JSplitPaneFixture(robot, target);
+    fixture = new JSplitPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -62,37 +56,8 @@ public class JSplitPaneFixtureTest extends ComponentFixtureTestCase<JSplitPane> 
       }
     }.run();
   }
-  
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
 
   ComponentDriver driver() { return driver; }
   JSplitPane target() { return target; }
-  ComponentFixture<JSplitPane> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JSplitPane> fixture() { return fixture; }
 }

@@ -30,7 +30,7 @@ import org.fest.swing.testing.TestFrame;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTextComponentDriver}</code>.
@@ -38,7 +38,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JTextComponentDriverTest {
 
   private Robot robot;

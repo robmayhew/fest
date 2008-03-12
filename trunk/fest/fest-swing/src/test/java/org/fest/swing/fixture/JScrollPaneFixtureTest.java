@@ -15,21 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
 import javax.swing.JList;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComponentDriver;
 
 import static javax.swing.ScrollPaneConstants.*;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -38,18 +32,17 @@ import static org.fest.assertions.Assertions.assertThat;
  * Tests for <code>{@link JScrollPaneFixture}</code>.
  *
  * @author Yvonne Wang
- *
  */
-public class JScrollPaneFixtureTest extends ComponentFixtureTestCase<JScrollPane> {
+public class JScrollPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JScrollPane> {
 
   private JComponentDriver driver;
   private JScrollPane target;
   private JScrollPaneFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JComponentDriver.class);
     target = new JScrollPane(new JList(), VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
-    fixture = new JScrollPaneFixture(robot, target);
+    fixture = new JScrollPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -63,36 +56,7 @@ public class JScrollPaneFixtureTest extends ComponentFixtureTestCase<JScrollPane
     assertThat(scrollBar.target).isSameAs(target.getVerticalScrollBar());
   }
   
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JScrollPane target() { return target; }
-  ComponentFixture<JScrollPane> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JScrollPane> fixture() { return fixture; }
 }

@@ -32,14 +32,14 @@ import static java.awt.Frame.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link FrameDriver}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class FrameDriverTest {
 
   private Robot robot;

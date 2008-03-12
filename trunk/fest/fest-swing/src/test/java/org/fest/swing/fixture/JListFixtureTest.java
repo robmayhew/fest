@@ -15,15 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.util.Range.From;
@@ -43,16 +40,16 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
-public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
+public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
 
   private JListDriver driver;
   private JList target;
   private JListFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JListDriver.class);
     target = new JList();
-    fixture = new JListFixture(robot, target);
+    fixture = new JListFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   
@@ -317,36 +314,7 @@ public class JListFixtureTest extends ComponentFixtureTestCase<JList> {
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JList target() { return target; }
-  ComponentFixture<JList> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JList> fixture() { return fixture; }
 }

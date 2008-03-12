@@ -36,7 +36,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**
@@ -45,7 +45,7 @@ import static org.fest.swing.util.AWT.centerOf;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JOptionPaneFinderTest {
 
   private Robot robot;

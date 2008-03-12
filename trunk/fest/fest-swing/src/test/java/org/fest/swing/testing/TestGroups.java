@@ -22,7 +22,7 @@ package org.fest.swing.testing;
  */
 public final class TestGroups {
 
-  public static final String FUNCTIONAL = "functional";
+  public static final String GUI = "GUI";
   
   private TestGroups() {}
 }

@@ -21,14 +21,14 @@ import org.fest.swing.finder.JOptionPaneFinder;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JOptionPaneFixture;
 
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=76">Bug 76</a>.
  * 
  * @author Wim Deblauwe
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JOptionPaneTest {
 
   private DialogFixture m_window;

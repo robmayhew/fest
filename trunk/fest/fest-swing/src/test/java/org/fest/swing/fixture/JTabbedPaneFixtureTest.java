@@ -15,15 +15,11 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTabbedPaneDriver;
 
@@ -39,16 +35,16 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTabbedPaneFixtureTest extends ComponentFixtureTestCase<JTabbedPane> {
+public class JTabbedPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTabbedPane> {
 
   private JTabbedPaneDriver driver;
   private JTabbedPane target;
   private JTabbedPaneFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JTabbedPaneDriver.class);
     target = new JTabbedPane();
-    fixture = new JTabbedPaneFixture(robot, target);
+    fixture = new JTabbedPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -91,37 +87,8 @@ public class JTabbedPaneFixtureTest extends ComponentFixtureTestCase<JTabbedPane
       }
     }.run();
   }
-  
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
 
   ComponentDriver driver() { return driver; }
   JTabbedPane target() { return target; }
-  ComponentFixture<JTabbedPane> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JTabbedPane> fixture() { return fixture; }
 }

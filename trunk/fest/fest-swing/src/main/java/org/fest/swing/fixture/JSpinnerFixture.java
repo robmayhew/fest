@@ -15,9 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Point;
-
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
@@ -35,7 +32,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JSpinnerFixture extends ComponentFixture<JSpinner> implements JPopupMenuInvokerFixture {
+public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
 
   private JSpinnerDriver driver;
 
@@ -273,25 +270,5 @@ public class JSpinnerFixture extends ComponentFixture<JSpinner> implements JPopu
   public JSpinnerFixture requireDisabled() {
     driver.requireDisabled(target);
     return this;
-  }
-
-  /**
-   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
-  }
-
-  /**
-   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * pop-up menu.
-   * @param p the given point where to show the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

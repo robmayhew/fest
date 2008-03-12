@@ -15,17 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
 import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.JPopupMenu;
 
 import org.easymock.classextension.EasyMock;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComboBoxDriver;
 
@@ -40,16 +36,16 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
+public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComboBox> {
 
   private JComboBoxDriver driver;
   private JComboBox target;
   private JComboBoxFixture fixture;
 
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = EasyMock.createMock(JComboBoxDriver.class);
     target = new JComboBox();
-    fixture = new JComboBoxFixture(robot, target);
+    fixture = new JComboBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   
@@ -133,36 +129,7 @@ public class JComboBoxFixtureTest extends ComponentFixtureTestCase<JComboBox> {
     }.run();    
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JComboBox target() { return target; }
-  ComponentFixture<JComboBox> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JComboBox> fixture() { return fixture; }
 }

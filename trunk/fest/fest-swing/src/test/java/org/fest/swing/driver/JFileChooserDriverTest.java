@@ -36,7 +36,7 @@ import static javax.swing.JFileChooser.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.*;
 import static org.fest.util.Strings.isEmpty;
 
@@ -46,7 +46,7 @@ import static org.fest.util.Strings.isEmpty;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JFileChooserDriverTest {
 
   private Robot robot;

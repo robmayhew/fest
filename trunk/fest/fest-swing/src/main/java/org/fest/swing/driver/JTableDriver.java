@@ -173,7 +173,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenu showPopupMenuAt(JTable table, JTableCell cell) {
-    return showPopupMenu(table, pointAt(table, cell));
+    return robot.showPopupMenu(table, pointAt(table, cell));
   }
 
   /**

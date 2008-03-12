@@ -218,10 +218,10 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.
    */
   public JList dropDownList() {
-    JPopupMenu popup = findActivePopupMenu();
+    JPopupMenu popup = robot.findActivePopupMenu();
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToFindPopup());
-      while ((popup = findActivePopupMenu()) == null) {
+      while ((popup = robot.findActivePopupMenu()) == null) {
         if (watch.isTimeOut()) throw listNotFound();
         pause();
       }

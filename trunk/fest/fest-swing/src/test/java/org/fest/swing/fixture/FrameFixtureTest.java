@@ -19,20 +19,14 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 
-import javax.swing.JPopupMenu;
-
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-
 
 /**
  * Tests for <code>{@link FrameFixture}</code>.
@@ -40,16 +34,16 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class FrameFixtureTest extends ComponentFixtureTestCase<Frame> {
+public class FrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<Frame> {
 
   private FrameDriver driver;
   private Frame target;
   private FrameFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(FrameDriver.class);
     target = new Frame("A Label");
-    fixture = new FrameFixture(robot, target);
+    fixture = new FrameFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -215,36 +209,7 @@ public class FrameFixtureTest extends ComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   Frame target() { return target; }
-  ComponentFixture<Frame> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<Frame> fixture() { return fixture; }
 }

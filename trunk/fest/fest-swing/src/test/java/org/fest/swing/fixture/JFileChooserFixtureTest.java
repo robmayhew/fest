@@ -23,7 +23,6 @@ import javax.swing.JFileChooser;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JFileChooserDriver;
 
@@ -43,10 +42,10 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
   private JFileChooser target;
   private JFileChooserFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JFileChooserDriver.class);
     target = new JFileChooser();
-    fixture = new JFileChooserFixture(robot, target);
+    fixture = new JFileChooserFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   

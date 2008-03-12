@@ -46,12 +46,14 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
   private Robot robot;
   
+  Robot robot() { return robot; }
+  
   @BeforeMethod public final void setUp() {
     robot = createMock(Robot.class);
-    onSetUp(robot);
+    onSetUp();
   }
 
-  abstract void onSetUp(Robot robot);
+  abstract void onSetUp();
 
   @Test public void shouldClick() {
     new EasyMockTemplate(driver()) {

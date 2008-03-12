@@ -24,15 +24,10 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.TimeoutWatch;
 
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.*;
-
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Settings.timeoutToBeVisible;
 import static org.fest.swing.driver.FocusMonitor.addFocusMonitorTo;
@@ -50,11 +45,6 @@ import static org.fest.util.Strings.*;
  * @author Alex Ruiz
  */
 public class ComponentDriver {
-
-  private static final int POPUP_TIMEOUT = 5000;
-  private static final int POPUP_DELAY = 10000;
-
-  private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
   
   private static final String ENABLED_PROPERTY = "enabled";
   private static final String SIZE_PROPERTY = "size";
@@ -78,7 +68,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    */
   public void click(Component c) {
-    click(c, LEFT_BUTTON);
+    robot.click(c);
   }
   
   /**
@@ -86,7 +76,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    */
   public void rightClick(Component c) {
-    click(c, RIGHT_BUTTON);
+    robot.rightClick(c);
   }
 
   /**
@@ -95,7 +85,7 @@ public class ComponentDriver {
    * @param button the mouse button to use.
    */
   public void click(Component c, MouseButton button) {
-    click(c, button, 1);
+    robot.click(c);
   }
 
   /**
@@ -103,7 +93,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    */
   public void doubleClick(Component c) {
-    click(c, LEFT_BUTTON, 2);
+    robot.doubleClick(c);
   }
   
   /**
@@ -113,7 +103,7 @@ public class ComponentDriver {
    * @param times the number of times to click the given mouse button.
    */
   public void click(Component c, MouseButton button, int times) {
-    robot.click(c, centerOf(c), button, times);
+    robot.click(c, button, times);
   }
 
   /**
@@ -122,7 +112,7 @@ public class ComponentDriver {
    * @param where the position where to click.
    */
   public void click(Component target, Point where) {
-    robot.click(target, where, LEFT_BUTTON, 1);
+    robot.click(target, where);
   }
 
   /**
@@ -370,55 +360,5 @@ public class ComponentDriver {
 
   protected final String propertyName(Component c, String propertyName) {
     return concat(format(c), " - property:", quote(propertyName));
-  }
-
-  /**
-   * Shows a pop-up menu.
-   * @param invoker the component to invoke the pop-up menu from.
-   * @return the displayed pop-up menu.
-   * @throws org.fest.swing.exception.ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, centerOf(invoker));
-  }
-
-  /**
-   * Shows a pop-up menu at the given coordinates.
-   * @param invoker the component to invoke the pop-up menu from.
-   * @param location the given coordinates for the pop-up menu.
-   * @return the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenu showPopupMenu(Component invoker, Point location) {
-    robot.click(invoker, location, RIGHT_BUTTON, 1);
-    JPopupMenu popup = findActivePopupMenu();
-    if (popup == null) 
-      throw new ComponentLookupException(concat("Unable to show popup at ", location, " on ", format(invoker)));
-    long start = currentTimeMillis();
-    while (!robot.isReadyForInput(getWindowAncestor(popup)) && currentTimeMillis() - start > POPUP_DELAY) pause();
-    return popup;
-  }
-
-  /**
-   * Returns the currently active pop-up menu, if any. If no pop-up is currently showing, returns <code>null</code>.
-   * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
-   */
-  public JPopupMenu findActivePopupMenu() {
-    JPopupMenu popup = activePopupMenu();
-    if (popup != null || isEventDispatchThread()) return popup;
-    TimeoutWatch watch = startWatchWithTimeoutOf(POPUP_TIMEOUT);
-    while ((popup = activePopupMenu()) == null) {
-      if (watch.isTimeOut()) break;
-      pause(100);
-    }
-    return popup;
-  }
-
-  private JPopupMenu activePopupMenu() {
-    try {
-      return (JPopupMenu)robot.finder().find(POPUP_MATCHER);
-    } catch (ComponentLookupException e) {
-      return null;
-    }
   }
 }

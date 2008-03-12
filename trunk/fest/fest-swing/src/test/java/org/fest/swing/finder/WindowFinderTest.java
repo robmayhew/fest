@@ -31,7 +31,7 @@ import org.fest.swing.fixture.FrameFixture;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link WindowFinder}</code>.
@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class WindowFinderTest {
 
   private FrameFixture launcher;

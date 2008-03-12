@@ -24,7 +24,6 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
 
@@ -42,17 +41,17 @@ import static org.fest.swing.fixture.TableCell.row;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
+public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> {
 
   private JTableDriver driver;
   private JTable target;
   private JTableFixture fixture;
   private TableCell cell;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JTableDriver.class);
     target = new JTable();
-    fixture = new JTableFixture(robot, target);
+    fixture = new JTableFixture(robot(), target);
     fixture.updateDriver(driver);
     cell = row(6).column(8);
   }
@@ -84,20 +83,6 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     }.run();    
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
   @Test public void shouldReturnSelectionContents() {
     final String content = "A Cell"; 
     new EasyMockTemplate(driver) {
@@ -206,22 +191,8 @@ public class JTableFixtureTest extends ComponentFixtureTestCase<JTable> {
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
 
   ComponentDriver driver() { return driver; }
   JTable target() { return target; }
-  ComponentFixture<JTable> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JTable> fixture() { return fixture; }
 }

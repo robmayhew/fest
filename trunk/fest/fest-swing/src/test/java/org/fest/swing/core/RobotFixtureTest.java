@@ -15,6 +15,8 @@
  */
 package org.fest.swing.core;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
@@ -22,6 +24,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.driver.JPopupMenuDriverTest;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
@@ -29,9 +33,10 @@ import org.fest.swing.testing.TestFrame;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**
@@ -39,7 +44,7 @@ import static org.fest.swing.util.AWT.centerOf;
  *
  * @author Yvonne Wang
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class RobotFixtureTest {
 
   private Robot robot;
@@ -58,8 +63,8 @@ public class RobotFixtureTest {
   
   @Test(dataProvider = "clickingData") 
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
-    ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
-    robot.click(frame.textBox, centerOf(frame.textBox), button, times);
+    ClickRecorder recorder = ClickRecorder.attachTo(frame.withoutPopup);
+    robot.click(frame.withoutPopup, centerOf(frame.withoutPopup), button, times);
     assertThat(recorder).clicked(button).timesClicked(times);
   }
   
@@ -76,27 +81,56 @@ public class RobotFixtureTest {
   }
   
   @Test public void shouldPressAndReleaseGivenKeys() {
-    frame.textBox.requestFocusInWindow();
-    KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
+    frame.withPopup.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(frame.withPopup);
     int[] keys = { VK_A, VK_B, VK_Z };
     robot.pressAndReleaseKeys(keys);
     assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
   @Test public void shouldPressGivenKeyWithoutReleasingIt() {
-    frame.textBox.requestFocusInWindow();
-    KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
+    frame.withPopup.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(frame.withPopup);
     robot.pressKey(VK_A);
     assertThat(recorder).keysPressed(VK_A).noKeysReleased();
   }
 
   @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt") 
   public void shouldReleaseGivenKey() {
-    frame.textBox.requestFocusInWindow();
-    KeyRecorder recorder = KeyRecorder.attachTo(frame.textBox);
+    frame.withPopup.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(frame.withPopup);
     robot.pressKey(VK_A);
     robot.releaseKey(VK_A);
     assertThat(recorder).keysReleased(VK_A);
+  }
+
+  @Test public void shouldShowPopupMenu() {
+    JPopupMenu menu = robot.showPopupMenu(frame.withPopup);
+    assertThat(menu).isSameAs(popupMenu());
+    assertThat(menu.isVisible()).isTrue();
+  }
+
+  @Test public void shouldThrowErrorIfPopupNotFound() {
+    try {
+      robot.showPopupMenu(frame.withoutPopup);
+      fail();
+    } catch (ComponentLookupException expected) {
+      assertThat(expected).message().contains("Unable to show popup")
+                                    .contains("on javax.swing.JTextField")
+                                    .contains("name='withoutPopup'");
+    }
+  }
+
+  @Test(dependsOnMethods = "shouldShowPopupMenu")
+  public void shouldReturnActivePopupMenu() {
+    robot.showPopupMenu(frame.withPopup);
+    JPopupMenu found = robot.findActivePopupMenu();
+    assertThat(found).isSameAs(frame.popupMenu);
+  }
+
+  @Test public void shouldReturnNullIfActivePopupMenuNotFound() {
+    JPopupMenu found = robot.findActivePopupMenu();
+    assertThat(found).isNull();
   }
 
   @Test public void shouldCloseWindow() {
@@ -111,14 +145,25 @@ public class RobotFixtureTest {
     assertThat(w.isVisible()).isFalse();
   }
     
+  private JPopupMenu popupMenu() {
+    return frame.popupMenu;
+  }
+
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    private final JTextField textBox = new JTextField(20);
-    
+    private final JTextField withPopup = new JTextField("With Pop-up Menu");
+    private final JTextField withoutPopup = new JTextField("Without Pop-up Menu");
+    private final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
+
     MyFrame() {
-      super(RobotFixtureTest.class);
-      add(textBox);
+      super(JPopupMenuDriverTest.class);
+      add(withPopup);
+      add(withoutPopup);
+      withPopup.setComponentPopupMenu(popupMenu);
+      withoutPopup.setName("withoutPopup");
+      popupMenu.add(new JMenuItem("First"));
+      popupMenu.add(new JMenuItem("Second"));
     }
   }
 }

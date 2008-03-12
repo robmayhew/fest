@@ -15,9 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.awt.Point;
-
 import javax.swing.JSplitPane;
 
 import org.fest.swing.core.MouseButton;
@@ -33,7 +30,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang 
  */
-public class JSplitPaneFixture extends ComponentFixture<JSplitPane> implements JPopupMenuInvokerFixture {
+public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
 
   private JSplitPaneDriver driver;
   
@@ -216,25 +213,5 @@ public class JSplitPaneFixture extends ComponentFixture<JSplitPane> implements J
   public JSplitPaneFixture requireVisible() {
     driver.requireVisible(target);
     return this;
-  }
-
-  /**
-   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
-  }
-
-  /**
-   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * pop-up menu.
-   * @param p the given point where to show the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

@@ -20,21 +20,57 @@ import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands a fixture that can invoke a <code>{@link JPopupMenu}</code> on the target <code>{@link Component}</code>.
+ * @param <T> the type of <code>Component</code> that this fixture can manage.
  *
  * @author Alex Ruiz
  */
-public interface JPopupMenuInvokerFixture {
+public abstract class JPopupMenuInvokerFixture<T extends Component> extends ComponentFixture<T> {
+
+  /**
+   * Creates a new <code>{@link JPopupMenuInvokerFixture}</code>.
+   * @param robot performs simulation of user events on a <code>Component</code>.
+   * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   */
+  public JPopupMenuInvokerFixture(Robot robot, Class<? extends T> type) {
+    super(robot, type);
+  }
+
+  /**
+   * Creates a new <code>{@link JPopupMenuInvokerFixture}</code>.
+   * @param robot performs simulation of user events on a <code>Component</code>.
+   * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   */
+  public JPopupMenuInvokerFixture(Robot robot, String name, Class<? extends T> type) {
+    super(robot, name, type);
+  }
+
+  /**
+   * Creates a new <code>{@link JPopupMenuInvokerFixture}</code>.
+   * @param robot performs simulation of user events on the given <code>Component</code>.
+   * @param target the <code>Component</code> to be managed by this fixture.
+   */
+  public JPopupMenuInvokerFixture(Robot robot, T target) {
+    super(robot, target);
+  }
 
   /**
    * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
-  JPopupMenuFixture showPopupMenu();
+  public JPopupMenuFixture showPopupMenu() {
+    return new JPopupMenuFixture(robot, robot.showPopupMenu(target));
+  }
 
   /**
    * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
@@ -43,5 +79,7 @@ public interface JPopupMenuInvokerFixture {
    * @return a fixture that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
-  JPopupMenuFixture showPopupMenuAt(Point p);
+  public JPopupMenuFixture showPopupMenuAt(Point p) {
+    return new JPopupMenuFixture(robot, robot.showPopupMenu(target, p));
+  }
 }

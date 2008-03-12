@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
 
+import javax.swing.JPopupMenu;
+
+import org.fest.swing.exception.ComponentLookupException;
+
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
  *
@@ -55,6 +59,12 @@ public interface Robot {
   void showWindow(final Window w, final Dimension size, final boolean pack);
 
   /**
+   * Simulates a user closing the given window.
+   * @param w the window to close.
+   */
+  void close(Window w);
+
+  /**
    * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
    * on the event dispatch thread.
    * @param c the component which event queue will be used.
@@ -80,6 +90,46 @@ public interface Robot {
    * robot.
    */
   void cleanUp();
+
+  /**
+   * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
+   * @param c the <code>Component</code> to click on.
+   */
+  void click(Component c);
+  
+  /**
+   * Simulates a user right-clicking the given <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to click on.
+   */
+  void rightClick(Component c);
+
+  /**
+   * Simulates a user clicking once the given <code>{@link Component}</code> using the given mouse button.
+   * @param c the <code>Component</code> to click on.
+   * @param button the mouse button to use.
+   */
+  void click(Component c, MouseButton button);
+
+  /**
+   * Simulates a user double-clicking the given <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to click on.
+   */
+  void doubleClick(Component c);
+  
+  /**
+   * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to click on.
+   * @param button the mouse button to click.
+   * @param times the number of times to click the given mouse button.
+   */
+  void click(Component c, MouseButton button, int times);
+
+  /**
+   * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
+   * @param target the <code>Component</code> to click on.
+   * @param where the position where to click.
+   */
+  void click(Component target, Point where);
 
   /**
    * Simulates a user clicking the given mouse button, the given times at the given position on the given
@@ -113,12 +163,6 @@ public interface Robot {
   void mousePress(Component target, Point where, MouseButton button);
 
   /**
-   * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
-   * @param c the given <code>Component</code>.
-   */
-  void jitter(Component c);
-
-  /**
    * Simulates a user moving the mouse pointer to the center of the given <code>{@link Component}</code>.
    * @param target the given <code>Component</code>.
    */
@@ -132,6 +176,12 @@ public interface Robot {
    * @param y vertical coordinate relative to the given <code>Component</code>.
    */
   void mouseMove(Component target, int x, int y);
+
+  /**
+   * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   */
+  void jitter(Component c);
 
   /**
    * Simulates a user entering the given text. Note that this method the key strokes to the component that has input
@@ -207,9 +257,25 @@ public interface Robot {
   boolean isReadyForInput(Component c);
 
   /**
-   * Simulates a user closing the given window.
-   * @param w the window to close.
+   * Shows a pop-up menu.
+   * @param invoker the component to invoke the pop-up menu from.
+   * @return the displayed pop-up menu.
+   * @throws org.fest.swing.exception.ComponentLookupException if a pop-up menu cannot be found.
    */
-  void close(Window w);
+  JPopupMenu showPopupMenu(Component invoker);
 
+  /**
+   * Shows a pop-up menu at the given coordinates.
+   * @param invoker the component to invoke the pop-up menu from.
+   * @param location the given coordinates for the pop-up menu.
+   * @return the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  JPopupMenu showPopupMenu(Component invoker, Point location);
+
+  /**
+   * Returns the currently active pop-up menu, if any. If no pop-up is currently showing, returns <code>null</code>.
+   * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
+   */
+  JPopupMenu findActivePopupMenu();
 }

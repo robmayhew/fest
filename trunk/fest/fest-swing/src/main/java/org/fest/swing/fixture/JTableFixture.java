@@ -15,7 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JTable;
@@ -36,7 +35,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JTableFixture extends ComponentFixture<JTable> implements JPopupMenuInvokerFixture {
+public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
 
   private JTableDriver driver;
 
@@ -339,26 +338,6 @@ public class JTableFixture extends ComponentFixture<JTable> implements JPopupMen
   public JTableFixture requireVisible() {
     driver.requireVisible(target);
     return this;
-  }
-
-  /**
-   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
-  }
-
-  /**
-   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * pop-up menu.
-   * @param p the given point where to show the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 
   /**

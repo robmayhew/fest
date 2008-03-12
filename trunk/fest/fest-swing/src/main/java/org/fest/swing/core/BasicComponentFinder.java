@@ -36,7 +36,7 @@ import static org.fest.util.Strings.concat;
  * 
  * @author Alex Ruiz
  */
-public class BasicComponentFinder implements ComponentFinder {
+public final class BasicComponentFinder implements ComponentFinder {
 
   private final Hierarchy hierarchy;
   private final ComponentPrinter printer;

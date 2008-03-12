@@ -32,7 +32,7 @@ import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -40,7 +40,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JInternalFrameDriverTest {
 
   private Robot robot;

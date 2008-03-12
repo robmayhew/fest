@@ -20,7 +20,6 @@ import javax.swing.JMenuItem;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JMenuItemDriver;
 
@@ -38,10 +37,10 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> {
   private JMenuItem target;
   private JMenuItemFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JMenuItemDriver.class);
     target = new JMenuItem("A Button");
-    fixture = new JMenuItemFixture(robot, target);
+    fixture = new JMenuItemFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 

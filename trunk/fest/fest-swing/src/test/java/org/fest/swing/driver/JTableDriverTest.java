@@ -32,7 +32,7 @@ import org.fest.swing.testing.TestTable;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestTable.*;
 
 /**
@@ -40,7 +40,7 @@ import static org.fest.swing.testing.TestTable.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JTableDriverTest {
 
   private Robot robot;

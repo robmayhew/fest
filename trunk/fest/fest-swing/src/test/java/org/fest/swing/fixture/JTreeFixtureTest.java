@@ -15,23 +15,17 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTreeDriver;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 
 /**
@@ -41,17 +35,17 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTreeFixtureTest extends ComponentFixtureTestCase<JTree> {
+public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
 
   private JTreeDriver driver;
   private JTree target;
   private JTreeFixture fixture;
   private TreePath path;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JTreeDriver.class);
     target = new JTree();
-    fixture = new JTreeFixture(robot, target);
+    fixture = new JTreeFixture(robot(), target);
     fixture.updateDriver(driver);
     path = new TreePath(new Object[] { "Hello" });
   }
@@ -147,36 +141,7 @@ public class JTreeFixtureTest extends ComponentFixtureTestCase<JTree> {
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JTree target() { return target; }
-  ComponentFixture<JTree> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JTree> fixture() { return fixture; }
 }

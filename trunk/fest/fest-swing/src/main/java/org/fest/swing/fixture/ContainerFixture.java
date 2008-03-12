@@ -14,11 +14,6 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.join;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
@@ -29,6 +24,11 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.*;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.join;
+
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
  * @param <T> the type of container handled by this fixture.
@@ -36,7 +36,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public abstract class ContainerFixture<T extends Container> extends ComponentFixture<T> {
+public abstract class ContainerFixture<T extends Container> extends JPopupMenuInvokerFixture<T> {
 
   /**
    * Creates a new <code>{@link ContainerFixture}</code>.

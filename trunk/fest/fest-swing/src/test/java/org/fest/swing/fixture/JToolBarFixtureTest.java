@@ -17,22 +17,19 @@ package org.fest.swing.fixture;
 
 import java.awt.Point;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JToolBarDriver;
 import org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
 
 
@@ -43,16 +40,16 @@ import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
  * @author Yvonne Wang
  */
 // TODO Implement
-public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
+public class JToolBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JToolBar> {
 
   private JToolBarDriver driver;
   private JToolBar target;
   private JToolBarFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JToolBarDriver.class);
     target = new JToolBar();
-    fixture = new JToolBarFixture(robot, target);
+    fixture = new JToolBarFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -101,36 +98,7 @@ public class JToolBarFixtureTest extends ComponentFixtureTestCase<JToolBar> {
     return new Object[][] { { NORTH }, { EAST }, { SOUTH }, { WEST } };
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JToolBar target() { return target; }
-  ComponentFixture<JToolBar> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JToolBar> fixture() { return fixture; }
 }

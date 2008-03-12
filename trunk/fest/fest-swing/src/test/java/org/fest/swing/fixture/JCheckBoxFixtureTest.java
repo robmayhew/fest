@@ -15,19 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
 import javax.swing.JCheckBox;
-import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.driver.ComponentDriver;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -37,16 +33,16 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
+public class JCheckBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JCheckBox> {
 
   private AbstractButtonDriver driver;
   private JCheckBox target;
   private JCheckBoxFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
     target = new JCheckBox("A CheckBox");
-    fixture = new JCheckBoxFixture(robot, target);
+    fixture = new JCheckBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -119,36 +115,7 @@ public class JCheckBoxFixtureTest extends ComponentFixtureTestCase<JCheckBox> {
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JCheckBox target() { return target; }
-  ComponentFixture<JCheckBox> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JCheckBox> fixture() { return fixture; }
 }

@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 import java.awt.Dimension;
 
@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  *
  * @author Yvonne Wang
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JMenuItemDriverTest {
 
   private Robot robot;

@@ -16,7 +16,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JToolBar;
@@ -35,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JToolBarFixture extends ContainerFixture<JToolBar> implements JPopupMenuInvokerFixture {
+public class JToolBarFixture extends JPopupMenuInvokerFixture<JToolBar> {
 
   /**
    * Understands constraints used to unfloat a floating <code>{@link JToolBar}</code>.
@@ -257,25 +256,5 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements JPopu
   public JToolBarFixture requireVisible() {
     driver.requireVisible(target);
     return this;
-  }
-
-  /**
-   * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenu() {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target));
-  }
-
-  /**
-   * Shows a pop-up menu at the given point using this fixture's <code>{@link Component}</code> as the invoker of the
-   * pop-up menu.
-   * @param p the given point where to show the pop-up menu.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(Point p) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, p));
   }
 }

@@ -25,12 +25,10 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -38,7 +36,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JPopupMenuDriverTest {
 
   private Robot robot;
@@ -56,35 +54,6 @@ public class JPopupMenuDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldShowPopupMenu() {
-    JPopupMenu menu = driver.showPopupMenu(frame.withPopup);
-    assertThat(menu).isSameAs(popupMenu());
-    assertThat(menu.isVisible()).isTrue();
-  }
-
-  @Test public void shouldThrowErrorIfPopupNotFound() {
-    try {
-      driver.showPopupMenu(frame.withoutPopup);
-      fail();
-    } catch (ComponentLookupException expected) {
-      assertThat(expected).message().contains("Unable to show popup")
-                                    .contains("on javax.swing.JTextField")
-                                    .contains("name='withoutPopup'");
-    }
-  }
-
-  @Test(dependsOnMethods = "shouldShowPopupMenu")
-  public void shouldReturnActivePopupMenu() {
-    driver.showPopupMenu(frame.withPopup);
-    JPopupMenu found = driver.findActivePopupMenu();
-    assertThat(found).isSameAs(frame.popupMenu);
-  }
-
-  @Test public void shouldReturnNullIfActivePopupMenuNotFound() {
-    JPopupMenu found = driver.findActivePopupMenu();
-    assertThat(found).isNull();
-  }
-
   @Test public void shouldReturnsPopupLabels() {
     String[] labels = driver.menuLabelsOf(popupMenu());
     assertThat(labels).isEqualTo(array("First", "Second"));
@@ -98,15 +67,12 @@ public class JPopupMenuDriverTest {
     private static final long serialVersionUID = 1L;
 
     private final JTextField withPopup = new JTextField("With Pop-up Menu");
-    private final JTextField withoutPopup = new JTextField("Without Pop-up Menu");
     private final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
     MyFrame() {
       super(JPopupMenuDriverTest.class);
       add(withPopup);
-      add(withoutPopup);
       withPopup.setComponentPopupMenu(popupMenu);
-      withoutPopup.setName("withoutPopup");
       popupMenu.add(new JMenuItem("First"));
       popupMenu.add(new JMenuItem("Second"));
     }

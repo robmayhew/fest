@@ -15,19 +15,15 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.driver.ComponentDriver;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -38,16 +34,16 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JRadioButtonFixtureTest extends ComponentFixtureTestCase<JRadioButton> {
+public class JRadioButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JRadioButton> {
 
   private AbstractButtonDriver driver;
   private JRadioButton target;
   private JRadioButtonFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
     target = new JRadioButton("A CheckBox");
-    fixture = new JRadioButtonFixture(robot, target);
+    fixture = new JRadioButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
@@ -94,36 +90,7 @@ public class JRadioButtonFixtureTest extends ComponentFixtureTestCase<JRadioButt
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-
   ComponentDriver driver() { return driver; }
   JRadioButton target() { return target; }
-  ComponentFixture<JRadioButton> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JRadioButton> fixture() { return fixture; }
 }

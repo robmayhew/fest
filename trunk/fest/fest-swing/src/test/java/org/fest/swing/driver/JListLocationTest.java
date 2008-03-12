@@ -32,7 +32,7 @@ import org.fest.swing.testing.TestList;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JListLocation}</code>.
@@ -40,7 +40,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JListLocationTest {
 
   private Robot robot;

@@ -15,71 +15,32 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Point;
-
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
-import org.testng.annotations.Test;
-
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComponentDriver;
 
-import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JPanelFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JPanelFixtureTest extends ComponentFixtureTestCase<JPanel> {
+public class JPanelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JPanel> {
 
   private JComponentDriver driver;
   private JPanel target;
   private JPanelFixture fixture;
   
-  void onSetUp(Robot robot) {
+  void onSetUp() {
     driver = createMock(JComponentDriver.class);
     target = new JPanel();
-    fixture = new JPanelFixture(robot, target);
+    fixture = new JPanelFixture(robot(), target);
     fixture.updateDriver(driver);
-  }
-
-  @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
-  }
-  
-  @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
   }
 
   ComponentDriver driver() { return driver; }
   JPanel target() { return target; }
-  ComponentFixture<JPanel> fixture() { return fixture; }
+  JPopupMenuInvokerFixture<JPanel> fixture() { return fixture; }
 }

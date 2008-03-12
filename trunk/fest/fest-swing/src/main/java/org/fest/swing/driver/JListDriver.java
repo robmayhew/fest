@@ -21,8 +21,8 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListModel;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -35,8 +35,8 @@ import static java.lang.String.valueOf;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
 import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -306,7 +306,7 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public JPopupMenu showPopupMenuAt(JList list, int index) {
-    return showPopupMenu(list, pointAt(list, index));
+    return robot.showPopupMenu(list, pointAt(list, index));
   }
 
   private Point pointAt(JList list, int index) {
@@ -322,7 +322,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public JPopupMenu showPopupMenuAt(JList list, Object value) {
-    return showPopupMenu(list, pointAt(list, value));
+    return robot.showPopupMenu(list, pointAt(list, value));
   }
 
   private Point pointAt(JList list, Object value) {

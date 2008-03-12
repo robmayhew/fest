@@ -31,7 +31,7 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JSplitPaneDriver}</code>.
@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.FUNCTIONAL;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = FUNCTIONAL)
+@Test(groups = GUI)
 public class JSplitPaneDriverTest {
 
   private Robot robot;
