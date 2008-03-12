@@ -7,6 +7,9 @@
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
       <action dev="alruiz" type="add" issue="95" due-to="Fabien Barbero">
+        Added method 'component' to ComponentFixture. It returns the GUI component in a fixture.
+      </action>
+      <action dev="alruiz" type="add" issue="95" due-to="Fabien Barbero">
         Added methods 'requireEditable' and 'requireNotEditable' to JComboBoxFixture, JTextComponentFixture and
         JTreeFixture.
       </action>

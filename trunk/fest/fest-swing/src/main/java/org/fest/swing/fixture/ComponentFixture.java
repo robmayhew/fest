@@ -17,8 +17,8 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.ComponentLookupException;
@@ -194,5 +194,13 @@ public abstract class ComponentFixture<T extends Component> {
   public final <C extends T> C targetCastedTo(Class<C> type) {
     assertThat(target).as(format(target)).isInstanceOf(type);
     return type.cast(target);
+  }
+  
+  /**
+   * Returns the GUI component in this fixture (same as <code>{@link #target}</code>.)
+   * @return the GUI component in this fixture.
+   */
+  public final T component() {
+    return target;
   }
 }
