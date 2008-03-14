@@ -31,14 +31,14 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class SettingsTest {
 
-  private int originalAutoDelay;
-
+  private int originalDelayBetweenEvents;
+  
   @BeforeMethod public void setUp() {
-    originalAutoDelay = Robot.getAutoDelay();
+    originalDelayBetweenEvents = Settings.delayBetweenEvents();
   }
   
   @AfterMethod public void tearDown() {
-    Robot.setAutoDelay(originalAutoDelay);
+    Settings.delayBetweenEvents(originalDelayBetweenEvents);
   }
   
   @Test(dataProvider = "autoDelayProvider") 
@@ -49,10 +49,10 @@ public class SettingsTest {
 
   @DataProvider(name="autoDelayProvider")
   public Object[][] autoDelayProvider() {
-    return new Object[][] {
-        { 100 },
-        { 200 },
-        { 68 }
-    };
+    return new Object[][] { { 100 }, { 200 }, { 68 } };
+  }
+  
+  @Test public void shouldIncludeComponentHierarchyInComponentLookupExceptionByDefault() {
+    assertThat(Settings.shouldIncludeHierarchyInComponentLookupException()).isTrue();
   }
 }

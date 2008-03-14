@@ -16,7 +16,6 @@
 package org.fest.swing.core;
 
 import java.awt.Component;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -27,10 +26,9 @@ import org.testng.annotations.Test;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
-import static java.util.logging.Level.INFO;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.format.Formatting.format;
 
 /**
  * Tests for <code>{@link BasicComponentFinder}</code>.
@@ -62,8 +60,6 @@ public class BasicComponentFinderTest {
     }
   }
 
-  private static Logger logger = Logger.getAnonymousLogger();
-  
   private ComponentFinder finder;
   private MainWindow window;
   private MainWindow anotherWindow;
@@ -74,6 +70,7 @@ public class BasicComponentFinderTest {
   }
   
   @AfterMethod public void tearDown() {
+    Settings.includeHierarchyInComponentLookupException(true);
     window.destroy();
     if (anotherWindow != null) anotherWindow.destroy();
   }
@@ -87,7 +84,9 @@ public class BasicComponentFinderTest {
     try {
       finder.findByType(JTree.class);
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("type=javax.swing.JTree").contains(format(window));
+    }
   }
 
   @Test public void shouldFindComponentByTypeAndContainer() {
@@ -100,7 +99,9 @@ public class BasicComponentFinderTest {
     try {
       finder.findByType(window, JList.class);
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("type=javax.swing.JList").contains(format(window));
+    }
   }
   
   @Test public void shouldFindComponentByName() {
@@ -112,7 +113,9 @@ public class BasicComponentFinderTest {
     try {
       finder.findByName("list");
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("name='list'").contains(format(window));
+    }
   }
   
   @Test public void shouldFindComponentByNameAndContainer() {
@@ -126,7 +129,9 @@ public class BasicComponentFinderTest {
     try {
       finder.findByName(window, "label");
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("name='label'").contains(format(window));
+    }
   }
   
   @Test public void shouldFindComponentByNameAndType() {
@@ -138,14 +143,20 @@ public class BasicComponentFinderTest {
     try {
       finder.findByName("list", JLabel.class);
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("name='list'").contains("type=javax.swing.JLabel")
+                             .contains(format(window));
+    }
   }
   
   @Test public void shouldThrowExceptionIfComponentFoundByNameAndNotByType() {
     try {
       finder.findByName("button", JLabel.class);
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
+                             .contains(format(window));
+    }
   }
   
   @Test public void shouldFindComponentByNameAndTypeAndContainer() {
@@ -158,14 +169,20 @@ public class BasicComponentFinderTest {
     try {
       finder.findByName(window, "list", JLabel.class);
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("name='list'").contains("type=javax.swing.JLabel")
+                             .contains(format(window));
+    }
   }
   
   @Test public void shouldThrowExceptionIfComponentFoundByNameAndContainerAndNotByType() {
     try {
       finder.findByName(window, "button", JLabel.class);
       fail();
-    } catch (ComponentLookupException e) { log(e); }
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
+                             .contains(format(window));
+    }
   }
   
   @Test public void shouldFindComponentUsingGenericTypeMatcher() {
@@ -226,10 +243,21 @@ public class BasicComponentFinderTest {
     try {
       finder.find(new TypeMatcher(JTextField.class));
       fail();
-    } catch (ComponentLookupException e) { log(e); }    
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("type=javax.swing.JTextField")
+                             .contains(format(window.textField))
+                             .contains(format(window.anotherTextField));
+    }    
   }
-  
-  private void log(ComponentLookupException e) {
-    logger.log(INFO, e.getMessage(), e);
+
+  @Test public void shouldThrowExceptionWithoutComponentHierarchyAsConfigured() {
+    Settings.includeHierarchyInComponentLookupException(false);
+    try {
+      finder.findByName(window, "button", JLabel.class);
+      fail();
+    } catch (ComponentLookupException e) { 
+      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel");
+      assertThat(e.getMessage().contains(format(window))).isFalse();
+    }
   }
 }

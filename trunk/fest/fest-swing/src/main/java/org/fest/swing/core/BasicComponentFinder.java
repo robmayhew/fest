@@ -27,6 +27,7 @@ import abbot.finder.TestHierarchy;
 
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.swing.core.Settings.shouldIncludeHierarchyInComponentLookupException;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.System.LINE_SEPARATOR;
 import static org.fest.util.Strings.concat;
@@ -175,10 +176,10 @@ public final class BasicComponentFinder implements ComponentFinder {
   }
   
   private ComponentLookupException componentNotFound(Hierarchy h, ComponentMatcher m) {
-    String message = concat(
-        "Unable to find component using matcher ", m, ".", 
-        LINE_SEPARATOR, LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, formattedHierarchy(root(h))
-    );
+    String message = concat("Unable to find component using matcher ", m, ".");
+    if (shouldIncludeHierarchyInComponentLookupException())
+      message = concat(message, 
+          LINE_SEPARATOR, LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, formattedHierarchy(root(h)));
     throw new ComponentLookupException(message);
   }
 

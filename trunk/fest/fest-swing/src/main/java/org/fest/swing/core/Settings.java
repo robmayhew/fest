@@ -16,6 +16,9 @@
 package org.fest.swing.core;
 
 import abbot.tester.Robot;
+
+import org.fest.swing.exception.ComponentLookupException;
+
 import static java.lang.Math.*;
 
 import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
@@ -36,6 +39,7 @@ public final class Settings {
   private static int dragDelay;
   private static int dropDelay;
   private static int eventPostingDelay;
+  private static boolean includeHierarchyInComponentLookupException;
   
   static {
     timeoutToBeVisible(DEFAULT_DELAY);
@@ -44,6 +48,7 @@ public final class Settings {
     dropDelay(0);
     eventPostingDelay(100);
     componentLookupScope(DEFAULT);
+    includeHierarchyInComponentLookupException(true);
   }
   
   /**
@@ -169,6 +174,25 @@ public final class Settings {
     componentLookupScope = scope;
   }
   
+  /**
+   * Returns whether the message in a thrown <code>{@link ComponentLookupException}</code> should include the current 
+   * component hierarchy.
+   * @return <code>true</code> if the component hierarchy is included as part of the 
+   *         <code>ComponentLookupException</code> message, <code>false</code> otherwise.
+   */
+  public static final boolean shouldIncludeHierarchyInComponentLookupException() {
+    return includeHierarchyInComponentLookupException;
+  }
+
+  /**
+   * Updates whether the message in a thrown <code>{@link ComponentLookupException}</code> should include the current 
+   * component hierarchy. The default value is <code>true</code>.
+   * @param newValue the new value to set.
+   */
+  public static final void includeHierarchyInComponentLookupException(boolean newValue) {
+    includeHierarchyInComponentLookupException = newValue;
+  }
+
   public static int valueToUpdate(int value, int min, int max) {
     return max(min, min(max, value));
   }
