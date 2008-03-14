@@ -256,8 +256,8 @@ public class BasicComponentFinderTest {
       finder.findByName(window, "button", JLabel.class);
       fail();
     } catch (ComponentLookupException e) { 
-      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel");
-      assertThat(e.getMessage().contains(format(window))).isFalse();
+      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
+                             .excludes(format(window));
     }
   }
 }
