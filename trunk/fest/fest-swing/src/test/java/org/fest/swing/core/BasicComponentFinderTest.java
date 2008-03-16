@@ -70,7 +70,6 @@ public class BasicComponentFinderTest {
   }
   
   @AfterMethod public void tearDown() {
-    Settings.includeHierarchyInComponentLookupException(true);
     window.destroy();
     if (anotherWindow != null) anotherWindow.destroy();
   }
@@ -251,7 +250,7 @@ public class BasicComponentFinderTest {
   }
 
   @Test public void shouldThrowExceptionWithoutComponentHierarchyAsConfigured() {
-    Settings.includeHierarchyInComponentLookupException(false);
+    finder.includeHierarchyIfComponentNotFound(false);
     try {
       finder.findByName(window, "button", JLabel.class);
       fail();

@@ -29,7 +29,6 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToBeVisible;
 import static org.fest.swing.driver.FocusMonitor.addFocusMonitorTo;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -150,7 +149,7 @@ public class ComponentDriver {
     robot.invokeAndWait(c, new RequestFocusTask(c));
     try {
       if (wait) {
-        TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToBeVisible());
+        TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
         while (!focusMonitor.hasFocus()) {
           if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(c), " failed"));
           pause();
@@ -159,6 +158,10 @@ public class ComponentDriver {
     } finally {
       c.removeFocusListener(focusMonitor);
     }
+  }
+
+  protected Settings settings() {
+    return robot.settings();
   }
 
   /**

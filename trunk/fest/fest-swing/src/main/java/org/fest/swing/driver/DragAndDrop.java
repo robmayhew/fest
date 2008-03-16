@@ -20,12 +20,12 @@ import java.awt.Point;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.Settings;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -57,7 +57,8 @@ final class DragAndDrop {
    */
   void drag(Component target, Point where) {
     robot.mousePress(target, where, LEFT_BUTTON);
-    if (dragDelay() > delayBetweenEvents()) pause(dragDelay());
+    int dragDelay = settings().dragDelay();
+    if (dragDelay > delayBetweenEvents()) pause(dragDelay);
     mouseMove(target, where.x, where.y);
     robot.waitForIdle();
   }
@@ -105,14 +106,24 @@ final class DragAndDrop {
    */
   void drop(Component target, Point where) {
     dragOver(target, where);
-    TimeoutWatch watch = startWatchWithTimeoutOf(eventPostingDelay() * 4);
+    TimeoutWatch watch = startWatchWithTimeoutOf(settings().eventPostingDelay() * 4);
     while (!robot.isDragging()) {
       if (watch.isTimeOut()) throw actionFailure("There is no drag in effect");
       pause();
     }
-    if (dropDelay() > delayBetweenEvents()) pause(dropDelay() - delayBetweenEvents());
+    int dropDelay = settings().dropDelay();
+    int delayBetweenEvents = delayBetweenEvents();
+    if (dropDelay > delayBetweenEvents) pause(dropDelay - delayBetweenEvents);
     robot.releaseMouseButtons();
     robot.waitForIdle();
+  }
+
+  private int delayBetweenEvents() {
+    return settings().delayBetweenEvents();
+  }
+
+  private Settings settings() {
+    return robot.settings();
   }
 
   /**

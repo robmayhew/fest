@@ -34,7 +34,6 @@ import static java.lang.String.valueOf;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToFindPopup;
 import static org.fest.swing.driver.CellRendererComponents.textFrom;
 import static org.fest.swing.util.Strings.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -221,7 +220,7 @@ public class JComboBoxDriver extends JComponentDriver {
   public JList dropDownList() {
     JPopupMenu popup = robot.findActivePopupMenu();
     if (popup == null) {
-      TimeoutWatch watch = startWatchWithTimeoutOf(timeoutToFindPopup());
+      TimeoutWatch watch = startWatchWithTimeoutOf(robot.settings().timeoutToFindPopup());
       while ((popup = robot.findActivePopupMenu()) == null) {
         if (watch.isTimeOut()) throw listNotFound();
         pause();

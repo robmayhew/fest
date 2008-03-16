@@ -33,7 +33,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.timeoutToBeVisible;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 
@@ -165,7 +164,7 @@ public class JTreeDriver extends JComponentDriver {
 
   private boolean waitForChildrenToShowUp(JTree tree, TreePath path, String pathDescription) {
     try {
-      pause(new UntilChildrenShowUp(tree, path, pathDescription), timeoutToBeVisible());
+      pause(new UntilChildrenShowUp(tree, path, pathDescription), robot.settings().timeoutToBeVisible());
     } catch (WaitTimedOutError e) {
       throw new LocationUnavailableException(e.getMessage());
     }

@@ -24,7 +24,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Settings.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.AWT.ancestorOf;
@@ -72,7 +71,7 @@ public class JMenuItemDriver extends JComponentDriver {
   private void ensurePopupIsShowing(JMenuItem menuItem) {
     if (!(menuItem instanceof JMenu)) return;
     JPopupMenu popup = ((JMenu)menuItem).getPopupMenu();
-    if (!waitForShowing(popup, timeoutToFindPopup())) 
+    if (!waitForShowing(popup, robot.settings().timeoutToFindPopup())) 
       throw actionFailure(concat("Clicking on menu item <", format(menuItem), "> never showed a pop-up menu"));
     waitForSubMenuToShow();
   }
@@ -107,7 +106,7 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   private void waitForSubMenuToShow() {
-    int delayBetweenEvents = delayBetweenEvents();
+    int delayBetweenEvents = robot.settings().delayBetweenEvents();
     if (SUBMENU_DELAY > delayBetweenEvents) pause(SUBMENU_DELAY - delayBetweenEvents);
   }
 

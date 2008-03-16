@@ -6,9 +6,14 @@
   </properties>
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="fix">
+        Made methods of class org.fest.core.Settings not static. To set a particular setting, an instance of Settings
+        should be retrieved from a Robot.
+      </action>
       <action dev="alruiz" type="add" issue="118" due-to="Łukasz Tutaj">
-        Added methods 'shouldIncludeHierarchyInComponentLookupException' and 
-        'includeHierarchyInComponentLookupException' to org.fest.swing.core.Settings.
+        Added methods 'includeHierarchyIfComponentNotFound' and 
+        'includeHierarchyIfComponentNotFound(boolean)' to org.fest.swing.core.ComponentFinder to indicate if the
+        component hierarchy should be included in a ComponentLookupException thrown when a component cannot be found.
       </action>
       <action dev="alruiz" type="add" issue="95" due-to="Fabien Barbero">
         Added method 'component' to ComponentFixture. It returns the GUI component in a fixture.

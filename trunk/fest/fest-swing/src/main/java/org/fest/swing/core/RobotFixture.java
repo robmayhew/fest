@@ -67,6 +67,8 @@ public class RobotFixture implements Robot {
 
   /** Looks up <code>{@link java.awt.Component}</code>s. */
   private final ComponentFinder finder;
+  
+  private final Settings settings;
 
   /**
    * Creates a new <code>{@link RobotFixture}</code> with a new AWT hierarchy. <code>{@link Component}</code>s created
@@ -92,6 +94,7 @@ public class RobotFixture implements Robot {
   private RobotFixture(Hierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
+    settings = new Settings();
     finder = new BasicComponentFinder(this.hierarchy);
     windowTracker = WindowTracker.getTracker();
     robot = newRobot();
@@ -377,5 +380,10 @@ public class RobotFixture implements Robot {
       if (found == null) return;
       fail(concat("Expecting no JOptionPane to be showing, but found:<", format(found), ">"));
     } catch (ComponentLookupException expected) {}
+  }
+
+  /** ${@inheritDoc} */
+  public Settings settings() {
+    return settings;
   }
 }

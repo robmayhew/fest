@@ -21,7 +21,10 @@ import java.awt.Dialog;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -342,7 +345,7 @@ public abstract class ContainerFixture<T extends Container> extends JPopupMenuIn
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> having a matching name is found.
    */
   public final JMenuItemFixture menuItem(String name) {
-    boolean requireShowing = SHOWING_ONLY.equals(Settings.componentLookupScope());
+    boolean requireShowing = SHOWING_ONLY.equals(robot.settings().componentLookupScope());
     return new JMenuItemFixture(robot, finder().findByName(target, name, JMenuItem.class, requireShowing));
   }
 

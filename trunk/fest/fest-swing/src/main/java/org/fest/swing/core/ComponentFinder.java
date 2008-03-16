@@ -50,7 +50,7 @@ public interface ComponentFinder {
   <T extends Component> T findByType(Class<T> type);
 
   /**
-   * Finds a <code>showing</code> <code>{@link Component}</code> by type. For example:
+   * Finds a <code>{@link Component}</code> by type. For example:
    * @param <T> the parameterized type of the component to find.
    * @param type the type of the component to find.
    * @param showing indicates whether the component to find should be visible (or showing) or not.
@@ -96,7 +96,7 @@ public interface ComponentFinder {
   <T extends Component> T findByType(Container root, Class<T> type);
 
   /**
-   * Finds a <strong>showing</strong> <code>{@link Component}</code> by type in the hierarchy under the given root.
+   * Finds a <code>{@link Component}</code> by type in the hierarchy under the given root.
    * @param <T> the parameterized type of the component to find.
    * @param root the root used as the starting point of the search.
    * @param showing indicates whether the component to find should be visible (or showing) or not.
@@ -274,4 +274,18 @@ public interface ComponentFinder {
    */
   Component find(Container root, ComponentMatcher m);
 
+  /**
+   * Returns whether the message in a <code>{@link ComponentLookupException}</code> should include the current component 
+   * hierarchy. The default value is <code>true</code>.
+   * @return <code>true</code> if the component hierarchy is included as part of the 
+   *         <code>ComponentLookupException</code> message, <code>false</code> otherwise.
+   */
+  boolean includeHierarchyIfComponentNotFound();
+
+  /**
+   * Updates whether the message in a <code>{@link ComponentLookupException}</code> should include the current component 
+   * hierarchy. The default value is <code>true</code>.
+   * @param newValue the new value to set.
+   */
+  void includeHierarchyIfComponentNotFound(boolean newValue);
 }

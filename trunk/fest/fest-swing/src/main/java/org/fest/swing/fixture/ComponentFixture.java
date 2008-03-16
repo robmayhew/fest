@@ -51,7 +51,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws ComponentLookupException if more than one matching component is found.
    */
   public ComponentFixture(Robot robot, Class<? extends T> type) {
-    this(robot, robot.finder().findByType(type, requireShowing()));
+    this(robot, robot.finder().findByType(type, requireShowing(robot)));
   }
 
   /**
@@ -63,17 +63,22 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws ComponentLookupException if more than one matching component is found.
    */
   public ComponentFixture(Robot robot, String name, Class<? extends T> type) {
-    this(robot, robot.finder().findByName(name, type, requireShowing()));
+    this(robot, robot.finder().findByName(name, type, requireShowing(robot)));
   }
 
   /**
    * Returns whether showing components are the only ones participating in a component lookup. The returned value is
-   * obtained from <code>{@link Settings#componentLookupScope()}</code>
+   * obtained from the <code>{@link Settings#componentLookupScope() component lookup scope}</code> stored in this
+   * fixture's <code>{@link Robot}</code>. 
    * @return <code>true</code> if only showing components can participate in a component lookup, <code>false</code>
    * otherwise.
    */
-  protected static boolean requireShowing() {
-    return Settings.componentLookupScope().requireShowing();
+  protected boolean requireShowing() {
+    return requireShowing(robot);
+  }
+  
+  private static boolean requireShowing(Robot robot) {
+    return robot.settings().componentLookupScope().requireShowing();
   }
 
   /**

@@ -283,4 +283,10 @@ public interface Robot {
    * Ensures that there is no <code>{@link javax.swing.JOptionPane}</code> showing, and potentially blocking GUI tests.
    */
   void requireNoJOptionPaneIsShowing();
+  
+  /**
+   * Returns the configuration settings for this <code>{@link Robot}</code>.
+   * @return the configuration settings for this <code>Robot</code>.
+   */
+  Settings settings();
 }

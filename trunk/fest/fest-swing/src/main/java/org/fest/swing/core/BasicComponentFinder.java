@@ -27,7 +27,6 @@ import abbot.finder.TestHierarchy;
 
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.swing.core.Settings.shouldIncludeHierarchyInComponentLookupException;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.util.System.LINE_SEPARATOR;
 import static org.fest.util.Strings.concat;
@@ -41,6 +40,8 @@ public final class BasicComponentFinder implements ComponentFinder {
 
   private final Hierarchy hierarchy;
   private final ComponentPrinter printer;
+
+  private boolean includeHierarchyInComponentLookupException;
 
   /**
    * Creates a new <code>{@link BasicComponentFinder}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
@@ -68,6 +69,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   BasicComponentFinder(Hierarchy hierarchy) {
     this.hierarchy = hierarchy;
     printer = new BasicComponentPrinter(hierarchy);
+    includeHierarchyIfComponentNotFound(true);
   }
 
   /** ${@inheritDoc} */
@@ -177,7 +179,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   
   private ComponentLookupException componentNotFound(Hierarchy h, ComponentMatcher m) {
     String message = concat("Unable to find component using matcher ", m, ".");
-    if (shouldIncludeHierarchyInComponentLookupException())
+    if (includeHierarchyIfComponentNotFound())
       message = concat(message, 
           LINE_SEPARATOR, LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, formattedHierarchy(root(h)));
     throw new ComponentLookupException(message);
@@ -204,5 +206,15 @@ public final class BasicComponentFinder implements ComponentFinder {
     for (Component c : found) message.append(LINE_SEPARATOR).append(format(c));
     if (!found.isEmpty()) message.append(LINE_SEPARATOR);
     throw new ComponentLookupException(message.toString(), found);    
+  }
+
+  /** ${@inheritDoc} */
+  public boolean includeHierarchyIfComponentNotFound() {
+    return includeHierarchyInComponentLookupException;
+  }
+
+  /** ${@inheritDoc} */
+  public void includeHierarchyIfComponentNotFound(boolean newValue) {
+    includeHierarchyInComponentLookupException = newValue;
   }
 }

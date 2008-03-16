@@ -15,7 +15,6 @@
  */
 package org.fest.swing.core;
 
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -31,28 +30,20 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class SettingsTest {
 
-  private int originalDelayBetweenEvents;
+  private Settings settings = new Settings();
   
   @BeforeMethod public void setUp() {
-    originalDelayBetweenEvents = Settings.delayBetweenEvents();
-  }
-  
-  @AfterMethod public void tearDown() {
-    Settings.delayBetweenEvents(originalDelayBetweenEvents);
+    settings = new Settings();
   }
   
   @Test(dataProvider = "autoDelayProvider") 
   public void shouldUpdateAndReturnDelayBetweenEvents(int delay) {
-    Settings.delayBetweenEvents(delay);
-    assertThat(Settings.delayBetweenEvents()).isEqualTo(Robot.getAutoDelay()).isEqualTo(delay);
+    settings.delayBetweenEvents(delay);
+    assertThat(settings.delayBetweenEvents()).isEqualTo(Robot.getAutoDelay()).isEqualTo(delay);
   }
 
   @DataProvider(name="autoDelayProvider")
   public Object[][] autoDelayProvider() {
     return new Object[][] { { 100 }, { 200 }, { 68 } };
-  }
-  
-  @Test public void shouldIncludeComponentHierarchyInComponentLookupExceptionByDefault() {
-    assertThat(Settings.shouldIncludeHierarchyInComponentLookupException()).isTrue();
   }
 }
