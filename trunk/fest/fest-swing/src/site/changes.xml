@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
+      <action dev="wanghy, alruiz" type="fix">
+        Fixed JListDriver and JTable driver to scroll to the item to select, drag or drop.
+      </action>
       <action dev="wanghy, alruiz" type="fix" issue="116" due-to="Rich Toulouse">
         Selecting items in JComboBox now scroll drop-down list to get to the item to select.
       </action>

@@ -113,13 +113,8 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void clickItem(JList list, Object value, MouseButton button, int times) {
-    scrollToVisible(list, itemBounds(list, value));
+    scrollToVisible(list, value);
     robot.click(list, pointAt(list, value), button, times);
-  }
-
-  private Rectangle itemBounds(JList list, Object value) {
-    int index = location.indexOf(list, value);
-    return itemBounds(list, index);
   }
 
   /**
@@ -184,12 +179,8 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void clickItem(JList list, int index, MouseButton button, int times) {
-    scrollToVisible(list, itemBounds(list, index));
+    scrollToVisible(list, index);
     robot.click(list, location.pointAt(list, index), button, times);
-  }
-
-  private Rectangle itemBounds(JList list, int index) {
-    return list.getCellBounds(index, index);
   }
 
   /**
@@ -261,6 +252,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void drag(JList list, Object value) {
+    scrollToVisible(list, value);
     super.drag(list, pointAt(list, value));
   }
 
@@ -272,6 +264,7 @@ public class JListDriver extends JComponentDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list, Object value) {
+    scrollToVisible(list, value);
     super.drop(list, pointAt(list, value));
   }
 
@@ -283,6 +276,7 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void drag(JList list, int index) {
+    scrollToVisible(list, index);
     super.drag(list, pointAt(list, index));
   }
 
@@ -295,6 +289,7 @@ public class JListDriver extends JComponentDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list, int index) {
+    scrollToVisible(list, index);
     super.drop(list, pointAt(list, index));
   }
 
@@ -317,7 +312,16 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public JPopupMenu showPopupMenuAt(JList list, int index) {
+    scrollToVisible(list, index);
     return robot.showPopupMenu(list, pointAt(list, index));
+  }
+
+  private void scrollToVisible(JList list, int index) {
+    super.scrollToVisible(list, itemBounds(list, index));
+  }
+
+  private Rectangle itemBounds(JList list, int index) {
+    return list.getCellBounds(index, index);
   }
 
   private Point pointAt(JList list, int index) {
@@ -333,7 +337,17 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public JPopupMenu showPopupMenuAt(JList list, Object value) {
+    scrollToVisible(list, value);
     return robot.showPopupMenu(list, pointAt(list, value));
+  }
+
+  private void scrollToVisible(JList list, Object value) {
+    super.scrollToVisible(list, itemBounds(list, value));
+  }
+
+  private Rectangle itemBounds(JList list, Object value) {
+    int index = location.indexOf(list, value);
+    return itemBounds(list, index);
   }
 
   private Point pointAt(JList list, Object value) {

@@ -15,25 +15,24 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestTable.*;
+
 import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestTable;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestTable;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestTable.*;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.
@@ -103,8 +102,8 @@ public class JTableDriverTest {
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    private static final Dimension TABLE_SIZE = new Dimension(400, 200);
-    
+    private static final Dimension TABLE_SIZE = new Dimension(400, 100);
+
     private static final int COLUMN_COUNT = 6;
     private static final int ROW_COUNT = 10;
 
@@ -132,7 +131,7 @@ public class JTableDriverTest {
       return scrollPane;
     }
   }
-  
+
   private static class TableCell extends JTableCell {
     public TableCell(int row, int column) {
       super(row, column);
