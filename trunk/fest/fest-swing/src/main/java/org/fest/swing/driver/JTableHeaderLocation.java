@@ -33,6 +33,26 @@ import org.fest.swing.exception.LocationUnavailableException;
  */
 public class JTableHeaderLocation {
 
+  /**
+   * Returns the coordinates of the column which name matches the given one.
+   * @param tableHeader the target <code>JTableHeader</code>.
+   * @param columnName the column name to match
+   * @return the coordinates of the column under the given index.
+   * @throws LocationUnavailableException if a column with a matching name cannot be found.
+   */
+  public Point pointAt(JTableHeader tableHeader, String columnName) {
+    int validatedIndex = validatedIndex(tableHeader, indexOf(tableHeader, columnName));
+    Rectangle r = tableHeader.getHeaderRect(validatedIndex);
+    return new Point(r.x + r.width / 2, r.y + r.height / 2);
+  }
+
+  /**
+   * Returns the coordinates of the column under the given index.
+   * @param tableHeader the target <code>JTableHeader</code>.
+   * @param index the given index.
+   * @return the coordinates of the column under the given index.
+   * @throws LocationUnavailableException if the index is out of bounds.
+   */
   public Point pointAt(JTableHeader tableHeader, int index) {
     int validatedIndex = validatedIndex(tableHeader, index);
     Rectangle r = tableHeader.getHeaderRect(validatedIndex);
@@ -47,10 +67,16 @@ public class JTableHeaderLocation {
         "] (inclusive)"));
   }
 
-  public int indexOf(JTableHeader tableHeader, String value) {
+  /**
+   * Returns the index of the column which name matches the given value or -1 if a matching column was not found.
+   * @param tableHeader the target <code>JTableHeader</code>.
+   * @param columnName the column name to match.
+   * @return the index of the column which name matches the given value or -1 if a matching column was not found.
+   */
+  public int indexOf(JTableHeader tableHeader, String columnName) {
     int size = columnCount(tableHeader);
     for (int i = 0; i < size; i++)
-      if (match(value, columnName(tableHeader, i))) return i;
+      if (match(columnName, columnName(tableHeader, i))) return i;
     return -1;
   }
 

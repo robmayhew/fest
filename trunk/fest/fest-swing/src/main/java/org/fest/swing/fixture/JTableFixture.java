@@ -15,9 +15,12 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.awt.Point;
 
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
@@ -214,7 +217,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     click(cell, button, 1);
     return this;
   }
-  
+
   /**
    * Simulates a user clicking a cell in this fixture's <code>{@link JTable}</code>, using the specified mouse button
    * the given number of times.
@@ -228,11 +231,11 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     click(cell, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
-  
+
   void click(TableCell cell, MouseButton button, int times) {
-    driver.click(target, cell, button, times);    
+    driver.click(target, cell, button, times);
   }
-  
+
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTable}</code>.
    * <p>
@@ -348,5 +351,19 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    */
   public JPopupMenuFixture showPopupMenuAt(TableCell cell) {
     return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, cell));
+  }
+
+  /**
+   * Returns a <code>{@link JTableHeaderFixture}</code> wrapping the <code>{@link JTableHeader}</code> in this
+   * fixture's <code>{@link JTable}</code>.
+   * @return a <code>JTableHeaderFixture</code> wrapping the <code>JTableHeader</code> in this fixture's
+   *          <code>JTable</code>.
+   * @throws AssertionError if the <code>JTableHeader</code> in this fixture's <code>JTable</code> is
+   *          <code>null</code>.
+   */
+  public JTableHeaderFixture tableHeader() {
+    JTableHeader tableHeader = target.getTableHeader();
+    assertThat(tableHeader).isNotNull();
+    return new JTableHeaderFixture(robot, tableHeader);
   }
 }

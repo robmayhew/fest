@@ -6,6 +6,12 @@
   </properties>
   <body>
     <release version="0.9" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="add" issue="110">
+        Added method 'tableHeader' to JTableFixture. This method returns a JTableHeaderFixture.
+      </action>
+      <action dev="wanghy" type="add" issue="110">
+        Added JTableHeaderFixture to test instances of JTableHeader.
+      </action>
       <action dev="wanghy" type="fix">
         Made methods of class org.fest.core.Settings not static. To set a particular setting, an instance of Settings
         should be retrieved from a Robot.

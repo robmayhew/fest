@@ -15,25 +15,23 @@
  */
 package org.fest.swing.fixture;
 
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
+
 import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -47,7 +45,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
   private JTable target;
   private JTableFixture fixture;
   private TableCell cell;
-  
+
   void onSetUp() {
     driver = createMock(JTableDriver.class);
     target = new JTable();
@@ -62,13 +60,13 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
         driver.selectCell(target, cell);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.selectCell(cell));
       }
-    }.run();    
+    }.run();
   }
-  
+
   @Test public void shouldSelectCells() {
     final TableCell[] cells = { cell };
     new EasyMockTemplate(driver) {
@@ -76,72 +74,72 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
         driver.selectCells(target, cells);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.selectCells(cells));
       }
-    }.run();    
+    }.run();
   }
 
   @Test public void shouldReturnSelectionContents() {
-    final String content = "A Cell"; 
+    final String content = "A Cell";
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.selectionText(target)).andReturn(content);
       }
-      
+
       protected void codeToTest() {
         String result = fixture.selectionContents();
         assertThat(result).isSameAs(content);
       }
     }.run();
   }
-  
+
   @Test public void shouldDragAtCell() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.drag(target, cell);
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.drag(cell));
       }
     }.run();
   }
-  
+
   @Test public void shouldDropAtCell() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.drop(target, cell);
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.drop(cell));
       }
-    }.run();    
+    }.run();
   }
-  
+
   @Test public void shouldReturnPointAtCell() {
-    final Point p = new Point(6, 8); 
+    final Point p = new Point(6, 8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.pointAt(target(), cell)).andReturn(p);
       }
-      
+
       protected void codeToTest() {
         Point result = fixture.pointAt(cell);
         assertThat(result).isSameAs(p);
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnCellContent() {
-    final String content = "A Cell"; 
+    final String content = "A Cell";
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.text(target(), cell)).andReturn(content);
       }
-      
+
       protected void codeToTest() {
         String result = fixture.contentAt(cell);
         assertThat(result).isSameAs(content);
@@ -156,13 +154,13 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
         driver.click(target, cell, button, 1);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.click(cell, button));
       }
-    }.run();    
+    }.run();
   }
-  
+
   @Test public void shouldClickCellWithGivenMouseClickInfo() {
     final MouseClickInfo mouseClickInfo = leftButton().times(2);
     new EasyMockTemplate(driver) {
@@ -170,20 +168,20 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
         driver.click(target, cell, mouseClickInfo.button(), mouseClickInfo.times());
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.click(cell, mouseClickInfo));
       }
-    }.run();    
+    }.run();
   }
 
   @Test public void shouldShowJPopupMenuAtCell() {
-    final JPopupMenu popup = new JPopupMenu(); 
+    final JPopupMenu popup = new JPopupMenu();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenuAt(target, cell)).andReturn(popup);
       }
-      
+
       protected void codeToTest() {
         JPopupMenuFixture result = fixture.showPopupMenuAt(cell);
         assertThat(result.target).isSameAs(popup);
@@ -191,6 +189,16 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
+  @Test public void shouldReturnJTableHeaderFixture() {
+    JTableHeaderFixture tableHeader = fixture.tableHeader();
+    assertThat(tableHeader.target).isSameAs(target.getTableHeader());
+  }
+
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldThrowErrorIfJTableHeaderIsNull() {
+    target.setTableHeader(null);
+    fixture.tableHeader();
+  }
 
   ComponentDriver driver() { return driver; }
   JTable target() { return target; }
