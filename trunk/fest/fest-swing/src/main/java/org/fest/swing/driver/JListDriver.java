@@ -15,7 +15,17 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
@@ -28,16 +38,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
-
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -113,7 +113,13 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void clickItem(JList list, Object value, MouseButton button, int times) {
+    scrollToVisible(list, itemBounds(list, value));
     robot.click(list, pointAt(list, value), button, times);
+  }
+
+  private Rectangle itemBounds(JList list, Object value) {
+    int index = location.indexOf(list, value);
+    return itemBounds(list, index);
   }
 
   /**
@@ -178,7 +184,12 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void clickItem(JList list, int index, MouseButton button, int times) {
+    scrollToVisible(list, itemBounds(list, index));
     robot.click(list, location.pointAt(list, index), button, times);
+  }
+
+  private Rectangle itemBounds(JList list, int index) {
+    return list.getCellBounds(index, index);
   }
 
   /**
@@ -205,7 +216,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JList}</code> matches 
+   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JList}</code> matches
    * the given text.
    * @param list the target <code>JList</code>.
    * @param text the text to match.
@@ -218,7 +229,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the <code>String</code> representations of the selected items in the <code>{@link JList}</code> match 
+   * Verifies that the <code>String</code> representations of the selected items in the <code>{@link JList}</code> match
    * the given text items.
    * @param list the target <code>JList</code>.
    * @param items text items to match.
@@ -235,14 +246,14 @@ public class JListDriver extends JComponentDriver {
     }
   }
 
-  private void failNoSelection(JList list) { 
-    fail(concat("[", selectedIndexProperty(list), "] No selection")); 
+  private void failNoSelection(JList list) {
+    fail(concat("[", selectedIndexProperty(list), "] No selection"));
   }
 
-  private String selectedIndexProperty(JList list) { 
-    return propertyName(list, "selectedIndex"); 
+  private String selectedIndexProperty(JList list) {
+    return propertyName(list, "selectedIndex");
   }
-  
+
   /**
    * Starts a drag operation at the location of the first item matching the given value.
    * @param list the target <code>JList</code>.
