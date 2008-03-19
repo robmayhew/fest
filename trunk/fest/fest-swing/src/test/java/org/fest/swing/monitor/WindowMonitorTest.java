@@ -111,8 +111,7 @@ public class WindowMonitorTest {
     return type.isAssignableFrom(wrapper.realListener().getClass());
   }
   
-  @Test(dependsOnMethods = "shouldAttachMonitors")
-  public void shouldReturnWindowIsReady() throws Exception {
+  @Test public void shouldReturnWindowIsReady() throws Exception {
     createAndInjectMocks();
     new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
@@ -125,8 +124,7 @@ public class WindowMonitorTest {
     }.run();
   }
   
-  @Test(dependsOnMethods = "shouldAttachMonitors")
-  public void shouldReturnWindowIsNotReadyAndCheckWindow() throws Exception {
+  @Test public void shouldReturnWindowIsNotReadyAndCheckWindow() throws Exception {
     createAndInjectMocks();
     new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
       @Override protected void expectations() {
@@ -140,8 +138,7 @@ public class WindowMonitorTest {
     }.run();    
   }
   
-  @Test(dependsOnMethods = "shouldAttachMonitors")
-  public void shouldReturnEventQueueForComponent() throws Exception {
+  @Test public void shouldReturnEventQueueForComponent() throws Exception {
     createAndInjectMocks();
     final EventQueue queue = new EventQueue();
     new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
@@ -155,8 +152,7 @@ public class WindowMonitorTest {
     }.run();    
   }
   
-  @Test(dependsOnMethods = "shouldAttachMonitors")
-  public void shouldReturnAllEventQueues() throws Exception {
+  @Test public void shouldReturnAllEventQueues() throws Exception {
     createAndInjectMocks();
     final List<EventQueue> allQueues = new ArrayList<EventQueue>();
     new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {
@@ -170,8 +166,7 @@ public class WindowMonitorTest {
     }.run();    
   }
   
-  @Test(dependsOnMethods = "shouldAttachMonitors")
-  public void shouldReturnRootWindows() throws Exception {
+  @Test public void shouldReturnRootWindows() throws Exception {
     createAndInjectMocks();
     final List<Window> rootWindows = new ArrayList<Window>();
     new EasyMockTemplate(mockWindows, mockContext, mockWindowStatus) {

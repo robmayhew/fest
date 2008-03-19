@@ -17,52 +17,9 @@
 
   <body>
     <breadcrumbs>
-      <item name="FEST" href="../index.html" />
-      <item name="Swing" href="index.html"/>
+      <item name="FEST" href="../index.php" />
+      <item name="Swing" href="index.php"/>
     </breadcrumbs>
-
-    <menu name="Overview">
-      <item name="Introduction" href="index.html" />
-      <item name="Getting Started" href="getting-started.html" />
-      <item name="Guidelines" href="guidelines.html" />
-      <item name="FAQ" href="faq.html" />
-      <item name="Changelog" href="changes-report.html" />
-      <item name="Javadocs" href="apidocs/index.html" />
-    </menu>
-
-    <menu name="Features">
-      <item name="DSL-Oriented API" href="dsl-api.html" />
-      <item name="FEST Fixtures" href="component-fixture.html" />
-      <item name="GUI Component Lookup" href="component-lookup.html">
-        <item name="ContainerFixture" href="container-fixture.html" />
-        <item name="ComponenFinder" href="component-finder.html" />
-        <item name="Troubleshooting" href="lookup-troubleshoot.html" />
-      </item>
-      <item name="Mouse Input" href="mouse-input.html" />
-      <item name="Keyboard Input" href="keyboard-input.html" />
-      <item name="Drag 'n Drop" href="drag-n-drop.html" />
-      <item name="Long-Duration Tasks" href="long-duration.html" />
-      <item name="Screenshots of Failing Tests" href="failure-screenshots.html">
-        <item name="Manually" href="manual-screenshot.html" />
-        <item name="JUnit Extension" href="junit-screenshot.html" />
-        <item name="TestNG Extension" href="testng-screenshot.html" />
-      </item>
-      <item name="Component Formatters" href="component-formatter.html" />
-      <item name="Screenshots of GUI Components" href="component-screenshot.html" />
-      <item name="Platform-Specific" href="platform.html" />
-    </menu>
-
-    <menu name="Extensions">
-      <item name="JUnit Extension" href="junit/apidocs/index.html" />
-      <item name="TestNG Extension" href="testng/apidocs/index.html" />
-    </menu>
-
-    <menu name="FEST Modules">
-      <item name="FEST-Swing" href="../swing/index.html" />
-      <item name="FEST-Assert" href="../assert/index.html" />
-      <item name="FEST-Reflect" href="../reflect/index.html" />
-      <item name="FEST-Mocks" href="../mocks/index.html" />
-    </menu>
 
     <menu ref="reports" />
   </body>

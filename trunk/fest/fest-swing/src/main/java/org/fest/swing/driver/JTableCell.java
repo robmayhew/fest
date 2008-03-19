@@ -17,6 +17,8 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
+import org.fest.swing.exception.ActionFailedException;
+
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -48,7 +50,7 @@ public abstract class JTableCell {
   /**
    * Validates the indices of this cell regarding the given table.
    * @param table the table to use to validate this cell's indices.
-   * @throw ActionFailedException if any of the indices is out of bounds. 
+   * @throws ActionFailedException if any of the indices is out of bounds. 
    */
   public void validateBoundsIn(JTable table) {
     int rowCount = table.getRowCount();
