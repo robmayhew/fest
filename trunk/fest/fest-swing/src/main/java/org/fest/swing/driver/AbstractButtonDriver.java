@@ -74,7 +74,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws AssertionError if the button is not selected.
    */
   public void requireSelected(AbstractButton button) {
-    assertThat(button.isSelected()).as(propertyName(button, SELECTED_PROPERTY)).isTrue();
+    assertThat(button.isSelected()).as(selectedProperty(button)).isTrue();
   }
   
   /**
@@ -83,6 +83,10 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws AssertionError if the button is selected.
    */
   public void requireNotSelected(AbstractButton button) {
-    assertThat(button.isSelected()).as(propertyName(button, SELECTED_PROPERTY)).isFalse();
+    assertThat(button.isSelected()).as(selectedProperty(button)).isFalse();
+  }
+
+  private static String selectedProperty(AbstractButton button) {
+    return propertyName(button, SELECTED_PROPERTY);
   }
 }

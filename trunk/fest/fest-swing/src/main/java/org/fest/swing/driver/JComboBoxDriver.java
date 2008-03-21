@@ -251,7 +251,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JComboBox</code> is not editable.
    */
   public void requireEditable(JComboBox comboBox) {
-    assertThat(comboBox.isEditable()).as(propertyName(comboBox, EDITABLE_PROPERTY)).isTrue();
+    assertThat(comboBox.isEditable()).as(editableProperty(comboBox)).isTrue();
   }
 
   /**
@@ -260,6 +260,10 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JComboBox</code> is editable.
    */
   public void requireNotEditable(JComboBox comboBox) {
-    assertThat(comboBox.isEditable()).as(propertyName(comboBox, EDITABLE_PROPERTY)).isFalse();
+    assertThat(comboBox.isEditable()).as(editableProperty(comboBox)).isFalse();
+  }
+
+  private static String editableProperty(JComboBox comboBox) {
+    return propertyName(comboBox, EDITABLE_PROPERTY);
   }
 }

@@ -41,6 +41,11 @@ import static org.fest.util.Strings.concat;
  */
 public class JOptionPaneDriver extends JComponentDriver {
 
+  private static final String MESSAGE_PROPERTY = "message";
+  private static final String MESSAGE_TYPE_PROPERTY = "messageType";
+  private static final String OPTIONS_PROPERTY = "options";
+  private static final String TITLE_PROPERTY = "title";
+  
   private static final HashMap<Integer, String> messageMap = new HashMap<Integer, String>();
   static {
     messageMap.put(ERROR_MESSAGE, "Error Message");
@@ -66,7 +71,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    */
   public void requireTitle(JOptionPane optionPane, String title) {
     String actualTitle = ((Dialog)optionPane.getRootPane().getParent()).getTitle();
-    assertThat(actualTitle).as(propertyName(optionPane, "title")).isEqualTo(title);
+    assertThat(actualTitle).as(propertyName(optionPane, TITLE_PROPERTY)).isEqualTo(title);
   }
 
   /**
@@ -76,7 +81,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not show the given message.
    */
   public void requireMessage(JOptionPane optionPane, Object message) {
-    assertThat(optionPane.getMessage()).as(propertyName(optionPane, "message")).isEqualTo(message);
+    assertThat(optionPane.getMessage()).as(propertyName(optionPane, MESSAGE_PROPERTY)).isEqualTo(message);
   }
 
   /**
@@ -86,7 +91,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not have the given options.
    */
   public void requireOptions(JOptionPane optionPane, Object[] options) {
-    assertThat(optionPane.getOptions()).as(propertyName(optionPane, "options")).isEqualTo(options);
+    assertThat(optionPane.getOptions()).as(propertyName(optionPane, OPTIONS_PROPERTY)).isEqualTo(options);
   }
 
   /**
@@ -208,7 +213,7 @@ public class JOptionPaneDriver extends JComponentDriver {
 
   private void assertEqualMessageType(JOptionPane optionPane, int expected) {
     String actualType = actualMessageTypeAsText(optionPane);
-    assertThat(actualType).as(propertyName(optionPane, "messageType")).isEqualTo(messageTypeAsText(expected));
+    assertThat(actualType).as(propertyName(optionPane, MESSAGE_TYPE_PROPERTY)).isEqualTo(messageTypeAsText(expected));
   }
 
   private String actualMessageTypeAsText(JOptionPane optionPane) {

@@ -201,7 +201,7 @@ public class ComponentDriver {
     assertThat(c.isVisible()).as(visibleProperty(c)).isFalse();
   }
 
-  private String visibleProperty(Component c) { 
+  private static String visibleProperty(Component c) { 
     return propertyName(c, VISIBLE_PROPERTY); 
   }
 
@@ -221,14 +221,22 @@ public class ComponentDriver {
    * @throws WaitTimedOutError if the <code>Component</code> is never enabled.
    */
   public void requireEnabled(final Component c, Timeout timeout) {
-    Condition targetEnabledCondition = new Condition(enabledProperty(c)) {
-      @Override public boolean test() {
-        return c.isEnabled();
-      }
-    };
-    pause(targetEnabledCondition, timeout);
+    pause(new ComponentEnabledCondition(c), timeout);
   }
 
+  private static class ComponentEnabledCondition extends Condition {
+    private final Component c;
+
+    ComponentEnabledCondition(Component c) {
+      super(enabledProperty(c));
+      this.c = c;
+    }
+
+    @Override public boolean test() {
+      return c.isEnabled();
+    }
+  }
+  
   /**
    * Asserts that the <code>{@link Component}</code> is disabled.
    * @param c the target component.
@@ -238,7 +246,7 @@ public class ComponentDriver {
     assertThat(c.isEnabled()).as(enabledProperty(c)).isFalse();
   }
 
-  private String enabledProperty(Component c) { 
+  private static String enabledProperty(Component c) { 
     return propertyName(c, ENABLED_PROPERTY); 
   }
 
@@ -361,7 +369,7 @@ public class ComponentDriver {
     return true;
   }
 
-  protected final String propertyName(Component c, String propertyName) {
+  protected static String propertyName(Component c, String propertyName) {
     return concat(format(c), " - property:", quote(propertyName));
   }
 }

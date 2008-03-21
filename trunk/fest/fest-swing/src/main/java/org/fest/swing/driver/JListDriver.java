@@ -15,15 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -39,6 +30,16 @@ import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
 
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JList}</code>s. This class is intended for internal
@@ -49,6 +50,10 @@ import org.fest.swing.util.Range.To;
  */
 public class JListDriver extends JComponentDriver {
 
+  private static final String SELECTED_INDICES_PROPERTY = "selectedIndices";
+  private static final String SELECTED_INDICES_LENGTH_PROPERTY = concat(SELECTED_INDICES_PROPERTY, "#length");
+  private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
+  
   private final JListLocation location;
 
   /**
@@ -230,9 +235,9 @@ public class JListDriver extends JComponentDriver {
     int[] selectedIndices = list.getSelectedIndices();
     int currentSelectionCount = selectedIndices.length;
     if (currentSelectionCount == 0) failNoSelection(list);
-    assertThat(currentSelectionCount).as(propertyName(list, "selectedIndices#length")).isEqualTo(items.length);
+    assertThat(currentSelectionCount).as(propertyName(list, SELECTED_INDICES_LENGTH_PROPERTY)).isEqualTo(items.length);
     for (int i = 0; i < currentSelectionCount; i++) {
-      String description = propertyName(list, concat("selectedIndices[", valueOf(i), "]"));
+      String description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
       assertThat(text(list, selectedIndices[i])).as(description).isEqualTo(items[i]);
     }
   }
@@ -242,7 +247,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   private String selectedIndexProperty(JList list) {
-    return propertyName(list, "selectedIndex");
+    return propertyName(list, SELECTED_INDEX_PROPERTY);
   }
 
   /**

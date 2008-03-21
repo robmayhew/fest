@@ -239,7 +239,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTree</code> is not editable.
    */
   public void requireEditable(JTree tree) {
-    assertThat(tree.isEditable()).as(propertyName(tree, EDITABLE_PROPERTY)).isTrue();
+    assertThat(tree.isEditable()).as(editableProperty(tree)).isTrue();
   }
 
   /**
@@ -248,6 +248,10 @@ public class JTreeDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTree</code> is editable.
    */
   public void requireNotEditable(JTree tree) {
-    assertThat(tree.isEditable()).as(propertyName(tree, EDITABLE_PROPERTY)).isFalse();
+    assertThat(tree.isEditable()).as(editableProperty(tree)).isFalse();
+  }
+
+  private static String editableProperty(JTree tree) {
+    return propertyName(tree, EDITABLE_PROPERTY);
   }
 }

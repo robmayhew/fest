@@ -30,6 +30,8 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class JLabelDriver extends JComponentDriver {
 
+  private static final String TEXT_PROPERTY = "text";
+
   /**
    * Creates a new </code>{@link JLabelDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -45,6 +47,6 @@ public class JLabelDriver extends JComponentDriver {
    * @throws AssertionError if the text of the <code>JLabel</code> is not equal to the given one.
    */
   public void requireText(JLabel label, String expected) {
-    assertThat(label.getText()).as(propertyName(label, "text")).isEqualTo(expected);
+    assertThat(label.getText()).as(propertyName(label, TEXT_PROPERTY)).isEqualTo(expected);
   }
 }

@@ -254,7 +254,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the text of the <code>JTextComponent</code> is not equal to the given one.
    */
   public void requireText(JTextComponent textBox, String expected) {
-    assertThat(textBox.getText()).as(propertyName(textBox, TEXT_PROPERTY)).isEqualTo(expected);
+    assertThat(textBox.getText()).as(textProperty(textBox)).isEqualTo(expected);
   }
 
   /**
@@ -263,7 +263,11 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTextComponent</code> is not empty.
    */
   public void requireEmpty(JTextComponent textBox) {
-    assertThat(textBox.getText()).as(propertyName(textBox, TEXT_PROPERTY)).isEmpty();
+    assertThat(textBox.getText()).as(textProperty(textBox)).isEmpty();
+  }
+
+  private static String textProperty(JTextComponent textBox) {
+    return propertyName(textBox, TEXT_PROPERTY);
   }
 
   /**
@@ -272,7 +276,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTextComponent</code> is not editable.
    */
   public void requireEditable(JTextComponent textBox) {
-    assertThat(textBox.isEditable()).as(propertyName(textBox, EDITABLE_PROPERTY)).isTrue();
+    assertThat(textBox.isEditable()).as(editableProperty(textBox)).isTrue();
   }
 
   /**
@@ -281,6 +285,10 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTextComponent</code> is editable.
    */
   public void requireNotEditable(JTextComponent textBox) {
-    assertThat(textBox.isEditable()).as(propertyName(textBox, EDITABLE_PROPERTY)).isFalse();
+    assertThat(textBox.isEditable()).as(editableProperty(textBox)).isFalse();
+  }
+
+  private static String editableProperty(JTextComponent textBox) {
+    return propertyName(textBox, EDITABLE_PROPERTY);
   }
 }
