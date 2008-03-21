@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.9" date="2008-03-19" description="Subsequent release">
+    <release version="0.9" date="2008-03-21" description="Subsequent release">
       <action dev="wanghy, alruiz" type="fix">
         Fixed JListDriver and JTable driver to scroll to the item to select, drag or drop.
       </action>
@@ -22,7 +22,7 @@
         Made methods of class org.fest.core.Settings not static. To set a particular setting, an instance of Settings
         should be retrieved from a Robot.
       </action>
-      <action dev="alruiz" type="add" issue="118" due-to="Łukasz Tutaj">
+      <action dev="alruiz" type="add" issue="118" due-to="Lukasz Tutaj">
         Added methods 'includeHierarchyIfComponentNotFound' and 
         'includeHierarchyIfComponentNotFound(boolean)' to org.fest.swing.core.ComponentFinder to indicate if the
         component hierarchy should be included in a ComponentLookupException thrown when a component cannot be found.

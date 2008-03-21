@@ -320,26 +320,6 @@
       #banner( $decoration.bannerLeft "bannerLeft" )
       #banner( $decoration.bannerRight "bannerRight" )
       <span id="bannerRight">
-<!-- Google CSE Search Box Begins  -->
-<style type="text/css">
-@import url(http://www.google.com/cse/api/branding.css);
-</style>
-<div class="cse-branding-bottom" style="color:#000000;padding:4px;">
-  <div class="cse-branding-form">
-    <form action="http://www.google.com/cse" id="searchbox_007537612904510037823:usu_hsci2xi">
-      <input type="hidden" name="cx" value="007537612904510037823:usu_hsci2xi" />
-      <input type="text" name="q" size="20" />
-      <input type="submit" name="sa" value="Search" />
-    </form>
-  </div>
-  <div class="cse-branding-logo">
-    <img src="http://www.google.com/images/poweredby_transparent/poweredby_FFFFFF.gif" alt="Google" />
-  </div>
-  <div class="cse-branding-text">
-    Custom Search
-  </div>
-</div>
-<!-- Google CSE Search Box Ends -->
       </span>
       <div class="clear">
         <hr/>
