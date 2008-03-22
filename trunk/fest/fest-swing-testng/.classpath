@@ -14,9 +14,9 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/fest-assert-0.9.1.jar"/>
-	<classpathentry kind="lib" path="lib/fest-reflect-0.3.jar"/>
-	<classpathentry kind="lib" path="lib/fest-swing-0.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/fest-util-0.3.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-1.0a1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-reflect-0.4.jar"/>
+	<classpathentry kind="lib" path="lib/fest-swing-0.9.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
