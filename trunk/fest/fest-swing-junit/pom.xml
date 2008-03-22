@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing-junit</artifactId>
-	<version>0.8.1</version>
+	<version>0.9</version>
 	<name>FEST Swing - JUnit Extension</name>
 	<description>JUnit-specific extension for FEST-Swing</description>
 	<inceptionYear>2007</inceptionYear>
@@ -63,25 +63,25 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-swing</artifactId>
-			<version>0.8.1</version>
+			<version>0.9</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-reflect</artifactId>
-			<version>0.3</version>
+			<version>0.4</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-util</artifactId>
-			<version>0.3</version>
+			<version>0.4</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-assert</artifactId>
-			<version>0.9.1</version>
+			<version>1.0a1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
