@@ -27,6 +27,7 @@ import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.ReflectionUtils.mapField;
 
 /**
@@ -57,7 +58,7 @@ public class WindowsTest {
     frame.destroy();
   }
   
-  @Test public void shouldEvaluateWindowAsReadyAndNotHiddenIfVisible() {
+  @Test(groups = GUI) public void shouldEvaluateWindowAsReadyAndNotHiddenIfVisible() {
     frame.display();
     windows.markExisting(frame);
     assertWindowIsReady();

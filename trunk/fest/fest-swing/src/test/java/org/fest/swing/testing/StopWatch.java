@@ -13,7 +13,7 @@
  * 
  * Copyright @2007 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.testing;
 
 import static java.lang.System.currentTimeMillis;
 

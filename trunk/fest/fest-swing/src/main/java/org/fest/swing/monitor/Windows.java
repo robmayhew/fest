@@ -56,6 +56,17 @@ class Windows {
   }
 
   /**
+   * Creates a new <code>{@link WindowVisibilityMonitor}</code> and attaches it to the given
+   * <code>{@link Window}</code>.
+   * @param target the <code>Window</code> to attach the new monitor to.
+   */
+  void attachNewWindowVisibilityMonitor(Window target) {
+    WindowVisibilityMonitor monitor = new WindowVisibilityMonitor(this);
+    target.addWindowListener(monitor);
+    target.addComponentListener(monitor);
+  }
+  
+  /**
    * Marks the given window as "ready to use" and if not showing, as "hidden."
    * @param w the given window.
    */

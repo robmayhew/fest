@@ -35,6 +35,7 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.field;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link ExistingHierarchy}</code>.
@@ -91,7 +92,7 @@ public class ExistingHierarchyTest {
     }.run();
   }
   
-  @Test public void shouldDisposeWindow() {
+  @Test(groups = GUI) public void shouldDisposeWindow() {
     class CustomFrame extends TestFrame {
       private static final long serialVersionUID = 1L;
 

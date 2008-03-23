@@ -57,6 +57,8 @@ class WindowStatus {
     }
   }
 
+  Windows windows() { return windows; }
+  
   /**
    * Checks whether the given window is ready for input.
    * @param w the given window.

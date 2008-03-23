@@ -15,22 +15,24 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.*;
-import java.lang.ref.WeakReference;
+import java.awt.EventQueue;
+import java.awt.Window;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JTextField;
+import java.util.List;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.ToolkitStub;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.util.ReflectionUtils.mapField;
 
 /**
  * Tests for <code>{@link Context}</code>.
@@ -39,135 +41,131 @@ import static org.fest.swing.util.ReflectionUtils.mapField;
  */
 public class ContextTest {
 
-  private Map<EventQueue, Map<Window, Boolean>> contexts;
-  private Map<Component, WeakReference<EventQueue>> queues;
+  private EventQueue eventQueue;
+  private ToolkitStub toolkit;
+  private WindowEventQueueMapping windowEventQueueMapping;
+  private EventQueueMapping eventQueueMapping;
   private TestFrame frame;
-  
   private Context context;
   
   @BeforeMethod public void setUp() {
-    context = new Context();
-    contexts = mapField("contexts", context);
-    queues = mapField("queues", context);
-    frame = new TestFrame(getClass());
+    eventQueue = new EventQueue();
+    toolkit = new ToolkitStub(eventQueue);
+    frame = new TestFrame(ContextTest.class);
+    windowEventQueueMapping = createMock(WindowEventQueueMapping.class);
+    eventQueueMapping = createMock(EventQueueMapping.class);
+    createContext();
+  }
+
+  private void createContext() {
+    new EasyMockTemplate(windowEventQueueMapping) {
+      protected void expectations() {
+        windowEventQueueMapping.addQueueFor(toolkit);
+      }
+
+      protected void codeToTest() {
+        context = new Context(toolkit, windowEventQueueMapping, eventQueueMapping);
+      }
+    }.run();
+    reset(windowEventQueueMapping);
   }
   
   @AfterMethod public void tearDown() {
     frame.destroy();
   }
-  
-  @Test public void shouldHaveSystemEventQueueInContext() {
-    assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
+
+  @Test public void shouldReturnRootWindows() {
+    final TestFrame anotherFrame = new TestFrame(ContextTest.class);
+    new EasyMockTemplate(windowEventQueueMapping) {
+      protected void expectations() {
+        expect(windowEventQueueMapping.windows()).andReturn(frameInList());
+      }
+
+      protected void codeToTest() {
+        Collection<Window> rootWindows = context.rootWindows();
+        assertThat(rootWindows).contains(frame);
+        assertThat(rootWindows).contains(anotherFrame);
+      }
+    }.run();
   }
 
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldAddContextIfGivenComponentIsWindowAndAddQueue() {
-    frame.display();
-    context.addContextFor(frame);
-    assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
-    Map<Window, Boolean> context = contexts.get(defaultSystemEventQueue());
-    assertMapContainsOnlyOneKey(context, frame);
-    assertQueueAddedFor(frame);
+  private List<Window> frameInList() {
+    List<Window> windows = new ArrayList<Window>();
+    windows.add(frame);
+    return windows;
+  }
+  
+  @Test public void shouldReturnStoredQueue() {
+    new EasyMockTemplate(eventQueueMapping) {
+      protected void expectations() {
+        expect(eventQueueMapping.storedQueueFor(frame)).andReturn(eventQueue);
+      }
+
+      protected void codeToTest() {
+        EventQueue storedQueue = context.storedQueueFor(frame);
+        assertThat(storedQueue).isSameAs(eventQueue);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRemoveContext() {
+    new EasyMockTemplate(windowEventQueueMapping) {
+      protected void expectations() {
+        windowEventQueueMapping.removeMappingFor(frame);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        context.removeContextFor(frame);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldAddContext() {
+    new EasyMockTemplate(windowEventQueueMapping, eventQueueMapping) {
+      protected void expectations() {
+        windowEventQueueMapping.addQueueFor(frame);
+        expectLastCall().once();
+        eventQueueMapping.addQueueFor(frame);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        context.addContextFor(frame);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldReturnEventQueueForComponent() {
+    new EasyMockTemplate(eventQueueMapping) {
+      protected void expectations() {
+        expect(eventQueueMapping.queueFor(frame)).andReturn(eventQueue);
+      }
+
+      protected void codeToTest() {
+        EventQueue storedEventQueue = context.eventQueueFor(frame);
+        assertThat(storedEventQueue).isSameAs(eventQueue);
+      }
+    }.run();
   }
 
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldNotAddContextIfGivenComponentIsNotWindowAndAddQueue() {
-    JTextField textField = new JTextField();
-    frame.add(textField);
-    frame.display();
-    context.addContextFor(textField);
-    assertMapContainsOnlyOneKey(contexts, defaultSystemEventQueue());
-    assertContextExcludes(defaultSystemEventQueue(), textField);
-    assertQueueAddedFor(textField);
-  }
+  @Test public void shouldReturnAllEventQueues() {
+    new EasyMockTemplate(windowEventQueueMapping, eventQueueMapping) {
+      protected void expectations() {
+        expect(windowEventQueueMapping.eventQueues()).andReturn(eventQueueInList());
+        expect(eventQueueMapping.eventQueues()).andReturn(eventQueueInList());
+      }
 
-  private void assertQueueAddedFor(Component c) {
-    assertMapContainsOnlyOneKey(queues, c);
-    WeakReference<EventQueue> queueReference = queues.get(c);
-    assertThat(queueReference.get()).isSameAs(c.getToolkit().getSystemEventQueue());
+      protected void codeToTest() {
+        Collection<EventQueue> allEventQueues = context.allEventQueues();
+        assertThat(allEventQueues).containsOnly(eventQueue);
+      }
+    }.run();
   }
   
-  private void assertMapContainsOnlyOneKey(Map<?, ?> map, Object key) {
-    assertThat(map.size()).isEqualTo(1);
-    assertThat(map.keySet()).contains(key);
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldLookupQueueForGivenComponent() {
-    frame.display();
-    EventQueue queue = frame.getToolkit().getSystemEventQueue();
-    WeakReference<EventQueue> reference = new WeakReference<EventQueue>(queue);
-    queues.put(frame, reference);
-    assertThat(context.lookupEventQueueFor(frame)).isSameAs(queue);
-  }
-  
-  @Test(dependsOnMethods = { "shouldHaveSystemEventQueueInContext", 
-                             "shouldAddContextIfGivenComponentIsWindowAndAddQueue" })
-  public void shouldReturnAllRootWindows() {
-    TestFrame anotherFrame = new TestFrame(getClass());
-    anotherFrame.display();
-    frame.display();
-    context.addContextFor(frame);
-    context.addContextFor(anotherFrame);
-    Collection<Window> rootWindows = context.rootWindows();
-    Object[] frames = Frame.getFrames();
-    assertThat(rootWindows).contains(frame, anotherFrame);
-    assertThat(rootWindows).containsOnly(frames);
-    anotherFrame.destroy();
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldReturnEventQueueInMapForGivenComponent() {
-    EventQueue queue = new EventQueue();
-    queues.put(frame, new WeakReference<EventQueue>(queue));
-    assertThat(context.eventQueueFor(frame)).isSameAs(queue);
-  }
-
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldReturnComponentEventQueueIfEventQueueInMapIsNull() {
-    queues.put(frame, new WeakReference<EventQueue>(null));
-    assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
-  }
-
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldReturnComponentEventQueueIfEventQueueReferenceInMapIsNull() {
-    queues.put(frame, null);
-    assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldReturnComponentEventQueueIfComponentNotInMap() {
-    queues.clear();
-    assertThat(context.eventQueueFor(frame)).isSameAs(defaultSystemEventQueue());    
-  }
-
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldRemoveContextForComponentMappedWithDefaultEventQueue() {
-    contexts.put(defaultSystemEventQueue(), contextWith(frame));
-    context.removeContextFor(frame);
-    assertContextExcludes(defaultSystemEventQueue(), frame);
-  }
-  
-  @Test(dependsOnMethods = "shouldHaveSystemEventQueueInContext")
-  public void shouldRemoveContextForComponentMappedWithNotDefaultEventQueue() {
-    contexts.get(defaultSystemEventQueue()).remove(frame);
-    EventQueue queue = new EventQueue();
-    contexts.put(queue, contextWith(frame));
-    context.removeContextFor(frame);
-    assertContextExcludes(queue, frame);
-  }
-
-  private Map<Window, Boolean> contextWith(Window w) {
-    Map<Window, Boolean> context = new HashMap<Window, Boolean>();
-    context.put(w, true);
-    return context;
-  }
-  
-  private void assertContextExcludes(EventQueue queue, Component excluded) {
-    assertThat(contexts.get(queue).keySet()).excludes(excluded);
-  }
-  
-  private EventQueue defaultSystemEventQueue() {
-    return Toolkit.getDefaultToolkit().getSystemEventQueue();
+  private List<EventQueue> eventQueueInList() {
+    final List<EventQueue> queues = new ArrayList<EventQueue>();
+    queues.add(eventQueue);
+    return queues;
   }
 }

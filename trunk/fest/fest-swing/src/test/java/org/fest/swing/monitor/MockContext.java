@@ -20,6 +20,8 @@ import java.awt.EventQueue;
 import java.awt.Window;
 import java.util.Collection;
 
+import org.fest.swing.testing.ToolkitStub;
+
 import static org.easymock.classextension.EasyMock.createMock;
 
 /**
@@ -30,7 +32,7 @@ import static org.easymock.classextension.EasyMock.createMock;
  */
 public class MockContext extends Context {
 
-  public static Context mock() throws Exception {
+  public static Context mock() {
     return createMock(MockContext.class);
   }
 
@@ -40,11 +42,13 @@ public class MockContext extends Context {
 
   @Override public EventQueue eventQueueFor(Component c) { return null; }
 
-  @Override public EventQueue lookupEventQueueFor(Component c) { return null; }
+  @Override public EventQueue storedQueueFor(Component c) { return null; }
 
   @Override public void removeContextFor(Component component) { }
 
   @Override public Collection<Window> rootWindows() { return null; }
   
-  public MockContext() {}
+  public MockContext() {
+    super(new ToolkitStub());
+  }
 }

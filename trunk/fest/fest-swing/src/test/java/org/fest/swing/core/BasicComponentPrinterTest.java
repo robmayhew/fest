@@ -27,12 +27,14 @@ import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link BasicComponentPrinter}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class BasicComponentPrinterTest {
 
   protected static class MainWindow extends TestFrame {

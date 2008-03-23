@@ -17,6 +17,7 @@ package org.fest.swing.monitor;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
@@ -41,9 +42,9 @@ final class WindowAvailabilityMonitor implements AWTEventListener {
   
   private final Windows windows;
 
-  static WindowAvailabilityMonitor attachWindowAvailabilityMonitor(Windows windows) {
+  static WindowAvailabilityMonitor attachWindowAvailabilityMonitor(Toolkit toolkit, Windows windows) {
     WindowAvailabilityMonitor monitor = new WindowAvailabilityMonitor(windows);
-    attachAsWeakEventListener(monitor, EVENT_MASK);
+    attachAsWeakEventListener(toolkit, monitor, EVENT_MASK);
     return monitor;
   }
   

@@ -17,6 +17,7 @@ package org.fest.swing.hierarchy;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.Collection;
 
@@ -62,22 +63,27 @@ public class NewHierarchy extends ExistingHierarchy {
   }
 
   NewHierarchy(boolean ignoreExisting) {
+    this(Toolkit.getDefaultToolkit(), ignoreExisting);
+  }
+
+  NewHierarchy(Toolkit toolkit, boolean ignoreExisting) {
     this.filter = new WindowFilter(parentFinder, childrenFinder);
-    setUp(ignoreExisting);
+    setUp(toolkit, ignoreExisting);
   }
 
-  NewHierarchy(WindowFilter filter, boolean ignoreExisting) {
+  NewHierarchy(Toolkit toolkit, WindowFilter filter, boolean ignoreExisting) {
     this.filter = filter;
-    setUp(ignoreExisting);    
+    setUp(toolkit, ignoreExisting);    
   }
 
-  private void setUp(boolean ignoreExisting) {
+  private void setUp(Toolkit toolkit, boolean ignoreExisting) {
     if (ignoreExisting) ignoreExisting();
-    attachAsWeakEventListener(new TransientWindowListener(filter), WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK);
+    TransientWindowListener listener = new TransientWindowListener(filter);
+    attachAsWeakEventListener(toolkit, listener, WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK);
   }
 
   /**
-   * Make all currently extisting components invisible to this hierarchy, without affecting their current state.
+   * Make all currently existing components invisible to this hierarchy, without affecting their current state.
    */
   public void ignoreExisting() {
     for (Container c : roots())

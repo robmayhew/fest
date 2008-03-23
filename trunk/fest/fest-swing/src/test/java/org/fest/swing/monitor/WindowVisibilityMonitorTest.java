@@ -19,17 +19,16 @@ import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestFrame;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.monitor.MockWindows.mock;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
 
 /**
  * Tests for <code>{@link WindowVisibilityMonitor}</code>.
@@ -41,26 +40,20 @@ public class WindowVisibilityMonitorTest {
   private WindowVisibilityMonitor monitor;
   
   private Windows windows;
-  private TestFrame frame;
+  private JFrame frame;
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = new TestFrame(getClass());
-    windows = mock();
+    frame = createMock(JFrame.class);
+    windows = MockWindows.mock();
+    createAndAttachMonitor();
   }
 
-  @AfterMethod public void tearDown() {
-    frame.destroy();
+  private void createAndAttachMonitor() {
+    monitor = new WindowVisibilityMonitor(windows);
   }
+
   
-  @Test public void shouldAttachMonitorToWindow() {
-    attachMonitor();
-    assertThat(frame.getWindowListeners()).contains(monitor);
-    assertThat(frame.getComponentListeners()).contains(monitor);
-  }
-  
-  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldMarkWindowAsShowingIfWindowShown() {
-    attachMonitor();
+  @Test public void shouldMarkWindowAsShowingIfWindowShown() {
     new EasyMockTemplate(windows) {
       protected void expectations() {
         windows.markAsShowing(frame);
@@ -72,9 +65,7 @@ public class WindowVisibilityMonitorTest {
     }.run();
   }
 
-  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldNotMarkWindowAsShowingIfComponentShownIsNotWindow() {
-    attachMonitor();
+  @Test public void shouldNotMarkWindowAsShowingIfComponentShownIsNotWindow() {
     new EasyMockTemplate(windows) {
       protected void expectations() {}
 
@@ -84,9 +75,7 @@ public class WindowVisibilityMonitorTest {
     }.run();
   }
 
-  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldMarkWindowAsHiddenIfWindowHidden() {
-    attachMonitor();
+  @Test public void shouldMarkWindowAsHiddenIfWindowHidden() {
     new EasyMockTemplate(windows) {
       protected void expectations() {
         windows.markAsHidden(frame);
@@ -98,9 +87,7 @@ public class WindowVisibilityMonitorTest {
     }.run();
   }
 
-  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldNotMarkWindowAsHiddenIfComponentHiddenIsNotWindow() {
-    attachMonitor();
+  @Test public void shouldNotMarkWindowAsHiddenIfComponentHiddenIsNotWindow() {
     new EasyMockTemplate(windows) {
       protected void expectations() {}
 
@@ -110,16 +97,19 @@ public class WindowVisibilityMonitorTest {
     }.run();
   }
 
-  @Test(dependsOnMethods = "shouldAttachMonitorToWindow")
-  public void shouldRemoveItselfWhenWindowClosed() {
-    attachMonitor();
-    monitor.windowClosed(new WindowEvent(frame, 8));
-    assertThat(frame.getWindowListeners()).excludes(monitor);
-    assertThat(frame.getComponentListeners()).excludes(monitor);
-  }
+  @Test public void shouldRemoveItselfWhenWindowClosed() {
+    new EasyMockTemplate(windows) {
+      protected void expectations() {
+        frame.removeWindowListener(monitor);
+        expectLastCall().once();
+        frame.removeComponentListener(monitor);
+        expectLastCall().once();
+      }
 
-  private void attachMonitor() {
-    monitor = WindowVisibilityMonitor.attachWindowVisibilityMonitor(frame, windows);
+      protected void codeToTest() {
+        monitor.windowClosed(new WindowEvent(frame, 8));
+      }
+    }.run();
   }
   
   private ComponentEvent componentEventWithWindowAsSource() {

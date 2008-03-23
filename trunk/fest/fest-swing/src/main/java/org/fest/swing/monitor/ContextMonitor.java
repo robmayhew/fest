@@ -16,10 +16,7 @@
 package org.fest.swing.monitor;
 
 import java.applet.Applet;
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.FileDialog;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
 
@@ -28,7 +25,6 @@ import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
 
 import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibilityMonitor;
 
 /**
  * Understands a monitor for components and event queues.
@@ -46,29 +42,29 @@ final class ContextMonitor implements AWTEventListener {
   private final Context context;
   private final Windows windows;
 
-  static ContextMonitor attachContextMonitor(Windows windows, Context context) {
-    ContextMonitor monitor = new ContextMonitor(windows, context);
-    attachAsWeakEventListener(monitor, EVENT_MASK);
+  static ContextMonitor attachContextMonitor(Toolkit toolkit, Context context, Windows windows) {
+    ContextMonitor monitor = new ContextMonitor(context, windows);
+    attachAsWeakEventListener(toolkit, monitor, EVENT_MASK);
     return monitor;
   }
   
-  ContextMonitor(Windows windows, Context context) {
-    this.windows = windows;
+  ContextMonitor(Context context, Windows windows) {
     this.context = context;
+    this.windows = windows;
   }
 
   /** ${@inheritDoc} */
   public void eventDispatched(AWTEvent e) {
     ComponentEvent event = (ComponentEvent) e;
     Component component = event.getComponent();
-    // This is our sole means of accessing other app contexts (if running within an applet). We look for window events
+    // This is our sole means of accessing other AppContexts (if running within an applet). We look for window events
     // beyond OPENED in order to catch windows that have already opened by the time we start listening but which are not
     // in the Frame.getFrames list (i.e. they are on a different context). Specifically watch for COMPONENT_SHOWN on 
     // applets, since we may not get frame events for them.
     if (!(component instanceof Applet) && !(component instanceof Window)) return;
     processEvent(event);
     // The context for root-level windows may change between WINDOW_OPENED and subsequent events.
-    if (!component.getToolkit().getSystemEventQueue().equals(context.lookupEventQueueFor(component)))
+    if (!component.getToolkit().getSystemEventQueue().equals(context.storedQueueFor(component)))
       context.addContextFor(component);
   }
 
@@ -93,7 +89,7 @@ final class ContextMonitor implements AWTEventListener {
     // Attempt to ensure the window is ready for input before recognizing it as "open". 
     // There is no Java API for this, so we institute an empirically tested delay.
     if (!(component instanceof Window)) return; 
-    attachWindowVisibilityMonitor((Window)component, windows);
+    windows.attachNewWindowVisibilityMonitor((Window)component);
     windows.markAsShowing((Window) component);
     // Native components don't receive events anyway...
     if (component instanceof FileDialog) windows.markAsReady((Window) component);

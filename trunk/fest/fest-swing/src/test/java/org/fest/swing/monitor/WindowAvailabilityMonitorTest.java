@@ -18,6 +18,7 @@ package org.fest.swing.monitor;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JTextField;
 
@@ -28,13 +29,12 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.ToolkitStub;
 
 import static java.awt.AWTEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.listener.WeakEventListener.createWithoutAttaching;
 import static org.fest.swing.monitor.MockWindows.mock;
-import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
 
 /**
  * Tests for <code>{@link WindowAvailabilityMonitor}</code>.
@@ -47,6 +47,7 @@ public class WindowAvailabilityMonitorTest {
 
   private WindowAvailabilityMonitor monitor;
   
+  private final ToolkitStub toolkit = new ToolkitStub();
   private Windows windows;
   private TestFrame frame;
   
@@ -60,9 +61,11 @@ public class WindowAvailabilityMonitorTest {
   }
 
   @Test public void shouldAttachItSelfToToolkit() {
-    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(windows);
-    WeakEventListener l = createWithoutAttaching(monitor);
-    assertThat(isListenerInToolkit(l, EVENT_MASK)).isTrue();
+    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(toolkit, windows);
+    List<WeakEventListener> eventListeners = toolkit.eventListenersUnderEventMask(EVENT_MASK, WeakEventListener.class);
+    assertThat(eventListeners).hasSize(1);
+    WeakEventListener weakEventListener = eventListeners.get(0);
+    assertThat(weakEventListener.underlyingListener()).isSameAs(monitor);
   }
 
   @Test public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {

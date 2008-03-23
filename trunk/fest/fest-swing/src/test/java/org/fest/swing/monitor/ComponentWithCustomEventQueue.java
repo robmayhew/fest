@@ -1,5 +1,5 @@
 /*
- * Created on Oct 18, 2007
+ * Created on Mar 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,33 +11,31 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.monitor;
 
-import java.awt.Window;
+import java.awt.Toolkit;
 
-import static org.easymock.classextension.EasyMock.createMock;
+import javax.swing.JComponent;
 
 /**
- * Understands a subclass of <code>{@link WindowStatus}</code> which methods have been overriden to be public,
- * allowing us to create mocks.
- * 
+ * Understands a GUI component stub that can be configured to use a custom <code>{@link Toolkit}</code>.
+ *
+ * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class MockWindowsStatus extends WindowStatus {
-  
-  public static WindowStatus mock() {
-    return createMock(MockWindowsStatus.class);
-  } 
-  
-  @Override public void checkIfReady(Window w) {}
+class ComponentWithCustomEventQueue extends JComponent {
 
-  public MockWindowsStatus() {
-    this(new Windows());
-  }
+  private static final long serialVersionUID = 1L;
   
-  public MockWindowsStatus(Windows windows) {
-    super(windows);
+  private final Toolkit toolkit;
+
+  ComponentWithCustomEventQueue(Toolkit toolkit) {
+    this.toolkit = toolkit;
+  }
+
+  @Override public Toolkit getToolkit() {
+    return toolkit;
   }
 }

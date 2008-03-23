@@ -14,15 +14,11 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Window;
+import java.awt.*;
 import java.util.Collection;
 
 import static org.fest.swing.monitor.ContextMonitor.attachContextMonitor;
 import static org.fest.swing.monitor.WindowAvailabilityMonitor.attachWindowAvailabilityMonitor;
-import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibilityMonitor;
 
 /**
  * Understands a monitor that keeps track of all known root windows (showing, hidden, closed.)
@@ -35,17 +31,29 @@ import static org.fest.swing.monitor.WindowVisibilityMonitor.attachWindowVisibil
  */
 public final class WindowMonitor {
 
-  private final Windows windows = new Windows();
-  private final Context context = new Context();
-  private final WindowStatus windowStatus = new WindowStatus(windows);
+  private final Context context;
+  private final Windows windows;
+  private final WindowStatus windowStatus;
 
   /**
-   * Create an instance of WindowTracker which will track all windows coming and going on the current and subsequent app
-   * contexts. WARNING: if an applet loads this class, it will only ever see stuff in its own app context.
+   * Create an instance of WindowTracker which will track all windows coming and going on the current and subsequent
+   * <code>AppContext</code>s.
+   * <p>
+   * <strong>WARNING:</strong> if an applet loads this class, it will only ever see stuff in its own
+   * <code>AppContext</code>.
+   * </p>
+   * @param toolkit the <code>Toolkit</code> to use.
    */
-  WindowMonitor() {
-    attachContextMonitor(windows, context);
-    attachWindowAvailabilityMonitor(windows);
+  WindowMonitor(Toolkit toolkit) {
+    this(toolkit, new Context(toolkit), new WindowStatus(new Windows()));
+  }
+  
+  WindowMonitor(Toolkit toolkit, Context context, WindowStatus windowStatus) {
+    this.context = context;
+    this.windowStatus = windowStatus;
+    this.windows = windowStatus.windows();
+    attachContextMonitor(toolkit, context, windows);
+    attachWindowAvailabilityMonitor(toolkit, windows);
     populateExistingWindows();
   }
 
@@ -54,7 +62,7 @@ public final class WindowMonitor {
   }
 
   private void examine(Window w) {
-    attachWindowVisibilityMonitor(w, windows);
+    windows.attachNewWindowVisibilityMonitor(w);
     for (Window owned : w.getOwnedWindows()) examine(owned);
     windows.markExisting(w);
     context.addContextFor(w);
@@ -111,6 +119,6 @@ public final class WindowMonitor {
   }
 
   private static class SingletonLazyLoader {
-    static final WindowMonitor INSTANCE = new WindowMonitor();
+    static final WindowMonitor INSTANCE = new WindowMonitor(Toolkit.getDefaultToolkit());
   }
 }

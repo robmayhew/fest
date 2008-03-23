@@ -17,13 +17,10 @@ package org.fest.swing.hierarchy;
 import java.awt.AWTEvent;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
-import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
 import static org.fest.swing.util.AWTEvents.*;
-import static org.fest.swing.util.AWT.quoteNameOf;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands automatic filtering of auto-generated Swing dialogs.
@@ -36,8 +33,6 @@ import static org.fest.util.Strings.concat;
  */
 public final class TransientWindowListener implements AWTEventListener {
 
-  private static Logger logger = Logger.getLogger(TransientWindowListener.class.getName());
-
   private final WindowFilter filter;
   
   TransientWindowListener(WindowFilter filter) {
@@ -47,9 +42,7 @@ public final class TransientWindowListener implements AWTEventListener {
   /** ${@inheritDoc} */
   public void eventDispatched(AWTEvent e) {
     if (windowOpened(e) || windowShown(e)) {
-      Window w = sourceOf(e);
-      logger.info(concat("Window ", quoteNameOf(w), " open/shown"));
-      filter(w);
+      filter(sourceOf(e));
       return;
     }
     if (windowClosed(e)) {
@@ -58,7 +51,6 @@ public final class TransientWindowListener implements AWTEventListener {
       if (filter.isFiltered(w)) return;
       filter.implicitFilter(w);
       // Filter this window only *after* any handlers for this event have finished.
-      logger.info(concat("Queueing dispose of ", quoteNameOf(w)));
       SwingUtilities.invokeLater(new DisposeAction(w));
     }
   }
@@ -69,7 +61,6 @@ public final class TransientWindowListener implements AWTEventListener {
 
   private void filter(Window w) {
     if (filter.isImplicitFiltered(w)) {
-      logger.info(concat("un-filter window ", quoteNameOf(w)));
       filter.unfilter(w);
       return;
     }
@@ -79,7 +70,6 @@ public final class TransientWindowListener implements AWTEventListener {
 
   private void filterIfParentIsFiltered(Window w) {
     if (!filter.isFiltered(w.getParent())) return;
-    logger.info(concat("Parent is filtered, filter ", quoteNameOf(w)));
     filter.filter(w);
   }
 
@@ -91,12 +81,7 @@ public final class TransientWindowListener implements AWTEventListener {
     public void run() {
       // If the window was shown again since we queued this action, it will have removed the window from the 
       // implicitFiltered set, and we shouldn't filter.
-      if (filter.isImplicitFiltered(w)) {
-        filter.filter(w);
-        logger.info(concat("Window ", quoteNameOf(w), " filtered"));
-        return;
-      }
-      logger.info(concat("Cancel dispose of " + w.getName()));
+      if (filter.isImplicitFiltered(w)) filter.filter(w);
     }
   }
 }

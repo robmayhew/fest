@@ -29,6 +29,7 @@ import org.fest.swing.testing.TestFrame;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link BasicComponentFinder}</code>.
@@ -36,6 +37,7 @@ import static org.fest.swing.format.Formatting.format;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test(groups = GUI)
 public class BasicComponentFinderTest {
 
   protected static class MainWindow extends TestFrame {

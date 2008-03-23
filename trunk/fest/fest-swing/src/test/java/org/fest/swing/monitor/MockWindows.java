@@ -28,7 +28,7 @@ import static org.easymock.classextension.EasyMock.createMock;
  */
 public class MockWindows extends Windows {
 
-  public static Windows mock() throws Exception {
+  public static Windows mock() {
     return createMock(MockWindows.class);
   }
   

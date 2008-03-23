@@ -21,10 +21,11 @@ import java.awt.event.AWTEventListener;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import org.fest.swing.testing.ToolkitStub;
+
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
 
 /**
  * Tests for <code>{@link WeakEventListener}</code>.
@@ -33,34 +34,38 @@ import static org.fest.swing.util.ToolkitUtils.isListenerInToolkit;
  */
 public class WeakEventListenerTest {
 
-  private WeakEventListener listener;
-
   private static final long EVENT_MASK = WINDOW_EVENT_MASK;
-  private WrappedEventListener wrapped;
+
+  private ToolkitStub toolkit;
+  private UnderlyingEventListener underlying;
+  private WeakEventListener listener;
   
   @BeforeTest public void setUp() {
-    wrapped = new WrappedEventListener();
+    toolkit = new ToolkitStub();
+    underlying = new UnderlyingEventListener();
   }
 
   @Test public void shouldWrapListenerAndAddItselfToToolkitWithGivenMask() {
-    listener = WeakEventListener.attachAsWeakEventListener(wrapped, EVENT_MASK);
-    assertThat(toolkitHasListenerUnderTest()).isTrue();
+    listener = WeakEventListener.attachAsWeakEventListener(toolkit, underlying, EVENT_MASK);
+    assertThat(listener.underlyingListener()).isSameAs(underlying);
+    assertThat(toolkit.contains(listener, EVENT_MASK)).isTrue();
   }
   
   @Test(dependsOnMethods = "shouldWrapListenerAndAddItselfToToolkitWithGivenMask")
   public void shouldDispatchEventsToWrappedListener() {
     AWTEvent event = awtEvent();
-    listener = WeakEventListener.attachAsWeakEventListener(wrapped, EVENT_MASK);
+    listener = WeakEventListener.attachAsWeakEventListener(toolkit, underlying, EVENT_MASK);
     listener.eventDispatched(event);
-    assertThat(wrapped.dispatchedEvent).isSameAs(event);
+    assertThat(underlying.dispatchedEvent).isSameAs(event);
   }
 
-  @Test(dependsOnMethods = "shouldWrapListenerAndAddItselfToToolkitWithGivenMask")
+  @Test(dependsOnMethods = "shouldDispatchEventsToWrappedListener")
   public void shouldRemoveItselfFromToolkitIfWrappedListenerIsNull() {
-    listener = WeakEventListener.attachAsWeakEventListener(wrapped, EVENT_MASK);
-    listener.removeListener();
-    listener.eventDispatched(awtEvent());
-    assertThat(toolkitHasListenerUnderTest()).isFalse();
+    AWTEvent event = awtEvent();
+    listener = WeakEventListener.attachAsWeakEventListener(toolkit, underlying, EVENT_MASK);
+    listener.simulateUnderlyingListenerIsGarbageCollected();
+    listener.eventDispatched(event);
+    assertThat(toolkit.contains(listener, EVENT_MASK)).isFalse();
   }
   
   private AWTEvent awtEvent() {
@@ -68,12 +73,8 @@ public class WeakEventListenerTest {
       private static final long serialVersionUID = 1L;
     };
   }
-  
-  private boolean toolkitHasListenerUnderTest() {
-    return isListenerInToolkit(listener, EVENT_MASK);
-  }
-  
-  private static class WrappedEventListener implements AWTEventListener {
+
+  private static class UnderlyingEventListener implements AWTEventListener {
     AWTEvent dispatchedEvent;
     
     public void eventDispatched(AWTEvent event) {

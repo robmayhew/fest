@@ -15,10 +15,9 @@
 package org.fest.swing.listener;
 
 import java.awt.AWTEvent;
+import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.lang.ref.WeakReference;
-
-import static java.awt.Toolkit.getDefaultToolkit;
 
 import static org.fest.util.Objects.areEqual;
 
@@ -40,22 +39,36 @@ import static org.fest.util.Objects.areEqual;
 public final class WeakEventListener implements AWTEventListener {
 
   private final WeakReference<AWTEventListener> listenerReference;
+  private final Toolkit toolkit;
 
-  public static WeakEventListener attachAsWeakEventListener(AWTEventListener listener, long eventMask) {
-    WeakEventListener l = new WeakEventListener(listener);
-    getDefaultToolkit().addAWTEventListener(l, eventMask);
+  /**
+   * Creates a new <code>{@link WeakEventListener}</code> and adds it to the given <code>{@link Toolkit}</code> using
+   * the given event mask. The created <code>{@link WeakEventListener}</code> simply "decorates" the given
+   * <code>{@link AWTEventListener}</code>. All events dispatched to the <code>{@link WeakEventListener}</code> are
+   * re-routed to the underlying <code>{@link AWTEventListener}</code>. When the underlying 
+   * <code>{@link AWTEventListener}</code> is garbage-collected, the <code>{@link WeakEventListener}</code> will remove
+   * itself from the toolkit.
+   * @param toolkit the given AWT <code>Toolkit</code>.
+   * @param listener the underlying listener to wrap.
+   * @param eventMask the event mask to use to attach the <code>WeakEventListener</code> to the toolkit.
+   * @return the created <code>WeakEventListener</code>.
+   */
+  public static WeakEventListener attachAsWeakEventListener(Toolkit toolkit, AWTEventListener listener, long eventMask) {
+    WeakEventListener l = new WeakEventListener(toolkit, listener);
+    toolkit.addAWTEventListener(l, eventMask);
     return l;
   }
   
-  public static WeakEventListener createWithoutAttaching(AWTEventListener listener) {
-    return new WeakEventListener(listener);
-  }
-  
-  private WeakEventListener(AWTEventListener listener) {
+  WeakEventListener(Toolkit toolkit, AWTEventListener listener) {
     listenerReference = new WeakReference<AWTEventListener>(listener);
+    this.toolkit = toolkit;
   }
 
-  public AWTEventListener realListener() {
+  /**
+   * Returns the underlying listener.
+   * @return the underlying listener.
+   */
+  public AWTEventListener underlyingListener() {
     return listenerReference.get();
   }
   
@@ -74,14 +87,14 @@ public final class WeakEventListener implements AWTEventListener {
   }
   
   void dispose() {
-    getDefaultToolkit().removeAWTEventListener(this);
+    toolkit.removeAWTEventListener(this);
   }
 
   /**
    * Removes the wrapped listener from the <code>{@link WeakReference}</code> (to simulate garbage collection). This 
-   * method should be used only for testing purposes.
+   * method should be used only for <strong>testing only</strong>.
    */
-  void removeListener() {
+  void simulateUnderlyingListenerIsGarbageCollected() {
     listenerReference.clear();
   }
 

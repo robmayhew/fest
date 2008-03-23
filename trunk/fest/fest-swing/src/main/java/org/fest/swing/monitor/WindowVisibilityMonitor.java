@@ -31,18 +31,12 @@ import java.awt.event.WindowEvent;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class WindowVisibilityMonitor extends WindowAdapter implements ComponentListener {
+class WindowVisibilityMonitor extends WindowAdapter implements ComponentListener {
 
   private final Windows windows;
 
-  static WindowVisibilityMonitor attachWindowVisibilityMonitor(Window target, Windows windows) {
-    return new WindowVisibilityMonitor(target, windows);
-  }
-  
-  private WindowVisibilityMonitor(Window target, Windows windows) {
+  WindowVisibilityMonitor(Windows windows) {
     this.windows = windows;
-    target.addComponentListener(this);
-    target.addWindowListener(this);
   }
 
   public void componentShown(ComponentEvent e) {

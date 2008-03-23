@@ -32,6 +32,7 @@ import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Collections.list;
 
 /**
@@ -68,7 +69,7 @@ public class ChildrenFinderTest {
     assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
   }
 
-  @Test public void shouldReturnOwnedWindowsIfComponentIsWindow() {
+  @Test(groups = GUI) public void shouldReturnOwnedWindowsIfComponentIsWindow() {
     TestFrame frame = TestFrame.showInTest(getClass());
     TestDialog dialog = TestDialog.showInTest(frame);
     dialog.display();
@@ -77,7 +78,7 @@ public class ChildrenFinderTest {
     frame.destroy();
   }
   
-  @Test public void shouldReturnChildrenOfContainer() {
+  @Test(groups = GUI) public void shouldReturnChildrenOfContainer() {
     TestFrame frame = new TestFrame(getClass());
     JTextField textField = new JTextField();
     frame.add(textField);

@@ -30,6 +30,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestFrame.showInTest;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 
@@ -78,7 +79,7 @@ public class ScreenshotTakerTest {
     frame.destroy();
   }
 
-  @Test public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
+  @Test(groups = GUI) public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
     class CustomFrame extends TestFrame {
       private static final long serialVersionUID = 1L;
       
