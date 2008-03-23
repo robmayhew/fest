@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.Platform.IS_OS_X;
 
 /**
  * Tests for <code>{@link Platform}</code>
@@ -29,7 +30,7 @@ import static org.fest.assertions.Assertions.assertThat;
 public class PlatformTest {
 
   @Test public void shouldReturnControlKeyForNonMacOS() {
-    if (abbot.Platform.isOSX())
+    if (IS_OS_X)
       assertThat(Platform.controlOrCommandKey()).isEqualTo(VK_META);
     else  
       assertThat(Platform.controlOrCommandKey()).isEqualTo(VK_CONTROL);

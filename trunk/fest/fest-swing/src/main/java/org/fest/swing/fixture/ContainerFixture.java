@@ -25,12 +25,12 @@ import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
+import org.fest.swing.driver.JMenuItemMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.ComponentLookupScope.SHOWING_ONLY;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.join;
 
 /**
  * Understands lookup of <code>{@link Component}</code>s contained in a <code>{@link Container}</code>.
@@ -330,7 +330,7 @@ public abstract class ContainerFixture<T extends Container> extends JPopupMenuIn
    * @throws AssertionError if the <code>Component</code> found under the given path is not a <code>JMenuItem</code>.
    */
   public final JMenuItemFixture menuItemWithPath(String... path) {
-    ComponentMatcher m = new JMenuItemMatcher(join(path).with("|"));
+    ComponentMatcher m = new JMenuItemMatcher(path);
     Component item = finder().find(target, m);
     assertThat(item).as(format(item)).isInstanceOf(JMenuItem.class);
     return new JMenuItemFixture(robot, (JMenuItem) item);

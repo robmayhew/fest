@@ -28,10 +28,6 @@ import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListene
 
 /**
  * Understands a monitor for components and event queues.
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

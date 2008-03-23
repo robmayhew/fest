@@ -16,15 +16,15 @@ package org.fest.swing.util;
 
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 
-import abbot.finder.AWTHierarchy;
-import abbot.finder.Hierarchy;
+import org.fest.swing.hierarchy.ComponentHierarchy;
+import org.fest.swing.hierarchy.ExistingHierarchy;
+
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.staticField;
@@ -33,16 +33,11 @@ import static org.fest.util.Strings.*;
 /**
  * Understands utility methods related to AWT.
  *
- * <p>
- * Adapted from <code>abbot.util.AWT</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
- *
  * @author Alex Ruiz
  */
 public class AWT {
 
-  private static Hierarchy hierarchy = new AWTHierarchy();
+  private static ComponentHierarchy hierarchy = new ExistingHierarchy();
   
   private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
@@ -135,7 +130,7 @@ public class AWT {
       Component invoker = invokerOf(c);
       if (invoker != null) return ancestorOf(invoker);
     }
-    return ancestorOf(hierarchy.getParent(c));
+    return ancestorOf(hierarchy.parentOf(c));
   }
 
   /**
@@ -180,10 +175,10 @@ public class AWT {
     try {
       return staticField("focusOwner").ofType(Component.class).in(KeyboardFocusManager.class).get();
     } catch (Exception e) {
-      Iterator<Window> i = new AWTHierarchy().getRoots().iterator();
       Component focus = null;
-      while (i.hasNext()) {
-        Window w = i.next();
+      for (Container c : new ExistingHierarchy().roots()) {
+        if (!(c instanceof Window)) continue;
+        Window w = (Window)c;
         if (w.isShowing() && (focus = focusOwner(w)) != null) break;
       }
       return focus;

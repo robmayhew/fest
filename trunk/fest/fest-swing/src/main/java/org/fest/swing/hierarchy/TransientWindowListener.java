@@ -24,10 +24,6 @@ import static org.fest.swing.util.AWTEvents.*;
 
 /**
  * Understands automatic filtering of auto-generated Swing dialogs.
- * <p>
- * Adapted from <code>abbot.finder.TestHierarchy.TransientWindowListener</code> from <a
- * href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

@@ -20,7 +20,7 @@ package org.fest.swing.core;
  * 
  * @author Yvonne Wang
  */
-public abstract class Condition implements abbot.script.Condition {
+public abstract class Condition {
 
   private final String description;
   

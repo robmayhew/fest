@@ -35,10 +35,6 @@ import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListene
  * them if they should be shown again. Any window explicitly disposed with <code>{@link ComponentHierarchy#dispose(java.awt.Window)}</code< will be
  * ignored permanently.
  * </p>
- * <p>
- * Adapted from <code>abbot.finder.TestHierarchy</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

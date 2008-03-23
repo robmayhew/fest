@@ -23,10 +23,6 @@ import static org.fest.util.Collections.list;
 
 /**
  * Understands a monitor that maps event queues to GUI components and GUI components to event event queues.
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

@@ -65,6 +65,20 @@ public interface Robot {
   void close(Window w);
 
   /**
+   * Gives input focus to the given <code>{@link Component}</code>. Note that the component may not yet have focus when
+   * this method returns.
+   * @param c the component to give focus to.
+   */
+  void focus(Component c);
+
+  /**
+   * Gives input focus to the given <code>{@link Component}</code> and waits until the <code>{@link Component}</code>
+   * has focus.
+   * @param c the component to give focus to.
+   */
+  void focusAndWaitForFocusGain(Component c);
+
+  /**
    * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
    * on the event dispatch thread.
    * @param c the component which event queue will be used.
@@ -240,6 +254,7 @@ public interface Robot {
    * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
    * use this method if there are animations or other continual refreshes happening, since in that case it may never
    * return.
+   * @throws IllegalThreadStateException if this method is called from the event dispatch thread.
    */
   void waitForIdle();
 

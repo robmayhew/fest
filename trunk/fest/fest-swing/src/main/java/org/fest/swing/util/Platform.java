@@ -15,19 +15,16 @@
  */
 package org.fest.swing.util;
 
-import static java.awt.event.KeyEvent.*;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
+import static java.awt.event.KeyEvent.*;
+
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands platform-specific functionality.
- *
- * <p>
- * Adapted from <code>abbot.Platform</code> from <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

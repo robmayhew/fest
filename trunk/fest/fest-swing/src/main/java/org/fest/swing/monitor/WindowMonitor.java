@@ -22,10 +22,6 @@ import static org.fest.swing.monitor.WindowAvailabilityMonitor.attachWindowAvail
 
 /**
  * Understands a monitor that keeps track of all known root windows (showing, hidden, closed.)
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

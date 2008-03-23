@@ -24,10 +24,6 @@ import static org.fest.swing.util.AWT.insetsFrom;
 
 /**
  * Understands verification of the state of a window.
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

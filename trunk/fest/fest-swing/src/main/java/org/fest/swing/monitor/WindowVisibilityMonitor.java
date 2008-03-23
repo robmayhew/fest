@@ -23,10 +23,6 @@ import java.awt.event.WindowEvent;
 
 /**
  * Understands tracking of window visibility state.
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

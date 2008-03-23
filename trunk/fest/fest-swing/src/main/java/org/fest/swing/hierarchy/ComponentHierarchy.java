@@ -21,10 +21,7 @@ import java.awt.Window;
 import java.util.Collection;
 
 /**
- * Understands access to all components in a hierarchy..
- * <p>
- * Adapted from <code>abbot.finder.Hierarchy</code> from <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
+ * Understands access to all components in a hierarchy.
  * 
  * @author Alex Ruiz
  */

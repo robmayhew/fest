@@ -24,10 +24,6 @@ import static org.fest.swing.util.AWT.isSharedInvisibleFrame;
 
 /**
  * Understands a filter of windows to ignore in a component hierarchy.
- * <p>
- * Adapted from <code>abbot.finder.TestHierarchy</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

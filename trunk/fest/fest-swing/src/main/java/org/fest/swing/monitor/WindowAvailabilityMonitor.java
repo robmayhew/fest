@@ -29,10 +29,6 @@ import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListene
 
 /**
  * Understands an event listener that monitors when a window is ready to receive OS-level event input.
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  */

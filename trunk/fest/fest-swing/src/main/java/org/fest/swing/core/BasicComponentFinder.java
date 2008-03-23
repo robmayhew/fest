@@ -21,13 +21,12 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import abbot.finder.AWTHierarchy;
-import abbot.finder.Hierarchy;
-import abbot.finder.TestHierarchy;
-
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.hierarchy.ComponentHierarchy;
+import org.fest.swing.hierarchy.ExistingHierarchy;
 
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.util.System.LINE_SEPARATOR;
 import static org.fest.util.Strings.concat;
 
@@ -38,7 +37,7 @@ import static org.fest.util.Strings.concat;
  */
 public final class BasicComponentFinder implements ComponentFinder {
 
-  private final Hierarchy hierarchy;
+  private final ComponentHierarchy hierarchy;
   private final ComponentPrinter printer;
 
   private boolean includeHierarchyInComponentLookupException;
@@ -50,7 +49,7 @@ public final class BasicComponentFinder implements ComponentFinder {
    * @return the created finder.
    */
   public static ComponentFinder finderWithNewAwtHierarchy() {
-    return new BasicComponentFinder(new TestHierarchy());
+    return new BasicComponentFinder(ignoreExistingComponents());
   }
 
   /**
@@ -59,14 +58,14 @@ public final class BasicComponentFinder implements ComponentFinder {
    * @return the created finder.
    */
   public static ComponentFinder finderWithCurrentAwtHierarchy() {
-    return new BasicComponentFinder(new AWTHierarchy());
+    return new BasicComponentFinder(new ExistingHierarchy());
   }
 
   /**
    * Creates a new <code>{@link BasicComponentFinder}</code>.
    * @param hierarchy provides access to the components in the AWT hierarchy.
    */
-  BasicComponentFinder(Hierarchy hierarchy) {
+  BasicComponentFinder(ComponentHierarchy hierarchy) {
     this.hierarchy = hierarchy;
     printer = new BasicComponentPrinter(hierarchy);
     includeHierarchyIfComponentNotFound(true);
@@ -159,25 +158,25 @@ public final class BasicComponentFinder implements ComponentFinder {
     return find(hierarchy(root), m);
   }
 
-  private Hierarchy hierarchy(Container root) {
+  private ComponentHierarchy hierarchy(Container root) {
     if (root == null) return hierarchy;
     return new SingleComponentHierarchy(root, hierarchy);
   }
   
-  private Component find(Hierarchy hierarchy, ComponentMatcher matcher)  {
+  private Component find(ComponentHierarchy hierarchy, ComponentMatcher matcher)  {
     Set<Component> found = new HashSet<Component>();
-    for (Object o : hierarchy.getRoots()) find(hierarchy, matcher, (Component)o, found);
+    for (Object o : hierarchy.roots()) find(hierarchy, matcher, (Component)o, found);
     if (found.isEmpty()) throw componentNotFound(hierarchy, matcher); 
     if (found.size() > 1) throw multipleComponentsFound(found, matcher);
     return found.iterator().next();
   }
 
-  private void find(Hierarchy h, ComponentMatcher m, Component root, Set<Component> found) {
-    for (Object o : h.getComponents(root)) find(h, m, (Component)o, found);
+  private void find(ComponentHierarchy h, ComponentMatcher m, Component root, Set<Component> found) {
+    for (Object o : h.childrenOf(root)) find(h, m, (Component)o, found);
     if (m.matches(root)) found.add(root);
   }
   
-  private ComponentLookupException componentNotFound(Hierarchy h, ComponentMatcher m) {
+  private ComponentLookupException componentNotFound(ComponentHierarchy h, ComponentMatcher m) {
     String message = concat("Unable to find component using matcher ", m, ".");
     if (includeHierarchyIfComponentNotFound())
       message = concat(message, 
@@ -185,7 +184,7 @@ public final class BasicComponentFinder implements ComponentFinder {
     throw new ComponentLookupException(message);
   }
 
-  private Container root(Hierarchy h) {
+  private Container root(ComponentHierarchy h) {
     if (h instanceof SingleComponentHierarchy) return ((SingleComponentHierarchy)h).root();
     return null;
   }

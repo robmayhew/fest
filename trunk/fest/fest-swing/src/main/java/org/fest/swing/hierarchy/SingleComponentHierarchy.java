@@ -26,10 +26,6 @@ import static javax.swing.SwingUtilities.isDescendingFrom;
 
 /**
  * Understands a component hierarchy having only one component as root.
- * <p>
- * Adapted from <code>abbot.finder.BasicFinder#SingleComponentHierarchy</code> from <a
- * href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

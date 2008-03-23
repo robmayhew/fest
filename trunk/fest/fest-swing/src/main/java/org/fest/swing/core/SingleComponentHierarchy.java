@@ -20,7 +20,8 @@ import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import abbot.finder.Hierarchy;
+import org.fest.swing.hierarchy.ComponentHierarchy;
+
 import static javax.swing.SwingUtilities.isDescendingFrom;
 
 /**
@@ -28,18 +29,18 @@ import static javax.swing.SwingUtilities.isDescendingFrom;
  * 
  * @author Alex Ruiz
  */
-final class SingleComponentHierarchy implements abbot.finder.Hierarchy {
+final class SingleComponentHierarchy implements ComponentHierarchy {
 
   private final Container root;
-  private final ArrayList<Component> list = new ArrayList<Component>();
-  private final Hierarchy hierarchy;
+  private final ArrayList<Container> list = new ArrayList<Container>();
+  private final ComponentHierarchy hierarchy;
 
   /**
    * Creates a new </code>{@link SingleComponentHierarchy}</code>.
    * @param root the root component of this hierarchy
    * @param hierarchy the base component hierarchy.
    */
-  public SingleComponentHierarchy(Container root, Hierarchy hierarchy) {
+  public SingleComponentHierarchy(Container root, ComponentHierarchy hierarchy) {
     this.root = root;
     this.hierarchy = hierarchy;
     list.add(root);
@@ -52,15 +53,15 @@ final class SingleComponentHierarchy implements abbot.finder.Hierarchy {
    * @param c the given <code>Component</code>.
    * @return the parent component for the given <code>{@link Component}</code>.  
    */
-  public Container getParent(Component c) {
-    return hierarchy.getParent(c);
+  public Container parentOf(Component c) {
+    return hierarchy.parentOf(c);
   }
 
   /**
    * Returns a collection containing only the root <code>{@link Component}</code> in this hierarchy.
    * @return a collection containing only the root <code>{@link Component}</code> in this hierarchy.
    */
-  public Collection<Component> getRoots() {
+  public Collection<? extends Container> roots() {
     return list;
   }
 
@@ -69,8 +70,8 @@ final class SingleComponentHierarchy implements abbot.finder.Hierarchy {
    * @return all sub-components of the given <code>{@link Component}</code>.
    */
   @SuppressWarnings("unchecked") 
-  public Collection<Component> getComponents(Component c) {
-    return hierarchy.getComponents(c);
+  public Collection<Component> childrenOf(Component c) {
+    return hierarchy.childrenOf(c);
   }
 
   /** 
@@ -83,7 +84,7 @@ final class SingleComponentHierarchy implements abbot.finder.Hierarchy {
 
   /**
    * Provides proper disposal of the given <code>{@link Window}</code>, appropriate to this hierarchy. After disposal, 
-   * the <code>{@link Window}</code> and its descendents will no longer be reachable from this hierarchy.
+   * the <code>{@link Window}</code> and its descendants will no longer be reachable from this hierarchy.
    * @param w the window to dispose.
    */
   public void dispose(Window w) {

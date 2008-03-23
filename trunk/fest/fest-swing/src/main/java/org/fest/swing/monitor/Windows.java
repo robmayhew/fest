@@ -24,10 +24,6 @@ import java.util.WeakHashMap;
 
 /**
  * Understands the information collected by the monitors in this package.
- * <p>
- * Adapted from <code>abbot.tester.WindowTracker</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

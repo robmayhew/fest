@@ -20,14 +20,11 @@ import java.util.Collection;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-import abbot.finder.AWTHierarchy;
-import abbot.finder.Hierarchy;
-import abbot.finder.TestHierarchy;
-import abbot.tester.WindowTracker;
-import abbot.util.Bugs;
-
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.hierarchy.ComponentHierarchy;
+import org.fest.swing.hierarchy.ExistingHierarchy;
+import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.util.TimeoutWatch;
 
 import static abbot.tester.Robot.*;
@@ -36,10 +33,14 @@ import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Fail.fail;
 import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
+import static org.fest.swing.util.AWT.*;
+import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
@@ -51,6 +52,8 @@ import static org.fest.util.Strings.concat;
  */
 public class RobotFixture implements Robot {
 
+  // private static final Toolkit TOOLKIT = Toolkit.getDefaultToolkit();
+  
   private static final int WINDOW_DELAY = 20000;
 
   private static final int POPUP_TIMEOUT = 5000;
@@ -58,12 +61,11 @@ public class RobotFixture implements Robot {
 
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
   
-
-  private abbot.tester.Robot robot;
-  private WindowTracker windowTracker;
+  private abbot.tester.Robot abbotRobot;
+  private WindowMonitor windowMonitor;
 
   /** Provides access to all the components in the hierarchy. */
-  private final Hierarchy hierarchy;
+  private final ComponentHierarchy hierarchy;
 
   /** Looks up <code>{@link java.awt.Component}</code>s. */
   private final ComponentFinder finder;
@@ -76,7 +78,7 @@ public class RobotFixture implements Robot {
    * @return the created robot fixture.
    */
   public static RobotFixture robotWithNewAwtHierarchy() {
-    return new RobotFixture(new TestHierarchy());
+    return new RobotFixture(ignoreExistingComponents());
   }
 
   /**
@@ -84,26 +86,26 @@ public class RobotFixture implements Robot {
    * @return the created robot fixture.
    */
   public static RobotFixture robotWithCurrentAwtHierarchy() {
-    return new RobotFixture(new AWTHierarchy());
+    return new RobotFixture(new ExistingHierarchy());
   }
 
   /**
    * Creates a new <code>{@link RobotFixture}</code>.
    * @param hierarchy the AWT component hierarchy to use.
    */
-  private RobotFixture(Hierarchy hierarchy) {
+  private RobotFixture(ComponentHierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     settings = new Settings();
     finder = new BasicComponentFinder(this.hierarchy);
-    windowTracker = WindowTracker.getTracker();
-    robot = newRobot();
+    windowMonitor = WindowMonitor.instance();
+    abbotRobot = newRobot();
   }
 
   private abbot.tester.Robot newRobot() {
     abbot.tester.Robot robot = new abbot.tester.Robot();
     robot.reset();
-    if (Bugs.hasMultiClickFrameBug()) robot.delay(500);
+    if (IS_WINDOWS || IS_OS_X) pause(500);
     return robot;
   }
 
@@ -138,31 +140,78 @@ public class RobotFixture implements Robot {
     });
     waitForWindow(w);
   }
-
-  private void waitForWindow(Window w) {
-    long start = currentTimeMillis();
-    while ((getEventMode() == EM_ROBOT && !windowTracker.isWindowReady(w)) || !w.isShowing()) {
-      long elapsed = currentTimeMillis() - start;
-      if (elapsed > WINDOW_DELAY)
-        throw new WaitTimedOutError(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
-      robot.sleep();
-    }
-  }
-
-  /** ${@inheritDoc} */
-  public void close(Window w) {
-    robot.focus(w);
-    robot.close(w);
-  }
-
+  
   private void packAndEnsureSafePosition(Window w) {
     w.pack();
     w.setLocation(100, 100);
   }
 
+  private void waitForWindow(Window w) {
+    long start = currentTimeMillis();
+    while ((getEventMode() == EM_ROBOT && !windowMonitor.isWindowReady(w)) || !w.isShowing()) {
+      long elapsed = currentTimeMillis() - start;
+      if (elapsed > WINDOW_DELAY)
+        throw new WaitTimedOutError(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
+      pause();
+    }
+  }
+
+  /** ${@inheritDoc} */
+  public void close(Window w) {
+    focus(w);
+    abbotRobot.close(w);
+  }
+
+  /** ${@inheritDoc} */
+  public void focus(Component c) {
+    focus(c, false);
+  }
+
+  /** ${@inheritDoc} */
+  public void focusAndWaitForFocusGain(Component c) {
+    focus(c, true);
+  }
+
+  private void focus(final Component c, boolean wait) {
+    Component currentOwner = focusOwner();
+    if (currentOwner == c) return;
+    FocusMonitor focusMonitor = addFocusMonitorTo(c);
+    // for pointer focus
+    mouseMove(c);
+    waitForIdle();
+    // Make sure the correct window is in front
+    Window currentOwnerAncestor = currentOwner != null ? ancestorOf(currentOwner) : null;
+    Window componentAncestor = ancestorOf(c);
+    if (currentOwnerAncestor != componentAncestor) {
+      activate(componentAncestor);
+      waitForIdle();
+    }
+    invokeAndWait(c, new RequestFocusTask(c));
+    try {
+      if (wait) {
+        TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
+        while (!focusMonitor.hasFocus()) {
+          if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(c), " failed"));
+          pause();
+        }
+      }
+    } finally {
+      c.removeFocusListener(focusMonitor);
+    }
+  }
+
+  /**
+   * Activates the given <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
+   * @param w the window to activate. 
+   */
+  private void activate(Window w) {
+    invokeAndWait(w, new ActivateWindowTask(w));
+    mouseMove(w); // For pointer-focus systems
+  }
+
   /** ${@inheritDoc} */
   public void invokeLater(Component c, Runnable action) {
-    robot.invokeLater(c, action);
+    abbotRobot.invokeLater(c, action);
   }
 
   /** ${@inheritDoc} */
@@ -172,32 +221,34 @@ public class RobotFixture implements Robot {
 
 /** ${@inheritDoc} */
   public void invokeAndWait(Component c, Runnable action) {
-    robot.invokeAndWait(c, action);
+    abbotRobot.invokeAndWait(c, action);
   }
 
   /** ${@inheritDoc} */
   public void cleanUp() {
     disposeWindows();
     mouseRelease();
-    robot = null;
-    windowTracker = null;
+    abbotRobot = null;
+    windowMonitor = null;
     ScreenLock.instance().release(this);
   }
 
   private void disposeWindows() {
-    for (Window w : roots()) {
+    for (Container c : roots()) {
+      if (!(c instanceof Window)) continue;
+      Window w = (Window)c;
       hierarchy.dispose(w);
       w.setVisible(false);
       w.dispose();
     }
   }
 
-  @SuppressWarnings("unchecked") private Collection<Window> roots() {
-    return hierarchy.getRoots();
+  private Collection<? extends Container> roots() {
+    return hierarchy.roots();
   }
 
   private void mouseRelease() {
-    if (robot == null) return;
+    if (abbotRobot == null) return;
     releaseMouseButtons();
   }
 
@@ -236,13 +287,13 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void click(Component target, Point where, MouseButton button, int times) {
-    robot.click(target, where.x, where.y, button.mask, times);
+    abbotRobot.click(target, where.x, where.y, button.mask, times);
     waitForIdle();
   }
 
   /** ${@inheritDoc} */
   public void mousePress(MouseButton button) {
-    robot.mousePress(button.mask);
+    abbotRobot.mousePress(button.mask);
   }
 
   /** ${@inheritDoc} */
@@ -252,7 +303,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void mousePress(Component target, Point where, MouseButton button) {
-    robot.mousePress(target, where.x, where.y, button.mask);
+    abbotRobot.mousePress(target, where.x, where.y, button.mask);
   }
   
   /** ${@inheritDoc} */
@@ -271,61 +322,67 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void mouseMove(Component target, int x, int y) {
-    robot.mouseMove(target, x, y);
+    abbotRobot.mouseMove(target, x, y);
   }
 
   /** ${@inheritDoc} */
   public void enterText(String text) {
-    robot.keyString(text);
+    abbotRobot.keyString(text);
   }
 
   /** ${@inheritDoc} */
   public void type(char character) {
-    robot.keyStroke(character);
+    abbotRobot.keyStroke(character);
   }
 
   /** ${@inheritDoc} */
   public void pressAndReleaseKey(int keyCode, int modifiers) {
-    robot.key(keyCode, modifiers);
+    abbotRobot.key(keyCode, modifiers);
   }
 
   /** ${@inheritDoc} */
   public void pressAndReleaseKeys(int... keyCodes) {
     for (int keyCode : keyCodes) {
-      robot.key(keyCode);
+      abbotRobot.key(keyCode);
       waitForIdle();
     }
   }
 
   /** ${@inheritDoc} */
   public void pressKey(int keyCode) {
-    robot.keyPress(keyCode);
+    abbotRobot.keyPress(keyCode);
     waitForIdle();
   }
 
   /** ${@inheritDoc} */
   public void releaseKey(int keyCode) {
-    robot.keyRelease(keyCode);
+    abbotRobot.keyRelease(keyCode);
     waitForIdle();
   }
 
   /** ${@inheritDoc} */
   public void releaseLeftMouseButton() {
-    robot.mouseRelease();
+    abbotRobot.mouseRelease();
   }
 
   /** ${@inheritDoc} */
   public void releaseMouseButtons() {
     int buttons = getState().getButtons();
     if (buttons == 0) return;
-    robot.mouseRelease(buttons);
+    abbotRobot.mouseRelease(buttons);
   }
 
   /** ${@inheritDoc} */
   public void waitForIdle() {
-    robot.waitForIdle();
+    abbotRobot.waitForIdle();
   }
 
+//  private void pauseIfNecessary() {
+//    int delayBetweenEvents = settings.delayBetweenEvents();
+//    int eventPostingDelay = settings.eventPostingDelay();
+//    if (eventPostingDelay > delayBetweenEvents) pause(eventPostingDelay - delayBetweenEvents);
+//  }
+  
   /** ${@inheritDoc} */
   public boolean isDragging() {
     return getState().isDragging();
@@ -333,7 +390,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public boolean isReadyForInput(Component c) {
-     return method("isReadyForInput").withReturnType(Boolean.class).withParameterTypes(Component.class).in(robot)
+     return method("isReadyForInput").withReturnType(Boolean.class).withParameterTypes(Component.class).in(abbotRobot)
                                      .invoke(c);
   }
 

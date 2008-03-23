@@ -28,10 +28,6 @@ import static org.fest.util.Objects.areEqual;
  * <li>dispatches any given event to the wrapped listener</li>
  * <li>removes itself from the default toolkit when the wrapped listener gets garbage-collected</li>
  * </ul>
- * <p>
- * Adapted from <code>abbot.util.WeakAWTEventListener</code> from 
- * <a href="http://abbot.sourceforge.net" target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang

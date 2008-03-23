@@ -29,10 +29,7 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.FocusMonitor.addFocusMonitorTo;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
@@ -120,7 +117,7 @@ public class ComponentDriver {
    * @param c the component to give focus to.
    */
   public void focus(Component c) {
-    focus(c, false);
+    robot.focus(c);
   }
 
   /**
@@ -129,48 +126,11 @@ public class ComponentDriver {
    * @param c the component to give focus to.
    */
   public void focusAndWaitForFocusGain(Component c) {
-    focus(c, true);
-  }
-
-  private void focus(final Component c, boolean wait) {
-    Component currentOwner = focusOwner();
-    if (currentOwner == c) return;
-    FocusMonitor focusMonitor = addFocusMonitorTo(c);
-    // for pointer focus
-    robot.mouseMove(c);
-    robot.waitForIdle();
-    // Make sure the correct window is in front
-    Window currentOwnerAncestor = currentOwner != null ? ancestorOf(currentOwner) : null;
-    Window componentAncestor = ancestorOf(c);
-    if (currentOwnerAncestor != componentAncestor) {
-      activate(componentAncestor);
-      robot.waitForIdle();
-    }
-    robot.invokeAndWait(c, new RequestFocusTask(c));
-    try {
-      if (wait) {
-        TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
-        while (!focusMonitor.hasFocus()) {
-          if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(c), " failed"));
-          pause();
-        }
-      }
-    } finally {
-      c.removeFocusListener(focusMonitor);
-    }
+    robot.focusAndWaitForFocusGain(c);
   }
 
   protected Settings settings() {
     return robot.settings();
-  }
-
-  /**
-   * Activates the given <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
-   * @param w the window to activate. 
-   */
-  protected void activate(Window w) {
-    robot.invokeAndWait(w, new ActivateWindowTask(w));
-    robot.mouseMove(w); // For pointer-focus systems
   }
 
   /**

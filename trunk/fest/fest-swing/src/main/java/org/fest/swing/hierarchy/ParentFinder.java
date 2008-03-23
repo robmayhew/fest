@@ -25,10 +25,6 @@ import javax.swing.MenuElement;
 
 /**
  * Understands how to find the parent of a <code>{@link Component}</code>.
- * <p>
- * Adapted from <code>abbot.finder.AWTHierarchy</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  *
  * @author Alex Ruiz
  */

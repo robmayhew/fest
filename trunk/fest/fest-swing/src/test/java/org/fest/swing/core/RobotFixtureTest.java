@@ -15,6 +15,7 @@
  */
 package org.fest.swing.core;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -145,7 +146,25 @@ public class RobotFixtureTest {
     });
     assertThat(w.isVisible()).isFalse();
   }
-    
+   
+  @Test public void shouldGiveFocus() {
+    giveFocusAndVerifyThatHasFocus(frame.withPopup);
+    giveFocusAndVerifyThatHasFocus(frame.withoutPopup);
+  }
+
+  private void giveFocusAndVerifyThatHasFocus(Component c) {
+    robot.focus(c);
+    pause(500);
+    assertThat(c.isFocusOwner()).isTrue();
+  }
+
+  @Test public void shouldGiveFocusAndWaitUntilComponentHasFocus() {
+    robot.focusAndWaitForFocusGain(frame.withPopup);
+    assertThat(frame.withPopup.isFocusOwner()).isTrue();
+    robot.focusAndWaitForFocusGain(frame.withoutPopup);
+    assertThat(frame.withoutPopup.isFocusOwner()).isTrue();
+  }
+  
   private JPopupMenu popupMenu() {
     return frame.popupMenu;
   }

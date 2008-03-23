@@ -31,10 +31,6 @@ import static org.fest.util.Strings.concat;
 
 /**
  * Understands access to the current AWT hierarchy.
- * <p>
- * Adapted from <code>abbot.finder.AWTHierarchy</code> from <a href="http://abbot.sourceforge.net"
- * target="_blank">Abbot</a>.
- * </p>
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
