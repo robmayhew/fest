@@ -74,7 +74,7 @@ public final class WindowMonitor {
   public boolean isWindowReady(Window w) {
     if (windows.isReady(w)) return true;
     windowStatus.checkIfReady(w);
-    return false;
+    return windows.isReady(w);
   }
 
   /**

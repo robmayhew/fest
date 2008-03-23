@@ -44,18 +44,18 @@ final class WindowMetrics {
   }
 
   private int centerWidth() {
-    return (window.getWidth() - addVerticalInsets()) / 2;
+    return (window.getWidth() - verticalInsets()) / 2;
   }
 
-  int addVerticalInsets() {
+  int verticalInsets() {
     return insets.left + insets.right;
   }
 
   private int centerHeight() {
-    return (window.getHeight() - addHorizontalInsets()) / 2;
+    return (window.getHeight() - horizontalInsets()) / 2;
   }
 
-  int addHorizontalInsets() {
+  int horizontalInsets() {
     return insets.top + insets.bottom;
   }
 }

@@ -90,11 +90,11 @@ class WindowStatus {
   }
 
   private int proposedWidth(WindowMetrics metrics) {
-    return metrics.addVerticalInsets() + ARBITRARY_EXTRA_VALUE;
+    return metrics.verticalInsets() + ARBITRARY_EXTRA_VALUE;
   }
 
   private int proposedHeight(WindowMetrics metrics) {
-    return metrics.addHorizontalInsets() + ARBITRARY_EXTRA_VALUE;
+    return metrics.horizontalInsets() + ARBITRARY_EXTRA_VALUE;
   }
 
   private static class WindowSizeSetter implements Runnable {

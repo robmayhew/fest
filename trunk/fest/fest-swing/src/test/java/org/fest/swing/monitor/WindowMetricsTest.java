@@ -61,11 +61,11 @@ public class WindowMetricsTest {
 
   @Test public void shouldAddVerticalInsets() {
     Insets insets = frame.getInsets();
-    assertThat(metrics.addVerticalInsets()).isEqualTo(insets.right + insets.left);
+    assertThat(metrics.verticalInsets()).isEqualTo(insets.right + insets.left);
   }
 
   @Test public void shouldAddHorizontalInsets() {
     Insets insets = frame.getInsets();
-    assertThat(metrics.addHorizontalInsets()).isEqualTo(insets.top + insets.bottom);
+    assertThat(metrics.horizontalInsets()).isEqualTo(insets.top + insets.bottom);
   }
 }

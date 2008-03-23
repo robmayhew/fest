@@ -136,6 +136,7 @@ public class WindowMonitorTest {
       protected void expectations() {
         expect(windows.isReady(frame)).andReturn(false);
         windowStatus.checkIfReady(frame);
+        expect(windows.isReady(frame)).andReturn(false);
       }
       
       protected void codeToTest() {
