@@ -34,6 +34,7 @@ import org.fest.swing.testing.ToolkitStub;
 
 import static java.awt.AWTEvent.*;
 import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -58,9 +59,9 @@ public class WindowMonitorTest {
 
   @BeforeMethod public void setUp() {
     toolkit = new ToolkitStub();
-    windows = MockWindows.mock();
-    context = MockContext.mock();
-    windowStatus = MockWindowsStatus.mock();
+    windows = createMock(Windows.class);
+    context = createMock(Context.class);
+    windowStatus = createMock(WindowStatus.class);
     frame = new TestFrame(WindowMonitorTest.class);
     createWindowMonitor();
   }
@@ -136,7 +137,7 @@ public class WindowMonitorTest {
       protected void expectations() {
         expect(windows.isReady(frame)).andReturn(false);
         windowStatus.checkIfReady(frame);
-        expect(windows.isReady(frame)).andReturn(false);
+        //expect(windows.isReady(frame)).andReturn(false);
       }
       
       protected void codeToTest() {

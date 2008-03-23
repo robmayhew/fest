@@ -52,8 +52,6 @@ import static org.fest.util.Strings.concat;
  */
 public class RobotFixture implements Robot {
 
-  // private static final Toolkit TOOLKIT = Toolkit.getDefaultToolkit();
-  
   private static final int WINDOW_DELAY = 20000;
 
   private static final int POPUP_TIMEOUT = 5000;
@@ -62,7 +60,9 @@ public class RobotFixture implements Robot {
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
   
   private abbot.tester.Robot abbotRobot;
-  private WindowMonitor windowMonitor;
+
+  //private static Toolkit toolkit = Toolkit.getDefaultToolkit();
+  private static WindowMonitor windowMonitor = WindowMonitor.instance();
 
   /** Provides access to all the components in the hierarchy. */
   private final ComponentHierarchy hierarchy;
@@ -98,7 +98,6 @@ public class RobotFixture implements Robot {
     this.hierarchy = hierarchy;
     settings = new Settings();
     finder = new BasicComponentFinder(this.hierarchy);
-    windowMonitor = WindowMonitor.instance();
     abbotRobot = newRobot();
   }
 
@@ -229,7 +228,6 @@ public class RobotFixture implements Robot {
     disposeWindows();
     mouseRelease();
     abbotRobot = null;
-    windowMonitor = null;
     ScreenLock.instance().release(this);
   }
 

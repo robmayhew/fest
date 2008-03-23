@@ -32,9 +32,9 @@ import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.ToolkitStub;
 
 import static java.awt.AWTEvent.*;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.monitor.MockWindows.mock;
 
 /**
  * Tests for <code>{@link WindowAvailabilityMonitor}</code>.
@@ -53,7 +53,8 @@ public class WindowAvailabilityMonitorTest {
   
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = mock();
+    windows = createMock(Windows.class);
+    monitor = new WindowAvailabilityMonitor(windows);
   }
 
   @AfterMethod public void tearDown() {
@@ -61,7 +62,7 @@ public class WindowAvailabilityMonitorTest {
   }
 
   @Test public void shouldAttachItSelfToToolkit() {
-    monitor = WindowAvailabilityMonitor.attachWindowAvailabilityMonitor(toolkit, windows);
+    monitor.attachTo(toolkit);
     List<WeakEventListener> eventListeners = toolkit.eventListenersUnderEventMask(EVENT_MASK, WeakEventListener.class);
     assertThat(eventListeners).hasSize(1);
     WeakEventListener weakEventListener = eventListeners.get(0);
@@ -69,7 +70,6 @@ public class WindowAvailabilityMonitorTest {
   }
 
   @Test public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {
-    createMonitor();
     new EasyMockTemplate(windows) {
       protected void expectations() {
         windows.markAsReady(frame);
@@ -82,7 +82,6 @@ public class WindowAvailabilityMonitorTest {
   }
   
   @Test public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
-    createMonitor();
     final JTextField source = new JTextField();
     frame.add(source);
     new EasyMockTemplate(windows) {
@@ -97,7 +96,6 @@ public class WindowAvailabilityMonitorTest {
   }
   
   @Test public void shouldNotMarkSourceWindowAsReadyIfEventIsNotMouseEvent() {
-    createMonitor();
     new EasyMockTemplate(windows) {
       protected void expectations() { /* should not call markAsReady */ }
 
@@ -105,10 +103,6 @@ public class WindowAvailabilityMonitorTest {
         monitor.eventDispatched(new KeyEvent(frame, 8, 9238, 0, 0, 'a'));
       }
     }.run();
-  }
-
-  private void createMonitor() {
-    monitor = new WindowAvailabilityMonitor(windows);
   }
 
   private MouseEvent mouseEvent(Component source) {

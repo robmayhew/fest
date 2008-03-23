@@ -27,10 +27,10 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.testing.TestFrame;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.monitor.MockWindows.mock;
 
 /**
  * Tests for <code>{@link WindowStatus}</code>.
@@ -46,7 +46,7 @@ public class WindowStatusTest {
   
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(getClass());
-    windows = mock();
+    windows = createMock(Windows.class);
     status = new WindowStatus(windows);
   }
   

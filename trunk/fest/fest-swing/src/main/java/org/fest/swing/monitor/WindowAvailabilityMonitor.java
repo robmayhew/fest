@@ -38,14 +38,12 @@ final class WindowAvailabilityMonitor implements AWTEventListener {
   
   private final Windows windows;
 
-  static WindowAvailabilityMonitor attachWindowAvailabilityMonitor(Toolkit toolkit, Windows windows) {
-    WindowAvailabilityMonitor monitor = new WindowAvailabilityMonitor(windows);
-    attachAsWeakEventListener(toolkit, monitor, EVENT_MASK);
-    return monitor;
-  }
-  
   WindowAvailabilityMonitor(Windows windows) {
     this.windows = windows;
+  }
+  
+  void attachTo(Toolkit toolkit) {
+    attachAsWeakEventListener(toolkit, this, EVENT_MASK);
   }
   
   public void eventDispatched(AWTEvent e) {

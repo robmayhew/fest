@@ -38,17 +38,15 @@ final class ContextMonitor implements AWTEventListener {
   private final Context context;
   private final Windows windows;
 
-  static ContextMonitor attachContextMonitor(Toolkit toolkit, Context context, Windows windows) {
-    ContextMonitor monitor = new ContextMonitor(context, windows);
-    attachAsWeakEventListener(toolkit, monitor, EVENT_MASK);
-    return monitor;
-  }
-  
   ContextMonitor(Context context, Windows windows) {
     this.context = context;
     this.windows = windows;
   }
 
+  void attachTo(Toolkit toolkit) {
+    attachAsWeakEventListener(toolkit, this, EVENT_MASK);
+  }
+  
   /** ${@inheritDoc} */
   public void eventDispatched(AWTEvent e) {
     ComponentEvent event = (ComponentEvent) e;

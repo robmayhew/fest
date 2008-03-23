@@ -44,7 +44,7 @@ public class WindowVisibilityMonitorTest {
 
   @BeforeMethod public void setUp() throws Exception {
     frame = createMock(JFrame.class);
-    windows = MockWindows.mock();
+    windows = createMock(Windows.class);
     createAndAttachMonitor();
   }
 

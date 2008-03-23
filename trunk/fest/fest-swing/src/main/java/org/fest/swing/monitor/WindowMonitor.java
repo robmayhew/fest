@@ -17,9 +17,6 @@ package org.fest.swing.monitor;
 import java.awt.*;
 import java.util.Collection;
 
-import static org.fest.swing.monitor.ContextMonitor.attachContextMonitor;
-import static org.fest.swing.monitor.WindowAvailabilityMonitor.attachWindowAvailabilityMonitor;
-
 /**
  * Understands a monitor that keeps track of all known root windows (showing, hidden, closed.)
  * 
@@ -28,8 +25,10 @@ import static org.fest.swing.monitor.WindowAvailabilityMonitor.attachWindowAvail
 public final class WindowMonitor {
 
   private final Context context;
+  private final ContextMonitor contextMonitor;
   private final Windows windows;
   private final WindowStatus windowStatus;
+  private final WindowAvailabilityMonitor windowAvailabilityMonitor;
 
   /**
    * Create an instance of WindowTracker which will track all windows coming and going on the current and subsequent
@@ -47,9 +46,11 @@ public final class WindowMonitor {
   WindowMonitor(Toolkit toolkit, Context context, WindowStatus windowStatus) {
     this.context = context;
     this.windowStatus = windowStatus;
-    this.windows = windowStatus.windows();
-    attachContextMonitor(toolkit, context, windows);
-    attachWindowAvailabilityMonitor(toolkit, windows);
+    windows = windowStatus.windows();
+    contextMonitor = new ContextMonitor(context, windows);
+    contextMonitor.attachTo(toolkit);
+    windowAvailabilityMonitor = new WindowAvailabilityMonitor(windows);
+    windowAvailabilityMonitor.attachTo(toolkit);
     populateExistingWindows();
   }
 
@@ -74,7 +75,7 @@ public final class WindowMonitor {
   public boolean isWindowReady(Window w) {
     if (windows.isReady(w)) return true;
     windowStatus.checkIfReady(w);
-    return windows.isReady(w);
+    return false;
   }
 
   /**

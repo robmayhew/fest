@@ -40,6 +40,7 @@ import org.fest.swing.testing.ToolkitStub;
 import static java.awt.AWTEvent.*;
 import static java.awt.event.WindowEvent.*;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -60,8 +61,9 @@ public class ContextMonitorTest {
 
   @BeforeMethod public void setUp() throws Exception {
     frame = new TestFrame(ContextMonitorTest.class);
-    windows = MockWindows.mock();
-    context = MockContext.mock();
+    windows = createMock(Windows.class);
+    context = createMock(Context.class);
+    monitor = new ContextMonitor(context, windows);
   }
 
   @AfterMethod public void tearDown() {
@@ -70,7 +72,7 @@ public class ContextMonitorTest {
 
   @Test public void shouldAttachItSelfToToolkit() {
     ToolkitStub toolkit = new ToolkitStub();
-    monitor = ContextMonitor.attachContextMonitor(toolkit, new Context(toolkit), new Windows());
+    monitor.attachTo(toolkit);
     List<WeakEventListener> eventListeners = toolkit.eventListenersUnderEventMask(EVENT_MASK, WeakEventListener.class);
     assertThat(eventListeners).hasSize(1);
     WeakEventListener weakEventListener = eventListeners.get(0);
@@ -78,7 +80,6 @@ public class ContextMonitorTest {
   }
 
   @Test public void shouldNotProcessEventIfComponentIsNotWindowOrApplet() {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {}
 
@@ -89,7 +90,6 @@ public class ContextMonitorTest {
   }
 
   @Test public void shouldProcessEventWithIdEqualToWindowOpen() {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         context.addContextFor(frame);
@@ -105,7 +105,6 @@ public class ContextMonitorTest {
   }
   
   @Test public void shouldProcessEventWithIdEqualToWindowOpenedAndMarkWindowAsReadyIfWindowIsFileDialog() {
-    createMonitor();
     final Window w = new FileDialog(frame);
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
@@ -123,7 +122,6 @@ public class ContextMonitorTest {
   }
 
   @Test public void shouldProcessEventWithIdEqualToWindowClosedAndWithRootWindow() {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         context.removeContextFor(frame);
@@ -140,7 +138,6 @@ public class ContextMonitorTest {
   @Test public void shouldProcessEventWithIdEqualToWindowClosedAndWithNotRootWindow() {
     final Applet applet = new Applet();
     frame.add(applet); 
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expectEventQueueLookupFor(applet);
@@ -153,7 +150,6 @@ public class ContextMonitorTest {
   }
 
   @Test public void shouldNotProcessEventWithIdWindowClosing() {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expectEventQueueLookupFor(frame);
@@ -166,7 +162,6 @@ public class ContextMonitorTest {
   }
   
   @Test public void shouldAddToContextIfComponentEventQueueNotEqualToSystemEventQueue() {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.storedQueueFor(frame)).andReturn(new EventQueue());
@@ -181,7 +176,6 @@ public class ContextMonitorTest {
   
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdBetweenWindowFirstAndWindowLastAndWindowNotInContext(final int eventId) {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(new ArrayList<Window>());
@@ -199,7 +193,6 @@ public class ContextMonitorTest {
   
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdBetweenWindowFirstAndWindowLastAndWindowInContextAndClosed(final int eventId) {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(frameInList());
@@ -218,7 +211,6 @@ public class ContextMonitorTest {
 
   @Test(dataProvider = "eventsBetweenWindowFirstAndWindowLast") 
   public void shouldProcessEventWithIdBetweenWindowFirstAndWindowLastAndWindowInContextAndNotClosed(final int eventId) {
-    createMonitor();
     new EasyMockTemplate(windows, context) {
       @Override protected void expectations() {
         expect(context.rootWindows()).andReturn(frameInList());
@@ -240,10 +232,6 @@ public class ContextMonitorTest {
       ids.add(new Object[] { id });
     }
     return ids.iterator();
-  }
-  
-  private void createMonitor() {
-    monitor = new ContextMonitor(context, windows);
   }
     
   private void expectEventQueueLookupFor(Component c) {

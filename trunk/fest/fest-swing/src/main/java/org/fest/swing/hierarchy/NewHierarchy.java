@@ -41,6 +41,7 @@ import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListene
 public class NewHierarchy extends ExistingHierarchy {
 
   private final WindowFilter filter;
+  private final TransientWindowListener transientWindowListener;
 
   /**
    * Creates a new <code>{@link NewHierarchy}</code> which does not contain any existing GUI components.
@@ -64,18 +65,19 @@ public class NewHierarchy extends ExistingHierarchy {
 
   NewHierarchy(Toolkit toolkit, boolean ignoreExisting) {
     this.filter = new WindowFilter(parentFinder, childrenFinder);
+    transientWindowListener = new TransientWindowListener(filter);
     setUp(toolkit, ignoreExisting);
   }
 
   NewHierarchy(Toolkit toolkit, WindowFilter filter, boolean ignoreExisting) {
     this.filter = filter;
+    transientWindowListener = new TransientWindowListener(filter);
     setUp(toolkit, ignoreExisting);    
   }
 
   private void setUp(Toolkit toolkit, boolean ignoreExisting) {
     if (ignoreExisting) ignoreExisting();
-    TransientWindowListener listener = new TransientWindowListener(filter);
-    attachAsWeakEventListener(toolkit, listener, WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK);
+    attachAsWeakEventListener(toolkit, transientWindowListener, WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK);
   }
 
   /**
