@@ -32,7 +32,6 @@ import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
@@ -387,12 +386,6 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public boolean isReadyForInput(Component c) {
-     return method("isReadyForInput").withReturnType(Boolean.class).withParameterTypes(Component.class).in(abbotRobot)
-                                     .invoke(c);
-  }
-
-  /** ${@inheritDoc} */
   public JPopupMenu showPopupMenu(Component invoker) {
     return showPopupMenu(invoker, centerOf(invoker));
   }
@@ -408,6 +401,13 @@ public class RobotFixture implements Robot {
     return popup;
   }
 
+  /** ${@inheritDoc} */
+  public boolean isReadyForInput(Component c) {
+    Window w = ancestorOf(c);
+    if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
+    return c.isShowing() && windowMonitor.isWindowReady(w);
+  }
+  
   /** ${@inheritDoc} */
   public JPopupMenu findActivePopupMenu() {
     JPopupMenu popup = activePopupMenu();

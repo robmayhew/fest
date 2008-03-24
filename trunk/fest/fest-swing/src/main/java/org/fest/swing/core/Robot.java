@@ -7,6 +7,7 @@ import java.awt.Window;
 
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -268,6 +269,7 @@ public interface Robot {
    * Indicates whether the given <code>{@link Component}</code> is ready for input. 
    * @param c the given <code>Component</code>.
    * @return <code>true</code> if the given <code>Component</code> is ready for input, <code>false</code> otherwise.
+   * @throws ActionFailedException if the given <code>Component</code> does not have a <code>Window</code> ancestor.
    */
   boolean isReadyForInput(Component c);
 
