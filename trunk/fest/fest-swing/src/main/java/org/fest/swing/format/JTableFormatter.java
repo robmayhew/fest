@@ -15,10 +15,6 @@
  */
 package org.fest.swing.format;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -26,6 +22,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
 import org.fest.util.Arrays;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JTable}</code>s.
@@ -40,8 +41,10 @@ public class JTableFormatter extends ComponentFormatterTemplate {
    * <code>{@link JTable}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JTable</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JTable</code>.
    */
   protected String doFormat(Component c) {
+    if (!(c instanceof JTable)) throw new IllegalArgumentException("The given component should be a JTable");
     JTable table = (JTable)c;
     return concat(
         table.getClass().getName(), "[",
@@ -60,12 +63,10 @@ public class JTableFormatter extends ComponentFormatterTemplate {
   }
 
   private String selectionMode(TableColumnModel model) {
-    if (model == null) return null;
     return selectionMode(model.getSelectionModel());
   }
 
   private String selectionMode(ListSelectionModel model) {
-    if (model == null) return null;
     return SELECTION_MODES.get(model.getSelectionMode());
   }
 

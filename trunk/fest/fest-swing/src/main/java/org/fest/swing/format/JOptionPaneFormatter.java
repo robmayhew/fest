@@ -15,13 +15,14 @@
  */
 package org.fest.swing.format;
 
-import static java.lang.String.valueOf;
-import static javax.swing.JOptionPane.*;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 
 import javax.swing.JOptionPane;
+
+import static java.lang.String.valueOf;
+import static javax.swing.JOptionPane.*;
+
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JOptionPane}</code>s.
@@ -53,8 +54,10 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
    * <code>{@link JOptionPane}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JOptionPane</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JOptionPane</code>.
    */
   protected String doFormat(Component c) {
+    if (!(c instanceof JOptionPane)) throw new IllegalArgumentException("The given component should be a JOptionPane");
     JOptionPane optionPane = (JOptionPane)c;
     return concat(
         optionPane.getClass().getName(), "[",

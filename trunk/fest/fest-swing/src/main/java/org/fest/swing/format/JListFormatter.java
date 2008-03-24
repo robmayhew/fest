@@ -15,10 +15,6 @@
  */
 package org.fest.swing.format;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +23,11 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 
 import org.fest.util.Arrays;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JList}</code>s.
@@ -40,8 +41,10 @@ public class JListFormatter extends ComponentFormatterTemplate {
    * <code>{@link JList}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JList</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JList</code>.
    */
   protected String doFormat(Component c) {
+    if (!(c instanceof JList)) throw new IllegalArgumentException("The given component should be a JList");
     JList list = (JList)c;
     return concat(
         list.getClass().getName(), "[",

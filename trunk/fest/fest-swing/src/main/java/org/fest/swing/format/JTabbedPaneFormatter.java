@@ -15,14 +15,15 @@
  */
 package org.fest.swing.format;
 
-import static java.lang.String.valueOf;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 
 import javax.swing.JTabbedPane;
 
 import org.fest.util.Arrays;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a formatter for <code>{@link JTabbedPane}</code>s.
@@ -31,19 +32,23 @@ import org.fest.util.Arrays;
  */
 public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
 
+  private static final String NO_SELECTION = "<No selection>";
+  
   /**
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>, which should be a
    * <code>{@link JTabbedPane}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JTabbedPane</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JTabbedPane</code>.
    */
   protected String doFormat(Component c) {
+    if (!(c instanceof JTabbedPane)) throw new IllegalArgumentException("The given component should be a JTabbedPane");
     JTabbedPane tabbedPane = (JTabbedPane)c;
     return concat(
         tabbedPane.getClass().getName(), "[",
         "name=", quote(tabbedPane.getName()), ", ",
         "selectedTabIndex=", valueOf(tabbedPane.getSelectedIndex()), ", ",
-        "selectedTabTitle=", quote(selectedTab(tabbedPane)), ", ",
+        "selectedTabTitle=", selectedTab(tabbedPane), ", ",
         "tabCount=", valueOf(tabbedPane.getTabCount()), ", ",
         "tabTitles=", Arrays.format(tabTitles(tabbedPane)),  ", ",
         "enabled=", valueOf(tabbedPane.isEnabled()), ", ",
@@ -54,10 +59,10 @@ public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
   }
 
   private String selectedTab(JTabbedPane tabbedPane) {
-    if (tabbedPane.getTabCount() == 0) return null;
+    if (tabbedPane.getTabCount() == 0) return NO_SELECTION;
     int index = tabbedPane.getSelectedIndex();
-    if (index == -1) return null;
-    return tabbedPane.getTitleAt(index);
+    if (index == -1) return NO_SELECTION;
+    return quote(tabbedPane.getTitleAt(index));
   }
 
   private String[] tabTitles(JTabbedPane tabbedPane) {

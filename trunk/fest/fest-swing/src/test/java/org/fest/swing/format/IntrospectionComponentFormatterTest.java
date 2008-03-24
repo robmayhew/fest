@@ -52,6 +52,11 @@ public class IntrospectionComponentFormatterTest {
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfTargetTypeIsNull() {
+    formatter = new IntrospectionComponentFormatter(null, "name", "text");
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentHasUnsupportedType() {
     formatter.format(new JComboBox());
   }
