@@ -1,35 +1,31 @@
 /*
  * Created on Mar 9, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.demo.view;
+
+import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import org.jdesktop.swingx.JXTree;
+import javax.swing.tree.*;
 
 import org.fest.swing.demo.model.Folder;
-
-import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
-import static org.fest.util.Arrays.array;
+import org.fest.swing.demo.model.WebFeed;
+import org.jdesktop.swingx.JXTree;
 
 /**
  * Understands the tree containing all web feeds.
@@ -47,11 +43,11 @@ class WebFeedTree extends JXTree {
   private final DefaultTreeModel model;
 
   private final NodeModelComparator comparator = new NodeModelComparator();
-  
+
   private final I18n i18n;
-  
+
   private final Map<String, FolderNode> folderNodes = new HashMap<String, FolderNode>();
-  
+
   WebFeedTree() {
     i18n = new I18n(this);
     root = new DefaultMutableTreeNode(i18n.message(TREE_ROOT_KEY));
@@ -61,11 +57,35 @@ class WebFeedTree extends JXTree {
     setOpenIcon(FOLDER_SMALL_ICON);
     setClosedIcon(FOLDER_SMALL_ICON);
   }
-  
+
   void addContent(Object content) {
+    if (content instanceof WebFeed) addWebFeed((WebFeed)content);
     if (content instanceof Folder) addFolder((Folder)content);
   }
-  
+
+  private void addWebFeed(WebFeed webFeed) {
+    FolderNode folderNode = folderFor(webFeed);
+    WebFeedNode webFeedNode = new WebFeedNode(webFeed);
+    MutableTreeNode parent = (folderNode != null) ? folderNode : root;
+    int insertIndex = indexForNewNodeInsertion(parent, webFeedNode);
+    model.insertNodeInto(webFeedNode, parent, insertIndex);
+    selectNode(webFeedNode);
+  }
+
+  private FolderNode folderFor(WebFeed webFeed) {
+    String folderName = folderNameFor(webFeed);
+    if (folderName == null) return null;
+    if (folderNodes.containsKey(folderName))
+      return folderNodes.get(folderName);
+    return addFolder(new Folder(folderName));
+  }
+
+  private String folderNameFor(WebFeed webFeed) {
+    Folder folder = webFeed.folder();
+    if (folder == null) return null;
+    return folder.name();
+  }
+
   private FolderNode addFolder(Folder folder) {
     String folderName = folder.name();
     if (folderNodes.containsKey(folderName)) return folderNodes.get(folderName);
@@ -75,30 +95,52 @@ class WebFeedTree extends JXTree {
   }
 
   private void addFolderNode(FolderNode folderNode) {
-    int insertIndex = indexForNewNodeInsertion(folderNode);
+    int insertIndex = indexForNewNodeInsertion(root, folderNode);
     model.insertNodeInto(folderNode, root, insertIndex);
-    setSelectionPath(new TreePath(array(root, folderNode)));
+    selectNode(folderNode);
     folderNodes.put(folderNode.folder.name(), folderNode);
   }
-  
-  private int indexForNewNodeInsertion(TreeNode nodeToInsert) {
-    int childCount = root.getChildCount();
+
+  private int indexForNewNodeInsertion(TreeNode parent, TreeNode nodeToInsert) {
+    int childCount = parent.getChildCount();
     if (childCount == 0) return 0;
     if (childCount == 1) {
-      int compareToFirst = comparator.compare(nodeToInsert, root.getChildAt(0));
+      int compareToFirst = comparator.compare(nodeToInsert, parent.getChildAt(0));
       return compareToFirst < 0 ? 0 : 1;
     }
     for (int i = 0; i < childCount; i++) {
-      TreeNode currentNode = root.getChildAt(i);
+      TreeNode currentNode = parent.getChildAt(i);
       int compareToCurrentNode = comparator.compare(nodeToInsert, currentNode);
       if (compareToCurrentNode < 0) return i;
     }
     return childCount++;
   }
 
+  private void selectNode(TreeNode node) {
+    TreeNode[] pathToRoot = model.getPathToRoot(node);
+    setSelectionPath(new TreePath(pathToRoot));
+  }
+
+  private static class WebFeedNode extends DefaultMutableTreeNode {
+    private static final long serialVersionUID = 1L;
+
+    final WebFeed webFeed;
+
+    WebFeedNode(WebFeed webFeed) {
+      super(webFeed.name());
+      this.webFeed = webFeed;
+      setAllowsChildren(false);
+    }
+
+    /** @see javax.swing.tree.DefaultMutableTreeNode#isLeaf() */
+    @Override public boolean isLeaf() {
+      return true;
+    }
+  }
+
   private static class FolderNode extends DefaultMutableTreeNode {
     private static final long serialVersionUID = 1L;
-    
+
     final Folder folder;
 
     FolderNode(Folder folder) {
@@ -112,7 +154,7 @@ class WebFeedTree extends JXTree {
       return false;
     }
   }
-  
+
   private static class NodeModelComparator implements Comparator<TreeNode> {
     public int compare(TreeNode node1, TreeNode node2) {
       String text1 = textFrom(node1);
@@ -124,7 +166,7 @@ class WebFeedTree extends JXTree {
       if (text2 == null) return 1;
       return text1.compareToIgnoreCase(text2);
     }
-    
+
     private String textFrom(TreeNode node) {
       if (!(node instanceof DefaultMutableTreeNode)) return null;
       Object userObject = ((DefaultMutableTreeNode)node).getUserObject();

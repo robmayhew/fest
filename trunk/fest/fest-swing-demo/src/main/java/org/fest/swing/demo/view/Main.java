@@ -18,13 +18,19 @@ package org.fest.swing.demo.view;
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.jvnet.substance.SubstanceLookAndFeel.TREE_DECORATIONS_ANIMATION_KIND;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import org.fest.swing.demo.model.Folder;
+import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.FolderService;
 import org.fest.swing.demo.service.Services;
+import org.fest.swing.demo.service.WebFeedService;
 import org.jvnet.lafwidget.animation.FadeConfigurationManager;
 import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
 
@@ -45,17 +51,40 @@ public class Main {
     UIManager.setLookAndFeel(new SubstanceRavenGraphiteGlassLookAndFeel());
     makeWindowDecorationsUseLookAndFeel();
     Services.instance().updateFolderService(new FolderService() {
+      private final List<Folder> folders = new ArrayList<Folder>();
+
       public void saveFolder(Folder folder) {
+        folders.add(folder);
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
+
+      public Folder[] allFolders() {
+        Folder[] sortedFolders = folders.toArray(new Folder[folders.size()]);
+        Arrays.sort(sortedFolders);
+        return sortedFolders;
+      }
+
     });
     invokeLater(new Runnable() {
       public void run() {
         new MainFrame().setVisible(true);
+      }
+    });
+    Services.instance().updateWebFeedService(new WebFeedService() {
+      @Override public String obtainFeedName(String address) {
+        return null;
+      }
+
+      @Override public void saveWebFeed(WebFeed webFeed) {
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
     });
   }
