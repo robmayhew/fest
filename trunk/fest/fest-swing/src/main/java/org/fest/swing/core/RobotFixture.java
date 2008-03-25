@@ -15,6 +15,7 @@
 package org.fest.swing.core;
 
 import java.awt.*;
+import java.awt.event.InvocationEvent;
 import java.util.Collection;
 
 import javax.swing.JOptionPane;
@@ -54,10 +55,10 @@ import static org.fest.util.Strings.concat;
  */
 public class RobotFixture implements Robot {
 
-  private static final int WINDOW_DELAY = 20000;
-
-  private static final int POPUP_TIMEOUT = 5000;
+  private static final int KEY_INPUT_DELAY = 200;
   private static final int POPUP_DELAY = 10000;
+  private static final int POPUP_TIMEOUT = 5000;
+  private static final int WINDOW_DELAY = 20000;
 
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
   
@@ -66,7 +67,7 @@ public class RobotFixture implements Robot {
   private abbot.tester.Robot abbotRobot;
   private final java.awt.Robot robot;
  
-  //private static Toolkit toolkit = Toolkit.getDefaultToolkit();
+  private static Toolkit toolkit = Toolkit.getDefaultToolkit();
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
 
   /** Provides access to all the components in the hierarchy. */
@@ -227,24 +228,31 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public void invokeLater(Component c, Runnable action) {
-    abbotRobot.invokeLater(c, action);
-  }
-
-  /** ${@inheritDoc} */
   public void invokeAndWait(Runnable action) {
     invokeAndWait(null, action);
   }
 
-/** ${@inheritDoc} */
+  /** ${@inheritDoc} */
   public void invokeAndWait(Component c, Runnable action) {
-    abbotRobot.invokeAndWait(c, action);
+    invokeLater(c, action);
+    waitForIdle();
   }
 
   /** ${@inheritDoc} */
+  public void invokeLater(Component c, Runnable action) {
+    EventQueue queue = eventQueueFor(c);
+    queue.postEvent(new InvocationEvent(toolkit, action));
+  }
+
+  /* Usually only needed when dealing with Applets. */
+  private EventQueue eventQueueFor(Component c) {
+    return c != null ? windowMonitor.eventQueueFor(c) : toolkit.getSystemEventQueue();
+  }
+  
+  /** ${@inheritDoc} */
   public void cleanUp() {
     disposeWindows();
-    mouseRelease();
+    releaseMouseButtons();
     abbotRobot = null;
     ScreenLock.instance().release(this);
   }
@@ -261,11 +269,6 @@ public class RobotFixture implements Robot {
 
   private Collection<? extends Container> roots() {
     return hierarchy.roots();
-  }
-
-  private void mouseRelease() {
-    if (abbotRobot == null) return;
-    releaseMouseButtons();
   }
 
   /**
@@ -311,7 +314,7 @@ public class RobotFixture implements Robot {
     // In general clicks have to be less than 200ms apart, although the actual setting is not readable by Java.
     int delayBetweenEvents = settings.delayBetweenEvents();
     if (times > 1 && delayBetweenEvents * 2 > 200) settings.delayBetweenEvents(0);
-    mousePress(target, where, mask);
+    pressMouse(target, where, mask);
     for (int i = times; i > 1; i--) {
       robot.mouseRelease(mask);
       robot.mousePress(mask);
@@ -347,10 +350,10 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void pressMouse(Component target, Point where, MouseButton button) {
-    mousePress(target, where, button.mask);
+    pressMouse(target, where, button.mask);
   }
   
-  private void mousePress(Component comp, Point where, int mask) {
+  private void pressMouse(Component comp, Point where, int mask) {
     jitter(comp, where);
     moveMouse(comp, where.x, where.y);
     robot.mousePress(mask);
@@ -376,7 +379,12 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void moveMouse(Component target, int x, int y) {
-    abbotRobot.mouseMove(target, x, y);
+    try {
+      Point point = locationOnScreenOf(target);
+      if (point == null) return;
+      point.translate(x, y);
+      robot.mouseMove(point.x, point.y);
+    } catch (IllegalComponentStateException e) {}
   }
 
   /** ${@inheritDoc} */
@@ -404,13 +412,18 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void pressKey(int keyCode) {
-    abbotRobot.keyPress(keyCode);
+    robot.keyPress(keyCode);
     waitForIdle();
   }
 
   /** ${@inheritDoc} */
   public void releaseKey(int keyCode) {
-    abbotRobot.keyRelease(keyCode);
+    robot.keyRelease(keyCode);
+    if (IS_OS_X) {
+      int delayBetweenEvents = settings.delayBetweenEvents();
+      if (KEY_INPUT_DELAY > delayBetweenEvents) 
+        pause(KEY_INPUT_DELAY - delayBetweenEvents);
+    }
     waitForIdle();
   }
 

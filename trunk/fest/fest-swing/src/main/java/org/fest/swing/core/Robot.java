@@ -224,6 +224,7 @@ public interface Robot {
    * <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyCode the code of the key to press.
    * @param modifiers the given modifiers.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   void pressAndReleaseKey(int keyCode, int modifiers);
 
@@ -231,6 +232,7 @@ public interface Robot {
    * Simulates a user pressing and releasing the given keys. This method does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if any of the given codes is not a valid key code.
    */
   void pressAndReleaseKeys(int... keyCodes);
 
@@ -238,6 +240,7 @@ public interface Robot {
    * Simulates a user pressing given key. This method does not affect the current focus.
    * @param keyCode the code of the key to press.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   void pressKey(int keyCode);
 
@@ -245,6 +248,7 @@ public interface Robot {
    * Simulates a user releasing the given key. This method does not affect the current focus.
    * @param keyCode the code of the key to release.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   void releaseKey(int keyCode);
 
