@@ -63,4 +63,50 @@ public class ModifiersTest {
     int[] keys = Modifiers.keysFor(0);
     assertThat(keys).isEmpty();
   }
+  
+  @Test public void shouldUpdateModifierIfKeyCodeIsAlt() {
+    int modifierMask = 0;
+    int updatedModifierMask = Modifiers.updateModifierWithKeyCode(VK_ALT, modifierMask);
+    assertThat(updatedModifierMask).isNotEqualTo(modifierMask);
+    assertThat(updatedModifierMask & ALT_MASK).isNotEqualTo(0);
+  }
+
+  @Test public void shouldUpdateModifierIfKeyCodeIsAltGraph() {
+    int modifierMask = 0;
+    int updatedModifierMask = Modifiers.updateModifierWithKeyCode(VK_ALT_GRAPH, modifierMask);
+    assertThat(updatedModifierMask).isNotEqualTo(modifierMask);
+    assertThat(updatedModifierMask & ALT_GRAPH_MASK).isNotEqualTo(0);
+  }
+
+  @Test public void shouldUpdateModifierIfKeyCodeIsCtrl() {
+    int modifierMask = 0;
+    int updatedModifierMask = Modifiers.updateModifierWithKeyCode(VK_CONTROL, modifierMask);
+    assertThat(updatedModifierMask).isNotEqualTo(modifierMask);
+    assertThat(updatedModifierMask & CTRL_MASK).isNotEqualTo(0);
+  }
+
+  @Test public void shouldUpdateModifierIfKeyCodeIsMeta() {
+    int modifierMask = 0;
+    int updatedModifierMask = Modifiers.updateModifierWithKeyCode(VK_META, modifierMask);
+    assertThat(updatedModifierMask).isNotEqualTo(modifierMask);
+    assertThat(updatedModifierMask & META_MASK).isNotEqualTo(0);
+  }
+
+  @Test public void shouldUpdateModifierIfKeyCodeIsShift() {
+    int modifierMask = 0;
+    int updatedModifierMask = Modifiers.updateModifierWithKeyCode(VK_SHIFT, modifierMask);
+    assertThat(updatedModifierMask).isNotEqualTo(modifierMask);
+    assertThat(updatedModifierMask & SHIFT_MASK).isNotEqualTo(0);
+  }
+
+  @Test public void shouldNotUpdateModifierIfKeyCodeIsNotModifier() {
+    int modifierMask = 0;
+    int updatedModifierMask = Modifiers.updateModifierWithKeyCode(VK_A, modifierMask);
+    assertThat(updatedModifierMask).isEqualTo(modifierMask);
+    assertThat(updatedModifierMask & ALT_MASK).isEqualTo(0);
+    assertThat(updatedModifierMask & ALT_GRAPH_MASK).isEqualTo(0);
+    assertThat(updatedModifierMask & CTRL_MASK).isEqualTo(0);
+    assertThat(updatedModifierMask & META_MASK).isEqualTo(0);
+    assertThat(updatedModifierMask & SHIFT_MASK).isEqualTo(0);
+  }
 }

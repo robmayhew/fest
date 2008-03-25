@@ -49,17 +49,33 @@ public class Modifiers {
   }
 
   /**
-   * Returns the key codes for the given modifier masks.
-   * @param modifierMasks the given modifier masks.
-   * @return the key codes for the given modifier masks.
+   * Returns the key codes for the given modifier mask.
+   * @param modifierMask the given modifier mask.
+   * @return the key codes for the given modifier mask.
    */
-  public static int[] keysFor(int modifierMasks) {
+  public static int[] keysFor(int modifierMask) {
     List<Integer> keyList = new ArrayList<Integer>();
     for (Integer mask : mapping.keySet()) 
-      if ((modifierMasks & mask.intValue()) != 0) keyList.add(mapping.get(mask));
+      if ((modifierMask & mask.intValue()) != 0) keyList.add(mapping.get(mask));
     int keyCount = keyList.size();
     int[] keys = new int[keyCount];
     for (int i = 0; i < keyCount; i++) keys[i] = keyList.get(i);
     return keys;
+  }
+  
+  /**
+   * Updates the given modifier mask with the given key code, only if the key code belong to a modifier key. 
+   * @param keyCode the given key code.
+   * @param modifierMask the given modifier mask.
+   * @return the updated modifier mask.
+   */
+  public static int updateModifierWithKeyCode(int keyCode, int modifierMask) {
+    int updatedModifierMask = modifierMask;
+    for (Map.Entry<Integer, Integer> entry : mapping.entrySet()) {
+      if (entry.getValue().intValue() != keyCode) continue;
+      updatedModifierMask |= entry.getKey().intValue();
+      break;
+    }
+    return updatedModifierMask;
   }
 }

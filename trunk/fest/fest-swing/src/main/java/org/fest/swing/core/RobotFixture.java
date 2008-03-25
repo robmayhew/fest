@@ -20,6 +20,9 @@ import java.util.Collection;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+
+import abbot.tester.KeyStrokeMap;
 
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -42,7 +45,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.util.AWT.*;
-import static org.fest.swing.util.Modifiers.keysFor;
+import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
@@ -389,42 +392,63 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void enterText(String text) {
-    abbotRobot.keyString(text);
+    for (char character : text.toCharArray()) type(character);
   }
 
   /** ${@inheritDoc} */
   public void type(char character) {
-    abbotRobot.keyStroke(character);
+    KeyStroke keyStroke = KeyStrokeMap.getKeyStroke(character);
+    if (keyStroke == null) {
+      // TODO generate KEY_TYPED event.
+      return;
+    } 
+    pressKeyAndReturn(keyStroke.getKeyCode(), keyStroke.getModifiers());
   }
-
+  
   /** ${@inheritDoc} */
   public void pressAndReleaseKey(int keyCode, int modifiers) {
-    abbotRobot.key(keyCode, modifiers);
+    pressKeyAndReturn(keyCode, modifiers);
   }
 
   /** ${@inheritDoc} */
   public void pressAndReleaseKeys(int... keyCodes) {
     for (int keyCode : keyCodes) {
-      abbotRobot.key(keyCode);
+      pressKeyAndReturn(keyCode, 0);
       waitForIdle();
     }
   }
 
-  /** ${@inheritDoc} */
-  public void pressKey(int keyCode) {
-    robot.keyPress(keyCode);
-    waitForIdle();
+  private void pressKeyAndReturn(int keyCode, int modifiers) {
+    int updatedModifiers = updateModifierWithKeyCode(keyCode, modifiers);
+    pressModifiers(updatedModifiers);
+    if (updatedModifiers == modifiers) {
+      pressKeyAndReturn(keyCode);
+      releaseKeyAndReturn(keyCode);
+    }
+    releaseModifiers(updatedModifiers);
   }
 
   /** ${@inheritDoc} */
-  public void releaseKey(int keyCode) {
-    robot.keyRelease(keyCode);
-    if (IS_OS_X) {
-      int delayBetweenEvents = settings.delayBetweenEvents();
-      if (KEY_INPUT_DELAY > delayBetweenEvents) 
-        pause(KEY_INPUT_DELAY - delayBetweenEvents);
-    }
+  public void pressKey(int keyCode) {
+    pressKeyAndReturn(keyCode);
     waitForIdle();
+  }
+
+  private void pressKeyAndReturn(int keyCode) {
+    robot.keyPress(keyCode);
+  }
+  
+  /** ${@inheritDoc} */
+  public void releaseKey(int keyCode) {
+    releaseKeyAndReturn(keyCode);
+    waitForIdle();
+  }
+
+  private void releaseKeyAndReturn(int keyCode) {
+    robot.keyRelease(keyCode);
+    if (!IS_OS_X) return;
+    int delayBetweenEvents = settings.delayBetweenEvents();
+    if (KEY_INPUT_DELAY > delayBetweenEvents) pause(KEY_INPUT_DELAY - delayBetweenEvents);
   }
 
   /** ${@inheritDoc} */
