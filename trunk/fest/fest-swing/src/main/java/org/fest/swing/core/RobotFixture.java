@@ -488,6 +488,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public boolean isReadyForInput(Component c) {
+    if (settings.eventMode().equals(AWT)) return c.isShowing();
     Window w = ancestorOf(c);
     if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
     return c.isShowing() && windowMonitor.isWindowReady(w);
