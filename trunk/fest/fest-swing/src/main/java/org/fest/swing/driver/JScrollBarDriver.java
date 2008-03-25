@@ -136,7 +136,7 @@ public class JScrollBarDriver extends JComponentDriver {
 
   private void scroll(JScrollBar scrollBar, Point where, int count) {
     // For now, do it programmatically, faking the mouse movement and clicking
-    robot.mouseMove(scrollBar, where.x, where.y);
+    robot.moveMouse(scrollBar, where.x, where.y);
     int value = scrollBar.getValue() + count;
     setValueProperty(scrollBar, value);
   }
@@ -150,9 +150,9 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollTo(JScrollBar scrollBar, final int position) {
     validatePosition(scrollBar, position);
     Point thumb = location.thumbLocation(scrollBar, scrollBar.getValue());
-    robot.mouseMove(scrollBar, thumb.x, thumb.y);
+    robot.moveMouse(scrollBar, thumb.x, thumb.y);
     thumb = location.thumbLocation(scrollBar, position);
-    robot.mouseMove(scrollBar, thumb.x, thumb.y);
+    robot.moveMouse(scrollBar, thumb.x, thumb.y);
     setValueProperty(scrollBar, position);
   }
 

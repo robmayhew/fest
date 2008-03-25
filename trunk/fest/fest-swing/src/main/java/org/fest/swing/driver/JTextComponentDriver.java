@@ -131,7 +131,7 @@ public class JTextComponentDriver extends JComponentDriver {
   private void startSelection(JTextComponent textBox, int index) {
     // From Abbot: Equivalent to JTextComponent.setCaretPosition(int), but operates through the UI.
     avoidAutomaticDragAndDrop(textBox);
-    robot.mousePress(textBox, scrollToVisible(textBox, index));
+    robot.pressMouse(textBox, scrollToVisible(textBox, index));
   }
 
   private void avoidAutomaticDragAndDrop(final JTextComponent textBox) {
@@ -157,7 +157,7 @@ public class JTextComponentDriver extends JComponentDriver {
   private void endSelection(JTextComponent textBox, int index) {
     // From Abbot: Equivalent to JTextComponent.moveCaretPosition(int), but operates through the UI.
     Point where = scrollToVisible(textBox, index);
-    robot.mouseMove(textBox, where.x, where.y);
+    robot.moveMouse(textBox, where.x, where.y);
     if (IS_OS_X) pause(75);
     robot.releaseLeftMouseButton();
   }

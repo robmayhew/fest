@@ -74,16 +74,16 @@ public class JSplitPaneDriver extends JComponentDriver {
   }
 
   private void simulateMovingDividerVertically(JSplitPane splitPane, int location) {
-    robot.mouseMove(splitPane, splitPane.getWidth() / 2, splitPane.getDividerLocation());
-    robot.mousePress(LEFT_BUTTON);
-    robot.mouseMove(splitPane, splitPane.getWidth() / 2, location);
+    robot.moveMouse(splitPane, splitPane.getWidth() / 2, splitPane.getDividerLocation());
+    robot.pressMouse(LEFT_BUTTON);
+    robot.moveMouse(splitPane, splitPane.getWidth() / 2, location);
     robot.releaseLeftMouseButton();
   }
 
   private void simulateMovingDividerHorizontally(JSplitPane splitPane, int location) {
-    robot.mouseMove(splitPane, splitPane.getDividerLocation(), splitPane.getHeight() / 2);
-    robot.mousePress(LEFT_BUTTON);
-    robot.mouseMove(splitPane, location, splitPane.getHeight() / 2);
+    robot.moveMouse(splitPane, splitPane.getDividerLocation(), splitPane.getHeight() / 2);
+    robot.pressMouse(LEFT_BUTTON);
+    robot.moveMouse(splitPane, location, splitPane.getHeight() / 2);
     robot.releaseLeftMouseButton();
   }
 }

@@ -20,6 +20,7 @@ import java.util.Collection;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
@@ -28,6 +29,7 @@ import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.util.TimeoutWatch;
 
 import static abbot.tester.Robot.*;
+import static java.awt.event.InputEvent.*;
 import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
@@ -39,6 +41,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.util.AWT.*;
+import static org.fest.swing.util.Modifiers.keysFor;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
@@ -58,8 +61,11 @@ public class RobotFixture implements Robot {
 
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
   
+  private static final int BUTTON_MASK = BUTTON1_MASK | BUTTON2_MASK | BUTTON3_MASK;
+  
   private abbot.tester.Robot abbotRobot;
-
+  private final java.awt.Robot robot;
+ 
   //private static Toolkit toolkit = Toolkit.getDefaultToolkit();
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
 
@@ -75,6 +81,7 @@ public class RobotFixture implements Robot {
    * Creates a new <code>{@link RobotFixture}</code> with a new AWT hierarchy. <code>{@link Component}</code>s created
    * before the created <code>{@link RobotFixture}</code> cannot be accessed by such <code>{@link RobotFixture}</code>.
    * @return the created robot fixture.
+   * @throws ActionFailedException if it was not possible to create the underlying AWT <code>Robot</code>.
    */
   public static RobotFixture robotWithNewAwtHierarchy() {
     return new RobotFixture(ignoreExistingComponents());
@@ -83,6 +90,7 @@ public class RobotFixture implements Robot {
   /**
    * Creates a new <code>{@link RobotFixture}</code> that has access to all the GUI components in the AWT hierarchy.
    * @return the created robot fixture.
+   * @throws ActionFailedException if it was not possible to create the underlying AWT <code>Robot</code>.
    */
   public static RobotFixture robotWithCurrentAwtHierarchy() {
     return new RobotFixture(new ExistingHierarchy());
@@ -91,20 +99,31 @@ public class RobotFixture implements Robot {
   /**
    * Creates a new <code>{@link RobotFixture}</code>.
    * @param hierarchy the AWT component hierarchy to use.
+   * @throws ActionFailedException if it was not possible to create the underlying AWT <code>Robot</code>.
    */
   private RobotFixture(ComponentHierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     settings = new Settings();
     finder = new BasicComponentFinder(this.hierarchy);
-    abbotRobot = newRobot();
+    abbotRobot = newAbbotRobot();
+    robot = newRobot();
+    settings.attachTo(robot);
   }
 
-  private abbot.tester.Robot newRobot() {
+  private abbot.tester.Robot newAbbotRobot() {
     abbot.tester.Robot robot = new abbot.tester.Robot();
     robot.reset();
     if (IS_WINDOWS || IS_OS_X) pause(500);
     return robot;
+  }
+  
+  private java.awt.Robot newRobot() {
+    try {
+      return new java.awt.Robot();
+    } catch (AWTException e) {
+      throw actionFailure("Unable to create AWT Robot", e);
+    }
   }
 
   /** ${@inheritDoc} */
@@ -175,7 +194,7 @@ public class RobotFixture implements Robot {
     if (currentOwner == c) return;
     FocusMonitor focusMonitor = addFocusMonitorTo(c);
     // for pointer focus
-    mouseMove(c);
+    moveMouse(c);
     waitForIdle();
     // Make sure the correct window is in front
     Window currentOwnerAncestor = currentOwner != null ? ancestorOf(currentOwner) : null;
@@ -204,7 +223,7 @@ public class RobotFixture implements Robot {
    */
   private void activate(Window w) {
     invokeAndWait(w, new ActivateWindowTask(w));
-    mouseMove(w); // For pointer-focus systems
+    moveMouse(w); // For pointer-focus systems
   }
 
   /** ${@inheritDoc} */
@@ -284,41 +303,79 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void click(Component target, Point where, MouseButton button, int times) {
-    abbotRobot.click(target, where.x, where.y, button.mask, times);
+    int mask = button.mask;
+    int modifierMask = mask & ~BUTTON_MASK;
+    mask &= BUTTON_MASK;
+    pressModifiers(modifierMask);
+    // From Abbot: Adjust the auto-delay to ensure we actually get a multiple click 
+    // In general clicks have to be less than 200ms apart, although the actual setting is not readable by Java.
+    int delayBetweenEvents = settings.delayBetweenEvents();
+    if (times > 1 && delayBetweenEvents * 2 > 200) settings.delayBetweenEvents(0);
+    mousePress(target, where, mask);
+    for (int i = times; i > 1; i--) {
+      robot.mouseRelease(mask);
+      robot.mousePress(mask);
+    }
+    settings.delayBetweenEvents(delayBetweenEvents);
+    robot.mouseRelease(mask);
+    releaseModifiers(modifierMask);
     waitForIdle();
   }
 
   /** ${@inheritDoc} */
-  public void mousePress(MouseButton button) {
-    abbotRobot.mousePress(button.mask);
+  public void pressModifiers(int modifierMask) {
+    for (int modifierKey : keysFor(modifierMask)) pressKey(modifierKey);
+  }
+  
+  /** ${@inheritDoc} */
+  public void releaseModifiers(int modifierMask) {
+    // For consistency, release in the reverse order of press.
+    int[] modifierKeys = keysFor(modifierMask);
+    for (int i = modifierKeys.length - 1; i >= 0; i--) 
+      releaseKey(modifierKeys[i]);
   }
 
   /** ${@inheritDoc} */
-  public void mousePress(Component target, Point where) {
-    mousePress(target, where, LEFT_BUTTON);
+  public void pressMouse(MouseButton button) {
+    robot.mousePress(button.mask);
   }
 
   /** ${@inheritDoc} */
-  public void mousePress(Component target, Point where, MouseButton button) {
-    abbotRobot.mousePress(target, where.x, where.y, button.mask);
+  public void pressMouse(Component target, Point where) {
+    pressMouse(target, where, LEFT_BUTTON);
+  }
+
+  /** ${@inheritDoc} */
+  public void pressMouse(Component target, Point where, MouseButton button) {
+    mousePress(target, where, button.mask);
+  }
+  
+  private void mousePress(Component comp, Point where, int mask) {
+    jitter(comp, where);
+    moveMouse(comp, where.x, where.y);
+    robot.mousePress(mask);
   }
   
   /** ${@inheritDoc} */
   public void jitter(Component c) {
-    Point center = centerOf(c);
-    int x = center.x;
-    int y = center.y;
-    mouseMove(c, (x > 0 ? x - 1 : x + 1), y);
+    jitter(c, centerOf(c));
   }
 
   /** ${@inheritDoc} */
-  public void mouseMove(Component target) {
+  public void jitter(Component c, Point where) {
+    int x = where.x;
+    int y = where.y;
+    moveMouse(c, (x > 0 ? x - 1 : x + 1), y);
+  }
+
+  /** ${@inheritDoc} */
+  public void moveMouse(Component target) {
     Point center = centerOf(target);
-    mouseMove(target, center.x, center.y);
+    moveMouse(target, center.x, center.y);
   }
 
   /** ${@inheritDoc} */
-  public void mouseMove(Component target, int x, int y) {
+  public void moveMouse(Component target, int x, int y) {
     abbotRobot.mouseMove(target, x, y);
   }
 
@@ -359,14 +416,14 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void releaseLeftMouseButton() {
-    abbotRobot.mouseRelease();
+    robot.mouseRelease(BUTTON1_MASK);
   }
 
   /** ${@inheritDoc} */
   public void releaseMouseButtons() {
     int buttons = getState().getButtons();
     if (buttons == 0) return;
-    abbotRobot.mouseRelease(buttons);
+    robot.mouseRelease(buttons);
   }
 
   /** ${@inheritDoc} */
@@ -374,12 +431,6 @@ public class RobotFixture implements Robot {
     abbotRobot.waitForIdle();
   }
 
-//  private void pauseIfNecessary() {
-//    int delayBetweenEvents = settings.delayBetweenEvents();
-//    int eventPostingDelay = settings.eventPostingDelay();
-//    if (eventPostingDelay > delayBetweenEvents) pause(eventPostingDelay - delayBetweenEvents);
-//  }
-  
   /** ${@inheritDoc} */
   public boolean isDragging() {
     return getState().isDragging();

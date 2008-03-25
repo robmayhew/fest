@@ -33,34 +33,50 @@ public final class Settings {
   private ComponentLookupScope componentLookupScope;
   private int timeoutToBeVisible;
   private int timeoutToFindPopup;
+  private int delayBetweenEvents;
   private int dragDelay;
   private int dropDelay;
   private int eventPostingDelay;
 
+  private java.awt.Robot robot;
+  
   public Settings() {
     timeoutToBeVisible(DEFAULT_DELAY);
     timeoutToFindPopup(DEFAULT_DELAY);
+    delayBetweenEvents(30);
     dragDelay(0);
     dropDelay(0);
     eventPostingDelay(100);
     componentLookupScope(DEFAULT);
   }
   
+  void attachTo(java.awt.Robot robot) {
+    this.robot = robot;
+    if (delayBetweenEvents < 0) delayBetweenEvents = this.robot.getAutoDelay();
+    else updateRobotAutoDelay();
+  }
+  
   /**
-   * Returns a value representing the millisecond count in between generated events. The default is zero delay.
+   * Returns a value representing the millisecond count in between generated events. The default is 30 milliseconds.
    * @return a value representing the millisecond count in between generated events.
    */
   public int delayBetweenEvents() { 
-    return Robot.getAutoDelay(); 
+    return delayBetweenEvents; 
   }
   
   /**
    * Updates the value representing the millisecond count in between generated events. Usually just set to 100-200 if
-   * you want to slow down the playback to simulate actual user input. The default is zero delay.
-   * @param ms the millisecond count in between generated events.
+   * you want to slow down the playback to simulate actual user input. The default is 30 milliseconds.
+   * @param ms the millisecond count in between generated events. It should be between -1 and 60000.
    */
   public void delayBetweenEvents(int ms) { 
-    Robot.setAutoDelay(ms); 
+    delayBetweenEvents = valueToUpdate(ms, -1, 60000);
+    Robot.setAutoDelay(delayBetweenEvents); 
+    if (robot != null) updateRobotAutoDelay();
+  }
+
+  private void updateRobotAutoDelay() {
+    robot.setAutoDelay(delayBetweenEvents);
   }
 
   /**

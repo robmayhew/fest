@@ -56,7 +56,7 @@ final class DragAndDrop {
    * @param where the point where to start the drag action.
    */
   void drag(Component target, Point where) {
-    robot.mousePress(target, where, LEFT_BUTTON);
+    robot.pressMouse(target, where, LEFT_BUTTON);
     int dragDelay = settings().dragDelay();
     if (dragDelay > delayBetweenEvents()) pause(dragDelay);
     mouseMove(target, where.x, where.y);
@@ -98,7 +98,7 @@ final class DragAndDrop {
    * Ends a drag operation, releasing the mouse button over the given target location.
    * <p>
    * This method is tuned for native drag/drop operations, so if you get odd behavior, you might try using a simple
-   * <code>{@link RobotFixture#mouseMove(Component, int, int)}</code> and
+   * <code>{@link RobotFixture#moveMouse(Component, int, int)}</code> and
    * <code>{@link RobotFixture#releaseMouseButtons()}</code>.
    * @param target the target component.
    * @param where the point where the drag operation ends.
@@ -137,11 +137,11 @@ final class DragAndDrop {
   }
 
   private void dragOver(Component target, int x, int y) {
-    robot.mouseMove(target, x - 4, y);
-    robot.mouseMove(target, x, y);
+    robot.moveMouse(target, x - 4, y);
+    robot.moveMouse(target, x, y);
   }
 
   private void mouseMove(Component target, Point...points) {
-    for (Point p : points) robot.mouseMove(target, p.x, p.y);
+    for (Point p : points) robot.moveMouse(target, p.x, p.y);
   }
 }

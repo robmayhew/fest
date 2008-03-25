@@ -111,7 +111,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     Container clickTarget = frame;
     if (frame.isIcon()) clickTarget = frame.getDesktopIcon();
     Point p = maximizeLocation(clickTarget);
-    robot.mouseMove(clickTarget, p.x, p.y);
+    robot.moveMouse(clickTarget, p.x, p.y);
     if (frame.isIcon()) deiconify(frame);
     setProperty(new SetMaximumTask(frame, action));
   }
@@ -141,7 +141,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     if (!frame.isIconifiable()) 
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not iconifiable"));
     Point p = iconifyLocation(frame);
-    robot.mouseMove(frame, p.x, p.y);
+    robot.moveMouse(frame, p.x, p.y);
     setProperty(new SetIconTask(frame, ICONIFY));
   }
 
@@ -154,7 +154,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     if (!frame.isIcon()) return;
     Container c = frame.getDesktopIcon();
     Point p = iconifyLocation(c);
-    robot.mouseMove(c, p.x, p.y);
+    robot.moveMouse(c, p.x, p.y);
     setProperty(new SetIconTask(frame, DEICONIFY));
   }
 
@@ -236,7 +236,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
       throw actionFailure(concat("The given JInternalFrame <", format(frame), "> is not closable"));
     // This is LAF-specific, so it must be done programmatically.
     Point p = closeLocation(frame);
-    robot.mouseMove(frame, p.x, p.y);
+    robot.moveMouse(frame, p.x, p.y);
     robot.invokeAndWait(new CloseFrameTask(frame));
   }
   

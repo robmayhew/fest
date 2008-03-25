@@ -6,6 +6,13 @@
   </properties>
   <body>
     <release version="0.9.1" date="TBD">
+      <action dev="wanghy" type="add">
+        Reverted the words method names that start with 'mouse' in org.fest.swing.core.Robot. For example, the method
+        'mouseMove' is now 'moveMouse'. This change was done to keep method naming consistency.
+      </action>
+      <action dev="wanghy, alruiz" type="add">
+        Added method 'pressModifiers(int)' and 'releaseModifiers(int)' to org.fest.swing.core.Robot.
+      </action>
       <action dev="alruiz" type="add">
         Moved class 'JMenuItemMatcher' from package 'org.fest.swing.fixture' to 'org.fest.swing.driver'.
       </action>

@@ -72,14 +72,14 @@ public abstract class ContainerDriver extends ComponentDriver {
   private void simulateResizeStarted(Container c, int horizontally, int vertically) {
     if (!isUserResizable(c)) return;
     Point p = resizeLocationOf(c);
-    robot.mouseMove(c, p.x, p.y);
-    robot.mouseMove(c, p.x + horizontally, p.y + vertically);
+    robot.moveMouse(c, p.x, p.y);
+    robot.moveMouse(c, p.x + horizontally, p.y + vertically);
   }
 
   private void simulateResizeComplete(Container c) {
     if (!isUserResizable(c)) return;
     Point p = resizeLocationOf(c);
-    robot.mouseMove(c, p.x, p.y);
+    robot.moveMouse(c, p.x, p.y);
   }
 
   /**
@@ -131,14 +131,14 @@ public abstract class ContainerDriver extends ComponentDriver {
   private void simulateMoveStarted(Container c, int horizontally, int vertically) {
     if (!isUserMovable(c)) return;
     Point p = moveLocation(c);
-    robot.mouseMove(c, p.x, p.y);
-    robot.mouseMove(c, p.x + horizontally, p.y + vertically);
+    robot.moveMouse(c, p.x, p.y);
+    robot.moveMouse(c, p.x + horizontally, p.y + vertically);
   }
 
   private void simulateMoveComplete(Container c) {
     if (!isUserMovable(c)) return;
     Point p = moveLocation(c);
-    robot.mouseMove(c, p.x, p.y);
+    robot.moveMouse(c, p.x, p.y);
   }
 
   /**

@@ -50,7 +50,7 @@ public class FrameDriver extends WindowDriver {
    */
   public void iconify(Frame frame) {
     Point p = iconifyLocation(frame);
-    if (p != null) robot.mouseMove(frame, p.x, p.y);
+    if (p != null) robot.moveMouse(frame, p.x, p.y);
     updateFrameExtendedState(frame, ICONIFIED);
     pause(new UntilIconified(frame));
   }
@@ -119,7 +119,7 @@ public class FrameDriver extends WindowDriver {
    */
   public void maximize(Frame frame) {
     Point p = maximizeLocation(frame);
-    if (p != null) robot.mouseMove(frame, p.x, p.y);
+    if (p != null) robot.moveMouse(frame, p.x, p.y);
     if (!supportsMaximize()) throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
     pause(new UntilMaximized(frame));

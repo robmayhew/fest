@@ -90,7 +90,7 @@ public class JMenuItemDriver extends JComponentDriver {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
     robot.invokeAndWait(w, new MoveToFrontTask(w));
-    robot.mouseMove(w);
+    robot.moveMouse(w);
   }
   
   private static class MoveToFrontTask implements Runnable {

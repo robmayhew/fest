@@ -160,14 +160,14 @@ public interface Robot {
    * Simulates a user pressing a mouse button. 
    * @param button the button to press.
    */
-  void mousePress(MouseButton button);
+  void pressMouse(MouseButton button);
 
   /**
    * Simulates a user pressing the left mouse button on the given <code>{@link Component}</code>.
    * @param target the <code>Component</code> to click on.
    * @param where the position where to press the left mouse button.
    */
-  void mousePress(Component target, Point where);
+  void pressMouse(Component target, Point where);
 
   /**
    * Simulates a user pressing the given mouse button on the given <code>{@link Component}</code>.
@@ -175,13 +175,13 @@ public interface Robot {
    * @param where the position where to press the given mouse button.
    * @param button the mouse button to press.
    */
-  void mousePress(Component target, Point where, MouseButton button);
+  void pressMouse(Component target, Point where, MouseButton button);
 
   /**
    * Simulates a user moving the mouse pointer to the center of the given <code>{@link Component}</code>.
    * @param target the given <code>Component</code>.
    */
-  void mouseMove(Component target);
+  void moveMouse(Component target);
 
   /**
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
@@ -190,13 +190,21 @@ public interface Robot {
    * @param x horizontal coordinate relative to the given <code>Component</code>.
    * @param y vertical coordinate relative to the given <code>Component</code>.
    */
-  void mouseMove(Component target, int x, int y);
+  void moveMouse(Component target, int x, int y);
 
   /**
    * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    */
   void jitter(Component c);
+
+  /**
+   * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code> at the given
+   * point.
+   * @param c the given <code>Component</code>.
+   * @param where the given point.
+   */
+  void jitter(Component c, Point where);
 
   /**
    * Simulates a user entering the given text. Note that this method the key strokes to the component that has input
@@ -250,6 +258,18 @@ public interface Robot {
    */
   void releaseMouseButtons();
 
+  /**
+   * Presses the appropriate modifiers corresponding to the given mask.
+   * @param modifierMask the given mask.
+   */
+  void pressModifiers(int modifierMask);
+  
+  /**
+   * Releases the appropriate modifiers corresponding to the given mask.
+   * @param modifierMask the given mask.
+   */
+  void releaseModifiers(int modifierMask);
+  
   /**
    * Wait for an idle AWT event queue. Note that this is different from the implementation of
    * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
