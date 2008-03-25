@@ -21,10 +21,10 @@ import java.util.Collection;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import static org.fest.swing.core.EventMode.*;
 
 import abbot.tester.KeyStrokeMap;
 
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
@@ -68,7 +68,7 @@ public class RobotFixture implements Robot {
   private static final int BUTTON_MASK = BUTTON1_MASK | BUTTON2_MASK | BUTTON3_MASK;
   
   private abbot.tester.Robot abbotRobot;
-  private final java.awt.Robot robot;
+  private java.awt.Robot robot;
  
   private static Toolkit toolkit = Toolkit.getDefaultToolkit();
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
@@ -85,7 +85,6 @@ public class RobotFixture implements Robot {
    * Creates a new <code>{@link RobotFixture}</code> with a new AWT hierarchy. <code>{@link Component}</code>s created
    * before the created <code>{@link RobotFixture}</code> cannot be accessed by such <code>{@link RobotFixture}</code>.
    * @return the created robot fixture.
-   * @throws ActionFailedException if it was not possible to create the underlying AWT <code>Robot</code>.
    */
   public static RobotFixture robotWithNewAwtHierarchy() {
     return new RobotFixture(ignoreExistingComponents());
@@ -94,7 +93,6 @@ public class RobotFixture implements Robot {
   /**
    * Creates a new <code>{@link RobotFixture}</code> that has access to all the GUI components in the AWT hierarchy.
    * @return the created robot fixture.
-   * @throws ActionFailedException if it was not possible to create the underlying AWT <code>Robot</code>.
    */
   public static RobotFixture robotWithCurrentAwtHierarchy() {
     return new RobotFixture(new ExistingHierarchy());
@@ -103,7 +101,6 @@ public class RobotFixture implements Robot {
   /**
    * Creates a new <code>{@link RobotFixture}</code>.
    * @param hierarchy the AWT component hierarchy to use.
-   * @throws ActionFailedException if it was not possible to create the underlying AWT <code>Robot</code>.
    */
   private RobotFixture(ComponentHierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
@@ -111,8 +108,7 @@ public class RobotFixture implements Robot {
     settings = new Settings();
     finder = new BasicComponentFinder(this.hierarchy);
     abbotRobot = newAbbotRobot();
-    robot = newRobot();
-    settings.attachTo(robot);
+    createRobot();
   }
 
   private abbot.tester.Robot newAbbotRobot() {
@@ -122,11 +118,12 @@ public class RobotFixture implements Robot {
     return robot;
   }
   
-  private java.awt.Robot newRobot() {
+  private void createRobot() {
     try {
-      return new java.awt.Robot();
+      robot = new java.awt.Robot();
+      settings.attachTo(robot);
     } catch (AWTException e) {
-      throw actionFailure("Unable to create AWT Robot", e);
+      settings.eventMode(AWT);
     }
   }
 

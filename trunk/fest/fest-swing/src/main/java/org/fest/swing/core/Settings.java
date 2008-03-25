@@ -20,6 +20,7 @@ import static java.lang.Math.*;
 
 import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
 import static org.fest.swing.util.Platform.*;
+import static org.fest.swing.core.EventMode.*;
 
 /**
  * Understands configuration settings.
@@ -30,6 +31,7 @@ public final class Settings {
 
   private static final int DEFAULT_DELAY = 30000;
   
+  private EventMode eventMode;
   private ComponentLookupScope componentLookupScope;
   private int timeoutToBeVisible;
   private int timeoutToFindPopup;
@@ -54,6 +56,23 @@ public final class Settings {
     this.robot = robot;
     if (delayBetweenEvents < 0) delayBetweenEvents = this.robot.getAutoDelay();
     else updateRobotAutoDelay();
+    eventMode(ROBOT);
+  }
+
+  /**
+   * Returns the event-generation mode.
+   * @return the event-generation mode.
+   */
+  public EventMode eventMode() {
+    return eventMode;
+  }
+
+  /**
+   * Updates the event-generation mode.
+   * @param eventMode the new event-generation mode.
+   */
+  public void eventMode(EventMode eventMode) {
+    this.eventMode = eventMode;
   }
   
   /**
