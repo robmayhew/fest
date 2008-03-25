@@ -29,6 +29,8 @@ import org.fest.swing.driver.JInternalFrameDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.assertions.Assertions.*;
+
 /**
  * Tests for <code>{@link JInternalFrameFixture}</code>.
  *
@@ -206,6 +208,10 @@ public class JInternalFrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<
         assertThatReturnsThis(fixture.resizeTo(size));
       }
     }.run();
+  }
+  
+  @Test public void shouldBeContainerFixture() {
+    assertThat(fixture).isInstanceOf(ContainerFixture.class);
   }
   
   ComponentDriver driver() { return driver; }

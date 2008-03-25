@@ -34,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixture extends JPopupMenuInvokerFixture<JInternalFrame> implements FrameLikeFixture {
+public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> implements FrameLikeFixture {
 
   private JInternalFrameDriver driver;
   
