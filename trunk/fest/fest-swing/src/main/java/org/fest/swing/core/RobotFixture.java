@@ -399,49 +399,49 @@ public class RobotFixture implements Robot {
       // TODO generate KEY_TYPED event.
       return;
     } 
-    pressKeyAndReturn(keyStroke.getKeyCode(), keyStroke.getModifiers());
+    keyPressAndRelease(keyStroke.getKeyCode(), keyStroke.getModifiers());
   }
   
   /** ${@inheritDoc} */
   public void pressAndReleaseKey(int keyCode, int modifiers) {
-    pressKeyAndReturn(keyCode, modifiers);
+    keyPressAndRelease(keyCode, modifiers);
   }
 
   /** ${@inheritDoc} */
   public void pressAndReleaseKeys(int... keyCodes) {
     for (int keyCode : keyCodes) {
-      pressKeyAndReturn(keyCode, 0);
+      keyPressAndRelease(keyCode, 0);
       waitForIdle();
     }
   }
 
-  private void pressKeyAndReturn(int keyCode, int modifiers) {
+  private void keyPressAndRelease(int keyCode, int modifiers) {
     int updatedModifiers = updateModifierWithKeyCode(keyCode, modifiers);
     pressModifiers(updatedModifiers);
     if (updatedModifiers == modifiers) {
-      pressKeyAndReturn(keyCode);
-      releaseKeyAndReturn(keyCode);
+      keyPress(keyCode);
+      keyRelease(keyCode);
     }
     releaseModifiers(updatedModifiers);
   }
 
   /** ${@inheritDoc} */
   public void pressKey(int keyCode) {
-    pressKeyAndReturn(keyCode);
+    keyPress(keyCode);
     waitForIdle();
   }
 
-  private void pressKeyAndReturn(int keyCode) {
+  private void keyPress(int keyCode) {
     robot.keyPress(keyCode);
   }
   
   /** ${@inheritDoc} */
   public void releaseKey(int keyCode) {
-    releaseKeyAndReturn(keyCode);
+    keyRelease(keyCode);
     waitForIdle();
   }
 
-  private void releaseKeyAndReturn(int keyCode) {
+  private void keyRelease(int keyCode) {
     robot.keyRelease(keyCode);
     if (!IS_OS_X) return;
     int delayBetweenEvents = settings.delayBetweenEvents();
