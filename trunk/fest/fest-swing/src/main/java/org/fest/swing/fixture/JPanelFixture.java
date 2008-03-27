@@ -30,7 +30,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JPanelFixture extends JPopupMenuInvokerFixture<JPanel> {
+public class JPanelFixture extends ContainerFixture<JPanel> {
 
   private JComponentDriver driver;
   
