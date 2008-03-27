@@ -26,7 +26,7 @@ import javax.swing.KeyStroke;
  *
  * @author Alex Ruiz
  */
-public class EnUsKeyStrokeMappingProvider extends EnglishStrokeMappingProviderTemplate {
+public class EnUsKeyStrokeMappingProvider extends EnglishKeyStrokeMappingProviderTemplate {
 
   /** 
    * Returns the mapping between characters and <code>{@link KeyStroke}</code>s for locale en_US. 

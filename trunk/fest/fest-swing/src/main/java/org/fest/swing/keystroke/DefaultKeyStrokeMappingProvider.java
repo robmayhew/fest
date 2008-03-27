@@ -31,7 +31,7 @@ import static java.util.Locale.*;
  * 
  * @author Alex Ruiz
  */
-public class DefaultKeyStrokeMappingProvider extends EnglishStrokeMappingProviderTemplate {
+public class DefaultKeyStrokeMappingProvider extends EnglishKeyStrokeMappingProviderTemplate {
 
   /**
    * Returns the default mapping of characters and <code>{@link KeyStroke}</code>s. If the country of the current

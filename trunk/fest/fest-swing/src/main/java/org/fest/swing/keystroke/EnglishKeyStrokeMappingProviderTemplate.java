@@ -28,7 +28,7 @@ import static java.awt.event.KeyEvent.*;
  *
  * @author Alex Ruiz
  */
-public abstract class EnglishStrokeMappingProviderTemplate implements KeyStrokeMappingProvider {
+public abstract class EnglishKeyStrokeMappingProviderTemplate implements KeyStrokeMappingProvider {
 
   /**
    * Returns the universal key stroke mappings:
