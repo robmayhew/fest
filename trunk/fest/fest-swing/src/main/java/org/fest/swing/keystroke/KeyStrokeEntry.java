@@ -29,6 +29,16 @@ public class KeyStrokeEntry {
 
   /**
    * Creates a new </code>{@link KeyStrokeEntry}</code>.
+   * @param character the character corresponding to the intended <code>KeyStroke</code>.
+   * @param keyCode the numeric key code for the intended <code>KeyStroke</code>.
+   * @param modifiers the set of modifiers for the intended <code>KeyStroke</code>.
+   */
+  public KeyStrokeEntry(char character, int keyCode, int modifiers) {
+    this(character, KeyStroke.getKeyStroke(keyCode, modifiers));
+  }
+  
+  /**
+   * Creates a new </code>{@link KeyStrokeEntry}</code>.
    * @param character the character corresponding to the given <code>KeyStroke</code>.
    * @param keyStroke the <code>KeyStroke</code> corresponding to the given character.
    */

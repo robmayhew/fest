@@ -14,59 +14,70 @@
  */
 package org.fest.swing.keystroke;
 
-import static java.awt.event.InputEvent.SHIFT_MASK;
-
-import java.awt.event.KeyEvent;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.KeyEvent.CHAR_UNDEFINED;
+
 /**
  * Understands a collection of <code>{@link KeyStrokeEntry}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class KeyStrokeMap {
 
   private static final Map<Character, KeyStroke> CHAR_TO_KEY_STROKE = new HashMap<Character, KeyStroke>();
   private static final Map<KeyStroke, Character> KEY_STROKE_TO_CHAR = new HashMap<KeyStroke, Character>();
 
-  public static synchronized void add(Collection<KeyStrokeEntry> keyStrokes) {
-    for (KeyStrokeEntry entry : keyStrokes) {
-      Character character = entry.character();
-      KeyStroke keyStroke = entry.keyStroke();
-      CHAR_TO_KEY_STROKE.put(character, keyStroke);
-      KEY_STROKE_TO_CHAR.put(keyStroke, character);
-    }
+  /**
+   * Adds the <code>{@link KeyStrokeEntry}</code> collection in the given <code>{@link KeyStrokeEntryProvider}</code>
+   * to this map.
+   * @param provider the given <code>KeyStrokeEntryProvider</code>.
+   */
+  public static synchronized void addKeyStrokesFrom(KeyStrokeEntryProvider provider) {
+    for (KeyStrokeEntry entry : provider.keyStrokeEntries()) 
+      add(entry.character(), entry.keyStroke());
   }
 
+  private static void add(Character character, KeyStroke keyStroke) {
+    CHAR_TO_KEY_STROKE.put(character, keyStroke);
+    KEY_STROKE_TO_CHAR.put(keyStroke, character);
+  }
+  
+  public static synchronized void clearKeyStrokes() {
+    CHAR_TO_KEY_STROKE.clear();
+    KEY_STROKE_TO_CHAR.clear();    
+  }
+  
   /**
-   * Returns the key code-based <code>{@link KeyStroke}</code> corresponding to the given character, as best we can
-   * guess it, or {@link KeyStrokeMap} if we don't know how to generate it.
+   * Returns the <code>{@link KeyStroke}</code> corresponding to the given character, as best we can guess it, or
+   * {@link KeyStrokeMap} if we don't know how to generate it.
    * @param character the given character.
    * @return the key code-based <code>KeyStroke</code> corresponding to the given character, or <code>null</code> if
-   * we cannot generate it.
+   *         we cannot generate it.
    */
-  public static KeyStroke getKeyStroke(char character) {
+  public static KeyStroke keyStrokeFor(char character) {
     return CHAR_TO_KEY_STROKE.get(character);
   }
 
   /**
-   * Given a key code-based <code>{@link KeyStroke}</code>, returns the equivalent character. Key strokes are defined
-   * properly for US keyboards only. To contribute your own, please add them using the method
-   * <code>{@link #add(Collection)}</code>.
+   * Given a <code>{@link KeyStroke}</code>, returns the equivalent character. Key strokes are defined properly for
+   * US keyboards only. To contribute your own, please add them using the method
+   * <code>{@link #addKeyStrokesFrom(KeyStrokeEntryProvider)}</code>.
    * @param keyStroke the given <code>KeyStroke</code>.
    * @return KeyEvent.VK_UNDEFINED if the result is unknown.
    */
-  public static char getChar(KeyStroke keyStroke) {
+  public static char charFor(KeyStroke keyStroke) {
     Character character = KEY_STROKE_TO_CHAR.get(keyStroke);
     if (character == null) {
       // Try again, but strip all modifiers but shift
       int mask = keyStroke.getModifiers() & ~SHIFT_MASK;
       character = KEY_STROKE_TO_CHAR.get(KeyStroke.getKeyStroke(keyStroke.getKeyCode(), mask));
-      if (character == null) return KeyEvent.CHAR_UNDEFINED;
+      if (character == null) return CHAR_UNDEFINED;
     }
     return character.charValue();
   }
