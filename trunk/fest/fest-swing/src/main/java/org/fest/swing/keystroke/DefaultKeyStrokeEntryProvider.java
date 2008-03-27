@@ -36,8 +36,8 @@ import static java.util.Locale.*;
 public class DefaultKeyStrokeEntryProvider implements KeyStrokeEntryProvider {
 
   /**
-   * Returns the default mapping of characters and <code>{@link KeyStroke}</code>s. If the language of the current
-   * <code>{@link Locale locale}</code> is English, this provider will also include <code>{@link KeyStroke}</code>s
+   * Returns the default mapping of characters and <code>{@link KeyStroke}</code>s. If the country of the current
+   * <code>{@link Locale locale}</code> is US or UK, this provider will also include <code>{@link KeyStroke}</code>s
    * for English characters. Otherwise, this provider will only return the mappings for following keys:
    * <ul>
    * <li>Escape</li>
