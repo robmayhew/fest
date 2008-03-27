@@ -27,9 +27,9 @@ import static java.awt.event.KeyEvent.*;
 import static java.util.Locale.*;
 
 /**
- * Understands a default mapping of characters and <code>{@link KeyStroke}</code>s. If the language of the current
- * <code>{@link Locale locale}</code> is English, this provider will also include <code>{@link KeyStroke}</code>s
- * for English characters.
+ * Understands a default mapping of characters and <code>{@link KeyStroke}</code>s. If the country of the current
+ * <code>{@link Locale locale}</code> is US or UK, this provider will include <code>{@link KeyStroke}</code>s for 
+ * English characters.
  * 
  * @author Alex Ruiz
  */
