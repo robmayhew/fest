@@ -23,7 +23,7 @@ import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.CHAR_UNDEFINED;
 
 /**
- * Understands a collection of <code>{@link KeyStrokeEntry}</code>.
+ * Understands a collection of <code>{@link KeyStrokeMapping}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
@@ -34,12 +34,12 @@ public class KeyStrokeMap {
   private static final Map<KeyStroke, Character> KEY_STROKE_TO_CHAR = new HashMap<KeyStroke, Character>();
 
   /**
-   * Adds the <code>{@link KeyStrokeEntry}</code> collection in the given <code>{@link KeyStrokeEntryProvider}</code>
-   * to this map.
-   * @param provider the given <code>KeyStrokeEntryProvider</code>.
+   * Adds the collection of <code>{@link KeyStrokeMapping}</code>s from the given
+   * <code>{@link KeyStrokeMappingProvider}</code> to this map.
+   * @param provider the given <code>KeyStrokeMappingProvider</code>.
    */
-  public static synchronized void addKeyStrokesFrom(KeyStrokeEntryProvider provider) {
-    for (KeyStrokeEntry entry : provider.keyStrokeEntries()) 
+  public static synchronized void addKeyStrokesFrom(KeyStrokeMappingProvider provider) {
+    for (KeyStrokeMapping entry : provider.keyStrokeMappings()) 
       add(entry.character(), entry.keyStroke());
   }
 
@@ -67,7 +67,7 @@ public class KeyStrokeMap {
   /**
    * Given a <code>{@link KeyStroke}</code>, returns the equivalent character. Key strokes are defined properly for
    * US keyboards only. To contribute your own, please add them using the method
-   * <code>{@link #addKeyStrokesFrom(KeyStrokeEntryProvider)}</code>.
+   * <code>{@link #addKeyStrokesFrom(KeyStrokeMappingProvider)}</code>.
    * @param keyStroke the given <code>KeyStroke</code>.
    * @return KeyEvent.VK_UNDEFINED if the result is unknown.
    */

@@ -22,14 +22,14 @@ import java.util.Collection;
  * 
  * @author Alex Ruiz
  */
-public interface KeyStrokeEntryProvider {
+public interface KeyStrokeMappingProvider {
 
   /** Value to use when a key stroke is not using modifiers. */
   int NO_MASK = 0;
   
   /**
-   * Returns a <code>{@link KeyStrokeEntry}</code> collection to be used by <code>{@link KeyStrokeMap}</code>.
-   * @return a <code>KeyStrokeEntry</code> collection.
+   * Returns a collection <code>{@link KeyStrokeMapping}</code>s to be used by <code>{@link KeyStrokeMap}</code>.
+   * @return a <code>KeyStrokeMapping</code> collection.
    */
-  Collection<KeyStrokeEntry> keyStrokeEntries();
+  Collection<KeyStrokeMapping> keyStrokeMappings();
 }
