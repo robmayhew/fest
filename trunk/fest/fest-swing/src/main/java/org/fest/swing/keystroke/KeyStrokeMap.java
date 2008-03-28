@@ -15,12 +15,15 @@
 package org.fest.swing.keystroke;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.CHAR_UNDEFINED;
+
+import static java.util.Locale.*;
 
 /**
  * Understands a collection of <code>{@link KeyStrokeMapping}</code>.
@@ -33,6 +36,19 @@ public class KeyStrokeMap {
   private static final Map<Character, KeyStroke> CHAR_TO_KEY_STROKE = new HashMap<Character, KeyStroke>();
   private static final Map<KeyStroke, Character> KEY_STROKE_TO_CHAR = new HashMap<KeyStroke, Character>();
 
+  static {
+    initialize();
+  }
+
+  private static void initialize() {
+    Locale locale = Locale.getDefault();
+    if (ENGLISH.equals(locale)) {
+      addKeyStrokesFrom(new EnglishKeyStrokeMappingProvider());
+      return;
+    }
+    addKeyStrokesFrom(new DefaultKeyStrokeMappingProvider());
+  }
+  
   /**
    * Adds the collection of <code>{@link KeyStrokeMapping}</code>s from the given
    * <code>{@link KeyStrokeMappingProvider}</code> to this map.

@@ -18,25 +18,21 @@ package org.fest.swing.keystroke;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.KeyStroke;
 
-import static java.util.Locale.*;
+import static java.awt.event.KeyEvent.*;
 
 /**
- * Understands a default mapping of characters and <code>{@link KeyStroke}</code>s. If the country of the current
- * <code>{@link Locale locale}</code> is US or UK, this provider will include <code>{@link KeyStroke}</code>s for 
- * English characters.
+ * Understands a default mapping of characters and <code>{@link KeyStroke}</code>s.
  * 
  * @author Alex Ruiz
  */
-public class DefaultKeyStrokeMappingProvider extends EnglishKeyStrokeMappingProviderTemplate {
+public class DefaultKeyStrokeMappingProvider implements KeyStrokeMappingProvider {
 
   /**
-   * Returns the default mapping of characters and <code>{@link KeyStroke}</code>s. If the country of the current
-   * <code>{@link Locale locale}</code> is US or UK, this provider will also include <code>{@link KeyStroke}</code>s
-   * for English characters. Otherwise, this provider will only return the mappings for following keys:
+   * Returns the default mapping of characters and <code>{@link KeyStroke}</code>s. This provider will only return
+   * the mappings for following keys:
    * <ul>
    * <li>Escape</li>
    * <li>Backspace</li>
@@ -46,14 +42,12 @@ public class DefaultKeyStrokeMappingProvider extends EnglishKeyStrokeMappingProv
    * @return the default mapping of characters and <code>KeyStroke</code>s
    */
   public Collection<KeyStrokeMapping> keyStrokeMappings() {
-    List<KeyStrokeMapping> mappings = new ArrayList<KeyStrokeMapping>(100);
-    mappings.addAll(universalKeyStrokes());
-    if (isEnglish()) mappings.addAll(englishKeyStrokes());
+    List<KeyStrokeMapping> mappings = new ArrayList<KeyStrokeMapping>();
+    mappings.add(new KeyStrokeMapping('\b', VK_BACK_SPACE, NO_MASK));
+    mappings.add(new KeyStrokeMapping('', VK_DELETE, NO_MASK));
+    mappings.add(new KeyStrokeMapping('', VK_ESCAPE, NO_MASK));
+    mappings.add(new KeyStrokeMapping('\n', VK_ENTER, NO_MASK));
+    mappings.add(new KeyStrokeMapping('\r', VK_ENTER, NO_MASK));
     return mappings;
-  }
-
-  private static boolean isEnglish() {
-    Locale locale = Locale.getDefault();
-    return US.equals(locale) || UK.equals(locale);    
   }
 }

@@ -1,60 +1,42 @@
 /*
  * Created on Mar 27, 2008
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.keystroke;
 
+import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.KeyEvent.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static java.awt.event.InputEvent.SHIFT_MASK;
-import static java.awt.event.KeyEvent.*;
+import javax.swing.KeyStroke;
 
 /**
- * Understands a template for <code>{@link KeyStrokeMappingProvider}</code>s that handle English as the language in
- * the current locale.
- *
+ * Understands mapping characters to <code>{@link KeyStroke}</code>s for locale
+ * <code>{@link java.util.Locale#ENGLISH ENGLISH}</code>.
+ * 
  * @author Alex Ruiz
  */
-public abstract class EnglishKeyStrokeMappingProviderTemplate implements KeyStrokeMappingProvider {
+public class EnglishKeyStrokeMappingProvider implements KeyStrokeMappingProvider {
 
   /**
-   * Returns the universal key stroke mappings:
-   * <ul>
-   * <li>Escape</li>
-   * <li>Backspace</li>
-   * <li>Delete</li>
-   * <li>Enter</li>
-   * </ul>
-   * @return the universal key stroke mappings. 
+   * Returns the mapping between characters and <code>{@link KeyStroke}</code>s for locale
+   * <code>{@link java.util.Locale#ENGLISH ENGLISH}</code>.
+   * @return the mapping between characters and <code>{@link KeyStroke}</code>s for locale <code>ENGLISH</code>.
    */
-  protected final Collection<KeyStrokeMapping> universalKeyStrokes() {
-    List<KeyStrokeMapping> mappings = new ArrayList<KeyStrokeMapping>();
-    mappings.add(new KeyStrokeMapping('\b', VK_BACK_SPACE, NO_MASK));
-    mappings.add(new KeyStrokeMapping('', VK_DELETE, NO_MASK));
-    mappings.add(new KeyStrokeMapping('', VK_ESCAPE, NO_MASK));
-    mappings.add(new KeyStrokeMapping('\n', VK_ENTER, NO_MASK));
-    mappings.add(new KeyStrokeMapping('\r', VK_ENTER, NO_MASK));
-    return mappings;
-  }
-
-  /**
-   * Returns the English-specific key stroke mappings.
-   * @return the English-specific key stroke mappings.
-   */
-  protected final Collection<KeyStrokeMapping> englishKeyStrokes() {
+  public Collection<KeyStrokeMapping> keyStrokeMappings() {
     List<KeyStrokeMapping> mappings = new ArrayList<KeyStrokeMapping>(100);
     mappings.add(new KeyStrokeMapping('0', VK_0, NO_MASK));
     mappings.add(new KeyStrokeMapping(')', VK_0, SHIFT_MASK));
@@ -84,6 +66,7 @@ public abstract class EnglishKeyStrokeMappingProviderTemplate implements KeyStro
     mappings.add(new KeyStrokeMapping('~', VK_BACK_QUOTE, SHIFT_MASK));
     mappings.add(new KeyStrokeMapping('\\', VK_BACK_SLASH, NO_MASK));
     mappings.add(new KeyStrokeMapping('|', VK_BACK_SLASH, SHIFT_MASK));
+    mappings.add(new KeyStrokeMapping('\b', VK_BACK_SPACE, NO_MASK));
     mappings.add(new KeyStrokeMapping('c', VK_C, NO_MASK));
     mappings.add(new KeyStrokeMapping('C', VK_C, SHIFT_MASK));
     mappings.add(new KeyStrokeMapping(']', VK_CLOSE_BRACKET, NO_MASK));
@@ -92,10 +75,14 @@ public abstract class EnglishKeyStrokeMappingProviderTemplate implements KeyStro
     mappings.add(new KeyStrokeMapping('<', VK_COMMA, SHIFT_MASK));
     mappings.add(new KeyStrokeMapping('d', VK_D, NO_MASK));
     mappings.add(new KeyStrokeMapping('D', VK_D, SHIFT_MASK));
+    mappings.add(new KeyStrokeMapping('', VK_DELETE, NO_MASK));
     mappings.add(new KeyStrokeMapping('e', VK_E, NO_MASK));
     mappings.add(new KeyStrokeMapping('E', VK_E, SHIFT_MASK));
+    mappings.add(new KeyStrokeMapping('\n', VK_ENTER, NO_MASK));
+    mappings.add(new KeyStrokeMapping('\r', VK_ENTER, NO_MASK));
     mappings.add(new KeyStrokeMapping('=', VK_EQUALS, NO_MASK));
     mappings.add(new KeyStrokeMapping('+', VK_EQUALS, NO_MASK));
+    mappings.add(new KeyStrokeMapping('', VK_ESCAPE, NO_MASK));
     mappings.add(new KeyStrokeMapping('f', VK_F, NO_MASK));
     mappings.add(new KeyStrokeMapping('F', VK_F, SHIFT_MASK));
     mappings.add(new KeyStrokeMapping('g', VK_G, NO_MASK));
