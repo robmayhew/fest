@@ -71,7 +71,7 @@ public class KeyStrokeMap {
   
   /**
    * Returns the <code>{@link KeyStroke}</code> corresponding to the given character, as best we can guess it, or
-   * {@link KeyStrokeMap} if we don't know how to generate it.
+   * <code>null</code> if we don't know how to generate it.
    * @param character the given character.
    * @return the key code-based <code>KeyStroke</code> corresponding to the given character, or <code>null</code> if
    *         we cannot generate it.
