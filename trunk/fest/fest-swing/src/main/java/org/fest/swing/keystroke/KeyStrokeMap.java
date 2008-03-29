@@ -43,7 +43,7 @@ public class KeyStrokeMap {
   private static void initialize() {
     Locale locale = Locale.getDefault();
     if (ENGLISH.equals(locale)) {
-      addKeyStrokesFrom(new EnglishKeyStrokeMappingProvider());
+      addKeyStrokesFrom(new KeyStrokeMappingProvider_en());
       return;
     }
     addKeyStrokesFrom(new DefaultKeyStrokeMappingProvider());

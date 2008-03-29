@@ -29,7 +29,7 @@ import javax.swing.KeyStroke;
  * 
  * @author Alex Ruiz
  */
-public class EnglishKeyStrokeMappingProvider implements KeyStrokeMappingProvider {
+public class KeyStrokeMappingProvider_en implements KeyStrokeMappingProvider {
 
   /**
    * Returns the mapping between characters and <code>{@link KeyStroke}</code>s for locale

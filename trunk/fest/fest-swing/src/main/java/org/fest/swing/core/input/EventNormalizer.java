@@ -14,7 +14,11 @@
  */
 package org.fest.swing.core.input;
 
-import static org.fest.swing.util.Modifiers.*;
+import static java.awt.AWTEvent.*;
+import static java.awt.event.MouseEvent.*;
+import static java.awt.event.WindowEvent.*;
+import static javax.swing.SwingUtilities.*;
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,32 +26,25 @@ import java.util.EmptyStackException;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-
 import org.fest.swing.listener.WeakEventListener;
 
 /**
- * Provide an AWTEventListener which normalizes the event stream.
+ * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream:
  * <ul>
- * <li>removes modifier key repeats on w32
- * <li>sends a single WINDOW_CLOSED, instead of one every time dispose is called
- * <li>removes some spurious key events on OSX
- * <li>catches sun.awt.dnd.SunDropTargetEvents during native drags
+ * <li>sends a single <code>WINDOW_CLOSED</code>, instead of one every time dispose is called
+ * <li>catches <code>sun.awt.dnd.SunDropTargetEvents</code> during native drags
  * </ul>
  */
 class EventNormalizer implements AWTEventListener {
 
-  // Normally we want to ignore these (w32 generates them)
-  private static boolean captureModifierRepeats = Boolean.getBoolean("abbot.capture_modifier_repeats");
-
-  private AWTEventListener listener;
-  private WeakEventListener weakListener;
-  private long modifiers;
   private final Map<Window, Boolean> disposedWindows = new WeakHashMap<Window, Boolean>();
-  private DragAwareEventQueue queue;
-  private long mask;
+
   private final boolean trackDrag;
+
+  private WeakEventListener weakEventListener;
+  private AWTEventListener listener;
+  private DragAwareEventQueue dragAwareEventQueue;
+  private long mask;
 
   EventNormalizer() {
     this(false);
@@ -57,208 +54,90 @@ class EventNormalizer implements AWTEventListener {
     this.trackDrag = trackDrag;
   }
 
-  void startListening(Toolkit toolkit, AWTEventListener listener, long mask) {
-    fnKeyDown = false;
-    lastKeyPress = lastKeyRelease = KeyEvent.VK_UNDEFINED;
-    lastKeyStroke = null;
-    lastKeyChar = KeyEvent.VK_UNDEFINED;
-    lastKeyComponent = null;
-    modifiers = 0;
+  void startListening(final Toolkit toolkit, AWTEventListener listener, long mask) {
     this.listener = listener;
     this.mask = mask;
-    weakListener = WeakEventListener.attachAsWeakEventListener(toolkit, this, mask);
-    if (trackDrag) {
-      queue = new DragAwareEventQueue();
-      try {
-        SwingUtilities.invokeAndWait(new Runnable() {
-          public void run() {
-            Toolkit.getDefaultToolkit().getSystemEventQueue().push(queue);
-          }
-        });
-      } catch (Exception e) {}
-    }
+    weakEventListener = attachAsWeakEventListener(toolkit, this, mask);
+    if (!trackDrag) return;
+    dragAwareEventQueue = new DragAwareEventQueue();
+    try {
+      invokeAndWait(new Runnable() {
+        public void run() {
+          toolkit.getSystemEventQueue().push(dragAwareEventQueue);
+        }
+      });
+    } catch (Exception e) {}
   }
 
   void stopListening() {
-    if (queue != null) {
-      try {
-        queue.pop();
-      } catch (EmptyStackException e) {
-      }
-      queue = null;
-    }
-    if (weakListener != null) {
-      weakListener.dispose();
-      weakListener = null;
-    }
+    disposeDragAwareEventQueue();
+    disposeWeakEventListener();
     listener = null;
-    modifiers = 0;
   }
 
-  /** For OSX pre-1.4 laptops... */
-  private boolean fnKeyDown;
-  /** These aid in culling duplicate key events, pre-1.4. */
-  private int lastKeyPress = KeyEvent.VK_UNDEFINED;
-  private int lastKeyRelease = KeyEvent.VK_UNDEFINED;
-  private KeyStroke lastKeyStroke;
-  private char lastKeyChar = KeyEvent.VK_UNDEFINED;
-  private Component lastKeyComponent;
+  private void disposeDragAwareEventQueue() {
+    if (dragAwareEventQueue == null) return;
+    try {
+      dragAwareEventQueue.pop();
+    } catch (EmptyStackException e) {}
+    dragAwareEventQueue = null;
+  }
 
-  // Returns whether the event is spurious and should be discarded.
-  private boolean isSpuriousEvent(AWTEvent event) {
-    return isDuplicateKeyEvent(event) || isOSXFunctionKey(event) || isDuplicateDispose(event);
+  private void disposeWeakEventListener() {
+    if (weakEventListener == null) return;
+    weakEventListener.dispose();
+    weakEventListener = null;
   }
 
   // TODO: (Abbot) Maybe make this an AWT event listener instead, so we can use one instance instead of one per window.
   private static class DisposalWatcher extends ComponentAdapter {
-    private final Map<Window, Boolean> map;
+    private final Map<Window, Boolean> disposedWindows;
 
-    DisposalWatcher(Map<Window, Boolean> map) {
-      this.map = map;
+    DisposalWatcher(Map<Window, Boolean> disposedWindows) {
+      this.disposedWindows = disposedWindows;
     }
 
     @Override public void componentShown(ComponentEvent e) {
-      e.getComponent().removeComponentListener(this);
-      map.remove(e.getComponent());
+      Component c = e.getComponent();
+      c.removeComponentListener(this);
+      disposedWindows.remove(c);
     }
+  }
+
+  /** Event reception callback. */
+  public void eventDispatched(AWTEvent event) {
+    boolean discard = isDuplicateDispose(event);
+    if (!discard && listener != null) delegate(event);
   }
 
   // We want to ignore consecutive event indicating window disposal; there
   // needs to be an intervening SHOWN/OPEN before we're interested again.
   private boolean isDuplicateDispose(AWTEvent event) {
-    if (event instanceof WindowEvent) {
-      WindowEvent we = (WindowEvent) event;
-      switch (we.getID()) {
-        case WindowEvent.WINDOW_CLOSED:
-          Window w = we.getWindow();
-          if (disposedWindows.containsKey(w)) { return true; }
-          disposedWindows.put(w, Boolean.TRUE);
-          w.addComponentListener(new DisposalWatcher(disposedWindows));
-          break;
-        case WindowEvent.WINDOW_CLOSING:
-          break;
-        default:
-          disposedWindows.remove(we.getWindow());
-          break;
-      }
+    if (!(event instanceof WindowEvent)) return false;
+    WindowEvent windowEvent = (WindowEvent) event;
+    final int eventId = windowEvent.getID();
+    if (eventId == WINDOW_CLOSING) return false;
+    if (eventId == WINDOW_CLOSED) {
+      Window w = windowEvent.getWindow();
+      if (disposedWindows.containsKey(w)) return true;
+      disposedWindows.put(w, Boolean.TRUE);
+      w.addComponentListener(new DisposalWatcher(disposedWindows));
+      return false;
     }
-
+    disposedWindows.remove(windowEvent.getWindow());
     return false;
-  }
-
-  // Flag duplicate key events on pre-1.4 VMs, and repeated modifiers.
-  private boolean isDuplicateKeyEvent(AWTEvent event) {
-    int id = event.getID();
-    if (id == KeyEvent.KEY_PRESSED) {
-      KeyEvent ke = (KeyEvent) event;
-      lastKeyRelease = KeyEvent.VK_UNDEFINED;
-      int code = ke.getKeyCode();
-
-      if (code == lastKeyPress) {
-        // Discard duplicate key events; they don't add any
-        // information.
-        // A duplicate key event is sent to the parent frame on
-        // components that don't otherwise consume it (JButton)
-        if (event.getSource() != lastKeyComponent) {
-          lastKeyPress = KeyEvent.VK_UNDEFINED;
-          lastKeyComponent = null;
-          return true;
-        }
-      }
-      lastKeyPress = code;
-      lastKeyComponent = ke.getComponent();
-
-      // Don't pass on key repeats for modifier keys (w32)
-      if (isModifier(code)) {
-        int mask = maskFor(code);
-        if ((mask & modifiers) != 0 && !captureModifierRepeats) { return true; }
-      }
-      modifiers = ke.getModifiers();
-    } else if (id == KeyEvent.KEY_RELEASED) {
-      KeyEvent ke = (KeyEvent) event;
-      lastKeyPress = KeyEvent.VK_UNDEFINED;
-      int code = ke.getKeyCode();
-      if (code == lastKeyRelease) {
-        if (event.getSource() != lastKeyComponent) {
-          lastKeyRelease = KeyEvent.VK_UNDEFINED;
-          lastKeyComponent = null;
-          return true;
-        }
-      }
-      lastKeyRelease = code;
-      lastKeyComponent = ke.getComponent();
-      modifiers = ke.getModifiers();
-    } else if (id == KeyEvent.KEY_TYPED) {
-      KeyStroke ks = KeyStroke.getKeyStrokeForEvent((KeyEvent) event);
-      char ch = ((KeyEvent) event).getKeyChar();
-      if (ks.equals(lastKeyStroke) || ch == lastKeyChar) {
-        if (event.getSource() != lastKeyComponent) {
-          lastKeyStroke = null;
-          lastKeyChar = KeyEvent.VK_UNDEFINED;
-          lastKeyComponent = null;
-          return true;
-        }
-      }
-      lastKeyStroke = ks;
-      lastKeyChar = ch;
-      lastKeyComponent = ((KeyEvent) event).getComponent();
-    } else {
-      lastKeyPress = lastKeyRelease = KeyEvent.VK_UNDEFINED;
-      lastKeyComponent = null;
-    }
-
-    return false;
-  }
-
-  // Discard function key press/release on 1.3.1 OSX laptops. 
-  private boolean isOSXFunctionKey(AWTEvent event) {
-    // FIXME fn pressed after arrow keys results in a RELEASE event
-    if (event.getID() == KeyEvent.KEY_RELEASED) {
-      if (((KeyEvent) event).getKeyCode() == KeyEvent.VK_CONTROL && fnKeyDown) {
-        fnKeyDown = false;
-        return true;
-      }
-    } else if (event.getID() == KeyEvent.KEY_PRESSED) {
-      if (((KeyEvent) event).getKeyCode() == KeyEvent.VK_CONTROL) {
-        int mods = ((KeyEvent) event).getModifiers();
-        if ((mods & KeyEvent.CTRL_MASK) == 0) {
-          fnKeyDown = true;
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /** Event reception callback. */
-  public void eventDispatched(AWTEvent event) {
-    boolean discard = isSpuriousEvent(event);
-    if (!discard && listener != null) delegate(event);
   }
 
   protected void delegate(AWTEvent e) {
     listener.eventDispatched(e);
   }
 
-
   /**
    * Catches native drop target events, which are normally hidden from AWTEventListeners.
    */
   private class DragAwareEventQueue extends EventQueue {
-    protected void relayDnDEvent(MouseEvent e) {
-      int id = e.getID();
-      if (id == MouseEvent.MOUSE_MOVED || id == MouseEvent.MOUSE_DRAGGED) {
-        if ((mask & InputEvent.MOUSE_MOTION_EVENT_MASK) != 0) {
-          eventDispatched(e);
-        }
-      } else if (id >= MouseEvent.MOUSE_FIRST && id <= MouseEvent.MOUSE_LAST) {
-        if ((mask & InputEvent.MOUSE_EVENT_MASK) != 0) {
-          eventDispatched(e);
-        }
-      }
-    }
-
-    public void pop() throws EmptyStackException {
+    
+    @Override public void pop() throws EmptyStackException {
       if (Toolkit.getDefaultToolkit().getSystemEventQueue() == this) super.pop();
     }
 
@@ -268,16 +147,26 @@ class EventNormalizer implements AWTEventListener {
      * <p>
      * TODO: implement enter/exit events TODO: change source to drag source, not mouse under
      */
-    protected void dispatchEvent(AWTEvent e) {
+    @Override protected void dispatchEvent(AWTEvent e) {
       if (e.getClass().getName().indexOf("SunDropTargetEvent") != -1) {
-        MouseEvent me = (MouseEvent) e;
-        Component target = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
-        if (target != me.getSource()) {
-          me = SwingUtilities.convertMouseEvent(me.getComponent(), me, target);
-        }
-        relayDnDEvent(me);
+        MouseEvent mouseEvent = (MouseEvent) e;
+        Component target = getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+        if (target != mouseEvent.getSource()) 
+          mouseEvent = convertMouseEvent(mouseEvent.getComponent(), mouseEvent, target);
+        relayDnDEvent(mouseEvent);
       }
       super.dispatchEvent(e);
+    }
+
+    private void relayDnDEvent(MouseEvent event) {
+      int eventId = event.getID();
+      if (eventId == MOUSE_MOVED || eventId == MOUSE_DRAGGED) {
+        if ((mask & MOUSE_MOTION_EVENT_MASK) != 0) eventDispatched(event);
+        return;
+      }  
+      if (eventId >= MOUSE_FIRST && eventId <= MOUSE_LAST) {
+        if ((mask & MOUSE_EVENT_MASK) != 0) eventDispatched(event);
+      }
     }
   }
 }
