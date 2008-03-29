@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core.input;
+package org.fest.swing.input;
 
 import static java.awt.AWTEvent.*;
 import static java.awt.event.MouseEvent.*;

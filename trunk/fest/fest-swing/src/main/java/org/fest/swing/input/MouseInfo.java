@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core.input;
+package org.fest.swing.input;
 
 import java.awt.Component;
 import java.awt.Point;

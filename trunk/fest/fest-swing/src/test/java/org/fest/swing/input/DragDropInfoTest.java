@@ -12,7 +12,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core.input;
+package org.fest.swing.input;
 
 import static java.awt.event.MouseEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+import org.fest.swing.input.DragDropInfo;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

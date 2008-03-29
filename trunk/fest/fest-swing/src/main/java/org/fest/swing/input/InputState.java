@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core.input;
+package org.fest.swing.input;
 
 import java.awt.*;
 import java.awt.event.AWTEventListener;
@@ -25,7 +25,7 @@ import org.fest.swing.listener.EventDispatchThreadedEventListener;
 import static java.awt.AWTEvent.*;
 import static javax.swing.SwingUtilities.getDeepestComponentAt;
 
-import static org.fest.swing.core.input.MouseInfo.BUTTON_MASK;
+import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 
 /**

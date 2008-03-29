@@ -26,11 +26,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-import org.fest.swing.core.input.InputState;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
+import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.util.MouseEventTarget;
 import org.fest.swing.util.TimeoutWatch;
