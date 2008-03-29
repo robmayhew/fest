@@ -1,15 +1,15 @@
 /*
  * Created on Jan 27, 2008
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.util;
@@ -35,13 +35,13 @@ import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to AWT.
- *
+ * 
  * @author Alex Ruiz
  */
 public class AWT {
 
   private static ComponentHierarchy hierarchy = new ExistingHierarchy();
-  
+
   private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
 
@@ -69,7 +69,7 @@ public class AWT {
     } catch (Exception e) {}
     return new Insets(0, 0, 0, 0);
   }
-  
+
   /**
    * Returns <code>true</code> if the given component is an Applet viewer.
    * @param c the component to check.
@@ -97,7 +97,7 @@ public class AWT {
    * have been processed and <code>r.run()</code> returns.
    * @param r the <code>Runnable</code> to execute.
    * @exception InterruptedException if we're interrupted while waiting for the event dispatching thread to finish
-   *            executing <code>r.run()</code>.
+   *              executing <code>r.run()</code>.
    * @exception InvocationTargetException if an exception is thrown while running <code>r</code>.
    * @see SwingUtilities#isEventDispatchThread()
    * @see SwingUtilities#invokeAndWait(Runnable)
@@ -126,8 +126,8 @@ public class AWT {
    * <code>{@link Component}</code> itself if it is a <code>{@link Window}</code>, or the invoker's
    * <code>Window</code> if on a pop-up.
    * @param c the <code>Component</code> to get the <code>Window</code> ancestor of.
-   * @return the <code>Window</code> ancestor of the given <code>Component</code>, the <code>Component</code> itself
-   * if it is a <code>Window</code>, or the invoker's <code>Window</code> if on a pop-up.
+   * @return the <code>Window</code> ancestor of the given <code>Component</code>, the <code>Component</code>
+   *         itself if it is a <code>Window</code>, or the invoker's <code>Window</code> if on a pop-up.
    */
   public static Window ancestorOf(Component c) {
     if (c == null) return null;
@@ -176,15 +176,14 @@ public class AWT {
    * Returns the focus owner.
    * @return the focus owner.
    */
-  @SuppressWarnings("unchecked") 
-  public static Component focusOwner() {
+  @SuppressWarnings("unchecked") public static Component focusOwner() {
     try {
       return staticField("focusOwner").ofType(Component.class).in(KeyboardFocusManager.class).get();
     } catch (Exception e) {
       Component focus = null;
       for (Container c : new ExistingHierarchy().roots()) {
         if (!(c instanceof Window)) continue;
-        Window w = (Window)c;
+        Window w = (Window) c;
         if (w.isShowing() && (focus = focusOwner(w)) != null) break;
       }
       return focus;
@@ -195,21 +194,21 @@ public class AWT {
     Component focus = w.getFocusOwner();
     if (focus != null) return focus;
     Window[] owned = w.getOwnedWindows();
-    for (int i = 0; i < owned.length; i++) 
+    for (int i = 0; i < owned.length; i++)
       if ((focus = owned[i].getFocusOwner()) != null) return focus;
     return focus;
   }
 
-  /** 
-   * Returns whether there is an AWT pop-up menu currently showing. 
+  /**
+   * Returns whether there is an AWT pop-up menu currently showing.
    * @return <code>true</code> if an AWT pop-up menu is currently showing, <code>false</code> otherwise.
    */
   public static boolean isAWTPopupMenuBlocking() {
     // Abbot: For now, just do a quick check to see if a PopupMenu is active on w32. Extend it if we find other common
     // situations that might block the EDT, but for now, keep it simple and restricted to what we've run into.
-    return /*Bugs.showAWTPopupMenuBlocks() &&*/ isAWTTreeLockHeld();
+    return /* Bugs.showAWTPopupMenuBlocks() && */isAWTTreeLockHeld();
   }
-  
+
   /**
    * If a <code>Component</code> does not have mouse events enabled, use the first ancestor which does.
    * @param c the given <code>Component</code>.
@@ -249,7 +248,8 @@ public class AWT {
     if (c instanceof Choice) return true;
     try {
       AWTEvent event = fakeAWTEventFrom(c, eventId);
-      return method("eventEnabled").withReturnType(boolean.class).withParameterTypes(AWTEvent.class).in(c).invoke(event);
+      return method("eventEnabled").withReturnType(boolean.class).withParameterTypes(AWTEvent.class).in(c)
+          .invoke(event);
     } catch (Exception e) {
       return true;
     }
@@ -260,8 +260,7 @@ public class AWT {
       private static final long serialVersionUID = 1L;
     };
   }
-  
-  
+
   /**
    * Indicates whether the AWT Tree Lock is currently held.
    * @return <code>true</code> if the AWT Tree Lock is currently held, <code>false</code> otherwise.

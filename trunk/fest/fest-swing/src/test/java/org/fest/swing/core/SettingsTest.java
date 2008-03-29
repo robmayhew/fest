@@ -15,11 +15,11 @@
  */
 package org.fest.swing.core;
 
+import java.awt.Robot;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import abbot.tester.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -37,9 +37,11 @@ public class SettingsTest {
   }
   
   @Test(dataProvider = "autoDelayProvider") 
-  public void shouldUpdateAndReturnDelayBetweenEvents(int delay) {
+  public void shouldUpdateAndReturnDelayBetweenEvents(int delay) throws Exception {
+    java.awt.Robot robot = new Robot();
+    settings.attachTo(robot);
     settings.delayBetweenEvents(delay);
-    assertThat(settings.delayBetweenEvents()).isEqualTo(Robot.getAutoDelay()).isEqualTo(delay);
+    assertThat(robot.getAutoDelay()).isEqualTo(settings.delayBetweenEvents());
   }
 
   @DataProvider(name="autoDelayProvider")

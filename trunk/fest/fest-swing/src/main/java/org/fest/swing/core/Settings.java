@@ -15,12 +15,11 @@
  */
 package org.fest.swing.core;
 
-import abbot.tester.Robot;
 import static java.lang.Math.*;
 
 import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
+import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.util.Platform.*;
-import static org.fest.swing.core.EventMode.*;
 
 /**
  * Understands configuration settings.
@@ -39,6 +38,7 @@ public final class Settings {
   private int dragDelay;
   private int dropDelay;
   private int eventPostingDelay;
+  private int idleTimeout;
 
   private java.awt.Robot robot;
   
@@ -50,6 +50,7 @@ public final class Settings {
     dropDelay(0);
     eventPostingDelay(100);
     componentLookupScope(DEFAULT);
+    idleTimeout(10000);
   }
   
   void attachTo(java.awt.Robot robot) {
@@ -90,7 +91,6 @@ public final class Settings {
    */
   public void delayBetweenEvents(int ms) { 
     delayBetweenEvents = valueToUpdate(ms, -1, 60000);
-    Robot.setAutoDelay(delayBetweenEvents); 
     if (robot != null) updateRobotAutoDelay();
   }
 
@@ -205,6 +205,22 @@ public final class Settings {
    */
   public void componentLookupScope(ComponentLookupScope scope) {
     componentLookupScope = scope;
+  }
+
+  /**
+   * Returns the time (in milliseconds) to wait for an idle AWT event queue. The default value is 10000 milliseconds.
+   * @return the time (in milliseconds) to wait for an idle AWT event queue.
+   */
+  public int idleTimeout() {
+    return idleTimeout;
+  }
+
+  /**
+   * Updates the time (in milliseconds) to wait for an idle AWT event queue.
+   * @param ms the new time. The value should be equal to or greater than zero.
+   */
+  public void idleTimeout(int ms) {
+    this.idleTimeout = valueToUpdate(ms, 0, Integer.MAX_VALUE);
   }
 
   private int valueToUpdate(int value, int min, int max) {
