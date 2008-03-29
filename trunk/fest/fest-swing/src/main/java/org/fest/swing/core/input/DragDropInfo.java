@@ -1,19 +1,22 @@
 /*
  * Created on Mar 28, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.core.input;
+
+import static java.awt.event.MouseEvent.*;
+import static org.fest.reflect.core.Reflection.staticMethod;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -22,10 +25,6 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 
 import org.fest.reflect.exception.ReflectionError;
-
-import static java.awt.event.MouseEvent.*;
-
-import static org.fest.reflect.core.Reflection.staticMethod;
 
 /**
  * Understands a description of drag/drop operations.
@@ -40,8 +39,9 @@ class DragDropInfo {
 
   void clear() {
     source(null);
+    x = y = 0;
   }
-  
+
   void update(MouseEvent event) {
     int mouseEventId = event.getID();
     if (mouseEventId == MOUSE_RELEASED || mouseEventId == MOUSE_MOVED) {
@@ -70,7 +70,12 @@ class DragDropInfo {
   Point origin() {
     return new Point(x, y);
   }
-  
+
+  void origin(Point origin) {
+    x = origin.x;
+    y = origin.y;
+  }
+
   boolean isNativeDragActive() {
     try {
       Class<?> type = Class.forName("sun.awt.dnd.SunDragSourceContextPeer");
