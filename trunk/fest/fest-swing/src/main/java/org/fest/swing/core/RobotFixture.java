@@ -80,7 +80,7 @@ public class RobotFixture implements Robot {
 
   private static Toolkit toolkit = Toolkit.getDefaultToolkit();
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
-  private static InputState inputState = new InputState();
+  private static InputState inputState = new InputState(toolkit);
 
   /** Provides access to all the components in the hierarchy. */
   private final ComponentHierarchy hierarchy;

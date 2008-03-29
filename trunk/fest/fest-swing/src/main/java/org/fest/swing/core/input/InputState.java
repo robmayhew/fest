@@ -14,10 +14,7 @@
  */
 package org.fest.swing.core.input;
 
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.IllegalComponentStateException;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -47,7 +44,7 @@ public class InputState {
   private long lastEventTime;
   private EventNormalizer normalizer;
 
-  public InputState() {
+  public InputState(Toolkit toolkit) {
     long mask = MOUSE_MOTION_EVENT_MASK | MOUSE_EVENT_MASK | KEY_EVENT_MASK;
     AWTEventListener listener = new EventDispatchThreadedEventListener() {
       protected void processEvent(AWTEvent event) {
@@ -55,7 +52,7 @@ public class InputState {
       }
     };
     normalizer = new EventNormalizer();
-    normalizer.startListening(listener, mask);
+    normalizer.startListening(toolkit, listener, mask);
   }
 
   public synchronized void clear() {

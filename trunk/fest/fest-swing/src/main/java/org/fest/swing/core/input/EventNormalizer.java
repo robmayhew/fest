@@ -14,22 +14,18 @@
  */
 package org.fest.swing.core.input;
 
+import static org.fest.swing.util.Modifiers.*;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.text.AttributedCharacterIterator;
-import java.text.CharacterIterator;
 import java.util.EmptyStackException;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.text.JTextComponent;
 
-import abbot.Log;
-import abbot.util.AWT;
-import abbot.util.Bugs;
-import abbot.util.WeakAWTEventListener;
+import org.fest.swing.listener.WeakEventListener;
 
 /**
  * Provide an AWTEventListener which normalizes the event stream.
@@ -40,29 +36,28 @@ import abbot.util.WeakAWTEventListener;
  * <li>catches sun.awt.dnd.SunDropTargetEvents during native drags
  * </ul>
  */
-public class EventNormalizer implements AWTEventListener {
+class EventNormalizer implements AWTEventListener {
 
   // Normally we want to ignore these (w32 generates them)
   private static boolean captureModifierRepeats = Boolean.getBoolean("abbot.capture_modifier_repeats");
 
   private AWTEventListener listener;
-  private WeakAWTEventListener weakListener;
+  private WeakEventListener weakListener;
   private long modifiers;
-  private final Map disposedWindows = new WeakHashMap();
+  private final Map<Window, Boolean> disposedWindows = new WeakHashMap<Window, Boolean>();
   private DragAwareEventQueue queue;
   private long mask;
   private final boolean trackDrag;
 
-  public EventNormalizer() {
+  EventNormalizer() {
     this(false);
   }
 
-  public EventNormalizer(boolean trackDrag) {
+  EventNormalizer(boolean trackDrag) {
     this.trackDrag = trackDrag;
   }
 
-  public void startListening(AWTEventListener listener, long mask) {
-    Log.debug("start listening, mask=0x" + Integer.toHexString((int) mask));
+  void startListening(Toolkit toolkit, AWTEventListener listener, long mask) {
     fnKeyDown = false;
     lastKeyPress = lastKeyRelease = KeyEvent.VK_UNDEFINED;
     lastKeyStroke = null;
@@ -71,7 +66,7 @@ public class EventNormalizer implements AWTEventListener {
     modifiers = 0;
     this.listener = listener;
     this.mask = mask;
-    weakListener = new WeakAWTEventListener(this, mask);
+    weakListener = WeakEventListener.attachAsWeakEventListener(toolkit, this, mask);
     if (trackDrag) {
       queue = new DragAwareEventQueue();
       try {
@@ -80,19 +75,15 @@ public class EventNormalizer implements AWTEventListener {
             Toolkit.getDefaultToolkit().getSystemEventQueue().push(queue);
           }
         });
-      } catch (Exception e) {
-        Log.warn(e);
-      }
+      } catch (Exception e) {}
     }
-    Log.debug("normalizer now listening");
   }
 
-  public void stopListening() {
+  void stopListening() {
     if (queue != null) {
       try {
         queue.pop();
       } catch (EmptyStackException e) {
-        Log.warn(e);
       }
       queue = null;
     }
@@ -113,21 +104,20 @@ public class EventNormalizer implements AWTEventListener {
   private char lastKeyChar = KeyEvent.VK_UNDEFINED;
   private Component lastKeyComponent;
 
-  /** Returns whether the event is spurious and should be discarded. */
+  // Returns whether the event is spurious and should be discarded.
   private boolean isSpuriousEvent(AWTEvent event) {
     return isDuplicateKeyEvent(event) || isOSXFunctionKey(event) || isDuplicateDispose(event);
   }
 
-  // TODO: maybe make this an AWT event listener instead, so we can use one
-  // instance instead of one per window.
-  private class DisposalWatcher extends ComponentAdapter {
-    private final Map map;
+  // TODO: (Abbot) Maybe make this an AWT event listener instead, so we can use one instance instead of one per window.
+  private static class DisposalWatcher extends ComponentAdapter {
+    private final Map<Window, Boolean> map;
 
-    public DisposalWatcher(Map map) {
+    DisposalWatcher(Map<Window, Boolean> map) {
       this.map = map;
     }
 
-    public void componentShown(ComponentEvent e) {
+    @Override public void componentShown(ComponentEvent e) {
       e.getComponent().removeComponentListener(this);
       map.remove(e.getComponent());
     }
@@ -156,7 +146,7 @@ public class EventNormalizer implements AWTEventListener {
     return false;
   }
 
-  /** Flag duplicate key events on pre-1.4 VMs, and repeated modifiers. */
+  // Flag duplicate key events on pre-1.4 VMs, and repeated modifiers.
   private boolean isDuplicateKeyEvent(AWTEvent event) {
     int id = event.getID();
     if (id == KeyEvent.KEY_PRESSED) {
@@ -179,8 +169,8 @@ public class EventNormalizer implements AWTEventListener {
       lastKeyComponent = ke.getComponent();
 
       // Don't pass on key repeats for modifier keys (w32)
-      if (AWT.isModifier(code)) {
-        int mask = AWT.keyCodeToMask(code);
+      if (isModifier(code)) {
+        int mask = maskFor(code);
         if ((mask & modifiers) != 0 && !captureModifierRepeats) { return true; }
       }
       modifiers = ke.getModifiers();
@@ -220,9 +210,9 @@ public class EventNormalizer implements AWTEventListener {
     return false;
   }
 
-  /** Discard function key press/release on 1.3.1 OSX laptops. */
-  // FIXME fn pressed after arrow keys results in a RELEASE event
+  // Discard function key press/release on 1.3.1 OSX laptops. 
   private boolean isOSXFunctionKey(AWTEvent event) {
+    // FIXME fn pressed after arrow keys results in a RELEASE event
     if (event.getID() == KeyEvent.KEY_RELEASED) {
       if (((KeyEvent) event).getKeyCode() == KeyEvent.VK_CONTROL && fnKeyDown) {
         fnKeyDown = false;
@@ -240,31 +230,16 @@ public class EventNormalizer implements AWTEventListener {
     return false;
   }
 
-  protected void delegate(AWTEvent e) {
-    if (Bugs.hasInputMethodInsteadOfKeyTyped()) {
-      if (e.getSource() instanceof JTextComponent && e.getID() == InputMethodEvent.INPUT_METHOD_TEXT_CHANGED) {
-        InputMethodEvent im = (InputMethodEvent) e;
-        if (im.getCommittedCharacterCount() > 0) {
-          AttributedCharacterIterator iter = im.getText();
-          for (char ch = iter.first(); ch != CharacterIterator.DONE; ch = iter.next()) {
-            e = new KeyEvent((Component) e.getSource(), KeyEvent.KEY_TYPED, System.currentTimeMillis(),
-                (int) modifiers, KeyEvent.VK_UNDEFINED, ch);
-            listener.eventDispatched(e);
-          }
-          return;
-        }
-      }
-    }
-    listener.eventDispatched(e);
-  }
-
   /** Event reception callback. */
   public void eventDispatched(AWTEvent event) {
     boolean discard = isSpuriousEvent(event);
-    if (!discard && listener != null) {
-      delegate(event);
-    }
+    if (!discard && listener != null) delegate(event);
   }
+
+  protected void delegate(AWTEvent e) {
+    listener.eventDispatched(e);
+  }
+
 
   /**
    * Catches native drop target events, which are normally hidden from AWTEventListeners.
@@ -294,15 +269,12 @@ public class EventNormalizer implements AWTEventListener {
      * TODO: implement enter/exit events TODO: change source to drag source, not mouse under
      */
     protected void dispatchEvent(AWTEvent e) {
-      Log.debug("dispatch " + e);
       if (e.getClass().getName().indexOf("SunDropTargetEvent") != -1) {
         MouseEvent me = (MouseEvent) e;
         Component target = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
         if (target != me.getSource()) {
-          Log.debug("Change drag event target");
           me = SwingUtilities.convertMouseEvent(me.getComponent(), me, target);
         }
-        Log.debug("relay " + me);
         relayDnDEvent(me);
       }
       super.dispatchEvent(e);

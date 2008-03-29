@@ -23,6 +23,9 @@ import java.util.Map;
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 
+import static org.fest.util.Strings.*;
+import static java.lang.String.*;
+
 /**
  * Understands mappings between key modifier masks and the codes for the keys:
  * <ul>
@@ -38,14 +41,20 @@ import static java.awt.event.KeyEvent.*;
  */
 public class Modifiers {
 
-  private static final Map<Integer, Integer> mapping = new LinkedHashMap<Integer, Integer>();
+  private static final Map<Integer, Integer> MODIFIER_TO_KEY = new LinkedHashMap<Integer, Integer>();
+  private static final Map<Integer, Integer> KEY_TO_MODIFIER = new LinkedHashMap<Integer, Integer>();
 
   static {
-    mapping.put(ALT_GRAPH_MASK, VK_ALT_GRAPH);
-    mapping.put(ALT_MASK, VK_ALT);
-    mapping.put(SHIFT_MASK, VK_SHIFT);
-    mapping.put(CTRL_MASK, VK_CONTROL);
-    mapping.put(META_MASK, VK_META);
+    MODIFIER_TO_KEY.put(ALT_GRAPH_MASK, VK_ALT_GRAPH);
+    KEY_TO_MODIFIER.put(VK_ALT_GRAPH, ALT_GRAPH_MASK);
+    MODIFIER_TO_KEY.put(ALT_MASK, VK_ALT);
+    KEY_TO_MODIFIER.put(VK_ALT, ALT_MASK);
+    MODIFIER_TO_KEY.put(SHIFT_MASK, VK_SHIFT);
+    KEY_TO_MODIFIER.put(VK_SHIFT, SHIFT_MASK);
+    MODIFIER_TO_KEY.put(CTRL_MASK, VK_CONTROL);
+    KEY_TO_MODIFIER.put(VK_CONTROL, CTRL_MASK);
+    MODIFIER_TO_KEY.put(META_MASK, VK_META);
+    KEY_TO_MODIFIER.put(VK_META, META_MASK);
   }
 
   /**
@@ -55,12 +64,34 @@ public class Modifiers {
    */
   public static int[] keysFor(int modifierMask) {
     List<Integer> keyList = new ArrayList<Integer>();
-    for (Integer mask : mapping.keySet()) 
-      if ((modifierMask & mask.intValue()) != 0) keyList.add(mapping.get(mask));
+    for (Integer mask : MODIFIER_TO_KEY.keySet()) 
+      if ((modifierMask & mask.intValue()) != 0) keyList.add(MODIFIER_TO_KEY.get(mask));
     int keyCount = keyList.size();
     int[] keys = new int[keyCount];
     for (int i = 0; i < keyCount; i++) keys[i] = keyList.get(i);
     return keys;
+  }
+  
+  /**
+   * Indicates whether the given key code is a modifier.
+   * @param keyCode the given key code.
+   * @return <code>true</code> if the given key code is a modifier, <code>false</code> otherwise.
+   */
+  public static boolean isModifier(int keyCode) {
+    return KEY_TO_MODIFIER.containsKey(keyCode);
+  }
+
+  /**
+   * Returns the modifier mask for the given key code.
+   * @param keyCode the given key code.
+   * @return the modifier mask for the given key code.
+   * @throws IllegalArgumentException if the given key code is not a modifier.
+   */
+  public static int maskFor(int keyCode) {
+    Integer key = Integer.valueOf(keyCode);
+    if (!KEY_TO_MODIFIER.containsKey(key))
+      throw new IllegalArgumentException(concat("Keycode '", valueOf(keyCode), "' is not a modifier"));
+    return KEY_TO_MODIFIER.get(key);
   }
   
   /**
@@ -71,7 +102,7 @@ public class Modifiers {
    */
   public static int updateModifierWithKeyCode(int keyCode, int modifierMask) {
     int updatedModifierMask = modifierMask;
-    for (Map.Entry<Integer, Integer> entry : mapping.entrySet()) {
+    for (Map.Entry<Integer, Integer> entry : MODIFIER_TO_KEY.entrySet()) {
       if (entry.getValue().intValue() != keyCode) continue;
       updatedModifierMask |= entry.getKey().intValue();
       break;
