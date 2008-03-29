@@ -33,7 +33,7 @@ import java.util.List;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public abstract class SingleThreadedEventListener implements AWTEventListener {
+public abstract class EventDispatchThreadedEventListener implements AWTEventListener {
 
   private final List<AWTEvent> deferredEvents = new ArrayList<AWTEvent>();
   private final Object lock = new Object();

@@ -16,34 +16,39 @@ package org.fest.swing.core;
 
 import java.awt.*;
 import java.awt.event.InvocationEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Collection;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-import static org.fest.swing.core.EventMode.*;
 
-import abbot.tester.KeyStrokeMap;
-
+import org.fest.swing.core.input.InputState;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.monitor.WindowMonitor;
+import org.fest.swing.util.MouseEventTarget;
 import org.fest.swing.util.TimeoutWatch;
 
 import static abbot.tester.Robot.*;
 import static java.awt.event.InputEvent.*;
+import static java.awt.event.KeyEvent.*;
+import static java.awt.event.MouseEvent.*;
 import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
+import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
 import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.*;
@@ -59,6 +64,7 @@ import static org.fest.util.Strings.concat;
 public class RobotFixture implements Robot {
 
   private static final int KEY_INPUT_DELAY = 200;
+  private static final int MULTI_CLICK_INTERVAL = 250; // a guess
   private static final int POPUP_DELAY = 10000;
   private static final int POPUP_TIMEOUT = 5000;
   private static final int WINDOW_DELAY = 20000;
@@ -72,6 +78,7 @@ public class RobotFixture implements Robot {
  
   private static Toolkit toolkit = Toolkit.getDefaultToolkit();
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
+  private static InputState inputState = new InputState();
 
   /** Provides access to all the components in the hierarchy. */
   private final ComponentHierarchy hierarchy;
@@ -81,6 +88,10 @@ public class RobotFixture implements Robot {
   
   private final Settings settings;
 
+  private AWTEvent lastEventPosted;
+  private MouseEvent lastMousePress;
+  private boolean countingClicks;
+  
   /**
    * Creates a new <code>{@link RobotFixture}</code> with a new AWT hierarchy. <code>{@link Component}</code>s created
    * before the created <code>{@link RobotFixture}</code> cannot be accessed by such <code>{@link RobotFixture}</code>.
@@ -244,11 +255,6 @@ public class RobotFixture implements Robot {
     queue.postEvent(new InvocationEvent(toolkit, action));
   }
 
-  /* Usually only needed when dealing with Applets. */
-  private EventQueue eventQueueFor(Component c) {
-    return c != null ? windowMonitor.eventQueueFor(c) : toolkit.getSystemEventQueue();
-  }
-  
   /** ${@inheritDoc} */
   public void cleanUp() {
     disposeWindows();
@@ -353,10 +359,14 @@ public class RobotFixture implements Robot {
     pressMouse(target, where, button.mask);
   }
   
-  private void pressMouse(Component comp, Point where, int mask) {
+  private void pressMouse(Component comp, Point where, int buttons) {
     jitter(comp, where);
     moveMouse(comp, where.x, where.y);
-    robot.mousePress(mask);
+    if (isRobotMode()) {
+      mousePress(buttons);
+      return;
+    }
+    postMousePress(comp, where, buttons);
   }
   
   /** ${@inheritDoc} */
@@ -386,7 +396,33 @@ public class RobotFixture implements Robot {
       robot.mouseMove(point.x, point.y);
     } catch (IllegalComponentStateException e) {}
   }
+  
+  private void mousePress(int buttons) {
+    if (isRobotMode()) {
+      robot.mousePress(buttons);
+      return;
+    } 
+    Component c = inputState.mouseComponent();
+    if (c == null) return;
+    Point where = inputState.mouseLocation();
+    postMousePress(c, where, buttons);
+  }
 
+  private void postMousePress(Component c, Point where, int buttons) {
+    long current = System.currentTimeMillis();
+    long last = lastMousePress != null ? lastMousePress.getWhen() : 0;
+    int count = 1;
+    MouseEventTarget target = retargetMouseEvent(c, MOUSE_PRESSED, where);
+    Component source = target.source;
+    if (countingClicks && source == lastMousePress.getComponent())
+      if ((current - last) < MULTI_CLICK_INTERVAL) count = inputState.clickCount() + 1;
+    int modifiers = inputState.keyModifiers() | buttons;
+    int x = target.position.x;
+    int y = target.position.y;
+    boolean popupTrigger = popupOnPress() && (buttons & popupMask()) != 0;
+    postEvent(source, new MouseEvent(source, MOUSE_PRESSED, current, modifiers, x, y, count, popupTrigger));
+  }
+  
   /** ${@inheritDoc} */
   public void enterText(String text) {
     for (char character : text.toCharArray()) type(character);
@@ -394,12 +430,68 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void type(char character) {
-    KeyStroke keyStroke = KeyStrokeMap.getKeyStroke(character);
+    KeyStroke keyStroke = keyStrokeFor(character);
     if (keyStroke == null) {
-      // TODO generate KEY_TYPED event.
+      Component focus = focusOwner();
+      if (focus == null) return;
+      KeyEvent keyEvent = keyEventFor(focus, character);
+      // Allow any pending robot events to complete; otherwise we might stuff the typed event before previous 
+      // robot-generated events are posted.
+      if (isRobotMode()) waitForIdle();
+      postEvent(focus, keyEvent);
       return;
     } 
     keyPressAndRelease(keyStroke.getKeyCode(), keyStroke.getModifiers());
+  }
+
+  private KeyEvent keyEventFor(Component c, char character) {
+    return new KeyEvent(c, KEY_TYPED, System.currentTimeMillis(), 0, VK_UNDEFINED, character);
+  }
+
+  // Post the given event to the corresponding event queue for the given component.
+  private void postEvent(Component c, AWTEvent event) {
+    if (isAWTMode() && isAWTPopupMenuBlocking()) 
+      throw actionFailure("Event queue is blocked by an active AWT PopupMenu");
+    // Force an update of the input state, so that we're in synch
+    // internally. Otherwise we might post more events before this
+    // one gets processed and end up using stale values for those events.
+    inputState.update(event);
+    EventQueue q = eventQueueFor(c);
+    q.postEvent(event);
+    pause(settings.delayBetweenEvents());
+    verifyPostedEvent(c, event);
+  }
+
+  private void verifyPostedEvent(Component c, AWTEvent event) {
+    AWTEvent previous = lastEventPosted;
+    lastEventPosted = event;
+    if (!(event instanceof MouseEvent)) return;
+    MouseEvent mouseEvent = (MouseEvent)event;
+    updateMousePressWith(mouseEvent);
+    // Generate a click if there are no events between press/release.
+    if (isAWTMode() && event.getID() == MOUSE_RELEASED && previous.getID() == MOUSE_PRESSED) {
+      long when = System.currentTimeMillis();
+      int modifiers = mouseEvent.getModifiers();
+      int x = mouseEvent.getX();
+      int y = mouseEvent.getY();
+      int clickCount = mouseEvent.getClickCount();
+      postEvent(c, new MouseEvent(c, MOUSE_CLICKED, when, modifiers, x, y, clickCount, false));
+    }
+  }
+
+  private void updateMousePressWith(MouseEvent event) {
+    int eventId = event.getID();
+    if (eventId == MOUSE_PRESSED) {
+      lastMousePress = event;
+      countingClicks = true;
+      return;
+    } 
+    if (eventId != MOUSE_RELEASED && eventId != MOUSE_CLICKED) countingClicks = false;
+  }
+
+  /* Usually only needed when dealing with Applets. */
+  private EventQueue eventQueueFor(Component c) {
+    return c != null ? windowMonitor.eventQueueFor(c) : toolkit.getSystemEventQueue();
   }
   
   /** ${@inheritDoc} */
@@ -455,7 +547,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void releaseMouseButtons() {
-    int buttons = getState().getButtons();
+    int buttons = inputState.buttons();
     if (buttons == 0) return;
     robot.mouseRelease(buttons);
   }
@@ -467,7 +559,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public boolean isDragging() {
-    return getState().isDragging();
+    return inputState.isDragging();
   }
 
   /** ${@inheritDoc} */
@@ -488,10 +580,18 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public boolean isReadyForInput(Component c) {
-    if (settings.eventMode().equals(AWT)) return c.isShowing();
+    if (isAWTMode()) return c.isShowing();
     Window w = ancestorOf(c);
     if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
     return c.isShowing() && windowMonitor.isWindowReady(w);
+  }
+
+  private boolean isAWTMode() {
+    return AWT.equals(settings.eventMode());
+  }
+  
+  private boolean isRobotMode() {
+    return ROBOT.equals(settings.eventMode());
   }
   
   /** ${@inheritDoc} */

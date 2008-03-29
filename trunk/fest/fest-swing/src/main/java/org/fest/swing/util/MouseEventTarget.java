@@ -1,5 +1,5 @@
 /*
- * Created on Feb 24, 2008
+ * Created on Mar 29, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,17 +13,26 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.testing;
+package org.fest.swing.util;
+
+import java.awt.Component;
+import java.awt.Point;
 
 /**
- * Understands names of test groups.
+ * Understands the target of a <code>{@link java.awt.event.MouseEvent}</code>.
  *
  * @author Alex Ruiz
  */
-public final class TestGroups {
+public class MouseEventTarget {
 
-  public static final String GUI = "GUI";
-  public static final String BUG = "Bug";
+  /** The source <code>{@link Component}</code> */
+  public final Component source;
   
-  private TestGroups() {}
+  /** The x,y position of the event relative to the source component. */
+  public final Point position;
+
+  MouseEventTarget(Component source, Point position) {
+    this.source = source;
+    this.position = position;
+  }
 }

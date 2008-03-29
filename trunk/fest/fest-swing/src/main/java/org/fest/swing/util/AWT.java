@@ -15,6 +15,7 @@
 package org.fest.swing.util;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JOptionPane;
@@ -25,9 +26,11 @@ import javax.swing.SwingUtilities;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
+import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
 
-import static org.fest.reflect.core.Reflection.staticField;
+import static org.fest.reflect.core.Reflection.*;
+import static org.fest.swing.util.Platform.IS_WINDOWS;
 import static org.fest.util.Strings.*;
 
 /**
@@ -41,6 +44,9 @@ public class AWT {
   
   private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
+
+  // Abbot: Macintosh *used* to map button2 to the pop-up trigger (1.3). Not clear when this changed.
+  private static final boolean POPUP_ON_BUTTON2 = false;
 
   /**
    * Returns a point at the center of the given <code>{@link Component}</code>.
@@ -193,6 +199,68 @@ public class AWT {
       if ((focus = owned[i].getFocusOwner()) != null) return focus;
     return focus;
   }
+
+  /** 
+   * Returns whether there is an AWT pop-up menu currently showing. 
+   * @return <code>true</code> if an AWT pop-up menu is currently showing, <code>false</code> otherwise.
+   */
+  public static boolean isAWTPopupMenuBlocking() {
+    // Abbot: For now, just do a quick check to see if a PopupMenu is active on w32. Extend it if we find other common
+    // situations that might block the EDT, but for now, keep it simple and restricted to what we've run into.
+    return /*Bugs.showAWTPopupMenuBlocks() &&*/ isAWTTreeLockHeld();
+  }
+  
+  /**
+   * If a <code>Component</code> does not have mouse events enabled, use the first ancestor which does.
+   * @param c the given <code>Component</code>.
+   * @param eventId the id of the mouse event to verify.
+   * @param where the x,y coordinates relative to the given <code>Component</code>.
+   * @return the new target for the mouse event.
+   */
+  public static MouseEventTarget retargetMouseEvent(final Component c, int eventId, final Point where) {
+    Component source = c;
+    Point coordinates = where;
+    while (!(c instanceof Window) && !eventTypeEnabled(source, eventId)) {
+      coordinates = convertPoint(source, coordinates.x, coordinates.y, source.getParent());
+      source = source.getParent();
+    }
+    return new MouseEventTarget(source, coordinates);
+  }
+
+  /**
+   * Returns whether the platform registers a pop-up on mouse press.
+   * @return <code>true</code> if the platform registers a pop-up on mouse press, <code>false</code> otherwise.
+   */
+  public static boolean popupOnPress() {
+    // Only w32 is pop-up on release
+    return !IS_WINDOWS;
+  }
+
+  /**
+   * Returns the <code>{@link InputEvent}</code> mask for the pop-up trigger button.
+   * @return the <code>InputEvent</code> mask for the pop-up trigger button.
+   */
+  public static int popupMask() {
+    return POPUP_ON_BUTTON2 ? BUTTON2_MASK : BUTTON3_MASK;
+  }
+
+  public static boolean eventTypeEnabled(Component c, int eventId) {
+    // certain AWT components should have events enabled, even if they claim not to.
+    if (c instanceof Choice) return true;
+    try {
+      AWTEvent event = fakeAWTEventFrom(c, eventId);
+      return method("eventEnabled").withReturnType(boolean.class).withParameterTypes(AWTEvent.class).in(c).invoke(event);
+    } catch (Exception e) {
+      return true;
+    }
+  }
+
+  private static AWTEvent fakeAWTEventFrom(Component c, int eventId) {
+    return new AWTEvent(c, eventId) {
+      private static final long serialVersionUID = 1L;
+    };
+  }
+  
   
   /**
    * Indicates whether the AWT Tree Lock is currently held.

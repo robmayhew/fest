@@ -30,7 +30,7 @@ import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -38,7 +38,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
+@Test(groups = { GUI, BUG })
 public class FindContainerShowingOnly {
 
   private MyFrame myFrame;

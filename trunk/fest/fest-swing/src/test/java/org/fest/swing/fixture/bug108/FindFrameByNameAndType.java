@@ -26,14 +26,14 @@ import org.fest.swing.testing.TestFrame;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findFrame;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=108">Bug 108</a>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
+@Test(groups = { GUI, BUG })
 public class FindFrameByNameAndType {
 
   private MyFrame frame;

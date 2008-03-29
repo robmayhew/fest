@@ -18,14 +18,14 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.fixture.DialogFixture;
 
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=80">Bug 80</a>.
  *
  * @author Wim Deblauwe
  */
-@Test(groups = GUI)
+@Test(groups = { GUI, BUG })
 public class JDialogTest {
 
   private DialogFixture m_window;

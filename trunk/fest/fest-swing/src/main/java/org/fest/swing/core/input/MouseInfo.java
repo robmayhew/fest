@@ -121,7 +121,7 @@ class MouseInfo {
     return buttons;
   }
 
-  void button(int buttons) {
+  void buttons(int buttons) {
     this.buttons = buttons;
   }
 

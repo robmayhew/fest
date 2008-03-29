@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 
 import abbot.util.EventNormalizer;
 
-import org.fest.swing.listener.SingleThreadedEventListener;
+import org.fest.swing.listener.EventDispatchThreadedEventListener;
 
 import static java.awt.AWTEvent.*;
 import static javax.swing.SwingUtilities.getDeepestComponentAt;
@@ -51,7 +51,7 @@ public class InputState {
 
   public InputState() {
     long mask = MOUSE_MOTION_EVENT_MASK | MOUSE_EVENT_MASK | KEY_EVENT_MASK;
-    AWTEventListener listener = new SingleThreadedEventListener() {
+    AWTEventListener listener = new EventDispatchThreadedEventListener() {
       protected void processEvent(AWTEvent event) {
         update(event);
       }
@@ -72,15 +72,16 @@ public class InputState {
     normalizer = null;
   }
 
-  /*
-   * Explicitly update the internal state. Allows Robot to update the state with events it has just posted.
+  /**
+   * Explicitly update the internal state.
+   * @param event the event to use to update the internal state.
    */
-  void update(AWTEvent event) {
+  public void update(AWTEvent event) {
     if (event instanceof KeyEvent) updateState((KeyEvent) event);
     if (event instanceof MouseEvent) updateState((MouseEvent) event);
   }
 
-  protected void updateState(KeyEvent event) {
+  void updateState(KeyEvent event) {
     if (isOld(event)) return;
     synchronized (this) {
       lastEventTime(event);
@@ -89,7 +90,7 @@ public class InputState {
     }
   }
 
-  protected void updateState(MouseEvent event) {
+  void updateState(MouseEvent event) {
     if (isOld(event)) return;
     // childAt and locationOnScreenOf want the tree lock, so be careful not to use any additional locks at the same time
     // to avoid deadlock.
@@ -111,6 +112,14 @@ public class InputState {
 
   private boolean isOld(InputEvent event) {
     return event.getWhen() < lastEventTime;
+  }
+
+  private void lastEventTime(InputEvent event) {
+    lastEventTime = event.getWhen();
+  }
+  
+  private void modifiers(int modifiers) {
+    this.modifiers = modifiers;
   }
 
   /**
@@ -152,36 +161,52 @@ public class InputState {
     return getDeepestComponentAt(parent, where.x, where.y);
   }
 
+  /**
+   * Indicates there is a drag operation in progress.
+   * @return <code>true</code> if there is a drag operation in progress, <code>false</code> otherwise.
+   */
   public synchronized boolean isDragging() {
     return dragDropInfo.isDragging();
   }
 
+  /**
+   * Returns the <code>{@link Component}</code> where a drag operation started.
+   * @return the <code>Component</code> where a drag operation started.
+   */
   public synchronized Component dragSource() {
     return dragDropInfo.source();
   }
 
-  public synchronized void dragSource(Component c) {
-    dragDropInfo.source(c);
+  /**
+   * Updates the <code>{@link Component}</code> where a drag operation started.
+   * @param source the new source of a drag operation.
+   */
+  public synchronized void dragSource(Component source) {
+    dragDropInfo.source(source);
   }
 
+  /**
+   * Returns the coordinates where a drag operation started.
+   * @return the coordinates where a drag operation started.
+   */
   public synchronized Point dragOrigin() {
     return dragDropInfo.origin();
   }
 
+  /**
+   * Indicates the number of times a mouse button was clicked.
+   * @return the number of times a mouse button was clicked.
+   */
   public synchronized int clickCount() {
     return mouseInfo.clickCount();
   }
 
-  protected synchronized void clickCount(int clickCount) {
-    mouseInfo.clickCount(clickCount);
-  }
-
+  /**
+   * Returns the time when the last input event occurred.
+   * @return the time when the last input event occurred.
+   */
   public synchronized long lastEventTime() {
     return lastEventTime;
-  }
-
-  protected synchronized void lastEventTime(InputEvent event) {
-    lastEventTime = event.getWhen();
   }
 
   /**
@@ -192,10 +217,6 @@ public class InputState {
     return modifiers;
   }
 
-  protected synchronized void modifiers(int modifiers) {
-    this.modifiers = modifiers;
-  }
-
   /**
    * Returns the currently pressed key modifiers.
    * @return the currently pressed key modifiers.
@@ -204,12 +225,20 @@ public class InputState {
     return modifiers & ~BUTTON_MASK;
   }
 
+  /**
+   * Returns the mouse buttons used in the last input event.
+   * @return the mouse buttons used in the last input event.
+   */
   public synchronized int buttons() {
     return mouseInfo.buttons();
   }
 
-  protected synchronized void buttons(int buttons) {
-    mouseInfo.button(buttons);
+  /**
+   * Updates the mouse buttons used in the last input event.
+   * @param buttons the value to update to.
+   */
+  public synchronized void buttons(int buttons) {
+    mouseInfo.buttons(buttons);
   }
 
   /**
@@ -231,8 +260,8 @@ public class InputState {
   }
 
   /**
-   * Return whether there is a native drag/drop operation in progress.
-   * @return <code>true</code> if there is a native drag/drop operation in progress.
+   * Indicates whether there is a native drag/drop operation in progress.
+   * @return <code>true</code> if there is a native drag/drop operation in progress, <code>false</code> otherwise.
    */
   public boolean isNativeDragActive() {
     return dragDropInfo.isNativeDragActive();
