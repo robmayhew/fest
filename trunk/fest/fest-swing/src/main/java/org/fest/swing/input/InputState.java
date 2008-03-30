@@ -160,7 +160,7 @@ public class InputState {
    * Indicates there is a drag operation in progress.
    * @return <code>true</code> if there is a drag operation in progress, <code>false</code> otherwise.
    */
-  public synchronized boolean isDragging() {
+  public synchronized boolean dragInProgress() {
     return dragDropInfo.isDragging();
   }
 

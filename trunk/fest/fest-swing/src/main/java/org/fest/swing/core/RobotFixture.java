@@ -1,44 +1,25 @@
 /*
  * Created on Sep 29, 2006
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2006 the original author or authors.
  */
 package org.fest.swing.core;
 
-import java.applet.Applet;
-import java.awt.*;
-import java.awt.event.InvocationEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.util.Collection;
-
-import javax.swing.*;
-
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.hierarchy.ComponentHierarchy;
-import org.fest.swing.hierarchy.ExistingHierarchy;
-import org.fest.swing.input.InputState;
-import org.fest.swing.monitor.WindowMonitor;
-import org.fest.swing.util.MouseEventTarget;
-import org.fest.swing.util.TimeoutWatch;
-
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.MouseEvent.*;
+import static java.lang.String.valueOf;
 import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
-
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
@@ -54,11 +35,31 @@ import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
 
-import static java.lang.String.*;
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.InvocationEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.util.Collection;
+
+import javax.swing.JMenu;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.hierarchy.ComponentHierarchy;
+import org.fest.swing.hierarchy.ExistingHierarchy;
+import org.fest.swing.input.InputState;
+import org.fest.swing.monitor.WindowMonitor;
+import org.fest.swing.util.MouseEventTarget;
+import org.fest.swing.util.TimeoutWatch;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
- * 
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
@@ -339,12 +340,12 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public void click(Component target, Point where) {
-    click(target, where, LEFT_BUTTON, 1);
+  public void click(Component c, Point where) {
+    click(c, where, LEFT_BUTTON, 1);
   }
 
   /** ${@inheritDoc} */
-  public void click(Component target, Point where, MouseButton button, int times) {
+  public void click(Component c, Point where, MouseButton button, int times) {
     int mask = button.mask;
     int modifierMask = mask & ~BUTTON_MASK;
     mask &= BUTTON_MASK;
@@ -353,7 +354,7 @@ public class RobotFixture implements Robot {
     // In general clicks have to be less than 200ms apart, although the actual setting is not readable by Java.
     int delayBetweenEvents = settings.delayBetweenEvents();
     if (times > 1 && delayBetweenEvents * 2 > 200) settings.delayBetweenEvents(0);
-    pressMouse(target, where, mask);
+    mousePress(c, where, mask);
     for (int i = times; i > 1; i--) {
       robot.mouseRelease(mask);
       robot.mousePress(mask);
@@ -384,70 +385,23 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public void pressMouse(Component target, Point where) {
-    pressMouse(target, where, LEFT_BUTTON);
+  public void pressMouse(Component c, Point where) {
+    pressMouse(c, where, LEFT_BUTTON);
   }
 
   /** ${@inheritDoc} */
-  public void pressMouse(Component target, Point where, MouseButton button) {
-    pressMouse(target, where, button.mask);
+  public void pressMouse(Component c, Point where, MouseButton button) {
+    mousePress(c, where, button.mask);
   }
 
-  private void pressMouse(Component comp, Point where, int buttons) {
-    jitter(comp, where);
-    moveMouse(comp, where.x, where.y);
+  private void mousePress(Component c, Point where, int buttons) {
+    jitter(c, where);
+    moveMouse(c, where.x, where.y);
     if (isRobotMode()) {
       mousePress(buttons);
       return;
     }
-    postMousePress(comp, where, buttons);
-  }
-
-  /** ${@inheritDoc} */
-  public void jitter(Component c) {
-    jitter(c, centerOf(c));
-  }
-
-  /** ${@inheritDoc} */
-  public void jitter(Component c, Point where) {
-    int x = where.x;
-    int y = where.y;
-    moveMouse(c, (x > 0 ? x - 1 : x + 1), y);
-  }
-
-  /** ${@inheritDoc} */
-  public void moveMouse(Component target) {
-    Point center = centerOf(target);
-    moveMouse(target, center.x, center.y);
-  }
-
-  /** ${@inheritDoc} */
-  public void moveMouse(Component target, int x, int y) {
-    if (!waitForComponentToBeReady(target, settings.timeoutToBeVisible()))
-      throw actionFailure(concat("Could not obtain position of component ", format(target)));
-    try {
-      Point point = locationOnScreenOf(target);
-      if (point == null) return;
-      point.translate(x, y);
-      robot.mouseMove(point.x, point.y);
-    } catch (IllegalComponentStateException e) {}
-  }
-
-  // Wait the given number of milliseconds for the component to be showing and ready.
-  private boolean waitForComponentToBeReady(Component c, long timeout) {
-    if (isReadyForInput(c)) return true;
-    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
-    while (!isReadyForInput(c)) {
-      if (c instanceof JPopupMenu) {
-        // wiggle the mouse over the parent menu item to ensure the sub-menu shows
-        Component invoker = ((JPopupMenu)c).getInvoker();
-        if (invoker instanceof JMenu) 
-          jitter(invoker, new Point(invoker.getWidth() / 2, invoker.getHeight() / 2));
-      }
-      if (watch.isTimeOut()) return false;
-      pause();
-    }
-    return true;
+    postMousePress(c, where, buttons);
   }
 
   private void mousePress(int buttons) {
@@ -474,6 +428,117 @@ public class RobotFixture implements Robot {
     int y = target.position.y;
     boolean popupTrigger = popupOnPress() && (buttons & popupMask()) != 0;
     postEvent(source, new MouseEvent(source, MOUSE_PRESSED, current, modifiers, x, y, count, popupTrigger));
+  }
+
+  /** ${@inheritDoc} */
+  public void jitter(Component c) {
+    jitter(c, centerOf(c));
+  }
+
+  /** ${@inheritDoc} */
+  public void jitter(Component c, Point where) {
+    int x = where.x;
+    int y = where.y;
+    moveMouse(c, (x > 0 ? x - 1 : x + 1), y);
+  }
+
+  /** ${@inheritDoc} */
+  public void moveMouse(Component c) {
+    Point center = centerOf(c);
+    moveMouse(c, center.x, center.y);
+  }
+
+  /** ${@inheritDoc} */
+  public void moveMouse(Component c, int x, int y) {
+    if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
+      throw actionFailure(concat("Could not obtain position of component ", format(c)));
+    if (isRobotMode()) {
+      try {
+        Point point = locationOnScreenOf(c);
+        if (point == null) return;
+        point.translate(x, y);
+        mouseMove(point.x, point.y);
+      } catch (IllegalComponentStateException e) {}
+      return;
+    }
+    Component target = c;
+    Component eventSource = c;
+    Point p = new Point(x, y);
+    int eventId = MOUSE_MOVED;
+    boolean outside = false;
+    if (inputState.dragInProgress()) {
+      eventId = MOUSE_DRAGGED;
+      eventSource = inputState.dragSource();
+    } else {
+      MouseEventTarget newTarget = retargetMouseEvent(eventSource, eventId, p);
+      eventSource = target = newTarget.source;
+      p.setLocation(newTarget.position);
+      outside = isPointOutsideComponent(p, target);
+    }
+    Component current = inputState.mouseComponent();
+    if (current != target) {
+      if (outside && current != null) {
+        postMouseMotion(current, MOUSE_EXITED, convertPoint(target, p.x, p.y, current));
+        return;
+      }
+      postMouseMotion(target, MOUSE_ENTERED, new Point(p.x ,p.y));
+    }
+    Point dragPosition = new Point(p.x, p.y);
+    // drag coordinates are relative to drag source component
+    if (eventId == MOUSE_DRAGGED) dragPosition = convertPoint(target, dragPosition, eventSource);
+    postMouseMotion(eventSource, eventId, dragPosition);
+    // Add an exit event if warranted
+    if (outside) postMouseMotion(target, MOUSE_EXITED, p);
+  }
+
+  // Wait the given number of milliseconds for the component to be showing and ready.
+  private boolean waitForComponentToBeReady(Component c, long timeout) {
+    if (isReadyForInput(c)) return true;
+    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
+    while (!isReadyForInput(c)) {
+      if (c instanceof JPopupMenu) {
+        // wiggle the mouse over the parent menu item to ensure the sub-menu shows
+        Component invoker = ((JPopupMenu)c).getInvoker();
+        if (invoker instanceof JMenu)
+          jitter(invoker, new Point(invoker.getWidth() / 2, invoker.getHeight() / 2));
+      }
+      if (watch.isTimeOut()) return false;
+      pause();
+    }
+    return true;
+  }
+
+  // Move the mouse to the given location, in screen coordinates.
+  private void mouseMove(int x, int y) {
+    if (isRobotMode()) robot.mouseMove(x, y);
+  }
+
+  private boolean isPointOutsideComponent(Point p, Component c) {
+    int x = p.x;
+    int y = p.y;
+    return x < 0 || y < 0 || x >= c.getWidth() || y >= c.getHeight();
+  }
+
+  /*
+   * Generate a mouse enter/exit/move/drag for the destination component. Abbot: The VM automatically usually generates
+   * exit events; need a test to define the behavior, though.
+   */
+  private void postMouseMotion(Component c, int eventId, Point where) {
+    Component target = c;
+    Point position = where;
+    // The VM auto-generates exit events as needed (1.3, 1.4)
+    if (eventId != MouseEvent.MOUSE_DRAGGED) {
+      MouseEventTarget newTarget = retargetMouseEvent(target, eventId, where);
+      target = newTarget.source;
+      position = newTarget.position;
+    }
+    // Avoid multiple moves to the same location
+    if (inputState.mouseComponent() == target && position.equals(inputState.mouseLocation())) return;
+    int modifiers = inputState.modifiers();
+    int x = position.x;
+    int y = position.y;
+    int clickCount = inputState.clickCount();
+    postEvent(target, new MouseEvent(target, eventId, currentTimeMillis(), modifiers, x, y, clickCount, false));
   }
 
   /** ${@inheritDoc} */
@@ -580,7 +645,7 @@ public class RobotFixture implements Robot {
   private void keyPress(int keyCode) {
     keyPress(keyCode, CHAR_UNDEFINED);
   }
-  
+
   private void keyPress(int keyCode, char keyChar) {
     if (isRobotMode()) {
       try {
@@ -626,14 +691,49 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void releaseLeftMouseButton() {
-    robot.mouseRelease(BUTTON1_MASK);
+    releaseMouseButton(LEFT_BUTTON);
+  }
+
+  /** ${@inheritDoc} */
+  public void releaseMouseButton(MouseButton button) {
+    mouseRelease(button.mask);
   }
 
   /** ${@inheritDoc} */
   public void releaseMouseButtons() {
     int buttons = inputState.buttons();
     if (buttons == 0) return;
-    robot.mouseRelease(buttons);
+    mouseRelease(buttons);
+  }
+
+  private void mouseRelease(int buttons) {
+    if (isAWTMode()) {
+      robot.mouseRelease(buttons);
+      return;
+    }
+    Component c = null;
+    if (inputState.dragInProgress()) c = inputState.dragSource();
+    else if (lastMousePress != null) c = lastMousePress.getComponent();
+    else c = inputState.mouseComponent();
+    Point where = inputState.mouseLocation();
+    if (c == null) return;
+    if (where == null) {
+      if (lastMousePress == null) return;
+      where = lastMousePress.getPoint();
+    }
+    postMouseRelease(c, where.x, where.y, buttons);
+  }
+
+   // Post a mouse release event to the AWT event queue for the given component.
+  private void postMouseRelease(Component c, int x, int y, int mask) {
+    int count = inputState.clickCount();
+    MouseEventTarget newTarget = retargetMouseEvent(c, MOUSE_PRESSED, new Point(x, y));
+    Component target = newTarget.source;
+    Point where = newTarget.position;
+    long when = currentTimeMillis();
+    int modifiers = inputState.keyModifiers() | mask;
+    boolean popupTrigger = !popupOnPress() && (mask & popupMask()) != 0;
+    postEvent(c, new MouseEvent(target, MOUSE_RELEASED, when, modifiers, where.x, where.y, count, popupTrigger));
   }
 
   /** ${@inheritDoc} */
@@ -657,8 +757,8 @@ public class RobotFixture implements Robot {
   private void waitForIdle(EventQueue eq) {
     if (EventQueue.isDispatchThread())
       throw new IllegalThreadStateException("Cannot call method from the event dispatcher thread");
-    // Abbot: as of Java 1.3.1, robot.waitForIdle only waits for the last event on the queue at the time of this 
-    // invocation to be processed. We need better than that. Make sure the given event queue is empty when this method 
+    // Abbot: as of Java 1.3.1, robot.waitForIdle only waits for the last event on the queue at the time of this
+    // invocation to be processed. We need better than that. Make sure the given event queue is empty when this method
     // returns.
     // We always post at least one idle event to allow any current event dispatch processing to finish.
     long start = currentTimeMillis();
@@ -698,7 +798,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public boolean isDragging() {
-    return inputState.isDragging();
+    return inputState.dragInProgress();
   }
 
   /** ${@inheritDoc} */

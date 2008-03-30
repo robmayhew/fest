@@ -111,7 +111,7 @@ public interface Robot {
    * @param c the <code>Component</code> to click on.
    */
   void click(Component c);
-  
+
   /**
    * Simulates a user right-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
@@ -130,7 +130,7 @@ public interface Robot {
    * @param c the <code>Component</code> to click on.
    */
   void doubleClick(Component c);
-  
+
   /**
    * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
@@ -141,57 +141,57 @@ public interface Robot {
 
   /**
    * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
-   * @param target the <code>Component</code> to click on.
+   * @param c the <code>Component</code> to click on.
    * @param where the position where to click.
    */
-  void click(Component target, Point where);
+  void click(Component c, Point where);
 
   /**
    * Simulates a user clicking the given mouse button, the given times at the given position on the given
    * <code>{@link Component}</code>.
-   * @param target the <code>Component</code> to click on.
+   * @param c the <code>Component</code> to click on.
    * @param where the position where to click.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    */
-  void click(Component target, Point where, MouseButton button, int times);
+  void click(Component c, Point where, MouseButton button, int times);
 
-  /** 
-   * Simulates a user pressing a mouse button. 
+  /**
+   * Simulates a user pressing a mouse button.
    * @param button the button to press.
    */
   void pressMouse(MouseButton button);
 
   /**
    * Simulates a user pressing the left mouse button on the given <code>{@link Component}</code>.
-   * @param target the <code>Component</code> to click on.
+   * @param c the <code>Component</code> to click on.
    * @param where the position where to press the left mouse button.
    */
-  void pressMouse(Component target, Point where);
+  void pressMouse(Component c, Point where);
 
   /**
    * Simulates a user pressing the given mouse button on the given <code>{@link Component}</code>.
-   * @param target the <code>Component</code> to click on.
+   * @param c the <code>Component</code> to click on.
    * @param where the position where to press the given mouse button.
    * @param button the mouse button to press.
    */
-  void pressMouse(Component target, Point where, MouseButton button);
+  void pressMouse(Component c, Point where, MouseButton button);
 
   /**
    * Simulates a user moving the mouse pointer to the center of the given <code>{@link Component}</code>.
-   * @param target the given <code>Component</code>.
+   * @param c the given <code>Component</code>.
    */
-  void moveMouse(Component target);
+  void moveMouse(Component c);
 
   /**
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
-   * @param target the given <code>Component</code>.
+   * @param c the given <code>Component</code>.
    * @param x horizontal coordinate relative to the given <code>Component</code>.
    * @param y vertical coordinate relative to the given <code>Component</code>.
    * @throws ActionFailedException if the given component is not showing and ready for input.
    */
-  void moveMouse(Component target, int x, int y);
+  void moveMouse(Component c, int x, int y);
 
   /**
    * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
@@ -259,6 +259,12 @@ public interface Robot {
   void releaseLeftMouseButton();
 
   /**
+   * Releases the given mouse button.
+   * @param button the mouse button to release.
+   */
+  void releaseMouseButton(MouseButton button);
+
+  /**
    * Releases any mouse button(s) used by the robot.
    */
   void releaseMouseButtons();
@@ -268,13 +274,13 @@ public interface Robot {
    * @param modifierMask the given mask.
    */
   void pressModifiers(int modifierMask);
-  
+
   /**
    * Releases the appropriate modifiers corresponding to the given mask.
    * @param modifierMask the given mask.
    */
   void releaseModifiers(int modifierMask);
-  
+
   /**
    * Wait for an idle AWT event queue. Note that this is different from the implementation of
    * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
@@ -290,8 +296,8 @@ public interface Robot {
    */
   boolean isDragging();
 
-  /** 
-   * Indicates whether the given <code>{@link Component}</code> is ready for input. 
+  /**
+   * Indicates whether the given <code>{@link Component}</code> is ready for input.
    * @param c the given <code>Component</code>.
    * @return <code>true</code> if the given <code>Component</code> is ready for input, <code>false</code> otherwise.
    * @throws ActionFailedException if the given <code>Component</code> does not have a <code>Window</code> ancestor.
@@ -320,12 +326,12 @@ public interface Robot {
    * @return the currently active pop-up menu or <code>null</code>, if no pop-up is currently showing.
    */
   JPopupMenu findActivePopupMenu();
-  
+
   /**
    * Ensures that there is no <code>{@link javax.swing.JOptionPane}</code> showing, and potentially blocking GUI tests.
    */
   void requireNoJOptionPaneIsShowing();
-  
+
   /**
    * Returns the configuration settings for this <code>{@link Robot}</code>.
    * @return the configuration settings for this <code>Robot</code>.
