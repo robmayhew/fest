@@ -1,18 +1,23 @@
 /*
  * Created on Mar 28, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.input;
+
+import static java.awt.AWTEvent.*;
+import static javax.swing.SwingUtilities.getDeepestComponentAt;
+import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
+import static org.fest.swing.util.AWT.locationOnScreenOf;
 
 import java.awt.*;
 import java.awt.event.AWTEventListener;
@@ -21,12 +26,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import org.fest.swing.listener.EventDispatchThreadedEventListener;
-
-import static java.awt.AWTEvent.*;
-import static javax.swing.SwingUtilities.getDeepestComponentAt;
-
-import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
 
 /**
  * Class to keep track of a given input state. Includes mouse/pointer position and keyboard modifier key state.
@@ -112,7 +111,7 @@ public class InputState {
   private void lastEventTime(InputEvent event) {
     lastEventTime = event.getWhen();
   }
-  
+
   private void modifiers(int modifiers) {
     this.modifiers = modifiers;
   }
@@ -226,14 +225,6 @@ public class InputState {
    */
   public synchronized int buttons() {
     return mouseInfo.buttons();
-  }
-
-  /**
-   * Updates the mouse buttons used in the last input event.
-   * @param buttons the value to update to.
-   */
-  public synchronized void buttons(int buttons) {
-    mouseInfo.buttons(buttons);
   }
 
   /**

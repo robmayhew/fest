@@ -707,7 +707,7 @@ public class RobotFixture implements Robot {
   }
 
   private void mouseRelease(int buttons) {
-    if (isAWTMode()) {
+    if (isRobotMode()) {
       robot.mouseRelease(buttons);
       return;
     }

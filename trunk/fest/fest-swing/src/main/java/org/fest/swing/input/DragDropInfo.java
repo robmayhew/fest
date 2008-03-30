@@ -39,7 +39,6 @@ class DragDropInfo {
 
   void clear() {
     source(null);
-    x = y = 0;
   }
 
   void update(MouseEvent event) {

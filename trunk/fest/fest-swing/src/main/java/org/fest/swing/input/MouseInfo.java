@@ -1,28 +1,28 @@
 /*
  * Created on Mar 28, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.input;
+
+import static java.awt.event.InputEvent.*;
+import static java.awt.event.MouseEvent.*;
 
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.lang.ref.WeakReference;
 import java.util.Stack;
-
-import static java.awt.event.InputEvent.*;
-import static java.awt.event.MouseEvent.*;
 
 /**
  * Understands a description mouse-related operations.
@@ -38,7 +38,7 @@ class MouseInfo {
 
   /** Current mouse position, in screen coordinates. */
   private Point locationOnScreen = new Point(0, 0);
-  
+
   private final Stack<WeakReference<Component>> componentStack = new Stack<WeakReference<Component>>();
   private final Stack<Point> locationStack = new Stack<Point>();
   private final Stack<Point> screenLocationStack = new Stack<Point>();
@@ -67,14 +67,14 @@ class MouseInfo {
     locationOnScreen.setLocation(eventScreenLocation);
     locationOnScreen.translate(where.x, where.y);
   }
-  
+
   private void updateOnMousePressed(MouseEvent event) {
     if (event.getID() != MOUSE_PRESSED) return;
     int buttonUsed = buttonUsed(event);
     buttons |= buttonUsed;
     modifiers |= buttonUsed;
   }
-  
+
   private void updateOnMouseReleased(MouseEvent event) {
     if (event.getID() != MOUSE_RELEASED) return;
     int buttonUsed = buttonUsed(event);
@@ -95,7 +95,7 @@ class MouseInfo {
   }
 
   private void updateOnMouseExited(MouseEvent event) {
-    if (event.getID() != MOUSE_EXITED || componentStack.empty()) return; 
+    if (event.getID() != MOUSE_EXITED || componentStack.empty()) return;
     componentStack.pop();
     locationStack.pop();
     screenLocationStack.pop();
@@ -117,7 +117,7 @@ class MouseInfo {
     return c;
   }
 
-  int buttons() { 
+  int buttons() {
     return buttons;
   }
 
@@ -148,7 +148,7 @@ class MouseInfo {
   Point locationOnScreen() {
     return pointFrom(locationOnScreen);
   }
-  
+
   private Point pointFrom(Point source) {
     return source != null ? new Point(source) : null;
   }
