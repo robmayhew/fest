@@ -47,10 +47,8 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
    * <code>{@link JTree}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JTree</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JTree</code>.
    */
   protected String doFormat(Component c) {
-    if (!(c instanceof JTree)) throw new IllegalArgumentException("The given component should be a JTree");
     JTree tree = (JTree)c;
     return concat(
         tree.getClass().getName(), "[",

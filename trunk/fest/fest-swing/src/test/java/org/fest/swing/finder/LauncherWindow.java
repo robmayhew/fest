@@ -15,7 +15,6 @@
  */
 package org.fest.swing.finder;
 
-import java.awt.FlowLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,13 +26,15 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import org.fest.swing.testing.TestFrame;
+
 /**
  * Understands a <code>{@link JFrame}</code> that simulates a login window.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class LauncherWindow extends JFrame {
+public class LauncherWindow extends TestFrame {
 
   private static final long serialVersionUID = 1L;
 
@@ -42,8 +43,8 @@ public class LauncherWindow extends JFrame {
   private int frameLaunchDelay = DEFAULT_DELAY;
   private int dialogLaunchDelay = DEFAULT_DELAY;
   
-  public LauncherWindow() {
-    setLayout(new FlowLayout());
+  public LauncherWindow(Class<?> testClass) {
+    super(testClass);
     add(frameLaunchButton());
     add(dialogLaunchButton());
   }

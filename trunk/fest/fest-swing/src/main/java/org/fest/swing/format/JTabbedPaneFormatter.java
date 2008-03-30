@@ -39,10 +39,8 @@ public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
    * <code>{@link JTabbedPane}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JTabbedPane</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JTabbedPane</code>.
    */
   protected String doFormat(Component c) {
-    if (!(c instanceof JTabbedPane)) throw new IllegalArgumentException("The given component should be a JTabbedPane");
     JTabbedPane tabbedPane = (JTabbedPane)c;
     return concat(
         tabbedPane.getClass().getName(), "[",

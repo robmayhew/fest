@@ -41,10 +41,8 @@ public class JTableFormatter extends ComponentFormatterTemplate {
    * <code>{@link JTable}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JTable</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JTable</code>.
    */
   protected String doFormat(Component c) {
-    if (!(c instanceof JTable)) throw new IllegalArgumentException("The given component should be a JTable");
     JTable table = (JTable)c;
     return concat(
         table.getClass().getName(), "[",

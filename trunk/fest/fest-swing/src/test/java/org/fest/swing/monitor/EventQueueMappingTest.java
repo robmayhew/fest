@@ -21,6 +21,8 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.swing.JTextField;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -100,5 +102,13 @@ public class EventQueueMappingTest {
     mapping.addQueueFor(anotherComponent);
     Collection<EventQueue> allEventQueues = mapping.eventQueues();
     assertThat(allEventQueues).containsOnly(eventQueue, anotherEventQueue);
+  }
+
+  @Test(dependsOnMethods = "shouldReturnAllQueues")
+  public void shouldNotFailIfMappingHasNullReference() {
+    mapping.addQueueFor(component);
+    queueMap.put(new JTextField(), null);
+    Collection<EventQueue> allEventQueues = mapping.eventQueues();
+    assertThat(allEventQueues).containsOnly(eventQueue);
   }
 }

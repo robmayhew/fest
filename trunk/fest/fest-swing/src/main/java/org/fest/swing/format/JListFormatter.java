@@ -41,10 +41,8 @@ public class JListFormatter extends ComponentFormatterTemplate {
    * <code>{@link JList}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JList</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JList</code>.
    */
   protected String doFormat(Component c) {
-    if (!(c instanceof JList)) throw new IllegalArgumentException("The given component should be a JList");
     JList list = (JList)c;
     return concat(
         list.getClass().getName(), "[",

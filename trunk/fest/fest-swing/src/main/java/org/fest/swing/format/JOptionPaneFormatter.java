@@ -54,10 +54,8 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
    * <code>{@link JOptionPane}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JOptionPane</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JOptionPane</code>.
    */
   protected String doFormat(Component c) {
-    if (!(c instanceof JOptionPane)) throw new IllegalArgumentException("The given component should be a JOptionPane");
     JOptionPane optionPane = (JOptionPane)c;
     return concat(
         optionPane.getClass().getName(), "[",

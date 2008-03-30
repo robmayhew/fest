@@ -15,10 +15,6 @@
  */
 package org.fest.swing.format;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Adjustable;
 import java.awt.Component;
 import java.util.logging.Logger;
@@ -27,8 +23,13 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link Formatting}</code>.
@@ -40,6 +41,21 @@ public class FormattingTest {
 
   private static Logger logger = Logger.getAnonymousLogger();
 
+  @Test public void shouldReplaceExistingFormatter() {
+    final Class<JComboBox> type = JComboBox.class;
+    ComponentFormatter oldFormatter = Formatting.formatter(type);
+    ComponentFormatter newFormatter = new ComponentFormatterTemplate() {
+      protected String doFormat(Component c) { return null; }
+
+      public Class<? extends Component> targetType() { 
+        return type;
+      }
+    };
+    Formatting.register(newFormatter);
+    assertThat(Formatting.formatter(type)).isSameAs(newFormatter);
+    Formatting.register(oldFormatter);
+  }
+  
   @Test public void shouldFormatDialog() {
     JDialog dialog = new JDialog();
     dialog.setTitle("A dialog");

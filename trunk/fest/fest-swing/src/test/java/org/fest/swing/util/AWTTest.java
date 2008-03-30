@@ -15,8 +15,7 @@
  */
 package org.fest.swing.util;
 
-import java.awt.Frame;
-import java.awt.Insets;
+import java.awt.*;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -36,6 +35,16 @@ import static org.fest.swing.testing.TestFrame.showInTest;
 public class AWTTest {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0); 
+  
+  @Test public void shouldReturnCenterPosition() {
+    Component c = new JTextField();
+    Dimension size = new Dimension(80, 60);
+    c.setSize(size);
+    assertThat(c.getSize()).isEqualTo(size);
+    Point center = AWT.centerOf(c);
+    assertThat(center.x).isEqualTo(40);
+    assertThat(center.y).isEqualTo(30);
+  }
   
   @Test public void shouldReturnInsetsFromContainer() {
     TestFrame frame = showInTest(getClass());

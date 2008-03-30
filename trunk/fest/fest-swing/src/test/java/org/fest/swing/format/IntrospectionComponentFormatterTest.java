@@ -15,8 +15,6 @@
  */
 package org.fest.swing.format;
 
-import java.util.logging.Logger;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -24,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -33,8 +32,6 @@ import static org.fest.util.Strings.concat;
  */
 public class IntrospectionComponentFormatterTest {
 
-  private static Logger logger = Logger.getAnonymousLogger();
-  
   private JButton button;
   private IntrospectionComponentFormatter formatter;
   
@@ -45,10 +42,43 @@ public class IntrospectionComponentFormatterTest {
   }
   
   @Test public void shouldFormatComponent() {
-    logger.info(formatter.toString());
-    String formatted = formatter.format(button);
     String expected = concat(button.getClass().getName(), "[name='button', text='Click Me']");
+    String formatted = formatter.format(button);
     assertThat(formatted).isEqualTo(expected);
+  }
+  
+  @Test public void shouldFormatEvenWithInvalidPropertyNames() {
+    formatter = new IntrospectionComponentFormatter(JButton.class, "lastName", "text");
+    String formatted = formatter.format(button);
+    assertThat(formatted).contains("lastName=<Unable to read property")
+                         .contains("text='Click Me'");
+  }
+
+  @Test public void shouldFormatOneDimensionalArrayProperties() {
+    MyButton button = new MyButton();
+    button.setNames(array("Luke", "Leia"));
+    formatter = new IntrospectionComponentFormatter(MyButton.class, "names", "text");
+    String formatted = formatter.format(button);
+    assertThat(formatted).contains("names=['Luke', 'Leia']");
+  }
+  
+  private static class MyButton extends JButton {
+    private static final long serialVersionUID = 1L;
+
+    private String[] names;
+
+    public String[] getNames() {
+      return names;
+    }
+
+    public void setNames(String[] names) {
+      this.names = names;
+    }
+  };
+
+  @Test public void shouldShowPropertyNamesInToString() {
+    String s = formatter.toString();
+    assertThat(s).contains("name").contains("text");
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)

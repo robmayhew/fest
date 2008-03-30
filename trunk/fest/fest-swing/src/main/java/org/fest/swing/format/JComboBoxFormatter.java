@@ -39,10 +39,8 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
    * <code>{@link JComboBox}</code> (or subclass.)
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>JComboBox</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is not a <code>JComboBox</code>.
    */
   protected String doFormat(Component c) {
-    if (!(c instanceof JComboBox)) throw new IllegalArgumentException("The given component should be a JComboBox");
     JComboBox comboBox = (JComboBox)c;
     return concat(
         comboBox.getClass().getName(), "[",

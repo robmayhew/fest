@@ -48,7 +48,7 @@ class Windows {
   private final Object lock = new Object();
   
   Windows() {
-    windowReadyTimer = new NamedTimer("Window Ready Timer", true);
+    windowReadyTimer = new Timer("Window Ready Timer", true);
   }
 
   /**
@@ -93,7 +93,7 @@ class Windows {
       TimerTask task = new TimerTask() {
         public void run() { markAsReady(w); }
       };
-      windowReadyTimer.schedule(task, WINDOW_READY_DELAY);
+      windowReadyTimer.schedule(new ProtectingTimerTask(task), WINDOW_READY_DELAY);
       pending.put(w, task);
     }
   }

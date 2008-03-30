@@ -61,6 +61,10 @@ public class JOptionPaneFinderTest {
     robot.cleanUp();
   }
 
+  @Test public void shouldNotHaveNameMatcher() {
+    assertThat(JOptionPaneFinder.findOptionPane().nameMatcher()).isNull();
+  }
+  
   @Test public void shouldFindFileChooser() {
     clickMessageButton();
     JOptionPaneFixture found = JOptionPaneFinder.findOptionPane().using(robot);

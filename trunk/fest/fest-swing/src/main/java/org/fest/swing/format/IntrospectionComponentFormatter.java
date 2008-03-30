@@ -98,9 +98,9 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
   private void appendProperty(StringBuilder b, String name, Component c) {
     b.append(name).append("=");
     try {
-      b.append(quote(propertyValue(c, name)));
+      b.append(propertyValue(c, name));
     } catch (Exception e) {
-      b.append(concat("<Unable to read property: [", e.getMessage(), "]>"));
+      b.append(concat("<Unable to read property [", e.getClass().getName(), ": ", quote(e.getMessage()), "]>"));
     }
   }
 
@@ -109,7 +109,7 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
     PropertyDescriptor descriptor = descriptors.get(property);
     Object value = descriptor.getReadMethod().invoke(c);
     if (isOneDimensionalArray(value)) return Arrays.format(value);
-    return value;
+    return quote(value);
   }
 
   private boolean isOneDimensionalArray(Object o) {

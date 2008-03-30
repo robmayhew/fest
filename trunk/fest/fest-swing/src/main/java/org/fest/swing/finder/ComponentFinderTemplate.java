@@ -15,18 +15,18 @@
  */
 package org.fest.swing.finder;
 
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.NameAndTypeMatcher;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.ComponentFixture;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a template for <code>{@link Component}</code> finders.
@@ -37,9 +37,11 @@ import org.fest.swing.fixture.ComponentFixture;
  */
 abstract class ComponentFinderTemplate<T extends Component> {
 
+  static final long TIMEOUT = 5000;
+  
   private String componentName;
   private Class<? extends T> componentType;
-  private long timeout = FinderConstants.TIMEOUT;
+  private long timeout = TIMEOUT;
 
   ComponentFinderTemplate(String componentName, Class<? extends T> componentType) {
     this(componentType);

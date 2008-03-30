@@ -15,8 +15,6 @@
  */
 package org.fest.swing.format;
 
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -26,6 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to formatting.
@@ -102,6 +102,11 @@ public class Formatting {
       logger.info(
           concat("Replacing formatter ", FORMATTERS.get(key), " with ", formatter, " for the type ", key.getName()));
     FORMATTERS.put(key, formatter);
+  }
+  
+  // Used for testing only.
+  static ComponentFormatter formatter(Class<?> type) {
+    return FORMATTERS.get(type);
   }
 
   /**
