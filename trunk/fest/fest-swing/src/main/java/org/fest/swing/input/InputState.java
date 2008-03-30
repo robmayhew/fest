@@ -172,14 +172,6 @@ public class InputState {
   }
 
   /**
-   * Updates the <code>{@link Component}</code> where a drag operation started.
-   * @param source the new source of a drag operation.
-   */
-  public synchronized void dragSource(Component source) {
-    dragDropInfo.source(source);
-  }
-
-  /**
    * Returns the coordinates where a drag operation started.
    * @return the coordinates where a drag operation started.
    */
