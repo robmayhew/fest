@@ -46,6 +46,14 @@ public class JButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JButton
     fixture = new JButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
+  
+  @Test public void shouldCreateFixtureWithGivenComponentNameAndType() {
+    new FixtureCreationByNameAndTypeTemplate("c") {
+      ComponentFixture<JButton> fixture() {
+        return new JButtonFixture(robot(), "c");
+      }
+    }.run();
+  }
 
   @Test public void shouldReturnText() {
     assertThat(fixture.text()).isEqualTo(target.getText());
@@ -67,4 +75,5 @@ public class JButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JButton
   ComponentDriver driver() { return driver; }
   JButton target() { return target; }
   JPopupMenuInvokerFixture<JButton> fixture() { return fixture; }
+  Class<JButton> targetType() { return JButton.class; }
 }

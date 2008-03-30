@@ -21,13 +21,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.ComponentDriver;
 
 import static java.awt.event.KeyEvent.*;
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -45,11 +43,15 @@ import static org.fest.swing.fixture.MouseClickInfo.middleButton;
 public abstract class ComponentFixtureTestCase<T extends Component> {
 
   private Robot robot;
+  private ComponentFinder finder;
+  private Settings settings;
   
   Robot robot() { return robot; }
   
   @BeforeMethod public final void setUp() {
     robot = createMock(Robot.class);
+    finder = createMock(ComponentFinder.class);
+    settings = new Settings();
     onSetUp();
   }
 
@@ -247,4 +249,54 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   abstract T target();
   abstract ComponentDriver driver();
   abstract ComponentFixture<T> fixture();
+  
+  @SuppressWarnings("unchecked") 
+  private Class<T> targetType() {
+    return (Class<T>) target().getClass();
+  }
+  
+  private boolean requireShowing() {
+    return settings.componentLookupScope().requireShowing();
+  }
+
+  private abstract class FixtureCreationTemplate extends EasyMockTemplate {
+    
+    FixtureCreationTemplate() {
+      super(robot, finder);
+    }
+    
+    protected final void expectations() {
+      expect(robot.finder()).andReturn(finder);
+      expect(robot.settings()).andReturn(settings);
+      expectComponentLookup();
+    }
+    
+    abstract void expectComponentLookup();
+    
+    protected final void codeToTest() {
+      ComponentFixture<T> fixture = fixture();
+      assertThat(fixture.component()).isSameAs(target());
+    }
+    
+    abstract ComponentFixture<T> fixture();
+  }
+
+  abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
+    
+    final void expectComponentLookup() {
+      expect(finder.findByType(targetType(), requireShowing())).andReturn(target());
+    }
+  }
+  
+  abstract class FixtureCreationByNameAndTypeTemplate extends FixtureCreationTemplate {
+    private final String name;
+
+    FixtureCreationByNameAndTypeTemplate(String name) {
+      this.name = name;
+    }
+    
+    final void expectComponentLookup() {
+      expect(finder.findByName(name, targetType(), requireShowing())).andReturn(target());
+    }
+  }
 }
