@@ -189,6 +189,7 @@ public interface Robot {
    * @param target the given <code>Component</code>.
    * @param x horizontal coordinate relative to the given <code>Component</code>.
    * @param y vertical coordinate relative to the given <code>Component</code>.
+   * @throws ActionFailedException if the given component is not showing and ready for input.
    */
   void moveMouse(Component target, int x, int y);
 

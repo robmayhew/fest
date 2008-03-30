@@ -22,9 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -49,12 +47,14 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
-import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
+import static org.fest.swing.keystroke.KeyStrokeMap.*;
 import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.concat;
+
+import static java.lang.String.*;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -72,7 +72,9 @@ public class RobotFixture implements Robot {
 
   private static final ComponentMatcher POPUP_MATCHER = new TypeMatcher(JPopupMenu.class, true);
 
-  private static final Runnable EMPTY_RUNNABLE = new Runnable() { public void run() {} };
+  private static final Runnable EMPTY_RUNNABLE = new Runnable() {
+    public void run() {}
+  };
 
   private static final int BUTTON_MASK = BUTTON1_MASK | BUTTON2_MASK | BUTTON3_MASK;
 
@@ -217,7 +219,7 @@ public class RobotFixture implements Robot {
     Insets insets = c.getInsets();
     return new Point(c.getSize().width - insets.right - 10, insets.top / 2);
   }
-  
+
   private Point closeLocationForOSX(Container c) {
     Insets insets = c.getInsets();
     return new Point(insets.left + 15, insets.top / 2);
@@ -421,12 +423,31 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void moveMouse(Component target, int x, int y) {
+    if (!waitForComponentToBeReady(target, settings.timeoutToBeVisible()))
+      throw actionFailure(concat("Could not obtain position of component ", format(target)));
     try {
       Point point = locationOnScreenOf(target);
       if (point == null) return;
       point.translate(x, y);
       robot.mouseMove(point.x, point.y);
     } catch (IllegalComponentStateException e) {}
+  }
+
+  // Wait the given number of milliseconds for the component to be showing and ready.
+  private boolean waitForComponentToBeReady(Component c, long timeout) {
+    if (isReadyForInput(c)) return true;
+    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
+    while (!isReadyForInput(c)) {
+      if (c instanceof JPopupMenu) {
+        // wiggle the mouse over the parent menu item to ensure the sub-menu shows
+        Component invoker = ((JPopupMenu)c).getInvoker();
+        if (invoker instanceof JMenu) 
+          jitter(invoker, new Point(invoker.getWidth() / 2, invoker.getHeight() / 2));
+      }
+      if (watch.isTimeOut()) return false;
+      pause();
+    }
+    return true;
   }
 
   private void mousePress(int buttons) {
@@ -503,7 +524,7 @@ public class RobotFixture implements Robot {
     updateMousePressWith(mouseEvent);
     // Generate a click if there are no events between press/release.
     if (isAWTMode() && event.getID() == MOUSE_RELEASED && previous.getID() == MOUSE_PRESSED) {
-      long when = System.currentTimeMillis();
+      long when = currentTimeMillis();
       int modifiers = mouseEvent.getModifiers();
       int x = mouseEvent.getX();
       int y = mouseEvent.getY();
@@ -557,7 +578,25 @@ public class RobotFixture implements Robot {
   }
 
   private void keyPress(int keyCode) {
-    robot.keyPress(keyCode);
+    keyPress(keyCode, CHAR_UNDEFINED);
+  }
+  
+  private void keyPress(int keyCode, char keyChar) {
+    if (isRobotMode()) {
+      try {
+        robot.keyPress(keyCode);
+        return;
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException(concat("Invalid key code '", valueOf(keyCode), "'"));
+      }
+    }
+    int modifiers = inputState.modifiers();
+    if (isModifier(keyCode)) modifiers |= maskFor(keyCode);
+    postKeyEvent(KEY_PRESSED, modifiers, keyCode, CHAR_UNDEFINED);
+    // Auto-generate KEY_TYPED events, as best we can
+    int mask = inputState.modifiers();
+    if (keyChar == CHAR_UNDEFINED) keyChar = charFor(KeyStroke.getKeyStroke(keyCode, mask));
+    if (keyChar != CHAR_UNDEFINED) postKeyEvent(KEY_TYPED, mask, VK_UNDEFINED, keyChar);
   }
 
   /** ${@inheritDoc} */
@@ -567,10 +606,22 @@ public class RobotFixture implements Robot {
   }
 
   private void keyRelease(int keyCode) {
-    robot.keyRelease(keyCode);
-    if (!IS_OS_X) return;
-    int delayBetweenEvents = settings.delayBetweenEvents();
-    if (KEY_INPUT_DELAY > delayBetweenEvents) pause(KEY_INPUT_DELAY - delayBetweenEvents);
+    if (isRobotMode()) {
+      robot.keyRelease(keyCode);
+      if (!IS_OS_X) return;
+      int delayBetweenEvents = settings.delayBetweenEvents();
+      if (KEY_INPUT_DELAY > delayBetweenEvents) pause(KEY_INPUT_DELAY - delayBetweenEvents);
+      return;
+    }
+    int mods = inputState.modifiers();
+    if (isModifier(keyCode)) mods &= ~maskFor(keyCode);
+    postKeyEvent(KEY_RELEASED, mods, keyCode, CHAR_UNDEFINED);
+  }
+
+  private void postKeyEvent(int eventId, int modifiers, int keyCode, char character) {
+    Component c = focusOwner();
+    if (c == null) return;
+    postEvent(c, new KeyEvent(c, eventId, currentTimeMillis(), modifiers, keyCode, character));
   }
 
   /** ${@inheritDoc} */
@@ -592,11 +643,11 @@ public class RobotFixture implements Robot {
     if (queues.size() == 1) {
       waitForIdle(toolkit.getSystemEventQueue());
       return;
-    } 
+    }
     // FIXME this resurrects dead event queues
-    for (EventQueue eq : queues) waitForIdle(eq);
+    for (EventQueue queue : queues) waitForIdle(queue);
   }
-  
+
   private void waitIfNecessary() {
     int delayBetweenEvents = settings.delayBetweenEvents();
     int eventPostingDelay = settings.eventPostingDelay();
@@ -606,26 +657,23 @@ public class RobotFixture implements Robot {
   private void waitForIdle(EventQueue eq) {
     if (EventQueue.isDispatchThread())
       throw new IllegalThreadStateException("Cannot call method from the event dispatcher thread");
-
-    // NOTE: as of Java 1.3.1, robot.waitForIdle only waits for the
-    // last event on the queue at the time of this invocation to be
-    // processed. We need better than that. Make sure the given event
-    // queue is empty when this method returns
-
-    // We always post at least one idle event to allow any current event
-    // dispatch processing to finish.
-    long start = System.currentTimeMillis();
+    // Abbot: as of Java 1.3.1, robot.waitForIdle only waits for the last event on the queue at the time of this 
+    // invocation to be processed. We need better than that. Make sure the given event queue is empty when this method 
+    // returns.
+    // We always post at least one idle event to allow any current event dispatch processing to finish.
+    long start = currentTimeMillis();
     int count = 0;
     do {
-      // Timed out waiting for idle  
+      // Timed out waiting for idle
       int idleTimeout = settings.idleTimeout();
       if (postInvocationEvent(eq, toolkit, idleTimeout)) break;
       // Timed out waiting for idle event queue
-      if (System.currentTimeMillis() - start > idleTimeout) break;
+      if (currentTimeMillis() - start > idleTimeout) break;
       ++count;
       // Force a yield
       pause();
-      // Abbot: this does not detect invocation events (i.e. what gets posted with EventQueue.invokeLater), so if someone
+      // Abbot: this does not detect invocation events (i.e. what gets posted with EventQueue.invokeLater), so if
+      // someone
       // is repeatedly posting one, we might get stuck. Not too worried, since if a Runnable keeps calling invokeLater
       // on itself, *nothing* else gets much chance to run, so it seems to be a bad programming practice.
     } while (eq.peekEvent() != null);
@@ -637,12 +685,12 @@ public class RobotFixture implements Robot {
     Object lock = new RobotIdleLock();
     synchronized (lock) {
       eq.postEvent(new InvocationEvent(toolkit, EMPTY_RUNNABLE, lock, true));
-      long start = System.currentTimeMillis();
+      long start = currentTimeMillis();
       try {
-        // NOTE: on fast linux systems when showing a dialog, if we don't provide a timeout, we're never notified, and 
+        // NOTE: on fast linux systems when showing a dialog, if we don't provide a timeout, we're never notified, and
         // the test will wait forever (up through 1.5.0_05).
         lock.wait(timeout);
-        return (System.currentTimeMillis() - start) >= settings.idleTimeout();
+        return (currentTimeMillis() - start) >= settings.idleTimeout();
       } catch (InterruptedException e) {}
     }
     return false;
