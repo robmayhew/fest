@@ -21,7 +21,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.ComponentMatcher;
 
-import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
 /**
@@ -49,7 +49,7 @@ public class JMenuItemMatcher implements ComponentMatcher {
     if (!(c instanceof JMenuItem)) return false;
     JMenuItem menuItem = (JMenuItem) c;
     String text = menuItem.getText();
-    return match(label, text) || match(label, pathOf(menuItem));
+    return areEqual(label, text) || areEqual(label, pathOf(menuItem));
   }
 
   private String pathOf(JMenuItem menuItem) {
