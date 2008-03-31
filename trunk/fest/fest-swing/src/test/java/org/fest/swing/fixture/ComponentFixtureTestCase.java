@@ -47,6 +47,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   private Settings settings;
   
   Robot robot() { return robot; }
+  ComponentFinder finder() { return finder; }
   
   @BeforeMethod public final void setUp() {
     robot = createMock(Robot.class);
@@ -250,8 +251,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   abstract ComponentDriver driver();
   abstract ComponentFixture<T> fixture();
   
-  @SuppressWarnings("unchecked") 
-  private Class<T> targetType() {
+  @SuppressWarnings("unchecked") Class<T> targetType() {
     return (Class<T>) target().getClass();
   }
   
@@ -283,20 +283,22 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
   abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
     
-    final void expectComponentLookup() {
+    void expectComponentLookup() {
       expect(finder.findByType(targetType(), requireShowing())).andReturn(target());
     }
   }
   
-  abstract class FixtureCreationByNameAndTypeTemplate extends FixtureCreationTemplate {
-    private final String name;
+  abstract class FixtureCreationByNameTemplate extends FixtureCreationTemplate {
+    private final String name = "c";
 
-    FixtureCreationByNameAndTypeTemplate(String name) {
-      this.name = name;
-    }
-    
     final void expectComponentLookup() {
       expect(finder.findByName(name, targetType(), requireShowing())).andReturn(target());
     }
+
+    final ComponentFixture<T> fixture() {
+      return fixtureWithName(name);
+    }
+
+    abstract ComponentFixture<T> fixtureWithName(String name);
   }
 }

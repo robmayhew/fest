@@ -145,7 +145,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    *         the <code>JList</code>.
    */
   public JListFixture doubleClickItem(int index) {
-    driver.clickItem(target, index, LEFT_BUTTON, 2);
+    clickItem(index, LEFT_BUTTON, 2);
     return this;
   }
 

@@ -46,6 +46,14 @@ public class JLabelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JLabel> 
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JLabel> fixtureWithName(String name) {
+        return new JLabelFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnText() {
     assertThat(fixture.text()).isEqualTo(target.getText());
   }

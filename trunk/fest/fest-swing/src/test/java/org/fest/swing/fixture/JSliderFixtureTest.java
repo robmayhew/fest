@@ -44,6 +44,14 @@ public class JSliderFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSlider
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JSlider> fixtureWithName(String name) {
+        return new JSliderFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldSlideToValue() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

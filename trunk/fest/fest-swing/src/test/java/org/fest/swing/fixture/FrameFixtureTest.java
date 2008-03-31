@@ -22,11 +22,15 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link FrameFixture}</code>.
@@ -45,6 +49,30 @@ public class FrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<Frame> {
     target = new Frame("A Label");
     fixture = new FrameFixture(robot(), target);
     fixture.updateDriver(driver);
+  }
+
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<Frame> fixtureWithName(String name) {
+        return new FrameFixture(robot(), name);
+      }
+    }.run();
+  }
+  
+  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
+    fixture = new FrameFixture(target);
+    assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+    fixture.cleanUp();
+  }
+
+  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
+    target.setName("frame");
+    target.pack();
+    target.setVisible(true);
+    fixture = new FrameFixture("frame");
+    assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+    assertThat(fixture.component()).isSameAs(target);
+    fixture.cleanUp();
   }
 
   @Test public void shouldRequireSize() {

@@ -47,6 +47,14 @@ public class JRadioButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JR
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JRadioButton> fixtureWithName(String name) {
+        return new JRadioButtonFixture(robot(), name);
+      }
+    }.run();
+  }
+  
   @Test public void shouldReturnText() {
     assertThat(fixture.text()).isEqualTo(target.getText());
   }

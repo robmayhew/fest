@@ -47,10 +47,10 @@ public class JButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JButton
     fixture.updateDriver(driver);
   }
   
-  @Test public void shouldCreateFixtureWithGivenComponentNameAndType() {
-    new FixtureCreationByNameAndTypeTemplate("c") {
-      ComponentFixture<JButton> fixture() {
-        return new JButtonFixture(robot(), "c");
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JButton> fixtureWithName(String name) {
+        return new JButtonFixture(robot(), name);
       }
     }.run();
   }

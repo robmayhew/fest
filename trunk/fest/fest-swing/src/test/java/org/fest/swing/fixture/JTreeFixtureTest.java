@@ -50,6 +50,14 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
     path = new TreePath(new Object[] { "Hello" });
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JTree> fixtureWithName(String name) {
+        return new JTreeFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldDragAtRow() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

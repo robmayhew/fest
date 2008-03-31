@@ -44,6 +44,14 @@ public class JSplitPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSpl
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JSplitPane> fixtureWithName(String name) {
+        return new JSplitPaneFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldMoveDivider() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

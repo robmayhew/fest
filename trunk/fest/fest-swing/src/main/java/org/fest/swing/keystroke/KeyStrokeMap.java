@@ -23,8 +23,6 @@ import javax.swing.KeyStroke;
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.CHAR_UNDEFINED;
 
-import static java.util.Locale.*;
-
 /**
  * Understands a collection of <code>{@link KeyStrokeMapping}</code>.
  *
@@ -33,6 +31,8 @@ import static java.util.Locale.*;
  */
 public class KeyStrokeMap {
 
+  private static final String ENGLISH = "en";
+  
   private static final Map<Character, KeyStroke> CHAR_TO_KEY_STROKE = new HashMap<Character, KeyStroke>();
   private static final Map<KeyStroke, Character> KEY_STROKE_TO_CHAR = new HashMap<KeyStroke, Character>();
 
@@ -42,7 +42,7 @@ public class KeyStrokeMap {
 
   private static void initialize() {
     Locale locale = Locale.getDefault();
-    if (ENGLISH.equals(locale)) {
+    if (locale.getLanguage().equals(ENGLISH)) {
       addKeyStrokesFrom(new KeyStrokeMappingProvider_en());
       return;
     }
@@ -64,6 +64,9 @@ public class KeyStrokeMap {
     KEY_STROKE_TO_CHAR.put(keyStroke, character);
   }
   
+  /**
+   * Removes all the character-<code>{@link KeyStroke}</code> mappings.
+   */
   public static synchronized void clearKeyStrokes() {
     CHAR_TO_KEY_STROKE.clear();
     KEY_STROKE_TO_CHAR.clear();    

@@ -48,6 +48,14 @@ public class JTabbedPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTa
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JTabbedPane> fixtureWithName(String name) {
+        return new JTabbedPaneFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldSelectTabWithIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

@@ -17,11 +17,13 @@ package org.fest.swing.fixture;
 
 import javax.swing.JPanel;
 
-import org.fest.swing.driver.ComponentDriver;
-import org.fest.swing.driver.JComponentDriver;
 import org.testng.annotations.Test;
 
+import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JComponentDriver;
+
 import static org.easymock.classextension.EasyMock.createMock;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
@@ -40,6 +42,14 @@ public class JPanelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JPanel> 
     target = new JPanel();
     fixture = new JPanelFixture(robot(), target);
     fixture.updateDriver(driver);
+  }
+
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JPanel> fixtureWithName(String name) {
+        return new JPanelFixture(robot(), name);
+      }
+    }.run();
   }
 
   @Test public void shouldBeContainerFixture() {

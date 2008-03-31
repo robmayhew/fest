@@ -46,6 +46,40 @@ public class JToggleButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<J
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JToggleButton> fixtureWithName(String name) {
+        return new JToggleButtonFixture(robot(), name);
+      }
+    }.run();
+  }
+
+  @Test public void shouldSelectCheckBox() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.select(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.check());
+      }
+    }.run();
+  }
+  
+  @Test public void shoulUnselectCheckBox() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.unselect(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.uncheck());
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnText() {
     assertThat(fixture.text()).isEqualTo(target.getText());
   }

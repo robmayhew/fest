@@ -48,6 +48,20 @@ public class JOptionPaneFixtureTest extends ComponentFixtureTestCase<JOptionPane
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureByType() {
+    new EasyMockTemplate(robot(), finder()) {
+      protected void expectations() {
+        expect(robot().finder()).andReturn(finder());
+        expect(finder().findByType(JOptionPane.class, true)).andReturn(target);
+      }
+      
+      protected void codeToTest() {
+        fixture = new JOptionPaneFixture(robot());
+        assertThat(fixture.component()).isSameAs(target);
+      }
+    }.run();
+  }
+
   @Test public void shouldRequireTitle() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

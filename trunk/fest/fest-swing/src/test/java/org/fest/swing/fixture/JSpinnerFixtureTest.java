@@ -44,6 +44,14 @@ public class JSpinnerFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSpinn
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JSpinner> fixtureWithName(String name) {
+        return new JSpinnerFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldRequireValue() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

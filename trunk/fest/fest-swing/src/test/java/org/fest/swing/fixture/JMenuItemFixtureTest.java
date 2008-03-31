@@ -15,6 +15,10 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JMenuItem;
 
 import org.testng.annotations.Test;
@@ -23,8 +27,10 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JMenuItemDriver;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JMenuItemFixture}</code>.
@@ -44,6 +50,29 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> {
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new EasyMockTemplate(robot(), finder()) {
+      protected void expectations() {
+        expect(robot().finder()).andReturn(finder());
+        expect(finder().findByName("c", JMenuItem.class, false)).andReturn(target);
+      }
+      
+      protected void codeToTest() {
+        fixture = new JMenuItemFixture(robot(), "c");
+        assertThat(fixture.component()).isSameAs(target);
+      }
+    }.run();
+  }
+
+  @Test public void shouldCreateFixtureWithGivenAction() {
+    Action action = new AbstractAction("action") {
+      private static final long serialVersionUID = 1L;
+      public void actionPerformed(ActionEvent e) {}
+    };
+    fixture = new JMenuItemFixture(robot(), action);
+    assertThat(fixture.component().getAction()).isSameAs(action);
+  }
+  
   @Test public void shouldSelectMenuItem() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

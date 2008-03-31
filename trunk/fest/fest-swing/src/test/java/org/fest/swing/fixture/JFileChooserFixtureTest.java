@@ -19,6 +19,7 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 
 import org.testng.annotations.Test;
 
@@ -47,6 +48,36 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
     target = new JFileChooser();
     fixture = new JFileChooserFixture(robot(), target);
     fixture.updateDriver(driver);
+  }
+  
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JFileChooser> fixtureWithName(String name) {
+        return new JFileChooserFixture(robot(), name);
+      }
+    }.run();
+  }
+
+  @Test public void shouldCreateFixtureByType() {
+    new FixtureCreationByTypeTemplate() {
+      ComponentFixture<JFileChooser> fixture() {
+        return new JFileChooserFixture(robot());
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnFileNameTextBox() {
+    final JTextField fileNameTextBox = new JTextField();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.fileNameTextBox(target)).andReturn(fileNameTextBox);
+      }
+
+      protected void codeToTest() {
+        JTextComponentFixture fileNameTextBoxFixture = fixture.fileNameTextBox();
+        assertThat(fileNameTextBoxFixture.component()).isSameAs(fileNameTextBox);
+      }
+    }.run();
   }
   
   @Test public void shouldClickApproveButton() {

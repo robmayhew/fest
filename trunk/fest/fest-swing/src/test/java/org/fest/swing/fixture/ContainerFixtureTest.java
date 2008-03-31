@@ -45,9 +45,9 @@ import static org.fest.util.Strings.concat;
 @Test(groups = GUI)
 public class ContainerFixtureTest {
 
-  private ContainerFixture<AllSupportedComponentsFrame> fixture;
+  private ContainerFixture<FrameWithAllSupportedComponents> fixture;
   private Robot robot;
-  private AllSupportedComponentsFrame window;
+  private FrameWithAllSupportedComponents window;
 
   private JButtonFixture findButton() {
     return fixture.button("button");
@@ -55,8 +55,8 @@ public class ContainerFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new AllSupportedComponentsFrame(getClass());
-    fixture = new ConcreteContainerFixture<AllSupportedComponentsFrame>(robot, window);
+    window = new FrameWithAllSupportedComponents(getClass());
+    fixture = new ConcreteContainerFixture<FrameWithAllSupportedComponents>(robot, window);
     robot.showWindow(window);
   }
 

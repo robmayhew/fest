@@ -36,7 +36,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-class AllSupportedComponentsFrame extends TestFrame {
+class FrameWithAllSupportedComponents extends TestFrame {
 
   private static final long serialVersionUID = 1L;
 
@@ -64,7 +64,7 @@ class AllSupportedComponentsFrame extends TestFrame {
   final JToggleButton toggleButton = new JToggleButton("A ToggleButton");
   final JToolBar toolBar = new JToolBar(HORIZONTAL);
 
-  AllSupportedComponentsFrame(Class<?> classForTitle) {
+  FrameWithAllSupportedComponents(Class<?> classForTitle) {
     super(classForTitle);
     setLayout(new BoxLayout(getContentPane(), Y_AXIS));
     setUpComponents();
@@ -86,7 +86,7 @@ class AllSupportedComponentsFrame extends TestFrame {
     button.setName("button");
     button.addMouseListener(new MouseAdapter() {
       @Override public void mousePressed(MouseEvent e) {
-        JOptionPane.showMessageDialog(AllSupportedComponentsFrame.this, "A Message");
+        JOptionPane.showMessageDialog(FrameWithAllSupportedComponents.this, "A Message");
       }
     });
     checkBox.setName("checkBox");

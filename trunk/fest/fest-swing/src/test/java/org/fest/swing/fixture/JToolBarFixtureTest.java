@@ -32,14 +32,12 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
 
-
 /**
  * Tests for <code>{@link JToolBarFixture}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-// TODO Implement
 public class JToolBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JToolBar> {
 
   private JToolBarDriver driver;
@@ -51,6 +49,14 @@ public class JToolBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JToolB
     target = new JToolBar();
     fixture = new JToolBarFixture(robot(), target);
     fixture.updateDriver(driver);
+  }
+
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JToolBar> fixtureWithName(String name) {
+        return new JToolBarFixture(robot(), name);
+      }
+    }.run();
   }
 
   @Test public void shouldFloatToPoint() {

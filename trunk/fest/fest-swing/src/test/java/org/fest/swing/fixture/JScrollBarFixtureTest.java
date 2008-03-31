@@ -43,6 +43,14 @@ public class JScrollBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JScr
     fixture = new JScrollBarFixture(robot(), target);
     fixture.updateDriver(driver);
   }
+  
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JScrollBar> fixtureWithName(String name) {
+        return new JScrollBarFixture(robot(), name);
+      }
+    }.run();
+  }
 
   @Test public void shouldRequireValue() {
     new EasyMockTemplate(driver) {

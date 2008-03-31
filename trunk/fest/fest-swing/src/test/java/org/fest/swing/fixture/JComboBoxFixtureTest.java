@@ -49,6 +49,14 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     fixture.updateDriver(driver);
   }
   
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JComboBox> fixtureWithName(String name) {
+        return new JComboBoxFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnContents() {
     final String[] contents = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {

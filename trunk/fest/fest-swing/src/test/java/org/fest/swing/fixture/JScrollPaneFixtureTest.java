@@ -46,6 +46,14 @@ public class JScrollPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSc
     fixture.updateDriver(driver);
   }
 
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JScrollPane> fixtureWithName(String name) {
+        return new JScrollPaneFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnHorizontalScrollBar() {
     JScrollBarFixture scrollBar = fixture.horizontalScrollBar();
     assertThat(scrollBar.target).isSameAs(target.getHorizontalScrollBar());

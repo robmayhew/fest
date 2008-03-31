@@ -46,7 +46,15 @@ public class JCheckBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JChec
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCheck() {
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JCheckBox> fixtureWithName(String name) {
+        return new JCheckBoxFixture(robot(), name);
+      }
+    }.run();
+  }
+
+  @Test public void shouldSelectCheckBox() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.select(target);
@@ -59,7 +67,7 @@ public class JCheckBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JChec
     }.run();
   }
   
-  @Test public void shoulUncheck() {
+  @Test public void shoulUnselectCheckBox() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.unselect(target);

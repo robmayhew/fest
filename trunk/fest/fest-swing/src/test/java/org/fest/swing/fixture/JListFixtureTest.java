@@ -53,6 +53,14 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
     fixture.updateDriver(driver);
   }
   
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JList> fixtureWithName(String name) {
+        return new JListFixture(robot(), name);
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnContents() {
     final String[] contents = array("Luke", "Leia");
     new EasyMockTemplate(driver) {

@@ -48,6 +48,44 @@ public class JTextComponentFixtureTest extends JPopupMenuInvokerFixtureTestCase<
     fixture.updateDriver(driver);
   }
 
+  Class<JTextComponent> targetType() {
+    return JTextComponent.class;
+  }
+
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JTextComponent> fixtureWithName(String name) {
+        return new JTextComponentFixture(robot(), name);
+      }
+    }.run();
+  }
+
+  @Test public void shouldDeleteText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.deleteText(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.deleteText());
+      }
+    }.run();
+  }
+
+  @Test public void shouldEnterText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.enterText(target, "Some Text");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.enterText("Some Text"));
+      }
+    }.run();
+  }
+
   @Test public void shouldSelectText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

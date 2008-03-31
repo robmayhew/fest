@@ -15,23 +15,25 @@
  */
 package org.fest.swing.fixture;
 
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
-
 import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-import org.testng.annotations.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -52,6 +54,14 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     fixture = new JTableFixture(robot(), target);
     fixture.updateDriver(driver);
     cell = row(6).column(8);
+  }
+
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<JTable> fixtureWithName(String name) {
+        return new JTableFixture(robot(), name);
+      }
+    }.run();
   }
 
   @Test public void shouldSelectCell() {

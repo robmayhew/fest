@@ -24,11 +24,15 @@ import javax.swing.JFrame;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.DialogDriver;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link DialogFixture}</code>.
@@ -47,6 +51,30 @@ public class DialogFixtureTest extends JPopupMenuInvokerFixtureTestCase<Dialog> 
     target = new Dialog(new JFrame());
     fixture = new DialogFixture(robot(), target);
     fixture.updateDriver(driver);
+  }
+
+  @Test public void shouldCreateFixtureWithGivenComponentName() {
+    new FixtureCreationByNameTemplate() {
+      ComponentFixture<Dialog> fixtureWithName(String name) {
+        return new DialogFixture(robot(), name);
+      }
+    }.run();
+  }
+  
+  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
+    fixture = new DialogFixture(target);
+    assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+    fixture.cleanUp();
+  }
+
+  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
+    target.setName("dialog");
+    target.pack();
+    target.setVisible(true);
+    fixture = new DialogFixture("dialog");
+    assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+    assertThat(fixture.component()).isSameAs(target);
+    fixture.cleanUp();
   }
 
   @Test public void shouldRequireModal() {
