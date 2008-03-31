@@ -5,7 +5,10 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.9.1" date="TBD">
+    <release version="0.9.1" date="2008-04-02" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="remove">
+        Eliminated some project dependencies. FEST-Swing now depends on FEST-Assert, FEST-Reflect and FEST-Util only.
+      </action>
       <action dev="alruiz" type="fix" issue="121" due-to="Frederik Martens">
         Fixed regression. JPanelFixture extends ComponentFixture.
       </action>
@@ -13,26 +16,11 @@
         Fixed regression. JInternalFrameFixture extends ComponentFixture.
       </action>
       <action dev="wanghy" type="add">
-        Reverted the words method names that start with 'mouse' in org.fest.swing.core.Robot. For example, the method
+        Renamed method names that start with 'mouse' in org.fest.swing.core.Robot. For example, the method
         'mouseMove' is now 'moveMouse'. This change was done to keep method naming consistency.
       </action>
       <action dev="wanghy, alruiz" type="add">
         Added method 'pressModifiers(int)' and 'releaseModifiers(int)' to org.fest.swing.core.Robot.
-      </action>
-      <action dev="alruiz" type="add">
-        Moved class 'JMenuItemMatcher' from package 'org.fest.swing.fixture' to 'org.fest.swing.driver'.
-      </action>
-      <action dev="alruiz" type="add">
-        Moved class 'ActivateWindowTask' from package 'org.fest.swing.driver' to 'org.fest.swing.core'.
-      </action>
-      <action dev="alruiz" type="add">
-        Moved class 'FocusMonitor' from package 'org.fest.swing.driver' to 'org.fest.swing.core'.
-      </action>
-      <action dev="alruiz" type="add">
-        Moved class 'RequestFocusTask' from package 'org.fest.swing.driver' to 'org.fest.swing.core'.
-      </action>
-      <action dev="alruiz" type="add">
-        Moved class 'FocusMonitor' from package 'org.fest.swing.driver' to 'org.fest.swing.core'.
       </action>
       <action dev="alruiz" type="add">
         Added methods 'focus(Component)' and 'focusAndWaitForFocusGain(Component)' to org.fest.swing.core.Robot.
@@ -45,10 +33,10 @@
       <action dev="wanghy, alruiz" type="fix" issue="116" due-to="Rich Toulouse">
         Selecting items in JComboBox now scroll drop-down list to get to the item to select.
       </action>
-      <action dev="wanghy" type="add" issue="110">
+      <action dev="wanghy" type="add" issue="110" due-to="Dan Dyer">
         Added method 'tableHeader' to JTableFixture. This method returns a JTableHeaderFixture.
       </action>
-      <action dev="wanghy" type="add" issue="110">
+      <action dev="wanghy" type="add" issue="110" due-to="Dan Dyer">
         Added JTableHeaderFixture to test instances of JTableHeader.
       </action>
       <action dev="wanghy" type="fix">

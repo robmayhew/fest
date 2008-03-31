@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
@@ -123,7 +122,7 @@ public class JTreeLocationTest {
       super(testClass);
       populateTree();
       tree.setPreferredSize(new Dimension(200, 200));
-      add(new JScrollPane(tree));
+      add(tree);
     }
 
     private void populateTree() {

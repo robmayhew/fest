@@ -60,6 +60,7 @@ public class TestFrame extends JFrame {
           beforeDisplayed();
           setPreferredSize(size);
           pack();
+          setLocation(100, 100);
           setVisible(true);
         }
       });

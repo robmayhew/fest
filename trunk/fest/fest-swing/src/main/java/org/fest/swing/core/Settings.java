@@ -45,7 +45,7 @@ public final class Settings {
   public Settings() {
     timeoutToBeVisible(DEFAULT_DELAY);
     timeoutToFindPopup(DEFAULT_DELAY);
-    delayBetweenEvents(30);
+    delayBetweenEvents(60);
     dragDelay(0);
     dropDelay(0);
     eventPostingDelay(100);
