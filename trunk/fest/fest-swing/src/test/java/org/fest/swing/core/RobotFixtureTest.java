@@ -26,7 +26,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.driver.JPopupMenuDriverTest;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
@@ -193,7 +192,7 @@ public class RobotFixtureTest {
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
     MyFrame() {
-      super(JPopupMenuDriverTest.class);
+      super(RobotFixtureTest.class);
       add(withPopup);
       add(withoutPopup);
       add(button);
