@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -72,6 +73,7 @@ public class JTreeLocationTest {
   @Test(dataProvider = "pathPairIndices")
   public void shouldFindLocationOfTreePath(int pathPairIndex) {
     TreePath[] pathPair = paths.get(pathPairIndex);
+    pause(160);
     Point actual = location.pointAt(frame.tree, pathPair[0]);
     Rectangle pathBounds = frame.tree.getPathBounds(pathPair[1]);
     Point expected = new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
