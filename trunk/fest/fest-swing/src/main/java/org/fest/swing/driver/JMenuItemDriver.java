@@ -1,18 +1,25 @@
 /*
  * Created on Jan 30, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.IS_OS_X;
+import static org.fest.util.Strings.concat;
 
 import java.awt.Window;
 
@@ -23,18 +30,11 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.AWT.ancestorOf;
-import static org.fest.swing.util.Platform.IS_OS_X;
-import static org.fest.util.Strings.concat;
-
 /**
  * Understands simulation of user input on a <code>{@link JMenuItem}</code>. Unlike <code>JMenuItemFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JMenuItem}</code>s. This class is intended for internal
  * use only.
- * 
+ *
  * @author Alex Ruiz
  */
 public class JMenuItemDriver extends JComponentDriver {
@@ -71,28 +71,28 @@ public class JMenuItemDriver extends JComponentDriver {
   private void ensurePopupIsShowing(JMenuItem menuItem) {
     if (!(menuItem instanceof JMenu)) return;
     JPopupMenu popup = ((JMenu)menuItem).getPopupMenu();
-    if (!waitForShowing(popup, robot.settings().timeoutToFindPopup())) 
+    if (!waitForShowing(popup, robot.settings().timeoutToFindPopup()))
       throw actionFailure(concat("Clicking on menu item <", format(menuItem), "> never showed a pop-up menu"));
     waitForSubMenuToShow();
   }
-  
+
   private void activateParentIfIsAMenu(JMenuItemLocation location) {
     if (!location.isParentAMenu()) return;
     selectMenuItem((JMenuItem)location.parentOrInvoker());
   }
-  
+
   private void moveParentWindowToFront(JMenuItemLocation location) {
     if (!location.inMenuBar()) return;
     moveToFront(ancestorOf(location.parentOrInvoker()));
   }
-  
+
   private void moveToFront(Window w) {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
     robot.invokeAndWait(w, new MoveToFrontTask(w));
     robot.moveMouse(w);
   }
-  
+
   private static class MoveToFrontTask implements Runnable {
     private final Window target;
 

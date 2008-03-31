@@ -16,7 +16,7 @@ package org.fest.swing.util;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
-import static org.fest.reflect.core.Reflection.*;
+import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.util.Platform.IS_WINDOWS;
 import static org.fest.util.Strings.*;
 
@@ -26,11 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
-
-import org.fest.swing.hierarchy.ComponentHierarchy;
-import org.fest.swing.hierarchy.ExistingHierarchy;
 
 /**
  * Understands utility methods related to AWT.
@@ -38,8 +34,6 @@ import org.fest.swing.hierarchy.ExistingHierarchy;
  * @author Alex Ruiz
  */
 public class AWT {
-
-  private static ComponentHierarchy hierarchy = new ExistingHierarchy();
 
   private static final String APPLET_APPLET_VIEWER_CLASS = "sun.applet.AppletViewer";
   private static final String ROOT_FRAME_CLASSNAME = concat(SwingUtilities.class.getName(), "$");
@@ -121,24 +115,6 @@ public class AWT {
   }
 
   /**
-   * Similar to <code>{@link javax.swing.SwingUtilities#getWindowAncestor(Component)}</code>, but returns the
-   * <code>{@link Component}</code> itself if it is a <code>{@link Window}</code>, or the invoker's
-   * <code>Window</code> if on a pop-up.
-   * @param c the <code>Component</code> to get the <code>Window</code> ancestor of.
-   * @return the <code>Window</code> ancestor of the given <code>Component</code>, the <code>Component</code>
-   *         itself if it is a <code>Window</code>, or the invoker's <code>Window</code> if on a pop-up.
-   */
-  public static Window ancestorOf(Component c) {
-    if (c == null) return null;
-    if (c instanceof Window) return (Window) c;
-    if (c instanceof MenuElement) {
-      Component invoker = invokerOf(c);
-      if (invoker != null) return ancestorOf(invoker);
-    }
-    return ancestorOf(hierarchy.parentOf(c));
-  }
-
-  /**
    * Returns the invoker, if any, of the given <code>{@link Component}</code>; or <code>null</code>, if the
    * <code>Component</code> is not on a pop-up of any sort.
    * @param c the given <code>Component</code>.
@@ -169,33 +145,6 @@ public class AWT {
     Point parentLocation = locationOnScreenOf(parent);
     location.translate(parentLocation.x, parentLocation.y);
     return location;
-  }
-
-  /**
-   * Returns the focus owner.
-   * @return the focus owner.
-   */
-  @SuppressWarnings("unchecked") public static Component focusOwner() {
-    try {
-      return staticField("focusOwner").ofType(Component.class).in(KeyboardFocusManager.class).get();
-    } catch (Exception e) {
-      Component focus = null;
-      for (Container c : new ExistingHierarchy().roots()) {
-        if (!(c instanceof Window)) continue;
-        Window w = (Window) c;
-        if (w.isShowing() && (focus = focusOwner(w)) != null) break;
-      }
-      return focus;
-    }
-  }
-
-  private static Component focusOwner(Window w) {
-    Component focus = w.getFocusOwner();
-    if (focus != null) return focus;
-    Window[] owned = w.getOwnedWindows();
-    for (int i = 0; i < owned.length; i++)
-      if ((focus = owned[i].getFocusOwner()) != null) return focus;
-    return focus;
   }
 
   /**
