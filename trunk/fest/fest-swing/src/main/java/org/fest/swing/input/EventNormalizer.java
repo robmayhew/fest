@@ -1,15 +1,15 @@
 /*
  * Created on Mar 29, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.input;
@@ -17,6 +17,7 @@ package org.fest.swing.input;
 import static java.awt.AWTEvent.*;
 import static java.awt.event.MouseEvent.*;
 import static java.awt.event.WindowEvent.*;
+import static java.util.logging.Level.WARNING;
 import static javax.swing.SwingUtilities.*;
 import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
@@ -25,6 +26,7 @@ import java.awt.event.*;
 import java.util.EmptyStackException;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.logging.Logger;
 
 import org.fest.swing.listener.WeakEventListener;
 
@@ -36,6 +38,8 @@ import org.fest.swing.listener.WeakEventListener;
  * </ul>
  */
 class EventNormalizer implements AWTEventListener {
+
+  private static Logger logger = Logger.getLogger(EventNormalizer.class.getName());
 
   private final Map<Window, Boolean> disposedWindows = new WeakHashMap<Window, Boolean>();
 
@@ -66,7 +70,9 @@ class EventNormalizer implements AWTEventListener {
           toolkit.getSystemEventQueue().push(dragAwareEventQueue);
         }
       });
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      logger.log(WARNING, "Ignoring error at EventNormalizer startup", e);
+    }
   }
 
   void stopListening() {
@@ -136,7 +142,7 @@ class EventNormalizer implements AWTEventListener {
    * Catches native drop target events, which are normally hidden from AWTEventListeners.
    */
   private class DragAwareEventQueue extends EventQueue {
-    
+
     @Override public void pop() throws EmptyStackException {
       if (Toolkit.getDefaultToolkit().getSystemEventQueue() == this) super.pop();
     }
@@ -151,7 +157,7 @@ class EventNormalizer implements AWTEventListener {
       if (e.getClass().getName().indexOf("SunDropTargetEvent") != -1) {
         MouseEvent mouseEvent = (MouseEvent) e;
         Component target = getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-        if (target != mouseEvent.getSource()) 
+        if (target != mouseEvent.getSource())
           mouseEvent = convertMouseEvent(mouseEvent.getComponent(), mouseEvent, target);
         relayDnDEvent(mouseEvent);
       }
@@ -163,7 +169,7 @@ class EventNormalizer implements AWTEventListener {
       if (eventId == MOUSE_MOVED || eventId == MOUSE_DRAGGED) {
         if ((mask & MOUSE_MOTION_EVENT_MASK) != 0) eventDispatched(event);
         return;
-      }  
+      }
       if (eventId >= MOUSE_FIRST && eventId <= MOUSE_LAST) {
         if ((mask & MOUSE_EVENT_MASK) != 0) eventDispatched(event);
       }

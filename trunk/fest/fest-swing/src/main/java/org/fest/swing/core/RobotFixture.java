@@ -192,7 +192,7 @@ public class RobotFixture implements Robot {
     try {
       Point p = closeLocation(w);
       moveMouse(w, p.x, p.y);
-    } catch (Exception ignored) {}
+    } catch (RuntimeException ignored) {}
     WindowEvent event = new WindowEvent(w, WindowEvent.WINDOW_CLOSING);
     // If the window contains an applet, send the event on the applet's queue instead to ensure a shutdown from the
     // applet's context (assists AppletViewer cleanup).
@@ -754,7 +754,7 @@ public class RobotFixture implements Robot {
     if (eventPostingDelay > delayBetweenEvents) pause(eventPostingDelay - delayBetweenEvents);
   }
 
-  private void waitForIdle(EventQueue eq) {
+  private void waitForIdle(EventQueue eventQueue) {
     if (EventQueue.isDispatchThread())
       throw new IllegalThreadStateException("Cannot call method from the event dispatcher thread");
     // Abbot: as of Java 1.3.1, robot.waitForIdle only waits for the last event on the queue at the time of this
@@ -766,7 +766,7 @@ public class RobotFixture implements Robot {
     do {
       // Timed out waiting for idle
       int idleTimeout = settings.idleTimeout();
-      if (postInvocationEvent(eq, toolkit, idleTimeout)) break;
+      if (postInvocationEvent(toolkit, eventQueue, idleTimeout)) break;
       // Timed out waiting for idle event queue
       if (currentTimeMillis() - start > idleTimeout) break;
       ++count;
@@ -776,15 +776,14 @@ public class RobotFixture implements Robot {
       // someone
       // is repeatedly posting one, we might get stuck. Not too worried, since if a Runnable keeps calling invokeLater
       // on itself, *nothing* else gets much chance to run, so it seems to be a bad programming practice.
-    } while (eq.peekEvent() != null);
+    } while (eventQueue.peekEvent() != null);
   }
 
   // Indicates whether we timed out waiting for the invocation to run
-  protected boolean postInvocationEvent(EventQueue eq, Toolkit toolkit, long timeout) {
-    class RobotIdleLock {}
+  private boolean postInvocationEvent(Toolkit toolkit, EventQueue eventQueue, long timeout) {
     Object lock = new RobotIdleLock();
     synchronized (lock) {
-      eq.postEvent(new InvocationEvent(toolkit, EMPTY_RUNNABLE, lock, true));
+      eventQueue.postEvent(new InvocationEvent(toolkit, EMPTY_RUNNABLE, lock, true));
       long start = currentTimeMillis();
       try {
         // NOTE: on fast linux systems when showing a dialog, if we don't provide a timeout, we're never notified, and
@@ -795,6 +794,8 @@ public class RobotFixture implements Robot {
     }
     return false;
   }
+
+  private static class RobotIdleLock {}
 
   /** ${@inheritDoc} */
   public boolean isDragging() {

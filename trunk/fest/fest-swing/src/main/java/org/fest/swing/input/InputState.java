@@ -105,7 +105,7 @@ public class InputState {
   }
 
   private boolean isOld(InputEvent event) {
-    return event.getWhen() < lastEventTime;
+    return event.getWhen() < lastEventTime();
   }
 
   private void lastEventTime(InputEvent event) {
