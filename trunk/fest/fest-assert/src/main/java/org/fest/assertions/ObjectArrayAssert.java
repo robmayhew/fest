@@ -17,10 +17,11 @@ package org.fest.assertions;
 
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Collections.list;
+import static org.fest.util.Collections.*;
 import static org.fest.util.Strings.concat;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -156,6 +157,21 @@ public final class ObjectArrayAssert extends ArrayAssert<Object[]> {
 
   List<Object> copyActual() {
     return list(actual);
+  }
+
+  /**
+   * Verifies that the actual <code>Object</code> array does not have duplicates.
+   * @return this assertion object.
+   * @throws AssertionError if the actual <code>Object</code> array is <code>null</code>.
+   * @throws AssertionError if the actual <code>Object</code> array has duplicates.
+   */
+  public ObjectArrayAssert doesNotHaveDuplicates() {
+    isNotNull();
+    Collection<?> actualAsList = list(actual);
+    Collection<?> duplicates = duplicatesFrom(actualAsList);
+    if (!duplicates.isEmpty())
+      fail(concat("array:", actualInBrackets(), " contains duplicate(s):", inBrackets(duplicates)));
+    return this;
   }
 
   /**

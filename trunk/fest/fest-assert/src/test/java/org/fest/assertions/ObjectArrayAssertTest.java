@@ -569,4 +569,45 @@ public class ObjectArrayAssertTest {
           }
         });
   }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingItDoesNotHaveDuplicates() {
+    expectAssertionErrorIfArrayIsNull(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(NULL_ARRAY).doesNotHaveDuplicates();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingItDoesNotHaveDuplicates() {
+    expectAssertionErrorWithDescriptionIfArrayIsNull(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert(NULL_ARRAY).as("A Test").doesNotHaveDuplicates();
+      }
+    });
+  }
+
+  @Test public void shouldFailIfActualHasDuplicatesAndExpectingNoDuplicates() {
+    expectAssertionError("array:<['Luke', 'Yoda', 'Luke']> contains duplicate(s):<['Luke']>").on(new CodeToTest() {
+      public void run() {
+        new ObjectArrayAssert("Luke", "Yoda", "Luke").doesNotHaveDuplicates();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualHasDuplicatesAndExpectingNoDuplicates() {
+    expectAssertionError("[A Test] array:<['Luke', 'Yoda', 'Luke']> contains duplicate(s):<['Luke']>").on(
+        new CodeToTest() {
+          public void run() {
+            new ObjectArrayAssert("Luke", "Yoda", "Luke").as("A Test").doesNotHaveDuplicates();
+          }
+        });
+  }
+
+  @Test public void shouldPassIfActualContainsNoDuplicates() {
+    new ObjectArrayAssert("Luke", "Yoda").doesNotHaveDuplicates();
+  }
+
+  @Test public void shouldPassIfEmptyActualContainsNoDuplicates() {
+    new ObjectArrayAssert(EMPTY_ARRAY).doesNotHaveDuplicates();
+  }
 }

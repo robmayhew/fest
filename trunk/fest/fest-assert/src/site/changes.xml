@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="add" issue="112" due-to="Ted Young">
+        Added method 'doesNotHaveDuplicates(Object...)' to ObjectArrayAssert.
+      </action>
       <action dev="alruiz, wanghy" type="add">
         Added method 'keySetExcludes(Object...)', 'valuesExclude(Object...)', 'excludes(Entry...)', 'keys' and 'values' 
         to MapAssert.
