@@ -31,6 +31,10 @@ public final class ScreenLock {
   private boolean locked;
   private Object owner;
   
+  synchronized Object owner() {
+    return owner;
+  }
+  
   /**
    * Acquires the lock.
    * @param owner the new owner of the lock.
@@ -72,5 +76,5 @@ public final class ScreenLock {
     static ScreenLock instance = new ScreenLock();
   }
   
-  private ScreenLock() {}
+  ScreenLock() {}
 }

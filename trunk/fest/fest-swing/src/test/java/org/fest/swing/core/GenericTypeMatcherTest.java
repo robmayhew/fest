@@ -64,4 +64,23 @@ public class GenericTypeMatcherTest {
     };
     assertThat(matcher.matches(new JLabel())).isFalse();
   }
+
+  @Test public void shouldReturnFalseIfComponentIsNull() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+      @Override protected boolean isMatching(JButton component) {
+        return true;
+      }
+    };
+    assertThat(matcher.matches(null)).isFalse();
+  }
+
+  @Test public void shouldReturnFalseIfComponentIsNotShowing() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+      @Override protected boolean isMatching(JButton component) {
+        return true;
+      }
+    };
+    matcher.requireShowing(true);
+    assertThat(matcher.matches(new JButton())).isFalse();
+  }
 }

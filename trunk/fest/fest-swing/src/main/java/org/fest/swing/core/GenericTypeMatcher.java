@@ -55,7 +55,7 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
-      return (!requireShowing || c.isShowing()) && isMatching((T)c);
+      return (!requireShowing() || c.isShowing()) && isMatching((T)c);
     } catch(ClassCastException ignored) {
       return false;
     }

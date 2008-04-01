@@ -69,7 +69,6 @@ final class SingleComponentHierarchy implements ComponentHierarchy {
    * Returns all sub-components of the given <code>{@link Component}</code>.
    * @return all sub-components of the given <code>{@link Component}</code>.
    */
-  @SuppressWarnings("unchecked") 
   public Collection<Component> childrenOf(Component c) {
     return hierarchy.childrenOf(c);
   }

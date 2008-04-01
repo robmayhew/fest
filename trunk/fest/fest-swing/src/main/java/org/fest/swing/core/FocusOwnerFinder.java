@@ -15,8 +15,6 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.reflect.core.Reflection.staticField;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.KeyboardFocusManager;
@@ -24,10 +22,13 @@ import java.awt.Window;
 
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
+import static org.fest.reflect.core.Reflection.staticField;
+
 /**
  * Understands lookup of a <code>{@link Component}</code> owning the input focus.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public final class FocusOwnerFinder {
 
@@ -35,20 +36,24 @@ public final class FocusOwnerFinder {
    * Returns the focus owner.
    * @return the focus owner.
    */
-  @SuppressWarnings("unchecked") public static Component focusOwner() {
+  public static Component focusOwner() {
     try {
       return staticField("focusOwner").ofType(Component.class).in(KeyboardFocusManager.class).get();
     } catch (Exception e) {
-      Component focus = null;
-      for (Container c : new ExistingHierarchy().roots()) {
-        if (!(c instanceof Window)) continue;
-        Window w = (Window) c;
-        if (w.isShowing() && (focus = focusOwner(w)) != null) break;
-      }
-      return focus;
+      return focusOwnerInHierarchy();
     }
   }
 
+  static Component focusOwnerInHierarchy() {
+    Component focus = null;
+    for (Container c : new ExistingHierarchy().roots()) {
+      if (!(c instanceof Window)) continue;
+      Window w = (Window) c;
+      if (w.isShowing() && (focus = focusOwner(w)) != null) break;
+    }
+    return focus;
+  }
+  
   private static Component focusOwner(Window w) {
     Component focus = w.getFocusOwner();
     if (focus != null) return focus;
@@ -57,7 +62,6 @@ public final class FocusOwnerFinder {
       if ((focus = owned[i].getFocusOwner()) != null) return focus;
     return focus;
   }
-
 
   private FocusOwnerFinder() {}
 }
