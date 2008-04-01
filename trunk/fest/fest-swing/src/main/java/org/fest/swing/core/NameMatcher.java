@@ -57,8 +57,14 @@ public final class NameMatcher implements ComponentMatcher {
    *         specified in this matcher, <code>false</code> otherwise.
    */
   public boolean matches(Component c) {
-    return areEqual(name, c.getName()) && (!requireShowing || c.isShowing());
+    return areEqual(name, c.getName()) && (!requireShowing() || c.isShowing());
   }
+
+  /**
+   * Indicates whether the component to match has to be showing.
+   * @return <code>true</code> if the component to find has to be showing, <code>false</code> otherwise.
+   */
+  public final boolean requireShowing() { return requireShowing; }
 
   @Override public String toString() {
     return concat(

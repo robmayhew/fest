@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="0.9.1" date="2008-04-02" description="Subsequent release">
+      <action dev="alruiz" type="fix">
+        Replaced constants that indicate the operating system with methods in org.fest.swing.util.Platform. 
+      </action>
       <action dev="alruiz, wanghy" type="remove">
         Eliminated some project dependencies. FEST-Swing now depends on FEST-Assert, FEST-Reflect and FEST-Util only.
       </action>
