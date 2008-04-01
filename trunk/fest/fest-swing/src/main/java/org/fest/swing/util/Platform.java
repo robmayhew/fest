@@ -30,47 +30,32 @@ import static org.fest.util.Strings.concat;
  */
 public final class Platform {
 
-  /** Name of the operating system. */
-  public static final String OS_NAME;
-
-  /** Indicates whether the operating system is Windows. */
-  public static final boolean IS_WINDOWS;
-
-  /** Indicates whether the operating system is Windows 9x (95, 98 or ME.) */
-  public static final boolean IS_WINDOWS_9X;
-
-  /** Indicates whether the operating system is Windows XP. */
-  public static final boolean IS_WINDOWS_XP;
-
-  /** Indicates whether the operating system is a Macintosh OS. */
-  public static final boolean IS_MACINTOSH;
-
-  /** Indicates whether the operating system is Mac OS X. */
-  public static final boolean IS_OS_X;
-
-  /** Indicates whether the operating system is using the X11 Windowing system. */
-  public static final boolean IS_X11;
-
-  /** Indicates whether the operating system is Solaris. */
-  public static final boolean IS_SOLARIS;
-
-  /** Indicates whether the operating system is HP-UX. */
-  public static final boolean IS_HP_UX;
-
-  /** Indicates whether the operating system is Linux. */
-  public static final boolean IS_LINUX;
-
+  private static String osName;
+  private static boolean isWindows;
+  private static boolean isWindows9x;
+  private static boolean isWindowsXP;
+  private static boolean isMacintosh;
+  private static boolean isOSX;
+  private static boolean isX11;
+  private static boolean isSolaris;
+  private static boolean isHPUX;
+  private static boolean isLinux;
+  
   static {
-    OS_NAME = property("os.name");
-    IS_WINDOWS = OS_NAME.startsWith("Windows");
-    IS_WINDOWS_9X = IS_WINDOWS && containsAny(OS_NAME, "95", "98", "ME");
-    IS_WINDOWS_XP = IS_WINDOWS && OS_NAME.contains("XP");
-    IS_MACINTOSH = property("mrj.version") != null;
-    IS_OS_X = IS_MACINTOSH && OS_NAME.contains("OS X");
-    IS_X11 = !IS_OS_X && !IS_WINDOWS;
-    IS_SOLARIS = OS_NAME.startsWith("SunOS") || OS_NAME.startsWith("Solaris");
-    IS_HP_UX = OS_NAME.equals("HP-UX");
-    IS_LINUX = OS_NAME.equals("Linux");
+    osName = property("os.name");
+    initialize(osName);
+  }
+
+  static void initialize(String osName) {
+    isWindows = osName.startsWith("Windows");
+    isWindows9x = isWindows && containsAny(osName, "95", "98", "ME");
+    isWindowsXP = isWindows && osName.contains("XP");
+    isMacintosh = property("mrj.version") != null;
+    isOSX = isMacintosh && osName.contains("OS X");
+    isX11 = !isOSX && !isWindows;
+    isSolaris = osName.startsWith("SunOS") || osName.startsWith("Solaris");
+    isHPUX = osName.equals("HP-UX");
+    isLinux = osName.equals("Linux");
   }
 
   private static boolean containsAny(String s, String...subs) {
@@ -102,7 +87,7 @@ public final class Platform {
    *         <code>Dialog</code>s, <code>false</code> otherwise.
    */
   public static boolean canResizeWindows() {
-    return !IS_WINDOWS && !IS_MACINTOSH;
+    return !isWindows() && !isMacintosh();
   }
 
   /**
@@ -113,8 +98,62 @@ public final class Platform {
    *         <code>Dialog</code>s, <code>false</code> otherwise.
    */
   public static boolean canMoveWindows() {
-    return !IS_WINDOWS && !IS_MACINTOSH;
+    return !isWindows() && !isMacintosh();
   }
+
+  /**
+   * Indicates whether the operating system is Windows.
+   * @return <code>true</code> if the operation system is Windows, <code>false</code> otherwise.
+   */
+  public static boolean isWindows() { return isWindows; }
+  
+  /**
+   * Indicates whether the operating system is Windows 9x (95, 98 or ME.)
+   * @return <code>true</code> if the operating system is Windows 9x (95, 98 or ME,) <code>false</code> otherwise.
+   */
+  public static boolean isWindows9x() { return isWindows9x; }
+  
+  /**
+   * Indicates whether the operating system is Windows XP.
+   * @return <code>true</code> if the operating system is Windows XP, <code>false</code> otherwise.
+   */
+  public static boolean isWindowsXP() { return isWindowsXP; }
+  
+  /**
+   * Indicates whether the operating system is a Macintosh OS.
+   * @return <code>true</code> is the operating system is a Macintosh OS, <code>false</code> otherwise.
+   */
+  public static boolean isMacintosh() { return isMacintosh; }
+
+  /**
+   * Indicates whether the operating system is Mac OS X.
+   * @return <code>true</code> if the operating system is Mac OS X, <code>false</code> otherwise.
+   */
+  public static boolean isOSX() { return isOSX; }
+  
+  /**
+   * Indicates whether the operating system is using the X11 Windowing system.
+   * @return <code>true</code> if the operating system is using the X11 Windowing system, <code>false</code> otherwise.
+   */
+  public static boolean isX11() { return isX11; }
+
+  /**
+   * Indicates whether the operating system is Solaris.
+   * @return <code>true</code> if the operating system is Solaris, <code>false</code> otherwise.
+   */
+  public static boolean isSolaris() { return isSolaris; }
+
+  /**
+   * Indicates whether the operating system is HP-UX.
+   * @return <code>true</code> if the operating system is HP-UX, <code>false</code> otherwise.
+   */
+  public static boolean isHPUX() { return isHPUX; }
+  
+  /**
+   * Indicates whether the operating system is Linux.
+   * @return <code>true</code> if the operating system is Linux, <code>false</code> otherwise.
+   */
+  public static boolean isLinux() { return isLinux; }
 
   private Platform() {}
 }

@@ -14,13 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.IS_OS_X;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Window;
 
 import javax.swing.JMenu;
@@ -29,6 +22,13 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JMenuItem}</code>. Unlike <code>JMenuItemFixture</code>, this
@@ -43,7 +43,7 @@ public class JMenuItemDriver extends JComponentDriver {
    * With decreased robot auto delay, OSX pop-up menus don't activate properly. Indicate the minimum delay for proper
    * operation (determined experimentally.)
    */
-  private static final int SUBMENU_DELAY = IS_OS_X ? 100 : 0;
+  private static final int SUBMENU_DELAY = isOSX() ? 100 : 0;
 
   /**
    * Creates a new </code>{@link JMenuItemDriver}</code>.

@@ -14,12 +14,6 @@
  */
 package org.fest.swing.util;
 
-import static java.awt.event.InputEvent.*;
-import static javax.swing.SwingUtilities.*;
-import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.util.Platform.IS_WINDOWS;
-import static org.fest.util.Strings.*;
-
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +21,13 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+
+import static java.awt.event.InputEvent.*;
+import static javax.swing.SwingUtilities.*;
+
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.util.Platform.isWindows;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to AWT.
@@ -180,7 +181,7 @@ public class AWT {
    */
   public static boolean popupOnPress() {
     // Only w32 is pop-up on release
-    return !IS_WINDOWS;
+    return !isWindows();
   }
 
   /**

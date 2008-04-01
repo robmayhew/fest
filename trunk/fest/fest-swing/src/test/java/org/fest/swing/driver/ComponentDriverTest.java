@@ -97,6 +97,6 @@ public class ComponentDriverTest {
   }
 
   private boolean isWindowsOrMac() {
-    return IS_WINDOWS || IS_MACINTOSH;
+    return isWindows() || isMacintosh();
   }
 }

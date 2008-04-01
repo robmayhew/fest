@@ -148,7 +148,7 @@ public final class Settings {
    * platforms the minimum value is 0. The maximum value for all platforms is 60000.
    */
   public void dragDelay(int ms) {
-    int min = IS_X11 || IS_OS_X ? 100 : 0;
+    int min = isX11() || isOSX() ? 100 : 0;
     dragDelay = valueToUpdate(ms, min, 60000);
   }
 
@@ -185,7 +185,7 @@ public final class Settings {
    * is 0. The maximum value for all platforms is 60000.
    */
   public void dropDelay(int ms) {
-    int min = IS_WINDOWS ? 200 : 0;
+    int min = isWindows() ? 200 : 0;
     dropDelay = valueToUpdate(ms, min, 60000);
   }
   

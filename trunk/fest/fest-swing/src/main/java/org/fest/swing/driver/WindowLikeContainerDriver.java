@@ -33,7 +33,7 @@ import static org.fest.swing.util.Platform.*;
  */
 public abstract class WindowLikeContainerDriver extends ContainerDriver {
 
-  private static final int MAXIMIZE_BUTTON_OFFSET = IS_OS_X ? 25 : IS_WINDOWS ? -20 : 0;
+  private static final int MAXIMIZE_BUTTON_OFFSET = isOSX() ? 25 : isWindows() ? -20 : 0;
 
   /**
    * Creates a new </code>{@link WindowLikeContainerDriver}</code>.
@@ -51,7 +51,7 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
   protected final Point closeLocation(Container c) {
     Dimension size = c.getSize();
     Insets insets = c.getInsets();
-    if (IS_OS_X) return new Point(insets.left + 15, insets.top / 2);
+    if (isOSX()) return new Point(insets.left + 15, insets.top / 2);
     return new Point(size.width - insets.right - 10, insets.top / 2);
   }
   
@@ -66,9 +66,9 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
     // the WM under X11. Maybe we could send a WM message (WM_ICONIFY)?
     Point p = new Point();
     p.y = insets.top / 2;
-    if (IS_OS_X) p.x = 35;
-    if (IS_WINDOWS) {
-      int offset = IS_WINDOWS_XP ? 64 : 45;
+    if (isOSX()) p.x = 35;
+    if (isWindows()) {
+      int offset = isWindowsXP() ? 64 : 45;
       p.x = c.getSize().width - insets.right - offset;
     }
     return p;
@@ -80,8 +80,8 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
    * @return the coordinates of the 'maximize' button.
    */
   protected final Point maximizeLocation(Container c) {
-      Point p = iconifyLocation(c);
-      p.x += MAXIMIZE_BUTTON_OFFSET;
-      return p;
-  } 
+    Point p = iconifyLocation(c);
+    p.x += MAXIMIZE_BUTTON_OFFSET;
+    return p;
+  }
 }

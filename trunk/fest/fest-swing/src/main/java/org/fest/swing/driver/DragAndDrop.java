@@ -48,7 +48,7 @@ final class DragAndDrop {
   }
 
   /** Number of pixels traversed before a drag starts. */
-  static final int DRAG_THRESHOLD = IS_WINDOWS || IS_MACINTOSH ? 10 : 16;
+  static final int DRAG_THRESHOLD = isWindows() || isMacintosh() ? 10 : 16;
 
   /**
    * Performs a drag action at the given point.
@@ -64,7 +64,7 @@ final class DragAndDrop {
   }
 
   private void mouseMove(Component target, int x, int y) {
-    if (IS_WINDOWS || IS_MACINTOSH) {
+    if (isWindows() || isMacintosh()) {
       mouseMoveOnWindowsAndMacintosh(target, x, y);
       return;
     }

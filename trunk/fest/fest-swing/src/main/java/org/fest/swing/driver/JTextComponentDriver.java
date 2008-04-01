@@ -35,7 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.IS_OS_X;
+import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.util.Strings.*;
 
 /**
@@ -158,7 +158,7 @@ public class JTextComponentDriver extends JComponentDriver {
     // From Abbot: Equivalent to JTextComponent.moveCaretPosition(int), but operates through the UI.
     Point where = scrollToVisible(textBox, index);
     robot.moveMouse(textBox, where.x, where.y);
-    if (IS_OS_X) pause(75);
+    if (isOSX()) pause(75);
     robot.releaseLeftMouseButton();
   }
 
