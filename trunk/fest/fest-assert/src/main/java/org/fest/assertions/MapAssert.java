@@ -32,12 +32,12 @@ import static org.fest.assertions.Collections.*;
  */
 public final class MapAssert extends GroupAssert<Map<?, ?>> {
 
+  private static final String ENTRY = "entry";
+  private static final String ENTRIES= "entries";
   private static final String KEY = "key";
   private static final String KEYS = "keys";
   private static final String VALUE = "value";
   private static final String VALUES = "values";
-  private static final String ENTRY = "entry";
-  private static final String ENTRIES= "entries";
 
   MapAssert(Map<?, ?> actual) {
     super(actual);
