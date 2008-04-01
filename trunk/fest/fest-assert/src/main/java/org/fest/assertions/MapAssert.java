@@ -79,6 +79,24 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   }
 
   /**
+   * Returns assertions for the key set in the actual <code>{@link Map}</code>.
+   * @return assertions for the key set in the actual <code>Map</code>.
+   */
+  public CollectionAssert keys() {
+    isNotNull();
+    return new CollectionAssert(actual.keySet());
+  }
+  
+  /**
+   * Returns assertions for the values in the actual <code>{@link Map}</code>.
+   * @return assertions for the values in the actual <code>Map</code>.
+   */
+  public CollectionAssert values() {
+    isNotNull();
+    return new CollectionAssert(actual.values());
+  }
+
+  /**
    * Verifies that the actual <code>{@link Map}</code> contains the given entries.
    * <p>
    * Example:
@@ -86,7 +104,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * // static import org.fest.assertions.Assertions.*;
    * // static import org.fest.assertions.MapAssert.*;
    *
-   * assertThat(myMap).{@link #contains(org.fest.assertions.MapAssert.Entry...) contains}({@link #entry(Object, Object) entry}(&quot;jedi&quot;, yoda), {@link #entry(Object, Object) entry}(&quot;sith&quot;, anakin));
+   * assertThat(myMap).{@link #includes(org.fest.assertions.MapAssert.Entry...) contains}({@link #entry(Object, Object) entry}(&quot;jedi&quot;, yoda), {@link #entry(Object, Object) entry}(&quot;sith&quot;, anakin));
    * </pre>
    * </p>
    * @param entries
@@ -96,7 +114,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @throws IllegalArgumentException if the given array of entries is <code>null</code>.
    * @throws IllegalArgumentException if any of the entries in the given array is <code>null</code>.
    */
-  public MapAssert contains(Entry...entries) {
+  public MapAssert includes(Entry...entries) {
     isNotNull();
     validate(ENTRIES, entries);
     List<Entry> notFound = new ArrayList<Entry>();
@@ -116,7 +134,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @param key the key of the entry.
    * @param value the value of the entry.
    * @return the created entry.
-   * @see #contains(org.fest.assertions.MapAssert.Entry...)
+   * @see #includes(org.fest.assertions.MapAssert.Entry...)
    */
   public static Entry entry(Object key, Object value) {
     return new Entry(key, value);

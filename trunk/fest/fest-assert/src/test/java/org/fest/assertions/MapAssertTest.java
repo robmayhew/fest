@@ -351,7 +351,7 @@ public class MapAssertTest {
 
   @Test public void shouldPassIfGivenEntryIsInMap() {
     Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-    new MapAssert(map).contains(entry("key1", 1));
+    new MapAssert(map).includes(entry("key1", 1));
   }
 
   @Test public void shouldThrowErrorIfEntryIsNullwhenCheckingIfContainsEntry() {
@@ -359,7 +359,7 @@ public class MapAssertTest {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Entry[] entries = { entry("key6", 6), null };
-        new MapAssert(map).contains(entries);
+        new MapAssert(map).includes(entries);
       }
     });
   }
@@ -367,7 +367,7 @@ public class MapAssertTest {
   @Test public void shouldFailIfActualIsNullWhenCheckingIfContainsEntry() {
     shouldFailIfActualIsNull(new CodeToTest() {
       public void run() {
-        new MapAssert(null).contains(entry("key6", 6));
+        new MapAssert(null).includes(entry("key6", 6));
       }
     });
   }
@@ -375,7 +375,7 @@ public class MapAssertTest {
   @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfContainsEntry() {
     shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
       public void run() {
-        new MapAssert(null).as("A Test").contains(entry("key6", 6));
+        new MapAssert(null).as("A Test").includes(entry("key6", 6));
       }
     });
   }
@@ -385,7 +385,7 @@ public class MapAssertTest {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Entry[] entry = null;
-        new MapAssert(map).contains(entry);
+        new MapAssert(map).includes(entry);
       }
     });
   }
@@ -395,7 +395,7 @@ public class MapAssertTest {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
         Entry entry = null;
-        new MapAssert(map).contains(entry);
+        new MapAssert(map).includes(entry);
       }
     });
   }
@@ -404,7 +404,7 @@ public class MapAssertTest {
     expectAssertionError("the map:<{'key1'=1, 'key2'=2}> does not contain the entry:<['key6'=6]>").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-        new MapAssert(map).contains(entry("key6", 6));
+        new MapAssert(map).includes(entry("key6", 6));
       }
     });
   }
@@ -414,7 +414,7 @@ public class MapAssertTest {
         new CodeToTest() {
           public void run() {
             Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-            new MapAssert(map).as("A Test").contains(entry("key6", 6));
+            new MapAssert(map).as("A Test").includes(entry("key6", 6));
           }
         });
   }
@@ -424,7 +424,7 @@ public class MapAssertTest {
         new CodeToTest() {
           public void run() {
             Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-            new MapAssert(map).contains(entry("key6", 6), entry("key8", 8));
+            new MapAssert(map).includes(entry("key6", 6), entry("key8", 8));
           }
         });
   }
@@ -434,7 +434,7 @@ public class MapAssertTest {
         .on(new CodeToTest() {
           public void run() {
             Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-            new MapAssert(map).as("A Test").contains(entry("key6", 6), entry("key8", 8));
+            new MapAssert(map).as("A Test").includes(entry("key6", 6), entry("key8", 8));
           }
         });
   }
@@ -443,7 +443,7 @@ public class MapAssertTest {
     expectAssertionError("the map:<{'key1'=1, 'key2'=2}> does not contain the entry:<['key1'=6]>").on(new CodeToTest() {
       public void run() {
         Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-        new MapAssert(map).contains(entry("key1", 6));
+        new MapAssert(map).includes(entry("key1", 6));
       }
     });
   }
@@ -680,6 +680,32 @@ public class MapAssertTest {
         new MapAssert(map).as("A Test").isNullOrEmpty();
       }
     });
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenReturningKeys() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).keys();
+      }
+    });
+  }
+
+  @Test public void shouldReturnKeys() {
+    Map<Object, Object> map = map(entry("key1", 1));
+    assertEquals(new MapAssert(map).keys().actual, map.keySet());
+  }
+  
+  @Test public void shouldFailIfActualIsNullWhenReturningValues() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).values();
+      }
+    });
+  }
+
+  @Test public void shouldReturnValues() {
+    Map<Object, Object> map = map(entry("key1", 1));
+    assertEquals(new MapAssert(map).values().actual, map.values());
   }
 
   private void shouldFailIfActualIsNull(CodeToTest codeToTest) {
