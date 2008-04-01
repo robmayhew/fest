@@ -14,13 +14,16 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Collections.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.fest.util.Maps;
-import static org.fest.assertions.Collections.*;
 
 /**
  * Understands assertions for <code>{@link Map}</code>. To create a new instance of this class use the method
@@ -86,7 +89,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     isNotNull();
     return new CollectionAssert(actual.keySet());
   }
-  
+
   /**
    * Returns assertions for the values in the actual <code>{@link Map}</code>.
    * @return assertions for the values in the actual <code>Map</code>.
@@ -104,10 +107,10 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * // static import org.fest.assertions.Assertions.*;
    * // static import org.fest.assertions.MapAssert.*;
    *
-   * assertThat(myMap).{@link #includes(org.fest.assertions.MapAssert.Entry...) contains}({@link #entry(Object, Object) entry}(&quot;jedi&quot;, yoda), {@link #entry(Object, Object) entry}(&quot;sith&quot;, anakin));
+   * assertThat(myMap).{@link #includes(org.fest.assertions.MapAssert.Entry...) includes}({@link #entry(Object, Object) entry}(&quot;jedi&quot;, yoda), {@link #entry(Object, Object) entry}(&quot;sith&quot;, anakin));
    * </pre>
    * </p>
-   * @param entries
+   * @param entries the given entries.
    * @return this assertion error.
    * @throws AssertionError if the actual map is <code>null</code>.
    * @throws AssertionError if the actual <code>Map</code> does not contain any of the given entries.
@@ -119,7 +122,34 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     validate(ENTRIES, entries);
     List<Entry> notFound = new ArrayList<Entry>();
     for (Entry e : entries) if (!containsEntry(e)) notFound.add(e);
-    if (!notFound.isEmpty()) failIfNotFound(notFound.size() == 1 ? ENTRY : ENTRIES, notFound);
+    if (!notFound.isEmpty()) failIfNotFound(entryOrEntries(notFound), notFound);
+    return this;
+  }
+
+  /**
+   * Verifies that the actual <code>{@link Map}</code> does not contain the given entries.
+   * <p>
+   * Example:
+   * <pre>
+   * // static import org.fest.assertions.Assertions.*;
+   * // static import org.fest.assertions.MapAssert.*;
+   *
+   * assertThat(myMap).{@link #excludes(org.fest.assertions.MapAssert.Entry...) excludes}({@link #entry(Object, Object) entry}(&quot;jedi&quot;, yoda), {@link #entry(Object, Object) entry}(&quot;sith&quot;, anakin));
+   * </pre>
+   * </p>
+   * @param entries the given entries.
+   * @return this assertion error.
+   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the actual <code>Map</code> contains any of the given entries.
+   * @throws IllegalArgumentException if the given array of entries is <code>null</code>.
+   * @throws IllegalArgumentException if any of the entries in the given array is <code>null</code>.
+   */
+  public MapAssert excludes(Entry...entries) {
+    isNotNull();
+    validate(ENTRIES, entries);
+    List<Entry> found = new ArrayList<Entry>();
+    for (Entry e : entries) if (containsEntry(e)) found.add(e);
+    if (!found.isEmpty()) failIfFound(entryOrEntries(found), found);
     return this;
   }
 
@@ -127,6 +157,10 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     if (e == null) throw new IllegalArgumentException("The entry to check should not be null");
     if (!actual.containsKey(e.key)) return false;
     return actual.containsValue(e.value);
+  }
+
+  private String entryOrEntries(List<Entry> found) {
+    return found.size() == 1 ? ENTRY : ENTRIES;
   }
 
   /**
@@ -195,7 +229,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   private String keyOrKeys(Collection<Object> c) {
     return c.size() == 1 ? KEY : KEYS;
   }
-  
+
   /**
    * Verifies that the actual <code>{@link Map}</code> contains the given values.
    * @param values the values to look for.
@@ -240,7 +274,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
   private void failIfFound(String description, Collection<?> found) {
     fail(concat("the map:", formattedActual(), " contains the ", description, ":", inBrackets(found)));
   }
-  
+
   private String valueOrValues(Collection<Object> c) {
     return c.size() == 1 ? VALUE : VALUES;
   }

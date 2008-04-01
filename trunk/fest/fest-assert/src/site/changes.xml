@@ -6,8 +6,9 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBD" description="Subsequent release">
-      <action dev="alruiz" type="add">
-        Added method 'keySetExcludes(Object...)', 'valuesExclude(Object...)', 'keys' and 'values' to MapAssert.
+      <action dev="alruiz, wanghy" type="add">
+        Added method 'keySetExcludes(Object...)', 'valuesExclude(Object...)', 'excludes(Entry...)', 'keys' and 'values' 
+        to MapAssert.
       </action>
       <action dev="alruiz" type="add">
         Renamed method 'contains(Entry...)' to 'includes(Entry...)' to MapAssert.
