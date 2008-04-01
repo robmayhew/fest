@@ -15,6 +15,8 @@
  */
 package org.fest.swing.core;
 
+import java.util.concurrent.TimeUnit;
+
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.WaitTimedOutError;
@@ -39,6 +41,14 @@ public class PauseTest {
     assertThat(watch.ellapsedTime() >= delay).isTrue();
   }
   
+  @Test public void shouldSleepForTheGivenTimeInUnits() {
+    StopWatch watch = startNewStopWatch();
+    long delay = 2000;
+    Pause.pause(2, TimeUnit.SECONDS);
+    watch.stop();
+    assertThat(watch.ellapsedTime() >= delay).isTrue();
+  }
+
   @Test public void shouldWaitTillConditionIsTrue() {
     class CustomCondition extends Condition {
       boolean satisfied;
