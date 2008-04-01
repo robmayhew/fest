@@ -34,7 +34,8 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
 
   private static final String KEY = "key";
   private static final String KEYS = "keys";
-  private static final String VALUES = "value(s)";
+  private static final String VALUE = "value";
+  private static final String VALUES = "values";
   private static final String ENTRY = "entry";
   private static final String ENTRIES= "entries";
 
@@ -153,7 +154,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     isNotNull();
     validate(KEYS, keys);
     Collection<Object> notFound = notFound(actual.keySet(), keys);
-    if (!notFound.isEmpty()) failIfNotFound(notFound.size() == 1 ? KEY : KEYS, notFound);
+    if (!notFound.isEmpty()) failIfNotFound(keyOrKeys(notFound), notFound);
     return this;
   }
 
@@ -169,12 +170,12 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     isNotNull();
     validate(KEYS, keys);
     Collection<Object> found = found(actual.keySet(), keys);
-    if (!found.isEmpty()) failIfFound(found.size() == 1 ? KEY : KEYS, found);
+    if (!found.isEmpty()) failIfFound(keyOrKeys(found), found);
     return this;
   }
-  
-  private void failIfFound(String description, Collection<?> found) {
-    fail(concat("the map:", formattedActual(), " contains the ", description, ":", inBrackets(found)));
+
+  private String keyOrKeys(Collection<Object> c) {
+    return c.size() == 1 ? KEY : KEYS;
   }
   
   /**
@@ -187,10 +188,29 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    */
   public MapAssert valuesInclude(Object... values) {
     isNotNull();
-    validate("values", values);
-    List<Object> notFound = new ArrayList<Object>();
-    for (Object expected : values) if (!actual.containsValue(expected)) notFound.add(expected);
-    if (!notFound.isEmpty()) failIfNotFound(VALUES, notFound);
+    validate(VALUES, values);
+    Collection<Object> notFound = notFound(actual.values(), values);
+    if (!notFound.isEmpty()) failIfNotFound(valueOrValues(notFound), notFound);
+    return this;
+  }
+
+  private void failIfNotFound(String description, Collection<?> notFound) {
+    fail(concat("the map:", formattedActual(), " does not contain the ", description, ":", inBrackets(notFound)));
+  }
+
+  /**
+   * Verifies that the actual <code>{@link Map}</code> does not contain the given values.
+   * @param values the values that the actual <code>Map</code> should not contain.
+   * @return this assertion object.
+   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the actual <code>Map</code> contains all the given values.
+   * @throws IllegalArgumentException if the given array of values is <code>null</code>.
+   */
+  public MapAssert valuesExclude(Object... values) {
+    isNotNull();
+    validate(VALUES, values);
+    Collection<Object> found = found(actual.values(), values);
+    if (!found.isEmpty()) failIfFound(valueOrValues(found), found);
     return this;
   }
 
@@ -199,8 +219,12 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
       throw new IllegalArgumentException(concat("The given array of ", description, " should not be null"));
   }
 
-  private void failIfNotFound(String description, Collection<?> notFound) {
-    fail(concat("the map:", formattedActual(), " does not contain the ", description, ":", inBrackets(notFound)));
+  private void failIfFound(String description, Collection<?> found) {
+    fail(concat("the map:", formattedActual(), " contains the ", description, ":", inBrackets(found)));
+  }
+  
+  private String valueOrValues(Collection<Object> c) {
+    return c.size() == 1 ? VALUE : VALUES;
   }
 
   /**
