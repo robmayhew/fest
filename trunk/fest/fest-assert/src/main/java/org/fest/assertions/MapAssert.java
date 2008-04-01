@@ -17,12 +17,10 @@ package org.fest.assertions;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Strings.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.fest.util.Maps;
+import static org.fest.assertions.Collections.*;
 
 /**
  * Understands assertions for <code>{@link Map}</code>. To create a new instance of this class use the method
@@ -34,7 +32,8 @@ import org.fest.util.Maps;
  */
 public final class MapAssert extends GroupAssert<Map<?, ?>> {
 
-  private static final String KEYS = "key(s)";
+  private static final String KEY = "key";
+  private static final String KEYS = "keys";
   private static final String VALUES = "value(s)";
   private static final String ENTRY = "entry";
   private static final String ENTRIES= "entries";
@@ -152,14 +151,32 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    */
   public MapAssert keySetIncludes(Object... keys) {
     isNotNull();
-    validate("keys", keys);
-    Set<?> keySet = actual.keySet();
-    List<Object> notFound = new ArrayList<Object>();
-    for (Object key : keys) if (!keySet.contains(key)) notFound.add(key);
-    if (!notFound.isEmpty()) failIfNotFound(KEYS, notFound);
+    validate(KEYS, keys);
+    Collection<Object> notFound = notFound(actual.keySet(), keys);
+    if (!notFound.isEmpty()) failIfNotFound(notFound.size() == 1 ? KEY : KEYS, notFound);
     return this;
   }
 
+  /**
+   * Verifies that the actual <code>{@link Map}</code> does not contain the given keys.
+   * @param keys the keys to look for.
+   * @return this assertion object.
+   * @throws AssertionError if the actual map is <code>null</code>.
+   * @throws AssertionError if the actual <code>Map</code> contains any of the given keys.
+   * @throws IllegalArgumentException if the given array of keys is <code>null</code>.
+   */
+  public MapAssert keySetExcludes(Object... keys) {
+    isNotNull();
+    validate(KEYS, keys);
+    Collection<Object> found = found(actual.keySet(), keys);
+    if (!found.isEmpty()) failIfFound(found.size() == 1 ? KEY : KEYS, found);
+    return this;
+  }
+  
+  private void failIfFound(String description, Collection<?> found) {
+    fail(concat("the map:", formattedActual(), " contains the ", description, ":", inBrackets(found)));
+  }
+  
   /**
    * Verifies that the actual <code>{@link Map}</code> contains the given values.
    * @param values the values to look for.
@@ -182,7 +199,7 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
       throw new IllegalArgumentException(concat("The given array of ", description, " should not be null"));
   }
 
-  private void failIfNotFound(String description, List<?> notFound) {
+  private void failIfNotFound(String description, Collection<?> notFound) {
     fail(concat("the map:", formattedActual(), " does not contain the ", description, ":", inBrackets(notFound)));
   }
 

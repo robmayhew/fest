@@ -179,21 +179,72 @@ public class MapAssertTest {
   }
 
   @Test public void shouldFailIfGivenKeysAreNotInMap() {
-    expectAssertionError("the map:<{'key1'=1, 'key2'=2}> does not contain the key(s):<['key4', 'key5']>").on(
+    expectAssertionError("the map:<{'key1'=1, 'key2'=2}> does not contain the key:<['key4']>").on(
         new CodeToTest() {
           public void run() {
             Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
-            new MapAssert(map).keySetIncludes("key4", "key5");
+            new MapAssert(map).keySetIncludes("key4");
           }
         });
   }
 
   @Test public void shouldFailShowingDescriptionIfGivenKeysAreNotInMap() {
-    expectAssertionError("[A Test] the map:<{'key1'=1, 'key2'=2}> does not contain the key(s):<['key4', 'key5']>").on(
+    expectAssertionError("[A Test] the map:<{'key1'=1, 'key2'=2}> does not contain the keys:<['key4', 'key5']>").on(
         new CodeToTest() {
           public void run() {
             Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
             new MapAssert(map).as("A Test").keySetIncludes("key4", "key5");
+          }
+        });
+  }
+  
+  @Test public void shouldPassIfGivenKeysAreNotInMap() {
+    Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
+    new MapAssert(map).keySetExcludes("key3", "key4");
+  }
+
+  @Test public void shouldFailIfActualIsNullWhenCheckingIfExcludesKeys() {
+    shouldFailIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).keySetExcludes("key1");
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenCheckingIfExcludesKeys() {
+    shouldFailShowingDescriptionIfActualIsNull(new CodeToTest() {
+      public void run() {
+        new MapAssert(null).as("A Test").keySetExcludes("key1");
+      }
+    });
+  }
+
+  @Test public void shouldThrowErrorIfArrayOfKeysIsNullWhenCheckingIfExcludesKeys() {
+    expectIllegalArgumentException("The given array of keys should not be null").on(new CodeToTest() {
+      public void run() {
+        Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
+        Object[] keys = null;
+        new MapAssert(map).keySetExcludes(keys);
+      }
+    });
+  }
+
+  @Test public void shouldFailIfGivenKeysAreInMap() {
+    expectAssertionError("the map:<{'key1'=1, 'key2'=2}> contains the key:<['key2']>").on(
+        new CodeToTest() {
+          public void run() {
+            Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
+            new MapAssert(map).keySetExcludes("key2");
+          }
+        });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfGivenKeysAreInMap() {
+    expectAssertionError("[A Test] the map:<{'key1'=1, 'key2'=2}> contains the keys:<['key1', 'key2']>").on(
+        new CodeToTest() {
+          public void run() {
+            Map<Object, Object> map = map(entry("key1", 1), entry("key2", 2));
+            new MapAssert(map).as("A Test").keySetExcludes("key1", "key2");
           }
         });
   }

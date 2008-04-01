@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Added method 'keySetExcludes' to MapAssert.
+      </action>
       <action dev="wanghy, alruiz" type="add" issue="114" due-to="Ted Young">
         Assertions for primitive values can also be created from primitive wrappers.
       </action>

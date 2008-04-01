@@ -15,6 +15,7 @@
  */
 package org.fest.assertions;
 
+import static org.fest.assertions.Collections.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Collections.duplicatesFrom;
 import static org.fest.util.Strings.concat;
@@ -30,6 +31,7 @@ import org.fest.util.Collections;
  * method <code>{@link Assertions#assertThat(Collection)}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public final class CollectionAssert extends GroupAssert<Collection<?>> {
 
@@ -48,8 +50,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public CollectionAssert contains(Object...objects) {
     isNotNull();
     failIfNull(objects);
-    List<Object> notFound = new ArrayList<Object>();
-    for (Object o : objects) if (!actual.contains(o)) notFound.add(o);
+    Collection<Object> notFound = notFound(actual, objects);
     if (!notFound.isEmpty()) failIfElementsNotFound(notFound);
     return this;
   }
@@ -81,7 +82,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     return this;
   }
 
-  private void failIfElementsNotFound(List<Object> notFound) {
+  private void failIfElementsNotFound(Collection<Object> notFound) {
     fail(concat("collection:", format(actual), " does not contain element(s):", format(notFound)));
   }
 
@@ -96,8 +97,7 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
   public CollectionAssert excludes(Object...objects) {
     isNotNull();
     failIfNull(objects);
-    List<Object> found = new ArrayList<Object>();
-    for (Object o : objects) if (actual.contains(o)) found.add(o);
+    Collection<Object> found = found(actual, objects);
     if (!found.isEmpty())
       fail(concat("collection:", format(actual), " does not exclude element(s):", format(found)));
     return this;
