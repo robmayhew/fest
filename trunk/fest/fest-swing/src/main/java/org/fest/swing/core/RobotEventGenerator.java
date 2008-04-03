@@ -1,29 +1,28 @@
 /*
  * Created on Apr 2, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.core;
 
-import java.awt.*;
-import java.awt.Robot;
-
 import static java.lang.String.valueOf;
-
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
-import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.swing.util.Platform.*;
 import static org.fest.util.Strings.concat;
+
+import java.awt.*;
+import java.awt.Robot;
 
 /**
  * Understands input event generation using a AWT <code>{@link Robot}</code>.
@@ -36,15 +35,21 @@ class RobotEventGenerator implements InputEventGenerator {
 
   private final Robot robot;
   private final Settings settings;
-  
+
   RobotEventGenerator(Settings settings) throws AWTException {
     this.settings = settings;
     robot = new Robot();
     settings.attachTo(robot);
+    if (isWindows() || isOSX()) pause(500);
   }
 
   /** ${@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {
+    pressMouse(buttons);
+  }
+
+  /** ${@inheritDoc} */
+  public void pressMouse(int buttons) {
     robot.mousePress(buttons);
   }
 
