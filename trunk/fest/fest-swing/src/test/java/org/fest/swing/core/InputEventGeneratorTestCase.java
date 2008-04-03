@@ -37,6 +37,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**
@@ -45,6 +46,7 @@ import static org.fest.swing.util.AWT.centerOf;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test(groups = GUI)
 public abstract class InputEventGeneratorTestCase {
 
   private MyFrame frame;

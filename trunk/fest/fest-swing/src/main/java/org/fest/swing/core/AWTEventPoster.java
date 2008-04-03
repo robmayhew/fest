@@ -111,4 +111,6 @@ class AWTEventPoster {
   void countingClicks(boolean countingClicks) { this.countingClicks = countingClicks; }
 
   InputState inputState() { return inputState; }
+  
+  Settings settings() { return settings; }
 }

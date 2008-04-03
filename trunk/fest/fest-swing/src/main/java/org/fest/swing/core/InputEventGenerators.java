@@ -19,8 +19,6 @@ import java.awt.AWTException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.swing.input.InputState;
-
 import static org.fest.swing.core.EventMode.*;
 
 /**
@@ -34,11 +32,11 @@ class InputEventGenerators {
   private final Settings settings;
   private final AWTEventGenerator awtEventGenerator;
 
-  InputEventGenerators(InputState inputState, AWTEventPoster eventPoster, Settings settings) {
-    this.settings = settings;
+  InputEventGenerators(AWTEventPoster eventPoster) {
+    this.settings = eventPoster.settings();
     RobotEventGenerator robotEventGenerator;
     try {
-      robotEventGenerator = new RobotEventGenerator(settings);
+      robotEventGenerator = robotEventGenerator();
       eventGeneratorMap.put(ROBOT, robotEventGenerator);
     } catch (AWTException e) {
       settings.eventMode(AWT);
@@ -47,6 +45,10 @@ class InputEventGenerators {
     eventGeneratorMap.put(AWT, awtEventGenerator);
   }
 
+  RobotEventGenerator robotEventGenerator() throws AWTException {
+    return new RobotEventGenerator(settings);
+  }
+  
   InputEventGenerator current() {
     InputEventGenerator inputEventGenerator = eventGeneratorMap.get(settings.eventMode());
     if (inputEventGenerator != null) return inputEventGenerator;

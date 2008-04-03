@@ -118,7 +118,7 @@ public class RobotFixture implements Robot {
     this.hierarchy = hierarchy;
     settings = new Settings();
     eventPoster = new AWTEventPoster(toolkit, inputState, windowMonitor, settings);
-    eventGenerators = new InputEventGenerators(inputState, eventPoster, settings);
+    eventGenerators = new InputEventGenerators(eventPoster);
     finder = new BasicComponentFinder(this.hierarchy);
   }
 
