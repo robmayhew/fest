@@ -14,21 +14,23 @@
  */
 package org.fest.swing.input;
 
-import static java.awt.AWTEvent.*;
-import static java.awt.event.MouseEvent.*;
-import static java.awt.event.WindowEvent.*;
-import static java.util.logging.Level.WARNING;
-import static javax.swing.SwingUtilities.*;
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.AWTEvent;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.AWTEventListener;
+import java.awt.event.WindowEvent;
 import java.util.EmptyStackException;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Logger;
 
 import org.fest.swing.listener.WeakEventListener;
+
+import static java.awt.event.WindowEvent.*;
+import static java.util.logging.Level.WARNING;
+import static javax.swing.SwingUtilities.invokeAndWait;
+
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 /**
  * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream:
@@ -48,7 +50,6 @@ class EventNormalizer implements AWTEventListener {
   private WeakEventListener weakEventListener;
   private AWTEventListener listener;
   private DragAwareEventQueue dragAwareEventQueue;
-  private long mask;
 
   EventNormalizer() {
     this(false);
@@ -60,10 +61,9 @@ class EventNormalizer implements AWTEventListener {
 
   void startListening(final Toolkit toolkit, AWTEventListener listener, long mask) {
     this.listener = listener;
-    this.mask = mask;
     weakEventListener = attachAsWeakEventListener(toolkit, this, mask);
     if (!trackDrag) return;
-    dragAwareEventQueue = new DragAwareEventQueue();
+    dragAwareEventQueue = new DragAwareEventQueue(mask, this);
     try {
       invokeAndWait(new Runnable() {
         public void run() {
@@ -95,21 +95,6 @@ class EventNormalizer implements AWTEventListener {
     weakEventListener = null;
   }
 
-  // TODO: (Abbot) Maybe make this an AWT event listener instead, so we can use one instance instead of one per window.
-  private static class DisposalWatcher extends ComponentAdapter {
-    private final Map<Window, Boolean> disposedWindows;
-
-    DisposalWatcher(Map<Window, Boolean> disposedWindows) {
-      this.disposedWindows = disposedWindows;
-    }
-
-    @Override public void componentShown(ComponentEvent e) {
-      Component c = e.getComponent();
-      c.removeComponentListener(this);
-      disposedWindows.remove(c);
-    }
-  }
-
   /** Event reception callback. */
   public void eventDispatched(AWTEvent event) {
     boolean discard = isDuplicateDispose(event);
@@ -127,7 +112,7 @@ class EventNormalizer implements AWTEventListener {
       Window w = windowEvent.getWindow();
       if (disposedWindows.containsKey(w)) return true;
       disposedWindows.put(w, Boolean.TRUE);
-      w.addComponentListener(new DisposalWatcher(disposedWindows));
+      w.addComponentListener(new DisposalMonitor(disposedWindows));
       return false;
     }
     disposedWindows.remove(windowEvent.getWindow());
@@ -136,43 +121,5 @@ class EventNormalizer implements AWTEventListener {
 
   protected void delegate(AWTEvent e) {
     listener.eventDispatched(e);
-  }
-
-  /**
-   * Catches native drop target events, which are normally hidden from AWTEventListeners.
-   */
-  private class DragAwareEventQueue extends EventQueue {
-
-    @Override public void pop() throws EmptyStackException {
-      if (Toolkit.getDefaultToolkit().getSystemEventQueue() == this) super.pop();
-    }
-
-    /**
-     * Dispatch native drag/drop events the same way non-native drags are reported. Enter/Exit are reported with the
-     * appropriate source, while drag and release events use the drag source as the source.
-     * <p>
-     * TODO: implement enter/exit events TODO: change source to drag source, not mouse under
-     */
-    @Override protected void dispatchEvent(AWTEvent e) {
-      if (e.getClass().getName().indexOf("SunDropTargetEvent") != -1) {
-        MouseEvent mouseEvent = (MouseEvent) e;
-        Component target = getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-        if (target != mouseEvent.getSource())
-          mouseEvent = convertMouseEvent(mouseEvent.getComponent(), mouseEvent, target);
-        relayDnDEvent(mouseEvent);
-      }
-      super.dispatchEvent(e);
-    }
-
-    private void relayDnDEvent(MouseEvent event) {
-      int eventId = event.getID();
-      if (eventId == MOUSE_MOVED || eventId == MOUSE_DRAGGED) {
-        if ((mask & MOUSE_MOTION_EVENT_MASK) != 0) eventDispatched(event);
-        return;
-      }
-      if (eventId >= MOUSE_FIRST && eventId <= MOUSE_LAST) {
-        if ((mask & MOUSE_EVENT_MASK) != 0) eventDispatched(event);
-      }
-    }
   }
 }
