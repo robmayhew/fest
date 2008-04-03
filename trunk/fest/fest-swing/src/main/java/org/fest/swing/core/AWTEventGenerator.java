@@ -15,15 +15,6 @@
  */
 package org.fest.swing.core;
 
-import static java.awt.event.KeyEvent.*;
-import static java.awt.event.MouseEvent.*;
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.convertPoint;
-import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
-import static org.fest.swing.keystroke.KeyStrokeMap.charFor;
-import static org.fest.swing.util.AWT.*;
-import static org.fest.swing.util.Modifiers.*;
-
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -35,6 +26,16 @@ import javax.swing.KeyStroke;
 
 import org.fest.swing.input.InputState;
 import org.fest.swing.util.MouseEventTarget;
+
+import static java.awt.event.KeyEvent.*;
+import static java.awt.event.MouseEvent.*;
+import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.convertPoint;
+
+import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
+import static org.fest.swing.keystroke.KeyStrokeMap.charFor;
+import static org.fest.swing.util.AWT.*;
+import static org.fest.swing.util.Modifiers.*;
 
 /**
  * Understands input event generation by posting <code>{@link AWTEvent}</code>s in a <code>{@link EventQueue}</code>.
@@ -49,8 +50,8 @@ class AWTEventGenerator implements InputEventGenerator {
   private final InputState inputState;
   private final AWTEventPoster eventPoster;
 
-  AWTEventGenerator(InputState inputState, AWTEventPoster eventPoster) {
-    this.inputState = inputState;
+  AWTEventGenerator(AWTEventPoster eventPoster) {
+    this.inputState = eventPoster.inputState();
     this.eventPoster = eventPoster;
   }
 
@@ -134,8 +135,8 @@ class AWTEventGenerator implements InputEventGenerator {
       target = newTarget.source;
       position = newTarget.position;
     }
-    // Avoid multiple moves to the same location
-    if (inputState.mouseComponent() == target && position.equals(inputState.mouseLocation())) return;
+    // Supposed to avoid multiple moves to the same location. Removed because tests verifying a mouse move failed.
+    // if (inputState.mouseComponent() == target && position.equals(inputState.mouseLocation())) return;
     long when = currentTimeMillis();
     int modifiers = inputState.modifiers();
     int x = position.x;
@@ -192,4 +193,8 @@ class AWTEventGenerator implements InputEventGenerator {
     if (c == null) return;
     eventPoster.postEvent(c, new KeyEvent(c, eventId, currentTimeMillis(), modifiers, keyCode, character));
   }
+
+  InputState inputState() { return inputState; }
+
+  AWTEventPoster eventPoster() { return eventPoster; }
 }

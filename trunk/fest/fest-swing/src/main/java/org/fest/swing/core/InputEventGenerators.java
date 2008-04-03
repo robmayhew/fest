@@ -15,13 +15,13 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.swing.core.EventMode.*;
-
 import java.awt.AWTException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.fest.swing.input.InputState;
+
+import static org.fest.swing.core.EventMode.*;
 
 /**
  * Understands event generators for different operation modes.
@@ -43,7 +43,7 @@ class InputEventGenerators {
     } catch (AWTException e) {
       settings.eventMode(AWT);
     }
-    awtEventGenerator = new AWTEventGenerator(inputState, eventPoster);
+    awtEventGenerator = new AWTEventGenerator(eventPoster);
     eventGeneratorMap.put(AWT, awtEventGenerator);
   }
 

@@ -48,6 +48,7 @@ class RobotEventGenerator implements InputEventGenerator {
 
   /** ${@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {
+    moveMouse(c, where.x, where.y);
     pressMouse(buttons);
   }
 

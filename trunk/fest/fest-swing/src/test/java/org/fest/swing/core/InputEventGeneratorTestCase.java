@@ -31,8 +31,13 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.util.AWT;
 
+import static java.awt.event.KeyEvent.*;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.FocusSetter.setFocusOn;
+import static org.fest.swing.util.AWT.centerOf;
 
 /**
  * Test case for implementations of <code>{@link InputEventGenerator}</code>.
@@ -62,9 +67,21 @@ public abstract class InputEventGeneratorTestCase {
 
   @Test public void shouldMoveMouse() {
     MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(frame);
-    Point center = AWT.centerOf(frame);
+    Point center = centerOf(frame);
     generator.moveMouse(frame, center.x, center.y);
+    pause(200);
     assertThat(recorder.point()).isEqualTo(center);
+  }
+  
+  @Test(dataProvider = "mouseButtons") 
+  public void shouldClickMouseButtonOnComponent(MouseButton button) {
+    ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
+    Point center = centerOf(frame.textBox);
+    generator.pressMouse(frame.textBox, center, button.mask);
+    generator.releaseMouse(button.mask);
+    pause(200);
+    recorder.clicked(button);
+    assertThat(recorder.pointClicked()).isEqualTo(center);
   }
   
   @Test(dataProvider = "mouseButtons",  dependsOnMethods = "shouldMoveMouse")
@@ -73,14 +90,27 @@ public abstract class InputEventGeneratorTestCase {
     generator.moveMouse(frame, center.x, center.y);
     ClickRecorder recorder = ClickRecorder.attachTo(frame);
     generator.pressMouse(button.mask);
+    generator.releaseMouse(button.mask);
+    pause(200);
     assertThat(recorder.clicked(button));
   }
   
- 
   @DataProvider(name = "mouseButtons") public Object[][] mouseButtons() {
     return new Object[][] { { LEFT_BUTTON }, { MIDDLE_BUTTON }, { RIGHT_BUTTON } };
   }
   
+  @Test(dataProvider = "keys") public void shouldTypeKey(int keyToPress, String expectedText) {
+    setFocusOn(frame.textBox);
+    generator.pressKey(keyToPress, CHAR_UNDEFINED);
+    generator.releaseKey(keyToPress);
+    pause(200);
+    assertThat(frame.textBox.getText()).isEqualTo(expectedText);
+  }
+  
+  @DataProvider(name = "keys") public Object[][] keys() {
+    return new Object[][] { { VK_A , "a" }, { VK_S, "s" }, { VK_D, "d" } };
+  }
+
   private static class MouseMotionRecorder extends MouseMotionAdapter {
     private Point point;
 

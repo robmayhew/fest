@@ -15,13 +15,6 @@
  */
 package org.fest.swing.core;
 
-import static java.awt.event.MouseEvent.*;
-import static java.lang.System.currentTimeMillis;
-import static org.fest.swing.core.EventMode.AWT;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.AWT.isAWTPopupMenuBlocking;
-
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -30,6 +23,14 @@ import java.awt.event.MouseEvent;
 
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
+
+import static java.awt.event.MouseEvent.*;
+import static java.lang.System.currentTimeMillis;
+
+import static org.fest.swing.core.EventMode.AWT;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.AWT.isAWTPopupMenuBlocking;
 
 /**
  * Understands posting <code>{@link AWTEvent}</code>s in a <code>{@link EventQueue}</code>.
@@ -61,8 +62,7 @@ class AWTEventPoster {
     // Force an update of the input state, so that we're in synch internally. Otherwise we might post more events before
     // this one gets processed and end up using stale values for those events.
     inputState.update(event);
-    EventQueue q = eventQueueFor(c);
-    q.postEvent(event);
+    eventQueueFor(c).postEvent(event);
     pause(settings.delayBetweenEvents());
     verifyPostedEvent(c, event);
   }
@@ -109,4 +109,6 @@ class AWTEventPoster {
 
   boolean countingClicks() { return countingClicks; }
   void countingClicks(boolean countingClicks) { this.countingClicks = countingClicks; }
+
+  InputState inputState() { return inputState; }
 }
