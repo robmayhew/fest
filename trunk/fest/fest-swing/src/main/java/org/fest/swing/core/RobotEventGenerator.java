@@ -15,14 +15,15 @@
  */
 package org.fest.swing.core;
 
+import java.awt.*;
+import java.awt.Robot;
+
 import static java.lang.String.valueOf;
+
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.util.Strings.concat;
-
-import java.awt.*;
-import java.awt.Robot;
 
 /**
  * Understands input event generation using a AWT <code>{@link Robot}</code>.
@@ -42,6 +43,8 @@ class RobotEventGenerator implements InputEventGenerator {
     settings.attachTo(robot);
     if (isWindows() || isOSX()) pause(500);
   }
+
+  Robot robot() { return robot; }
 
   /** ${@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {

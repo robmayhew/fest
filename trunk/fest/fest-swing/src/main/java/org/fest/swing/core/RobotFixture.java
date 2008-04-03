@@ -14,27 +14,6 @@
  */
 package org.fest.swing.core;
 
-import static java.awt.event.InputEvent.*;
-import static java.awt.event.KeyEvent.*;
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.*;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
-import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
-import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
-import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.swing.util.Modifiers.*;
-import static org.fest.swing.util.Platform.isOSX;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.concat;
-
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.InvocationEvent;
@@ -54,6 +33,28 @@ import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.util.TimeoutWatch;
+
+import static java.awt.event.InputEvent.*;
+import static java.awt.event.KeyEvent.*;
+import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.*;
+
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
+import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
+import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.Modifiers.*;
+import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -402,7 +403,7 @@ public class RobotFixture implements Robot {
   public void moveMouse(Component c, int x, int y) {
     if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
-    eventGenerators.eventGenerator().moveMouse(c, x, y);
+    eventGenerator().moveMouse(c, x, y);
   }
 
   // Wait the given number of milliseconds for the component to be showing and ready.
@@ -504,22 +505,22 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void releaseMouseButton(MouseButton button) {
-    releaseMouse(button.mask);
+    mouseRelease(button.mask);
   }
 
   /** ${@inheritDoc} */
   public void releaseMouseButtons() {
     int buttons = inputState.buttons();
     if (buttons == 0) return;
-    releaseMouse(buttons);
+    mouseRelease(buttons);
   }
 
-  private void releaseMouse(int buttons) {
+  private void mouseRelease(int buttons) {
     eventGenerator().releaseMouse(buttons);
   }
 
   private InputEventGenerator eventGenerator() {
-    return eventGenerators.eventGenerator();
+    return eventGenerators.current();
   }
 
   /** ${@inheritDoc} */

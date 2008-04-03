@@ -47,7 +47,7 @@ class InputEventGenerators {
     eventGeneratorMap.put(AWT, awtEventGenerator);
   }
 
-  InputEventGenerator eventGenerator() {
+  InputEventGenerator current() {
     InputEventGenerator inputEventGenerator = eventGeneratorMap.get(settings.eventMode());
     if (inputEventGenerator != null) return inputEventGenerator;
     return awtEventGenerator;

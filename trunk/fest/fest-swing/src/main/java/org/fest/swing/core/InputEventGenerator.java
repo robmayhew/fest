@@ -18,23 +18,59 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.awt.Point;
 
+import org.fest.swing.exception.ActionFailedException;
+
 /**
  * Understands generation of input events.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 interface InputEventGenerator {
 
+  /**
+   * Simulates a user pressing mouse buttons.
+   * @param buttons the buttons to press.
+   */
   void pressMouse(int buttons);
 
+  /**
+   * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to click on.
+   * @param where the position where to press the given mouse button.
+   * @param buttons the mouse buttons to press.
+   */
   void pressMouse(Component c, Point where, int buttons);
 
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
+   * <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * @param x horizontal coordinate relative to the given <code>Component</code>.
+   * @param y vertical coordinate relative to the given <code>Component</code>.
+   * @throws ActionFailedException if the given component is not showing and ready for input.
+   */
+  void moveMouse(Component c, int x, int y);
+  
+  /**
+   * Releases the given mouse buttons.
+   * @param buttons the mouse buttons to release.
+   */
   void releaseMouse(int buttons);
 
-  void moveMouse(Component c, int x, int y);
-
+  /**
+   * Simulates a user pressing given key.
+   * @param keyCode the code of the key to press.
+   * @param keyChar the given character.
+   * @see java.awt.event.KeyEvent
+   */
   void pressKey(int keyCode, char keyChar);
 
+  /**
+   * Simulates a user releasing the given key.
+   * @param keyCode the code of the key to release.
+   * @see java.awt.event.KeyEvent
+   */
   void releaseKey(int keyCode);
 
 }

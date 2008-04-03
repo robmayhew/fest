@@ -60,6 +60,8 @@ public final class Settings {
     eventMode(ROBOT);
   }
 
+  java.awt.Robot robot() { return robot; }
+  
   /**
    * Returns the event-generation mode.
    * @return the event-generation mode.
