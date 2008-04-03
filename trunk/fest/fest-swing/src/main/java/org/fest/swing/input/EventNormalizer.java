@@ -63,7 +63,7 @@ class EventNormalizer implements AWTEventListener {
     this.listener = listener;
     weakEventListener = attachAsWeakEventListener(toolkit, this, mask);
     if (!trackDrag) return;
-    dragAwareEventQueue = new DragAwareEventQueue(mask, this);
+    dragAwareEventQueue = new DragAwareEventQueue(toolkit, mask, this);
     try {
       invokeAndWait(new Runnable() {
         public void run() {

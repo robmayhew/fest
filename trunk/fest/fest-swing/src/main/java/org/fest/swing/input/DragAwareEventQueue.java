@@ -34,16 +34,18 @@ import static javax.swing.SwingUtilities.*;
  */
 class DragAwareEventQueue extends EventQueue {
 
+  private final Toolkit toolkit;
   private final long mask;
   private final AWTEventListener eventListener;
 
-  DragAwareEventQueue(long mask, AWTEventListener eventListener) {
+  DragAwareEventQueue(Toolkit toolkit, long mask, AWTEventListener eventListener) {
+    this.toolkit = toolkit;
     this.mask = mask;
     this.eventListener = eventListener;
   }
   
   @Override public void pop() throws EmptyStackException {
-    if (Toolkit.getDefaultToolkit().getSystemEventQueue() == this) super.pop();
+    if (toolkit.getSystemEventQueue() == this) super.pop();
   }
 
   /*
@@ -53,7 +55,7 @@ class DragAwareEventQueue extends EventQueue {
    * TODO: implement enter/exit events TODO: change source to drag source, not mouse under
    */
   @Override protected void dispatchEvent(AWTEvent e) {
-    if (e.getClass().getName().indexOf("SunDropTargetEvent") != -1) {
+    if (isNativeDragAndDrop(e)) {
       MouseEvent mouseEvent = (MouseEvent) e;
       Component target = getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
       if (target != mouseEvent.getSource())
@@ -61,6 +63,10 @@ class DragAwareEventQueue extends EventQueue {
       relayDnDEvent(mouseEvent);
     }
     super.dispatchEvent(e);
+  }
+
+  boolean isNativeDragAndDrop(AWTEvent e) {
+    return e.getClass().getName().indexOf("SunDropTargetEvent") != -1;
   }
 
   private void relayDnDEvent(MouseEvent event) {
