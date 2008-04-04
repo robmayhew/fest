@@ -44,17 +44,23 @@ class DragAwareEventQueue extends EventQueue {
     this.eventListener = eventListener;
   }
   
+  /**
+   * Stops dispatching events using this <code>EventQueue</code>, only if this <code>EventQueue</code> is the same
+   * as the <code>{@link Toolkit}</code>'s system event queue. Any pending events are transferred to the previous
+   * <code>EventQueue</code> for processing.
+   * @throws EmptyStackException if no previous push was made on this <code>EventQueue</code>.
+   */
   @Override public void pop() throws EmptyStackException {
     if (toolkit.getSystemEventQueue() == this) super.pop();
   }
 
-  /*
+  /**
    * Dispatch native drag/drop events the same way non-native drags are reported. Enter/Exit are reported with the
    * appropriate source, while drag and release events use the drag source as the source.
-   * <p>
-   * TODO: implement enter/exit events TODO: change source to drag source, not mouse under
+   * @param e an instance of <code>java.awt.AWTEvent</code>
    */
   @Override protected void dispatchEvent(AWTEvent e) {
+    // TODO: implement enter/exit events TODO: change source to drag source, not mouse under
     if (isNativeDragAndDrop(e)) {
       MouseEvent mouseEvent = (MouseEvent) e;
       Component target = getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
