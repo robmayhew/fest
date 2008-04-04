@@ -29,20 +29,12 @@ import org.easymock.classextension.EasyMock;
  */
 public abstract class ToolkitStub extends Toolkit {
 
-  private static final List<String> METHODS_NOT_TO_MOCK = new ArrayList<String>();
+  private static final List<Method> METHODS_NOT_TO_MOCK = new ArrayList<Method>();
 
   private Map<AWTEventListener, Long> eventListeners;
 
   static {
-    METHODS_NOT_TO_MOCK.add("createMock");
-    METHODS_NOT_TO_MOCK.add("eventQueue");
-    METHODS_NOT_TO_MOCK.add("eventListeners");
-    METHODS_NOT_TO_MOCK.add("addAWTEventListener");
-    METHODS_NOT_TO_MOCK.add("removeAWTEventListener");
-    METHODS_NOT_TO_MOCK.add("eventListenersUnderEventMask");
-    METHODS_NOT_TO_MOCK.add("contains");
-    METHODS_NOT_TO_MOCK.add("getSystemEventQueueImpl");
-    METHODS_NOT_TO_MOCK.add("getScreenInsets");
+    for (Method m : ToolkitStub.class.getDeclaredMethods()) METHODS_NOT_TO_MOCK.add(m);
   }
 
   private EventQueue eventQueue;
@@ -52,18 +44,19 @@ public abstract class ToolkitStub extends Toolkit {
   }
 
   public static ToolkitStub createNew(EventQueue eventQueue) {
-    Map<String, Method> methodMap = new HashMap<String, Method>();
-    for(Method method : ToolkitStub.class.getMethods()) {
-      String name = method.getName();
-      if (!METHODS_NOT_TO_MOCK.contains(name))
-        methodMap.put(name, method);
-    }
-    Collection<Method> methods = methodMap.values();
-    Method[] methodsToMock = methods.toArray(new Method[methods.size()]);
+    Method[] methodsToMock = methodsToMock();
     ToolkitStub stub =  EasyMock.createMock(ToolkitStub.class, methodsToMock);
     stub.eventQueue(eventQueue);
     stub.eventListeners = new HashMap<AWTEventListener, Long>();
     return stub;
+  }
+
+  private static Method[] methodsToMock() {
+    Map<String, Method> methodMap = new HashMap<String, Method>();
+    for(Method method : ToolkitStub.class.getMethods()) 
+      if (!METHODS_NOT_TO_MOCK.contains(method)) methodMap.put(method.getName(), method);
+    Collection<Method> methods = methodMap.values();
+    return methods.toArray(new Method[methods.size()]);
   }
 
   public ToolkitStub() {}
