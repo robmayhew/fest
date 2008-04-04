@@ -1,19 +1,23 @@
 /*
  * Created on Oct 11, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.monitor;
+
+import static java.awt.AWTEvent.*;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -22,19 +26,13 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.ToolkitStub;
-
-import static java.awt.AWTEvent.*;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link WindowAvailabilityMonitor}</code>.
@@ -46,12 +44,13 @@ public class WindowAvailabilityMonitorTest {
   private static final long EVENT_MASK = MOUSE_MOTION_EVENT_MASK | MOUSE_EVENT_MASK | PAINT_EVENT_MASK;
 
   private WindowAvailabilityMonitor monitor;
-  
-  private final ToolkitStub toolkit = new ToolkitStub();
+
+  private ToolkitStub toolkit;
   private Windows windows;
   private TestFrame frame;
-  
+
   @BeforeMethod public void setUp() throws Exception {
+    toolkit = ToolkitStub.createNew();
     frame = new TestFrame(getClass());
     windows = createMock(Windows.class);
     monitor = new WindowAvailabilityMonitor(windows);
@@ -76,11 +75,11 @@ public class WindowAvailabilityMonitorTest {
       }
 
       protected void codeToTest() {
-        monitor.eventDispatched(mouseEvent(frame));        
+        monitor.eventDispatched(mouseEvent(frame));
       }
     }.run();
   }
-  
+
   @Test public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
     final JTextField source = new JTextField();
     frame.add(source);
@@ -90,11 +89,11 @@ public class WindowAvailabilityMonitorTest {
       }
 
       protected void codeToTest() {
-        monitor.eventDispatched(mouseEvent(source));        
+        monitor.eventDispatched(mouseEvent(source));
       }
     }.run();
   }
-  
+
   @Test public void shouldNotMarkSourceWindowAsReadyIfEventIsNotMouseEvent() {
     new EasyMockTemplate(windows) {
       protected void expectations() { /* should not call markAsReady */ }

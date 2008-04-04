@@ -1,19 +1,24 @@
 /*
  * Created on Oct 18, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.monitor;
+
+import static java.awt.AWTEvent.*;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.awt.EventQueue;
 import java.awt.Frame;
@@ -23,20 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.easymock.classextension.EasyMock;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.ToolkitStub;
-
-import static java.awt.AWTEvent.*;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.
@@ -50,22 +48,22 @@ public class WindowMonitorTest {
   private static final long CONTEXT_MONITOR_EVENT_MASK = WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK;
 
   private WindowMonitor monitor;
-  
+
   private ToolkitStub toolkit;
   private Windows windows;
   private Context context;
-  private WindowStatus windowStatus;  
+  private WindowStatus windowStatus;
   private TestFrame frame;
 
   @BeforeMethod public void setUp() {
-    toolkit = new ToolkitStub();
+    toolkit = ToolkitStub.createNew();
     windows = createMock(Windows.class);
     context = createMock(Context.class);
     windowStatus = createMock(WindowStatus.class);
     frame = new TestFrame(WindowMonitorTest.class);
     createWindowMonitor();
   }
-  
+
   private void createWindowMonitor() {
     new EasyMockTemplate(context, windows, windowStatus) {
       protected final void expectations() {
@@ -89,7 +87,7 @@ public class WindowMonitorTest {
         context.addContextFor(w);
         expectLastCall().once();
       }
-      
+
       protected final void codeToTest() {
         monitor = new WindowMonitor(toolkit, context, windowStatus);
       }
@@ -98,11 +96,11 @@ public class WindowMonitorTest {
     EasyMock.reset(windows);
     EasyMock.reset(windowStatus);
   }
-  
+
   @AfterMethod public void tearDown() {
     frame.destroy();
   }
-  
+
   @Test public void shouldAttachMonitorsAndPopulateExistingWindows() {
     assertThatListenerIsUnderMask(CONTEXT_MONITOR_EVENT_MASK, ContextMonitor.class);
     assertThatListenerIsUnderMask(WINDOWS_AVAILABILITY_MONITOR_EVENT_MASK, WindowAvailabilityMonitor.class);
@@ -112,26 +110,26 @@ public class WindowMonitorTest {
     AWTEventListener listener = listenerUnderMask(mask);
     assertThat(listener).isInstanceOf(type);
   }
-  
+
   private AWTEventListener listenerUnderMask(long mask) {
-    List<WeakEventListener> contextMonitorWrappers = 
+    List<WeakEventListener> contextMonitorWrappers =
         toolkit.eventListenersUnderEventMask(mask, WeakEventListener.class);
     assertThat(contextMonitorWrappers).hasSize(1);
     return contextMonitorWrappers.get(0).underlyingListener();
   }
-  
+
   @Test public void shouldReturnWindowIsReady() throws Exception {
     new EasyMockTemplate(windows) {
       protected void expectations() {
         expect(windows.isReady(frame)).andReturn(true);
       }
-      
+
       protected void codeToTest() {
         assertThat(monitor.isWindowReady(frame)).isTrue();
       }
     }.run();
   }
-  
+
   @Test public void shouldCheckWindowIfWindowNotReady() throws Exception {
     new EasyMockTemplate(windows, windowStatus) {
       protected void expectations() {
@@ -139,49 +137,49 @@ public class WindowMonitorTest {
         windowStatus.checkIfReady(frame);
         //expect(windows.isReady(frame)).andReturn(false);
       }
-      
+
       protected void codeToTest() {
         assertThat(monitor.isWindowReady(frame)).isFalse();
       }
-    }.run();    
+    }.run();
   }
-  
+
   @Test public void shouldReturnEventQueueForComponent() throws Exception {
     final EventQueue queue = new EventQueue();
     new EasyMockTemplate(context) {
       protected void expectations() {
         expect(context.eventQueueFor(frame)).andReturn(queue);
       }
-      
+
       protected void codeToTest() {
         assertThat(monitor.eventQueueFor(frame)).isSameAs(queue);
       }
-    }.run();    
+    }.run();
   }
-  
+
   @Test public void shouldReturnAllEventQueues() throws Exception {
     final List<EventQueue> allQueues = new ArrayList<EventQueue>();
     new EasyMockTemplate(context) {
       protected void expectations() {
         expect(context.allEventQueues()).andReturn(allQueues);
       }
-      
+
       protected void codeToTest() {
         assertThat(monitor.allEventQueues()).isSameAs(allQueues);
       }
-    }.run();    
+    }.run();
   }
-  
+
   @Test public void shouldReturnRootWindows() throws Exception {
     final List<Window> rootWindows = new ArrayList<Window>();
     new EasyMockTemplate(context) {
       protected void expectations() {
         expect(context.rootWindows()).andReturn(rootWindows);
       }
-      
+
       protected void codeToTest() {
         assertThat(monitor.rootWindows()).isSameAs(rootWindows);
       }
-    }.run();    
+    }.run();
   }
 }

@@ -1,19 +1,23 @@
 /*
  * Created on Oct 14, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.monitor;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.awt.EventQueue;
 import java.awt.Window;
@@ -21,18 +25,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.ToolkitStub;
-
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
-
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link Context}</code>.
@@ -47,10 +45,10 @@ public class ContextTest {
   private EventQueueMapping eventQueueMapping;
   private TestFrame frame;
   private Context context;
-  
+
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
-    toolkit = new ToolkitStub(eventQueue);
+    toolkit = ToolkitStub.createNew(eventQueue);
     frame = new TestFrame(ContextTest.class);
     windowEventQueueMapping = createMock(WindowEventQueueMapping.class);
     eventQueueMapping = createMock(EventQueueMapping.class);
@@ -69,7 +67,7 @@ public class ContextTest {
     }.run();
     reset(windowEventQueueMapping);
   }
-  
+
   @AfterMethod public void tearDown() {
     frame.destroy();
   }
@@ -94,7 +92,7 @@ public class ContextTest {
     windows.add(frame);
     return windows;
   }
-  
+
   @Test public void shouldReturnStoredQueue() {
     new EasyMockTemplate(eventQueueMapping) {
       protected void expectations() {
@@ -107,7 +105,7 @@ public class ContextTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldRemoveContext() {
     new EasyMockTemplate(windowEventQueueMapping) {
       protected void expectations() {
@@ -120,7 +118,7 @@ public class ContextTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldAddContext() {
     new EasyMockTemplate(windowEventQueueMapping, eventQueueMapping) {
       protected void expectations() {
@@ -135,7 +133,7 @@ public class ContextTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnEventQueueForComponent() {
     new EasyMockTemplate(eventQueueMapping) {
       protected void expectations() {
@@ -162,7 +160,7 @@ public class ContextTest {
       }
     }.run();
   }
-  
+
   private List<EventQueue> eventQueueInList() {
     final List<EventQueue> queues = new ArrayList<EventQueue>();
     queues.add(eventQueue);
