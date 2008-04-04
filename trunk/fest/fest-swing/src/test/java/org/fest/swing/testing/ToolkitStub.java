@@ -37,10 +37,8 @@ public abstract class ToolkitStub extends Toolkit {
   private Map<AWTEventListener, Long> eventListeners;
 
   private static Method[] methodsToMock() {
-    List<Method> methodsNotToMock = new ArrayList<Method>(list(ToolkitStub.class.getDeclaredMethods()));
-    List<Method> methodsToMock = new ArrayList<Method>();
-    for(Method method : ToolkitStub.class.getMethods()) 
-      if (!methodsNotToMock.contains(method)) methodsToMock.add(method);
+    List<Method> methodsToMock = new ArrayList<Method>(list(ToolkitStub.class.getMethods()));
+    for (Method m : ToolkitStub.class.getDeclaredMethods()) methodsToMock.remove(m);
     return methodsToMock.toArray(new Method[methodsToMock.size()]);
   }
 
