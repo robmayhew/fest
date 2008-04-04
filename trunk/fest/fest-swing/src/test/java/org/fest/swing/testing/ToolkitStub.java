@@ -14,13 +14,16 @@
  */
 package org.fest.swing.testing;
 
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.util.Collections.list;
+
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.easymock.classextension.EasyMock;
+import java.util.Map;
 
 /**
  * Understands a stub of <code>{@link Toolkit}</code>.
@@ -29,12 +32,16 @@ import org.easymock.classextension.EasyMock;
  */
 public abstract class ToolkitStub extends Toolkit {
 
-  private static final List<Method> METHODS_NOT_TO_MOCK = new ArrayList<Method>();
-
+  private static final Method[] METHODS_TO_MOCK = methodsToMock();
+  
   private Map<AWTEventListener, Long> eventListeners;
 
-  static {
-    for (Method m : ToolkitStub.class.getDeclaredMethods()) METHODS_NOT_TO_MOCK.add(m);
+  private static Method[] methodsToMock() {
+    List<Method> methodsNotToMock = new ArrayList<Method>(list(ToolkitStub.class.getDeclaredMethods()));
+    List<Method> methodsToMock = new ArrayList<Method>();
+    for(Method method : ToolkitStub.class.getMethods()) 
+      if (!methodsNotToMock.contains(method)) methodsToMock.add(method);
+    return methodsToMock.toArray(new Method[methodsToMock.size()]);
   }
 
   private EventQueue eventQueue;
@@ -44,19 +51,10 @@ public abstract class ToolkitStub extends Toolkit {
   }
 
   public static ToolkitStub createNew(EventQueue eventQueue) {
-    Method[] methodsToMock = methodsToMock();
-    ToolkitStub stub =  EasyMock.createMock(ToolkitStub.class, methodsToMock);
+    ToolkitStub stub =  createMock(ToolkitStub.class, METHODS_TO_MOCK);
     stub.eventQueue(eventQueue);
     stub.eventListeners = new HashMap<AWTEventListener, Long>();
     return stub;
-  }
-
-  private static Method[] methodsToMock() {
-    Map<String, Method> methodMap = new HashMap<String, Method>();
-    for(Method method : ToolkitStub.class.getMethods()) 
-      if (!METHODS_NOT_TO_MOCK.contains(method)) methodMap.put(method.getName(), method);
-    Collection<Method> methods = methodMap.values();
-    return methods.toArray(new Method[methods.size()]);
   }
 
   public ToolkitStub() {}
