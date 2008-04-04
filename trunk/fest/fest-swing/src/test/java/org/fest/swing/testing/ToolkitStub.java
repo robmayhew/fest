@@ -80,8 +80,8 @@ public abstract class ToolkitStub extends Toolkit {
     eventListeners().remove(listener);
   }
 
-  public <T extends AWTEventListener> java.util.List<T> eventListenersUnderEventMask(long eventMask, Class<T> type) {
-    java.util.List<T> listeners = new ArrayList<T>();
+  public <T extends AWTEventListener> List<T> eventListenersUnderEventMask(long eventMask, Class<T> type) {
+    List<T> listeners = new ArrayList<T>();
     for (AWTEventListener listener : eventListeners().keySet()) {
       if (!type.isInstance(listener)) continue;
       if (eventListeners().get(listener).longValue() != eventMask) continue;
