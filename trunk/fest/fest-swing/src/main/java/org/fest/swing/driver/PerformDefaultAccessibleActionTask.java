@@ -37,7 +37,7 @@ class PerformDefaultAccessibleActionTask implements Runnable {
   private static final int DEFAULT_ACTION_INDEX = 0;
   private static final AccessibleActionFinder FINDER = new AccessibleActionFinder();
 
-  private final AccessibleAction action;
+  final AccessibleAction action;
 
   /**
    * Creates a new </code>{@link PerformDefaultAccessibleActionTask}</code>.

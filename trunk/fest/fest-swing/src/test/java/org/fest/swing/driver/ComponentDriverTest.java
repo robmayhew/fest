@@ -15,16 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.util.Platform.*;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -33,18 +23,35 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import org.easymock.IArgumentMatcher;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.exception.WaitTimedOutError;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.fest.swing.testing.StopWatch;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.Timeout.timeout;
+import static org.fest.swing.driver.ComponentDriverTest.PerformDefaultAccessibleActionTaskMatcher.eqTask;
+import static org.fest.swing.testing.StopWatch.startNewStopWatch;
+import static org.fest.swing.util.Platform.*;
 
 /**
  * Tests for <code>{@link ComponentDriver}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class ComponentDriverTest {
 
@@ -442,5 +449,80 @@ public class ComponentDriverTest {
 
   private boolean isWindowsOrMac() {
     return isWindows() || isMacintosh();
+  }
+  
+  @Test public void shouldPerformAccessibleAction() {
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        robot.invokeLater(same(c), eqTask(new PerformDefaultAccessibleActionTask(c)));
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.performAccessibleActionOf(c);
+      }
+    }.run();
+  }
+
+  static class PerformDefaultAccessibleActionTaskMatcher implements IArgumentMatcher {
+    static PerformDefaultAccessibleActionTask eqTask(PerformDefaultAccessibleActionTask expected) {
+      reportMatcher(new PerformDefaultAccessibleActionTaskMatcher(expected));
+      return expected;
+    }
+    
+    private final PerformDefaultAccessibleActionTask expected;
+    
+    PerformDefaultAccessibleActionTaskMatcher(PerformDefaultAccessibleActionTask expected) {
+      this.expected = expected;
+    }
+    
+    public boolean matches(Object o) {
+      if (!(o instanceof PerformDefaultAccessibleActionTask)) return false;
+      PerformDefaultAccessibleActionTask actual = (PerformDefaultAccessibleActionTask)o;
+      return expected.action == actual.action; 
+    }
+    
+    public void appendTo(StringBuffer buffer) {}
+  }
+  
+  @Test public void shouldNotWaitIfComponentIsReady() {
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        expect(robot.isReadyForInput(c)).andReturn(true);
+      }
+
+      protected void codeToTest() {
+        long timeout = 500;
+        StopWatch stopWatch = startNewStopWatch();
+        assertThat(driver.waitForShowing(c, timeout)).isTrue();
+        stopWatch.stop();
+        assertThat(stopWatch.ellapsedTime()).isLessThan(timeout);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldWaitUntilComponentIsReady() {
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        expect(robot.isReadyForInput(c)).andReturn(false);
+        expect(robot.isReadyForInput(c)).andReturn(true);
+      }
+
+      protected void codeToTest() {
+        assertThat(driver.waitForShowing(c, 2000)).isTrue();
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnFalseComponentIsReady() {
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        expect(robot.isReadyForInput(c)).andReturn(false).atLeastOnce();
+      }
+
+      protected void codeToTest() {
+        assertThat(driver.waitForShowing(c, 100)).isFalse();
+      }
+    }.run();
   }
 }
