@@ -1,19 +1,23 @@
 /*
  * Created on Apr 3, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.input;
+
+import static java.awt.AWTEvent.*;
+import static java.awt.event.MouseEvent.*;
+import static javax.swing.SwingUtilities.*;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
@@ -23,13 +27,9 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.util.EmptyStackException;
 
-import static java.awt.AWTEvent.*;
-import static java.awt.event.MouseEvent.*;
-import static javax.swing.SwingUtilities.*;
-
 /**
  * Catches native drop target events, which are normally hidden from AWTEventListeners.
- * 
+ *
  * @author Alex Ruiz
  */
 class DragAwareEventQueue extends EventQueue {
@@ -43,7 +43,7 @@ class DragAwareEventQueue extends EventQueue {
     this.mask = mask;
     this.eventListener = eventListener;
   }
-  
+
   /**
    * Stops dispatching events using this <code>EventQueue</code>, only if this <code>EventQueue</code> is the same
    * as the <code>{@link Toolkit}</code>'s system event queue. Any pending events are transferred to the previous
@@ -51,7 +51,9 @@ class DragAwareEventQueue extends EventQueue {
    * @throws EmptyStackException if no previous push was made on this <code>EventQueue</code>.
    */
   @Override public void pop() throws EmptyStackException {
-    if (toolkit.getSystemEventQueue() == this) super.pop();
+    EventQueue systemEventQueue = toolkit.getSystemEventQueue();
+    if (systemEventQueue == this)
+      super.pop();
   }
 
   /**

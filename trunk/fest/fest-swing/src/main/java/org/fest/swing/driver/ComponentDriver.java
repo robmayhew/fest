@@ -15,6 +15,13 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.*;
+
 import java.awt.*;
 
 import javax.accessibility.AccessibleAction;
@@ -27,13 +34,6 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.TimeoutWatch;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.*;
-
 /**
  * Understands simulation of user input on a <code>{@link Component}</code>. This class is intended for internal use
  * only.
@@ -41,7 +41,7 @@ import static org.fest.util.Strings.*;
  * @author Alex Ruiz
  */
 public class ComponentDriver {
-  
+
   private static final String ENABLED_PROPERTY = "enabled";
   private static final String SIZE_PROPERTY = "size";
   private static final String VISIBLE_PROPERTY = "visible";
@@ -55,8 +55,12 @@ public class ComponentDriver {
    * @param robot the robot to use to simulate user input.
    */
   public ComponentDriver(Robot robot) {
+    this(robot, new DragAndDrop(robot));
+  }
+
+  ComponentDriver(Robot robot, DragAndDrop dragAndDrop) {
     this.robot = robot;
-    dragAndDrop = new DragAndDrop(robot);
+    this.dragAndDrop = dragAndDrop;
   }
 
   /**
@@ -66,14 +70,6 @@ public class ComponentDriver {
   public void click(Component c) {
     robot.click(c);
   }
-  
-  /**
-   * Simulates a user right-clicking the given <code>{@link Component}</code>.
-   * @param c the <code>Component</code> to click on.
-   */
-  public void rightClick(Component c) {
-    robot.rightClick(c);
-  }
 
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the given mouse button.
@@ -81,7 +77,7 @@ public class ComponentDriver {
    * @param button the mouse button to use.
    */
   public void click(Component c, MouseButton button) {
-    robot.click(c);
+    robot.click(c, button);
   }
 
   /**
@@ -91,7 +87,15 @@ public class ComponentDriver {
   public void doubleClick(Component c) {
     robot.doubleClick(c);
   }
-  
+
+  /**
+   * Simulates a user right-clicking the given <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to click on.
+   */
+  public void rightClick(Component c) {
+    robot.rightClick(c);
+  }
+
   /**
    * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
@@ -109,15 +113,6 @@ public class ComponentDriver {
    */
   public void click(Component target, Point where) {
     robot.click(target, where);
-  }
-
-  /**
-   * Gives input focus to the given <code>{@link Component}</code>. Note that the component may not yet have focus when
-   * this method returns.
-   * @param c the component to give focus to.
-   */
-  public void focus(Component c) {
-    robot.focus(c);
   }
 
   /**
@@ -161,8 +156,8 @@ public class ComponentDriver {
     assertThat(c.isVisible()).as(visibleProperty(c)).isFalse();
   }
 
-  private static String visibleProperty(Component c) { 
-    return propertyName(c, VISIBLE_PROPERTY); 
+  private static String visibleProperty(Component c) {
+    return propertyName(c, VISIBLE_PROPERTY);
   }
 
   /**
@@ -180,23 +175,10 @@ public class ComponentDriver {
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @throws WaitTimedOutError if the <code>Component</code> is never enabled.
    */
-  public void requireEnabled(final Component c, Timeout timeout) {
+  public void requireEnabled(Component c, Timeout timeout) {
     pause(new ComponentEnabledCondition(c), timeout);
   }
 
-  private static class ComponentEnabledCondition extends Condition {
-    private final Component c;
-
-    ComponentEnabledCondition(Component c) {
-      super(enabledProperty(c));
-      this.c = c;
-    }
-
-    @Override public boolean test() {
-      return c.isEnabled();
-    }
-  }
-  
   /**
    * Asserts that the <code>{@link Component}</code> is disabled.
    * @param c the target component.
@@ -206,14 +188,15 @@ public class ComponentDriver {
     assertThat(c.isEnabled()).as(enabledProperty(c)).isFalse();
   }
 
-  private static String enabledProperty(Component c) { 
-    return propertyName(c, ENABLED_PROPERTY); 
+  private static String enabledProperty(Component c) {
+    return propertyName(c, ENABLED_PROPERTY);
   }
 
   /**
    * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code>.
    * @param c the target component.
    * @param keyCodes one or more codes of the keys to press.
+   * @throws IllegalArgumentException if the given code is not a valid key code. *
    * @see java.awt.event.KeyEvent
    */
   public void pressAndReleaseKeys(Component c, int... keyCodes) {
@@ -222,9 +205,24 @@ public class ComponentDriver {
   }
 
   /**
+   * Simulates a user pressing and releasing the given key on the <code>{@link Component}</code>. Modifiers is a
+   * mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param c the target component.
+   * @param keyCode the code of the key to press.
+   * @param modifiers the given modifiers.
+   * @throws IllegalArgumentException if the given code is not a valid key code. *
+   * @see java.awt.event.KeyEvent
+   */
+  public void pressAndReleaseKey(Component c, int keyCode, int modifiers) {
+    focus(c);
+    robot.pressAndReleaseKey(keyCode, modifiers);
+  }
+
+  /**
    * Simulates a user pressing given key on the <code>{@link Component}</code>.
    * @param c the target component.
    * @param keyCode the code of the key to press.
+   * @throws IllegalArgumentException if the given code is not a valid key code. *
    * @see java.awt.event.KeyEvent
    */
   public void pressKey(Component c, int keyCode) {
@@ -236,11 +234,21 @@ public class ComponentDriver {
    * Simulates a user releasing the given key on the <code>{@link Component}</code>.
    * @param c the target component.
    * @param keyCode the code of the key to release.
+   * @throws IllegalArgumentException if the given code is not a valid key code. *
    * @see java.awt.event.KeyEvent
    */
   public void releaseKey(Component c, int keyCode) {
     focus(c);
     robot.releaseKey(keyCode);
+  }
+
+  /**
+   * Gives input focus to the given <code>{@link Component}</code>. Note that the component may not yet have focus when
+   * this method returns.
+   * @param c the component to give focus to.
+   */
+  public void focus(Component c) {
+    robot.focus(c);
   }
 
   /**
@@ -301,7 +309,7 @@ public class ComponentDriver {
   /**
    * Performs the <code>{@link AccessibleAction}</code> in the given <code>{@link Component}</code>'s event queue.
    * @param c the given <code>Component</code>.
-   * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty. 
+   * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty.
    */
   protected final void performAccessibleActionOf(Component c) {
     robot.invokeLater(c, new PerformDefaultAccessibleActionTask(c));
