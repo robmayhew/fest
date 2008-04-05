@@ -79,8 +79,12 @@ public class JTabbedPaneDriver extends JComponentDriver {
       click(tabbedPane, p);
     } catch (LocationUnavailableException e) {
       // Set the tab directly
-      robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));
+      setTabDirectly(tabbedPane, index);
     }
+  }
+
+  void setTabDirectly(JTabbedPane tabbedPane, int index) {
+    robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));
   }  
 
   private static class SetSelectedIndexTask implements Runnable {

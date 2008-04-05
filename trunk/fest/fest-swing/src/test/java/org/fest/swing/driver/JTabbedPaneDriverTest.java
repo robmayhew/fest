@@ -1,41 +1,41 @@
 /*
  * Created on Feb 25, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
 import org.fest.assertions.IntAssert;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestFrame;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTabbedPaneDriver}</code>.
@@ -49,7 +49,7 @@ public class JTabbedPaneDriverTest {
   private Robot robot;
   private JTabbedPane tabbedPane;
   private JTabbedPaneDriver driver;
-  
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTabbedPaneDriver(robot);
@@ -57,23 +57,30 @@ public class JTabbedPaneDriverTest {
     tabbedPane = frame.tabbedPane;
     robot.showWindow(frame);
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
-  @Test(dataProvider = "tabIndexProvider") 
+
+  @Test(dataProvider = "tabIndexProvider")
   public void shouldSelectTabWithGivenIndex(int index) {
     driver.selectTab(tabbedPane, index);
     assertThatSelectedTabIndexIsEqualTo(index);
   }
-  
+
+  @Test(dataProvider = "tabIndexProvider")
+  public void shouldSetTabWithGivenIndexDirectly(int index) {
+    driver.setTabDirectly(tabbedPane, index);
+    pause(200);
+    assertThatSelectedTabIndexIsEqualTo(index);
+  }
+
   @DataProvider(name = "tabIndexProvider")
   public Object[][] tabIndices() {
     return new Object[][] { { 0 }, { 1 } };
   }
-  
-  @Test(dataProvider = "indexOutOfBoundsProvider") 
+
+  @Test(dataProvider = "indexOutOfBoundsProvider")
   public void shouldThrowErrorIfIndexOutOfBounds(int index) {
     try {
       driver.selectTab(tabbedPane, index);

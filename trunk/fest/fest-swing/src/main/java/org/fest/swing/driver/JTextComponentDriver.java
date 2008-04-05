@@ -14,6 +14,16 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.Math.*;
+import static java.lang.String.valueOf;
+import static javax.swing.text.DefaultEditorKit.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.util.Strings.*;
+
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -26,17 +36,6 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-
-import static java.lang.Math.*;
-import static java.lang.String.valueOf;
-import static javax.swing.text.DefaultEditorKit.*;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.isOSX;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JTextComponent}</code>. Unlike
@@ -63,7 +62,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the target <code>JTextComponent</code>.
    */
   public void deleteText(JTextComponent textBox) {
-    replaceText(textBox, "");
+    replaceText(textBox, null);
   }
 
   /**
@@ -113,7 +112,7 @@ public class JTextComponentDriver extends JComponentDriver {
     if (indexFound == -1) return;
     selectText(textBox, indexFound, indexFound + text.length());
   }
-  
+
   /**
    * Select the given text range.
    * @param textBox the target <code>JTextComponent</code>.

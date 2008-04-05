@@ -15,22 +15,21 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dimension;
-
-import javax.swing.JTextField;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
+
+import java.awt.Dimension;
+
+import javax.swing.JTextField;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTextComponentDriver}</code>.
@@ -56,10 +55,9 @@ public class JTextComponentDriverTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-
-  @Test public void shouldSelectOnlyGivenText() {
-    driver.selectText(textField, 8, 14);
-    assertThat(textField.getSelectedText()).isEqualTo("a test");
+  @Test public void shouldDeleteText() {
+    driver.deleteText(textField);
+    assertThat(textField.getText()).isNullOrEmpty();
   }
 
   @Test public void shouldReplaceText() {
@@ -67,7 +65,26 @@ public class JTextComponentDriverTest {
     driver.replaceText(textField, "Bye");
     assertThat(textField.getText()).isEqualTo("Bye");
   }
-  
+
+  @Test public void shouldSelectAllText() {
+    textField.setText("Hello");
+    driver.selectAll(textField);
+    assertThat(textField.getSelectedText()).isEqualTo(textField.getText());
+  }
+
+  @Test public void shouldEnterText() {
+    textField.setText("");
+    String textToEnter = "Entering text";
+    driver.enterText(textField, textToEnter);
+    assertThat(textField.getText()).isEqualTo(textToEnter);
+  }
+
+
+  @Test public void shouldSelectOnlyGivenText() {
+    driver.selectText(textField, 8, 14);
+    assertThat(textField.getSelectedText()).isEqualTo("a test");
+  }
+
   @Test public void shouldThrowErrorIfIndicesAreOutOfBoundsWhenSelectingText() {
     try {
       driver.selectText(textField, 20, 22);
@@ -76,7 +93,7 @@ public class JTextComponentDriverTest {
       assertThat(expected).message().contains("Unable to get location for index '20' in javax.swing.JTextField");
     }
   }
-  
+
   @Test public void shouldPassIfTextComponentIsEditable() {
     textField.setEditable(true);
     driver.requireEditable(textField);
