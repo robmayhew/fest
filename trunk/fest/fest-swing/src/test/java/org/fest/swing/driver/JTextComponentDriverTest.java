@@ -55,6 +55,7 @@ public class JTextComponentDriverTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
+
   @Test public void shouldDeleteText() {
     driver.deleteText(textField);
     assertThat(textField.getText()).isNullOrEmpty();
@@ -127,6 +128,41 @@ public class JTextComponentDriverTest {
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+    }
+  }
+
+  @Test public void shouldPassIfHasExpectedText() {
+    textField.setText("Hi");
+    driver.requireText(textField, "Hi");
+  }
+
+  @Test public void shouldFailIfDoesNotHaveExpectedText() {
+    textField.setText("Hi");
+    try {
+      driver.requireText(textField, "Bye");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'text'").contains("expected:<'Bye'> but was:<'Hi'>");
+    }
+  }
+
+  @Test public void shouldPassIfEmpty() {
+    textField.setText("");
+    driver.requireEmpty(textField);
+  }
+
+  @Test public void shouldPassIfTextIsNull() {
+    textField.setText(null);
+    driver.requireEmpty(textField);
+  }
+
+  @Test public void shouldFailIfNotEmpty() {
+    textField.setText("Hi");
+    try {
+      driver.requireEmpty(textField);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'text'").contains("expecting empty String but was:<'Hi'>");
     }
   }
 

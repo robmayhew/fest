@@ -122,24 +122,24 @@ public class JTextComponentDriver extends JComponentDriver {
     if (isEmpty(textBox.getText())) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
-    robot.invokeAndWait(new SetSelectionTask(textBox, start, end));
+    robot.invokeAndWait(new TextSelectionTask(textBox, start, end));
     verifySelectionMade(textBox, start, end);
   }
 
-  private static class SetSelectionTask implements Runnable {
+  private static class TextSelectionTask implements Runnable {
     private final JTextComponent textBox;
     private final int start;
     private final int end;
 
-    private SetSelectionTask(JTextComponent textBox, int start, int end) {
+    private TextSelectionTask(JTextComponent textBox, int start, int end) {
       this.textBox = textBox;
       this.start = start;
       this.end = end;
     }
 
     public void run() {
-      textBox.setSelectionStart(start);
-      textBox.setSelectionEnd(end);
+      textBox.setCaretPosition(start);
+      textBox.moveCaretPosition(end);
     }
   }
 

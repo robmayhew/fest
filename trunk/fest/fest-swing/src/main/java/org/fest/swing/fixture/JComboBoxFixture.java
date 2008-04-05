@@ -62,7 +62,7 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   private void createDriver() {
     updateDriver(new JComboBoxDriver(robot));
   }
-  
+
   final void updateDriver(JComboBoxDriver driver) {
     this.driver = driver;
   }
@@ -123,8 +123,29 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Simulates a user entering the specified text in this fixture's <code>{@link JComboBox}</code> only
-   * if it is editable.
+   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code>, replacing any text. This action
+   * is executed only if the <code>{@link JComboBox}</code> is editable.
+   * @param text the text to enter.
+   * @return this fixture.
+   */
+  public JComboBoxFixture replaceText(String text) {
+    driver.replaceText(target, text);
+    return this;
+  }
+
+  /**
+   * Simulates a user selecting the text in the <code>{@link JComboBox}</code>. This action is executed only if the
+   * <code>{@link JComboBox}</code> is editable.
+   * @return this fixture.
+   */
+  public JComboBoxFixture selectAllText() {
+    driver.selectAllText(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user entering the specified text in this fixture's <code>{@link JComboBox}</code>. This action is
+   * executed only if the <code>{@link JComboBox}</code> is editable.
    * @param text the text to enter.
    * @return this fixture.
    */
@@ -282,7 +303,7 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is editable.
    * @throws AssertionError if this fixture's <code>JComboBox</code> is not editable.
-   * @return this fixture. 
+   * @return this fixture.
    */
   public JComboBoxFixture requireEditable() {
     driver.requireEditable(target);
@@ -292,7 +313,7 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is not editable.
    * @throws AssertionError if this fixture's <code>JComboBox</code> is editable.
-   * @return this fixture. 
+   * @return this fixture.
    */
   public JComboBoxFixture requireNotEditable() {
     driver.requireNotEditable(target);

@@ -15,10 +15,22 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static javax.swing.text.DefaultEditorKit.selectAllAction;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Strings.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
@@ -28,17 +40,6 @@ import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Strings.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
@@ -131,7 +132,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JComboBox}</code> 
+   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JComboBox}</code>
    * matches the given text.
    * @param comboBox the target <code>JComboBox</code>.
    * @param text the text to match.
@@ -139,7 +140,7 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   public void requireSelection(JComboBox comboBox, String text) {
     int selectedIndex = comboBox.getSelectedIndex();
-    if (selectedIndex == -1) 
+    if (selectedIndex == -1)
       fail(concat("[", selectedIndexProperty(comboBox), "] No selection"));
     assertThat(text(comboBox, selectedIndex)).as(selectedIndexProperty(comboBox)).isEqualTo(text);
   }
@@ -201,7 +202,33 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code> only if it is editable.
+   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code>, replacing any text. This action
+   * is executed only if the <code>{@link JComboBox}</code> is editable.
+   * @param comboBox the target <code>JComboBox</code>.
+   * @param text the text to enter.
+   */
+  public void replaceText(JComboBox comboBox, String text) {
+    if (!comboBox.isEditable()) return;
+    selectAllText(comboBox);
+    enterText(comboBox, text);
+  }
+
+  /**
+   * Simulates a user selecting the text in the <code>{@link JComboBox}</code>. This action is executed only if the
+   * <code>{@link JComboBox}</code> is editable.
+   * @param comboBox the target <code>JComboBox</code>.
+   */
+  public void selectAllText(JComboBox comboBox) {
+    if (!comboBox.isEditable()) return;
+    Component editor = comboBox.getEditor().getEditorComponent();
+    if (!(editor instanceof JComponent)) return;
+    focus(editor);
+    invokeAction((JComponent) editor, selectAllAction);
+  }
+
+  /**
+   * Simulates a user entering the specified text in the <code>{@link JComboBox}</code>. This action is executed only
+   * if the <code>{@link JComboBox}</code> is editable.
    * @param comboBox the target <code>JComboBox</code>.
    * @param text the text to enter.
    */

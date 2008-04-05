@@ -1,34 +1,32 @@
 /*
  * Created on Apr 9, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007 the original author or authors.
  */
 package org.fest.swing.fixture;
+
+import static org.easymock.EasyMock.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
 import org.easymock.classextension.EasyMock;
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComboBoxDriver;
-
-import static org.easymock.EasyMock.*;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JComboBoxFixture}</code>.
@@ -48,7 +46,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     fixture = new JComboBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }
-  
+
   @Test public void shouldCreateFixtureWithGivenComponentName() {
     new FixtureCreationByNameTemplate() {
       ComponentFixture<JComboBox> fixtureWithName(String name) {
@@ -70,7 +68,33 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
       }
     }.run();
   }
-  
+
+  @Test public void shouldReplaceText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.replaceText(target, "Hello");
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.replaceText("Hello"));
+      }
+    }.run();
+  }
+
+  @Test public void shouldSelectAllText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectAllText(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectAllText());
+      }
+    }.run();
+  }
+
   @Test public void shouldEnterText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -123,7 +147,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnValueAtIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -134,7 +158,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
         String result = fixture.valueAt(8);
         assertThat(result).isEqualTo("Sam");
       }
-    }.run();    
+    }.run();
   }
 
   @Test public void shouldRequireEditable() {
@@ -143,20 +167,20 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
         driver.requireEditable(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireEditable());
       }
     }.run();
   }
-  
+
   @Test public void shouldRequireNotEditable() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireNotEditable(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireNotEditable());
       }
