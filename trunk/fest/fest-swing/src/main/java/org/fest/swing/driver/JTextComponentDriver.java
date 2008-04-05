@@ -18,10 +18,8 @@ import static java.lang.Math.*;
 import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.*;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.util.Strings.*;
 
 import java.awt.Container;
@@ -122,43 +120,27 @@ public class JTextComponentDriver extends JComponentDriver {
    */
   public void selectText(JTextComponent textBox, int start, int end) {
     if (isEmpty(textBox.getText())) return;
-    startSelection(textBox, start);
-    endSelection(textBox, end);
+    robot.moveMouse(textBox, scrollToVisible(textBox, start));
+    robot.moveMouse(textBox, scrollToVisible(textBox, end));
+    robot.invokeAndWait(new SetSelectionTask(textBox, start, end));
     verifySelectionMade(textBox, start, end);
   }
 
-  private void startSelection(JTextComponent textBox, int index) {
-    // From Abbot: Equivalent to JTextComponent.setCaretPosition(int), but operates through the UI.
-    avoidAutomaticDragAndDrop(textBox);
-    robot.pressMouse(textBox, scrollToVisible(textBox, index));
-  }
+  private static class SetSelectionTask implements Runnable {
+    private final JTextComponent textBox;
+    private final int start;
+    private final int end;
 
-  private void avoidAutomaticDragAndDrop(final JTextComponent textBox) {
-    if (textBox.getSelectionStart() == textBox.getSelectionEnd()) return;
-    robot.invokeAndWait(new SetAndMoveCaretPositionTask(textBox, 0));
-  }
-
-  private static class SetAndMoveCaretPositionTask implements Runnable {
-    private final JTextComponent target;
-    private final int position;
-
-    SetAndMoveCaretPositionTask(JTextComponent target, int position) {
-      this.target = target;
-      this.position = position;
+    private SetSelectionTask(JTextComponent textBox, int start, int end) {
+      this.textBox = textBox;
+      this.start = start;
+      this.end = end;
     }
 
     public void run() {
-      target.setCaretPosition(position);
-      target.moveCaretPosition(position);
+      textBox.setSelectionStart(start);
+      textBox.setSelectionEnd(end);
     }
-  }
-
-  private void endSelection(JTextComponent textBox, int index) {
-    // From Abbot: Equivalent to JTextComponent.moveCaretPosition(int), but operates through the UI.
-    Point where = scrollToVisible(textBox, index);
-    robot.moveMouse(textBox, where.x, where.y);
-    if (isOSX()) pause(75);
-    robot.releaseLeftMouseButton();
   }
 
   /**

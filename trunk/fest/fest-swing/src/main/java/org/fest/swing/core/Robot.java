@@ -187,6 +187,15 @@ public interface Robot {
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
+   * @param p the given coordinates.
+   * @throws ActionFailedException if the given component is not showing and ready for input.
+   */
+  void moveMouse(Component c, Point p);
+  
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
+   * <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
    * @param x horizontal coordinate relative to the given <code>Component</code>.
    * @param y vertical coordinate relative to the given <code>Component</code>.
    * @throws ActionFailedException if the given component is not showing and ready for input.

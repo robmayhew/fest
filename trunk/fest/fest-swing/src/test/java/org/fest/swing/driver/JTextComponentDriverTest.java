@@ -80,7 +80,7 @@ public class JTextComponentDriverTest {
   }
 
 
-  @Test public void shouldSelectOnlyGivenText() {
+  @Test public void shouldSelectTextRange() {
     driver.selectText(textField, 8, 14);
     assertThat(textField.getSelectedText()).isEqualTo("a test");
   }
@@ -92,6 +92,12 @@ public class JTextComponentDriverTest {
     } catch (ActionFailedException expected) {
       assertThat(expected).message().contains("Unable to get location for index '20' in javax.swing.JTextField");
     }
+  }
+
+  @Test public void shouldSelectGivenTextOnly() {
+    textField.setText("Hello World");
+    driver.selectText(textField, "llo W");
+    assertThat(textField.getSelectedText()).isEqualTo("llo W");
   }
 
   @Test public void shouldPassIfTextComponentIsEditable() {

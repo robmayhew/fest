@@ -395,10 +395,14 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void moveMouse(Component c) {
-    Point center = centerOf(c);
-    moveMouse(c, center.x, center.y);
+    moveMouse(c, centerOf(c));
   }
 
+  /** ${@inheritDoc} */
+  public void moveMouse(Component c, Point p) {
+    moveMouse(c, p.x, p.y);
+  }
+  
   /** ${@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
     if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
