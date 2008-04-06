@@ -49,7 +49,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public void resizeWidthTo(Window w, int width) {
-    resizeTo(w, new Dimension(width, w.getHeight()));
+    resizeTo(w, new Dimension(width, w.getSize().height));
   }
 
   /**
@@ -59,7 +59,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public void resizeHeightTo(Window w, int height) {
-    resizeTo(w, new Dimension(w.getWidth(), height));
+    resizeTo(w, new Dimension(w.getSize().width, height));
   }
 
   /**
