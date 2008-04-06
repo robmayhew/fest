@@ -15,22 +15,23 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JSliderDriver}</code>.
@@ -48,7 +49,7 @@ public abstract class JSliderDriverTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyFrame frame = new MyFrame(orientation());
+    MyFrame frame = new MyFrame(getClass(), orientation());
     slider = frame.slider;
     robot.showWindow(frame);
   }
@@ -119,8 +120,8 @@ public abstract class JSliderDriverTestCase {
 
     final JSlider slider = new JSlider();
 
-    MyFrame(int orientation) {
-      super(JScrollBarDriverTest.class);
+    MyFrame(Class<?> testClass, int orientation) {
+      super(testClass);
       add(slider);
       slider.setOrientation(orientation);
       slider.setMinimum(0);

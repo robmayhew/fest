@@ -76,6 +76,7 @@ public class JTableDriverTest {
   }
 
   @Test public void shouldSelectCells() {
+    dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     driver.selectCells(dragTable, new TableCell(0, 0), new TableCell(2, 0));
     assertThat(dragTable.isCellSelected(0, 0));
     assertThat(dragTable.isCellSelected(2, 0));
@@ -161,7 +162,6 @@ public class JTableDriverTest {
 
     MyFrame() {
       super(JTableDriverTest.class);
-      dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
       add(decorate(dragTable));
       add(decorate(dropTable));
       setPreferredSize(new Dimension(600, 400));

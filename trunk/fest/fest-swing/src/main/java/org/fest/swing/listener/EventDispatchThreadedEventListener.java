@@ -38,7 +38,7 @@ public abstract class EventDispatchThreadedEventListener implements AWTEventList
   private final List<AWTEvent> deferredEvents = new ArrayList<AWTEvent>();
   private final Object lock = new Object();
 
-  private final Runnable action = new Runnable() {
+  private final Runnable processDeferredEventsTask = new Runnable() {
     public void run() {
       processDeferredEvents();
     }
@@ -59,7 +59,7 @@ public abstract class EventDispatchThreadedEventListener implements AWTEventList
       // Ensure that in the absence of any subsequent event thread events deferred events still get processed.
       // If regular events are received before this action is run, the deferred events will be processed prior to those
       // events and the action will do nothing.
-      invokeLater(action);
+      invokeLater(processDeferredEventsTask);
       return;
     }
     // Ensure any deferred events are processed prior to subsequently posted events.
