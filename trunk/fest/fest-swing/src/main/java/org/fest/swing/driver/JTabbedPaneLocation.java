@@ -14,6 +14,11 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -21,12 +26,6 @@ import javax.swing.JTabbedPane;
 
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Strings.match;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands encapsulation of a location on a <code>{@link JTabbedPane}</code> (notably a tab).
@@ -43,7 +42,7 @@ public final class JTabbedPaneLocation {
    * @return the index of the first tab that matches the given <code>String</code>.
    * @throws LocationUnavailableException if a tab matching the given title could not be found.
    */
-  public int titleToIndex(JTabbedPane tabbedPane, String title) {
+  public int indexOf(JTabbedPane tabbedPane, String title) {
     for (int i = 0; i < tabbedPane.getTabCount(); i++)
       if (match(title, tabbedPane.getTitleAt(i))) return i;
     throw new LocationUnavailableException(concat("Unable to find a tab with title ", quote(title)));
@@ -66,7 +65,7 @@ public final class JTabbedPaneLocation {
     return new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
   }
 
-  private void validateIndex(JTabbedPane tabbedPane, int index) {
+  void validateIndex(JTabbedPane tabbedPane, int index) {
     int max = tabbedPane.getTabCount() - 1;
     if (index >= 0 && index <= max) return;
     throw actionFailure(concat(

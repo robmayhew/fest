@@ -15,26 +15,28 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.TestFrame;
-
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
+
+import javax.swing.*;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestFrame;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JPopupMenuDriver}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Price
  */
 @Test(groups = GUI)
 public class JPopupMenuDriverTest {
@@ -54,9 +56,42 @@ public class JPopupMenuDriverTest {
     robot.cleanUp();
   }
 
+  @Test public void shouldReturnTextOfMenuItem() {
+    String s = JPopupMenuDriver.asString(new JMenuItem("Hello"));
+    assertThat(s).isEqualTo("Hello");
+  }
+
+  @Test public void shouldReturnDashIfNotMenuItem() {
+    final MenuElement menuElement = createMock(MenuElement.class);
+    final JButton button = new JButton();
+    new EasyMockTemplate(menuElement) {
+      protected void expectations() {
+        expect(menuElement.getComponent()).andReturn(button);
+      }
+
+      protected void codeToTest() {
+        assertThat(JPopupMenuDriver.asString(menuElement)).isEqualTo("-");
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnsPopupLabels() {
     String[] labels = driver.menuLabelsOf(popupMenu());
     assertThat(labels).isEqualTo(array("First", "Second"));
+  }
+
+  @Test public void shouldFindMenuItemByName() {
+    JMenuItem found = driver.menuItem(popupMenu(), "first");
+    assertThat(found).isSameAs(frame.firstMenuItem);
+  }
+
+  @Test public void shouldFindMenuItemWithGivenMatcher() {
+    JMenuItem found = driver.menuItem(popupMenu(), new GenericTypeMatcher<JMenuItem>() {
+      protected boolean isMatching(JMenuItem menuItem) {
+        return "Second".equals(menuItem.getText());
+      }
+    });
+    assertThat(found).isSameAs(frame.secondMenuItem);
   }
 
   private JPopupMenu popupMenu() {
@@ -66,6 +101,8 @@ public class JPopupMenuDriverTest {
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
+    private final JMenuItem firstMenuItem = new JMenuItem("First");
+    private final JMenuItem secondMenuItem = new JMenuItem("Second");
     private final JTextField withPopup = new JTextField("With Pop-up Menu");
     private final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
@@ -73,8 +110,9 @@ public class JPopupMenuDriverTest {
       super(JPopupMenuDriverTest.class);
       add(withPopup);
       withPopup.setComponentPopupMenu(popupMenu);
-      popupMenu.add(new JMenuItem("First"));
-      popupMenu.add(new JMenuItem("Second"));
+      popupMenu.add(firstMenuItem);
+      firstMenuItem.setName("first");
+      popupMenu.add(secondMenuItem);
     }
   }
 }

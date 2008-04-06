@@ -53,8 +53,8 @@ public class JPopupMenuDriver extends JComponentDriver {
     for (int i = 0; i < subElements.length; i++) result[i] = asString(subElements[i]);
     return result;
   }
-  
-  private String asString(MenuElement e) {
+
+  static String asString(MenuElement e) {
     Component c = e.getComponent();
     if (c instanceof JMenuItem) return ((JMenuItem) c).getText();
     return "-";

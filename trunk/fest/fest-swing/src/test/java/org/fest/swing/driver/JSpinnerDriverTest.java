@@ -1,32 +1,19 @@
 /*
  * Created on Feb 25, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
-
-import java.awt.Dimension;
-
-import javax.swing.JSpinner;
-import javax.swing.SpinnerListModel;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -34,6 +21,18 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
+
+import java.awt.Dimension;
+
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JSpinnerDriver}</code>.
@@ -46,7 +45,7 @@ public class JSpinnerDriverTest {
   private Robot robot;
   private JSpinner spinner;
   private JSpinnerDriver driver;
-  
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSpinnerDriver(robot);
@@ -54,11 +53,11 @@ public class JSpinnerDriverTest {
     spinner = frame.spinner;
     robot.showWindow(frame);
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   @Test public void shouldIncrementValue() {
     assertThatSpinnerValueIsEqualTo("Frodo");
     driver.increment(spinner);
@@ -70,7 +69,7 @@ public class JSpinnerDriverTest {
     driver.increment(spinner, 2);
     assertThatSpinnerValueIsEqualTo("Gandalf");
   }
-  
+
   @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToIncrementIsZeroOrNegative(int times) {
     try {
@@ -82,19 +81,19 @@ public class JSpinnerDriverTest {
       assertThat(expected).message().isEqualTo(message);
     }
   }
-  
+
   @Test public void shouldDecrementValue() {
     driver.increment(spinner);
     driver.decrement(spinner);
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
-  
+
   @Test public void shouldDecrementValueTheGivenTimes() {
     spinner.setValue("Gandalf");
     driver.decrement(spinner, 2);
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
-  
+
   @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToDecrementIsZeroOrNegative(int times) {
     try {
@@ -106,12 +105,28 @@ public class JSpinnerDriverTest {
       assertThat(expected).message().isEqualTo(message);
     }
   }
-  
+
   @Test public void shouldEnterText() {
     driver.enterText(spinner, "Gandalf");
     assertThatSpinnerValueIsEqualTo("Gandalf");
   }
-  
+
+  @Test public void shouldPassIfValueIsEqualToExpected() {
+    spinner.setValue("Gandalf");
+    driver.requireValue(spinner, "Gandalf");
+  }
+
+  @Test public void shouldFailIfValueIsNotEqualToExpected() {
+    spinner.setValue("Gandalf");
+    try {
+      driver.requireValue(spinner, "Frodo");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'value'")
+                             .contains("expected:<'Frodo'> but was:<'Gandalf'>");
+    }
+  }
+
   private void assertThatSpinnerValueIsEqualTo(Object expected) {
     assertThat(spinner.getValue()).isEqualTo(expected);
   }
@@ -120,7 +135,7 @@ public class JSpinnerDriverTest {
     private static final long serialVersionUID = 1L;
 
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("Frodo", "Sam", "Gandalf")));
-    
+
     MyFrame() {
       super(JSpinnerDriverTest.class);
       add(spinner);
