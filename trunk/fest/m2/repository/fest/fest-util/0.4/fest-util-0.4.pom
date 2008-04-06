@@ -10,6 +10,13 @@
   <name>FEST Util</name>
   <description>Utility methods used by FEST modules</description>
   <inceptionYear>2007</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <mailingLists>
     <mailingList>
       <name>Easy Testing Group</name>

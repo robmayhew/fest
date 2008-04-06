@@ -11,6 +11,13 @@
   <description>'Flexible' or 'fluent' assertions for testing</description>
   <inceptionYear>2007</inceptionYear>
   <url>http://code.google.com/p/fest/</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <mailingLists>
     <mailingList>
       <name>Easy Testing Group</name>
