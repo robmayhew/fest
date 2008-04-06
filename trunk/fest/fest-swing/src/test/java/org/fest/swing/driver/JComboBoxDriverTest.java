@@ -15,23 +15,25 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
-
 import java.awt.Component;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxDriver}</code>.
@@ -101,6 +103,14 @@ public class JComboBoxDriverTest {
     JList dropDownList = driver.dropDownList();
     assertThatListContains(dropDownList, "first", "second", "third");
   }
+  
+  private void assertThatListContains(JList list, Object...expected) {
+    int expectedSize = expected.length;
+    ListModel model = list.getModel();
+    assertThat(model.getSize()).isEqualTo(expectedSize);
+    for (int i = 0; i < expectedSize; i++)
+      assertThat(model.getElementAt(i)).isEqualTo(expected[i]);
+  }
 
   @Test public void shouldPassIfHasExpectedSelection() {
     comboBox.setSelectedIndex(0);
@@ -115,6 +125,17 @@ public class JComboBoxDriverTest {
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
                              .contains("expected:<'second'> but was:<'first'>");
+    }
+  }
+
+  @Test public void shouldFailIfDoesNotHaveAnySelectionAndExpectingSelection() {
+    comboBox.setSelectedIndex(-1);
+    try {
+      driver.requireSelection(comboBox, "second");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectedIndex'")
+                             .contains("No selection");
     }
   }
 
@@ -133,6 +154,13 @@ public class JComboBoxDriverTest {
     }
   }
 
+  @Test public void shouldNotSelectAllTextIfComboBoxIsNotEditable() {
+    comboBox.setSelectedIndex(0);
+    comboBox.setEditable(false);
+    driver.selectAllText(comboBox);
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
+  }
+
   @Test public void shouldSelectAllText() {
     comboBox.setSelectedIndex(0);
     comboBox.setEditable(true);
@@ -143,12 +171,26 @@ public class JComboBoxDriverTest {
     assertThat(textBox.getSelectedText()).isEqualTo("first");
   }
 
+  @Test public void shouldNotEnterTextIfComboBoxIsNotEditable() {
+    comboBox.setSelectedIndex(0);
+    comboBox.setEditable(false);
+    driver.enterText(comboBox, "Hello");
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
+  }
+
   @Test public void shouldEnterText() {
     comboBox.setEditable(true);
     driver.enterText(comboBox, "Hello");
     assertThat(textIn(comboBox)).contains("Hello");
   }
 
+  @Test public void shouldNotReplaceTextIfComboBoxIsNotEditable() {
+    comboBox.setSelectedIndex(0);
+    comboBox.setEditable(false);
+    driver.replaceText(comboBox, "Hello");
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
+  }
+  
   @Test public void shouldReplaceText() {
     comboBox.setSelectedIndex(0);
     comboBox.setEditable(true);
@@ -177,13 +219,41 @@ public class JComboBoxDriverTest {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
+  
+  @Test public void shouldFailIfItemIndexIsNegative() {
+    try {
+      driver.validatedIndex(comboBox, -1);
+      fail();
+    } catch (LocationUnavailableException e) {
+      assertThat(e).message().contains("Item index (-1) should be between [0] and [2]");
+    }    
+  }
 
-  private void assertThatListContains(JList list, Object...expected) {
-    int expectedSize = expected.length;
-    ListModel model = list.getModel();
-    assertThat(model.getSize()).isEqualTo(expectedSize);
-    for (int i = 0; i < expectedSize; i++)
-      assertThat(model.getElementAt(i)).isEqualTo(expected[i]);
+  @Test public void shouldFailIfItemIndexIsGreaterThanLastItemIndex() {
+    try {
+      driver.validatedIndex(comboBox, 6);
+      fail();
+    } catch (LocationUnavailableException e) {
+      assertThat(e).message().contains("Item index (6) should be between [0] and [2]");
+    }    
+  }
+
+  @Test public void shouldShowDropDownListWhenComboBoxIsNotEditable() {
+    comboBox.setEditable(false);
+    driver.showDropDownList(comboBox);
+    pause(200);
+    assertDropDownVisible();
+  }
+  
+  @Test public void shouldShowDropDownListWhenComboBoxIsEditable() {
+    comboBox.setEditable(true);
+    driver.showDropDownList(comboBox);
+    pause(200);
+    assertDropDownVisible();
+  }
+
+  private void assertDropDownVisible() {
+    assertThat(comboBox.getUI().isPopupVisible(comboBox)).isTrue();
   }
 
   private static class MyFrame extends TestFrame {

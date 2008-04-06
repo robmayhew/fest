@@ -15,24 +15,33 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestTable.*;
-
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestTable;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestTable;
+
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestTable.*;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.
@@ -60,26 +69,46 @@ public class JTableDriverTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "cellsToSelect")
+  @Test(dataProvider = "cells")
   public void shouldSelectCell(int row, int column) {
     driver.selectCell(dragTable, new TableCell(row, column));
     assertThat(dragTable.isCellSelected(row, column));
   }
 
-  @Test(dataProvider = "cellsToSelect")
-  public void shouldReturnValueOfGivenCell(int row, int column) {
+  @Test public void shouldSelectCells() {
+    driver.selectCells(dragTable, new TableCell(0, 0), new TableCell(2, 0));
+    assertThat(dragTable.isCellSelected(0, 0));
+    assertThat(dragTable.isCellSelected(2, 0));
+  }
+  
+  @Test(dependsOnMethods = "shouldSelectCell")
+  public void shouldNotSelectCellIfAlreadySelected() {
+    driver.selectCell(dragTable, new TableCell(0, 0));
+    assertThat(dragTable.isCellSelected(0, 0));
+    driver.selectCell(dragTable, new TableCell(0, 0));
+    assertThat(dragTable.isCellSelected(0, 0));
+  }
+  
+  @Test(dataProvider = "cells")
+  public void shouldReturnValueOfGivenRowAndColumn(int row, int column) {
     String text = driver.text(dragTable, row, column);
     assertThat(text).isEqualTo(createCellTextUsing(row, column));
   }
 
-  @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cellsToSelect")
+  @Test(dataProvider = "cells")
+  public void shouldReturnValueOfGivenCell(int row, int column) {
+    String text = driver.text(dragTable, new TableCell(row, column));
+    assertThat(text).isEqualTo(createCellTextUsing(row, column));
+  }
+
+  @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cells")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
     driver.selectCell(dragTable, new TableCell(row, column));
     String text = driver.selectionText(dragTable);
     assertThat(text).isEqualTo(createCellTextUsing(row, column));
   }
 
-  @DataProvider(name = "cellsToSelect") public Object[][] cellsToSelect() {
+  @DataProvider(name = "cells") public Object[][] cells() {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }
 
@@ -99,6 +128,18 @@ public class JTableDriverTest {
     assertThat(dropTable.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
+  @Test public void shouldShowPopupMenuAtCell() {
+    JPopupMenu popupMenu = new JPopupMenu();
+    popupMenu.add(new JMenuItem("Leia"));
+    dragTable.setComponentPopupMenu(popupMenu);
+    ClickRecorder recorder = attachTo(dragTable);
+    driver.showPopupMenuAt(dragTable, new TableCell(0, 1));
+    recorder.clicked(RIGHT_BUTTON).timesClicked(1);
+    Point pointClicked = recorder.pointClicked();
+    Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
+    assertThat(pointClicked).isEqualTo(pointAtCell);
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
@@ -120,6 +161,7 @@ public class JTableDriverTest {
 
     MyFrame() {
       super(JTableDriverTest.class);
+      dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
       add(decorate(dragTable));
       add(decorate(dropTable));
       setPreferredSize(new Dimension(600, 400));

@@ -15,17 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static javax.swing.text.DefaultEditorKit.selectAllAction;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
-import static org.fest.swing.util.Strings.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.awt.Container;
 
@@ -40,6 +29,18 @@ import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
+
+import static java.lang.String.valueOf;
+import static javax.swing.text.DefaultEditorKit.selectAllAction;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.CellRendererComponents.textFrom;
+import static org.fest.swing.util.Strings.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
@@ -165,23 +166,23 @@ public class JComboBoxDriver extends JComponentDriver {
       robot.invokeAndWait(new Runnable() {
         public void run() {
           comboBox.setSelectedIndex(validatedIndex);
-          if (isDropDownVisible(comboBox)) dropDownVisible(comboBox, false);
+          if (isDropDownVisible(comboBox)) dropDownVisibleThroughUIDelegate(comboBox, false);
         }
       });
     }
   }
 
-  private int validatedIndex(JComboBox comboBox, int index) {
+  int validatedIndex(JComboBox comboBox, int index) {
     int itemCount = size(comboBox);
     if (index >= 0 && index < itemCount) return index;
     throw new LocationUnavailableException(concat(
-        "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [",  valueOf(itemCount - 1),
-        "] (inclusive)"));
+        "Item index (", valueOf(index), ") should be between [0] and [",
+        valueOf(itemCount - 1), "] (inclusive)"));
   }
 
   private int size(JComboBox comboBox) { return comboBox.getItemCount(); }
 
-  private void showDropDownList(final JComboBox comboBox) {
+  void showDropDownList(final JComboBox comboBox) {
     if (isDropDownVisible(comboBox)) return;
     if (!comboBox.isEditable()) {
       click(comboBox);
@@ -189,7 +190,7 @@ public class JComboBoxDriver extends JComponentDriver {
     }
     // Location of pop-up button activator is LAF-dependent
     robot.invokeAndWait(new Runnable() {
-      public void run() { dropDownVisible(comboBox, true); }
+      public void run() { dropDownVisibleThroughUIDelegate(comboBox, true); }
     });
   }
 
@@ -197,7 +198,7 @@ public class JComboBoxDriver extends JComponentDriver {
     return comboBox.getUI().isPopupVisible(comboBox);
   }
 
-  private void dropDownVisible(JComboBox comboBox, boolean visible) {
+  void dropDownVisibleThroughUIDelegate(JComboBox comboBox, boolean visible) {
     comboBox.getUI().setPopupVisible(comboBox, visible);
   }
 
