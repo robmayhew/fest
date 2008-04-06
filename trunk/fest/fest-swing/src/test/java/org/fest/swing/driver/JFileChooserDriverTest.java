@@ -127,7 +127,7 @@ public class JFileChooserDriverTest {
     File userHome = new File(homePath);
     assertThat(userHome.isDirectory()).isTrue();
     String userHomeAbsolutePath = userHome.getAbsolutePath();
-    fileChooser.setCurrentDirectory(userHome);
+    driver.setCurrentDirectory(fileChooser, userHome);
     assertThat(userHomeAbsolutePath).isEqualTo(currentDirectoryAbsolutePath());
   }
 
