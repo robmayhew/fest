@@ -16,16 +16,23 @@
 package org.fest.swing.driver;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
 
 import java.awt.Dimension;
 
 import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestList;
 import org.testng.annotations.AfterMethod;
@@ -83,6 +90,11 @@ public class JListDriverTest {
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
   }
 
+  @Test public void shouldSelectItemsInRange() {
+    driver.selectItems(dragList, from(0), to(1));
+    assertThat(dragList.getSelectedValues()).isEqualTo(array("one", "two"));
+  }
+
   @Test public void shouldSelectItemsInGivenRange() {
     driver.selectItems(dragList, 0, 1);
     assertThat(dragList.getSelectedValues()).isEqualTo(array("one", "two"));
@@ -91,6 +103,94 @@ public class JListDriverTest {
   @Test public void shouldReturnValueAtGivenIndex() {
     String text = driver.text(dragList, 2);
     assertThat(text).isEqualTo("three");
+  }
+
+  @Test public void shouldReturnIndexOfValue() {
+    int index = driver.indexOf(dragList, "three");
+    assertThat(index).isEqualTo(2);
+  }
+
+  @Test public void shouldPassIfSelectionIsEqualToExpectedOne() {
+    dragList.setSelectedIndex(0);
+    driver.requireSelection(dragList, "one");
+  }
+
+  @Test public void shouldFailIfExpectingSelectionButThereIsNone() {
+    dragList.setSelectedIndex(-1);
+    try {
+      driver.requireSelection(dragList, "one");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("No selection");
+    }
+  }
+
+  @Test public void shouldFailIfSelectionIsNotEqualToExpectedOne() {
+    dragList.setSelectedIndex(1);
+    try {
+      driver.requireSelection(dragList, "one");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("expected:<'one'> but was:<'two'>");
+    }
+  }
+
+  @Test public void shouldPassIfSelectedItemsIsEqualToExpectedOnes() {
+    dragList.setSelectedIndices(new int[] { 0, 1 });
+    driver.requireSelectedItems(dragList, "one", "two");
+  }
+
+  @Test public void shouldFailIfExpectingSelectedItemsButThereIsNone() {
+    dragList.setSelectedIndex(-1);
+    try {
+      driver.requireSelectedItems(dragList, "one", "two");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("No selection");
+    }
+  }
+
+  @Test public void shouldFailIfSelectedItemCountIsNotEqualToExpectedOnes() {
+    dragList.setSelectedIndex(2);
+    try {
+      driver.requireSelectedItems(dragList, "one", "two");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectedIndices#length'] expected:<2> but was:<1>");
+    }
+  }
+
+  @Test public void shouldFailIfSelectedItemsIsNotEqualToExpectedOnes() {
+    dragList.setSelectedIndex(2);
+    try {
+      driver.requireSelectedItems(dragList, "one");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("expected:<'one'> but was:<'three'>");
+    }
+  }
+
+  @Test public void shouldShowPopupMenuAtItemWithValue() {
+    JPopupMenu popupMenu = popupMenuFor(dragList);
+    ClickRecorder recorder = attachTo(dragList);
+    driver.showPopupMenuAt(dragList, "one");
+    recorder.clicked(RIGHT_BUTTON);
+    assertThat(popupMenu.isVisible()).isTrue();
+  }
+
+  @Test public void shouldShowPopupMenuAtItemWithIndex() {
+    JPopupMenu popupMenu = popupMenuFor(dragList);
+    ClickRecorder recorder = attachTo(dragList);
+    driver.showPopupMenuAt(dragList, 0);
+    recorder.clicked(RIGHT_BUTTON);
+    assertThat(popupMenu.isVisible()).isTrue();
+  }
+
+  private JPopupMenu popupMenuFor(JList list) {
+    JPopupMenu popupMenu = new JPopupMenu();
+    popupMenu.add(new JMenuItem("Frodo"));
+    list.setComponentPopupMenu(popupMenu);
+    return popupMenu;
   }
 
   @Test public void shouldDragAndDropValueUsingGivenNames() {

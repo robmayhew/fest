@@ -14,6 +14,12 @@
  */
 package org.fest.swing.driver;
 
+import static javax.swing.SwingUtilities.getWindowAncestor;
+import static org.fest.reflect.core.Reflection.field;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.*;
+
 import java.awt.*;
 
 import javax.swing.JToolBar;
@@ -23,13 +29,6 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-
-import static javax.swing.SwingUtilities.getWindowAncestor;
-
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JToolBar}</code>. Unlike <code>JToolBarFixture</code>, this
@@ -65,6 +64,18 @@ public class JToolBarDriver extends JComponentDriver {
   }
 
   /**
+   * Makes the given <code>{@link JToolBar}</code> float.
+   * @param toolBar the target <code>JToolBar</code>.
+   * @throws ActionFailedException if the <code>JToolBar</code> is not floatable.
+   * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
+   */
+  public void makeFloat(JToolBar toolBar) {
+    Window w = SwingUtilities.getWindowAncestor(toolBar);
+    Point where = w.getLocation();
+    floatTo(toolBar, where.x, where.y);
+  }
+
+  /**
    * Drags the <code>{@link JToolBar}</code> to the given location, causing it to float.
    * @param toolBar the target <code>JToolBar</code>.
    * @param x the horizontal coordinate of the location to drag the <code>JToolBar</code> to.
@@ -78,18 +89,6 @@ public class JToolBarDriver extends JComponentDriver {
     drag(toolBar, location.pointToGrab(toolBar));
     drop(w, new Point(x - w.getX(), y - w.getY()));
     if (!isFloating(toolBar)) throw actionFailure(concat("Unable to float JToolbar <", format(toolBar), ">"));
-  }
-
-  /**
-   * Makes the given <code>{@link JToolBar}</code> float.
-   * @param toolBar the target <code>JToolBar</code>.
-   * @throws ActionFailedException if the <code>JToolBar</code> is not floatable.
-   * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
-   */
-  public void floatTo(JToolBar toolBar) {
-    Window w = SwingUtilities.getWindowAncestor(toolBar);
-    Point where = w.getLocation();
-    floatTo(toolBar, where.x, where.y);
   }
 
   /**
