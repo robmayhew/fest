@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="0.9.1" date="2008-04-02" description="Subsequent release">
+    <release version="1.0a1" date="2008-04-07" description="Subsequent release">
       <action dev="wanghy" type="add">
         Added methods 'selectAllText' and 'replaceText(String)' to JComboBoxFixture. 
       </action>

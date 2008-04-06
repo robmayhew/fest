@@ -276,7 +276,7 @@ public class JOptionPaneDriverTest {
     }
 
     JOptionPane showMessageWithOptions(final Object[] options) {
-      return setActionAndClickButton(new MouseAdapter() {
+      return setUpAndFindOptionPane(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showOptionDialog(MyFrame.this, "Message", "Title", YES_NO_OPTION, QUESTION_MESSAGE, null, options,
               options[0]);
@@ -285,7 +285,7 @@ public class JOptionPaneDriverTest {
     }
 
     JOptionPane showInputMessage() {
-      return setActionAndClickButton(new MouseAdapter() {
+      return setUpAndFindOptionPane(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showInputDialog(MyFrame.this, "Message");
         }
@@ -293,7 +293,7 @@ public class JOptionPaneDriverTest {
     }
 
     JOptionPane showConfirmMessage() {
-      return setActionAndClickButton(new MouseAdapter() {
+      return setUpAndFindOptionPane(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           JOptionPane.showConfirmDialog(MyFrame.this, "Text");
         }
@@ -325,7 +325,7 @@ public class JOptionPaneDriverTest {
     }
 
     private JOptionPane showMessage(final String text, final String title, final int messageType) {
-      return setActionAndClickButton(new MouseAdapter() {
+      return setUpAndFindOptionPane(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           showMessageDialog(MyFrame.this, text, title, messageType);
         }
@@ -333,7 +333,7 @@ public class JOptionPaneDriverTest {
     }
 
     JOptionPane showManuallyCreatedOptionPaneWithTitle(final String title) {
-      return setActionAndClickButton(new MouseAdapter() {
+      return setUpAndFindOptionPane(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           JOptionPane optionPane = new JOptionPane("Manually Created");
           JDialog dialog = optionPane.createDialog(MyFrame.this, title);
@@ -342,12 +342,14 @@ public class JOptionPaneDriverTest {
       });
     }
 
-    private JOptionPane setActionAndClickButton(MouseListener l) {
+    private JOptionPane setUpAndFindOptionPane(MouseListener l) {
       removeAllMouseListeners();
       button.addMouseListener(l);
       clickButton();
-      pause(2000);
-      return robot.finder().findByType(JOptionPane.class, true);
+      pause(500);
+      JOptionPane optionPane = robot.finder().findByType(JOptionPane.class, true);
+      pause(500);
+      return optionPane;
     }
 
     private void removeAllMouseListeners() {

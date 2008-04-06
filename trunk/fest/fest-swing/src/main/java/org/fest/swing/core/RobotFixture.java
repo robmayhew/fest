@@ -331,6 +331,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void click(Component c, Point where, MouseButton button, int times) {
+    focus(c);
     int mask = button.mask;
     int modifierMask = mask & ~BUTTON_MASK;
     mask &= BUTTON_MASK;
