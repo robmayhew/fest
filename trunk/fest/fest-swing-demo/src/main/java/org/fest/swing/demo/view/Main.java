@@ -15,9 +15,6 @@
  */
 package org.fest.swing.demo.view;
 
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.jvnet.substance.SubstanceLookAndFeel.TREE_DECORATIONS_ANIMATION_KIND;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +23,17 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import org.jvnet.lafwidget.animation.FadeConfigurationManager;
+import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
+
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.FolderService;
 import org.fest.swing.demo.service.Services;
 import org.fest.swing.demo.service.WebFeedService;
-import org.jvnet.lafwidget.animation.FadeConfigurationManager;
-import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
+
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.jvnet.substance.SubstanceLookAndFeel.TREE_DECORATIONS_ANIMATION_KIND;
 
 /**
  * Launches the application.
@@ -75,11 +76,11 @@ public class Main {
       }
     });
     Services.instance().updateWebFeedService(new WebFeedService() {
-      @Override public String obtainFeedName(String address) {
+      public String obtainFeedName(String address) {
         return null;
       }
 
-      @Override public void saveWebFeed(WebFeed webFeed) {
+      public void saveWebFeed(WebFeed webFeed) {
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {
