@@ -34,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JToolBarFixture extends JPopupMenuInvokerFixture<JToolBar> {
+public class JToolBarFixture extends ContainerFixture<JToolBar> {
 
   /**
    * Understands constraints used to unfloat a floating <code>{@link JToolBar}</code>.
