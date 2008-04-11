@@ -54,7 +54,7 @@ import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -430,8 +430,8 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void enterText(String text) {
-    for (char character : text.toCharArray())
-      type(character);
+    if (isEmpty(text)) return;
+    for (char character : text.toCharArray()) type(character);
   }
 
   /** ${@inheritDoc} */

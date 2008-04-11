@@ -15,21 +15,22 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 
 import javax.swing.JTextField;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTextComponentDriver}</code>.
@@ -57,6 +58,12 @@ public class JTextComponentDriverTest {
   }
 
   @Test public void shouldDeleteText() {
+    driver.deleteText(textField);
+    assertThat(textField.getText()).isNullOrEmpty();
+  }
+  
+  @Test public void shouldDeleteTextInEmptyTextComponent() {
+    textField.setText("");
     driver.deleteText(textField);
     assertThat(textField.getText()).isNullOrEmpty();
   }

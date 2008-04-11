@@ -6,6 +6,11 @@
   </properties>
   <body>
     <release version="1.0a1" date="2008-04-07" description="Subsequent release">
+      <action dev="alruiz" type="fix" issue="123" due-to="Manuel Kueblboeck">
+        Fixed NullPointerException in method 'enterText' in org.fest.core.RobotFixture.
+      </action>
+    </release>
+    <release version="1.0a1" date="2008-04-07" description="Subsequent release">
       <action dev="wanghy" type="add">
         Added methods 'selectAllText' and 'replaceText(String)' to JComboBoxFixture. 
       </action>
