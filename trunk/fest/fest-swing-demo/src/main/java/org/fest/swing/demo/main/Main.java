@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.demo.view;
+package org.fest.swing.demo.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +31,7 @@ import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.FolderService;
 import org.fest.swing.demo.service.Services;
 import org.fest.swing.demo.service.WebFeedService;
+import org.fest.swing.demo.view.MainFrame;
 
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.jvnet.substance.SubstanceLookAndFeel.TREE_DECORATIONS_ANIMATION_KIND;
