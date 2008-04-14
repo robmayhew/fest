@@ -15,6 +15,24 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+import java.awt.Point;
+
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestList;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
@@ -23,21 +41,6 @@ import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
-
-import java.awt.Dimension;
-
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestList;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JListDriver}</code>.
@@ -65,8 +68,42 @@ public class JListDriverTest {
     robot.cleanUp();
   }
 
+  @Test public void shouldReturnLocationOfValue() {
+    Point p = driver.pointAt(dragList, "two");
+    int index = dragList.locationToIndex(p);
+    assertThat(index).isEqualTo(1);
+  }
+
+  @Test public void shouldReturnIndexForValue() {
+    int index = driver.indexOf(dragList, "three");
+    assertThat(index).isEqualTo(2);
+  }
+  
+  @Test public void shouldThrowErrorIfIndexForValueNotFound() {
+    try {
+      driver.indexOf(dragList, "four");
+      fail();
+    } catch (LocationUnavailableException expected) {
+      assertThat(expected).message().isEqualTo("Unable to find an element matching the value 'four'");
+    }
+  }
+  
+  @Test public void shouldReturnTextOfElement() {
+    Object text = driver.value(dragList, 0);
+    assertThat(text).isEqualTo("one");
+  }
+  
+  @Test public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForText() {
+    try {
+      driver.value(dragList, 6);
+      fail();
+    } catch (LocationUnavailableException expected) {
+      assertThat(expected).message().isEqualTo("Item index (6) should be between [0] and [2] (inclusive)");
+    }
+  }
+
   @Test public void shouldReturnListContents() {
-    String[] contents = driver.contentsOf(dragList);
+    Object[] contents = driver.contentsOf(dragList);
     assertThat(contents).isEqualTo(array("one", "two", "three"));
   }
 
@@ -101,7 +138,7 @@ public class JListDriverTest {
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {
-    String text = driver.text(dragList, 2);
+    Object text = driver.value(dragList, 2);
     assertThat(text).isEqualTo("three");
   }
 

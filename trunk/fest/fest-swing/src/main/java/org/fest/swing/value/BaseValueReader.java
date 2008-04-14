@@ -17,10 +17,7 @@ package org.fest.swing.value;
 
 import java.awt.Component;
 
-import javax.swing.AbstractButton;
 import javax.swing.JLabel;
-import javax.swing.JToggleButton;
-import javax.swing.text.JTextComponent;
 
 import static org.fest.swing.util.Strings.isDefaultToString;
 
@@ -32,32 +29,15 @@ import static org.fest.swing.util.Strings.isDefaultToString;
 public abstract class BaseValueReader {
 
   /**
-   * Reads the value in the given renderer, or returns <code>null</code> if the renderer belongs to an unknown component 
-   * type.
-   * <p>
-   * Internally, this method will call the methods:
-   * <ul>
-   * <li><code>isSelected()</code> if the given renderer is an instance of <code>{@link JToggleButton}</code></li>
-   * <li>
-   * <p>
-   * <code>getText()</code> if the given renderer is an instance of:
-   * <ul>
-   * <li><code>{@link JLabel}</code></li>
-   * <li><code>{@link JTextComponent}</code></li>
-   * <li><code>{@link AbstractButton}</code></li>
-   * </ul>
-   * </p>
-   * </li>
-   * </ul>
-   * </p>
+   * Reads the value in the given renderer, or returns <code>null</code> if the renderer belongs to an unknown
+   * component type. Internally, this method will call <code>getText()</code> if the given renderer is an instance of
+   * <code>{@link JLabel}</code></li>
    * @param renderer the given renderer.
-   * @return the value of the given renderer, or <code>null</code> if the renderer belongs to an unknown component type.
+   * @return the value of the given renderer, or <code>null</code> if the renderer belongs to an unknown component
+   *         type.
    */
   protected final Object valueFrom(Component renderer) {
-    if (renderer instanceof JToggleButton) return ((JToggleButton)renderer).isSelected();
     if (renderer instanceof JLabel) return ((JLabel)renderer).getText();
-    if (renderer instanceof JTextComponent) return ((JTextComponent)renderer).getText();
-    if (renderer instanceof AbstractButton) return ((AbstractButton)renderer).getText();
     return null;
   }
 

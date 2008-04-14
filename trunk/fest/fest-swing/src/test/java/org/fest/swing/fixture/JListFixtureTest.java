@@ -25,6 +25,7 @@ import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
+import org.fest.swing.value.JListCellValueReader;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -62,14 +63,14 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
 
   @Test public void shouldReturnContents() {
-    final String[] contents = array("Luke", "Leia");
+    final Object[] contents = array("Luke", "Leia");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.contentsOf(target)).andReturn(contents);
       }
       
       protected void codeToTest() {
-        String[] result = fixture.contents();
+        Object[] result = fixture.contents();
         assertThat(result).isSameAs(contents);
       }
     }.run();
@@ -118,7 +119,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
 
   @Test public void shouldSelectItemsWithValues() {
-    final String[] values = array("Frodo", "Sam");
+    final Object[] values = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectItems(target, values);
@@ -184,7 +185,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
   
   @Test public void shouldRequireSelectedItems() {
-    final String[] items = array("Frodo", "Sam");
+    final Object[] items = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireSelectedItems(target, items);
@@ -200,7 +201,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   @Test public void shouldReturnValueAtIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.text(target, 6)).andReturn("Frodo");
+        expect(driver.value(target, 6)).andReturn("Frodo");
       }
       
       protected void codeToTest() {
@@ -318,6 +319,20 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
       protected void codeToTest() {
         JPopupMenuFixture result = fixture.showPopupMenuAt("Frodo");
         assertThat(result.target).isSameAs(popup);
+      }
+    }.run();
+  }
+
+  @Test public void shouldSetCellReaderInDriver() {
+    final JListCellValueReader reader = createMock(JListCellValueReader.class);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.cellValueReader(reader);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        fixture.cellValueReader(reader);
       }
     }.run();
   }

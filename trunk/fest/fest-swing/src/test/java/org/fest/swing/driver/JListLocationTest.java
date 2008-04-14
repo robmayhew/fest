@@ -59,12 +59,6 @@ public class JListLocationTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldReturnLocationOfValue() {
-    Point p = location.pointAt(list, "two");
-    int index = list.locationToIndex(p);
-    assertThat(index).isEqualTo(1);
-  }
-  
   @Test public void shouldReturnLocationOfIndex() {
     Point p = location.pointAt(list, 2);
     int index = list.locationToIndex(p);
@@ -80,34 +74,6 @@ public class JListLocationTest {
     }
   }
   
-  @Test public void shouldReturnIndexForValue() {
-    int index = location.indexOf(list, "three");
-    assertThat(index).isEqualTo(2);
-  }
-  
-  @Test public void shouldThrowErrorIfIndexForValueNotFound() {
-    try {
-      location.indexOf(list, "four");
-      fail();
-    } catch (LocationUnavailableException expected) {
-      assertThat(expected).message().isEqualTo("Unable to find an element matching the value 'four'");
-    }
-  }
-  
-  @Test public void shouldReturnTextOfElement() {
-    String text = location.text(list, 0);
-    assertThat(text).isEqualTo("one");
-  }
-  
-  @Test public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForText() {
-    try {
-      location.text(list, 6);
-      fail();
-    } catch (LocationUnavailableException expected) {
-      assertThat(expected).message().isEqualTo("Item index (6) should be between [0] and [2] (inclusive)");
-    }
-  }
-
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

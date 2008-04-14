@@ -17,6 +17,7 @@ package org.fest.swing.value;
 
 import java.awt.Component;
 
+import javax.swing.JComboBox;
 import javax.swing.JList;
 
 /**
@@ -24,27 +25,29 @@ import javax.swing.JList;
  *
  * @author Alex Ruiz
  */
-public class BasicJListCellValueReader extends BaseValueReader implements JListCellValueReader {
+public class BasicJComboBoxCellValueReader extends BaseValueReader implements JComboBoxCellValueReader {
+
+  private static final JList REFERENCE_JLIST = new JList();
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test. This method first
+   * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test. This method first
    * tries to get the value from the <code>toString</code> implementation of the object stored in the
-   * <code>JList</code>'s model at the specified index. If it fails, it returns the value displayed in the
-   * <code>JList</code>'s cell renderer.
-   * @param list the given <code>JList</code>.
+   * <code>JComboBox</code>'s model at the specified index. If it fails, it returns the value displayed in the
+   * <code>JComboBox</code>'s cell renderer.
+   * @param comboBox the given <code>JComboBox</code>.
    * @param index the index of the cell.
-   * @return the internal value of a cell in a <code>JList</code> as expected in a test.
+   * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
    * @see BaseValueReader#valueFrom(Object)
    * @see BaseValueReader#valueFrom(Component)
    */
-  public Object valueAt(JList list, int index) {
-    Object element = list.getModel().getElementAt(index);
-    Object value = valueFrom(element);
+  public Object valueAt(JComboBox comboBox, int index) {
+    Object item = comboBox.getItemAt(index);
+    Object value = valueFrom(item);
     if (value != null) return value;
-    return valueFrom(cellRendererComponent(list, index, element));
+    return valueFrom(cellRendererComponent(comboBox, index, item));
   }
 
-  private Component cellRendererComponent(JList list, int index, Object element) {
-    return list.getCellRenderer().getListCellRendererComponent(list, element, index, false, false);
+  private Component cellRendererComponent(JComboBox comboBox, int index, Object item) {
+    return comboBox.getRenderer().getListCellRendererComponent(REFERENCE_JLIST, item, index, true, true);
   }
 }

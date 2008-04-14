@@ -60,7 +60,7 @@ public class JComboBoxDriverTest {
   }
 
   @Test public void shouldReturnComboBoxContents() {
-    String[] contents = driver.contentsOf(comboBox);
+    Object[] contents = driver.contentsOf(comboBox);
     assertThat(contents).isEqualTo(array("first", "second", "third"));
   }
 
@@ -86,8 +86,8 @@ public class JComboBoxDriverTest {
   }
 
   @Test public void shouldReturnTextAtGivenIndex() {
-    String text = driver.text(comboBox, 2);
-    assertThat(text).isEqualTo("third");
+    Object value = driver.value(comboBox, 2);
+    assertThat(value).isEqualTo("third");
   }
 
   @Test public void shouldReturnTextFromListCellRenderer() {
@@ -95,7 +95,7 @@ public class JComboBoxDriverTest {
     comboBox.setModel(model);
     comboBox.setRenderer(new ListCellRendererStub("Hi"));
     robot.click(comboBox);
-    assertThat(driver.text(comboBox, 0)).isEqualTo("Hi");
+    assertThat(driver.value(comboBox, 0)).isEqualTo("Hi");
   }
 
   @Test public void shouldReturnDropDownList() {
@@ -222,7 +222,7 @@ public class JComboBoxDriverTest {
   
   @Test public void shouldFailIfItemIndexIsNegative() {
     try {
-      driver.validatedIndex(comboBox, -1);
+      driver.validateIndex(comboBox, -1);
       fail();
     } catch (LocationUnavailableException e) {
       assertThat(e).message().contains("Item index (-1) should be between [0] and [2]");
@@ -231,7 +231,7 @@ public class JComboBoxDriverTest {
 
   @Test public void shouldFailIfItemIndexIsGreaterThanLastItemIndex() {
     try {
-      driver.validatedIndex(comboBox, 6);
+      driver.validateIndex(comboBox, 6);
       fail();
     } catch (LocationUnavailableException e) {
       assertThat(e).message().contains("Item index (6) should be between [0] and [2]");

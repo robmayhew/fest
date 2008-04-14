@@ -26,6 +26,8 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.Range;
+import org.fest.swing.value.BasicJListCellValueReader;
+import org.fest.swing.value.JListCellValueReader;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 
@@ -72,10 +74,10 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   }
 
   /**
-   * Returns the elements in this fixture's <code>{@link JList}</code> as <code>String</code>s.
+   * Returns the elements in this fixture's <code>{@link JList}</code>.
    * @return the elements in this fixture's <code>JList</code>.
    */
-  public String[] contents() {
+  public Object[] contents() {
     return driver.contentsOf(target);
   }
 
@@ -116,24 +118,23 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
 
   /**
    * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
-   * @param items the text of the items to select.
+   * @param items the values of the items to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
-   *         found.
+   * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
-  public JListFixture selectItems(String...items) {
+  public JListFixture selectItems(Object...items) {
     driver.selectItems(target, items);
     return this;
   }
 
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item to select.
+   * @param value the value of the item to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public JListFixture selectItem(String text) {
-    driver.selectItem(target, text);
+  public JListFixture selectItem(Object value) {
+    driver.selectItem(target, value);
     return this;
   }
 
@@ -151,11 +152,11 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
 
   /**
    * Simulates a user double-clicking an item in this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item to double-click.
+   * @param value the value of the item to double-click.
    * @return this fixture.
    */
-  public JListFixture doubleClickItem(String text) {
-    driver.clickItem(target, text, LEFT_BUTTON, 2);
+  public JListFixture doubleClickItem(Object value) {
+    driver.clickItem(target, value, LEFT_BUTTON, 2);
     return this;
   }
 
@@ -164,39 +165,37 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   }
 
   /**
-   * Verifies that the <code>String</code> representation of the selected item in this fixture's
-   * <code>{@link JList}</code> matches the given text.
-   * @param text the text to match.
+   * Verifies that the selected item in this fixture's <code>{@link JList}</code> matches the given value.
+   * @param value the value to match.
    * @return this fixture.
-   * @throws AssertionError if the selected item does not match the given text.
+   * @throws AssertionError if the selected item does not match the given value.
    */
-  public JListFixture requireSelection(String text) {
-    driver.requireSelection(target, text);
+  public JListFixture requireSelection(Object value) {
+    driver.requireSelection(target, value);
     return this;
   }
 
   /**
-   * Verifies that the <code>String</code> representations of the selected items in this fixture's
-   * <code>{@link JList}</code> match the given text items.
-   * @param items text items to match.
+   * Verifies that the selected items in this fixture's <code>{@link JList}</code> match the given values.
+   * @param items the values to match.
    * @return this fixture.
-   * @throws AssertionError if the selected items do not match the given text items.
+   * @throws AssertionError if the selected items do not match the given values.
    */
-  public JListFixture requireSelectedItems(String... items) {
+  public JListFixture requireSelectedItems(Object... items) {
     driver.requireSelectedItems(target, items);
     return this;
   }
 
   /**
-   * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JList}</code> . If such
-   * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * Returns the value of an item in this fixture's <code>{@link JList}</code>. If the value is not meaningful, this
+   * method will return <code>null</code>.
    * @param index the index of the item to return.
-   * @return the String representation of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @return the value of the item under the given index, or <code>null</code> if nothing meaningful.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public String valueAt(int index) {
-    return driver.text(target, index);
+  public Object valueAt(int index) {
+    return driver.value(target, index);
   }
 
   /**
@@ -210,13 +209,13 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   }
 
   /**
-   * Returns a fixture that manages the list item specified by the given text.
-   * @param text the text of the item.
-   * @return a fixture that manages the list item specified by the given text.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * Returns a fixture that manages the list item specified by the given value.
+   * @param value the value of the item.
+   * @return a fixture that manages the list item specified by the given value.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public JListItemFixture item(String text) {
-    return new JListItemFixture(this, driver.indexOf(target, text));
+  public JListItemFixture item(Object value) {
+    return new JListItemFixture(this, driver.indexOf(target, value));
   }
 
   /**
@@ -361,24 +360,24 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
 
   /**
    * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item to drag.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @param value the value of the item to drag.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @return this fixture.
    */
-  public JListFixture drag(String text) {
-    driver.drag(target, text);
+  public JListFixture drag(Object value) {
+    driver.drag(target, value);
     return this;
   }
 
   /**
    * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item to drop.
+   * @param value the value of the item to drop.
    * @return this fixture.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public JListFixture drop(String text) {
-    driver.drop(target, text);
+  public JListFixture drop(Object value) {
+    driver.drop(target, value);
     return this;
   }
 
@@ -431,12 +430,22 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
 
   /**
    * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item.
+   * @param value the value of the item.
    * @return a fixture that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public JPopupMenuFixture showPopupMenuAt(String text) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, text));
+  public JPopupMenuFixture showPopupMenuAt(Object value) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, value));
+  }
+
+  /**
+   * Updates the implementation of <code>{@link JListCellValueReader}</code> to use when comparing internal values of 
+   * this fixture's <code>{@link JList}</code> and the values expected in a test. The default implementation to use
+   * is <code>{@link BasicJListCellValueReader}</code>.
+   * @param cellValueReader the new <code>JListCellValueReader</code> to use.
+   */
+  public void cellValueReader(JListCellValueReader cellValueReader) {
+    driver.cellValueReader(cellValueReader);
   }
 }

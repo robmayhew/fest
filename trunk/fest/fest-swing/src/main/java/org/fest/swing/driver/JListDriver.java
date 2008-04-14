@@ -29,6 +29,8 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
+import org.fest.swing.value.BasicJListCellValueReader;
+import org.fest.swing.value.JListCellValueReader;
 
 import static java.awt.event.KeyEvent.VK_SHIFT;
 import static java.lang.String.valueOf;
@@ -38,7 +40,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -56,6 +59,8 @@ public class JListDriver extends JComponentDriver {
   
   private final JListLocation location;
 
+  private JListCellValueReader cellValueReader;
+
   /**
    * Creates a new </code>{@link JListDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -63,17 +68,18 @@ public class JListDriver extends JComponentDriver {
   public JListDriver(Robot robot) {
     super(robot);
     location = new JListLocation();
+    cellValueReader(new BasicJListCellValueReader());
   }
 
   /**
-   * Returns an array of <code>String</code>s that represents the list's contents.
+   * Returns the given list's contents.
    * @param list the target <code>JList</code>.
-   * @return an array of <code>String</code>s that represents the list's contents.
+   * @return the list's contents.
    */
-  public String[] contentsOf(JList list) {
-    String[] values = new String[sizeOf(list)];
+  public Object[] contentsOf(JList list) {
+    Object[] values = new String[sizeOf(list)];
     for (int i = 0; i < values.length; i++)
-      values[i] = model(list).getElementAt(i).toString();
+      values[i] = value(list, i);
     return values;
   }
 
@@ -189,57 +195,46 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the text of the element under the given index.
-   * @param list the target <code>JList</code>.
-   * @param index the given index.
-   * @return the text of the element under the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   */
-  public String text(JList list, int index) {
-    return location.text(list, index);
-  }
-
-  /**
-   * Returns the index of the first item matching the given value.
+   * Verifies that the the selected item in the <code>{@link JList}</code> matches the given value.
    * @param list the target <code>JList</code>.
    * @param value the value to match.
-   * @return the index of the first item matching the given value.
-   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   * @throws AssertionError if the selected item does not match the value.
    */
-  public int indexOf(JList list, Object value) {
-    return location.indexOf(list, value);
-  }
-
-  /**
-   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JList}</code> matches
-   * the given text.
-   * @param list the target <code>JList</code>.
-   * @param text the text to match.
-   * @throws AssertionError if the selected item does not match the given text.
-   */
-  public void requireSelection(JList list, String text) {
+  public void requireSelection(JList list, Object value) {
     int selectedIndex = list.getSelectedIndex();
     if (selectedIndex == -1) failNoSelection(list);
-    assertThat(text(list, selectedIndex)).as(selectedIndexProperty(list)).isEqualTo(text);
+    assertThat(value(list, selectedIndex)).as(selectedIndexProperty(list)).isEqualTo(value);
   }
 
   /**
-   * Verifies that the <code>String</code> representations of the selected items in the <code>{@link JList}</code> match
-   * the given text items.
+   * Verifies that the the selected items in the <code>{@link JList}</code> match the given values.
    * @param list the target <code>JList</code>.
-   * @param items text items to match.
-   * @throws AssertionError if the selected items do not match the given text items.
+   * @param items the values to match.
+   * @throws AssertionError if the selected items do not match the given values.
    */
-  public void requireSelectedItems(JList list, String... items) {
+  public void requireSelectedItems(JList list, Object... items) {
     int[] selectedIndices = list.getSelectedIndices();
     int currentSelectionCount = selectedIndices.length;
     if (currentSelectionCount == 0) failNoSelection(list);
     assertThat(currentSelectionCount).as(propertyName(list, SELECTED_INDICES_LENGTH_PROPERTY)).isEqualTo(items.length);
     for (int i = 0; i < currentSelectionCount; i++) {
       String description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
-      assertThat(text(list, selectedIndices[i])).as(description).isEqualTo(items[i]);
+      assertThat(value(list, selectedIndices[i])).as(description).isEqualTo(items[i]);
     }
+  }
+
+  /**
+   * Returns the value of the element under the given index using this driver's 
+   * <code>{@link JListCellValueReader}</code>.
+   * @param list the target <code>JList</code>.
+   * @param index the given index.
+   * @return the text of the element under the given index.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public Object value(JList list, int index) {
+    location.validate(list, index);
+    return cellValueReader.valueAt(list, index);
   }
 
   private void failNoSelection(JList list) {
@@ -351,11 +346,45 @@ public class JListDriver extends JComponentDriver {
   }
 
   private Rectangle itemBounds(JList list, Object value) {
-    int index = location.indexOf(list, value);
+    int index = indexOf(list, value);
     return itemBounds(list, index);
   }
 
-  private Point pointAt(JList list, Object value) {
-    return location.pointAt(list, value);
+  /**
+   * Returns the coordinates of the first item matching the given value.
+   * @param list the target <code>JList</code>
+   * @param value the value to match.
+   * @return the coordinates of the item at the given item.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   */
+  public Point pointAt(JList list, Object value) {
+    return location.pointAt(list, indexOf(list, value));
+  }
+
+  /**
+   * Returns the index of the first item matching the given value.
+   * @param list the target <code>JList</code>
+   * @param value the value to match.
+   * @return the index of the first item matching the given value.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   */
+  public int indexOf(JList list, Object value) {
+    int size = sizeOf(list);
+    for (int i = 0; i < size; i++)
+      if (areEqual(value, value(list, i))) return i;
+    throw indexNotFoundFor(value);
+  }
+
+  private LocationUnavailableException indexNotFoundFor(Object value) {
+    throw new LocationUnavailableException(concat("Unable to find an element matching the value ", quote(value)));
+  }
+  
+  /**
+   * Updates the implementation of <code>{@link JListCellValueReader}</code> to use when comparing internal values of a
+   * <code>{@link JList}</code> and the values expected in a test.
+   * @param cellValueReader the new <code>JListCellValueReader</code> to use.
+   */
+  public void cellValueReader(JListCellValueReader cellValueReader) {
+    this.cellValueReader = cellValueReader;
   }
 }
