@@ -1,5 +1,5 @@
 /*
- * Created on Apr 13, 2008
+ * Created on Apr 14, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,20 +15,21 @@
  */
 package org.fest.swing.cell;
 
-import javax.swing.JComboBox;
+import javax.swing.JTree;
 
 /**
- * Understands reading the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test.
+ * Understands reading the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
  *
- * @author Alex Ruiz 
+ * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public interface JComboBoxCellValueReader {
+public interface JTreeCellReader {
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test.
-   * @param comboBox the given <code>JComboBox</code>.
-   * @param index the index of the cell.
-   * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
+   * Returns the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
+   * @param tree the given <code>JTree</code>.
+   * @param modelValue the value of a cell, retrieved from the model. 
+   * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
    */
-  String valueAt(JComboBox comboBox, int index);
+  String valueAt(JTree tree, Object modelValue);
 }

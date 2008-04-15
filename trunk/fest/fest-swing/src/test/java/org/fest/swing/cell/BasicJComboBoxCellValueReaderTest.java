@@ -27,18 +27,18 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link BasicJComboBoxCellValueReader}</code>.
+ * Tests for <code>{@link BasicJComboBoxCellReader}</code>.
  *
  * @author Alex Ruiz
  */
 public class BasicJComboBoxCellValueReaderTest {
 
   private JComboBox comboBox;
-  private BasicJComboBoxCellValueReader reader;
+  private BasicJComboBoxCellReader reader;
   
   @BeforeMethod public void setUp() {
     comboBox = new JComboBox(new Object[] { "First" });
-    reader = new BasicJComboBoxCellValueReader();
+    reader = new BasicJComboBoxCellReader();
   }
   
   @Test public void shouldReturnModelValueToString() {

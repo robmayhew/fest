@@ -23,8 +23,8 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.cell.BasicJComboBoxCellValueReader;
-import org.fest.swing.cell.JComboBoxCellValueReader;
+import org.fest.swing.cell.BasicJComboBoxCellReader;
+import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
@@ -58,7 +58,7 @@ public class JComboBoxDriver extends JComponentDriver {
   
   private final JListDriver listDriver;
   
-  private JComboBoxCellValueReader cellReader;
+  private JComboBoxCellReader cellReader;
 
   /**
    * Creates a new </code>{@link JComboBoxDriver}</code>.
@@ -67,7 +67,7 @@ public class JComboBoxDriver extends JComponentDriver {
   public JComboBoxDriver(Robot robot) {
     super(robot);
     listDriver = new JListDriver(robot);
-    cellReader(new BasicJComboBoxCellValueReader());
+    cellReader(new BasicJComboBoxCellReader());
   }
 
   /**
@@ -287,11 +287,11 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Updates the implementation of <code>{@link JComboBoxCellValueReader}</code> to use when comparing internal values
+   * Updates the implementation of <code>{@link JComboBoxCellReader}</code> to use when comparing internal values
    * of a <code>{@link JComboBox}</code> and the values expected in a test.
    * @param cellReader the new <code>JComboBoxCellValueReader</code> to use.
    */
-  public void cellReader(JComboBoxCellValueReader cellReader) {
+  public void cellReader(JComboBoxCellReader cellReader) {
     this.cellReader = cellReader;
   }
 }

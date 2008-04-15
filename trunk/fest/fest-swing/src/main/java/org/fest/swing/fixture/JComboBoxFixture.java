@@ -18,8 +18,8 @@ package org.fest.swing.fixture;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
-import org.fest.swing.cell.BasicJComboBoxCellValueReader;
-import org.fest.swing.cell.JComboBoxCellValueReader;
+import org.fest.swing.cell.BasicJComboBoxCellReader;
+import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
@@ -30,6 +30,11 @@ import org.fest.swing.exception.LocationUnavailableException;
 /**
  * Understands simulation of user events on a <code>{@link JComboBox}</code> and verification of the state of such
  * <code>{@link JComboBox}</code>.
+ * <p>
+ * The conversion between the values given in tests and the values being displayed by a <code>{@link JComboBox}</code>
+ * renderer is performed by a <code>{@link JComboBoxCellReader}</code>. This fixture uses a 
+ * <code>{@link JComboBoxCellReader}</code> by default.
+ * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -323,12 +328,12 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Updates the implementation of <code>{@link JComboBoxCellValueReader}</code> to use when comparing internal values
+   * Updates the implementation of <code>{@link JComboBoxCellReader}</code> to use when comparing internal values
    * of this fixture's <code>{@link JComboBox}</code> and the values expected in a test. The default implementation to
-   * use is <code>{@link BasicJComboBoxCellValueReader}</code>.
+   * use is <code>{@link BasicJComboBoxCellReader}</code>.
    * @param cellReader the new <code>JComboBoxCellValueReader</code> to use.
    */
-  public void cellReader(JComboBoxCellValueReader cellReader) {
+  public void cellReader(JComboBoxCellReader cellReader) {
     driver.cellReader(cellReader);
   }
 }

@@ -23,7 +23,7 @@ import javax.swing.JTable;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.cell.JTableCellValueReader;
+import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
@@ -212,7 +212,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
   }
 
   @Test public void shouldSetCellReaderInDriver() {
-    final JTableCellValueReader reader = createMock(JTableCellValueReader.class);
+    final JTableCellReader reader = createMock(JTableCellReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.cellReader(reader);

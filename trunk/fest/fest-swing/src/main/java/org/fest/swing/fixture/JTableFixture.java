@@ -20,8 +20,8 @@ import java.awt.Point;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
-import org.fest.swing.cell.BasicJTableCellValueReader;
-import org.fest.swing.cell.JTableCellValueReader;
+import org.fest.swing.cell.BasicJTableCellReader;
+import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
@@ -35,6 +35,11 @@ import static org.fest.assertions.Assertions.assertThat;
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
  * <code>{@link JTable}</code>.
+ * <p>
+ * The conversion between the values given in tests and the values being displayed by a <code>{@link JTable}</code>
+ * renderer is performed by a <code>{@link JTableCellReader}</code>. This fixture uses a
+ * <code>{@link BasicJTableCellReader}</code> by default.
+ * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -370,12 +375,12 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Updates the implementation of <code>{@link JTableCellValueReader}</code> to use when comparing internal values of 
+   * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of 
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
-   * is <code>{@link BasicJTableCellValueReader}</code>.
+   * is <code>{@link BasicJTableCellReader}</code>.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.
    */
-  public void cellReader(JTableCellValueReader cellReader) {
+  public void cellReader(JTableCellReader cellReader) {
     driver.cellReader(cellReader);
   }
 }

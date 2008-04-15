@@ -20,7 +20,7 @@ import javax.swing.JTree;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.cell.JTreeCellValueReader;
+import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTreeDriver;
 
@@ -176,7 +176,7 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   }
 
   @Test public void shouldSetCellReaderInDriver() {
-    final JTreeCellValueReader reader = createMock(JTreeCellValueReader.class);
+    final JTreeCellReader reader = createMock(JTreeCellReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.cellReader(reader);

@@ -15,21 +15,42 @@
  */
 package org.fest.swing.cell;
 
+import java.awt.Component;
+
 import javax.swing.JTree;
+import javax.swing.tree.TreeCellRenderer;
+
+import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**
- * Understands reading the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
+ * Understands the default implementation of <code>{@link JTreeCellReader}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public interface JTreeCellValueReader {
+public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellReader {
 
   /**
    * Returns the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
    * @param tree the given <code>JTree</code>.
    * @param modelValue the value of a cell, retrieved from the model. 
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
+   * @see BaseValueReader#valueFrom(java.awt.Component)
    */
-  String valueAt(JTree tree, Object modelValue);
+  public String valueAt(JTree tree, Object modelValue) {
+    String text = valueFrom(cellRendererComponent(tree, modelValue));
+    if (text != null) return text;
+    return valueToText(tree, modelValue);
+  }
+
+  private Component cellRendererComponent(JTree tree, Object modelValue) {
+    TreeCellRenderer r = tree.getCellRenderer();
+    return r.getTreeCellRendererComponent(tree, modelValue, false, false, false, 0, false);
+  }
+
+  private String valueToText(JTree tree, Object modelValue) {
+    String text = tree.convertValueToText(modelValue, false, false, false, 0, false);
+    if (isDefaultToString(text)) return null;
+    return text;
+  }
 }

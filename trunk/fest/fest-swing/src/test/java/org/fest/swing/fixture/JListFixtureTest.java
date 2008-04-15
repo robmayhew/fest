@@ -21,7 +21,7 @@ import javax.swing.JPopupMenu;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.cell.JListCellValueReader;
+import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.util.Range.From;
@@ -324,7 +324,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
 
   @Test public void shouldSetCellReaderInDriver() {
-    final JListCellValueReader reader = createMock(JListCellValueReader.class);
+    final JListCellReader reader = createMock(JListCellReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.cellReader(reader);

@@ -24,14 +24,14 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * Understands the default implementation of <code>{@link JTableCellValueReader}</code>.
+ * Understands the default implementation of <code>{@link JTableCellReader}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class BasicJTableCellValueReader extends BaseValueReader implements JTableCellValueReader {
+public class BasicJTableCellReader extends BaseValueReader implements JTableCellReader {
 
-  private final JComboBoxCellValueReader comboBoxCellValueReader = new BasicJComboBoxCellValueReader();
+  private final JComboBoxCellReader comboBoxCellValueReader = new BasicJComboBoxCellReader();
   
   /**
    * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test. This method first 
@@ -48,7 +48,7 @@ public class BasicJTableCellValueReader extends BaseValueReader implements JTabl
    * @param column the column index of the cell.
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
    * @see BaseValueReader#valueFrom(Object)
-   * @see BasicJComboBoxCellValueReader#valueAt(JComboBox, int)
+   * @see BasicJComboBoxCellReader#valueAt(JComboBox, int)
    */
   public String valueAt(JTable table, int row, int column) {
     Component c = cellRendererComponent(table, row, column);

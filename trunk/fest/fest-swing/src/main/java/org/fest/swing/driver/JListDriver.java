@@ -22,8 +22,8 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListModel;
 
-import org.fest.swing.cell.BasicJListCellValueReader;
-import org.fest.swing.cell.JListCellValueReader;
+import org.fest.swing.cell.BasicJListCellReader;
+import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -59,7 +59,7 @@ public class JListDriver extends JComponentDriver {
   
   private final JListLocation location;
 
-  private JListCellValueReader cellReader;
+  private JListCellReader cellReader;
 
   /**
    * Creates a new </code>{@link JListDriver}</code>.
@@ -68,7 +68,7 @@ public class JListDriver extends JComponentDriver {
   public JListDriver(Robot robot) {
     super(robot);
     location = new JListLocation();
-    cellReader(new BasicJListCellValueReader());
+    cellReader(new BasicJListCellReader());
   }
 
   /**
@@ -225,7 +225,7 @@ public class JListDriver extends JComponentDriver {
 
   /**
    * Returns the value of the element under the given index using this driver's 
-   * <code>{@link JListCellValueReader}</code>.
+   * <code>{@link JListCellReader}</code>.
    * @param list the target <code>JList</code>.
    * @param index the given index.
    * @return the text of the element under the given index.
@@ -380,11 +380,11 @@ public class JListDriver extends JComponentDriver {
   }
   
   /**
-   * Updates the implementation of <code>{@link JListCellValueReader}</code> to use when comparing internal values of a
+   * Updates the implementation of <code>{@link JListCellReader}</code> to use when comparing internal values of a
    * <code>{@link JList}</code> and the values expected in a test.
    * @param cellReader the new <code>JListCellValueReader</code> to use.
    */
-  public void cellReader(JListCellValueReader cellReader) {
+  public void cellReader(JListCellReader cellReader) {
     this.cellReader = cellReader;
   }
 }

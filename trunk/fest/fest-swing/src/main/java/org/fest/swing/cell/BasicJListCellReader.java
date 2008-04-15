@@ -21,11 +21,11 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 /**
- * Understands the default implementation of <code>{@link JListCellValueReader}</code>.
+ * Understands the default implementation of <code>{@link JListCellReader}</code>.
  *
  * @author Alex Ruiz
  */
-public class BasicJListCellValueReader extends BaseValueReader implements JListCellValueReader {
+public class BasicJListCellReader extends BaseValueReader implements JListCellReader {
 
   /**
    * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test. This method first

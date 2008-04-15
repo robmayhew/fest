@@ -26,8 +26,8 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.cell.BasicJTreeCellValueReader;
-import org.fest.swing.cell.JTreeCellValueReader;
+import org.fest.swing.cell.BasicJTreeCellReader;
+import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -55,7 +55,7 @@ public class JTreeDriver extends JComponentDriver {
 
   private final JTreeLocation location;
 
-  private JTreeCellValueReader cellReader;
+  private JTreeCellReader cellReader;
   private String separator;
 
   /**
@@ -65,7 +65,7 @@ public class JTreeDriver extends JComponentDriver {
   public JTreeDriver(Robot robot) {
     super(robot);
     location = new JTreeLocation();
-    cellReader(new BasicJTreeCellValueReader());
+    cellReader(new BasicJTreeCellReader());
     separator(SEPARATOR);
   }
 
@@ -338,11 +338,11 @@ public class JTreeDriver extends JComponentDriver {
   }
   
   /**
-   * Updates the implementation of <code>{@link JTreeCellValueReader}</code> to use when comparing internal values of a
+   * Updates the implementation of <code>{@link JTreeCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTree}</code> and the values expected in a test.
    * @param cellReader the new <code>JTreeCellValueReader</code> to use.
    */
-  public void cellReader(JTreeCellValueReader cellReader) {
+  public void cellReader(JTreeCellReader cellReader) {
     this.cellReader = cellReader;
   }
 }

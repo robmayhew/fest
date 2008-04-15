@@ -1,5 +1,5 @@
 /*
- * Created on Apr 14, 2008
+ * Created on Apr 12, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,21 +15,20 @@
  */
 package org.fest.swing.cell;
 
-import javax.swing.JTable;
+import javax.swing.JList;
 
 /**
- * Understands reading the internal value of a cell in a <code>{@link JTable}</code> as expected in a test.
+ * Understands reading the internal value of a cell in a <code>{@link JList}</code> as expected in a test.
  *
- * @author Alex Ruiz
+ * @author Alex Ruiz 
  */
-public interface JTableCellValueReader {
+public interface JListCellReader {
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test.
-   * @param table the given <code>JTable</code>.
-   * @param row the row index of the cell.
-   * @param column the column index of the cell.
-   * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
+   * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test.
+   * @param list the given <code>JList</code>.
+   * @param index the index of the cell.
+   * @return the internal value of a cell in a <code>JList</code> as expected in a test.
    */
-  String valueAt(JTable table, int row, int column);
+  String valueAt(JList list, int index);
 }

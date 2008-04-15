@@ -19,8 +19,8 @@ import java.awt.Point;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import org.fest.swing.cell.BasicJTableCellValueReader;
-import org.fest.swing.cell.JTableCellValueReader;
+import org.fest.swing.cell.BasicJTableCellReader;
+import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -41,7 +41,7 @@ import static org.fest.swing.util.Platform.controlOrCommandKey;
 public class JTableDriver extends JComponentDriver {
 
   private final JTableLocation location = new JTableLocation();
-  private JTableCellValueReader cellReader;
+  private JTableCellReader cellReader;
 
   /**
    * Creates a new </code>{@link JTableDriver}</code>.
@@ -49,7 +49,7 @@ public class JTableDriver extends JComponentDriver {
    */
   public JTableDriver(Robot robot) {
     super(robot);
-    cellReader(new BasicJTableCellValueReader());
+    cellReader(new BasicJTableCellReader());
   }
 
   /**
@@ -201,11 +201,11 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Updates the implementation of <code>{@link JTableCellValueReader}</code> to use when comparing internal values of a
+   * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.
    */
-  public void cellReader(JTableCellValueReader cellReader) {
+  public void cellReader(JTableCellReader cellReader) {
     this.cellReader = cellReader;
   }
 }

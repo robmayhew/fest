@@ -22,11 +22,11 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 /**
- * Understands the default implementation of <code>{@link JComboBoxCellValueReader}</code>.
+ * Understands the default implementation of <code>{@link JComboBoxCellReader}</code>.
  *
  * @author Alex Ruiz
  */
-public class BasicJComboBoxCellValueReader extends BaseValueReader implements JComboBoxCellValueReader {
+public class BasicJComboBoxCellReader extends BaseValueReader implements JComboBoxCellReader {
 
   private static final JList REFERENCE_JLIST = new JList();
 

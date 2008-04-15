@@ -18,7 +18,8 @@ package org.fest.swing.fixture;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.cell.JTreeCellValueReader;
+import org.fest.swing.cell.BasicJTreeCellReader;
+import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
@@ -30,7 +31,34 @@ import org.fest.swing.exception.LocationUnavailableException;
 /**
  * Understands simulation of user events on a <code>{@link JTree}</code> and verification of the state of such
  * <code>{@link JTree}</code>.
- *
+ * <p>
+ * <code>{@link TreePath}</code>s can be specified using <code>String</code>s. For example, for the following
+ * tree:
+ * 
+ * <pre><code>
+ * root
+ *   |
+ *   +- node1
+ *   |  |
+ *   |  +- node1.1
+ * </code></pre>
+ * 
+ * we can identify the node "node1.1" as follows:
+ * 
+ * <pre><code>
+ *   root/node1/node1.1
+ * </code></pre>
+ * 
+ * </p>
+ * <p>
+ * The default path separator is "/". It can be changed by calling <code>{@link #separator(String)}</code>.
+ * </p>
+ * <p>
+ * The conversion between the values given in tests and the values being displayed by a <code>{@link JTree}</code>
+ * renderer is performed by a <code>{@link JTreeCellReader}</code>. This fixture uses a
+ * <code>{@link BasicJTreeCellReader}</code> by default.
+ * </p>
+ * 
  * @author Keith Coughtrey
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -330,11 +358,12 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   }
   
   /**
-   * Updates the implementation of <code>{@link JTreeCellValueReader}</code> to use when comparing internal values of a
-   * <code>{@link JTree}</code> and the values expected in a test.
+   * Updates the implementation of <code>{@link JTreeCellReader}</code> to use when comparing internal values of a
+   * <code>{@link JTree}</code> and the values expected in a test. The default implementation to use
+   * is <code>{@link BasicJTreeCellReader}</code>.
    * @param cellReader the new <code>JTreeCellValueReader</code> to use.
    */
-  public void cellReader(JTreeCellValueReader cellReader) {
+  public void cellReader(JTreeCellReader cellReader) {
     driver.cellReader(cellReader);
   }
 }

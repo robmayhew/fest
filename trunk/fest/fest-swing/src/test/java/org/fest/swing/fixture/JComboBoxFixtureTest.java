@@ -22,7 +22,7 @@ import org.easymock.classextension.EasyMock;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.cell.JComboBoxCellValueReader;
+import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComboBoxDriver;
 
@@ -192,7 +192,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
   }
 
   @Test public void shouldSetCellReaderInDriver() {
-    final JComboBoxCellValueReader reader = createMock(JComboBoxCellValueReader.class);
+    final JComboBoxCellReader reader = createMock(JComboBoxCellReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.cellReader(reader);

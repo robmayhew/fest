@@ -1,5 +1,5 @@
 /*
- * Created on Apr 12, 2008
+ * Created on Apr 13, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,20 +15,20 @@
  */
 package org.fest.swing.cell;
 
-import javax.swing.JList;
+import javax.swing.JComboBox;
 
 /**
- * Understands reading the internal value of a cell in a <code>{@link JList}</code> as expected in a test.
+ * Understands reading the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test.
  *
  * @author Alex Ruiz 
  */
-public interface JListCellValueReader {
+public interface JComboBoxCellReader {
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test.
-   * @param list the given <code>JList</code>.
+   * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test.
+   * @param comboBox the given <code>JComboBox</code>.
    * @param index the index of the cell.
-   * @return the internal value of a cell in a <code>JList</code> as expected in a test.
+   * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
    */
-  String valueAt(JList list, int index);
+  String valueAt(JComboBox comboBox, int index);
 }

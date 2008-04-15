@@ -28,18 +28,18 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link BasicJTableCellValueReader}</code>.
+ * Tests for <code>{@link BasicJTableCellReader}</code>.
  *
  * @author Alex Ruiz
  */
 public class JTableCellValueReaderTest {
 
   private JTable table;
-  private BasicJTableCellValueReader reader;
+  private BasicJTableCellReader reader;
   
   @BeforeMethod public void setUp() {
     table = new JTable(1, 1);
-    reader = new BasicJTableCellValueReader();
+    reader = new BasicJTableCellReader();
   }
 
   @Test public void shouldReturnModelValueToStringIfRendererNotRecognized() {

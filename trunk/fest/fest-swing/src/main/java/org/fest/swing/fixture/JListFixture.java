@@ -17,8 +17,8 @@ package org.fest.swing.fixture;
 
 import javax.swing.JList;
 
-import org.fest.swing.cell.BasicJListCellValueReader;
-import org.fest.swing.cell.JListCellValueReader;
+import org.fest.swing.cell.BasicJListCellReader;
+import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
@@ -34,6 +34,11 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 /**
  * Understands simulation of user events on a <code>{@link JList}</code> and verification of the state of such
  * <code>{@link JList}</code>.
+ * <p>
+ * The conversion between the values given in tests and the values being displayed by a <code>{@link JList}</code>
+ * renderer is performed by a <code>{@link JListCellReader}</code>. This fixture uses a 
+ * <code>{@link BasicJListCellReader}</code> by default.
+ * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -443,12 +448,12 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   }
 
   /**
-   * Updates the implementation of <code>{@link JListCellValueReader}</code> to use when comparing internal values of 
+   * Updates the implementation of <code>{@link JListCellReader}</code> to use when comparing internal values of 
    * this fixture's <code>{@link JList}</code> and the values expected in a test. The default implementation to use
-   * is <code>{@link BasicJListCellValueReader}</code>.
+   * is <code>{@link BasicJListCellReader}</code>.
    * @param cellReader the new <code>JListCellValueReader</code> to use.
    */
-  public void cellReader(JListCellValueReader cellReader) {
+  public void cellReader(JListCellReader cellReader) {
     driver.cellReader(cellReader);
   }
 }

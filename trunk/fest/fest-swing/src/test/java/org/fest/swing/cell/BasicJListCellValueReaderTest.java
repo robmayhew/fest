@@ -27,18 +27,18 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link BasicJListCellValueReader}</code>.
+ * Tests for <code>{@link BasicJListCellReader}</code>.
  *
  * @author Alex Ruiz
  */
 public class BasicJListCellValueReaderTest {
 
   private JList list;
-  private BasicJListCellValueReader reader;
+  private BasicJListCellReader reader;
   
   @BeforeMethod public void setUp() {
     list = new JList();
-    reader = new BasicJListCellValueReader();
+    reader = new BasicJListCellReader();
   }
 
   @Test public void shouldReturnModelValueToString() {
