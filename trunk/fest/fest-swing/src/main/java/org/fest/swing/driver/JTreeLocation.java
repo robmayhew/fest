@@ -25,9 +25,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.driver.TreeCell.lastInPath;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
 
@@ -63,54 +61,10 @@ public final class JTreeLocation {
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
   public Point pointAt(JTree tree, TreePath path) {
-    TreePath realPath = findMatchingPath(tree, path);
-    Rectangle pathBounds = tree.getPathBounds(realPath);
+    Rectangle pathBounds = tree.getPathBounds(path);
     if (pathBounds != null)
         return new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
     throw new LocationUnavailableException(concat("The tree path ", format(path.getPath()), " is not visible"));
-  }
-
-  public TreePath findMatchingPath(JTree tree, TreePath path) {
-    Object[] pathValues = path.getPath();
-    TreeCell rootPath = lastInPath(tree, pathToRoot(tree));
-    if (!tree.isRootVisible() && !matches(pathValues[0], rootPath))
-      pathValues = startWithInvisibleRoot(pathValues);
-    TreePath treeNodePath = findMatchingTreeNodePath(pathValues, rootPath);
-    if (treeNodePath != null) return treeNodePath;
-    throw new LocationUnavailableException(concat("Unable to find tree path ", format(pathValues)));
-  }
-
-  private Object[] startWithInvisibleRoot(Object[] path) {
-    Object[] tmp = new Object[path.length + 1];
-    System.arraycopy(path, 0, tmp, 1, path.length);
-    tmp[0] = null; // shouldn't be null by default?
-    return tmp;
-  }
-
-  private TreePath pathToRoot(JTree tree) {
-    return new TreePath(tree.getModel().getRoot());
-  }
-
-  private boolean matches(Object o, TreeCell cell) {
-    if (o == null || o.equals(cell.value())) return true;
-    return match(o.toString(), cell.textWithIndexIfDuplicated());
-  }
-
-  private TreePath findMatchingTreeNodePath(Object[] inputPath, TreeCell cell) {
-    if (!matches(inputPath[0], cell)) return null; // no match
-    if (inputPath.length == 1) return cell.path();
-    Object[] subInputPath = removeFirstFrom(inputPath);
-    for (Object child : cell) {
-      TreePath newPath = findMatchingTreeNodePath(subInputPath, cell.cellFrom(child));
-      if (newPath != null) return newPath;
-    }
-    return null;
-  }
-
-  private Object[] removeFirstFrom(Object[] array) {
-    Object[] subArray = new Object[array.length - 1];
-    System.arraycopy(array, 1, subArray, 0, subArray.length);
-    return subArray;
   }
 
   /**

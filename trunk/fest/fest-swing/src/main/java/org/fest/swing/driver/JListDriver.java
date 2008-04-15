@@ -22,6 +22,8 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListModel;
 
+import org.fest.swing.cell.BasicJListCellValueReader;
+import org.fest.swing.cell.JListCellValueReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -29,8 +31,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
-import org.fest.swing.value.BasicJListCellValueReader;
-import org.fest.swing.value.JListCellValueReader;
 
 import static java.awt.event.KeyEvent.VK_SHIFT;
 import static java.lang.String.valueOf;
@@ -59,7 +59,7 @@ public class JListDriver extends JComponentDriver {
   
   private final JListLocation location;
 
-  private JListCellValueReader cellValueReader;
+  private JListCellValueReader cellReader;
 
   /**
    * Creates a new </code>{@link JListDriver}</code>.
@@ -68,7 +68,7 @@ public class JListDriver extends JComponentDriver {
   public JListDriver(Robot robot) {
     super(robot);
     location = new JListLocation();
-    cellValueReader(new BasicJListCellValueReader());
+    cellReader(new BasicJListCellValueReader());
   }
 
   /**
@@ -76,8 +76,8 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @return the list's contents.
    */
-  public Object[] contentsOf(JList list) {
-    Object[] values = new String[sizeOf(list)];
+  public String[] contentsOf(JList list) {
+    String[] values = new String[sizeOf(list)];
     for (int i = 0; i < values.length; i++)
       values[i] = value(list, i);
     return values;
@@ -97,10 +97,10 @@ public class JListDriver extends JComponentDriver {
    * @param values the values to match.
    * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
-  public void selectItems(JList list, Object[] values) {
+  public void selectItems(JList list, String[] values) {
     int controlOrCommand = controlOrCommandKey();
     robot.pressKey(controlOrCommand);
-    for (Object value : values) selectItem(list, value);
+    for (String value : values) selectItem(list, value);
     robot.releaseKey(controlOrCommand);
   }
 
@@ -111,7 +111,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public void selectItem(JList list, Object value) {
+  public void selectItem(JList list, String value) {
     clickItem(list, value, LEFT_BUTTON, 1);
   }
 
@@ -123,7 +123,7 @@ public class JListDriver extends JComponentDriver {
    * @param times the number of times to click.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void clickItem(JList list, Object value, MouseButton button, int times) {
+  public void clickItem(JList list, String value, MouseButton button, int times) {
     scrollToVisible(list, value);
     robot.click(list, pointAt(list, value), button, times);
   }
@@ -200,7 +200,7 @@ public class JListDriver extends JComponentDriver {
    * @param value the value to match.
    * @throws AssertionError if the selected item does not match the value.
    */
-  public void requireSelection(JList list, Object value) {
+  public void requireSelection(JList list, String value) {
     int selectedIndex = list.getSelectedIndex();
     if (selectedIndex == -1) failNoSelection(list);
     assertThat(value(list, selectedIndex)).as(selectedIndexProperty(list)).isEqualTo(value);
@@ -212,7 +212,7 @@ public class JListDriver extends JComponentDriver {
    * @param items the values to match.
    * @throws AssertionError if the selected items do not match the given values.
    */
-  public void requireSelectedItems(JList list, Object... items) {
+  public void requireSelectedItems(JList list, String... items) {
     int[] selectedIndices = list.getSelectedIndices();
     int currentSelectionCount = selectedIndices.length;
     if (currentSelectionCount == 0) failNoSelection(list);
@@ -232,9 +232,9 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public Object value(JList list, int index) {
+  public String value(JList list, int index) {
     location.validate(list, index);
-    return cellValueReader.valueAt(list, index);
+    return cellReader.valueAt(list, index);
   }
 
   private void failNoSelection(JList list) {
@@ -251,7 +251,7 @@ public class JListDriver extends JComponentDriver {
    * @param value the value to match.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public void drag(JList list, Object value) {
+  public void drag(JList list, String value) {
     scrollToVisible(list, value);
     super.drag(list, pointAt(list, value));
   }
@@ -263,7 +263,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public void drop(JList list, Object value) {
+  public void drop(JList list, String value) {
     scrollToVisible(list, value);
     super.drop(list, pointAt(list, value));
   }
@@ -336,16 +336,16 @@ public class JListDriver extends JComponentDriver {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public JPopupMenu showPopupMenuAt(JList list, Object value) {
+  public JPopupMenu showPopupMenuAt(JList list, String value) {
     scrollToVisible(list, value);
     return robot.showPopupMenu(list, pointAt(list, value));
   }
 
-  private void scrollToVisible(JList list, Object value) {
+  private void scrollToVisible(JList list, String value) {
     super.scrollToVisible(list, itemBounds(list, value));
   }
 
-  private Rectangle itemBounds(JList list, Object value) {
+  private Rectangle itemBounds(JList list, String value) {
     int index = indexOf(list, value);
     return itemBounds(list, index);
   }
@@ -357,7 +357,7 @@ public class JListDriver extends JComponentDriver {
    * @return the coordinates of the item at the given item.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public Point pointAt(JList list, Object value) {
+  public Point pointAt(JList list, String value) {
     return location.pointAt(list, indexOf(list, value));
   }
 
@@ -368,23 +368,23 @@ public class JListDriver extends JComponentDriver {
    * @return the index of the first item matching the given value.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public int indexOf(JList list, Object value) {
+  public int indexOf(JList list, String value) {
     int size = sizeOf(list);
     for (int i = 0; i < size; i++)
       if (areEqual(value, value(list, i))) return i;
     throw indexNotFoundFor(value);
   }
 
-  private LocationUnavailableException indexNotFoundFor(Object value) {
+  private LocationUnavailableException indexNotFoundFor(String value) {
     throw new LocationUnavailableException(concat("Unable to find an element matching the value ", quote(value)));
   }
   
   /**
    * Updates the implementation of <code>{@link JListCellValueReader}</code> to use when comparing internal values of a
    * <code>{@link JList}</code> and the values expected in a test.
-   * @param cellValueReader the new <code>JListCellValueReader</code> to use.
+   * @param cellReader the new <code>JListCellValueReader</code> to use.
    */
-  public void cellValueReader(JListCellValueReader cellValueReader) {
-    this.cellValueReader = cellValueReader;
+  public void cellReader(JListCellValueReader cellReader) {
+    this.cellReader = cellReader;
   }
 }

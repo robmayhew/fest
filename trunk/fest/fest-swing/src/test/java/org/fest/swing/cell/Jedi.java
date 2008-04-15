@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.value;
+package org.fest.swing.cell;
 
 /**
  * Understands a class that implements <code>toString()</code>.

@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import org.fest.swing.cell.JTreeCellValueReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
@@ -135,7 +136,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * @return this fixture.
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
-  public JTreeFixture drag(TreePath treePath) {
+  public JTreeFixture drag(String treePath) {
     driver.drag(target, treePath);
     return this;
   }
@@ -161,7 +162,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * @throws LocationUnavailableException if any part of the path is not visible.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  public JTreeFixture drop(TreePath treePath) {
+  public JTreeFixture drop(String treePath) {
     driver.drop(target, treePath);
     return this;
   }
@@ -175,7 +176,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * @return this fixture.
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
-  public JTreeFixture selectPath(TreePath treePath) {
+  public JTreeFixture selectPath(String treePath) {
     driver.selectPath(target, treePath);
     return this;
   }
@@ -318,5 +319,22 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   public JTreeFixture requireNotEditable() {
     driver.requireNotEditable(target);
     return this;
+  }
+
+  /**
+   * Updates the separator to use when specifying <code>{@link TreePath}</code>s as <code>String</code>s.
+   * @param separator the new separator.
+   */
+  public void separator(String separator) {
+    driver.separator(separator);
+  }
+  
+  /**
+   * Updates the implementation of <code>{@link JTreeCellValueReader}</code> to use when comparing internal values of a
+   * <code>{@link JTree}</code> and the values expected in a test.
+   * @param cellReader the new <code>JTreeCellValueReader</code> to use.
+   */
+  public void cellReader(JTreeCellValueReader cellReader) {
+    driver.cellReader(cellReader);
   }
 }

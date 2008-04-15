@@ -15,13 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Point;
 
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
+import org.fest.swing.cell.BasicJTableCellValueReader;
+import org.fest.swing.cell.JTableCellValueReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
@@ -29,6 +29,8 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -116,7 +118,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * @return the value of the selected cell.
    */
   public String selectionContents() {
-    return driver.selectionText(target);
+    return driver.selectionValue(target);
   }
 
   /**
@@ -172,7 +174,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public String contentAt(TableCell cell) {
-    return driver.text(target, cell);
+    return driver.value(target, cell);
   }
 
   /**
@@ -365,5 +367,15 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     JTableHeader tableHeader = target.getTableHeader();
     assertThat(tableHeader).isNotNull();
     return new JTableHeaderFixture(robot, tableHeader);
+  }
+
+  /**
+   * Updates the implementation of <code>{@link JTableCellValueReader}</code> to use when comparing internal values of 
+   * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
+   * is <code>{@link BasicJTableCellValueReader}</code>.
+   * @param cellReader the new <code>JTableCellValueReader</code> to use.
+   */
+  public void cellReader(JTableCellValueReader cellReader) {
+    driver.cellReader(cellReader);
   }
 }

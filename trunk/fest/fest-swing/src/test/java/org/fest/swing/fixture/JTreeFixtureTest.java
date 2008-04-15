@@ -16,11 +16,11 @@
 package org.fest.swing.fixture;
 
 import javax.swing.JTree;
-import javax.swing.tree.TreePath;
 
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.cell.JTreeCellValueReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTreeDriver;
 
@@ -40,14 +40,14 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   private JTreeDriver driver;
   private JTree target;
   private JTreeFixture fixture;
-  private TreePath path;
+  private String path;
   
   void onSetUp() {
     driver = createMock(JTreeDriver.class);
     target = new JTree();
     fixture = new JTreeFixture(robot(), target);
     fixture.updateDriver(driver);
-    path = new TreePath(new Object[] { "Hello" });
+    path = "Hello";
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
@@ -171,6 +171,34 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
       
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireNotEditable());
+      }
+    }.run();
+  }
+
+  @Test public void shouldSetCellReaderInDriver() {
+    final JTreeCellValueReader reader = createMock(JTreeCellValueReader.class);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.cellReader(reader);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        fixture.cellReader(reader);
+      }
+    }.run();
+  }
+
+  @Test public void shouldSetSeparatorInDriver() {
+    final String separator = "\\";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.separator(separator);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        fixture.separator(separator);
       }
     }.run();
   }

@@ -23,6 +23,7 @@ import javax.swing.JTable;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.cell.JTableCellValueReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
@@ -95,11 +96,11 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     final String content = "A Cell";
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.selectionText(target)).andReturn(content);
+        expect(driver.selectionValue(target)).andReturn(content);
       }
 
       protected void codeToTest() {
-        String result = fixture.selectionContents();
+        Object result = fixture.selectionContents();
         assertThat(result).isSameAs(content);
       }
     }.run();
@@ -147,11 +148,11 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     final String content = "A Cell";
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.text(target(), cell)).andReturn(content);
+        expect(driver.value(target(), cell)).andReturn(content);
       }
 
       protected void codeToTest() {
-        String result = fixture.contentAt(cell);
+        Object result = fixture.contentAt(cell);
         assertThat(result).isSameAs(content);
       }
     }.run();
@@ -208,6 +209,20 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
   public void shouldThrowErrorIfJTableHeaderIsNull() {
     target.setTableHeader(null);
     fixture.tableHeader();
+  }
+
+  @Test public void shouldSetCellReaderInDriver() {
+    final JTableCellValueReader reader = createMock(JTableCellValueReader.class);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.cellReader(reader);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        fixture.cellReader(reader);
+      }
+    }.run();
   }
 
   ComponentDriver driver() { return driver; }

@@ -14,19 +14,19 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
+import org.fest.swing.cell.BasicJTableCellValueReader;
+import org.fest.swing.cell.JTableCellValueReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.CellRendererComponents.textFrom;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Platform.controlOrCommandKey;
 
@@ -41,6 +41,7 @@ import static org.fest.swing.util.Platform.controlOrCommandKey;
 public class JTableDriver extends JComponentDriver {
 
   private final JTableLocation location = new JTableLocation();
+  private JTableCellValueReader cellReader;
 
   /**
    * Creates a new </code>{@link JTableDriver}</code>.
@@ -48,33 +49,31 @@ public class JTableDriver extends JComponentDriver {
    */
   public JTableDriver(Robot robot) {
     super(robot);
+    cellReader(new BasicJTableCellValueReader());
   }
 
   /**
-   * Returns the value of the selected cell into a reasonable <code>String</code> representation. Returns
-   * <code>null</code> if one can not be obtained or if the <code>{@link JTable}</code> does not have any selected
-   * cell.
+   * Returns the value of the selected cell. Returns <code>null</code> if one can not be obtained or if the
+   * <code>{@link JTable}</code> does not have any selected cell.
    * @param table the target <code>JTable</code>.
    * @return the value of the selected cell.
    */
-  public String selectionText(JTable table) {
+  public String selectionValue(JTable table) {
     if (table.getSelectedRowCount() == 0) return null;
-    return text(table, table.getSelectedRow(), table.getSelectedColumn());
+    return value(table, table.getSelectedRow(), table.getSelectedColumn());
   }
 
   /**
-   * Convert the value at the given table cell into a reasonable <code>String</code> representation, or
-   * <code>null</code> if one cannot be obtained.
+   * Returns the value at the given table cell, or <code>null</code> if one cannot be obtained.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
-   * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code>
-   *         if one cannot be obtained.
+   * @return the value at the given row and column, or <code>null</code> if one cannot be obtained.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
-  public String text(JTable table, JTableCell cell) {
+  public String value(JTable table, JTableCell cell) {
     validate(table, cell);
-    return textFrom(cellRendererComponent(table, cell.row, cell.column));
+    return value(table, cell.row, cell.column);
   }
 
   /**
@@ -86,13 +85,8 @@ public class JTableDriver extends JComponentDriver {
    * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code>
    *         if one cannot be obtained.
    */
-  public String text(JTable table, int row, int column) {
-    return textFrom(cellRendererComponent(table, row, column));
-  }
-
-  private static Component cellRendererComponent(JTable table, int row, int col) {
-    Object value = table.getValueAt(row, col);
-    return table.getCellRenderer(row, col).getTableCellRendererComponent(table, value, false, false, row, col);
+  public String value(JTable table, int row, int column) {
+    return cellReader.valueAt(table, row, column);
   }
 
   /**
@@ -204,5 +198,14 @@ public class JTableDriver extends JComponentDriver {
   public void validate(JTable table, JTableCell cell) {
     if (cell == null) throw actionFailure("Table cell cannot be null");
     cell.validateBoundsIn(table);
+  }
+
+  /**
+   * Updates the implementation of <code>{@link JTableCellValueReader}</code> to use when comparing internal values of a
+   * <code>{@link JTable}</code> and the values expected in a test.
+   * @param cellReader the new <code>JTableCellValueReader</code> to use.
+   */
+  public void cellReader(JTableCellValueReader cellReader) {
+    this.cellReader = cellReader;
   }
 }

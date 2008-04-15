@@ -21,11 +21,11 @@ import javax.swing.JPopupMenu;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.cell.JListCellValueReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
-import org.fest.swing.value.JListCellValueReader;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -63,14 +63,14 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
 
   @Test public void shouldReturnContents() {
-    final Object[] contents = array("Luke", "Leia");
+    final String[] contents = array("Luke", "Leia");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.contentsOf(target)).andReturn(contents);
       }
       
       protected void codeToTest() {
-        Object[] result = fixture.contents();
+        String[] result = fixture.contents();
         assertThat(result).isSameAs(contents);
       }
     }.run();
@@ -119,7 +119,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
 
   @Test public void shouldSelectItemsWithValues() {
-    final Object[] values = array("Frodo", "Sam");
+    final String[] values = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectItems(target, values);
@@ -185,7 +185,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
   }
   
   @Test public void shouldRequireSelectedItems() {
-    final Object[] items = array("Frodo", "Sam");
+    final String[] items = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireSelectedItems(target, items);
@@ -327,12 +327,12 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
     final JListCellValueReader reader = createMock(JListCellValueReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.cellValueReader(reader);
+        driver.cellReader(reader);
         expectLastCall().once();
       }
       
       protected void codeToTest() {
-        fixture.cellValueReader(reader);
+        fixture.cellReader(reader);
       }
     }.run();
   }

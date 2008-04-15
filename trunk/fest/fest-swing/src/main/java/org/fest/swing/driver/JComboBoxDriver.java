@@ -23,14 +23,14 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.cell.BasicJComboBoxCellValueReader;
+import org.fest.swing.cell.JComboBoxCellValueReader;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
-import org.fest.swing.value.BasicJComboBoxCellValueReader;
-import org.fest.swing.value.JComboBoxCellValueReader;
 
 import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.selectAllAction;
@@ -58,7 +58,7 @@ public class JComboBoxDriver extends JComponentDriver {
   
   private final JListDriver listDriver;
   
-  private JComboBoxCellValueReader cellValueReader;
+  private JComboBoxCellValueReader cellReader;
 
   /**
    * Creates a new </code>{@link JComboBoxDriver}</code>.
@@ -67,7 +67,7 @@ public class JComboBoxDriver extends JComponentDriver {
   public JComboBoxDriver(Robot robot) {
     super(robot);
     listDriver = new JListDriver(robot);
-    cellValueReader(new BasicJComboBoxCellValueReader());
+    cellReader(new BasicJComboBoxCellValueReader());
   }
 
   /**
@@ -77,9 +77,9 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @return an array of <code>String</code>s that represent the <code>JComboBox</code> list.
    */
-  public Object[] contentsOf(JComboBox comboBox) {
+  public String[] contentsOf(JComboBox comboBox) {
     int itemCount = size(comboBox);
-    Object[] items = new String[itemCount];
+    String[] items = new String[itemCount];
     for (int i = 0; i < itemCount; i++)
       items[i] = value(comboBox, i);
     return items;
@@ -117,7 +117,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param value the value to match.
    * @throws AssertionError if the selected item does not match the given value.
    */
-  public void requireSelection(JComboBox comboBox, Object value) {
+  public void requireSelection(JComboBox comboBox, String value) {
     int selectedIndex = comboBox.getSelectedIndex();
     if (selectedIndex == -1)
       fail(concat("[", selectedIndexProperty(comboBox), "] No selection"));
@@ -132,9 +132,9 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JComboBox</code>.
    */
-  public Object value(JComboBox comboBox, int index) {
+  public String value(JComboBox comboBox, int index) {
     validateIndex(comboBox, index);
-    return cellValueReader.valueAt(comboBox, index);
+    return cellReader.valueAt(comboBox, index);
   }
 
   private String selectedIndexProperty(JComboBox comboBox) {
@@ -289,9 +289,9 @@ public class JComboBoxDriver extends JComponentDriver {
   /**
    * Updates the implementation of <code>{@link JComboBoxCellValueReader}</code> to use when comparing internal values
    * of a <code>{@link JComboBox}</code> and the values expected in a test.
-   * @param cellValueReader the new <code>JComboBoxCellValueReader</code> to use.
+   * @param cellReader the new <code>JComboBoxCellValueReader</code> to use.
    */
-  public void cellValueReader(JComboBoxCellValueReader cellValueReader) {
-    this.cellValueReader = cellValueReader;
+  public void cellReader(JComboBoxCellValueReader cellReader) {
+    this.cellReader = cellReader;
   }
 }

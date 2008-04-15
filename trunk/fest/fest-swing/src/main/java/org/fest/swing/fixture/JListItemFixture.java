@@ -112,12 +112,13 @@ public class JListItemFixture implements ItemFixture {
   }
   
   /**
-   * Returns the value of this fixture's list item, or  <code>null</code> if one can not be obtained.
+   * Returns the value of this fixture's list item into a reasonable <code>String</code> representation, or
+   * <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
    * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public final Object content() {
+  public final String content() {
     return list.valueAt(index);
   }
 

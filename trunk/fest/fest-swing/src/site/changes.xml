@@ -6,6 +6,16 @@
   </properties>
   <body>
     <release version="1.0a1" date="2008-04-07" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="add">
+        Replaced TreePath as method parameter in JTreeFixture and replace it with a String specifying the path. For
+        example, now a path can be set as "root/node1/node1.1".
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="130">
+        Created JTreeCellReader and BasicJTreeReader to support custom cell renderers in JTreeFixture.
+      </action>
+      <action dev="alruiz" type="add" issue="128">
+        Created JComboBoxCellReader and BasicJComboBoxReader to support custom cell renderers in JComboBoxFixture.
+      </action>
       <action dev="alruiz" type="fix" issue="125" due-to="Woody Folsom">
         Fixed regression. JToolBarFixture extends ComponentFixture.
       </action>

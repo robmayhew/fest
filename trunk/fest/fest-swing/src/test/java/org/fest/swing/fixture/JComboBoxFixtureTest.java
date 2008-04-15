@@ -22,9 +22,9 @@ import org.easymock.classextension.EasyMock;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.cell.JComboBoxCellValueReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComboBoxDriver;
-import org.fest.swing.value.JComboBoxCellValueReader;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -60,14 +60,14 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
   }
 
   @Test public void shouldReturnContents() {
-    final Object[] contents = array("Frodo", "Sam");
+    final String[] contents = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.contentsOf(target)).andReturn(contents);
       }
 
       protected void codeToTest() {
-        Object[] result = fixture.contents();
+        String[] result = fixture.contents();
         assertThat(result).isSameAs(contents);
       }
     }.run();
@@ -191,17 +191,16 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-
   @Test public void shouldSetCellReaderInDriver() {
     final JComboBoxCellValueReader reader = createMock(JComboBoxCellValueReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.cellValueReader(reader);
+        driver.cellReader(reader);
         expectLastCall().once();
       }
       
       protected void codeToTest() {
-        fixture.cellValueReader(reader);
+        fixture.cellReader(reader);
       }
     }.run();
   }

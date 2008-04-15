@@ -40,8 +40,6 @@ import static org.fest.swing.core.MouseButton.*;
  */
 public class JTableCellFixture implements ItemFixture {
 
-  // TODO Test!
-  
   private final JTableFixture table;
   private final TableCell cell;
 
@@ -60,8 +58,7 @@ public class JTableCellFixture implements ItemFixture {
    * @return this fixture.
    */
   public final JTableCellFixture select() {
-    table.selectCell(cell);
-    return this;
+    return click();
   }
 
   /**
@@ -72,7 +69,7 @@ public class JTableCellFixture implements ItemFixture {
     table.selectCell(cell);
     return this;
   }
-
+  
   /**
    * Simulates a user clicking this fixture's table cell.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
@@ -110,11 +107,10 @@ public class JTableCellFixture implements ItemFixture {
   }
 
   /**
-   * Returns the value of this fixture's table cell into a reasonable <code>String</code> representation, or
-   * <code>null</code> if one can not be obtained.
+   * Returns the value of this fixture's table cell, or <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
    */
-  public final String content() {
+  public final Object content() {
     return table.contentAt(cell);
   }
 

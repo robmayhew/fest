@@ -13,11 +13,12 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.value;
+package org.fest.swing.cell;
 
 import java.awt.Component;
 
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
  * Understands the default implementation of <code>{@link JListCellValueReader}</code>.
@@ -37,14 +38,26 @@ public class BasicJListCellValueReader extends BaseValueReader implements JListC
    * @see BaseValueReader#valueFrom(Object)
    * @see BaseValueReader#valueFrom(Component)
    */
-  public Object valueAt(JList list, int index) {
-    Object element = list.getModel().getElementAt(index);
-    Object value = valueFrom(element);
+  public String valueAt(JList list, int index) {
+    Object element = elementAt(list, index);
+    String value = valueFrom(element);
     if (value != null) return value;
-    return valueFrom(cellRendererComponent(list, index, element));
+    return valueFrom(cellRendererComponent(list, index));
   }
 
-  private Component cellRendererComponent(JList list, int index, Object element) {
+  /**
+   * Returns the <code>{@link Component}</code> used by the <code>{@link ListCellRenderer}</code> in the given 
+   * <code>{@link JList}</code>.
+   * @param list the given <code>JList</code>.
+   * @param index the index of the cell.
+   * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JList</code>.
+   */
+  protected final Component cellRendererComponent(JList list, int index) {
+    Object element = elementAt(list, index);
     return list.getCellRenderer().getListCellRendererComponent(list, element, index, false, false);
+  }
+  
+  private Object elementAt(JList list, int index) {
+    return list.getModel().getElementAt(index);
   }
 }

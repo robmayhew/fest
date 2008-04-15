@@ -130,7 +130,7 @@ public class JTableCellFixtureTest {
       }
 
       protected void codeToTest() {
-        String result = fixture.content();
+        Object result = fixture.content();
         assertThat(result).isSameAs(content);
       }
     }.run();
@@ -208,5 +208,4 @@ public class JTableCellFixtureTest {
   private void assertThatReturnsThis(JTableCellFixture result) {
     assertThat(result).isSameAs(fixture);
   }
-
 }

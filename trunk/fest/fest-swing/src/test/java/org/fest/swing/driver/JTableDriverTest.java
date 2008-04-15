@@ -92,21 +92,21 @@ public class JTableDriverTest {
   
   @Test(dataProvider = "cells")
   public void shouldReturnValueOfGivenRowAndColumn(int row, int column) {
-    String text = driver.text(dragTable, row, column);
-    assertThat(text).isEqualTo(createCellTextUsing(row, column));
+    Object value = driver.value(dragTable, row, column);
+    assertThat(value).isEqualTo(createCellTextUsing(row, column));
   }
 
   @Test(dataProvider = "cells")
   public void shouldReturnValueOfGivenCell(int row, int column) {
-    String text = driver.text(dragTable, new TableCell(row, column));
-    assertThat(text).isEqualTo(createCellTextUsing(row, column));
+    Object value = driver.value(dragTable, new TableCell(row, column));
+    assertThat(value).isEqualTo(createCellTextUsing(row, column));
   }
 
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cells")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
     driver.selectCell(dragTable, new TableCell(row, column));
-    String text = driver.selectionText(dragTable);
-    assertThat(text).isEqualTo(createCellTextUsing(row, column));
+    Object value = driver.selectionValue(dragTable);
+    assertThat(value).isEqualTo(createCellTextUsing(row, column));
   }
 
   @DataProvider(name = "cells") public Object[][] cells() {
@@ -115,7 +115,7 @@ public class JTableDriverTest {
 
   @Test public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
     assertThat(dragTable.getSelectedRowCount()).isZero();
-    assertThat(driver.selectionText(dragTable)).isNull();
+    assertThat(driver.selectionValue(dragTable)).isNull();
   }
 
   @Test public void shouldDragAndDrop() throws Exception {

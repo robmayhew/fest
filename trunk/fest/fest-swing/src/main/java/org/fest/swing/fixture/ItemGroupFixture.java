@@ -30,7 +30,7 @@ public interface ItemGroupFixture {
    * Returns the elements in this fixture's <code>{@link Component}</code>.
    * @return the elements in this fixture's <code>Component</code>.
    */
-  Object[] contents();
+  String[] contents();
 
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link Component}</code>. 
@@ -44,7 +44,7 @@ public interface ItemGroupFixture {
    * @param value the value of the item to select.
    * @return this fixture.
    */
-  ItemGroupFixture selectItem(Object value);
+  ItemGroupFixture selectItem(String value);
 
   /**
    * Returns the value of an item in the <code>{@link Component}</code> managed by this fixture. If the value is not
@@ -61,5 +61,5 @@ public interface ItemGroupFixture {
    * @return this fixture.
    * @throws AssertionError if the selected item does not match the given value.
    */
-  ItemGroupFixture requireSelection(Object value);
+  ItemGroupFixture requireSelection(String value);
 }

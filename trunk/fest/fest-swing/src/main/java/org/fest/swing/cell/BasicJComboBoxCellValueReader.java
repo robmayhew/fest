@@ -13,15 +13,16 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.value;
+package org.fest.swing.cell;
 
 import java.awt.Component;
 
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
- * Understands the default implementation of <code>{@link JListCellValueReader}</code>.
+ * Understands the default implementation of <code>{@link JComboBoxCellValueReader}</code>.
  *
  * @author Alex Ruiz
  */
@@ -40,14 +41,26 @@ public class BasicJComboBoxCellValueReader extends BaseValueReader implements JC
    * @see BaseValueReader#valueFrom(Object)
    * @see BaseValueReader#valueFrom(Component)
    */
-  public Object valueAt(JComboBox comboBox, int index) {
-    Object item = comboBox.getItemAt(index);
-    Object value = valueFrom(item);
+  public String valueAt(JComboBox comboBox, int index) {
+    Object item = itemAt(comboBox, index);
+    String value = valueFrom(item);
     if (value != null) return value;
-    return valueFrom(cellRendererComponent(comboBox, index, item));
+    return valueFrom(cellRendererComponent(comboBox, index));
   }
 
-  private Component cellRendererComponent(JComboBox comboBox, int index, Object item) {
+  /**
+   * Returns the <code>{@link Component}</code> used by the <code>{@link ListCellRenderer}</code> in the given 
+   * <code>{@link JComboBox}</code>.
+   * @param comboBox the given <code>JComboBox</code>.
+   * @param index the index of the cell.
+   * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JComboBox</code>.
+   */
+  protected final Component cellRendererComponent(JComboBox comboBox, int index) {
+    final Object item = itemAt(comboBox, index);
     return comboBox.getRenderer().getListCellRendererComponent(REFERENCE_JLIST, item, index, true, true);
+  }
+  
+  private Object itemAt(JComboBox comboBox, int index) {
+    return comboBox.getItemAt(index);
   }
 }

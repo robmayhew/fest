@@ -18,14 +18,14 @@ package org.fest.swing.fixture;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
+import org.fest.swing.cell.BasicJComboBoxCellValueReader;
+import org.fest.swing.cell.JComboBoxCellValueReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JComboBoxDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.value.BasicJComboBoxCellValueReader;
-import org.fest.swing.value.JComboBoxCellValueReader;
 
 /**
  * Understands simulation of user events on a <code>{@link JComboBox}</code> and verification of the state of such
@@ -117,10 +117,10 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Returns the elements in this fixture's <code>{@link JComboBox}</code>.
+   * Returns the elements in this fixture's <code>{@link JComboBox}</code> as <code>String</code>s.
    * @return the elements in this fixture's <code>JComboBox</code>.
    */
-  public Object[] contents() {
+  public String[] contents() {
     return driver.contentsOf(target);
   }
 
@@ -271,34 +271,34 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
 
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>.
-   * @param value the value of the item to select.
+   * @param text the text of the item to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
    */
-  public JComboBoxFixture selectItem(Object value) {
-    driver.selectItem(target, value);
+  public JComboBoxFixture selectItem(String text) {
+    driver.selectItem(target, text);
     return this;
   }
 
   /**
    * Verifies that the <code>String</code> representation of the selected item in this fixture's
-   * <code>{@link JComboBox}</code> matches the given value.
-   * @param value the value to match.
+   * <code>{@link JComboBox}</code> matches the given text.
+   * @param text the text to match.
    * @return this fixture.
-   * @throws AssertionError if the selected item does not match the given value.
+   * @throws AssertionError if the selected item does not match the given text.
    */
-  public JComboBoxFixture requireSelection(Object value) {
-    driver.requireSelection(target, value);
+  public JComboBoxFixture requireSelection(String text) {
+    driver.requireSelection(target, text);
     return this;
   }
 
   /**
-   * Returns the value of an item in this fixture's <code>{@link JComboBox}</code>. If such value is not meaningful,
-   * this method will return <code>null</code>.
+   * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JComboBox}</code>. If such
+   * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
    * @param index the index of the item to return.
-   * @return the value of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @return the String representation of the item under the given index, or <code>null</code> if nothing meaningful.
    */
-  public Object valueAt(int index) {
+  public String valueAt(int index) {
     return driver.value(target, index);
   }
 
@@ -322,14 +322,13 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
     return this;
   }
 
-
   /**
    * Updates the implementation of <code>{@link JComboBoxCellValueReader}</code> to use when comparing internal values
    * of this fixture's <code>{@link JComboBox}</code> and the values expected in a test. The default implementation to
    * use is <code>{@link BasicJComboBoxCellValueReader}</code>.
-   * @param cellValueReader the new <code>JComboBoxCellValueReader</code> to use.
+   * @param cellReader the new <code>JComboBoxCellValueReader</code> to use.
    */
-  public void cellValueReader(JComboBoxCellValueReader cellValueReader) {
-    driver.cellValueReader(cellValueReader);
+  public void cellReader(JComboBoxCellValueReader cellReader) {
+    driver.cellReader(cellReader);
   }
 }

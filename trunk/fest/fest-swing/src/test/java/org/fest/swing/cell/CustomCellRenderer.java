@@ -13,20 +13,23 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.value;
+package org.fest.swing.cell;
 
 import java.awt.Component;
 
 import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
- * Understands a <code>{@link ListCellRenderer}</code> that returns the specified <code>{@link Component}</code> as its
- * renderer component. Used only for testing.
- *
- * @author Alex Ruiz 
+ * Understands a cell renderer that returns the specified <code>{@link Component}</code> as its renderer component.
+ * Used only for testing.
+ * 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-class CustomCellRenderer implements ListCellRenderer {
+class CustomCellRenderer implements ListCellRenderer, TableCellRenderer {
   private static final long serialVersionUID = 1L;
   private final Component rendererComponent;
   
@@ -35,6 +38,11 @@ class CustomCellRenderer implements ListCellRenderer {
   }
   
   public Component getListCellRendererComponent(JList list, Object value, int index, boolean selected, boolean focus) {
+    return rendererComponent;
+  }
+
+  public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focus,
+      int row, int column) {
     return rendererComponent;
   }
 }

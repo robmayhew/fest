@@ -20,7 +20,10 @@ import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeModel;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -84,7 +87,7 @@ public class JTreeDriverTest {
   }
 
   @Test(dataProvider = "selectionPath") 
-  public void shouldSelectNodeByPath(TreePath treePath) {
+  public void shouldSelectNodeByPath(String treePath) {
     dragTree.clearSelection();
     assertThat(dragTree.getSelectionRows()).isEqualTo(null);
     driver.selectPath(dragTree, treePath);
@@ -94,15 +97,15 @@ public class JTreeDriverTest {
   @DataProvider(name = "selectionPath") 
   public Object[][] selectionPath() {
     return new Object[][] { 
-        { path("root", "branch1") },
-        { path("root", "branch1", "branch1.2") },
-        { path("root") } 
+        { "root/branch1" },
+        { "root/branch1/branch1.2" },
+        { "root" } 
     };
   }
 
   @Test public void shouldDragAndDropUsingGivenTreePaths() {
-    driver.drag(dragTree, path("root", "branch1", "branch1.1"));
-    driver.drop(dropTree, path("root"));
+    driver.drag(dragTree, "root/branch1/branch1.1");
+    driver.drop(dropTree, "root");
     TreeModel dragModel = dragTree.getModel();
     DefaultMutableTreeNode branch1 = firstChildOf(rootOf(dragModel));
     assertThat(branch1.getChildCount()).isEqualTo(1);
@@ -137,10 +140,6 @@ public class JTreeDriverTest {
     return (DefaultMutableTreeNode)node.getChildAt(0);
   }
   
-  private TreePath path(String... path) {
-    return new TreePath(path);
-  }
-
   @Test public void shouldPassIfTreeIsEditable() {
     dragTree.setEditable(true);
     driver.requireEditable(dragTree);

@@ -1,0 +1,91 @@
+/*
+ * Created on Apr 12, 2008
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * Copyright @2008 the original author or authors.
+ */
+package org.fest.swing.cell;
+
+
+import java.awt.Component;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+/**
+ * Tests for <code>{@link BasicJTableCellValueReader}</code>.
+ *
+ * @author Alex Ruiz
+ */
+public class JTableCellValueReaderTest {
+
+  private JTable table;
+  private BasicJTableCellValueReader reader;
+  
+  @BeforeMethod public void setUp() {
+    table = new JTable(1, 1);
+    reader = new BasicJTableCellValueReader();
+  }
+
+  @Test public void shouldReturnModelValueToStringIfRendererNotRecognized() {
+    DefaultTableModel model = new DefaultTableModel(new Object[][] { { new Jedi("Yoda") } }, new Object[] { "Names" });
+    table.setModel(model);
+    updateRendererComponent(0, new JToolBar());
+    Object value = reader.valueAt(table, 0, 0);
+    assertThat(value).isEqualTo("Yoda");
+  }
+
+  private void updateRendererComponent(int column, Component c) {
+    table.getColumnModel().getColumn(column).setCellRenderer(new CustomCellRenderer(c));
+  }
+  
+  @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
+    JLabel label = new JLabel("Hello");
+    updateRendererComponent(0, label);
+    Object value = reader.valueAt(table, 0, 0);
+    assertThat(value).isEqualTo(label.getText());
+  }
+  
+  @Test public void shouldReturnSelectionFromCellRendererIfRendererIsJComboBox() {
+    JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
+    comboBox.setSelectedIndex(1);
+    updateRendererComponent(0, comboBox);
+    Object value = reader.valueAt(table, 0, 0);
+    assertThat(value).isEqualTo("Two");
+  }
+  
+  @Test public void shouldReturnNullIfRendererIsJComboBoxWithoutSelection() {
+    JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
+    comboBox.setSelectedIndex(-1);
+    updateRendererComponent(0, comboBox);
+    Object value = reader.valueAt(table, 0, 0);
+    assertThat(value).isNull();
+  }
+
+  @Test(dataProvider = "booleans") 
+  public void shouldReturnIsSelectedIfRendererIsJCheckBox(boolean selected) {
+    JCheckBox checkBox = new JCheckBox("Hello", selected);
+    updateRendererComponent(0, checkBox);
+    Object value = reader.valueAt(table, 0, 0);
+    assertThat(value).isEqualTo(selected);
+  }
+  
+  @DataProvider(name = "booleans") public Object[][] booleans() {
+    return new Object[][] { { true }, { false } };
+  }
+}
