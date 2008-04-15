@@ -350,7 +350,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   }
 
   /**
-   * Updates the separator to use when specifying <code>{@link TreePath}</code>s as <code>String</code>s.
+   * Updates the separator to use when specifying <code>{@link TreePath}</code>s as <code>String</code>s. The default
+   * value is "/".
    * @param separator the new separator.
    */
   public void separator(String separator) {
