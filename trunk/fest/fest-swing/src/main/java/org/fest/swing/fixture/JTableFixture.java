@@ -350,6 +350,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     return this;
   }
 
+  
+  
   /**
    * Shows a pop-up menu at the given cell.
    * @param cell the table cell where to show the pop-up menu.

@@ -17,6 +17,7 @@ package org.fest.swing.cell;
 
 
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -32,7 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JTableCellValueReaderTest {
+public class BasicJTableCellReaderTest {
 
   private JTable table;
   private BasicJTableCellReader reader;
@@ -54,6 +55,13 @@ public class JTableCellValueReaderTest {
     table.getColumnModel().getColumn(column).setCellRenderer(new CustomCellRenderer(c));
   }
   
+  @Test public void shouldReturnFontFromRenderer() {
+    JLabel label = new JLabel("Hello");
+    updateRendererComponent(0, label);
+    Font font = reader.fontAt(table, 0, 0);
+    assertThat(font).isEqualTo(label.getFont());
+  }
+
   @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
@@ -82,7 +90,7 @@ public class JTableCellValueReaderTest {
     JCheckBox checkBox = new JCheckBox("Hello", selected);
     updateRendererComponent(0, checkBox);
     Object value = reader.valueAt(table, 0, 0);
-    assertThat(value).isEqualTo(selected);
+    assertThat(value).isEqualTo(String.valueOf(selected));
   }
   
   @DataProvider(name = "booleans") public Object[][] booleans() {

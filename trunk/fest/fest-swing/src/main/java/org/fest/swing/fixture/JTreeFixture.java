@@ -38,9 +38,9 @@ import org.fest.swing.exception.LocationUnavailableException;
  * <pre><code>
  * root
  *   |
- *   +- node1
- *   |  |
- *   |  +- node1.1
+ *   -- node1
+ *      |
+ *      -- node1.1
  * </code></pre>
  * 
  * we can identify the node "node1.1" as follows:

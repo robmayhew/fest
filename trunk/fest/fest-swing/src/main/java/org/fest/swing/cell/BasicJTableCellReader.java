@@ -16,6 +16,7 @@
 package org.fest.swing.cell;
 
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -64,6 +65,11 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
     return comboBoxCellValueReader.valueAt(comboBox, selectedIndex);
   }
   
+  /** {@inheritDoc} */
+  public Font fontAt(JTable table, int row, int column) {
+    return cellRendererComponent(table, row, column).getFont();
+  }
+
   /**
    * Returns the <code>{@link Component}</code> used by the <code>{@link TableCellRenderer}</code> in the given 
    * <code>{@link JTable}</code>.

@@ -19,8 +19,10 @@ import java.awt.Component;
 
 import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.ListCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 
 /**
  * Understands a cell renderer that returns the specified <code>{@link Component}</code> as its renderer component.
@@ -29,7 +31,7 @@ import javax.swing.table.TableCellRenderer;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class CustomCellRenderer implements ListCellRenderer, TableCellRenderer {
+class CustomCellRenderer implements ListCellRenderer, TableCellRenderer, TreeCellRenderer {
   private static final long serialVersionUID = 1L;
   private final Component rendererComponent;
   
@@ -43,6 +45,11 @@ class CustomCellRenderer implements ListCellRenderer, TableCellRenderer {
 
   public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focus,
       int row, int column) {
+    return rendererComponent;
+  }
+
+  public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+      boolean leaf, int row, boolean focus) {
     return rendererComponent;
   }
 }
