@@ -1,26 +1,26 @@
 /*
  * Created on Apr 16, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.assertion;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.*;
+
 import java.awt.Font;
 
 import org.fest.assertions.AssertExtension;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands assertion methods for <code>{@link Font}</code>.
@@ -39,7 +39,7 @@ public class FontAssert implements AssertExtension {
   private static final String SIZE_PROPERTY = "size";
 
   private final Font actual;
-  
+
   private String description;
 
   public FontAssert(Font actual) {
@@ -94,7 +94,7 @@ public class FontAssert implements AssertExtension {
   }
 
   /**
-   * Verifies that the logical name of the actual font is equal to the given one. 
+   * Verifies that the logical name of the actual font is equal to the given one.
    * @param name the expected logical name.
    * @return this assertion object.
    * @throws AssertionError if the logical name of the actual font is not equal to the given one.
@@ -127,7 +127,18 @@ public class FontAssert implements AssertExtension {
     assertThat(actual).as(description).isEqualTo(font);
     return this;
   }
-  
+
+  /**
+   * Verifies that the actual font is not equal to the given one.
+   * @param font the font to compare to.
+   * @return this assertion object.
+   * @throws AssertionError if the actual font is equal to the given one.
+   */
+  public FontAssert isNotEqualTo(Font font) {
+    assertThat(actual).as(description).isNotEqualTo(font);
+    return this;
+  }
+
   /**
    * Verifies that the actual font's object style is bold.
    * @return this assertion object.
@@ -152,7 +163,7 @@ public class FontAssert implements AssertExtension {
     assertThat(actual.isBold()).as(addProperty(BOLD_PROPERTY)).isEqualTo(bold);
     return this;
   }
-  
+
   /**
    * Verifies that the actual font's object style is italic.
    * @return this assertion object.
@@ -172,12 +183,12 @@ public class FontAssert implements AssertExtension {
   public FontAssert isNotItalic() {
     return isItalic(false);
   }
-  
+
   private FontAssert isItalic(boolean italic) {
     assertThat(actual.isItalic()).as(addProperty(ITALIC_PROPERTY)).isEqualTo(italic);
     return this;
   }
-  
+
   /**
    * Verifies that the actual font's object style is plain.
    * @return this assertion object.
@@ -197,7 +208,7 @@ public class FontAssert implements AssertExtension {
   public FontAssert isNotPlain() {
     return isPlain(false);
   }
-  
+
   private FontAssert isPlain(boolean plain) {
     assertThat(actual.isBold()).as(addProperty(PLAIN_PROPERTY)).isEqualTo(plain);
     return this;
