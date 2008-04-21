@@ -7,6 +7,10 @@
   <body>
     <release version="1.0a1" date="2008-04-07" description="Subsequent release">
       <action dev="alruiz, wanghy" type="add">
+        Added method 'requireSelection(String)' to JTreeFixture. This method verifies that a JTree has the given path 
+        selected. The path is specified as a String, for example "root/node1/node1.1".
+      </action>
+      <action dev="alruiz, wanghy" type="add">
         Replaced TreePath as method parameter in JTreeFixture and replace it with a String specifying the path. For
         example, now a path can be set as "root/node1/node1.1".
       </action>

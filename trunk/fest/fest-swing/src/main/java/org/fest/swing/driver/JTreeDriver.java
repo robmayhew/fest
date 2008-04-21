@@ -51,6 +51,8 @@ import static org.fest.util.Strings.*;
 public class JTreeDriver extends JComponentDriver {
 
   private static final String EDITABLE_PROPERTY = "editable";
+  private static final String SELECTION_PATH_PROPERTY = "selectionPath";
+
   private static final String SEPARATOR = "/";
 
   private final JTreeLocation location;
@@ -257,6 +259,17 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   /**
+   * Asserts that the given <code>{@link JTree}</code>'s selected path is equal to the given one.
+   * @param tree the target <code>JTree</code>.
+   * @param path the given <code>TreePath</code>, expected to be selected.
+   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given path.
+   */
+  public void requireSelection(JTree tree, String path) {
+    TreePath matchingPath = findMatchingPath(tree, path);
+    assertThat(tree.getSelectionPath()).as(propertyName(tree, SELECTION_PATH_PROPERTY)).isEqualTo(matchingPath);
+  }
+  
+  /**
    * Asserts that the given <code>{@link JTree}</code> is editable.
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> is not editable.
@@ -284,7 +297,8 @@ public class JTreeDriver extends JComponentDriver {
     List<Object> newPathValues = new ArrayList<Object>(pathStrings.length + 1);
     Object node = model.getRoot();
     int childCount = model.getChildCount(node);
-    for (int stringIndex = 0; stringIndex < pathStrings.length; stringIndex++) {
+    int pathElementCount = pathStrings.length;
+    for (int stringIndex = 0; stringIndex < pathElementCount; stringIndex++) {
       String pathString = pathStrings[stringIndex];
       Object match = null;
       if (stringIndex == 0 && tree.isRootVisible()) {
@@ -330,7 +344,15 @@ public class JTreeDriver extends JComponentDriver {
   }
   
   /**
-   * Updates the separator to use when specifying <code>{@link TreePath}</code>s as <code>String</code>s.
+   * Returns the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
+   * @return the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
+   */
+  public String separator() {
+    return separator;
+  }
+  
+  /**
+   * Updates the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    * @param separator the new separator.
    */
   public void separator(String separator) {

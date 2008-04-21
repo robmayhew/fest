@@ -20,10 +20,7 @@ import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeModel;
+import javax.swing.tree.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -38,6 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
 
 /**
  * Test for <code>{@link JTreeDriver}</code>.
@@ -91,7 +89,7 @@ public class JTreeDriverTest {
     dragTree.clearSelection();
     assertThat(dragTree.getSelectionRows()).isEqualTo(null);
     driver.selectPath(dragTree, treePath);
-    assertThat(dragTree.getSelectionPath().toString()).isEqualTo(treePath.toString());
+    assertThat(textOf(dragTree.getSelectionPath())).isEqualTo(treePath);
   }
 
   @DataProvider(name = "selectionPath") 
@@ -132,6 +130,19 @@ public class JTreeDriverTest {
     return (DefaultMutableTreeNode)model.getRoot();
   }
 
+  private String textOf(TreePath path) {
+    if (path == null) return null;
+    Object[] values = path.getPath();
+    String separator = driver.separator();
+    StringBuilder b = new StringBuilder();
+    for (int i = 0; i < values.length; i++) {
+      if (i != 0) b.append(separator);
+      Object value = values[i];
+      if (value instanceof DefaultMutableTreeNode) b.append(textOf((DefaultMutableTreeNode)value));
+    }
+    return b.toString();
+  }
+  
   private String textOf(DefaultMutableTreeNode node) {
     return (String)node.getUserObject();
   }
@@ -140,6 +151,36 @@ public class JTreeDriverTest {
     return (DefaultMutableTreeNode)node.getChildAt(0);
   }
   
+  @Test public void shouldPassIfPathIsSelected() {
+    DefaultMutableTreeNode root = rootOf(dragTree.getModel());
+    TreePath path = new TreePath(array(root, root.getFirstChild()));
+    dragTree.setSelectionPath(path);
+    driver.requireSelection(dragTree, "root/branch1");
+  }
+
+  @Test public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {
+    dragTree.setSelectionPath(null);
+    try {
+      driver.requireSelection(dragTree, "root/branch1");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectionPath'")
+                             .contains("expected:<[root, branch1]> but was:<null>");
+    }
+  }
+  
+  @Test public void shouldFailIfSelectedPathIsNotEqualToExpectedSelection() {
+    DefaultMutableTreeNode root = rootOf(dragTree.getModel());
+    dragTree.setSelectionPath(new TreePath(array(root)));
+    try {
+      driver.requireSelection(dragTree, "root/branch1");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectionPath'")
+                             .contains("expected:<[root, branch1]> but was:<[root]>");
+    }
+  }
+
   @Test public void shouldPassIfTreeIsEditable() {
     dragTree.setEditable(true);
     driver.requireEditable(dragTree);

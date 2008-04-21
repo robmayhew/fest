@@ -15,17 +15,19 @@
  */
 package org.fest.swing.assertion;
 
+import java.awt.Font;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
 import static java.awt.Font.*;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.concat;
-
-import java.awt.Font;
-
-import org.fest.test.CodeToTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link FontAssert}</code>.
@@ -163,7 +165,7 @@ public class FontAssertTest {
     fontAssert.isBold();
   }
 
-  @Test public void shouldFailIfSizeIsNotBoldAndExpectingToBeBold() {
+  @Test public void shouldFailIfFontIsNotBoldAndExpectingToBeBold() {
     expectAssertionError("[bold] expected:<true> but was:<false>").on(new CodeToTest() {
       public void run() {
         fontAssert.isBold();
@@ -171,10 +173,34 @@ public class FontAssertTest {
     });
   }
 
-  @Test public void shouldFailShowingDescriptionIfSizeIsNotBoldAndExpectingToBeBold() {
+  @Test public void shouldFailShowingDescriptionIfFontIsNotBoldAndExpectingToBeBold() {
     expectAssertionError("[test - bold] expected:<true> but was:<false>").on(new CodeToTest() {
       public void run() {
         fontAssert.as("test").isBold();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfFontIsNotBoldAsAnticipated() {
+    fontAssert.isNotBold();
+  }
+
+  @Test public void shouldFailIfFontIsBoldAndExpectingNotToBeBold() {
+    font = font.deriveFont(BOLD);
+    fontAssert = new FontAssert(font);
+    expectAssertionError("[bold] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        fontAssert.isNotBold();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFontIsBoldAndExpectingNotToBeBold() {
+    font = font.deriveFont(BOLD);
+    fontAssert = new FontAssert(font);
+    expectAssertionError("[test - bold] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        fontAssert.as("test").isNotBold();
       }
     });
   }

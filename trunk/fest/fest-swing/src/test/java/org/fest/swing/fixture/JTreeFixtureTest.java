@@ -24,8 +24,10 @@ import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTreeDriver;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 
 /**
@@ -175,6 +177,21 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
     }.run();
   }
 
+  @Test public void shouldRequireSelectedPath() {
+    final String path = "root/node1";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelection(target, path);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelection(path));
+      }
+    }.run();
+    
+  }
+  
   @Test public void shouldSetCellReaderInDriver() {
     final JTreeCellReader reader = createMock(JTreeCellReader.class);
     new EasyMockTemplate(driver) {
@@ -189,6 +206,20 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
     }.run();
   }
 
+  @Test public void shouldReturnSeparatorFromDriver() {
+    final String separator = "\\";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.separator()).andReturn(separator);
+      }
+      
+      protected void codeToTest() {
+        String result = fixture.separator();
+        assertThat(result).isSameAs(separator);
+      }
+    }.run();
+  }
+  
   @Test public void shouldSetSeparatorInDriver() {
     final String separator = "\\";
     new EasyMockTemplate(driver) {

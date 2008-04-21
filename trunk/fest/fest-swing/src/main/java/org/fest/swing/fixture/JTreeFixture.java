@@ -333,6 +333,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * Asserts that this fixture's <code>{@link JTree}</code> is editable.
    * @throws AssertionError if this fixture's <code>JTree</code> is not editable.
    * @return this fixture. 
+   * @throws AssertionError if this fixture's <code>JTree</code> is not editable.
    */
   public JTreeFixture requireEditable() {
     driver.requireEditable(target);
@@ -343,6 +344,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * Asserts that this fixture's <code>{@link JTree}</code> is not editable.
    * @throws AssertionError if this fixture's <code>JTree</code> is editable.
    * @return this fixture. 
+   * @throws AssertionError if this fixture's <code>JTree</code> is editable.
    */
   public JTreeFixture requireNotEditable() {
     driver.requireNotEditable(target);
@@ -350,7 +352,26 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   }
 
   /**
-   * Updates the separator to use when specifying <code>{@link TreePath}</code>s as <code>String</code>s. The default
+   * Asserts that this fixture's <code>{@link JTree}</code> selection is equal to the given path.
+   * @param path the given path, expected to be selected.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given path.
+   */
+  public JTreeFixture requireSelection(String path) {
+    driver.requireSelection(target, path);
+    return this;
+  }
+  
+  /**
+   * Returns the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
+   * @return the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
+   */
+  public String separator() {
+    return driver.separator();
+  }
+
+  /**
+   * Updates the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s. The default
    * value is "/".
    * @param separator the new separator.
    */
