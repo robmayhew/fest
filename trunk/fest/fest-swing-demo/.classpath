@@ -11,5 +11,10 @@
 	<classpathentry kind="lib" path="lib/filters.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-0.9.2.jar" sourcepath="lib/swingx-0.9.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/substance-swingx.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-1.0a1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-reflect-0.4.jar"/>
+	<classpathentry kind="lib" path="lib/MRJToolkitStubs-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/fest-swing"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

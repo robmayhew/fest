@@ -15,15 +15,6 @@
  */
 package org.fest.swing.demo.view;
 
-import static java.awt.BorderLayout.CENTER;
-import static java.awt.GridBagConstraints.*;
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
-import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.center;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +25,16 @@ import javax.swing.*;
 import javax.swing.FocusManager;
 
 import org.jdesktop.swinghelper.layer.JXLayer;
+
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.GridBagConstraints.*;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+
+import static org.fest.swing.demo.view.Icons.*;
+import static org.fest.swing.demo.view.Swing.center;
 
 /**
  * Understands the dialog where users can create new web feeds and/or folders.
@@ -79,6 +80,7 @@ class AddDialog extends JDialog implements InputForm {
     setLayout(new BorderLayout());
     layer = JComponentFactory.instance().blurFilteredLayer(content());
     add(layer, CENTER);
+    setName("add");
     setPreferredSize(new Dimension(320, 280));
     setResizable(false);
     setTitle(i18n.message(DIALOG_TITLE_KEY));

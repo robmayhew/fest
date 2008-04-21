@@ -15,9 +15,6 @@
  */
 package org.fest.swing.demo.main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -26,11 +23,9 @@ import javax.swing.UIManager;
 import org.jvnet.lafwidget.animation.FadeConfigurationManager;
 import org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel;
 
-import org.fest.swing.demo.model.Folder;
-import org.fest.swing.demo.model.WebFeed;
-import org.fest.swing.demo.service.FolderService;
+import org.fest.swing.demo.service.FolderServiceStub;
 import org.fest.swing.demo.service.Services;
-import org.fest.swing.demo.service.WebFeedService;
+import org.fest.swing.demo.service.WebFeedServiceStub;
 import org.fest.swing.demo.view.MainFrame;
 
 import static javax.swing.SwingUtilities.invokeLater;
@@ -46,52 +41,22 @@ public class Main {
   /**
    * Starts the main application.
    * @param args any command line arguments.
-   * @throws Exception
+   * @throws Exception any error that may occur while setting the look and feel of the application.
    */
   public static void main(String[] args) throws Exception {
-    FadeConfigurationManager.getInstance().allowFades(TREE_DECORATIONS_ANIMATION_KIND);
-    UIManager.setLookAndFeel(new SubstanceRavenGraphiteGlassLookAndFeel());
-    makeWindowDecorationsUseLookAndFeel();
-    Services.instance().updateFolderService(new FolderService() {
-      private final List<Folder> folders = new ArrayList<Folder>();
-
-      public void saveFolder(Folder folder) {
-        folders.add(folder);
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-
-      public Folder[] allFolders() {
-        Folder[] sortedFolders = folders.toArray(new Folder[folders.size()]);
-        Arrays.sort(sortedFolders);
-        return sortedFolders;
-      }
-
-    });
+    updateLookAndFeel();
+    Services.instance().updateFolderService(new FolderServiceStub());
+    Services.instance().updateWebFeedService(new WebFeedServiceStub());
     invokeLater(new Runnable() {
       public void run() {
         new MainFrame().setVisible(true);
       }
     });
-    Services.instance().updateWebFeedService(new WebFeedService() {
-      public String obtainFeedName(String address) {
-        return null;
-      }
-
-      public void saveWebFeed(WebFeed webFeed) {
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    });
   }
 
-  private static void makeWindowDecorationsUseLookAndFeel() {
+  public static void updateLookAndFeel() throws Exception {
+    FadeConfigurationManager.getInstance().allowFades(TREE_DECORATIONS_ANIMATION_KIND);
+    UIManager.setLookAndFeel(new SubstanceRavenGraphiteGlassLookAndFeel());
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
   }

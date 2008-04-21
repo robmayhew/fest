@@ -15,17 +15,18 @@
  */
 package org.fest.swing.demo.view;
 
-import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.tree.*;
 
+import org.jdesktop.swingx.JXTree;
+
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
-import org.jdesktop.swingx.JXTree;
+
+import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
 
 /**
  * Understands the tree containing all web feeds.
@@ -53,6 +54,7 @@ class WebFeedTree extends JXTree {
     root = new DefaultMutableTreeNode(i18n.message(TREE_ROOT_KEY));
     model = new DefaultTreeModel(root);
     setModel(model);
+    setName("feeds");
     setRootVisible(true);
     setOpenIcon(FOLDER_SMALL_ICON);
     setClosedIcon(FOLDER_SMALL_ICON);
