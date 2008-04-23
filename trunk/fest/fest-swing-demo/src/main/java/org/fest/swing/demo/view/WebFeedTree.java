@@ -46,7 +46,7 @@ class WebFeedTree extends JXTree {
   private final NodeModelComparator comparator = new NodeModelComparator();
 
   private final I18n i18n;
-
+  
   private final Map<String, FolderNode> folderNodes = new HashMap<String, FolderNode>();
 
   WebFeedTree() {
@@ -58,6 +58,12 @@ class WebFeedTree extends JXTree {
     setRootVisible(true);
     setOpenIcon(FOLDER_SMALL_ICON);
     setClosedIcon(FOLDER_SMALL_ICON);
+    setUpDragAndDrop();
+  }
+  
+  void setUpDragAndDrop() {
+    setDragEnabled(true);
+    setTransferHandler(new WebFeedTreeTransferHandler());
   }
 
   void addContent(Object content) {
@@ -65,7 +71,7 @@ class WebFeedTree extends JXTree {
     if (content instanceof Folder) addFolder((Folder)content);
   }
 
-  private void addWebFeed(WebFeed webFeed) {
+  void addWebFeed(WebFeed webFeed) {
     FolderNode folderNode = folderFor(webFeed);
     WebFeedNode webFeedNode = new WebFeedNode(webFeed);
     MutableTreeNode parent = (folderNode != null) ? folderNode : root;
@@ -122,8 +128,8 @@ class WebFeedTree extends JXTree {
     TreeNode[] pathToRoot = model.getPathToRoot(node);
     setSelectionPath(new TreePath(pathToRoot));
   }
-
-  private static class WebFeedNode extends DefaultMutableTreeNode {
+  
+  static class WebFeedNode extends DefaultMutableTreeNode {
     private static final long serialVersionUID = 1L;
 
     final WebFeed webFeed;
@@ -140,7 +146,7 @@ class WebFeedTree extends JXTree {
     }
   }
 
-  private static class FolderNode extends DefaultMutableTreeNode {
+  static class FolderNode extends DefaultMutableTreeNode {
     private static final long serialVersionUID = 1L;
 
     final Folder folder;
