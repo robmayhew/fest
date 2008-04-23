@@ -140,13 +140,16 @@ abstract class WebFeedTransferHandler<T extends JComponent> extends TransferHand
    */
   @Override protected final void exportDone(JComponent c, Transferable data, int action) {
     if (!componentType.isInstance(c)) return;
-    cleanup(componentType.cast(c), action == MOVE);
+    WebFeedSelection selection = null;
+    if (data instanceof WebFeedSelection) selection = (WebFeedSelection)data;
+    cleanup(componentType.cast(c), selection, action == MOVE);
   }
   
   /**
    * Cleans up after any data transfer.
    * @param c the component that was the source of the data.
+   * @param selection the web feeds that were transferred.
    * @param remove indicates if the data should be removed.
    */
-  abstract void cleanup(T c, boolean remove);
+  abstract void cleanup(T c, WebFeedSelection selection, boolean remove);
 }

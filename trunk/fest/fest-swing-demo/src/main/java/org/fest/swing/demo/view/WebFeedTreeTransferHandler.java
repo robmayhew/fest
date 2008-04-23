@@ -49,9 +49,7 @@ class WebFeedTreeTransferHandler extends WebFeedTransferHandler<WebFeedTree> {
     reset();
   }
   
-  /**
-   * @see org.fest.swing.demo.view.WebFeedTransferHandler#exportWebFeeds(javax.swing.JComponent)
-   */
+  /** {@inheritDoc} */
   WebFeed[] exportWebFeeds(WebFeedTree tree) {
     rows = tree.getSelectionRows();
     List<WebFeed> webFeeds = new ArrayList<WebFeed>();
@@ -65,9 +63,7 @@ class WebFeedTreeTransferHandler extends WebFeedTransferHandler<WebFeedTree> {
     return webFeeds.toArray(new WebFeed[webFeeds.size()]);
   }
   
-  /**
-   * @see org.fest.swing.demo.view.WebFeedTransferHandler#importWebFeeds(javax.swing.JComponent, WebFeed[])
-   */
+  /** {@inheritDoc} */
   void importWebFeeds(WebFeedTree tree, WebFeed[] webFeeds) {
     int index = tree.getRowForPath(tree.getSelectionPath());
     // Prevent the user from dropping data back on itself.
@@ -96,10 +92,8 @@ class WebFeedTreeTransferHandler extends WebFeedTransferHandler<WebFeedTree> {
     return realIndex;
   }
 
-  /**
-   * @see org.fest.swing.demo.view.WebFeedTransferHandler#cleanup(javax.swing.JComponent, boolean)
-   */
-  void cleanup(WebFeedTree source, boolean remove) {
+  /** {@inheritDoc} */
+  void cleanup(WebFeedTree source, WebFeedSelection selection, boolean remove) {
     if (remove && rows != null) {
       DefaultTreeModel model = (DefaultTreeModel) source.getModel();
       // If we are moving items around in the same table, we need to adjust the rows accordingly, since those after the 
