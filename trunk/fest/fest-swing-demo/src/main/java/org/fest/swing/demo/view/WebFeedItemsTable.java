@@ -29,12 +29,20 @@ class WebFeedItemsTable extends JXTable {
 
   private static final long serialVersionUID = 1L;
 
-  private final I18n i18n;
+  private static final String COLUMN_DATE_NAME = "table.column.date.name";
+  private static final String COLUMN_TITLE_NAME = "table.column.title.name";
 
   WebFeedItemsTable() {
-    i18n = new I18n(this);
-    String[] columnNames = i18n.messages("table.column.title.name", "table.column.date.name");
+    String[] columnNames = i18n().messages(COLUMN_TITLE_NAME, COLUMN_DATE_NAME);
     DefaultTableModel model = new DefaultTableModel(columnNames, 0);
     setModel(model);
+  }
+
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(WebFeedItemsTable.class);
   }
 }

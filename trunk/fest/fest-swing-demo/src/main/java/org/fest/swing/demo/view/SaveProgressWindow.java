@@ -30,12 +30,20 @@ class SaveProgressWindow extends ProgressWindow {
   private static final String LABEL_SAVING_KEY = "label.saving";
 
   SaveProgressWindow(Window owner) {
-    super(owner, LABEL_SAVING_KEY);
+    super(owner, i18n().message(LABEL_SAVING_KEY));
   }
 
   void save(InputForm inputForm) {
     setVisible(true);
     InputFormPanel source = inputForm.selectedPanel();
     source.save(inputForm, this);
+  }
+
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(SaveProgressWindow.class);
   }
 }

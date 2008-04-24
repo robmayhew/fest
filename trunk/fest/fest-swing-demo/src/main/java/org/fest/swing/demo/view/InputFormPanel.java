@@ -38,14 +38,11 @@ abstract class InputFormPanel extends JPanel {
   
   static final String EMPTY_TEXT = "";
   
-  final I18n i18n; 
-  
   /**
    * Creates a new </code>{@link InputFormPanel}</code>.
    */
   InputFormPanel() {
     super(new GridBagLayout());
-    i18n = new I18n(this);
     setBorder(createEmptyBorder(20, 20, 20, 20));
     addContent();
   }

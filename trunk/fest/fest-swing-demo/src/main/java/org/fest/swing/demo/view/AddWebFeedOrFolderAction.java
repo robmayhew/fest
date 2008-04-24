@@ -15,12 +15,12 @@
  */
 package org.fest.swing.demo.view;
 
-import static org.fest.swing.demo.view.AddDialog.addWebFeedOrFolderDialog;
-import static org.fest.swing.demo.view.Icons.ADD_ICON;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+
+import static org.fest.swing.demo.view.AddDialog.addWebFeedOrFolderDialog;
+import static org.fest.swing.demo.view.Icons.ADD_ICON;
 
 /**
  * Understands an action that displays an instance of <code>{@link AddDialog}</code>.
@@ -41,9 +41,8 @@ class AddWebFeedOrFolderAction extends AbstractAction {
    */
   AddWebFeedOrFolderAction(MainFrame mainFrame) {
     this.mainFrame = mainFrame;
-    I18n i18n = new I18n(this);
-    String name = i18n.message(ACTION_ADD_KEY);
-    int mnemonic = i18n.mnemonic(ACTION_ADD_KEY);
+    String name = i18n().message(ACTION_ADD_KEY);
+    int mnemonic = i18n().mnemonic(ACTION_ADD_KEY);
     putValue(NAME, name);
     putValue(MNEMONIC_KEY, mnemonic);
     putValue(SMALL_ICON, ADD_ICON);
@@ -57,5 +56,13 @@ class AddWebFeedOrFolderAction extends AbstractAction {
     mainFrame.lock();
     AddDialog addDialog = addWebFeedOrFolderDialog(mainFrame);
     addDialog.setVisible(true);
+  }
+  
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(AddWebFeedOrFolderAction.class);
   }
 }

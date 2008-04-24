@@ -15,8 +15,6 @@
  */
 package org.fest.swing.demo.view;
 
-import static org.fest.util.Strings.isEmpty;
-
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 
@@ -25,6 +23,8 @@ import javax.swing.*;
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.Services;
+
+import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands the panel where users can add a new web feed.
@@ -83,7 +83,7 @@ class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JLabel addressLabel() {
-    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_ADDRESS_KEY);
+    return JComponentFactory.instance().labelWithMnemonic(i18n(), LABEL_ADDRESS_KEY);
   }
 
   private void addNameField(GridBagConstraints c) {
@@ -92,7 +92,7 @@ class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JLabel nameLabel() {
-    return JComponentFactory.instance().labelWithMnemonic(i18n, LABEL_NAME_KEY);
+    return JComponentFactory.instance().labelWithMnemonic(i18n(), LABEL_NAME_KEY);
   }
 
   private JTextField nameField() {
@@ -107,7 +107,7 @@ class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JLabel folderLabel() {
-    return JComponentFactory.instance().labelWithMnemonic(i18n, FOLDER_NAME_KEY);
+    return JComponentFactory.instance().labelWithMnemonic(i18n(), FOLDER_NAME_KEY);
   }
 
   private JComboBox folderComboBox() {
@@ -141,7 +141,7 @@ class AddWebFeedPanel extends InputFormPanel {
 
   boolean validInput() {
     if (!isEmpty(addressField.getText())) return true;
-    addressMissingLabel.showErrorMessage(i18n.message(LABEL_ADDRESS_MISSING_KEY));
+    addressMissingLabel.showErrorMessage(i18n().message(LABEL_ADDRESS_MISSING_KEY));
     return false;
   }
 
@@ -156,5 +156,13 @@ class AddWebFeedPanel extends InputFormPanel {
   private String selectedFolder() {
     Object folder = folderComboBox.getSelectedItem();
     return folder != null ? folder.toString() : null;
+  }
+
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(AddWebFeedPanel.class);
   }
 }

@@ -41,7 +41,6 @@ public class MainFrame extends JFrame {
 
   private static final String FRAME_TITLE_KEY = "frame.title";
 
-  private final I18n i18n;
   private final JXLayer<JPanel> layer;
   
   private final WebFeedTree webFeedTree = new WebFeedTree(this);
@@ -52,11 +51,10 @@ public class MainFrame extends JFrame {
    */
   public MainFrame() {
     setLayout(new BorderLayout());
-    i18n = new I18n(this);
     layer = JComponentFactory.instance().blurFilteredLayer(content());
     add(layer, CENTER);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setTitle(i18n.message(FRAME_TITLE_KEY));
+    setTitle(i18n().message(FRAME_TITLE_KEY));
     setPreferredSize(new Dimension(600, 400));
     pack();
   }
@@ -92,5 +90,13 @@ public class MainFrame extends JFrame {
   @Override public void setVisible(boolean visible) {
     center(this);
     super.setVisible(visible);
+  }
+
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(MainFrame.class);
   }
 }

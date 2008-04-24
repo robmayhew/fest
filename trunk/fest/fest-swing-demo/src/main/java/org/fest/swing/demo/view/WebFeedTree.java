@@ -46,13 +46,10 @@ class WebFeedTree extends JXTree {
 
   private final NodeModelComparator comparator = new NodeModelComparator();
 
-  private final I18n i18n;
-  
   private final Map<String, FolderNode> folderNodes = new HashMap<String, FolderNode>();
 
   WebFeedTree(MainFrame mainFrame) {
-    i18n = new I18n(this);
-    root = new DefaultMutableTreeNode(i18n.message(TREE_ROOT_KEY));
+    root = new DefaultMutableTreeNode(i18n().message(TREE_ROOT_KEY));
     model = new DefaultTreeModel(root);
     setModel(model);
     setName("feeds");
@@ -171,6 +168,14 @@ class WebFeedTree extends JXTree {
     }
   }
 
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(WebFeedTree.class);
+  }
+  
   private static class NodeModelComparator implements Comparator<TreeNode> {
     public int compare(TreeNode node1, TreeNode node2) {
       String text1 = textFrom(node1);

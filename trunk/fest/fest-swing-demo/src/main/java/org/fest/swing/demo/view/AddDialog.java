@@ -15,15 +15,6 @@
  */
 package org.fest.swing.demo.view;
 
-import static java.awt.BorderLayout.CENTER;
-import static java.awt.GridBagConstraints.*;
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
-import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.center;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,8 +24,19 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 import javax.swing.FocusManager;
 
-import org.fest.swing.demo.model.Folder;
 import org.jdesktop.swinghelper.layer.JXLayer;
+
+import org.fest.swing.demo.model.Folder;
+
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.GridBagConstraints.*;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+
+import static org.fest.swing.demo.view.Icons.*;
+import static org.fest.swing.demo.view.Swing.center;
 
 /**
  * Understands the dialog where users can create new web feeds and/or folders.
@@ -60,7 +62,6 @@ class AddDialog extends JDialog implements InputForm {
 
   private final MainFrame owner;
   private final JXLayer<JPanel> layer;
-  private final I18n i18n;
 
   private String selectedForm;
 
@@ -89,7 +90,6 @@ class AddDialog extends JDialog implements InputForm {
 
   private AddDialog(MainFrame owner, Folder selectedFolder, boolean addWebFeedOnly) {
     super(owner, DEFAULT_MODALITY_TYPE);
-    i18n = new I18n(this);
     this.owner = owner;
     this.selectedFolder = selectedFolder;
     this.addWebFeedOnly = addWebFeedOnly;
@@ -101,7 +101,7 @@ class AddDialog extends JDialog implements InputForm {
     setName("add");
     setPreferredSize(new Dimension(320, 280));
     setResizable(false);
-    setTitle(i18n.message(DIALOG_TITLE_KEY));
+    setTitle(i18n().message(DIALOG_TITLE_KEY));
     addWindowListener(new WindowAdapter() {
       @Override public void windowClosing(WindowEvent e) {
         AddDialog.this.owner.unlock();
@@ -170,7 +170,7 @@ class AddDialog extends JDialog implements InputForm {
   }
 
   private JToggleButton optionButton(String i18nKey, Icon icon, final String cardName) {
-    final JToggleButton button = JComponentFactory.instance().toggleButtonWithMnemonic(i18n, i18nKey);
+    final JToggleButton button = JComponentFactory.instance().toggleButtonWithMnemonic(i18n(), i18nKey);
     button.setIcon(icon);
     button.setBorderPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -212,14 +212,14 @@ class AddDialog extends JDialog implements InputForm {
   }
 
   private JButton cancelButton() {
-    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_CANCEL_KEY);
+    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n(), BUTTON_CANCEL_KEY);
     button.setName("cancel");
     button.addActionListener(new CloseAddDialogActionListener());
     return button;
   }
 
   private JButton okButton() {
-    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_OK_KEY);
+    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n(), BUTTON_OK_KEY);
     getRootPane().setDefaultButton(button);
     button.setName("ok");
     button.addActionListener(new ActionListener() {
@@ -278,5 +278,13 @@ class AddDialog extends JDialog implements InputForm {
   @Override public void setVisible(boolean visible) {
     if (visible) center(this);
     super.setVisible(visible);
+  }
+  
+  private static I18n i18n() {
+    return I18nSingletonHolder.INSTANCE;
+  }
+  
+  private static class I18nSingletonHolder {
+    static final I18n INSTANCE = new I18n(AddDialog.class);
   }
 }

@@ -34,10 +34,10 @@ final class I18n {
   
   /**
    * Creates a new </code>{@link I18n}</code>.
-   * @param owner the owner who is going to display the messages. 
+   * @param ownerType the type of the owner who is going to display the messages. 
    */
-  I18n(Object owner) {
-    String bundleName = owner.getClass().getName().replace(".", "/");
+  I18n(Class<?> ownerType) {
+    String bundleName = ownerType.getName().replace(".", "/");
     resourceBundle = ResourceBundle.getBundle(bundleName);
   }
 

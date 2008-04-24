@@ -35,13 +35,10 @@ import static org.fest.swing.demo.view.Swing.center;
  */
 abstract class ProgressWindow extends JWindow {
 
-  final I18n i18n;
-  
-  ProgressWindow(Window owner, String messageKey) {
+  ProgressWindow(Window owner, String message) {
     super(owner);
-    i18n = new I18n(this);
     setLayout(new BorderLayout());
-    add(content(i18n.message(messageKey)), BorderLayout.CENTER);
+    add(content(message), BorderLayout.CENTER);
     setPreferredSize(new Dimension(200, 100));
     pack();
   }
