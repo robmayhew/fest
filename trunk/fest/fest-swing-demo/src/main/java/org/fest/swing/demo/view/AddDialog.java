@@ -15,6 +15,15 @@
  */
 package org.fest.swing.demo.view;
 
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.GridBagConstraints.*;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.*;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+import static org.fest.swing.demo.view.Icons.*;
+import static org.fest.swing.demo.view.Swing.center;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,17 +33,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 import javax.swing.FocusManager;
 
+import org.fest.swing.demo.model.Folder;
 import org.jdesktop.swinghelper.layer.JXLayer;
-
-import static java.awt.BorderLayout.CENTER;
-import static java.awt.GridBagConstraints.*;
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.*;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
-
-import static org.fest.swing.demo.view.Icons.*;
-import static org.fest.swing.demo.view.Swing.center;
 
 /**
  * Understands the dialog where users can create new web feeds and/or folders.
@@ -67,14 +67,32 @@ class AddDialog extends JDialog implements InputForm {
   private AddWebFeedPanel addWebFeedPanel;
   private AddFolderPanel addFolderPanel;
 
+  private final boolean addWebFeedOnly;
+  private final Folder selectedFolder;
+
   /**
-   * Creates a new </code>{@link AddDialog}</code>.
+   * Creates a new </code>{@link AddDialog}</code> where users can add a new Web Feed or a new Folder.
    * @param owner the owner of this dialog.
+   * @return the created dialog.
    */
-  AddDialog(MainFrame owner) {
+  static AddDialog addWebFeedOrFolderDialog(MainFrame owner) {
+    return new AddDialog(owner, null, false);
+  }
+
+  static AddDialog addWebFeedDialog(MainFrame owner, Folder folder) {
+    return new AddDialog(owner, folder);
+  }
+
+  private AddDialog(MainFrame owner, Folder folder) {
+    this(owner, folder, true);
+  }
+
+  private AddDialog(MainFrame owner, Folder selectedFolder, boolean addWebFeedOnly) {
     super(owner, DEFAULT_MODALITY_TYPE);
     i18n = new I18n(this);
     this.owner = owner;
+    this.selectedFolder = selectedFolder;
+    this.addWebFeedOnly = addWebFeedOnly;
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     setLocationRelativeTo(owner);
     setLayout(new BorderLayout());
@@ -102,10 +120,12 @@ class AddDialog extends JDialog implements InputForm {
   }
 
   private void addPanelsToInputFormCardPanel() {
-    addWebFeedPanel = new AddWebFeedPanel();
-    addFolderPanel = new AddFolderPanel();
+    addWebFeedPanel = new AddWebFeedPanel(selectedFolder);
     inputFormCardPanel.add(addWebFeedPanel, WEB_FEED_CARD);
-    inputFormCardPanel.add(addFolderPanel, FOLDER_CARD);
+    if (!addWebFeedOnly) {
+      addFolderPanel = new AddFolderPanel();
+      inputFormCardPanel.add(addFolderPanel, FOLDER_CARD);
+    }
     selectedForm = WEB_FEED_CARD;
     cardLayout.show(inputFormCardPanel, selectedForm);
   }
@@ -116,17 +136,22 @@ class AddDialog extends JDialog implements InputForm {
     c.anchor = NORTHWEST;
     c.gridx = c.gridy = 0;
     AbstractButton addWebFeedButton = addWebFeedButton();
-    AbstractButton addFolderButton = addFolderButton();
-    addToButtonGroup(addWebFeedButton, addFolderButton);
     panel.add(addWebFeedButton, c);
+    int gridwidth = 2;
+    if (!addWebFeedOnly) {
+      AbstractButton addFolderButton = addFolderButton();
+      addToButtonGroup(addWebFeedButton, addFolderButton);
+      c.gridx++;
+      panel.add(addFolderButton, c);
+      gridwidth = 3;
+    }
     c.gridx++;
-    panel.add(addFolderButton, c);
     c.fill = BOTH;
     c.weightx = 1.0;
     panel.add(createHorizontalGlue(), c);
     c.gridy++;
     c.gridx = 0;
-    c.gridwidth = 3;
+    c.gridwidth = gridwidth;
     panel.add(new JSeparator(), c);
     return panel;
   }

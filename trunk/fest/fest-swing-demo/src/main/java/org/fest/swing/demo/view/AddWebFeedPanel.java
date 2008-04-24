@@ -15,18 +15,16 @@
  */
 package org.fest.swing.demo.view;
 
+import static org.fest.util.Strings.isEmpty;
+
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.Services;
-
-import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands the panel where users can add a new web feed.
@@ -47,6 +45,16 @@ class AddWebFeedPanel extends InputFormPanel {
   private JTextField addressField;
   private JTextField nameField;
   private JComboBox folderComboBox;
+
+  private final Folder folder;
+
+  AddWebFeedPanel() {
+    this(null);
+  }
+
+  AddWebFeedPanel(Folder folder) {
+    this.folder = folder;
+  }
 
   void addInputFields(GridBagConstraints c) {
     addAddressField(c);
@@ -103,12 +111,17 @@ class AddWebFeedPanel extends InputFormPanel {
   }
 
   private JComboBox folderComboBox() {
-    String[] folderNames = folderNames();
-    JComboBox comboBox = new JComboBox(folderNames);
+    JComboBox comboBox = new JComboBox(folders());
     comboBox.setName("folder");
     comboBox.setEditable(true);
     comboBox.setSelectedIndex(-1);
     return comboBox;
+  }
+
+  private ComboBoxModel folders() {
+    DefaultComboBoxModel model = new DefaultComboBoxModel(folderNames());
+    if (folder != null) model.setSelectedItem(folder.name());
+    return model;
   }
 
   private String[] folderNames() {
