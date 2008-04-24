@@ -36,4 +36,17 @@ public interface WebFeedService {
    * @param webFeed the web feed to save.
    */
   void saveWebFeed(WebFeed webFeed);
+
+  /**
+   * Updates the values of the given web feeds in the database.
+   * @param webFeeds the given web feeds to update.
+   */
+  void updateWebFeeds(WebFeed[] webFeeds);
+  
+  /**
+   * Returns the web feed whose name matches the given one.
+   * @param name the name to match.
+   * @return a web feed with a matching name, or <code>null</code> if it could not be found.
+   */
+  WebFeed webFeed(String name);
 }

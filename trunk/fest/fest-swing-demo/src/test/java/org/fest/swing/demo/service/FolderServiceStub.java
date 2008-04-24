@@ -17,10 +17,10 @@ package org.fest.swing.demo.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.fest.swing.demo.model.Folder;
-import org.fest.swing.demo.service.FolderService;
 
 public final class FolderServiceStub implements FolderService {
   private final List<Folder> folders = new ArrayList<Folder>();
@@ -36,7 +36,11 @@ public final class FolderServiceStub implements FolderService {
 
   public Folder[] allFolders() {
     Folder[] sortedFolders = folders.toArray(new Folder[folders.size()]);
-    Arrays.sort(sortedFolders);
+    Arrays.sort(sortedFolders, new Comparator<Folder>() {
+      public int compare(Folder f1, Folder f2) {
+        return f1.name().compareTo(f2.name());
+      }
+    });
     return sortedFolders;
   }
 }

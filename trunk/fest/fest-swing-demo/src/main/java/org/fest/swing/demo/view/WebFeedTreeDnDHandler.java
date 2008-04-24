@@ -27,12 +27,12 @@ import org.fest.swing.demo.view.WebFeedTree.FolderNode;
 import org.fest.swing.demo.view.WebFeedTree.WebFeedNode;
 
 /**
- * Understands a <code>{@link WebFeedTransferHandler}</code> for performing DND of <code>{@link WebFeed}</code>s in a
+ * Understands a <code>{@link WebFeedDnDHandler}</code> for performing DND of <code>{@link WebFeed}</code>s in a
  * <code>{@link WebFeedTree}</code>.
  *
  * @author Alex Ruiz
  */
-class WebFeedTreeTransferHandler extends WebFeedTransferHandler<WebFeedTree> {
+class WebFeedTreeDnDHandler extends WebFeedDnDHandler<WebFeedTree> {
   
   private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ class WebFeedTreeTransferHandler extends WebFeedTransferHandler<WebFeedTree> {
   private int addIndex; // Location where items were added
   private int addCount; // Number of items added.
 
-  WebFeedTreeTransferHandler() {
+  WebFeedTreeDnDHandler() {
     super(WebFeedTree.class);
     reset();
   }
@@ -108,6 +108,7 @@ class WebFeedTreeTransferHandler extends WebFeedTransferHandler<WebFeedTree> {
         model.removeNodeFromParent((MutableTreeNode) path.getLastPathComponent());
       }
     }
+    new UpdateWebFeedFolderWorker(selection.webFeeds()).execute();
     reset();
   }
 

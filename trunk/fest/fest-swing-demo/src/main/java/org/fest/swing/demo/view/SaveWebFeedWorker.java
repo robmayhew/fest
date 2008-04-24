@@ -17,6 +17,7 @@ package org.fest.swing.demo.view;
 
 import java.awt.Window;
 
+import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.Services;
 
@@ -40,7 +41,10 @@ class SaveWebFeedWorker extends SaveWorkerTemplate<WebFeed> {
 
   /** @see javax.swing.SwingWorker#doInBackground() */
   protected Void doInBackground() throws Exception {
-    Services.instance().webFeedService().saveWebFeed(target);
+    Services services = Services.instance();
+    services.webFeedService().saveWebFeed(target);
+    Folder folder = target.folder();
+    if (folder != null) services.folderService().saveFolder(folder);
     return null;
   }
 }

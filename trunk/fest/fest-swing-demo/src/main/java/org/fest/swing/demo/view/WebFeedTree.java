@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JPopupMenu;
 import javax.swing.tree.*;
 
 import org.jdesktop.swingx.JXTree;
@@ -49,7 +50,7 @@ class WebFeedTree extends JXTree {
   
   private final Map<String, FolderNode> folderNodes = new HashMap<String, FolderNode>();
 
-  WebFeedTree() {
+  WebFeedTree(MainFrame mainFrame) {
     i18n = new I18n(this);
     root = new DefaultMutableTreeNode(i18n.message(TREE_ROOT_KEY));
     model = new DefaultTreeModel(root);
@@ -59,18 +60,25 @@ class WebFeedTree extends JXTree {
     setOpenIcon(FOLDER_SMALL_ICON);
     setClosedIcon(FOLDER_SMALL_ICON);
     setUpDragAndDrop();
+    setUpFolderPopupMenu(mainFrame);
   }
   
-  void setUpDragAndDrop() {
+  private void setUpDragAndDrop() {
     setDragEnabled(true);
-    setTransferHandler(new WebFeedTreeTransferHandler());
+    setTransferHandler(new WebFeedTreeDnDHandler());
+  }
+  
+  private void setUpFolderPopupMenu(MainFrame mainFrame) {
+    JPopupMenu popupMenu = new JPopupMenu();
+    popupMenu.add(new AddWebFeedOrFolderAction(mainFrame));
+    addMouseListener(new WebFeedTreeFolderPopupMenuMouseListener(popupMenu));
   }
 
   void addContent(Object content) {
     if (content instanceof WebFeed) addWebFeed((WebFeed)content);
     if (content instanceof Folder) addFolder((Folder)content);
   }
-
+  
   void addWebFeed(WebFeed webFeed) {
     FolderNode folderNode = folderFor(webFeed);
     WebFeedNode webFeedNode = new WebFeedNode(webFeed);

@@ -28,6 +28,7 @@ public class WebFeed {
 
   private static final String NO_FOLDER = null;
   
+  private long id;
   private String address;
   private String name;
   private Folder folder;
@@ -64,6 +65,22 @@ public class WebFeed {
     address(address);
     name(name);
     folder(folder);
+  }
+
+  /**
+   * Returns this feed's id.
+   * @return this feed's id.
+   */
+  public long id() {
+    return id;
+  }
+
+  /**
+   * Updates the id of this feed.
+   * @param id the new id to set.
+   */
+  public void setId(long id) {
+    this.id = id;
   }
 
   /**

@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
   private final I18n i18n;
   private final JXLayer<JPanel> layer;
   
-  private final WebFeedTree webFeedTree = new WebFeedTree();
+  private final WebFeedTree webFeedTree = new WebFeedTree(this);
   private final WebFeedItemsTable webFeedItemsTable = new WebFeedItemsTable();
 
   /**

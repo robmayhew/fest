@@ -15,19 +15,37 @@
  */
 package org.fest.swing.demo.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.fest.swing.demo.model.WebFeed;
-import org.fest.swing.demo.service.WebFeedService;
 
 public final class WebFeedServiceStub implements WebFeedService {
+  
+  private final Map<String, WebFeed> feeds = new HashMap<String, WebFeed>();
+  
   public String obtainFeedName(String address) {
     return null;
   }
 
   public void saveWebFeed(WebFeed webFeed) {
     try {
+      store(webFeed);
       Thread.sleep(1000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  public void updateWebFeeds(WebFeed[] webFeeds) {
+    for (WebFeed feed : webFeeds) store(feed);
+  }
+  
+  private WebFeed store(WebFeed webFeed) {
+    return feeds.put(webFeed.name(), webFeed);
+  }
+
+  public WebFeed webFeed(String name) {
+    return feeds.get(name);
   }
 }

@@ -42,6 +42,8 @@ class WebFeedSelection implements Transferable {
     this.data = data;
   }
   
+  WebFeed[] webFeeds() { return data; }
+  
   /**
    * Returns an array of <code>{@link WebFeed}</code>s to be transferred.
    * @param flavor the requested flavor for the data.

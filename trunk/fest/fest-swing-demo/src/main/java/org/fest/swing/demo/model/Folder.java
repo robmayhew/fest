@@ -25,6 +25,7 @@ import static org.fest.util.Strings.*;
  */
 public class Folder {
 
+  private long id;
   private String name;
 
   /** Creates a new </code>{@link Folder}</code>. */
@@ -36,6 +37,22 @@ public class Folder {
    */
   public Folder(String name) {
     name(name);
+  }
+
+  /**
+   * Returns this folder's id.
+   * @return this folder's id.
+   */
+  public long id() {
+    return id;
+  }
+
+  /**
+   * Updates the id of this folder.
+   * @param id the new id to set.
+   */
+  public void setId(long id) {
+    this.id = id;
   }
 
   /**

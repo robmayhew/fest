@@ -15,17 +15,15 @@
  */
 package org.fest.swing.demo.view;
 
-import static java.awt.GridBagConstraints.*;
-import static javax.swing.BorderFactory.createEmptyBorder;
-import static javax.swing.Box.createHorizontalGlue;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import static java.awt.GridBagConstraints.*;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.Box.createHorizontalGlue;
 
 /**
  * Understands the panel that contains the actions the user can perform on the main window (<code>{@link MainFrame}</code>).
@@ -37,10 +35,7 @@ class MainActionPanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
 
-  private static final String BUTTON_ADD_KEY = "button.add";
-
   private final MainFrame mainFrame;
-  private final I18n i18n;
 
   /**
    * Creates a new </code>{@link MainActionPanel}</code>.
@@ -49,7 +44,6 @@ class MainActionPanel extends JPanel {
   MainActionPanel(MainFrame mainFrame) {
     super(new GridBagLayout());
     this.mainFrame = mainFrame;
-    i18n = new I18n(this);
     setBorder(createEmptyBorder(8, 8, 8, 8));
     GridBagConstraints c = new GridBagConstraints();
     c.anchor = NORTHWEST;
@@ -62,15 +56,8 @@ class MainActionPanel extends JPanel {
   }
 
   private JButton addButton() {
-    JButton button = JComponentFactory.instance().buttonWithMnemonic(i18n, BUTTON_ADD_KEY);
+    JButton button = new JButton(new AddWebFeedOrFolderAction(mainFrame));
     button.setName("add");
-    button.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        mainFrame.lock();
-        AddDialog addDialog = new AddDialog(mainFrame);
-        addDialog.setVisible(true);
-      }
-    });
     return button;
   }
 }

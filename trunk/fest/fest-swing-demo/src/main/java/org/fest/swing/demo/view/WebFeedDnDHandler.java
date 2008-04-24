@@ -15,6 +15,7 @@
  */
 package org.fest.swing.demo.view;
 
+import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 
@@ -32,17 +33,17 @@ import static org.fest.util.Arrays.isEmpty;
  *
  * @author Alex Ruiz
  */
-abstract class WebFeedTransferHandler<T extends JComponent> extends TransferHandler {
+abstract class WebFeedDnDHandler<T extends JComponent> extends TransferHandler {
 
   private static final long serialVersionUID = 1L;
   
   private final Class<T> componentType;
 
   /**
-   * Creates a new </code>{@link WebFeedTransferHandler}</code>.
+   * Creates a new </code>{@link WebFeedDnDHandler}</code>.
    * @param componentType the type of GUI component involved in the transfer.
    */
-  WebFeedTransferHandler(Class<T> componentType) {
+  WebFeedDnDHandler(Class<T> componentType) {
     this.componentType = componentType;
   }
 
@@ -76,7 +77,7 @@ abstract class WebFeedTransferHandler<T extends JComponent> extends TransferHand
   @Override public final int getSourceActions(JComponent c) {
     return MOVE;
   }
-  
+
   /**
    * Causes a transfer to a component from a DND drop operation. The <code>Transferable</code> represents the data to
    * be imported into the component.
@@ -94,19 +95,33 @@ abstract class WebFeedTransferHandler<T extends JComponent> extends TransferHand
       return false;
     }
   }
+  
+
+  @Override public boolean importData(TransferSupport support) {
+    if (!canImport(support)) return false;
+    try {
+      WebFeed[] webFeeds = (WebFeed[])support.getTransferable().getTransferData(WEB_FEED_FLAVOR);
+      importWebFeeds(componentType.cast(support.getComponent()), webFeeds);
+      return true;
+    } catch (Exception ignored) {
+      return false;
+    }
+  }
 
   /**
    * Indicates whether a component will accept an import of the given set of data flavors prior to actually attempting
    * to import it. Only components belonging to the type specified in this handler can accept an import. In order to
    * import data the data flavor should be <code>{@link WebFeedSelection#WEB_FEED_FLAVOR}</code>.
-   * @param c the component to receive the transfer; provided to enable sharing of <code>TransferHandler</code>s
-   * @param flavors the data formats available.
+   * @param support the object containing the details of the transfer.
    * @return <code>true</code> if the data can be inserted into the component, <code>false</code> otherwise.
    */
-  @Override public final boolean canImport(JComponent c, DataFlavor[] flavors) {
+  @Override public final boolean canImport(TransferSupport support) {
+    support.setShowDropLocation(true);
+    if (!support.isDrop()) return false;
+    Component c = support.getComponent();
     if (!componentType.isInstance(c)) return false;
     boolean found = false;
-    for (DataFlavor flavor : flavors) {
+    for (DataFlavor flavor : support.getDataFlavors()) {
       if (!WEB_FEED_FLAVOR.equals(flavor)) continue;
       found = true;
       break;
@@ -114,7 +129,7 @@ abstract class WebFeedTransferHandler<T extends JComponent> extends TransferHand
     if (found) return importAllowed(componentType.cast(c));
     return false;
   }
-  
+
   /**
    * Indicates whether the given component allows an import of <code>{@link WebFeed}</code>s.
    * @param c the given component.

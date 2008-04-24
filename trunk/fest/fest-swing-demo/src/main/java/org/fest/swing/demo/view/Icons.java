@@ -35,6 +35,7 @@ final class Icons {
   static final Icon FOLDER_ICON = new ImageIcon(iconURL("folder.png"));
   static final Icon FOLDER_SMALL_ICON = new ImageIcon(iconURL("folder-small.png"));
   static final Icon INTERNET_FEEDS_ICON = new ImageIcon(iconURL("internet-feeds.png")); 
+  static final Icon ADD_ICON = new ImageIcon(iconURL("add.png"));
   
   private static URL iconURL(String imageName) {
     return Icons.class.getClassLoader().getResource(concat(IMAGE_LOCATION, imageName));
