@@ -15,7 +15,10 @@
  */
 package org.fest.swing.demo.view;
 
+import java.awt.Dimension;
+
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
 
@@ -32,17 +35,37 @@ class WebFeedItemsTable extends JXTable {
   private static final String COLUMN_DATE_NAME = "table.column.date.name";
   private static final String COLUMN_TITLE_NAME = "table.column.title.name";
 
+  private final DefaultTableModel model;
+
   WebFeedItemsTable() {
     String[] columnNames = i18n().messages(COLUMN_TITLE_NAME, COLUMN_DATE_NAME);
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    setAutoResizeMode(AUTO_RESIZE_OFF);
+    model = new DefaultTableModel(columnNames, 0);
     setModel(model);
   }
 
+  void resizeColumns(Dimension availableSize) {
+    updatePreferredColumnWidths(availableSize, 0.8, 0.2);
+  }
+  
+  private void updatePreferredColumnWidths(Dimension availableSize, double... percentages) {
+    double total = 0;
+    for (int i = 0; i < getColumnModel().getColumnCount(); i++) total += percentages[i];
+    for (int i = 0; i < getColumnModel().getColumnCount(); i++) {
+      TableColumn column = getColumnModel().getColumn(i);
+      column.setPreferredWidth((int) (availableSize.width * (percentages[i] / total)));
+    }
+  }
+  
   private static I18n i18n() {
     return I18nSingletonHolder.INSTANCE;
   }
   
   private static class I18nSingletonHolder {
     static final I18n INSTANCE = new I18n(WebFeedItemsTable.class);
+  }
+
+  void removeAllRows() {
+    model.setRowCount(0);
   }
 }

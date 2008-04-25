@@ -15,17 +15,18 @@
  */
 package org.fest.swing.demo.view;
 
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPopupMenu;
-import javax.swing.tree.TreePath;
+
+import static org.fest.swing.demo.view.WebFeedTreeMouseListeners.*;
 
 /**
  * Understands a mouse listener that shows a pop-up menu on the root node of a <code>{@link WebFeedTree}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 class WebFeedTreeRootPopupMenuMouseListener {
 
@@ -38,7 +39,6 @@ class WebFeedTreeRootPopupMenuMouseListener {
   private WebFeedTreeRootPopupMenuMouseListener() {}
 
   private static class MouseListener extends MouseAdapter {
-
     private final JPopupMenu popupMenu;
 
     MouseListener(JPopupMenu popupMenu) {
@@ -47,17 +47,8 @@ class WebFeedTreeRootPopupMenuMouseListener {
 
     @Override public void mouseReleased(MouseEvent e) {
       if (!e.isPopupTrigger()) return;
-      Component c = e.getComponent();
-      if (!(c instanceof WebFeedTree)) return;
-      WebFeedTree tree = (WebFeedTree)c;
-      int x = e.getX();
-      int y = e.getY();
-      int row = tree.getRowForLocation(x, y);
-      TreePath path = tree.getPathForRow(row);
-      if (path == null) return;
-      Object value = path.getLastPathComponent();
-      if (!tree.getModel().getRoot().equals(value)) return;
-      popupMenu.show(tree, x, y);
+      if (!isSelectionRootNode(e)) return;
+      popupMenu.show(webFeedTreeFrom(e), e.getX(), e.getY());
     }
   }
 }

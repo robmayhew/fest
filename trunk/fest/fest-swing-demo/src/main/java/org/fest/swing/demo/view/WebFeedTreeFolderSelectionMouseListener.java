@@ -18,8 +18,6 @@ package org.fest.swing.demo.view;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JPopupMenu;
-
 import org.fest.swing.demo.view.WebFeedTree.FolderNode;
 
 import static org.fest.swing.demo.view.WebFeedTreeMouseListeners.*;
@@ -28,25 +26,23 @@ import static org.fest.swing.demo.view.WebFeedTreeMouseListeners.*;
  * Understands a mouse listener that shows a pop-up menu on a folder node of a <code>{@link WebFeedTree}</code>.
  *
  * @author Alex Ruiz
- * @author Yvonne Wang
  */
-class WebFeedTreeFolderPopupMenuMouseListener {
+class WebFeedTreeFolderSelectionMouseListener {
 
   static void attachTo(WebFeedTree tree) {
     tree.addMouseListener(new MouseListener());
   }
 
-  private WebFeedTreeFolderPopupMenuMouseListener() {}
+  private WebFeedTreeFolderSelectionMouseListener() {}
 
   private static class MouseListener extends MouseAdapter {
-    @Override public void mouseReleased(MouseEvent e) {
-      if (!e.isPopupTrigger()) return;
+
+    @Override public void mousePressed(MouseEvent e) {
+      if (e.isPopupTrigger()) return;
       FolderNode folderNode = folderNodeFrom(e);
       if (folderNode == null) return;
       WebFeedTree tree = webFeedTreeFrom(e);
-      JPopupMenu popupMenu = new JPopupMenu();
-      popupMenu.add(new AddWebFeedAction(tree.mainFrame(), folderNode.folder));
-      popupMenu.show(tree, e.getX(), e.getY());
+      tree.mainFrame().clearWebFeedItems();
     }
   }
 }

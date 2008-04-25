@@ -15,17 +15,18 @@
  */
 package org.fest.swing.demo.view;
 
-import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.tree.*;
 
+import org.jdesktop.swingx.JXTree;
+
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
-import org.jdesktop.swingx.JXTree;
+
+import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
 
 /**
  * Understands the tree containing all web feeds.
@@ -56,7 +57,7 @@ class WebFeedTree extends JXTree {
     setOpenIcon(FOLDER_SMALL_ICON);
     setClosedIcon(FOLDER_SMALL_ICON);
     setUpDragAndDrop();
-    setUpPopupMenus();
+    addMouseListeners();
   }
 
   private void setUpDragAndDrop() {
@@ -64,9 +65,10 @@ class WebFeedTree extends JXTree {
     setTransferHandler(new WebFeedTreeDnDHandler());
   }
 
-  private void setUpPopupMenus() {
-    WebFeedTreeRootPopupMenuMouseListener.attachTo(this);
+  private void addMouseListeners() {
     WebFeedTreeFolderPopupMenuMouseListener.attachTo(this);
+    WebFeedTreeFolderSelectionMouseListener.attachTo(this);
+    WebFeedTreeRootPopupMenuMouseListener.attachTo(this);
   }
 
   void addContent(Object content) {
@@ -86,8 +88,7 @@ class WebFeedTree extends JXTree {
   private FolderNode folderFor(WebFeed webFeed) {
     String folderName = folderNameFor(webFeed);
     if (folderName == null) return null;
-    if (folderNodes.containsKey(folderName))
-      return folderNodes.get(folderName);
+    if (folderNodes.containsKey(folderName)) return folderNodes.get(folderName);
     return addFolder(new Folder(folderName));
   }
 

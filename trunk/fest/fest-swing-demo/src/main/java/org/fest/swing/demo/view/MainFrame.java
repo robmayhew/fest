@@ -17,6 +17,8 @@ package org.fest.swing.demo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -69,7 +71,13 @@ public class MainFrame extends JFrame {
   private JSplitPane splitPane() {
     JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
     splitPane.setLeftComponent(new JScrollPane(webFeedTree));
-    splitPane.setRightComponent(new JScrollPane(webFeedItemsTable));
+    final JScrollPane tableScrollPane = new JScrollPane(webFeedItemsTable);
+    addComponentListener(new ComponentAdapter() {
+      @Override public void componentResized(ComponentEvent e) {
+        webFeedItemsTable.resizeColumns(tableScrollPane.getSize());
+      }
+    });
+    splitPane.setRightComponent(tableScrollPane);
     splitPane.setDividerLocation(120);
     return splitPane;
   }
@@ -88,10 +96,14 @@ public class MainFrame extends JFrame {
   
   /** @see java.awt.Window#setVisible(boolean) */
   @Override public void setVisible(boolean visible) {
-    center(this);
+    if (visible) center(this);
     super.setVisible(visible);
   }
 
+  void clearWebFeedItems() {
+    webFeedItemsTable.removeAllRows();
+  }
+  
   private static I18n i18n() {
     return I18nSingletonHolder.INSTANCE;
   }
