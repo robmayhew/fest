@@ -15,14 +15,14 @@
  */
 package org.fest.swing.demo.view;
 
+import static org.fest.swing.demo.view.AddDialog.addWebFeedDialog;
+import static org.fest.swing.demo.view.Icons.ADD_ICON;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
 import org.fest.swing.demo.model.Folder;
-
-import static org.fest.swing.demo.view.AddDialog.addWebFeedDialog;
-import static org.fest.swing.demo.view.Icons.ADD_ICON;
 
 /**
  * Understands an action that displays an instance of <code>{@link AddDialog}</code>.
@@ -33,7 +33,7 @@ class AddWebFeedAction extends AbstractAction {
 
   private static final long serialVersionUID = 1L;
 
-  private static final String ACTION_ADD_KEY = "action.add";
+  private static final String ACTION_ADD_FEED_KEY = "action.add.feed";
 
   private final MainFrame mainFrame;
   private final Folder selectedFolder;
@@ -41,13 +41,13 @@ class AddWebFeedAction extends AbstractAction {
   /**
    * Creates a new </code>{@link AddWebFeedAction}</code>.
    * @param mainFrame the main frame of the application.
-   * @param selectedFolder the folder to contain the web feed to create. 
+   * @param selectedFolder the folder to contain the web feed to create.
    */
   AddWebFeedAction(MainFrame mainFrame, Folder selectedFolder) {
     this.mainFrame = mainFrame;
     this.selectedFolder = selectedFolder;
-    String name = i18n().message(ACTION_ADD_KEY);
-    int mnemonic = i18n().mnemonic(ACTION_ADD_KEY);
+    String name = i18n().message(ACTION_ADD_FEED_KEY);
+    int mnemonic = i18n().mnemonic(ACTION_ADD_FEED_KEY);
     putValue(NAME, name);
     putValue(MNEMONIC_KEY, mnemonic);
     putValue(SMALL_ICON, ADD_ICON);
@@ -56,7 +56,7 @@ class AddWebFeedAction extends AbstractAction {
   private static I18n i18n() {
     return I18nSingletonHolder.INSTANCE;
   }
-  
+
   /**
    * Shows an instance of <code>{@link AddDialog}</code>.
    * @param e the action event.

@@ -15,19 +15,17 @@
  */
 package org.fest.swing.demo.view;
 
+import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JPopupMenu;
 import javax.swing.tree.*;
-
-import org.jdesktop.swingx.JXTree;
 
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
-
-import static org.fest.swing.demo.view.Icons.FOLDER_SMALL_ICON;
+import org.jdesktop.swingx.JXTree;
 
 /**
  * Understands the tree containing all web feeds.
@@ -45,10 +43,11 @@ class WebFeedTree extends JXTree {
   private final DefaultTreeModel model;
 
   private final NodeModelComparator comparator = new NodeModelComparator();
-
   private final Map<String, FolderNode> folderNodes = new HashMap<String, FolderNode>();
+  private final MainFrame mainFrame;
 
   WebFeedTree(MainFrame mainFrame) {
+    this.mainFrame = mainFrame;
     root = new DefaultMutableTreeNode(i18n().message(TREE_ROOT_KEY));
     model = new DefaultTreeModel(root);
     setModel(model);
@@ -57,25 +56,24 @@ class WebFeedTree extends JXTree {
     setOpenIcon(FOLDER_SMALL_ICON);
     setClosedIcon(FOLDER_SMALL_ICON);
     setUpDragAndDrop();
-    setUpFolderPopupMenu(mainFrame);
+    setUpPopupMenus();
   }
-  
+
   private void setUpDragAndDrop() {
     setDragEnabled(true);
     setTransferHandler(new WebFeedTreeDnDHandler());
   }
-  
-  private void setUpFolderPopupMenu(MainFrame mainFrame) {
-    JPopupMenu popupMenu = new JPopupMenu();
-    popupMenu.add(new AddWebFeedOrFolderAction(mainFrame));
-    addMouseListener(new WebFeedTreeFolderPopupMenuMouseListener(popupMenu));
+
+  private void setUpPopupMenus() {
+    WebFeedTreeRootPopupMenuMouseListener.attachTo(this);
+    WebFeedTreeFolderPopupMenuMouseListener.attachTo(this);
   }
 
   void addContent(Object content) {
     if (content instanceof WebFeed) addWebFeed((WebFeed)content);
     if (content instanceof Folder) addFolder((Folder)content);
   }
-  
+
   void addWebFeed(WebFeed webFeed) {
     FolderNode folderNode = folderFor(webFeed);
     WebFeedNode webFeedNode = new WebFeedNode(webFeed);
@@ -133,7 +131,7 @@ class WebFeedTree extends JXTree {
     TreeNode[] pathToRoot = model.getPathToRoot(node);
     setSelectionPath(new TreePath(pathToRoot));
   }
-  
+
   static class WebFeedNode extends DefaultMutableTreeNode {
     private static final long serialVersionUID = 1L;
 
@@ -168,14 +166,16 @@ class WebFeedTree extends JXTree {
     }
   }
 
+  MainFrame mainFrame() { return mainFrame; }
+
   private static I18n i18n() {
     return I18nSingletonHolder.INSTANCE;
   }
-  
+
   private static class I18nSingletonHolder {
     static final I18n INSTANCE = new I18n(WebFeedTree.class);
   }
-  
+
   private static class NodeModelComparator implements Comparator<TreeNode> {
     public int compare(TreeNode node1, TreeNode node2) {
       String text1 = textFrom(node1);

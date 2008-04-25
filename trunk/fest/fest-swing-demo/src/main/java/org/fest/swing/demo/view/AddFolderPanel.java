@@ -15,6 +15,8 @@
  */
 package org.fest.swing.demo.view;
 
+import static org.fest.util.Strings.isEmpty;
+
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 
@@ -22,8 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.fest.swing.demo.model.Folder;
-
-import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands the panel where users can add a new folder.
@@ -40,6 +40,10 @@ class AddFolderPanel extends InputFormPanel {
 
   private JTextField nameField;
   private ErrorMessageLabel nameMissingLabel;
+
+  AddFolderPanel() {
+    addContent();
+  }
 
   void addInputFields(GridBagConstraints c) {
     nameField = nameField();
@@ -84,7 +88,7 @@ class AddFolderPanel extends InputFormPanel {
   private static I18n i18n() {
     return I18nSingletonHolder.INSTANCE;
   }
-  
+
   private static class I18nSingletonHolder {
     static final I18n INSTANCE = new I18n(AddFolderPanel.class);
   }

@@ -15,6 +15,9 @@
  */
 package org.fest.swing.demo.view;
 
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.isEmpty;
+
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 
@@ -23,8 +26,6 @@ import javax.swing.*;
 import org.fest.swing.demo.model.Folder;
 import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.service.Services;
-
-import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands the panel where users can add a new web feed.
@@ -46,14 +47,15 @@ class AddWebFeedPanel extends InputFormPanel {
   private JTextField nameField;
   private JComboBox folderComboBox;
 
-  private final Folder folder;
+  private final Folder selectedFolder;
 
   AddWebFeedPanel() {
     this(null);
   }
 
-  AddWebFeedPanel(Folder folder) {
-    this.folder = folder;
+  AddWebFeedPanel(Folder selectedFolder) {
+    this.selectedFolder = selectedFolder;
+    addContent();
   }
 
   void addInputFields(GridBagConstraints c) {
@@ -114,23 +116,23 @@ class AddWebFeedPanel extends InputFormPanel {
     JComboBox comboBox = new JComboBox(folders());
     comboBox.setName("folder");
     comboBox.setEditable(true);
-    comboBox.setSelectedIndex(-1);
     return comboBox;
   }
 
   private ComboBoxModel folders() {
-    DefaultComboBoxModel model = new DefaultComboBoxModel(folderNames());
-    if (folder != null) model.setSelectedItem(folder.name());
-    return model;
-  }
-
-  private String[] folderNames() {
     Folder[] folders = Services.instance().folderService().allFolders();
     int folderCount = folders.length;
     String[] folderNames = new String[folderCount];
-    for (int i = 0; i < folderCount; i++)
-      folderNames[i] = folders[i].name();
-    return folderNames;
+    String selected = null;
+    for (int i = 0; i < folderCount; i++) {
+      Folder currentFolder = folders[i];
+      String folderName = currentFolder.name();
+      if (selectedFolder != null && areEqual(selectedFolder, currentFolder)) selected = folderName;
+      folderNames[i] = folderName;
+    }
+    DefaultComboBoxModel model = new DefaultComboBoxModel(folderNames);
+    if (selected != null) model.setSelectedItem(selected);
+    return model;
   }
 
   void clear() {
@@ -161,7 +163,7 @@ class AddWebFeedPanel extends InputFormPanel {
   private static I18n i18n() {
     return I18nSingletonHolder.INSTANCE;
   }
-  
+
   private static class I18nSingletonHolder {
     static final I18n INSTANCE = new I18n(AddWebFeedPanel.class);
   }
