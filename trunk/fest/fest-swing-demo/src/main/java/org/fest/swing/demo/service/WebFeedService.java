@@ -16,6 +16,7 @@
 package org.fest.swing.demo.service;
 
 import org.fest.swing.demo.model.WebFeed;
+import org.fest.swing.demo.model.WebFeedEntry;
 
 /**
  * Understands a service that manages web feeds.
@@ -23,13 +24,6 @@ import org.fest.swing.demo.model.WebFeed;
  * @author Alex Ruiz
  */
 public interface WebFeedService {
-  
-  /**
-   * Obtains the name of the feed at the given address.
-   * @param address the address of the web feed.
-   * @return the name of the feed, or <code>null</code> if it could not be found.
-   */
-  String obtainFeedName(String address);
   
   /**
    * Saves the given web feed in the database.
@@ -42,11 +36,11 @@ public interface WebFeedService {
    * @param webFeeds the given web feeds to update.
    */
   void updateWebFeeds(WebFeed[] webFeeds);
-  
+
   /**
-   * Returns the web feed whose name matches the given one.
-   * @param name the name to match.
-   * @return a web feed with a matching name, or <code>null</code> if it could not be found.
+   * Returns the entries of the given web feed from the database.
+   * @param webFeed the given web feed.
+   * @return the entries of the given web feed.
    */
-  WebFeed webFeed(String name);
+  WebFeedEntry[] entriesOf(WebFeed webFeed);
 }

@@ -79,7 +79,7 @@ public class WebFeed {
    * Updates the id of this feed.
    * @param id the new id to set.
    */
-  public void setId(long id) {
+  public void id(long id) {
     this.id = id;
   }
 
@@ -135,6 +135,7 @@ public class WebFeed {
   @Override public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + hashCodeFor(id);
     result = prime * result + hashCodeFor(address);
     result = prime * result + hashCodeFor(name);
     result = prime * result + hashCodeFor(folder);

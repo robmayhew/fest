@@ -19,19 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.fest.swing.demo.model.WebFeed;
+import org.fest.swing.demo.model.WebFeedEntry;
 
 public final class WebFeedServiceStub implements WebFeedService {
   
-  private final Map<String, WebFeed> feeds = new HashMap<String, WebFeed>();
+  private final Map<Long, WebFeed> feedsById = new HashMap<Long, WebFeed>();
+  private final Map<String, WebFeed> feedsByName = new HashMap<String, WebFeed>();
   
-  public String obtainFeedName(String address) {
-    return null;
-  }
-
   public void saveWebFeed(WebFeed webFeed) {
     try {
       store(webFeed);
-      Thread.sleep(1000);
+      Thread.sleep(500);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -41,11 +39,13 @@ public final class WebFeedServiceStub implements WebFeedService {
     for (WebFeed feed : webFeeds) store(feed);
   }
   
-  private WebFeed store(WebFeed webFeed) {
-    return feeds.put(webFeed.name(), webFeed);
+  private void store(WebFeed webFeed) {
+    if (webFeed.id() == 0) webFeed.id(feedsById.size() + 1);
+    feedsById.put(webFeed.id(), webFeed);
+    feedsByName.put(webFeed.name(), webFeed);
   }
 
-  public WebFeed webFeed(String name) {
-    return feeds.get(name);
+  public WebFeedEntry[] entriesOf(WebFeed webFeed) {
+    return null;
   }
 }
