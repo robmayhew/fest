@@ -16,11 +16,17 @@
 package org.fest.swing.demo.view;
 
 import java.awt.Dimension;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
+
+import org.fest.swing.demo.model.WebFeedEntry;
+
+import static org.fest.util.Arrays.array;
 
 /**
  * Understands the table displaying the items in a web feed.
@@ -42,6 +48,7 @@ class WebFeedItemsTable extends JXTable {
     setAutoResizeMode(AUTO_RESIZE_OFF);
     model = new DefaultTableModel(columnNames, 0);
     setModel(model);
+    setEditable(false);
   }
 
   void resizeColumns(Dimension availableSize) {
@@ -67,5 +74,16 @@ class WebFeedItemsTable extends JXTable {
 
   void removeAllRows() {
     model.setRowCount(0);
+  }
+  
+  void display(WebFeedEntry[] entries) {
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    for (WebFeedEntry entry : entries) model.addRow(rowFrom(entry, dateFormat));
+  }
+  
+  private Object[] rowFrom(WebFeedEntry entry, DateFormat dateFormat) {
+    String formattedDate = dateFormat.format(entry.date());
+    Object[] row = array(entry.title(), formattedDate);
+    return row;
   }
 }

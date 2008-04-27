@@ -15,11 +15,14 @@
  */
 package org.fest.swing.demo.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.fest.swing.demo.model.WebFeed;
 import org.fest.swing.demo.model.WebFeedEntry;
+
+import static java.util.Calendar.*;
+
+import static org.fest.util.Arrays.array;
 
 public final class WebFeedServiceStub implements WebFeedService {
   
@@ -29,7 +32,7 @@ public final class WebFeedServiceStub implements WebFeedService {
   public void saveWebFeed(WebFeed webFeed) {
     try {
       store(webFeed);
-      Thread.sleep(500);
+      Thread.sleep(200);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -46,6 +49,20 @@ public final class WebFeedServiceStub implements WebFeedService {
   }
 
   public WebFeedEntry[] entriesOf(WebFeed webFeed) {
-    return null;
+    return array(
+        new WebFeedEntry("The weekly bag– April 18", "", date(18, APRIL, 2008)),
+        new WebFeedEntry("0.8 is easyb’s bag", "", date(3, APRIL, 2008)),
+        new WebFeedEntry("Abecedarian Groovy", "", date(31, MARCH, 2008)),
+        new WebFeedEntry("The weekly bag– March 21", "", date(24, MARCH, 2008)),
+        new WebFeedEntry("Unambiguously analyzing metrics", "", date(20, MARCH, 2008))
+        );
+  }
+  
+  private Date date(int day, int month, int year) {
+    Calendar calendar = new GregorianCalendar();
+    calendar.set(DATE, day);
+    calendar.set(MONTH, month);
+    calendar.set(YEAR, year);
+    return calendar.getTime();
   }
 }

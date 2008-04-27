@@ -28,7 +28,7 @@ public final class FolderServiceStub implements FolderService {
   public void saveFolder(Folder folder) {
     folders.add(folder);
     try {
-      Thread.sleep(500);
+      Thread.sleep(200);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

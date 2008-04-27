@@ -66,9 +66,10 @@ class WebFeedTree extends JXTree {
   }
 
   private void addMouseListeners() {
-    WebFeedTreeFolderPopupMenuMouseListener.attachTo(this);
-    WebFeedTreeFolderSelectionMouseListener.attachTo(this);
     WebFeedTreeRootPopupMenuMouseListener.attachTo(this);
+    WebFeedTreeWebFeedSelectionListener.attachTo(this);
+    WebFeedTreeFolderPopupMenuMouseListener.attachTo(this);
+    WebFeedTreeFolderSelectionListener.attachTo(this);
   }
 
   void addContent(Object content) {

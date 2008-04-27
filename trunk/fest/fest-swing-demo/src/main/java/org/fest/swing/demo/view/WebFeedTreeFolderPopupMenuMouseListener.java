@@ -22,7 +22,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.demo.view.WebFeedTree.FolderNode;
 
-import static org.fest.swing.demo.view.WebFeedTreeMouseListeners.*;
+import static org.fest.swing.demo.view.WebFeedTreeListeners.*;
 
 /**
  * Understands a mouse listener that shows a pop-up menu on a folder node of a <code>{@link WebFeedTree}</code>.

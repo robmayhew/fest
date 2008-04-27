@@ -21,19 +21,26 @@ import java.awt.event.MouseEvent;
 import javax.swing.tree.TreePath;
 
 import org.fest.swing.demo.view.WebFeedTree.FolderNode;
+import org.fest.swing.demo.view.WebFeedTree.WebFeedNode;
 
 /**
- * Understands utility methods related to mouse listeners in a <code>{@link WebFeedTree}</code>.
+ * Understands utility methods related to event listeners in a <code>{@link WebFeedTree}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class WebFeedTreeMouseListeners  {
+final class WebFeedTreeListeners  {
 
   static FolderNode folderNodeFrom(MouseEvent e) {
     Object value = selectedTreeValueFrom(e);
     if (!(value instanceof FolderNode)) return null;
     return (FolderNode)value;
+  }
+  
+  static WebFeedNode webFeedNodeFrom(MouseEvent e) {
+    Object value = selectedTreeValueFrom(e);
+    if (!(value instanceof WebFeedNode)) return null;
+    return (WebFeedNode)value;
   }
 
   static boolean isSelectionRootNode(MouseEvent e) {
@@ -62,5 +69,5 @@ final class WebFeedTreeMouseListeners  {
   
   
   
-  private WebFeedTreeMouseListeners() {}
+  private WebFeedTreeListeners() {}
 }

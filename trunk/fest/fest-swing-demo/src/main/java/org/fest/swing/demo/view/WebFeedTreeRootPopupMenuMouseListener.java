@@ -20,7 +20,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPopupMenu;
 
-import static org.fest.swing.demo.view.WebFeedTreeMouseListeners.*;
+import static org.fest.swing.demo.view.WebFeedTreeListeners.*;
 
 /**
  * Understands a mouse listener that shows a pop-up menu on the root node of a <code>{@link WebFeedTree}</code>.
@@ -33,15 +33,15 @@ class WebFeedTreeRootPopupMenuMouseListener {
   static void attachTo(WebFeedTree tree) {
     JPopupMenu popupMenu = new JPopupMenu();
     popupMenu.add(new AddWebFeedOrFolderAction(tree.mainFrame()));
-    tree.addMouseListener(new MouseListener(popupMenu));
+    tree.addMouseListener(new Listener(popupMenu));
   }
 
   private WebFeedTreeRootPopupMenuMouseListener() {}
 
-  private static class MouseListener extends MouseAdapter {
+  private static class Listener extends MouseAdapter {
     private final JPopupMenu popupMenu;
 
-    MouseListener(JPopupMenu popupMenu) {
+    Listener(JPopupMenu popupMenu) {
       this.popupMenu = popupMenu;
     }
 

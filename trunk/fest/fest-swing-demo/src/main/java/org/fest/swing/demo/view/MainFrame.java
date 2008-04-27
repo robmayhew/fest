@@ -27,6 +27,10 @@ import javax.swing.JSplitPane;
 
 import org.jdesktop.swinghelper.layer.JXLayer;
 
+import org.fest.swing.demo.model.WebFeed;
+import org.fest.swing.demo.model.WebFeedEntry;
+import org.fest.swing.demo.service.Services;
+
 import static java.awt.BorderLayout.*;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 
@@ -98,6 +102,12 @@ public class MainFrame extends JFrame {
   @Override public void setVisible(boolean visible) {
     if (visible) center(this);
     super.setVisible(visible);
+  }
+
+  void displayEntriesOf(WebFeed webFeed) {
+    clearWebFeedItems();
+    WebFeedEntry[] entries = Services.instance().webFeedService().entriesOf(webFeed);
+    webFeedItemsTable.display(entries);
   }
 
   void clearWebFeedItems() {

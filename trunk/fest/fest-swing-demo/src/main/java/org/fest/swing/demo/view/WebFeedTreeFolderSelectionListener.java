@@ -15,33 +15,36 @@
  */
 package org.fest.swing.demo.view;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
-import org.fest.swing.demo.view.WebFeedTree.FolderNode;
-
-import static org.fest.swing.demo.view.WebFeedTreeMouseListeners.*;
+import org.fest.swing.demo.view.WebFeedTree.WebFeedNode;
 
 /**
- * Understands a mouse listener that shows a pop-up menu on a folder node of a <code>{@link WebFeedTree}</code>.
- *
+ * Understands a listener that clears the entry table when on a folder node of a <code>{@link WebFeedTree}</code> is
+ * selected.
+ * 
  * @author Alex Ruiz
  */
-class WebFeedTreeFolderSelectionMouseListener {
+class WebFeedTreeFolderSelectionListener {
 
   static void attachTo(WebFeedTree tree) {
-    tree.addMouseListener(new MouseListener());
+    tree.addTreeSelectionListener(new Listener(tree));
   }
 
-  private WebFeedTreeFolderSelectionMouseListener() {}
+  private WebFeedTreeFolderSelectionListener() {}
 
-  private static class MouseListener extends MouseAdapter {
+  private static class Listener implements TreeSelectionListener {
 
-    @Override public void mousePressed(MouseEvent e) {
-      if (e.isPopupTrigger()) return;
-      FolderNode folderNode = folderNodeFrom(e);
-      if (folderNode == null) return;
-      WebFeedTree tree = webFeedTreeFrom(e);
+    private final WebFeedTree tree;
+
+    Listener(WebFeedTree tree) {
+      this.tree = tree;
+    }
+
+    public void valueChanged(TreeSelectionEvent e) {
+      Object selection = tree.getLastSelectedPathComponent();
+      if (!(selection instanceof WebFeedNode)) return;
       tree.mainFrame().clearWebFeedItems();
     }
   }
