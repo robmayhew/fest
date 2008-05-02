@@ -433,7 +433,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    *         the <code>JList</code>.
    */
   public JPopupMenuFixture showPopupMenuAt(int index) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, index));
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, index));
   }
 
   /**
@@ -444,7 +444,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public JPopupMenuFixture showPopupMenuAt(String text) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenuAt(target, text));
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, text));
   }
 
   /**

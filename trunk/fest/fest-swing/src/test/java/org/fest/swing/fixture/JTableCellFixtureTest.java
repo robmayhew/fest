@@ -136,6 +136,35 @@ public class JTableCellFixtureTest {
     }.run();
   }
   
+  @Test public void shouldPassIfContentIsEqualToExpected() {
+    final String content = "Hello"; 
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.contentAt(cell)).andReturn(content);
+      }
+
+      protected void codeToTest() {
+        fixture.requireContent(content);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldFailIfContentIsNotEqualToExpected() {
+    try {
+      new EasyMockTemplate(table) {
+        protected void expectations() {
+          expect(table.contentAt(cell)).andReturn("Bye");
+        }
+
+        protected void codeToTest() {
+          fixture.requireContent("Hello");
+        }
+      }.run();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("expected:<'Hello'> but was:<'Bye'>");
+    }
+  }
+
   @Test public void shouldDrag() {
     new EasyMockTemplate(table) {
       protected void expectations() {

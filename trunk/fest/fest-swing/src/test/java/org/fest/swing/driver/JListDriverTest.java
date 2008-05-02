@@ -210,7 +210,7 @@ public class JListDriverTest {
   @Test public void shouldShowPopupMenuAtItemWithValue() {
     JPopupMenu popupMenu = popupMenuFor(dragList);
     ClickRecorder recorder = attachTo(dragList);
-    driver.showPopupMenuAt(dragList, "one");
+    driver.showPopupMenu(dragList, "one");
     recorder.clicked(RIGHT_BUTTON);
     assertThat(popupMenu.isVisible()).isTrue();
   }
@@ -218,7 +218,7 @@ public class JListDriverTest {
   @Test public void shouldShowPopupMenuAtItemWithIndex() {
     JPopupMenu popupMenu = popupMenuFor(dragList);
     ClickRecorder recorder = attachTo(dragList);
-    driver.showPopupMenuAt(dragList, 0);
+    driver.showPopupMenu(dragList, 0);
     recorder.clicked(RIGHT_BUTTON);
     assertThat(popupMenu.isVisible()).isTrue();
   }

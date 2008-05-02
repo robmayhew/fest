@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 
 /**
@@ -57,7 +58,7 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user selecting this fixture's table cell.
    * @return this fixture.
    */
-  public final JTableCellFixture select() {
+  public JTableCellFixture select() {
     return click();
   }
 
@@ -65,7 +66,7 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user clicking this fixture's table cell.
    * @return this fixture.
    */
-  public final JTableCellFixture click() {
+  public JTableCellFixture click() {
     table.selectCell(cell);
     return this;
   }
@@ -75,7 +76,7 @@ public class JTableCellFixture implements ItemFixture {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    */
-  public final JTableCellFixture click(MouseClickInfo mouseClickInfo) {
+  public JTableCellFixture click(MouseClickInfo mouseClickInfo) {
     table.click(cell, mouseClickInfo);
     return this;
   }
@@ -84,7 +85,7 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user double-clicking this fixture's table cell.
    * @return this fixture.
    */
-  public final JTableCellFixture doubleClick() {
+  public JTableCellFixture doubleClick() {
     return click(LEFT_BUTTON, 2);
   }
 
@@ -92,7 +93,7 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user right-clicking this fixture's table cell.
    * @return this fixture.
    */
-  public final JTableCellFixture rightClick() {
+  public JTableCellFixture rightClick() {
     return click(RIGHT_BUTTON);
   }
 
@@ -107,10 +108,22 @@ public class JTableCellFixture implements ItemFixture {
   }
 
   /**
+   * Asserts that this fixture's table cell contains the given value.
+   * @param content the expected content of this fixture's table cell.
+   * @return this fixture.
+   * @throws AssertionError if the content of this fixture's table cell is not equal to the expected one.
+   * TODO: Add property name as description of the assertion.
+   */
+  public JTableCellFixture requireContent(Object content) {
+    assertThat(content()).isEqualTo(content);
+    return this;
+  }
+  
+  /**
    * Returns the value of this fixture's table cell, or <code>null</code> if one can not be obtained.
    * @return the value of the given cell.
    */
-  public final Object content() {
+  public Object content() {
     return table.contentAt(cell);
   }
 
@@ -118,7 +131,7 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user dragging this fixture's table cell.
    * @return this fixture.
    */
-  public final JTableCellFixture drag() {
+  public JTableCellFixture drag() {
     table.drag(cell);
     return this;
   }
@@ -127,7 +140,7 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user dropping into this fixture's table cell.
    * @return this fixture.
    */
-  public final JTableCellFixture drop() {
+  public JTableCellFixture drop() {
     table.drop(cell);
     return this;
   }
@@ -139,7 +152,7 @@ public class JTableCellFixture implements ItemFixture {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableCellFixture pressAndReleaseKeys(int... keyCodes) {
+  public JTableCellFixture pressAndReleaseKeys(int... keyCodes) {
     table.pressAndReleaseKeys(keyCodes);
     return this;
   }
@@ -150,7 +163,7 @@ public class JTableCellFixture implements ItemFixture {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableCellFixture pressKey(int keyCode) {
+  public JTableCellFixture pressKey(int keyCode) {
     table.pressKey(keyCode);
     return this;
   }
@@ -161,7 +174,7 @@ public class JTableCellFixture implements ItemFixture {
    * @return this fixture.
    * @see java.awt.event.KeyEvent
    */
-  public final JTableCellFixture releaseKey(int keyCode) {
+  public JTableCellFixture releaseKey(int keyCode) {
     table.releaseKey(keyCode);
     return this;
   }
@@ -171,7 +184,7 @@ public class JTableCellFixture implements ItemFixture {
    * @return a fixture that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
-  public final JPopupMenuFixture showPopupMenu() {
+  public JPopupMenuFixture showPopupMenu() {
     return table.showPopupMenuAt(cell);
   }
 
@@ -179,11 +192,11 @@ public class JTableCellFixture implements ItemFixture {
    * Returns the row index of this fixture's table cell.
    * @return the row index of this fixture's table cell.
    */
-  public final int row() { return cell.row; }
+  public int row() { return cell.row; }
 
   /**
    * Returns the column index of this fixture's table cell.
    * @return the column index of this fixture's table cell.
    */
-  public final int column() { return cell.column; }
+  public int column() { return cell.column; }
 }

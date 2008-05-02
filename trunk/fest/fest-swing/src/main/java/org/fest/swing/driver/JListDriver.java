@@ -306,12 +306,12 @@ public class JListDriver extends JComponentDriver {
    * Shows a pop-up menu at the location of the specified item in the <code>{@link JList}</code>.
    * @param list the target <code>JList</code>.
    * @param index the index of the item.
-   * @return a fixture that manages the displayed pop-up menu.
+   * @return a driver that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public JPopupMenu showPopupMenuAt(JList list, int index) {
+  public JPopupMenu showPopupMenu(JList list, int index) {
     scrollToVisible(list, index);
     return robot.showPopupMenu(list, pointAt(list, index));
   }
@@ -336,7 +336,7 @@ public class JListDriver extends JComponentDriver {
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
-  public JPopupMenu showPopupMenuAt(JList list, String value) {
+  public JPopupMenu showPopupMenu(JList list, String value) {
     scrollToVisible(list, value);
     return robot.showPopupMenu(list, pointAt(list, value));
   }

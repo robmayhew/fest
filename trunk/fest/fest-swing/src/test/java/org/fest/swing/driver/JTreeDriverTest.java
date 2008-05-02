@@ -17,7 +17,11 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
@@ -28,6 +32,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
 
@@ -48,14 +53,16 @@ import static org.fest.util.Arrays.array;
 public class JTreeDriverTest {
 
   private Robot robot;
+  private MyFrame frame;
   private JTree dragTree;
   private JTree dropTree;
+
   private JTreeDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTreeDriver(robot);
-    MyFrame frame = new MyFrame();
+    frame = new MyFrame();
     dragTree = frame.dragTree;
     dropTree = frame.dropTree;
     robot.showWindow(frame);
@@ -84,6 +91,15 @@ public class JTreeDriverTest {
     assertThat(dragTree.isExpanded(1)).isFalse();
   }
 
+  @Test public void shouldThrowErrorIfPathNotFound() {
+    try {
+      driver.selectPath(dragTree, "another");
+      fail();
+    } catch (LocationUnavailableException e) {
+      assertThat(e.getMessage()).isEqualTo("Unable to find path 'another'");
+    }
+  }
+  
   @Test(dataProvider = "selectionPath") 
   public void shouldSelectNodeByPath(String treePath) {
     dragTree.clearSelection();
@@ -150,6 +166,13 @@ public class JTreeDriverTest {
   private DefaultMutableTreeNode firstChildOf(DefaultMutableTreeNode node) {
     return (DefaultMutableTreeNode)node.getChildAt(0);
   }
+
+  @Test public void shouldPassIfRowIsSelected() {
+    DefaultMutableTreeNode root = rootOf(dragTree.getModel());
+    TreePath path = new TreePath(array(root, root.getFirstChild()));
+    dragTree.setSelectionPath(path);
+    driver.requireSelection(dragTree, 1);
+  }
   
   @Test public void shouldPassIfPathIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
@@ -158,14 +181,37 @@ public class JTreeDriverTest {
     driver.requireSelection(dragTree, "root/branch1");
   }
 
+  @Test public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection() {
+    dragTree.setSelectionPath(null);
+    try {
+      driver.requireSelection(dragTree, 1);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selection'")
+                             .contains("No selection");
+    }
+  }
+  
+  @Test public void shouldFailIfSelectedRowIsNotEqualToExpectedSelection() {
+    DefaultMutableTreeNode root = rootOf(dragTree.getModel());
+    dragTree.setSelectionPath(new TreePath(array(root)));
+    try {
+      driver.requireSelection(dragTree, 1);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectionPath'")
+                             .contains("expected:<[root, branch1]> but was:<[root]>");
+    }
+  }
+
   @Test public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {
     dragTree.setSelectionPath(null);
     try {
       driver.requireSelection(dragTree, "root/branch1");
       fail();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectionPath'")
-                             .contains("expected:<[root, branch1]> but was:<null>");
+      assertThat(e).message().contains("property:'selection'")
+                             .contains("No selection");
     }
   }
   
@@ -210,6 +256,16 @@ public class JTreeDriverTest {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
+  
+  @Test public void shouldShowPopupMenuAtRow() {
+    JPopupMenu popupMenu = driver.showPopupMenu(dragTree, 0);
+    assertThat(popupMenu).isSameAs(frame.popupMenu);
+  }
+  
+  @Test public void shouldShowPopupMenuAtPath() {
+    JPopupMenu popupMenu = driver.showPopupMenu(dragTree, "root");
+    assertThat(popupMenu).isSameAs(frame.popupMenu);
+  }
 
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
@@ -218,6 +274,7 @@ public class JTreeDriverTest {
 
     final TestTree dragTree = new TestTree(nodes());
     final TestTree dropTree = new TestTree(rootOnly());
+    final JPopupMenu popupMenu = new JPopupMenu();
     
     private static TreeModel nodes() {
       MutableTreeNode root =
@@ -247,7 +304,9 @@ public class JTreeDriverTest {
     MyFrame() {
       super(JTreeDriverTest.class);
       add(decorate(dragTree));
+      dragTree.addMouseListener(new Listener(popupMenu));
       add(decorate(dropTree));
+      popupMenu.add(new JMenuItem("Hello"));
       setPreferredSize(new Dimension(600, 400));
     }
 
@@ -256,5 +315,25 @@ public class JTreeDriverTest {
       scrollPane.setPreferredSize(TREE_SIZE);
       return scrollPane;
     }
-}
+    
+    private static class Listener extends MouseAdapter {
+      private final JPopupMenu popupMenu;
+
+      Listener(JPopupMenu popupMenu) {
+        this.popupMenu = popupMenu;
+      }
+
+      @Override public void mouseReleased(MouseEvent e) {
+        if (!e.isPopupTrigger()) return;
+        Component c = e.getComponent();
+        if (!(c instanceof JTree)) return;
+        JTree tree = (JTree)c;
+        int x = e.getX();
+        int y = e.getY();
+        int row = tree.getRowForLocation(x, y);
+        if (row == 0) popupMenu.show(tree, x, y);
+      }
+    }
+    
+  }
 }

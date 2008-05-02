@@ -20,6 +20,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.plaf.TreeUI;
 import javax.swing.plaf.basic.BasicTreeUI;
@@ -31,10 +32,12 @@ import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
@@ -51,6 +54,7 @@ import static org.fest.util.Strings.*;
 public class JTreeDriver extends JComponentDriver {
 
   private static final String EDITABLE_PROPERTY = "editable";
+  private static final String SELECTION_PROPERTY = "selection";
   private static final String SELECTION_PATH_PROPERTY = "selectionPath";
 
   private static final String SEPARATOR = "/";
@@ -115,7 +119,7 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given path, expanding parent nodes if necessary.
    * @param tree the target <code>JTree</code>.
    * @param path the path to select.
-   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @throws LocationUnavailableException if the given path cannot be found.
    */
   public void selectPath(JTree tree, String path) {
     TreePath treePath = findMatchingPath(tree, path);
@@ -129,6 +133,7 @@ public class JTreeDriver extends JComponentDriver {
     if (alreadySelected(tree, row)) return;
     // NOTE: the row bounds *do not* include the expansion handle
     Rectangle rowBounds = tree.getRowBounds(row);
+    scrollToVisible(tree, rowBounds);
     click(tree, new Point(rowBounds.x + 1, rowBounds.y + rowBounds.height / 2));
   }
 
@@ -204,6 +209,32 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   /**
+   * Shows a pop-up menu at the position of the node in the given row.
+   * @param tree the target <code>JTree</code>.
+   * @param row the given row.
+   * @return a driver that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  public JPopupMenu showPopupMenu(JTree tree, int row) {
+    return robot.showPopupMenu(tree, location.pointAt(tree, row));
+  }
+
+  /**
+   * Shows a pop-up menu at the position of the last node in the given path.
+   * @param tree the target <code>JTree</code>.
+   * @param path the given path.
+   * @return a driver that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if the given path cannot be found.
+   */
+  public JPopupMenu showPopupMenu(JTree tree, String path) {
+    return robot.showPopupMenu(tree, location.pointAt(tree, findMatchingPath(tree, path)));
+  }
+
+  /**
    * Starts a drag operation at the location of the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
@@ -231,8 +262,8 @@ public class JTreeDriver extends JComponentDriver {
   /**
    * Starts a drag operation at the location of the given <code>{@link TreePath}</code>.
    * @param tree the target <code>JTree</code>.
-   * @param path the given <code>TreePath</code>.
-   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @param path the given path.
+   * @throws LocationUnavailableException if the given path cannot be found.
    */
   public void drag(JTree tree, String path) {
     drag(tree, findMatchingPath(tree, path));
@@ -241,8 +272,8 @@ public class JTreeDriver extends JComponentDriver {
   /**
    * Ends a drag operation at the location of the given <code>{@link TreePath}</code>.
    * @param tree the target <code>JTree</code>.
-   * @param path the given <code>TreePath</code>.
-   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @param path the given path.
+   * @throws LocationUnavailableException if the given path cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JTree tree, String path) {
@@ -255,18 +286,36 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   private void drop(JTree tree, TreePath path) {
+    scrollToVisible(tree, tree.getPathBounds(path));
     drop(tree, location.pointAt(tree, path));
   }
 
   /**
+   * Asserts that the given <code>{@link JTree}</code>'s selected row is equal to the given one.
+   * @param tree the target <code>JTree</code>.
+   * @param row the index of the row, expected to be selected.
+   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given row.
+   */
+  public void requireSelection(JTree tree, int row) {
+    TreePath selectionPath = tree.getPathForRow(row);
+    requireSelection(tree, selectionPath);
+  }
+  
+  /**
    * Asserts that the given <code>{@link JTree}</code>'s selected path is equal to the given one.
    * @param tree the target <code>JTree</code>.
-   * @param path the given <code>TreePath</code>, expected to be selected.
+   * @param path the given path, expected to be selected.
+   * @throws LocationUnavailableException if the given path cannot be found.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given path.
    */
   public void requireSelection(JTree tree, String path) {
     TreePath matchingPath = findMatchingPath(tree, path);
-    assertThat(tree.getSelectionPath()).as(propertyName(tree, SELECTION_PATH_PROPERTY)).isEqualTo(matchingPath);
+    requireSelection(tree, matchingPath);
+  }
+
+  private void requireSelection(JTree tree, TreePath path) {
+    if (tree.getSelectionCount() == 0) fail(concat("[", propertyName(tree, SELECTION_PROPERTY), "] No selection"));
+    assertThat(tree.getSelectionPath()).as(propertyName(tree, SELECTION_PATH_PROPERTY)).isEqualTo(path);
   }
   
   /**
@@ -296,16 +345,16 @@ public class JTreeDriver extends JComponentDriver {
     TreeModel model = tree.getModel();
     List<Object> newPathValues = new ArrayList<Object>(pathStrings.length + 1);
     Object node = model.getRoot();
-    int childCount = model.getChildCount(node);
     int pathElementCount = pathStrings.length;
     for (int stringIndex = 0; stringIndex < pathElementCount; stringIndex++) {
       String pathString = pathStrings[stringIndex];
       Object match = null;
       if (stringIndex == 0 && tree.isRootVisible()) {
-        if (!pathString.equals(value(tree, node))) return null;
+        if (!pathString.equals(value(tree, node))) throw pathNotFound(path);
         newPathValues.add(node);
         continue;
       }
+      int childCount = model.getChildCount(node);
       for (int childIndex = 0; childIndex < childCount; childIndex++) {
         Object child = model.getChild(node, childIndex);
         if (pathString.equals(value(tree, child))) {
@@ -313,11 +362,15 @@ public class JTreeDriver extends JComponentDriver {
           match = child;
         }
       }
-      if (match == null) return null;
+      if (match == null) throw pathNotFound(path);
       newPathValues.add(match);
       node = match;
     }
     return new TreePath(newPathValues.toArray());
+  }
+  
+  private LocationUnavailableException pathNotFound(String path) {
+    throw new LocationUnavailableException(concat("Unable to find path ", quote(path)));
   }
 
   private String[] splitPath(String path) {
@@ -334,8 +387,8 @@ public class JTreeDriver extends JComponentDriver {
     return result.toArray(new String[result.size()]);
   }
 
-  private ActionFailedException multipleMatchingNodes(String matchingText, String parentText) {
-    throw actionFailure(
+  private LocationUnavailableException multipleMatchingNodes(String matchingText, String parentText) {
+    throw new LocationUnavailableException(
         concat("There is more than one node with value ", quote(matchingText), " under ", quote(parentText)));
   }
   
@@ -367,4 +420,5 @@ public class JTreeDriver extends JComponentDriver {
   public void cellReader(JTreeCellReader cellReader) {
     this.cellReader = cellReader;
   }
+
 }

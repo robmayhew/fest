@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 
 import org.testng.annotations.Test;
@@ -42,14 +43,12 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   private JTreeDriver driver;
   private JTree target;
   private JTreeFixture fixture;
-  private String path;
   
   void onSetUp() {
     driver = createMock(JTreeDriver.class);
     target = new JTree();
     fixture = new JTreeFixture(robot(), target);
     fixture.updateDriver(driver);
-    path = "Hello";
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
@@ -74,6 +73,7 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   }
   
   @Test public void shouldDragAtTreePath() {
+    final String path = "root/node1";
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.drag(target, path);
@@ -100,6 +100,7 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   }
   
   @Test public void shouldDropAtTreePath() {
+    final String path = "root/node1";
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.drop(target, path);
@@ -126,6 +127,7 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   }
   
   @Test public void shouldSelectTreePath() {
+    final String path = "root/node1";
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectPath(target, path);
@@ -134,6 +136,34 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
       
       protected void codeToTest() {
         assertThatReturnsThis(fixture.selectPath(path));
+      }
+    }.run();
+  }
+
+  @Test public void shouldRequireSelectedTreePath() {
+    final String path = "root/node1";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelection(target, path);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelection(path));
+      }
+    }.run();
+  }
+
+  @Test public void shouldRequireSelectedRow() {
+    final int row = 0;
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelection(target, row);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelection(row));
       }
     }.run();
   }
@@ -230,6 +260,36 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
       
       protected void codeToTest() {
         fixture.separator(separator);
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowPopupMenuAtRow() {
+    final int row = 0;
+    final JPopupMenu popupMenu = new JPopupMenu();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, row)).andReturn(popupMenu);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture showPopupMenuFixture = fixture.showPopupMenuAt(row);
+        assertThat(showPopupMenuFixture.target).isSameAs(popupMenu);
+      }
+    }.run();
+  }
+
+  @Test public void shouldShowPopupMenuAtPath() {
+    final String path = "root";
+    final JPopupMenu popupMenu = new JPopupMenu();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(target, path)).andReturn(popupMenu);
+      }
+      
+      protected void codeToTest() {
+        JPopupMenuFixture showPopupMenuFixture = fixture.showPopupMenuAt(path);
+        assertThat(showPopupMenuFixture.target).isSameAs(popupMenu);
       }
     }.run();
   }

@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
@@ -160,9 +161,9 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
 
   /**
    * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
-   * @param treePath the tree path corresponding to the item to drag.
+   * @param treePath the path corresponding to the item to drag.
    * @return this fixture.
-   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @throws LocationUnavailableException if the given path cannot be found.
    */
   public JTreeFixture drag(String treePath) {
     driver.drag(target, treePath);
@@ -185,9 +186,9 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
 
   /**
    * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
-   * @param treePath the tree path corresponding to the item to drop.
+   * @param treePath the path corresponding to the item to drop.
    * @return this fixture.
-   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @throws LocationUnavailableException if the given path cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public JTreeFixture drop(String treePath) {
@@ -196,13 +197,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   }
 
   /**
-   * Select the given path, expanding parent nodes if necessary. TreePath must consist of usable String representations
-   * that can be used in later comparisons. The default &lt;classname&gt;@&lt;hashcode&gt; returned by
-   * <code>{@link Object#toString()}</code> is not usable; if that is all that is available, refer to the row number
-   * instead.
-   * @param treePath A path comprising an array of Strings that match the toString()'s of the path nodes
+   * Select the given path, expanding parent nodes if necessary.
+   * @param treePath the path to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if any part of the path is not visible.
+   * @throws LocationUnavailableException if the given path cannot be found.
    */
   public JTreeFixture selectPath(String treePath) {
     driver.selectPath(target, treePath);
@@ -233,6 +231,31 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   public JTreeFixture toggleRow(int row) {
     driver.toggleRow(target, row);
     return this;
+  }
+
+  /**
+   * Shows a pop-up menu at the position of the node in the given row.
+   * @param row the index of the row invoking the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(int row) {
+    JPopupMenu popupMenu = driver.showPopupMenu(target, row);
+    return new JPopupMenuFixture(robot, popupMenu);
+  }
+  
+  /**
+   * Shows a pop-up menu at the position of the last node in the given path.
+   * @param treePath the path of the node invoking the pop-up menu.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if the given path cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(String treePath) {
+    JPopupMenu popupMenu = driver.showPopupMenu(target, treePath);
+    return new JPopupMenuFixture(robot, popupMenu);
   }
 
   /**
@@ -355,10 +378,22 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * Asserts that this fixture's <code>{@link JTree}</code> selection is equal to the given path.
    * @param path the given path, expected to be selected.
    * @return this fixture.
+   * @throws LocationUnavailableException if the given path cannot be found.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given path.
    */
   public JTreeFixture requireSelection(String path) {
     driver.requireSelection(target, path);
+    return this;
+  }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code>'s selected row is equal to the given one.
+   * @param row the index of the row, expected to be selected.
+   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given row.
+   * @return this fixture.
+   */
+  public JTreeFixture requireSelection(int row) {
+    driver.requireSelection(target, row);
     return this;
   }
   

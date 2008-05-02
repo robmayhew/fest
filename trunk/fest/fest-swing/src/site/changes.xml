@@ -5,10 +5,23 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0a1" date="2008-04-07" description="Subsequent release">
+    <release version="1.0a2" date="TBA" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Added method 'requireContent(Object)' to JTableCellFixture. 
+      </action>
+      <action dev="alruiz" type="fix" issue="133">
+        JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
+      </action>
       <action dev="alruiz, wanghy" type="add">
         Added method 'requireSelection(String)' to JTreeFixture. This method verifies that a JTree has the given path 
         selected. The path is specified as a String, for example "root/node1/node1.1".
+      </action>
+      <action dev="alruiz, wanghy" type="add">
+        Added method 'requireSelection(int)' to JTreeFixture. This method verifies that a JTree has the row selected.
+      </action>
+      <action dev="wanghy" type="add">
+        Added methods 'showPopupMenuAt(int)' and 'showPopupMenuAt(String)' to JTreeFixture. These methods shows a 
+        JPopupMenu in a given row and node path respectively.
       </action>
       <action dev="alruiz, wanghy" type="add">
         Replaced TreePath as method parameter in JTreeFixture and replace it with a String specifying the path. For
@@ -56,7 +69,7 @@
     </release>
     <release version="0.9" date="2008-03-21" description="Subsequent release">
       <action dev="wanghy, alruiz" type="fix">
-        Fixed JListDriver and JTable driver to scroll to the item to select, drag or drop.
+        Fixed JListDriver and JTableDriver to scroll to the item to select, drag or drop.
       </action>
       <action dev="wanghy, alruiz" type="fix" issue="116" due-to="Rich Toulouse">
         Selecting items in JComboBox now scroll drop-down list to get to the item to select.

@@ -299,7 +299,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
     final JPopupMenu popup = new JPopupMenu(); 
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.showPopupMenuAt(target, 6)).andReturn(popup);
+        expect(driver.showPopupMenu(target, 6)).andReturn(popup);
       }
       
       protected void codeToTest() {
@@ -313,7 +313,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
     final JPopupMenu popup = new JPopupMenu(); 
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.showPopupMenuAt(target, "Frodo")).andReturn(popup);
+        expect(driver.showPopupMenu(target, "Frodo")).andReturn(popup);
       }
       
       protected void codeToTest() {
