@@ -62,7 +62,11 @@ public abstract class JTableCell {
   private void validateIndex(int index, int itemCount, String indexName) {
     if (index >= 0 && index < itemCount) return; 
     throw actionFailure(concat(
-        indexName, " ", quote(valueOf(index)), " should be between ", quote(valueOf(0)), " and ", 
+        indexName, " ", quote(valueOf(index)), " should be between ", quote("0"), " and ", 
         quote(valueOf(itemCount))));
+  }
+  
+  @Override public String toString() {
+    return concat("[row=", valueOf(row), ", column=", valueOf(column), "]");
   }
 }

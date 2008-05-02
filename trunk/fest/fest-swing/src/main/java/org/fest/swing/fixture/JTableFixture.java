@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JTable;
@@ -31,6 +32,8 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentDriver.propertyName;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -79,6 +82,19 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     this.driver = driver;
   }
 
+  /**
+   * Returns a fixture for the <code>{@link Font}</code> of the given table cell.
+   * @param cell the given table cell.
+   * @return a fixture for the <code>Font</code> of the given table cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public FontFixture fontAt(TableCell cell) {
+    Font font = driver.font(target, cell);
+    String description = concat(propertyName(target, "font"), " - ", cell);
+    return new FontFixture(font, description);
+  }
+  
   /**
    * Returns a fixture that manages the table cell specified by the given row and column.
    * @param cell the cell of interest.

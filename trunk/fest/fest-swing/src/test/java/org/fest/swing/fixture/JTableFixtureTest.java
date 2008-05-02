@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JPopupMenu;
@@ -28,6 +29,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
 
+import static java.awt.Font.PLAIN;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
@@ -221,6 +223,23 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       
       protected void codeToTest() {
         fixture.cellReader(reader);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldReturnCellFont() {
+    final Font font = new Font("SansSerif", PLAIN, 8);
+    final TableCell cell = row(6).column(8);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.font(target, cell)).andReturn(font);
+      }
+      
+      protected void codeToTest() {
+        FontFixture fontFixture = fixture.fontAt(cell);
+        assertThat(fontFixture.target()).isSameAs(font);
+        assertThat(fontFixture.description()).contains(target.getClass().getName())
+                                             .contains("property:'font' - [row=6, column=8]");
       }
     }.run();
   }

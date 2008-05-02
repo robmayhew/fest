@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JMenuItem;
@@ -29,12 +30,17 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
 
+import static java.awt.Font.PLAIN;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
@@ -139,6 +145,22 @@ public class JTableDriverTest {
     Point pointClicked = recorder.pointClicked();
     Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
     assertThat(pointClicked).isEqualTo(pointAtCell);
+  }
+  
+  @Test public void shouldReturnCellFont() {
+    final JTableCellReader cellReader = createMock(JTableCellReader.class);
+    final Font font = new Font("SansSerif", PLAIN, 8);
+    driver.cellReader(cellReader);
+    new EasyMockTemplate(cellReader) {
+      protected void expectations() {
+        expect(cellReader.fontAt(dragTable, 0, 0)).andReturn(font);
+      }
+
+      protected void codeToTest() {
+        Font result = driver.font(dragTable, new JTableCell(0, 0) {});
+        assertThat(result).isSameAs(font);
+      }
+    }.run();
   }
   
   private static class MyFrame extends TestFrame {

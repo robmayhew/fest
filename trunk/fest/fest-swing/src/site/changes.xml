@@ -9,9 +9,6 @@
       <action dev="alruiz" type="add">
         Added method 'requireContent(Object)' to JTableCellFixture. 
       </action>
-      <action dev="alruiz" type="fix" issue="133">
-        JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
-      </action>
       <action dev="alruiz, wanghy" type="add">
         Added method 'requireSelection(String)' to JTreeFixture. This method verifies that a JTree has the given path 
         selected. The path is specified as a String, for example "root/node1/node1.1".
@@ -27,6 +24,9 @@
         Replaced TreePath as method parameter in JTreeFixture and replace it with a String specifying the path. For
         example, now a path can be set as "root/node1/node1.1".
       </action>
+      <action dev="alruiz" type="fix" issue="133">
+        JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
+      </action>
       <action dev="alruiz, wanghy" type="add" issue="130">
         Created JTreeCellReader and BasicJTreeReader to support custom cell renderers in JTreeFixture.
       </action>
@@ -36,8 +36,17 @@
       <action dev="alruiz" type="fix" issue="125" due-to="Woody Folsom">
         Fixed regression. JToolBarFixture extends ComponentFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="124" due-to="Woody Folsom">
+        Introduced 'JListCellReader' to read values from JLists. Users can implement their own JListCellReaders when
+        using custom cell renderers in JLists. After creating a JListCellRendering, users only need to pass an instance
+        to the method 'cellReader(JListCellReader)' in JListFixture.
+      </action>
       <action dev="alruiz" type="fix" issue="123" due-to="Manuel Kueblboeck">
         Fixed NullPointerException in method 'enterText' in org.fest.core.RobotFixture.
+      </action>
+      <action dev="wanghy, alruiz" type="add" issue="99" due-to="J. Simmons">
+        Added method 'fontAt(TableCell)' which returns a FontFixture wrapping the font of the specified table cell, to 
+        verify properties (e.g. "bold", "italics", etc.) of such font.
       </action>
     </release>
     <release version="1.0a1" date="2008-04-07" description="Subsequent release">
