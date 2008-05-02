@@ -15,13 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.*;
-
 import java.awt.*;
 
 import javax.accessibility.AccessibleAction;
@@ -33,6 +26,13 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.TimeoutWatch;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link Component}</code>. This class is intended for internal use
@@ -337,7 +337,7 @@ public class ComponentDriver {
     return true;
   }
 
-  protected static String propertyName(Component c, String propertyName) {
+  public static String propertyName(Component c, String propertyName) {
     return concat(format(c), " - property:", quote(propertyName));
   }
 }
