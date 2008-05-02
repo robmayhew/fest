@@ -65,4 +65,8 @@ public final class WebFeedServiceStub implements WebFeedService {
     calendar.set(YEAR, year);
     return calendar.getTime();
   }
+
+  public WebFeed webFeedWithName(String name) {
+    return feedsByName.get(name);
+  }
 }

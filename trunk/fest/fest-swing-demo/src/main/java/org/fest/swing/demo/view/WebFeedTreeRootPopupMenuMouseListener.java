@@ -18,6 +18,7 @@ package org.fest.swing.demo.view;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import static org.fest.swing.demo.view.WebFeedTreeListeners.*;
@@ -32,7 +33,8 @@ class WebFeedTreeRootPopupMenuMouseListener {
 
   static void attachTo(WebFeedTree tree) {
     JPopupMenu popupMenu = new JPopupMenu();
-    popupMenu.add(new AddWebFeedOrFolderAction(tree.mainFrame()));
+    JMenuItem item = popupMenu.add(new AddWebFeedOrFolderAction(tree.mainFrame()));
+    item.setName("add");
     tree.addMouseListener(new Listener(popupMenu));
   }
 

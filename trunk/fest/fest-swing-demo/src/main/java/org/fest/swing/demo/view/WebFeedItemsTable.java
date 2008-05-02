@@ -48,6 +48,7 @@ class WebFeedItemsTable extends JXTable {
     setAutoResizeMode(AUTO_RESIZE_OFF);
     model = new DefaultTableModel(columnNames, 0);
     setModel(model);
+    setName("webFeedItems");
     setEditable(false);
   }
 

@@ -43,4 +43,11 @@ public interface WebFeedService {
    * @return the entries of the given web feed.
    */
   WebFeedEntry[] entriesOf(WebFeed webFeed);
+
+  /**
+   * Returns a web feed whose name matches the given one
+   * @param name the name of to match.
+   * @return the matching web feed, or <code>null</code> if no matching web feed was found.
+   */
+  WebFeed webFeedWithName(String name);
 }
