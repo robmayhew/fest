@@ -25,6 +25,8 @@ import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.format.ComponentFormatter;
+import org.fest.swing.format.Formatting;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -337,6 +339,15 @@ public class ComponentDriver {
     return true;
   }
 
+  /**
+   * Returns the description of a property belonging to a <code>{@link Component}</code>. To describe a property, this 
+   * method concatenates the value of <code>{@link Formatting#format(Component)}</code> with the given property name.
+   * @param c the given <code>Component</code>.
+   * @param propertyName the name of the property.
+   * @return the description of a property belonging to a <code>Component</code>.
+   * @see ComponentFormatter
+   * @see Formatting#format(Component)
+   */
   public static String propertyName(Component c, String propertyName) {
     return concat(format(c), " - property:", quote(propertyName));
   }
