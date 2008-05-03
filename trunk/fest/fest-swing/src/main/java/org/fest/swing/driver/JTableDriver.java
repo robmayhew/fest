@@ -59,7 +59,7 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @return the value of the selected cell.
    */
-  public String selectionValue(JTable table) {
+  public Object selectionValue(JTable table) {
     if (table.getSelectedRowCount() == 0) return null;
     return value(table, table.getSelectedRow(), table.getSelectedColumn());
   }
@@ -72,7 +72,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
-  public String value(JTable table, JTableCell cell) {
+  public Object value(JTable table, JTableCell cell) {
     validate(table, cell);
     return value(table, cell.row, cell.column);
   }
@@ -86,7 +86,7 @@ public class JTableDriver extends JComponentDriver {
    * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code>
    *         if one cannot be obtained.
    */
-  public String value(JTable table, int row, int column) {
+  public Object value(JTable table, int row, int column) {
     return cellReader.valueAt(table, row, column);
   }
 

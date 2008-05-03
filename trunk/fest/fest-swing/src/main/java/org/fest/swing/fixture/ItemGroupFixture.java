@@ -30,7 +30,7 @@ public interface ItemGroupFixture {
    * Returns the elements in this fixture's <code>{@link Component}</code>.
    * @return the elements in this fixture's <code>Component</code>.
    */
-  String[] contents();
+  Object[] contents();
 
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link Component}</code>. 

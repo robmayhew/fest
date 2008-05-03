@@ -387,12 +387,12 @@ public class JTreeDriver extends JComponentDriver {
     return result.toArray(new String[result.size()]);
   }
 
-  private LocationUnavailableException multipleMatchingNodes(String matchingText, String parentText) {
+  private LocationUnavailableException multipleMatchingNodes(String matchingText, Object parentText) {
     throw new LocationUnavailableException(
         concat("There is more than one node with value ", quote(matchingText), " under ", quote(parentText)));
   }
   
-  private String value(JTree tree, Object modelValue) {
+  private Object value(JTree tree, Object modelValue) {
     return cellReader.valueAt(tree, modelValue);
   }
   

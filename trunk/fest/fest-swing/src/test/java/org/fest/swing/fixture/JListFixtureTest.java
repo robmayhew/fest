@@ -70,7 +70,7 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
       }
       
       protected void codeToTest() {
-        String[] result = fixture.contents();
+        Object[] result = fixture.contents();
         assertThat(result).isSameAs(contents);
       }
     }.run();

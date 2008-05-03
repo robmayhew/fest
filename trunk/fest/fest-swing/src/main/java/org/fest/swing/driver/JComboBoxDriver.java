@@ -77,9 +77,9 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @return an array of <code>String</code>s that represent the <code>JComboBox</code> list.
    */
-  public String[] contentsOf(JComboBox comboBox) {
+  public Object[] contentsOf(JComboBox comboBox) {
     int itemCount = size(comboBox);
-    String[] items = new String[itemCount];
+    Object[] items = new Object[itemCount];
     for (int i = 0; i < itemCount; i++)
       items[i] = value(comboBox, i);
     return items;
@@ -132,7 +132,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JComboBox</code>.
    */
-  public String value(JComboBox comboBox, int index) {
+  public Object value(JComboBox comboBox, int index) {
     validateIndex(comboBox, index);
     return cellReader.valueAt(comboBox, index);
   }

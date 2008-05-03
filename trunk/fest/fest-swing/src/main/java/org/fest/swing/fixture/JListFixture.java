@@ -82,7 +82,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Returns the elements in this fixture's <code>{@link JList}</code> as <code>String</code>s.
    * @return the elements in this fixture's <code>JList</code>.
    */
-  public String[] contents() {
+  public Object[] contents() {
     return driver.contentsOf(target);
   }
 
@@ -195,14 +195,14 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   }
 
   /**
-   * Returns the <code>String</code> representation of an item in this fixture's <code>{@link JList}</code> . If such
-   * <code>String</code> representation is not meaningful, this method will return <code>null</code>.
+   * Returns the value of an item in this fixture's <code>{@link JList}</code>. If such value is not meaningful, this 
+   * method will return <code>null</code>.
    * @param index the index of the item to return.
-   * @return the String representation of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @return the value of the item under the given index, or <code>null</code> if nothing meaningful.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public String valueAt(int index) {
+  public Object valueAt(int index) {
     return driver.value(target, index);
   }
 

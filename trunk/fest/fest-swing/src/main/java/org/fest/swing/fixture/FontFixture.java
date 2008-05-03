@@ -18,17 +18,15 @@ package org.fest.swing.fixture;
 import java.awt.Font;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Strings.*;
 
 /**
- * Understands assertion methods for <code>{@link Font}</code>.
+ * Understands state verification of <code>{@link Font}</code>s.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class FontFixture {
+public class FontFixture extends NonGUIFixture {
 
-  private static final String PROPERTY_SEPARATOR = " - ";
   private static final String BOLD_PROPERTY = "bold";
   private static final String FAMILY_PROPERTY = "family";
   private static final String ITALIC_PROPERTY = "italic";
@@ -37,7 +35,6 @@ public class FontFixture {
   private static final String SIZE_PROPERTY = "size";
 
   private final Font target;
-  private final String description;
 
   /**
    * Creates a new </code>{@link FontFixture}</code>.
@@ -47,9 +44,14 @@ public class FontFixture {
     this(target, null);
   }
 
+  /**
+   * Creates a new </code>{@link FontFixture}</code>.
+   * @param target the font to manage.
+   * @param description this fixture's description.
+   */
   public FontFixture(Font target, String description) {
+    super(description);
     this.target = target;
-    this.description = description;
   }
   
   /**
@@ -163,24 +165,9 @@ public class FontFixture {
     return this;
   }
 
-  private String property(String s) {
-    if (isEmpty(description)) return s;
-    return concat(description, PROPERTY_SEPARATOR, s);
-  }
-  
   /**
    * Returns this fixture's font.
    * @return this fixture's font.
    */
-  public Font target() {
-    return target;
-  }
-  
-  /**
-   * Returns this fixture's description.
-   * @return this fixture's description.
-   */
-  public String description() {
-    return description;
-  }
+  public Font target() { return target; }
 }

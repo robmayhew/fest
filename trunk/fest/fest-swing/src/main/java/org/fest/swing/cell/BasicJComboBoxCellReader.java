@@ -41,9 +41,9 @@ public class BasicJComboBoxCellReader extends BaseValueReader implements JComboB
    * @see BaseValueReader#valueFrom(Object)
    * @see BaseValueReader#valueFrom(Component)
    */
-  public String valueAt(JComboBox comboBox, int index) {
+  public Object valueAt(JComboBox comboBox, int index) {
     Object item = itemAt(comboBox, index);
-    String value = valueFrom(item);
+    Object value = valueFrom(item);
     if (value != null) return value;
     return valueFrom(cellRendererComponent(comboBox, index));
   }

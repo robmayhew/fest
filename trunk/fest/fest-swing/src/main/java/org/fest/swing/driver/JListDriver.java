@@ -76,8 +76,8 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @return the list's contents.
    */
-  public String[] contentsOf(JList list) {
-    String[] values = new String[sizeOf(list)];
+  public Object[] contentsOf(JList list) {
+    Object[] values = new String[sizeOf(list)];
     for (int i = 0; i < values.length; i++)
       values[i] = value(list, i);
     return values;
@@ -228,11 +228,11 @@ public class JListDriver extends JComponentDriver {
    * <code>{@link JListCellReader}</code>.
    * @param list the target <code>JList</code>.
    * @param index the given index.
-   * @return the text of the element under the given index.
+   * @return the value of the element under the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
-  public String value(JList list, int index) {
+  public Object value(JList list, int index) {
     location.validate(list, index);
     return cellReader.valueAt(list, index);
   }

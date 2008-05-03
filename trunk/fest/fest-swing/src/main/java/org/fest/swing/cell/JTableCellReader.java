@@ -33,7 +33,7 @@ public interface JTableCellReader {
    * @param column the column index of the cell.
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
    */
-  String valueAt(JTable table, int row, int column);
+  Object valueAt(JTable table, int row, int column);
 
   /**
    * Returns the font of the cell renderer for the given table cell.

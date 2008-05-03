@@ -67,7 +67,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
       }
 
       protected void codeToTest() {
-        String[] result = fixture.contents();
+        Object[] result = fixture.contents();
         assertThat(result).isSameAs(contents);
       }
     }.run();
