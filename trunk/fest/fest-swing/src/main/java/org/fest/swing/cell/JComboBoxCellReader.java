@@ -30,5 +30,5 @@ public interface JComboBoxCellReader {
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
    */
-  Object valueAt(JComboBox comboBox, int index);
+  String valueAt(JComboBox comboBox, int index);
 }

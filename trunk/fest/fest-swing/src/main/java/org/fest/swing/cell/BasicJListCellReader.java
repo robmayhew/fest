@@ -38,9 +38,9 @@ public class BasicJListCellReader extends BaseValueReader implements JListCellRe
    * @see BaseValueReader#valueFrom(Object)
    * @see BaseValueReader#valueFrom(Component)
    */
-  public Object valueAt(JList list, int index) {
+  public String valueAt(JList list, int index) {
     Object element = elementAt(list, index);
-    Object value = valueFrom(element);
+    String value = valueFrom(element);
     if (value != null) return value;
     return valueFrom(cellRendererComponent(list, index));
   }

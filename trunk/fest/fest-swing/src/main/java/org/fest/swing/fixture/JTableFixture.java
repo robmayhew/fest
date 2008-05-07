@@ -133,11 +133,13 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Returns the value of the selected cell in this fixture's <code>{@link JTable}</code>. Returns <code>null</code>
-   * if one can not be obtained or if the <code>{@link JTable}</code> does not have any selected cell.
-   * @return the value of the selected cell.
+   * Returns the <code>String</code> representation of the selected cell in this fixture's <code>{@link JTable}</code>,
+   * using this fixture's <code>{@link JTableCellReader}</code>. Returns <code>null</code> if one can not be
+   * obtained or if the <code>{@link JTable}</code> does not have any selected cell.
+   * @return the <code>String</code> representation of the selected cell.
+   * @see #cellReader(JTableCellReader)
    */
-  public Object selectionContents() {
+  public String selectionValue() {
     return driver.selectionValue(target);
   }
 
@@ -186,14 +188,15 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Returns the value of the given cell in this fixture's <code>{@link JTable}</code>, or <code>null</code> if one
-   * can not be obtained.
+   * Returns the <code>String</code> representation of the value of a cell in this fixture's
+   * <code>{@link JTable}</code>, using this fixture's <code>{@link JTableCellReader}</code>.
    * @param cell the given cell.
-   * @return the value of the given cell.
+   * @return the <code>String</code> representation of the value of a cell in this fixture's <code>JTable</code>.
    * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @see #cellReader(JTableCellReader)
    */
-  public Object contentAt(TableCell cell) {
+  public String valueAt(TableCell cell) {
     return driver.value(target, cell);
   }
 

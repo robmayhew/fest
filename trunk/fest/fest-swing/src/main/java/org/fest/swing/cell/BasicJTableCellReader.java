@@ -51,15 +51,15 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
    * @see BaseValueReader#valueFrom(Object)
    * @see BasicJComboBoxCellReader#valueAt(JComboBox, int)
    */
-  public Object valueAt(JTable table, int row, int column) {
+  public String valueAt(JTable table, int row, int column) {
     Component c = cellRendererComponent(table, row, column);
     if (c instanceof JLabel) return ((JLabel)c).getText();
-    if (c instanceof JCheckBox) return ((JCheckBox)c).isSelected();
+    if (c instanceof JCheckBox) return String.valueOf(((JCheckBox)c).isSelected());
     if (c instanceof JComboBox) return valueAt((JComboBox)c);
     return valueFrom(cellAt(table, row, column));
   }
 
-  private Object valueAt(JComboBox comboBox) {
+  private String valueAt(JComboBox comboBox) {
     int selectedIndex = comboBox.getSelectedIndex();
     if (selectedIndex == -1) return null;
     return comboBoxCellValueReader.valueAt(comboBox, selectedIndex);

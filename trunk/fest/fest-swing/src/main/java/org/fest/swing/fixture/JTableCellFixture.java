@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
+import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -109,22 +110,25 @@ public class JTableCellFixture implements ItemFixture {
 
   /**
    * Asserts that this fixture's table cell contains the given value.
-   * @param content the expected content of this fixture's table cell.
+   * @param value the expected value of this fixture's table cell.
    * @return this fixture.
-   * @throws AssertionError if the content of this fixture's table cell is not equal to the expected one.
+   * @throws AssertionError if the value of this fixture's table cell is not equal to the expected one.
    * TODO: Add property name as description of the assertion.
    */
-  public JTableCellFixture requireContent(Object content) {
-    assertThat(content()).isEqualTo(content);
+  public JTableCellFixture requireValue(String value) {
+    assertThat(value()).isEqualTo(value);
     return this;
   }
   
   /**
-   * Returns the value of this fixture's table cell, or <code>null</code> if one can not be obtained.
-   * @return the value of the given cell.
+   * Returns the <code>String</code> representation of the value of this fixture's table cell, using the 
+   * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this
+   * <code>{@link JTableCellFixture}</code>.
+   * @return the <code>String</code> representation of the value of this fixture's table cell.
+   * @see JTableFixture#cellReader(JTableCellReader)
    */
-  public Object content() {
-    return table.contentAt(cell);
+  public String value() {
+    return table.valueAt(cell);
   }
 
   /**

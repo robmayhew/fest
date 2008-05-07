@@ -129,7 +129,7 @@ public class JListItemFixtureTest {
       }
 
       protected void codeToTest() {
-        Object result = fixture.content();
+        Object result = fixture.value();
         assertThat(result).isSameAs(content);
       }
     }.run();

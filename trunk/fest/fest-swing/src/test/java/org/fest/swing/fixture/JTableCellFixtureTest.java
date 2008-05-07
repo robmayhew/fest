@@ -126,11 +126,11 @@ public class JTableCellFixtureTest {
     final String content = "Hello"; 
     new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(table.contentAt(cell)).andReturn(content);
+        expect(table.valueAt(cell)).andReturn(content);
       }
 
       protected void codeToTest() {
-        Object result = fixture.content();
+        Object result = fixture.value();
         assertThat(result).isSameAs(content);
       }
     }.run();
@@ -140,11 +140,11 @@ public class JTableCellFixtureTest {
     final String content = "Hello"; 
     new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(table.contentAt(cell)).andReturn(content);
+        expect(table.valueAt(cell)).andReturn(content);
       }
 
       protected void codeToTest() {
-        fixture.requireContent(content);
+        fixture.requireValue(content);
       }
     }.run();
   }
@@ -153,11 +153,11 @@ public class JTableCellFixtureTest {
     try {
       new EasyMockTemplate(table) {
         protected void expectations() {
-          expect(table.contentAt(cell)).andReturn("Bye");
+          expect(table.valueAt(cell)).andReturn("Bye");
         }
 
         protected void codeToTest() {
-          fixture.requireContent("Hello");
+          fixture.requireValue("Hello");
         }
       }.run();
     } catch (AssertionError e) {

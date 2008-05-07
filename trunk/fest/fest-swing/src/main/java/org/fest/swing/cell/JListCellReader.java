@@ -30,5 +30,5 @@ public interface JListCellReader {
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JList</code> as expected in a test.
    */
-  Object valueAt(JList list, int index);
+  String valueAt(JList list, int index);
 }

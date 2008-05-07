@@ -27,10 +27,10 @@ import java.awt.Component;
 public interface ItemGroupFixture {
 
   /**
-   * Returns the elements in this fixture's <code>{@link Component}</code>.
-   * @return the elements in this fixture's <code>Component</code>.
+   * Returns the <code>String</code> representation of the elements in this fixture's <code>{@link Component}</code>.
+   * @return the <code>String</code> representation of the elements in this fixture's <code>Component</code>.
    */
-  Object[] contents();
+  String[] contents();
 
   /**
    * Simulates a user selecting an item in this fixture's <code>{@link Component}</code>. 

@@ -71,15 +71,14 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Returns an array of <code>String</code>s that represent the <code>{@link JComboBox}</code> list. Note that the
-   * current selection might not be included, since it's possible to have a custom (edited) entry there that is not
-   * included in the default contents.
+   * Returns an array of <code>String</code>s that represents the contents of the given <code>{@link JComboBox}</code> 
+   * list.
    * @param comboBox the target <code>JComboBox</code>.
-   * @return an array of <code>String</code>s that represent the <code>JComboBox</code> list.
+   * @return an array of <code>String</code>s that represent the contents of the given <code>JComboBox</code> list.
    */
-  public Object[] contentsOf(JComboBox comboBox) {
+  public String[] contentsOf(JComboBox comboBox) {
     int itemCount = size(comboBox);
-    Object[] items = new Object[itemCount];
+    String[] items = new String[itemCount];
     for (int i = 0; i < itemCount; i++)
       items[i] = value(comboBox, i);
     return items;
@@ -112,9 +111,10 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the the selected item in the <code>{@link JComboBox}</code> matches the given value.
+   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JComboBox}</code> 
+   * matches the given text.
    * @param comboBox the target <code>JComboBox</code>.
-   * @param value the value to match.
+   * @param value the text to match.
    * @throws AssertionError if the selected item does not match the given value.
    */
   public void requireSelection(JComboBox comboBox, String value) {
@@ -125,14 +125,16 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the value of the element under the given index.
+   * Returns the <code>String</code> representation of the element under the given index, using this driver's 
+   * <code>{@link JComboBoxCellReader}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
    * @return the value of the element under the given index.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JComboBox</code>.
+   * @see #cellReader(JComboBoxCellReader)
    */
-  public Object value(JComboBox comboBox, int index) {
+  public String value(JComboBox comboBox, int index) {
     validateIndex(comboBox, index);
     return cellReader.valueAt(comboBox, index);
   }

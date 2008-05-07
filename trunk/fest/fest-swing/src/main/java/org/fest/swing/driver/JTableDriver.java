@@ -54,39 +54,42 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the value of the selected cell. Returns <code>null</code> if one can not be obtained or if the
-   * <code>{@link JTable}</code> does not have any selected cell.
+   * Returns the <code>String</code> representation of the value of the selected cell, using this driver's
+   * <code>{@link JTableCellReader}</code>.
    * @param table the target <code>JTable</code>.
-   * @return the value of the selected cell.
+   * @return the <code>String</code> representation of the value of the selected cell.
+   * @see #cellReader(JTableCellReader)
    */
-  public Object selectionValue(JTable table) {
+  public String selectionValue(JTable table) {
     if (table.getSelectedRowCount() == 0) return null;
     return value(table, table.getSelectedRow(), table.getSelectedColumn());
   }
 
   /**
-   * Returns the value at the given table cell, or <code>null</code> if one cannot be obtained.
+   * Returns the <code>String</code> representation of the value at the given cell, using this driver's
+   * <code>{@link JTableCellReader}</code>.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
-   * @return the value at the given row and column, or <code>null</code> if one cannot be obtained.
+   * @return the <code>String</code> representation of the value at the given cell.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @see #cellReader(JTableCellReader)
    */
-  public Object value(JTable table, JTableCell cell) {
+  public String value(JTable table, JTableCell cell) {
     validate(table, cell);
     return value(table, cell.row, cell.column);
   }
 
   /**
-   * Convert the value at the given row and column into a reasonable <code>String</code> representation, or
-   * <code>null</code> if one cannot be obtained.
+   * Returns the <code>String</code> representation of the value at the given row and column, using this driver's
+   * <code>{@link JTableCellReader}</code>.
    * @param table the target <code>JTable</code>.
    * @param row the given row.
    * @param column the given column.
-   * @return a <code>String</code> representation of the the value at the given row and column, or <code>null</code>
-   *         if one cannot be obtained.
+   * @return the <code>String</code> representation of the value at the given row and column.
+   * @see #cellReader(JTableCellReader)
    */
-  public Object value(JTable table, int row, int column) {
+  public String value(JTable table, int row, int column) {
     return cellReader.valueAt(table, row, column);
   }
 

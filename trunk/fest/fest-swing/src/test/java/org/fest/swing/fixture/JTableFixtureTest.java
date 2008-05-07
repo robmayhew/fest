@@ -102,7 +102,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       }
 
       protected void codeToTest() {
-        Object result = fixture.selectionContents();
+        Object result = fixture.selectionValue();
         assertThat(result).isSameAs(content);
       }
     }.run();
@@ -154,7 +154,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       }
 
       protected void codeToTest() {
-        Object result = fixture.contentAt(cell);
+        Object result = fixture.valueAt(cell);
         assertThat(result).isSameAs(content);
       }
     }.run();

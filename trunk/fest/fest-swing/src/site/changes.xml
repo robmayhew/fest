@@ -6,8 +6,15 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBA" description="Subsequent release">
+      <action dev="alruiz" type="fix">
+        Renamed method 'selectionContents' to 'selectionValue' in JTableFixture.
+      </action>
+      <action dev="alruiz" type="fix">
+        Renamed method 'contentAt' to 'valueAt' in JTableFixture. This change was made to keep name consistency between
+        JComboBoxFixture, JListFixture and JTableFixture.
+      </action>
       <action dev="alruiz" type="add">
-        Added method 'requireContent(Object)' to JTableCellFixture. 
+        Added method 'requireValue(String)' to JTableCellFixture. 
       </action>
       <action dev="alruiz, wanghy" type="add">
         Added method 'requireSelection(String)' to JTreeFixture. This method verifies that a JTree has the given path 

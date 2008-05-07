@@ -60,10 +60,11 @@ public interface ItemFixture {
   ItemFixture doubleClick();
 
   /**
-   * Returns the value of this fixture's item or <code>null</code> if one can not be obtained.
-   * @return the value of this fixture's item.
+   * Returns the <code>String</code> representation of this fixture's item, or <code>null</code> if one can not be 
+   * obtained.
+   * @return the <code>String</code> representation of this fixture's item.
    */
-  Object content();
+  Object value();
 
   /**
    * Simulates a user dragging this fixture's item.

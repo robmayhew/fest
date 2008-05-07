@@ -36,7 +36,7 @@ public abstract class BaseValueReader {
    * @return the value of the given renderer, or <code>null</code> if the renderer belongs to an unknown component
    *         type.
    */
-  protected final Object valueFrom(Component renderer) {
+  protected final String valueFrom(Component renderer) {
     if (renderer instanceof JLabel) return ((JLabel)renderer).getText();
     return null;
   }
@@ -48,7 +48,7 @@ public abstract class BaseValueReader {
    * @return the <code>toString</code> value from the given object, or <code>null</code> if the given object does not
    * implement <code>toString</code>.
    */
-  protected final Object valueFrom(Object fromModel) {
+  protected final String valueFrom(Object fromModel) {
     if (fromModel == null) return null;
     String text = fromModel.toString();
     if (!isDefaultToString(text)) return text;    

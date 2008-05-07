@@ -229,6 +229,7 @@ public class JTreeDriver extends JComponentDriver {
    * @return a driver that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if the given path cannot be found.
+   * @see #separator(String)
    */
   public JPopupMenu showPopupMenu(JTree tree, String path) {
     return robot.showPopupMenu(tree, location.pointAt(tree, findMatchingPath(tree, path)));
@@ -264,6 +265,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param tree the target <code>JTree</code>.
    * @param path the given path.
    * @throws LocationUnavailableException if the given path cannot be found.
+   * @see #separator(String)
    */
   public void drag(JTree tree, String path) {
     drag(tree, findMatchingPath(tree, path));
@@ -275,6 +277,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param path the given path.
    * @throws LocationUnavailableException if the given path cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
+   * @see #separator(String)
    */
   public void drop(JTree tree, String path) {
     drop(tree, findMatchingPath(tree, path));
@@ -307,6 +310,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param path the given path, expected to be selected.
    * @throws LocationUnavailableException if the given path cannot be found.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given path.
+   * @see #separator(String)
    */
   public void requireSelection(JTree tree, String path) {
     TreePath matchingPath = findMatchingPath(tree, path);

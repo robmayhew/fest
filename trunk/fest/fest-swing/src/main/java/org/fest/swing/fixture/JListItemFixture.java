@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JList;
 
+import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -112,12 +113,15 @@ public class JListItemFixture implements ItemFixture {
   }
   
   /**
-   * Returns the value of this fixture's list item, or <code>null</code> if one can not be obtained.
-   * @return the value of the given cell.
+   * Returns the <code>String</code> representation of the value of this fixture's list item, using the 
+   * <code>{@link JListCellReader}</code> from the <code>{@link JListFixture}</code> that created this 
+   * <code>{@link JListItemFixture}</code>.
+   * @return the <code>String</code> representation of the value of this fixture's list item.
    * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
+   * @see JListFixture#cellReader(JListCellReader)
    */
-  public final Object content() {
+  public final String value() {
     return list.valueAt(index);
   }
 

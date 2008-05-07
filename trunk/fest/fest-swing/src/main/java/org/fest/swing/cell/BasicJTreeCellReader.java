@@ -37,8 +37,8 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
    * @see BaseValueReader#valueFrom(java.awt.Component)
    */
-  public Object valueAt(JTree tree, Object modelValue) {
-    Object value = valueFrom(cellRendererComponent(tree, modelValue));
+  public String valueAt(JTree tree, Object modelValue) {
+    String value = valueFrom(cellRendererComponent(tree, modelValue));
     if (value != null) return value;
     return valueToText(tree, modelValue);
   }

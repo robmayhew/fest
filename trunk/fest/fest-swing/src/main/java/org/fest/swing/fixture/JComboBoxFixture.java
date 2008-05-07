@@ -122,10 +122,12 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Returns the elements in this fixture's <code>{@link JComboBox}</code> as <code>String</code>s.
-   * @return the elements in this fixture's <code>JComboBox</code>.
+   * Returns the <code>String</code> representation of the elements in this fixture's <code>{@link JComboBox}</code>,
+   * using this fixture's <code>{@link JComboBoxCellReader}</code>.
+   * @return the <code>String</code> representation of the elements in this fixture's <code>JComboBox</code>.
+   * @see #cellReader(JComboBoxCellReader)
    */
-  public Object[] contents() {
+  public String[] contents() {
     return driver.contentsOf(target);
   }
 
@@ -288,22 +290,25 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Verifies that the <code>String</code> representation of the selected item in this fixture's
    * <code>{@link JComboBox}</code> matches the given text.
-   * @param text the text to match.
+   * @param value the text to match.
    * @return this fixture.
    * @throws AssertionError if the selected item does not match the given text.
    */
-  public JComboBoxFixture requireSelection(String text) {
-    driver.requireSelection(target, text);
+  public JComboBoxFixture requireSelection(String value) {
+    driver.requireSelection(target, value);
     return this;
   }
 
   /**
-   * Returns the value of an item in this fixture's <code>{@link JComboBox}</code>. If such value is not meaningful, 
-   * this method will return <code>null</code>.
+   * Returns the <code>String</code> representation of the value of an item in this fixture's 
+   * <code>{@link JComboBox}</code>, using this fixture's <code>{@link JComboBoxCellReader}</code>.
    * @param index the index of the item to return.
-   * @return the value of the item under the given index, or <code>null</code> if nothing meaningful.
+   * @return the <code>String</code> representation of the value of an item in this fixture's <code>JComboBox</code>.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JComboBox</code>.
+   * @see #cellReader(JComboBoxCellReader)
    */
-  public Object valueAt(int index) {
+  public String valueAt(int index) {
     return driver.value(target, index);
   }
 
