@@ -25,9 +25,10 @@ import static org.fest.swing.util.Colors.colorFromHexString;
  *
  * @author Alex Ruiz
  */
-public class ColorFixture extends NonGUIFixture {
+public class ColorFixture {
 
   private final Color target;
+  private final String description;
 
   /**
    * Creates a new </code>{@link ColorFixture}</code>.
@@ -43,8 +44,8 @@ public class ColorFixture extends NonGUIFixture {
    * @param description this fixture's description.
    */
   public ColorFixture(Color target, String description) {
-    super(description);
     this.target = target;
+    this.description = description;
   }
 
   /**
@@ -65,7 +66,7 @@ public class ColorFixture extends NonGUIFixture {
    * @throws AssertionError if this fixture's <code>Color</code> is not equal to the given one.
    */
   public ColorFixture requireEqualTo(Color color) {
-    assertThat(target).as(description()).isEqualTo(color);
+    assertThat(target).as(description).isEqualTo(color);
     return this;
   }
 
@@ -87,7 +88,7 @@ public class ColorFixture extends NonGUIFixture {
    * @throws AssertionError if this fixture's <code>Color</code> is equal to the given one.
    */
   public ColorFixture requireNotEqualTo(Color color) {
-    assertThat(target).as(description()).isNotEqualTo(color);
+    assertThat(target).as(description).isNotEqualTo(color);
     return this;
   }
   
@@ -96,4 +97,10 @@ public class ColorFixture extends NonGUIFixture {
    * @return this fixture's color.
    */
   public Color target() { return target; }
+
+  /**
+   * Returns this fixture's description.
+   * @return this fixture's description.
+   */
+  public final String description() { return description; }
 }

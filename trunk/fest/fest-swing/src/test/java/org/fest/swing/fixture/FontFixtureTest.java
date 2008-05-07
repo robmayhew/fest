@@ -20,7 +20,6 @@ import java.awt.Font;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.fixture.FontFixture;
 import org.fest.test.CodeToTest;
 
 import static java.awt.Font.*;
@@ -107,8 +106,7 @@ public class FontFixtureTest {
   }
 
   @Test public void shouldPassIfFontIsBoldAsAnticipated() {
-    font = font.deriveFont(BOLD);
-    fixture = new FontFixture(font);
+    fixture = new FontFixture(boldFont());
     fixture.requireBold();
   }
 
@@ -134,8 +132,7 @@ public class FontFixtureTest {
   }
 
   @Test public void shouldFailIfFontIsBoldAndExpectingNotToBeBold() {
-    font = font.deriveFont(BOLD);
-    fixture = new FontFixture(font);
+    fixture = new FontFixture(boldFont());
     expectAssertionError("[bold] expected:<false> but was:<true>").on(new CodeToTest() {
       public void run() {
         fixture.requireNotBold();
@@ -144,12 +141,107 @@ public class FontFixtureTest {
   }
 
   @Test public void shouldFailShowingDescriptionIfFontIsBoldAndExpectingNotToBeBold() {
-    font = font.deriveFont(BOLD);
-    fixture = new FontFixture(font, "test");
+    fixture = new FontFixture(boldFont(), "test");
     expectAssertionError("[test - bold] expected:<false> but was:<true>").on(new CodeToTest() {
       public void run() {
         fixture.requireNotBold();
       }
     });
+  }
+
+  @Test public void shouldPassIfFontIsItalicAsAnticipated() {
+    fixture = new FontFixture(italicFont());
+    fixture.requireItalic();
+  }
+
+  @Test public void shouldFailIfFontIsNotItalicAndExpectingToBeItalic() {
+    expectAssertionError("[italic] expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        fixture.requireItalic();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFontIsNotItalicAndExpectingToBeItalic() {
+    fixture = new FontFixture(font, "test");
+    expectAssertionError("[test - italic] expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        fixture.requireItalic();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfFontIsNotItalicAsAnticipated() {
+    fixture.requireNotItalic();
+  }
+
+  @Test public void shouldFailIfFontIsItalicAndExpectingNotToBeItalic() {
+    fixture = new FontFixture(italicFont());
+    expectAssertionError("[italic] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        fixture.requireNotItalic();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFontIsItalicAndExpectingNotToBeItalic() {
+    fixture = new FontFixture(italicFont(), "test");
+    expectAssertionError("[test - italic] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        fixture.requireNotItalic();
+      }
+    });
+  }
+
+  private Font italicFont() {
+    return font.deriveFont(ITALIC);
+  }
+
+  @Test public void shouldPassIfFontIsPlainAsAnticipated() {
+    fixture = new FontFixture(boldFont());
+    fixture.requirePlain();
+  }
+
+  @Test public void shouldFailIfFontIsNotPlainAndExpectingToBePlain() {
+    expectAssertionError("[plain] expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        fixture.requirePlain();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFontIsNotPlainAndExpectingToBePlain() {
+    fixture = new FontFixture(font, "test");
+    expectAssertionError("[test - plain] expected:<true> but was:<false>").on(new CodeToTest() {
+      public void run() {
+        fixture.requirePlain();
+      }
+    });
+  }
+
+  @Test public void shouldPassIfFontIsNotPlainAsAnticipated() {
+    fixture.requireNotPlain();
+  }
+
+  @Test public void shouldFailIfFontIsPlainAndExpectingNotToBePlain() {
+    fixture = new FontFixture(boldFont());
+    expectAssertionError("[plain] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        fixture.requireNotPlain();
+      }
+    });
+  }
+
+  @Test public void shouldFailShowingDescriptionIfFontIsPlainAndExpectingNotToBePlain() {
+    fixture = new FontFixture(boldFont(), "test");
+    expectAssertionError("[test - plain] expected:<false> but was:<true>").on(new CodeToTest() {
+      public void run() {
+        fixture.requireNotPlain();
+      }
+    });
+  }
+
+  private Font boldFont() {
+    return font.deriveFont(BOLD);
   }
 }

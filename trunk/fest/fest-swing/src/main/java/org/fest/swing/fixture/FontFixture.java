@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import java.awt.Font;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands state verification of <code>{@link Font}</code>s.
@@ -25,7 +26,9 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class FontFixture extends NonGUIFixture {
+public class FontFixture {
+
+  private static final String PROPERTY_SEPARATOR = " - ";
 
   private static final String BOLD_PROPERTY = "bold";
   private static final String FAMILY_PROPERTY = "family";
@@ -35,6 +38,7 @@ public class FontFixture extends NonGUIFixture {
   private static final String SIZE_PROPERTY = "size";
 
   private final Font target;
+  private final String description;
 
   /**
    * Creates a new </code>{@link FontFixture}</code>.
@@ -50,8 +54,8 @@ public class FontFixture extends NonGUIFixture {
    * @param description this fixture's description.
    */
   public FontFixture(Font target, String description) {
-    super(description);
     this.target = target;
+    this.description = description;
   }
   
   /**
@@ -165,9 +169,20 @@ public class FontFixture extends NonGUIFixture {
     return this;
   }
 
+  private String property(String s) {
+    if (!isEmpty(description)) return concat(description, PROPERTY_SEPARATOR, s);
+    return s;
+  }
+
   /**
    * Returns this fixture's font.
    * @return this fixture's font.
    */
   public Font target() { return target; }
+
+  /**
+   * Returns this fixture's description.
+   * @return this fixture's description.
+   */
+  public final String description() { return description; }
 }
