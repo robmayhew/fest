@@ -6,6 +6,14 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBA" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
+        Created JTableCellReader (with default implementation BasicJTableCellReader) which reads the value of a cell in 
+        a JTable. BasicJTableCellReader supports JLabels, JComboBoxes and JCheckBoxes as cell renderers of a JTable.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
+        Added methods 'fontAt(TableCell)', 'backgroundAt(TableCell)' and 'foregroundAt(TableCell)' to JTableFixture to
+        verify the font, background and foreground of an specific cell in a JTable.
+      </action>
       <action dev="alruiz" type="fix">
         Renamed method 'selectionContents' to 'selectionValue' in JTableFixture.
       </action>

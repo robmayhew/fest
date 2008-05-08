@@ -75,6 +75,11 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
   public Color backgroundAt(JTable table, int row, int column) {
     return cellRendererComponent(table, row, column).getBackground();
   }
+  
+  /** {@inheritDoc} */
+  public Color foregroundAt(JTable table, int row, int column) {
+    return cellRendererComponent(table, row, column).getForeground();
+  }
 
   /**
    * Returns the <code>{@link Component}</code> used by the <code>{@link TableCellRenderer}</code> in the given 

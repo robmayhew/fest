@@ -107,6 +107,18 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     return new ColorFixture(background, cellProperty(cell, "background"));
   }
   
+  /**
+   * Returns a fixture for the foreground color of the given table cell.
+   * @param cell the given table cell.
+   * @return a fixture for the foreground color of the given table cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public ColorFixture foregroundAt(TableCell cell) {
+    Color foreground = driver.foreground(target, cell);
+    return new ColorFixture(foreground, cellProperty(cell, "foreground"));
+  }
+
   private String cellProperty(TableCell cell, String propertyName) {
     return concat(propertyName(target, propertyName), " - ", cell);
   }

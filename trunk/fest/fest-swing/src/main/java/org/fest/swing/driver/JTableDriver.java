@@ -121,6 +121,19 @@ public class JTableDriver extends JComponentDriver {
   }
   
   /**
+   * Returns the foreground color of the given table cell. 
+   * @param table the target <code>JTable</code>.
+   * @param cell the table cell.
+   * @return the foreground color of the given table cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public Color foreground(JTable table, JTableCell cell) {
+    validate(table, cell);
+    return cellReader.foregroundAt(table, cell.row, cell.column);
+  }
+
+  /**
    * Selects the given cells of the <code>{@link JTable}</code>.
    * @param table the target <code>JTable</code>.
    * @param cells the cells to select.

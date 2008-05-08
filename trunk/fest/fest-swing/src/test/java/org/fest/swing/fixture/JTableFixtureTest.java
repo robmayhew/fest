@@ -263,6 +263,23 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
+  @Test public void shouldReturnCellForegroundColor() {
+    final Color foreground = BLUE;
+    final TableCell cell = row(6).column(8);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.foreground(target, cell)).andReturn(foreground);
+      }
+      
+      protected void codeToTest() {
+        ColorFixture colorFixture = fixture.foregroundAt(cell);
+        assertThat(colorFixture.target()).isSameAs(foreground);
+        assertThat(colorFixture.description()).contains(target.getClass().getName())
+                                              .contains("property:'foreground' - [row=6, column=8]");
+      }
+    }.run();
+  }
+
   ComponentDriver driver() { return driver; }
   JTable target() { return target; }
   JPopupMenuInvokerFixture<JTable> fixture() { return fixture; }

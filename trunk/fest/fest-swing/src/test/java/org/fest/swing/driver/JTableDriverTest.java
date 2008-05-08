@@ -146,7 +146,7 @@ public class JTableDriverTest {
   }
   
   @Test public void shouldReturnCellFont() {
-    final JTableCellReader cellReader = createMock(JTableCellReader.class);
+    final JTableCellReader cellReader = mockCellReader();
     final Font font = new Font("SansSerif", PLAIN, 8);
     driver.cellReader(cellReader);
     new EasyMockTemplate(cellReader) {
@@ -162,7 +162,7 @@ public class JTableDriverTest {
   }
   
   @Test public void shouldReturnCellBackgroundColor() {
-    final JTableCellReader cellReader = createMock(JTableCellReader.class);
+    final JTableCellReader cellReader = mockCellReader();
     final Color background = BLUE;
     driver.cellReader(cellReader);
     new EasyMockTemplate(cellReader) {
@@ -175,6 +175,26 @@ public class JTableDriverTest {
         assertThat(result).isSameAs(background);
       }
     }.run();
+  }
+
+  @Test public void shouldReturnCellForegroundColor() {
+    final JTableCellReader cellReader = mockCellReader();
+    final Color foreground = BLUE;
+    driver.cellReader(cellReader);
+    new EasyMockTemplate(cellReader) {
+      protected void expectations() {
+        expect(cellReader.foregroundAt(dragTable, 0, 0)).andReturn(foreground);
+      }
+
+      protected void codeToTest() {
+        Color result = driver.foreground(dragTable, new JTableCell(0, 0) {});
+        assertThat(result).isSameAs(foreground);
+      }
+    }.run();
+  }
+
+  private JTableCellReader mockCellReader() {
+    return createMock(JTableCellReader.class);
   }
 
   private static class MyFrame extends TestFrame {

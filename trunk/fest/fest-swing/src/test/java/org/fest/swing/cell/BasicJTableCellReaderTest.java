@@ -70,6 +70,13 @@ public class BasicJTableCellReaderTest {
     assertThat(background).isEqualTo(label.getBackground());
   }
 
+  @Test public void shouldReturnForegroundColorFromRenderer() {
+    JLabel label = new JLabel("Hello");
+    updateRendererComponent(0, label);
+    Color foreground = reader.foregroundAt(table, 0, 0);
+    assertThat(foreground).isEqualTo(label.getForeground());
+  }
+
   @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
