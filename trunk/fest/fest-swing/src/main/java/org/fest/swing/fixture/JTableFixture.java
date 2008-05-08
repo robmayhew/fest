@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 
@@ -83,16 +84,31 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Returns a fixture for the <code>{@link Font}</code> of the given table cell.
+   * Returns a fixture for the font of the given table cell.
    * @param cell the given table cell.
-   * @return a fixture for the <code>Font</code> of the given table cell.
+   * @return a fixture for the font of the given table cell.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public FontFixture fontAt(TableCell cell) {
     Font font = driver.font(target, cell);
-    String description = concat(propertyName(target, "font"), " - ", cell);
-    return new FontFixture(font, description);
+    return new FontFixture(font, cellProperty(cell, "font"));
+  }
+
+  /**
+   * Returns a fixture for the background color of the given table cell.
+   * @param cell the given table cell.
+   * @return a fixture for the background color of the given table cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public ColorFixture backgroundAt(TableCell cell) {
+    Color background = driver.background(target, cell);
+    return new ColorFixture(background, cellProperty(cell, "background"));
+  }
+  
+  private String cellProperty(TableCell cell, String propertyName) {
+    return concat(propertyName(target, propertyName), " - ", cell);
   }
   
   /**

@@ -14,6 +14,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 
@@ -106,6 +107,19 @@ public class JTableDriver extends JComponentDriver {
     return cellReader.fontAt(table, cell.row, cell.column);
   }
 
+  /**
+   * Returns the background color of the given table cell. 
+   * @param table the target <code>JTable</code>.
+   * @param cell the table cell.
+   * @return the background color of the given table cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public Color background(JTable table, JTableCell cell) {
+    validate(table, cell);
+    return cellReader.backgroundAt(table, cell.row, cell.column);
+  }
+  
   /**
    * Selects the given cells of the <code>{@link JTable}</code>.
    * @param table the target <code>JTable</code>.

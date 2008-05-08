@@ -46,4 +46,9 @@ public class ColorsTest {
         { "FFFF00", YELLOW }
     };
   }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfHexStringNotValid() {
+    Colors.colorFromHexString("");
+  }
 }

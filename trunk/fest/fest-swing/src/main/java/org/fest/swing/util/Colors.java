@@ -17,6 +17,8 @@ package org.fest.swing.util;
 
 import java.awt.Color;
 
+import static org.fest.util.Strings.*;
+
 /**
  * Understands utility methods related to colors.
  *
@@ -29,10 +31,14 @@ public final class Colors {
    * color. 
    * @param hexString contains the hexadecimal coding of a color.
    * @return a <code>Color</code> from the given <code>String</code> containing the hexadecimal coding of a color. 
-   * @throws NumberFormatException if the value represented by the given hexadecimal coding is not an integer.
+   * @throws IllegalArgumentException if the value represented by the given hexadecimal coding is not valid.
    */
   public static Color colorFromHexString(String hexString) {
-    return new Color(Integer.parseInt(hexString, 16));
+    try {
+      return new Color(Integer.parseInt(hexString, 16));
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(concat("The hexadecimal code ", quote(hexString), " is not a valid color"));
+    }
   }
   
   private Colors() {}

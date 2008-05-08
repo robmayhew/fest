@@ -53,6 +53,7 @@ public class ColorFixture {
    * value (e.g. "82A9FF".)
    * @param hexValue the value representing the color to compare to.
    * @return this fixture.
+   * @throws IllegalArgumentException if the value represented by the given hexadecimal coding is not valid.
    * @throws AssertionError if this fixture's <code>Color</code> is not equal to the given one.
    */
   public ColorFixture requireEqualTo(String hexValue) {
@@ -75,6 +76,7 @@ public class ColorFixture {
    * hexadecimal value (e.g. "82A9FF".)
    * @param hexValue the value representing the color to compare to.
    * @return this fixture.
+   * @throws IllegalArgumentException if the value represented by the given hexadecimal coding is not valid.
    * @throws AssertionError if this fixture's <code>Color</code> is equal to the given one.
    */
   public ColorFixture requireNotEqualTo(String hexValue) {

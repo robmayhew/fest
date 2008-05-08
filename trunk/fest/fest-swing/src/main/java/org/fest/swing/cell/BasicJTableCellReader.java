@@ -15,6 +15,7 @@
  */
 package org.fest.swing.cell;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -68,6 +69,11 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
   /** {@inheritDoc} */
   public Font fontAt(JTable table, int row, int column) {
     return cellRendererComponent(table, row, column).getFont();
+  }
+
+  /** {@inheritDoc} */
+  public Color backgroundAt(JTable table, int row, int column) {
+    return cellRendererComponent(table, row, column).getBackground();
   }
 
   /**

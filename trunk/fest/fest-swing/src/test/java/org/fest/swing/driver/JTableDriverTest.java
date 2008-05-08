@@ -15,10 +15,7 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import java.awt.*;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -37,6 +34,7 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
 
+import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.easymock.EasyMock.expect;
@@ -163,6 +161,22 @@ public class JTableDriverTest {
     }.run();
   }
   
+  @Test public void shouldReturnCellBackgroundColor() {
+    final JTableCellReader cellReader = createMock(JTableCellReader.class);
+    final Color background = BLUE;
+    driver.cellReader(cellReader);
+    new EasyMockTemplate(cellReader) {
+      protected void expectations() {
+        expect(cellReader.backgroundAt(dragTable, 0, 0)).andReturn(background);
+      }
+
+      protected void codeToTest() {
+        Color result = driver.background(dragTable, new JTableCell(0, 0) {});
+        assertThat(result).isSameAs(background);
+      }
+    }.run();
+  }
+
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

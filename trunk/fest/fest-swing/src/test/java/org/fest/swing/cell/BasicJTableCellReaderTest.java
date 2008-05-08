@@ -16,6 +16,7 @@
 package org.fest.swing.cell;
 
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -60,6 +61,13 @@ public class BasicJTableCellReaderTest {
     updateRendererComponent(0, label);
     Font font = reader.fontAt(table, 0, 0);
     assertThat(font).isEqualTo(label.getFont());
+  }
+
+  @Test public void shouldReturnBackgroundColorFromRenderer() {
+    JLabel label = new JLabel("Hello");
+    updateRendererComponent(0, label);
+    Color background = reader.backgroundAt(table, 0, 0);
+    assertThat(background).isEqualTo(label.getBackground());
   }
 
   @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {

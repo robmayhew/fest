@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 
@@ -29,6 +30,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
 
+import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -240,6 +242,23 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
         assertThat(fontFixture.target()).isSameAs(font);
         assertThat(fontFixture.description()).contains(target.getClass().getName())
                                              .contains("property:'font' - [row=6, column=8]");
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnCellBackgroundColor() {
+    final Color background = BLUE;
+    final TableCell cell = row(6).column(8);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.background(target, cell)).andReturn(background);
+      }
+      
+      protected void codeToTest() {
+        ColorFixture colorFixture = fixture.backgroundAt(cell);
+        assertThat(colorFixture.target()).isSameAs(background);
+        assertThat(colorFixture.description()).contains(target.getClass().getName())
+                                              .contains("property:'background' - [row=6, column=8]");
       }
     }.run();
   }

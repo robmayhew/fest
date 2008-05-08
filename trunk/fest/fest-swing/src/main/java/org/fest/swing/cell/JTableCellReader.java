@@ -15,6 +15,7 @@
  */
 package org.fest.swing.cell;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JTable;
@@ -43,4 +44,13 @@ public interface JTableCellReader {
    * @return the font of the cell renderer for the given table cell.
    */
   Font fontAt(JTable table, int row, int column);
+
+  /**
+   * Returns the background color of the cell renderer for the given table cell.
+   * @param table the given <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @return the background color of the cell renderer for the given table cell.
+   */
+  Color backgroundAt(JTable table, int row, int column);
 }
