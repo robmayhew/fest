@@ -76,6 +76,20 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
     }.run();
   }
 
+  @Test public void shouldReturnSelection() {
+    final String[] selection = array("Luke", "Leia");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.selectionOf(target)).andReturn(selection);
+      }
+      
+      protected void codeToTest() {
+        Object[] result = fixture.selection();
+        assertThat(result).isSameAs(selection);
+      }
+    }.run();
+  }
+
   @Test public void shouldSelectItemsInRange() {
     final From from = from(6);
     final To to = to(8);

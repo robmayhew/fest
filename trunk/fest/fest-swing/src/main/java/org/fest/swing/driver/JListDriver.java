@@ -72,14 +72,32 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Returns an array of <code>String</code>s that represents the contents of the given <code>{@link JList}</code>.
+   * Returns an array of <code>String</code>s that represents the contents of the given <code>{@link JList}</code>,
+   * using this driver's <code>{@link JListCellReader}</code>.
    * @param list the target <code>JList</code>.
    * @return an array of <code>String</code>s that represents the contents of the given <code>JList</code>.
+   * @see #cellReader(JListCellReader)
    */
   public String[] contentsOf(JList list) {
     String[] values = new String[sizeOf(list)];
     for (int i = 0; i < values.length; i++)
       values[i] = value(list, i);
+    return values;
+  }
+
+  /**
+   * Returns an array of <code>String</code>s that represents the selection in the given <code>{@link JList}</code>,
+   * using this driver's <code>{@link JListCellReader}</code>.
+   * @param list the target <code>JList</code>.
+   * @return an array of <code>String</code>s that represents the selection in the given <code>JList</code>.
+   * @see #cellReader(JListCellReader)
+   */
+  public String[] selectionOf(JList list) {
+    int[] selectedIndices = list.getSelectedIndices();
+    int selectionCount = selectedIndices.length;
+    String[] values = new String[selectionCount];
+    for (int i = 0; i < selectionCount; i++) 
+      values[i] = value(list, selectedIndices[i]);
     return values;
   }
 

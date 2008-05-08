@@ -42,6 +42,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
 
+import static javax.swing.ListSelectionModel.*;
+
 /**
  * Tests for <code>{@link JListDriver}</code>.
  *
@@ -102,6 +104,17 @@ public class JListDriverTest {
     }
   }
 
+  @Test public void shouldReturnSelection() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        dragList.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+        dragList.setSelectedIndices(new int[] { 0, 2 });
+      }
+    });
+    String[] selection = driver.selectionOf(dragList);
+    assertThat(selection).containsOnly("one", "three");
+  }
+  
   @Test public void shouldReturnListContents() {
     Object[] contents = driver.contentsOf(dragList);
     assertThat(contents).isEqualTo(array("one", "two", "three"));

@@ -89,6 +89,16 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   }
 
   /**
+   * Returns the <code>String</code> representation of the selected elements in this fixture's
+   * <code>{@link JList}</code>, using this fixture's <code>{@link JListCellReader}</code>.
+   * @return the <code>String</code> representation of the selected elements in this fixture's <code>JList</code>.
+   * @see #cellReader(JListCellReader)
+   */
+  public String[] selection() {
+    return driver.selectionOf(target);
+  }
+  
+  /**
    * Simulates a user selecting the items (in the specified range) in this fixture's <code>{@link JList}</code>.
    * @param from the starting point of the selection.
    * @param to the last item to select (inclusive.)
