@@ -6,6 +6,15 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBA" description="Subsequent release">
+      <action dev="alruiz" type="add">
+        Added method 'font' to all fixtures. This method returns a FontFixture.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'background' to all fixtures. This method returns a ColorFixture.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'foreground' to all fixtures. This method returns a ColorFixture.
+      </action>
       <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
         Created JTableCellReader (with default implementation BasicJTableCellReader) which reads the value of a cell in 
         a JTable. BasicJTableCellReader supports JLabels, JComboBoxes and JCheckBoxes as cell renderers of a JTable.

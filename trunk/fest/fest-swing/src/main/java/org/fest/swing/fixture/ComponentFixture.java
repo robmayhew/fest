@@ -26,6 +26,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.driver.ComponentDriver.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
@@ -36,6 +37,15 @@ import static org.fest.swing.format.Formatting.format;
  * @author Yvonne Wang
  */
 public abstract class ComponentFixture<T extends Component> {
+
+  /** Name of the property "font". */
+  protected static final String FONT_PROPERTY = "font";
+
+  /** Name of the property "background". */
+  protected static final String BACKGROUND_PROPERTY = "background";
+  
+  /** Name of the property "foreground". */
+  protected static final String FOREGROUND_PROPERTY = "foreground";
 
   /** Performs simulation of user events on <code>{@link #target}</code> */
   public final Robot robot;
@@ -188,6 +198,30 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws AssertionError if the managed <code>Component</code> is not visible.
    */
   protected abstract ComponentFixture<T> requireVisible();
+
+  /**
+   * Returns a fixture that verifies the font of this fixture's <code>{@link Component}</code>.
+   * @return a fixture that verifies the font of this fixture's <code>Component</code>.
+   */
+  public final FontFixture font() {
+    return new FontFixture(target.getFont(), propertyName(target, FONT_PROPERTY));
+  }
+
+  /**
+   * Returns a fixture that verifies the background color of this fixture's <code>{@link Component}</code>.
+   * @return a fixture that verifies the background color of this fixture's <code>Component</code>.
+   */
+  public final ColorFixture background() {
+    return new ColorFixture(target.getBackground(), propertyName(target, BACKGROUND_PROPERTY));
+  }
+  
+  /**
+   * Returns a fixture that verifies the foreground color of this fixture's <code>{@link Component}</code>.
+   * @return a fixture that verifies the foreground color of this fixture's <code>Component</code>.
+   */
+  public final ColorFixture foreground() {
+    return new ColorFixture(target.getForeground(), propertyName(target, FOREGROUND_PROPERTY));
+  }
 
   /**
    * Returns this fixture's <code>{@link Component}</code> casted to the given subtype.

@@ -260,7 +260,6 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   private abstract class FixtureCreationTemplate extends EasyMockTemplate {
-    
     FixtureCreationTemplate() {
       super(robot, finder);
     }
@@ -282,7 +281,6 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   }
 
   abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
-    
     void expectComponentLookup() {
       expect(finder.findByType(targetType(), requireShowing())).andReturn(target());
     }

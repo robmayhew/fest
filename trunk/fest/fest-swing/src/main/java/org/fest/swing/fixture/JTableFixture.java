@@ -84,39 +84,39 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Returns a fixture for the font of the given table cell.
+   * Returns a fixture that verifies the font of the given table cell.
    * @param cell the given table cell.
-   * @return a fixture for the font of the given table cell.
+   * @return a fixture that verifies the font of the given table cell.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public FontFixture fontAt(TableCell cell) {
     Font font = driver.font(target, cell);
-    return new FontFixture(font, cellProperty(cell, "font"));
+    return new FontFixture(font, cellProperty(cell, FONT_PROPERTY));
   }
 
   /**
-   * Returns a fixture for the background color of the given table cell.
+   * Returns a fixture that verifies the background color of the given table cell.
    * @param cell the given table cell.
-   * @return a fixture for the background color of the given table cell.
+   * @return a fixture that verifies the background color of the given table cell.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public ColorFixture backgroundAt(TableCell cell) {
     Color background = driver.background(target, cell);
-    return new ColorFixture(background, cellProperty(cell, "background"));
+    return new ColorFixture(background, cellProperty(cell, BACKGROUND_PROPERTY));
   }
   
   /**
-   * Returns a fixture for the foreground color of the given table cell.
+   * Returns a fixture that verifies the foreground color of the given table cell.
    * @param cell the given table cell.
-   * @return a fixture for the foreground color of the given table cell.
+   * @return a fixture that verifies the foreground color of the given table cell.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public ColorFixture foregroundAt(TableCell cell) {
     Color foreground = driver.foreground(target, cell);
-    return new ColorFixture(foreground, cellProperty(cell, "foreground"));
+    return new ColorFixture(foreground, cellProperty(cell, FOREGROUND_PROPERTY));
   }
 
   private String cellProperty(TableCell cell, String propertyName) {
