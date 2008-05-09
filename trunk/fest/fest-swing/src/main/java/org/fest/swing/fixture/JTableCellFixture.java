@@ -15,14 +15,14 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.*;
+
 import javax.swing.JTable;
 
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
@@ -37,6 +37,7 @@ import static org.fest.swing.core.MouseButton.*;
  * </p>
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  *
  * @see TableCell
  */
@@ -71,7 +72,7 @@ public class JTableCellFixture implements ItemFixture {
     table.selectCell(cell);
     return this;
   }
-  
+
   /**
    * Simulates a user clicking this fixture's table cell.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
@@ -113,15 +114,38 @@ public class JTableCellFixture implements ItemFixture {
    * @param value the expected value of this fixture's table cell.
    * @return this fixture.
    * @throws AssertionError if the value of this fixture's table cell is not equal to the expected one.
-   * TODO: Add property name as description of the assertion.
    */
   public JTableCellFixture requireValue(String value) {
-    assertThat(value()).isEqualTo(value);
+    assertThat(value()).as(table.cellProperty(cell, "value")).isEqualTo(value);
     return this;
   }
-  
+
   /**
-   * Returns the <code>String</code> representation of the value of this fixture's table cell, using the 
+   * Returns a fixture that verifies the font of this fixture's table cell.
+   * @return a fixture that verifies the font of this fixture's table cell.
+   */
+  public FontFixture font() {
+    return table.fontAt(cell);
+  }
+
+  /**
+   * Returns a fixture that verifies the background color of this fixture's table cell.
+   * @return a fixture that verifies the background color of this fixture's table cell.
+   */
+  public ColorFixture background() {
+    return table.backgroundAt(cell);
+  }
+
+  /**
+   * Returns a fixture that verifies the foreground color of this fixture's table cell.
+   * @return a fixture that verifies the foreground color of this fixture's table cell.
+   */
+  public ColorFixture foreground() {
+    return table.foregroundAt(cell);
+  }
+
+  /**
+   * Returns the <code>String</code> representation of the value of this fixture's table cell, using the
    * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this
    * <code>{@link JTableCellFixture}</code>.
    * @return the <code>String</code> representation of the value of this fixture's table cell.

@@ -15,6 +15,10 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentDriver.propertyName;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -31,10 +35,6 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.ComponentDriver.propertyName;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -106,7 +106,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     Color background = driver.background(target, cell);
     return new ColorFixture(background, cellProperty(cell, BACKGROUND_PROPERTY));
   }
-  
+
   /**
    * Returns a fixture that verifies the foreground color of the given table cell.
    * @param cell the given table cell.
@@ -119,10 +119,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     return new ColorFixture(foreground, cellProperty(cell, FOREGROUND_PROPERTY));
   }
 
-  private String cellProperty(TableCell cell, String propertyName) {
+  final String cellProperty(TableCell cell, String propertyName) {
     return concat(propertyName(target, propertyName), " - ", cell);
   }
-  
+
   /**
    * Returns a fixture that manages the table cell specified by the given row and column.
    * @param cell the cell of interest.
@@ -396,8 +396,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     return this;
   }
 
-  
-  
+
+
   /**
    * Shows a pop-up menu at the given cell.
    * @param cell the table cell where to show the pop-up menu.
@@ -423,7 +423,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of 
+   * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTableCellReader}</code>.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.

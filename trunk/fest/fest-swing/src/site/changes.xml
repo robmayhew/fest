@@ -72,6 +72,10 @@
         Added methods 'fontAt(TableCell)', 'backgroundAt(TableCell)' and 'foregroundAt(TableCell)' to JTableFixture to
         verify the font, background and foreground of an specific cell in a JTable.
       </action>
+      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
+        Added methods 'font()', 'background()' and 'foreground()' to JTableCellFixture to verify the font, background 
+        and foreground of an specific cell in a JTable.
+      </action>
     </release>
     <release version="1.0a1" date="2008-04-07" description="Subsequent release">
       <action dev="wanghy" type="add">

@@ -1,33 +1,35 @@
 /*
  * Created on Mar 2, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.mocks.EasyMockTemplate;
-
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
 import static java.awt.event.KeyEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.fixture.MouseClickInfo.leftButton;
 import static org.fest.swing.fixture.TableCell.row;
+
+import java.awt.Font;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.
@@ -39,7 +41,7 @@ public class JTableCellFixtureTest {
   private JTableFixture table;
   private TableCell cell;
   private JTableCellFixture fixture;
-  
+
   @BeforeMethod public void setUp() {
     table = createMock(JTableFixture.class);
     cell = row(8).column(6);
@@ -57,7 +59,7 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldClick() {
     new EasyMockTemplate(table) {
       protected void expectations() {
@@ -82,7 +84,7 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldDoubleClick() {
     new EasyMockTemplate(table) {
       protected void expectations() {
@@ -107,7 +109,7 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldShowPopupMenu() {
     final JPopupMenuFixture popup = createMock(JPopupMenuFixture.class);
     new EasyMockTemplate(table) {
@@ -121,9 +123,9 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnContents() {
-    final String content = "Hello"; 
+    final String content = "Hello";
     new EasyMockTemplate(table) {
       protected void expectations() {
         expect(table.valueAt(cell)).andReturn(content);
@@ -135,9 +137,9 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldPassIfContentIsEqualToExpected() {
-    final String content = "Hello"; 
+    final String content = "Hello";
     new EasyMockTemplate(table) {
       protected void expectations() {
         expect(table.valueAt(cell)).andReturn(content);
@@ -148,7 +150,49 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
+  @Test public void shouldReturnFontForCell() {
+    final FontFixture fontFixture = new FontFixture(new Font("SansSerif", PLAIN, 8));
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.fontAt(cell)).andReturn(fontFixture);
+      }
+
+      protected void codeToTest() {
+        FontFixture result = fixture.font();
+        assertThat(result).isSameAs(fontFixture);
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnBackgroundColorForCell() {
+    final ColorFixture colorFixture = new ColorFixture(BLUE);
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.backgroundAt(cell)).andReturn(colorFixture);
+      }
+
+      protected void codeToTest() {
+        ColorFixture result = fixture.background();
+        assertThat(result).isSameAs(colorFixture);
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnForegroundColorForCell() {
+    final ColorFixture colorFixture = new ColorFixture(BLUE);
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.foregroundAt(cell)).andReturn(colorFixture);
+      }
+
+      protected void codeToTest() {
+        ColorFixture result = fixture.foreground();
+        assertThat(result).isSameAs(colorFixture);
+      }
+    }.run();
+  }
+
   @Test public void shouldFailIfContentIsNotEqualToExpected() {
     try {
       new EasyMockTemplate(table) {
@@ -188,7 +232,7 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldPressAndReleaseKeys() {
     final int[] keys = { VK_A, VK_B };
     new EasyMockTemplate(table) {
@@ -213,7 +257,7 @@ public class JTableCellFixtureTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldReleaseKey() {
     new EasyMockTemplate(table) {
       protected void expectations() {
