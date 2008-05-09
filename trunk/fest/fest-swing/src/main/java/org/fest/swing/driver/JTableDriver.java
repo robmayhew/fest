@@ -14,6 +14,9 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -27,10 +30,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>,
@@ -95,7 +94,7 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the font of the given table cell. 
+   * Returns the font of the given table cell.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the font of the given table cell.
@@ -108,7 +107,7 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the background color of the given table cell. 
+   * Returns the background color of the given table cell.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the background color of the given table cell.
@@ -119,9 +118,9 @@ public class JTableDriver extends JComponentDriver {
     validate(table, cell);
     return cellReader.backgroundAt(table, cell.row, cell.column);
   }
-  
+
   /**
-   * Returns the foreground color of the given table cell. 
+   * Returns the foreground color of the given table cell.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the foreground color of the given table cell.
@@ -141,12 +140,13 @@ public class JTableDriver extends JComponentDriver {
    * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
-  public void selectCells(JTable table, JTableCell... cells) {
+  public void selectCells(final JTable table, final JTableCell... cells) {
     if (cells == null) throw actionFailure("Table cells to select cannot be null");
-    int controlOrCommandKey = controlOrCommandKey();
-    pressKey(table, controlOrCommandKey);
-    for (JTableCell c : cells) selectCell(table, c);
-    releaseKey(table, controlOrCommandKey);
+    new MultipleSelectionTemplate(robot) {
+      void select() {
+        for (JTableCell c : cells) selectCell(table, c);
+      }
+    }.multiSelect();
   }
 
   /**

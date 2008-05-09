@@ -15,6 +15,15 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -32,17 +41,6 @@ import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
 
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JList}</code>s. This class is intended for internal
@@ -56,7 +54,7 @@ public class JListDriver extends JComponentDriver {
   private static final String SELECTED_INDICES_PROPERTY = "selectedIndices";
   private static final String SELECTED_INDICES_LENGTH_PROPERTY = concat(SELECTED_INDICES_PROPERTY, "#length");
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
-  
+
   private final JListLocation location;
 
   private JListCellReader cellReader;
@@ -96,7 +94,7 @@ public class JListDriver extends JComponentDriver {
     int[] selectedIndices = list.getSelectedIndices();
     int selectionCount = selectedIndices.length;
     String[] values = new String[selectionCount];
-    for (int i = 0; i < selectionCount; i++) 
+    for (int i = 0; i < selectionCount; i++)
       values[i] = value(list, selectedIndices[i]);
     return values;
   }
@@ -115,11 +113,12 @@ public class JListDriver extends JComponentDriver {
    * @param values the values to match.
    * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
-  public void selectItems(JList list, String[] values) {
-    int controlOrCommand = controlOrCommandKey();
-    robot.pressKey(controlOrCommand);
-    for (String value : values) selectItem(list, value);
-    robot.releaseKey(controlOrCommand);
+  public void selectItems(final JList list, final String[] values) {
+    new MultipleSelectionTemplate(robot) {
+      void select() {
+        for (String value : values) selectItem(list, value);
+      }
+    }.multiSelect();
   }
 
   /**
@@ -153,11 +152,12 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
    *         in the <code>JList</code>.
    */
-  public void selectItems(JList list, int[] indices) {
-    int controlOrCommand = controlOrCommandKey();
-    robot.pressKey(controlOrCommand);
-    for (int index : indices) selectItem(list, index);
-    robot.releaseKey(controlOrCommand);
+  public void selectItems(final JList list, final int[] indices) {
+    new MultipleSelectionTemplate(robot) {
+      void select() {
+        for (int index : indices) selectItem(list, index);
+      }
+    }.multiSelect();
   }
 
   /**
@@ -242,7 +242,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the <code>String</code> representation of the element under the given index, using this driver's 
+   * Returns the <code>String</code> representation of the element under the given index, using this driver's
    * <code>{@link JListCellReader}</code>.
    * @param list the target <code>JList</code>.
    * @param index the given index.
@@ -397,7 +397,7 @@ public class JListDriver extends JComponentDriver {
   private LocationUnavailableException indexNotFoundFor(String value) {
     throw new LocationUnavailableException(concat("Unable to find an element matching the value ", quote(value)));
   }
-  
+
   /**
    * Updates the implementation of <code>{@link JListCellReader}</code> to use when comparing internal values of a
    * <code>{@link JList}</code> and the values expected in a test.

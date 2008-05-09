@@ -15,6 +15,14 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -35,14 +43,6 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
@@ -116,6 +116,20 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   /**
+   * Selects the given paths, expanding parent nodes if necessary.
+   * @param tree the target <code>JTree</code>.
+   * @param paths the paths to select.
+   * @throws LocationUnavailableException if any the given path cannot be found.
+   */
+  public void selectePaths(final JTree tree, final String...paths) {
+    new MultipleSelectionTemplate(robot) {
+      void select() {
+        for (String path : paths) selectPath(tree, path);
+      }
+    }.multiSelect();
+  }
+
+  /**
    * Selects the given path, expanding parent nodes if necessary.
    * @param tree the target <code>JTree</code>.
    * @param path the path to select.
@@ -125,7 +139,7 @@ public class JTreeDriver extends JComponentDriver {
     TreePath treePath = findMatchingPath(tree, path);
     selectPath(tree, treePath);
   }
-  
+
   private void selectPath(JTree tree, TreePath path) {
     makeVisible(tree, path, false);
     Point p = location.pointAt(tree, path);
@@ -303,7 +317,7 @@ public class JTreeDriver extends JComponentDriver {
     TreePath selectionPath = tree.getPathForRow(row);
     requireSelection(tree, selectionPath);
   }
-  
+
   /**
    * Asserts that the given <code>{@link JTree}</code>'s selected path is equal to the given one.
    * @param tree the target <code>JTree</code>.
@@ -321,7 +335,7 @@ public class JTreeDriver extends JComponentDriver {
     if (tree.getSelectionCount() == 0) fail(concat("[", propertyName(tree, SELECTION_PROPERTY), "] No selection"));
     assertThat(tree.getSelectionPath()).as(propertyName(tree, SELECTION_PATH_PROPERTY)).isEqualTo(path);
   }
-  
+
   /**
    * Asserts that the given <code>{@link JTree}</code> is editable.
    * @param tree the given <code>JTree</code>.
@@ -372,7 +386,7 @@ public class JTreeDriver extends JComponentDriver {
     }
     return new TreePath(newPathValues.toArray());
   }
-  
+
   private LocationUnavailableException pathNotFound(String path) {
     throw new LocationUnavailableException(concat("Unable to find path ", quote(path)));
   }
@@ -395,11 +409,11 @@ public class JTreeDriver extends JComponentDriver {
     throw new LocationUnavailableException(
         concat("There is more than one node with value ", quote(matchingText), " under ", quote(parentText)));
   }
-  
+
   private Object value(JTree tree, Object modelValue) {
     return cellReader.valueAt(tree, modelValue);
   }
-  
+
   /**
    * Returns the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    * @return the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
@@ -407,7 +421,7 @@ public class JTreeDriver extends JComponentDriver {
   public String separator() {
     return separator;
   }
-  
+
   /**
    * Updates the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    * @param separator the new separator.
@@ -415,7 +429,7 @@ public class JTreeDriver extends JComponentDriver {
   public void separator(String separator) {
     this.separator = separator;
   }
-  
+
   /**
    * Updates the implementation of <code>{@link JTreeCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTree}</code> and the values expected in a test.

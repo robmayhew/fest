@@ -15,6 +15,12 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -26,21 +32,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Test for <code>{@link JTreeDriver}</code>.
@@ -99,22 +98,37 @@ public class JTreeDriverTest {
       assertThat(e.getMessage()).isEqualTo("Unable to find path 'another'");
     }
   }
-  
-  @Test(dataProvider = "selectionPath") 
+
+  @Test(dataProvider = "selectionPath")
   public void shouldSelectNodeByPath(String treePath) {
-    dragTree.clearSelection();
-    assertThat(dragTree.getSelectionRows()).isEqualTo(null);
+    clearSelection();
     driver.selectPath(dragTree, treePath);
     assertThat(textOf(dragTree.getSelectionPath())).isEqualTo(treePath);
   }
 
-  @DataProvider(name = "selectionPath") 
+  @DataProvider(name = "selectionPath")
   public Object[][] selectionPath() {
-    return new Object[][] { 
+    return new Object[][] {
         { "root/branch1" },
         { "root/branch1/branch1.2" },
-        { "root" } 
+        { "root" }
     };
+  }
+
+  @Test public void shouldSelectNodesByPaths() {
+    clearSelection();
+    dragTree.setSelectionModel(new DefaultTreeSelectionModel());
+    String[] paths = array("root/branch1/branch1.1", "root/branch1/branch1.2");
+    driver.selectePaths(dragTree, paths);
+    TreePath[] selectionPaths = dragTree.getSelectionPaths();
+    assertThat(selectionPaths).hasSize(2);
+    assertThat(textOf(selectionPaths[0])).isEqualTo(paths[0]);
+    assertThat(textOf(selectionPaths[1])).isEqualTo(paths[1]);
+  }
+
+  private void clearSelection() {
+    dragTree.clearSelection();
+    assertThat(dragTree.getSelectionRows()).isEqualTo(null);
   }
 
   @Test public void shouldDragAndDropUsingGivenTreePaths() {
@@ -127,7 +141,7 @@ public class JTreeDriverTest {
     TreeModel dropModel = dropTree.getModel();
     DefaultMutableTreeNode root = rootOf(dropModel);
     assertThat(root.getChildCount()).isEqualTo(1);
-    assertThat(textOf(firstChildOf(root))).isEqualTo("branch1.1");    
+    assertThat(textOf(firstChildOf(root))).isEqualTo("branch1.1");
   }
 
   @Test public void shouldDragAndDropUsingGivenRows() {
@@ -139,11 +153,7 @@ public class JTreeDriverTest {
     TreeModel dropModel = dropTree.getModel();
     DefaultMutableTreeNode destinationRoot = rootOf(dropModel);
     assertThat(destinationRoot.getChildCount()).isEqualTo(1);
-    assertThat(textOf(firstChildOf(destinationRoot))).isEqualTo("branch2"); 
-  }
-
-  private DefaultMutableTreeNode rootOf(TreeModel model) {
-    return (DefaultMutableTreeNode)model.getRoot();
+    assertThat(textOf(firstChildOf(destinationRoot))).isEqualTo("branch2");
   }
 
   private String textOf(TreePath path) {
@@ -158,11 +168,15 @@ public class JTreeDriverTest {
     }
     return b.toString();
   }
-  
+
   private String textOf(DefaultMutableTreeNode node) {
     return (String)node.getUserObject();
   }
-  
+
+  private DefaultMutableTreeNode rootOf(TreeModel model) {
+    return (DefaultMutableTreeNode)model.getRoot();
+  }
+
   private DefaultMutableTreeNode firstChildOf(DefaultMutableTreeNode node) {
     return (DefaultMutableTreeNode)node.getChildAt(0);
   }
@@ -173,7 +187,7 @@ public class JTreeDriverTest {
     dragTree.setSelectionPath(path);
     driver.requireSelection(dragTree, 1);
   }
-  
+
   @Test public void shouldPassIfPathIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
@@ -191,7 +205,7 @@ public class JTreeDriverTest {
                              .contains("No selection");
     }
   }
-  
+
   @Test public void shouldFailIfSelectedRowIsNotEqualToExpectedSelection() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     dragTree.setSelectionPath(new TreePath(array(root)));
@@ -214,7 +228,7 @@ public class JTreeDriverTest {
                              .contains("No selection");
     }
   }
-  
+
   @Test public void shouldFailIfSelectedPathIsNotEqualToExpectedSelection() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     dragTree.setSelectionPath(new TreePath(array(root)));
@@ -256,12 +270,12 @@ public class JTreeDriverTest {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
-  
+
   @Test public void shouldShowPopupMenuAtRow() {
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, 0);
     assertThat(popupMenu).isSameAs(frame.popupMenu);
   }
-  
+
   @Test public void shouldShowPopupMenuAtPath() {
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, "root");
     assertThat(popupMenu).isSameAs(frame.popupMenu);
@@ -275,7 +289,7 @@ public class JTreeDriverTest {
     final TestTree dragTree = new TestTree(nodes());
     final TestTree dropTree = new TestTree(rootOnly());
     final JPopupMenu popupMenu = new JPopupMenu();
-    
+
     private static TreeModel nodes() {
       MutableTreeNode root =
         node("root",
@@ -290,11 +304,11 @@ public class JTreeDriverTest {
         );
       return new DefaultTreeModel(root);
     }
-    
+
     private static TreeModel rootOnly() {
       return new DefaultTreeModel(node("root"));
     }
-    
+
     private static MutableTreeNode node(String text, MutableTreeNode...children) {
       DefaultMutableTreeNode node = new DefaultMutableTreeNode(text);
       for (MutableTreeNode child : children) node.add(child);
@@ -315,7 +329,7 @@ public class JTreeDriverTest {
       scrollPane.setPreferredSize(TREE_SIZE);
       return scrollPane;
     }
-    
+
     private static class Listener extends MouseAdapter {
       private final JPopupMenu popupMenu;
 
@@ -334,6 +348,6 @@ public class JTreeDriverTest {
         if (row == 0) popupMenu.show(tree, x, y);
       }
     }
-    
+
   }
 }
