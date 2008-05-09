@@ -206,7 +206,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
     driver.selectPath(target, treePath);
     return this;
   }
-
+  
   /**
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.

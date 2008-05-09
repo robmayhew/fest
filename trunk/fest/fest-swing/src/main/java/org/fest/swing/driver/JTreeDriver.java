@@ -15,14 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -43,6 +35,14 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
@@ -101,6 +101,22 @@ public class JTreeDriver extends JComponentDriver {
     if (!(treeUI instanceof BasicTreeUI)) throw actionFailure(concat("Can't toggle row for ", treeUI));
     TreePath path = tree.getPathForLocation(p.x, p.y);
     method("toggleExpandState").withParameterTypes(TreePath.class).in(treeUI).invoke(path);
+  }
+
+  /**
+   * Selects the given rows.
+   * @param tree the target <code>JTree</code>.
+   * @param rows the rows to select.
+   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
+   */
+  public void selectRows(final JTree tree, final int... rows) {
+    new MultipleSelectionTemplate(robot) {
+      void select() {
+        for (int row : rows) selectRow(tree, row);
+      }
+    }.multiSelect();
   }
 
   /**

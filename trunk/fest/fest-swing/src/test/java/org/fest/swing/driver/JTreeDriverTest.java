@@ -15,12 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -32,14 +26,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestTree;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestTree;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
 
 /**
  * Test for <code>{@link JTreeDriver}</code>.
@@ -72,7 +73,7 @@ public class JTreeDriverTest {
   }
 
   @Test public void shouldSelectNodeByRow() {
-    dragTree.clearSelection();
+    clearSelection();
     assertThat(dragTree.getSelectionRows()).isNull();
     driver.selectRow(dragTree, 0);
     assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 0 });
@@ -80,6 +81,14 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 1 });
     driver.selectRow(dragTree, 0);
     assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 0 });
+  }
+
+  @Test public void shouldSelectNodesByRow() {
+    clearSelection();
+    dragTree.setSelectionModel(new DefaultTreeSelectionModel());
+    assertThat(dragTree.getSelectionRows()).isNull();
+    driver.selectRows(dragTree, 0, 1, 2);
+    assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 0, 1, 2 });
   }
 
   @Test public void shouldToggleNodeByRow() {
