@@ -208,6 +208,17 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   }
   
   /**
+   * Select the given paths, expanding parent nodes if necessary.
+   * @param treePaths the paths to select.
+   * @return this fixture.
+   * @throws LocationUnavailableException if the any of the given paths cannot be found.
+   */
+  public JTreeFixture selectPaths(String... treePaths) {
+    driver.selectPaths(target, treePaths);
+    return this;
+  }
+ 
+  /**
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.

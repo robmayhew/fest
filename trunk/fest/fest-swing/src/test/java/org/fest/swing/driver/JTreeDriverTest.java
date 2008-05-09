@@ -128,7 +128,7 @@ public class JTreeDriverTest {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
     String[] paths = array("root/branch1/branch1.1", "root/branch1/branch1.2");
-    driver.selectePaths(dragTree, paths);
+    driver.selectPaths(dragTree, paths);
     TreePath[] selectionPaths = dragTree.getSelectionPaths();
     assertThat(selectionPaths).hasSize(2);
     assertThat(textOf(selectionPaths[0])).isEqualTo(paths[0]);

@@ -137,7 +137,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param paths the paths to select.
    * @throws LocationUnavailableException if any the given path cannot be found.
    */
-  public void selectePaths(final JTree tree, final String...paths) {
+  public void selectPaths(final JTree tree, final String...paths) {
     new MultipleSelectionTemplate(robot) {
       void select() {
         for (String path : paths) selectPath(tree, path);
