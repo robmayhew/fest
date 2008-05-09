@@ -29,7 +29,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTreeFixture}</code>.
@@ -136,6 +136,20 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
       
       protected void codeToTest() {
         assertThatReturnsThis(fixture.selectPath(path));
+      }
+    }.run();
+  }
+
+  @Test public void shouldSelectTreePaths() {
+    final String[] paths = array("root/node1", "root/node2");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectPaths(target, paths);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectPaths(paths));
       }
     }.run();
   }
