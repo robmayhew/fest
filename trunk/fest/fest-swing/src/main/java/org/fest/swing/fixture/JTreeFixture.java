@@ -422,6 +422,16 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   }
   
   /**
+   * Asserts that this fixture's <code>{@link JTree}</code>'s does not have any selection.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> has a selection.
+   */
+  public JTreeFixture requireNoSelection() {
+    driver.requireNoSelection(target);
+    return this;
+  }
+
+  /**
    * Returns the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    * @return the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    */

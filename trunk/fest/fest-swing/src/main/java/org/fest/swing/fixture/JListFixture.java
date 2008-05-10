@@ -139,6 +139,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * @return this fixture.
    * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
    *         found.
+   * @see #cellReader(JListCellReader)
    */
   public JListFixture selectItems(String...items) {
     driver.selectItems(target, items);
@@ -150,6 +151,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * @param text the text of the item to select.
    * @return this fixture.
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @see #cellReader(JListCellReader)
    */
   public JListFixture selectItem(String text) {
     driver.selectItem(target, text);
@@ -188,6 +190,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * @param text the text to match.
    * @return this fixture.
    * @throws AssertionError if the selected item does not match the given text.
+   * @see #cellReader(JListCellReader)
    */
   public JListFixture requireSelection(String text) {
     driver.requireSelection(target, text);
@@ -200,9 +203,20 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * @param items text items to match.
    * @return this fixture.
    * @throws AssertionError if the selected items do not match the given text items.
+   * @see #cellReader(JListCellReader)
    */
   public JListFixture requireSelectedItems(String... items) {
     driver.requireSelectedItems(target, items);
+    return this;
+  }
+
+  /**
+   * Verifies that this fixture's <code>{@link JList}</code> does not have any selection. 
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JList</code> has a selection.
+   */
+  public JListFixture requireNoSelection() {
+    driver.requireNoSelection(target);
     return this;
   }
 

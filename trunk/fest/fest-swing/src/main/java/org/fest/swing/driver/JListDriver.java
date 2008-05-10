@@ -15,15 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -40,6 +31,16 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
+
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -213,7 +214,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the the selected item in the <code>{@link JList}</code> matches the given value.
+   * Verifies that the selected item in the <code>{@link JList}</code> matches the given value.
    * @param list the target <code>JList</code>.
    * @param value the value to match.
    * @throws AssertionError if the selected item does not match the value.
@@ -225,7 +226,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the the selected items in the <code>{@link JList}</code> match the given values.
+   * Verifies that the selected items in the <code>{@link JList}</code> match the given values.
    * @param list the target <code>JList</code>.
    * @param items the values to match.
    * @throws AssertionError if the selected items do not match the given values.
@@ -239,6 +240,15 @@ public class JListDriver extends JComponentDriver {
       String description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
       assertThat(value(list, selectedIndices[i])).as(description).isEqualTo(items[i]);
     }
+  }
+
+  /**
+   * Verifies that the <code>{@link JList}</code> does not have a selection.
+   * @param list the target <code>JList</code>.
+   * @throws AssertionError if the <code>JList</code> has a selection.
+   */
+  public void requireNoSelection(JList list) {
+    assertThat(list.getSelectedIndex()).as(selectedIndexProperty(list)).isEqualTo(-1);
   }
 
   /**

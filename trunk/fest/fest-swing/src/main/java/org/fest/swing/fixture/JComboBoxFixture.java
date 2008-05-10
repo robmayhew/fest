@@ -281,6 +281,7 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @param text the text of the item to select.
    * @return this fixture.
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @see #cellReader(JComboBoxCellReader)
    */
   public JComboBoxFixture selectItem(String text) {
     driver.selectItem(target, text);
@@ -293,9 +294,20 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @param value the text to match.
    * @return this fixture.
    * @throws AssertionError if the selected item does not match the given text.
+   * @see #cellReader(JComboBoxCellReader)
    */
   public JComboBoxFixture requireSelection(String value) {
     driver.requireSelection(target, value);
+    return this;
+  }
+
+  /**
+   * Verifies that this fixture's <code>{@link JComboBox}</code> does not have any selection. 
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> has a selection.
+   */
+  public JComboBoxFixture requireNoSelection() {
+    driver.requireNoSelection(target);
     return this;
   }
 

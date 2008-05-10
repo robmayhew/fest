@@ -41,6 +41,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
@@ -117,6 +118,22 @@ public class JTableDriverTest {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }
 
+  @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
+    dragTable.clearSelection();
+    driver.requireNoSelection(dragTable);
+  }
+
+  @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+    dragTable.changeSelection(0, 0, false, false);
+    try {
+      driver.requireNoSelection(dragTable);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selection'")
+                             .contains("expected no selection but was:<rows[0], columns[0]>");
+    }
+  }
+  
   @Test public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
     assertThat(dragTable.getSelectedRowCount()).isZero();
     assertThat(driver.selectionValue(dragTable)).isNull();

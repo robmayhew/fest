@@ -47,6 +47,9 @@
       <action dev="alruiz, wanghy" type="add" issue="130">
         Created JTreeCellReader and BasicJTreeReader to support custom cell renderers in JTreeFixture.
       </action>
+      <action dev="wanghy, alruiz" type="add" issue="131">
+        Added method 'requireNoSelection' to JComboBoxFixture, JListFixture, JTableFixture and JTreeFixture.
+      </action>
       <action dev="alruiz" type="fix" issue="133">
         JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
       </action>

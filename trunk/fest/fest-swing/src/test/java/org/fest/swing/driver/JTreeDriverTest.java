@@ -255,6 +255,22 @@ public class JTreeDriverTest {
     return values;
   }
   
+  @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
+    dragTree.clearSelection();
+    driver.requireNoSelection(dragTree);
+  }
+
+  @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+    dragTree.setSelectionRow(0);
+    try {
+      driver.requireNoSelection(dragTree);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selection'")
+                             .contains("expected no selection but was:<[[root]]>");
+    }
+  }
+  
   @Test public void shouldPassIfTreeIsEditable() {
     dragTree.setEditable(true);
     driver.requireEditable(dragTree);

@@ -42,6 +42,7 @@ import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
 /**
@@ -353,6 +354,19 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   /**
+   * Asserts that the given <code>{@link JTree}</code> does not have any selection.
+   * @param tree the given <code>JTree</code>.
+   * @throws AssertionError if the <code>JTree</code> has a selection.
+   */
+  public void requireNoSelection(JTree tree) {
+    if (tree.getSelectionCount() == 0) return;
+    String message = concat(
+        "[", propertyName(tree, SELECTION_PROPERTY), "] expected no selection but was:<",
+        format(tree.getSelectionPaths()), ">");
+    fail(message);
+  }
+
+  /**
    * Asserts that the given <code>{@link JTree}</code> is editable.
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> is not editable.
@@ -454,5 +468,4 @@ public class JTreeDriver extends JComponentDriver {
   public void cellReader(JTreeCellReader cellReader) {
     this.cellReader = cellReader;
   }
-
 }

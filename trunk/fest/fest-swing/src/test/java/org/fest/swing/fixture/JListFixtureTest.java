@@ -211,6 +211,19 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
       }
     }.run();
   }
+  
+  @Test public void shouldRequireNoSelection() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNoSelection(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNoSelection());
+      }
+    }.run();
+  }  
 
   @Test public void shouldReturnValueAtIndex() {
     new EasyMockTemplate(driver) {

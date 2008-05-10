@@ -15,10 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.ComponentDriver.propertyName;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -35,6 +31,10 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentDriver.propertyName;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -169,6 +169,16 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    */
   public String selectionValue() {
     return driver.selectionValue(target);
+  }
+
+  /**
+   * Verifies that this fixture's <code>{@link JTable}</code> does not have any selection. 
+   * @return this fixture.
+   * @throw AssertionError if this fixture's <code>JTable</code> has a selection.
+   */
+  public JTableFixture requireNoSelection() {
+    driver.requireNoSelection(target);
+    return this;
   }
 
   /**
@@ -395,8 +405,6 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     driver.requireVisible(target);
     return this;
   }
-
-
 
   /**
    * Shows a pop-up menu at the given cell.

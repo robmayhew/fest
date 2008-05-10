@@ -14,9 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -31,6 +28,12 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
+
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>,
  * this driver only focuses on behavior present only in <code>{@link JTable}</code>s. This class is intended for
@@ -41,6 +44,8 @@ import org.fest.swing.exception.ComponentLookupException;
  */
 public class JTableDriver extends JComponentDriver {
 
+  private static final String SELECTION_PROPERTY = "selection";
+  
   private final JTableLocation location = new JTableLocation();
   private JTableCellReader cellReader;
 
@@ -147,6 +152,19 @@ public class JTableDriver extends JComponentDriver {
         for (JTableCell c : cells) selectCell(table, c);
       }
     }.multiSelect();
+  }
+
+  /**
+   * Verifies that the <code>{@link JTable}</code> does not have any selection.
+   * @param table the target <code>JTable</code>.
+   * @throws AssertionError is the <code>JTable</code> has a selection.
+   */
+  public void requireNoSelection(JTable table) {
+    if (table.getSelectedColumnCount() == 0 && table.getSelectedRowCount() == 0) return;
+    String message = concat(
+        "[", propertyName(table, SELECTION_PROPERTY), "] expected no selection but was:<rows",
+        format(table.getSelectedRows()), ", columns", format(table.getSelectedColumns()), ">");
+    fail(message);
   }
 
   /**

@@ -139,6 +139,22 @@ public class JComboBoxDriverTest {
     }
   }
 
+  @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
+    comboBox.setSelectedIndex(-1);
+    driver.requireNoSelection(comboBox);
+  }
+  
+  @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+    comboBox.setSelectedIndex(0);
+    try {
+      driver.requireNoSelection(comboBox);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectedIndex'")
+                             .contains("expected:<-1> but was:<0>");
+    }
+  }
+  
   @Test public void shouldPassIfComboBoxIsEditable() {
     comboBox.setEditable(true);
     driver.requireEditable(comboBox);

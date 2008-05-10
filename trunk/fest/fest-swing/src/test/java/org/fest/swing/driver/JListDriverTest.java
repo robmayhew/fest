@@ -33,6 +33,8 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestList;
 
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
@@ -41,8 +43,6 @@ import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
-
-import static javax.swing.ListSelectionModel.*;
 
 /**
  * Tests for <code>{@link JListDriver}</code>.
@@ -217,6 +217,22 @@ public class JListDriverTest {
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("expected:<'one'> but was:<'three'>");
+    }
+  }
+
+  @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
+    dragList.setSelectedIndex(-1);
+    driver.requireNoSelection(dragList);
+  }
+
+  @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+    dragList.setSelectedIndex(0);
+    try {
+      driver.requireNoSelection(dragList);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectedIndex'")
+                             .contains("expected:<-1> but was:<0>");
     }
   }
 

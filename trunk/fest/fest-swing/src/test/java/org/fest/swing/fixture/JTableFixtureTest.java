@@ -81,6 +81,19 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       }
     }.run();
   }
+  
+  @Test public void shouldRequireNoSelection() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNoSelection(target);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNoSelection());
+      }
+    }.run();
+  }
 
   @Test public void shouldSelectCells() {
     final TableCell[] cells = { cell };

@@ -125,6 +125,15 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
+   * Verifies that the <code>{@link JComboBox}</code> does not have any selection.
+   * @param comboBox the target <code>JComboBox</code>.
+   * @throws AssertionError if the <code>JComboBox</code> has a selection.
+   */
+  public void requireNoSelection(JComboBox comboBox) {
+    assertThat(comboBox.getSelectedIndex()).as(selectedIndexProperty(comboBox)).isEqualTo(-1);
+  }
+
+  /**
    * Returns the <code>String</code> representation of the element under the given index, using this driver's 
    * <code>{@link JComboBoxCellReader}</code>.
    * @param comboBox the target <code>JComboBox</code>.

@@ -62,4 +62,11 @@ public interface ItemGroupFixture {
    * @throws AssertionError if the selected item does not match the given value.
    */
   ItemGroupFixture requireSelection(String value);
+  
+  /**
+   * Verifies that this fixture's <code>{@link Component}</code> does not have a selection. 
+   * @return this fixture.
+   * @throws AssertionError if the this fixture's <code>Component</code> has a selection.
+   */
+  ItemGroupFixture requireNoSelection();
 }
