@@ -87,8 +87,9 @@ public class JTreeDriverTest {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
     assertThat(dragTree.getSelectionRows()).isNull();
-    driver.selectRows(dragTree, 0, 1, 2);
-    assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 0, 1, 2 });
+    int[] rows = { 0, 1, 2 };
+    driver.selectRows(dragTree, rows);
+    assertThat(dragTree.getSelectionRows()).isEqualTo(rows);
   }
 
   @Test public void shouldToggleNodeByRow() {
@@ -127,7 +128,7 @@ public class JTreeDriverTest {
   @Test public void shouldSelectNodesByPaths() {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
-    String[] paths = array("root/branch1/branch1.1", "root/branch1/branch1.2");
+    String[] paths = { "root/branch1/branch1.1", "root/branch1/branch1.2" };
     driver.selectPaths(dragTree, paths);
     TreePath[] selectionPaths = dragTree.getSelectionPaths();
     assertThat(selectionPaths).hasSize(2);
@@ -194,20 +195,20 @@ public class JTreeDriverTest {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
     dragTree.setSelectionPath(path);
-    driver.requireSelection(dragTree, 1);
+    driver.requireSelection(dragTree, intArray(1));
   }
 
   @Test public void shouldPassIfPathIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
     dragTree.setSelectionPath(path);
-    driver.requireSelection(dragTree, "root/branch1");
+    driver.requireSelection(dragTree, array("root/branch1"));
   }
 
   @Test public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection() {
     dragTree.setSelectionPath(null);
     try {
-      driver.requireSelection(dragTree, 1);
+      driver.requireSelection(dragTree, intArray(1));
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selection'")
@@ -219,7 +220,7 @@ public class JTreeDriverTest {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     dragTree.setSelectionPath(new TreePath(array(root)));
     try {
-      driver.requireSelection(dragTree, 1);
+      driver.requireSelection(dragTree, intArray(1));
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectionPath'")
@@ -230,7 +231,7 @@ public class JTreeDriverTest {
   @Test public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {
     dragTree.setSelectionPath(null);
     try {
-      driver.requireSelection(dragTree, "root/branch1");
+      driver.requireSelection(dragTree, array("root/branch1"));
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selection'")
@@ -242,7 +243,7 @@ public class JTreeDriverTest {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     dragTree.setSelectionPath(new TreePath(array(root)));
     try {
-      driver.requireSelection(dragTree, "root/branch1");
+      driver.requireSelection(dragTree, array("root/branch1"));
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectionPath'")
@@ -250,6 +251,10 @@ public class JTreeDriverTest {
     }
   }
 
+  private int[] intArray(int...values) {
+    return values;
+  }
+  
   @Test public void shouldPassIfTreeIsEditable() {
     dragTree.setEditable(true);
     driver.requireEditable(dragTree);

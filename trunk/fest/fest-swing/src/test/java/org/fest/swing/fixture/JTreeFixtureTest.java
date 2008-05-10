@@ -126,6 +126,20 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
     }.run();
   }
   
+  @Test public void shouldSelectRows() {
+    final int[] rows = { 6, 8 }; 
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectRows(target, rows);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectRows(rows));
+      }
+    }.run();
+  }
+
   @Test public void shouldSelectTreePath() {
     final String path = "root/node1";
     new EasyMockTemplate(driver) {
@@ -155,29 +169,29 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   }
 
   @Test public void shouldRequireSelectedTreePath() {
-    final String path = "root/node1";
+    final String[] paths = { "root/node1" };
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.requireSelection(target, path);
+        driver.requireSelection(target, paths);
         expectLastCall().once();
       }
       
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.requireSelection(path));
+        assertThatReturnsThis(fixture.requireSelection(paths));
       }
     }.run();
   }
 
   @Test public void shouldRequireSelectedRow() {
-    final int row = 0;
+    final int[] rows = { 0 };
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.requireSelection(target, row);
+        driver.requireSelection(target, rows);
         expectLastCall().once();
       }
       
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.requireSelection(row));
+        assertThatReturnsThis(fixture.requireSelection(rows));
       }
     }.run();
   }
@@ -222,15 +236,15 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
   }
 
   @Test public void shouldRequireSelectedPath() {
-    final String path = "root/node1";
+    final String[] paths = { "root/node1" };
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.requireSelection(target, path);
+        driver.requireSelection(target, paths);
         expectLastCall().once();
       }
       
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.requireSelection(path));
+        assertThatReturnsThis(fixture.requireSelection(paths));
       }
     }.run();
     

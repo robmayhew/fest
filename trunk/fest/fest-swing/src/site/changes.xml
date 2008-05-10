@@ -6,6 +6,50 @@
   </properties>
   <body>
     <release version="1.0a2" date="TBA" description="Subsequent release">
+      <action dev="wanghy, alruiz" type="add" issue="68">
+        Added method 'selectPaths(String...)' and 'selectRows(int...)' to JTreeFixture.
+      </action>
+      <action dev="wanghy, alruiz" type="add" issue="68">
+        Method 'requireSelection(String)' and 'requireSelection(row)' in JTreeFixture now take an array as argument to
+        verify multi-selection in a JTree. The new signatures are 'requireSelection(String...)' and 
+        'requireSelection(int...)' respectively.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
+        Created JTableCellReader (with default implementation BasicJTableCellReader) which reads the value of a cell in 
+        a JTable. BasicJTableCellReader supports JLabels, JComboBoxes and JCheckBoxes as cell renderers of a JTable.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
+        Added methods 'fontAt(TableCell)', 'backgroundAt(TableCell)' and 'foregroundAt(TableCell)' to JTableFixture to
+        verify the font, background and foreground of an specific cell in a JTable.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
+        Added methods 'font()', 'background()' and 'foreground()' to JTableCellFixture to verify the font, background 
+        and foreground of an specific cell in a JTable.
+      </action>
+      <action dev="alruiz" type="fix" issue="123" due-to="Manuel Kueblboeck">
+        Fixed NullPointerException in method 'enterText' in org.fest.core.RobotFixture.
+      </action>
+      <action dev="alruiz" type="fix" issue="124" due-to="Woody Folsom">
+        Added method 'selection' to JListFixture. This method returns the String representation of the selection of a
+        JList.
+      </action>
+      <action dev="alruiz" type="fix" issue="124" due-to="Woody Folsom">
+        Introduced 'JListCellReader' to read values from JLists. Users can implement their own JListCellReaders when
+        using custom cell renderers in JLists. After creating a JListCellRendering, users only need to pass an instance
+        to the method 'cellReader(JListCellReader)' in JListFixture.
+      </action>
+      <action dev="alruiz" type="fix" issue="125" due-to="Woody Folsom">
+        Fixed regression. JToolBarFixture extends ComponentFixture.
+      </action>
+      <action dev="alruiz" type="add" issue="128">
+        Created JComboBoxCellReader and BasicJComboBoxReader to support custom cell renderers in JComboBoxFixture.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="130">
+        Created JTreeCellReader and BasicJTreeReader to support custom cell renderers in JTreeFixture.
+      </action>
+      <action dev="alruiz" type="fix" issue="133">
+        JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
+      </action>
       <action dev="alruiz" type="add">
         Added method 'font' to all fixtures. This method returns a FontFixture.
       </action>
@@ -39,42 +83,6 @@
       <action dev="alruiz, wanghy" type="add">
         Replaced TreePath as method parameter in JTreeFixture and replace it with a String specifying the path. For
         example, now a path can be set as "root/node1/node1.1".
-      </action>
-      <action dev="alruiz" type="fix" issue="133">
-        JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
-      </action>
-      <action dev="alruiz, wanghy" type="add" issue="130">
-        Created JTreeCellReader and BasicJTreeReader to support custom cell renderers in JTreeFixture.
-      </action>
-      <action dev="alruiz" type="add" issue="128">
-        Created JComboBoxCellReader and BasicJComboBoxReader to support custom cell renderers in JComboBoxFixture.
-      </action>
-      <action dev="alruiz" type="fix" issue="125" due-to="Woody Folsom">
-        Fixed regression. JToolBarFixture extends ComponentFixture.
-      </action>
-      <action dev="alruiz" type="fix" issue="124" due-to="Woody Folsom">
-        Introduced 'JListCellReader' to read values from JLists. Users can implement their own JListCellReaders when
-        using custom cell renderers in JLists. After creating a JListCellRendering, users only need to pass an instance
-        to the method 'cellReader(JListCellReader)' in JListFixture.
-      </action>
-      <action dev="alruiz" type="fix" issue="124" due-to="Woody Folsom">
-        Added method 'selection' to JListFixture. This method returns the String representation of the selection of a
-        JList.
-      </action>
-      <action dev="alruiz" type="fix" issue="123" due-to="Manuel Kueblboeck">
-        Fixed NullPointerException in method 'enterText' in org.fest.core.RobotFixture.
-      </action>
-      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
-        Created JTableCellReader (with default implementation BasicJTableCellReader) which reads the value of a cell in 
-        a JTable. BasicJTableCellReader supports JLabels, JComboBoxes and JCheckBoxes as cell renderers of a JTable.
-      </action>
-      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
-        Added methods 'fontAt(TableCell)', 'backgroundAt(TableCell)' and 'foregroundAt(TableCell)' to JTableFixture to
-        verify the font, background and foreground of an specific cell in a JTable.
-      </action>
-      <action dev="alruiz, wanghy" type="add" issue="99" due-to="J. Simmons">
-        Added methods 'font()', 'background()' and 'foreground()' to JTableCellFixture to verify the font, background 
-        and foreground of an specific cell in a JTable.
       </action>
     </release>
     <release version="1.0a1" date="2008-04-07" description="Subsequent release">

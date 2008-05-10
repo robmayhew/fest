@@ -111,7 +111,7 @@ public class JTreeDriver extends JComponentDriver {
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
-  public void selectRows(final JTree tree, final int... rows) {
+  public void selectRows(final JTree tree, final int[] rows) {
     new MultipleSelectionTemplate(robot) {
       void select() {
         for (int row : rows) selectRow(tree, row);
@@ -137,7 +137,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param paths the paths to select.
    * @throws LocationUnavailableException if any the given path cannot be found.
    */
-  public void selectPaths(final JTree tree, final String...paths) {
+  public void selectPaths(final JTree tree, final String[] paths) {
     new MultipleSelectionTemplate(robot) {
       void select() {
         for (String path : paths) selectPath(tree, path);
@@ -324,27 +324,27 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   /**
-   * Asserts that the given <code>{@link JTree}</code>'s selected row is equal to the given one.
+   * Asserts that the given <code>{@link JTree}</code>'s selected rows are equal to the given one.
    * @param tree the target <code>JTree</code>.
-   * @param row the index of the row, expected to be selected.
-   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given row.
+   * @param rows the indices of the rows, expected to be selected.
+   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given rows.
    */
-  public void requireSelection(JTree tree, int row) {
-    TreePath selectionPath = tree.getPathForRow(row);
-    requireSelection(tree, selectionPath);
+  public void requireSelection(JTree tree, int[] rows) {
+    for (int row : rows) 
+      requireSelection(tree, tree.getPathForRow(row));
   }
 
   /**
-   * Asserts that the given <code>{@link JTree}</code>'s selected path is equal to the given one.
+   * Asserts that the given <code>{@link JTree}</code>'s selected paths are equal to the given one.
    * @param tree the target <code>JTree</code>.
-   * @param path the given path, expected to be selected.
-   * @throws LocationUnavailableException if the given path cannot be found.
-   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given path.
+   * @param paths the given paths, expected to be selected.
+   * @throws LocationUnavailableException if any of the given paths cannot be found.
+   * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given paths.
    * @see #separator(String)
    */
-  public void requireSelection(JTree tree, String path) {
-    TreePath matchingPath = findMatchingPath(tree, path);
-    requireSelection(tree, matchingPath);
+  public void requireSelection(JTree tree, String[] paths) {
+    for (String path : paths) 
+      requireSelection(tree, findMatchingPath(tree, path));
   }
 
   private void requireSelection(JTree tree, TreePath path) {
