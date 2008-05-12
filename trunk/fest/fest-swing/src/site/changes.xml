@@ -53,6 +53,10 @@
       <action dev="alruiz" type="fix" issue="133">
         JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
       </action>
+      <action dev="wanghy, alruiz" type="add">
+        Component finders (WindowFinder, JFileChooserFinder and JOptionPaneFinder) can perform lookups using
+        GenericTypeMatchers.
+      </action>
       <action dev="alruiz" type="add">
         Added method 'font' to all fixtures. This method returns a FontFixture.
       </action>

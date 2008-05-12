@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFileChooser;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JFileChooserFixture;
 
@@ -29,38 +30,61 @@ import org.fest.swing.fixture.JFileChooserFixture;
  * <p>
  * This example illustrates finding a <code>{@link JFileChooser}</code> by name, using the default lookup time (5
  * seconds):
+ * 
  * <pre>
  * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().using(robot);
  * </pre>
+ * 
  * </p>
  * <p>
  * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.core.RobotFixture}</code>.
  * </p>
  * <p>
  * This example shows how to find a <code>{@link JFileChooser}</code> by type using a lookup time of 10 seconds:
+ * 
  * <pre>
  * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().withTimeout(10000).using(robot);
  * </pre>
+ * 
  * We can also specify the time unit:
+ * 
  * <pre>
  * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
  * </pre>
+ * 
+ * </p>
+ * <p>
+ * This examples shows how to find a <code>{@link JFileChooser}</code> using a <code>{@link GenericTypeMatcher}</code>:
+ * 
+ * <pre>
+ * GenericTypeMatcher&lt;JFileChooser&gt; matcher = new GenericTypeMatcher&lt;JFileChooser&gt;() {
+ *   protected boolean isMatching(JFileChooser fileChooser) {
+ *     return fileChooser.getCurrentDirectory().getAbsolutePath().equals(&quot;c:\\temp&quot;);
+ *   }
+ * };
+ * JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser(matcher).using(robot);
+ * </pre>
+ * 
  * </p>
  * 
  * @author Alex Ruiz
  */
 public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChooser> {
-
+  
   JFileChooserFinder() {
     super(JFileChooser.class);
   }
-
+  
   JFileChooserFinder(String name) {
     super(name, JFileChooser.class);
   }
 
+  JFileChooserFinder(GenericTypeMatcher<? extends JFileChooser> matcher) {
+    super(matcher);
+  }
+  
   /**
-   * Creates a new <code>{@link JFileChooserFinder}</code> to lookup a <code>{@link JFileChooser}</code>.
+   * Creates a new <code>{@link JFileChooserFinder}</code> capable of looking up a <code>{@link JFileChooser}</code>.
    * @return the created finder.
    */
   public static JFileChooserFinder findFileChooser() {
@@ -68,7 +92,8 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
   }
 
   /**
-   * Creates a new <code>{@link JFileChooserFinder}</code> to lookup a <code>{@link JFileChooser}</code> by name.
+   * Creates a new <code>{@link JFileChooserFinder}</code> capable of looking up a <code>{@link JFileChooser}</code> by 
+   * name.
    * @param name the name of the file chooser to find.
    * @return the created finder.
    */
@@ -76,6 +101,16 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
     return new JFileChooserFinder(name);
   }
 
+  /**
+   * Creates a new <code>{@link JFileChooserFinder}</code> capable of looking up a <code>{@link JFileChooser}</code> 
+   * using the given matcher.
+   * @param matcher the given matcher.
+   * @return the created finder.
+   */
+  public static JFileChooserFinder findFileChooser(GenericTypeMatcher<? extends JFileChooser> matcher) {
+    return new JFileChooserFinder(matcher);
+  }
+  
   /**
    * Finds a <code>{@link JFileChooserFinder}</code> by name or type.
    * @param robot contains the underlying finding to delegate the search to.

@@ -25,6 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
@@ -90,6 +91,17 @@ public class JFileChooserFinderTest {
   @Test public void shouldFindFileChooserByName() {
     clickBrowseButton();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser("fileChooser").using(robot);
+    assertThat(found.target).isSameAs(frame.fileChooser);    
+  }
+  
+  @Test public void shouldFindFileChooserUsingMatcher() {
+    clickBrowseButton();
+    GenericTypeMatcher<JFileChooser> matcher = new GenericTypeMatcher<JFileChooser>( ) {
+      protected boolean isMatching(JFileChooser fileChooser) {
+        return "fileChooser".equals(fileChooser.getName());
+      }
+    };
+    JFileChooserFixture found = JFileChooserFinder.findFileChooser(matcher).using(robot);
     assertThat(found.target).isSameAs(frame.fileChooser);    
   }
   

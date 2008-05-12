@@ -18,31 +18,54 @@ package org.fest.swing.finder;
 import java.awt.Dialog;
 import java.awt.Frame;
 
+import org.fest.swing.core.GenericTypeMatcher;
+
 /**
  * <p>
- * Understands lookup of <code>{@link Frame}</code>s and <code>{@link Dialog}</code>s. Lookups are performed till the
- * window of interest is found, or until the given time to perform the lookup is over. The default lookup time is 5 
+ * Understands lookup of <code>{@link Frame}</code>s and <code>{@link Dialog}</code>s. Lookups are performed till
+ * the window of interest is found, or until the given time to perform the lookup is over. The default lookup time is 5
  * seconds.
  * </p>
  * <p>
- * <code>{@link WindowFinder}</code> is the &quot;entry point&quot; of a fluent interface to lookup frames and dialogs.
- * This example illustrates finding a <code>{@link Frame}</code> by name, using the default lookup time (5 seconds):
+ * <code>{@link WindowFinder}</code> is the &quot;entry point&quot; of a fluent interface to look up frames and
+ * dialogs. This example illustrates finding a <code>{@link Frame}</code> by name, using the default lookup time (5
+ * seconds):
+ * 
  * <pre>
  * FrameFixture frame = WindowFinder.findFrame(&quot;someFrame&quot;).using(robot);
  * </pre>
+ * 
  * </p>
  * <p>
  * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.core.RobotFixture}</code>.
  * </p>
  * <p>
  * This example shows how to find a <code>{@link Dialog}</code> by type using a lookup time of 10 seconds:
+ * 
  * <pre>
  * DialogFixture dialog = WindowFinder.findDialog(MyDialog.class).withTimeout(10000).using(robot);
  * </pre>
+ * 
  * We can also specify the time unit:
+ * 
  * <pre>
  * DialogFixture dialog = WindowFinder.findDialog(MyDialog.class).withTimeout(10, {@link java.util.concurrent.TimeUnit#SECONDS SECONDS}).using(robot);
  * </pre>
+ * 
+ * </p>
+ * <p>
+ * This example shows how to use a <code>{@link GenericTypeMatcher}</code> to find a <code>{@link Frame}</code> with
+ * title "Hello":
+ * 
+ * <pre>
+ * GenericTypeMatcher&lt;JFrame&gt; matcher = new GenericTypeMatcher&lt;JFrame&gt;() {
+ *   protected boolean isMatching(JFrame frame) {
+ *     return &quot;hello&quot;.equals(frame.getTitle());
+ *   }
+ * };
+ * FrameFixture frame = WindowFinder.findFrame(matcher).using(robot);
+ * </pre>
+ * 
  * </p>
  * 
  * @author Alex Ruiz
@@ -53,7 +76,7 @@ public final class WindowFinder {
   private WindowFinder() {}
 
   /**
-   * Creates a new <code>{@link FrameFinder}</code> to lookup a <code>{@link Frame}</code> by name.
+   * Creates a new <code>{@link FrameFinder}</code> capable of looking up a <code>{@link Frame}</code> by name.
    * @param frameName the name of the frame to find.
    * @return the created finder.
    */
@@ -62,7 +85,7 @@ public final class WindowFinder {
   }
 
   /**
-   * Creates a new <code>{@link FrameFinder}</code> to lookup a <code>{@link Frame}</code> by type.
+   * Creates a new <code>{@link FrameFinder}</code> capable of looking up a <code>{@link Frame}</code> by type.
    * @param frameType the type of the frame to find.
    * @return the created finder.
    */
@@ -71,7 +94,17 @@ public final class WindowFinder {
   }
 
   /**
-   * Creates a new <code>{@link DialogFinder}</code> to lookup a <code>{@link Dialog}</code> by name.
+   * Creates a new <code>{@link FrameFinder}</code> capable of looking up a <code>{@link Frame}</code> using the 
+   * provided matcher.
+   * @param matcher the matcher to use to find a frame.
+   * @return the created finder.
+   */
+  public static FrameFinder findFrame(GenericTypeMatcher<? extends Frame> matcher) {
+    return new FrameFinder(matcher);
+  }
+  
+  /**
+   * Creates a new <code>{@link DialogFinder}</code> capable of looking up a <code>{@link Dialog}</code> by name.
    * @param dialogName the name of the dialog to find.
    * @return the created finder.
    */
@@ -80,11 +113,21 @@ public final class WindowFinder {
   }
 
   /**
-   * Creates a new <code>{@link org.fest.swing.finder.DialogFinder}</code> to lookup a <code>{@link Dialog}</code> by type.
+   * Creates a new <code>{@link DialogFinder}</code> capable of looking up a <code>{@link Dialog}</code> by type.
    * @param dialogType the type of the dialog to find.
    * @return the created finder.
    */
   public static DialogFinder findDialog(Class<? extends Dialog> dialogType) {
     return new DialogFinder(dialogType);
+  }
+
+  /**
+   * Creates a new <code>{@link DialogFinder}</code> capable of looking up a <code>{@link Dialog}</code> using the 
+   * provided matcher.
+   * @param matcher the matcher to use to find a dialog.
+   * @return the created finder.
+   */
+  public static DialogFinder findDialog(GenericTypeMatcher<? extends Dialog> matcher) {
+    return new DialogFinder(matcher);
   }
 }

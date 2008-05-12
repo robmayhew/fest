@@ -18,6 +18,7 @@ package org.fest.swing.finder;
 import java.awt.Frame;
 import java.util.concurrent.TimeUnit;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.FrameFixture;
 
@@ -32,6 +33,10 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
 
   FrameFinder(String frameName) {
     super(frameName, Frame.class);
+  }
+  
+  FrameFinder(GenericTypeMatcher<? extends Frame> matcher) {
+    super(matcher);
   }
 
   FrameFinder(Class<? extends Frame> frameType) {

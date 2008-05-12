@@ -18,10 +18,7 @@ package org.fest.swing.finder;
 import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
-import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.NameAndTypeMatcher;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.TypeMatcher;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.ComponentFixture;
 
@@ -39,23 +36,36 @@ abstract class ComponentFinderTemplate<T extends Component> {
 
   static final long TIMEOUT = 5000;
   
-  private String componentName;
-  private Class<? extends T> componentType;
   private long timeout = TIMEOUT;
 
+  private final ComponentMatcher matcher;
+  private final String searchDescription;
+  
   ComponentFinderTemplate(String componentName, Class<? extends T> componentType) {
-    this(componentType);
     if (isEmpty(componentName))
       throw new IllegalArgumentException("The name of the component to find should not be empty or null");
-    this.componentName = componentName;
+    validate(componentType);
+    matcher = new NameAndTypeMatcher(componentName, componentType, true);
+    searchDescription = concat("Find ", componentDisplayName(), " with name ", quote(componentName));
   }
 
+  ComponentFinderTemplate(GenericTypeMatcher<? extends T> matcher) {
+    if (matcher == null) throw new IllegalArgumentException("The matcher should not be null");
+    this.matcher = matcher;
+    searchDescription = concat("Find ", componentDisplayName(), " with matcher ", matcher.getClass().getSimpleName());
+  }
+  
   ComponentFinderTemplate(Class<? extends T> componentType) {
-    this.componentType = componentType;
+    validate(componentType);
+    matcher = new TypeMatcher(componentType, true);
+    searchDescription = concat("Find ", componentDisplayName(), " of type ", componentType.getName());
+  }
+
+  private void validate(Class<? extends T> componentType) {
     if (componentType == null)
       throw new IllegalArgumentException("The type of component to find should not be null");
   }
-
+  
   ComponentFinderTemplate<T> withTimeout(long timeout, TimeUnit unit) {
     if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
     return withTimeout(unit.toMillis(timeout));
@@ -83,27 +93,14 @@ abstract class ComponentFinderTemplate<T extends Component> {
    */
   @SuppressWarnings("unchecked")
   protected final T findComponentWith(Robot robot) {
-    ComponentFoundCondition condition = new ComponentFoundCondition(searchDescription(), robot.finder(), matcher());
+    ComponentFoundCondition condition = new ComponentFoundCondition(searchDescription, robot.finder(), matcher);
     pause(condition, timeout);
     return (T)condition.found();
   }
 
-  private String searchDescription() {
-    String message = concat("Find ", componentDisplayName());
-    if (searchingByType()) return concat(message, " of type ", componentType.getName());
-    return concat(message, " with name ", quote(componentName));
-  }
-
+  /**
+   * Returns a simple name for the component to find (e.g. "frame", "dialog", etc.)
+   * @return a simple name for the component to find.
+   */
   protected abstract String componentDisplayName();
-
-  private ComponentMatcher matcher() {
-    if (searchingByType()) return new TypeMatcher(componentType, true);
-    return nameMatcher();
-  }
-
-  private boolean searchingByType() { return isEmpty(componentName); }
-
-  protected ComponentMatcher nameMatcher() {
-    return new NameAndTypeMatcher(componentName, componentType, true);
-  }
 }

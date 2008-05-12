@@ -19,10 +19,14 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.finder.LauncherWindow.DialogToLaunch;
 import org.fest.swing.finder.LauncherWindow.FrameToLaunch;
@@ -72,14 +76,19 @@ public class WindowFinderTest {
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfFrameMatcherIsNull() {
+    GenericTypeMatcher<JFrame> matcher = null;
+    WindowFinder.findFrame(matcher);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameSearchTimeoutIsNegative() {
     WindowFinder.findFrame("frame").withTimeout(-20);
   }
   
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutIfFrameNotFound() {
-    launcherWindow.frameLaunchDelay(5000);
-    launcher.button("launchFrame").click();
+    launchFrame(5000);
     WindowFinder.findFrame("frame").withTimeout(10).using(launcher.robot);
   }
   
@@ -90,33 +99,50 @@ public class WindowFinderTest {
 
   @Test(expectedExceptions = WaitTimedOutError.class) 
   public void shouldTimeOutWhenUsingTimeUnitsIfFrameNotFound() {
-    launcherWindow.frameLaunchDelay(5000);
-    launcher.button("launchFrame").click();
+    launchFrame(5000);
     WindowFinder.findDialog("frame").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
   }
 
   @Test(dependsOnMethods = "shouldTimeOutIfFrameNotFound")
   public void shouldFindFrameByNameAfterLogin() {
-    launcherWindow.frameLaunchDelay(500);
-    launcher.button("launchFrame").click();
+    launchFrame();
     FrameFixture frame = WindowFinder.findFrame("frame").using(launcher.robot);
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfFrameNotFound")
   public void shouldFindFrameByNameAfterLoginUsingTimeUnit() {
-    launcherWindow.frameLaunchDelay(500);
-    launcher.button("launchFrame").click();
+    launchFrame();
     FrameFixture frame = WindowFinder.findFrame("frame").withTimeout(2, SECONDS).using(launcher.robot);
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfFrameNotFound")
+  public void shouldFindFrameUsingMatcherAfterLogin() {
+    launchFrame();
+    GenericTypeMatcher<JFrame> matcher = new GenericTypeMatcher<JFrame>() {
+      protected boolean isMatching(JFrame frame) {
+        return "frame".equals(frame.getName());
+      }
+    };
+    FrameFixture frame = WindowFinder.findFrame(matcher).using(launcher.robot);
+    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
+  }
+
+  @Test(dependsOnMethods = "shouldTimeOutIfFrameNotFound")
   public void shouldFindFrameByTypeAfterLogin() {
-    launcherWindow.frameLaunchDelay(500);
-    launcher.button("launchFrame").click();
+    launchFrame();
     FrameFixture frame = WindowFinder.findFrame(FrameToLaunch.class).using(launcher.robot);
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
+  }
+
+  private void launchFrame() {
+    launchFrame(500);
+  }
+
+  private void launchFrame(int delay) {
+    launcherWindow.frameLaunchDelay(delay);
+    launcher.button("launchFrame").click();
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -135,14 +161,19 @@ public class WindowFinderTest {
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowExceptionIfDialogMatcherIsNull() {
+    GenericTypeMatcher<JDialog> matcher = null;
+    WindowFinder.findDialog(matcher);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogSearchTimeoutIsNegative() {
     WindowFinder.findDialog("dialog").withTimeout(-20);
   }
   
   @Test(expectedExceptions = WaitTimedOutError.class) 
   public void shouldTimeOutIfDialogNotFound() {
-    launcherWindow.dialogLaunchDelay(5000);
-    launcher.button("launchDialog").click();
+    launchDialog(5000);
     WindowFinder.findDialog("dialog").withTimeout(10).using(launcher.robot);
   }
   
@@ -153,24 +184,42 @@ public class WindowFinderTest {
   
   @Test(expectedExceptions = WaitTimedOutError.class) 
   public void shouldTimeOutWhenUsingTimeUnitsIfDialogNotFound() {
-    launcherWindow.dialogLaunchDelay(5000);
-    launcher.button("launchDialog").click();
+    launchDialog(5000);
     WindowFinder.findDialog("dialog").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
   }
 
   @Test(dependsOnMethods = "shouldTimeOutIfDialogNotFound")
   public void shouldFindDialogByNameAfterLoadingSettings() {
-    launcherWindow.dialogLaunchDelay(500);
-    launcher.button("launchDialog").click();
+    launchDialog();
     DialogFixture dialog = WindowFinder.findDialog("dialog").using(launcher.robot);
     assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
   }
   
   @Test(dependsOnMethods = "shouldTimeOutIfDialogNotFound")
   public void shouldFindDialogByTypeAfterLoadingSettings() {
-    launcherWindow.dialogLaunchDelay(500);
-    launcher.button("launchDialog").click();
+    launchDialog();
     DialogFixture dialog = WindowFinder.findDialog(DialogToLaunch.class).using(launcher.robot);
     assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
+  }
+
+  @Test(dependsOnMethods = "shouldTimeOutIfDialogNotFound")
+  public void shouldFindDialogUsingMatcherAfterLoadingSettings() {
+    launchDialog();
+    GenericTypeMatcher<JDialog> matcher = new GenericTypeMatcher<JDialog>() {
+      protected boolean isMatching(JDialog dialog) {
+        return "dialog".equals(dialog.getName());
+      }
+    };
+    DialogFixture dialog = WindowFinder.findDialog(matcher).using(launcher.robot);
+    assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
+  }
+
+  private void launchDialog() {
+    launchDialog(500);
+  }
+
+  private void launchDialog(int delay) {
+    launcherWindow.dialogLaunchDelay(delay);
+    launcher.button("launchDialog").click();
   }
 }

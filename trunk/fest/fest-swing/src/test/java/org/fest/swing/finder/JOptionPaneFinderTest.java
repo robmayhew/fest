@@ -25,6 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
@@ -61,13 +62,20 @@ public class JOptionPaneFinderTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldNotHaveNameMatcher() {
-    assertThat(JOptionPaneFinder.findOptionPane().nameMatcher()).isNull();
-  }
-  
   @Test public void shouldFindFileChooser() {
     clickMessageButton();
     JOptionPaneFixture found = JOptionPaneFinder.findOptionPane().using(robot);
+    assertThat(found.target).isNotNull();
+  }
+
+  @Test public void shouldFindFileChooserUsingGivenMatcher() {
+    clickMessageButton();
+    GenericTypeMatcher<JOptionPane> matcher = new GenericTypeMatcher<JOptionPane>() {
+      protected boolean isMatching(JOptionPane optionPane) {
+        return "A message".equals(optionPane.getMessage());
+      }
+    };
+    JOptionPaneFixture found = JOptionPaneFinder.findOptionPane(matcher).using(robot);
     assertThat(found.target).isNotNull();
   }
 
@@ -106,7 +114,7 @@ public class JOptionPaneFinderTest {
       messageButton.setName("message");
       messageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          JOptionPane.showMessageDialog(MyFrame.this, "A message");
+          JOptionPane.showMessageDialog(MyFrame.this, "A message", "Hello", JOptionPane.PLAIN_MESSAGE);
         }
       });
       add(messageButton);

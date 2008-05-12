@@ -18,6 +18,7 @@ package org.fest.swing.finder;
 import java.awt.Dialog;
 import java.util.concurrent.TimeUnit;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.DialogFixture;
 
@@ -34,6 +35,10 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
     super(dialogName, Dialog.class);
   }
 
+  DialogFinder(GenericTypeMatcher<? extends Dialog> matcher) {
+    super(matcher);
+  }
+  
   DialogFinder(Class<? extends Dialog> dialogType) {
     super(dialogType);
   }
@@ -56,7 +61,6 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
   @Override public DialogFinder withTimeout(long timeout, TimeUnit unit) {
     return (DialogFinder)super.withTimeout(timeout, unit);
   }
-
 
   /**
    * Finds a <code>{@link Dialog}</code> by name or type.

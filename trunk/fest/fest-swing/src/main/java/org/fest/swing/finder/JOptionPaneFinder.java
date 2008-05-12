@@ -19,35 +19,54 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JOptionPaneFixture;
 
 /**
- * Understands a finder for <code>{@link JOptionPane}</code>s. Lookups are performed till a file chooser is found,
- * or until the given time to perform the lookup is over. The default lookup time is 5 seconds.
+ * Understands a finder for <code>{@link JOptionPane}</code>s. Lookups are performed till a file chooser is found, or
+ * until the given time to perform the lookup is over. The default lookup time is 5 seconds.
  * </p>
  * <p>
  * This example illustrates finding a <code>{@link JOptionPane}</code> by name, using the default lookup time (5
  * seconds):
+ * 
  * <pre>
  * JOptionPaneFixture optionPane = JOptionPaneFinder.findOptionPane().using(robot);
  * </pre>
+ * 
  * </p>
  * <p>
  * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.core.RobotFixture}</code>.
  * </p>
  * <p>
  * This example shows how to find a <code>{@link JOptionPane}</code> by type using a lookup time of 10 seconds:
+ * 
  * <pre>
  * JOptionPaneFixture optionPane = JOptionPaneFinder.findOptionPane().withTimeout(10000).using(robot);
  * </pre>
+ * 
  * We can also specify the time unit:
+ * 
  * <pre>
  * JOptionPaneFixture optionPane = JOptionPaneFinder.findOptionPane().withTimeout(10, {@link TimeUnit#SECONDS SECONDS}).using(robot);
  * </pre>
+ * 
  * </p>
- *
+ * <p>
+ * This example shows how to find a <code>{@link JOptionPane}</code> using a <code>{@link GenericTypeMatcher}</code>:
+ * 
+ * <pre>
+ * GenericTypeMatcher&lt;JOptionPane&gt; matcher = new GenericTypeMatcher&lt;JOptionPane&gt;() {
+ *   protected boolean isMatching(JOptionPane optionPane) {
+ *     return &quot;A message&quot;.equals(optionPane.getMessage());
+ *   }
+ * };
+ * JOptionPaneFixture optionPane = JOptionPaneFinder.findOptionPane(matcher).using(robot);
+ * </pre>
+ * 
+ * </p>
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -57,14 +76,28 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
     super(JOptionPane.class);
   }
 
+  JOptionPaneFinder(GenericTypeMatcher<? extends JOptionPane> matcher) {
+    super(matcher);
+  }
+  
   /**
-   * Creates a new <code>{@link JOptionPaneFinder}</code> to lookup a <code>{@link JOptionPane}</code>.
+   * Creates a new <code>{@link JOptionPaneFinder}</code> capable of looking up a <code>{@link JOptionPane}</code>.
    * @return the created finder.
    */
   public static JOptionPaneFinder findOptionPane() {
     return new JOptionPaneFinder();
   }
 
+  /**
+   * Creates a new <code>{@link JOptionPaneFinder}</code> capable of looking up a <code>{@link JOptionPane}</code>
+   * using the given matcher.
+   * @param matcher the given matcher.
+   * @return the created finder.
+   */
+  public static JOptionPaneFinder findOptionPane(GenericTypeMatcher<? extends JOptionPane> matcher) {
+    return new JOptionPaneFinder(matcher);
+  }
+  
   /**
    * Finds a <code>{@link JOptionPaneFinder}</code> by name or type.
    * @param robot contains the underlying finding to delegate the search to.
@@ -96,9 +129,5 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
 
   protected String componentDisplayName() {
     return "option pane";
-  }
-
-  @Override protected ComponentMatcher nameMatcher() {
-    return null; // no name matching with JOptionPane
   }
 }

@@ -18,6 +18,7 @@ package org.fest.swing.finder;
 import java.awt.Window;
 import java.util.concurrent.TimeUnit;
 
+import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.WindowFixture;
 
@@ -32,6 +33,10 @@ abstract class WindowFinderTemplate<T extends Window> extends ComponentFinderTem
 
   WindowFinderTemplate(String windowName, Class<? extends T> windowType) {
     super(windowName, windowType);
+  }
+  
+  WindowFinderTemplate(GenericTypeMatcher<? extends T> matcher) {
+    super(matcher);
   }
   
   WindowFinderTemplate(Class<? extends T> windowType) {
