@@ -24,6 +24,8 @@ import javax.swing.JToolBar;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.testing.CustomCellRenderer;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

@@ -263,6 +263,23 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
+   * Returns the <code>String</code> representation of the cells in the <code>{@link JTable}</code>, using this 
+   * driver's <code>{@link JTableCellReader}</code>.
+   * @param table the target <code>JTable</code>.
+   * @return the <code>String</code> representation of the cells in the <code>JTable</code>.
+   * @see #cellReader(JTableCellReader)
+   */
+  public String[][] contents(JTable table) {
+    int rowCount = table.getRowCount();
+    int columnCount = table.getColumnCount();
+    String[][] contents = new String[rowCount][columnCount];
+    for (int row = 0; row < rowCount; row++)
+      for (int col = 0; col < columnCount; col++) 
+        contents[row][col] = cellReader.valueAt(table, row, col);
+    return contents;
+  }
+
+  /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.

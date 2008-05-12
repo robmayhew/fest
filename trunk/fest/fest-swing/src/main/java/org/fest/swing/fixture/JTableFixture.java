@@ -225,6 +225,17 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     return driver.pointAt(target, cell);
   }
 
+
+  /**
+   * Returns the <code>String</code> representation of the cells in the in this fixture's <code>{@link JTable}</code>,
+   * using this fixture's <code>{@link JTableCellReader}</code>.
+   * @return the <code>String</code> representation of the cells in thi fixture's <code>JTable</code>.
+   * @see #cellReader(JTableCellReader)
+   */
+  public String[][] contents() {
+    return driver.contents(target);
+  }
+
   /**
    * Returns the <code>String</code> representation of the value of a cell in this fixture's
    * <code>{@link JTable}</code>, using this fixture's <code>{@link JTableCellReader}</code>.

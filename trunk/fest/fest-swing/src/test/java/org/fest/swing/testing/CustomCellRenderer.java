@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.cell;
+package org.fest.swing.testing;
 
 import java.awt.Component;
 
@@ -31,7 +31,7 @@ import javax.swing.tree.TreeCellRenderer;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class CustomCellRenderer implements ListCellRenderer, TableCellRenderer, TreeCellRenderer {
+public class CustomCellRenderer implements ListCellRenderer, TableCellRenderer, TreeCellRenderer {
   private static final long serialVersionUID = 1L;
   private final Component rendererComponent;
   

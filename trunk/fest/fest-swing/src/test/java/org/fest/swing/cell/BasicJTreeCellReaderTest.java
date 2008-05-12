@@ -25,6 +25,8 @@ import javax.swing.tree.DefaultTreeModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.testing.CustomCellRenderer;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
