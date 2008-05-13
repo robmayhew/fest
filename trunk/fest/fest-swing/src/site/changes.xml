@@ -53,6 +53,13 @@
       <action dev="alruiz" type="fix" issue="133">
         JTreeFixture now scrolls (up or down) to the row or path to select, drag or drop.
       </action>
+      <action dev="alruiz" type="add" issue="135">
+        Added method 'contents' to JTableFixture. This method returns the String representation of the cell values of a
+        JTable.
+      </action>
+      <action dev="alruiz" type="add" issue="135">
+        Added method 'requireContents(String[][])' to JTableFixture. 
+      </action>
       <action dev="wanghy, alruiz" type="add">
         Component finders (WindowFinder, JFileChooserFinder and JOptionPaneFinder) can perform lookups using
         GenericTypeMatchers.

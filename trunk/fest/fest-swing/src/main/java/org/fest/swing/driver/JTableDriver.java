@@ -1,15 +1,15 @@
 /*
  * Created on Feb 2, 2008
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -31,21 +31,23 @@ import org.fest.swing.exception.ComponentLookupException;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>,
- * this driver only focuses on behavior present only in <code>{@link JTable}</code>s. This class is intended for
- * internal use only.
- *
+ * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
+ * driver only focuses on behavior present only in <code>{@link JTable}</code>s. This class is intended for internal
+ * use only.
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
 public class JTableDriver extends JComponentDriver {
 
+  private static final String CONTENTS_PROPERTY = "contents";
   private static final String SELECTION_PROPERTY = "selection";
-  
+
   private final JTableLocation location = new JTableLocation();
   private JTableCellReader cellReader;
 
@@ -149,7 +151,8 @@ public class JTableDriver extends JComponentDriver {
     if (cells == null) throw actionFailure("Table cells to select cannot be null");
     new MultipleSelectionTemplate(robot) {
       void select() {
-        for (JTableCell c : cells) selectCell(table, c);
+        for (JTableCell c : cells)
+          selectCell(table, c);
       }
     }.multiSelect();
   }
@@ -161,8 +164,7 @@ public class JTableDriver extends JComponentDriver {
    */
   public void requireNoSelection(JTable table) {
     if (table.getSelectedColumnCount() == 0 && table.getSelectedRowCount() == 0) return;
-    String message = concat(
-        "[", propertyName(table, SELECTION_PROPERTY), "] expected no selection but was:<rows",
+    String message = concat("[", propertyName(table, SELECTION_PROPERTY), "] expected no selection but was:<rows",
         format(table.getSelectedRows()), ", columns", format(table.getSelectedColumns()), ">");
     fail(message);
   }
@@ -263,7 +265,20 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the <code>String</code> representation of the cells in the <code>{@link JTable}</code>, using this 
+   * Asserts that the <code>String</code> representation of the cell values in the <code>{@link JTable}</code> is
+   * equal to the given <code>String</code> array. This method uses this driver's
+   * <code>{@link JTableCellReader}</code> to read the values of the table cells as <code>String</code>s.
+   * @param table the target <code>JTable</code>.
+   * @param contents the expected <code>String</code> representation of the cell values in the <code>JTable</code>.
+   * @see #cellReader(JTableCellReader)
+   */
+  public void requireContents(JTable table, String[][] contents) {
+    String[][] actual = contents(table);
+    assertEquals(actual, contents, propertyName(table, CONTENTS_PROPERTY));
+  }
+
+  /**
+   * Returns the <code>String</code> representation of the cells in the <code>{@link JTable}</code>, using this
    * driver's <code>{@link JTableCellReader}</code>.
    * @param table the target <code>JTable</code>.
    * @return the <code>String</code> representation of the cells in the <code>JTable</code>.
@@ -274,7 +289,7 @@ public class JTableDriver extends JComponentDriver {
     int columnCount = table.getColumnCount();
     String[][] contents = new String[rowCount][columnCount];
     for (int row = 0; row < rowCount; row++)
-      for (int col = 0; col < columnCount; col++) 
+      for (int col = 0; col < columnCount; col++)
         contents[row][col] = cellReader.valueAt(table, row, col);
     return contents;
   }

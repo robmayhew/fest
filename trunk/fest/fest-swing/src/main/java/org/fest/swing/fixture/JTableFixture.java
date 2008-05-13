@@ -418,6 +418,18 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
+   * Asserts that the <code>String</code> representation of the cell values in this fixture's 
+   * <code>{@link JTable}</code> is equal to the given <code>String</code> array. This method uses this fixture's
+   * <code>{@link JTableCellReader}</code> to read the values of the table cells as <code>String</code>s.
+   * @param contents the expected <code>String</code> representation of the cell values in this fixture's 
+   * <code>JTable</code>.
+   * @see #cellReader(JTableCellReader)
+   */
+  public void requireContents(String[][] contents) {
+    driver.requireContents(target, contents);
+  }
+
+  /**
    * Shows a pop-up menu at the given cell.
    * @param cell the table cell where to show the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
