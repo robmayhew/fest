@@ -46,7 +46,7 @@ public class JTreeLocationTest {
 
   private MyFrame frame;
   private JTreeLocation location;
-  private List<TreePath[]> paths;
+  private List<TreePath> paths;
 
   @BeforeMethod public void setUp() {
     frame = new MyFrame(getClass());
@@ -56,39 +56,35 @@ public class JTreeLocationTest {
   }
 
   private void populatePaths() {
-    paths = new ArrayList<TreePath[]>();
-    paths.add(array(path("root"), rootPath()));
-    paths.add(array(path("root", "node1"), node1Path()));
-    paths.add(array(path("root", "node1", "node11"), node11Path()));
-    paths.add(array(path("root", "node1", "node11", "node111"), childOf(node11Path(), 0)));
-    paths.add(array(path("root", "node1", "node11", "node112"), childOf(node11Path(), 1)));
-    paths.add(array(path("root", "node1", "node12"), childOf(node1Path(), 1)));
-    paths.add(array(path("root", "node2"), childOf(rootPath(), 1)));
+    paths = new ArrayList<TreePath>();
+    paths.add(rootPath());
+    paths.add(node1Path());
+    paths.add(node11Path());
+    paths.add(childOf(node11Path(), 0));
+    paths.add(childOf(node11Path(), 1));
+    paths.add(childOf(node1Path(), 1));
+    paths.add(childOf(rootPath(), 1));
   }
 
   @AfterMethod public void tearDown() {
     frame.destroy();
   }
 
-  @Test(dataProvider = "pathPairIndices")
-  public void shouldFindLocationOfTreePath(int pathPairIndex) {
-    TreePath[] pathPair = paths.get(pathPairIndex);
+  @Test(dataProvider = "pathIndices")
+  public void shouldFindLocationOfTreePath(int pathIndex) {
+    TreePath path = paths.get(pathIndex);
     pause(160);
-    Point actual = location.pointAt(frame.tree, pathPair[0]);
-    Rectangle pathBounds = frame.tree.getPathBounds(pathPair[1]);
+    Point actual = location.pointAt(frame.tree, path);
+    Rectangle pathBounds = frame.tree.getPathBounds(path);
     Point expected = new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
     assertThat(actual).isEqualTo(expected);
   }
 
-  @DataProvider(name = "pathPairIndices")
-  public Object[][] pathPairIndices() {
+  @DataProvider(name = "pathIndices")
+  public Object[][] pathIndices() {
     return new Object[][] {
         { 0 }, { 1 }, { 2 }, { 3 }, { 4 }, { 5 }, { 6 }
     };
-  }
-
-  private TreePath path(String...path) {
-    return new TreePath(path);
   }
 
   private TreePath node11Path() {
