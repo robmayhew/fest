@@ -56,7 +56,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
   private ComponentFinderTemplate(ComponentMatcher matcher) {
     if (matcher == null) throw new IllegalArgumentException("The matcher should not be null");
     this.matcher = matcher;
-    searchDescription = concat(" to be found using matcher ", matcher);
+    searchDescription = concat("component to be found using matcher ", matcher);
   }
   
   ComponentFinderTemplate<T> withTimeout(long timeout, TimeUnit unit) {

@@ -92,8 +92,7 @@ public class WindowFinderTest {
 
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutIfFrameNotFound() {
-    launchFrame(5000);
-    WindowFinder.findFrame("frame").withTimeout(10).using(launcher.robot);
+    WindowFinder.findFrame("myFrame").withTimeout(10).using(launcher.robot);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -103,8 +102,7 @@ public class WindowFinderTest {
 
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutWhenUsingTimeUnitsIfFrameNotFound() {
-    launchFrame(5000);
-    WindowFinder.findDialog("frame").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
+    WindowFinder.findDialog("myFrame").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
   }
 
   @Test public void shouldFindFrameByNameAfterLogin() {
@@ -173,8 +171,7 @@ public class WindowFinderTest {
 
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutIfDialogNotFound() {
-    launchDialog(5000);
-    WindowFinder.findDialog("dialog").withTimeout(5).using(launcher.robot);
+    WindowFinder.findDialog("myDialog").withTimeout(5).using(launcher.robot);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -184,8 +181,7 @@ public class WindowFinderTest {
 
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutWhenUsingTimeUnitsIfDialogNotFound() {
-    launchDialog(5000);
-    WindowFinder.findDialog("dialog").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
+    WindowFinder.findDialog("myDialog").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
   }
 
   @Test public void shouldFindDialogByNameAfterLoadingSettings() {
