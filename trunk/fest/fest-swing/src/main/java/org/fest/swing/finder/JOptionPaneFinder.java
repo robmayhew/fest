@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.finder;
 
@@ -125,9 +125,5 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
    */
   @Override public JOptionPaneFinder withTimeout(long timeout, TimeUnit unit) {
     return (JOptionPaneFinder)super.withTimeout(timeout, unit);
-  }
-
-  protected String componentDisplayName() {
-    return "option pane";
   }
 }

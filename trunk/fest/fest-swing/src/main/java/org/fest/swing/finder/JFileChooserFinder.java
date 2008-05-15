@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.finder;
 
@@ -138,9 +138,5 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
    */
   @Override public JFileChooserFinder withTimeout(long timeout, TimeUnit unit) {
     return (JFileChooserFinder)super.withTimeout(timeout, unit);
-  }
-
-  protected String componentDisplayName() {
-    return "file chooser";
   }
 }

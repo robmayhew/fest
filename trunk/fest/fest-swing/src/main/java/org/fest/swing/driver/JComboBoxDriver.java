@@ -186,10 +186,6 @@ public class JComboBoxDriver extends JComponentDriver {
 
   void showDropDownList(final JComboBox comboBox) {
     if (isDropDownVisible(comboBox)) return;
-    if (!comboBox.isEditable()) {
-      click(comboBox);
-      return;
-    }
     // Location of pop-up button activator is LAF-dependent
     robot.invokeAndWait(new Runnable() {
       public void run() { dropDownVisibleThroughUIDelegate(comboBox, true); }

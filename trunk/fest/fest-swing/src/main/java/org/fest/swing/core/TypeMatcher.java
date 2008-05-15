@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
 
@@ -34,6 +34,7 @@ public final class TypeMatcher implements ComponentMatcher {
   /**
    * Creates a new <code>{@link TypeMatcher}</code>. The component to match does not have to be showing. 
    * @param type the type of the component we are looking for.
+   * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
   public TypeMatcher(Class<? extends Component> type) {
     this(type, false);
@@ -43,8 +44,11 @@ public final class TypeMatcher implements ComponentMatcher {
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param type the type of the component we are looking for.
    * @param requireShowing indicates if the component to match should be showing or not.
+   * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
   public TypeMatcher(Class<? extends Component> type, boolean requireShowing) {
+    if (type == null)
+      throw new IllegalArgumentException("The type of component to find should not be null");
     this.type = type;
     this.requireShowing = requireShowing;
   }

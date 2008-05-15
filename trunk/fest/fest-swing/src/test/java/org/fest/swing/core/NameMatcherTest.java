@@ -53,6 +53,16 @@ public class NameMatcherTest {
     assertThat(matcher.matches(button)).isFalse();
   }
   
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfNameIsNull() {
+    new NameMatcher(null);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfNameIsEmpty() {
+    new NameMatcher("");
+  }
+
   @Test(groups = GUI) public void shouldReturnTrueIfNameMatchingAndIsShowing() {
     TestFrame frame = new TestFrame(NameMatcherTest.class);
     frame.add(button);

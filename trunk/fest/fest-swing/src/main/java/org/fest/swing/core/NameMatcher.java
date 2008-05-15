@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
 
@@ -35,6 +35,7 @@ public final class NameMatcher implements ComponentMatcher {
   /**
    * Creates a new <code>{@link NameMatcher}</code>. The component to match does not have to be showing.
    * @param name the name of the component we are looking for.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
   public NameMatcher(String name) {
     this(name, false);
@@ -44,8 +45,11 @@ public final class NameMatcher implements ComponentMatcher {
    * Creates a new <code>{@link TypeMatcher}</code>.
    * @param name the name of the component we are looking for.
    * @param requireShowing indicates if the component to match should be showing or not.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
   public NameMatcher(String name, boolean requireShowing) {
+    if (isEmpty(name))
+      throw new IllegalArgumentException("The name of the component to find should not be empty or null");
     this.name = name;
     this.requireShowing = requireShowing;
   }

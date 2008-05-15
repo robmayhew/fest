@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.finder;
 
@@ -23,7 +23,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.ComponentFixture;
 
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a template for <code>{@link Component}</code> finders.
@@ -42,28 +42,21 @@ abstract class ComponentFinderTemplate<T extends Component> {
   private final String searchDescription;
   
   ComponentFinderTemplate(String componentName, Class<? extends T> componentType) {
-    if (isEmpty(componentName))
-      throw new IllegalArgumentException("The name of the component to find should not be empty or null");
-    validate(componentType);
-    matcher = new NameAndTypeMatcher(componentName, componentType, true);
-    searchDescription = concat("Find ", componentDisplayName(), " with name ", quote(componentName));
+    this(new NameAndTypeMatcher(componentName, componentType, true));
   }
 
   ComponentFinderTemplate(GenericTypeMatcher<? extends T> matcher) {
-    if (matcher == null) throw new IllegalArgumentException("The matcher should not be null");
-    this.matcher = matcher;
-    searchDescription = concat("Find ", componentDisplayName(), " with matcher ", matcher.getClass().getSimpleName());
+    this((ComponentMatcher)matcher);
   }
   
   ComponentFinderTemplate(Class<? extends T> componentType) {
-    validate(componentType);
-    matcher = new TypeMatcher(componentType, true);
-    searchDescription = concat("Find ", componentDisplayName(), " of type ", componentType.getName());
+    this(new TypeMatcher(componentType, true));
   }
-
-  private void validate(Class<? extends T> componentType) {
-    if (componentType == null)
-      throw new IllegalArgumentException("The type of component to find should not be null");
+  
+  private ComponentFinderTemplate(ComponentMatcher matcher) {
+    if (matcher == null) throw new IllegalArgumentException("The matcher should not be null");
+    this.matcher = matcher;
+    searchDescription = concat(" to be found using matcher ", matcher);
   }
   
   ComponentFinderTemplate<T> withTimeout(long timeout, TimeUnit unit) {
@@ -97,10 +90,4 @@ abstract class ComponentFinderTemplate<T extends Component> {
     pause(condition, timeout);
     return (T)condition.found();
   }
-
-  /**
-   * Returns a simple name for the component to find (e.g. "frame", "dialog", etc.)
-   * @return a simple name for the component to find.
-   */
-  protected abstract String componentDisplayName();
 }

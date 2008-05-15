@@ -51,6 +51,21 @@ public class NameAndTypeMatcherTest {
     textField.setName("myTextField");
   }
   
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfNameIsNull() {
+    new NameAndTypeMatcher(null, JTextComponent.class);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfNameIsEmpty() {
+    new NameAndTypeMatcher("", JTextComponent.class);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfTypeIsNull() {
+    new NameAndTypeMatcher("myTextField", null);
+  }
+
   @Test public void shouldFindComponentWithIfNameTypeAndShowingMatch() {
     NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class, true);
     textField.setShowing(true);

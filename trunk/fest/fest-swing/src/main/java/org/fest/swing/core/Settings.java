@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
 
@@ -80,7 +80,7 @@ public final class Settings {
   
   /**
    * Returns a value representing the millisecond count in between generated events. The default is 30 milliseconds.
-   * @return a value representing the millisecond count in between generated events.
+   * @return a value representing the millisecond count in between generated events. 
    */
   public int delayBetweenEvents() { 
     return delayBetweenEvents; 
@@ -89,7 +89,12 @@ public final class Settings {
   /**
    * Updates the value representing the millisecond count in between generated events. Usually just set to 100-200 if
    * you want to slow down the playback to simulate actual user input. The default is 30 milliseconds.
+   * <p>
+   * To change the speed of a GUI test, you need to change the values of both <code>delayBetweenEvents</code> and 
+   * <code>eventPostingDelay</code>.
+   * </p>
    * @param ms the millisecond count in between generated events. It should be between -1 and 60000.
+   * @see #eventPostingDelay(int)
    */
   public void delayBetweenEvents(int ms) { 
     delayBetweenEvents = valueToUpdate(ms, -1, 60000);
@@ -165,7 +170,12 @@ public final class Settings {
   /**
    * Updates the number of milliseconds before checking for idle. This allows the system a little time to put a native
    * event onto the AWT event queue. The default value is 100 milliseconds.
+   * <p>
+   * To change the speed of a GUI test, you need to change the values of both <code>delayBetweenEvents</code> and 
+   * <code>eventPostingDelay</code>.
+   * </p>
    * @param ms the time in milliseconds. It should be between 0 and 1000.
+   * @see #delayBetweenEvents(int)
    */
   public void eventPostingDelay(int ms) {
     eventPostingDelay = valueToUpdate(ms, 0, 1000);

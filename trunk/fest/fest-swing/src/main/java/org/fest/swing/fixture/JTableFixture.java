@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *
- * Copyright @2007 the original author or authors.
+ * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
 
@@ -174,7 +174,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   /**
    * Verifies that this fixture's <code>{@link JTable}</code> does not have any selection. 
    * @return this fixture.
-   * @throw AssertionError if this fixture's <code>JTable</code> has a selection.
+   * @throws AssertionError if this fixture's <code>JTable</code> has a selection.
    */
   public JTableFixture requireNoSelection() {
     driver.requireNoSelection(target);

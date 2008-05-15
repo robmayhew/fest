@@ -1,5 +1,5 @@
 /*
- * Created on Dec 2, 2007
+ * Created on May 14, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,26 +11,22 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007-2008 the original author or authors.
+ * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.core;
+
+import org.testng.annotations.Test;
 
 /**
- * Understands system-related utility methods.
+ * Tests for <code>{@link TypeMatcher}</code>.
  *
  * @author Alex Ruiz
  */
-public final class System {
+public class TypeMatcherTest {
 
-  public static final String LINE_SEPARATOR = lineSeparator();
-  
-  private static String lineSeparator() {
-    try {
-      return java.lang.System.getProperty("line.separator");
-    } catch (Exception e) {
-      return "\n";
-    }
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfTypeIsNull() {
+    new TypeMatcher(null);
   }
-  
-  private System() {}
+
 }
