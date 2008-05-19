@@ -54,10 +54,6 @@ public class BasicJTableCellReaderTest {
     assertThat(value).isEqualTo("Yoda");
   }
 
-  private void updateRendererComponent(int column, Component c) {
-    table.getColumnModel().getColumn(column).setCellRenderer(new CustomCellRenderer(c));
-  }
-  
   @Test public void shouldReturnFontFromRenderer() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
@@ -113,4 +109,8 @@ public class BasicJTableCellReaderTest {
   @DataProvider(name = "booleans") public Object[][] booleans() {
     return new Object[][] { { true }, { false } };
   }
+
+  private void updateRendererComponent(int column, Component c) {
+    table.getColumnModel().getColumn(column).setCellRenderer(new CustomCellRenderer(c));
+  }  
 }

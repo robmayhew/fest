@@ -26,6 +26,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Pause;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.testing.CustomCellRenderer;
@@ -55,6 +56,7 @@ public class TableContentsTest {
     robot = robotWithNewAwtHierarchy();
     frame = new MyFrame();
     robot.showWindow(frame);
+    Pause.pause(20000);
     fixture = new JTableFixture(robot, frame.table);
   }
   
@@ -119,8 +121,10 @@ public class TableContentsTest {
     
     public MyFrame() {
       super(TableContentsTest.class);
-      add(new JScrollPane(table));
-      setPreferredSize(new Dimension(600, 300));
+      JScrollPane scrollPane = new JScrollPane(table);
+      scrollPane.setPreferredSize(new Dimension(180, 200));
+      add(scrollPane);
+      setPreferredSize(new Dimension(380, 350));
       comboBox.setSelectedIndex(0);
       updateCellRendererComponent(1, comboBox);
       updateCellRendererComponent(2, checkBox);

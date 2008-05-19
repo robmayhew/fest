@@ -62,7 +62,7 @@
       </action>
       <action dev="wanghy, alruiz" type="add">
         Component finders (WindowFinder, JFileChooserFinder and JOptionPaneFinder) can perform lookups using
-        GenericTypeMatchers.
+        GenericTypeMatchers. Many thanks to Mariusz Saternus.
       </action>
       <action dev="alruiz" type="add">
         Added method 'font' to all fixtures. This method returns a FontFixture.
@@ -91,11 +91,11 @@
         Added method 'requireSelection(int)' to JTreeFixture. This method verifies that a JTree has the row selected.
       </action>
       <action dev="wanghy" type="add">
-        Added methods 'showPopupMenuAt(int)' and 'showPopupMenuAt(String)' to JTreeFixture. These methods shows a 
+        Added methods 'showPopupMenuAt(int)' and 'showPopupMenuAt(String)' to JTreeFixture. These methods show a 
         JPopupMenu in a given row and node path respectively.
       </action>
       <action dev="alruiz, wanghy" type="add">
-        Replaced TreePath as method parameter in JTreeFixture and replace it with a String specifying the path. For
+        Replaced TreePath as method parameter in JTreeFixture with a String specifying the path. For
         example, now a path can be set as "root/node1/node1.1".
       </action>
     </release>
