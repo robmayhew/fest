@@ -81,6 +81,9 @@
       <name>David DIDIER</name>
     </contributor>
     <contributor>
+      <name>Dan Dyer</name>
+    </contributor>
+    <contributor>
       <name>Woody Folsom</name>
     </contributor>
     <contributor>
@@ -93,6 +96,12 @@
       <url>http://thediscoblog.com</url>
     </contributor>
     <contributor>
+      <name>Manuel Kueblboeck</name>
+    </contributor>
+    <contributor>
+      <name>Frederik Martens</name>
+    </contributor>
+    <contributor>
       <name>Duncan Mills</name>
       <organization>Oracle</organization>
       <organizationUrl>http://www.oracle.com/</organizationUrl>
@@ -102,10 +111,21 @@
       <name>Javier Sandino</name>
     </contributor>
     <contributor>
+      <name>Mariusz Saternus</name>
+      <organization>IDR Solutions</organization>
+      <organizationUrl>http://www.idrsolutions.com/</organizationUrl>
+    </contributor>
+    <contributor>
       <name>Konstantin Scheglov</name>
     </contributor>
     <contributor>
+      <name>Lorenzo Sicilia</name>
+    </contributor>
+    <contributor>
       <name>Marcos Silva Pereira</name>
+    </contributor>
+    <contributor>
+      <name>J. Simmons</name>
     </contributor>
     <contributor>
       <name>John Stephi</name>
@@ -123,6 +143,12 @@
     </contributor>
     <contributor>
       <name>Lukasz Tutaj</name>
+    </contributor>
+    <contributor>
+      <name>Geertjan Wielenga</name>
+      <organization>Sun Microsystems</organization>
+      <organizationUrl>http://www.sun.com/</organizationUrl>
+      <url>http://blogs.sun.com/geertjan/</url>
     </contributor>
     <contributor>
       <name>Geoffrey Wiseman</name>
@@ -155,22 +181,22 @@
           <templateFile>${basedir}/src/site/site.vm</templateFile>
         </configuration>
       </plugin>
-      <!--plugin>
+      <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
-        <licenseLocation>../clover.license</licenseLocation>
-        <includesTestSourceRoots>false</includesTestSourceRoots>
+          <licenseLocation>../clover.license</licenseLocation>
+          <includesTestSourceRoots>false</includesTestSourceRoots>
         </configuration>
         <executions>
-        <execution>
-        <phase>pre-site</phase>
-        <goals>
-        <goal>instrument</goal>
-        </goals>
-        </execution>
+          <execution>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
         </executions>
-        </plugin-->
+      </plugin>
     </plugins>
   </build>
   <pluginRepositories>
@@ -181,14 +207,14 @@
   </pluginRepositories>
   <reporting>
     <plugins>
-      <!--plugin>
+      <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
-        <licenseLocation>../clover.license</licenseLocation>
-        <includesTestSourceRoots>false</includesTestSourceRoots>
+          <licenseLocation>../clover.license</licenseLocation>
+          <includesTestSourceRoots>false</includesTestSourceRoots>
         </configuration>
-        </plugin-->
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
