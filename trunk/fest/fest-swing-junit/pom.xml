@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-swing-junit</artifactId>
-	<version>1.0a1</version>
+	<version>1.0a2</version>
 	<name>FEST Swing - JUnit Extension</name>
 	<description>JUnit-specific extension for FEST-Swing</description>
 	<inceptionYear>2007</inceptionYear>
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-swing</artifactId>
-			<version>1.0a1</version>
+			<version>1.0a2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
