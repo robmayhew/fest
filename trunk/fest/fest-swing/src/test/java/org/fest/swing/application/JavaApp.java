@@ -16,10 +16,10 @@
 package org.fest.swing.application;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
-
-import org.fest.util.Arrays;
 
 /**
  * An application with a "main" method that shows a <code>{@link JFrame}</code>.
@@ -28,11 +28,25 @@ import org.fest.util.Arrays;
  */
 public class JavaApp {
 
+  private static List<ArgumentObserver> argumentObservers = new ArrayList<ArgumentObserver>();
+
   public static void main(String[] args) {
-    System.out.println(Arrays.format(args));
+    for (ArgumentObserver observer : argumentObservers) observer.arguments(args);
     JFrame frame = new JFrame("Java Application");
     frame.setPreferredSize(new Dimension(200, 200));
     frame.pack();
     frame.setVisible(true);
+  }
+
+  public static void add(ArgumentObserver observer) {
+    argumentObservers.add(observer);
+  }
+
+  public static void remove(ArgumentObserver observer) {
+    argumentObservers.remove(observer);
+  }
+
+  static interface ArgumentObserver {
+    void arguments(String[] args);
   }
 }

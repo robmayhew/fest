@@ -17,9 +17,13 @@ package org.fest.swing.application;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.util.Collections.list;
 
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.fest.swing.application.JavaApp.ArgumentObserver;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.finder.WindowFinder;
@@ -53,6 +57,19 @@ public class ApplicationStarterTest {
   @Test public void shouldLaunchApplicationWithoutArgumentsUsingFQCN() {
     ApplicationStarter.application(JavaApp.class.getName()).start();
     assertFrameIsShowing();
+  }
+
+  @Test public void shouldLaunchApplicationUsingArguments() {
+    final List<String> arguments = new ArrayList<String>();
+    ArgumentObserver observer = new ArgumentObserver() {
+      public void arguments(String[] args) {
+        arguments.addAll(list(args));
+      }
+    };
+    JavaApp.add(observer);
+    ApplicationStarter.application(JavaApp.class).withArgs("arg1", "arg2").start();
+    assertFrameIsShowing();
+    assertThat(arguments).containsOnly("arg1", "arg2");
   }
 
   private void assertFrameIsShowing() {
