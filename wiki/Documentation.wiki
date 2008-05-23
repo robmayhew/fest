@@ -4,7 +4,7 @@
 Detailed documentation can be found at the project's [http://fest.easytesting.org/ main page].
 
 The following are links to each of the project's modules: 
-  * [http://fest.easytesting.org/swing Swing]
-  * [http://fest.easytesting.org/assert Assert]
-  * [http://fest.easytesting.org/reflect Reflect]
-  * [http://fest.easytesting.org/mocks Mocks]
+  * [http://fest.easytesting.org/swing Swing GUI Testing]
+  * [http://fest.easytesting.org/assert Flexible Assertions]
+  * [http://fest.easytesting.org/reflect Fluent Reflection]
+  * [http://fest.easytesting.org/mocks Mock Template]
