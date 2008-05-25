@@ -39,6 +39,6 @@ public class AddWebFeedAndFolderTest {
     pause(1000);
     mainFrame.tree("feeds").requireSelection("Web Feeds/Testing/The Disco Blog");
     JTableCellFixture firstCell = mainFrame.table("webFeedItems").cell(row(0).column(0));
-    firstCell.requireContent("The weekly bag– April 18");
+    firstCell.requireValue("The weekly bag– April 18");
   }
 }
