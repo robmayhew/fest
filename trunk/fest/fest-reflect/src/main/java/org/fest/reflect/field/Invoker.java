@@ -14,12 +14,12 @@
  */
 package org.fest.reflect.field;
 
-import static org.fest.reflect.util.Accessibles.*;
-import static org.fest.util.Strings.*;
-
 import java.lang.reflect.Field;
 
 import org.fest.reflect.exception.ReflectionError;
+
+import static org.fest.reflect.util.Accessibles.*;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands the use of reflection to access a field from an object.
@@ -65,11 +65,11 @@ public final class Invoker<T> {
     accessible = field.isAccessible();
   }
 
-  private void validate(Object target) {
+  private static void validate(Object target) {
     if (target == null) throw new IllegalArgumentException("Target should not be null");
   }
 
-  private Field lookupInClassHierarchy(String fieldName, Class<?> declaringType) {
+  private static Field lookupInClassHierarchy(String fieldName, Class<?> declaringType) {
     java.lang.reflect.Field field = null;
     Class<?> target = declaringType;
     while (target != null) {
@@ -81,7 +81,7 @@ public final class Invoker<T> {
     throw new ReflectionError(concat("Unable to find field ", quote(fieldName), " in ", declaringType.getName()));
   }
 
-  private Field field(String fieldName, Class<?> declaringType) {
+  private static Field field(String fieldName, Class<?> declaringType) {
     try {
       return declaringType.getDeclaredField(fieldName);
     } catch (NoSuchFieldException e) {
@@ -90,17 +90,17 @@ public final class Invoker<T> {
   }
 
   void verifyCorrectType(Class<?> expectedType) {
-    boolean accessible = field.isAccessible();
+    boolean isAccessible = field.isAccessible();
     try {
       makeAccessible(field);
       Class<?> actualType = field.getType();
       if (!expectedType.isAssignableFrom(actualType)) throw incorrectFieldType(field, actualType, expectedType);
     } finally {
-      setAccessibleIgnoringExceptions(field, accessible);
+      setAccessibleIgnoringExceptions(field, isAccessible);
     }
   }
 
-  private ReflectionError incorrectFieldType(Field field, Class<?> actualType, Class<?> expectedType) {
+  private static ReflectionError incorrectFieldType(Field field, Class<?> actualType, Class<?> expectedType) {
     String fieldTypeName = field.getDeclaringClass().getName();
     String message = concat("The type of the field ", quote(field.getName()), " in ", fieldTypeName, " should be <",
         expectedType.getName(), "> but was <", actualType.getName(), ">");

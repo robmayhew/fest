@@ -60,7 +60,7 @@ public final class Invoker<T> {
     method = lookupInClassHierarchy(methodName, target.getClass(), parameterTypes);
   }
 
-  private Method lookupInClassHierarchy(String methodName, Class<?> targetType, Class<?>[] parameterTypes) {
+  private static Method lookupInClassHierarchy(String methodName, Class<?> targetType, Class<?>[] parameterTypes) {
     Method method = null;
     Class<?> type = targetType;
     while (type != null) {
