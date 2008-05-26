@@ -15,29 +15,26 @@
  */
 package org.fest.swing.junit.runner;
 
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.util.TypeFilter.byType;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fest.reflect.exception.ReflectionError;
-import org.fest.util.Collections;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.internal.runners.BeforeAndAfterRunner;
-import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.MethodValidator;
-import org.junit.internal.runners.TestIntrospector;
-import org.junit.internal.runners.TestMethodRunner;
+import org.junit.internal.runners.*;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
+
+import org.fest.reflect.exception.ReflectionError;
+import org.fest.util.Collections;
+
+import static org.fest.reflect.core.Reflection.field;
+import static org.fest.util.TypeFilter.byType;
 
 /**
  * Understands a JUnit 4 test runner that takes a screenshot of a failed GUI test.
@@ -104,7 +101,7 @@ public class GUITestRunner extends Runner {
     }
   }
 
-  private void doRun(RunNotifier notifier) {
+  final void doRun(RunNotifier notifier) {
     if (testMethods.isEmpty()) notifier.testAborted(getDescription(), new Exception("No runnable methods"));
     for (Method method : testMethods)
       invokeTestMethod(method, notifier);
@@ -128,6 +125,8 @@ public class GUITestRunner extends Runner {
     return new TestMethodRunner(test, method, notifier, methodDescription(method));
   }
 
+  final Class<?> testClass() { return testClass; }
+  
   /**
    * Returns a <code>{@link Description}</code> showing the tests to be run by the receiver.
    * @return a <code>Description</code> showing the tests to be run by the receiver.
@@ -147,7 +146,7 @@ public class GUITestRunner extends Runner {
     private final RunNotifier notifier;
 
     InnerRunner(RunNotifier notifier) {
-      super(testClass, BeforeClass.class, AfterClass.class, null);
+      super(testClass(), BeforeClass.class, AfterClass.class, null);
       this.notifier = notifier;
     }
 
@@ -159,5 +158,4 @@ public class GUITestRunner extends Runner {
       notifier.fireTestFailure(new Failure(getDescription(), targetException));
     }
   }
-
 }
