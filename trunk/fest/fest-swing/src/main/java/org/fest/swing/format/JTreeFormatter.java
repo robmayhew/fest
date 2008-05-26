@@ -35,6 +35,8 @@ import static org.fest.util.Strings.*;
  */
 public class JTreeFormatter extends ComponentFormatterTemplate {
 
+  private static final String[] EMPTY = new String[0];
+  
   private static final IntEnum SELECTION_MODES = new IntEnum();
   static {
     SELECTION_MODES.put(SINGLE_TREE_SELECTION, "SINGLE_TREE_SELECTION")
@@ -65,8 +67,9 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
 
   private String[] selectionPaths(JTree tree) {
     TreePath[] paths = tree.getSelectionPaths();
-    int count = paths != null ? paths.length : 0;
-    if (count == 0) return new String[0];
+    if (paths == null) return EMPTY;
+    int count = paths.length;
+    if (count == 0) return EMPTY;
     String[] pathArray = new String[count];
     for (int i = 0; i < count; i++) {
       TreePath path = paths[i];

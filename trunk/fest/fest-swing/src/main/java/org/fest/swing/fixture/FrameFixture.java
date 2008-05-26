@@ -88,8 +88,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
     updateDriver(new FrameDriver(robot));
   }
 
-  void updateDriver(FrameDriver driver) {
-    this.driver = driver;
+  void updateDriver(FrameDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

@@ -114,7 +114,8 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
    * @return this finder.
    */
   @Override public JOptionPaneFinder withTimeout(long timeout) {
-    return (JOptionPaneFinder)super.withTimeout(timeout);
+    super.withTimeout(timeout);
+    return this;
   }
 
   /**
@@ -124,6 +125,7 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
    * @return this finder.
    */
   @Override public JOptionPaneFinder withTimeout(long timeout, TimeUnit unit) {
-    return (JOptionPaneFinder)super.withTimeout(timeout, unit);
+    super.withTimeout(timeout, unit);
+    return this;
   }
 }

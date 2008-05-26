@@ -64,8 +64,8 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
     updateDriver(new JInternalFrameDriver(robot));
   }
   
-  final void updateDriver(JInternalFrameDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JInternalFrameDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

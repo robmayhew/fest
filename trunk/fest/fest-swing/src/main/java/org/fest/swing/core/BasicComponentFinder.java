@@ -163,10 +163,10 @@ public final class BasicComponentFinder implements ComponentFinder {
     return new SingleComponentHierarchy(root, hierarchy);
   }
   
-  private Component find(ComponentHierarchy hierarchy, ComponentMatcher matcher)  {
+  private Component find(ComponentHierarchy delegate, ComponentMatcher matcher)  {
     Set<Component> found = new HashSet<Component>();
-    for (Object o : hierarchy.roots()) find(hierarchy, matcher, (Component)o, found);
-    if (found.isEmpty()) throw componentNotFound(hierarchy, matcher); 
+    for (Object o : delegate.roots()) find(delegate, matcher, (Component)o, found);
+    if (found.isEmpty()) throw componentNotFound(delegate, matcher); 
     if (found.size() > 1) throw multipleComponentsFound(found, matcher);
     return found.iterator().next();
   }

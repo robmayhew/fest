@@ -45,8 +45,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
     updateDriver(newComponentDriver());
   }
 
-  final void updateDriver(JComponentDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JComponentDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

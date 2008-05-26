@@ -30,7 +30,6 @@ import static org.fest.util.Strings.concat;
  */
 public final class Platform {
 
-  private static String osName;
   private static boolean isWindows;
   private static boolean isWindows9x;
   private static boolean isWindowsXP;
@@ -42,8 +41,7 @@ public final class Platform {
   private static boolean isLinux;
   
   static {
-    osName = property("os.name");
-    initialize(osName);
+    initialize(property("os.name"));
   }
 
   static void initialize(String osName) {

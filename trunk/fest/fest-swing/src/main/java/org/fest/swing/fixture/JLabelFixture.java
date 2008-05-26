@@ -59,8 +59,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements T
     updateDriver(new JLabelDriver(robot));
   }
   
-  final void updateDriver(JLabelDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JLabelDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

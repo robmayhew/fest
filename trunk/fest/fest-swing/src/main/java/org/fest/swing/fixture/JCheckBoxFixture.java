@@ -59,8 +59,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
     updateDriver(new AbstractButtonDriver(robot));
   }
   
-  final void updateDriver(AbstractButtonDriver driver) {
-    this.driver = driver;
+  final void updateDriver(AbstractButtonDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

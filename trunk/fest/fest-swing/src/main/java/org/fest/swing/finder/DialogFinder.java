@@ -49,7 +49,8 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
    * @return this finder.
    */
   @Override public DialogFinder withTimeout(long timeout) {
-    return (DialogFinder)super.withTimeout(timeout);
+    super.withTimeout(timeout);
+    return this;
   }
 
   /**
@@ -59,7 +60,8 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
    * @return this finder.
    */
   @Override public DialogFinder withTimeout(long timeout, TimeUnit unit) {
-    return (DialogFinder)super.withTimeout(timeout, unit);
+    super.withTimeout(timeout, unit);
+    return this;
   }
 
   /**

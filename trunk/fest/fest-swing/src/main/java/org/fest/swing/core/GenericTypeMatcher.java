@@ -76,7 +76,9 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
 
   /**
    * Sets this matcher to match either showing or not showing components.
-   * @param requireShowing indicates if the component to match should be showing or not.
+   * @param shouldRequireShowing indicates if the component to match should be showing or not.
    */
-  public final void requireShowing(boolean requireShowing) { this.requireShowing = requireShowing; }
+  public final void requireShowing(boolean shouldRequireShowing) { 
+    requireShowing = shouldRequireShowing; 
+  }
 }

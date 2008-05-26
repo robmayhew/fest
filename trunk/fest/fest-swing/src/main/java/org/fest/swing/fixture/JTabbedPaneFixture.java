@@ -61,8 +61,8 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
     updateDriver(new JTabbedPaneDriver(robot));
   }
 
-  final void updateDriver(JTabbedPaneDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JTabbedPaneDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

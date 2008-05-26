@@ -70,8 +70,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
     updateDriver(new JComboBoxDriver(robot));
   }
 
-  final void updateDriver(JComboBoxDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JComboBoxDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

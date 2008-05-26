@@ -61,8 +61,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
     updateDriver(new AbstractButtonDriver(robot));
   }
   
-  final void updateDriver(AbstractButtonDriver driver) {
-    this.driver = driver;
+  final void updateDriver(AbstractButtonDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

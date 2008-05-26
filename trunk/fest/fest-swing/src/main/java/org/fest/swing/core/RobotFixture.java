@@ -154,7 +154,7 @@ public class RobotFixture implements Robot {
     waitForWindow(w);
   }
 
-  private void packAndEnsureSafePosition(Window w) {
+  void packAndEnsureSafePosition(Window w) {
     w.pack();
     w.setLocation(100, 100);
   }
@@ -558,7 +558,7 @@ public class RobotFixture implements Robot {
     do {
       // Timed out waiting for idle
       int idleTimeout = settings.idleTimeout();
-      if (postInvocationEvent(toolkit, eventQueue, idleTimeout)) break;
+      if (postInvocationEvent(eventQueue, idleTimeout)) break;
       // Timed out waiting for idle event queue
       if (currentTimeMillis() - start > idleTimeout) break;
       ++count;
@@ -572,7 +572,7 @@ public class RobotFixture implements Robot {
   }
 
   // Indicates whether we timed out waiting for the invocation to run
-  private boolean postInvocationEvent(Toolkit toolkit, EventQueue eventQueue, long timeout) {
+  private boolean postInvocationEvent(EventQueue eventQueue, long timeout) {
     Object lock = new RobotIdleLock();
     synchronized (lock) {
       eventQueue.postEvent(new InvocationEvent(toolkit, EMPTY_RUNNABLE, lock, true));
@@ -587,7 +587,9 @@ public class RobotFixture implements Robot {
     return false;
   }
 
-  private static class RobotIdleLock {}
+  private static class RobotIdleLock {
+    RobotIdleLock() {}
+  }
 
   /** ${@inheritDoc} */
   public boolean isDragging() {

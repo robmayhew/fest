@@ -37,31 +37,31 @@ public final class ScreenLock {
   
   /**
    * Acquires the lock.
-   * @param owner the new owner of the lock.
+   * @param newOwner the new owner of the lock.
    */
-  public synchronized void acquire(Object owner) {
+  public synchronized void acquire(Object newOwner) {
     while (locked) {
       try {
         wait();
       } catch (InterruptedException e) {
         break;
       }
-      acquire(owner);
+      acquire(newOwner);
       notifyAll();
     }
     locked = true;
-    this.owner = owner;
+    this.owner = newOwner;
   }
   
   /**
    * Releases the lock.
-   * @param owner the current owner of the lock.
+   * @param currentOwner the current owner of the lock.
    * @throws ScreenLockException if the lock has not been previously acquired.
    * @throws ScreenLockException if the given owner is not the same as the current owner of the lock. 
    */
-  public synchronized void release(Object owner) {
+  public synchronized void release(Object currentOwner) {
     if (!locked) throw new ScreenLockException("No lock to release");
-    if (this.owner != owner) throw new ScreenLockException(concat(owner, " is not the lock owner"));
+    if (this.owner != currentOwner) throw new ScreenLockException(concat(currentOwner, " is not the lock owner"));
     locked = false;
     this.owner = null;
   }

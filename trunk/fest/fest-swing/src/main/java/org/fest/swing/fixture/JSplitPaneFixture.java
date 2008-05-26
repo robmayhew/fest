@@ -60,8 +60,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
     updateDriver(new JSplitPaneDriver(robot));
   }
 
-  final void updateDriver(JSplitPaneDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JSplitPaneDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

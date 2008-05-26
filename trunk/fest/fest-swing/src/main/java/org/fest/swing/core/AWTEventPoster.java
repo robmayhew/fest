@@ -103,14 +103,27 @@ class AWTEventPoster {
     if (eventId != MOUSE_RELEASED && eventId != MOUSE_CLICKED) countingClicks = false;
   }
 
-  AWTEvent lastEventPosted() { return lastEventPosted; }
+  AWTEvent lastEventPosted() {
+    return lastEventPosted;
+  }
 
-  MouseEvent lastMousePress() { return lastMousePress; }
+  MouseEvent lastMousePress() {
+    return lastMousePress;
+  }
 
-  boolean countingClicks() { return countingClicks; }
-  void countingClicks(boolean countingClicks) { this.countingClicks = countingClicks; }
+  boolean countingClicks() {
+    return countingClicks;
+  }
 
-  InputState inputState() { return inputState; }
-  
-  Settings settings() { return settings; }
+  void countingClicks(boolean newCountingClicks) {
+    countingClicks = newCountingClicks;
+  }
+
+  InputState inputState() {
+    return inputState;
+  }
+
+  Settings settings() {
+    return settings;
+  }
 }

@@ -63,8 +63,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
     updateDriver(new JTextComponentDriver(robot));
   }
 
-  void updateDriver(JTextComponentDriver driver) {
-    this.driver = driver;
+  void updateDriver(JTextComponentDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

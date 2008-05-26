@@ -192,7 +192,7 @@ public class JComboBoxDriver extends JComponentDriver {
     });
   }
 
-  private boolean isDropDownVisible(JComboBox comboBox) {
+  boolean isDropDownVisible(JComboBox comboBox) {
     return comboBox.getUI().isPopupVisible(comboBox);
   }
 
@@ -296,9 +296,9 @@ public class JComboBoxDriver extends JComponentDriver {
   /**
    * Updates the implementation of <code>{@link JComboBoxCellReader}</code> to use when comparing internal values
    * of a <code>{@link JComboBox}</code> and the values expected in a test.
-   * @param cellReader the new <code>JComboBoxCellValueReader</code> to use.
+   * @param newCellReader the new <code>JComboBoxCellValueReader</code> to use.
    */
-  public void cellReader(JComboBoxCellReader cellReader) {
-    this.cellReader = cellReader;
+  public void cellReader(JComboBoxCellReader newCellReader) {
+    cellReader = newCellReader;
   }
 }

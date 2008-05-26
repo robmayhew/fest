@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Dialog;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -46,7 +47,7 @@ public class JOptionPaneDriver extends JComponentDriver {
   private static final String OPTIONS_PROPERTY = "options";
   private static final String TITLE_PROPERTY = "title";
   
-  private static final HashMap<Integer, String> messageMap = new HashMap<Integer, String>();
+  private static final Map<Integer, String> messageMap = new HashMap<Integer, String>();
   static {
     messageMap.put(ERROR_MESSAGE, "Error Message");
     messageMap.put(INFORMATION_MESSAGE, "Information Message");

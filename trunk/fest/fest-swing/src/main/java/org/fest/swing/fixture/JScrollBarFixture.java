@@ -61,8 +61,8 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
     updateDriver(new JScrollBarDriver(robot));
   }
   
-  final void updateDriver(JScrollBarDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JScrollBarDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

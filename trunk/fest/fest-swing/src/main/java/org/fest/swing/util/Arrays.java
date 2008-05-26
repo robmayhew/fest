@@ -40,7 +40,10 @@ public final class Arrays {
    */
   public static void assertEquals(String[][] actual, String[][] expected, String message) {
     if (actual == null && expected == null) return;
-    if (actual == null || expected == null) failNotEqual(actual, expected, message);
+    if (actual == null || expected == null) {
+      failNotEqual(actual, expected, message);
+      return;
+    }
     if (actual.length != expected.length) failNotEqual(actual, expected, message);
     if (actual.length == 0) return;
     if (actual[0].length != expected[0].length) failNotEqual(actual, expected, message);

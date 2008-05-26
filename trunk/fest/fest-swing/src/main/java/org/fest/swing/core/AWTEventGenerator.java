@@ -161,7 +161,7 @@ class AWTEventGenerator implements InputEventGenerator {
     int count = 1;
     MouseEventTarget target = retargetMouseEvent(c, MOUSE_PRESSED, where);
     Component source = target.source;
-    if (eventPoster.countingClicks() && source == lastMousePress.getComponent())
+    if (eventPoster.countingClicks() && lastMousePress != null && source == lastMousePress.getComponent())
       if ((current - last) < MULTI_CLICK_INTERVAL) count = inputState.clickCount() + 1;
     int modifiers = inputState.keyModifiers() | buttons;
     int x = target.position.x;
@@ -172,13 +172,14 @@ class AWTEventGenerator implements InputEventGenerator {
 
   /** ${@inheritDoc} */
   public void pressKey(int keyCode, char keyChar) {
+    char keyCharCopy = keyChar;
     int modifiers = inputState.modifiers();
     if (isModifier(keyCode)) modifiers |= maskFor(keyCode);
     postKeyEvent(KEY_PRESSED, modifiers, keyCode, CHAR_UNDEFINED);
     // Auto-generate KEY_TYPED events, as best we can
     int mask = inputState.modifiers();
-    if (keyChar == CHAR_UNDEFINED) keyChar = charFor(KeyStroke.getKeyStroke(keyCode, mask));
-    if (keyChar != CHAR_UNDEFINED) postKeyEvent(KEY_TYPED, mask, VK_UNDEFINED, keyChar);
+    if (keyCharCopy == CHAR_UNDEFINED) keyCharCopy = charFor(KeyStroke.getKeyStroke(keyCode, mask));
+    if (keyCharCopy != CHAR_UNDEFINED) postKeyEvent(KEY_TYPED, mask, VK_UNDEFINED, keyCharCopy);
   }
 
   /** ${@inheritDoc} */

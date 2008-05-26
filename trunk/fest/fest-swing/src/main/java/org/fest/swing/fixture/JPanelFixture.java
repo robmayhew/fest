@@ -60,8 +60,8 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
     updateDriver(new JComponentDriver(robot));
   }
   
-  final void updateDriver(JComponentDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JComponentDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

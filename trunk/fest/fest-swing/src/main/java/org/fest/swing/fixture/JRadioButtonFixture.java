@@ -60,8 +60,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
     updateDriver(new AbstractButtonDriver(robot));
   }
   
-  void updateDriver(AbstractButtonDriver driver) {
-    this.driver = driver;
+  void updateDriver(AbstractButtonDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

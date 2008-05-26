@@ -205,7 +205,7 @@ public class JTreeDriver extends JComponentDriver {
     private final JTree target;
     private final TreePath path;
 
-    private ExpandPathTask(JTree target, TreePath path) {
+    ExpandPathTask(JTree target, TreePath path) {
       this.target = target;
       this.path = path;
     }
@@ -454,18 +454,18 @@ public class JTreeDriver extends JComponentDriver {
 
   /**
    * Updates the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
-   * @param separator the new separator.
+   * @param newSeparator the new separator.
    */
-  public void separator(String separator) {
-    this.separator = separator;
+  public void separator(String newSeparator) {
+    separator = newSeparator;
   }
 
   /**
    * Updates the implementation of <code>{@link JTreeCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTree}</code> and the values expected in a test.
-   * @param cellReader the new <code>JTreeCellValueReader</code> to use.
+   * @param newCellReader the new <code>JTreeCellValueReader</code> to use.
    */
-  public void cellReader(JTreeCellReader cellReader) {
-    this.cellReader = cellReader;
+  public void cellReader(JTreeCellReader newCellReader) {
+    cellReader = newCellReader;
   }
 }

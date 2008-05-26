@@ -43,8 +43,8 @@ public class JTableHeaderFixture {
     updateDriver(new JTableHeaderDriver(robot));
   }
 
-  final void updateDriver(JTableHeaderDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JTableHeaderDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

@@ -49,7 +49,8 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
    * @return this finder.
    */
   @Override public FrameFinder withTimeout(long timeout) {
-    return (FrameFinder)super.withTimeout(timeout);
+    super.withTimeout(timeout);
+    return this;
   }
 
   /**
@@ -59,7 +60,8 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
    * @return this finder.
    */
   @Override public FrameFinder withTimeout(long timeout, TimeUnit unit) {
-    return (FrameFinder)super.withTimeout(timeout, unit);
+    super.withTimeout(timeout, unit);
+    return this;
   }
 
   /**

@@ -62,8 +62,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
     updateDriver(new JSpinnerDriver(robot));
   }
   
-  final void updateDriver(JSpinnerDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JSpinnerDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

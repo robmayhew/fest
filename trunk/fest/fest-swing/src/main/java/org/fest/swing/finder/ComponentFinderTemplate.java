@@ -59,14 +59,14 @@ abstract class ComponentFinderTemplate<T extends Component> {
     searchDescription = concat("component to be found using matcher ", matcher);
   }
   
-  ComponentFinderTemplate<T> withTimeout(long timeout, TimeUnit unit) {
+  ComponentFinderTemplate<T> withTimeout(long newTimeout, TimeUnit unit) {
     if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
-    return withTimeout(unit.toMillis(timeout));
+    return withTimeout(unit.toMillis(newTimeout));
   }
 
-  ComponentFinderTemplate<T> withTimeout(long timeout) {
-    if (timeout < 0) throw new IllegalArgumentException("Timeout cannot be a negative number");
-    this.timeout = timeout;
+  ComponentFinderTemplate<T> withTimeout(long newTimeout) {
+    if (newTimeout < 0) throw new IllegalArgumentException("Timeout cannot be a negative number");
+    this.timeout = newTimeout;
     return this;
   }
 

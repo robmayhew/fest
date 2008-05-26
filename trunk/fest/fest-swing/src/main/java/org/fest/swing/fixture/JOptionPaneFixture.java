@@ -19,8 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
@@ -55,8 +55,8 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
     updateDriver(new JOptionPaneDriver(robot));
   }
 
-  final void updateDriver(JOptionPaneDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JOptionPaneDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

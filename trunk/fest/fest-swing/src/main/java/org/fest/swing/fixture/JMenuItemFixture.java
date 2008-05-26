@@ -18,8 +18,8 @@ package org.fest.swing.fixture;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JMenuItemDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -66,8 +66,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
     updateDriver(new JMenuItemDriver(robot));
   }
 
-  final void updateDriver(JMenuItemDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JMenuItemDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

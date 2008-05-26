@@ -61,8 +61,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
     updateDriver(new JSliderDriver(robot));
   }
   
-  final void updateDriver(JSliderDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JSliderDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

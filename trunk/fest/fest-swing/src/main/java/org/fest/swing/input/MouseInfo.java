@@ -15,14 +15,14 @@
  */
 package org.fest.swing.input;
 
-import static java.awt.event.InputEvent.*;
-import static java.awt.event.MouseEvent.*;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.lang.ref.WeakReference;
 import java.util.Stack;
+
+import static java.awt.event.InputEvent.*;
+import static java.awt.event.MouseEvent.*;
 
 /**
  * Understands a description mouse-related operations.
@@ -121,24 +121,24 @@ class MouseInfo {
     return buttons;
   }
 
-  void buttons(int buttons) {
-    this.buttons = buttons;
+  void buttons(int newButtons) {
+    buttons = newButtons;
   }
 
   int modifiers() {
     return modifiers;
   }
 
-  void modifiers(int modifiers) {
-    this.modifiers = modifiers;
+  void modifiers(int newModifiers) {
+    modifiers = newModifiers;
   }
 
   int clickCount() {
     return clickCount;
   }
 
-  void clickCount(int clickCount) {
-    this.clickCount = clickCount;
+  void clickCount(int newClickCount) {
+    clickCount = newClickCount;
   }
 
   Point location() {

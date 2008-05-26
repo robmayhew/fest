@@ -71,21 +71,21 @@ public class JFileChooserDriver extends JComponentDriver {
   private ActionFailedException cannotSelectFile(File file, String reason) {
     throw actionFailure(concat("Unable to select file ", file, ": ", reason));
   }
-  
-  private static class SetCurrentDirectoryTask implements Runnable {
-    private final JFileChooser fileChooser;
-    private final File dir;
 
-    private SetCurrentDirectoryTask(JFileChooser fileChooser, File dir) {
+  private static class SelectFileTask implements Runnable {
+    private final JFileChooser fileChooser;
+    private final File file;
+
+    SelectFileTask(JFileChooser fileChooser, File file) {
       this.fileChooser = fileChooser;
-      this.dir = dir;
+      this.file = file;
     }
 
     public void run() {
-      fileChooser.setCurrentDirectory(dir);
+      fileChooser.setSelectedFile(file);
     }
   }
-
+  
   /**
    * Sets the current directory in the <code>{@link JFileChooser}</code> to the given one.
    * @param fileChooser the target <code>JFileChooser</code>.
@@ -95,17 +95,17 @@ public class JFileChooserDriver extends JComponentDriver {
     robot.invokeAndWait(new SetCurrentDirectoryTask(fileChooser, dir));
   }
 
-  private static class SelectFileTask implements Runnable {
+  private static class SetCurrentDirectoryTask implements Runnable {
     private final JFileChooser fileChooser;
-    private final File file;
+    private final File dir;
 
-    private SelectFileTask(JFileChooser fileChooser, File file) {
+    SetCurrentDirectoryTask(JFileChooser fileChooser, File dir) {
       this.fileChooser = fileChooser;
-      this.file = file;
+      this.dir = dir;
     }
 
     public void run() {
-      fileChooser.setSelectedFile(file);
+      fileChooser.setCurrentDirectory(dir);
     }
   }
 

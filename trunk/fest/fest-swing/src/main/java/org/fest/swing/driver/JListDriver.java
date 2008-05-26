@@ -411,9 +411,9 @@ public class JListDriver extends JComponentDriver {
   /**
    * Updates the implementation of <code>{@link JListCellReader}</code> to use when comparing internal values of a
    * <code>{@link JList}</code> and the values expected in a test.
-   * @param cellReader the new <code>JListCellValueReader</code> to use.
+   * @param newCellReader the new <code>JListCellValueReader</code> to use.
    */
-  public void cellReader(JListCellReader cellReader) {
-    this.cellReader = cellReader;
+  public void cellReader(JListCellReader newCellReader) {
+    cellReader = newCellReader;
   }
 }

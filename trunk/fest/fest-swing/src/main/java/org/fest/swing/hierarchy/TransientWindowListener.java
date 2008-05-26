@@ -47,7 +47,7 @@ public final class TransientWindowListener implements AWTEventListener {
       if (filter.isFiltered(w)) return;
       filter.implicitFilter(w);
       // Filter this window only *after* any handlers for this event have finished.
-      SwingUtilities.invokeLater(new DisposeAction(w));
+      SwingUtilities.invokeLater(new DisposeAction(w, filter));
     }
   }
 
@@ -69,10 +69,14 @@ public final class TransientWindowListener implements AWTEventListener {
     filter.filter(w);
   }
 
-  private class DisposeAction implements Runnable {
+  private static class DisposeAction implements Runnable {
     private final Window w;
+    private final WindowFilter filter;
 
-    DisposeAction(Window w) { this.w = w; }
+    DisposeAction(Window w, WindowFilter filter) { 
+      this.w = w;
+      this.filter = filter; 
+    }
 
     public void run() {
       // If the window was shown again since we queued this action, it will have removed the window from the 

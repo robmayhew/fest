@@ -79,8 +79,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     updateDriver(new JTableDriver(robot));
   }
 
-  final void updateDriver(JTableDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JTableDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

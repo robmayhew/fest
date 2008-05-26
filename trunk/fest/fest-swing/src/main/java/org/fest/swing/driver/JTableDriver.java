@@ -297,9 +297,9 @@ public class JTableDriver extends JComponentDriver {
   /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
-   * @param cellReader the new <code>JTableCellValueReader</code> to use.
+   * @param newCellReader the new <code>JTableCellValueReader</code> to use.
    */
-  public void cellReader(JTableCellReader cellReader) {
-    this.cellReader = cellReader;
+  public void cellReader(JTableCellReader newCellReader) {
+    cellReader = newCellReader;
   }
 }

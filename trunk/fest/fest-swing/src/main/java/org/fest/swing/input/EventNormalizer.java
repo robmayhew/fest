@@ -59,19 +59,29 @@ class EventNormalizer implements AWTEventListener {
     this.trackDrag = trackDrag;
   }
 
-  void startListening(final Toolkit toolkit, AWTEventListener listener, long mask) {
-    this.listener = listener;
+  void startListening(final Toolkit toolkit, AWTEventListener newListener, long mask) {
+    listener = newListener;
     weakEventListener = attachAsWeakEventListener(toolkit, this, mask);
     if (!trackDrag) return;
     dragAwareEventQueue = new DragAwareEventQueue(toolkit, mask, this);
     try {
-      invokeAndWait(new Runnable() {
-        public void run() {
-          toolkit.getSystemEventQueue().push(dragAwareEventQueue);
-        }
-      });
+      invokeAndWait(new PushEventQueueTask(toolkit, dragAwareEventQueue));
     } catch (Exception e) {
       logger.log(WARNING, "Ignoring error at EventNormalizer startup", e);
+    }
+  }
+
+  private static class PushEventQueueTask implements Runnable {
+    private final Toolkit toolkit;
+    private final DragAwareEventQueue dragAwareEventQueue;
+
+    PushEventQueueTask(Toolkit toolkit, DragAwareEventQueue dragAwareEventQueue) {
+      this.toolkit = toolkit;
+      this.dragAwareEventQueue = dragAwareEventQueue;
+    }
+
+    public void run() {
+      toolkit.getSystemEventQueue().push(dragAwareEventQueue);
     }
   }
 

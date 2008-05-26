@@ -99,11 +99,11 @@ public final class MouseClickInfo {
   
   /**
    * Specifies how many times the mouse button should be clicked.
-   * @param times the specified number of times to click the mouse button.
+   * @param newTimes the specified number of times to click the mouse button.
    * @return this object.
    */
-  public MouseClickInfo times(int times) { 
-    this.times = times;
+  public MouseClickInfo times(int newTimes) { 
+    times = newTimes;
     return this;
   }
 

@@ -15,9 +15,6 @@
  */
 package org.fest.swing.input;
 
-import static java.awt.event.MouseEvent.*;
-import static org.fest.reflect.core.Reflection.staticMethod;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.dnd.InvalidDnDOperationException;
@@ -25,6 +22,10 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 
 import org.fest.reflect.exception.ReflectionError;
+
+import static java.awt.event.MouseEvent.*;
+
+import static org.fest.reflect.core.Reflection.staticMethod;
 
 /**
  * Understands a description of drag/drop operations.
@@ -58,8 +59,8 @@ class DragDropInfo {
     return source;
   }
 
-  void source(Component source) {
-    this.source = source;
+  void source(Component newSource) {
+    source = newSource;
   }
 
   boolean isDragging() {

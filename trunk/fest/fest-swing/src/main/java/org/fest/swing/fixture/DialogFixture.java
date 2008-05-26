@@ -87,8 +87,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
     updateDriver(new DialogDriver(robot));
   }
 
-  void updateDriver(DialogDriver driver) {
-    this.driver = driver;
+  void updateDriver(DialogDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

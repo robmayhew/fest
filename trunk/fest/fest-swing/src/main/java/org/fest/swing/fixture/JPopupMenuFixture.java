@@ -47,8 +47,8 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
     updateDriver(new JPopupMenuDriver(robot));
   }
 
-  final void updateDriver(JPopupMenuDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JPopupMenuDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

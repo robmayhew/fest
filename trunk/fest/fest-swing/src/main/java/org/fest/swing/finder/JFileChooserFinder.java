@@ -127,7 +127,8 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
    * @return this finder.
    */
   @Override public JFileChooserFinder withTimeout(long timeout) {
-    return (JFileChooserFinder)super.withTimeout(timeout);
+    super.withTimeout(timeout);
+    return this;
   }
 
   /**
@@ -137,6 +138,7 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
    * @return this finder.
    */
   @Override public JFileChooserFinder withTimeout(long timeout, TimeUnit unit) {
-    return (JFileChooserFinder)super.withTimeout(timeout, unit);
+    super.withTimeout(timeout, unit);
+    return this;
   }
 }

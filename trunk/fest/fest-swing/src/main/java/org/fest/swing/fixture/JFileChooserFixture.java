@@ -19,8 +19,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JFileChooserDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -74,8 +74,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
     updateDriver(new JFileChooserDriver(robot));
   }
 
-  final void updateDriver(JFileChooserDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JFileChooserDriver newDriver) {
+    driver = newDriver;
   }
   
   /**

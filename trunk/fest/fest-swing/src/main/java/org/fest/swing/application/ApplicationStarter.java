@@ -15,10 +15,10 @@
  */
 package org.fest.swing.application;
 
+import org.fest.reflect.exception.ReflectionError;
+
 import static org.fest.reflect.core.Reflection.staticMethod;
 import static org.fest.util.Strings.*;
-
-import org.fest.reflect.exception.ReflectionError;
 
 /**
  * Understands execution of a Java application from a class that has a "main" method.
@@ -84,11 +84,11 @@ public class ApplicationStarter {
 
   /**
    * Specifies the arguments to pass to the "main" method.
-   * @param args the arguments to pass to the "main" method.
+   * @param newArgs the arguments to pass to the "main" method.
    * @return this <code>ApplicationStarter</code>.
    */
-  public ApplicationStarter withArgs(String...args) {
-    this.args = args;
+  public ApplicationStarter withArgs(String...newArgs) {
+    args = newArgs;
     return this;
   }
 

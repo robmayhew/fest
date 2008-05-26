@@ -60,7 +60,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public JToolBarFixture(Robot robot, JToolBar target) {
     super(robot, target);
-    createDriver(robot);
+    createDriver();
   }
 
   /**
@@ -73,15 +73,15 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    */
   public JToolBarFixture(Robot robot, String toolbarName) {
     super(robot, toolbarName, JToolBar.class);
-    createDriver(robot);
+    createDriver();
   }
 
-  private void createDriver(Robot robot) {
+  private void createDriver() {
     updateDriver(new JToolBarDriver(robot));
   }
 
-  void updateDriver(JToolBarDriver driver) {
-    this.driver = driver;
+  void updateDriver(JToolBarDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

@@ -53,8 +53,8 @@ public final class Settings {
     idleTimeout(10000);
   }
   
-  void attachTo(java.awt.Robot robot) {
-    this.robot = robot;
+  void attachTo(java.awt.Robot newRobot) {
+    robot = newRobot;
     if (delayBetweenEvents < 0) delayBetweenEvents = this.robot.getAutoDelay();
     else updateRobotAutoDelay();
     eventMode(ROBOT);
@@ -72,10 +72,10 @@ public final class Settings {
 
   /**
    * Updates the event-generation mode.
-   * @param eventMode the new event-generation mode.
+   * @param newEventMode the new event-generation mode.
    */
-  public void eventMode(EventMode eventMode) {
-    this.eventMode = eventMode;
+  public void eventMode(EventMode newEventMode) {
+    this.eventMode = newEventMode;
   }
   
   /**

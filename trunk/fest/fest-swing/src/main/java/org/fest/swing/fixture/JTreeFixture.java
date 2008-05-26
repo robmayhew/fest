@@ -95,8 +95,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
     updateDriver(new JTreeDriver(robot));
   }
 
-  void updateDriver(JTreeDriver driver) {
-    this.driver = driver;
+  void updateDriver(JTreeDriver newDriver) {
+    driver = newDriver;
   }
 
   /**

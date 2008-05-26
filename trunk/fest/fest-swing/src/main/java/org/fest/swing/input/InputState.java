@@ -14,11 +14,6 @@
  */
 package org.fest.swing.input;
 
-import static java.awt.AWTEvent.*;
-import static javax.swing.SwingUtilities.getDeepestComponentAt;
-import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
-
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
@@ -26,6 +21,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import org.fest.swing.listener.EventDispatchThreadedEventListener;
+
+import static java.awt.AWTEvent.*;
+import static javax.swing.SwingUtilities.getDeepestComponentAt;
+
+import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
+import static org.fest.swing.util.AWT.locationOnScreenOf;
 
 /**
  * Class to keep track of a given input state. Includes mouse/pointer position and keyboard modifier key state.
@@ -112,8 +113,8 @@ public class InputState {
     lastEventTime = event.getWhen();
   }
 
-  private void modifiers(int modifiers) {
-    this.modifiers = modifiers;
+  private void modifiers(int newModifiers) {
+    modifiers = newModifiers;
   }
 
   /**

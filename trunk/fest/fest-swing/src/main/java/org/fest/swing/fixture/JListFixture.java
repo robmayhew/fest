@@ -74,8 +74,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
     updateDriver(new JListDriver(robot));
   }
   
-  final void updateDriver(JListDriver driver) {
-    this.driver = driver;
+  final void updateDriver(JListDriver newDriver) {
+    driver = newDriver;
   }
 
   /**
