@@ -52,7 +52,7 @@ public final class ExpectedFailure {
    * @return a holder of the expected failure message.
    */
   public Message withMessage(String message) {
-    return new Message(message);
+    return new Message(errorType, message);
   }
 
   /**
@@ -61,10 +61,12 @@ public final class ExpectedFailure {
    * @author Alex Ruiz
    * @author Yvonne Wang
    */
-  public class Message {
+  public static class Message {
+    private final Class<? extends Throwable> errorType;
     private final String message;
 
-    Message(String message) {
+    Message(Class<? extends Throwable> errorType, String message) {
+      this.errorType = errorType;
       this.message = message;
     }
 
@@ -90,10 +92,10 @@ public final class ExpectedFailure {
     private String errorTypeName() {
       return errorType.getName();
     }
-  }
 
-  private void fail(String message) {
-    throw new AssertionError(message);
+    private void fail(String failureMessage) {
+      throw new AssertionError(failureMessage);
+    }
   }
 
   private ExpectedFailure(Class<? extends Throwable> error) {
