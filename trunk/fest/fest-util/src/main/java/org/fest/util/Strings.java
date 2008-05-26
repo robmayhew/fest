@@ -66,14 +66,14 @@ public final class Strings {
   }
   
   /**
-   * Joins the given <code>String</code>s using a given delimeter. The following example illustrates proper usage of 
+   * Joins the given <code>String</code>s using a given delimiter. The following example illustrates proper usage of 
    * this method:
    * <pre>
    * Strings.join("a", "b", "c").with("|")
    * </pre>
    * which will result in the <code>String</code> <code>"a|b|c"</code>.
    * @param strings the <code>String</code>s to join.
-   * @return an intermediate object that takes a given delimeter and understands how to join the given 
+   * @return an intermediate object that takes a given delimiter and understands how to join the given 
    * <code>String</code>s.
    * @see StringsToJoin#with(String)
    */
@@ -82,7 +82,7 @@ public final class Strings {
   }
   
   /**
-   * Understands how to join <code>String</code>s using a given delimeter.
+   * Understands how to join <code>String</code>s using a given delimiter.
    * @see Strings#join(String[])
    */
   public static class StringsToJoin {
@@ -94,7 +94,7 @@ public final class Strings {
      * Creates a new <code>{@link StringsToJoin}</code>.
      * @param strings the <code>String</code>s to join.
      */
-    private StringsToJoin(String...strings) {
+    StringsToJoin(String...strings) {
       this.strings = strings;
     }
     
@@ -148,7 +148,7 @@ public final class Strings {
      * Creates a new <code>{@link StringToAppend}</code>.
      * @param toAppend the <code>String</code> to append.
      */
-    private StringToAppend(String toAppend) {
+    StringToAppend(String toAppend) {
       this.toAppend = toAppend;
     }
     
