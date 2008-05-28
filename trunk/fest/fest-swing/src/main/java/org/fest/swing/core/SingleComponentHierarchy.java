@@ -19,6 +19,7 @@ import java.awt.Container;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.fest.swing.hierarchy.ComponentHierarchy;
 
@@ -32,7 +33,7 @@ import static javax.swing.SwingUtilities.isDescendingFrom;
 final class SingleComponentHierarchy implements ComponentHierarchy {
 
   private final Container root;
-  private final ArrayList<Container> list = new ArrayList<Container>();
+  private final List<Container> list = new ArrayList<Container>();
   private final ComponentHierarchy hierarchy;
 
   /**
