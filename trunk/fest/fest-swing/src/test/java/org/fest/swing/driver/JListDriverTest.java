@@ -27,6 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.cell.BasicJListCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
@@ -53,13 +54,16 @@ import static org.fest.util.Arrays.array;
 public class JListDriverTest {
 
   private Robot robot;
+  private JListCellReaderStub cellReader;
   private TestList dragList;
   private TestList dropList;
   private JListDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
+    cellReader = new JListCellReaderStub();
     driver = new JListDriver(robot);
+    driver.cellReader(cellReader);
     MyFrame frame = new MyFrame();
     dragList = frame.dragList;
     dropList = frame.dropList;
@@ -74,11 +78,13 @@ public class JListDriverTest {
     Point p = driver.pointAt(dragList, "two");
     int index = dragList.locationToIndex(p);
     assertThat(index).isEqualTo(1);
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldReturnIndexForValue() {
     int index = driver.indexOf(dragList, "three");
     assertThat(index).isEqualTo(2);
+    assertCellReaderWasCalled();
   }
   
   @Test public void shouldThrowErrorIfIndexForValueNotFound() {
@@ -93,6 +99,7 @@ public class JListDriverTest {
   @Test public void shouldReturnTextOfElement() {
     Object text = driver.value(dragList, 0);
     assertThat(text).isEqualTo("one");
+    assertCellReaderWasCalled();
   }
   
   @Test public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForText() {
@@ -113,11 +120,13 @@ public class JListDriverTest {
     });
     String[] selection = driver.selectionOf(dragList);
     assertThat(selection).containsOnly("one", "three");
+    assertCellReaderWasCalled();
   }
   
   @Test public void shouldReturnListContents() {
     Object[] contents = driver.contentsOf(dragList);
     assertThat(contents).isEqualTo(array("one", "two", "three"));
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldSelectItemAtGivenIndex() {
@@ -128,11 +137,13 @@ public class JListDriverTest {
   @Test public void shouldSelectItemWithGivenText() {
     driver.selectItem(dragList, "two");
     assertThat(dragList.getSelectedValue()).isEqualTo("two");
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldSelectItemsWithGivenText() {
     driver.selectItems(dragList, array("two", "three"));
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldSelectItemsWithGivenIndices() {
@@ -158,11 +169,13 @@ public class JListDriverTest {
   @Test public void shouldReturnIndexOfValue() {
     int index = driver.indexOf(dragList, "three");
     assertThat(index).isEqualTo(2);
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldPassIfSelectionIsEqualToExpectedOne() {
     dragList.setSelectedIndex(0);
     driver.requireSelection(dragList, "one");
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldFailIfExpectingSelectionButThereIsNone() {
@@ -188,6 +201,7 @@ public class JListDriverTest {
   @Test public void shouldPassIfSelectedItemsIsEqualToExpectedOnes() {
     dragList.setSelectedIndices(new int[] { 0, 1 });
     driver.requireSelectedItems(dragList, "one", "two");
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldFailIfExpectingSelectedItemsButThereIsNone() {
@@ -242,6 +256,7 @@ public class JListDriverTest {
     driver.showPopupMenu(dragList, "one");
     recorder.clicked(RIGHT_BUTTON);
     assertThat(popupMenu.isVisible()).isTrue();
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldShowPopupMenuAtItemWithIndex() {
@@ -264,6 +279,7 @@ public class JListDriverTest {
     driver.drop(dropList, "six");
     assertThat(dragList.elements()).isEqualTo(array("one", "three"));
     assertThat(dropList.elements()).isEqualTo(array("four", "five", "six", "two"));
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldDrop() {
@@ -280,6 +296,10 @@ public class JListDriverTest {
     assertThat(dropList.elements()).isEqualTo(array("four", "five", "six", "three"));
   }
 
+  private void assertCellReaderWasCalled() {
+    assertThat(cellReader.called()).isTrue();
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
     private static final Dimension LIST_SIZE = new Dimension(80, 40);
@@ -299,5 +319,18 @@ public class JListDriverTest {
       scrollPane.setPreferredSize(LIST_SIZE);
       return scrollPane;
     }
+  }
+  
+  private static class JListCellReaderStub extends BasicJListCellReader {
+    private boolean called;
+    
+    JListCellReaderStub() {}
+    
+    @Override public String valueAt(JList list, int index) {
+      called = true;
+      return super.valueAt(list, index);
+    }
+    
+    boolean called() { return called; }
   }
 }

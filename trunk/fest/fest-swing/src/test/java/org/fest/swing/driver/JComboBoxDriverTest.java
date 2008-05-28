@@ -17,13 +17,17 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.cell.BasicJComboBoxCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -44,12 +48,15 @@ import static org.fest.util.Arrays.array;
 public class JComboBoxDriverTest {
 
   private Robot robot;
+  private JComboBoxCellReaderStub cellReader;
   private JComboBox comboBox;
   private JComboBoxDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
+    cellReader = new JComboBoxCellReaderStub();
     driver = new JComboBoxDriver(robot);
+    driver.cellReader(cellReader);
     MyFrame frame = new MyFrame();
     comboBox = frame.comboBox;
     robot.showWindow(frame);
@@ -62,6 +69,7 @@ public class JComboBoxDriverTest {
   @Test public void shouldReturnComboBoxContents() {
     Object[] contents = driver.contentsOf(comboBox);
     assertThat(contents).isEqualTo(array("first", "second", "third"));
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldSelectItemAtGivenIndex() {
@@ -72,6 +80,7 @@ public class JComboBoxDriverTest {
   @Test public void shouldSelectItemWithGivenText() {
     driver.selectItem(comboBox, "second");
     assertThat(comboBox.getSelectedItem()).isEqualTo("second");
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldNotSelectItemWithGivenTextIfAlreadySelected() {
@@ -86,16 +95,9 @@ public class JComboBoxDriverTest {
   }
 
   @Test public void shouldReturnTextAtGivenIndex() {
-    Object value = driver.value(comboBox, 2);
+    String value = driver.value(comboBox, 2);
     assertThat(value).isEqualTo("third");
-  }
-
-  @Test public void shouldReturnTextFromListCellRenderer() {
-    DefaultComboBoxModel model = new DefaultComboBoxModel(array(new Object()));
-    comboBox.setModel(model);
-    comboBox.setRenderer(new ListCellRendererStub("Hi"));
-    robot.click(comboBox);
-    assertThat(driver.value(comboBox, 0)).isEqualTo("Hi");
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldReturnDropDownList() {
@@ -104,7 +106,7 @@ public class JComboBoxDriverTest {
     assertThatListContains(dropDownList, "first", "second", "third");
   }
   
-  private void assertThatListContains(JList list, Object...expected) {
+  private void assertThatListContains(JList list, String...expected) {
     int expectedSize = expected.length;
     ListModel model = list.getModel();
     assertThat(model.getSize()).isEqualTo(expectedSize);
@@ -115,6 +117,7 @@ public class JComboBoxDriverTest {
   @Test public void shouldPassIfHasExpectedSelection() {
     comboBox.setSelectedIndex(0);
     driver.requireSelection(comboBox, "first");
+    assertCellReaderWasCalled();
   }
 
   @Test public void shouldFailIfDoesNotHaveExpectedSelection() {
@@ -272,6 +275,10 @@ public class JComboBoxDriverTest {
     assertThat(comboBox.getUI().isPopupVisible(comboBox)).isTrue();
   }
 
+  private void assertCellReaderWasCalled() {
+    assertThat(cellReader.called()).isTrue();
+  }
+
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
@@ -281,5 +288,18 @@ public class JComboBoxDriverTest {
       super(JComboBoxDriverTest.class);
       add(comboBox);
     }
+  }
+  
+  private static class JComboBoxCellReaderStub extends BasicJComboBoxCellReader {
+    private boolean called;
+    
+    JComboBoxCellReaderStub() {}
+    
+    @Override public String valueAt(JComboBox comboBox, int index) {
+      called = true;
+      return super.valueAt(comboBox, index);
+    }
+
+    boolean called() { return called; }
   }
 }

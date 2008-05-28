@@ -251,21 +251,6 @@ public class JListDriver extends JComponentDriver {
     assertThat(list.getSelectedIndex()).as(selectedIndexProperty(list)).isEqualTo(-1);
   }
 
-  /**
-   * Returns the <code>String</code> representation of the element under the given index, using this driver's
-   * <code>{@link JListCellReader}</code>.
-   * @param list the target <code>JList</code>.
-   * @param index the given index.
-   * @return the value of the element under the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   * @see #cellReader(JListCellReader)
-   */
-  public String value(JList list, int index) {
-    location.validate(list, index);
-    return cellReader.valueAt(list, index);
-  }
-
   private void failNoSelection(JList list) {
     fail(concat("[", selectedIndexProperty(list), "] No selection"));
   }
@@ -402,6 +387,21 @@ public class JListDriver extends JComponentDriver {
     for (int i = 0; i < size; i++)
       if (areEqual(value, value(list, i))) return i;
     throw indexNotFoundFor(value);
+  }
+
+  /**
+   * Returns the <code>String</code> representation of the element under the given index, using this driver's
+   * <code>{@link JListCellReader}</code>.
+   * @param list the target <code>JList</code>.
+   * @param index the given index.
+   * @return the value of the element under the given index.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   * @see #cellReader(JListCellReader)
+   */
+  public String value(JList list, int index) {
+    location.validate(list, index);
+    return cellReader.valueAt(list, index);
   }
 
   private LocationUnavailableException indexNotFoundFor(String value) {

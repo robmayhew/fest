@@ -277,7 +277,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>.
+   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. Value matching is performed
+   * by this fixture's <code>{@link JComboBoxCellReader}</code>.
    * @param text the text of the item to select.
    * @return this fixture.
    * @throws LocationUnavailableException if an element matching the given text cannot be found.

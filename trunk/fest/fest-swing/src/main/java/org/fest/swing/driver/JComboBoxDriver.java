@@ -72,9 +72,12 @@ public class JComboBoxDriver extends JComponentDriver {
 
   /**
    * Returns an array of <code>String</code>s that represents the contents of the given <code>{@link JComboBox}</code> 
-   * list.
+   * list. The <code>String</code> representation of each element is performed using this driver's 
+   * <code>{@link JComboBoxCellReader}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @return an array of <code>String</code>s that represent the contents of the given <code>JComboBox</code> list.
+   * @see #value(JComboBox, int)
+   * @see #cellReader(JComboBoxCellReader)
    */
   public String[] contentsOf(JComboBox comboBox) {
     int itemCount = size(comboBox);
@@ -85,16 +88,17 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Selects the first item matching the given value in the <code>{@link JComboBox}</code>.
+   * Selects the first item matching the given text in the <code>{@link JComboBox}</code>. Value matching is performed
+   * using this fixture's <code>{@link JComboBoxCellReader}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @param value the value to match
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   * @see #cellReader(JComboBoxCellReader)
    */
-  public void selectItem(JComboBox comboBox, Object value) {
-    if (areEqual(comboBox.getSelectedItem(), value)) return;
+  public void selectItem(JComboBox comboBox, String value) {
     int itemCount = size(comboBox);
     for (int i = 0; i < itemCount; i++) {
-      if (areEqual(itemAt(comboBox, i), value)) {
+      if (areEqual(value(comboBox, i), value)) {
         selectItem(comboBox, i);
         return;
       }
@@ -104,10 +108,6 @@ public class JComboBoxDriver extends JComponentDriver {
     throw new LocationUnavailableException(
         concat("Unable to find item ", quote(value), " among the JComboBox contents (",
             format(contentsOf(comboBox)), ")"));
-  }
-
-  private Object itemAt(JComboBox comboBox, int index) {
-    return comboBox.getItemAt(index);
   }
 
   /**
