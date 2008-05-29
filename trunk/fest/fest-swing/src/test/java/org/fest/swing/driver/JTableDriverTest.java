@@ -15,31 +15,11 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.*;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.cell.JTableCellReader;
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestTable;
-
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
@@ -48,22 +28,45 @@ import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestTable.*;
 
+import java.awt.*;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.cell.BasicJTableCellReader;
+import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestTable;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
 /**
  * Tests for <code>{@link JTableDriver}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class JTableDriverTest {
 
   private Robot robot;
+  private JTableCellReaderStub cellReader;
   private TestTable dragTable;
   private TestTable dropTable;
   private JTableDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
+    cellReader = new JTableCellReaderStub();
     driver = new JTableDriver(robot);
+    driver.cellReader(cellReader);
     MyFrame frame = new MyFrame();
     dragTable = frame.dragTable;
     dropTable = frame.dropTable;
@@ -86,7 +89,7 @@ public class JTableDriverTest {
     assertThat(dragTable.isCellSelected(0, 0));
     assertThat(dragTable.isCellSelected(2, 0));
   }
-  
+
   @Test(dependsOnMethods = "shouldSelectCell")
   public void shouldNotSelectCellIfAlreadySelected() {
     driver.selectCell(dragTable, new TableCell(0, 0));
@@ -94,24 +97,27 @@ public class JTableDriverTest {
     driver.selectCell(dragTable, new TableCell(0, 0));
     assertThat(dragTable.isCellSelected(0, 0));
   }
-  
+
   @Test(dataProvider = "cells")
   public void shouldReturnValueOfGivenRowAndColumn(int row, int column) {
-    Object value = driver.value(dragTable, row, column);
+    String value = driver.value(dragTable, row, column);
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
+    assertCellReaderWasCalled();
   }
 
   @Test(dataProvider = "cells")
   public void shouldReturnValueOfGivenCell(int row, int column) {
-    Object value = driver.value(dragTable, new TableCell(row, column));
+    String value = driver.value(dragTable, new TableCell(row, column));
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
+    assertCellReaderWasCalled();
   }
 
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cells")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
     driver.selectCell(dragTable, new TableCell(row, column));
-    Object value = driver.selectionValue(dragTable);
+    String value = driver.selectionValue(dragTable);
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
+    assertCellReaderWasCalled();
   }
 
   @DataProvider(name = "cells") public Object[][] cells() {
@@ -133,7 +139,7 @@ public class JTableDriverTest {
                              .contains("expected no selection but was:<rows[0], columns[0]>");
     }
   }
-  
+
   @Test public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
     assertThat(dragTable.getSelectedRowCount()).isZero();
     assertThat(driver.selectionValue(dragTable)).isNull();
@@ -161,7 +167,7 @@ public class JTableDriverTest {
     Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
     assertThat(pointClicked).isEqualTo(pointAtCell);
   }
-  
+
   @Test public void shouldReturnCellFont() {
     final JTableCellReader cellReader = mockCellReader();
     final Font font = new Font("SansSerif", PLAIN, 8);
@@ -177,7 +183,7 @@ public class JTableDriverTest {
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnCellBackgroundColor() {
     final JTableCellReader cellReader = mockCellReader();
     final Color background = BLUE;
@@ -212,6 +218,10 @@ public class JTableDriverTest {
 
   private JTableCellReader mockCellReader() {
     return createMock(JTableCellReader.class);
+  }
+
+  private void assertCellReaderWasCalled() {
+    assertThat(cellReader.called()).isTrue();
   }
 
   private static class MyFrame extends TestFrame {
@@ -251,5 +261,18 @@ public class JTableDriverTest {
     public TableCell(int row, int column) {
       super(row, column);
     }
+  }
+
+  private static class JTableCellReaderStub extends BasicJTableCellReader {
+    private boolean called;
+
+    JTableCellReaderStub() {}
+
+    @Override public String valueAt(JTable table, int row, int column) {
+      called = true;
+      return super.valueAt(table, row, column);
+    }
+
+    boolean called() { return called; }
   }
 }

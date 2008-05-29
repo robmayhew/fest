@@ -15,6 +15,15 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -35,15 +44,6 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
@@ -331,7 +331,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given rows.
    */
   public void requireSelection(JTree tree, int[] rows) {
-    for (int row : rows) 
+    for (int row : rows)
       requireSelection(tree, tree.getPathForRow(row));
   }
 
@@ -344,7 +344,7 @@ public class JTreeDriver extends JComponentDriver {
    * @see #separator(String)
    */
   public void requireSelection(JTree tree, String[] paths) {
-    for (String path : paths) 
+    for (String path : paths)
       requireSelection(tree, findMatchingPath(tree, path));
   }
 
@@ -440,7 +440,7 @@ public class JTreeDriver extends JComponentDriver {
         concat("There is more than one node with value ", quote(matchingText), " under ", quote(parentText)));
   }
 
-  private Object value(JTree tree, Object modelValue) {
+  private String value(JTree tree, Object modelValue) {
     return cellReader.valueAt(tree, modelValue);
   }
 
