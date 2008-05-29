@@ -15,6 +15,16 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static javax.swing.text.DefaultEditorKit.selectAllAction;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
+
 import java.awt.Component;
 import java.awt.Container;
 
@@ -32,17 +42,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
 
-import static java.lang.String.valueOf;
-import static javax.swing.text.DefaultEditorKit.selectAllAction;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JComboBox}</code>s. This class is intended for internal
@@ -55,9 +54,9 @@ public class JComboBoxDriver extends JComponentDriver {
 
   private static final String EDITABLE_PROPERTY = "editable";
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
-  
+
   private final JListDriver listDriver;
-  
+
   private JComboBoxCellReader cellReader;
 
   /**
@@ -71,8 +70,8 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Returns an array of <code>String</code>s that represents the contents of the given <code>{@link JComboBox}</code> 
-   * list. The <code>String</code> representation of each element is performed using this driver's 
+   * Returns an array of <code>String</code>s that represents the contents of the given <code>{@link JComboBox}</code>
+   * list. The <code>String</code> representation of each element is performed using this driver's
    * <code>{@link JComboBoxCellReader}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @return an array of <code>String</code>s that represent the contents of the given <code>JComboBox</code> list.
@@ -111,7 +110,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JComboBox}</code> 
+   * Verifies that the <code>String</code> representation of the selected item in the <code>{@link JComboBox}</code>
    * matches the given text.
    * @param comboBox the target <code>JComboBox</code>.
    * @param value the text to match.
@@ -134,7 +133,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the <code>String</code> representation of the element under the given index, using this driver's 
+   * Returns the <code>String</code> representation of the element under the given index, using this driver's
    * <code>{@link JComboBoxCellReader}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
@@ -161,6 +160,7 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   public void selectItem(final JComboBox comboBox, int index) {
     final int validatedIndex = validateIndex(comboBox, index);
+    if (!comboBox.isEnabled()) return;
     showDropDownList(comboBox);
     try {
       listDriver.selectItem(dropDownList(), index);
@@ -185,7 +185,7 @@ public class JComboBoxDriver extends JComponentDriver {
   private int size(JComboBox comboBox) { return comboBox.getItemCount(); }
 
   void showDropDownList(final JComboBox comboBox) {
-    if (isDropDownVisible(comboBox)) return;
+    if (isDropDownVisible(comboBox) || !comboBox.isEnabled()) return;
     // Location of pop-up button activator is LAF-dependent
     robot.invokeAndWait(new Runnable() {
       public void run() { dropDownVisibleThroughUIDelegate(comboBox, true); }
@@ -207,7 +207,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void replaceText(JComboBox comboBox, String text) {
-    if (!comboBox.isEditable()) return;
+    if (!canAccessEditorIn(comboBox)) return;
     selectAllText(comboBox);
     enterText(comboBox, text);
   }
@@ -218,7 +218,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    */
   public void selectAllText(JComboBox comboBox) {
-    if (!comboBox.isEditable()) return;
+    if (!canAccessEditorIn(comboBox)) return;
     Component editor = comboBox.getEditor().getEditorComponent();
     if (!(editor instanceof JComponent)) return;
     focus(editor);
@@ -232,9 +232,13 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void enterText(JComboBox comboBox, String text) {
-    if (!comboBox.isEditable()) return;
+    if (!canAccessEditorIn(comboBox)) return;
     focus(comboBox);
     robot.enterText(text);
+  }
+
+  private boolean canAccessEditorIn(JComboBox comboBox) {
+    return comboBox.isEditable() && comboBox.isEnabled();
   }
 
   /**

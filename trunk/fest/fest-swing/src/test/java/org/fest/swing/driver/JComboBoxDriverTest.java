@@ -15,6 +15,12 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
+
 import java.awt.Component;
 
 import javax.swing.JComboBox;
@@ -23,26 +29,20 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.text.JTextComponent;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import org.fest.swing.cell.BasicJComboBoxCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JComboBoxDriver}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class JComboBoxDriverTest {
@@ -77,10 +77,32 @@ public class JComboBoxDriverTest {
     assertThat(comboBox.getSelectedItem()).isEqualTo("third");
   }
 
+  @Test public void shouldNotSelectItemWithGivenIndexIfComboBoxIsNotEnabled() {
+    clearAndDisableComboBox();
+    driver.selectItem(comboBox, 0);
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(-1);
+  }
+
   @Test public void shouldSelectItemWithGivenText() {
     driver.selectItem(comboBox, "second");
     assertThat(comboBox.getSelectedItem()).isEqualTo("second");
     assertCellReaderWasCalled();
+  }
+
+  @Test public void shouldNotSelectItemWithGivenTextIfComboBoxIsNotEnabled() {
+    clearAndDisableComboBox();
+    driver.selectItem(comboBox, "first");
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(-1);
+  }
+
+  private void clearAndDisableComboBox() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        comboBox.setSelectedIndex(-1);
+        comboBox.setEnabled(false);
+      }
+    });
+    assertThat(comboBox.isEnabled()).isFalse();
   }
 
   @Test public void shouldNotSelectItemWithGivenTextIfAlreadySelected() {
@@ -105,7 +127,7 @@ public class JComboBoxDriverTest {
     JList dropDownList = driver.dropDownList();
     assertThatListContains(dropDownList, "first", "second", "third");
   }
-  
+
   private void assertThatListContains(JList list, String...expected) {
     int expectedSize = expected.length;
     ListModel model = list.getModel();
@@ -146,7 +168,7 @@ public class JComboBoxDriverTest {
     comboBox.setSelectedIndex(-1);
     driver.requireNoSelection(comboBox);
   }
-  
+
   @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
     comboBox.setSelectedIndex(0);
     try {
@@ -157,7 +179,7 @@ public class JComboBoxDriverTest {
                              .contains("expected:<-1> but was:<0>");
     }
   }
-  
+
   @Test public void shouldPassIfComboBoxIsEditable() {
     comboBox.setEditable(true);
     driver.requireEditable(comboBox);
@@ -180,6 +202,14 @@ public class JComboBoxDriverTest {
     assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
   }
 
+  @Test public void shouldNotSelectAllTextIfComboBoxIsNotEnabled() {
+    comboBox.setSelectedIndex(0);
+    comboBox.setEditable(true);
+    comboBox.setEnabled(false);
+    driver.selectAllText(comboBox);
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
+  }
+
   @Test public void shouldSelectAllText() {
     comboBox.setSelectedIndex(0);
     comboBox.setEditable(true);
@@ -197,6 +227,14 @@ public class JComboBoxDriverTest {
     assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
   }
 
+  @Test public void shouldNotEnterTextIfComboBoxIsNotEnabled() {
+    comboBox.setSelectedIndex(0);
+    comboBox.setEditable(true);
+    comboBox.setEnabled(false);
+    driver.enterText(comboBox, "Hello");
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
+  }
+
   @Test public void shouldEnterText() {
     comboBox.setEditable(true);
     driver.enterText(comboBox, "Hello");
@@ -209,7 +247,15 @@ public class JComboBoxDriverTest {
     driver.replaceText(comboBox, "Hello");
     assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
   }
-  
+
+  @Test public void shouldNotReplaceTextIfComboBoxIsNotEnabled() {
+    comboBox.setSelectedIndex(0);
+    comboBox.setEditable(true);
+    comboBox.setEnabled(false);
+    driver.replaceText(comboBox, "Hello");
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(0);
+  }
+
   @Test public void shouldReplaceText() {
     comboBox.setSelectedIndex(0);
     comboBox.setEditable(true);
@@ -238,14 +284,14 @@ public class JComboBoxDriverTest {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
-  
+
   @Test public void shouldFailIfItemIndexIsNegative() {
     try {
       driver.validateIndex(comboBox, -1);
       fail();
     } catch (LocationUnavailableException e) {
       assertThat(e).message().contains("Item index (-1) should be between [0] and [2]");
-    }    
+    }
   }
 
   @Test public void shouldFailIfItemIndexIsGreaterThanLastItemIndex() {
@@ -254,7 +300,7 @@ public class JComboBoxDriverTest {
       fail();
     } catch (LocationUnavailableException e) {
       assertThat(e).message().contains("Item index (6) should be between [0] and [2]");
-    }    
+    }
   }
 
   @Test public void shouldShowDropDownListWhenComboBoxIsNotEditable() {
@@ -263,7 +309,7 @@ public class JComboBoxDriverTest {
     pause(200);
     assertDropDownVisible();
   }
-  
+
   @Test public void shouldShowDropDownListWhenComboBoxIsEditable() {
     comboBox.setEditable(true);
     driver.showDropDownList(comboBox);
@@ -272,7 +318,18 @@ public class JComboBoxDriverTest {
   }
 
   private void assertDropDownVisible() {
-    assertThat(comboBox.getUI().isPopupVisible(comboBox)).isTrue();
+    assertThat(isDropDownListVisible()).isTrue();
+  }
+
+  @Test public void shouldNotShowDropDownListWhenComboBoxIsNotEnabled() {
+    comboBox.setEnabled(false);
+    driver.showDropDownList(comboBox);
+    pause(200);
+    assertThat(isDropDownListVisible()).isFalse();
+  }
+
+  private boolean isDropDownListVisible() {
+    return comboBox.getUI().isPopupVisible(comboBox);
   }
 
   private void assertCellReaderWasCalled() {
@@ -289,12 +346,12 @@ public class JComboBoxDriverTest {
       add(comboBox);
     }
   }
-  
+
   private static class JComboBoxCellReaderStub extends BasicJComboBoxCellReader {
     private boolean called;
-    
+
     JComboBoxCellReaderStub() {}
-    
+
     @Override public String valueAt(JComboBox comboBox, int index) {
       called = true;
       return super.valueAt(comboBox, index);
