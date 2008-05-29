@@ -5,6 +5,12 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="1.0a3" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="fix" issue="140" due-to="Wim Deblauwe">
+        Method 'selectItem(String)' in JComboBoxFixture now uses the specified cell reader to find a matching value in
+        the JComboBox.
+      </action>
+    </release>
     <release version="1.0a2" date="2008-05-19" description="Subsequent release">
       <action dev="wanghy, alruiz" type="add" issue="68">
         Added method 'selectPaths(String...)' and 'selectRows(int...)' to JTreeFixture.
