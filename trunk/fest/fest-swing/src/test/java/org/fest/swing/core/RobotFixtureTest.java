@@ -1,44 +1,46 @@
 /*
  * Created on Sep 5, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
 
+import static java.awt.event.KeyEvent.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.util.AWT.centerOf;
+
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.KeyRecorder;
+import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.KeyRecorder;
-import org.fest.swing.testing.TestFrame;
-
-import static java.awt.event.KeyEvent.*;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.AWT.centerOf;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.
@@ -50,26 +52,113 @@ public class RobotFixtureTest {
 
   private Robot robot;
   private MyFrame frame;
-  
+  private JTextField textFieldWithPopup;
+  private JTextField textFieldWithoutPopup;
+
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
     frame = new MyFrame();
-    robot.showWindow(frame);
+    textFieldWithPopup = frame.textFieldWithPopup;
+    textFieldWithoutPopup = frame.textFieldWithoutPopup;
+    robot.showWindow(frame); // implicitly test 'showWindow(Window)'
     assertThat(frame.isVisible()).isTrue();
+    assertThat(frame.getLocationOnScreen()).isEqualTo(new Point(100, 100));
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
-  @Test(dataProvider = "clickingData") 
-  public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
-    ClickRecorder recorder = ClickRecorder.attachTo(frame.withoutPopup);
-    robot.click(frame.withoutPopup, centerOf(frame.withoutPopup), button, times);
-    assertThat(recorder).clicked(button).timesClicked(times);
+
+  @Test public void shouldThrowErrorIfWindowNeverShown() {
+    try {
+      robot.showWindow(new JFrame() {
+        @Override public void setVisible(boolean b) {
+          super.setVisible(false);
+        }
+      });
+      fail();
+    } catch (WaitTimedOutError e) {
+      assertThat(e).message().contains("Timed out waiting for Window to open");
+    }
   }
-  
-  @DataProvider(name = "clickingData") 
+
+  @Test public void shouldNotPackWindowAsSpecified() {
+    class MyWindow extends JWindow {
+      private static final long serialVersionUID = 1L;
+      private boolean packed;
+
+      @Override public void pack() {
+        packed = true;
+        super.pack();
+      }
+
+      boolean packed() { return packed; }
+    }
+    Dimension size = new Dimension(100, 100);
+    MyWindow window = new MyWindow();
+    robot.showWindow(window, size, false);
+    assertThat(window.getSize()).isEqualTo(size);
+    assertThat(window.packed()).isFalse();
+    assertThat(window.getLocationOnScreen()).isEqualTo(new Point(0, 0));
+  }
+
+  @Test public void shouldClickComponent() {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    robot.click(textFieldWithoutPopup);
+    assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(1);
+  }
+
+  @Test public void shouldRightClickComponent() {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    robot.rightClick(textFieldWithoutPopup);
+    assertThat(recorder).clicked(RIGHT_BUTTON).timesClicked(1);
+  }
+
+  @Test public void shouldDoubleClickComponent() {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    robot.doubleClick(textFieldWithoutPopup);
+    assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(2);
+  }
+
+  @Test public void shouldClickComponentOnceWithLeftButtonAtGivenPoint() {
+    Point p = new Point(10, 10);
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    robot.click(textFieldWithoutPopup, p);
+    assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(1).clickedAt(p);
+  }
+
+  @Test(dataProvider = "mouseButtons")
+  public void shouldClickComponentOnceWithGivenButton(MouseButton button) {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    robot.click(textFieldWithoutPopup, button);
+    assertThat(recorder).clicked(button).timesClicked(1);
+  }
+
+  @DataProvider(name = "mouseButtons")
+  public Object[][] mouseButtons() {
+    return new Object[][] {
+        { LEFT_BUTTON },
+        { MIDDLE_BUTTON },
+        { RIGHT_BUTTON }
+    };
+  }
+
+  @Test(dataProvider = "clickingData")
+  public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    robot.click(textFieldWithoutPopup, button, times);
+    assertThat(recorder).clicked(button).timesClicked(times).clickedAt(centerOf(textFieldWithoutPopup));
+  }
+
+  @Test(dataProvider = "clickingData")
+  public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimesAtGivenPoint(MouseButton button, int times) {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    Point point = new Point(10, 10);
+    robot.click(textFieldWithoutPopup, point, button, times);
+    assertThat(recorder).clicked(button).timesClicked(times).clickedAt(point);
+  }
+
+  @DataProvider(name = "clickingData")
   public Object[][] clickingData() {
     return new Object[][] {
         { LEFT_BUTTON, 1 },
@@ -80,40 +169,40 @@ public class RobotFixtureTest {
         { RIGHT_BUTTON, 2 },
     };
   }
-  
+
   @Test public void shouldPressAndReleaseGivenKeys() {
-    frame.withPopup.requestFocusInWindow();
-    KeyRecorder recorder = KeyRecorder.attachTo(frame.withPopup);
+    textFieldWithPopup.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
     int[] keys = { VK_A, VK_B, VK_Z };
     robot.pressAndReleaseKeys(keys);
     assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
   @Test public void shouldPressGivenKeyWithoutReleasingIt() {
-    frame.withPopup.requestFocusInWindow();
-    KeyRecorder recorder = KeyRecorder.attachTo(frame.withPopup);
+    textFieldWithPopup.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
     robot.pressKey(VK_A);
     assertThat(recorder).keysPressed(VK_A).noKeysReleased();
   }
 
-  @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt") 
+  @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt")
   public void shouldReleaseGivenKey() {
-    frame.withPopup.requestFocusInWindow();
-    KeyRecorder recorder = KeyRecorder.attachTo(frame.withPopup);
+    textFieldWithPopup.requestFocusInWindow();
+    KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
     robot.pressKey(VK_A);
     robot.releaseKey(VK_A);
     assertThat(recorder).keysReleased(VK_A);
   }
 
   @Test public void shouldShowPopupMenu() {
-    JPopupMenu menu = robot.showPopupMenu(frame.withPopup);
+    JPopupMenu menu = robot.showPopupMenu(textFieldWithPopup);
     assertThat(menu).isSameAs(popupMenu());
     assertThat(menu.isVisible()).isTrue();
   }
 
   @Test public void shouldThrowErrorIfPopupNotFound() {
     try {
-      robot.showPopupMenu(frame.withoutPopup);
+      robot.showPopupMenu(textFieldWithoutPopup);
       fail();
     } catch (ComponentLookupException expected) {
       assertThat(expected).message().contains("Unable to show popup")
@@ -124,7 +213,7 @@ public class RobotFixtureTest {
 
   @Test(dependsOnMethods = "shouldShowPopupMenu")
   public void shouldReturnActivePopupMenu() {
-    robot.showPopupMenu(frame.withPopup);
+    robot.showPopupMenu(textFieldWithPopup);
     JPopupMenu found = robot.findActivePopupMenu();
     assertThat(found).isSameAs(frame.popupMenu);
   }
@@ -145,10 +234,19 @@ public class RobotFixtureTest {
     });
     assertThat(w.isVisible()).isFalse();
   }
-   
+
+  @Test public void shouldNotCloseWindowIfWindowNotShowing() {
+    TestFrame w = new TestFrame(getClass());
+    w.display();
+    w.setVisible(false);
+    assertThat(w.isShowing()).isFalse();
+    robot.close(w);
+    assertThat(w.isShowing()).isFalse();
+  }
+
   @Test public void shouldGiveFocus() {
-    giveFocusAndVerifyThatHasFocus(frame.withPopup);
-    giveFocusAndVerifyThatHasFocus(frame.withoutPopup);
+    giveFocusAndVerifyThatHasFocus(textFieldWithPopup);
+    giveFocusAndVerifyThatHasFocus(textFieldWithoutPopup);
   }
 
   private void giveFocusAndVerifyThatHasFocus(Component c) {
@@ -158,16 +256,16 @@ public class RobotFixtureTest {
   }
 
   @Test public void shouldGiveFocusAndWaitUntilComponentHasFocus() {
-    robot.focusAndWaitForFocusGain(frame.withPopup);
-    assertThat(frame.withPopup.isFocusOwner()).isTrue();
-    robot.focusAndWaitForFocusGain(frame.withoutPopup);
-    assertThat(frame.withoutPopup.isFocusOwner()).isTrue();
+    robot.focusAndWaitForFocusGain(textFieldWithPopup);
+    assertThat(textFieldWithPopup.isFocusOwner()).isTrue();
+    robot.focusAndWaitForFocusGain(textFieldWithoutPopup);
+    assertThat(textFieldWithoutPopup.isFocusOwner()).isTrue();
   }
-  
+
   private JPopupMenu popupMenu() {
     return frame.popupMenu;
   }
-  
+
   @Test public void shouldPassIfNoJOptionPaneIsShowing() {
     robot.requireNoJOptionPaneIsShowing();
   }
@@ -186,23 +284,23 @@ public class RobotFixtureTest {
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    final JTextField withPopup = new JTextField("With Pop-up Menu");
-    final JTextField withoutPopup = new JTextField("Without Pop-up Menu");
+    final JTextField textFieldWithPopup = new JTextField("With Pop-up Menu");
+    final JTextField textFieldWithoutPopup = new JTextField("Without Pop-up Menu");
     final JButton button = new JButton("Click Me");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
     MyFrame() {
       super(RobotFixtureTest.class);
-      add(withPopup);
-      add(withoutPopup);
+      add(textFieldWithPopup);
+      add(textFieldWithoutPopup);
       add(button);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           JOptionPane.showMessageDialog(MyFrame.this, "A Message");
         }
       });
-      withPopup.setComponentPopupMenu(popupMenu);
-      withoutPopup.setName("withoutPopup");
+      textFieldWithPopup.setComponentPopupMenu(popupMenu);
+      textFieldWithoutPopup.setName("withoutPopup");
       popupMenu.add(new JMenuItem("Luke"));
       popupMenu.add(new JMenuItem("Leia"));
     }

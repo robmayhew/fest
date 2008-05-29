@@ -171,8 +171,8 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void close(Window w) {
-    focus(w);
     if (!w.isShowing()) return;
+    focus(w);
     // Move to a corner and "pretend" to use the window manager control
     try {
       Point p = closeLocation(w);
