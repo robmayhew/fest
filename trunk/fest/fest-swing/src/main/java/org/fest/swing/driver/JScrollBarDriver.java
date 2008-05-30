@@ -14,18 +14,17 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JScrollBar}</code>. Unlike <code>JScrollBarFixture</code>,
@@ -126,7 +125,7 @@ public class JScrollBarDriver extends JComponentDriver {
     Point where = location.blockLocationToScrollDown(scrollBar);
     scroll(scrollBar, where, times * scrollBar.getBlockIncrement() * -1);
   }
-  
+
   private void validateTimes(int times, String action) {
     if (times > 0) return;
     String message = concat(
@@ -135,12 +134,13 @@ public class JScrollBarDriver extends JComponentDriver {
   }
 
   private void scroll(JScrollBar scrollBar, Point where, int count) {
+    if (!scrollBar.isEnabled()) return;
     // For now, do it programmatically, faking the mouse movement and clicking
     robot.moveMouse(scrollBar, where.x, where.y);
     int value = scrollBar.getValue() + count;
     setValueProperty(scrollBar, value);
   }
-  
+
   /**
    * Scrolls to the given position.
    * @param scrollBar the target <code>JScrollBar</code>.
@@ -149,6 +149,7 @@ public class JScrollBarDriver extends JComponentDriver {
    */
   public void scrollTo(JScrollBar scrollBar, final int position) {
     validatePosition(scrollBar, position);
+    if (!scrollBar.isEnabled()) return;
     Point thumb = location.thumbLocation(scrollBar, scrollBar.getValue());
     robot.moveMouse(scrollBar, thumb.x, thumb.y);
     thumb = location.thumbLocation(scrollBar, position);
