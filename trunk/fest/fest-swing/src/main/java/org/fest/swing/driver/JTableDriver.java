@@ -177,6 +177,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public void selectCell(JTable table, JTableCell cell) {
+    if (!table.isEnabled()) return;
     validate(table, cell);
     if (isCellSelected(table, cell)) return;
     click(table, cell, LEFT_BUTTON, 1);
@@ -196,6 +197,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public void click(JTable table, JTableCell cell, MouseButton mouseButton, int times) {
+    if (!table.isEnabled()) return;
     validate(table, cell);
     scrollToVisible(table, location.cellBounds(table, cell));
     robot.click(table, pointAt(table, cell), mouseButton, times);

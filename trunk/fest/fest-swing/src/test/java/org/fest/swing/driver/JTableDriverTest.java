@@ -15,25 +15,17 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestTable.*;
-
 import java.awt.*;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.BasicJTableCellReader;
@@ -42,10 +34,20 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestTable.*;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.
@@ -80,22 +82,34 @@ public class JTableDriverTest {
   @Test(dataProvider = "cells")
   public void shouldSelectCell(int row, int column) {
     driver.selectCell(dragTable, new TableCell(row, column));
-    assertThat(dragTable.isCellSelected(row, column));
+    assertThat(dragTable.isCellSelected(row, column)).isTrue();
+  }
+  
+  @Test public void shouldNotSelectCellIfTableIsNotEnabled() {
+    clearAndDisableDragTable();
+    driver.selectCell(dragTable, new TableCell(0, 0));
+    assertDragTableHasNoSelection();
   }
 
   @Test public void shouldSelectCells() {
     dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     driver.selectCells(dragTable, new TableCell(0, 0), new TableCell(2, 0));
-    assertThat(dragTable.isCellSelected(0, 0));
-    assertThat(dragTable.isCellSelected(2, 0));
+    assertThat(dragTable.isCellSelected(0, 0)).isTrue();
+    assertThat(dragTable.isCellSelected(2, 0)).isTrue();
+  }
+
+  @Test public void shouldNotSelectCellsIfTableIsNotEnabled() {
+    clearAndDisableDragTable();
+    driver.selectCells(dragTable, new TableCell(0, 0), new TableCell(2, 0));
+    assertDragTableHasNoSelection();
   }
 
   @Test(dependsOnMethods = "shouldSelectCell")
   public void shouldNotSelectCellIfAlreadySelected() {
     driver.selectCell(dragTable, new TableCell(0, 0));
-    assertThat(dragTable.isCellSelected(0, 0));
+    assertThat(dragTable.isCellSelected(0, 0)).isTrue();
     driver.selectCell(dragTable, new TableCell(0, 0));
-    assertThat(dragTable.isCellSelected(0, 0));
+    assertThat(dragTable.isCellSelected(0, 0)).isTrue();
   }
 
   @Test(dataProvider = "cells")
@@ -222,6 +236,20 @@ public class JTableDriverTest {
 
   private void assertCellReaderWasCalled() {
     assertThat(cellReader.called()).isTrue();
+  }
+  
+  private void clearAndDisableDragTable() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        dragTable.clearSelection();
+        dragTable.setEnabled(false);
+      }
+    });
+    assertThat(dragTable.isEnabled()).isFalse();
+  }
+
+  private void assertDragTableHasNoSelection() {
+    assertThat(dragTable.getSelectedRowCount()).isEqualTo(0);
   }
 
   private static class MyFrame extends TestFrame {
