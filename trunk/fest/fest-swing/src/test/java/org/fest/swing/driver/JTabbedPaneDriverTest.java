@@ -15,6 +15,21 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import org.fest.assertions.IntAssert;
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
@@ -22,20 +37,6 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
-
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
-import org.fest.assertions.IntAssert;
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTabbedPaneDriver}</code>.
@@ -66,6 +67,12 @@ public class JTabbedPaneDriverTest {
   public void shouldSelectTabWithGivenIndex(int index) {
     driver.selectTab(tabbedPane, index);
     assertThatSelectedTabIndexIsEqualTo(index);
+  }
+  
+  @Test public void shouldNotSelectTabWithGivenIndexIfTabbedPaneIsNotEnabled() {
+    clearAndDisableTabbedPane();
+    driver.selectTab(tabbedPane, 1);
+    assertThatSelectedTabIndexIsEqualTo(0);
   }
 
   @Test(dataProvider = "tabIndexProvider")
@@ -106,6 +113,12 @@ public class JTabbedPaneDriverTest {
     assertThatSelectedTabIndexIsEqualTo(1);
   }
 
+  @Test public void shouldNotSelectTabWithGivenTitleIfTabbedPaneIsNotEnabled() {
+    clearAndDisableTabbedPane();
+    driver.selectTab(tabbedPane, "Second");
+    assertThatSelectedTabIndexIsEqualTo(0);
+  }
+  
   private IntAssert assertThatSelectedTabIndexIsEqualTo(int expected) {
     return assertThat(tabbedPane.getSelectedIndex()).isEqualTo(expected);
   }
@@ -114,6 +127,16 @@ public class JTabbedPaneDriverTest {
     assertThat(driver.tabTitles(tabbedPane)).isEqualTo(array("First", "Second"));
   }
 
+  private void clearAndDisableTabbedPane() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        tabbedPane.setSelectedIndex(0);
+        tabbedPane.setEnabled(false);
+      }
+    });
+    assertThat(tabbedPane.isEnabled()).isEqualTo(false);
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
