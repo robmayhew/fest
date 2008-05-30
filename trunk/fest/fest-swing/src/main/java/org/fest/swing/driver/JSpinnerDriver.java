@@ -97,6 +97,7 @@ public class JSpinnerDriver extends JComponentDriver {
   }
 
   private void pressKey(JSpinner spinner, int key) {
+    if (!spinner.isEnabled()) return;
     focus(spinner);
     robot.pressAndReleaseKeys(key);
   }
@@ -111,6 +112,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
   public void enterText(JSpinner spinner, String text) {
+    if (!spinner.isEnabled()) return;
     try {
       JTextComponent editor = robot.finder().findByType(spinner, JTextComponent.class);
       textComponentDriver.replaceText(editor, text);

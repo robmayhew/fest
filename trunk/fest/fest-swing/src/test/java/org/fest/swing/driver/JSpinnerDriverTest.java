@@ -15,24 +15,25 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
-
-import java.awt.Dimension;
-
-import javax.swing.JSpinner;
-import javax.swing.SpinnerListModel;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JSpinnerDriver}</code>.
@@ -59,15 +60,27 @@ public class JSpinnerDriverTest {
   }
 
   @Test public void shouldIncrementValue() {
-    assertThatSpinnerValueIsEqualTo("Frodo");
+    assertFirstValueIsSelected();
     driver.increment(spinner);
     assertThatSpinnerValueIsEqualTo("Sam");
   }
 
+  @Test public void shouldNotIncrementValueIfSpinnerIsNotEnabled() {
+    clearAndDisableSpinner();
+    driver.increment(spinner);
+    assertFirstValueIsSelected();
+  }
+  
   @Test public void shouldIncrementValueTheGivenTimes() {
-    assertThatSpinnerValueIsEqualTo("Frodo");
+    assertFirstValueIsSelected();
     driver.increment(spinner, 2);
-    assertThatSpinnerValueIsEqualTo("Gandalf");
+    assertLastValueIsSelected();
+  }
+
+  @Test public void shouldNotIncrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
+    clearAndDisableSpinner();
+    driver.increment(spinner, 2);
+    assertFirstValueIsSelected();
   }
 
   @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
@@ -85,13 +98,31 @@ public class JSpinnerDriverTest {
   @Test public void shouldDecrementValue() {
     driver.increment(spinner);
     driver.decrement(spinner);
+    assertFirstValueIsSelected();
+  }
+
+  @Test public void shouldNotDecrementValueIfSpinnerIsNotEnabled() {
+    clearAndDisableSpinner();
+    selectLastValue();
+    driver.decrement(spinner);
+    assertLastValueIsSelected();
+  }
+
+  private void assertFirstValueIsSelected() {
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
 
   @Test public void shouldDecrementValueTheGivenTimes() {
-    spinner.setValue("Gandalf");
+    selectLastValue();
     driver.decrement(spinner, 2);
-    assertThatSpinnerValueIsEqualTo("Frodo");
+    assertFirstValueIsSelected();
+  }
+
+  @Test public void shouldNotDecrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
+    clearAndDisableSpinner();
+    selectLastValue();
+    driver.decrement(spinner, 2);
+    assertLastValueIsSelected();
   }
 
   @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
@@ -108,16 +139,26 @@ public class JSpinnerDriverTest {
 
   @Test public void shouldEnterText() {
     driver.enterText(spinner, "Gandalf");
+    assertLastValueIsSelected();
+  }
+
+  @Test public void shouldNotEnterTextIfSpinnerIsNotEnabled() {
+    clearAndDisableSpinner();
+    driver.enterText(spinner, "Gandalf");
+    assertFirstValueIsSelected();
+  }
+
+  private void assertLastValueIsSelected() {
     assertThatSpinnerValueIsEqualTo("Gandalf");
   }
 
   @Test public void shouldPassIfValueIsEqualToExpected() {
-    spinner.setValue("Gandalf");
+    selectLastValue();
     driver.requireValue(spinner, "Gandalf");
   }
 
   @Test public void shouldFailIfValueIsNotEqualToExpected() {
-    spinner.setValue("Gandalf");
+    selectLastValue();
     try {
       driver.requireValue(spinner, "Frodo");
       fail();
@@ -127,10 +168,24 @@ public class JSpinnerDriverTest {
     }
   }
 
+  private void selectLastValue() {
+    spinner.setValue("Gandalf");
+  }
+
   private void assertThatSpinnerValueIsEqualTo(Object expected) {
     assertThat(spinner.getValue()).isEqualTo(expected);
   }
 
+  private void clearAndDisableSpinner() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        spinner.setValue("Frodo");
+        spinner.setEnabled(false);
+      }
+    });
+    assertThat(spinner.isEnabled()).isFalse();
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
