@@ -1,18 +1,23 @@
 /*
  * Created on May 14, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
+
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
+import static org.fest.swing.util.System.LINE_SEPARATOR;
+import static org.fest.util.Strings.concat;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -25,14 +30,9 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
-import static org.fest.swing.util.System.LINE_SEPARATOR;
-import static org.fest.util.Strings.concat;
-
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.
- * 
+ *
  * @author Alex Ruiz
  */
 public final class BasicComponentFinder implements ComponentFinder {
@@ -73,7 +73,7 @@ public final class BasicComponentFinder implements ComponentFinder {
 
   /** ${@inheritDoc} */
   public ComponentPrinter printer() { return printer; }
-  
+
   /** ${@inheritDoc} */
   public <T extends Component> T findByType(Class<T> type) {
     return findByType(type, false);
@@ -83,7 +83,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   public <T extends Component> T findByType(Class<T> type, boolean showing) {
     return type.cast(find(new TypeMatcher(type, showing)));
   }
-  
+
   /** ${@inheritDoc} */
   public <T extends Component> T findByType(Container root, Class<T> type) {
     return findByType(root, type, false);
@@ -116,7 +116,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   }
 
   /** ${@inheritDoc} */
-  @SuppressWarnings("unchecked") 
+  @SuppressWarnings("unchecked")
   public <T extends Component> T find(GenericTypeMatcher<T> m) {
     return (T)find((ComponentMatcher)m);
   }
@@ -125,7 +125,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   public Component find(ComponentMatcher m) {
     return find(hierarchy, m);
   }
-  
+
   /** ${@inheritDoc} */
   public <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return findByName(root, name, type, false);
@@ -146,9 +146,9 @@ public final class BasicComponentFinder implements ComponentFinder {
   public Component findByName(Container root, String name, boolean showing) {
     return find(root, new NameMatcher(name, showing));
   }
-  
+
   /** ${@inheritDoc} */
-  @SuppressWarnings("unchecked") 
+  @SuppressWarnings("unchecked")
   public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
     return (T)find(root, (ComponentMatcher)m);
   }
@@ -162,11 +162,11 @@ public final class BasicComponentFinder implements ComponentFinder {
     if (root == null) return hierarchy;
     return new SingleComponentHierarchy(root, hierarchy);
   }
-  
+
   private Component find(ComponentHierarchy delegate, ComponentMatcher matcher)  {
     Set<Component> found = new HashSet<Component>();
     for (Object o : delegate.roots()) find(delegate, matcher, (Component)o, found);
-    if (found.isEmpty()) throw componentNotFound(delegate, matcher); 
+    if (found.isEmpty()) throw componentNotFound(delegate, matcher);
     if (found.size() > 1) throw multipleComponentsFound(found, matcher);
     return found.iterator().next();
   }
@@ -175,11 +175,11 @@ public final class BasicComponentFinder implements ComponentFinder {
     for (Object o : h.childrenOf(root)) find(h, m, (Component)o, found);
     if (m.matches(root)) found.add(root);
   }
-  
+
   private ComponentLookupException componentNotFound(ComponentHierarchy h, ComponentMatcher m) {
     String message = concat("Unable to find component using matcher ", m, ".");
     if (includeHierarchyIfComponentNotFound())
-      message = concat(message, 
+      message = concat(message,
           LINE_SEPARATOR, LINE_SEPARATOR, "Component hierarchy:", LINE_SEPARATOR, formattedHierarchy(root(h)));
     throw new ComponentLookupException(message);
   }
@@ -188,13 +188,13 @@ public final class BasicComponentFinder implements ComponentFinder {
     if (h instanceof SingleComponentHierarchy) return ((SingleComponentHierarchy)h).root();
     return null;
   }
-  
+
   private String formattedHierarchy(Container root) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(out, true);
     printer.printComponents(printStream, root);
     printStream.flush();
-    return new String(out.toByteArray());    
+    return new String(out.toByteArray());
   }
 
   private ComponentLookupException multipleComponentsFound(Set<Component> found, ComponentMatcher m) {
@@ -204,7 +204,7 @@ public final class BasicComponentFinder implements ComponentFinder {
            .append("Found:");
     for (Component c : found) message.append(LINE_SEPARATOR).append(format(c));
     if (!found.isEmpty()) message.append(LINE_SEPARATOR);
-    throw new ComponentLookupException(message.toString(), found);    
+    throw new ComponentLookupException(message.toString(), found);
   }
 
   /** ${@inheritDoc} */
