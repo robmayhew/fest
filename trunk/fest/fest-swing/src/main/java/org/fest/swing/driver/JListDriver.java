@@ -15,6 +15,15 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -31,16 +40,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
-
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -142,8 +141,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void clickItem(JList list, String value, MouseButton button, int times) {
-    scrollToVisible(list, value);
-    robot.click(list, pointAt(list, value), button, times);
+    clickItem(list, indexOf(list, value), button, times);
   }
 
   /**
@@ -209,6 +207,7 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void clickItem(JList list, int index, MouseButton button, int times) {
+    if (!list.isEnabled()) return;
     scrollToVisible(list, index);
     robot.click(list, location.pointAt(list, index), button, times);
   }
@@ -266,8 +265,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void drag(JList list, String value) {
-    scrollToVisible(list, value);
-    super.drag(list, pointAt(list, value));
+    drag(list, indexOf(list, value));
   }
 
   /**
@@ -278,8 +276,7 @@ public class JListDriver extends JComponentDriver {
    * @throws ActionFailedException if there is no drag action in effect.
    */
   public void drop(JList list, String value) {
-    scrollToVisible(list, value);
-    super.drop(list, pointAt(list, value));
+    drop(list, indexOf(list, value));
   }
 
   /**
@@ -316,24 +313,6 @@ public class JListDriver extends JComponentDriver {
     super.drop(list, centerOf(list));
   }
 
-  /**
-   * Shows a pop-up menu at the location of the specified item in the <code>{@link JList}</code>.
-   * @param list the target <code>JList</code>.
-   * @param index the index of the item.
-   * @return a driver that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   */
-  public JPopupMenu showPopupMenu(JList list, int index) {
-    scrollToVisible(list, index);
-    return robot.showPopupMenu(list, pointAt(list, index));
-  }
-
-  private void scrollToVisible(JList list, int index) {
-    super.scrollToVisible(list, itemBounds(list, index));
-  }
-
   private Rectangle itemBounds(JList list, int index) {
     return list.getCellBounds(index, index);
   }
@@ -351,17 +330,25 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public JPopupMenu showPopupMenu(JList list, String value) {
-    scrollToVisible(list, value);
-    return robot.showPopupMenu(list, pointAt(list, value));
+    return showPopupMenu(list, indexOf(list, value));
   }
 
-  private void scrollToVisible(JList list, String value) {
-    super.scrollToVisible(list, itemBounds(list, value));
+  /**
+   * Shows a pop-up menu at the location of the specified item in the <code>{@link JList}</code>.
+   * @param list the target <code>JList</code>.
+   * @param index the index of the item.
+   * @return a driver that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public JPopupMenu showPopupMenu(JList list, int index) {
+    scrollToVisible(list, index);
+    return robot.showPopupMenu(list, pointAt(list, index));
   }
 
-  private Rectangle itemBounds(JList list, String value) {
-    int index = indexOf(list, value);
-    return itemBounds(list, index);
+  private void scrollToVisible(JList list, int index) {
+    super.scrollToVisible(list, itemBounds(list, index));
   }
 
   /**

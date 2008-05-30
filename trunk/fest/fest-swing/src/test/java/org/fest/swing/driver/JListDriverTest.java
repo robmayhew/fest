@@ -15,27 +15,7 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dimension;
-import java.awt.Point;
-
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.cell.BasicJListCellReader;
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestList;
-
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
@@ -45,10 +25,29 @@ import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
 
+import java.awt.Dimension;
+import java.awt.Point;
+
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+
+import org.fest.swing.cell.BasicJListCellReader;
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestList;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 /**
  * Tests for <code>{@link JListDriver}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class JListDriverTest {
@@ -86,7 +85,7 @@ public class JListDriverTest {
     assertThat(index).isEqualTo(2);
     assertCellReaderWasCalled();
   }
-  
+
   @Test public void shouldThrowErrorIfIndexForValueNotFound() {
     try {
       driver.indexOf(dragList, "four");
@@ -95,13 +94,13 @@ public class JListDriverTest {
       assertThat(expected).message().isEqualTo("Unable to find an element matching the value 'four'");
     }
   }
-  
+
   @Test public void shouldReturnTextOfElement() {
     Object text = driver.value(dragList, 0);
     assertThat(text).isEqualTo("one");
     assertCellReaderWasCalled();
   }
-  
+
   @Test public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForText() {
     try {
       driver.value(dragList, 6);
@@ -122,7 +121,7 @@ public class JListDriverTest {
     assertThat(selection).containsOnly("one", "three");
     assertCellReaderWasCalled();
   }
-  
+
   @Test public void shouldReturnListContents() {
     Object[] contents = driver.contentsOf(dragList);
     assertThat(contents).isEqualTo(array("one", "two", "three"));
@@ -134,10 +133,22 @@ public class JListDriverTest {
     assertThat(dragList.getSelectedValue()).isEqualTo("three");
   }
 
+  @Test public void shouldNotSelectItemAtGivenIndexIfListIsNotEnabled() {
+    clearAndDisableDragList();
+    driver.selectItem(dragList, 2);
+    assertDragListHasNoSelection();
+  }
+
   @Test public void shouldSelectItemWithGivenText() {
     driver.selectItem(dragList, "two");
     assertThat(dragList.getSelectedValue()).isEqualTo("two");
     assertCellReaderWasCalled();
+  }
+
+  @Test public void shouldNotSelectItemWithGivenTextIfListIsNotEnabled() {
+    clearAndDisableDragList();
+    driver.selectItem(dragList, "two");
+    assertDragListHasNoSelection();
   }
 
   @Test public void shouldSelectItemsWithGivenText() {
@@ -146,19 +157,43 @@ public class JListDriverTest {
     assertCellReaderWasCalled();
   }
 
+  @Test public void shouldNotSelectItemsWithGivenTextIsListIsNotEnabled() {
+    clearAndDisableDragList();
+    driver.selectItems(dragList, array("two", "three"));
+    assertDragListHasNoSelection();
+  }
+
   @Test public void shouldSelectItemsWithGivenIndices() {
     driver.selectItems(dragList, new int[] { 1, 2 });
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
   }
 
-  @Test public void shouldSelectItemsInRange() {
+  @Test public void shouldNotSelectItemsWithGivenIndicesIfListIsNotEnabled() {
+    clearAndDisableDragList();
+    driver.selectItems(dragList, new int[] { 1, 2 });
+    assertDragListHasNoSelection();
+  }
+
+  @Test public void shouldSelectItemsInFluentRange() {
     driver.selectItems(dragList, from(0), to(1));
     assertThat(dragList.getSelectedValues()).isEqualTo(array("one", "two"));
+  }
+
+  @Test public void shouldNotSelectItemsInFluentRangeIfListIsNotEnabled() {
+    clearAndDisableDragList();
+    driver.selectItems(dragList, from(0), to(1));
+    assertDragListHasNoSelection();
   }
 
   @Test public void shouldSelectItemsInGivenRange() {
     driver.selectItems(dragList, 0, 1);
     assertThat(dragList.getSelectedValues()).isEqualTo(array("one", "two"));
+  }
+
+  @Test public void shouldNotSelectItemsInGivenRangeIfListIsNotEnabled() {
+    clearAndDisableDragList();
+    driver.selectItems(dragList, 0, 1);
+    assertDragListHasNoSelection();
   }
 
   @Test public void shouldReturnValueAtGivenIndex() {
@@ -274,7 +309,7 @@ public class JListDriverTest {
     return popupMenu;
   }
 
-  @Test public void shouldDragAndDropValueUsingGivenNames() {
+  @Test public void shouldDragAndDropValueUsingGivenValues() {
     driver.drag(dragList, "two");
     driver.drop(dropList, "six");
     assertThat(dragList.elements()).isEqualTo(array("one", "three"));
@@ -296,10 +331,19 @@ public class JListDriverTest {
     assertThat(dropList.elements()).isEqualTo(array("four", "five", "six", "three"));
   }
 
+  private void clearAndDisableDragList() {
+    dragList.setSelectedIndex(-1);
+    dragList.setEnabled(false);
+  }
+
+  private void assertDragListHasNoSelection() {
+    assertThat(dragList.getSelectedIndex()).isEqualTo(-1);
+  }
+
   private void assertCellReaderWasCalled() {
     assertThat(cellReader.called()).isTrue();
   }
-  
+
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
     private static final Dimension LIST_SIZE = new Dimension(80, 40);
@@ -320,17 +364,17 @@ public class JListDriverTest {
       return scrollPane;
     }
   }
-  
+
   private static class JListCellReaderStub extends BasicJListCellReader {
     private boolean called;
-    
+
     JListCellReaderStub() {}
-    
+
     @Override public String valueAt(JList list, int index) {
       called = true;
       return super.valueAt(list, index);
     }
-    
+
     boolean called() { return called; }
   }
 }
