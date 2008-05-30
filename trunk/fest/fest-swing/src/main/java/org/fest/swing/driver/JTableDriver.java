@@ -197,7 +197,6 @@ public class JTableDriver extends JComponentDriver {
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
   public void click(JTable table, JTableCell cell, MouseButton mouseButton, int times) {
-    if (!table.isEnabled()) return;
     validate(table, cell);
     scrollToVisible(table, location.cellBounds(table, cell));
     robot.click(table, pointAt(table, cell), mouseButton, times);
