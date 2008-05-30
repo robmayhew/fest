@@ -46,6 +46,7 @@ public class JSplitPaneDriver extends JComponentDriver {
    * @param location the location to move the divider to.
    */
   public void moveDividerTo(JSplitPane splitPane, int location) {
+    if (!splitPane.isEnabled()) return;
     // Move as close as possible, then set the position
     simulateMovingDivider(splitPane, location);
     robot.invokeAndWait(splitPane, new SetDividerLocationTask(splitPane, location));
