@@ -14,15 +14,14 @@
  */
 package org.fest.swing.driver;
 
+import static java.lang.String.valueOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
+
 import javax.swing.JSlider;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-
-import static java.lang.String.valueOf;
-
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JSlider}</code>. Unlike <code>JSliderFixture</code>, this
@@ -30,6 +29,7 @@ import static org.fest.util.Strings.concat;
  * use only.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class JSliderDriver extends JComponentDriver {
 
@@ -45,26 +45,10 @@ public class JSliderDriver extends JComponentDriver {
   }
 
   /**
-   * Clicks at the maximum end of the <code>{@link JSlider}</code>.
-   * @param slider the target <code>JSlider</code>.
-   */
-  public void increment(JSlider slider) {
-    click(slider, location.pointAt(slider, slider.getMaximum()));
-  }
-
-  /**
-   * Clicks at the minimum end of the <code>{@link JSlider}</code>.
-   * @param slider the target <code>JSlider</code>.
-   */
-  public void decrement(JSlider slider) {
-    click(slider, location.pointAt(slider, slider.getMinimum()));
-  }
-
-  /**
    * Slides the knob to its maximum.
    * @param slider the target <code>JSlider</code>.
    */
-  public void slideToMax(JSlider slider) {
+  public void slideToMaximum(JSlider slider) {
     slide(slider, slider.getMaximum());
   }
 
@@ -72,7 +56,7 @@ public class JSliderDriver extends JComponentDriver {
    * Slides the knob to its minimum.
    * @param slider the target <code>JSlider</code>.
    */
-  public void slideToMin(JSlider slider) {
+  public void slideToMinimum(JSlider slider) {
     slide(slider, slider.getMinimum());
   }
 
@@ -84,6 +68,7 @@ public class JSliderDriver extends JComponentDriver {
    */
   public void slide(JSlider slider, int value) {
     validateValue(slider, value);
+    if (!slider.isEnabled()) return;
     drag(slider, location.pointAt(slider, slider.getValue()));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
@@ -97,7 +82,7 @@ public class JSliderDriver extends JComponentDriver {
     throw actionFailure(concat(
         "Value <", valueOf(value), "> is not within the JSlider bounds of <", valueOf(min), "> and <", valueOf(max), ">"));
   }
-  
+
   private static class SetValueTask implements Runnable {
     private final JSlider target;
     private final int value;

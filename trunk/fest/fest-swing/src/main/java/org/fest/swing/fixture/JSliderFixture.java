@@ -60,11 +60,11 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
   private void createDriver() {
     updateDriver(new JSliderDriver(robot));
   }
-  
+
   final void updateDriver(JSliderDriver newDriver) {
     driver = newDriver;
   }
-  
+
   /**
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.
@@ -80,8 +80,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to its maximum value.
    * @return this fixture.
    */
-  public JSliderFixture slideToMax() {
-    driver.slideToMax(target);
+  public JSliderFixture slideToMaximum() {
+    driver.slideToMaximum(target);
     return this;
   }
 
@@ -89,26 +89,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to its minimum value.
    * @return this fixture.
    */
-  public JSliderFixture slideToMin() {
-    driver.slideToMin(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking at the maximum end of this fixture's <code>{@link JSlider}</code>.
-   * @return this fixture.
-   */
-  public JSliderFixture increment() {
-    driver.increment(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking at the minimum end of this fixture's <code>{@link JSlider}</code>.
-   * @return this fixture.
-   */
-  public JSliderFixture decrement() {
-    driver.decrement(target);
+  public JSliderFixture slideToMinimum() {
+    driver.slideToMinimum(target);
     return this;
   }
 

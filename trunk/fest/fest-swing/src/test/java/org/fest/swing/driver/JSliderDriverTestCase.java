@@ -15,23 +15,22 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dimension;
-
-import javax.swing.JSlider;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
+
+import java.awt.Dimension;
+
+import javax.swing.JSlider;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JSliderDriver}</code>.
@@ -62,16 +61,6 @@ public abstract class JSliderDriverTestCase {
     robot.cleanUp();
   }
 
-  @Test public void shouldIncrementValue() {
-    driver.increment(slider);
-    assertThat(slider.getValue()).isGreaterThan(15);
-  }
-
-  @Test public void shouldDecrementValue() {
-    driver.decrement(slider);
-    assertThat(slider.getValue()).isLessThan(15);
-  }
-
   @Test(dataProvider = "valueProvider")
   public void shouldSlideToValue(int value) {
     driver.slide(slider, value);
@@ -83,14 +72,37 @@ public abstract class JSliderDriverTestCase {
     return new Object[][] { { 5 }, { 10 }, { 28 }, { 20 } };
   }
 
+  @Test public void shouldNotSlideToValueIfSliderIsNotEnabled() {
+    clearAndDisableSlider();
+    int value = 10;
+    slider.setValue(value);
+    driver.slideToMaximum(slider);
+    assertThatSliderValueIsEqualTo(value);
+  }
+
   @Test public void shouldSlideToMaximum() {
-    driver.slideToMax(slider);
+    driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(slider.getMaximum());
   }
 
+  @Test public void shouldNotSlideToMaximumIfSliderIsNotEnabled() {
+    clearAndDisableSlider();
+    int value = slider.getValue();
+    driver.slideToMaximum(slider);
+    assertThatSliderValueIsEqualTo(value);
+  }
+
   @Test public void shouldSlideToMinimum() {
-    driver.slideToMin(slider);
+    driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(slider.getMinimum());
+  }
+
+  @Test public void shouldNotSlideToMinimumIfSliderIsNotEnabled() {
+    clearAndDisableSlider();
+    int value = slider.getMaximum();
+    slider.setValue(value);
+    driver.slideToMinimum(slider);
+    assertThatSliderValueIsEqualTo(value);
   }
 
   private void assertThatSliderValueIsEqualTo(int expected) {
@@ -113,6 +125,16 @@ public abstract class JSliderDriverTestCase {
     } catch (ActionFailedException expected) {
       assertThat(expected).message().isEqualTo("Value <31> is not within the JSlider bounds of <0> and <30>");
     }
+  }
+
+  private void clearAndDisableSlider() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        slider.setValue(0);
+        slider.setEnabled(false);
+      }
+    });
+    assertThat(slider.isEnabled()).isFalse();
   }
 
   private static class MyFrame extends TestFrame {

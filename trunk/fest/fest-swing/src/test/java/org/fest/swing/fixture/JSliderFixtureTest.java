@@ -1,30 +1,29 @@
 /*
  * Created on Jul 1, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JSlider;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
 
-import org.testng.annotations.Test;
+import javax.swing.JSlider;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSliderDriver;
-
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JSliderFixture}</code>.
@@ -32,11 +31,11 @@ import static org.easymock.classextension.EasyMock.createMock;
  * @author Yvonne Wang
  */
 public class JSliderFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSlider> {
-  
+
   private JSliderDriver driver;
   private JSlider target;
   private JSliderFixture fixture;
-  
+
   void onSetUp() {
     driver = createMock(JSliderDriver.class);
     target = new JSlider();
@@ -58,22 +57,22 @@ public class JSliderFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSlider
         driver.slide(target, 8);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.slideTo(8));
       }
     }.run();
   }
-  
+
   @Test public void shouldSlideToMax() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.slideToMax(target);
+        driver.slideToMaximum(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.slideToMax());
+        assertThatReturnsThis(fixture.slideToMaximum());
       }
     }.run();
   }
@@ -81,38 +80,12 @@ public class JSliderFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSlider
   @Test public void shouldSlideToMin() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.slideToMin(target);
+        driver.slideToMinimum(target);
         expectLastCall().once();
       }
-      
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.slideToMin());
-      }
-    }.run();
-  }
 
-  @Test public void shouldIncrement() {
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        driver.increment(target);
-        expectLastCall().once();
-      }
-      
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.increment());
-      }
-    }.run();
-  }
-
-  @Test public void shouldDecrement() {
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        driver.decrement(target);
-        expectLastCall().once();
-      }
-      
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.decrement());
+        assertThatReturnsThis(fixture.slideToMinimum());
       }
     }.run();
   }

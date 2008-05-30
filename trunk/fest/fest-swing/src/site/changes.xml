@@ -10,6 +10,18 @@
         Method 'selectItem(String)' in JComboBoxFixture now uses the specified cell reader to find a matching value in
         the JComboBox.
       </action>
+      <action dev="wanghy" type="fix">
+        Fixed bug in org.fest.swing.core.RobotFixture. Closing a window that is not shown resulted in an 
+        ActionFailedException.
+      </action>
+      <action dev="wanghy" type="add">
+        Renamed methods 'slideToMax' and 'slideToMin' in JSliderFixture to 'slideToMaximum' and 'slideToMinimum'
+        respectively.
+      </action>
+      <action dev="wanghy" type="remove">
+        Removed methods 'increment' and 'decrement' in JSliderFixture. These methods were not communicating their
+        intention properly and are not needed since JSliderFixture has the methods 'slideToMaximum' and 'slideToMinimum'
+      </action>
     </release>
     <release version="1.0a2" date="2008-05-19" description="Subsequent release">
       <action dev="wanghy, alruiz" type="add" issue="68">

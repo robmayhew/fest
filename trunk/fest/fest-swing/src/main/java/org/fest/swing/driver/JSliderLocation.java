@@ -15,12 +15,13 @@
  */
 package org.fest.swing.driver;
 
+import static javax.swing.SwingConstants.VERTICAL;
+import static org.fest.swing.util.AWT.centerOf;
+
 import java.awt.Insets;
 import java.awt.Point;
 
 import javax.swing.JSlider;
-
-import static javax.swing.SwingConstants.VERTICAL;
 
 /**
  * Understands encapsulation of a location in a <code>{@link JSlider}</code>.
@@ -51,10 +52,6 @@ public final class JSliderLocation {
     p.x = (int)(percent(slider, value) * max);
     if (slider.getInverted()) p.x = max - p.x;
     return p;
-  }
-
-  private Point centerOf(JSlider slider) {
-    return new Point((slider.getWidth()/2), (slider.getHeight()/2));
   }
 
   private float percent(JSlider slider, int value) {
