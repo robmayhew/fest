@@ -113,6 +113,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
   public void selectRows(final JTree tree, final int[] rows) {
+    if (!tree.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
       void select() {
         for (int row : rows) selectRow(tree, row);
@@ -129,6 +130,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public void selectRow(JTree tree, int row) {
+    if (!tree.isEnabled()) return;
     selectPath(tree, location.pathFor(tree, row));
   }
 
@@ -139,6 +141,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if any the given path cannot be found.
    */
   public void selectPaths(final JTree tree, final String[] paths) {
+    if (!tree.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
       void select() {
         for (String path : paths) selectPath(tree, path);
@@ -153,6 +156,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given path cannot be found.
    */
   public void selectPath(JTree tree, String path) {
+    if (!tree.isEditable()) return;
     TreePath treePath = findMatchingPath(tree, path);
     selectPath(tree, treePath);
   }

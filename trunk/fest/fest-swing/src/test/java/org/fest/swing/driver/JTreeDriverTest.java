@@ -15,6 +15,12 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -26,21 +32,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Test for <code>{@link JTreeDriver}</code>.
@@ -83,6 +82,12 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 0 });
   }
 
+  @Test public void shouldNotSelectNodeByRowIfTreeIsNotEnabled() {
+    clearAndDisableTree();
+    driver.selectRow(dragTree, 0);
+    assertThat(dragTree.getSelectionCount()).isZero();
+  }
+
   @Test public void shouldSelectNodesByRow() {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
@@ -90,6 +95,13 @@ public class JTreeDriverTest {
     int[] rows = { 0, 1, 2 };
     driver.selectRows(dragTree, rows);
     assertThat(dragTree.getSelectionRows()).isEqualTo(rows);
+  }
+
+  @Test public void shouldNotSelectNodesByRowIfTreeIsNotEnabled() {
+    clearAndDisableTree();
+    int[] rows = { 0, 1, 2 };
+    driver.selectRows(dragTree, rows);
+    assertThat(dragTree.getSelectionCount()).isZero();
   }
 
   @Test public void shouldToggleNodeByRow() {
@@ -125,6 +137,12 @@ public class JTreeDriverTest {
     };
   }
 
+  @Test public void shouldNotSelectNodeByPathIfTreeIsNotEnabled() {
+    clearAndDisableTree();
+    driver.selectPath(dragTree, "root/branch1");
+    assertThat(dragTree.getSelectionCount()).isZero();
+  }
+
   @Test public void shouldSelectNodesByPaths() {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
@@ -134,6 +152,18 @@ public class JTreeDriverTest {
     assertThat(selectionPaths).hasSize(2);
     assertThat(textOf(selectionPaths[0])).isEqualTo(paths[0]);
     assertThat(textOf(selectionPaths[1])).isEqualTo(paths[1]);
+  }
+
+  @Test public void shouldNotSelectNodesByPathsIfTreeIsNotEnabled() {
+    clearAndDisableTree();
+    String[] paths = { "root/branch1/branch1.1", "root/branch1/branch1.2" };
+    driver.selectPaths(dragTree, paths);
+    assertThat(dragTree.getSelectionCount()).isZero();
+  }
+
+  private void clearAndDisableTree() {
+    clearSelection();
+    dragTree.setEnabled(false);
   }
 
   private void clearSelection() {
@@ -254,7 +284,7 @@ public class JTreeDriverTest {
   private int[] intArray(int...values) {
     return values;
   }
-  
+
   @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
     dragTree.clearSelection();
     driver.requireNoSelection(dragTree);
@@ -270,7 +300,7 @@ public class JTreeDriverTest {
                              .contains("expected no selection but was:<[[root]]>");
     }
   }
-  
+
   @Test public void shouldPassIfTreeIsEditable() {
     dragTree.setEditable(true);
     driver.requireEditable(dragTree);

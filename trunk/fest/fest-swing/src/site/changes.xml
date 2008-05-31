@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.0a3" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="fix" issue="126" due-to="Manuel Kueblboeck">
+        Disabled components should not be modified by user-like actions.
+      </action>
       <action dev="alruiz" type="fix" issue="140" due-to="Wim Deblauwe">
         Method 'selectItem(String)' in JComboBoxFixture now uses the specified cell reader to find a matching value in
         the JComboBox.
