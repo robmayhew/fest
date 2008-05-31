@@ -71,10 +71,11 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void replaceText(JTextComponent textBox, String text) {
+    if (!textBox.isEnabled()) return;
     selectAll(textBox);
     if (isEmpty(text) && !isEmpty(textBox.getText())) {
-        invokeAction(textBox, deletePrevCharAction);
-        return;
+      invokeAction(textBox, deletePrevCharAction);
+      return;
     }
     enterText(textBox, text);
   }
@@ -84,6 +85,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the target <code>JTextComponent</code>.
    */
   public void selectAll(JTextComponent textBox) {
+    if (!textBox.isEnabled()) return;
     scrollToVisible(textBox, 0);
     invokeAction(textBox, selectAllAction);
   }
@@ -94,6 +96,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void enterText(JTextComponent textBox, String text) {
+    if (!textBox.isEnabled()) return;
     focus(textBox);
     robot.enterText(text);
   }
@@ -105,6 +108,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws ActionFailedException if selecting the text fails.
    */
   public void selectText(JTextComponent textBox, String text) {
+    if (!textBox.isEnabled()) return;
     String actualText = textBox.getText();
     if (isEmpty(actualText)) return;
     int indexFound = actualText.indexOf(text);
@@ -120,7 +124,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws ActionFailedException if selecting the text in the given range fails.
    */
   public void selectText(JTextComponent textBox, int start, int end) {
-    if (isEmpty(textBox.getText())) return;
+    if (!textBox.isEnabled() || isEmpty(textBox.getText())) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
     robot.invokeAndWait(new TextSelectionTask(textBox, start, end));
