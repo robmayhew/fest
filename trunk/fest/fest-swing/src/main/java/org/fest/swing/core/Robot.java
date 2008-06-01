@@ -107,6 +107,12 @@ public interface Robot {
   void cleanUp();
 
   /**
+   * Cleans up any used resources (keyboard, mouse and <code>{@link ScreenLock}</code>) used by this robot. This method
+   * <strong>does not</strong> dispose any open windows.
+   */
+  void cleanUpWithoutDisposingWindows();
+  
+  /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
    */

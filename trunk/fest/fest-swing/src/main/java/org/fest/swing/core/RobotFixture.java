@@ -113,7 +113,7 @@ public class RobotFixture implements Robot {
    * Creates a new <code>{@link RobotFixture}</code>.
    * @param hierarchy the AWT component hierarchy to use.
    */
-  private RobotFixture(ComponentHierarchy hierarchy) {
+  RobotFixture(ComponentHierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     settings = new Settings();
@@ -277,11 +277,20 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void cleanUp() {
-    disposeWindows();
+    cleanUp(true);
+  }
+  
+  /** ${@inheritDoc} */
+  public void cleanUpWithoutDisposingWindows() {
+    cleanUp(false);
+  }
+
+  private void cleanUp(boolean disposeWindows) {
+    if (disposeWindows) disposeWindows();
     releaseMouseButtons();
     ScreenLock.instance().release(this);
   }
-
+  
   private void disposeWindows() {
     for (Container c : roots()) {
       if (!(c instanceof Window)) continue;
