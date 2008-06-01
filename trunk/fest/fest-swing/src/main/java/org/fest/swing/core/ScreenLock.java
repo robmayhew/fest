@@ -1,23 +1,23 @@
 /*
  * Created on May 24, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
 
-import org.fest.swing.exception.ScreenLockException;
-
 import static org.fest.util.Strings.concat;
+
+import org.fest.swing.exception.ScreenLockException;
 
 /**
  * Understands a lock that each GUI test should acquire before being executed, to guarantee sequential execution of
@@ -30,11 +30,11 @@ public final class ScreenLock {
 
   private boolean locked;
   private Object owner;
-  
+
   synchronized Object owner() {
     return owner;
   }
-  
+
   /**
    * Acquires the lock.
    * @param newOwner the new owner of the lock.
@@ -52,12 +52,22 @@ public final class ScreenLock {
     locked = true;
     this.owner = newOwner;
   }
-  
+
+  /**
+   * Indicates whether the lock was acquired by the given object.
+   * @param possibleOwner the given object, which could be owning the lock.
+   * @return <code>true</code> if the given object is owning the lock; <code>false</code> otherwise.
+   */
+  public synchronized boolean acquiredBy(Object possibleOwner) {
+    if (!locked) return false;
+    return owner == possibleOwner;
+  }
+
   /**
    * Releases the lock.
    * @param currentOwner the current owner of the lock.
    * @throws ScreenLockException if the lock has not been previously acquired.
-   * @throws ScreenLockException if the given owner is not the same as the current owner of the lock. 
+   * @throws ScreenLockException if the given owner is not the same as the current owner of the lock.
    */
   public synchronized void release(Object currentOwner) {
     if (!locked) throw new ScreenLockException("No lock to release");
@@ -65,16 +75,16 @@ public final class ScreenLock {
     locked = false;
     this.owner = null;
   }
-  
+
   /**
-   * Returns the singleton instance of this class. 
-   * @return the singleton instance of this class. 
+   * Returns the singleton instance of this class.
+   * @return the singleton instance of this class.
    */
   public static ScreenLock instance() { return ScreenLockHolder.instance; }
-  
+
   private static class ScreenLockHolder {
     static ScreenLock instance = new ScreenLock();
   }
-  
+
   ScreenLock() {}
 }
