@@ -109,9 +109,15 @@ public interface Robot {
   /**
    * Cleans up any used resources (keyboard, mouse and <code>{@link ScreenLock}</code>) used by this robot. This method
    * <strong>does not</strong> dispose any open windows.
+   * <p>
+   * <strong>Note:</strong> The preferred method to use to clean up resources is <code>{@link #cleanUp()}</code>. Using
+   * <code>{@link #cleanUpWithoutDisposingWindows()}</code> may leave many windows open after each test. Use it on very
+   * special cases. Please read <a href="http://code.google.com/p/fest/issues/detail?id=138" target="_blank">bug 138</a>
+   * for more details.
+   * </p>
    */
   void cleanUpWithoutDisposingWindows();
-  
+
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
@@ -197,7 +203,7 @@ public interface Robot {
    * @throws ActionFailedException if the given component is not showing and ready for input.
    */
   void moveMouse(Component c, Point p);
-  
+
   /**
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
