@@ -17,6 +17,7 @@ package org.fest.swing.fixture.bug138;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.swing.testing.TestGroups.*;
 
 import java.awt.Container;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test(groups = { GUI, BUG })
 public class WindowDisposalTest {
 
   private ComponentHierarchy hierarchy;
