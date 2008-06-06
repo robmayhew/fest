@@ -65,7 +65,7 @@ public class TableRenderDemo extends JPanel {
    * This method picks good column sizes. If all column heads are wider than the column's cells' contents, then you can
    * just use column.sizeWidthToFit().
    */
-  private void initColumnSizes(JTable table) {
+  private static void initColumnSizes(JTable table) {
     MyTableModel model = (MyTableModel) table.getModel();
     TableColumn column = null;
     Component comp = null;
@@ -141,11 +141,8 @@ public class TableRenderDemo extends JPanel {
     public boolean isCellEditable(int row, int col) {
       // Note that the data/cell address is constant,
       // no matter where the cell appears onscreen.
-      if (col < 2) {
-        return false;
-      } else {
-        return true;
-      }
+      if (col < 2) return false;
+      return true;
     }
 
     /*
@@ -160,7 +157,7 @@ public class TableRenderDemo extends JPanel {
   /**
    * Create the GUI and show it. For thread safety, this method should be invoked from the event-dispatching thread.
    */
-  private static void createAndShowGUI() {
+  static void createAndShowGUI() {
     // Create and set up the window.
     TestFrame frame = new TestFrame(TableRenderDemo.class);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
