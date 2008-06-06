@@ -14,21 +14,20 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
-import static org.fest.swing.util.System.LINE_SEPARATOR;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
+
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
+import static org.fest.swing.util.System.LINE_SEPARATOR;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands GUI <code>{@link java.awt.Component}</code> lookup.
@@ -40,6 +39,8 @@ public final class BasicComponentFinder implements ComponentFinder {
   private final ComponentHierarchy hierarchy;
   private final ComponentPrinter printer;
 
+  private final FinderDelegate finderDelegate = new FinderDelegate();
+  
   private boolean includeHierarchyInComponentLookupException;
 
   /**
@@ -158,22 +159,11 @@ public final class BasicComponentFinder implements ComponentFinder {
     return find(hierarchy(root), m);
   }
 
-  private ComponentHierarchy hierarchy(Container root) {
-    if (root == null) return hierarchy;
-    return new SingleComponentHierarchy(root, hierarchy);
-  }
-
-  private Component find(ComponentHierarchy delegate, ComponentMatcher matcher)  {
-    Set<Component> found = new HashSet<Component>();
-    for (Object o : delegate.roots()) find(delegate, matcher, (Component)o, found);
-    if (found.isEmpty()) throw componentNotFound(delegate, matcher);
-    if (found.size() > 1) throw multipleComponentsFound(found, matcher);
+  private Component find(ComponentHierarchy h, ComponentMatcher m)  {
+    Collection<Component> found = finderDelegate.find(h, m);
+    if (found.isEmpty()) throw componentNotFound(h, m);
+    if (found.size() > 1) throw multipleComponentsFound(found, m);
     return found.iterator().next();
-  }
-
-  private void find(ComponentHierarchy h, ComponentMatcher m, Component root, Set<Component> found) {
-    for (Object o : h.childrenOf(root)) find(h, m, (Component)o, found);
-    if (m.matches(root)) found.add(root);
   }
 
   private ComponentLookupException componentNotFound(ComponentHierarchy h, ComponentMatcher m) {
@@ -184,7 +174,7 @@ public final class BasicComponentFinder implements ComponentFinder {
     throw new ComponentLookupException(message);
   }
 
-  private Container root(ComponentHierarchy h) {
+  private static Container root(ComponentHierarchy h) {
     if (h instanceof SingleComponentHierarchy) return ((SingleComponentHierarchy)h).root();
     return null;
   }
@@ -197,7 +187,7 @@ public final class BasicComponentFinder implements ComponentFinder {
     return new String(out.toByteArray());
   }
 
-  private ComponentLookupException multipleComponentsFound(Set<Component> found, ComponentMatcher m) {
+  private static ComponentLookupException multipleComponentsFound(Collection<Component> found, ComponentMatcher m) {
     StringBuilder message = new StringBuilder();
     message.append("Found more than one component using matcher ").append(m).append(".").append(LINE_SEPARATOR)
            .append(LINE_SEPARATOR)
@@ -215,5 +205,20 @@ public final class BasicComponentFinder implements ComponentFinder {
   /** ${@inheritDoc} */
   public void includeHierarchyIfComponentNotFound(boolean newValue) {
     includeHierarchyInComponentLookupException = newValue;
+  }
+
+  /** ${@inheritDoc} */
+  public Collection<Component> findAll(ComponentMatcher m) {
+    return finderDelegate.find(hierarchy, m);
+  }
+
+  /** ${@inheritDoc} */
+  public Collection<Component> findAll(Container root, ComponentMatcher m) {
+    return finderDelegate.find(hierarchy(root), m);
+  }
+
+  private ComponentHierarchy hierarchy(Container root) {
+    if (root == null) return hierarchy;
+    return new SingleComponentHierarchy(root, hierarchy);
   }
 }

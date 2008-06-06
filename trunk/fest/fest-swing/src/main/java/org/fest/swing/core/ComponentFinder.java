@@ -17,6 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.util.Collection;
 
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -288,4 +289,23 @@ public interface ComponentFinder {
    * @param newValue the new value to set.
    */
   void includeHierarchyIfComponentNotFound(boolean newValue);
+
+  /**
+   * Returns all the <code>{@link Component}</code>s that match the search criteria specified in the given
+   * <code>{@link ComponentMatcher}</code>.
+   * @param m the matcher to use to find the component.
+   * @return all the <code>Component</code>s that match the search criteria specified in the given
+   *         <code>ComponentMatcher</code>; or an empty collection, if there are no matching components.
+   */
+  Collection<Component> findAll(ComponentMatcher m);
+
+  /**
+   * Returns all the <code>{@link Component}</code>s under the given root that match the search criteria specified in
+   * the given <code>{@link ComponentMatcher}</code>.
+   * @param root the root used as the starting point of the search.
+   * @param m the matcher to use to find the component.
+   * @return all the <code>Component</code>s under the given root that match the search criteria specified in the given
+   *         <code>ComponentMatcher</code>; or an empty collection, if there are no matching components.
+   */
+  Collection<Component> findAll(Container root, ComponentMatcher m);
 }

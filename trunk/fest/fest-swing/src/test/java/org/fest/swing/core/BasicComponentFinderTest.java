@@ -16,6 +16,7 @@
 package org.fest.swing.core;
 
 import java.awt.Component;
+import java.util.Collection;
 
 import javax.swing.*;
 
@@ -260,5 +261,24 @@ public class BasicComponentFinderTest {
       assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
                              .excludes(format(window));
     }
+  }
+  
+  @Test public void shouldReturnAllMatchingComponents() {
+    Collection<Component> found = finder.findAll(new ComponentMatcher() {
+      public boolean matches(Component c) {
+        return c instanceof JTextField;
+      }
+    });
+    assertThat(found).containsOnly(window.textField, window.anotherTextField);
+  }
+  
+  @Test public void shouldReturnAllMatchingComponentsInGivenRoot() {
+    anotherWindow = MainWindow.beVisible();
+    Collection<Component> found = finder.findAll(anotherWindow, new ComponentMatcher() {
+      public boolean matches(Component c) {
+        return c instanceof JButton;
+      }
+    });
+    assertThat(found).containsOnly(anotherWindow.button);
   }
 }
