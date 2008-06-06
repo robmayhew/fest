@@ -15,14 +15,6 @@
  */
 package org.fest.swing.fixture.bug135;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
-import static org.fest.swing.util.Arrays.format;
-import static org.fest.util.Arrays.array;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -30,15 +22,24 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.swing.core.Pause;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.testing.CustomCellRenderer;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.util.Arrays.format;
+import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=135">Bug 135</a>.
@@ -116,7 +117,7 @@ public class TableContentsTest {
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    private final TestTable table = new TestTable("table", 6, 3);
+    final TestTable table = new TestTable("table", 6, 3);
     private final JComboBox comboBox = new JComboBox(array("first", "second"));
     private final JCheckBox checkBox = new JCheckBox();
 
