@@ -27,7 +27,7 @@ public final class JUnitVersionHelper2 {
   /**
    * Obtains the name of the test method from the given test.
    * @param test the give test.
-   * @return the name of the test method obtained fromt the givent test.
+   * @return the name of the test method obtained from the given test.
    */
   public static String testMethodName(Test test) {
     return JUnitVersionHelper.getTestCaseName(test);
@@ -36,7 +36,7 @@ public final class JUnitVersionHelper2 {
   /**
    * Obtains the name of the test class from the given test.
    * @param test the give test.
-   * @return the name of the test class obtained fromt the givent test.
+   * @return the name of the test class obtained from the given test.
    */
   public static String testClassName(Test test) {
     return JUnitVersionHelper.getTestCaseClassName(test);
