@@ -15,31 +15,25 @@
  */
 package org.fest.swing.fixture.bug135;
 
-import java.awt.Component;
-import java.awt.Dimension;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JScrollPane;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.core.Pause;
-import org.fest.swing.core.Robot;
-import org.fest.swing.fixture.JTableFixture;
-import org.fest.swing.testing.CustomCellRenderer;
-import org.fest.swing.testing.TestFrame;
-import org.fest.swing.testing.TestTable;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.util.Arrays.format;
-import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
+
+import java.awt.Component;
+
+import javax.swing.JTable;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.TableRenderDemo;
+import org.fest.swing.fixture.JTableFixture;
+import org.fest.swing.testing.CustomCellRenderer;
+import org.fest.swing.testing.TestFrame;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=135">Bug 135</a>.
@@ -58,7 +52,6 @@ public class TableContentsTest {
     robot = robotWithNewAwtHierarchy();
     frame = new MyFrame();
     robot.showWindow(frame);
-    Pause.pause(20000);
     fixture = new JTableFixture(robot, frame.table);
   }
 
@@ -68,36 +61,42 @@ public class TableContentsTest {
 
   @Test public void shouldReturnTableContents() {
     String[][] contents = fixture.contents();
-    assertThat(contents.length).isEqualTo(6);
-    assertThat(contents[0].length).isEqualTo(3);
-    assertThat(contents[0][0]).isEqualTo("0-0");
-    assertThat(contents[0][1]).isEqualTo("first");
-    assertThat(contents[0][2]).isEqualTo("false");
-    assertThat(contents[1][0]).isEqualTo("1-0");
-    assertThat(contents[1][1]).isEqualTo("first");
-    assertThat(contents[1][2]).isEqualTo("false");
-    assertThat(contents[2][0]).isEqualTo("2-0");
-    assertThat(contents[2][1]).isEqualTo("first");
-    assertThat(contents[2][2]).isEqualTo("false");
-    assertThat(contents[3][0]).isEqualTo("3-0");
-    assertThat(contents[3][1]).isEqualTo("first");
-    assertThat(contents[3][2]).isEqualTo("false");
-    assertThat(contents[4][0]).isEqualTo("4-0");
-    assertThat(contents[4][1]).isEqualTo("first");
-    assertThat(contents[4][2]).isEqualTo("false");
-    assertThat(contents[5][0]).isEqualTo("5-0");
-    assertThat(contents[5][1]).isEqualTo("first");
-    assertThat(contents[5][2]).isEqualTo("false");
+    assertThat(contents.length).isEqualTo(5);
+    assertThat(contents[0].length).isEqualTo(5);
+    assertThat(contents[0][0]).isEqualTo("Mary");
+    assertThat(contents[0][1]).isEqualTo("Campione");
+    assertThat(contents[0][2]).isEqualTo("Snowboarding");
+    assertThat(contents[0][3]).isEqualTo("5");
+    assertThat(contents[0][4]).isEqualTo("false");
+    assertThat(contents[1][0]).isEqualTo("Alison");
+    assertThat(contents[1][1]).isEqualTo("Huml");
+    assertThat(contents[1][2]).isEqualTo("Rowing");
+    assertThat(contents[1][3]).isEqualTo("3");
+    assertThat(contents[1][4]).isEqualTo("true");
+    assertThat(contents[2][0]).isEqualTo("Kathy");
+    assertThat(contents[2][1]).isEqualTo("Walrath");
+    assertThat(contents[2][2]).isEqualTo("Knitting");
+    assertThat(contents[2][3]).isEqualTo("2");
+    assertThat(contents[2][4]).isEqualTo("false");
+    assertThat(contents[3][0]).isEqualTo("Sharon");
+    assertThat(contents[3][1]).isEqualTo("Zakhour");
+    assertThat(contents[3][2]).isEqualTo("Speed reading");
+    assertThat(contents[3][3]).isEqualTo("20");
+    assertThat(contents[3][4]).isEqualTo("true");
+    assertThat(contents[4][0]).isEqualTo("Philip");
+    assertThat(contents[4][1]).isEqualTo("Milne");
+    assertThat(contents[4][2]).isEqualTo("Pool");
+    assertThat(contents[4][3]).isEqualTo("10");
+    assertThat(contents[4][4]).isEqualTo("false");
   }
 
   @Test public void shouldPassIfContentIsEqualToExpected() {
     String[][] contents = new String[][] {
-        { "0-0", "first", "false" },
-        { "1-0", "first", "false" },
-        { "2-0", "first", "false" },
-        { "3-0", "first", "false" },
-        { "4-0", "first", "false" },
-        { "5-0", "first", "false" }
+        { "Mary",   "Campione", "Snowboarding",   "5", "false" },
+        { "Alison", "Huml",     "Rowing",         "3", "true"  },
+        { "Kathy",  "Walrath",  "Knitting",       "2", "false" },
+        { "Sharon", "Zakhour",  "Speed reading", "20", "true"  },
+        { "Philip", "Milne",    "Pool",          "10", "false" }
     };
     fixture.requireContents(contents);
   }
@@ -117,19 +116,14 @@ public class TableContentsTest {
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 
-    final TestTable table = new TestTable("table", 6, 3);
-    private final JComboBox comboBox = new JComboBox(array("first", "second"));
-    private final JCheckBox checkBox = new JCheckBox();
+    final JTable table;
 
     public MyFrame() {
       super(TableContentsTest.class);
-      JScrollPane scrollPane = new JScrollPane(table);
-      scrollPane.setPreferredSize(new Dimension(180, 200));
-      add(scrollPane);
-      setPreferredSize(new Dimension(380, 350));
-      comboBox.setSelectedIndex(0);
-      updateCellRendererComponent(1, comboBox);
-      updateCellRendererComponent(2, checkBox);
+      TableRenderDemo newContentPane = new TableRenderDemo();
+      table = newContentPane.table;
+      newContentPane.setOpaque(true); // content panes must be opaque
+      setContentPane(newContentPane);
     }
 
     private void updateCellRendererComponent(int column, Component c) {
