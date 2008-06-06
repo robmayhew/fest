@@ -15,25 +15,23 @@
  */
 package org.fest.swing.fixture.bug135;
 
+import javax.swing.JTable;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.TableRenderDemo;
+import org.fest.swing.fixture.JTableFixture;
+import org.fest.swing.testing.TestFrame;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.util.Arrays.format;
 import static org.fest.util.Strings.concat;
-
-import java.awt.Component;
-
-import javax.swing.JTable;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.driver.TableRenderDemo;
-import org.fest.swing.fixture.JTableFixture;
-import org.fest.swing.testing.CustomCellRenderer;
-import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=135">Bug 135</a>.
@@ -124,10 +122,6 @@ public class TableContentsTest {
       table = newContentPane.table;
       newContentPane.setOpaque(true); // content panes must be opaque
       setContentPane(newContentPane);
-    }
-
-    private void updateCellRendererComponent(int column, Component c) {
-      table.getColumnModel().getColumn(column).setCellRenderer(new CustomCellRenderer(c));
     }
   }
 }
