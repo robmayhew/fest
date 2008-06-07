@@ -38,14 +38,13 @@ public class BasicJComboBoxCellReader extends BaseValueReader implements JComboB
    * @param comboBox the given <code>JComboBox</code>.
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
-   * @see BaseValueReader#valueFrom(Object)
    * @see BaseValueReader#valueFrom(Component)
+   * @see BaseValueReader#valueFrom(Object)
    */
   public String valueAt(JComboBox comboBox, int index) {
-    Object item = itemAt(comboBox, index);
-    String value = valueFrom(item);
+    String value = valueFrom(cellRendererComponent(comboBox, index));
     if (value != null) return value;
-    return valueFrom(cellRendererComponent(comboBox, index));
+    return valueFrom(itemAt(comboBox, index));
   }
 
   /**
