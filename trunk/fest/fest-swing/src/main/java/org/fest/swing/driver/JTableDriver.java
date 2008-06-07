@@ -1,18 +1,26 @@
 /*
  * Created on Feb 2, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Arrays.assertEquals;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -28,18 +36,11 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Arrays.assertEquals;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
-
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
  * driver only focuses on behavior present only in <code>{@link JTable}</code>s. This class is intended for internal
  * use only.
- * 
+ *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
@@ -293,6 +294,29 @@ public class JTableDriver extends JComponentDriver {
       for (int col = 0; col < columnCount; col++)
         contents[row][col] = cellReader.valueAt(table, row, col);
     return contents;
+  }
+
+  /**
+   * Asserts that the value of the given cell is equal to the expected one.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given table cell.
+   * @param value the expected value.
+   * @throws AssertionError if the value of the given cell is not equal to the expected one.
+   */
+  public void requireCellValue(JTable table, JTableCell cell, String value) {
+    cell.validateBoundsIn(table);
+    assertThat(value(table, cell)).as(cellProperty(table, cell, "value")).isEqualTo(value);
+  }
+
+  /**
+   * Returns the name of a cell property, to be included in an assertion method.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given table cell.
+   * @param propertyName the name of a property.
+   * @return the name of a cell property, to be included in an assertion method.
+   */
+  public String cellProperty(JTable table, JTableCell cell, String propertyName) {
+    return concat(propertyName(table, propertyName), " - ", cell);
   }
 
   /**

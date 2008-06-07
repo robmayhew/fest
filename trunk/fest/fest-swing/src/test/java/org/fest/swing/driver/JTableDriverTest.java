@@ -15,17 +15,25 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestTable.*;
+
 import java.awt.*;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.BasicJTableCellReader;
@@ -34,20 +42,10 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
-
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestTable.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.
@@ -84,7 +82,7 @@ public class JTableDriverTest {
     driver.selectCell(dragTable, new TableCell(row, column));
     assertThat(dragTable.isCellSelected(row, column)).isTrue();
   }
-  
+
   @Test public void shouldNotSelectCellIfTableIsNotEnabled() {
     clearAndDisableDragTable();
     driver.selectCell(dragTable, new TableCell(0, 0));
@@ -170,6 +168,22 @@ public class JTableDriverTest {
     assertThat(dropTable.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
+  @Test public void shouldPassIfCellValueIsEqualToExpected() {
+    driver.requireCellValue(dragTable, new TableCell(0, 0), "0-0");
+  }
+
+  @Test public void shouldFailIfCellValueIsNotEqualToExpected() {
+    try {
+      driver.requireCellValue(dragTable, new TableCell(0, 0), "0-1");
+      fail();
+    } catch (AssertionError e) {
+      e.printStackTrace();
+      assertThat(e).message().contains("[row=0, column=0]")
+                             .contains("property:'value'")
+                             .contains("expected:<'0-1'> but was:<'0-0'>");
+    }
+  }
+
   @Test public void shouldShowPopupMenuAtCell() {
     JPopupMenu popupMenu = new JPopupMenu();
     popupMenu.add(new JMenuItem("Leia"));
@@ -237,7 +251,7 @@ public class JTableDriverTest {
   private void assertCellReaderWasCalled() {
     assertThat(cellReader.called()).isTrue();
   }
-  
+
   private void clearAndDisableDragTable() {
     robot.invokeAndWait(new Runnable() {
       public void run() {

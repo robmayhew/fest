@@ -15,6 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -22,23 +31,12 @@ import java.awt.Point;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -81,7 +79,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       }
     }.run();
   }
-  
+
   @Test public void shouldRequireNoSelection() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -235,13 +233,13 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
         driver.cellReader(reader);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         fixture.cellReader(reader);
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnCellFont() {
     final Font font = new Font("SansSerif", PLAIN, 8);
     final TableCell cell = row(6).column(8);
@@ -249,7 +247,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       protected void expectations() {
         expect(driver.font(target, cell)).andReturn(font);
       }
-      
+
       protected void codeToTest() {
         FontFixture fontFixture = fixture.fontAt(cell);
         assertThat(fontFixture.target()).isSameAs(font);
@@ -266,7 +264,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       protected void expectations() {
         expect(driver.background(target, cell)).andReturn(background);
       }
-      
+
       protected void codeToTest() {
         ColorFixture colorFixture = fixture.backgroundAt(cell);
         assertThat(colorFixture.target()).isSameAs(background);
@@ -283,12 +281,27 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
       protected void expectations() {
         expect(driver.foreground(target, cell)).andReturn(foreground);
       }
-      
+
       protected void codeToTest() {
         ColorFixture colorFixture = fixture.foregroundAt(cell);
         assertThat(colorFixture.target()).isSameAs(foreground);
         assertThat(colorFixture.description()).contains(target.getClass().getName())
                                               .contains("property:'foreground' - [row=6, column=8]");
+      }
+    }.run();
+  }
+
+  @Test public void shouldRequireCellValue() {
+    final TableCell cell = row(6).column(8);
+    final String value = "Hello";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireCellValue(target, cell, value);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireCellValue(cell, value));
       }
     }.run();
   }

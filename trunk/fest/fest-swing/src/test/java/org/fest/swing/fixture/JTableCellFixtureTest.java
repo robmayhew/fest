@@ -281,4 +281,17 @@ public class JTableCellFixtureTest {
   private void assertThatReturnsThis(JTableCellFixture result) {
     assertThat(result).isSameAs(fixture);
   }
+
+  @Test public void shouldRequireValue() {
+    final String value = "Hello";
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.requireCellValue(cell, value)).andReturn(table);
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireValue(value));
+      }
+    }.run();
+  }
 }

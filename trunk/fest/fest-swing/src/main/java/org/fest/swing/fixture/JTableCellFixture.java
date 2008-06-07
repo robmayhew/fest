@@ -15,7 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 
 import javax.swing.JTable;
@@ -116,7 +115,7 @@ public class JTableCellFixture implements ItemFixture {
    * @throws AssertionError if the value of this fixture's table cell is not equal to the expected one.
    */
   public JTableCellFixture requireValue(String value) {
-    assertThat(value()).as(table.cellProperty(cell, "value")).isEqualTo(value);
+    table.requireCellValue(cell, value);
     return this;
   }
 

@@ -15,6 +15,8 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -31,10 +33,6 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.ComponentDriver.propertyName;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -119,8 +117,20 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     return new ColorFixture(foreground, cellProperty(cell, FOREGROUND_PROPERTY));
   }
 
-  final String cellProperty(TableCell cell, String propertyName) {
-    return concat(propertyName(target, propertyName), " - ", cell);
+  private String cellProperty(TableCell cell, String propertyName) {
+    return driver.cellProperty(target, cell, propertyName);
+  }
+
+  /**
+   * Asserts that the value of the given cell is equal to the expected one.
+   * @param cell the given table cell.
+   * @param value the expected value.
+   * @return this fixture.
+   * @throws AssertionError if the value of the given cell is not equal to the expected one.
+   */
+  public JTableFixture requireCellValue(TableCell cell, String value) {
+    driver.requireCellValue(target, cell, value);
+    return this;
   }
 
   /**
@@ -172,7 +182,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Verifies that this fixture's <code>{@link JTable}</code> does not have any selection. 
+   * Verifies that this fixture's <code>{@link JTable}</code> does not have any selection.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JTable</code> has a selection.
    */
@@ -418,10 +428,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
-   * Asserts that the <code>String</code> representation of the cell values in this fixture's 
+   * Asserts that the <code>String</code> representation of the cell values in this fixture's
    * <code>{@link JTable}</code> is equal to the given <code>String</code> array. This method uses this fixture's
    * <code>{@link JTableCellReader}</code> to read the values of the table cells as <code>String</code>s.
-   * @param contents the expected <code>String</code> representation of the cell values in this fixture's 
+   * @param contents the expected <code>String</code> representation of the cell values in this fixture's
    * <code>JTable</code>.
    * @see #cellReader(JTableCellReader)
    */
