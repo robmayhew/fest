@@ -15,8 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -33,6 +31,8 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -118,7 +118,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   private String cellProperty(TableCell cell, String propertyName) {
-    return driver.cellProperty(target, cell, propertyName);
+    return JTableDriver.cellProperty(target, cell, propertyName);
   }
 
   /**

@@ -14,14 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Arrays.assertEquals;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -35,6 +27,14 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Arrays.assertEquals;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
@@ -309,13 +309,16 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the name of a cell property, to be included in an assertion method.
+   * Formats the name of a table cell property by concatenating the value obtained from
+   * <code>{@link ComponentDriver#propertyName(java.awt.Component, String)}</code> with the coordinates of the given
+   * cell.
    * @param table the target <code>JTable</code>.
    * @param cell the given table cell.
    * @param propertyName the name of a property.
-   * @return the name of a cell property, to be included in an assertion method.
+   * @return the formatted name of a property from the given table cell.
+   * @see ComponentDriver#propertyName(java.awt.Component, String)
    */
-  public String cellProperty(JTable table, JTableCell cell, String propertyName) {
+  public static String cellProperty(JTable table, JTableCell cell, String propertyName) {
     return concat(propertyName(table, propertyName), " - ", cell);
   }
 

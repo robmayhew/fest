@@ -340,8 +340,8 @@ public class ComponentDriver {
   }
 
   /**
-   * Returns the description of a property belonging to a <code>{@link Component}</code>. To describe a property, this 
-   * method concatenates the value of <code>{@link Formatting#format(Component)}</code> with the given property name.
+   * Formats the name of a property of the given <code>{@link Component}</code> by concatenating the value obtained
+   * from <code>{@link Formatting#format(Component)}</code> with the given property name.
    * @param c the given <code>Component</code>.
    * @param propertyName the name of the property.
    * @return the description of a property belonging to a <code>Component</code>.

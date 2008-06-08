@@ -18,14 +18,9 @@ package org.fest.swing.format;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.TableColumnModel;
-
-import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
 import static org.fest.util.Strings.*;
 
 /**
@@ -49,23 +44,11 @@ public class JTableFormatter extends ComponentFormatterTemplate {
         "name=", quote(table.getName()), ", ",
         "rowCount=", valueOf(table.getRowCount()), ", ",
         "columnCount=", valueOf(table.getColumnCount()), ", ",
-        "selectedRows=", Arrays.format(table.getSelectedRows()), ", ",
-        "selectedColumns=", Arrays.format(table.getSelectedColumns()), ", ",
-        "rowSelectionMode=", selectionMode(table.getSelectionModel()), ", ",
-        "columnSelectionMode=", selectionMode(table.getColumnModel()), ", ",
         "enabled=", valueOf(table.isEnabled()), ", ",
         "visible=", valueOf(table.isVisible()), ", ",
         "showing=", valueOf(table.isShowing()),
         "]"
     );
-  }
-
-  private String selectionMode(TableColumnModel model) {
-    return selectionMode(model.getSelectionModel());
-  }
-
-  private String selectionMode(ListSelectionModel model) {
-    return SELECTION_MODES.get(model.getSelectionMode());
   }
 
   /**

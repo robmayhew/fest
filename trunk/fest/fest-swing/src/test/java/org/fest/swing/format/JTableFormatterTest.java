@@ -53,10 +53,6 @@ public class JTableFormatterTest {
                          .contains("name='table'")
                          .contains("rowCount=8")
                          .contains("columnCount=6")
-                         .contains("selectedRows=[]")
-                         .contains("selectedColumns=[]")
-                         .contains("rowSelectionMode=MULTIPLE_INTERVAL_SELECTION")
-                         .contains("columnSelectionMode=MULTIPLE_INTERVAL_SELECTION")
                          .contains("enabled=true")
                          .contains("visible=true")
                          .contains("showing=false");
