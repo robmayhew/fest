@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture.bug135;
+package org.fest.swing.fixture;
 
 import javax.swing.JTable;
 
@@ -29,7 +29,7 @@ import org.fest.swing.testing.TestFrame;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Arrays.format;
 import static org.fest.util.Strings.concat;
 
@@ -39,7 +39,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, BUG })
+@Test(groups = GUI)
 public class TableContentsTest {
 
   private Robot robot;
