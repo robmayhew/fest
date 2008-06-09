@@ -200,21 +200,8 @@ public class JTableDriver extends JComponentDriver {
    */
   public void click(JTable table, JTableCell cell, MouseButton mouseButton, int times) {
     validate(table, cell);
-    click(table, cell.row, cell.column, mouseButton, times);
-  }
-
-  /**
-   * Clicks the given cell, using the specified mouse button, the given number of times.
-   * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
-   * @param mouseButton the mouse button to use.
-   * @param times the number of times to click the cell.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
-   */
-  public void click(JTable table, int row, int column, MouseButton mouseButton, int times) {
-    scrollToVisible(table, location.cellBounds(table, row, column));
-    robot.click(table, location.pointAt(table, row, column), mouseButton, times);
+    scrollToVisible(table, location.cellBounds(table, cell));
+    robot.click(table, pointAt(table, cell), mouseButton, times);
   }
 
   /**

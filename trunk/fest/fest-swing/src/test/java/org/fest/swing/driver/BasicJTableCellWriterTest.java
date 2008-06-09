@@ -20,6 +20,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -51,7 +52,7 @@ public class BasicJTableCellWriterTest {
     robot = robotWithNewAwtHierarchy();
     writer = new BasicJTableCellWriter(robot);
     frame = new MyFrame();
-    robot.showWindow(frame);
+    robot.showWindow(frame, new Dimension(500, 100));
   }
 
   @AfterMethod public void tearDown() {
@@ -88,8 +89,8 @@ public class BasicJTableCellWriterTest {
   }
 
   @Test public void shouldEnterTextInTextComponentEditor() {
-    writer.enterValue(frame.table, 0, 3, "8");
-    assertThat(valueAt(0, 3)).isEqualTo(8);
+    writer.enterValue(frame.table, 4, 3, "8");
+    assertThat(valueAt(4, 3)).isEqualTo(8);
   }
 
   private Object valueAt(int row, int column) {

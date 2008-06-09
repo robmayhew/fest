@@ -37,13 +37,15 @@ import org.fest.swing.core.Robot;
  */
 public class BasicJTableCellWriter implements JTableCellWriter {
 
+  private final Robot robot;
   private final JComboBoxDriver comboBoxDriver;
-  private final JTableDriver tableDriver;
   private final JTextComponentDriver textComponentDriver;
 
+  private final JTableLocation tableLocation = new JTableLocation();
+
   public BasicJTableCellWriter(Robot robot) {
+    this.robot = robot;
     comboBoxDriver = new JComboBoxDriver(robot);
-    tableDriver = new JTableDriver(robot);
     textComponentDriver = new JTextComponentDriver(robot);
   }
 
@@ -74,14 +76,19 @@ public class BasicJTableCellWriter implements JTableCellWriter {
     comboBoxDriver.selectItem(editor, value);
   }
 
+  private void clickCell(JTable table, int row, int column) {
+    clickCell(table, row, column, 1);
+  }
+
   private void enterValue(JTable table, JTextComponent editor, int row, int column, String value) {
-    tableDriver.click(table, row, column, LEFT_BUTTON, 2);
+    clickCell(table, row, column, 2);
     textComponentDriver.replaceText(editor, value);
     textComponentDriver.pressAndReleaseKeys(editor, VK_ENTER);
   }
 
-  private void clickCell(JTable table, int row, int column) {
-    tableDriver.click(table, row, column, LEFT_BUTTON, 1);
+  private void clickCell(JTable table, int row, int column, int times) {
+    comboBoxDriver.scrollToVisible(table, tableLocation.cellBounds(table, row, column));
+    robot.click(table, tableLocation.pointAt(table, row, column), LEFT_BUTTON, times);
   }
 
   /** ${@inheritDoc} */
