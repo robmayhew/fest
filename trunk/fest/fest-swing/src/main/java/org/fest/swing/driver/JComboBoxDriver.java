@@ -15,16 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static javax.swing.text.DefaultEditorKit.selectAllAction;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 import java.awt.Component;
 import java.awt.Container;
 
@@ -40,6 +30,18 @@ import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.TimeoutWatch;
+
+import static java.lang.String.valueOf;
+import static javax.swing.text.DefaultEditorKit.selectAllAction;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.CellReaderValidation.validateCellReader;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JComboBox}</code>. Unlike <code>JComboBoxFixture</code>, this
@@ -300,8 +302,10 @@ public class JComboBoxDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JComboBoxCellReader}</code> to use when comparing internal values
    * of a <code>{@link JComboBox}</code> and the values expected in a test.
    * @param newCellReader the new <code>JComboBoxCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JComboBoxCellReader newCellReader) {
+    validateCellReader(newCellReader);
     cellReader = newCellReader;
   }
 }

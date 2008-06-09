@@ -32,6 +32,7 @@ import org.fest.swing.exception.ComponentLookupException;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.CellReaderValidation.validateCellReader;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
@@ -389,8 +390,10 @@ public class JTableDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
    * @param newCellReader the new <code>JTableCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JTableCellReader newCellReader) {
+    validateCellReader(newCellReader);
     cellReader = newCellReader;
   }
   

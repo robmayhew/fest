@@ -15,15 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -43,6 +34,16 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.CellReaderValidation.validateCellReader;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
@@ -467,8 +468,10 @@ public class JTreeDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JTreeCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTree}</code> and the values expected in a test.
    * @param newCellReader the new <code>JTreeCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JTreeCellReader newCellReader) {
+    validateCellReader(newCellReader);
     cellReader = newCellReader;
   }
 }

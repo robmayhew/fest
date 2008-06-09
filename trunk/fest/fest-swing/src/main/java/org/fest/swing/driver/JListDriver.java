@@ -15,15 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -39,6 +30,17 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
+
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.CellReaderValidation.validateCellReader;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -398,8 +400,10 @@ public class JListDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JListCellReader}</code> to use when comparing internal values of a
    * <code>{@link JList}</code> and the values expected in a test.
    * @param newCellReader the new <code>JListCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JListCellReader newCellReader) {
+    validateCellReader(newCellReader);
     cellReader = newCellReader;
   }
 }

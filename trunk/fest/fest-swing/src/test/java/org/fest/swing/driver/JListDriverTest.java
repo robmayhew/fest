@@ -15,16 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.Range.*;
-import static org.fest.util.Arrays.array;
-
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -33,14 +23,26 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestList;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.util.Range.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JListDriver}</code>.
@@ -343,6 +345,11 @@ public class JListDriverTest {
     assertThat(cellReader.called()).isTrue();
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfCellReaderIsNull() {
+    driver.cellReader(null);
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
     private static final Dimension LIST_SIZE = new Dimension(80, 40);

@@ -336,6 +336,11 @@ public class JTableDriverTest {
     assertThat(dragTable.getSelectedRowCount()).isEqualTo(0);
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfCellReaderIsNull() {
+    driver.cellReader(null);
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

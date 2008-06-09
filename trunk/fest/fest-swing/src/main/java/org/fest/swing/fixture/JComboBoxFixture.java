@@ -350,6 +350,7 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * of this fixture's <code>{@link JComboBox}</code> and the values expected in a test. The default implementation to
    * use is <code>{@link BasicJComboBoxCellReader}</code>.
    * @param cellReader the new <code>JComboBoxCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>cellReader</code> is <code>null</code>.
    */
   public void cellReader(JComboBoxCellReader cellReader) {
     driver.cellReader(cellReader);

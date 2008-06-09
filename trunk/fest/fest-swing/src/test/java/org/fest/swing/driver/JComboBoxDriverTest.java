@@ -15,12 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
-
 import java.awt.Component;
 
 import javax.swing.JComboBox;
@@ -29,13 +23,20 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.text.JTextComponent;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxDriver}</code>.
@@ -335,6 +336,11 @@ public class JComboBoxDriverTest {
     assertThat(cellReader.called()).isTrue();
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfCellReaderIsNull() {
+    driver.cellReader(null);
+  }
+  
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

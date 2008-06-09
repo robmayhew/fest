@@ -490,6 +490,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTableCellReader}</code>.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>cellReader</code> is <code>null</code>.
    */
   public void cellReader(JTableCellReader cellReader) {
     driver.cellReader(cellReader);

@@ -453,6 +453,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * <code>{@link JTree}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTreeCellReader}</code>.
    * @param cellReader the new <code>JTreeCellValueReader</code> to use.
+   * @throws IllegalArgumentException if <code>cellReader</code> is <code>null</code>.
    */
   public void cellReader(JTreeCellReader cellReader) {
     driver.cellReader(cellReader);
