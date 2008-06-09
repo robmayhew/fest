@@ -65,8 +65,8 @@ public class BasicJTableCellWriter implements JTableCellWriter {
     }
   }
 
-  private void check(JTable table, final JCheckBox editor, int row, int column, String value) {
-    final boolean realValue = Boolean.parseBoolean(value);
+  private void check(JTable table, JCheckBox editor, int row, int column, String value) {
+    boolean realValue = Boolean.parseBoolean(value);
     if (editor.isSelected() == realValue) return;
     clickCell(table, row, column);
   }
