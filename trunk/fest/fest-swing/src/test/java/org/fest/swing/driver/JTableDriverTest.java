@@ -264,6 +264,18 @@ public class JTableDriverTest {
     }.run();
   }
   
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldThrowErrorIfTableIsNotEnabledWhenEditingCell() {
+    dragTable.setEnabled(false);
+    driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
+  }
+  
+  @Test(expectedExceptions = AssertionError.class)
+  public void shouldThrowErrorIfCellToEditIsNotEditable() {
+    assertThat(dragTable.isCellEditable(0, 0)).isFalse();
+    driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
+  }
+  
   @Test public void shouldReturnEditorComponentInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
     final Component editor = new JTextField("Hello");

@@ -296,36 +296,12 @@ public class JTableDriver extends JComponentDriver {
    * @param cell the given table cell.
    * @param value the expected value.
    * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the value of the given cell is not equal to the expected one.
    */
   public void requireCellValue(JTable table, JTableCell cell, String value) {
     validate(table, cell);
     assertThat(value(table, cell)).as(cellProperty(table, cell, VALUE_PROPERTY)).isEqualTo(value);
-  }
-
-  /**
-   * Asserts that the given table cell is editable.
-   * @param table the target <code>JTable</code>.
-   * @param cell the given table cell.
-   * @throws AssertionError if the given table cell is not editable.
-   */
-  public void requireEditable(JTable table, JTableCell cell) {
-    requireEditableEqualTo(table, cell, true);
-  }
-
-  /**
-   * Asserts that the given table cell is not editable.
-   * @param table the target <code>JTable</code>.
-   * @param cell the given table cell.
-   * @throws AssertionError if the given table cell is editable.
-   */
-  public void requireNotEditable(JTable table, JTableCell cell) {
-    requireEditableEqualTo(table, cell, false);
-  }
-
-  private void requireEditableEqualTo(JTable table, JTableCell cell, boolean editable) {
-    boolean cellEditable = table.isCellEditable(cell.row, cell.column);
-    assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
   }
 
   /**
@@ -348,6 +324,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
    * @param value the given value.
+   * @throws AssertionError if the given <code>JTable</code> is not enabled.
+   * @throws AssertionError if the given table cell is not editable.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
@@ -355,8 +333,37 @@ public class JTableDriver extends JComponentDriver {
    * @see #cellWriter(JTableCellWriter)
    */
   public void enterValueInCell(JTable table, JTableCell cell, String value) {
-    validate(table, cell);
+    requireEditable(table, cell);
+    requireEnabled(table);
     cellWriter.enterValue(table, cell.row, cell.column, value);
+  }
+
+  /**
+   * Asserts that the given table cell is editable.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given table cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws AssertionError if the given table cell is not editable.
+   */
+  public void requireEditable(JTable table, JTableCell cell) {
+    requireEditableEqualTo(table, cell, true);
+  }
+
+  /**
+   * Asserts that the given table cell is not editable.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given table cell.
+   * @throws AssertionError if the given table cell is editable.
+   */
+  public void requireNotEditable(JTable table, JTableCell cell) {
+    requireEditableEqualTo(table, cell, false);
+  }
+
+  private void requireEditableEqualTo(JTable table, JTableCell cell, boolean editable) {
+    validate(table, cell);
+    boolean cellEditable = table.isCellEditable(cell.row, cell.column);
+    assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
   }
   
   /**
