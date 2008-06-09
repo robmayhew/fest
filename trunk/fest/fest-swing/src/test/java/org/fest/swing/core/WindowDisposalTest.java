@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture.bug138;
+package org.fest.swing.core;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -28,7 +28,6 @@ import javax.swing.JFrame;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.ScreenLock;
-import org.fest.swing.core.TestRobotFixture;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

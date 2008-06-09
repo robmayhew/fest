@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture.bug108;
+package org.fest.swing.core;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

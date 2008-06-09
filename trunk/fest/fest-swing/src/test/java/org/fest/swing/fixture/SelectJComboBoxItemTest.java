@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture.bug116;
+package org.fest.swing.fixture;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;

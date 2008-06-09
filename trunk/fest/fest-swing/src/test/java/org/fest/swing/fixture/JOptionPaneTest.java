@@ -12,7 +12,13 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.fixture.bug76;
+package org.fest.swing.fixture;
+
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+
+import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -63,5 +69,36 @@ public class JOptionPaneTest {
 
   @AfterMethod public void stopGui() {
     m_window.cleanUp();
+  }
+  
+  private static class JOptionPaneStarter extends JDialog {
+
+    private static final long serialVersionUID = 1L;
+
+    public JOptionPaneStarter(Frame owner, String message) {
+      super(owner, "JOptionPane Starter");
+      setContentPane(createContentPane(message));
+    }
+
+    private Container createContentPane(String message) {
+      JPanel panel = new JPanel();
+      panel.add(new JButton(new OpenJOptionPaneAction(message)));
+      return panel;
+    }
+
+    private class OpenJOptionPaneAction extends AbstractAction {
+      private static final long serialVersionUID = 1L;
+      
+      private final String m_message;
+
+      private OpenJOptionPaneAction(String message) {
+        super("Start!");
+        m_message = message;
+      }
+
+      public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(JOptionPaneStarter.this, m_message);
+      }
+    }
   }
 }

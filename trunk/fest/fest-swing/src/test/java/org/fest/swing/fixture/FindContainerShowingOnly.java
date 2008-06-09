@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture.bug105;
+package org.fest.swing.fixture;
 
 import java.awt.Dimension;
 
