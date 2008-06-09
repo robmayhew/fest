@@ -13,60 +13,61 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.cell;
+package org.fest.swing.driver;
 
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JToolBar;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.driver.BasicJListCellReader;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link BasicJComboBoxCellReader}</code>.
+ * Tests for <code>{@link BasicJListCellReader}</code>.
  *
  * @author Alex Ruiz
  */
-public class BasicJComboBoxCellReaderTest {
+public class BasicJListCellReaderTest {
 
-  private JComboBox comboBox;
-  private BasicJComboBoxCellReader reader;
+  private JList list;
+  private BasicJListCellReader reader;
   
   @BeforeMethod public void setUp() {
-    comboBox = new JComboBox(new Object[] { "First" });
-    reader = new BasicJComboBoxCellReader();
+    list = new JList();
+    reader = new BasicJListCellReader();
   }
-  
+
   @Test public void shouldReturnModelValueToString() {
-    DefaultComboBoxModel model = new DefaultComboBoxModel();
+    DefaultListModel model = new DefaultListModel();
     model.addElement(new Jedi("Yoda"));
-    comboBox.setModel(model);
-    Object value = reader.valueAt(comboBox, 0);
+    list.setModel(model);
+    Object value = reader.valueAt(list, 0);
     assertThat(value).isEqualTo("Yoda");
   }
 
   @Test public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
-    DefaultComboBoxModel model = new DefaultComboBoxModel();
+    DefaultListModel model = new DefaultListModel();
     model.addElement(null);
-    comboBox.setModel(model);
-    comboBox.setRenderer(new CustomCellRenderer(new JToolBar()));
-    Object value = reader.valueAt(comboBox, 0);
+    list.setModel(model);
+    list.setCellRenderer(new CustomCellRenderer(new JToolBar()));
+    Object value = reader.valueAt(list, 0);
     assertThat(value).isNull();
   }
   
   @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
-    DefaultComboBoxModel model = new DefaultComboBoxModel();
+    DefaultListModel model = new DefaultListModel();
     model.addElement(new Jedi(null));
-    comboBox.setModel(model);
+    list.setModel(model);
     JLabel label = new JLabel("First");
-    comboBox.setRenderer(new CustomCellRenderer(label));
-    Object value = reader.valueAt(comboBox, 0);
+    list.setCellRenderer(new CustomCellRenderer(label));
+    Object value = reader.valueAt(list, 0);
     assertThat(value).isEqualTo(label.getText());
   }
 }

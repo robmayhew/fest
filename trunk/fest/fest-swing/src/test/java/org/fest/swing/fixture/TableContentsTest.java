@@ -22,8 +22,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.driver.TableRenderDemo;
 import org.fest.swing.fixture.JTableFixture;
+import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;

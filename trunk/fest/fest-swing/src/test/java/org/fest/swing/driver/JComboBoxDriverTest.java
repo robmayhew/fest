@@ -29,7 +29,6 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.cell.BasicJComboBoxCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.LocationUnavailableException;

@@ -14,20 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
-import javax.swing.JTable;
-
-import org.fest.swing.cell.BasicJTableCellReader;
-import org.fest.swing.cell.JTableCellReader;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.ComponentLookupException;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
@@ -35,6 +21,19 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Point;
+
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+
+import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
@@ -201,8 +200,21 @@ public class JTableDriver extends JComponentDriver {
    */
   public void click(JTable table, JTableCell cell, MouseButton mouseButton, int times) {
     validate(table, cell);
-    scrollToVisible(table, location.cellBounds(table, cell));
-    robot.click(table, pointAt(table, cell), mouseButton, times);
+    click(table, cell.row, cell.column, mouseButton, times);
+  }
+
+  /**
+   * Clicks the given cell, using the specified mouse button, the given number of times.
+   * @param table the target <code>JTable</code>.
+   * @param row the given row.
+   * @param column the given column.
+   * @param mouseButton the mouse button to use.
+   * @param times the number of times to click the cell.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public void click(JTable table, int row, int column, MouseButton mouseButton, int times) {
+    scrollToVisible(table, location.cellBounds(table, row, column));
+    robot.click(table, location.pointAt(table, row, column), mouseButton, times);
   }
 
   /**

@@ -22,11 +22,11 @@ import java.awt.Point;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
-import org.fest.swing.cell.BasicJTableCellReader;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.BasicJTableCellReader;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;

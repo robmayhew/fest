@@ -28,7 +28,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.cell.BasicJTableCellReader;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;

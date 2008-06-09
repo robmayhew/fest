@@ -36,7 +36,6 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.cell.BasicJTreeCellReader;
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.Robot;

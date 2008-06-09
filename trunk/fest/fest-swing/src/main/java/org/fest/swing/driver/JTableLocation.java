@@ -50,7 +50,14 @@ public final class JTableLocation {
     return cellBounds(table, cell.row, cell.column);
   }
 
-  private Rectangle cellBounds(JTable table, int row, int column) {
+  /**
+   * Returns the bounds of the given row and column.
+   * @param table the target <code>JTable</code>.
+   * @param row the given row.
+   * @param column the given column.
+   * @return the bounds of the given row and column.
+   */
+  public Rectangle cellBounds(JTable table, int row, int column) {
     return table.getCellRect(row, column, false);
   }
 

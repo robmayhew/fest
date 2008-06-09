@@ -13,12 +13,14 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.cell;
+package org.fest.swing.driver;
 
 import java.awt.Component;
 
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+
+import org.fest.swing.cell.JListCellReader;
 
 /**
  * Understands the default implementation of <code>{@link JListCellReader}</code>.

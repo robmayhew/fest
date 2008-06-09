@@ -31,7 +31,6 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.ListModel;
 
-import org.fest.swing.cell.BasicJListCellReader;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;

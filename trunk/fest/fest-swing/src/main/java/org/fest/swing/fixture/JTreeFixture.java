@@ -19,11 +19,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.cell.BasicJTreeCellReader;
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.BasicJTreeCellReader;
 import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;

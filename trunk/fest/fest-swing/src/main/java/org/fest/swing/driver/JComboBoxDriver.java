@@ -33,7 +33,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.cell.BasicJComboBoxCellReader;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;

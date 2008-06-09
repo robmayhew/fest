@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.cell;
+package org.fest.swing.driver;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -24,6 +24,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+
+import org.fest.swing.cell.JComboBoxCellReader;
+import org.fest.swing.cell.JTableCellReader;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.

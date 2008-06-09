@@ -17,11 +17,11 @@ package org.fest.swing.fixture;
 
 import javax.swing.JList;
 
-import org.fest.swing.cell.BasicJListCellReader;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.BasicJListCellReader;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;

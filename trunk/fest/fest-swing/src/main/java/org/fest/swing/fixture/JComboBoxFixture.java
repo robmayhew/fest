@@ -18,11 +18,11 @@ package org.fest.swing.fixture;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
-import org.fest.swing.cell.BasicJComboBoxCellReader;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.BasicJComboBoxCellReader;
 import org.fest.swing.driver.JComboBoxDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
