@@ -35,7 +35,6 @@ public interface JTableCellWriter {
    * @param row the row index of the cell.
    * @param column the column index of the cell.
    * @param value the value to enter.
-   * @throws IllegalArgumentException if the given value cannot be handled by the underneath editor component.
    * @throws ActionFailedException if this writer is unable to enter the given value.
    */
   void enterValue(JTable table, int row, int column, String value);

@@ -15,9 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_ENTER;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-
 import java.awt.Component;
 
 import javax.swing.JCheckBox;
@@ -28,6 +25,13 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+
+import static java.awt.event.KeyEvent.VK_ENTER;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellWriter}</code>.
@@ -49,7 +53,22 @@ public class BasicJTableCellWriter implements JTableCellWriter {
     textComponentDriver = new JTextComponentDriver(robot);
   }
 
-  /** ${@inheritDoc} */
+  /**
+   * Enters the given value at the given cell of the <code>JTable</code>. This method only supports the following GUI
+   * components as cell editors:
+   * <ul>
+   * <li><code>{@link JCheckBox}</code>: valid values for the property "selected" (a boolean) are "true" and "yes",
+   * other values are considered <code>false</code>.</li>
+   * <li><code>{@link JComboBox}</code>: this writer will select the element which <code>String</code> representation
+   * matches the given value.</li>
+   * <li><code>{@link JTextComponent}</code>: any value will be entered in the cell.</li>
+   * </ul>
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @param value the value to enter.
+   * @throws ActionFailedException if this writer is unable to enter the given value.
+   */
   public void enterValue(JTable table, int row, int column, String value) {
     Component editor = editorForCell(table, row, column);
     if (editor instanceof JCheckBox) {
@@ -63,6 +82,12 @@ public class BasicJTableCellWriter implements JTableCellWriter {
     if (editor instanceof JTextComponent) {
       enterValue(table, (JTextComponent)editor, row, column, value);
     }
+    throw actionFailure(concat("Unable to handle editor component of type ", editorTypeName(editor)));
+  }
+
+  private String editorTypeName(Component editor) {
+    if (editor == null) return "<null>";
+    return editor.getClass().getName();
   }
 
   private void check(JTable table, JCheckBox editor, int row, int column, String value) {

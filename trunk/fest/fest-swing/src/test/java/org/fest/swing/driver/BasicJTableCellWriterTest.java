@@ -15,10 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -27,13 +23,20 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TableRenderDemo;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TableDialogEditDemo;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link BasicJTableCellWriter}</code>.
@@ -74,6 +77,15 @@ public class BasicJTableCellWriterTest {
     };
   }
 
+  @Test public void shouldThrowErrorIfEditorComponentCannotBeHandled() {
+    try {
+      writer.enterValue(frame.table, 0, 1, "hello");
+      fail();
+    } catch (ActionFailedException e) {
+      assertThat(e).message().contains("Unable to handle editor component of type javax.swing.JButton");
+    }
+  }
+  
   @Test public void shouldSelectItemInComboBoxEditor() {
     writer.enterValue(frame.table, 0, 2, "Pool");
     assertThat(valueAt(0, 2)).isEqualTo("Pool");
@@ -104,7 +116,7 @@ public class BasicJTableCellWriterTest {
 
     public MyFrame() {
       super(BasicJTableCellWriterTest.class);
-      TableRenderDemo newContentPane = new TableRenderDemo();
+      TableDialogEditDemo newContentPane = new TableDialogEditDemo();
       table = newContentPane.table;
       newContentPane.setOpaque(true); // content panes must be opaque
       setContentPane(newContentPane);
