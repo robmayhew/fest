@@ -17,10 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.*;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -29,6 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
@@ -37,7 +35,7 @@ import org.fest.swing.testing.TestTable;
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -248,6 +246,42 @@ public class JTableDriverTest {
 
   private JTableCellReader mockCellReader() {
     return createMock(JTableCellReader.class);
+  }
+
+  @Test public void shouldEnterValueInCell() {
+    final JTableCellWriter cellWriter = mockCellWriter();
+    final String value = "Hello";
+    driver.cellWriter(cellWriter);
+    new EasyMockTemplate(cellWriter) {
+      protected void expectations() {
+        cellWriter.enterValue(dragTable, 0, 0, value);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.enterValueInCell(dragTable, cell(0, 0), value);
+      }
+    }.run();
+  }
+  
+  @Test public void shouldReturnEditorComponentInCell() {
+    final JTableCellWriter cellWriter = mockCellWriter();
+    final Component editor = new JTextField("Hello");
+    driver.cellWriter(cellWriter);
+    new EasyMockTemplate(cellWriter) {
+      protected void expectations() {
+        expect(cellWriter.editorForCell(dragTable, 0, 0)).andReturn(editor);
+      }
+
+      protected void codeToTest() {
+        Component result = driver.cellEditor(dragTable, cell(0, 0));
+        assertThat(result).isSameAs(editor);
+      }
+    }.run();
+  }
+  
+  private JTableCellWriter mockCellWriter() {
+    return createMock(JTableCellWriter.class);
   }
 
   @Test public void shouldPassIfCellIsEditableAsAnticipated() {

@@ -14,15 +14,8 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Arrays.assertEquals;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
 
@@ -30,10 +23,19 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Arrays.assertEquals;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
@@ -52,6 +54,7 @@ public class JTableDriver extends JComponentDriver {
 
   private final JTableLocation location = new JTableLocation();
   private JTableCellReader cellReader;
+  private JTableCellWriter cellWriter;
 
   /**
    * Creates a new </code>{@link JTableDriver}</code>.
@@ -60,6 +63,7 @@ public class JTableDriver extends JComponentDriver {
   public JTableDriver(Robot robot) {
     super(robot);
     cellReader(new BasicJTableCellReader());
+    cellWriter(new BasicJTableCellWriter(robot));
   }
 
   /**
@@ -256,18 +260,6 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
-   * @param table the target <code>JTable</code>.
-   * @param cell to validate.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
-   */
-  public void validate(JTable table, JTableCell cell) {
-    if (cell == null) throw actionFailure("Table cell cannot be null");
-    cell.validateBoundsIn(table);
-  }
-
-  /**
    * Asserts that the <code>String</code> representation of the cell values in the <code>{@link JTable}</code> is
    * equal to the given <code>String</code> array. This method uses this driver's
    * <code>{@link JTableCellReader}</code> to read the values of the table cells as <code>String</code>s.
@@ -302,10 +294,11 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given table cell.
    * @param value the expected value.
+   * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws AssertionError if the value of the given cell is not equal to the expected one.
    */
   public void requireCellValue(JTable table, JTableCell cell, String value) {
-    cell.validateBoundsIn(table);
+    validate(table, cell);
     assertThat(value(table, cell)).as(cellProperty(table, cell, VALUE_PROPERTY)).isEqualTo(value);
   }
 
@@ -349,11 +342,64 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
+   * Enters the given value in the given cell of the <code>{@link JTable}</code>, using this driver's
+   * <code>{@link JTableCellWriter}</code>.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given cell.
+   * @param value the given value.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
+   *         value.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public void enterValueInCell(JTable table, JTableCell cell, String value) {
+    validate(table, cell);
+    cellWriter.enterValue(table, cell.row, cell.column, value);
+  }
+  
+  /**
+   * Returns the editor in the given cell of the <code>{@link JTable}</code>, using this driver's
+   * <code>{@link JTableCellWriter}</code>.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given cell.
+   * @return the editor in the given cell of the <code>JTable</code>.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public Component cellEditor(JTable table, JTableCell cell) {
+    validate(table, cell);
+    return cellWriter.editorForCell(table, cell.row, cell.column);
+  }
+  
+  /**
+   * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
+   * @param table the target <code>JTable</code>.
+   * @param cell to validate.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   */
+  public void validate(JTable table, JTableCell cell) {
+    if (cell == null) throw actionFailure("Table cell cannot be null");
+    cell.validateBoundsIn(table);
+  }
+
+  /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
    * @param newCellReader the new <code>JTableCellValueReader</code> to use.
    */
   public void cellReader(JTableCellReader newCellReader) {
     cellReader = newCellReader;
+  }
+  
+  /**
+   * Updates the implementation of <code>{@link JTableCellWriter}</code> to use to edit cell values in a 
+   * <code>{@link JTable}</code>.
+   * @param newCellWriter the new <code>JTableCellWriter</code> to use.
+   */
+  public void cellWriter(JTableCellWriter newCellWriter) {
+    cellWriter = newCellWriter;
   }
 }
