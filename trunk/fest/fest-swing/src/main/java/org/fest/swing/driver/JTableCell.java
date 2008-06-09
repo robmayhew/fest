@@ -37,6 +37,11 @@ public abstract class JTableCell {
   /** The column of the cell. */
   public final int column;
 
+  // to be used in tests
+  static JTableCell cell(int row, int column) {
+    return new JTableCell(row, column) {};
+  }
+  
   /**
    * Creates a new </code>{@link JTableCell}</code>.
    * @param row the row of the cell.

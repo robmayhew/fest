@@ -47,7 +47,9 @@ import static org.fest.util.Strings.concat;
 public class JTableDriver extends JComponentDriver {
 
   private static final String CONTENTS_PROPERTY = "contents";
+  private static final String EDITABLE_PROPERTY = "editable";
   private static final String SELECTION_PROPERTY = "selection";
+  private static final String VALUE_PROPERTY = "value";
 
   private final JTableLocation location = new JTableLocation();
   private JTableCellReader cellReader;
@@ -305,7 +307,32 @@ public class JTableDriver extends JComponentDriver {
    */
   public void requireCellValue(JTable table, JTableCell cell, String value) {
     cell.validateBoundsIn(table);
-    assertThat(value(table, cell)).as(cellProperty(table, cell, "value")).isEqualTo(value);
+    assertThat(value(table, cell)).as(cellProperty(table, cell, VALUE_PROPERTY)).isEqualTo(value);
+  }
+
+  /**
+   * Asserts that the given table cell is editable.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given table cell.
+   * @throws AssertionError if the given table cell is not editable.
+   */
+  public void requireEditable(JTable table, JTableCell cell) {
+    requireEditableEqualTo(table, cell, true);
+  }
+
+  /**
+   * Asserts that the given table cell is not editable.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given table cell.
+   * @throws AssertionError if the given table cell is editable.
+   */
+  public void requireNotEditable(JTable table, JTableCell cell) {
+    requireEditableEqualTo(table, cell, false);
+  }
+
+  private void requireEditableEqualTo(JTable table, JTableCell cell, boolean editable) {
+    boolean cellEditable = table.isCellEditable(cell.row, cell.column);
+    assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
   }
 
   /**

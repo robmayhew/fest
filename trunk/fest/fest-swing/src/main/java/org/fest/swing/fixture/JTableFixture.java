@@ -464,6 +464,28 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
+   * Asserts that the given cell in this fixture's <code>{@link JTable}</code> is editable.
+   * @param cell the given cell.
+   * @return this fixture.
+   * @throws AssertionError if the given cell is not editable.
+   */
+  public JTableFixture requireEditable(TableCell cell) {
+    driver.requireEditable(target, cell);
+    return this;
+  }
+
+  /**
+   * Asserts that the given cell in this fixture's <code>{@link JTable}</code> is not editable.
+   * @param cell the given cell.
+   * @return this fixture.
+   * @throws AssertionError if the given cell is editable.
+   */
+  public JTableFixture requireNotEditable(TableCell cell) {
+    driver.requireNotEditable(target, cell);
+    return this;
+  }
+
+  /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTableCellReader}</code>.

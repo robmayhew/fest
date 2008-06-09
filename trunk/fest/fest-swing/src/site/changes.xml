@@ -16,6 +16,13 @@
         Method 'selectItem(String)' in JComboBoxFixture now uses the specified cell reader to find a matching value in
         the JComboBox.
       </action>
+      <action dev="alruiz, wanghy" type="add" issue="142" due-to="Matthias Otterbach, Simeon Fitch">
+        Added methods 'requireEditable(TableCell)' and 'requireNotEditable(TableCell)' to 
+        org.fest.swing.fixture.JTableFixture.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="142" due-to="Matthias Otterbach, Simeon Fitch">
+        Added methods 'requireEditable()' and 'requireNotEditable()' to org.fest.swing.fixture.JTableCellFixture.
+      </action>
       <action dev="alruiz" type="fix" issue="144" due-to="Simeon Fitch">
         Added methods 'findAll(ComponentMatcher)' and 'findAll(Container, ComponentMatcher)' to 
         org.fest.swing.core.ComponentFinder to look up all the components that match certain search criteria.

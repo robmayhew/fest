@@ -15,21 +15,23 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Font;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
 import static java.awt.event.KeyEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.fixture.MouseClickInfo.leftButton;
 import static org.fest.swing.fixture.TableCell.row;
-
-import java.awt.Font;
-
-import org.fest.mocks.EasyMockTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.
@@ -142,11 +144,11 @@ public class JTableCellFixtureTest {
     final String content = "Hello";
     new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(table.valueAt(cell)).andReturn(content);
+        expect(table.requireCellValue(cell, content)).andReturn(table);
       }
 
       protected void codeToTest() {
-        fixture.requireValue(content);
+        assertThatReturnsThis(fixture.requireValue(content));
       }
     }.run();
   }
@@ -191,22 +193,6 @@ public class JTableCellFixtureTest {
         assertThat(result).isSameAs(colorFixture);
       }
     }.run();
-  }
-
-  @Test public void shouldFailIfContentIsNotEqualToExpected() {
-    try {
-      new EasyMockTemplate(table) {
-        protected void expectations() {
-          expect(table.valueAt(cell)).andReturn("Bye");
-        }
-
-        protected void codeToTest() {
-          fixture.requireValue("Hello");
-        }
-      }.run();
-    } catch (AssertionError e) {
-      assertThat(e).message().contains("expected:<'Hello'> but was:<'Bye'>");
-    }
   }
 
   @Test public void shouldDrag() {
@@ -270,6 +256,30 @@ public class JTableCellFixtureTest {
     }.run();
   }
 
+  @Test public void shouldRequireEditableCell() {
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.requireEditable(cell)).andReturn(table);
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireEditable());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireNotEditableCell() {
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.requireNotEditable(cell)).andReturn(table);
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNotEditable());
+      }
+    }.run();
+  }
+
   @Test public void shouldReturnRow() {
     assertThat(fixture.row()).isEqualTo(cell.row);
   }
@@ -278,7 +288,7 @@ public class JTableCellFixtureTest {
     assertThat(fixture.column()).isEqualTo(cell.column);
   }
 
-  private void assertThatReturnsThis(JTableCellFixture result) {
+  void assertThatReturnsThis(JTableCellFixture result) {
     assertThat(result).isSameAs(fixture);
   }
 

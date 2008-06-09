@@ -15,25 +15,17 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestTable.*;
-
 import java.awt.*;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.BasicJTableCellReader;
@@ -42,10 +34,21 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestTable.*;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.
@@ -79,34 +82,34 @@ public class JTableDriverTest {
 
   @Test(dataProvider = "cells")
   public void shouldSelectCell(int row, int column) {
-    driver.selectCell(dragTable, new TableCell(row, column));
+    driver.selectCell(dragTable, cell(row, column));
     assertThat(dragTable.isCellSelected(row, column)).isTrue();
   }
 
   @Test public void shouldNotSelectCellIfTableIsNotEnabled() {
     clearAndDisableDragTable();
-    driver.selectCell(dragTable, new TableCell(0, 0));
+    driver.selectCell(dragTable, cell(0, 0));
     assertDragTableHasNoSelection();
   }
 
   @Test public void shouldSelectCells() {
     dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
-    driver.selectCells(dragTable, new TableCell(0, 0), new TableCell(2, 0));
+    driver.selectCells(dragTable, cell(0, 0), cell(2, 0));
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
     assertThat(dragTable.isCellSelected(2, 0)).isTrue();
   }
 
   @Test public void shouldNotSelectCellsIfTableIsNotEnabled() {
     clearAndDisableDragTable();
-    driver.selectCells(dragTable, new TableCell(0, 0), new TableCell(2, 0));
+    driver.selectCells(dragTable, cell(0, 0), cell(2, 0));
     assertDragTableHasNoSelection();
   }
 
   @Test(dependsOnMethods = "shouldSelectCell")
   public void shouldNotSelectCellIfAlreadySelected() {
-    driver.selectCell(dragTable, new TableCell(0, 0));
+    driver.selectCell(dragTable, cell(0, 0));
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
-    driver.selectCell(dragTable, new TableCell(0, 0));
+    driver.selectCell(dragTable, cell(0, 0));
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
   }
 
@@ -119,14 +122,14 @@ public class JTableDriverTest {
 
   @Test(dataProvider = "cells")
   public void shouldReturnValueOfGivenCell(int row, int column) {
-    String value = driver.value(dragTable, new TableCell(row, column));
+    String value = driver.value(dragTable, cell(row, column));
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
     assertCellReaderWasCalled();
   }
 
   @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cells")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
-    driver.selectCell(dragTable, new TableCell(row, column));
+    driver.selectCell(dragTable, cell(row, column));
     String value = driver.selectionValue(dragTable);
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
     assertCellReaderWasCalled();
@@ -160,8 +163,8 @@ public class JTableDriverTest {
   @Test public void shouldDragAndDrop() throws Exception {
     int dragRowCount = dragTable.getRowCount();
     int dropRowCount = dropTable.getRowCount();
-    driver.drag(dragTable, new TableCell(3, 0));
-    driver.drop(dropTable, new TableCell(1, 0));
+    driver.drag(dragTable, cell(3, 0));
+    driver.drop(dropTable, cell(1, 0));
     assertThat(dragTable.getRowCount()).isEqualTo(dragRowCount - 1);
     assertThat(dragTable.getValueAt(3, 0)).isEqualTo(createCellTextUsing(4, 0));
     assertThat(dropTable.getRowCount()).isEqualTo(dropRowCount + 1);
@@ -169,12 +172,12 @@ public class JTableDriverTest {
   }
 
   @Test public void shouldPassIfCellValueIsEqualToExpected() {
-    driver.requireCellValue(dragTable, new TableCell(0, 0), "0-0");
+    driver.requireCellValue(dragTable, cell(0, 0), "0-0");
   }
 
   @Test public void shouldFailIfCellValueIsNotEqualToExpected() {
     try {
-      driver.requireCellValue(dragTable, new TableCell(0, 0), "0-1");
+      driver.requireCellValue(dragTable, cell(0, 0), "0-1");
       fail();
     } catch (AssertionError e) {
       e.printStackTrace();
@@ -189,7 +192,7 @@ public class JTableDriverTest {
     popupMenu.add(new JMenuItem("Leia"));
     dragTable.setComponentPopupMenu(popupMenu);
     ClickRecorder recorder = attachTo(dragTable);
-    driver.showPopupMenuAt(dragTable, new TableCell(0, 1));
+    driver.showPopupMenuAt(dragTable, cell(0, 1));
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
     Point pointClicked = recorder.pointClicked();
     Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
@@ -206,7 +209,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Font result = driver.font(dragTable, new JTableCell(0, 0) {});
+        Font result = driver.font(dragTable, cell(0, 0));
         assertThat(result).isSameAs(font);
       }
     }.run();
@@ -222,7 +225,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Color result = driver.background(dragTable, new JTableCell(0, 0) {});
+        Color result = driver.background(dragTable, cell(0, 0));
         assertThat(result).isSameAs(background);
       }
     }.run();
@@ -238,7 +241,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Color result = driver.foreground(dragTable, new JTableCell(0, 0) {});
+        Color result = driver.foreground(dragTable, cell(0, 0));
         assertThat(result).isSameAs(foreground);
       }
     }.run();
@@ -246,6 +249,40 @@ public class JTableDriverTest {
 
   private JTableCellReader mockCellReader() {
     return createMock(JTableCellReader.class);
+  }
+
+  @Test public void shouldPassIfCellIsEditableAsAnticipated() {
+    dragTable.cellEditable(0, 0, true);
+    driver.requireEditable(dragTable, cell(0, 0));
+  }
+  
+  @Test public void shouldFailIfCellIsNotEditableAndExpectingEditable() {
+    dragTable.cellEditable(0, 0, false);
+    try {
+      driver.requireEditable(dragTable, cell(0, 0));
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("[row=0, column=0]")
+                             .contains("property:'editable'")
+                             .contains("expected:<true> but was:<false>");
+    }
+  }
+  
+  @Test public void shouldPassIfCellIsNotEditableAsAnticipated() {
+    dragTable.cellEditable(0, 0, false);
+    driver.requireNotEditable(dragTable, cell(0, 0));
+  }
+  
+  @Test public void shouldFailIfCellIsEditableAndExpectingNotEditable() {
+    dragTable.cellEditable(0, 0, true);
+    try {
+      driver.requireNotEditable(dragTable, cell(0, 0));
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("[row=0, column=0]")
+                             .contains("property:'editable'")
+                             .contains("expected:<false> but was:<true>");
+    }
   }
 
   private void assertCellReaderWasCalled() {
@@ -296,12 +333,6 @@ public class JTableDriverTest {
       JScrollPane scrollPane = new JScrollPane(table);
       scrollPane.setPreferredSize(TABLE_SIZE);
       return scrollPane;
-    }
-  }
-
-  private static class TableCell extends JTableCell {
-    public TableCell(int row, int column) {
-      super(row, column);
     }
   }
 

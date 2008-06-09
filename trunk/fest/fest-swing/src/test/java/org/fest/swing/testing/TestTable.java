@@ -15,11 +15,12 @@
  */
 package org.fest.swing.testing;
 
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
-import static org.fest.util.Strings.concat;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+
+import static org.fest.util.Strings.concat;
 
 
 /**
@@ -36,6 +37,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class TestTable extends JTable {
   private static final long serialVersionUID = 1L;
+  
+  private final CustomModel model;
 
   public TestTable(int rowCount, int columnCount) {
     this(null, rowData(rowCount, columnCount), columnNames(columnCount));
@@ -68,24 +71,44 @@ public final class TestTable extends JTable {
     this(null, rowData, columnNames);
   }
 
-  public TestTable(String name, Object[][] rowData, Object[] columnNames) {
+  public TestTable(String name, Object[][] data, Object[] columnNames) {
     setDragEnabled(true);
-    DefaultTableModel model = new DefaultTableModel(rowData, columnNames) {
-      private static final long serialVersionUID = 1L;
-
-      @Override public boolean isCellEditable(int row, int column) {
-        return false;
-      }
-    };
+    model = new CustomModel(data, columnNames);
     setModel(model);
     setName(name);
     setSelectionMode(SINGLE_SELECTION);
     setTransferHandler(new TableTransferHandler());
   }
+  
+  public void cellEditable(int row, int column, boolean editable) {
+    model.cellEditable(row, column, editable);
+  }
 
+  private static class CustomModel extends DefaultTableModel {
+
+    private final boolean[][] editableCells;
+    
+    CustomModel(Object[][] data, Object[] columnNames) {
+      super(data, columnNames);
+      editableCells = new boolean[data.length][data[0].length];
+    }
+    
+    private static final long serialVersionUID = 1L;
+    
+    @Override public boolean isCellEditable(int row, int column) {
+      return editableCells[row][column];
+    }
+    
+    void cellEditable(int row, int column, boolean editable) {
+      editableCells[row][column] = editable;
+    }
+  }
+  
   private static class TableTransferHandler extends StringTransferHandler<JTable> {
     private static final long serialVersionUID = 1L;
 
+    TableTransferHandler() {}
+    
     protected String exportString(JTable table) {
       rows = table.getSelectedRows();
       int colCount = table.getColumnCount();

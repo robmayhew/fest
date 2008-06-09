@@ -15,15 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -31,12 +22,23 @@ import java.awt.Point;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-import org.testng.annotations.Test;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -302,6 +304,34 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireCellValue(cell, value));
+      }
+    }.run();
+  }
+
+  @Test public void shouldRequireEditableCell() {
+    final TableCell cell = row(0).column(0);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireEditable(target, cell);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireEditable(cell));
+      }
+    }.run();
+  }
+  
+  @Test public void shouldRequireNotEditableCell() {
+    final TableCell cell = row(0).column(0);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireNotEditable(target, cell);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireNotEditable(cell));
       }
     }.run();
   }

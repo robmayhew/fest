@@ -15,13 +15,13 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.swing.core.MouseButton.*;
-
 import javax.swing.JTable;
 
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
@@ -213,6 +213,27 @@ public class JTableCellFixture implements ItemFixture {
    */
   public JPopupMenuFixture showPopupMenu() {
     return table.showPopupMenuAt(cell);
+  }
+
+  /**
+   * Asserts that this fixture's table cell is editable.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's table cell is not editable.
+   */
+  public JTableCellFixture requireEditable() {
+    table.requireEditable(cell);
+    return this;
+  }
+
+
+  /**
+   * Asserts that this fixture's table cell is not editable.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's table cell is editable.
+   */
+  public JTableCellFixture requireNotEditable() {
+    table.requireNotEditable(cell);
+    return this;
   }
 
   /**
