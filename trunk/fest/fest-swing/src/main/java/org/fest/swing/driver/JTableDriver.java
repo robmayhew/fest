@@ -14,6 +14,15 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.CommonValidations.*;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Arrays.assertEquals;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -28,15 +37,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.CellReaderValidation.validateCellReader;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Arrays.assertEquals;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
@@ -365,7 +365,7 @@ public class JTableDriver extends JComponentDriver {
     boolean cellEditable = table.isCellEditable(cell.row, cell.column);
     assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
   }
-  
+
   /**
    * Returns the editor in the given cell of the <code>{@link JTable}</code>, using this driver's
    * <code>{@link JTableCellWriter}</code>.
@@ -380,7 +380,7 @@ public class JTableDriver extends JComponentDriver {
     validate(table, cell);
     return cellWriter.editorForCell(table, cell.row, cell.column);
   }
-  
+
   /**
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
    * @param table the target <code>JTable</code>.
@@ -403,13 +403,15 @@ public class JTableDriver extends JComponentDriver {
     validateCellReader(newCellReader);
     cellReader = newCellReader;
   }
-  
+
   /**
-   * Updates the implementation of <code>{@link JTableCellWriter}</code> to use to edit cell values in a 
+   * Updates the implementation of <code>{@link JTableCellWriter}</code> to use to edit cell values in a
    * <code>{@link JTable}</code>.
    * @param newCellWriter the new <code>JTableCellWriter</code> to use.
+   * @throws IllegalArgumentException if <code>newCellWriter</code> is <code>null</code>.
    */
   public void cellWriter(JTableCellWriter newCellWriter) {
+    validateCellWriter(newCellWriter);
     cellWriter = newCellWriter;
   }
 }

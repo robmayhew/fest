@@ -353,6 +353,11 @@ public class JTableDriverTest {
     driver.cellReader(null);
   }
   
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfCellWriterIsNull() {
+    driver.cellWriter(null);
+  }
+
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;
 

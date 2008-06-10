@@ -15,7 +15,10 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
 
@@ -23,16 +26,16 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
 import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.BasicJTableCellReader;
+import org.fest.swing.driver.BasicJTableCellWriter;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -486,6 +489,38 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   }
 
   /**
+   * Enters the given value in the given cell of this fixture's <code>{@link JTable}</code>, using this fixture's
+   * <code>{@link JTableCellWriter}</code>.
+   * @param cell the given cell.
+   * @param value the given value.
+   * @return this fixture.
+   * @throws AssertionError if the given <code>JTable</code> is not enabled.
+   * @throws AssertionError if the given table cell is not editable.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this fixture's <code>JTableCellValueReader</code> is unable to enter the given
+   *         value.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public JTableFixture enterValue(TableCell cell, String value) {
+    driver.enterValueInCell(target, cell, value);
+    return this;
+  }
+
+  /**
+   * Returns the editor in the given cell of this fixture's <code>{@link JTable}</code>, using this driver's
+   * <code>{@link JTableCellWriter}</code>.
+   * @param cell the given cell.
+   * @return the editor in the given cell of this fixture's <code>JTable</code>.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public Component editorFor(TableCell cell) {
+    return driver.cellEditor(target, cell);
+  }
+
+  /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTableCellReader}</code>.
@@ -494,5 +529,16 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    */
   public void cellReader(JTableCellReader cellReader) {
     driver.cellReader(cellReader);
+  }
+
+  /**
+   * Updates the implementation of <code>{@link JTableCellWriter}</code> to use when comparing internal values of
+   * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
+   * is <code>{@link BasicJTableCellWriter}</code>.
+   * @param cellWriter the new <code>JTableCellValueWriter</code> to use.
+   * @throws IllegalArgumentException if <code>cellWriter</code> is <code>null</code>.
+   */
+  public void cellWriter(JTableCellWriter cellWriter) {
+    driver.cellWriter(cellWriter);
   }
 }

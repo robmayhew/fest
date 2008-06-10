@@ -40,7 +40,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.CellReaderValidation.validateCellReader;
+import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
