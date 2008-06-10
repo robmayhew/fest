@@ -15,10 +15,7 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
 
@@ -36,6 +33,8 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -505,19 +504,6 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   public JTableFixture enterValue(TableCell cell, String value) {
     driver.enterValueInCell(target, cell, value);
     return this;
-  }
-
-  /**
-   * Returns the editor in the given cell of this fixture's <code>{@link JTable}</code>, using this driver's
-   * <code>{@link JTableCellWriter}</code>.
-   * @param cell the given cell.
-   * @return the editor in the given cell of this fixture's <code>JTable</code>.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
-   * @see #cellWriter(JTableCellWriter)
-   */
-  public Component editorFor(TableCell cell) {
-    return driver.cellEditor(target, cell);
   }
 
   /**

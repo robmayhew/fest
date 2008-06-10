@@ -15,30 +15,30 @@
  */
 package org.fest.swing.fixture;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
-
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-import org.testng.annotations.Test;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -347,21 +347,6 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture.enterValue(cell, value));
-      }
-    }.run();
-  }
-
-  @Test public void shouldReturnEditorInCell() {
-    final TableCell cell = row(0).column(0);
-    final Component editor = new JTextField("Hello");
-    new EasyMockTemplate(driver) {
-      protected void expectations() {
-        expect(driver.cellEditor(target, cell)).andReturn(editor);
-      }
-
-      protected void codeToTest() {
-        Component result = fixture.editorFor(cell);
-        assertThat(result).isSameAs(editor);
       }
     }.run();
   }
