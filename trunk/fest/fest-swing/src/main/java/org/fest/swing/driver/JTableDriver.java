@@ -14,15 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.CommonValidations.*;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Arrays.assertEquals;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -37,6 +28,15 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.CommonValidations.*;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Arrays.assertEquals;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
@@ -381,6 +381,54 @@ public class JTableDriver extends JComponentDriver {
     return cellWriter.editorForCell(table, cell.row, cell.column);
   }
 
+  /**
+   * Starts editing the given cell of the <code>{@link JTable}</code>, using this driver's
+   * <code>{@link JTableCellWriter}</code>. This method should be called before manipulating the
+   * <code>{@link Component}</code> returned by <code>{@link #cellEditor(JTable, JTableCell)}</code>.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public void startCellEditing(JTable table, JTableCell cell) {
+    validate(table, cell);
+    cellWriter.startCellEditing(table, cell.row, cell.column);
+  }
+  
+  /**
+   * Stops editing the given cell of the <code>{@link JTable}</code>, using this driver's
+   * <code>{@link JTableCellWriter}</code>. This method should be called after manipulating the
+   * <code>{@link Component}</code> returned by <code>{@link #cellEditor(JTable, JTableCell)}</code>.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public void stopCellEditing(JTable table, JTableCell cell) {
+    validate(table, cell);
+    cellWriter.stopCellEditing(table, cell.row, cell.column);
+  }
+  
+  /**
+   * Cancels editing the given cell of the <code>{@link JTable}</code>, using this driver's
+   * <code>{@link JTableCellWriter}</code>. This method should be called after manipulating the
+   * <code>{@link Component}</code> returned by <code>{@link #cellEditor(JTable, JTableCell)}</code>.
+   * @param table the target <code>JTable</code>.
+   * @param cell the given cell.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @see #cellWriter(JTableCellWriter)
+   */
+  public void cancelCellEditing(JTable table, JTableCell cell) {
+    validate(table, cell);
+    cellWriter.cancelCellEditing(table, cell.row, cell.column);
+  }
+  
   /**
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
    * @param table the target <code>JTable</code>.

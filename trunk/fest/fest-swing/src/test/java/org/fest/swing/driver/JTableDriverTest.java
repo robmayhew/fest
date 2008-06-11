@@ -292,6 +292,51 @@ public class JTableDriverTest {
     }.run();
   }
   
+  @Test public void shouldStartCellEditing() {
+    final JTableCellWriter cellWriter = mockCellWriter();
+    driver.cellWriter(cellWriter);
+    new EasyMockTemplate(cellWriter) {
+      protected void expectations() {
+        cellWriter.startCellEditing(dragTable, 0, 0);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.startCellEditing(dragTable, cell(0,0));
+      }
+    }.run();
+  }
+
+  @Test public void shouldStopCellEditing() {
+    final JTableCellWriter cellWriter = mockCellWriter();
+    driver.cellWriter(cellWriter);
+    new EasyMockTemplate(cellWriter) {
+      protected void expectations() {
+        cellWriter.stopCellEditing(dragTable, 0, 0);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.stopCellEditing(dragTable, cell(0,0));
+      }
+    }.run();
+  }
+
+  @Test public void shouldCancelCellEditing() {
+    final JTableCellWriter cellWriter = mockCellWriter();
+    driver.cellWriter(cellWriter);
+    new EasyMockTemplate(cellWriter) {
+      protected void expectations() {
+        cellWriter.cancelCellEditing(dragTable, 0, 0);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.cancelCellEditing(dragTable, cell(0,0));
+      }
+    }.run();
+  }
+
   private JTableCellWriter mockCellWriter() {
     return createMock(JTableCellWriter.class);
   }
