@@ -328,8 +328,8 @@ public class JTableDriver extends JComponentDriver {
    * @throws AssertionError if the given table cell is not editable.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
-   *         value.
+   * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given 
+   * value.
    * @see #cellWriter(JTableCellWriter)
    */
   public void enterValueInCell(JTable table, JTableCell cell, String value) {

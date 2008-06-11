@@ -15,12 +15,18 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
 import java.awt.Font;
+
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.driver.JTableDriver;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
@@ -303,5 +309,93 @@ public class JTableCellFixtureTest {
         assertThatReturnsThis(fixture.requireValue(value));
       }
     }.run();
+  }
+
+  @Test public void shouldStartCellEditing() {
+    table = tableFixtureStub();
+    fixture = new JTableCellFixture(table, cell);
+    final JTableDriver driver = table.driver();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.startCellEditing(table.target, cell);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.startEditing());
+      }
+    }.run();
+  }
+
+  @Test public void shouldStopCellEditing() {
+    table = tableFixtureStub();
+    fixture = new JTableCellFixture(table, cell);
+    final JTableDriver driver = table.driver();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.stopCellEditing(table.target, cell);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.stopEditing());
+      }
+    }.run();
+  }
+
+  @Test public void shouldCancelCellEditing() {
+    table = tableFixtureStub();
+    fixture = new JTableCellFixture(table, cell);
+    final JTableDriver driver = table.driver();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.cancelCellEditing(table.target, cell);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.cancelEditing());
+      }
+    }.run();
+  }
+
+  @Test public void shouldReturnCellEditor() {
+    table = tableFixtureStub();
+    fixture = new JTableCellFixture(table, cell);
+    final JTableDriver driver = table.driver();
+    final Component editor = new JTextField();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.cellEditor(table.target, cell)).andReturn(editor);
+      }
+
+      protected void codeToTest() {
+        Component result = fixture.editor();
+        assertThat(result).isSameAs(editor);
+      }
+    }.run();
+  }
+
+  @Test public void shouldEnterValue() {
+    table = tableFixtureStub();
+    fixture = new JTableCellFixture(table, cell);
+    final JTableDriver driver = table.driver();
+    final String value = "Hello";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.enterValueInCell(table.target, cell, value);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.enterValue(value));
+      }
+    }.run();
+  }
+
+  private JTableFixture tableFixtureStub() {
+    JTableFixture tableFixture = new JTableFixture(createMock(Robot.class), new JTable());
+    tableFixture.updateDriver(createMock(JTableDriver.class));
+    return tableFixture;
   }
 }

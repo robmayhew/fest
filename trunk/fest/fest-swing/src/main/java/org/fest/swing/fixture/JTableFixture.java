@@ -82,6 +82,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   final void updateDriver(JTableDriver newDriver) {
     driver = newDriver;
   }
+  
+  final JTableDriver driver() { return driver; }
 
   /**
    * Returns a fixture that verifies the font of the given table cell.
@@ -489,7 +491,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
 
   /**
    * Enters the given value in the given cell of this fixture's <code>{@link JTable}</code>, using this fixture's
-   * <code>{@link JTableCellWriter}</code>.
+   * <code>{@link JTableCellWriter}</code>. If you need more flexibility for editing cell, please see 
+   * <code>{@link JTableCellFixture#editor()}</code>.
    * @param cell the given cell.
    * @param value the given value.
    * @return this fixture.
@@ -497,9 +500,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * @throws AssertionError if the given table cell is not editable.
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if this fixture's <code>JTableCellValueReader</code> is unable to enter the given
-   *         value.
+   * @throws ActionFailedException if this fixture's <code>JTableCellValueReader</code> is unable to enter the given 
+   * value.
    * @see #cellWriter(JTableCellWriter)
+   * @see JTableCellFixture#editor()
    */
   public JTableFixture enterValue(TableCell cell, String value) {
     driver.enterValueInCell(target, cell, value);

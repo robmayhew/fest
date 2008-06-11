@@ -15,10 +15,14 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+
 import javax.swing.JTable;
 
 import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.swing.core.MouseButton.*;
@@ -109,6 +113,132 @@ public class JTableCellFixture implements ItemFixture {
   }
 
   /**
+   * Starts editing this fixture's table cell. This method should be called <strong>before</strong> manipulating the
+   * <code>{@link Component}</code> returned by <code>{@link #editor()}</code>.
+   * <p>
+   * This method uses the <code>{@link JTableCellWriter}</code> from the <code>{@link JTableFixture}</code> that
+   * created this fixture.
+   * </p>
+   * @return this fixture.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @see JTableFixture#cellWriter(JTableCellWriter)
+   * @see JTableCellWriter
+   * @see #editor()
+   */
+  public JTableCellFixture startEditing() {
+    table.driver().startCellEditing(table.target, cell);
+    return this;
+  }
+  
+  /**
+   * Stops editing this fixture's table cell. This method should be called <strong>after</strong> manipulating the
+   * <code>{@link Component}</code> returned by <code>{@link #editor()}</code>.
+   * <p>
+   * This method uses the <code>{@link JTableCellWriter}</code> from the <code>{@link JTableFixture}</code> that
+   * created this fixture.
+   * </p>
+   * @return this fixture.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @see JTableFixture#cellWriter(JTableCellWriter)
+   * @see JTableCellWriter
+   * @see #editor()
+   */
+  public JTableCellFixture stopEditing() {
+    table.driver().stopCellEditing(table.target, cell);
+    return this;
+  }
+  
+  /**
+   * Cancels editing this fixture's table cell. This method should be called <strong>after</strong> manipulating the
+   * <code>{@link Component}</code> returned by <code>{@link #editor()}</code>.
+   * <p>
+   * 
+   * <pre>
+   * TableCellFixture cell = table.cell(row(6).column(8));
+   * Component editor = cell.editor();
+   * // assume editor is a JTextField
+   * JTextComponentFixture editorFixture = new JTextComponentFixture(robot, (JTextField) editor);
+   * cell.{@link #startEditing()};
+   * editorFixture.enterText(&quot;Hello&quot;);
+   * // discard any entered value
+   * cell.cancelEditing();
+   * </pre>
+   * 
+   * </p>
+   * <p>
+   * This method uses the <code>{@link JTableCellWriter}</code> from the <code>{@link JTableFixture}</code> that
+   * created this fixture.
+   * </p>
+   * @return this fixture.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @see JTableFixture#cellWriter(JTableCellWriter)
+   * @see JTableCellWriter
+   * @see #editor()
+   */
+  public JTableCellFixture cancelEditing() {
+    table.driver().cancelCellEditing(table.target, cell);
+    return this;
+  }
+  
+  /**
+   * Returns the editor of this fixture's table cell. To manipulate the editor (e.g. wrapping it with a
+   * <code>ComponentFixture</code>,) the method <code>{@link #startEditing()}</code> should be called first. To
+   * apply any changes back to the table cell, the method <code>{@link #stopEditing()}</code> should be called. This
+   * method uses the <code>{@link JTableCellWriter}</code> from the <code>{@link JTableFixture}</code> that created
+   * this fixture.
+   * <p>
+   * Example:
+   * 
+   * <pre>
+   * TableCellFixture cell = table.cell(row(6).column(8));
+   * Component editor = cell.editor();
+   * // assume editor is a JTextField
+   * JTextComponentFixture editorFixture = new JTextComponentFixture(robot, (JTextField) editor);
+   * cell.{@link #startEditing()};
+   * editorFixture.enterText(&quot;Hello&quot;);
+   * cell.{@link #stopEditing()};
+   * </pre>
+   * 
+   * </p>
+   * @return the editor of this fixture's table cell.
+   * @see JTableFixture#cellWriter(JTableCellWriter)
+   * @see JTableCellWriter
+   */
+  public Component editor() {
+    return table.driver().cellEditor(table.target, cell);
+  }
+  
+  /**
+   * Enters the given value to this fixture's table cell. This method starts cell edition, enters the given value and
+   * stops cell edition. To change the value of a cell, only a call to this method is necessary. If you need more
+   * flexibility, you can retrieve the cell editor with <code>{@link #editor()}</code>.
+   * <p>
+   * This method uses the <code>{@link JTableCellWriter}</code> from the <code>{@link JTableFixture}</code> that
+   * created this fixture.
+   * </p>
+   * @param value the value to enter in the cell.
+   * @return this fixture.
+   * @throws AssertionError if the given <code>JTable</code> is not enabled.
+   * @throws AssertionError if the given table cell is not editable.
+   * @throws ActionFailedException if the cell is <code>null</code>.
+   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
+   * value.
+   * @see JTableFixture#cellWriter(JTableCellWriter)
+   * @see JTableCellWriter
+   */
+  public JTableCellFixture enterValue(String value) {
+    table.driver().enterValueInCell(table.target, cell, value);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's table cell contains the given value.
    * @param value the expected value of this fixture's table cell.
    * @return this fixture.
@@ -120,35 +250,44 @@ public class JTableCellFixture implements ItemFixture {
   }
 
   /**
-   * Returns a fixture that verifies the font of this fixture's table cell.
+   * Returns a fixture that verifies the font of this fixture's table cell. This method uses the
+   * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this fixture.
    * @return a fixture that verifies the font of this fixture's table cell.
+   * @see JTableFixture#cellReader(JTableCellReader)
+   * @see JTableCellReader
    */
   public FontFixture font() {
     return table.fontAt(cell);
   }
 
   /**
-   * Returns a fixture that verifies the background color of this fixture's table cell.
+   * Returns a fixture that verifies the background color of this fixture's table cell. This method uses the
+   * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this fixture.
    * @return a fixture that verifies the background color of this fixture's table cell.
+   * @see JTableFixture#cellReader(JTableCellReader)
+   * @see JTableCellReader
    */
   public ColorFixture background() {
     return table.backgroundAt(cell);
   }
 
   /**
-   * Returns a fixture that verifies the foreground color of this fixture's table cell.
+   * Returns a fixture that verifies the foreground color of this fixture's table cell. This method uses the
+   * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this fixture.
    * @return a fixture that verifies the foreground color of this fixture's table cell.
+   * @see JTableFixture#cellReader(JTableCellReader)
+   * @see JTableCellReader
    */
   public ColorFixture foreground() {
     return table.foregroundAt(cell);
   }
 
   /**
-   * Returns the <code>String</code> representation of the value of this fixture's table cell, using the
-   * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this
-   * <code>{@link JTableCellFixture}</code>.
+   * Returns the <code>String</code> representation of the value of this fixture's table cell. This method uses the
+   * <code>{@link JTableCellReader}</code> from the <code>{@link JTableFixture}</code> that created this fixture.
    * @return the <code>String</code> representation of the value of this fixture's table cell.
    * @see JTableFixture#cellReader(JTableCellReader)
+   * @see JTableCellReader
    */
   public String value() {
     return table.valueAt(cell);
