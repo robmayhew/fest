@@ -72,6 +72,8 @@ public class RobotFixtureTest {
   @Test public void shouldThrowErrorIfWindowNeverShown() {
     try {
       robot.showWindow(new JFrame() {
+        private static final long serialVersionUID = 1L;
+
         @Override public void setVisible(boolean b) {
           super.setVisible(false);
         }

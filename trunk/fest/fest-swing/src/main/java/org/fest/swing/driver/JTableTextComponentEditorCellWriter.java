@@ -70,8 +70,8 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
 
   /** ${@inheritDoc} */
   public void cancelCellEditing(JTable table, int row, int column) {
-    JTextComponent editor = editor(table, row, column);
-    driver.pressAndReleaseKeys(editor, VK_ESCAPE);
+    editor(table, row, column);
+    robot.invokeAndWait(new CancelTableCellEditingTask(table, row, column));
   }
 
   private JTextComponent editor(JTable table, int row, int column) {

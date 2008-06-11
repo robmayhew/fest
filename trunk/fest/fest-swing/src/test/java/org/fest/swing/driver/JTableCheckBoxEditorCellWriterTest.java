@@ -1,5 +1,5 @@
 /*
- * Created on Jun 8, 2008
+ * Created on Jun 10, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -16,28 +16,21 @@
 package org.fest.swing.driver;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
 
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link BasicJTableCellWriter}</code>.
+ * Tests for <code>{@link JTableCheckBoxEditorCellWriter}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
-public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
+public class JTableCheckBoxEditorCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter(Robot robot) {
-    return new BasicJTableCellWriter(robot);
-  }
-
-  @Test public void shouldSelectItemInComboBoxEditor() {
-    writer().enterValue(table(), 0, 2, "Pool");
-    assertThat(valueAt(0, 2)).isEqualTo("Pool");
+    return new JTableCheckBoxEditorCellWriter(robot);
   }
 
   @Test public void shouldSelectItemInCheckBoxEditor() {
@@ -49,10 +42,5 @@ public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
     assertThat(valueAt(row,column)).isEqualTo(true);
     writer().enterValue(table(), row, column, "false");
     assertThat(valueAt(row,column)).isEqualTo(false);
-  }
-
-  @Test public void shouldEnterTextInTextComponentEditor() {
-    writer().enterValue(table(), 4, 3, "8");
-    assertThat(valueAt(4, 3)).isEqualTo(8);
   }
 }

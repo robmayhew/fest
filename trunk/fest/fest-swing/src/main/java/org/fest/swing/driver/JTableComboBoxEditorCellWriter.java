@@ -23,8 +23,6 @@ import javax.swing.JTable;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
  * <code>{@link JComboBox}</code>es as cell editors.
@@ -65,8 +63,8 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
 
   /** ${@inheritDoc} */
   public void cancelCellEditing(JTable table, int row, int column) {
-    JComboBox editor = editor(table, row, column);
-    driver.pressAndReleaseKeys(editor, VK_ESCAPE);
+    editor(table, row, column);
+    robot.invokeAndWait(new CancelTableCellEditingTask(table, row, column));
   }
 
   private JComboBox editor(JTable table, int row, int column) {

@@ -1,5 +1,5 @@
 /*
- * Created on Jun 8, 2008
+ * Created on Jun 10, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -16,43 +16,35 @@
 package org.fest.swing.driver;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
 
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link BasicJTableCellWriter}</code>.
+ * Tests for <code>{@link JTableTextComponentEditorCellWriter}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
-public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
+public class JTableTextComponentEditorCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter(Robot robot) {
-    return new BasicJTableCellWriter(robot);
-  }
-
-  @Test public void shouldSelectItemInComboBoxEditor() {
-    writer().enterValue(table(), 0, 2, "Pool");
-    assertThat(valueAt(0, 2)).isEqualTo("Pool");
-  }
-
-  @Test public void shouldSelectItemInCheckBoxEditor() {
-    int row = 0;
-    int column = 4;
-    writer().enterValue(table(), row, column, "false");
-    assertThat(valueAt(row,column)).isEqualTo(false);
-    writer().enterValue(table(), row, column, "true");
-    assertThat(valueAt(row,column)).isEqualTo(true);
-    writer().enterValue(table(), row, column, "false");
-    assertThat(valueAt(row,column)).isEqualTo(false);
+    return new JTableTextComponentEditorCellWriter(robot);
   }
 
   @Test public void shouldEnterTextInTextComponentEditor() {
     writer().enterValue(table(), 4, 3, "8");
     assertThat(valueAt(4, 3)).isEqualTo(8);
+  }
+
+  @Test public void shouldCancelEditingIfDropDownVisible() {
+    int row = 0;
+    int column = 3;
+    assertThat(valueAt(row, column)).isEqualTo(5);
+    writer().startCellEditing(table(), row, column);
+    writer().editorForCell(table(), row, column);
+    writer().cancelCellEditing(table(), row, column);
+    assertThat(valueAt(row, column)).isEqualTo(5);
   }
 }
