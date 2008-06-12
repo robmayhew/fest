@@ -14,14 +14,14 @@
  */
 package org.fest.swing.keystroke;
 
-import static java.awt.event.InputEvent.SHIFT_MASK;
-import static java.awt.event.KeyEvent.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.KeyStroke;
+
+import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.KeyEvent.*;
 
 /**
  * Understands mapping characters to <code>{@link KeyStroke}</code>s for locale
@@ -81,7 +81,7 @@ public class KeyStrokeMappingProvider_en implements KeyStrokeMappingProvider {
     mappings.add(new KeyStrokeMapping('\n', VK_ENTER, NO_MASK));
     mappings.add(new KeyStrokeMapping('\r', VK_ENTER, NO_MASK));
     mappings.add(new KeyStrokeMapping('=', VK_EQUALS, NO_MASK));
-    mappings.add(new KeyStrokeMapping('+', VK_EQUALS, NO_MASK));
+    mappings.add(new KeyStrokeMapping('+', VK_EQUALS, SHIFT_MASK));
     mappings.add(new KeyStrokeMapping('', VK_ESCAPE, NO_MASK));
     mappings.add(new KeyStrokeMapping('f', VK_F, NO_MASK));
     mappings.add(new KeyStrokeMapping('F', VK_F, SHIFT_MASK));

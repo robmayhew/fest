@@ -62,4 +62,16 @@ public class KeyStrokeMapping {
   public KeyStroke keyStroke() {
     return keyStroke;
   }
+  
+  /**
+   * Returns the <code>String</code> representation of this class.
+   * @return the <code>String</code> representation of this class.
+   */
+  @Override public String toString() {
+    StringBuilder b = new StringBuilder();
+    b.append(getClass().getSimpleName()).append("[");
+    b.append("character='").append(character).append("',");
+    b.append("keyStroke=").append(keyStroke).append("]");
+    return b.toString();
+  }
 }

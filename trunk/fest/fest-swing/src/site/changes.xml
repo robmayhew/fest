@@ -34,6 +34,9 @@
         Added methods 'findAll(ComponentMatcher)' and 'findAll(Container, ComponentMatcher)' to 
         org.fest.swing.core.ComponentFinder to look up all the components that match certain search criteria.
       </action>
+      <action dev="alruiz" type="fix" issue="145" due-to="Csaba Juhos">
+        Fixed mapping of character '+' to a key stroke in org.fest.swing.keystroke.KeyStrokeMappingProvider_en.
+      </action>
       <action dev="wanghy" type="fix">
         Fixed bug in org.fest.swing.core.RobotFixture. Closing a window that is not shown resulted in an 
         ActionFailedException.
