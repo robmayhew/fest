@@ -118,12 +118,13 @@ public class JTreeDriver extends JComponentDriver {
   public void selectRows(final JTree tree, final int[] rows) {
     if (isEmptyArray(rows)) throw actionFailure("The array of rows should not be null or empty");
     if (!tree.isEnabled()) return;
-    selectRow(tree, rows[0]);
-    final int rowCount = rows.length;
-    if (rowCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void performMultipleSelection() {
-        for (int i = 1; i < rowCount; i++) selectRow(tree, rows[i]);
+      @Override int elementCount() {
+        return rows.length;
+      }
+
+      @Override void selectElement(int index) {
+        selectRow(tree, rows[index]);
       }
     }.multiSelect();
   }
@@ -153,12 +154,13 @@ public class JTreeDriver extends JComponentDriver {
   public void selectPaths(final JTree tree, final String[] paths) {
     if (Arrays.isEmpty(paths)) throw actionFailure("The array of paths should not be null or empty");
     if (!tree.isEnabled()) return;
-    selectPath(tree, paths[0]);
-    final int pathCount = paths.length;
-    if (pathCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void performMultipleSelection() {
-        for (int i = 1; i < pathCount; i++) selectPath(tree, paths[i]);
+      int elementCount() {
+        return paths.length;
+      }
+
+      void selectElement(int index) {
+        selectPath(tree, paths[index]);
       }
     }.multiSelect();
   }

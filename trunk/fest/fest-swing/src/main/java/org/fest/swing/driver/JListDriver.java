@@ -119,12 +119,14 @@ public class JListDriver extends JComponentDriver {
    */
   public void selectItems(final JList list, final String[] values) {
     if (Arrays.isEmpty(values)) throw actionFailure("Array of values should not be null or empty");
-    final int valueCount = values.length;
-    selectItem(list, values[0]);
-    if (valueCount == 1) return;
+    if (!list.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
-      void performMultipleSelection() {
-        for (int i = 1; i < valueCount; i++) selectItem(list, values[i]);
+      int elementCount() {
+        return values.length;
+      }
+
+      void selectElement(int index) {
+        selectItem(list, values[index]);
       }
     }.multiSelect();
   }
@@ -162,13 +164,14 @@ public class JListDriver extends JComponentDriver {
    */
   public void selectItems(final JList list, final int[] indices) {
     if (isEmptyArray(indices)) throw actionFailure("The array of indices should not be null or empty");
-    final int indexCount = indices.length;
-    if (indexCount == 0) return;
-    selectItem(list, indices[0]);
-    if (indexCount == 1) return;
+    if (!list.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
-      void performMultipleSelection() {
-        for (int i = 1; i < indexCount; i++) selectItem(list, indices[i]);
+      int elementCount() {
+        return indices.length;
+      }
+
+      void selectElement(int index) {
+        selectItem(list, indices[index]);
       }
     }.multiSelect();
   }

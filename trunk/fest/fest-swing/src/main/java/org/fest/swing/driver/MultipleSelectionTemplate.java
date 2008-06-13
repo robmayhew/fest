@@ -15,9 +15,9 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.util.Platform.controlOrCommandKey;
-
 import org.fest.swing.core.Robot;
+
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 /**
  * Understands a template for simulating multiple selection on a GUI component.
@@ -31,13 +31,18 @@ abstract class MultipleSelectionTemplate {
   MultipleSelectionTemplate(Robot robot) {
     this.robot = robot;
   }
+  
+  abstract int elementCount();
 
   final void multiSelect() {
+    int elementCount = elementCount();
+    selectElement(0);
+    if (elementCount == 1) return;
     int key = controlOrCommandKey();
     robot.pressKey(key);
-    performMultipleSelection();
+    for (int i = 1; i < elementCount; i++) selectElement(i);
     robot.releaseKey(key);
   }
-
-  abstract void performMultipleSelection();
+  
+  abstract void selectElement(int index);
 }

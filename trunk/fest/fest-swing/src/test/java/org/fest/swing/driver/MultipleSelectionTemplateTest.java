@@ -15,15 +15,17 @@
  */
 package org.fest.swing.driver;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.util.Platform.controlOrCommandKey;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.Robot;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.Platform.controlOrCommandKey;
 
 /**
  * Tests for <code>{@link MultipleSelectionTemplate}</code>.
@@ -33,14 +35,26 @@ import org.testng.annotations.Test;
 public class MultipleSelectionTemplateTest {
 
   private Robot robot;
-  private MultipleSelection selection;
+  private MultipleSelection template;
 
   @BeforeMethod public void setUp() {
     robot = createMock(Robot.class);
-    selection = new MultipleSelection(robot);
   }
 
+  @Test public void shouldSelectOnceIfElementCountIsOne() {
+    template = new MultipleSelection(robot, 1);
+    new EasyMockTemplate(robot) {
+      protected void expectations() {}
+
+      protected void codeToTest() {
+        template.multiSelect();
+        assertThat(template.timesSelected).isEqualTo(1);
+      }
+    }.run();
+  }
+  
   @Test public void shouldSelectMultipleItems() {
+    template = new MultipleSelection(robot, 2);
     final int key = controlOrCommandKey();
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -51,21 +65,29 @@ public class MultipleSelectionTemplateTest {
       }
 
       protected void codeToTest() {
-        selection.multiSelect();
-        assertThat(selection.selected).isTrue();
+        template.multiSelect();
+        assertThat(template.timesSelected).isEqualTo(2);
       }
     }.run();
   }
 
   private static class MultipleSelection extends MultipleSelectionTemplate {
-    boolean selected;
+    private final int elementCount;
+    
+    int timesSelected;
 
-    MultipleSelection(Robot robot) {
+    
+    MultipleSelection(Robot robot, int elementCount) {
       super(robot);
+      this.elementCount = elementCount;
     }
 
-    void performMultipleSelection() {
-      selected = true;
+    int elementCount() {
+      return elementCount;
+    }
+
+    void selectElement(int index) {
+      timesSelected++;
     }
   }
 }

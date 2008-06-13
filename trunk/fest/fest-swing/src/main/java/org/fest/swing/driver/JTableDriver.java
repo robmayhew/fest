@@ -157,12 +157,13 @@ public class JTableDriver extends JComponentDriver {
    */
   public void selectCells(final JTable table, final JTableCell[] cells) {
     if (Arrays.isEmpty(cells)) throw actionFailure("Array of table cells to select should be null or empty");
-    final int cellCount = cells.length;
-    selectCell(table, cells[0]);
-    if (cellCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void performMultipleSelection() {
-        for (int i = 1; i < cellCount; i++) selectCell(table, cells[i]);
+      int elementCount() {
+        return cells.length;
+      }
+
+      void selectElement(int index) {
+        selectCell(table, cells[index]);
       }
     }.multiSelect();
   }
