@@ -37,6 +37,9 @@
       <action dev="alruiz" type="fix" issue="145" due-to="Csaba Juhos">
         Fixed mapping of character '+' to a key stroke in org.fest.swing.keystroke.KeyStrokeMappingProvider_en.
       </action>
+      <action dev="alruiz" type="fix" issue="147" due-to="Csaba Juhos">
+        Fixed multiple selection in JListDriver, JTableDriver and JTreeDriver.
+      </action>
       <action dev="wanghy" type="fix" issue="152" due-to="Csaba Juhos">
         Fixed implementation of 'selectItems(JList, int, int)' in org.fest.swing.driver.JListDriver.
       </action>
