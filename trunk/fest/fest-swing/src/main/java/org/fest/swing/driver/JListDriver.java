@@ -15,6 +15,16 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -30,17 +40,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
-
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -181,9 +180,10 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void selectItems(JList list, int start, int end) {
+    selectItem(list, start);
     int shift = VK_SHIFT;
     robot.pressKey(shift);
-    for (int i = start; i <= end; i++) selectItem(list, i);
+    selectItem(list, end);
     robot.releaseKey(shift);
   }
 
