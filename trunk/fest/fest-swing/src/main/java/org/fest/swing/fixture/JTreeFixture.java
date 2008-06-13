@@ -211,6 +211,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * Select the given paths, expanding parent nodes if necessary.
    * @param paths the paths to select.
    * @return this fixture.
+   * @throws ActionFailedException if the array of paths is <code>null</code> or empty.
    * @throws LocationUnavailableException if the any of the given paths cannot be found.
    */
   public JTreeFixture selectPaths(String... paths) {
@@ -235,6 +236,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * Simulates a user selecting the tree nodes at the given rows.
    * @param rows the indices of the rows to select.
    * @return this fixture.
+   * @throws ActionFailedException if the array of rows is <code>null</code> or empty.
    * @throws ActionFailedException if the any of the given rows is less than zero or equal than or greater than the
    *         number of visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.

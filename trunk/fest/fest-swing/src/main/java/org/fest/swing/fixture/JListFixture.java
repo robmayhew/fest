@@ -113,6 +113,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
    * @param indices the indices of the items to select.
    * @return this fixture.
+   * @throws ActionFailedException if the given array is <code>null</code> or empty.
    * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
    *         in the <code>JList</code>.
    */
@@ -137,6 +138,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
    * @param items the text of the items to select.
    * @return this fixture.
+   * @throws ActionFailedException if the given array is <code>null</code> or empty.
    * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
    *         found.
    * @see #cellReader(JListCellReader)

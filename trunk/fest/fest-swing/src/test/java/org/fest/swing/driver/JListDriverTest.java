@@ -28,6 +28,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
@@ -134,6 +135,12 @@ public class JListDriverTest {
     assertThat(dragList.getSelectedValue()).isEqualTo("three");
   }
 
+  @Test public void shouldNotSelectItemIfAlreadySelected() {
+    dragList.setSelectedIndex(1);
+    driver.selectItem(dragList, 1);
+    assertThat(dragList.getSelectedIndex()).isEqualTo(1);
+  }
+  
   @Test public void shouldNotSelectItemAtGivenIndexIfListIsNotEnabled() {
     clearAndDisableDragList();
     driver.selectItem(dragList, 2);
@@ -152,6 +159,18 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfArrayOfValuesToSelectIsNull() {
+    String[] values = null;
+    driver.selectItems(dragList, values);
+  }
+  
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfArrayOfValuesToSelectIsEmpty() {
+    String[] values = new String[0];
+    driver.selectItems(dragList, values);
+  }
+
   @Test public void shouldSelectItemsWithGivenText() {
     driver.selectItems(dragList, array("two", "three"));
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
@@ -167,6 +186,23 @@ public class JListDriverTest {
   @Test public void shouldSelectItemsWithGivenIndices() {
     driver.selectItems(dragList, new int[] { 1, 2 });
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
+  }
+  
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfArrayOfIndicesToSelectIsNull() {
+    int[] indices = null;
+    driver.selectItems(dragList, indices);
+  }
+  
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfArrayOfIndicesToSelectIsEmpty() {
+    int[] indices = new int[0];
+    driver.selectItems(dragList, indices);
+  }
+
+  @Test public void shouldSelectItemsWithGivenIndicesEvenIfIndexArrayHasOneElement() {
+    driver.selectItems(dragList, new int[] { 1 });
+    assertThat(dragList.getSelectedValues()).isEqualTo(array("two"));
   }
 
   @Test public void shouldNotSelectItemsWithGivenIndicesIfListIsNotEnabled() {

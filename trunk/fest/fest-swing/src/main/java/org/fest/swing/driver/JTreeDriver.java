@@ -34,6 +34,7 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -90,6 +91,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
    */
   public void toggleRow(JTree tree, int row) {
+    if (!tree.isEnabled()) return;
     // Alternatively, we can reflect into the UI and do a single click on the appropriate expand location, but this is
     // safer.
     Point p = location.pointAt(tree, row);
@@ -108,19 +110,26 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given rows.
    * @param tree the target <code>JTree</code>.
    * @param rows the rows to select.
+   * @throws ActionFailedException if the array of rows is <code>null</code> or empty.
    * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
   public void selectRows(final JTree tree, final int[] rows) {
+    if (isEmptyArray(rows)) throw actionFailure("The array of rows should not be null or empty");
     if (!tree.isEnabled()) return;
+    selectRow(tree, rows[0]);
+    final int rowCount = rows.length;
+    if (rowCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void select() {
-        for (int row : rows) selectRow(tree, row);
+      void performMultipleSelection() {
+        for (int i = 1; i < rowCount; i++) selectRow(tree, rows[i]);
       }
     }.multiSelect();
   }
 
+  private boolean isEmptyArray(int[] array) { return array == null || array.length == 0; }
+  
   /**
    * Selects the given row.
    * @param tree the target <code>JTree</code>.
@@ -138,13 +147,18 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given paths, expanding parent nodes if necessary.
    * @param tree the target <code>JTree</code>.
    * @param paths the paths to select.
+   * @throws ActionFailedException if the array of paths is <code>null</code> or empty.
    * @throws LocationUnavailableException if any the given path cannot be found.
    */
   public void selectPaths(final JTree tree, final String[] paths) {
+    if (Arrays.isEmpty(paths)) throw actionFailure("The array of paths should not be null or empty");
     if (!tree.isEnabled()) return;
+    selectPath(tree, paths[0]);
+    final int pathCount = paths.length;
+    if (pathCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void select() {
-        for (String path : paths) selectPath(tree, path);
+      void performMultipleSelection() {
+        for (int i = 1; i < pathCount; i++) selectPath(tree, paths[i]);
       }
     }.multiSelect();
   }
@@ -156,7 +170,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given path cannot be found.
    */
   public void selectPath(JTree tree, String path) {
-    if (!tree.isEditable()) return;
+    if (!tree.isEnabled()) return;
     TreePath treePath = findMatchingPath(tree, path);
     selectPath(tree, treePath);
   }

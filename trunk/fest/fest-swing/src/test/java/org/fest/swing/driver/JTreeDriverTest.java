@@ -32,6 +32,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
@@ -89,6 +90,18 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionCount()).isZero();
   }
 
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfRowArrayIsNull() {
+    int[] rows = null;
+    driver.selectRows(dragTree, rows);
+  }
+  
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfRowArrayIsEmpty() {
+    int[] rows = new int[0];
+    driver.selectRows(dragTree, rows);
+  }
+
   @Test public void shouldSelectNodesByRow() {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
@@ -142,6 +155,18 @@ public class JTreeDriverTest {
     clearAndDisableTree();
     driver.selectPath(dragTree, "root/branch1");
     assertThat(dragTree.getSelectionCount()).isZero();
+  }
+
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfPathArrayIsNull() {
+    String[] paths = null;
+    driver.selectPaths(dragTree, paths);
+  }
+  
+  @Test(expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorIfPathArrayIsEmpty() {
+    String[] paths = new String[0];
+    driver.selectPaths(dragTree, paths);
   }
 
   @Test public void shouldSelectNodesByPaths() {

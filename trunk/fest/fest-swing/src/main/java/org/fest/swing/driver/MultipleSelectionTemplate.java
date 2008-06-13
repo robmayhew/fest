@@ -35,9 +35,9 @@ abstract class MultipleSelectionTemplate {
   final void multiSelect() {
     int key = controlOrCommandKey();
     robot.pressKey(key);
-    select();
+    performMultipleSelection();
     robot.releaseKey(key);
   }
 
-  abstract void select();
+  abstract void performMultipleSelection();
 }

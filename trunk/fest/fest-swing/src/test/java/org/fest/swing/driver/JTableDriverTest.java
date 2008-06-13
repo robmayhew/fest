@@ -28,6 +28,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
@@ -88,17 +89,35 @@ public class JTableDriverTest {
     driver.selectCell(dragTable, cell(0, 0));
     assertDragTableHasNoSelection();
   }
+  
+  @Test(expectedExceptions = ActionFailedException.class) 
+  public void shouldThrowErrorIfArrayOfCellsToSelectIsNull() {
+    JTableCell[] cells = null;
+    driver.selectCells(dragTable, cells);
+  }
+
+  @Test(expectedExceptions = ActionFailedException.class) 
+  public void shouldThrowErrorIfArrayOfCellsToSelectIsEmpty() {
+    JTableCell[] cells = new JTableCell[0];
+    driver.selectCells(dragTable, cells);
+  }
 
   @Test public void shouldSelectCells() {
     dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
-    driver.selectCells(dragTable, cell(0, 0), cell(2, 0));
+    driver.selectCells(dragTable, new JTableCell[] { cell(0, 0), cell(2, 0) });
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
     assertThat(dragTable.isCellSelected(2, 0)).isTrue();
   }
 
+  @Test public void shouldSelectCellsEvenIfArrayHasOneElement() {
+    dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+    driver.selectCells(dragTable, new JTableCell[] { cell(0, 0) });
+    assertThat(dragTable.isCellSelected(0, 0)).isTrue();
+  }
+
   @Test public void shouldNotSelectCellsIfTableIsNotEnabled() {
     clearAndDisableDragTable();
-    driver.selectCells(dragTable, cell(0, 0), cell(2, 0));
+    driver.selectCells(dragTable, new JTableCell[] { cell(0, 0), cell(2, 0) });
     assertDragTableHasNoSelection();
   }
 

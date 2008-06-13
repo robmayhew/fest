@@ -28,6 +28,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -150,16 +151,18 @@ public class JTableDriver extends JComponentDriver {
    * Selects the given cells of the <code>{@link JTable}</code>.
    * @param table the target <code>JTable</code>.
    * @param cells the cells to select.
-   * @throws ActionFailedException if <code>cells</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cells</code> is <code>null</code> or empty.
    * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
-  public void selectCells(final JTable table, final JTableCell... cells) {
-    if (cells == null) throw actionFailure("Table cells to select cannot be null");
+  public void selectCells(final JTable table, final JTableCell[] cells) {
+    if (Arrays.isEmpty(cells)) throw actionFailure("Array of table cells to select should be null or empty");
+    final int cellCount = cells.length;
+    selectCell(table, cells[0]);
+    if (cellCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void select() {
-        for (JTableCell c : cells)
-          selectCell(table, c);
+      void performMultipleSelection() {
+        for (int i = 1; i < cellCount; i++) selectCell(table, cells[i]);
       }
     }.multiSelect();
   }

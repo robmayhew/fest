@@ -64,7 +64,7 @@ public class MultipleSelectionTemplateTest {
       super(robot);
     }
 
-    void select() {
+    void performMultipleSelection() {
       selected = true;
     }
   }

@@ -165,7 +165,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Simulates a user selecting the given cells of this fixture's <code>{@link JTable}</code>.
    * @param cells the cells to select.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cells</code> is <code>null</code>.
+   * @throws ActionFailedException if <code>cells</code> is <code>null</code> or empty.
    * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
    * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
    */

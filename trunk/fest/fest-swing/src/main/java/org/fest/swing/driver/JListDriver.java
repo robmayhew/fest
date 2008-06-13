@@ -15,16 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -40,6 +30,19 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
+import org.fest.util.Arrays;
+
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JList}</code>. Unlike <code>JListFixture</code>, this
@@ -111,12 +114,17 @@ public class JListDriver extends JComponentDriver {
    * Selects the items matching the given values.
    * @param list the target <code>JList</code>.
    * @param values the values to match.
+   * @throws ActionFailedException if the given array is <code>null</code> or empty.
    * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
   public void selectItems(final JList list, final String[] values) {
+    if (Arrays.isEmpty(values)) throw actionFailure("Array of values should not be null or empty");
+    final int valueCount = values.length;
+    selectItem(list, values[0]);
+    if (valueCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void select() {
-        for (String value : values) selectItem(list, value);
+      void performMultipleSelection() {
+        for (int i = 1; i < valueCount; i++) selectItem(list, values[i]);
       }
     }.multiSelect();
   }
@@ -129,7 +137,7 @@ public class JListDriver extends JComponentDriver {
    *         the <code>JList</code>.
    */
   public void selectItem(JList list, String value) {
-    clickItem(list, value, LEFT_BUTTON, 1);
+    selectItem(list, indexOf(list, value));
   }
 
   /**
@@ -148,17 +156,25 @@ public class JListDriver extends JComponentDriver {
    * Selects the items under the given indices.
    * @param list the target <code>JList</code>.
    * @param indices the indices of the items to select.
+   * @throws ActionFailedException if the given array is <code>null</code> or empty.
    * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
    *         in the <code>JList</code>.
    */
   public void selectItems(final JList list, final int[] indices) {
+    if (isEmptyArray(indices)) throw actionFailure("The array of indices should not be null or empty");
+    final int indexCount = indices.length;
+    if (indexCount == 0) return;
+    selectItem(list, indices[0]);
+    if (indexCount == 1) return;
     new MultipleSelectionTemplate(robot) {
-      void select() {
-        for (int index : indices) selectItem(list, index);
+      void performMultipleSelection() {
+        for (int i = 1; i < indexCount; i++) selectItem(list, indices[i]);
       }
     }.multiSelect();
   }
 
+  private boolean isEmptyArray(int[] array) { return array == null || array.length == 0; }
+  
   /**
    * Selects the items in the specified range.
    * @param list the target <code>JList</code>.
@@ -181,20 +197,20 @@ public class JListDriver extends JComponentDriver {
    */
   public void selectItems(JList list, int start, int end) {
     selectItem(list, start);
-    int shift = VK_SHIFT;
-    robot.pressKey(shift);
+    robot.pressKey(VK_SHIFT);
     selectItem(list, end);
-    robot.releaseKey(shift);
+    robot.releaseKey(VK_SHIFT);
   }
 
   /**
-   * Clicks the item under the given index using left mouse button once.
+   * Selects the item under the given index using left mouse button once.
    * @param list the target <code>JList</code>.
    * @param index the index of the item to click.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    *         the <code>JList</code>.
    */
   public void selectItem(JList list, int index) {
+    if (list.isSelectedIndex(index)) return;
     clickItem(list, index, LEFT_BUTTON, 1);
   }
 
