@@ -17,16 +17,13 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Settings;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentDriver.propertyName;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.driver.ComponentDriver.*;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
@@ -57,23 +54,37 @@ public abstract class ComponentFixture<T extends Component> {
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @throws IllegalArgumentException if the given robot is <code>null</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> type is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
   public ComponentFixture(Robot robot, Class<? extends T> type) {
-    this(robot, robot.finder().findByType(type, requireShowing(robot)));
+    this(robot, findTarget(robot, null, type));
   }
 
   /**
-   * Creates a new <code>{@link ComponentFixture}</code>.
+   * Creates a new <code>{@link ComponentFixture}</code>. If the given name is <code>null</code>, component lookup will
+   * be performed by name only.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>. If the given 
+   * name is <code>null</code>, component lookup will be performed by type only.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @throws IllegalArgumentException if the given robot is <code>null</code>.
+   * @throws IllegalArgumentException if the given <code>Component</code> type is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
   public ComponentFixture(Robot robot, String name, Class<? extends T> type) {
-    this(robot, robot.finder().findByName(name, type, requireShowing(robot)));
+    this(robot, findTarget(robot, name, type));
+  }
+
+  private static <C extends Component> C findTarget(Robot robot, String name, Class<? extends C> type) {
+    validate(robot);
+    if (type == null) throw new IllegalArgumentException("The type of component to look for should not be null");
+    ComponentFinder finder = robot.finder();
+    if (name == null) return finder.findByType(type, requireShowing(robot));
+    return finder.findByName(name, type, requireShowing(robot));
   }
 
   /**
@@ -95,10 +106,18 @@ public abstract class ComponentFixture<T extends Component> {
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Component</code>.
    * @param target the <code>Component</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if the given robot is <code>null</code>.
+   * @throws IllegalArgumentException if the given target <code>Component</code> is <code>null</code>.
    */
   public ComponentFixture(Robot robot, T target) {
+    validate(robot);
+    if (target == null) throw new IllegalArgumentException("Target component should not be null");
     this.robot = robot;
     this.target = target;
+  }
+  
+  private static void validate(Robot robot) {
+    if (robot == null) throw new IllegalArgumentException("Robot should not be null");
   }
   
   /**
