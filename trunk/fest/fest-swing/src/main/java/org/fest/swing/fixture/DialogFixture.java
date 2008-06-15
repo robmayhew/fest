@@ -38,9 +38,10 @@ public class DialogFixture extends WindowFixture<Dialog> {
   private DialogDriver driver;
 
   /**
-   * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link Robot}</code>
    * containing the current AWT hierarchy.
    * @param target the <code>Dialog</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(Dialog target) {
@@ -52,6 +53,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Dialog</code>.
    * @param target the <code>Dialog</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public DialogFixture(Robot robot, Dialog target) {
     super(robot, target);
@@ -61,7 +64,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
   /**
    * Creates a new <code>{@link DialogFixture}</code>.
    * @param robot performs simulation of user events on a <code>Dialog</code>.
-   * @param dialogName the name of the <code>Dialog</code> to find using the given <code>RobotFixture</code>.
+   * @param dialogName the name of the <code>Dialog</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>Dialog</code> having a matching name is found.
    */
@@ -71,7 +75,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
-   * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link RobotFixture}</code>
+   * Creates a new <code>{@link DialogFixture}</code>. This constructor creates a new <code>{@link Robot}</code>
    * containing the current AWT hierarchy.
    * @param dialogName the name of the <code>Dialog</code> to find.
    * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.

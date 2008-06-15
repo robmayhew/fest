@@ -75,12 +75,14 @@ public final class MouseClickInfo {
    * Specifies that the given button should be clicked once.
    * @param button the mouse button to click.
    * @return the created click info.
+   * @throws IllegalArgumentException if <code>button</code> is <code>null</code>.
    */
   public static MouseClickInfo button(MouseButton button) {
     return new MouseClickInfo(button, 1);
   }
   
   private MouseClickInfo(MouseButton button, int times) {
+    if (button == null) throw new IllegalArgumentException("The given MouseButton should not be null");
     this.button = button;
     this.times = times;
   }

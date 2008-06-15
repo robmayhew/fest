@@ -39,6 +39,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JScrollPane</code>.
    * @param target the <code>JScrollPane</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JScrollPaneFixture(Robot robot, JScrollPane target) {
     super(robot, target);
@@ -52,7 +54,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
   /**
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JScrollPane</code>.
-   * @param panelName the name of the <code>JScrollPane</code> to find using the given <code>RobotFixture</code>.
+   * @param panelName the name of the <code>JScrollPane</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JScrollPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JScrollPane</code> is found.
    */

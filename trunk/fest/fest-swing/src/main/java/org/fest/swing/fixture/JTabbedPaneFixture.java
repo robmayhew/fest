@@ -39,6 +39,8 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
    * Creates a new <code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTabbedPane</code>.
    * @param target the <code>JTabbedPane</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JTabbedPaneFixture(Robot robot, JTabbedPane target) {
     super(robot, target);
@@ -48,7 +50,8 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
   /**
    * Creates a new <code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
-   * @param tabbedPaneName the name of the <code>JTabbedPane</code> to find using the given <code>RobotFixture</code>.
+   * @param tabbedPaneName the name of the <code>JTabbedPane</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JTabbedPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTabbedPane</code> is found.
    */

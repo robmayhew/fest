@@ -39,6 +39,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
    * Creates a new <code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSlider</code>.
    * @param target the <code>JSlider</code> to be managed <code>{@link JSlider}</code> by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JSliderFixture(Robot robot, JSlider target) {
     super(robot, target);
@@ -48,7 +50,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
   /**
    * Creates a new <code>{@link JSliderFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSlider</code>.
-   * @param sliderName the name of the <code>JSlider</code> to find using the given <code>RobotFixture</code>.
+   * @param sliderName the name of the <code>JSlider</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JSlider</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSlider</code> is found.
    */

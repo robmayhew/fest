@@ -40,6 +40,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
   /**
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JFileChooser</code> is found.
    */
@@ -52,6 +53,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JFileChooser</code>.
    * @param target the <code>JFileChooser</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JFileChooserFixture(Robot robot, JFileChooser target) {
     super(robot, target);
@@ -62,6 +65,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
    * @param labelName the name of the <code>JFileChooser</code> to find using the given <code>RobotFixture</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JFileChooser</code> is found.
    */

@@ -37,7 +37,8 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   /**
    * Creates a new <code>{@link JPanelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JPanel</code>.
-   * @param panelName the name of the <code>JPanel</code> to find using the given <code>RobotFixture</code>.
+   * @param panelName the name of the <code>JPanel</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JPanel</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JPanel</code> is found.
    */
@@ -50,6 +51,8 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
    * Creates a new <code>{@link JPanelFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPanel</code>.
    * @param target the <code>JPanel</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JPanelFixture(Robot robot, JPanel target) {
     super(robot, target);

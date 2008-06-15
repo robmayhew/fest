@@ -43,6 +43,10 @@
       <action dev="wanghy" type="fix" issue="152" due-to="Juhos Csaba-Zsolt">
         Fixed implementation of 'selectItems(JList, int, int)' in org.fest.swing.driver.JListDriver.
       </action>
+      <action dev="alruiz, wanghy" type="fix" issue="153" due-to="Juhos Csaba-Zsolt">
+        All fixtures now throw IllegalArgumentException if any constructor argument is null (with the exception of
+        the name of the component to look up.)
+      </action>
       <action dev="wanghy" type="fix">
         Fixed bug in org.fest.swing.core.RobotFixture. Closing a window that is not shown resulted in an 
         ActionFailedException.

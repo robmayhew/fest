@@ -44,6 +44,11 @@ public class ColorFixtureTest {
     fixture = new ColorFixture(color);
   }
   
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfColorIsNull() {
+    new ColorFixture(null);
+  }
+  
   @Test public void shouldPassIfColorsAreEqualAsAnticipated() {
     fixture.requireEqualTo(BLUE);
   }

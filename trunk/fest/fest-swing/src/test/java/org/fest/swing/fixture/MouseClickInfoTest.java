@@ -28,6 +28,11 @@ import static org.fest.swing.core.MouseButton.*;
  */
 public class MouseClickInfoTest {
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfMouseButtonIsNull() {
+    MouseClickInfo.button(null);
+  }
+  
   @Test public void shouldCreateLeftButtonClickOneTime() {
     MouseClickInfo button = MouseClickInfo.leftButton();
     assertThat(button.button()).isEqualTo(LEFT_BUTTON);

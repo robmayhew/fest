@@ -33,6 +33,7 @@ public class ColorFixture {
   /**
    * Creates a new </code>{@link ColorFixture}</code>.
    * @param target the color to manage.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public ColorFixture(Color target) {
     this(target, null);
@@ -42,8 +43,10 @@ public class ColorFixture {
    * Creates a new </code>{@link ColorFixture}</code>.
    * @param target the color to manage.
    * @param description this fixture's description.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public ColorFixture(Color target, String description) {
+    if (target == null) throw new IllegalArgumentException("The given color should not be null");
     this.target = target;
     this.description = description;
   }

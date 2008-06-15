@@ -56,6 +56,16 @@ public class JTableCellFixtureTest {
     fixture = new JTableCellFixture(table, cell);
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfJTableFixtureIsNull() {
+    new JTableCellFixture(null, cell);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfCellIsNull() {
+    new JTableCellFixture(table, null);
+  }
+
   @Test public void shouldSelect() {
     new EasyMockTemplate(table) {
       protected void expectations() {

@@ -50,6 +50,12 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> {
     fixture.updateDriver(driver);
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfGivenActionIsNull() {
+    Action action = null;
+    new JMenuItemFixture(robot(), action);
+  }
+  
   @Test public void shouldCreateFixtureWithGivenComponentName() {
     new EasyMockTemplate(robot(), finder()) {
       protected void expectations() {

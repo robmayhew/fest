@@ -39,7 +39,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
   /**
    * Creates a new <code>{@link JSpinnerFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSpinner</code>.
-   * @param spinnerName the name of the <code>JSpinner</code> to find using the given <code>RobotFixture</code>.
+   * @param spinnerName the name of the <code>JSpinner</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JSpinner</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSpinner</code> is found.
    */
@@ -52,6 +53,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    * Creates a new <code>{@link JSpinnerFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSpinner</code>.
    * @param target the <code>JSpinner</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JSpinnerFixture(Robot robot, JSpinner target) {
     super(robot, target);

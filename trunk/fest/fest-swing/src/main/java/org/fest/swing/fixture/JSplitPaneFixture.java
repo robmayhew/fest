@@ -38,6 +38,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
    * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSplitPane</code>.
    * @param target the <code>JSplitPane</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JSplitPaneFixture(Robot robot, JSplitPane target) {
     super(robot, target);
@@ -47,7 +49,7 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
   /**
    * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSplitPane</code>.
-   * @param spinnerName the name of the <code>JSplitPane</code> to find using the given <code>RobotFixture</code>.
+   * @param spinnerName the name of the <code>JSplitPane</code> to find using the given <code>Robot</code>.
    * @throws ComponentLookupException if a matching <code>JSplitPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSplitPane</code> is found.
    */

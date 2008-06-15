@@ -41,6 +41,8 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * Creates a new <code>{@link JPopupMenuFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPopupMenu</code>.
    * @param target the <code>JPopupMenu</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JPopupMenuFixture(Robot robot, JPopupMenu target) {
     super(robot, target);

@@ -34,7 +34,9 @@ public abstract class JPopupMenuInvokerFixture<T extends Component> extends Comp
   /**
    * Creates a new <code>{@link JPopupMenuInvokerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param type the type of the <code>Component</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
@@ -45,8 +47,10 @@ public abstract class JPopupMenuInvokerFixture<T extends Component> extends Comp
   /**
    * Creates a new <code>{@link JPopupMenuInvokerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
-   * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
+   * @param name the name of the <code>Component</code> to find using the given <code>Robot</code>.
+   * @param type the type of the <code>Component</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
@@ -58,6 +62,8 @@ public abstract class JPopupMenuInvokerFixture<T extends Component> extends Comp
    * Creates a new <code>{@link JPopupMenuInvokerFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Component</code>.
    * @param target the <code>Component</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JPopupMenuInvokerFixture(Robot robot, T target) {
     super(robot, target);

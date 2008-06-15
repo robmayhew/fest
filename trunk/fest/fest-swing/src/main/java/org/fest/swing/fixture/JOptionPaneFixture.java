@@ -38,17 +38,25 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   /**
    * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot finds a showing <code>JOptionPane</code>, which will be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a showing <code>JOptionPane</code> could not be found.
    * @throws ComponentLookupException if more than one showing <code>JOptionPane</code> is found.
    */
   public JOptionPaneFixture(Robot robot) {
-    this(robot, robot.finder().findByType(JOptionPane.class, true));
+    this(robot, findShowingOptionPane(robot));
+  }
+
+  private static JOptionPane findShowingOptionPane(Robot robot) {
+    validate(robot);
+    return robot.finder().findByType(JOptionPane.class, true);
   }
 
   /**
    * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JOptionPane</code>.
    * @param target the <code>JOptionPane</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JOptionPaneFixture(Robot robot, JOptionPane target) {
     super(robot, target);

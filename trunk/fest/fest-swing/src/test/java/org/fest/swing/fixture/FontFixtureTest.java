@@ -42,6 +42,11 @@ public class FontFixtureTest {
     fixture = new FontFixture(font);
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfFontIsNull() {
+    new FontFixture(null);
+  }
+  
   @Test public void shouldPassIfFamilyIsEqualToGivenOne() {
     fixture.requireFamily("SansSerif");
   }

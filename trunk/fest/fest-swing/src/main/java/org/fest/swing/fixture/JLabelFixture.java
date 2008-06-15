@@ -37,6 +37,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements T
    * Creates a new <code>{@link JLabelFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JLabel</code>.
    * @param target the <code>JLabel</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JLabelFixture(Robot robot, JLabel target) {
     super(robot, target);
@@ -46,7 +48,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements T
   /**
    * Creates a new <code>{@link JLabelFixture}</code>.
    * @param robot performs simulation of user events on a <code>JLabel</code>.
-   * @param labelName the name of the <code>JLabel</code> to find using the given <code>RobotFixture</code>.
+   * @param labelName the name of the <code>JLabel</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JLabel</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JLabel</code> is found.
    */

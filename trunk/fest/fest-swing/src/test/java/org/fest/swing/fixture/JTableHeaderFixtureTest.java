@@ -15,19 +15,21 @@
  */
 package org.fest.swing.fixture;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-
 import javax.swing.table.JTableHeader;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTableHeaderDriver;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 
 /**
  * Tests for <code>{@link JTableHeaderFixture}</code>.
@@ -39,13 +41,24 @@ public class JTableHeaderFixtureTest {
   private JTableHeaderDriver driver;
   private JTableHeader tableHeader;
   private JTableHeaderFixture fixture;
+  private Robot robot;
 
   @BeforeMethod public void setUp() {
-    Robot robot = createMock(Robot.class);
+    robot = createMock(Robot.class);
     tableHeader = new JTableHeader();
     fixture = new JTableHeaderFixture(robot, tableHeader);
     driver = createMock(JTableHeaderDriver.class);
     fixture.updateDriver(driver);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfRobotIsNull() {
+    new JTableHeaderFixture(null, tableHeader);
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfTargetIsNull() {
+    new JTableHeaderFixture(robot, null);
   }
 
   @Test public void shouldClickColumnUnderIndex() {

@@ -40,8 +40,10 @@ public class JListItemFixture implements ItemFixture {
    * Creates a new </code>{@link JListItemFixture}</code>.
    * @param list manages the <code>JList</code> containing the list item to be managed by this fixture.
    * @param index index of the list item to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>list</code> is <code>null</code>.
    */
   public JListItemFixture(JListFixture list, int index) {
+    if (list == null) throw new IllegalArgumentException("The given JListFixture should not be null");
     this.list = list;
     this.index = index;
   }

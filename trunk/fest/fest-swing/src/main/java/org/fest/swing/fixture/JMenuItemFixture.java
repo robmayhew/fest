@@ -38,7 +38,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
-   * @param menuItemName the name of the <code>JMenuItem</code> to find using the given <code>RobotFixture</code>.
+   * @param menuItemName the name of the <code>JMenuItem</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JMenuItem</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JMenuItem</code> is found.
    */
@@ -51,15 +52,24 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * <code>{@link JMenuItem}</code> as the target menu item.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param action the <code>Action</code> to assign to the created <code>JMenuItem</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>action</code> is <code>null</code>.
    */
   public JMenuItemFixture(Robot robot, Action action) {
-    this(robot, new JMenuItem(action));
+    this(robot, new JMenuItem(validated(action)));
   }
 
+  private static Action validated(Action action) {
+    if (action != null) return action;
+    throw new IllegalArgumentException("The given action should not be null");
+  }
+  
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JMenuItem</code>.
    * @param target the <code>JMenuItem</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JMenuItemFixture(Robot robot, JMenuItem target) {
     super(robot, target);

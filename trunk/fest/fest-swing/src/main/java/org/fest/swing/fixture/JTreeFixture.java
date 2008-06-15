@@ -73,6 +73,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
    * Creates a new <code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTree</code>.
    * @param target the <code>JTree</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JTreeFixture(Robot robot, JTree target) {
     super(robot, target);
@@ -82,7 +84,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
   /**
    * Creates a new <code>{@link JTreeFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTree</code>.
-   * @param treeName the name of the <code>JTree</code> to find using the given <code>RobotFixture</code>.
+   * @param treeName the name of the <code>JTree</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JTree</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTree</code> is found.
    */

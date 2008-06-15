@@ -57,6 +57,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTable</code>.
    * @param target the <code>JTable</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JTableFixture(Robot robot, JTable target) {
     super(robot, target);
@@ -66,7 +68,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   /**
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTable</code>.
-   * @param tableName the name of the <code>JTable</code> to find using the given <code>RobotFixture</code>.
+   * @param tableName the name of the <code>JTable</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JTable</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTable</code> is found.
    */

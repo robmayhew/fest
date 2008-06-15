@@ -38,6 +38,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * Creates a new <code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JRadioButton</code>.
    * @param target the <code>JRadioButton</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JRadioButtonFixture(Robot robot, JRadioButton target) {
     super(robot, target);
@@ -47,7 +49,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   /**
    * Creates a new <code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JRadioButton</code>.
-   * @param buttonName the name of the <code>JRadioButton</code> to find using the given <code>RobotFixture</code>.
+   * @param buttonName the name of the <code>JRadioButton</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JRadioButton</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JRadioButton</code> is found.
    */

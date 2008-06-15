@@ -45,6 +45,11 @@ public class JListItemFixtureTest {
     fixture = new JListItemFixture(list, index);
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfJListFixtureIsNull() {
+    new JListItemFixture(null, 0);
+  }
+  
   @Test public void shouldSelect() {
     new EasyMockTemplate(list) {
       protected void expectations() {

@@ -37,6 +37,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * Creates a new <code>{@link JToggleButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToggleButton</code>.
    * @param target the <code>JToggleButton</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JToggleButtonFixture(Robot robot, JToggleButton target) {
     super(robot, target);
@@ -46,12 +48,13 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   /**
    * Creates a new <code>{@link org.fest.swing.fixture.JToggleButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
-   * @param checkBoxName the name of the <code>JToggleButton</code> to find using the given <code>RobotFixture</code>.
+   * @param toggleButtonName the name of the <code>JToggleButton</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JToggleButton</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JToggleButton</code> is found.
    */
-  public JToggleButtonFixture(Robot robot, String checkBoxName) {
-    super(robot, checkBoxName, JToggleButton.class);
+  public JToggleButtonFixture(Robot robot, String toggleButtonName) {
+    super(robot, toggleButtonName, JToggleButton.class);
     createDriver();
   }
 

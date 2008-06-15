@@ -57,6 +57,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToolBar</code>.
    * @param target the <code>JToolBar</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JToolBarFixture(Robot robot, JToolBar target) {
     super(robot, target);
@@ -66,8 +68,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
   /**
    * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToolBar</code>.
-   * @param toolbarName the name of the <code>JToolBar</code> to find using the given
-   * <code>RobotFixture</code>.
+   * @param toolbarName the name of the <code>JToolBar</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JToolBar</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JToolBar</code> is found.
    */

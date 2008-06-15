@@ -99,21 +99,6 @@ public class ComponentFixtureTest {
     }.run();
   }
 
-  @Test public void shouldLookupComponentByTypeIfNameIsNull() {
-    final ComponentFinder finder = finder();
-    new EasyMockTemplate(robot, finder) {
-      protected void expectations() {
-        expect(robot.settings()).andReturn(settings);
-        expect(robot.finder()).andReturn(finder);
-        expect(finder.findByType(type, requireShowing())).andReturn(target);
-      }
-      
-      protected void codeToTest() {
-        assertHasCorrectTarget(new ConcreteComponentFixture(robot, null, type));
-      }
-    }.run();
-  }
-
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfRobotIsNullWhenPassingTarget() {
     new ConcreteComponentFixture(null, target);

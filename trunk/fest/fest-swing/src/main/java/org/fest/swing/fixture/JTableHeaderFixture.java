@@ -22,6 +22,8 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTableHeaderDriver;
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static org.fest.swing.fixture.ComponentFixture.*;
+
 /**
  * Understands simulation of user events on a <code>{@link JTableHeader}</code>.
  *
@@ -37,8 +39,12 @@ public class JTableHeaderFixture {
    * Creates a new </code>{@link JTableHeaderFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTableHeader</code>.
    * @param target the <code>JTableHeader</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   JTableHeaderFixture(Robot robot, JTableHeader target) {
+    validate(robot);
+    validateTarget(target);
     this.target = target;
     updateDriver(new JTableHeaderDriver(robot));
   }

@@ -37,6 +37,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * Creates a new <code>{@link JCheckBoxFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JCheckBox</code>.
    * @param target the <code>JCheckBox</code> to be managed by this fixture.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JCheckBoxFixture(Robot robot, JCheckBox target) {
     super(robot, target);
@@ -46,7 +48,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Creates a new <code>{@link JCheckBoxFixture}</code>.
    * @param robot performs simulation of user events on a <code>JCheckBox</code>.
-   * @param checkBoxName the name of the <code>JCheckBox</code> to find using the given <code>RobotFixture</code>.
+   * @param checkBoxName the name of the <code>JCheckBox</code> to find using the given <code>Robot</code>.
+   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JCheckBox</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JCheckBox</code> is found.
    */
