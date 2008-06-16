@@ -14,9 +14,6 @@
  */
 package org.fest.swing.input;
 
-import static java.awt.event.MouseEvent.*;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -24,10 +21,13 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-import org.fest.swing.input.DragDropInfo;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import static java.awt.event.MouseEvent.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link DragDropInfo}</code>.
@@ -49,7 +49,7 @@ public class DragDropInfoTest {
   }
 
   @Test public void shouldUpdateOnMousePressed() {
-    MouseEvent event = new MouseEvent(source, MOUSE_PRESSED, when, 0, origin.x, origin.y, 0, 0, 1, false, BUTTON1);
+    MouseEvent event = new MouseEvent(source, MOUSE_PRESSED, when, 0, origin.x, origin.y, 1, false, BUTTON1);
     info.update(event);
     assertThat(info.source()).isSameAs(source);
     assertThat(info.origin()).isEqualTo(origin);
@@ -60,7 +60,7 @@ public class DragDropInfoTest {
     info.source(source);
     info.origin(origin);
     JComboBox c = new JComboBox();
-    MouseEvent event = new MouseEvent(c, eventId, when, 0, 0, 0, 0, 0, 1, false, BUTTON1);
+    MouseEvent event = new MouseEvent(c, eventId, when, 0, 0, 0, 1, false, BUTTON1);
     info.update(event);
     assertThat(info.source()).isSameAs(source);
     assertThat(info.origin()).isEqualTo(origin);
@@ -76,7 +76,7 @@ public class DragDropInfoTest {
     info.source(source);
     info.origin(origin);
     JComboBox c = new JComboBox();
-    MouseEvent event = new MouseEvent(c, eventId, when, 0, 7, 9, 0, 0, 1, false, BUTTON1);
+    MouseEvent event = new MouseEvent(c, eventId, when, 0, 7, 9, 1, false, BUTTON1);
     info.update(event);
     assertThat(info.source()).isNull();
   }

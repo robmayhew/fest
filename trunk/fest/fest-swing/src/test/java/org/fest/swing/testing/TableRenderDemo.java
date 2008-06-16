@@ -45,7 +45,7 @@ public class TableRenderDemo extends JPanel {
     table = new JTable(new MyTableModel());
     table.setName("table");
     table.setPreferredScrollableViewportSize(new Dimension(500, 100));
-    table.setFillsViewportHeight(true);
+    // JDK 6: table.setFillsViewportHeight(true);
 
     // Create the scroll pane and add the table to it.
     JScrollPane scrollPane = new JScrollPane(table);
