@@ -47,6 +47,9 @@
         All fixtures now throw IllegalArgumentException if any constructor argument is null (with the exception of
         the name of the component to look up.)
       </action>
+      <action dev="wanghy" type="fix" issue="157" due-to="Andriy Tsykholyas, Simeon Fitch">
+        JMenuItemFixture now supports the screen menu bar in Mac OS.
+      </action>
       <action dev="wanghy" type="fix">
         Fixed bug in org.fest.swing.core.RobotFixture. Closing a window that is not shown resulted in an 
         ActionFailedException.

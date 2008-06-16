@@ -123,7 +123,7 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   private boolean isMacOSMenuBar() {
-    return isOSX() && getBoolean("apple.laf.useScreenMenuBar");
+    return isOSX() && (getBoolean("apple.laf.useScreenMenuBar") || getBoolean("com.apple.macos.useScreenMenuBar"));
   }
 
   private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {

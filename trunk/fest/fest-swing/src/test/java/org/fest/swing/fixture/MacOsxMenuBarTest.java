@@ -50,7 +50,7 @@ public class MacOsxMenuBarTest {
     frame = new MyFrame();
     frame.display();
     FrameFixture frameFixture = findFrame("myFrame").withTimeout(2000).using(robot);
-    menuItemFixture = frameFixture.menuItem("menu");
+    menuItemFixture = frameFixture.menuItem("menuItem");
   }
   
   @AfterMethod public void tearDown() {
@@ -63,7 +63,6 @@ public class MacOsxMenuBarTest {
     JMenuItem menu = menuItemFixture.target;
     menu.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
-        System.out.println("selected");
         selected[0] = true;
       }
     });
