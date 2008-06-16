@@ -127,7 +127,18 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
-    menuItem.doClick();
-    robot.waitForIdle();
+    robot.invokeAndWait(new ClickMenuItemTask(menuItem));
+  }
+
+  private static class ClickMenuItemTask implements Runnable {
+    private final JMenuItem item;
+
+    ClickMenuItemTask(JMenuItem item) {
+      this.item = item;
+    }
+
+    public void run() {
+      item.doClick();
+    }
   }
 }
