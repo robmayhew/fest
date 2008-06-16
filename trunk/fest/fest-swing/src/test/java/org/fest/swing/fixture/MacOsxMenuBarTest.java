@@ -15,20 +15,18 @@
 package org.fest.swing.fixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findFrame;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.Pause;
 import org.fest.swing.core.Robot;
-import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -61,10 +59,16 @@ public class MacOsxMenuBarTest {
   }
   
   @Test public void shouldSelectMenu() {
-    ClickRecorder recorder = attachTo(menuItemFixture.target);
+    final boolean[] selected = new boolean[1];
+    JMenuItem menu = menuItemFixture.target;
+    menu.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent event) {
+        System.out.println("selected");
+        selected[0] = true;
+      }
+    });
     menuItemFixture.select();
-    Pause.pause(5000);
-    assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(1);
+    assertThat(selected[0]).isTrue();
   }
 
   private static class MyFrame extends TestFrame {
