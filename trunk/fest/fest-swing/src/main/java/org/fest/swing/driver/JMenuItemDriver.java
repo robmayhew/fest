@@ -14,6 +14,13 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Window;
 
 import javax.swing.JMenu;
@@ -22,13 +29,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.isOSX;
-import static org.fest.util.Strings.concat;
+import static java.lang.Boolean.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JMenuItem}</code>. Unlike <code>JMenuItemFixture</code>, this
@@ -36,6 +37,7 @@ import static org.fest.util.Strings.concat;
  * use only.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class JMenuItemDriver extends JComponentDriver {
 
@@ -112,7 +114,20 @@ public class JMenuItemDriver extends JComponentDriver {
 
   private void click(JMenuItem menuItem) {
     if (!menuItem.isEnabled()) actionFailure(concat("Menu item <", format(menuItem), "> is disabled"));
+    if (isMacOSMenuBar()) {
+      clickMenuInMacOSMenuBar(menuItem);
+      return;
+    }
     super.click(menuItem);
+    robot.waitForIdle();
+  }
+
+  private boolean isMacOSMenuBar() {
+    return isOSX() && getBoolean("apple.laf.useScreenMenuBar");
+  }
+
+  private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
+    menuItem.doClick();
     robot.waitForIdle();
   }
 }
