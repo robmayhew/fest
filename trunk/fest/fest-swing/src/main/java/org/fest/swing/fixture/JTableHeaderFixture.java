@@ -15,11 +15,12 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
 import javax.swing.table.JTableHeader;
 
-import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTableHeaderDriver;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static org.fest.swing.fixture.ComponentFixture.*;
@@ -30,6 +31,8 @@ import static org.fest.swing.fixture.ComponentFixture.*;
  * @author Yvonne Wang
  */
 public class JTableHeaderFixture {
+
+  private final Robot robot;
 
   final JTableHeader target;
 
@@ -45,6 +48,7 @@ public class JTableHeaderFixture {
   JTableHeaderFixture(Robot robot, JTableHeader target) {
     validate(robot);
     validateTarget(target);
+    this.robot = robot;
     this.target = target;
     updateDriver(new JTableHeaderDriver(robot));
   }
@@ -65,16 +69,26 @@ public class JTableHeaderFixture {
   }
 
   /**
+   * Shows a pop-up menu using this fixture's <code>{@link JTableHeader}</code> as the invoker of the pop-up menu.
+   * @param columnIndex the index of the column where the pop-up menu will be displayed.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(int columnIndex) {
+    JPopupMenu popupMenu = driver.showPopupMenu(target, columnIndex);
+    return new JPopupMenuFixture(robot, popupMenu);
+  }
+  
+  /**
    * Simulates a user clicking the column under the given index, in this fixture's <code>{@link JTableHeader}</code>,
    * using the given mouse button, the given number of times.
    * @param index the index of the column to click.
-   * @param button the mouse button to use.
-   * @param times the number of times to click.
+   * @param mouseClickInfo specifies the mouse button to use and the number of times to click.
    * @return this fixture.
    * @throws LocationUnavailableException if the index is out of bounds.
    */
-  public JTableHeaderFixture clickColumn(int index, MouseButton button, int times) {
-    driver.clickColumn(target, index, button, times);
+  public JTableHeaderFixture clickColumn(int index, MouseClickInfo mouseClickInfo) {
+    driver.clickColumn(target, index, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
 
@@ -95,13 +109,12 @@ public class JTableHeaderFixture {
    * Simulates a user clicking the column which name matches the given one, in this fixture's
    * <code>{@link JTableHeader}</code>, using the given mouse button, the given number of times.
    * @param columnName the column name to match
-   * @param button the mouse button to use.
-   * @param times the number of times to click.
+   * @param mouseClickInfo specifies the mouse button to use and the number of times to click.
    * @return this fixture.
    * @throws LocationUnavailableException if a column with a matching name cannot be found.
    */
-  public JTableHeaderFixture clickColumn(String columnName, MouseButton button, int times) {
-    driver.clickColumn(target, columnName, button, times);
+  public JTableHeaderFixture clickColumn(String columnName, MouseClickInfo mouseClickInfo) {
+    driver.clickColumn(target, columnName, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
 }

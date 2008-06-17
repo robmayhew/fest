@@ -15,13 +15,15 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-
+import javax.swing.JPopupMenu;
 import javax.swing.table.JTableHeader;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 
 /**
  * Understands simulation of user input on a <code>{@link JTableHeader}</code>. Unlike
@@ -85,5 +87,16 @@ public class JTableHeaderDriver extends JComponentDriver {
    */
   public void clickColumn(JTableHeader tableHeader, String columnName, MouseButton button, int times) {
     robot.click(tableHeader, location.pointAt(tableHeader, columnName), button, times);
+  }
+
+  /**
+   * Shows a pop-up menu at the given column.
+   * @param tableHeader the target <code>JTableHeader</code>.
+   * @param columnIndex the index of the column.
+   * @return the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenu showPopupMenu(JTableHeader tableHeader, int columnIndex) {
+    return robot.showPopupMenu(tableHeader, location.pointAt(tableHeader, columnIndex));
   }
 }

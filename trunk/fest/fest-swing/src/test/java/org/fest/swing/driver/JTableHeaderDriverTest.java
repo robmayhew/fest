@@ -15,28 +15,32 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTable;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableHeaderDriver}</code>.
@@ -100,6 +104,22 @@ public class JTableHeaderDriverTest {
     return new Object[][] { { "0", 0 }, { "1", 1 } };
   }
 
+  @Test public void shouldShowPopupMenuAtItemWithIndex() {
+    JPopupMenu popupMenu = popupMenuForHeader();
+    ClickRecorder recorder = attachTo(tableHeader);
+    driver.showPopupMenu(tableHeader, 1);
+    recorder.clicked(RIGHT_BUTTON).timesClicked(1);
+    assertColumnClicked(recorder, 1);
+    assertThat(popupMenu.isVisible()).isTrue();
+  }
+
+  private JPopupMenu popupMenuForHeader() {
+    JPopupMenu popupMenu = new JPopupMenu();
+    popupMenu.add(new JMenuItem("Frodo"));
+    tableHeader.setComponentPopupMenu(popupMenu);
+    return popupMenu;
+  }
+  
   private void assertColumnClicked(ClickRecorder recorder, int columnIndex) {
     Point pointClicked = recorder.pointClicked();
     int columnAtPoint = tableHeader.getTable().columnAtPoint(pointClicked);

@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JPopupMenu;
 import javax.swing.table.JTableHeader;
 
 import org.testng.annotations.BeforeMethod;
@@ -25,11 +26,12 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTableHeaderDriver;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
 
 /**
  * Tests for <code>{@link JTableHeaderFixture}</code>.
@@ -87,7 +89,7 @@ public class JTableHeaderFixtureTest {
       }
 
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.clickColumn(index, mouseButton, times));
+        assertThatReturnsThis(fixture.clickColumn(index, leftButton().times(2)));
       }
 
     }.run();
@@ -119,7 +121,7 @@ public class JTableHeaderFixtureTest {
       }
 
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.clickColumn(name, mouseButton, times));
+        assertThatReturnsThis(fixture.clickColumn(name, leftButton().times(2)));
       }
 
     }.run();
@@ -127,5 +129,20 @@ public class JTableHeaderFixtureTest {
 
   private void assertThatReturnsThis(JTableHeaderFixture result) {
     assertThat(result).isSameAs(fixture);
+  }
+
+  @Test public void shouldShowPopupMenuAtGivenColumnIndex() {
+    final JPopupMenu popupMenu = new JPopupMenu();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(tableHeader, 1)).andReturn(popupMenu);
+      }
+
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(1);
+        assertThat(result.target).isSameAs(popupMenu);
+      }
+
+    }.run();
   }
 }
