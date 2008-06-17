@@ -9,6 +9,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.hierarchy.ComponentHierarchy;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -19,16 +20,22 @@ import org.fest.swing.exception.ComponentLookupException;
 public interface Robot {
 
   /**
-   * Returns the <code>{@link BasicComponentPrinter}</code> used by this fixture.
-   * @return the <code>ComponentPrinter</code> used by this fixture.
+   * Returns the <code>{@link ComponentHierarchy}</code> being used by this robot.
+   * @return the <code>ComponentHierarchy</code> being used by this robot.
    */
-  ComponentPrinter printer();
+  ComponentHierarchy hierarchy();
 
   /**
-   * Returns the <code>{@link ComponentFinder}</code> used by this fixture.
-   * @return the object responsible for GUI component lookup and user input simulation.
+   * Returns the <code>{@link ComponentFinder}</code> being used by this robot.
+   * @return the <code>ComponentFinder</code> being used by this robot.
    */
   ComponentFinder finder();
+
+  /**
+   * Returns the <code>{@link BasicComponentPrinter}</code> being used by this robot.
+   * @return the <code>ComponentPrinter</code> being used by this robot.
+   */
+  ComponentPrinter printer();
 
   /**
    * Safely display a window with proper EDT synchronization. This method blocks until the <code>{@link Window}</code>
