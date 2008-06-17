@@ -25,19 +25,19 @@ import java.awt.Component;
  */
 public class MockWindowFilter extends WindowFilter {
 
-  @Override public boolean isImplicitFiltered(Component c) {
+  @Override public boolean isImplicitlyIgnored(Component c) {
     return false;
   }
 
-  @Override public boolean isFiltered(Component c) {
+  @Override public boolean isIgnored(Component c) {
     return false;
   }
 
-  @Override public void implicitFilter(Component c) {}
+  @Override public void implicitlyIgnore(Component c) {}
 
-  @Override public void filter(Component c) {}
+  @Override public void ignore(Component c) {}
 
-  @Override public void unfilter(Component c) {}
+  @Override public void recognize(Component c) {}
 
   public MockWindowFilter() {}
 }

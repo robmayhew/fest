@@ -69,8 +69,8 @@ public class TransientWindowListenerTest {
   private void assertUnfilterWindowIfImplicitFiltered(final AWTEvent event) {
     new EasyMockTemplate(mockWindowFilter) {
       protected void expectations() {
-        expect(mockWindowFilter.isImplicitFiltered(eventSource)).andReturn(true);
-        mockWindowFilter.unfilter(eventSource);
+        expect(mockWindowFilter.isImplicitlyIgnored(eventSource)).andReturn(true);
+        mockWindowFilter.recognize(eventSource);
         expectLastCall();
       }
 
@@ -91,9 +91,9 @@ public class TransientWindowListenerTest {
   private void assertFilterWindowIfParentIsFiltered(final AWTEvent event) {
     new EasyMockTemplate(mockWindowFilter) {
       protected void expectations() {
-        expect(mockWindowFilter.isImplicitFiltered(eventSource)).andReturn(false);
-        expect(mockWindowFilter.isFiltered(dialogParent)).andReturn(true);
-        mockWindowFilter.filter(eventSource);
+        expect(mockWindowFilter.isImplicitlyIgnored(eventSource)).andReturn(false);
+        expect(mockWindowFilter.isIgnored(dialogParent)).andReturn(true);
+        mockWindowFilter.ignore(eventSource);
         expectLastCall();
       }
 
@@ -114,7 +114,7 @@ public class TransientWindowListenerTest {
   @Test public void shouldNotDoAnythingIfClosedWindowAlreadyFiltered() {
     new EasyMockTemplate(mockWindowFilter) {
       protected void expectations() {
-        expect(mockWindowFilter.isFiltered(eventSource)).andReturn(true);
+        expect(mockWindowFilter.isIgnored(eventSource)).andReturn(true);
       }
 
       protected void codeToTest() {
@@ -126,11 +126,11 @@ public class TransientWindowListenerTest {
   @Test public void shouldFilterClosedWindowAfterEventIsProcessed() {
     new EasyMockTemplate(mockWindowFilter) {
       protected void expectations() {
-        expect(mockWindowFilter.isFiltered(eventSource)).andReturn(false);
-        mockWindowFilter.implicitFilter(eventSource);
+        expect(mockWindowFilter.isIgnored(eventSource)).andReturn(false);
+        mockWindowFilter.implicitlyIgnore(eventSource);
         expectLastCall();
-        expect(mockWindowFilter.isImplicitFiltered(eventSource)).andReturn(true);
-        mockWindowFilter.filter(eventSource);
+        expect(mockWindowFilter.isImplicitlyIgnored(eventSource)).andReturn(true);
+        mockWindowFilter.ignore(eventSource);
         expectLastCall();
       }
 
@@ -144,10 +144,10 @@ public class TransientWindowListenerTest {
   @Test public void shouldNotFilterClosedWindowAfterEventIsProcessedIfWindowNotImplicitFiltered() {
     new EasyMockTemplate(mockWindowFilter) {
       protected void expectations() {
-        expect(mockWindowFilter.isFiltered(eventSource)).andReturn(false);
-        mockWindowFilter.implicitFilter(eventSource);
+        expect(mockWindowFilter.isIgnored(eventSource)).andReturn(false);
+        mockWindowFilter.implicitlyIgnore(eventSource);
         expectLastCall();
-        expect(mockWindowFilter.isImplicitFiltered(eventSource)).andReturn(false);
+        expect(mockWindowFilter.isImplicitlyIgnored(eventSource)).andReturn(false);
       }
 
       protected void codeToTest() {

@@ -59,13 +59,13 @@ public class NewHierarchyTest {
 
   @Test public void shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
     new NewHierarchy(toolkit, filter, true);
-    assertThat(filter.isFiltered(frame)).isTrue();
+    assertThat(filter.isIgnored(frame)).isTrue();
     assertThatTransientWindowListenerWasAddedToToolkit();
   }
 
   @Test public void shouldNotIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
     new NewHierarchy(toolkit, filter, false);
-    assertThat(filter.isFiltered(frame)).isFalse();
+    assertThat(filter.isIgnored(frame)).isFalse();
     assertThatTransientWindowListenerWasAddedToToolkit();
   }
 
@@ -76,40 +76,41 @@ public class NewHierarchyTest {
     assertThat(weakEventListener.underlyingListener()).isInstanceOf(TransientWindowListener.class);
   }
 
-  @Test(dependsOnMethods = "shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
-  public void shouldReturnNoChildrenIfComponentIsFiltered() {
+  @Test public void shouldReturnNoChildrenIfComponentIsFiltered() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
     assertThat(hierarchy.childrenOf(frame)).isEmpty();
   }
 
-  @Test(dependsOnMethods = "shouldNotIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
-  public void shouldReturnUnfilteredChildrenOfUnfilteredComponent() {
+  @Test public void shouldReturnUnfilteredChildrenOfUnfilteredComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, false);
-    filter.filter(frame.textField);
+    filter.ignore(frame.textField);
     assertThat(hierarchy.childrenOf(frame.getContentPane())).containsOnly(frame.comboBox);
   }
 
-  @Test(dependsOnMethods = "shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
-  public void shouldNotContainFilteredComponent() {
+  @Test public void shouldNotContainFilteredComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
     assertThat(hierarchy.contains(frame)).isFalse();
   }
 
-  @Test(dependsOnMethods = "shouldNotIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
-  public void shouldContainUnfilteredComponent() {
+  @Test public void shouldContainUnfilteredComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, false);
     assertThat(hierarchy.contains(frame)).isTrue();
   }
 
-  @Test(dependsOnMethods = "shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
-  public void shouldNotContainFilteredWindowsInRootWindows() {
+  @Test public void shouldNotContainFilteredWindowsInRootWindows() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
     assertThat(hierarchy.roots()).excludes(frame);
   }
 
-  @Test(dependsOnMethods = "shouldNotIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit")
-  public void shouldContainUnfilteredWindowsInRootWindows() {
+  @Test public void shouldContainUnfilteredWindowsInRootWindows() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, false);
+    assertThat(hierarchy.roots()).contains(frame);
+  }
+
+  @Test public void shouldRecognizeGivenComponent() {
+    NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
+    assertThat(hierarchy.roots()).excludes(frame);
+    hierarchy.recognize(frame);
     assertThat(hierarchy.roots()).contains(frame);
   }
 

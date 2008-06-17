@@ -1,19 +1,23 @@
 /*
  * Created on Oct 31, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.hierarchy;
+
+import static java.awt.AWTEvent.*;
+import static java.util.Collections.emptyList;
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -21,21 +25,16 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.Collection;
 
-import static java.awt.AWTEvent.*;
-import static java.util.Collections.emptyList;
-
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-
 /**
  * Understands isolation of a component hierarchy to limit to only those components created during the lifetime of this
  * hierarchy. Existing components (and any subsequently generated subwindows) are ignored by default.
  * <p>
  * Implicitly auto-filters windows which are disposed (i.e. generate a
  * <code>{@link java.awt.event.WindowEvent#WINDOW_CLOSED WINDOW_CLOSED}</code> event), but also implicitly un-filters
- * them if they should be shown again. Any window explicitly disposed with <code>{@link ComponentHierarchy#dispose(java.awt.Window)}</code< will be
- * ignored permanently.
+ * them if they should be shown again. Any window explicitly disposed by the calling
+ * <code>{@link ComponentHierarchy#dispose(java.awt.Window)}</code< will be ignored permanently.
  * </p>
- * 
+ *
  * @author Alex Ruiz
  */
 public class NewHierarchy extends ExistingHierarchy {
@@ -72,7 +71,7 @@ public class NewHierarchy extends ExistingHierarchy {
   NewHierarchy(Toolkit toolkit, WindowFilter filter, boolean ignoreExisting) {
     this.filter = filter;
     transientWindowListener = new TransientWindowListener(filter);
-    setUp(toolkit, ignoreExisting);    
+    setUp(toolkit, ignoreExisting);
   }
 
   private void setUp(Toolkit toolkit, boolean ignoreExisting) {
@@ -85,7 +84,15 @@ public class NewHierarchy extends ExistingHierarchy {
    */
   public void ignoreExisting() {
     for (Container c : roots())
-      filter.filter(c);
+      filter.ignore(c);
+  }
+
+  /**
+   * Make the given component visible to this hierarchy.
+   * @param c the given component.
+   */
+  public void recognize(Component c) {
+    filter.recognize(c);
   }
 
   /**
@@ -94,9 +101,9 @@ public class NewHierarchy extends ExistingHierarchy {
    * @return all sub-components of the given component, omitting those which are currently filtered.
    */
   @Override public Collection<Component> childrenOf(Component c) {
-    if (filter.isFiltered(c)) return emptyList();
+    if (filter.isIgnored(c)) return emptyList();
     Collection<Component> children = super.childrenOf(c);
-    // this only removes those components which are directly filtered, not necessarily those which have a filtered 
+    // this only removes those components which are directly filtered, not necessarily those which have a filtered
     // ancestor.
     children.removeAll(filter.filtered());
     return children;
@@ -108,7 +115,7 @@ public class NewHierarchy extends ExistingHierarchy {
    * @return <code>true</code> if the given component is not filtered, <code>false</code> otherwise.
    */
   @Override public boolean contains(Component c) {
-    return super.contains(c) && !filter.isFiltered(c);
+    return super.contains(c) && !filter.isIgnored(c);
   }
 
   /**
@@ -119,7 +126,7 @@ public class NewHierarchy extends ExistingHierarchy {
   @Override public void dispose(Window w) {
     if (!contains(w)) return;
     super.dispose(w);
-    filter.filter(w);
+    filter.ignore(w);
   }
 
   /**
