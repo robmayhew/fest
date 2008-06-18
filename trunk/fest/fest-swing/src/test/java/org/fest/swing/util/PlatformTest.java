@@ -15,9 +15,10 @@
  */
 package org.fest.swing.util;
 
-import org.testng.annotations.Test;
+import java.awt.Event;
+import java.awt.event.KeyEvent;
 
-import static java.awt.event.KeyEvent.*;
+import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.util.Platform.isOSX;
@@ -29,10 +30,19 @@ import static org.fest.swing.util.Platform.isOSX;
  */
 public class PlatformTest {
 
-  @Test public void shouldReturnControlKeyForNonMacOS() {
-    if (isOSX())
-      assertThat(Platform.controlOrCommandKey()).isEqualTo(VK_META);
-    else  
-      assertThat(Platform.controlOrCommandKey()).isEqualTo(VK_CONTROL);
+  @Test public void shouldReturnControlOrCommandKey() {
+    int controlOrCommandKey = Platform.controlOrCommandKey();
+    if (isOSX()) {
+      assertThat(controlOrCommandKey).isEqualTo(KeyEvent.VK_META);
+    } else  
+      assertThat(controlOrCommandKey).isEqualTo(KeyEvent.VK_CONTROL);
+  }
+
+  @Test public void shouldReturnControlOrCommandMask() {
+    int controlOrCommandMask = Platform.controlOrCommandMask();
+    if (isOSX()) {
+      assertThat(controlOrCommandMask).isEqualTo(Event.META_MASK);
+    } else  
+      assertThat(controlOrCommandMask).isEqualTo(Event.CTRL_MASK);
   }
 }

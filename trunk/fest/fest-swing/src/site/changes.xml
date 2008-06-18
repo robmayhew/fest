@@ -65,6 +65,9 @@
         Removed methods 'increment' and 'decrement' in JSliderFixture. These methods were not communicating their
         intention properly and are not needed since JSliderFixture has the methods 'slideToMaximum' and 'slideToMinimum'
       </action>
+      <action dev="alruiz" type="add">
+        Added method 'controlOrCommandMask' to org.fest.swing.util.Platform.
+      </action>
     </release>
     <release version="1.0a2" date="2008-05-19" description="Subsequent release">
       <action dev="wanghy, alruiz" type="add" issue="68">

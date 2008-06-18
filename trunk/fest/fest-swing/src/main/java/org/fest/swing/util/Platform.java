@@ -16,11 +16,14 @@
 package org.fest.swing.util;
 
 import java.awt.Event;
-import java.awt.Toolkit;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 
-import static java.awt.event.KeyEvent.*;
+import static java.awt.Toolkit.getDefaultToolkit;
+import static java.lang.String.valueOf;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.util.Modifiers.keysFor;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -66,23 +69,35 @@ public final class Platform {
   }
 
   /**
-   * Returns <code>{@link KeyEvent#VK_CONTROL}</code> or <code>{@link KeyEvent#VK_META}</code> (if MacOS).
-   * @return <code>VK_CONTROL</code> or <code>VK_META</code> (if MacOS).
-   * @throws IllegalStateException if unable to find the appropriate key.
+   * Return the modifier key for the appropriate accelerator key for menu shortcuts: 
+   * <code>{@link KeyEvent#VK_CONTROL}</code> (default) or <code>{@link KeyEvent#VK_META}</code> (MacOS.)
+   * @return the modifier key for the appropriate accelerator key for menu shortcuts.
+   * @throws AssertionError if unable to find the appropriate key.
+   * @throws HeadlessException if <code>GraphicsEnvironment.isHeadless()</code>.
    */
   public static int controlOrCommandKey() {
-    int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    if (menuShortcutKeyMask == Event.CTRL_MASK) return VK_CONTROL;
-    if (menuShortcutKeyMask == Event.META_MASK) return VK_META;
-    throw new IllegalStateException(concat("Unable to map event mask '", String.valueOf(menuShortcutKeyMask), "' to a key"));
+    int menuShortcutKeyMask = controlOrCommandMask();
+    int[] keys = keysFor(menuShortcutKeyMask);
+    assertThat(keys).as(concat("Key code for mask ", valueOf(menuShortcutKeyMask))).isNotNull().hasSize(1);
+    return keys[0];
+  }
+
+  /**
+   * Return the modifier mask for the appropriate accelerator key for menu shortcuts: 
+   * <code>{@link Event#CTRL_MASK}</code> (default) or <code>{@link Event#META_MASK}</code> (MacOS.)
+   * @return the modifier mask for the appropriate accelerator key for menu shortcuts.
+   * @throws HeadlessException if <code>GraphicsEnvironment.isHeadless()</code>.
+   */
+  public static int controlOrCommandMask() {
+    return getDefaultToolkit().getMenuShortcutKeyMask();
   }
 
   /**
    * Indicates whether it is possible to resize windows that are not an instance of <code>{@link java.awt.Frame}</code>
    * or <code>{@link java.awt.Dialog}</code>. Most X11 window managers will allow this, but stock Macintosh and Windows
    * do not.
-   * @return <code>true</code> if it is possible to resize windows other than <code>Frame</code>s or
-   *         <code>Dialog</code>s, <code>false</code> otherwise.
+   * @return <code>true</code> if it is possible to resize windows other than <code>Frame</code>s or 
+   * <code>Dialog</code>s, <code>false</code> otherwise.
    */
   public static boolean canResizeWindows() {
     return !isWindows() && !isMacintosh();
@@ -92,8 +107,8 @@ public final class Platform {
    * Indicates whether it is possible to move windows that are not an instance of <code>{@link java.awt.Frame}</code>
    * or <code>{@link java.awt.Dialog}</code>. Most X11 window managers will allow this, but stock Macintosh and Windows
    * do not.
-   * @return <code>true</code> if it is possible to move windows other than <code>Frame</code>s or
-   *         <code>Dialog</code>s, <code>false</code> otherwise.
+   * @return <code>true</code> if it is possible to move windows other than <code>Frame</code>s or <code>Dialog</code>s, 
+   * <code>false</code> otherwise.
    */
   public static boolean canMoveWindows() {
     return !isWindows() && !isMacintosh();
