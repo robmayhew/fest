@@ -78,6 +78,17 @@ public class JTableHeaderFixture {
     JPopupMenu popupMenu = driver.showPopupMenu(target, columnIndex);
     return new JPopupMenuFixture(robot, popupMenu);
   }
+
+  /**
+   * Shows a pop-up menu using this fixture's <code>{@link JTableHeader}</code> as the invoker of the pop-up menu.
+   * @param columnName the name of the column where the pop-up menu will be displayed.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(String columnName) {
+    JPopupMenu popupMenu = driver.showPopupMenu(target, columnName);
+    return new JPopupMenuFixture(robot, popupMenu);
+  }
   
   /**
    * Simulates a user clicking the column under the given index, in this fixture's <code>{@link JTableHeader}</code>,

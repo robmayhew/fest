@@ -31,6 +31,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
  * <code>{@link JTableHeader}</code>s. This class is intended for internal use only.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class JTableHeaderDriver extends JComponentDriver {
 
@@ -98,5 +99,16 @@ public class JTableHeaderDriver extends JComponentDriver {
    */
   public JPopupMenu showPopupMenu(JTableHeader tableHeader, int columnIndex) {
     return robot.showPopupMenu(tableHeader, location.pointAt(tableHeader, columnIndex));
+  }
+  
+  /**
+   * Shows a pop-up menu at the given column.
+   * @param tableHeader the target <code>JTableHeader</code>.
+   * @param columnName the name of the column.
+   * @return the displayed pop-up menu.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   */
+  public JPopupMenu showPopupMenu(JTableHeader tableHeader, String columnName) {
+    return robot.showPopupMenu(tableHeader, location.pointAt(tableHeader, columnName));
   }
 }

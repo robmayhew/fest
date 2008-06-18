@@ -16,17 +16,20 @@
         Method 'selectItem(String)' in JComboBoxFixture now uses the specified cell reader to find a matching value in
         the JComboBox.
       </action>
-      <action dev="wanghy, alruiz" type="add" issue="142" due-to="Matthias Otterbach, Simeon Fitch">
+      <action dev="alruiz" type="fix" issue="141" due-to="BA">
+        Added methods 'showPopupMenuAt(int)' and 'showPopupMenuAt(String)' to JTableHeaderFixture.
+      </action>
+      <action dev="wanghy, alruiz" type="add" issue="142" due-to="Simeon Fitch, Matthias Otterbach">
         Added methods 'enterValue(TableCell, String)' to org.fest.swing.fixture.JTableFixture.
       </action>
-      <action dev="alruiz, wanghy" type="add" issue="142" due-to="Matthias Otterbach, Simeon Fitch">
+      <action dev="alruiz, wanghy" type="add" issue="142" due-to="Simeon Fitch, Matthias Otterbach">
         Added methods 'requireEditable(TableCell)' and 'requireNotEditable(TableCell)' to 
         org.fest.swing.fixture.JTableFixture.
       </action>
-      <action dev="alruiz, wanghy" type="add" issue="142" due-to="Matthias Otterbach, Simeon Fitch">
+      <action dev="alruiz, wanghy" type="add" issue="142" due-to="Simeon Fitch, Matthias Otterbach">
         Added methods 'requireEditable()' and 'requireNotEditable()' to org.fest.swing.fixture.JTableCellFixture.
       </action>
-      <action dev="wanghy, alruiz" type="add" issue="142" due-to="Matthias Otterbach, Simeon Fitch">
+      <action dev="wanghy, alruiz" type="add" issue="142" due-to="Simeon Fitch, Matthias Otterbach">
         Added methods 'startEditing(),' 'stopEditing(),' 'cancelEditing(),' 'editor(),' and 'enterValue(String)' to 
         org.fest.swing.fixture.JTableCellFixture.
       </action>

@@ -113,6 +113,15 @@ public class JTableHeaderDriverTest {
     assertThat(popupMenu.isVisible()).isTrue();
   }
 
+  @Test public void shouldShowPopupMenuAtItemWithName() {
+    JPopupMenu popupMenu = popupMenuForHeader();
+    ClickRecorder recorder = attachTo(tableHeader);
+    driver.showPopupMenu(tableHeader, "1");
+    recorder.clicked(RIGHT_BUTTON).timesClicked(1);
+    assertColumnClicked(recorder, 1);
+    assertThat(popupMenu.isVisible()).isTrue();
+  }
+
   private JPopupMenu popupMenuForHeader() {
     JPopupMenu popupMenu = new JPopupMenu();
     popupMenu.add(new JMenuItem("Frodo"));

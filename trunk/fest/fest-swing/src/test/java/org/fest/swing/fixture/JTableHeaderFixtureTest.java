@@ -123,7 +123,6 @@ public class JTableHeaderFixtureTest {
       protected void codeToTest() {
         assertThatReturnsThis(fixture.clickColumn(name, leftButton().times(2)));
       }
-
     }.run();
   }
 
@@ -140,6 +139,22 @@ public class JTableHeaderFixtureTest {
 
       protected void codeToTest() {
         JPopupMenuFixture result = fixture.showPopupMenuAt(1);
+        assertThat(result.target).isSameAs(popupMenu);
+      }
+
+    }.run();
+  }
+
+  @Test public void shouldShowPopupMenuAtGivenColumnName() {
+    final JPopupMenu popupMenu = new JPopupMenu();
+    final String name = "1";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.showPopupMenu(tableHeader, name)).andReturn(popupMenu);
+      }
+
+      protected void codeToTest() {
+        JPopupMenuFixture result = fixture.showPopupMenuAt(name);
         assertThat(result.target).isSameAs(popupMenu);
       }
 
