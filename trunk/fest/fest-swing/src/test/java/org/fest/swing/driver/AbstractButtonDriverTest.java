@@ -15,6 +15,10 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JCheckBox;
 
 import org.testng.annotations.AfterMethod;
@@ -53,6 +57,29 @@ public class AbstractButtonDriverTest {
     robot.cleanUp();
   }
   
+  @Test public void shouldClickButton() {
+    final boolean[] clicked = new boolean[1];
+    checkBox.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        clicked[0] = true;
+      }
+    });
+    driver.click(checkBox);
+    assertThat(clicked[0]).isTrue();
+  }
+  
+  @Test public void shouldNotClickButtonIfButtonDisabled() {
+    final boolean[] clicked = new boolean[1];
+    checkBox.setEnabled(false);
+    checkBox.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        clicked[0] = true;
+      }
+    });
+    driver.click(checkBox);
+    assertThat(clicked[0]).isFalse();
+  }
+
   @Test public void shouldPassIfTextIsEqualToExpectedOne() {
     driver.requireText(checkBox, "Hello");
   }
@@ -131,6 +158,7 @@ public class AbstractButtonDriverTest {
     public MyFrame() {
       super(AbstractButtonDriverTest.class);
       add(checkBox);
+      setPreferredSize(new Dimension(200, 200));
     }
   }
 }

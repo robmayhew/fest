@@ -26,6 +26,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * use only.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class AbstractButtonDriver extends JComponentDriver {
 
@@ -40,6 +41,14 @@ public class AbstractButtonDriver extends JComponentDriver {
     super(robot);
   }
 
+  /**
+   * Simulates a user pressing the given button.
+   * @param button the button to press.
+   */
+  public void click(AbstractButton button) {
+    button.doClick();
+  }
+  
   /**
    * Asserts that the text in the given button is equal to the specified <code>String</code>.
    * @param button the given button.
