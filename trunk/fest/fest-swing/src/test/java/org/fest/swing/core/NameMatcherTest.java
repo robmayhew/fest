@@ -63,7 +63,8 @@ public class NameMatcherTest {
     new NameMatcher("");
   }
 
-  @Test(groups = GUI) public void shouldReturnTrueIfNameMatchingAndIsShowing() {
+  @Test(groups = GUI) 
+  public void shouldReturnTrueIfNameMatchingAndIsShowing() {
     TestFrame frame = new TestFrame(NameMatcherTest.class);
     frame.add(button);
     frame.display();
@@ -72,7 +73,8 @@ public class NameMatcherTest {
     frame.destroy();
   }
 
-  @Test(groups = GUI) public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
+  @Test(groups = GUI) 
+  public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
     TestFrame frame = new TestFrame(NameMatcherTest.class);
     frame.add(button);
     frame.display();
@@ -80,7 +82,7 @@ public class NameMatcherTest {
     assertThat(matcher.matches(button)).isFalse();
     frame.destroy();
   }
-
+  
   @Test public void shouldReturnFalseIfNameMatchingAndIsNotShowing() {
     matcher = new NameMatcher(NAME, true);
     assertThat(matcher.matches(button)).isFalse();

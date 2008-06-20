@@ -16,8 +16,6 @@ package org.fest.swing.core;
 
 import java.awt.Toolkit;
 
-import org.testng.annotations.Test;
-
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 
@@ -44,7 +42,7 @@ public class AWTEventGeneratorTest extends InputEventGeneratorTestCase {
     return generator;
   }
 
-  @Test public void shouldUseInputStateFromEventPoster() {
+  public void shouldUseInputStateFromEventPoster() {
     assertThat(generator.inputState()).isSameAs(generator.eventPoster().inputState());
   }
 }

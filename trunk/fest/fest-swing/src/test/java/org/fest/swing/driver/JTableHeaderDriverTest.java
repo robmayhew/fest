@@ -66,7 +66,7 @@ public class JTableHeaderDriverTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "indicesOutOfBound", expectedExceptions = LocationUnavailableException.class)
+  @Test(groups = GUI, dataProvider = "indicesOutOfBound", expectedExceptions = LocationUnavailableException.class)
   public void shouldThrowErrorIfColumnIndexOutOfBounds(int columnIndex) {
     driver.clickColumn(tableHeader, columnIndex);
   }
@@ -75,12 +75,12 @@ public class JTableHeaderDriverTest {
     return new Object[][] { { -1 }, { 2 } };
   }
 
-  @Test(expectedExceptions = LocationUnavailableException.class)
+  @Test(groups = GUI, expectedExceptions = LocationUnavailableException.class)
   public void shouldThrowErrorIfColumnNameNotMatching() {
     driver.clickColumn(tableHeader, "Hello");
   }
 
-  @Test(dataProvider = "columnIndices")
+  @Test(groups = GUI, dataProvider = "columnIndices")
   public void shouldClickColumnUnderGivenIndex(int columnIndex) {
     ClickRecorder recorder = attachTo(tableHeader);
     driver.clickColumn(tableHeader, columnIndex);
@@ -92,7 +92,7 @@ public class JTableHeaderDriverTest {
     return new Object[][] { { 0 }, { 1 } };
   }
 
-  @Test(dataProvider = "columnNames")
+  @Test(groups = GUI, dataProvider = "columnNames")
   public void shouldClickColumnWithName(String columnName, int columnIndex) {
     ClickRecorder recorder = attachTo(tableHeader);
     driver.clickColumn(tableHeader, columnName);
@@ -104,7 +104,7 @@ public class JTableHeaderDriverTest {
     return new Object[][] { { "0", 0 }, { "1", 1 } };
   }
 
-  @Test public void shouldShowPopupMenuAtItemWithIndex() {
+  public void shouldShowPopupMenuAtItemWithIndex() {
     JPopupMenu popupMenu = popupMenuForHeader();
     ClickRecorder recorder = attachTo(tableHeader);
     driver.showPopupMenu(tableHeader, 1);
@@ -113,7 +113,7 @@ public class JTableHeaderDriverTest {
     assertThat(popupMenu.isVisible()).isTrue();
   }
 
-  @Test public void shouldShowPopupMenuAtItemWithName() {
+  public void shouldShowPopupMenuAtItemWithName() {
     JPopupMenu popupMenu = popupMenuForHeader();
     ClickRecorder recorder = attachTo(tableHeader);
     driver.showPopupMenu(tableHeader, "1");

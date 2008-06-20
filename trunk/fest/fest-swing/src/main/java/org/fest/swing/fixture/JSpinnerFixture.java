@@ -21,6 +21,7 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSpinnerDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -67,6 +68,11 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
   
   final void updateDriver(JSpinnerDriver newDriver) {
     driver = newDriver;
+  }
+  
+  /** {@inheritDoc} **/
+  protected final ComponentDriver driver() {
+    return driver;
   }
   
   /**
@@ -157,9 +163,10 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JSpinnerFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    doClick(mouseClickInfo);
     return this;
   }
 
@@ -187,6 +194,20 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    */
   public JSpinnerFixture focus() {
     driver.focus(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link JSpinner}</code>.
+   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see KeyPressInfo
+   */
+  public JSpinnerFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
+    doPressAndReleaseKey(keyPressInfo);
     return this;
   }
 

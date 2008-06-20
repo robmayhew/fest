@@ -24,8 +24,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.finder.JOptionPaneFinder;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.JOptionPaneFixture;
 
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -39,7 +37,7 @@ public class JOptionPaneTest {
 
   private DialogFixture m_window;
 
-  @Test public void shouldFindOptionPane() throws InterruptedException {
+  public void shouldFindOptionPane() throws InterruptedException {
     JOptionPaneStarter optionPaneStarter = new JOptionPaneStarter(null, "Message 1");
     m_window = new DialogFixture(optionPaneStarter);
     m_window.show();
@@ -53,7 +51,7 @@ public class JOptionPaneTest {
     fixture.button().click();
   }
 
-  @Test public void shouldFindOptionPaneAgain() throws InterruptedException {
+  public void shouldFindOptionPaneAgain() throws InterruptedException {
     JOptionPaneStarter optionPaneStarter = new JOptionPaneStarter(null, "Message 2");
     m_window = new DialogFixture(optionPaneStarter);
     m_window.show();

@@ -15,19 +15,16 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JInternalFrameDriver.Action.MAXIMIZE;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JInternalFrameDriver.Action;
@@ -36,9 +33,13 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JInternalFrameDriver.Action.MAXIMIZE;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JInternalFrameDriver}</code>.
@@ -67,7 +68,7 @@ public class JInternalFrameDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldThrowErrorWithExceptionInSetPropertyTask() {
+  public void shouldThrowErrorWithExceptionInSetPropertyTask() {
     final PropertyVetoException vetoed = new PropertyVetoException("Test", null);
     Action action = MAXIMIZE;
     SetPropertyTask task = new SetPropertyTask(internalFrame, action) {
@@ -84,26 +85,26 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  @Test public void shouldNotIconifyAlreadyIconifiedInternalFrame() throws PropertyVetoException {
+  public void shouldNotIconifyAlreadyIconifiedInternalFrame() throws PropertyVetoException {
     internalFrame.setIcon(true);
     driver.iconify(internalFrame);
     assertThat(internalFrame.isIcon()).isTrue();
   }
 
-  @Test public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame() throws PropertyVetoException {
+  public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame() throws PropertyVetoException {
     internalFrame.setIcon(false);
     driver.deiconify(internalFrame);
     assertThat(internalFrame.isIcon()).isFalse();
   }
 
-  @Test public void shouldIconifyAndDeiconifyInternalFrame() {
+  public void shouldIconifyAndDeiconifyInternalFrame() {
     driver.iconify(internalFrame);
     assertThat(internalFrame.isIcon()).isTrue();
     driver.deiconify(internalFrame);
     assertThat(internalFrame.isIcon()).isFalse();
   }
 
-  @Test public void shouldThrowErrorIfIconifyingFrameThatIsNotIconifiable() {
+  public void shouldThrowErrorIfIconifyingFrameThatIsNotIconifiable() {
     internalFrame.setIconifiable(false);
     try {
       driver.iconify(internalFrame);
@@ -114,18 +115,18 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  @Test public void shouldMaximizeInternalFrame() {
+  public void shouldMaximizeInternalFrame() {
     driver.maximize(internalFrame);
     assertThat(internalFrame.isMaximum()).isTrue();
   }
 
-  @Test public void shouldMaximizeIconifiedInternalFrame() throws PropertyVetoException {
+  public void shouldMaximizeIconifiedInternalFrame() throws PropertyVetoException {
     internalFrame.setIcon(true);
     driver.maximize(internalFrame);
     assertThat(internalFrame.isMaximum()).isTrue();
   }
 
-  @Test public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable() {
+  public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable() {
     internalFrame.setMaximizable(false);
     try {
       driver.maximize(internalFrame);
@@ -136,13 +137,13 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  @Test public void shouldNormalizeInternalFrame() {
+  public void shouldNormalizeInternalFrame() {
     driver.maximize(internalFrame);
     driver.normalize(internalFrame);
     assertIsNormalized();
   }
 
-  @Test public void shouldNormalizeIconifiedInternalFrame() throws PropertyVetoException {
+  public void shouldNormalizeIconifiedInternalFrame() throws PropertyVetoException {
     internalFrame.setIcon(true);
     driver.normalize(internalFrame);
     assertIsNormalized();
@@ -153,17 +154,17 @@ public class JInternalFrameDriverTest {
     assertThat(internalFrame.isMaximum()).isFalse();
   }
 
-  @Test public void shouldMoveInternalFrameToFront() {
+  public void shouldMoveInternalFrameToFront() {
     driver.moveToFront(internalFrame);
     assertThat(desktopPane.getComponentZOrder(internalFrame)).isEqualTo(0);
   }
 
-  @Test public void shouldMoveInternalFrameToBack() {
+  public void shouldMoveInternalFrameToBack() {
     driver.moveToBack(internalFrame);
     assertThat(desktopPane.getComponentZOrder(internalFrame)).isEqualTo(1);
   }
 
-  @Test public final void shouldResizeInternalFrameToGivenSize() {
+  public final void shouldResizeInternalFrameToGivenSize() {
     FluentDimension newSize = internalFrameSize().addToWidth(20).addToHeight(40);
     driver.resize(internalFrame, newSize.width, newSize.height);
     assertThat(internalFrame.getSize()).isEqualTo(newSize);
@@ -173,7 +174,7 @@ public class JInternalFrameDriverTest {
     return new FluentDimension(internalFrame.getSize());
   }
 
-  @Test public final void shouldMoveInternalFrame() {
+  public final void shouldMoveInternalFrame() {
     Point p = internalFrameLocation().addToX(10).addToY(10);
     driver.moveTo(internalFrame, p);
     assertThat(internalFrameLocation()).isEqualTo(p);
@@ -183,12 +184,12 @@ public class JInternalFrameDriverTest {
     return new FluentPoint(internalFrame.getLocation());
   }
 
-  @Test public void shouldCloseInternalFrame() {
+  public void shouldCloseInternalFrame() {
     driver.close(internalFrame);
     assertThat(internalFrame.isClosed()).isTrue();
   }
 
-  @Test public void shouldThrowErrorIfClosingFrameThatIsNotClosable() {
+  public void shouldThrowErrorIfClosingFrameThatIsNotClosable() {
     internalFrame.setClosable(false);
     try {
       driver.close(internalFrame);
@@ -199,20 +200,20 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  @Test public void shouldResizeInternalFrame() {
+  public void shouldResizeInternalFrame() {
     Dimension newSize = new FluentDimension(internalFrame.getSize()).addToWidth(60).addToHeight(60);
     driver.resizeTo(internalFrame, newSize);
     assertThat(internalFrame.getSize()).isEqualTo(newSize);
   }
 
-  @Test public void shouldResizeWidth() {
+  public void shouldResizeWidth() {
     int newWidth = 600;
     assertThat(internalFrame.getWidth()).isNotEqualTo(newWidth);
     driver.resizeWidthTo(internalFrame, newWidth);
     assertThat(internalFrame.getWidth()).isEqualTo(newWidth);
   }
 
-  @Test public void shouldResizeHeight() {
+  public void shouldResizeHeight() {
     int newHeight = 600;
     assertThat(internalFrame.getHeight()).isNotEqualTo(newHeight);
     driver.resizeHeightTo(internalFrame, newHeight);

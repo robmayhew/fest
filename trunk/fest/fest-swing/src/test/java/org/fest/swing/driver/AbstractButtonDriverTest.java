@@ -57,7 +57,7 @@ public class AbstractButtonDriverTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldClickButton() {
+  public void shouldClickButton() {
     final boolean[] clicked = new boolean[1];
     checkBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -68,7 +68,7 @@ public class AbstractButtonDriverTest {
     assertThat(clicked[0]).isTrue();
   }
   
-  @Test public void shouldNotClickButtonIfButtonDisabled() {
+  public void shouldNotClickButtonIfButtonDisabled() {
     final boolean[] clicked = new boolean[1];
     checkBox.setEnabled(false);
     checkBox.addActionListener(new ActionListener() {
@@ -80,11 +80,11 @@ public class AbstractButtonDriverTest {
     assertThat(clicked[0]).isFalse();
   }
 
-  @Test public void shouldPassIfTextIsEqualToExpectedOne() {
+  public void shouldPassIfTextIsEqualToExpectedOne() {
     driver.requireText(checkBox, "Hello");
   }
   
-  @Test public void shouldFailIfTextIsNotEqualToExpectedOne() {
+  public void shouldFailIfTextIsNotEqualToExpectedOne() {
     try {
       driver.requireText(checkBox, "Bye");
       fail();
@@ -94,36 +94,36 @@ public class AbstractButtonDriverTest {
     }
   }
 
-  @Test public void shouldNotSelectIfButtonAlreadySelected() {
+  public void shouldNotSelectIfButtonAlreadySelected() {
     checkBox.setSelected(true);
     driver.select(checkBox);
     assertThat(checkBox.isSelected()).isTrue();
   }
   
-  @Test public void shouldSelectButton() {
+  public void shouldSelectButton() {
     checkBox.setSelected(false);
     driver.select(checkBox);
     assertThat(checkBox.isSelected()).isTrue();
   }
 
-  @Test public void shouldNotUnselectIfButtonAlreadySelected() {
+  public void shouldNotUnselectIfButtonAlreadySelected() {
     checkBox.setSelected(false);
     driver.unselect(checkBox);
     assertThat(checkBox.isSelected()).isFalse();
   }
   
-  @Test public void shouldUnselectButton() {
+  public void shouldUnselectButton() {
     checkBox.setSelected(true);
     driver.unselect(checkBox);
     assertThat(checkBox.isSelected()).isFalse();
   }
 
-  @Test public void shouldPassIfButtonIsSelectedAsAnticipated() {
+  public void shouldPassIfButtonIsSelectedAsAnticipated() {
     checkBox.setSelected(true);
     driver.requireSelected(checkBox);
   }
   
-  @Test public void shouldFailIfButtonIsNotSelectedAndExpectingSelected() {
+  public void shouldFailIfButtonIsNotSelectedAndExpectingSelected() {
     checkBox.setSelected(false);
     try {
       driver.requireSelected(checkBox);
@@ -134,12 +134,12 @@ public class AbstractButtonDriverTest {
     }
   }
   
-  @Test public void shouldPassIfButtonIsUnselectedAsAnticipated() {
+  public void shouldPassIfButtonIsUnselectedAsAnticipated() {
     checkBox.setSelected(false);
     driver.requireNotSelected(checkBox);
   }
 
-  @Test public void shouldFailIfButtonIsSelectedAndExpectingNotSelected() {
+  public void shouldFailIfButtonIsSelectedAndExpectingNotSelected() {
     checkBox.setSelected(true);
     try {
       driver.requireNotSelected(checkBox);

@@ -15,23 +15,23 @@
  */
 package org.fest.swing.core;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.swing.testing.TestGroups.*;
-
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.ScreenLock;
-import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.hierarchy.ComponentHierarchy;
+
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=138">Bug 138</a>.
@@ -58,7 +58,7 @@ public class WindowDisposalTest {
     } catch (Exception e) {}
   }
 
-  @Test public void shouldDisposeWindows() {
+  public void shouldDisposeWindows() {
     final List<Container> roots = new ArrayList<Container>();
     final JFrame frame = new JFrame("Hello");
     roots.add(frame);
@@ -75,7 +75,7 @@ public class WindowDisposalTest {
     }.run();
   }
 
-  @Test public void shouldNotDisposeWindows() {
+  public void shouldNotDisposeWindows() {
     new EasyMockTemplate(hierarchy) {
       protected void expectations() {}
 

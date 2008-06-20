@@ -23,8 +23,6 @@ import javax.swing.*;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.fixture.DialogFixture;
-
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -37,7 +35,7 @@ public class JDialogTest {
 
   private DialogFixture m_window;
 
-  @Test public void shouldFindNestedDialogTwoTimes() throws InterruptedException {
+  public void shouldFindNestedDialogTwoTimes() throws InterruptedException {
     JDialogStarter optionPaneStarter = new JDialogStarter(null);
     m_window = new DialogFixture(optionPaneStarter);
     m_window.show();

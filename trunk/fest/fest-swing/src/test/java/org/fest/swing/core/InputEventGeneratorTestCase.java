@@ -52,6 +52,8 @@ public abstract class InputEventGeneratorTestCase {
   private MyFrame frame;
   private InputEventGenerator generator;
 
+  protected static final String MOVE_MOUSE_TEST = "MoveMouseTest";
+  
   @BeforeMethod public void setUp() throws Exception {
     frame = new MyFrame();
     onSetUp();
@@ -67,7 +69,8 @@ public abstract class InputEventGeneratorTestCase {
     frame.destroy();
   }
 
-  @Test public void shouldMoveMouse() {
+  @Test(groups = { GUI, MOVE_MOUSE_TEST } ) 
+  public void shouldMoveMouse() {
     MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(frame);
     Point center = centerOf(frame);
     generator.moveMouse(frame, center.x, center.y);
@@ -75,7 +78,7 @@ public abstract class InputEventGeneratorTestCase {
     assertThat(recorder.point()).isEqualTo(center);
   }
   
-  @Test(dataProvider = "mouseButtons") 
+  @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST) 
   public void shouldClickMouseButtonOnComponent(MouseButton button) {
     ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
     Point center = centerOf(frame.textBox);
@@ -86,7 +89,7 @@ public abstract class InputEventGeneratorTestCase {
     assertThat(recorder.pointClicked()).isEqualTo(center);
   }
   
-  @Test(dataProvider = "mouseButtons",  dependsOnMethods = "shouldMoveMouse")
+  @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST)
   public void shouldClickMouseButton(MouseButton button) {
     Point center = AWT.centerOf(frame);
     generator.moveMouse(frame, center.x, center.y);

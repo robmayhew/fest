@@ -15,21 +15,22 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 
 import javax.swing.JTable;
 
-import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Test case for implementations of <code>{@link JTableCellWriter}</code>.
@@ -57,7 +58,7 @@ public abstract class JTableCellWriterTestCase {
     robot.cleanUp();
   }
 
-  @Test public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue() {
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue() {
     try {
       writer.enterValue(frame.table, 0, 1, "hello");
       fail();
@@ -66,7 +67,7 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  @Test public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing() {
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing() {
     try {
       writer.startCellEditing(frame.table, 0, 1);
       fail();
@@ -75,7 +76,7 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  @Test public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStopingEditing() {
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStopingEditing() {
     try {
       writer.stopCellEditing(frame.table, 0, 1);
       fail();
@@ -84,7 +85,7 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  @Test public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenCancellingEditing() {
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenCancellingEditing() {
     try {
       writer.cancelCellEditing(frame.table, 0, 1);
       fail();

@@ -57,67 +57,67 @@ public class JTextComponentDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldDeleteText() {
+  public void shouldDeleteText() {
     driver.deleteText(textField);
     assertThat(textField.getText()).isNullOrEmpty();
   }
   
-  @Test public void shouldNotDeleteTextIfTextComponentIsNotEnabled() {
+  public void shouldNotDeleteTextIfTextComponentIsNotEnabled() {
     setTextAndDisableTextField("Hello");
     driver.deleteText(textField);
     assertThat(textField.getText()).isEqualTo("Hello");
   }
   
-  @Test public void shouldDeleteTextInEmptyTextComponent() {
+  public void shouldDeleteTextInEmptyTextComponent() {
     textField.setText("");
     driver.deleteText(textField);
     assertThat(textField.getText()).isNullOrEmpty();
   }
 
-  @Test public void shouldReplaceText() {
+  public void shouldReplaceText() {
     textField.setText("Hi");
     driver.replaceText(textField, "Bye");
     assertThat(textField.getText()).isEqualTo("Bye");
   }
 
-  @Test public void shouldSelectAllText() {
+  public void shouldSelectAllText() {
     textField.setText("Hello");
     driver.selectAll(textField);
     assertThat(textField.getSelectedText()).isEqualTo(textField.getText());
   }
 
-  @Test public void shouldNotSelectAllTextIfTextComponentIsNotEnabled() {
+  public void shouldNotSelectAllTextIfTextComponentIsNotEnabled() {
     setTextAndDisableTextField("Hello");
     driver.selectAll(textField);
     assertThat(textField.getSelectedText()).isNullOrEmpty();
   }
   
-  @Test public void shouldEnterText() {
+  public void shouldEnterText() {
     textField.setText("");
     String textToEnter = "Entering text";
     driver.enterText(textField, textToEnter);
     assertThat(textField.getText()).isEqualTo(textToEnter);
   }
 
-  @Test public void shouldNotEnterTextIfTextComponentIsNotEnabled() {
+  public void shouldNotEnterTextIfTextComponentIsNotEnabled() {
     clearAndDisableTextField();
     String textToEnter = "Entering text";
     driver.enterText(textField, textToEnter);
     assertThat(textField.getText()).isNullOrEmpty();
   }
 
-  @Test public void shouldSelectTextRange() {
+  public void shouldSelectTextRange() {
     driver.selectText(textField, 8, 14);
     assertThat(textField.getSelectedText()).isEqualTo("a test");
   }
 
-  @Test public void shouldNotSelectTextRangeIfTextComponentIsNotEnabled() {
+  public void shouldNotSelectTextRangeIfTextComponentIsNotEnabled() {
     setTextAndDisableTextField("This is a test");
     driver.selectText(textField, 8, 14);
     assertThat(textField.getSelectedText()).isNullOrEmpty();
   }
   
-  @Test public void shouldThrowErrorIfIndicesAreOutOfBoundsWhenSelectingText() {
+  public void shouldThrowErrorIfIndicesAreOutOfBoundsWhenSelectingText() {
     try {
       driver.selectText(textField, 20, 22);
       fail();
@@ -126,24 +126,24 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test public void shouldSelectGivenTextOnly() {
+  public void shouldSelectGivenTextOnly() {
     textField.setText("Hello World");
     driver.selectText(textField, "llo W");
     assertThat(textField.getSelectedText()).isEqualTo("llo W");
   }
   
-  @Test public void shouldNotSelectGivenTextIfTextComponentIsNotEnabled() {
+  public void shouldNotSelectGivenTextIfTextComponentIsNotEnabled() {
     setTextAndDisableTextField("Hello World");
     driver.selectText(textField, "llo W");
     assertThat(textField.getSelectedText()).isNullOrEmpty();
   }
 
-  @Test public void shouldPassIfTextComponentIsEditable() {
+  public void shouldPassIfTextComponentIsEditable() {
     textField.setEditable(true);
     driver.requireEditable(textField);
   }
 
-  @Test public void shouldFailIfTextComponentIsNotEditableAndExpectingEditable() {
+  public void shouldFailIfTextComponentIsNotEditableAndExpectingEditable() {
     textField.setEditable(false);
     try {
       driver.requireEditable(textField);
@@ -153,12 +153,12 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfTextComponentIsNotEditable() {
+  public void shouldPassIfTextComponentIsNotEditable() {
     textField.setEditable(false);
     driver.requireNotEditable(textField);
   }
 
-  @Test public void shouldFailIfTextComponentIsEditableAndExpectingNotEditable() {
+  public void shouldFailIfTextComponentIsEditableAndExpectingNotEditable() {
     textField.setEditable(true);
     try {
       driver.requireNotEditable(textField);
@@ -168,12 +168,12 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfHasExpectedText() {
+  public void shouldPassIfHasExpectedText() {
     textField.setText("Hi");
     driver.requireText(textField, "Hi");
   }
 
-  @Test public void shouldFailIfDoesNotHaveExpectedText() {
+  public void shouldFailIfDoesNotHaveExpectedText() {
     textField.setText("Hi");
     try {
       driver.requireText(textField, "Bye");
@@ -183,17 +183,17 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfEmpty() {
+  public void shouldPassIfEmpty() {
     textField.setText("");
     driver.requireEmpty(textField);
   }
 
-  @Test public void shouldPassIfTextIsNull() {
+  public void shouldPassIfTextIsNull() {
     textField.setText(null);
     driver.requireEmpty(textField);
   }
 
-  @Test public void shouldFailIfNotEmpty() {
+  public void shouldFailIfNotEmpty() {
     textField.setText("Hi");
     try {
       driver.requireEmpty(textField);

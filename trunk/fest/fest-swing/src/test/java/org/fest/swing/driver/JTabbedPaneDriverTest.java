@@ -63,19 +63,19 @@ public class JTabbedPaneDriverTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "tabIndexProvider")
+  @Test(groups = GUI, dataProvider = "tabIndexProvider")
   public void shouldSelectTabWithGivenIndex(int index) {
     driver.selectTab(tabbedPane, index);
     assertThatSelectedTabIndexIsEqualTo(index);
   }
   
-  @Test public void shouldNotSelectTabWithGivenIndexIfTabbedPaneIsNotEnabled() {
+  public void shouldNotSelectTabWithGivenIndexIfTabbedPaneIsNotEnabled() {
     clearAndDisableTabbedPane();
     driver.selectTab(tabbedPane, 1);
     assertThatSelectedTabIndexIsEqualTo(0);
   }
 
-  @Test(dataProvider = "tabIndexProvider")
+  @Test(groups = GUI, dataProvider = "tabIndexProvider")
   public void shouldSetTabWithGivenIndexDirectly(int index) {
     driver.setTabDirectly(tabbedPane, index);
     pause(200);
@@ -87,7 +87,7 @@ public class JTabbedPaneDriverTest {
     return new Object[][] { { 0 }, { 1 } };
   }
 
-  @Test(dataProvider = "indexOutOfBoundsProvider")
+  @Test(groups = GUI, dataProvider = "indexOutOfBoundsProvider")
   public void shouldThrowErrorIfIndexOutOfBounds(int index) {
     try {
       driver.selectTab(tabbedPane, index);
@@ -103,17 +103,17 @@ public class JTabbedPaneDriverTest {
     return new Object[][] { { -1 }, { 2 } };
   }
 
-  @Test public void shouldSelectFirstTab() {
+  public void shouldSelectFirstTab() {
     driver.selectTab(tabbedPane, "First");
     assertThatSelectedTabIndexIsEqualTo(0);
   }
 
-  @Test public void shouldSelectSecondTab() {
+  public void shouldSelectSecondTab() {
     driver.selectTab(tabbedPane, "Second");
     assertThatSelectedTabIndexIsEqualTo(1);
   }
 
-  @Test public void shouldNotSelectTabWithGivenTitleIfTabbedPaneIsNotEnabled() {
+  public void shouldNotSelectTabWithGivenTitleIfTabbedPaneIsNotEnabled() {
     clearAndDisableTabbedPane();
     driver.selectTab(tabbedPane, "Second");
     assertThatSelectedTabIndexIsEqualTo(0);
@@ -123,7 +123,7 @@ public class JTabbedPaneDriverTest {
     return assertThat(tabbedPane.getSelectedIndex()).isEqualTo(expected);
   }
 
-  @Test public void shouldReturnTabTitles() {
+  public void shouldReturnTabTitles() {
     assertThat(driver.tabTitles(tabbedPane)).isEqualTo(array("First", "Second"));
   }
 

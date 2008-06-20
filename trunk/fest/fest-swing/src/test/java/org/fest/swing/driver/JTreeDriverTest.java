@@ -73,7 +73,7 @@ public class JTreeDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldSelectNodeByRow() {
+  public void shouldSelectNodeByRow() {
     clearSelection();
     assertThat(dragTree.getSelectionRows()).isNull();
     driver.selectRow(dragTree, 0);
@@ -84,25 +84,25 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionRows()).isEqualTo(new int[] { 0 });
   }
 
-  @Test public void shouldNotSelectNodeByRowIfTreeIsNotEnabled() {
+  public void shouldNotSelectNodeByRowIfTreeIsNotEnabled() {
     clearAndDisableTree();
     driver.selectRow(dragTree, 0);
     assertThat(dragTree.getSelectionCount()).isZero();
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfRowArrayIsNull() {
     int[] rows = null;
     driver.selectRows(dragTree, rows);
   }
   
-  @Test(expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfRowArrayIsEmpty() {
     int[] rows = new int[0];
     driver.selectRows(dragTree, rows);
   }
 
-  @Test public void shouldSelectNodesByRow() {
+  public void shouldSelectNodesByRow() {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
     assertThat(dragTree.getSelectionRows()).isNull();
@@ -111,14 +111,14 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionRows()).isEqualTo(rows);
   }
 
-  @Test public void shouldNotSelectNodesByRowIfTreeIsNotEnabled() {
+  public void shouldNotSelectNodesByRowIfTreeIsNotEnabled() {
     clearAndDisableTree();
     int[] rows = { 0, 1, 2 };
     driver.selectRows(dragTree, rows);
     assertThat(dragTree.getSelectionCount()).isZero();
   }
 
-  @Test public void shouldToggleNodeByRow() {
+  public void shouldToggleNodeByRow() {
     assertThat(dragTree.isExpanded(1)).isFalse();
     driver.toggleRow(dragTree, 1);
     assertThat(dragTree.isExpanded(1)).isTrue();
@@ -126,7 +126,7 @@ public class JTreeDriverTest {
     assertThat(dragTree.isExpanded(1)).isFalse();
   }
 
-  @Test public void shouldThrowErrorIfPathNotFound() {
+  public void shouldThrowErrorIfPathNotFound() {
     try {
       driver.selectPath(dragTree, "another");
       fail();
@@ -135,7 +135,7 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test(dataProvider = "selectionPath")
+  @Test(groups = GUI, dataProvider = "selectionPath")
   public void shouldSelectNodeByPath(String treePath) {
     clearSelection();
     driver.selectPath(dragTree, treePath);
@@ -151,25 +151,25 @@ public class JTreeDriverTest {
     };
   }
 
-  @Test public void shouldNotSelectNodeByPathIfTreeIsNotEnabled() {
+  public void shouldNotSelectNodeByPathIfTreeIsNotEnabled() {
     clearAndDisableTree();
     driver.selectPath(dragTree, "root/branch1");
     assertThat(dragTree.getSelectionCount()).isZero();
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfPathArrayIsNull() {
     String[] paths = null;
     driver.selectPaths(dragTree, paths);
   }
   
-  @Test(expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfPathArrayIsEmpty() {
     String[] paths = new String[0];
     driver.selectPaths(dragTree, paths);
   }
 
-  @Test public void shouldSelectNodesByPaths() {
+  public void shouldSelectNodesByPaths() {
     clearSelection();
     dragTree.setSelectionModel(new DefaultTreeSelectionModel());
     String[] paths = { "root/branch1/branch1.1", "root/branch1/branch1.2" };
@@ -180,7 +180,7 @@ public class JTreeDriverTest {
     assertThat(textOf(selectionPaths[1])).isEqualTo(paths[1]);
   }
 
-  @Test public void shouldNotSelectNodesByPathsIfTreeIsNotEnabled() {
+  public void shouldNotSelectNodesByPathsIfTreeIsNotEnabled() {
     clearAndDisableTree();
     String[] paths = { "root/branch1/branch1.1", "root/branch1/branch1.2" };
     driver.selectPaths(dragTree, paths);
@@ -197,7 +197,7 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionRows()).isEqualTo(null);
   }
 
-  @Test public void shouldDragAndDropUsingGivenTreePaths() {
+  public void shouldDragAndDropUsingGivenTreePaths() {
     driver.drag(dragTree, "root/branch1/branch1.1");
     driver.drop(dropTree, "root");
     TreeModel dragModel = dragTree.getModel();
@@ -210,7 +210,7 @@ public class JTreeDriverTest {
     assertThat(textOf(firstChildOf(root))).isEqualTo("branch1.1");
   }
 
-  @Test public void shouldDragAndDropUsingGivenRows() {
+  public void shouldDragAndDropUsingGivenRows() {
     driver.drag(dragTree, 2);
     driver.drop(dropTree, 0);
     TreeModel dragModel = dragTree.getModel();
@@ -247,21 +247,21 @@ public class JTreeDriverTest {
     return (DefaultMutableTreeNode)node.getChildAt(0);
   }
 
-  @Test public void shouldPassIfRowIsSelected() {
+  public void shouldPassIfRowIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
     dragTree.setSelectionPath(path);
     driver.requireSelection(dragTree, intArray(1));
   }
 
-  @Test public void shouldPassIfPathIsSelected() {
+  public void shouldPassIfPathIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
     dragTree.setSelectionPath(path);
     driver.requireSelection(dragTree, array("root/branch1"));
   }
 
-  @Test public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection() {
+  public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection() {
     dragTree.setSelectionPath(null);
     try {
       driver.requireSelection(dragTree, intArray(1));
@@ -272,7 +272,7 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test public void shouldFailIfSelectedRowIsNotEqualToExpectedSelection() {
+  public void shouldFailIfSelectedRowIsNotEqualToExpectedSelection() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     dragTree.setSelectionPath(new TreePath(array(root)));
     try {
@@ -284,7 +284,7 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {
+  public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {
     dragTree.setSelectionPath(null);
     try {
       driver.requireSelection(dragTree, array("root/branch1"));
@@ -295,7 +295,7 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test public void shouldFailIfSelectedPathIsNotEqualToExpectedSelection() {
+  public void shouldFailIfSelectedPathIsNotEqualToExpectedSelection() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     dragTree.setSelectionPath(new TreePath(array(root)));
     try {
@@ -311,12 +311,12 @@ public class JTreeDriverTest {
     return values;
   }
 
-  @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
+  public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
     dragTree.clearSelection();
     driver.requireNoSelection(dragTree);
   }
 
-  @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+  public void shouldFailIfHasSelectionAndExpectingNoSelection() {
     dragTree.setSelectionRow(0);
     try {
       driver.requireNoSelection(dragTree);
@@ -327,12 +327,12 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test public void shouldPassIfTreeIsEditable() {
+  public void shouldPassIfTreeIsEditable() {
     dragTree.setEditable(true);
     driver.requireEditable(dragTree);
   }
 
-  @Test public void shouldFailIfTreeIsNotEditableAndExpectingEditable() {
+  public void shouldFailIfTreeIsNotEditableAndExpectingEditable() {
     dragTree.setEditable(false);
     try {
       driver.requireEditable(dragTree);
@@ -342,12 +342,12 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test public void shouldPassIfTreeIsNotEditable() {
+  public void shouldPassIfTreeIsNotEditable() {
     dragTree.setEditable(false);
     driver.requireNotEditable(dragTree);
   }
 
-  @Test public void shouldFailIfTreeIsEditableAndExpectingNotEditable() {
+  public void shouldFailIfTreeIsEditableAndExpectingNotEditable() {
     dragTree.setEditable(true);
     try {
       driver.requireNotEditable(dragTree);
@@ -357,17 +357,17 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test public void shouldShowPopupMenuAtRow() {
+  public void shouldShowPopupMenuAtRow() {
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, 0);
     assertThat(popupMenu).isSameAs(frame.popupMenu);
   }
 
-  @Test public void shouldShowPopupMenuAtPath() {
+  public void shouldShowPopupMenuAtPath() {
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, "root");
     assertThat(popupMenu).isSameAs(frame.popupMenu);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }

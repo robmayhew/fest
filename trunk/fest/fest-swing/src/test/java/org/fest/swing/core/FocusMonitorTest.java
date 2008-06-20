@@ -51,12 +51,12 @@ public class FocusMonitorTest {
     frame.destroy();
   }
   
-  @Test public void shouldReturnFalseIfLosesFocus() {
+  public void shouldReturnFalseIfLosesFocus() {
     setFocusOn(frame.textBox);
     assertThat(monitor.hasFocus()).isFalse();
   }
 
-  @Test public void shouldNotHaveFocusIsComponentIsNotFocusOwner() {
+  public void shouldNotHaveFocusIsComponentIsNotFocusOwner() {
     setFocusOn(frame.textBox);
     monitor = FocusMonitor.addFocusMonitorTo(frame.button);
     assertThat(monitor.hasFocus()).isFalse();

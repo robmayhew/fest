@@ -15,10 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -27,11 +23,16 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import org.fest.swing.core.Robot;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link AbstractJTableCellWriter}</code>.
@@ -39,7 +40,6 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
 public class AbstractJTableCellWriterTest {
 
   private Robot robot;
@@ -62,7 +62,7 @@ public class AbstractJTableCellWriterTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "cellEditors")
+  @Test(groups = GUI, dataProvider = "cellEditors")
   public void shouldReturnEditorForCell(int row, int column, Class<Component> editorType) {
     Component editor = writer.editorForCell(frame.table, row, column);
     assertThat(editor).isNotNull().isInstanceOf(editorType);

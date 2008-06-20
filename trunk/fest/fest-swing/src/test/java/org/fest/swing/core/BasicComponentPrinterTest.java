@@ -15,19 +15,20 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link BasicComponentPrinter}</code>.
@@ -73,12 +74,12 @@ public class BasicComponentPrinterTest {
     secondWindow.destroy();
   }
 
-  @Test public void shouldCreatePrinterWithExistingHierarchy() {
+  public void shouldCreatePrinterWithExistingHierarchy() {
     printer = BasicComponentPrinter.printerWithCurrentAwtHierarchy();
     assertThat(((BasicComponentPrinter)printer).hierarchy()).isInstanceOf(ExistingHierarchy.class);
   }
 
-  @Test public void shouldPrintAllComponents() {
+  public void shouldPrintAllComponents() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out);
     assertThat(out.printed()).contains(format(firstWindow),
@@ -87,20 +88,20 @@ public class BasicComponentPrinterTest {
                                        format(secondWindow.button));
   }
 
-  @Test public void shouldPrintAllComponentsOfGivenType() {
+  public void shouldPrintAllComponentsOfGivenType() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, JButton.class);
     assertThat(out.printed()).containsOnly(format(firstWindow.button),
                                            format(secondWindow.button));
   }
 
-  @Test public void shouldNotPrintComponentsOfNonMatchingType() {
+  public void shouldNotPrintComponentsOfNonMatchingType() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, JComboBox.class);
     assertThat(out.printed()).isEmpty();
   }
 
-  @Test public void shouldPrintComponentsUnderGivenRootOnly() {
+  public void shouldPrintComponentsUnderGivenRootOnly() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, firstWindow);
     assertThat(out.printed()).contains(format(firstWindow),
@@ -109,7 +110,7 @@ public class BasicComponentPrinterTest {
                                        format(secondWindow.button));
   }
 
-  @Test public void shouldPrintAllComponentsOfGivenTypeUnderGivenRootOnly() {
+  public void shouldPrintAllComponentsOfGivenTypeUnderGivenRootOnly() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, JButton.class, firstWindow);
     assertThat(out.printed()).containsOnly(format(firstWindow.button));

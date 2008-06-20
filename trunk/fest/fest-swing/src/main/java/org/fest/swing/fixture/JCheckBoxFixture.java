@@ -21,6 +21,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.AbstractButtonDriver;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -66,6 +67,11 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
     driver = newDriver;
   }
   
+  /** {@inheritDoc} **/
+  protected ComponentDriver driver() {
+    return driver;
+  }
+
   /**
    * Checks (or selects) this fixture's <code>{@link JCheckBox}</code> only it is not already checked.
    * @return this fixture.
@@ -106,10 +112,11 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Simulates a user clicking this fixture's <code>{@link JCheckBox}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    * @return this fixture.
    */
   public JCheckBoxFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    doClick(mouseClickInfo);
     return this;
   }
 
@@ -137,6 +144,20 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    */
   public JCheckBoxFixture focus() {
     driver.focus(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link JCheckBox}</code>.
+   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see KeyPressInfo
+   */
+  public JCheckBoxFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
+    doPressAndReleaseKey(keyPressInfo);
     return this;
   }
 

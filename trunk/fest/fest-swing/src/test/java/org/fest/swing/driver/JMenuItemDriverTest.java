@@ -15,22 +15,23 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JMenuItemDriver}</code>.
@@ -56,12 +57,11 @@ public class JMenuItemDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldSelectMenu() {
+  public void shouldSelectMenu() {
     ClickRecorder clickRecorder = attachTo(menuItem);
     driver.selectMenuItem(menuItem);
     clickRecorder.wasClicked();
   }
-
 
   private static class MyFrame extends TestFrame {
     private static final long serialVersionUID = 1L;

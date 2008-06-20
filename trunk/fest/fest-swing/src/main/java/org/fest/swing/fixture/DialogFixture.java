@@ -23,6 +23,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.DialogDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -95,6 +96,11 @@ public class DialogFixture extends WindowFixture<Dialog> {
     driver = newDriver;
   }
 
+  /** {@inheritDoc} **/
+  protected ComponentDriver driver() {
+    return driver;
+  }
+
   /**
    * Simulates a user clicking this fixture's <code>{@link Dialog}</code>.
    * @return this fixture.
@@ -118,9 +124,10 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user clicking this fixture's <code>{@link Dialog}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public DialogFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    doClick(mouseClickInfo);
     return this;
   }
 
@@ -155,10 +162,25 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
+   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Dialog}</code>.
+   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see KeyPressInfo
+   */
+  public DialogFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
+    doPressAndReleaseKey(keyPressInfo);
+    return this;
+  }
+  
+  /**
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Dialog}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   public DialogFixture pressAndReleaseKeys(int... keyCodes) {
     driver.pressAndReleaseKeys(target, keyCodes);
@@ -170,6 +192,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   public DialogFixture pressKey(int keyCode) {
     driver.pressKey(target, keyCode);
@@ -181,6 +204,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   public DialogFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);

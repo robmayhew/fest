@@ -15,22 +15,23 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JSliderDriver}</code>.
@@ -72,7 +73,7 @@ public abstract class JSliderDriverTestCase {
     return new Object[][] { { 5 }, { 10 }, { 28 }, { 20 } };
   }
 
-  @Test public void shouldNotSlideToValueIfSliderIsNotEnabled() {
+  public void shouldNotSlideToValueIfSliderIsNotEnabled() {
     clearAndDisableSlider();
     int value = 10;
     slider.setValue(value);
@@ -80,24 +81,24 @@ public abstract class JSliderDriverTestCase {
     assertThatSliderValueIsEqualTo(value);
   }
 
-  @Test public void shouldSlideToMaximum() {
+  public void shouldSlideToMaximum() {
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(slider.getMaximum());
   }
 
-  @Test public void shouldNotSlideToMaximumIfSliderIsNotEnabled() {
+  public void shouldNotSlideToMaximumIfSliderIsNotEnabled() {
     clearAndDisableSlider();
     int value = slider.getValue();
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
 
-  @Test public void shouldSlideToMinimum() {
+  public void shouldSlideToMinimum() {
     driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(slider.getMinimum());
   }
 
-  @Test public void shouldNotSlideToMinimumIfSliderIsNotEnabled() {
+  public void shouldNotSlideToMinimumIfSliderIsNotEnabled() {
     clearAndDisableSlider();
     int value = slider.getMaximum();
     slider.setValue(value);
@@ -109,7 +110,7 @@ public abstract class JSliderDriverTestCase {
     assertThat(slider.getValue()).isEqualTo(expected);
   }
 
-  @Test public void shouldThrowErrorIfValueIsLessThanMinimum() {
+  public void shouldThrowErrorIfValueIsLessThanMinimum() {
     try {
       driver.slide(slider, -1);
       fail();
@@ -118,7 +119,7 @@ public abstract class JSliderDriverTestCase {
     }
   }
 
-  @Test public void shouldThrowErrorIfValueIsGreaterThanMaximum() {
+  public void shouldThrowErrorIfValueIsGreaterThanMaximum() {
     try {
       driver.slide(slider, 31);
       fail();

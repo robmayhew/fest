@@ -78,50 +78,49 @@ public class JTableDriverTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "cells")
+  @Test(groups = GUI, dataProvider = "cells")
   public void shouldSelectCell(int row, int column) {
     driver.selectCell(dragTable, cell(row, column));
     assertThat(dragTable.isCellSelected(row, column)).isTrue();
   }
 
-  @Test public void shouldNotSelectCellIfTableIsNotEnabled() {
+  public void shouldNotSelectCellIfTableIsNotEnabled() {
     clearAndDisableDragTable();
     driver.selectCell(dragTable, cell(0, 0));
     assertDragTableHasNoSelection();
   }
   
-  @Test(expectedExceptions = ActionFailedException.class) 
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class) 
   public void shouldThrowErrorIfArrayOfCellsToSelectIsNull() {
     JTableCell[] cells = null;
     driver.selectCells(dragTable, cells);
   }
 
-  @Test(expectedExceptions = ActionFailedException.class) 
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class) 
   public void shouldThrowErrorIfArrayOfCellsToSelectIsEmpty() {
     JTableCell[] cells = new JTableCell[0];
     driver.selectCells(dragTable, cells);
   }
 
-  @Test public void shouldSelectCells() {
+  public void shouldSelectCells() {
     dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     driver.selectCells(dragTable, new JTableCell[] { cell(0, 0), cell(2, 0) });
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
     assertThat(dragTable.isCellSelected(2, 0)).isTrue();
   }
 
-  @Test public void shouldSelectCellsEvenIfArrayHasOneElement() {
+  public void shouldSelectCellsEvenIfArrayHasOneElement() {
     dragTable.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     driver.selectCells(dragTable, new JTableCell[] { cell(0, 0) });
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
   }
 
-  @Test public void shouldNotSelectCellsIfTableIsNotEnabled() {
+  public void shouldNotSelectCellsIfTableIsNotEnabled() {
     clearAndDisableDragTable();
     driver.selectCells(dragTable, new JTableCell[] { cell(0, 0), cell(2, 0) });
     assertDragTableHasNoSelection();
   }
 
-  @Test(dependsOnMethods = "shouldSelectCell")
   public void shouldNotSelectCellIfAlreadySelected() {
     driver.selectCell(dragTable, cell(0, 0));
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
@@ -129,21 +128,21 @@ public class JTableDriverTest {
     assertThat(dragTable.isCellSelected(0, 0)).isTrue();
   }
 
-  @Test(dataProvider = "cells")
+  @Test(groups = GUI, dataProvider = "cells")
   public void shouldReturnValueOfGivenRowAndColumn(int row, int column) {
     String value = driver.value(dragTable, row, column);
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
     assertCellReaderWasCalled();
   }
 
-  @Test(dataProvider = "cells")
+  @Test(groups = GUI, dataProvider = "cells")
   public void shouldReturnValueOfGivenCell(int row, int column) {
     String value = driver.value(dragTable, cell(row, column));
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
     assertCellReaderWasCalled();
   }
 
-  @Test(dependsOnMethods = "shouldSelectCell", dataProvider = "cells")
+  @Test(groups = GUI, dataProvider = "cells")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
     driver.selectCell(dragTable, cell(row, column));
     String value = driver.selectionValue(dragTable);
@@ -155,12 +154,12 @@ public class JTableDriverTest {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }
 
-  @Test public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
+  public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
     dragTable.clearSelection();
     driver.requireNoSelection(dragTable);
   }
 
-  @Test public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+  public void shouldFailIfHasSelectionAndExpectingNoSelection() {
     dragTable.changeSelection(0, 0, false, false);
     try {
       driver.requireNoSelection(dragTable);
@@ -171,12 +170,12 @@ public class JTableDriverTest {
     }
   }
 
-  @Test public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
+  public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
     assertThat(dragTable.getSelectedRowCount()).isZero();
     assertThat(driver.selectionValue(dragTable)).isNull();
   }
 
-  @Test public void shouldDragAndDrop() throws Exception {
+  public void shouldDragAndDrop() throws Exception {
     int dragRowCount = dragTable.getRowCount();
     int dropRowCount = dropTable.getRowCount();
     driver.drag(dragTable, cell(3, 0));
@@ -187,11 +186,11 @@ public class JTableDriverTest {
     assertThat(dropTable.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
-  @Test public void shouldPassIfCellValueIsEqualToExpected() {
+  public void shouldPassIfCellValueIsEqualToExpected() {
     driver.requireCellValue(dragTable, cell(0, 0), "0-0");
   }
 
-  @Test public void shouldFailIfCellValueIsNotEqualToExpected() {
+  public void shouldFailIfCellValueIsNotEqualToExpected() {
     try {
       driver.requireCellValue(dragTable, cell(0, 0), "0-1");
       fail();
@@ -203,7 +202,7 @@ public class JTableDriverTest {
     }
   }
 
-  @Test public void shouldShowPopupMenuAtCell() {
+  public void shouldShowPopupMenuAtCell() {
     JPopupMenu popupMenu = new JPopupMenu();
     popupMenu.add(new JMenuItem("Leia"));
     dragTable.setComponentPopupMenu(popupMenu);
@@ -215,7 +214,7 @@ public class JTableDriverTest {
     assertThat(pointClicked).isEqualTo(pointAtCell);
   }
 
-  @Test public void shouldReturnCellFont() {
+  public void shouldReturnCellFont() {
     final JTableCellReader cellReader = mockCellReader();
     final Font font = new Font("SansSerif", PLAIN, 8);
     driver.cellReader(cellReader);
@@ -231,7 +230,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  @Test public void shouldReturnCellBackgroundColor() {
+  public void shouldReturnCellBackgroundColor() {
     final JTableCellReader cellReader = mockCellReader();
     final Color background = BLUE;
     driver.cellReader(cellReader);
@@ -247,7 +246,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  @Test public void shouldReturnCellForegroundColor() {
+  public void shouldReturnCellForegroundColor() {
     final JTableCellReader cellReader = mockCellReader();
     final Color foreground = BLUE;
     driver.cellReader(cellReader);
@@ -267,7 +266,7 @@ public class JTableDriverTest {
     return createMock(JTableCellReader.class);
   }
 
-  @Test public void shouldEnterValueInCell() {
+  public void shouldEnterValueInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
     final String value = "Hello";
     driver.cellWriter(cellWriter);
@@ -283,19 +282,19 @@ public class JTableDriverTest {
     }.run();
   }
   
-  @Test(expectedExceptions = AssertionError.class)
+  @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfTableIsNotEnabledWhenEditingCell() {
     dragTable.setEnabled(false);
     driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
   }
   
-  @Test(expectedExceptions = AssertionError.class)
+  @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfCellToEditIsNotEditable() {
     assertThat(dragTable.isCellEditable(0, 0)).isFalse();
     driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
   }
   
-  @Test public void shouldReturnEditorComponentInCell() {
+  public void shouldReturnEditorComponentInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
     final Component editor = new JTextField("Hello");
     driver.cellWriter(cellWriter);
@@ -311,7 +310,7 @@ public class JTableDriverTest {
     }.run();
   }
   
-  @Test public void shouldStartCellEditing() {
+  public void shouldStartCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
@@ -326,7 +325,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  @Test public void shouldStopCellEditing() {
+  public void shouldStopCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
@@ -341,7 +340,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  @Test public void shouldCancelCellEditing() {
+  public void shouldCancelCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
@@ -360,12 +359,12 @@ public class JTableDriverTest {
     return createMock(JTableCellWriter.class);
   }
 
-  @Test public void shouldPassIfCellIsEditableAsAnticipated() {
+  public void shouldPassIfCellIsEditableAsAnticipated() {
     dragTable.cellEditable(0, 0, true);
     driver.requireEditable(dragTable, cell(0, 0));
   }
   
-  @Test public void shouldFailIfCellIsNotEditableAndExpectingEditable() {
+  public void shouldFailIfCellIsNotEditableAndExpectingEditable() {
     dragTable.cellEditable(0, 0, false);
     try {
       driver.requireEditable(dragTable, cell(0, 0));
@@ -377,12 +376,12 @@ public class JTableDriverTest {
     }
   }
   
-  @Test public void shouldPassIfCellIsNotEditableAsAnticipated() {
+  public void shouldPassIfCellIsNotEditableAsAnticipated() {
     dragTable.cellEditable(0, 0, false);
     driver.requireNotEditable(dragTable, cell(0, 0));
   }
   
-  @Test public void shouldFailIfCellIsEditableAndExpectingNotEditable() {
+  public void shouldFailIfCellIsEditableAndExpectingNotEditable() {
     dragTable.cellEditable(0, 0, true);
     try {
       driver.requireNotEditable(dragTable, cell(0, 0));
@@ -412,12 +411,12 @@ public class JTableDriverTest {
     assertThat(dragTable.getSelectedRowCount()).isEqualTo(0);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfCellWriterIsNull() {
     driver.cellWriter(null);
   }

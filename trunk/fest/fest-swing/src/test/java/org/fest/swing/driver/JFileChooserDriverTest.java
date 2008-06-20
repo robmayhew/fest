@@ -65,20 +65,20 @@ public class JFileChooserDriverTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldFindCancelButton() {
+  public void shouldFindCancelButton() {
     JButton cancelButton = driver.cancelButton(fileChooser);
     assertThat(cancelButton).isNotNull();
     assertThat(cancelButton.getText()).isEqualTo(UIManager.getString("FileChooser.cancelButtonText"));
   }
   
-  @Test public void shouldSelectFile() {
+  public void shouldSelectFile() {
     File temporaryFile = newTemporaryFile();
     driver.selectFile(fileChooser, temporaryFile);
     assertThat(fileChooser.getSelectedFile()).isSameAs(temporaryFile);
     temporaryFile.delete();
   }
   
-  @Test public void shouldThrowErrorIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
+  public void shouldThrowErrorIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
     File temporaryFile = newTemporaryFile();
     fileChooser.setFileSelectionMode(DIRECTORIES_ONLY);
     try {
@@ -105,7 +105,7 @@ public class JFileChooserDriverTest {
     }
   }
   
-  @Test public void shouldFindApproveButton() {
+  public void shouldFindApproveButton() {
     JButton approveButton = driver.approveButton(fileChooser);
     assertThat(approveButton).isNotNull();
     assertThat(approveButton.getText()).isEqualTo(approveButtonText());
@@ -117,12 +117,12 @@ public class JFileChooserDriverTest {
     return fileChooser.getUI().getApproveButtonText(fileChooser);
   }
   
-  @Test public void shouldFindFileNameTextBox() {
+  public void shouldFindFileNameTextBox() {
     JTextField fileNameTextBox = driver.fileNameTextBox(fileChooser);
     assertThat(fileNameTextBox).isNotNull();
   }
   
-  @Test public void shouldSetCurrentDirectory() {
+  public void shouldSetCurrentDirectory() {
     String homePath = System.getProperty("user.home");
     File userHome = new File(homePath);
     assertThat(userHome.isDirectory()).isTrue();

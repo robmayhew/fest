@@ -15,25 +15,27 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.BorderLayout.*;
-import static javax.swing.SwingUtilities.getWindowAncestor;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.*;
 
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestFrame;
+
+import static java.awt.BorderLayout.*;
+import static javax.swing.SwingUtilities.getWindowAncestor;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JToolBarDriver}</code>.
@@ -59,7 +61,7 @@ public class JToolBarDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldThrowErrorWhenFloatingNotFloatableToolBar() {
+  public void shouldThrowErrorWhenFloatingNotFloatableToolBar() {
     toolBar().setFloatable(false);
     try {
       driver.makeFloat(toolBar());
@@ -69,14 +71,14 @@ public class JToolBarDriverTest {
     }
   }
 
-  @Test public void shouldFloatToolbar() {
+  public void shouldFloatToolbar() {
     Window oldAncestor = toolbarAncestor();
     driver.makeFloat(toolBar());
     Window newAncestor = toolbarAncestor();
     assertThat(newAncestor).isNotSameAs(oldAncestor);
   }
 
-  @Test public void shouldFloatToolbarToPoint() {
+  public void shouldFloatToolbarToPoint() {
     Window oldAncestor = toolbarAncestor();
     Point where = whereToFloatTo();
     driver.floatTo(toolBar(), where.x, where.y);

@@ -19,7 +19,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.TestFrame;
 
@@ -49,7 +48,7 @@ public class FindFrameByNameAndType {
     robot.cleanUp();
   }
 
-  @Test public void shouldNotFindFrameWhenUsingWrongName() {
+  public void shouldNotFindFrameWhenUsingWrongName() {
     try {
       findFrame("yourFrame").using(robot);
       fail("Should not find frame");

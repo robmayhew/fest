@@ -22,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestFrame;
 
@@ -57,7 +56,7 @@ public class TableContentsTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldReturnTableContents() {
+  public void shouldReturnTableContents() {
     String[][] contents = fixture.contents();
     assertThat(contents.length).isEqualTo(5);
     assertThat(contents[0].length).isEqualTo(5);
@@ -88,7 +87,7 @@ public class TableContentsTest {
     assertThat(contents[4][4]).isEqualTo("false");
   }
 
-  @Test public void shouldPassIfContentIsEqualToExpected() {
+  public void shouldPassIfContentIsEqualToExpected() {
     String[][] contents = new String[][] {
         { "Mary",   "Campione", "Snowboarding",   "5", "false" },
         { "Alison", "Huml",     "Rowing",         "3", "true"  },
@@ -99,7 +98,7 @@ public class TableContentsTest {
     fixture.requireContents(contents);
   }
 
-  @Test(dependsOnMethods = "shouldReturnTableContents")
+  @Test(groups = GUI, dependsOnMethods = "shouldReturnTableContents")
   public void shouldFailIfContentNotEqualToExpected() {
     try {
       fixture.requireContents(new String[][] { { "hello" } });

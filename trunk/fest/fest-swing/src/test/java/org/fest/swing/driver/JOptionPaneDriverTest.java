@@ -29,7 +29,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
 import static javax.swing.JOptionPane.*;
@@ -64,34 +63,30 @@ public class JOptionPaneDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldFindButtonWithGivenTextInOptionPane() {
+  public void shouldFindButtonWithGivenTextInOptionPane() {
     JOptionPane optionPane = frame.showMessageWithOptions(array("First", "Second"));
     JButton button = driver.buttonWithText(optionPane, "Second");
     assertThat(button.getText()).isEqualTo("Second");
   }
 
-  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
   public void shouldFindOKButton() {
     JOptionPane optionPane = frame.showInformationMessage();
     JButton button = driver.okButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.okButtonText");
   }
 
-  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
   public void shouldFindCancelButton() {
     JOptionPane optionPane = frame.showInputMessage();
     JButton button = driver.cancelButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.cancelButtonText");
   }
 
-  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
   public void shouldFindYesButton() {
     JOptionPane optionPane = frame.showConfirmMessage();
     JButton button = driver.yesButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.yesButtonText");
   }
 
-  @Test(dependsOnMethods = "shouldFindButtonWithGivenTextInOptionPane") 
   public void shouldFindNoButton() {
     JOptionPane optionPane = frame.showConfirmMessage();
     JButton button = driver.noButton(optionPane);
@@ -103,29 +98,27 @@ public class JOptionPaneDriverTest {
     assertThat(button.getText()).isEqualTo(expected);
   }
   
-  @Test public void shouldFindTextComponentInOptionPane() {
+  public void shouldFindTextComponentInOptionPane() {
     JOptionPane optionPane = frame.showInputMessage();
     JTextComponent textBox = driver.textBox(optionPane);
     assertThat(textBox).isNotNull();
   }
 
-  @Test(dependsOnMethods = "shouldFindTextComponentInOptionPane", expectedExceptions = ComponentLookupException.class) 
   public void shouldNotFindTextComponentInOptionPaneIfNotInputMessage() {
     JOptionPane optionPane = frame.showErrorMessage();
     driver.textBox(optionPane);
   }
 
-  @Test public void shouldPassIfMatchingTitle() {
+  public void shouldPassIfMatchingTitle() {
     JOptionPane optionPane = frame.showMessageWithTitle("Star Wars");
     driver.requireTitle(optionPane, "Star Wars");
   }
 
-  @Test public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
+  public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
     JOptionPane optionPane = frame.showManuallyCreatedOptionPaneWithTitle("Jedi");
     driver.requireTitle(optionPane, "Jedi");
   }
 
-  @Test(dependsOnMethods = "shouldPassIfMatchingTitle") 
   public void shouldFailIfNotMatchingTitle() {
     JOptionPane optionPane = frame.showMessageWithTitle("Yoda");
     try {
@@ -136,12 +129,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfMatchingOptions() {
+  public void shouldPassIfMatchingOptions() {
     JOptionPane optionPane = frame.showMessageWithOptions(array("First", "Second"));
     driver.requireOptions(optionPane, array("First", "Second"));
   }
 
-  @Test(dependsOnMethods = "shouldPassIfMatchingOptions") 
   public void shouldFailIfNotMatchingOptions() {
     JOptionPane optionPane = frame.showMessageWithOptions(array("First", "Second"));
     try {
@@ -153,12 +145,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfMatchingMessage() {
+  public void shouldPassIfMatchingMessage() {
     JOptionPane optionPane = frame.showMessageWithText("Leia");
     driver.requireMessage(optionPane, "Leia");
   }
 
-  @Test(dependsOnMethods = "shouldPassIfMatchingMessage") 
   public void shouldFailIfNotMatchingMessage() {
     JOptionPane optionPane = frame.showMessageWithText("Palpatine");
     try {
@@ -169,12 +160,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfExpectedAndActualMessageTypeIsError() {
+  public void shouldPassIfExpectedAndActualMessageTypeIsError() {
     JOptionPane optionPane = frame.showErrorMessage();
     driver.requireErrorMessage(optionPane);
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsError") 
   public void shouldFailIfExpectedMessageTypeIsErrorAndActualIsNot() {
     JOptionPane optionPane = frame.showInformationMessage();
     try {
@@ -186,12 +176,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
+  public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
     JOptionPane optionPane = frame.showInformationMessage();
     driver.requireInformationMessage(optionPane);
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsInformation") 
   public void shouldFailIfExpectedMessageTypeIsInformationAndActualIsNot() {
     JOptionPane optionPane = frame.showErrorMessage();
     try {
@@ -203,12 +192,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
+  public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
     JOptionPane optionPane = frame.showWarningMessage();
     driver.requireWarningMessage(optionPane);
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning") 
   public void shouldFailIfExpectedMessageTypeIsWarningAndActualIsNot() {
     JOptionPane optionPane = frame.showErrorMessage();
     try {
@@ -220,12 +208,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
+  public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
     JOptionPane optionPane = frame.showQuestionMessage();
     driver.requireQuestionMessage(optionPane);
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning") 
   public void shouldFailIfExpectedMessageTypeIsQuestionAndActualIsNot() {
     JOptionPane optionPane = frame.showErrorMessage();
     try {
@@ -237,12 +224,11 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  @Test public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
+  public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
     JOptionPane optionPane = frame.showPlainMessage();
     driver.requirePlainMessage(optionPane);
   }
 
-  @Test(dependsOnMethods = "shouldPassIfExpectedAndActualMessageTypeIsWarning") 
   public void shouldFailIfExpectedMessageTypeIsPlainAndActualIsNot() {
     JOptionPane optionPane = frame.showErrorMessage();
     try {

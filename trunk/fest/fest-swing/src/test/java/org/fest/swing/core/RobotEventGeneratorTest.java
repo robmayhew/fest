@@ -15,8 +15,6 @@
  */
 package org.fest.swing.core;
 
-import org.testng.annotations.Test;
-
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
@@ -38,7 +36,7 @@ public class RobotEventGeneratorTest extends InputEventGeneratorTestCase {
     return generator;
   }
 
-  @Test public void shouldAttachRobotToSettings() {
+  public void shouldAttachRobotToSettings() {
     assertThat(generator.robot()).isSameAs(settings.robot());
     assertThat(settings.eventMode()).isEqualTo(EventMode.ROBOT);
   }

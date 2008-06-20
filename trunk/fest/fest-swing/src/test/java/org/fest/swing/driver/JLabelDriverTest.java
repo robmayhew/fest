@@ -15,20 +15,21 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JLabelDriver}</code>.
@@ -54,12 +55,12 @@ public class JLabelDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldPassIfHasExpectedText() {
+  public void shouldPassIfHasExpectedText() {
     label.setText("Hi");
     driver.requireText(label, "Hi");
   }
 
-  @Test public void shouldFailIfDoesNotHaveExpectedText() {
+  public void shouldFailIfDoesNotHaveExpectedText() {
     label.setText("Hi");
     try {
       driver.requireText(label, "Bye");

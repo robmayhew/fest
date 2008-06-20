@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.*;
+import org.fest.swing.driver.ComponentDriver;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -139,6 +140,7 @@ public class ComponentFixtureTest {
     public ConcreteComponentFixture click(MouseClickInfo mouseClickInfo) { return null; }
     public ConcreteComponentFixture doubleClick() { return null; }
     public ConcreteComponentFixture focus() { return null; }
+    public ConcreteComponentFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) { return null; }    
     public ConcreteComponentFixture pressAndReleaseKeys(int... keyCodes) { return null; }
     public ConcreteComponentFixture requireDisabled() { return null; }
     public ConcreteComponentFixture requireEnabled() { return null; }
@@ -148,7 +150,9 @@ public class ComponentFixtureTest {
     public ConcreteComponentFixture rightClick() { return null; }
     public ConcreteComponentFixture pressKey(int keyCode) { return null; }
     public ConcreteComponentFixture releaseKey(int keyCode) { return null; }
-    public ConcreteComponentFixture lookUpShowingComponentsOnly(boolean newValue) { return null; }    
+    public ConcreteComponentFixture lookUpShowingComponentsOnly(boolean newValue) { return null; }
+
+    protected ComponentDriver driver() { return null; }
   }
 }
 

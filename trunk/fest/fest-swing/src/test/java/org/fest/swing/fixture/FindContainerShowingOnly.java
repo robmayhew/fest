@@ -25,7 +25,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.fixture.JInternalFrameFixture;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -54,7 +53,7 @@ public class FindContainerShowingOnly {
     robot.cleanUp();
   }
 
-  @Test public void shouldFindOnlyVisibleContainer() {
+  public void shouldFindOnlyVisibleContainer() {
     myFrame.notShowing.setVisible(false);
     JInternalFrameFixture fixture = new JInternalFrameFixture(robot, "target");
     assertThat(fixture.target).isSameAs(myFrame.showing);

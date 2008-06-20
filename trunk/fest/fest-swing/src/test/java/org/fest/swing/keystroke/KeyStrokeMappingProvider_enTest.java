@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link KeyStrokeMappingProvider_en}</code>.
@@ -33,7 +34,7 @@ import static org.fest.assertions.Fail.fail;
  */
 public class KeyStrokeMappingProvider_enTest extends KeyStrokeMappingProviderTestCase {
 
-  @Test(dataProvider = "keyStrokeMappings")
+  @Test(groups = GUI, dataProvider = "keyStrokeMappings")
   public void shouldProvideKeyStrokesForEnglishKeyboard(char character, KeyStroke keyStroke) {
     focusTextArea();
     if (character == BACKSPACE) {

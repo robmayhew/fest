@@ -62,13 +62,13 @@ public class JOptionPaneFinderTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldFindFileChooser() {
+  public void shouldFindFileChooser() {
     clickMessageButton();
     JOptionPaneFixture found = JOptionPaneFinder.findOptionPane().using(robot);
     assertThat(found.target).isNotNull();
   }
 
-  @Test public void shouldFindFileChooserUsingGivenMatcher() {
+  public void shouldFindFileChooserUsingGivenMatcher() {
     clickMessageButton();
     GenericTypeMatcher<JOptionPane> matcher = new GenericTypeMatcher<JOptionPane>() {
       protected boolean isMatching(JOptionPane optionPane) {
@@ -79,7 +79,7 @@ public class JOptionPaneFinderTest {
     assertThat(found.target).isNotNull();
   }
 
-  @Test public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
+  public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
     new Thread() {
       @Override public void run() {
         pause(2000);
@@ -95,7 +95,7 @@ public class JOptionPaneFinderTest {
     robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
   }
 
-  @Test(expectedExceptions = WaitTimedOutError.class)
+  @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
   public void shouldFailIfFileChooserNotFound() {
     JFileChooserFinder.findFileChooser().using(robot);
   }

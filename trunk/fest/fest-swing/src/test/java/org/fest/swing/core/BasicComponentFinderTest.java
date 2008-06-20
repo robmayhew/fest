@@ -77,12 +77,12 @@ public class BasicComponentFinderTest {
     if (anotherWindow != null) anotherWindow.destroy();
   }
   
-  @Test public void shouldFindComponentByType() {
+  public void shouldFindComponentByType() {
     JButton button = finder.findByType(JButton.class);
     assertThat(button).isSameAs(window.button);
   }
   
-  @Test public void shouldThrowExceptionIfComponentNotFoundByType() {
+  public void shouldThrowExceptionIfComponentNotFoundByType() {
     try {
       finder.findByType(JTree.class);
       fail();
@@ -91,13 +91,13 @@ public class BasicComponentFinderTest {
     }
   }
 
-  @Test public void shouldFindComponentByTypeAndContainer() {
+  public void shouldFindComponentByTypeAndContainer() {
     anotherWindow = MainWindow.beVisible();
     JButton button = finder.findByType(anotherWindow, JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
   
-  @Test public void shouldThrowExceptionIfComponentNotFoundByTypeAndContainer() {
+  public void shouldThrowExceptionIfComponentNotFoundByTypeAndContainer() {
     try {
       finder.findByType(window, JList.class);
       fail();
@@ -106,12 +106,12 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldFindComponentByName() {
+  public void shouldFindComponentByName() {
     Component button = finder.findByName("button");
     assertThat(button).isSameAs(window.button);
   }
   
-  @Test public void shouldThrowExceptionIfComponentNotFoundByName() {
+  public void shouldThrowExceptionIfComponentNotFoundByName() {
     try {
       finder.findByName("list");
       fail();
@@ -120,14 +120,14 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldFindComponentByNameAndContainer() {
+  public void shouldFindComponentByNameAndContainer() {
     anotherWindow = MainWindow.beVisible();
     anotherWindow.button.setName("anotherButton");
     Component button = finder.findByName(anotherWindow, "anotherButton");
     assertThat(button).isSameAs(anotherWindow.button);
   }
   
-  @Test public void shouldThrowExceptionIfComponentNotFoundByNameAndContainer() {
+  public void shouldThrowExceptionIfComponentNotFoundByNameAndContainer() {
     try {
       finder.findByName(window, "label");
       fail();
@@ -136,12 +136,12 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldFindComponentByNameAndType() {
+  public void shouldFindComponentByNameAndType() {
     JButton button = finder.findByName("button", JButton.class);
     assertThat(button).isSameAs(window.button);
   }
   
-  @Test public void shouldThrowExceptionIfComponentNotFoundByNameAndType() {
+  public void shouldThrowExceptionIfComponentNotFoundByNameAndType() {
     try {
       finder.findByName("list", JLabel.class);
       fail();
@@ -151,7 +151,7 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldThrowExceptionIfComponentFoundByNameAndNotByType() {
+  public void shouldThrowExceptionIfComponentFoundByNameAndNotByType() {
     try {
       finder.findByName("button", JLabel.class);
       fail();
@@ -161,13 +161,13 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldFindComponentByNameAndTypeAndContainer() {
+  public void shouldFindComponentByNameAndTypeAndContainer() {
     anotherWindow = MainWindow.beVisible();
     JButton button = finder.findByName(anotherWindow, "button", JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
   
-  @Test public void shouldThrowExceptionIfComponentNotFoundByNameAndTypeAndContainer() {
+  public void shouldThrowExceptionIfComponentNotFoundByNameAndTypeAndContainer() {
     try {
       finder.findByName(window, "list", JLabel.class);
       fail();
@@ -177,7 +177,7 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldThrowExceptionIfComponentFoundByNameAndContainerAndNotByType() {
+  public void shouldThrowExceptionIfComponentFoundByNameAndContainerAndNotByType() {
     try {
       finder.findByName(window, "button", JLabel.class);
       fail();
@@ -187,7 +187,7 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldFindComponentUsingGenericTypeMatcher() {
+  public void shouldFindComponentUsingGenericTypeMatcher() {
     JButton button = finder.find(new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
         return "A Button".equals(button.getText());
@@ -196,7 +196,7 @@ public class BasicComponentFinderTest {
     assertThat(button).isSameAs(window.button);
   }
 
-  @Test(expectedExceptions = ComponentLookupException.class) 
+  @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
   public void shouldThrowExceptionIfGenericMatcherNeverMatchesComponent() {
     finder.find(new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {
@@ -205,7 +205,7 @@ public class BasicComponentFinderTest {
     });
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
+  @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
   public void shouldThrowExceptionIfGenericMatcherMatchesWrongType() {
     finder.find(window, new GenericTypeMatcher<JLabel>() {
       @Override protected boolean isMatching(JLabel component) {
@@ -214,7 +214,7 @@ public class BasicComponentFinderTest {
     });
   }
   
-  @Test public void shouldFindComponentByContainerUsingGenericTypeMatcher() {
+  public void shouldFindComponentByContainerUsingGenericTypeMatcher() {
     JButton button = finder.find(window, new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
         return "A Button".equals(button.getText());
@@ -223,7 +223,7 @@ public class BasicComponentFinderTest {
     assertThat(button).isSameAs(window.button);
   }
 
-  @Test(expectedExceptions = ComponentLookupException.class) 
+  @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
   public void shouldThrowExceptionIfGenericMatcherNeverMatchesComponentInContainer() {
     finder.find(window, new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {
@@ -232,7 +232,7 @@ public class BasicComponentFinderTest {
     });
   }
   
-  @Test(expectedExceptions = ComponentLookupException.class) 
+  @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
   public void shouldThrowExceptionIfGenericMatcherMatchesWrongTypeInContainer() {
     finder.find(window, new GenericTypeMatcher<JList>() {
       @Override protected boolean isMatching(JList component) {
@@ -241,7 +241,7 @@ public class BasicComponentFinderTest {
     });
   }
   
-  @Test public void shouldThrowErrorIfMoreThanOneComponentMatch() {
+  public void shouldThrowErrorIfMoreThanOneComponentMatch() {
     try {
       finder.find(new TypeMatcher(JTextField.class));
       fail();
@@ -252,7 +252,7 @@ public class BasicComponentFinderTest {
     }    
   }
 
-  @Test public void shouldThrowExceptionWithoutComponentHierarchyAsConfigured() {
+  public void shouldThrowExceptionWithoutComponentHierarchyAsConfigured() {
     finder.includeHierarchyIfComponentNotFound(false);
     try {
       finder.findByName(window, "button", JLabel.class);
@@ -263,7 +263,7 @@ public class BasicComponentFinderTest {
     }
   }
   
-  @Test public void shouldReturnAllMatchingComponents() {
+  public void shouldReturnAllMatchingComponents() {
     Collection<Component> found = finder.findAll(new ComponentMatcher() {
       public boolean matches(Component c) {
         return c instanceof JTextField;
@@ -272,7 +272,7 @@ public class BasicComponentFinderTest {
     assertThat(found).containsOnly(window.textField, window.anotherTextField);
   }
   
-  @Test public void shouldReturnAllMatchingComponentsInGivenRoot() {
+  public void shouldReturnAllMatchingComponentsInGivenRoot() {
     anotherWindow = MainWindow.beVisible();
     Collection<Component> found = finder.findAll(anotherWindow, new ComponentMatcher() {
       public boolean matches(Component c) {

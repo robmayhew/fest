@@ -86,7 +86,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
     driver = newDriver;
   }
   
-  final JTableDriver driver() { return driver; }
+  /** {@inheritDoc} **/
+  protected final JTableDriver driver() {
+    return driver;
+  }
 
   /**
    * Returns a fixture that verifies the font of the given table cell.
@@ -289,6 +292,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTableFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
@@ -319,7 +323,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
-    click(cell, mouseClickInfo.button(), mouseClickInfo.times());
+    doClick(mouseClickInfo);
     return this;
   }
 
@@ -346,6 +350,20 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    */
   public JTableFixture rightClick() {
     driver.rightClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link JTable}</code>.
+   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see KeyPressInfo
+   */
+  public JTableFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
+    doPressAndReleaseKey(keyPressInfo);
     return this;
   }
 

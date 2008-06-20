@@ -23,6 +23,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -56,7 +57,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * @param robot performs user events on the given window and verifies expected output.
    * @param target the <code>Frame</code> to be managed by this fixture.
    * @throws IllegalArgumentException if the given robot is <code>null</code>.
-   * @throws IllegalArgumentException if the given dialog is <code>null</code>.
+   * @throws IllegalArgumentException if the given frame is <code>null</code>.
    */
   public FrameFixture(Robot robot, Frame target) {
     super(robot, target);
@@ -96,6 +97,11 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
     driver = newDriver;
   }
 
+  /** {@inheritDoc} **/
+  protected ComponentDriver driver() {
+    return driver;
+  }
+
   /**
    * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @return this fixture.
@@ -119,9 +125,10 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public FrameFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    doClick(mouseClickInfo);
     return this;
   }
 
@@ -199,6 +206,20 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
     return this;
   }
 
+  /**
+   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Frame}</code>.
+   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @return this fixture.
+   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see KeyPressInfo
+   */
+  public FrameFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
+    doPressAndReleaseKey(keyPressInfo);
+    return this;
+  }
+  
   /**
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Frame}</code>.
    * @param keyCodes one or more codes of the keys to press.

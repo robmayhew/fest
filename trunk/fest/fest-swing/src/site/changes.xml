@@ -12,14 +12,14 @@
       <action dev="alruiz, wanghy" type="fix" issue="134" due-to="Woody Folsom">
         Fixed implementation of 'click(AbstractButton)' in AbstractButtonDriver.
       </action>
-      <action dev="alruiz, wanghy" type="fix" issue="138" due-to="J. Simmons">
+      <action dev="alruiz, wanghy" type="add" issue="138" due-to="J. Simmons">
         Added method 'cleanUpWithoutDisposingWindows' to Robot and RobotFixture in package 'org.fest.swing.core'.
       </action>
       <action dev="alruiz" type="fix" issue="140" due-to="Wim Deblauwe">
         Method 'selectItem(String)' in JComboBoxFixture now uses the specified cell reader to find a matching value in
         the JComboBox.
       </action>
-      <action dev="alruiz" type="fix" issue="141" due-to="BA">
+      <action dev="alruiz" type="add" issue="141" due-to="BA">
         Added methods 'showPopupMenuAt(int)' and 'showPopupMenuAt(String)' to JTableHeaderFixture.
       </action>
       <action dev="wanghy, alruiz" type="add" issue="142" due-to="Simeon Fitch, Matthias Otterbach">
@@ -36,7 +36,7 @@
         Added methods 'startEditing(),' 'stopEditing(),' 'cancelEditing(),' 'editor(),' and 'enterValue(String)' to 
         org.fest.swing.fixture.JTableCellFixture.
       </action>
-      <action dev="alruiz" type="fix" issue="144" due-to="Simeon Fitch">
+      <action dev="alruiz" type="add" issue="144" due-to="Simeon Fitch">
         Added methods 'findAll(ComponentMatcher)' and 'findAll(Container, ComponentMatcher)' to 
         org.fest.swing.core.ComponentFinder to look up all the components that match certain search criteria.
       </action>
@@ -70,6 +70,9 @@
       </action>
       <action dev="alruiz" type="add">
         Added method 'controlOrCommandMask' to org.fest.swing.util.Platform.
+      </action>
+      <action dev="alruiz" type="add">
+        Added method 'pressAndReleaseKey(KeyPressInfo)' to all component fixtures.
       </action>
     </release>
     <release version="1.0a2" date="2008-05-19" description="Subsequent release">

@@ -17,9 +17,10 @@ package org.fest.swing.fixture;
 
 import java.awt.Container;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.ComponentDriver;
 
 /**
  * Understands a concrete subclass of <code>{@link ContainerFixture}</code> to be used for testing only.
@@ -38,6 +39,7 @@ public class ConcreteContainerFixture<T extends Container> extends ContainerFixt
   public ContainerFixture<T> click(MouseClickInfo mouseClickInfo) { return null; }
   public ContainerFixture<T> doubleClick() { return null; }
   public ContainerFixture<T> focus() { return null; }
+  public ContainerFixture<T> pressAndReleaseKey(KeyPressInfo keyPressInfo) { return null; }
   public ContainerFixture<T> pressAndReleaseKeys(int... keyCodes) { return null; }
   public ContainerFixture<T> requireDisabled() { return null; }
   public ContainerFixture<T> requireEnabled() { return null; }
@@ -48,4 +50,6 @@ public class ConcreteContainerFixture<T extends Container> extends ContainerFixt
   public ContainerFixture<T> pressKey(int keyCode) { return null; }
   public ContainerFixture<T> releaseKey(int keyCode) { return null; }
   public ContainerFixture<T> lookUpShowingComponentsOnly(boolean newValue) { return null; }
+
+  protected ComponentDriver driver() { return null; }
 }

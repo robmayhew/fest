@@ -40,7 +40,6 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
 public class JSplitPaneDriverTest {
 
   private Robot robot;
@@ -56,7 +55,7 @@ public class JSplitPaneDriverTest {
     robot.cleanUp();
   }
   
-  @Test(dataProvider = "orientations")
+  @Test(groups = GUI, dataProvider = "orientations")
   public void shouldMoveDividerToGivenLocation(int orientation) {
     MyFrame frame = new MyFrame(orientation);
     splitPane = frame.splitPane;
@@ -66,7 +65,7 @@ public class JSplitPaneDriverTest {
     assertThat(splitPane.getDividerLocation()).isEqualTo(newLocation);
   }
 
-  @Test(dataProvider = "orientations")
+  @Test(groups = GUI, dataProvider = "orientations")
   public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation) {
     MyFrame frame = new MyFrame(orientation);
     splitPane = frame.splitPane;

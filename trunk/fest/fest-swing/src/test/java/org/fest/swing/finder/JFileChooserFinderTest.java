@@ -61,13 +61,13 @@ public class JFileChooserFinderTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldFindFileChooser() {
+  public void shouldFindFileChooser() {
     clickBrowseButton();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser().using(robot);
     assertThat(found.target).isSameAs(frame.fileChooser);
   }
 
-  @Test public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
+  public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
     new Thread() {
       @Override public void run() {
         pause(2000);
@@ -83,18 +83,18 @@ public class JFileChooserFinderTest {
     robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
   }
 
-  @Test(expectedExceptions = WaitTimedOutError.class)
+  @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
   public void shouldFailIfFileChooserNotFound() {
     JFileChooserFinder.findFileChooser().using(robot);
   }
   
-  @Test public void shouldFindFileChooserByName() {
+  public void shouldFindFileChooserByName() {
     clickBrowseButton();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser("fileChooser").using(robot);
     assertThat(found.target).isSameAs(frame.fileChooser);    
   }
   
-  @Test public void shouldFindFileChooserUsingMatcher() {
+  public void shouldFindFileChooserUsingMatcher() {
     clickBrowseButton();
     GenericTypeMatcher<JFileChooser> matcher = new GenericTypeMatcher<JFileChooser>( ) {
       protected boolean isMatching(JFileChooser fileChooser) {

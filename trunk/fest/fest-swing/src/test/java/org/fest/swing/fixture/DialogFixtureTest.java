@@ -61,13 +61,15 @@ public class DialogFixtureTest extends JPopupMenuInvokerFixtureTestCase<Dialog> 
     }.run();
   }
   
-  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
+  @Test(groups = GUI) 
+  public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
     fixture = new DialogFixture(target);
     assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
     fixture.cleanUp();
   }
 
-  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
+  @Test(groups = GUI) 
+  public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
     target.setName("dialog");
     target.pack();
     target.setVisible(true);

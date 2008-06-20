@@ -59,13 +59,15 @@ public class FrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<Frame> {
     }.run();
   }
   
-  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
+  @Test(groups = GUI) 
+  public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
     fixture = new FrameFixture(target);
     assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
     fixture.cleanUp();
   }
 
-  @Test(groups = GUI) public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
+  @Test(groups = GUI) 
+  public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
     target.setName("frame");
     target.pack();
     target.setVisible(true);

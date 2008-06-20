@@ -59,31 +59,31 @@ public class JSpinnerDriverTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldIncrementValue() {
+  public void shouldIncrementValue() {
     assertFirstValueIsSelected();
     driver.increment(spinner);
     assertThatSpinnerValueIsEqualTo("Sam");
   }
 
-  @Test public void shouldNotIncrementValueIfSpinnerIsNotEnabled() {
+  public void shouldNotIncrementValueIfSpinnerIsNotEnabled() {
     clearAndDisableSpinner();
     driver.increment(spinner);
     assertFirstValueIsSelected();
   }
   
-  @Test public void shouldIncrementValueTheGivenTimes() {
+  public void shouldIncrementValueTheGivenTimes() {
     assertFirstValueIsSelected();
     driver.increment(spinner, 2);
     assertLastValueIsSelected();
   }
 
-  @Test public void shouldNotIncrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
+  public void shouldNotIncrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
     clearAndDisableSpinner();
     driver.increment(spinner, 2);
     assertFirstValueIsSelected();
   }
 
-  @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
+  @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToIncrementIsZeroOrNegative(int times) {
     try {
       driver.increment(spinner, times);
@@ -95,13 +95,13 @@ public class JSpinnerDriverTest {
     }
   }
 
-  @Test public void shouldDecrementValue() {
+  public void shouldDecrementValue() {
     driver.increment(spinner);
     driver.decrement(spinner);
     assertFirstValueIsSelected();
   }
 
-  @Test public void shouldNotDecrementValueIfSpinnerIsNotEnabled() {
+  public void shouldNotDecrementValueIfSpinnerIsNotEnabled() {
     clearAndDisableSpinner();
     selectLastValue();
     driver.decrement(spinner);
@@ -112,20 +112,20 @@ public class JSpinnerDriverTest {
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
 
-  @Test public void shouldDecrementValueTheGivenTimes() {
+  public void shouldDecrementValueTheGivenTimes() {
     selectLastValue();
     driver.decrement(spinner, 2);
     assertFirstValueIsSelected();
   }
 
-  @Test public void shouldNotDecrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
+  public void shouldNotDecrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
     clearAndDisableSpinner();
     selectLastValue();
     driver.decrement(spinner, 2);
     assertLastValueIsSelected();
   }
 
-  @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
+  @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToDecrementIsZeroOrNegative(int times) {
     try {
       driver.decrement(spinner, times);
@@ -137,12 +137,12 @@ public class JSpinnerDriverTest {
     }
   }
 
-  @Test public void shouldEnterText() {
+  public void shouldEnterText() {
     driver.enterText(spinner, "Gandalf");
     assertLastValueIsSelected();
   }
 
-  @Test public void shouldNotEnterTextIfSpinnerIsNotEnabled() {
+  public void shouldNotEnterTextIfSpinnerIsNotEnabled() {
     clearAndDisableSpinner();
     driver.enterText(spinner, "Gandalf");
     assertFirstValueIsSelected();
@@ -152,12 +152,12 @@ public class JSpinnerDriverTest {
     assertThatSpinnerValueIsEqualTo("Gandalf");
   }
 
-  @Test public void shouldPassIfValueIsEqualToExpected() {
+  public void shouldPassIfValueIsEqualToExpected() {
     selectLastValue();
     driver.requireValue(spinner, "Gandalf");
   }
 
-  @Test public void shouldFailIfValueIsNotEqualToExpected() {
+  public void shouldFailIfValueIsNotEqualToExpected() {
     selectLastValue();
     try {
       driver.requireValue(spinner, "Frodo");

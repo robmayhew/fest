@@ -15,15 +15,6 @@
  */
 package org.fest.swing.core;
 
-import static java.awt.event.KeyEvent.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.AWT.centerOf;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -32,15 +23,26 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestFrame;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
+import static java.awt.event.KeyEvent.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.util.AWT.centerOf;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.
@@ -69,7 +71,7 @@ public class RobotFixtureTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldThrowErrorIfWindowNeverShown() {
+  public void shouldThrowErrorIfWindowNeverShown() {
     try {
       robot.showWindow(new JFrame() {
         private static final long serialVersionUID = 1L;
@@ -84,7 +86,7 @@ public class RobotFixtureTest {
     }
   }
 
-  @Test public void shouldNotPackWindowAsSpecified() {
+  public void shouldNotPackWindowAsSpecified() {
     class MyWindow extends JWindow {
       private static final long serialVersionUID = 1L;
       private boolean packed;
@@ -104,32 +106,32 @@ public class RobotFixtureTest {
     assertThat(window.getLocationOnScreen()).isEqualTo(new Point(0, 0));
   }
 
-  @Test public void shouldClickComponent() {
+  public void shouldClickComponent() {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.click(textFieldWithoutPopup);
     assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(1);
   }
 
-  @Test public void shouldRightClickComponent() {
+  public void shouldRightClickComponent() {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.rightClick(textFieldWithoutPopup);
     assertThat(recorder).clicked(RIGHT_BUTTON).timesClicked(1);
   }
 
-  @Test public void shouldDoubleClickComponent() {
+  public void shouldDoubleClickComponent() {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.doubleClick(textFieldWithoutPopup);
     assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(2);
   }
 
-  @Test public void shouldClickComponentOnceWithLeftButtonAtGivenPoint() {
+  public void shouldClickComponentOnceWithLeftButtonAtGivenPoint() {
     Point p = new Point(10, 10);
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.click(textFieldWithoutPopup, p);
     assertThat(recorder).clicked(LEFT_BUTTON).timesClicked(1).clickedAt(p);
   }
 
-  @Test(dataProvider = "mouseButtons")
+  @Test(groups = GUI, dataProvider = "mouseButtons")
   public void shouldClickComponentOnceWithGivenButton(MouseButton button) {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.click(textFieldWithoutPopup, button);
@@ -145,14 +147,14 @@ public class RobotFixtureTest {
     };
   }
 
-  @Test(dataProvider = "clickingData")
+  @Test(groups = GUI, dataProvider = "clickingData")
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimes(MouseButton button, int times) {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.click(textFieldWithoutPopup, button, times);
     assertThat(recorder).clicked(button).timesClicked(times).clickedAt(centerOf(textFieldWithoutPopup));
   }
 
-  @Test(dataProvider = "clickingData")
+  @Test(groups = GUI, dataProvider = "clickingData")
   public void shouldClickComponentWithGivenMouseButtonAndGivenNumberOfTimesAtGivenPoint(MouseButton button, int times) {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     Point point = new Point(10, 10);
@@ -172,7 +174,7 @@ public class RobotFixtureTest {
     };
   }
 
-  @Test public void shouldPressAndReleaseGivenKeys() {
+  public void shouldPressAndReleaseGivenKeys() {
     textFieldWithPopup.requestFocusInWindow();
     KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
     int[] keys = { VK_A, VK_B, VK_Z };
@@ -180,14 +182,13 @@ public class RobotFixtureTest {
     assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
-  @Test public void shouldPressGivenKeyWithoutReleasingIt() {
+  public void shouldPressGivenKeyWithoutReleasingIt() {
     textFieldWithPopup.requestFocusInWindow();
     KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
     robot.pressKey(VK_A);
     assertThat(recorder).keysPressed(VK_A).noKeysReleased();
   }
 
-  @Test(dependsOnMethods = "shouldPressGivenKeyWithoutReleasingIt")
   public void shouldReleaseGivenKey() {
     textFieldWithPopup.requestFocusInWindow();
     KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
@@ -196,13 +197,13 @@ public class RobotFixtureTest {
     assertThat(recorder).keysReleased(VK_A);
   }
 
-  @Test public void shouldShowPopupMenu() {
+  public void shouldShowPopupMenu() {
     JPopupMenu menu = robot.showPopupMenu(textFieldWithPopup);
     assertThat(menu).isSameAs(popupMenu());
     assertThat(menu.isVisible()).isTrue();
   }
 
-  @Test public void shouldThrowErrorIfPopupNotFound() {
+  public void shouldThrowErrorIfPopupNotFound() {
     try {
       robot.showPopupMenu(textFieldWithoutPopup);
       fail();
@@ -213,19 +214,18 @@ public class RobotFixtureTest {
     }
   }
 
-  @Test(dependsOnMethods = "shouldShowPopupMenu")
   public void shouldReturnActivePopupMenu() {
     robot.showPopupMenu(textFieldWithPopup);
     JPopupMenu found = robot.findActivePopupMenu();
     assertThat(found).isSameAs(frame.popupMenu);
   }
 
-  @Test public void shouldReturnNullIfActivePopupMenuNotFound() {
+  public void shouldReturnNullIfActivePopupMenuNotFound() {
     JPopupMenu found = robot.findActivePopupMenu();
     assertThat(found).isNull();
   }
 
-  @Test public void shouldCloseWindow() {
+  public void shouldCloseWindow() {
     final TestFrame w = new TestFrame(getClass());
     w.display();
     robot.close(w);
@@ -237,7 +237,7 @@ public class RobotFixtureTest {
     assertThat(w.isVisible()).isFalse();
   }
 
-  @Test public void shouldNotCloseWindowIfWindowNotShowing() {
+  public void shouldNotCloseWindowIfWindowNotShowing() {
     TestFrame w = new TestFrame(getClass());
     w.display();
     w.setVisible(false);
@@ -246,7 +246,7 @@ public class RobotFixtureTest {
     assertThat(w.isShowing()).isFalse();
   }
 
-  @Test public void shouldGiveFocus() {
+  public void shouldGiveFocus() {
     giveFocusAndVerifyThatHasFocus(textFieldWithPopup);
     giveFocusAndVerifyThatHasFocus(textFieldWithoutPopup);
   }
@@ -257,7 +257,7 @@ public class RobotFixtureTest {
     assertThat(c.isFocusOwner()).isTrue();
   }
 
-  @Test public void shouldGiveFocusAndWaitUntilComponentHasFocus() {
+  public void shouldGiveFocusAndWaitUntilComponentHasFocus() {
     robot.focusAndWaitForFocusGain(textFieldWithPopup);
     assertThat(textFieldWithPopup.isFocusOwner()).isTrue();
     robot.focusAndWaitForFocusGain(textFieldWithoutPopup);
@@ -268,11 +268,11 @@ public class RobotFixtureTest {
     return frame.popupMenu;
   }
 
-  @Test public void shouldPassIfNoJOptionPaneIsShowing() {
+  public void shouldPassIfNoJOptionPaneIsShowing() {
     robot.requireNoJOptionPaneIsShowing();
   }
 
-  @Test public void shouldFailIfJOptionPaneIsShowingAndExpectingNotShowing() throws Exception {
+  public void shouldFailIfJOptionPaneIsShowingAndExpectingNotShowing() throws Exception {
     robot.click(frame.button);
     pause(500);
     try {

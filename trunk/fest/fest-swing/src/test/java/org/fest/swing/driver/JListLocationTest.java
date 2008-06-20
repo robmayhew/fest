@@ -59,13 +59,13 @@ public class JListLocationTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldReturnLocationOfIndex() {
+  public void shouldReturnLocationOfIndex() {
     Point p = location.pointAt(list, 2);
     int index = list.locationToIndex(p);
     assertThat(index).isEqualTo(2);
   }
   
-  @Test public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForLocation() {
+  public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForLocation() {
     try {
       location.pointAt(list, 8);
       fail();

@@ -15,20 +15,21 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.FocusSetter.setFocusOn;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Component;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.FocusSetter.setFocusOn;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link FocusOwnerFinder}</code>.
@@ -53,19 +54,19 @@ public class FocusOwnerFinderTest {
     frame.destroy();
   }
 
-  @Test public void shouldFindFocusOwner() {
+  public void shouldFindFocusOwner() {
     setFocusOn(textField);
     Component focusOwner = FocusOwnerFinder.focusOwner();
     assertThat(focusOwner).isSameAs(textField);
   }
 
-  @Test public void shouldFindFocusOwnerInHierarchy() {
+  public void shouldFindFocusOwnerInHierarchy() {
     setFocusOn(textField);
     Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
     assertThat(focusOwner).isSameAs(textField);
   }
 
-  @Test public void shouldFindFocusInOwnedWindow() {
+  public void shouldFindFocusInOwnedWindow() {
     TestDialog dialog = new TestDialog(frame);
     JButton button = new JButton("Click me");
     dialog.add(button);

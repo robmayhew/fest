@@ -15,12 +15,13 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link BasicJTableCellWriter}</code>.
@@ -35,12 +36,12 @@ public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
     return new BasicJTableCellWriter(robot);
   }
 
-  @Test public void shouldSelectItemInComboBoxEditor() {
+  public void shouldSelectItemInComboBoxEditor() {
     writer().enterValue(table(), 0, 2, "Pool");
     assertThat(valueAt(0, 2)).isEqualTo("Pool");
   }
 
-  @Test public void shouldSelectItemInCheckBoxEditor() {
+  public void shouldSelectItemInCheckBoxEditor() {
     int row = 0;
     int column = 4;
     writer().enterValue(table(), row, column, "false");
@@ -51,7 +52,7 @@ public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
     assertThat(valueAt(row,column)).isEqualTo(false);
   }
 
-  @Test public void shouldEnterTextInTextComponentEditor() {
+  public void shouldEnterTextInTextComponentEditor() {
     writer().enterValue(table(), 4, 3, "8");
     assertThat(valueAt(4, 3)).isEqualTo(8);
   }

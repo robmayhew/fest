@@ -57,20 +57,20 @@ public class FrameDriverTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldIconifyAndDeiconifyFrame() {
+  public void shouldIconifyAndDeiconifyFrame() {
     driver.iconify(frame);
     assertThat(frameState()).isEqualTo(ICONIFIED);
     driver.deiconify(frame);
     assertThat(frameState()).isEqualTo(NORMAL);
   }
   
-  @Test public void shouldMaximizeFrame() {
+  public void shouldMaximizeFrame() {
     driver.maximize(frame);
     int frameState = frameState() & MAXIMIZED_BOTH;
     assertThat(frameState).isEqualTo(MAXIMIZED_BOTH);
   }
 
-  @Test public void shouldNormalizeFrame() {
+  public void shouldNormalizeFrame() {
     driver.maximize(frame);
     driver.normalize(frame);
     assertThat(frameState()).isEqualTo(NORMAL);
@@ -80,7 +80,7 @@ public class FrameDriverTest {
     return frame.getExtendedState();
   }
 
-  @Test public final void shouldResizeFrameToGivenSize() {
+  public final void shouldResizeFrameToGivenSize() {
     FluentDimension newSize = frameSize().addToWidth(20).addToHeight(40);
     driver.resize(frame, newSize.width, newSize.height);
     assertThat(frame.getSize()).isEqualTo(newSize);
@@ -90,7 +90,7 @@ public class FrameDriverTest {
     return new FluentDimension(frame.getSize());
   }
   
-  @Test public final void shouldMoveFrame() {
+  public final void shouldMoveFrame() {
     Point p = frameLocationOnScreen().addToX(10).addToY(10);
     driver.move(frame, p.x, p.y);
     assertThat(frameLocationOnScreen()).isEqualTo(p);

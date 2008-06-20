@@ -64,60 +64,60 @@ public class WindowFinderTest {
     robot.cleanUp();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameNameIsNull() {
     WindowFinder.findFrame((String)null);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameNameIsEmpty() {
     WindowFinder.findFrame("");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameTypeIsNull() {
     WindowFinder.findFrame((Class<Frame>)null);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameMatcherIsNull() {
     GenericTypeMatcher<JFrame> matcher = null;
     WindowFinder.findFrame(matcher);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfFrameSearchTimeoutIsNegative() {
     WindowFinder.findFrame("frame").withTimeout(-20);
   }
 
-  @Test(expectedExceptions = WaitTimedOutError.class)
+  @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutIfFrameNotFound() {
     WindowFinder.findFrame("myFrame").withTimeout(10).using(launcher.robot);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfTimeUnitToFindFrameIsNull() {
     WindowFinder.findFrame("frame").withTimeout(10, null).using(launcher.robot);
   }
 
-  @Test(expectedExceptions = WaitTimedOutError.class)
+  @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutWhenUsingTimeUnitsIfFrameNotFound() {
     WindowFinder.findDialog("myFrame").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
   }
 
-  @Test public void shouldFindFrameByNameAfterLogin() {
+  public void shouldFindFrameByNameAfterLogin() {
     launchFrame();
     FrameFixture frame = WindowFinder.findFrame("frame").using(launcher.robot);
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
 
-  @Test public void shouldFindFrameByNameAfterLoginUsingTimeUnit() {
+  public void shouldFindFrameByNameAfterLoginUsingTimeUnit() {
     launchFrame();
     FrameFixture frame = WindowFinder.findFrame("frame").withTimeout(2, SECONDS).using(launcher.robot);
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
 
-  @Test public void shouldFindFrameUsingMatcherAfterLogin() {
+  public void shouldFindFrameUsingMatcherAfterLogin() {
     launchFrame();
     GenericTypeMatcher<JFrame> matcher = new GenericTypeMatcher<JFrame>() {
       protected boolean isMatching(JFrame frame) {
@@ -128,7 +128,7 @@ public class WindowFinderTest {
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
   }
 
-  @Test public void shouldFindFrameByTypeAfterLogin() {
+  public void shouldFindFrameByTypeAfterLogin() {
     launchFrame();
     FrameFixture frame = WindowFinder.findFrame(FrameToLaunch.class).using(launcher.robot);
     assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
@@ -143,60 +143,60 @@ public class WindowFinderTest {
     launcher.button("launchFrame").click();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogNameIsNull() {
     WindowFinder.findDialog((String)null);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogNameIsEmpty() {
     WindowFinder.findDialog("");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogTypeIsNull() {
     WindowFinder.findDialog((Class<Dialog>)null);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogMatcherIsNull() {
     GenericTypeMatcher<JDialog> matcher = null;
     WindowFinder.findDialog(matcher);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfDialogSearchTimeoutIsNegative() {
     WindowFinder.findDialog("dialog").withTimeout(-20);
   }
 
-  @Test(expectedExceptions = WaitTimedOutError.class)
+  @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutIfDialogNotFound() {
     WindowFinder.findDialog("myDialog").withTimeout(5).using(launcher.robot);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfTimeUnitToFindDialogIsNull() {
     WindowFinder.findDialog("dialog").withTimeout(10, null).using(launcher.robot);
   }
 
-  @Test(expectedExceptions = WaitTimedOutError.class)
+  @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
   public void shouldTimeOutWhenUsingTimeUnitsIfDialogNotFound() {
     WindowFinder.findDialog("myDialog").withTimeout(10, TimeUnit.MILLISECONDS).using(launcher.robot);
   }
 
-  @Test public void shouldFindDialogByNameAfterLoadingSettings() {
+  public void shouldFindDialogByNameAfterLoadingSettings() {
     launchDialog();
     DialogFixture dialog = WindowFinder.findDialog("dialog").using(launcher.robot);
     assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
   }
 
-  @Test public void shouldFindDialogByTypeAfterLoadingSettings() {
+  public void shouldFindDialogByTypeAfterLoadingSettings() {
     launchDialog();
     DialogFixture dialog = WindowFinder.findDialog(DialogToLaunch.class).using(launcher.robot);
     assertThat(dialog.target).isInstanceOf(DialogToLaunch.class);
   }
 
-  @Test public void shouldFindDialogUsingMatcherAfterLoadingSettings() {
+  public void shouldFindDialogUsingMatcherAfterLoadingSettings() {
     launchDialog();
     GenericTypeMatcher<JDialog> matcher = new GenericTypeMatcher<JDialog>() {
       protected boolean isMatching(JDialog dialog) {

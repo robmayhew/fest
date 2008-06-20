@@ -24,6 +24,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.*;
 import org.fest.swing.driver.ComponentDriver;
 
+import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -99,6 +100,11 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfMouseClickInfoIsNull() {
+    fixture().click((MouseClickInfo)null);
+  }
+
   @Test public void shouldDoubleClick() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -138,6 +144,26 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
+  @Test public void shouldPressAndReleaseKey() {
+    final int keyCode = VK_A;
+    final int[] modifiers = { SHIFT_MASK };
+    new EasyMockTemplate(driver()) {
+      protected void expectations() {
+        driver().pressAndReleaseKey(target(), keyCode, modifiers);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture().pressAndReleaseKey(KeyPressInfo.keyCode(keyCode).modifiers(modifiers)));
+      }
+    }.run();
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowErrorIfKeyPressInfoIsNull() {
+    fixture().pressAndReleaseKey(null);
+  }
+  
   @Test public void shouldPressAndReleaseKeys() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {

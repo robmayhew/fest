@@ -27,7 +27,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestTree;
 
@@ -56,24 +55,24 @@ public class ScrollJTreeElementTest {
     fixture.cleanUp();
   }
 
-  @Test public void shouldScrollToSelectElementByPath() {
+  public void shouldScrollToSelectElementByPath() {
     fixture.tree("drag").selectPath("root/100/100.1");
     assertThat(selection()).isEqualTo("100.1");
   }
 
-  @Test public void shouldScrollToSelectElementByIndex() {
+  public void shouldScrollToSelectElementByIndex() {
     fixture.tree("drag").selectRow(99);
     assertThat(selection()).isEqualTo("99");
   }
   
-  @Test public void shouldScrollToDragAndDropByPath() {
+  public void shouldScrollToDragAndDropByPath() {
     fixture.tree("drag").drag("root/99");
     fixture.tree("drop").drop("root/90");
     assertPathNotFound("root/99");
     fixture.tree("drop").selectPath("root/90/99");
   }
 
-  @Test public void shouldScrollToDragAndDropByIndex() {
+  public void shouldScrollToDragAndDropByIndex() {
     fixture.tree("drag").drag(99);
     fixture.tree("drop").drop(90);
     assertPathNotFound("root/99");

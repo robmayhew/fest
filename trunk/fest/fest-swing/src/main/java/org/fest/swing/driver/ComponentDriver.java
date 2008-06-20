@@ -215,9 +215,14 @@ public class ComponentDriver {
    * @throws IllegalArgumentException if the given code is not a valid key code. *
    * @see java.awt.event.KeyEvent
    */
-  public void pressAndReleaseKey(Component c, int keyCode, int modifiers) {
+  public void pressAndReleaseKey(Component c, int keyCode, int[] modifiers) {
     focus(c);
-    robot.pressAndReleaseKey(keyCode, modifiers);
+    int modifier = 0;
+    if (modifiers != null && modifiers.length > 0) {
+      modifier = modifiers[0];
+      for(int i = 1; i < modifiers.length; i++) modifier |= modifiers[i];
+    }
+    robot.pressAndReleaseKey(keyCode, modifier);
   }
 
   /**

@@ -41,7 +41,6 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
 public class JTreeLocationTest {
 
   private MyFrame frame;
@@ -70,7 +69,7 @@ public class JTreeLocationTest {
     frame.destroy();
   }
 
-  @Test(dataProvider = "pathIndices")
+  @Test(groups = GUI, dataProvider = "pathIndices")
   public void shouldFindLocationOfTreePath(int pathIndex) {
     TreePath path = paths.get(pathIndex);
     pause(160);

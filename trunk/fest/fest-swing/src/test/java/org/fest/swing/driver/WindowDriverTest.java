@@ -56,43 +56,43 @@ public class WindowDriverTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldResizeWindow() {
+  public void shouldResizeWindow() {
     Dimension newSize = new FluentDimension(frame.getSize()).addToHeight(100).addToWidth(200);
     driver.resize(frame, newSize.width, newSize.height);
     assertThat(frame.getSize()).isEqualTo(newSize);
   }
   
-  @Test public void shouldResizeWidthOnly() {
+  public void shouldResizeWidthOnly() {
     Dimension newSize = new FluentDimension(frame.getSize()).addToWidth(200);
     driver.resizeWidthTo(frame, newSize.width);
     assertThat(frame.getSize()).isEqualTo(newSize);
   }
 
-  @Test public void shouldResizeHeightOnly() {
+  public void shouldResizeHeightOnly() {
     Dimension newSize = new FluentDimension(frame.getSize()).addToHeight(100);
     driver.resizeHeightTo(frame, newSize.height);
     assertThat(frame.getSize()).isEqualTo(newSize);
   }
   
-  @Test public void shouldMoveWindow() {
+  public void shouldMoveWindow() {
     Point newPosition = new Point(200, 200);
     driver.moveTo(frame, newPosition);
     assertThat(frame.getLocationOnScreen()).isEqualTo(newPosition);
   }
   
-  @Test public void shouldCloseWindow() {
+  public void shouldCloseWindow() {
     driver.close(frame);
     pause(200);
     assertThat(frame.isVisible()).isFalse();
   }
   
-  @Test public void shouldShowWindow() {
+  public void shouldShowWindow() {
     frame.setVisible(false);
     driver.show(frame);
     assertThat(frame.isVisible()).isTrue();
   }
 
-  @Test public void shouldShowWindowUsingGivenSize() {
+  public void shouldShowWindowUsingGivenSize() {
     frame.setVisible(false);
     final Dimension newSize = new Dimension(600, 300);
     driver.show(frame, newSize);

@@ -23,7 +23,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.testing.TestFrame;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -54,7 +53,7 @@ public class SelectJComboBoxItemTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldScrollToSelectLastItem() {
+  public void shouldScrollToSelectLastItem() {
     int toSelect = 99;
     fixture.selectItem(toSelect);
     assertThat(target.getSelectedIndex()).isEqualTo(toSelect);

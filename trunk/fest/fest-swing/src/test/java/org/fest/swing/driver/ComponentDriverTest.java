@@ -297,23 +297,6 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldPressAndReleaseKey() {
-    final int key = 6;
-    final int modifier = 8;
-    new EasyMockTemplate(robot) {
-      protected void expectations() {
-        robot.focus(c);
-        expectLastCall().once();
-        robot.pressAndReleaseKey(key, modifier);
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        driver.pressAndReleaseKey(c, key, modifier);
-      }
-    }.run();
-  }
-
   @Test public void shouldPressKey() {
     final int key = 6;
     new EasyMockTemplate(robot) {
