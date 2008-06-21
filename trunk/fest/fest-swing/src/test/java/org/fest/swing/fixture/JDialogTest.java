@@ -42,8 +42,10 @@ public class JDialogTest {
     m_window.requireVisible();
 
     m_window.button("start").click();
-
+    System.out.println("Clicked");
+    
     DialogFixture dialogFixture = m_window.dialog("NestedDialog");
+    System.out.println("Dialog found");
     dialogFixture.requireVisible();
     dialogFixture.requireModal();
     dialogFixture.button().click();
@@ -66,6 +68,7 @@ public class JDialogTest {
 
     public JDialogStarter(Frame owner) {
       super(owner);
+      setTitle(JDialogTest.class.getSimpleName());
       setContentPane(createContentPane());
     }
 
@@ -80,7 +83,7 @@ public class JDialogTest {
     private class OpenJDialogAction extends AbstractAction {
       private static final long serialVersionUID = 1L;
 
-      private OpenJDialogAction() { super("Start!"); }
+      OpenJDialogAction() { super("Start!"); }
 
       public void actionPerformed(ActionEvent e) {
         NestedJDialog dialog = new NestedJDialog(JDialogStarter.this);
@@ -92,7 +95,7 @@ public class JDialogTest {
     private static class NestedJDialog extends JDialog {
       private static final long serialVersionUID = 1L;
 
-      private NestedJDialog(JDialog owner) {
+      NestedJDialog(JDialog owner) {
         super(owner, true);
         setContentPane(createContentPane());
         setName("NestedDialog");

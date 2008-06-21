@@ -42,14 +42,6 @@ public class AbstractButtonDriver extends JComponentDriver {
   }
 
   /**
-   * Simulates a user pressing the given button.
-   * @param button the button to press.
-   */
-  public void click(AbstractButton button) {
-    button.doClick();
-  }
-  
-  /**
    * Asserts that the text in the given button is equal to the specified <code>String</code>.
    * @param button the given button.
    * @param expected the text to match.

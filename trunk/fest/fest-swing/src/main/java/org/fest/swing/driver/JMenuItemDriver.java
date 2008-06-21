@@ -14,13 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.util.Platform.isOSX;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Window;
 
 import javax.swing.JMenu;
@@ -29,7 +22,15 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import static java.lang.Boolean.*;
+
+import static java.lang.Boolean.getBoolean;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JMenuItem}</code>. Unlike <code>JMenuItemFixture</code>, this
@@ -127,18 +128,6 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
-    robot.invokeAndWait(new ClickMenuItemTask(menuItem));
-  }
-
-  private static class ClickMenuItemTask implements Runnable {
-    private final JMenuItem item;
-
-    ClickMenuItemTask(JMenuItem item) {
-      this.item = item;
-    }
-
-    public void run() {
-      item.doClick();
-    }
+    robot.invokeAndWait(new ClickButtonTask(menuItem));
   }
 }

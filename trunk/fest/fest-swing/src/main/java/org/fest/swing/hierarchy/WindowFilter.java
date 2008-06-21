@@ -14,13 +14,13 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.swing.util.AWT.isSharedInvisibleFrame;
-
 import java.awt.Component;
 import java.awt.Window;
 import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import static org.fest.swing.util.AWT.isSharedInvisibleFrame;
 
 /**
  * Understands a filter of windows to ignore in a component hierarchy.
@@ -42,13 +42,13 @@ class WindowFilter {
   }
 
   // Map of components to ignore
-  private final Map<Component, Boolean> ignored = new WeakHashMap<Component, Boolean>();
+  final Map<Component, Boolean> ignored = new WeakHashMap<Component, Boolean>();
 
   // Map of components implicitly ignored; these will be removed if they are re-shown.
-  private final Map<Component, Boolean> isImplicitlyIgnored = new WeakHashMap<Component, Boolean>();
+  final Map<Component, Boolean> implicitlyIgnored = new WeakHashMap<Component, Boolean>();
 
   boolean isImplicitlyIgnored(Component c) {
-    return isImplicitlyIgnored.containsKey(c);
+    return implicitlyIgnored.containsKey(c);
   }
 
   boolean isIgnored(Component c) {
@@ -65,7 +65,7 @@ class WindowFilter {
   }
 
   void implicitlyIgnore(Component c) {
-    isImplicitlyIgnored.put(c, true);
+    implicitlyIgnored.put(c, true);
   }
 
   void ignore(Component c) {
@@ -88,7 +88,7 @@ class WindowFilter {
       return;
     }
     doFilter(c, ignore);
-    isImplicitlyIgnored.remove(c);
+    implicitlyIgnored.remove(c);
     if (!(c instanceof Window)) return;
     for (Window owned : ((Window)c).getOwnedWindows())
       filter(owned, ignore);
