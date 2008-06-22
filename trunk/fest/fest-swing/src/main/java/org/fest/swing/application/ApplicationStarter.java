@@ -76,7 +76,7 @@ public class ApplicationStarter {
   }
 
   private final Class<?> applicationType;
-  private String[] args;
+  private String[] args = new String[0];
 
   private ApplicationStarter(Class<?> applicationType) {
     this.applicationType = applicationType;

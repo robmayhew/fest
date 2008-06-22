@@ -295,7 +295,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTableFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    doClick(mouseClickInfo);
     return this;
   }
 
@@ -323,7 +323,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
    */
   public JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    click(cell, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
 

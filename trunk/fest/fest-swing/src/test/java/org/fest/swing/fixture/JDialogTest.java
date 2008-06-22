@@ -42,10 +42,8 @@ public class JDialogTest {
     m_window.requireVisible();
 
     m_window.button("start").click();
-    System.out.println("Clicked");
     
     DialogFixture dialogFixture = m_window.dialog("NestedDialog");
-    System.out.println("Dialog found");
     dialogFixture.requireVisible();
     dialogFixture.requireModal();
     dialogFixture.button().click();

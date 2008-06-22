@@ -267,6 +267,7 @@ public class JTableDriverTest {
   }
 
   public void shouldEnterValueInCell() {
+    dragTable.cellEditable(0, 0, true);
     final JTableCellWriter cellWriter = mockCellWriter();
     final String value = "Hello";
     driver.cellWriter(cellWriter);

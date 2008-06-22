@@ -32,6 +32,7 @@ import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -68,18 +69,20 @@ public class ScrollJTreeElementTest {
   public void shouldScrollToDragAndDropByPath() {
     fixture.tree("drag").drag("root/99");
     fixture.tree("drop").drop("root/90");
-    assertPathNotFound("root/99");
+    assertPathNotFoundInDragTree("root/99");
+    pause(200);
     fixture.tree("drop").selectPath("root/90/99");
   }
 
   public void shouldScrollToDragAndDropByIndex() {
     fixture.tree("drag").drag(99);
     fixture.tree("drop").drop(90);
-    assertPathNotFound("root/99");
+    assertPathNotFoundInDragTree("root/99");
+    pause(200);
     fixture.tree("drop").selectPath("root/90/99");
   }
 
-  private void assertPathNotFound(String path) {
+  private void assertPathNotFoundInDragTree(String path) {
     try {
       fixture.tree("drag").selectPath(path);
       fail();

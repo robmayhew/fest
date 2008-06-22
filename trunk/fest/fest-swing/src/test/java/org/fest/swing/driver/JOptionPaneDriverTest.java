@@ -29,6 +29,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestFrame;
 
 import static javax.swing.JOptionPane.*;
@@ -104,6 +105,7 @@ public class JOptionPaneDriverTest {
     assertThat(textBox).isNotNull();
   }
 
+  @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
   public void shouldNotFindTextComponentInOptionPaneIfNotInputMessage() {
     JOptionPane optionPane = frame.showErrorMessage();
     driver.textBox(optionPane);
