@@ -43,7 +43,7 @@ public class FontFixture {
   /**
    * Creates a new </code>{@link FontFixture}</code>.
    * @param target the font to manage.
-   * @throw IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public FontFixture(Font target) {
     this(target, null);
@@ -53,7 +53,7 @@ public class FontFixture {
    * Creates a new </code>{@link FontFixture}</code>.
    * @param target the font to manage.
    * @param description this fixture's description.
-   * @throw IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public FontFixture(Font target, String description) {
     if (target == null) throw new IllegalArgumentException("The given font should not be null");

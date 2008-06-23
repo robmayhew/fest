@@ -17,6 +17,8 @@ package org.fest.swing.launcher;
 
 import org.fest.reflect.exception.ReflectionError;
 
+import static java.util.Arrays.copyOf;
+
 import static org.fest.reflect.core.Reflection.staticMethod;
 import static org.fest.util.Strings.*;
 
@@ -86,9 +88,11 @@ public class ApplicationLauncher {
    * Specifies the arguments to pass to the "main" method.
    * @param newArgs the arguments to pass to the "main" method.
    * @return this <code>ApplicationStarter</code>.
+   * @throws IllegalArgumentException if <code>newArgs</code> is <code>null</code>.
    */
   public ApplicationLauncher withArgs(String...newArgs) {
-    args = newArgs;
+    if (newArgs == null) throw new IllegalArgumentException("The array of arguments should not be null");
+    args = copyOf(newArgs, newArgs.length);
     return this;
   }
 

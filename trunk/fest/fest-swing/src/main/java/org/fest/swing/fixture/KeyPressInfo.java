@@ -15,13 +15,12 @@
  */
 package org.fest.swing.fixture;
 
-
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 
 import org.fest.swing.util.Platform;
 
-import static org.fest.util.Strings.concat;
+import static java.util.Arrays.copyOf;
 
 /**
  * Understands information about pressing a keyboard key.
@@ -54,7 +53,7 @@ public final class KeyPressInfo {
 
   private final int keyCode;
   private int[] modifiers;
-
+  
   /**
    * Specifies the code of the key to press, without any modifiers (e.g. 
    * <code>{@link KeyEvent#VK_C KeyEvent.VK_C}</code>.)
@@ -80,7 +79,9 @@ public final class KeyPressInfo {
    * Returns the modifiers to use when pressing <code>{@link #keyCode the specified key}</code>.
    * @return the modifiers to use.
    */
-  public int[] modifiers() { return modifiers; }
+  public int[] modifiers() { 
+    return copyOf(modifiers, modifiers.length);
+  }
   
   /**
    * Specifies the modifiers to use when pressing <code>{@link #keyCode the specified key}</code> (e.g. 
@@ -91,17 +92,11 @@ public final class KeyPressInfo {
    * </p>
    * @param newModifiers the new modifiers to use.
    * @return this object.
+   * @throws IllegalArgumentException if <code>newModifiers</code> is <code>null</code>.
    */
-  public KeyPressInfo modifiers(int... newModifiers) { 
-    modifiers = newModifiers;
+  public KeyPressInfo modifiers(int... newModifiers) {
+    if (newModifiers == null) throw new IllegalArgumentException("The array of modifiers should not be null");
+    modifiers = copyOf(newModifiers, newModifiers.length);
     return this;
-  }
-
-  /** @see java.lang.Object#toString() */
-  @Override public String toString() {
-    return concat(
-        getClass().getSimpleName(), "[",
-        "keyCode=", keyCode, ",",
-        "modifiers=", String.valueOf(modifiers), "]");
   }
 }

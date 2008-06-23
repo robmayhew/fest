@@ -15,30 +15,30 @@
  */
 package org.fest.swing.launcher;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.util.Collections.list;
-
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.launcher.ApplicationLauncher;
 import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.util.Collections.list;
 
 /**
  * Tests for <code>{@link ApplicationLauncher}</code>.
  *
  * @author Yvonne Wang
  */
+@Test
 public class ApplicationLauncherTest {
 
   private Robot robot;
@@ -51,17 +51,17 @@ public class ApplicationLauncherTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldLaunchApplicationWithoutArguments() {
+  public void shouldLaunchApplicationWithoutArguments() {
     ApplicationLauncher.application(JavaApp.class).start();
     assertFrameIsShowing();
   }
 
-  @Test public void shouldLaunchApplicationWithoutArgumentsUsingFQCN() {
+  public void shouldLaunchApplicationWithoutArgumentsUsingFQCN() {
     ApplicationLauncher.application(JavaApp.class.getName()).start();
     assertFrameIsShowing();
   }
 
-  @Test public void shouldLaunchApplicationUsingArguments() {
+  public void shouldLaunchApplicationUsingArguments() {
     final List<String> arguments = new ArrayList<String>();
     ArgumentObserver observer = new ArgumentObserver() {
       public void arguments(String[] args) {
@@ -74,6 +74,12 @@ public class ApplicationLauncherTest {
     assertThat(arguments).containsOnly("arg1", "arg2");
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfArgumentArrayIsNull() {
+    String[] args = null;
+    ApplicationLauncher.application(JavaApp.class).withArgs(args).start();    
+  }
+  
   private void assertFrameIsShowing() {
     FrameFixture frame = WindowFinder.findFrame(new GenericTypeMatcher<Frame>() {
       protected boolean isMatching(Frame frame) {

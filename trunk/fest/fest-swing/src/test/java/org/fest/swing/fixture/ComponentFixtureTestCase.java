@@ -149,7 +149,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     final int[] modifiers = { SHIFT_MASK };
     new EasyMockTemplate(driver()) {
       protected void expectations() {
-        driver().pressAndReleaseKey(target(), keyCode, modifiers);
+        driver().pressAndReleaseKey(eq(target()), eq(keyCode), aryEq(modifiers));
         expectLastCall().once();
       }
 
