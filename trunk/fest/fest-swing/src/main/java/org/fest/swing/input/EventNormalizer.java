@@ -71,20 +71,6 @@ class EventNormalizer implements AWTEventListener {
     }
   }
 
-  private static class PushEventQueueTask implements Runnable {
-    private final Toolkit toolkit;
-    private final DragAwareEventQueue dragAwareEventQueue;
-
-    PushEventQueueTask(Toolkit toolkit, DragAwareEventQueue dragAwareEventQueue) {
-      this.toolkit = toolkit;
-      this.dragAwareEventQueue = dragAwareEventQueue;
-    }
-
-    public void run() {
-      toolkit.getSystemEventQueue().push(dragAwareEventQueue);
-    }
-  }
-
   void stopListening() {
     disposeDragAwareEventQueue();
     disposeWeakEventListener();
