@@ -27,7 +27,7 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.launcher.ApplicationStarter;
+import org.fest.swing.launcher.ApplicationLauncher;
 import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 
 import org.testng.annotations.AfterMethod;
@@ -35,11 +35,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link ApplicationStarter}</code>.
+ * Tests for <code>{@link ApplicationLauncher}</code>.
  *
  * @author Yvonne Wang
  */
-public class ApplicationStarterTest {
+public class ApplicationLauncherTest {
 
   private Robot robot;
 
@@ -52,12 +52,12 @@ public class ApplicationStarterTest {
   }
 
   @Test public void shouldLaunchApplicationWithoutArguments() {
-    ApplicationStarter.application(JavaApp.class).start();
+    ApplicationLauncher.application(JavaApp.class).start();
     assertFrameIsShowing();
   }
 
   @Test public void shouldLaunchApplicationWithoutArgumentsUsingFQCN() {
-    ApplicationStarter.application(JavaApp.class.getName()).start();
+    ApplicationLauncher.application(JavaApp.class.getName()).start();
     assertFrameIsShowing();
   }
 
@@ -69,7 +69,7 @@ public class ApplicationStarterTest {
       }
     };
     JavaApp.add(observer);
-    ApplicationStarter.application(JavaApp.class).withArgs("arg1", "arg2").start();
+    ApplicationLauncher.application(JavaApp.class).withArgs("arg1", "arg2").start();
     assertFrameIsShowing();
     assertThat(arguments).containsOnly("arg1", "arg2");
   }

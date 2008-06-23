@@ -49,7 +49,7 @@ import static org.fest.util.Strings.*;
  *
  * @author Yvonne Wang
  */
-public class ApplicationStarter {
+public class ApplicationLauncher {
 
   /**
    * Starting point of the fluent interface.
@@ -57,9 +57,9 @@ public class ApplicationStarter {
    * @return the created <code>ApplicationStarter</code>.
    * @throws ReflectionError if the class specified in the given name cannot be loaded.
    */
-  public static ApplicationStarter application(String applicationTypeName) {
+  public static ApplicationLauncher application(String applicationTypeName) {
     try {
-      Class<?> applicationType = ApplicationStarter.class.getClassLoader().loadClass(applicationTypeName);
+      Class<?> applicationType = ApplicationLauncher.class.getClassLoader().loadClass(applicationTypeName);
       return application(applicationType);
     } catch (ClassNotFoundException e) {
       throw new ReflectionError(concat("Unable to load class ", quote(applicationTypeName)), e);
@@ -71,14 +71,14 @@ public class ApplicationStarter {
    * @param applicationType the class containing the "main" method.
    * @return the created <code>ApplicationStarter</code>.
    */
-  public static ApplicationStarter application(Class<?> applicationType) {
-    return new ApplicationStarter(applicationType);
+  public static ApplicationLauncher application(Class<?> applicationType) {
+    return new ApplicationLauncher(applicationType);
   }
 
   private final Class<?> applicationType;
   private String[] args = new String[0];
 
-  private ApplicationStarter(Class<?> applicationType) {
+  private ApplicationLauncher(Class<?> applicationType) {
     this.applicationType = applicationType;
   }
 
@@ -87,7 +87,7 @@ public class ApplicationStarter {
    * @param newArgs the arguments to pass to the "main" method.
    * @return this <code>ApplicationStarter</code>.
    */
-  public ApplicationStarter withArgs(String...newArgs) {
+  public ApplicationLauncher withArgs(String...newArgs) {
     args = newArgs;
     return this;
   }
