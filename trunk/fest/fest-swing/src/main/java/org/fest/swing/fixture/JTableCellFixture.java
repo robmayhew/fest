@@ -15,6 +15,8 @@
  */
 package org.fest.swing.fixture;
 
+import static org.fest.swing.core.MouseButton.*;
+
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -24,8 +26,6 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
-
-import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
@@ -62,6 +62,9 @@ public class JTableCellFixture implements ItemFixture {
     this.table = table;
     this.cell = cell;
   }
+
+  JTableFixture table() { return table; }
+  TableCell cell() { return cell; }
 
   /**
    * Simulates a user selecting this fixture's table cell.
@@ -135,7 +138,7 @@ public class JTableCellFixture implements ItemFixture {
     table.driver().startCellEditing(table.target, cell);
     return this;
   }
-  
+
   /**
    * Stops editing this fixture's table cell. This method should be called <strong>after</strong> manipulating the
    * <code>{@link Component}</code> returned by <code>{@link #editor()}</code>.
@@ -155,12 +158,12 @@ public class JTableCellFixture implements ItemFixture {
     table.driver().stopCellEditing(table.target, cell);
     return this;
   }
-  
+
   /**
    * Cancels editing this fixture's table cell. This method should be called <strong>after</strong> manipulating the
    * <code>{@link Component}</code> returned by <code>{@link #editor()}</code>.
    * <p>
-   * 
+   *
    * <pre>
    * TableCellFixture cell = table.cell(row(6).column(8));
    * Component editor = cell.editor();
@@ -171,7 +174,7 @@ public class JTableCellFixture implements ItemFixture {
    * // discard any entered value
    * cell.cancelEditing();
    * </pre>
-   * 
+   *
    * </p>
    * <p>
    * This method uses the <code>{@link JTableCellWriter}</code> from the <code>{@link JTableFixture}</code> that
@@ -189,7 +192,7 @@ public class JTableCellFixture implements ItemFixture {
     table.driver().cancelCellEditing(table.target, cell);
     return this;
   }
-  
+
   /**
    * Returns the editor of this fixture's table cell. To manipulate the editor (e.g. wrapping it with a
    * <code>ComponentFixture</code>,) the method <code>{@link #startEditing()}</code> should be called first. To
@@ -198,7 +201,7 @@ public class JTableCellFixture implements ItemFixture {
    * this fixture.
    * <p>
    * Example:
-   * 
+   *
    * <pre>
    * TableCellFixture cell = table.cell(row(6).column(8));
    * Component editor = cell.editor();
@@ -208,7 +211,7 @@ public class JTableCellFixture implements ItemFixture {
    * editorFixture.enterText(&quot;Hello&quot;);
    * cell.{@link #stopEditing()};
    * </pre>
-   * 
+   *
    * </p>
    * @return the editor of this fixture's table cell.
    * @see JTableFixture#cellWriter(JTableCellWriter)
@@ -217,7 +220,7 @@ public class JTableCellFixture implements ItemFixture {
   public Component editor() {
     return table.driver().cellEditor(table.target, cell);
   }
-  
+
   /**
    * Enters the given value to this fixture's table cell. This method starts cell edition, enters the given value and
    * stops cell edition. To change the value of a cell, only a call to this method is necessary. If you need more
@@ -241,7 +244,7 @@ public class JTableCellFixture implements ItemFixture {
     table.driver().enterValueInCell(table.target, cell, value);
     return this;
   }
-  
+
   /**
    * Asserts that this fixture's table cell contains the given value.
    * @param value the expected value of this fixture's table cell.

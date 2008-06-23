@@ -15,6 +15,15 @@
  */
 package org.fest.swing.fixture;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -22,23 +31,12 @@ import java.awt.Point;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -46,6 +44,7 @@ import static org.fest.swing.fixture.TableCell.row;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test
 public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> {
 
   private JTableDriver driver;
@@ -61,7 +60,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     cell = row(6).column(8);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     new FixtureCreationByNameTemplate() {
       ComponentFixture<JTable> fixtureWithName(String name) {
         return new JTableFixture(robot(), name);
@@ -69,7 +68,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldSelectCell() {
+  public void shouldSelectCell() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectCell(target, cell);
@@ -82,7 +81,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldRequireNoSelection() {
+  public void shouldRequireNoSelection() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireNoSelection(target);
@@ -95,7 +94,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldSelectCells() {
+  public void shouldSelectCells() {
     final TableCell[] cells = { cell };
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -109,7 +108,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnSelectionContents() {
+  public void shouldReturnSelectionContents() {
     final String content = "A Cell";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -123,7 +122,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldDragAtCell() {
+  public void shouldDragAtCell() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.drag(target, cell);
@@ -135,7 +134,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldDropAtCell() {
+  public void shouldDropAtCell() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.drop(target, cell);
@@ -147,7 +146,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnPointAtCell() {
+  public void shouldReturnPointAtCell() {
     final Point p = new Point(6, 8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -161,7 +160,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnCellContent() {
+  public void shouldReturnCellContent() {
     final String content = "A Cell";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -175,7 +174,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldClickCellWithGivenMouseButton() {
+  public void shouldClickCellWithGivenMouseButton() {
     final MouseButton button = LEFT_BUTTON;
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -189,7 +188,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldClickCellWithGivenMouseClickInfo() {
+  public void shouldClickCellWithGivenMouseClickInfo() {
     final MouseClickInfo mouseClickInfo = leftButton().times(2);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -203,7 +202,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldShowJPopupMenuAtCell() {
+  public void shouldShowJPopupMenuAtCell() {
     final JPopupMenu popup = new JPopupMenu();
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -217,7 +216,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnJTableHeaderFixture() {
+  public void shouldReturnJTableHeaderFixture() {
     JTableHeaderFixture tableHeader = fixture.tableHeader();
     assertThat(tableHeader.target).isSameAs(target.getTableHeader());
   }
@@ -228,7 +227,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     fixture.tableHeader();
   }
 
-  @Test public void shouldSetCellReaderInDriver() {
+  public void shouldSetCellReaderInDriver() {
     final JTableCellReader reader = createMock(JTableCellReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -242,7 +241,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnCellFont() {
+  public void shouldReturnCellFont() {
     final Font font = new Font("SansSerif", PLAIN, 8);
     final TableCell cell = row(6).column(8);
     new EasyMockTemplate(driver) {
@@ -259,7 +258,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnCellBackgroundColor() {
+  public void shouldReturnCellBackgroundColor() {
     final Color background = BLUE;
     final TableCell cell = row(6).column(8);
     new EasyMockTemplate(driver) {
@@ -276,7 +275,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldReturnCellForegroundColor() {
+  public void shouldReturnCellForegroundColor() {
     final Color foreground = BLUE;
     final TableCell cell = row(6).column(8);
     new EasyMockTemplate(driver) {
@@ -293,7 +292,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldRequireCellValue() {
+  public void shouldRequireCellValue() {
     final TableCell cell = row(6).column(8);
     final String value = "Hello";
     new EasyMockTemplate(driver) {
@@ -308,7 +307,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldRequireEditableCell() {
+  public void shouldRequireEditableCell() {
     final TableCell cell = row(0).column(0);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -322,7 +321,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldRequireNotEditableCell() {
+  public void shouldRequireNotEditableCell() {
     final TableCell cell = row(0).column(0);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -336,7 +335,7 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
     }.run();
   }
 
-  @Test public void shouldEnterValueInCell() {
+  public void shouldEnterValueInCell() {
     final TableCell cell = row(0).column(0);
     final String value = "Hello";
     new EasyMockTemplate(driver) {
@@ -347,6 +346,22 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture.enterValue(cell, value));
+      }
+    }.run();
+  }
+
+  public void shouldReturnCell() {
+    final TableCell cell = row(0).column(0);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.validate(target, cell);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        JTableCellFixture cellFixture = fixture.cell(cell);
+        assertThat(cellFixture.table()).isSameAs(fixture);
+        assertThat(cellFixture.cell()).isSameAs(cell);
       }
     }.run();
   }

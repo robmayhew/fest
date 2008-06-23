@@ -15,22 +15,20 @@
  */
 package org.fest.swing.fixture;
 
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
+
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
 import org.easymock.classextension.EasyMock;
-import org.testng.annotations.Test;
-
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComboBoxDriver;
-
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link JComboBoxFixture}</code>.
@@ -38,6 +36,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test
 public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComboBox> {
 
   private JComboBoxDriver driver;
@@ -51,7 +50,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     new FixtureCreationByNameTemplate() {
       ComponentFixture<JComboBox> fixtureWithName(String name) {
         return new JComboBoxFixture(robot(), name);
@@ -59,7 +58,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldReturnContents() {
+  public void shouldReturnContents() {
     final String[] contents = array("Frodo", "Sam");
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -73,7 +72,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldReplaceText() {
+  public void shouldReplaceText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.replaceText(target, "Hello");
@@ -86,7 +85,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldSelectAllText() {
+  public void shouldSelectAllText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectAllText(target);
@@ -99,7 +98,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldEnterText() {
+  public void shouldEnterText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.enterText(target, "Hello");
@@ -112,7 +111,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldReturnList() {
+  public void shouldReturnList() {
     final JList list = new JList();
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -126,7 +125,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldSelectItemUnderIndex() {
+  public void shouldSelectItemUnderIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectItem(target, 6);
@@ -139,7 +138,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldSelectItemWithText() {
+  public void shouldSelectItemWithText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectItem(target, "Frodo");
@@ -152,7 +151,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldReturnValueAtIndex() {
+  public void shouldReturnValueAtIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.value(target, 8)).andReturn("Sam");
@@ -165,7 +164,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldRequireEditable() {
+  public void shouldRequireEditable() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireEditable(target);
@@ -178,7 +177,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldRequireNotEditable() {
+  public void shouldRequireNotEditable() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireNotEditable(target);
@@ -191,7 +190,7 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
     }.run();
   }
 
-  @Test public void shouldRequireNoSelection() {
+  public void shouldRequireNoSelection() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireNoSelection(target);
@@ -203,21 +202,35 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
       }
     }.run();
   }
-  
-  @Test public void shouldSetCellReaderInDriver() {
+
+  public void shouldSetCellReaderInDriver() {
     final JComboBoxCellReader reader = createMock(JComboBoxCellReader.class);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.cellReader(reader);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         fixture.cellReader(reader);
       }
     }.run();
   }
-  
+
+  public void shouldRequireSelection() {
+    final String value = "Hello";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireSelection(target, value);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireSelection(value));
+      }
+    }.run();
+  }
+
   ComponentDriver driver() { return driver; }
   JComboBox target() { return target; }
   JPopupMenuInvokerFixture<JComboBox> fixture() { return fixture; }
