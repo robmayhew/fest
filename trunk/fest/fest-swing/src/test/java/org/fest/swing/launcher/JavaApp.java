@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.application;
+package org.fest.swing.launcher;
 
 import java.awt.Dimension;
 import java.util.ArrayList;

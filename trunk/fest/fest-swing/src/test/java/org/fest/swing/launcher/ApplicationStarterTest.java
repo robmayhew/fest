@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.application;
+package org.fest.swing.launcher;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -23,11 +23,13 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fest.swing.application.JavaApp.ArgumentObserver;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.launcher.ApplicationStarter;
+import org.fest.swing.launcher.JavaApp.ArgumentObserver;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
