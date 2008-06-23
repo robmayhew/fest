@@ -28,11 +28,11 @@ import static org.fest.util.Strings.*;
  * The following example shows how to start an application without any arguments:
  *
  * <pre>
- * ApplicationStarter.application(JavaApp.class).start();
+ * ApplicationLauncher.application(JavaApp.class).start();
  *
  * // or
  *
- * ApplicationStarter.application(&quot;org.fest.swing.application.JavaApp&quot;).start();
+ * ApplicationLauncher.application(&quot;org.fest.swing.application.JavaApp&quot;).start();
  * </pre>
  *
  * </p>
@@ -40,11 +40,11 @@ import static org.fest.util.Strings.*;
  * The following example shows how to start an application with arguments:
  *
  * <pre>
- * ApplicationStarter.application(JavaApp.class).withArgs(&quot;arg1&quot;, &quot;arg2&quot;).start();
+ * ApplicationLauncher.application(JavaApp.class).withArgs(&quot;arg1&quot;, &quot;arg2&quot;).start();
  *
  * // or
  *
- * ApplicationStarter.application(&quot;org.fest.swing.application.JavaApp&quot;).withArgs(&quot;arg1&quot;, &quot;arg2&quot;).start();
+ * ApplicationLauncher.application(&quot;org.fest.swing.application.JavaApp&quot;).withArgs(&quot;arg1&quot;, &quot;arg2&quot;).start();
  * </pre>
  *
  * </p>
