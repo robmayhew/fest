@@ -15,17 +15,19 @@
  */
 package org.fest.swing.fixture;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-
 import javax.swing.JTextField;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.*;
 import org.fest.swing.driver.ComponentDriver;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link ComponentFixture}</code>.

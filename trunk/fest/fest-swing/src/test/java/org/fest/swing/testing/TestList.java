@@ -68,6 +68,8 @@ public final class TestList extends JList {
   private static class ListTransferHandler extends StringTransferHandler<JList> {
     private static final long serialVersionUID = 1L;
 
+    ListTransferHandler() {}
+    
     // Bundle up the selected items in the list as a single string, for export.
     protected String exportString(JList list) {
       rows = list.getSelectedIndices();

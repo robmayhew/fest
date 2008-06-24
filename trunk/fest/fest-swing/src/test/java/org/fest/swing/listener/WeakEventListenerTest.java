@@ -15,15 +15,17 @@
  */
 package org.fest.swing.listener;
 
-import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.AWTEvent;
 import java.awt.event.AWTEventListener;
 
-import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.ToolkitStub;
+
+import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link WeakEventListener}</code>.
@@ -75,6 +77,8 @@ public class WeakEventListenerTest {
   private static class UnderlyingEventListener implements AWTEventListener {
     AWTEvent dispatchedEvent;
 
+    UnderlyingEventListener() {}
+    
     public void eventDispatched(AWTEvent event) {
       dispatchedEvent = event;
     }

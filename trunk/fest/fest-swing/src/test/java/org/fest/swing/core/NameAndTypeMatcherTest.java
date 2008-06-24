@@ -29,20 +29,6 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  */
 public class NameAndTypeMatcherTest {
-
-  private static class MyTextField extends JTextField {
-    private static final long serialVersionUID = 1L;
-
-    private boolean showing;
-
-    public void setShowing(boolean showing) {
-      this.showing = showing;
-    }
-    
-    @Override public boolean isShowing() {
-      return showing;
-    }
-  }
   
   private MyTextField textField;
   
@@ -83,4 +69,20 @@ public class NameAndTypeMatcherTest {
     textField.setShowing(false);
     assertThat(matcher.matches(textField)).isTrue();
   }  
+
+  private static class MyTextField extends JTextField {
+    private static final long serialVersionUID = 1L;
+
+    private boolean showing;
+
+    MyTextField() {}
+    
+    public void setShowing(boolean showing) {
+      this.showing = showing;
+    }
+    
+    @Override public boolean isShowing() {
+      return showing;
+    }
+  }
 }

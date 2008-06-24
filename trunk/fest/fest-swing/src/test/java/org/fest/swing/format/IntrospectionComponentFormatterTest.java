@@ -55,16 +55,18 @@ public class IntrospectionComponentFormatterTest {
   }
 
   @Test public void shouldFormatOneDimensionalArrayProperties() {
-    MyButton button = new MyButton();
-    button.setNames(array("Luke", "Leia"));
+    MyButton myButton = new MyButton();
+    myButton.setNames(array("Luke", "Leia"));
     formatter = new IntrospectionComponentFormatter(MyButton.class, "names", "text");
-    String formatted = formatter.format(button);
+    String formatted = formatter.format(myButton);
     assertThat(formatted).contains("names=['Luke', 'Leia']");
   }
   
   private static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
+    MyButton() {}
+    
     private String[] names;
 
     public String[] getNames() {

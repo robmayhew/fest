@@ -188,12 +188,12 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentUsingGenericTypeMatcher() {
-    JButton button = finder.find(new GenericTypeMatcher<JButton>() {
+    JButton foundButton = finder.find(new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
         return "A Button".equals(button.getText());
       }
     });
-    assertThat(button).isSameAs(window.button);
+    assertThat(foundButton).isSameAs(window.button);
   }
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
@@ -215,12 +215,12 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentByContainerUsingGenericTypeMatcher() {
-    JButton button = finder.find(window, new GenericTypeMatcher<JButton>() {
+    JButton foundButton = finder.find(window, new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
         return "A Button".equals(button.getText());
       }
     });
-    assertThat(button).isSameAs(window.button);
+    assertThat(foundButton).isSameAs(window.button);
   }
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 

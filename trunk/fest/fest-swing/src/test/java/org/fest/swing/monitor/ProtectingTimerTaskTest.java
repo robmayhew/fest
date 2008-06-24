@@ -55,9 +55,10 @@ public class ProtectingTimerTaskTest {
   }
 
   private static class MyTimerTask extends TimerTask {
+    boolean executed;
+    RuntimeException exceptionToThrow;
 
-    private boolean executed;
-    private RuntimeException exceptionToThrow;
+    MyTimerTask() {}
     
     public void run() {
       executed = true;

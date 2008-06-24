@@ -66,6 +66,8 @@ public class EventDispatchThreadedEventListenerTest {
     AWTEvent event;
     boolean inEventDispatchThread;
     
+    Listener() {}
+    
     protected void processEvent(AWTEvent event) {
       this.event = event;
       inEventDispatchThread = SwingUtilities.isEventDispatchThread();

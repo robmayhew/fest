@@ -89,7 +89,7 @@ public class JOptionPaneTest {
       
       private final String m_message;
 
-      private OpenJOptionPaneAction(String message) {
+      OpenJOptionPaneAction(String message) {
         super("Start!");
         m_message = message;
       }

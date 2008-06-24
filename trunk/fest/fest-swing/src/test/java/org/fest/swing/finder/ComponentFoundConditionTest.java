@@ -68,7 +68,9 @@ public class ComponentFoundConditionTest {
   private static class TypeMatcher implements ComponentMatcher {
     private Class<? extends Component> type;
 
-    void typeToMatch(Class<? extends Component> type) { this.type = type; }
+    TypeMatcher() {}
+    
+    void typeToMatch(Class<? extends Component> newType) { this.type = newType; }
 
     public boolean matches(Component c) {
       return c != null && type.isAssignableFrom(c.getClass());

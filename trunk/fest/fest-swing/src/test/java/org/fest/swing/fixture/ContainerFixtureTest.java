@@ -562,6 +562,8 @@ public class ContainerFixtureTest {
   }
   
   private static abstract class FindFunction {
+    FindFunction() {}
+    
     abstract ComponentFixture<? extends Component> perform();
   }
 }
