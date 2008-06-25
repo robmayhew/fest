@@ -17,72 +17,38 @@ package org.fest.swing.input;
 import java.awt.AWTEvent;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
-import java.util.EmptyStackException;
-import java.util.logging.Logger;
 
 import org.fest.swing.listener.WeakEventListener;
-
-import static java.util.logging.Level.WARNING;
-import static javax.swing.SwingUtilities.invokeAndWait;
 
 import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 /**
- * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream:
- * <ul>
- * <li>sends a single <code>WINDOW_CLOSED</code>, instead of one every time dispose is called
- * <li>catches <code>sun.awt.dnd.SunDropTargetEvents</code> during native drags
- * </ul>
+ * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream by sending a single 
+ * <code>WINDOW_CLOSED</code>, instead of one every time dispose is called.
  */
 class EventNormalizer implements AWTEventListener {
 
-  private static Logger logger = Logger.getLogger(EventNormalizer.class.getName());
-
-  private final boolean trackDrag;
   private final DisposedWindowMonitor disposedWindowMonitor;
 
   private WeakEventListener weakEventListener;
   private AWTEventListener listener;
-  private DragAwareEventQueue dragAwareEventQueue;
-
 
   EventNormalizer() {
-    this(false);
+    this(new DisposedWindowMonitor());
   }
 
-  EventNormalizer(boolean trackDrag) {
-    this(trackDrag, new DisposedWindowMonitor());
-  }
-
-  EventNormalizer(boolean trackDrag, DisposedWindowMonitor disposedWindowMonitor) {
-    this.trackDrag = trackDrag;
+  EventNormalizer(DisposedWindowMonitor disposedWindowMonitor) {
     this.disposedWindowMonitor = disposedWindowMonitor;
   }
   
-  void startListening(final Toolkit toolkit, AWTEventListener newListener, long mask) {
-    listener = newListener;
+  void startListening(final Toolkit toolkit, AWTEventListener delegate, long mask) {
+    listener = delegate;
     weakEventListener = attachAsWeakEventListener(toolkit, this, mask);
-    if (!trackDrag) return;
-    dragAwareEventQueue = new DragAwareEventQueue(toolkit, mask, this);
-    try {
-      invokeAndWait(new PushEventQueueTask(toolkit, dragAwareEventQueue));
-    } catch (Exception e) {
-      logger.log(WARNING, "Ignoring error at EventNormalizer startup", e);
-    }
   }
 
   void stopListening() {
-    disposeDragAwareEventQueue();
     disposeWeakEventListener();
     listener = null;
-  }
-
-  private void disposeDragAwareEventQueue() {
-    if (dragAwareEventQueue == null) return;
-    try {
-      dragAwareEventQueue.pop();
-    } catch (EmptyStackException e) {}
-    dragAwareEventQueue = null;
   }
 
   private void disposeWeakEventListener() {
@@ -97,7 +63,7 @@ class EventNormalizer implements AWTEventListener {
     if (!discard && listener != null) delegate(event);
   }
 
-  protected void delegate(AWTEvent e) {
+  void delegate(AWTEvent e) {
     listener.eventDispatched(e);
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Jun 24, 2008
+ * Created on Jun 25, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,11 +15,9 @@
  */
 package org.fest.swing.input;
 
-import java.awt.EventQueue;
 import java.awt.event.AWTEventListener;
 import java.util.List;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.listener.WeakEventListener;
@@ -30,44 +28,26 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link EventNormalizer}</code> when configured to track drag events.
+ * Test case for <code>{@link EventNormalizer}</code> and subclasses.
  *
  * @author Alex Ruiz
  */
 @Test
-public class DragTrackingEventNormalizerTest {
+public abstract class EventNormalizerTestCase {
 
-  private EventNormalizer eventNormalizer;
-  
-  @BeforeMethod public void setUp() {
-    eventNormalizer = new EventNormalizer(true);
-  }
-  
-  public void shouldReplaceEventQueueWhenStartListening() {
-    ToolkitStub toolkit = ToolkitStub.createNew();
-    EventQueueStub eventQueue = new EventQueueStub();
-    toolkit.eventQueue(eventQueue);
-    int mask = 8;
-    eventNormalizer.startListening(toolkit, createMock(AWTEventListener.class), mask);
-    assertEventNormalizerIsInToolkit(toolkit, mask);
-    assertThat(eventQueue.pushedEventQueue).isInstanceOf(DragAwareEventQueue.class);
-  }
-
-  private void assertEventNormalizerIsInToolkit(ToolkitStub toolkit, int mask) {
+  final void assertEventNormalizerIsInToolkit(ToolkitStub toolkit, EventNormalizer eventNormalizer, int mask) {
     List<WeakEventListener> listeners = toolkit.eventListenersUnderEventMask(mask, WeakEventListener.class);
     assertThat(listeners).isNotNull().hasSize(1);
     WeakEventListener weakEventListener = listeners.get(0);
     assertThat(weakEventListener.underlyingListener()).isSameAs(eventNormalizer);
   }
   
-  private static class EventQueueStub extends EventQueue {
-    EventQueue pushedEventQueue;
+  final void assertEventNormalizerIsNotInToolkit(ToolkitStub toolkit, int mask) {
+    List<WeakEventListener> listeners = toolkit.eventListenersUnderEventMask(mask, WeakEventListener.class);
+    assertThat(listeners).isNullOrEmpty();
+  }
 
-    EventQueueStub() {}
-    
-    @Override public synchronized void push(EventQueue newEventQueue) {
-      this.pushedEventQueue = newEventQueue;
-      super.push(newEventQueue);
-    }
+  final AWTEventListener mockDelegateEventListener() {
+    return createMock(AWTEventListener.class);
   }
 }
