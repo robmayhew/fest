@@ -16,17 +16,12 @@ package org.fest.swing.input;
 
 import java.awt.AWTEvent;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.AWTEventListener;
-import java.awt.event.WindowEvent;
 import java.util.EmptyStackException;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.logging.Logger;
 
 import org.fest.swing.listener.WeakEventListener;
 
-import static java.awt.event.WindowEvent.*;
 import static java.util.logging.Level.WARNING;
 import static javax.swing.SwingUtilities.invokeAndWait;
 
@@ -43,22 +38,27 @@ class EventNormalizer implements AWTEventListener {
 
   private static Logger logger = Logger.getLogger(EventNormalizer.class.getName());
 
-  private final Map<Window, Boolean> disposedWindows = new WeakHashMap<Window, Boolean>();
-
   private final boolean trackDrag;
+  private final DisposedWindowMonitor disposedWindowMonitor;
 
   private WeakEventListener weakEventListener;
   private AWTEventListener listener;
   private DragAwareEventQueue dragAwareEventQueue;
+
 
   EventNormalizer() {
     this(false);
   }
 
   EventNormalizer(boolean trackDrag) {
-    this.trackDrag = trackDrag;
+    this(trackDrag, new DisposedWindowMonitor());
   }
 
+  EventNormalizer(boolean trackDrag, DisposedWindowMonitor disposedWindowMonitor) {
+    this.trackDrag = trackDrag;
+    this.disposedWindowMonitor = disposedWindowMonitor;
+  }
+  
   void startListening(final Toolkit toolkit, AWTEventListener newListener, long mask) {
     listener = newListener;
     weakEventListener = attachAsWeakEventListener(toolkit, this, mask);
@@ -93,26 +93,8 @@ class EventNormalizer implements AWTEventListener {
 
   /** Event reception callback. */
   public void eventDispatched(AWTEvent event) {
-    boolean discard = isDuplicateDispose(event);
+    boolean discard = disposedWindowMonitor.isDuplicateDispose(event);
     if (!discard && listener != null) delegate(event);
-  }
-
-  // We want to ignore consecutive event indicating window disposal; there
-  // needs to be an intervening SHOWN/OPEN before we're interested again.
-  private boolean isDuplicateDispose(AWTEvent event) {
-    if (!(event instanceof WindowEvent)) return false;
-    WindowEvent windowEvent = (WindowEvent) event;
-    final int eventId = windowEvent.getID();
-    if (eventId == WINDOW_CLOSING) return false;
-    if (eventId == WINDOW_CLOSED) {
-      Window w = windowEvent.getWindow();
-      if (disposedWindows.containsKey(w)) return true;
-      disposedWindows.put(w, Boolean.TRUE);
-      w.addComponentListener(new DisposalMonitor(disposedWindows));
-      return false;
-    }
-    disposedWindows.remove(windowEvent.getWindow());
-    return false;
   }
 
   protected void delegate(AWTEvent e) {

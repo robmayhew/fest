@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Alex Ruiz 
  */
 class DisposalMonitor extends ComponentAdapter {
-  private final Map<Window, Boolean> disposedWindows;
+  final Map<Window, Boolean> disposedWindows;
 
   DisposalMonitor(Map<Window, Boolean> disposedWindows) {
     this.disposedWindows = disposedWindows;
