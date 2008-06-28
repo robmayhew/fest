@@ -27,7 +27,7 @@ import static javax.swing.SwingUtilities.invokeAndWait;
  * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream:
  * <ul>
  * <li>sends a single <code>WINDOW_CLOSED</code>, instead of one every time dispose is called
- * <li>catches <code>sun.awt.dnd.SunDropTargetEvents</code> during native drags
+ * <li>catches <code>sun.awt.dnd.SunDropTargetEvent</code>s during native drags
  * </ul>
  *
  * @author Alex Ruiz
