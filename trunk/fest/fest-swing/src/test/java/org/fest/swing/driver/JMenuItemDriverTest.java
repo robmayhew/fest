@@ -69,8 +69,6 @@ public class JMenuItemDriverTest {
     final JMenu menuFile = new JMenu("File");
     final JMenuItem menuNew = new JMenuItem("New");
 
-    boolean newMenuSelected;
-
     MyFrame() {
       super(JMenuItemDriverTest.class);
       setJMenuBar(new JMenuBar());

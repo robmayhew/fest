@@ -57,7 +57,7 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   /**
-   * Find and select the given <code>{@link JMenuItem}</code>.
+   * Finds and selects the given <code>{@link JMenuItem}</code>.
    * @param menuItem the <code>JMenuItem</code> to select.
    * @throws ActionFailedException if the menu to select is disabled.
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
