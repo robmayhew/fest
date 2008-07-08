@@ -43,14 +43,12 @@ abstract class WindowFinderTemplate<T extends Window> extends ComponentFinderTem
     super(windowType);
   }
 
-  @SuppressWarnings("unchecked")
-  WindowFinderTemplate<T> withTimeout(long timeout) {
+  @Override WindowFinderTemplate<T> withTimeout(long timeout) {
     super.withTimeout(timeout);
     return this;
   }
 
-  @SuppressWarnings("unchecked")
-  WindowFinderTemplate<T> withTimeout(long timeout, TimeUnit unit) {
+  @Override WindowFinderTemplate<T> withTimeout(long timeout, TimeUnit unit) {
     super.withTimeout(timeout, unit);
     return this;
   }

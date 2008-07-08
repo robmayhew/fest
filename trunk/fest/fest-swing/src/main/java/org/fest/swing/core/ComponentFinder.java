@@ -188,7 +188,7 @@ public interface ComponentFinder {
    * @return the found component.
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
    */
-  @SuppressWarnings("unchecked") <T extends Component> T find(GenericTypeMatcher<T> m);
+  <T extends Component> T find(GenericTypeMatcher<T> m);
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>.
