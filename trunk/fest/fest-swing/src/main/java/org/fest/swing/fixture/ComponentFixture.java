@@ -29,6 +29,7 @@ import org.fest.swing.util.Platform;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentDriver.propertyName;
+import static org.fest.swing.fixture.ComponentFixtureValidator.*;
 import static org.fest.swing.format.Formatting.format;
 
 /**
@@ -94,7 +95,7 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   private static void validate(Robot robot, Class<?> type) {
-    validate(robot);
+    notNullRobot(robot);
     if (type == null) throw new IllegalArgumentException("The type of component to look for should not be null");
   }
 
@@ -128,28 +129,8 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public ComponentFixture(Robot robot, T target) {
-    validate(robot);
-    validateTarget(target);
-    this.robot = robot;
-    this.target = target;
-  }
-
-  /**
-   * Verifies that the given <code>{@link Robot}</code> is not <code>null</code>.
-   * @param robot the <code>Robot</code> to verify.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   */
-  protected static void validate(Robot robot) {
-    if (robot == null) throw new IllegalArgumentException("Robot should not be null");
-  }
-  
-  /**
-   * Verifies that the given <code>{@link Component}</code> is not <code>null</code>.
-   * @param target the <code>Component</code> to verify.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
-   */
-  protected static void validateTarget(Component target) {
-    if (target == null) throw new IllegalArgumentException("Target component should not be null");
+    this.robot = notNullRobot(robot);
+    this.target = notNullTarget(target);
   }
 
   /**
@@ -244,7 +225,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   protected final void doPressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    if (keyPressInfo == null) throw new IllegalArgumentException("The given KeyPressInfo should not be null");
+    notNullKeyPressInfo(keyPressInfo);
     driver().pressAndReleaseKey(target, keyPressInfo.keyCode(), keyPressInfo.modifiers());
   }
   

@@ -14,10 +14,6 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.finder.WindowFinder.findFrame;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,11 +22,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestFrame;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestFrame;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.finder.WindowFinder.findFrame;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=157" target="_blank">issue 157</a>.
@@ -66,7 +67,7 @@ public class MacOsxMenuBarTest {
         selected[0] = true;
       }
     });
-    menuItemFixture.select();
+    menuItemFixture.click();
     assertThat(selected[0]).isTrue();
   }
 

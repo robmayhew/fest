@@ -37,6 +37,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * Tests for <code>{@link JMenuItemDriver}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 @Test(groups = GUI)
 public class JMenuItemDriverTest {
@@ -57,9 +58,9 @@ public class JMenuItemDriverTest {
     robot.cleanUp();
   }
 
-  public void shouldSelectMenu() {
+  public void shouldClickMenu() {
     ClickRecorder clickRecorder = attachTo(menuItem);
-    driver.selectMenuItem(menuItem);
+    driver.click(menuItem);
     clickRecorder.wasClicked();
   }
 

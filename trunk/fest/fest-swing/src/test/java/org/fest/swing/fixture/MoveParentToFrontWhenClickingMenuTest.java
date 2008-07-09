@@ -69,7 +69,7 @@ public class MoveParentToFrontWhenClickingMenuTest {
     JMenuItemFixture fixture = new JMenuItemFixture(robot, menuItem);
     pause(DELAY_BEFORE_SHOWING_MENU);
     ClickRecorder clickRecorder = attachTo(menuItem);
-    fixture.select();
+    fixture.click();
     clickRecorder.wasClicked();
   }
 
@@ -81,7 +81,7 @@ public class MoveParentToFrontWhenClickingMenuTest {
     pause(DELAY_BEFORE_SHOWING_MENU);
     robot.showPopupMenu(frame.textField);
     ClickRecorder clickRecorder = attachTo(menuItem);
-    fixture.select();
+    fixture.click();
     clickRecorder.wasClicked();
   }
 

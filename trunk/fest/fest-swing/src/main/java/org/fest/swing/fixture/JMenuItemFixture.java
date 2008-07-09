@@ -18,13 +18,13 @@ package org.fest.swing.fixture;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JMenuItemDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.fixture.ComponentFixtureValidator.*;
 
 /**
  * Understands simulation of user events on a <code>{@link JMenuItem}</code> and verification of the state of such
@@ -32,7 +32,9 @@ import org.fest.swing.exception.ComponentLookupException;
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
+public class JMenuItemFixture {
+
+  public final JMenuItem target;
 
   private JMenuItemDriver driver;
   
@@ -73,17 +75,13 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JMenuItemFixture(Robot robot, JMenuItem target) {
-    super(robot, target);
+    notNullRobot(robot);
+    this.target = notNullTarget(target);
     updateDriver(new JMenuItemDriver(robot));
   }
 
   final void updateDriver(JMenuItemDriver newDriver) {
     driver = newDriver;
-  }
-
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
   }
 
   /**
@@ -92,64 +90,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @throws ActionFailedException if the menu to select is disabled.
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
    */
-  public JMenuItemFixture select() {
-    driver.selectMenuItem(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
-   * the <code>{@link JMenuItem}</code> is showing. If not, please use the method <code>{@link #select()}</code>
-   * instead.
-   * @return this fixture.
-   */
   public JMenuItemFixture click() {
     driver.click(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
-   * the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code> first.
-   * @param button the button to click.
-   * @return this fixture.
-   */
-  public JMenuItemFixture click(MouseButton button) {
-    driver.click(target, button);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes that
-   * the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code> first.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
-   */
-  public JMenuItemFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
-    return this;
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method assumes
-   * that the <code>{@link JMenuItem}</code> is showing. If not, please call the method <code>{@link #select()}</code>
-   * first.
-   * @return this fixture.
-   */
-  public JMenuItemFixture rightClick() {
-    driver.rightClick(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user double-clicking this fixture's <code>{@link JMenuItem}</code>. Please note that this method
-   * assumes that the <code>{@link JMenuItem}</code> is showing. If not, please call the method
-   * <code>{@link #select()}</code> first.
-   * @return this fixture.
-   */
-  public JMenuItemFixture doubleClick() {
-    driver.doubleClick(target);
     return this;
   }
 
@@ -172,7 +114,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
    * @see KeyPressInfo
    */
   public JMenuItemFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    notNullKeyPressInfo(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo.keyCode(), keyPressInfo.modifiers());
     return this;
   }
 
@@ -258,5 +201,13 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> {
   public JMenuItemFixture requireDisabled() {
     driver.requireDisabled(target);
     return this;
+  }
+
+  /**
+   * Returns the <code>{@link JMenuItem}</code> in this fixture (same as <code>{@link #target}</code>.)
+   * @return the <code>JMenuItem</code> in this fixture.
+   */
+  public final JMenuItem component() {
+    return target;
   }
 }

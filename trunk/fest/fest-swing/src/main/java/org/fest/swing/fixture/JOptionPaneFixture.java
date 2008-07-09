@@ -26,6 +26,8 @@ import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.swing.fixture.ComponentFixtureValidator.notNullRobot;
+
 /**
  * Understands simulation of user events on a <code>{@link JOptionPane}</code> and verification of the state of such
  * <code>{@link JOptionPane}</code>.
@@ -48,7 +50,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
   }
 
   private static JOptionPane findShowingOptionPane(Robot robot) {
-    validate(robot);
+    notNullRobot(robot);
     return robot.finder().findByType(JOptionPane.class, true);
   }
 

@@ -55,19 +55,29 @@ public class JMenuItemDriver extends JComponentDriver {
   public JMenuItemDriver(Robot robot) {
     super(robot);
   }
+  
+  private void show(JMenuItem menuItem) {
+    JMenuItemLocation location = new JMenuItemLocation(menuItem);
+    activateParentIfIsAMenu(location);
+    moveParentWindowToFront(location);
+    if (menuItem instanceof JMenu && !location.inMenuBar()) waitForSubMenuToShow();    
+  }
 
+  private void activateParentIfIsAMenu(JMenuItemLocation location) {
+    if (!location.isParentAMenu()) return;
+    click((JMenuItem)location.parentOrInvoker());
+  }
+  
   /**
    * Finds and selects the given <code>{@link JMenuItem}</code>.
    * @param menuItem the <code>JMenuItem</code> to select.
    * @throws ActionFailedException if the menu to select is disabled.
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
+   * @see #show(JMenuItem)
    */
-  public void selectMenuItem(JMenuItem menuItem) {
-    JMenuItemLocation location = new JMenuItemLocation(menuItem);
-    activateParentIfIsAMenu(location);
-    moveParentWindowToFront(location);
-    if (menuItem instanceof JMenu && !location.inMenuBar()) waitForSubMenuToShow();
-    click(menuItem);
+  public void click(JMenuItem menuItem) {
+    show(menuItem);
+    doClick(menuItem);
     ensurePopupIsShowing(menuItem);
   }
 
@@ -77,11 +87,6 @@ public class JMenuItemDriver extends JComponentDriver {
     if (!waitForShowing(popup, robot.settings().timeoutToFindPopup()))
       throw actionFailure(concat("Clicking on menu item <", format(menuItem), "> never showed a pop-up menu"));
     waitForSubMenuToShow();
-  }
-
-  private void activateParentIfIsAMenu(JMenuItemLocation location) {
-    if (!location.isParentAMenu()) return;
-    selectMenuItem((JMenuItem)location.parentOrInvoker());
   }
 
   private void moveParentWindowToFront(JMenuItemLocation location) {
@@ -113,7 +118,7 @@ public class JMenuItemDriver extends JComponentDriver {
     if (SUBMENU_DELAY > delayBetweenEvents) pause(SUBMENU_DELAY - delayBetweenEvents);
   }
 
-  private void click(JMenuItem menuItem) {
+  private void doClick(JMenuItem menuItem) {
     if (!menuItem.isEnabled()) actionFailure(concat("Menu item <", format(menuItem), "> is disabled"));
     if (isMacOSMenuBar()) {
       clickMenuInMacOSMenuBar(menuItem);

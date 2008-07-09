@@ -139,7 +139,7 @@ public class JTableHeaderFixtureTest {
 
       protected void codeToTest() {
         JPopupMenuFixture result = fixture.showPopupMenuAt(1);
-        assertThat(result.target).isSameAs(popupMenu);
+        assertThat(result.component()).isSameAs(popupMenu);
       }
 
     }.run();
@@ -155,7 +155,7 @@ public class JTableHeaderFixtureTest {
 
       protected void codeToTest() {
         JPopupMenuFixture result = fixture.showPopupMenuAt(name);
-        assertThat(result.target).isSameAs(popupMenu);
+        assertThat(result.component()).isSameAs(popupMenu);
       }
 
     }.run();
