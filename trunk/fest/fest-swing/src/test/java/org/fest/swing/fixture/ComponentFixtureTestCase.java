@@ -269,7 +269,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }.run();
   }
   
-  final void assertThatReturnsThis(ComponentFixture<T> result) {
+  final void assertThatReturnsThis(Object result) {
     assertThat(result).isSameAs(fixture());
   }
 

@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.JList;
 
 import org.fest.swing.cell.JListCellReader;
+import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -66,6 +67,18 @@ public class JListItemFixture implements ItemFixture {
    */
   public final JListItemFixture click() {
     list.selectItem(index);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's list item.
+   * @param button the button to click.
+   * @return this fixture.
+   * @throws LocationUnavailableException if this item's index is negative or greater than the index of the last item in
+   *         the <code>JList</code>.
+   */
+  public final JListItemFixture click(MouseButton button) {
+    list.clickItem(index, button, 1);
     return this;
   }
 
@@ -150,40 +163,6 @@ public class JListItemFixture implements ItemFixture {
     return this;
   }
 
-  /**
-   * Simulates a user pressing and releasing the given keys on this fixture's list item. This method does not affect
-   * the current focus.
-   * @param keyCodes one or more codes of the keys to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final JListItemFixture pressAndReleaseKeys(int... keyCodes) {
-    list.pressAndReleaseKeys(keyCodes);
-    return this;
-  }
-
-  /**
-   * Simulates a user pressing the given key on this fixture's list item.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final JListItemFixture pressKey(int keyCode) {
-    list.pressKey(keyCode);
-    return this;
-  }
-
-  /**
-   * Simulates a user releasing the given key on this fixture's list item.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public final JListItemFixture releaseKey(int keyCode) {
-    list.releaseKey(keyCode);
-    return this;
-  }
-  
   /**
    * Returns the index of this fixture's list item.
    * @return the index of this fixture's list item.

@@ -16,16 +16,11 @@
 package org.fest.swing.fixture;
 
 import java.awt.Component;
-import java.awt.event.KeyEvent;
 
-import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
-import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.util.Platform;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentDriver.propertyName;
@@ -40,7 +35,8 @@ import static org.fest.swing.format.Formatting.format;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public abstract class ComponentFixture<T extends Component> {
+public abstract class ComponentFixture<T extends Component> implements MouseInputSimulationFixture,
+    KeyboardInputSimulationFixture, StateVerificationFixture {
 
   /** Name of the property "font". */
   protected static final String FONT_PROPERTY = "font";
@@ -56,6 +52,8 @@ public abstract class ComponentFixture<T extends Component> {
 
   /** This fixture's <code>{@link Component}</code>. */
   public final T target;
+  
+  private final CommonComponentFixtureBehavior commonBehavior;
 
   /**
    * Creates a new <code>{@link ComponentFixture}</code>.
@@ -131,28 +129,14 @@ public abstract class ComponentFixture<T extends Component> {
   public ComponentFixture(Robot robot, T target) {
     this.robot = notNullRobot(robot);
     this.target = notNullTarget(target);
+    commonBehavior = new CommonComponentFixtureBehavior(driver(), target);
   }
 
   /**
-   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
+   * Gives input focus to this fixture's GUI component.
    * @return this fixture.
    */
-  protected abstract ComponentFixture<T> click();
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
-   * @param button the button to click.
-   * @return this fixture.
-   */
-  protected abstract ComponentFixture<T> click(MouseButton button);
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
-   */
-  protected abstract ComponentFixture<T> click(MouseClickInfo mouseClickInfo);
+  public abstract ComponentFixture<T> focus();
 
   /**
    * Simulates a user clicking this fixture's <code>{@link Component}</code>.
@@ -160,63 +144,8 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   protected final void doClick(MouseClickInfo mouseClickInfo) {
-    if (mouseClickInfo == null) throw new IllegalArgumentException("The given MouseClickInfo should not be null");
-    driver().click(target, mouseClickInfo.button(), mouseClickInfo.times());
+    commonBehavior.click(mouseClickInfo);
   }
-  
-  /**
-   * Simulates a user double-clicking this fixture's <code>{@link Component}</code>.
-   * @return this fixture.
-   */
-  protected abstract ComponentFixture<T> doubleClick();
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link Component}</code>.
-   * @return this fixture.
-   */
-  protected abstract ComponentFixture<T> rightClick();
-
-  /**
-   * Gives input focus to this fixture's <code>{@link Component}</code>.
-   * @return this fixture.
-   */
-  protected abstract ComponentFixture<T> focus();
-
-  /**
-   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Component}</code> .
-   * @param keyCodes one or more codes of the keys to press.
-   * @return this fixture.
-   * @throws IllegalArgumentException if any of the given code is not a valid key code.
-   * @see java.awt.event.KeyEvent
-   */
-  protected abstract ComponentFixture<T> pressAndReleaseKeys(int...keyCodes);
-
-  /**
-   * Simulates a user pressing given key on this fixture's <code>{@link Component}</code>.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @see java.awt.event.KeyEvent
-   */
-  protected abstract ComponentFixture<T> pressKey(int keyCode);
-
-  /**
-   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Component}</code>.
-   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
-   * <p>
-   * The following code listing shows how to press 'CTRL' + 'C' in a platform-safe way:
-   * <pre>
-   * JTextComponentFixture textBox = dialog.textBox(&quot;username&quot;);
-   * textBox.selectAll()
-   *        .pressAndReleaseKey(key(<code>{@link KeyEvent#VK_C VK_C}</code>).modifiers({@link Platform#controlOrCommandMask() controlOrCommandMask}())); 
-   * </pre>
-   * </p>
-   * @param keyPressInfo specifies the key and modifiers to press.
-   * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
-   * @throws IllegalArgumentException if the given code is not a valid key code.
-   */
-  protected abstract ComponentFixture<T> pressAndReleaseKey(KeyPressInfo keyPressInfo);
   
   /**
    * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Component}</code>.
@@ -225,54 +154,8 @@ public abstract class ComponentFixture<T extends Component> {
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   protected final void doPressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    notNullKeyPressInfo(keyPressInfo);
-    driver().pressAndReleaseKey(target, keyPressInfo.keyCode(), keyPressInfo.modifiers());
+    commonBehavior.pressAndReleaseKey(keyPressInfo);
   }
-  
-  /**
-   * Simulates a user releasing the given key on this fixture's <code>{@link Component}</code>.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @see java.awt.event.KeyEvent
-   */
-  protected abstract ComponentFixture<T> releaseKey(int keyCode);
-
-  /**
-   * Asserts that this fixture's <code>{@link Component}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is enabled.
-   */
-  protected abstract ComponentFixture<T> requireDisabled();
-
-  /**
-   * Asserts that this fixture's <code>{@link Component}</code> is enabled.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is disabled.
-   */
-  protected abstract ComponentFixture<T> requireEnabled();
-
-  /**
-   * Asserts that this fixture's <code>{@link Component}</code> is enabled.
-   * @param timeout the time this fixture will wait for the component to be enabled.
-   * @return this fixture.
-   * @throws WaitTimedOutError if the managed <code>Component</code> is never enabled.
-   */
-  protected abstract ComponentFixture<T> requireEnabled(Timeout timeout);
-
-  /**
-   * Asserts that this fixture's <code>{@link Component}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is visible.
-   */
-  protected abstract ComponentFixture<T> requireNotVisible();
-
-  /**
-   * Asserts that this fixture's <code>{@link Component}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>Component</code> is not visible.
-   */
-  protected abstract ComponentFixture<T> requireVisible();
 
   /**
    * Returns a fixture that verifies the font of this fixture's <code>{@link Component}</code>.
@@ -299,10 +182,10 @@ public abstract class ComponentFixture<T extends Component> {
   }
 
   /**
-   * Returns this fixture's <code>{@link Component}</code> casted to the given subtype.
-   * @param <C> enforces that the given type is a subtype of the managed <code>Component</code>.
+   * Returns this fixture's <code>{@link Component}</code> casted to the given sub-type.
+   * @param <C> enforces that the given type is a sub-type of the managed <code>Component</code>.
    * @param type the type that the managed <code>Component</code> will be casted to.
-   * @return this fixture's <code>Component</code> casted to the given subtype.
+   * @return this fixture's <code>Component</code> casted to the given sub-type.
    * @throws AssertionError if this fixture's <code>Component</code> is not an instance of the given type.
    */
   public final <C extends T> C targetCastedTo(Class<C> type) {

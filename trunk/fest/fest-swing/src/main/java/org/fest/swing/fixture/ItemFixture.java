@@ -20,13 +20,12 @@ import java.awt.Component;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
- * Understands simulation of user events on an belonging to a fixture's <code>{@link Component}</code> and
- * verification of the state of such .
+ * Understands simulation of user events on an item belonging to a fixture's <code>{@link Component}</code>.
  * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public interface ItemFixture {
+public interface ItemFixture extends MouseInputSimulationFixture {
 
   /**
    * Simulates a user selecting this fixture's item.
@@ -35,36 +34,11 @@ public interface ItemFixture {
   ItemFixture select();
 
   /**
-   * Simulates a user clicking this fixture's item.
-   * @return this fixture.
-   */
-  ItemFixture click();
-
-  /**
-   * Simulates a user clicking this fixture's item.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @return this fixture.
-   */
-  ItemFixture click(MouseClickInfo mouseClickInfo);
-
-  /**
-   * Simulates a user right-clicking this fixture's item.
-   * @return this fixture.
-   */
-  ItemFixture rightClick();
-
-  /**
-   * Simulates a user double-clicking this fixture's item.
-   * @return this fixture.
-   */
-  ItemFixture doubleClick();
-
-  /**
    * Returns the <code>String</code> representation of this fixture's item, or <code>null</code> if one can not be 
    * obtained.
    * @return the <code>String</code> representation of this fixture's item.
    */
-  Object value();
+  String value();
 
   /**
    * Simulates a user dragging this fixture's item.
@@ -77,31 +51,6 @@ public interface ItemFixture {
    * @return this fixture.
    */
   ItemFixture drop();
-
-  /**
-   * Simulates a user pressing and releasing the given keys on this fixture's item. This method does not affect
-   * the current focus.
-   * @param keyCodes one or more codes of the keys to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  ItemFixture pressAndReleaseKeys(int... keyCodes);
-
-  /**
-   * Simulates a user pressing the given key on this fixture's item.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  ItemFixture pressKey(int keyCode);
-
-  /**
-   * Simulates a user releasing the given key on this fixture's item.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  ItemFixture releaseKey(int keyCode);
 
   /**
    * Shows a pop-up menu using this fixture's item as the invoker of the pop-up menu.

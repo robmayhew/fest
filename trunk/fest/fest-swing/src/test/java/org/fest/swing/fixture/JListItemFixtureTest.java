@@ -19,8 +19,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.MouseButton;
 
-import static java.awt.event.KeyEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
@@ -112,6 +112,20 @@ public class JListItemFixtureTest {
     }.run();
   }
   
+  @Test public void shouldClickGivenButton() {
+    final MouseButton button = MouseButton.LEFT_BUTTON;
+    new EasyMockTemplate(list) {
+      protected void expectations() {
+        list.clickItem(index, button, 1);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.click(button));
+      }
+    }.run();
+  }
+
   @Test public void shouldShowPopupMenu() {
     final JPopupMenuFixture popup = createMock(JPopupMenuFixture.class);
     new EasyMockTemplate(list) {
@@ -164,43 +178,6 @@ public class JListItemFixtureTest {
     }.run();
   }
   
-  @Test public void shouldPressAndReleaseKeys() {
-    final int[] keys = { VK_A, VK_B };
-    new EasyMockTemplate(list) {
-      protected void expectations() {
-        expect(list.pressAndReleaseKeys(keys)).andReturn(list);
-      }
-
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.pressAndReleaseKeys(keys));
-      }
-    }.run();
-  }
-
-  @Test public void shouldPressKey() {
-    new EasyMockTemplate(list) {
-      protected void expectations() {
-        expect(list.pressKey(VK_A)).andReturn(list);
-      }
-
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.pressKey(VK_A));
-      }
-    }.run();
-  }
-  
-  @Test public void shouldReleaseKey() {
-    new EasyMockTemplate(list) {
-      protected void expectations() {
-        expect(list.releaseKey(VK_A)).andReturn(list);
-      }
-
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.releaseKey(VK_A));
-      }
-    }.run();
-  }
-
   @Test public void shouldReturnIndex() {
     assertThat(fixture.index()).isEqualTo(index);
   }

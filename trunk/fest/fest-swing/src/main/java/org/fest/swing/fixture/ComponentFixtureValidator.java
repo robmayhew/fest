@@ -49,16 +49,5 @@ public final class ComponentFixtureValidator {
     return target;
   }
   
-  /**
-   * Verifies that the given <code>{@link KeyPressInfo}</code> is not <code>null</code>.
-   * @param keyPressInfo the <code>KeyPressInfo</code> to verify.
-   * @return the given <code>KeyPressInfo</code>.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
-   */
-  public static KeyPressInfo notNullKeyPressInfo(KeyPressInfo keyPressInfo) {
-    if (keyPressInfo == null) throw new IllegalArgumentException("The given KeyPressInfo should not be null");
-    return keyPressInfo;
-  }
-  
   private ComponentFixtureValidator() {}
 }

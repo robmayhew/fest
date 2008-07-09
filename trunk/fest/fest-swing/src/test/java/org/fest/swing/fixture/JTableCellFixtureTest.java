@@ -30,7 +30,6 @@ import org.fest.swing.driver.JTableDriver;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
-import static java.awt.event.KeyEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
@@ -231,43 +230,6 @@ public class JTableCellFixtureTest {
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture.drop());
-      }
-    }.run();
-  }
-
-  @Test public void shouldPressAndReleaseKeys() {
-    final int[] keys = { VK_A, VK_B };
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.pressAndReleaseKeys(keys)).andReturn(table);
-      }
-
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.pressAndReleaseKeys(keys));
-      }
-    }.run();
-  }
-
-  @Test public void shouldPressKey() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.pressKey(VK_A)).andReturn(table);
-      }
-
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.pressKey(VK_A));
-      }
-    }.run();
-  }
-
-  @Test public void shouldReleaseKey() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.releaseKey(VK_A)).andReturn(table);
-      }
-
-      protected void codeToTest() {
-        assertThatReturnsThis(fixture.releaseKey(VK_A));
       }
     }.run();
   }

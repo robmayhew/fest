@@ -32,9 +32,11 @@ import static org.fest.swing.fixture.ComponentFixtureValidator.*;
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixture {
+public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVerificationFixture {
 
   public final JMenuItem target;
+
+  private final CommonComponentFixtureBehavior commonBehavior;
 
   private JMenuItemDriver driver;
   
@@ -78,6 +80,7 @@ public class JMenuItemFixture {
     notNullRobot(robot);
     this.target = notNullTarget(target);
     updateDriver(new JMenuItemDriver(robot));
+    commonBehavior = new CommonComponentFixtureBehavior(driver, target);
   }
 
   final void updateDriver(JMenuItemDriver newDriver) {
@@ -114,8 +117,7 @@ public class JMenuItemFixture {
    * @see KeyPressInfo
    */
   public JMenuItemFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    notNullKeyPressInfo(keyPressInfo);
-    driver.pressAndReleaseKey(target, keyPressInfo.keyCode(), keyPressInfo.modifiers());
+    commonBehavior.pressAndReleaseKey(keyPressInfo);
     return this;
   }
 

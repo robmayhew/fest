@@ -15,8 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.swing.core.MouseButton.*;
-
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -26,6 +24,8 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+
+import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands simulation of user events on a cell in a <code>{@link JTable}</code> and verification of the state of
@@ -109,7 +109,12 @@ public class JTableCellFixture implements ItemFixture {
     return click(RIGHT_BUTTON);
   }
 
-  private JTableCellFixture click(MouseButton button) {
+  /**
+   * Simulates a user clicking a cell in this fixture's table cell once, using the specified mouse button.
+   * @param button the mouse button to use.
+   * @return this fixture.
+   */
+  public JTableCellFixture click(MouseButton button) {
     table.click(cell, button);
     return this;
   }
@@ -315,40 +320,6 @@ public class JTableCellFixture implements ItemFixture {
    */
   public JTableCellFixture drop() {
     table.drop(cell);
-    return this;
-  }
-
-  /**
-   * Simulates a user pressing and releasing the given keys on this fixture's table cell. This method does not affect
-   * the current focus.
-   * @param keyCodes one or more codes of the keys to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public JTableCellFixture pressAndReleaseKeys(int... keyCodes) {
-    table.pressAndReleaseKeys(keyCodes);
-    return this;
-  }
-
-  /**
-   * Simulates a user pressing the given key on this fixture's table cell.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public JTableCellFixture pressKey(int keyCode) {
-    table.pressKey(keyCode);
-    return this;
-  }
-
-  /**
-   * Simulates a user releasing the given key on this fixture's table cell.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public JTableCellFixture releaseKey(int keyCode) {
-    table.releaseKey(keyCode);
     return this;
   }
 

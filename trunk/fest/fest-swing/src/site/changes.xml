@@ -18,6 +18,9 @@
       <action dev="alruiz, wanghy" type="remove" issue="165" due-to="Simeon Fitch">
         Removed method 'click(JMenuItem, MouseButton)' in org.fest.swing.fixture.JMenuItemFixture.
       </action>
+      <action dev="alruiz" type="remove">
+        Removed all methods related to keyboard input simulation from JListItemFixture and JTableCellFixture.
+      </action>
     </release>
     <release version="1.0a3" date="2008-06-23" description="Subsequent release">
       <action dev="wanghy" type="fix" issue="126" due-to="Manuel Kueblboeck">
