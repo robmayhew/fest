@@ -56,11 +56,6 @@ public class ExistingHierarchy implements ComponentHierarchy {
     static final ExistingHierarchy INSTANCE = new ExistingHierarchy();
   }
 
-  /**
-   * Creates a new <code>{@link ExistingHierarchy}</code>
-   */
-  public ExistingHierarchy() {}
-
   /** ${@inheritDoc} */
   public Collection<? extends Container> roots() {
     return windowMonitor.rootWindows();

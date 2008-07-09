@@ -21,6 +21,7 @@ import java.awt.Robot;
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.util.Strings.concat;
@@ -69,7 +70,9 @@ class RobotEventGenerator implements InputEventGenerator {
       if (point == null) return;
       point.translate(x, y);
       robot.mouseMove(point.x, point.y);
-    } catch (IllegalComponentStateException e) {}
+    } catch (IllegalComponentStateException e) {
+      throw unexpected(e);
+    }
   }
 
   /** ${@inheritDoc} */

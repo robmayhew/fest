@@ -14,12 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static javax.swing.SwingUtilities.getWindowAncestor;
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.*;
 
 import javax.swing.JToolBar;
@@ -29,6 +23,13 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+
+import static javax.swing.SwingUtilities.getWindowAncestor;
+
+import static org.fest.reflect.core.Reflection.field;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JToolBar}</code>. Unlike <code>JToolBarFixture</code>, this
@@ -112,7 +113,7 @@ public class JToolBarDriver extends JComponentDriver {
     Container dock = null;
     try {
       dock = field("dockingSource").ofType(Container.class).in(toolBar.getUI()).get();
-    } catch (RuntimeException ignored) {}
+    } catch (RuntimeException e) {}
     if (dock != null) return dock;
     throw actionFailure("Unabled to determine dock for JToolBar");
   }

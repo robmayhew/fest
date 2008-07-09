@@ -14,27 +14,6 @@
  */
 package org.fest.swing.core;
 
-import static java.awt.event.InputEvent.*;
-import static java.awt.event.KeyEvent.*;
-import static java.lang.System.currentTimeMillis;
-import static javax.swing.SwingUtilities.*;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
-import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
-import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
-import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
-import static org.fest.swing.util.AWT.centerOf;
-import static org.fest.swing.util.Modifiers.*;
-import static org.fest.swing.util.Platform.isOSX;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-import static org.fest.util.Strings.*;
-
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.InvocationEvent;
@@ -54,6 +33,29 @@ import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.util.TimeoutWatch;
+
+import static java.awt.event.InputEvent.*;
+import static java.awt.event.KeyEvent.*;
+import static java.lang.System.currentTimeMillis;
+import static javax.swing.SwingUtilities.*;
+
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
+import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
+import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
+import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
+import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.Modifiers.*;
+import static org.fest.swing.util.Platform.isOSX;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.
@@ -176,7 +178,9 @@ public class RobotFixture implements Robot {
     try {
       Point p = closeLocation(w);
       moveMouse(w, p.x, p.y);
-    } catch (RuntimeException ignored) {}
+    } catch (RuntimeException e) {
+      throw unexpected(e);
+    }
     WindowEvent event = new WindowEvent(w, WindowEvent.WINDOW_CLOSING);
     // If the window contains an applet, send the event on the applet's queue instead to ensure a shutdown from the
     // applet's context (assists AppletViewer cleanup).
@@ -590,9 +594,10 @@ public class RobotFixture implements Robot {
         // the test will wait forever (up through 1.5.0_05).
         lock.wait(timeout);
         return (currentTimeMillis() - start) >= settings.idleTimeout();
-      } catch (InterruptedException e) {}
+      } catch (InterruptedException e) {
+        throw unexpected(e);
+      }
     }
-    return false;
   }
 
   private static class RobotIdleLock {
@@ -659,7 +664,9 @@ public class RobotFixture implements Robot {
       JOptionPane found = finder().findByType(JOptionPane.class, true);
       if (found == null) return;
       fail(concat("Expecting no JOptionPane to be showing, but found:<", format(found), ">"));
-    } catch (ComponentLookupException expected) {}
+    } catch (ComponentLookupException e) {
+      throw unexpected(e);
+    }
   }
 
   /** ${@inheritDoc} */

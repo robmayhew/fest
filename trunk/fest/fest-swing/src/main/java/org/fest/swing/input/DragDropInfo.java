@@ -87,7 +87,8 @@ class DragDropInfo {
         if (!(cause instanceof InvocationTargetException)) return false;
         return (((InvocationTargetException) cause).getTargetException() instanceof InvalidDnDOperationException);
       }
-    } catch (Exception ignored) {}
-    return false;
+    } catch (Exception ignored) {
+      return false;
+    }
   }
 }
