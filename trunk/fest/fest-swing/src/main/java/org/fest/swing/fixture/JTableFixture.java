@@ -85,8 +85,11 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
   final void updateDriver(JTableDriver newDriver) {
     driver = newDriver;
   }
-  
-  /** {@inheritDoc} **/
+
+  /**
+   * Returns the <code>{@link JTableDriver}</code> used by this fixture.
+   * @return the <code>JTableDriver</code> used by this fixture.
+   */
   protected final JTableDriver driver() {
     return driver;
   }

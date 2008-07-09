@@ -21,7 +21,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.AbstractButtonDriver;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -67,11 +66,6 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   
   final void updateDriver(AbstractButtonDriver newDriver) {
     driver = newDriver;
-  }
-
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
   }
 
   /**

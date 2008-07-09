@@ -23,7 +23,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -95,11 +94,6 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
 
   void updateDriver(FrameDriver newDriver) {
     driver = newDriver;
-  }
-
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
   }
 
   /**

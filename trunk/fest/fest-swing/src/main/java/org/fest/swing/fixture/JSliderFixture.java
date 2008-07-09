@@ -20,7 +20,6 @@ import javax.swing.JSlider;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSliderDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -69,11 +68,6 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> {
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.

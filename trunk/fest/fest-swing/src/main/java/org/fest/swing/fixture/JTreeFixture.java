@@ -24,7 +24,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.BasicJTreeCellReader;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -103,11 +102,6 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> {
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.

@@ -24,7 +24,6 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JPopupMenuDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -52,11 +51,6 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
 
   final void updateDriver(JPopupMenuDriver newDriver) {
     driver = newDriver;
-  }
-  
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
   }
 
   /**

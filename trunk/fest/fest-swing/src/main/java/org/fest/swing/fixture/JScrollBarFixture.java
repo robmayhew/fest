@@ -20,7 +20,6 @@ import javax.swing.JScrollBar;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JScrollBarDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -67,11 +66,6 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
   
   final void updateDriver(JScrollBarDriver newDriver) {
     driver = newDriver;
-  }
-  
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
   }
 
   /**

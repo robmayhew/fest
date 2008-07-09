@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComponentDriver;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
@@ -52,11 +51,6 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JScrollPane</code>.

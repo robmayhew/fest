@@ -21,7 +21,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.AbstractButtonDriver;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -68,11 +67,6 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.

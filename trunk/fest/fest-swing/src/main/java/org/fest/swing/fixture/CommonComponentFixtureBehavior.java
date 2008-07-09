@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 
 /**
@@ -32,10 +33,14 @@ public final class CommonComponentFixtureBehavior {
 
   /**
    * Creates a new </code>{@link CommonComponentFixtureBehavior}</code>.
-   * @param driver the component driver to delegate work to.
+   * @param robot the robot to delegate work to.
    * @param target the target <code>Component</code>.
    */
-  public CommonComponentFixtureBehavior(ComponentDriver driver, Component target) {
+  public CommonComponentFixtureBehavior(Robot robot, Component target) {
+    this(new ComponentDriver(robot), target);
+  }
+
+  CommonComponentFixtureBehavior(ComponentDriver driver, Component target) {
     this.driver = driver;
     this.target = target;
   }

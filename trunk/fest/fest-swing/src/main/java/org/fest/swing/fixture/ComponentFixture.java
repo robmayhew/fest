@@ -19,7 +19,6 @@ import java.awt.Component;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -113,13 +112,6 @@ public abstract class ComponentFixture<T extends Component> implements MouseInpu
   }
 
   /**
-   * Returns the <code>{@link ComponentDriver}</code> used internally to simulate user input and verify the state of
-   * this fixture's <code>{@link Component}</code>.
-   * @return the internal <code>ComponentDriver</code>.
-   */
-  protected abstract ComponentDriver driver();
-  
-  /**
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Component</code>.
    * @param target the <code>Component</code> to be managed by this fixture.
@@ -129,7 +121,7 @@ public abstract class ComponentFixture<T extends Component> implements MouseInpu
   public ComponentFixture(Robot robot, T target) {
     this.robot = notNullRobot(robot);
     this.target = notNullTarget(target);
-    commonBehavior = new CommonComponentFixtureBehavior(driver(), target);
+    commonBehavior = new CommonComponentFixtureBehavior(robot, target);
   }
 
   /**

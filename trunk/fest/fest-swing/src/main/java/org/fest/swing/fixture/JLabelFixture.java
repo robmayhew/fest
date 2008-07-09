@@ -20,7 +20,6 @@ import javax.swing.JLabel;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JLabelDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -67,11 +66,6 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements T
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.

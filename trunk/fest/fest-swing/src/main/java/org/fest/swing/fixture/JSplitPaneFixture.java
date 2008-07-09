@@ -20,7 +20,6 @@ import javax.swing.JSplitPane;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSplitPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -67,11 +66,6 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Simulates a user moving the divider of this fixture's <code>{@link JSplitPane}</code>.
    * @param location the location to move the divider to.

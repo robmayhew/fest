@@ -22,7 +22,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.BasicJListCellReader;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -80,11 +79,6 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
   
   final void updateDriver(JListDriver newDriver) {
     driver = newDriver;
-  }
-
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
   }
 
   /**

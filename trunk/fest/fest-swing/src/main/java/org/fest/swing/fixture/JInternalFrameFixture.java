@@ -23,7 +23,6 @@ import javax.swing.JInternalFrame;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JInternalFrameDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -72,11 +71,6 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Brings this fixture's <code>{@link JInternalFrame}</code> to the front.
    * @return this fixture.

@@ -80,7 +80,7 @@ public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVe
     notNullRobot(robot);
     this.target = notNullTarget(target);
     updateDriver(new JMenuItemDriver(robot));
-    commonBehavior = new CommonComponentFixtureBehavior(driver, target);
+    commonBehavior = new CommonComponentFixtureBehavior(robot, target);
   }
 
   final void updateDriver(JMenuItemDriver newDriver) {

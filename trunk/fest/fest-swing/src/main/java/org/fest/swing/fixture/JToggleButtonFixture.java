@@ -21,7 +21,6 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.AbstractButtonDriver;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -67,11 +66,6 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
     driver = newDriver;
   }
   
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
-  }
-
   /**
    * Checks (or selects) this fixture's <code>{@link JToggleButton}</code> only it is not already checked.
    * @return this fixture.

@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -66,11 +65,6 @@ public class JPanelFixture extends ContainerFixture<JPanel> {
   
   final void updateDriver(JComponentDriver newDriver) {
     driver = newDriver;
-  }
-  
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
   }
 
   /**

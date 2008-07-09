@@ -21,7 +21,6 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSpinnerDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -68,11 +67,6 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
   
   final void updateDriver(JSpinnerDriver newDriver) {
     driver = newDriver;
-  }
-  
-  /** {@inheritDoc} **/
-  protected final ComponentDriver driver() {
-    return driver;
   }
   
   /**

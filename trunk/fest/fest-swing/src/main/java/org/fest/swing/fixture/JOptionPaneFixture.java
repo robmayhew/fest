@@ -22,7 +22,6 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
-import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -68,11 +67,6 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
 
   final void updateDriver(JOptionPaneDriver newDriver) {
     driver = newDriver;
-  }
-
-  /** {@inheritDoc} **/
-  protected ComponentDriver driver() {
-    return driver;
   }
 
   /**
