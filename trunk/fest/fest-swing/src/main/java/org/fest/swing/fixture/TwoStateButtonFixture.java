@@ -29,14 +29,14 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  */
 public abstract class TwoStateButtonFixture<T extends AbstractButton> extends JPopupMenuInvokerFixture<T> 
-    implements TextDisplayFixture {
+    implements CommonComponentFixture, TextDisplayFixture {
 
   /**
    * Creates a new <code>{@link TwoStateButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
@@ -49,8 +49,8 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends JP
    * @param robot performs simulation of user events on a <code>JToggleButton</code>.
    * @param name the name of the <code>JToggleButton</code> to find using the given <code>Robot</code>.
    * @param type the type of the <code>JToggleButton</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
@@ -62,8 +62,8 @@ public abstract class TwoStateButtonFixture<T extends AbstractButton> extends JP
    * Creates a new <code>{@link TwoStateButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToggleButton</code>.
    * @param target the <code>JToggleButton</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public TwoStateButtonFixture(Robot robot, T target) {
     super(robot, target);

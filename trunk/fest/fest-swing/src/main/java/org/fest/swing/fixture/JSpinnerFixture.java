@@ -32,7 +32,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
+public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implements CommonComponentFixture {
 
   private JSpinnerDriver driver;
 
@@ -40,7 +40,7 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    * Creates a new <code>{@link JSpinnerFixture}</code>.
    * @param robot performs simulation of user events on a <code>JSpinner</code>.
    * @param spinnerName the name of the <code>JSpinner</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JSpinner</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JSpinner</code> is found.
    */
@@ -53,8 +53,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    * Creates a new <code>{@link JSpinnerFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSpinner</code>.
    * @param target the <code>JSpinner</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JSpinnerFixture(Robot robot, JSpinner target) {
     super(robot, target);
@@ -157,7 +157,7 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JSpinnerFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -196,7 +196,7 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

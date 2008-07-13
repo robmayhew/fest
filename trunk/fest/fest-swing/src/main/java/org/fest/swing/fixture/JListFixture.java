@@ -44,7 +44,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JListFixture extends JPopupMenuInvokerFixture<JList> implements ItemGroupFixture {
+public class JListFixture extends JPopupMenuInvokerFixture<JList> implements CommonComponentFixture, ItemGroupFixture {
 
   private JListDriver driver;
 
@@ -52,7 +52,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on a <code>JList</code>.
    * @param listName the name of the <code>JList</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JList</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JList</code> is found.
    */
@@ -65,8 +65,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Creates a new <code>{@link JListFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JList</code>.
    * @param target the <code>JList</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JListFixture(Robot robot, JList target) {
     super(robot, target);
@@ -281,7 +281,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Simulates a user clicking this fixture's <code>{@link JList}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JListFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -320,7 +320,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */
@@ -499,7 +499,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Ite
    * this fixture's <code>{@link JList}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJListCellReader}</code>.
    * @param cellReader the new <code>JListCellValueReader</code> to use.
-   * @throws IllegalArgumentException if <code>cellReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>cellReader</code> is <code>null</code>.
    */
   public void cellReader(JListCellReader cellReader) {
     driver.cellReader(cellReader);

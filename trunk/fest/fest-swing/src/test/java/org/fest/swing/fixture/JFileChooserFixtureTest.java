@@ -37,7 +37,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Yvonne Wang
  */
-public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChooser> {
+public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFileChooser> {
 
   private JFileChooserDriver driver;
   private JFileChooser target;
@@ -164,5 +164,5 @@ public class JFileChooserFixtureTest extends ComponentFixtureTestCase<JFileChoos
 
   ComponentDriver driver() { return driver; }
   JFileChooser target() { return target; }
-  ComponentFixture<JFileChooser> fixture() { return fixture; }
+  JFileChooserFixture fixture() { return fixture; }
 }

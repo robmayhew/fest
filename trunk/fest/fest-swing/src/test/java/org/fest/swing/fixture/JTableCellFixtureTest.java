@@ -55,12 +55,12 @@ public class JTableCellFixtureTest {
     fixture = new JTableCellFixture(table, cell);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfJTableFixtureIsNull() {
     new JTableCellFixture(null, cell);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellIsNull() {
     new JTableCellFixture(table, null);
   }

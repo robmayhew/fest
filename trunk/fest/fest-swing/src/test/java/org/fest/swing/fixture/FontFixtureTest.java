@@ -42,7 +42,7 @@ public class FontFixtureTest {
     fixture = new FontFixture(font);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfFontIsNull() {
     new FontFixture(null);
   }

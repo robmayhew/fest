@@ -39,7 +39,7 @@ import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JToolBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JToolBar> {
+public class JToolBarFixtureTest extends CommonComponentFixtureTestCase<JToolBar> {
 
   private JToolBarDriver driver;
   private JToolBar target;
@@ -111,5 +111,5 @@ public class JToolBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JToolB
 
   ComponentDriver driver() { return driver; }
   JToolBar target() { return target; }
-  JPopupMenuInvokerFixture<JToolBar> fixture() { return fixture; }
+  JToolBarFixture fixture() { return fixture; }
 }

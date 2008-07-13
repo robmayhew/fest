@@ -47,8 +47,18 @@ public class ColorsTest {
     };
   }
   
+  @Test(expectedExceptions = NumberFormatException.class)
+  public void shouldThrowErrorIfHexStringIsNotValid() {
+    Colors.colorFromHexString("zz");
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfHexStringIsNull() {
+    Colors.colorFromHexString(null);
+  }
+
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldThrowErrorIfHexStringNotValid() {
+  public void shouldThrowErrorIfHexStringIsEmpty() {
     Colors.colorFromHexString("");
   }
 }

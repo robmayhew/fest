@@ -57,7 +57,7 @@ public interface KeyboardInputSimulationFixture {
    * </p>
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   KeyboardInputSimulationFixture pressAndReleaseKey(KeyPressInfo keyPressInfo);

@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
  */
 public class TypeMatcherTest {
 
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfTypeIsNull() {
     new TypeMatcher(null);
   }

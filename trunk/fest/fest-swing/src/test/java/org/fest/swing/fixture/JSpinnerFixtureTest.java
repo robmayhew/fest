@@ -31,7 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
  *
  * @author Yvonne Wang
  */
-public class JSpinnerFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSpinner> {
+public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner> {
 
   private JSpinnerDriver driver;
   private JSpinner target;
@@ -132,5 +132,5 @@ public class JSpinnerFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSpinn
 
   ComponentDriver driver() { return driver; }
   JSpinner target() { return target; }
-  JPopupMenuInvokerFixture<JSpinner> fixture() { return fixture; }
+  JSpinnerFixture fixture() { return fixture; }
 }

@@ -41,7 +41,7 @@ public interface MouseInputSimulationFixture {
    * Simulates a user clicking this fixture's GUI component.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   MouseInputSimulationFixture click(MouseClickInfo mouseClickInfo);
 

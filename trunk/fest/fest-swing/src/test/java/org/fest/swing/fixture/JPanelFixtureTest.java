@@ -31,7 +31,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JPanelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JPanel> {
+public class JPanelFixtureTest extends CommonComponentFixtureTestCase<JPanel> {
 
   private JComponentDriver driver;
   private JPanel target;
@@ -58,5 +58,5 @@ public class JPanelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JPanel> 
 
   ComponentDriver driver() { return driver; }
   JPanel target() { return target; }
-  JPopupMenuInvokerFixture<JPanel> fixture() { return fixture; }
+  JPanelFixture fixture() { return fixture; }
 }

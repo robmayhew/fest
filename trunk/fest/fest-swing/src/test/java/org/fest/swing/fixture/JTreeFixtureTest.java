@@ -38,7 +38,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
+public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
 
   private JTreeDriver driver;
   private JTree target;
@@ -337,5 +337,5 @@ public class JTreeFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTree> {
 
   ComponentDriver driver() { return driver; }
   JTree target() { return target; }
-  JPopupMenuInvokerFixture<JTree> fixture() { return fixture; }
+  JTreeFixture fixture() { return fixture; }
 }

@@ -33,7 +33,7 @@ public class ColorFixture {
   /**
    * Creates a new </code>{@link ColorFixture}</code>.
    * @param target the color to manage.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public ColorFixture(Color target) {
     this(target, null);
@@ -43,10 +43,10 @@ public class ColorFixture {
    * Creates a new </code>{@link ColorFixture}</code>.
    * @param target the color to manage.
    * @param description this fixture's description.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public ColorFixture(Color target, String description) {
-    if (target == null) throw new IllegalArgumentException("The given color should not be null");
+    if (target == null) throw new NullPointerException("The given color should not be null");
     this.target = target;
     this.description = description;
   }
@@ -56,7 +56,9 @@ public class ColorFixture {
    * value (e.g. "82A9FF".)
    * @param hexValue the value representing the color to compare to.
    * @return this fixture.
-   * @throws IllegalArgumentException if the value represented by the given hexadecimal coding is not valid.
+   * @throws NullPointerException if the hexadecimal code is <code>null</code>.
+   * @throws IllegalArgumentException if the hexadecimal code is empty.
+   * @throws NumberFormatException if the hexadecimal code is empty.
    * @throws AssertionError if this fixture's <code>Color</code> is not equal to the given one.
    */
   public ColorFixture requireEqualTo(String hexValue) {
@@ -79,7 +81,9 @@ public class ColorFixture {
    * hexadecimal value (e.g. "82A9FF".)
    * @param hexValue the value representing the color to compare to.
    * @return this fixture.
-   * @throws IllegalArgumentException if the value represented by the given hexadecimal coding is not valid.
+   * @throws NullPointerException if the hexadecimal code is <code>null</code>.
+   * @throws IllegalArgumentException if the hexadecimal code is empty.
+   * @throws NumberFormatException if the hexadecimal code is empty.
    * @throws AssertionError if this fixture's <code>Color</code> is equal to the given one.
    */
   public ColorFixture requireNotEqualTo(String hexValue) {

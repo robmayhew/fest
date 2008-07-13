@@ -24,11 +24,11 @@ package org.fest.swing.driver;
 final class CommonValidations {
 
   static void validateCellReader(Object cellReader) {
-    if (cellReader == null) throw new IllegalArgumentException("Cell reader should not be null");
+    if (cellReader == null) throw new NullPointerException("Cell reader should not be null");
   }
 
   static void validateCellWriter(Object cellWriter) {
-    if (cellWriter == null) throw new IllegalArgumentException("Cell writer should not be null");
+    if (cellWriter == null) throw new NullPointerException("Cell writer should not be null");
   }
 
   private CommonValidations() {}

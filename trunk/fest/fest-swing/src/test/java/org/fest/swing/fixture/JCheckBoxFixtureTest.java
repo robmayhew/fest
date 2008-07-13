@@ -33,7 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JCheckBox> {
+public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckBox> {
 
   private AbstractButtonDriver driver;
   private JCheckBox target;
@@ -125,5 +125,5 @@ public class JCheckBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JChec
 
   ComponentDriver driver() { return driver; }
   JCheckBox target() { return target; }
-  JPopupMenuInvokerFixture<JCheckBox> fixture() { return fixture; }
+  JCheckBoxFixture fixture() { return fixture; }
 }

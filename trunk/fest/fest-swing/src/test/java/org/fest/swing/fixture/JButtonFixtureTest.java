@@ -34,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JButton> {
+public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> {
 
   private AbstractButtonDriver driver;
   private JButton target;
@@ -74,6 +74,6 @@ public class JButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JButton
 
   ComponentDriver driver() { return driver; }
   JButton target() { return target; }
-  JPopupMenuInvokerFixture<JButton> fixture() { return fixture; }
+  JButtonFixture fixture() { return fixture; }
   Class<JButton> targetType() { return JButton.class; }
 }

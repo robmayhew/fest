@@ -49,7 +49,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Fabien Barbero
  */
-public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
+public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements CommonComponentFixture {
 
   private JTableDriver driver;
 
@@ -57,8 +57,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTable</code>.
    * @param target the <code>JTable</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JTableFixture(Robot robot, JTable target) {
     super(robot, target);
@@ -69,7 +69,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Creates a new <code>{@link JTableFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTable</code>.
    * @param tableName the name of the <code>JTable</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JTable</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTable</code> is found.
    */
@@ -295,7 +295,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Simulates a user clicking this fixture's <code>{@link JTable}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTableFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -361,7 +361,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */
@@ -539,7 +539,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTableCellReader}</code>.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.
-   * @throws IllegalArgumentException if <code>cellReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>cellReader</code> is <code>null</code>.
    */
   public void cellReader(JTableCellReader cellReader) {
     driver.cellReader(cellReader);
@@ -550,7 +550,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> {
    * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJTableCellWriter}</code>.
    * @param cellWriter the new <code>JTableCellValueWriter</code> to use.
-   * @throws IllegalArgumentException if <code>cellWriter</code> is <code>null</code>.
+   * @throws NullPointerException if <code>cellWriter</code> is <code>null</code>.
    */
   public void cellWriter(JTableCellWriter cellWriter) {
     driver.cellWriter(cellWriter);

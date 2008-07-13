@@ -60,7 +60,7 @@ public class JMenuItemFixtureTest {
     fixture.updateDriver(driver);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfGivenActionIsNull() {
     Action action = null;
     new JMenuItemFixture(robot, action);
@@ -117,7 +117,7 @@ public class JMenuItemFixtureTest {
     }.run();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfKeyPressInfoIsNull() {
     fixture.pressAndReleaseKey(null);
   }

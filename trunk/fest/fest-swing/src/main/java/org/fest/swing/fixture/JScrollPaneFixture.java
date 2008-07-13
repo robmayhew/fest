@@ -31,7 +31,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang
  */
-public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
+public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> implements CommonComponentFixture {
 
   private JComponentDriver driver;
   
@@ -39,7 +39,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JScrollPane</code>.
    * @param target the <code>JScrollPane</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JScrollPaneFixture(Robot robot, JScrollPane target) {
@@ -55,7 +55,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JScrollPane</code>.
    * @param panelName the name of the <code>JScrollPane</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JScrollPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JScrollPane</code> is found.
    */
@@ -113,7 +113,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
    * Simulates a user clicking this fixture's <code>{@link JScrollPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JScrollPaneFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -152,7 +152,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

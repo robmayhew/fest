@@ -33,14 +33,14 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang 
  */
-public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
+public class JFileChooserFixture extends ComponentFixture<JFileChooser> implements CommonComponentFixture {
 
   private JFileChooserDriver driver;
   
   /**
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JFileChooser</code> is found.
    */
@@ -53,8 +53,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JFileChooser</code>.
    * @param target the <code>JFileChooser</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JFileChooserFixture(Robot robot, JFileChooser target) {
     super(robot, target);
@@ -65,7 +65,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Creates a new <code>{@link JFileChooserFixture}</code>.
    * @param robot performs simulation of user events on a <code>JFileChooser</code>.
    * @param labelName the name of the <code>JFileChooser</code> to find using the given <code>RobotFixture</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JFileChooser</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JFileChooser</code> is found.
    */
@@ -141,7 +141,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Simulates a user clicking this fixture's <code>{@link JFileChooser}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JFileChooserFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -190,7 +190,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

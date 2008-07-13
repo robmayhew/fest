@@ -35,7 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JOptionPaneFixtureTest extends ComponentFixtureTestCase<JOptionPane> {
+public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOptionPane> {
 
   private JOptionPaneDriver driver;
   private JOptionPane target;
@@ -267,5 +267,5 @@ public class JOptionPaneFixtureTest extends ComponentFixtureTestCase<JOptionPane
 
   ComponentDriver driver() { return driver; }
   JOptionPane target() { return target; }
-  ComponentFixture<JOptionPane> fixture() { return fixture; }
+  JOptionPaneFixture fixture() { return fixture; }
 }

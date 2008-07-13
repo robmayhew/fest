@@ -21,26 +21,26 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 
 /**
- * Understands common behavior in component fixtures.
+ * Understands simulation of user input.
  *
  * @author Alex Ruiz 
  */
-public final class CommonComponentFixtureBehavior {
+public final class InputSimulator {
 
   // TODO test
   private final ComponentDriver driver;
   private final Component target;
 
   /**
-   * Creates a new </code>{@link CommonComponentFixtureBehavior}</code>.
+   * Creates a new </code>{@link InputSimulator}</code>.
    * @param robot the robot to delegate work to.
    * @param target the target <code>Component</code>.
    */
-  public CommonComponentFixtureBehavior(Robot robot, Component target) {
+  public InputSimulator(Robot robot, Component target) {
     this(new ComponentDriver(robot), target);
   }
 
-  CommonComponentFixtureBehavior(ComponentDriver driver, Component target) {
+  InputSimulator(ComponentDriver driver, Component target) {
     this.driver = driver;
     this.target = target;
   }
@@ -48,21 +48,21 @@ public final class CommonComponentFixtureBehavior {
   /**
    * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public void click(MouseClickInfo mouseClickInfo) {
-    if (mouseClickInfo == null) throw new IllegalArgumentException("The given MouseClickInfo should not be null");
+    if (mouseClickInfo == null) throw new NullPointerException("The given MouseClickInfo should not be null");
     driver.click(target, mouseClickInfo.button(), mouseClickInfo.times());
   }
   
   /**
    * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Component}</code>.
    * @param keyPressInfo specifies the key and modifiers to press.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   public void pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    if (keyPressInfo == null) throw new IllegalArgumentException("The given KeyPressInfo should not be null");
+    if (keyPressInfo == null) throw new NullPointerException("The given KeyPressInfo should not be null");
     driver.pressAndReleaseKey(target, keyPressInfo.keyCode(), keyPressInfo.modifiers());
   }
 }

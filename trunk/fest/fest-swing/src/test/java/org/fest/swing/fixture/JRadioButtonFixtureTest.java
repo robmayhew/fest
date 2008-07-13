@@ -34,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JRadioButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JRadioButton> {
+public class JRadioButtonFixtureTest extends CommonComponentFixtureTestCase<JRadioButton> {
 
   private AbstractButtonDriver driver;
   private JRadioButton target;
@@ -100,5 +100,5 @@ public class JRadioButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JR
 
   ComponentDriver driver() { return driver; }
   JRadioButton target() { return target; }
-  JPopupMenuInvokerFixture<JRadioButton> fixture() { return fixture; }
+  JRadioButtonFixture fixture() { return fixture; }
 }

@@ -48,10 +48,10 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
    * @param targetType the type of <code>Component</code> that this formatter supports.
    * @param propertyNames the property names to show as the <code>String</code> representation of a given
    * <code>Component</code>.
-   * @throws IllegalArgumentException if <code>targetType</code> is <code>null</code>.
+   * @throws NullPointerException if <code>targetType</code> is <code>null</code>.
    */
   public IntrospectionComponentFormatter(Class<? extends Component> targetType, String...propertyNames) {
-    if (targetType == null) throw new IllegalArgumentException("targetType should not be null");
+    if (targetType == null) throw new NullPointerException("targetType should not be null");
     this.targetType = targetType;
     this.propertyNames = list(propertyNames);
     populate();
@@ -79,8 +79,9 @@ public final class IntrospectionComponentFormatter extends ComponentFormatterTem
    * <code>{@link #IntrospectionComponentFormatter(Class, String...) constructor}</code>.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
-   * @throws IllegalArgumentException if the given <code>Component</code> is <code>null</code> or its type is not
-   * supported by this formatter.
+   * @throws NullPointerException if the given <code>Component</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the type of the given <code>Component</code> is not supported by this 
+   * formatter.
    * @see #targetType()
    */
   protected String doFormat(Component c) {

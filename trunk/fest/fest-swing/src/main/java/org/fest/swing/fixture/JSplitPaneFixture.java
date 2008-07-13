@@ -30,7 +30,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang 
  */
-public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
+public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> implements CommonComponentFixture {
 
   private JSplitPaneDriver driver;
   
@@ -38,8 +38,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
    * Creates a new <code>{@link JSplitPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JSplitPane</code>.
    * @param target the <code>JSplitPane</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JSplitPaneFixture(Robot robot, JSplitPane target) {
     super(robot, target);
@@ -99,7 +99,7 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
    * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JSplitPaneFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -138,7 +138,7 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

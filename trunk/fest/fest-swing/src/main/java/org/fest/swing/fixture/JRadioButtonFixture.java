@@ -38,8 +38,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * Creates a new <code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JRadioButton</code>.
    * @param target the <code>JRadioButton</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JRadioButtonFixture(Robot robot, JRadioButton target) {
     super(robot, target);
@@ -50,7 +50,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * Creates a new <code>{@link JRadioButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JRadioButton</code>.
    * @param buttonName the name of the <code>JRadioButton</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JRadioButton</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JRadioButton</code> is found.
    */
@@ -90,7 +90,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JRadioButtonFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -129,7 +129,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

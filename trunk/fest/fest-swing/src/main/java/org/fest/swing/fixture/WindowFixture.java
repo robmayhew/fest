@@ -32,13 +32,14 @@ import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
  *
  * @author Alex Ruiz
  */
-public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> implements WindowLikeContainerFixture {
+public abstract class WindowFixture<T extends Window> extends ContainerFixture<T> implements CommonComponentFixture,
+    WindowLikeContainerFixture {
 
   /**
    * Creates a new <code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link Robot}</code>
    * containing the current AWT hierarchy.
    * @param type the type of <code>Window</code> to find using the created <code>Robot</code>.
-   * @throws IllegalArgumentException if the given <code>Window</code> type is <code>null</code>.
+   * @throws NullPointerException if the given <code>Window</code> type is <code>null</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching type could not be found.
    * @throws ComponentLookupException if more than one <code>Window</code> having a matching type is found.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
@@ -51,8 +52,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new <code>{@link WindowFixture}</code>.
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param type the type of <code>Window</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if the given robot is <code>null</code>.
-   * @throws IllegalArgumentException if the given <code>Window</code> type is <code>null</code>.
+   * @throws NullPointerException if the given robot is <code>null</code>.
+   * @throws NullPointerException if the given <code>Window</code> type is <code>null</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching type could not be found.
    * @throws ComponentLookupException if more than one <code>Window</code> having a matching type is found.
    */
@@ -65,7 +66,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * <code>{@link Robot}</code> containing the current AWT hierarchy.
    * @param name the name of the <code>Window</code> to find.
    * @param type the type of <code>Window</code> to find using the created <code>Robot</code>.
-   * @throws IllegalArgumentException if the given <code>Window</code> type is <code>null</code>.
+   * @throws NullPointerException if the given <code>Window</code> type is <code>null</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>Window</code> having a matching name is found.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
@@ -79,8 +80,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @param robot performs simulation of user events on a <code>Window</code>.
    * @param name the name of the <code>Window</code> to find using the given <code>Robot</code>.
    * @param type the type of <code>Window</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if the given robot is <code>null</code>.
-   * @throws IllegalArgumentException if the given <code>Window</code> type is <code>null</code>.
+   * @throws NullPointerException if the given robot is <code>null</code>.
+   * @throws NullPointerException if the given <code>Window</code> type is <code>null</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>Window</code> having a matching name is found.
    */
@@ -92,7 +93,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new <code>{@link WindowFixture}</code>. This constructor creates a new <code>{@link Robot}</code>
    * containing the current AWT hierarchy.
    * @param target the <code>Window</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if the given target <code>Window</code> is <code>null</code>.
+   * @throws NullPointerException if the given target <code>Window</code> is <code>null</code>.
    */
   public WindowFixture(T target) {
     this(robotWithCurrentAwtHierarchy(), target);
@@ -102,8 +103,8 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * Creates a new <code>{@link WindowFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Window</code>.
    * @param target the <code>Window</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if the given robot is <code>null</code>.
-   * @throws IllegalArgumentException if the given target <code>Window</code> is <code>null</code>.
+   * @throws NullPointerException if the given robot is <code>null</code>.
+   * @throws NullPointerException if the given target <code>Window</code> is <code>null</code>.
    */
   public WindowFixture(Robot robot, T target) {
     super(robot, target);

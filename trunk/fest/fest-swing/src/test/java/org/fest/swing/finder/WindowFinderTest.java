@@ -64,7 +64,7 @@ public class WindowFinderTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowExceptionIfFrameNameIsNull() {
     WindowFinder.findFrame((String)null);
   }
@@ -74,12 +74,12 @@ public class WindowFinderTest {
     WindowFinder.findFrame("");
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowExceptionIfFrameTypeIsNull() {
     WindowFinder.findFrame((Class<Frame>)null);
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowExceptionIfFrameMatcherIsNull() {
     GenericTypeMatcher<JFrame> matcher = null;
     WindowFinder.findFrame(matcher);
@@ -95,7 +95,7 @@ public class WindowFinderTest {
     WindowFinder.findFrame("myFrame").withTimeout(10).using(launcher.robot);
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTimeUnitToFindFrameIsNull() {
     WindowFinder.findFrame("frame").withTimeout(10, null).using(launcher.robot);
   }
@@ -143,7 +143,7 @@ public class WindowFinderTest {
     launcher.button("launchFrame").click();
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowExceptionIfDialogNameIsNull() {
     WindowFinder.findDialog((String)null);
   }
@@ -153,12 +153,12 @@ public class WindowFinderTest {
     WindowFinder.findDialog("");
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowExceptionIfDialogTypeIsNull() {
     WindowFinder.findDialog((Class<Dialog>)null);
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowExceptionIfDialogMatcherIsNull() {
     GenericTypeMatcher<JDialog> matcher = null;
     WindowFinder.findDialog(matcher);
@@ -174,7 +174,7 @@ public class WindowFinderTest {
     WindowFinder.findDialog("myDialog").withTimeout(5).using(launcher.robot);
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTimeUnitToFindDialogIsNull() {
     WindowFinder.findDialog("dialog").withTimeout(10, null).using(launcher.robot);
   }

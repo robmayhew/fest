@@ -34,7 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JToolBarFixture extends ContainerFixture<JToolBar> {
+public class JToolBarFixture extends ContainerFixture<JToolBar> implements CommonComponentFixture {
 
   /**
    * Understands constraints used to unfloat a floating <code>{@link JToolBar}</code>.
@@ -57,8 +57,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JToolBar</code>.
    * @param target the <code>JToolBar</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JToolBarFixture(Robot robot, JToolBar target) {
     super(robot, target);
@@ -69,7 +69,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Creates a new <code>{@link JToolBarFixture}</code>.
    * @param robot performs simulation of user events on a <code>JToolBar</code>.
    * @param toolbarName the name of the <code>JToolBar</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JToolBar</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JToolBar</code> is found.
    */
@@ -142,7 +142,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Simulates a user clicking this fixture's <code>{@link JToolBar}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JToolBarFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -181,7 +181,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

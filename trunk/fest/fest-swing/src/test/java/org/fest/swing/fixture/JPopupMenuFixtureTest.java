@@ -36,7 +36,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Yvonne Wang
  */
-public class JPopupMenuFixtureTest extends ComponentFixtureTestCase<JPopupMenu> {
+public class JPopupMenuFixtureTest extends CommonComponentFixtureTestCase<JPopupMenu> {
 
   private JPopupMenuDriver driver;
   private JPopupMenu target;
@@ -95,5 +95,5 @@ public class JPopupMenuFixtureTest extends ComponentFixtureTestCase<JPopupMenu> 
 
   ComponentDriver driver() { return driver; }
   JPopupMenu target() { return target; }
-  ComponentFixture<JPopupMenu> fixture() { return fixture; }  
+  JPopupMenuFixture fixture() { return fixture; }  
 }

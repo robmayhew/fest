@@ -74,7 +74,7 @@ public class ApplicationLauncherTest {
     assertThat(arguments).containsOnly("arg1", "arg2");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArgumentArrayIsNull() {
     String[] args = null;
     ApplicationLauncher.application(JavaApp.class).withArgs(args).start();    

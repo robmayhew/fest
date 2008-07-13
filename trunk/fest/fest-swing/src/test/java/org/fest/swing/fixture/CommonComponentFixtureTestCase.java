@@ -36,12 +36,12 @@ import static org.fest.swing.fixture.MouseClickInfo.middleButton;
 
 
 /**
- * Understands test methods for subclasses of <code>{@link ComponentFixture}</code>.
+ * Understands test methods for implementations of <code>{@link CommonComponentFixture}</code>.
  * @param <T> the type of component tested by this test class. 
  *
  * @author Alex Ruiz
  */
-public abstract class ComponentFixtureTestCase<T extends Component> {
+public abstract class CommonComponentFixtureTestCase<T extends Component> {
 
   private Robot robot;
   private ComponentFinder finder;
@@ -100,7 +100,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfMouseClickInfoIsNull() {
     fixture().click((MouseClickInfo)null);
   }
@@ -159,7 +159,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfKeyPressInfoIsNull() {
     fixture().pressAndReleaseKey(null);
   }
@@ -275,7 +275,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
   abstract T target();
   abstract ComponentDriver driver();
-  abstract ComponentFixture<T> fixture();
+  abstract CommonComponentFixture fixture();
   
   @SuppressWarnings("unchecked") Class<T> targetType() {
     return (Class<T>) target().getClass();

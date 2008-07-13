@@ -83,7 +83,7 @@ public class IntrospectionComponentFormatterTest {
     assertThat(s).contains("name").contains("text");
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTargetTypeIsNull() {
     formatter = new IntrospectionComponentFormatter(null, "name", "text");
   }
@@ -93,7 +93,7 @@ public class IntrospectionComponentFormatterTest {
     formatter.format(new JComboBox());
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfComponentIsNull() {
     formatter.format(null);
   }

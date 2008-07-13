@@ -449,7 +449,7 @@ public class JTableDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
    * @param newCellReader the new <code>JTableCellValueReader</code> to use.
-   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JTableCellReader newCellReader) {
     validateCellReader(newCellReader);
@@ -460,7 +460,7 @@ public class JTableDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JTableCellWriter}</code> to use to edit cell values in a
    * <code>{@link JTable}</code>.
    * @param newCellWriter the new <code>JTableCellWriter</code> to use.
-   * @throws IllegalArgumentException if <code>newCellWriter</code> is <code>null</code>.
+   * @throws NullPointerException if <code>newCellWriter</code> is <code>null</code>.
    */
   public void cellWriter(JTableCellWriter newCellWriter) {
     validateCellWriter(newCellWriter);

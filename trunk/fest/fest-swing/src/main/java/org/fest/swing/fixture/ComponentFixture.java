@@ -34,8 +34,7 @@ import static org.fest.swing.format.Formatting.format;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public abstract class ComponentFixture<T extends Component> implements MouseInputSimulationFixture,
-    KeyboardInputSimulationFixture, StateVerificationFixture {
+public abstract class ComponentFixture<T extends Component> {
 
   /** Name of the property "font". */
   protected static final String FONT_PROPERTY = "font";
@@ -52,14 +51,14 @@ public abstract class ComponentFixture<T extends Component> implements MouseInpu
   /** This fixture's <code>{@link Component}</code>. */
   public final T target;
   
-  private final CommonComponentFixtureBehavior commonBehavior;
+  private InputSimulator inputSimulator;
 
   /**
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
@@ -77,8 +76,8 @@ public abstract class ComponentFixture<T extends Component> implements MouseInpu
    * @param robot performs simulation of user events on a <code>Component</code>.
    * @param name the name of the <code>Component</code> to find using the given <code>RobotFixture</code>.
    * @param type the type of the <code>Component</code> to find using the given <code>RobotFixture</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
@@ -93,7 +92,7 @@ public abstract class ComponentFixture<T extends Component> implements MouseInpu
 
   private static void validate(Robot robot, Class<?> type) {
     notNullRobot(robot);
-    if (type == null) throw new IllegalArgumentException("The type of component to look for should not be null");
+    if (type == null) throw new NullPointerException("The type of component to look for should not be null");
   }
 
   /**
@@ -115,38 +114,36 @@ public abstract class ComponentFixture<T extends Component> implements MouseInpu
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Component</code>.
    * @param target the <code>Component</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public ComponentFixture(Robot robot, T target) {
     this.robot = notNullRobot(robot);
     this.target = notNullTarget(target);
-    commonBehavior = new CommonComponentFixtureBehavior(robot, target);
+    inputSimulator(new InputSimulator(robot, target));
   }
 
-  /**
-   * Gives input focus to this fixture's GUI component.
-   * @return this fixture.
-   */
-  public abstract ComponentFixture<T> focus();
+  final void inputSimulator(InputSimulator newInputSimulator) {
+    inputSimulator = newInputSimulator;
+  }
 
   /**
    * Simulates a user clicking this fixture's <code>{@link Component}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   protected final void doClick(MouseClickInfo mouseClickInfo) {
-    commonBehavior.click(mouseClickInfo);
+    inputSimulator.click(mouseClickInfo);
   }
   
   /**
    * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Component}</code>.
    * @param keyPressInfo specifies the key and modifiers to press.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   protected final void doPressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    commonBehavior.pressAndReleaseKey(keyPressInfo);
+    inputSimulator.pressAndReleaseKey(keyPressInfo);
   }
 
   /**

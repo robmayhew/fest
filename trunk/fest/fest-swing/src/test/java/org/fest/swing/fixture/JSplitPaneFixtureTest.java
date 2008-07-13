@@ -31,7 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
  *
  * @author Yvonne Wang
  */
-public class JSplitPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSplitPane> {
+public class JSplitPaneFixtureTest extends CommonComponentFixtureTestCase<JSplitPane> {
 
   private JSplitPaneDriver driver;
   private JSplitPane target;
@@ -67,5 +67,5 @@ public class JSplitPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSpl
 
   ComponentDriver driver() { return driver; }
   JSplitPane target() { return target; }
-  JPopupMenuInvokerFixture<JSplitPane> fixture() { return fixture; }
+  JSplitPaneFixture fixture() { return fixture; }
 }

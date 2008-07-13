@@ -31,7 +31,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
+public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> implements CommonComponentFixture {
 
   private JTabbedPaneDriver driver;
 
@@ -39,8 +39,8 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
    * Creates a new <code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTabbedPane</code>.
    * @param target the <code>JTabbedPane</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JTabbedPaneFixture(Robot robot, JTabbedPane target) {
     super(robot, target);
@@ -51,7 +51,7 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
    * Creates a new <code>{@link JTabbedPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JTabbedPane</code>.
    * @param tabbedPaneName the name of the <code>JTabbedPane</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JTabbedPane</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JTabbedPane</code> is found.
    */
@@ -120,7 +120,7 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
    * Simulates a user clicking this fixture's <code>{@link JTabbedPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTabbedPaneFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -159,7 +159,7 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

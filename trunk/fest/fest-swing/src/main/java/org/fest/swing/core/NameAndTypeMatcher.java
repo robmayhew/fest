@@ -37,8 +37,9 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
    * @param name the name of the component we are looking for.
    * @param type the type of the component we are looking for.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
-   * @throws IllegalArgumentException if the given type is <code>null</code>.
+   * @throws NullPointerException if the given name is empty.
+   * @throws IllegalArgumentException if the given name is empty.
+   * @throws NullPointerException if the given type is <code>null</code>.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type) {
     this(name, type, false);
@@ -49,14 +50,17 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * @param name the name of the component we are looking for.
    * @param type the type of the component we are looking for.
    * @param requireShowing indicates if the component to match should be showing or not.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
-   * @throws IllegalArgumentException if the given type is <code>null</code>.
+   * @throws NullPointerException if the given name is empty.
+   * @throws IllegalArgumentException if the given name is empty.
+   * @throws NullPointerException if the given type is <code>null</code>.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
+    if (name == null) 
+      throw new NullPointerException("The name of the component to find should not be null");
     if (isEmpty(name))
-      throw new IllegalArgumentException("The name of the component to find should not be empty or null");
+      throw new IllegalArgumentException("The name of the component to find should not be empty");
     if (type == null)
-      throw new IllegalArgumentException("The type of component to find should not be null");
+      throw new NullPointerException("The type of component to find should not be null");
     this.name = name;
     this.type = type;
     this.requireShowing = requireShowing;

@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JLabelDriver;
+import org.fest.swing.fixture.CommonComponentFixtureTestCase.FixtureCreationByNameTemplate;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -33,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Yvonne Wang
  */
-public class JLabelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JLabel> {
+public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
 
   private JLabelDriver driver;
   private JLabel target;
@@ -73,5 +74,5 @@ public class JLabelFixtureTest extends JPopupMenuInvokerFixtureTestCase<JLabel> 
 
   ComponentDriver driver() { return driver; }
   JLabel target() { return target; }
-  JPopupMenuInvokerFixture<JLabel> fixture() { return fixture; }
+  JLabelFixture fixture() { return fixture; }
 }

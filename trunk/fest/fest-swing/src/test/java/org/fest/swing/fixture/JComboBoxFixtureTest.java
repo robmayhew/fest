@@ -15,20 +15,22 @@
  */
 package org.fest.swing.fixture;
 
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
-
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
 import org.easymock.classextension.EasyMock;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComboBoxDriver;
-import org.testng.annotations.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxFixture}</code>.
@@ -37,7 +39,7 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  */
 @Test
-public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComboBox> {
+public class JComboBoxFixtureTest extends CommonComponentFixtureTestCase<JComboBox> {
 
   private JComboBoxDriver driver;
   private JComboBox target;
@@ -233,5 +235,5 @@ public class JComboBoxFixtureTest extends JPopupMenuInvokerFixtureTestCase<JComb
 
   ComponentDriver driver() { return driver; }
   JComboBox target() { return target; }
-  JPopupMenuInvokerFixture<JComboBox> fixture() { return fixture; }
+  JComboBoxFixture fixture() { return fixture; }
 }

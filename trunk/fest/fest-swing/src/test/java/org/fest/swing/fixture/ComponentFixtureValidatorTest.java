@@ -40,7 +40,7 @@ public class ComponentFixtureValidatorTest {
     assertThat(ComponentFixtureValidator.notNullRobot(robot)).isSameAs(robot);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRobotIsNull() {
     ComponentFixtureValidator.notNullRobot(null);
   }
@@ -50,7 +50,7 @@ public class ComponentFixtureValidatorTest {
     assertThat(ComponentFixtureValidator.notNullTarget(target)).isSameAs(target);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTargetIsNull() {
     ComponentFixtureValidator.notNullTarget(null);
   }

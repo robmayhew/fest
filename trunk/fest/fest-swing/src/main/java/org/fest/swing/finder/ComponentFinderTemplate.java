@@ -54,13 +54,13 @@ abstract class ComponentFinderTemplate<T extends Component> {
   }
   
   private ComponentFinderTemplate(ComponentMatcher matcher) {
-    if (matcher == null) throw new IllegalArgumentException("The matcher should not be null");
+    if (matcher == null) throw new NullPointerException("The matcher should not be null");
     this.matcher = matcher;
     searchDescription = concat("component to be found using matcher ", matcher);
   }
   
   ComponentFinderTemplate<T> withTimeout(long newTimeout, TimeUnit unit) {
-    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
+    if (unit == null) throw new NullPointerException("Time unit cannot be null");
     return withTimeout(unit.toMillis(newTimeout));
   }
 

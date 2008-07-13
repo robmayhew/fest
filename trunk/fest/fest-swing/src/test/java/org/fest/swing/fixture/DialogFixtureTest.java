@@ -40,7 +40,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class DialogFixtureTest extends JPopupMenuInvokerFixtureTestCase<Dialog> {
+public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
 
   private DialogDriver driver;
   private Dialog target;
@@ -204,5 +204,5 @@ public class DialogFixtureTest extends JPopupMenuInvokerFixtureTestCase<Dialog> 
 
   ComponentDriver driver() { return driver; }
   Dialog target() { return target; }
-  JPopupMenuInvokerFixture<Dialog> fixture() { return fixture; }
+  DialogFixture fixture() { return fixture; }
 }

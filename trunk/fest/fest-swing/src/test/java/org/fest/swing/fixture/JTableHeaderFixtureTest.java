@@ -53,12 +53,12 @@ public class JTableHeaderFixtureTest {
     fixture.updateDriver(driver);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRobotIsNull() {
     new JTableHeaderFixture(null, tableHeader);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTargetIsNull() {
     new JTableHeaderFixture(robot, null);
   }

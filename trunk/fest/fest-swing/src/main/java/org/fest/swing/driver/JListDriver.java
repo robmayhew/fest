@@ -419,7 +419,7 @@ public class JListDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JListCellReader}</code> to use when comparing internal values of a
    * <code>{@link JList}</code> and the values expected in a test.
    * @param newCellReader the new <code>JListCellValueReader</code> to use.
-   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JListCellReader newCellReader) {
     validateCellReader(newCellReader);

@@ -53,12 +53,14 @@ public class JTableCellFixture implements ItemFixture {
    * Creates a new <code>{@link JTableCellFixture}</code>.
    * @param table manages the <code>JTable</code> containing the table cell to be managed by this fixture.
    * @param cell row and column indices of the table cell to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>table</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>cell</code> is <code>null</code>.
+   * @throws NullPointerException if <code>table</code> is <code>null</code>.
+   * @throws NullPointerException if <code>cell</code> is <code>null</code>.
    */
   protected JTableCellFixture(JTableFixture table, TableCell cell) {
-    if (table == null) throw new IllegalArgumentException("The given JTableFixture should not be null");
-    if (cell == null) throw new IllegalArgumentException("The given TableCell should not be null");
+    if (table == null) 
+      throw new NullPointerException("The JTableFixture should not be null");
+    if (cell == null) 
+      throw new NullPointerException("The TableCell should not be null");
     this.table = table;
     this.cell = cell;
   }

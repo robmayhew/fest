@@ -484,7 +484,7 @@ public class JTreeDriver extends JComponentDriver {
    * Updates the implementation of <code>{@link JTreeCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTree}</code> and the values expected in a test.
    * @param newCellReader the new <code>JTreeCellValueReader</code> to use.
-   * @throws IllegalArgumentException if <code>newCellReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>newCellReader</code> is <code>null</code>.
    */
   public void cellReader(JTreeCellReader newCellReader) {
     validateCellReader(newCellReader);

@@ -31,7 +31,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Alex Ruiz
  */
-public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
+public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> implements CommonComponentFixture {
 
   private JScrollBarDriver driver;
 
@@ -39,8 +39,8 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
    * Creates a new <code>{@link JScrollBarFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JScrollBar</code>.
    * @param target the <code>JScrollBar</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JScrollBarFixture(Robot robot, JScrollBar target) {
     super(robot, target);
@@ -51,7 +51,7 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
    * Creates a new <code>{@link JScrollBarFixture}</code>.
    * @param robot performs simulation of user events on a <code>JScrollBar</code>.
    * @param scrollBarName the name of the <code>JScrollBar</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JScrollBar</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JScrollBar</code> is found.
    */
@@ -91,7 +91,7 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
    * Simulates a user clicking this fixture's <code>{@link JScrollBar}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JScrollBarFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -130,7 +130,7 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

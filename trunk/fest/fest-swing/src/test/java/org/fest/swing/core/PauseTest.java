@@ -48,6 +48,11 @@ public class PauseTest {
     watch.stop();
     assertThat(watch.ellapsedTime() >= delay).isTrue();
   }
+  
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfUnitIsNull() {
+    Pause.pause(2, null);
+  }
 
   @Test public void shouldWaitTillConditionIsTrue() {
     class CustomCondition extends Condition {

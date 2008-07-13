@@ -44,7 +44,7 @@ public class ColorFixtureTest {
     fixture = new ColorFixture(color);
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfColorIsNull() {
     new ColorFixture(null);
   }

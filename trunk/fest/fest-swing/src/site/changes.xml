@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.0b1" date="TBD" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="add" issue="11">
+        Added org.fest.swing.applet.AppletViewer and helper classes in package org.fest.swing.applet.
+      </action>
       <action dev="alruiz, wanghy" type="fix" issue="165" due-to="Simeon Fitch">
         Replaced method 'select(JMenuItem)' with 'click(JMenuItem)' in org.fest.swing.fixture.JMenuItemFixture.
       </action>
@@ -20,6 +23,9 @@
       </action>
       <action dev="alruiz" type="remove">
         Removed all methods related to keyboard input simulation from JListItemFixture and JTableCellFixture.
+      </action>
+      <action dev="alruiz" type="fix">
+        Replaced IllegalArgumentException with NullPointerException when a method argument has null as its value. 
       </action>
     </release>
     <release version="1.0a3" date="2008-06-23" description="Subsequent release">

@@ -28,7 +28,7 @@ import static org.fest.swing.core.MouseButton.*;
  */
 public class MouseClickInfoTest {
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfMouseButtonIsNull() {
     MouseClickInfo.button(null);
   }

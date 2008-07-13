@@ -36,7 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<JInternalFrame> {
+public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JInternalFrame> {
 
   private JInternalFrameDriver driver;
   private JInternalFrame target;
@@ -224,5 +224,5 @@ public class JInternalFrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<
   
   ComponentDriver driver() { return driver; }
   JInternalFrame target() { return target; }
-  JPopupMenuInvokerFixture<JInternalFrame> fixture() { return fixture; }
+  JInternalFrameFixture fixture() { return fixture; }
 }

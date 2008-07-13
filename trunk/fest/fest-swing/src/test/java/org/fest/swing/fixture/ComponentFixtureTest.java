@@ -21,8 +21,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.*;
-import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.Settings;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -51,12 +52,12 @@ public class ComponentFixtureTest {
     target = new JTextField();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRobotIsNullWhenLookingUpComponentByType() {
     new ConcreteComponentFixture(null, type);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTypeIsNullWhenLookingUpComponentByType() {
     new ConcreteComponentFixture(robot, (Class<? extends JTextField>)null);
   }
@@ -76,12 +77,12 @@ public class ComponentFixtureTest {
     }.run();
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRobotIsNullWhenLookingUpComponentByName() {
     new ConcreteComponentFixture(null, name, type);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTypeIsNullWhenLookingUpComponentByName() {
     new ConcreteComponentFixture(robot, name, null);
   }
@@ -113,12 +114,12 @@ public class ComponentFixtureTest {
     assertThat(fixture.target).isSameAs(target);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRobotIsNullWhenPassingTarget() {
     new ConcreteComponentFixture(null, target);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTargetIsNullWhenPassingTarget() {
     new ConcreteComponentFixture(robot, (JTextField)null);
   }
@@ -149,7 +150,7 @@ public class ComponentFixtureTest {
     assertThat(castedTarget).isSameAs(target);
   }
 
-  private ConcreteComponentFixture fixture() {
+  private ComponentFixture<JTextField> fixture() {
     return new ConcreteComponentFixture(robot, target);
   }
 
@@ -165,25 +166,6 @@ public class ComponentFixtureTest {
     public ConcreteComponentFixture(Robot robot, String name, Class<? extends JTextField> type) {
       super(robot, name, type);
     }
-
-    public ConcreteComponentFixture click() { return null; }
-    public ConcreteComponentFixture click(MouseButton button) { return null; }
-    public ConcreteComponentFixture click(MouseClickInfo mouseClickInfo) { return null; }
-    public ConcreteComponentFixture doubleClick() { return null; }
-    public ConcreteComponentFixture focus() { return null; }
-    public ConcreteComponentFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) { return null; }
-    public ConcreteComponentFixture pressAndReleaseKeys(int... keyCodes) { return null; }
-    public ConcreteComponentFixture requireDisabled() { return null; }
-    public ConcreteComponentFixture requireEnabled() { return null; }
-    public ConcreteComponentFixture requireEnabled(Timeout timeout) { return null; }
-    public ConcreteComponentFixture requireVisible() { return null; }
-    public ConcreteComponentFixture requireNotVisible() { return null; }
-    public ConcreteComponentFixture rightClick() { return null; }
-    public ConcreteComponentFixture pressKey(int keyCode) { return null; }
-    public ConcreteComponentFixture releaseKey(int keyCode) { return null; }
-    public ConcreteComponentFixture lookUpShowingComponentsOnly(boolean newValue) { return null; }
-
-    protected ComponentDriver driver() { return null; }
   }
 }
 

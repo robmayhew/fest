@@ -30,10 +30,10 @@ public final class ComponentFixtureValidator {
    * Verifies that the given <code>{@link Robot}</code> is not <code>null</code>.
    * @param robot the <code>Robot</code> to verify.
    * @return the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    */
   public static Robot notNullRobot(Robot robot) {
-    if (robot == null) throw new IllegalArgumentException("Robot should not be null");
+    if (robot == null) throw new NullPointerException("Robot should not be null");
     return robot;
   }
   
@@ -42,10 +42,10 @@ public final class ComponentFixtureValidator {
    * @param <T> specifies the type of <code>Component</code> to return.
    * @param target the <code>Component</code> to verify.
    * @return the given target <code>Component</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public static <T extends Component> T notNullTarget(T target) {
-    if (target == null) throw new IllegalArgumentException("Target component should not be null");
+    if (target == null) throw new NullPointerException("Target component should not be null");
     return target;
   }
   

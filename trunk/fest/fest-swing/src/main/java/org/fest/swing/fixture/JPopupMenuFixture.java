@@ -33,7 +33,7 @@ import org.fest.swing.exception.WaitTimedOutError;
  *
  * @author Yvonne Wang
  */
-public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
+public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements CommonComponentFixture {
 
   private JPopupMenuDriver driver;
   
@@ -41,8 +41,8 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * Creates a new <code>{@link JPopupMenuFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JPopupMenu</code>.
    * @param target the <code>JPopupMenu</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JPopupMenuFixture(Robot robot, JPopupMenu target) {
     super(robot, target);
@@ -110,7 +110,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * Simulates a user clicking this fixture's <code>{@link JPopupMenu}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JPopupMenuFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -149,7 +149,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

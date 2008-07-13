@@ -41,7 +41,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz 
  * @author Yvonne Wang
  */
-public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
+public class JListFixtureTest extends CommonComponentFixtureTestCase<JList> {
 
   private JListDriver driver;
   private JList target;
@@ -366,5 +366,5 @@ public class JListFixtureTest extends JPopupMenuInvokerFixtureTestCase<JList> {
 
   ComponentDriver driver() { return driver; }
   JList target() { return target; }
-  JPopupMenuInvokerFixture<JList> fixture() { return fixture; }
+  JListFixture fixture() { return fixture; }
 }

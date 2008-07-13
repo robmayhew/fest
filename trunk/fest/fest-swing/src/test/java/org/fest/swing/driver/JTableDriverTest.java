@@ -412,12 +412,12 @@ public class JTableDriverTest {
     assertThat(dragTable.getSelectedRowCount()).isEqualTo(0);
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }
   
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellWriterIsNull() {
     driver.cellWriter(null);
   }

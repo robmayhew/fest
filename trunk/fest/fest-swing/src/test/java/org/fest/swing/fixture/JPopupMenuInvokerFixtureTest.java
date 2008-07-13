@@ -15,11 +15,14 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
+import org.easymock.EasyMock;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -30,24 +33,32 @@ import static org.easymock.EasyMock.expect;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Test case for implementations of <code>{@link JPopupMenuInvokerFixture}</code>.
- * @param <T> the type of component tested by this test class. 
+ * Tests for <code>{@link JPopupMenuInvokerFixture}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public abstract class JPopupMenuInvokerFixtureTestCase<T extends Component> extends ComponentFixtureTestCase<T> {
+public class JPopupMenuInvokerFixtureTest {
 
+  private Robot robot;
+  private JPopupMenuInvokerFixture<JTextComponent> fixture;
+  private JTextField target;
+  
+  @BeforeMethod public void setUp() {
+    robot = EasyMock.createMock(Robot.class);
+    target = new JTextField();
+    fixture = new JPopupMenuInvokerFixture<JTextComponent>(robot, target) {};
+  }
+  
   @Test public void shouldShowJPopupMenu() {
     final JPopupMenu popup = new JPopupMenu(); 
-    final Robot robot = robot();
     new EasyMockTemplate(robot) {
       protected void expectations() {
-        expect(robot.showPopupMenu(target())).andReturn(popup);
+        expect(robot.showPopupMenu(target)).andReturn(popup);
       }
       
       protected void codeToTest() {
-        JPopupMenuFixture result = fixture().showPopupMenu();
+        JPopupMenuFixture result = fixture.showPopupMenu();
         assertThat(result.target).isSameAs(popup);
       }
     }.run();
@@ -56,18 +67,15 @@ public abstract class JPopupMenuInvokerFixtureTestCase<T extends Component> exte
   @Test public void shouldShowJPopupMenuAtPoint() {
     final Point p = new Point(8, 6);
     final JPopupMenu popup = new JPopupMenu(); 
-    final Robot robot = robot();
     new EasyMockTemplate(robot) {
       protected void expectations() {
-        expect(robot.showPopupMenu(target(), p)).andReturn(popup);
+        expect(robot.showPopupMenu(target, p)).andReturn(popup);
       }
       
       protected void codeToTest() {
-        JPopupMenuFixture result = fixture().showPopupMenuAt(p);
+        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
         assertThat(result.target).isSameAs(popup);
       }
     }.run();
   }
-
-  abstract JPopupMenuInvokerFixture<T> fixture();
 }

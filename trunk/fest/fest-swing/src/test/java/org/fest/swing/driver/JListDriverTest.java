@@ -381,7 +381,7 @@ public class JListDriverTest {
     assertThat(cellReader.called()).isTrue();
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }

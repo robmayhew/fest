@@ -31,7 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
  *
  * @author Alex Ruiz
  */
-public class JScrollBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JScrollBar> {
+public class JScrollBarFixtureTest extends CommonComponentFixtureTestCase<JScrollBar> {
 
   private JScrollBarDriver driver;
   private JScrollBar target;
@@ -184,5 +184,5 @@ public class JScrollBarFixtureTest extends JPopupMenuInvokerFixtureTestCase<JScr
 
   ComponentDriver driver() { return driver; }
   JScrollBar target() { return target; }
-  JPopupMenuInvokerFixture<JScrollBar> fixture() { return fixture; }
+  JScrollBarFixture fixture() { return fixture; }
 }

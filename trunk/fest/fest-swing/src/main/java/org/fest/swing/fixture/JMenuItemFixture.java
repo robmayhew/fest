@@ -24,19 +24,14 @@ import org.fest.swing.driver.JMenuItemDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.swing.fixture.ComponentFixtureValidator.*;
-
 /**
  * Understands simulation of user events on a <code>{@link JMenuItem}</code> and verification of the state of such
  * <code>{@link JMenuItem}</code>.
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVerificationFixture {
-
-  public final JMenuItem target;
-
-  private final CommonComponentFixtureBehavior commonBehavior;
+public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements KeyboardInputSimulationFixture,
+    StateVerificationFixture {
 
   private JMenuItemDriver driver;
   
@@ -44,7 +39,7 @@ public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVe
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param menuItemName the name of the <code>JMenuItem</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JMenuItem</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JMenuItem</code> is found.
    */
@@ -57,8 +52,8 @@ public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVe
    * <code>{@link JMenuItem}</code> as the target menu item.
    * @param robot performs simulation of user events on a <code>JMenuItem</code>.
    * @param action the <code>Action</code> to assign to the created <code>JMenuItem</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>action</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>action</code> is <code>null</code>.
    */
   public JMenuItemFixture(Robot robot, Action action) {
     this(robot, new JMenuItem(validated(action)));
@@ -66,21 +61,19 @@ public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVe
 
   private static Action validated(Action action) {
     if (action != null) return action;
-    throw new IllegalArgumentException("The given action should not be null");
+    throw new NullPointerException("The given action should not be null");
   }
   
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JMenuItem</code>.
    * @param target the <code>JMenuItem</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JMenuItemFixture(Robot robot, JMenuItem target) {
-    notNullRobot(robot);
-    this.target = notNullTarget(target);
+    super(robot, target);
     updateDriver(new JMenuItemDriver(robot));
-    commonBehavior = new CommonComponentFixtureBehavior(robot, target);
   }
 
   final void updateDriver(JMenuItemDriver newDriver) {
@@ -112,12 +105,12 @@ public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVe
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */
   public JMenuItemFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    commonBehavior.pressAndReleaseKey(keyPressInfo);
+    doPressAndReleaseKey(keyPressInfo);
     return this;
   }
 
@@ -203,13 +196,5 @@ public class JMenuItemFixture implements KeyboardInputSimulationFixture, StateVe
   public JMenuItemFixture requireDisabled() {
     driver.requireDisabled(target);
     return this;
-  }
-
-  /**
-   * Returns the <code>{@link JMenuItem}</code> in this fixture (same as <code>{@link #target}</code>.)
-   * @return the <code>JMenuItem</code> in this fixture.
-   */
-  public final JMenuItem component() {
-    return target;
   }
 }

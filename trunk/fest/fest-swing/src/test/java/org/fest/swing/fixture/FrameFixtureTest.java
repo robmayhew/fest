@@ -38,7 +38,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class FrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<Frame> {
+public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
 
   private FrameDriver driver;
   private Frame target;
@@ -241,5 +241,5 @@ public class FrameFixtureTest extends JPopupMenuInvokerFixtureTestCase<Frame> {
 
   ComponentDriver driver() { return driver; }
   Frame target() { return target; }
-  JPopupMenuInvokerFixture<Frame> fixture() { return fixture; }
+  FrameFixture fixture() { return fixture; }
 }

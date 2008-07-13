@@ -45,7 +45,7 @@ public class JListItemFixtureTest {
     fixture = new JListItemFixture(list, index);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfJListFixtureIsNull() {
     new JListItemFixture(null, 0);
   }

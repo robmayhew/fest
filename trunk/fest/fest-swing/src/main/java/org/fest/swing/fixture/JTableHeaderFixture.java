@@ -23,18 +23,12 @@ import org.fest.swing.driver.JTableHeaderDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 
-import static org.fest.swing.fixture.ComponentFixtureValidator.*;
-
 /**
  * Understands simulation of user events on a <code>{@link JTableHeader}</code>.
  *
  * @author Yvonne Wang
  */
-public class JTableHeaderFixture {
-
-  private final Robot robot;
-
-  public final JTableHeader target;
+public class JTableHeaderFixture extends ComponentFixture<JTableHeader> {
 
   private JTableHeaderDriver driver;
 
@@ -42,12 +36,11 @@ public class JTableHeaderFixture {
    * Creates a new </code>{@link JTableHeaderFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JTableHeader</code>.
    * @param target the <code>JTableHeader</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
-  JTableHeaderFixture(Robot robot, JTableHeader target) {
-    this.robot = notNullRobot(robot);
-    this.target = notNullTarget(target);
+  public JTableHeaderFixture(Robot robot, JTableHeader target) {
+    super(robot, target);
     updateDriver(new JTableHeaderDriver(robot));
   }
 
@@ -125,13 +118,5 @@ public class JTableHeaderFixture {
   public JTableHeaderFixture clickColumn(String columnName, MouseClickInfo mouseClickInfo) {
     driver.clickColumn(target, columnName, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
-  }
-
-  /**
-   * Returns the <code>{@link JTableHeader}</code> in this fixture (same as <code>{@link #target}</code>.)
-   * @return the <code>JTableHeader</code> in this fixture.
-   */
-  public final JTableHeader component() {
-    return target;
   }
 }

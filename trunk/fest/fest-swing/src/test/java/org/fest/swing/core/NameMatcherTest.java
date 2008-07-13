@@ -53,7 +53,7 @@ public class NameMatcherTest {
     assertThat(matcher.matches(button)).isFalse();
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfNameIsNull() {
     new NameMatcher(null);
   }

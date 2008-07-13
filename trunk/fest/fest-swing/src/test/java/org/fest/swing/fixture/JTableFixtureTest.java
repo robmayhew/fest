@@ -15,15 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Font.PLAIN;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
@@ -31,12 +22,23 @@ import java.awt.Point;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
-import org.testng.annotations.Test;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Font.PLAIN;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.fixture.TableCell.row;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -45,7 +47,7 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  */
 @Test
-public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> {
+public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
 
   private JTableDriver driver;
   private JTable target;
@@ -368,5 +370,5 @@ public class JTableFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTable> 
 
   ComponentDriver driver() { return driver; }
   JTable target() { return target; }
-  JPopupMenuInvokerFixture<JTable> fixture() { return fixture; }
+  JTableFixture fixture() { return fixture; }
 }

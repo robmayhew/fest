@@ -31,7 +31,8 @@ import org.fest.swing.exception.WaitTimedOutError;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements TextDisplayFixture {
+public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements CommonComponentFixture,
+    TextDisplayFixture {
 
   private AbstractButtonDriver driver;
   
@@ -39,8 +40,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * Creates a new <code>{@link JButtonFixture}</code>.
    * @param target the <code>JButton</code> to be managed by this fixture.
    * @param robot performs simulation of user events on the given <code>JButton</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public JButtonFixture(Robot robot, JButton target) {
     super(robot, target);
@@ -51,7 +52,7 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * Creates a new <code>{@link JButtonFixture}</code>.
    * @param robot performs simulation of user events on a <code>JButton</code>.
    * @param buttonName the name of the <code>JButton</code> to find using the given <code>RobotFixture</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching <code>JButton</code> could not be found.
    * @throws ComponentLookupException if more than one matching <code>JButton</code> is found.
    */
@@ -91,7 +92,7 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JButtonFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -130,7 +131,7 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

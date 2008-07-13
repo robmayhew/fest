@@ -33,7 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Yvonne Wang
  */
-public class JScrollPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JScrollPane> {
+public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScrollPane> {
 
   private JComponentDriver driver;
   private JScrollPane target;
@@ -66,5 +66,5 @@ public class JScrollPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSc
   
   ComponentDriver driver() { return driver; }
   JScrollPane target() { return target; }
-  JPopupMenuInvokerFixture<JScrollPane> fixture() { return fixture; }
+  JScrollPaneFixture fixture() { return fixture; }
 }

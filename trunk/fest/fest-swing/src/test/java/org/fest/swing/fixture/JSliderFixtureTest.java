@@ -15,22 +15,23 @@
  */
 package org.fest.swing.fixture;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-
 import javax.swing.JSlider;
+
+import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JSliderDriver;
-import org.testng.annotations.Test;
+
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
 
 /**
  * Tests for <code>{@link JSliderFixture}</code>.
  *
  * @author Yvonne Wang
  */
-public class JSliderFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSlider> {
+public class JSliderFixtureTest extends CommonComponentFixtureTestCase<JSlider> {
 
   private JSliderDriver driver;
   private JSlider target;
@@ -92,5 +93,5 @@ public class JSliderFixtureTest extends JPopupMenuInvokerFixtureTestCase<JSlider
 
   ComponentDriver driver() { return driver; }
   JSlider target() { return target; }
-  JPopupMenuInvokerFixture<JSlider> fixture() { return fixture; }
+  JSliderFixture fixture() { return fixture; }
 }

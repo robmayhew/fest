@@ -88,10 +88,10 @@ public class ApplicationLauncher {
    * Specifies the arguments to pass to the "main" method.
    * @param newArgs the arguments to pass to the "main" method.
    * @return this <code>ApplicationStarter</code>.
-   * @throws IllegalArgumentException if <code>newArgs</code> is <code>null</code>.
+   * @throws NullPointerException if <code>newArgs</code> is <code>null</code>.
    */
   public ApplicationLauncher withArgs(String...newArgs) {
-    if (newArgs == null) throw new IllegalArgumentException("The array of arguments should not be null");
+    if (newArgs == null) throw new NullPointerException("The array of arguments should not be null");
     args = copyOf(newArgs, newArgs.length);
     return this;
   }

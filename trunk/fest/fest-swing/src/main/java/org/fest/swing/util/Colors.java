@@ -17,6 +17,8 @@ package org.fest.swing.util;
 
 import java.awt.Color;
 
+import org.fest.util.Strings;
+
 import static org.fest.util.Strings.*;
 
 /**
@@ -31,13 +33,17 @@ public final class Colors {
    * color. 
    * @param hexString contains the hexadecimal coding of a color.
    * @return a <code>Color</code> from the given <code>String</code> containing the hexadecimal coding of a color. 
-   * @throws IllegalArgumentException if the value represented by the given hexadecimal coding is not valid.
+   * @throws NullPointerException if the hexadecimal code is <code>null</code>.
+   * @throws IllegalArgumentException if the hexadecimal code is empty.
+   * @throws NumberFormatException if the hexadecimal code is empty.
    */
   public static Color colorFromHexString(String hexString) {
+    if (hexString == null) throw new NullPointerException("The hexadecimal code should not be null");
+    if (Strings.isEmpty(hexString)) throw new IllegalArgumentException("The hexadecimal code should not be empty");
     try {
       return new Color(Integer.parseInt(hexString, 16));
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException(concat("The hexadecimal code ", quote(hexString), " is not a valid color"));
+      throw new NumberFormatException(concat("The hexadecimal code ", quote(hexString), " is not a valid color code"));
     }
   }
   

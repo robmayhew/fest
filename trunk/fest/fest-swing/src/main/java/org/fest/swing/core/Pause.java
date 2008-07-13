@@ -71,9 +71,10 @@ public final class Pause {
    * @param timeout the quantity of time units to sleep.
    * @param unit the time units.
    * @see #pause(long)
+   * @throws NullPointerException if <code>unit</code> is <code>null</code>.
    */
   public static void pause(long timeout, TimeUnit unit) {
-    if (unit == null) throw new IllegalArgumentException("Time unit cannot be null");
+    if (unit == null) throw new NullPointerException("Time unit cannot be null");
     pause(unit.toMillis(timeout));
   }
   

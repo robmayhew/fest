@@ -33,7 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class JToggleButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<JToggleButton> {
+public class JToggleButtonFixtureTest extends CommonComponentFixtureTestCase<JToggleButton> {
 
   private AbstractButtonDriver driver;
   private JToggleButton target;
@@ -125,5 +125,5 @@ public class JToggleButtonFixtureTest extends JPopupMenuInvokerFixtureTestCase<J
 
   ComponentDriver driver() { return driver; }
   JToggleButton target() { return target; }
-  JPopupMenuInvokerFixture<JToggleButton> fixture() { return fixture; }
+  JToggleButtonFixture fixture() { return fixture; }
 }

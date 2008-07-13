@@ -30,7 +30,9 @@ public abstract class ComponentFormatterTemplate implements ComponentFormatter {
    * Returns the <code>String</code> representation of the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    * @return the <code>String</code> representation of the given <code>Component</code>.
-   * @throws IllegalArgumentException if the type of the given <code>Component</code> is not supported by this formatter.
+   * @throws NullPointerException if the given <code>Component</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the type of the given <code>Component</code> is not supported by this 
+   * formatter. 
    */
   public final String format(Component c) {
     validateTypeOf(c);
@@ -45,7 +47,8 @@ public abstract class ComponentFormatterTemplate implements ComponentFormatter {
   protected abstract String doFormat(Component c);
 
   private void validateTypeOf(Component c) {
-    if (c == null || !targetType().isAssignableFrom(c.getClass()))
+    if (c == null) throw new NullPointerException("The component should not be null");
+    if (!targetType().isAssignableFrom(c.getClass()))
       throw new IllegalArgumentException(concat("This formatter only supports components of type ", targetType().getName()));
   }
 

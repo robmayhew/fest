@@ -56,7 +56,7 @@ public class ContainerFixtureTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = new FrameWithAllSupportedComponents(getClass());
-    fixture = new ConcreteContainerFixture<FrameWithAllSupportedComponents>(robot, window);
+    fixture = new ContainerFixture<FrameWithAllSupportedComponents>(robot, window) {};
     robot.showWindow(window);
   }
 

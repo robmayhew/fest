@@ -35,7 +35,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTabbedPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTabbedPane> {
+public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabbedPane> {
 
   private JTabbedPaneDriver driver;
   private JTabbedPane target;
@@ -98,5 +98,5 @@ public class JTabbedPaneFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTa
 
   ComponentDriver driver() { return driver; }
   JTabbedPane target() { return target; }
-  JPopupMenuInvokerFixture<JTabbedPane> fixture() { return fixture; }
+  JTabbedPaneFixture fixture() { return fixture; }
 }

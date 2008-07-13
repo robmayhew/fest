@@ -45,8 +45,8 @@ public abstract class ContainerFixture<T extends Container> extends JPopupMenuIn
    * Creates a new <code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    * @see org.fest.swing.core.ComponentFinder#findByType(Class)
@@ -60,8 +60,8 @@ public abstract class ContainerFixture<T extends Container> extends JPopupMenuIn
    * @param robot performs simulation of user events on a <code>Container</code>.
    * @param name the name of the <code>Container</code> to find using the given <code>Robot</code>.
    * @param type the type of the <code>Container</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>type</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    * @see org.fest.swing.core.ComponentFinder#findByName(String, Class)
@@ -74,8 +74,8 @@ public abstract class ContainerFixture<T extends Container> extends JPopupMenuIn
    * Creates a new <code>{@link ContainerFixture}</code>.
    * @param robot performs simulation of user events on the given <code>Container</code>.
    * @param target the <code>Container</code> to be.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
-   * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public ContainerFixture(Robot robot, T target) {
     super(robot, target);

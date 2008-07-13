@@ -37,7 +37,7 @@ public class NameAndTypeMatcherTest {
     textField.setName("myTextField");
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfNameIsNull() {
     new NameAndTypeMatcher(null, JTextComponent.class);
   }
@@ -47,7 +47,7 @@ public class NameAndTypeMatcherTest {
     new NameAndTypeMatcher("", JTextComponent.class);
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class) 
+  @Test(expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfTypeIsNull() {
     new NameAndTypeMatcher("myTextField", null);
   }

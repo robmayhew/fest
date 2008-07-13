@@ -43,7 +43,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Creates a new <code>{@link FrameFixture}</code>. This constructor creates a new <code>{@link Robot}</code>
    * containing the current AWT hierarchy.
    * @param target the <code>Frame</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if the given frame is <code>null</code>.
+   * @throws NullPointerException if the given frame is <code>null</code>.
    * @see RobotFixture#robotWithCurrentAwtHierarchy()
    */
   public FrameFixture(Frame target) {
@@ -55,8 +55,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Creates a new <code>{@link FrameFixture}</code>.
    * @param robot performs user events on the given window and verifies expected output.
    * @param target the <code>Frame</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if the given robot is <code>null</code>.
-   * @throws IllegalArgumentException if the given frame is <code>null</code>.
+   * @throws NullPointerException if the given robot is <code>null</code>.
+   * @throws NullPointerException if the given frame is <code>null</code>.
    */
   public FrameFixture(Robot robot, Frame target) {
     super(robot, target);
@@ -67,7 +67,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Creates a new <code>{@link FrameFixture}</code>.
    * @param robot performs user events on the given window and verifies expected output.
    * @param name the name of the <code>Frame</code> to find using the given <code>Robot</code>.
-   * @throws IllegalArgumentException if the given robot is <code>null</code>.
+   * @throws NullPointerException if the given robot is <code>null</code>.
    * @throws ComponentLookupException if a <code>Frame</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>Frame</code> having a matching name is found.
    */
@@ -119,7 +119,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Simulates a user clicking this fixture's <code>{@link Frame}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public FrameFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);

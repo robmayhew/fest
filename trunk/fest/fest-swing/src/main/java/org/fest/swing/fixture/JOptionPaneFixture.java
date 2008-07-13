@@ -33,14 +33,14 @@ import static org.fest.swing.fixture.ComponentFixtureValidator.notNullRobot;
  *
  * @author Alex Ruiz
  */
-public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
+public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements CommonComponentFixture {
 
   private JOptionPaneDriver driver;
   
   /**
    * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot finds a showing <code>JOptionPane</code>, which will be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws ComponentLookupException if a showing <code>JOptionPane</code> could not be found.
    * @throws ComponentLookupException if more than one showing <code>JOptionPane</code> is found.
    */
@@ -57,7 +57,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * Creates a new <code>{@link JOptionPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JOptionPane</code>.
    * @param target the <code>JOptionPane</code> to be managed by this fixture.
-   * @throws IllegalArgumentException if <code>robot</code> is <code>null</code>.
+   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
    * @throws IllegalArgumentException if <code>target</code> is <code>null</code>.
    */
   public JOptionPaneFixture(Robot robot, JOptionPane target) {
@@ -92,7 +92,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
     doClick(mouseClickInfo);
@@ -278,7 +278,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> {
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */

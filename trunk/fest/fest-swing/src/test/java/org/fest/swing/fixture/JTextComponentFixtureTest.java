@@ -35,7 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTextComponentFixtureTest extends JPopupMenuInvokerFixtureTestCase<JTextComponent> {
+public class JTextComponentFixtureTest extends CommonComponentFixtureTestCase<JTextComponent> {
 
   private JTextComponentDriver driver;
   private JTextComponent target;
@@ -183,6 +183,6 @@ public class JTextComponentFixtureTest extends JPopupMenuInvokerFixtureTestCase<
 
   ComponentDriver driver() { return driver; }
   JTextComponent target() { return target; }
-  JPopupMenuInvokerFixture<JTextComponent> fixture() { return fixture; }
+  JTextComponentFixture fixture() { return fixture; }
 }
 
