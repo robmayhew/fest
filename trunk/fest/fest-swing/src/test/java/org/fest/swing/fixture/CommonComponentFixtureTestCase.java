@@ -17,17 +17,15 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.*;
-import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Timeout;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
@@ -41,25 +39,11 @@ import static org.fest.swing.fixture.MouseClickInfo.middleButton;
  *
  * @author Alex Ruiz
  */
-public abstract class CommonComponentFixtureTestCase<T extends Component> {
+@Test
+public abstract class CommonComponentFixtureTestCase<T extends Component> extends ComponentFixtureTestCase<T> implements
+    KeyboardInputSimulationFixtureTestCase, StateVerificationFixtureTestCase {
 
-  private Robot robot;
-  private ComponentFinder finder;
-  private Settings settings;
-  
-  Robot robot() { return robot; }
-  ComponentFinder finder() { return finder; }
-  
-  @BeforeMethod public final void setUp() {
-    robot = createMock(Robot.class);
-    finder = createMock(ComponentFinder.class);
-    settings = new Settings();
-    onSetUp();
-  }
-
-  abstract void onSetUp();
-
-  @Test public void shouldClick() {
+  public void shouldClick() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().click(target());
@@ -72,13 +56,13 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
   
-  @Test public void shouldClickUsingGivenMouseButton() {
+  public void shouldClickUsingGivenMouseButton() {
     final MouseButton button = MIDDLE_BUTTON;
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().click(target(), button);
         expectLastCall().once();
-      }
+      } 
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture().click(button));
@@ -86,7 +70,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldClickUsingGivenMouseClickInfo() {
+  public void shouldClickUsingGivenMouseClickInfo() {
     final MouseClickInfo mouseClickInfo = middleButton().times(2);
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -105,7 +89,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     fixture().click((MouseClickInfo)null);
   }
 
-  @Test public void shouldDoubleClick() {
+  public void shouldDoubleClick() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().doubleClick(target());
@@ -118,7 +102,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldRightClick() {
+  public void shouldRightClick() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().rightClick(target());
@@ -131,7 +115,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
   
-  @Test public void shouldGiveFocus() {
+  public void shouldGiveFocus() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().focus(target());
@@ -144,7 +128,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldPressAndReleaseKey() {
+  public void shouldPressAndReleaseKey() {
     final int keyCode = VK_A;
     final int[] modifiers = { SHIFT_MASK };
     new EasyMockTemplate(driver()) {
@@ -164,7 +148,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     fixture().pressAndReleaseKey(null);
   }
   
-  @Test public void shouldPressAndReleaseKeys() {
+  public void shouldPressAndReleaseKeys() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().pressAndReleaseKeys(target(), VK_A, VK_B, VK_C);
@@ -177,7 +161,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldPressKey() {
+  public void shouldPressKey() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().pressKey(target(), VK_A);
@@ -190,7 +174,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldReleaseKey() {
+  public void shouldReleaseKey() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().releaseKey(target(), VK_A);
@@ -203,7 +187,8 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldRequireDisabled() {
+  /** ${@inheritDoc} */
+  public void shouldRequireDisabled() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().requireDisabled(target());
@@ -216,7 +201,8 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
   
-  @Test public void shouldRequireEnabled() {
+  /** ${@inheritDoc} */
+  public void shouldRequireEnabled() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().requireEnabled(target());
@@ -229,7 +215,8 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldRequireEnabledUsingTimeout() {
+  /** ${@inheritDoc} */
+  public void shouldRequireEnabledUsingTimeout() {
     final Timeout timeout = timeout(2000);
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -243,7 +230,8 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldRequireNotVisible() {
+  /** ${@inheritDoc} */
+  public void shouldRequireNotVisible() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().requireNotVisible(target());
@@ -256,7 +244,8 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     }.run();
   }
 
-  @Test public void shouldRequireVisible() {
+  /** ${@inheritDoc} */
+  public void shouldRequireVisible() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
         driver().requireVisible(target());
@@ -273,26 +262,20 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     assertThat(result).isSameAs(fixture());
   }
 
-  abstract T target();
-  abstract ComponentDriver driver();
   abstract CommonComponentFixture fixture();
   
-  @SuppressWarnings("unchecked") Class<T> targetType() {
-    return (Class<T>) target().getClass();
+  private boolean requireShowing() {
+    return settings().componentLookupScope().requireShowing();
   }
   
-  private boolean requireShowing() {
-    return settings.componentLookupScope().requireShowing();
-  }
-
   private abstract class FixtureCreationTemplate extends EasyMockTemplate {
     FixtureCreationTemplate() {
-      super(robot, finder);
+      super(robot(), finder());
     }
     
     protected final void expectations() {
-      expect(robot.finder()).andReturn(finder);
-      expect(robot.settings()).andReturn(settings);
+      expect(robot().finder()).andReturn(finder());
+      expect(robot().settings()).andReturn(settings());
       expectComponentLookup();
     }
     
@@ -308,7 +291,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
 
   abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
     void expectComponentLookup() {
-      expect(finder.findByType(targetType(), requireShowing())).andReturn(target());
+      expect(finder().findByType(targetType(), requireShowing())).andReturn(target());
     }
   }
   
@@ -316,7 +299,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> {
     private final String name = "c";
 
     final void expectComponentLookup() {
-      expect(finder.findByName(name, targetType(), requireShowing())).andReturn(target());
+      expect(finder().findByName(name, targetType(), requireShowing())).andReturn(target());
     }
 
     final ComponentFixture<T> fixture() {

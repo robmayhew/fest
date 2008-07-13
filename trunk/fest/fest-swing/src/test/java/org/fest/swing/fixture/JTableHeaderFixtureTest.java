@@ -18,12 +18,11 @@ package org.fest.swing.fixture;
 import javax.swing.JPopupMenu;
 import javax.swing.table.JTableHeader;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableHeaderDriver;
 
 import static org.easymock.EasyMock.*;
@@ -38,36 +37,34 @@ import static org.fest.swing.fixture.MouseClickInfo.leftButton;
  *
  * @author Yvonne Wang
  */
-public class JTableHeaderFixtureTest {
+public class JTableHeaderFixtureTest extends ComponentFixtureTestCase<JTableHeader> {
 
   private JTableHeaderDriver driver;
-  private JTableHeader tableHeader;
+  private JTableHeader target;
   private JTableHeaderFixture fixture;
-  private Robot robot;
 
-  @BeforeMethod public void setUp() {
-    robot = createMock(Robot.class);
-    tableHeader = new JTableHeader();
-    fixture = new JTableHeaderFixture(robot, tableHeader);
+  void onSetUp() {
+    target = new JTableHeader();
+    fixture = new JTableHeaderFixture(robot(), target);
     driver = createMock(JTableHeaderDriver.class);
     fixture.updateDriver(driver);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRobotIsNull() {
-    new JTableHeaderFixture(null, tableHeader);
+    new JTableHeaderFixture(null, target);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTargetIsNull() {
-    new JTableHeaderFixture(robot, null);
+    new JTableHeaderFixture(robot(), null);
   }
 
   @Test public void shouldClickColumnUnderIndex() {
     final int index = 0;
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.clickColumn(tableHeader, index);
+        driver.clickColumn(target, index);
         expectLastCall().once();
       }
 
@@ -84,7 +81,7 @@ public class JTableHeaderFixtureTest {
     final int times = 2;
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.clickColumn(tableHeader, index, mouseButton, times);
+        driver.clickColumn(target, index, mouseButton, times);
         expectLastCall().once();
       }
 
@@ -99,7 +96,7 @@ public class JTableHeaderFixtureTest {
     final String name = "first";
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.clickColumn(tableHeader, name);
+        driver.clickColumn(target, name);
         expectLastCall().once();
       }
 
@@ -116,7 +113,7 @@ public class JTableHeaderFixtureTest {
     final int times = 2;
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.clickColumn(tableHeader, name, mouseButton, times);
+        driver.clickColumn(target, name, mouseButton, times);
         expectLastCall().once();
       }
 
@@ -134,7 +131,7 @@ public class JTableHeaderFixtureTest {
     final JPopupMenu popupMenu = new JPopupMenu();
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.showPopupMenu(tableHeader, 1)).andReturn(popupMenu);
+        expect(driver.showPopupMenu(target, 1)).andReturn(popupMenu);
       }
 
       protected void codeToTest() {
@@ -150,7 +147,7 @@ public class JTableHeaderFixtureTest {
     final String name = "1";
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        expect(driver.showPopupMenu(tableHeader, name)).andReturn(popupMenu);
+        expect(driver.showPopupMenu(target, name)).andReturn(popupMenu);
       }
 
       protected void codeToTest() {
@@ -160,4 +157,8 @@ public class JTableHeaderFixtureTest {
 
     }.run();
   }
+
+  ComponentDriver driver() { return driver; }
+
+  JTableHeader target() { return target; }
 }

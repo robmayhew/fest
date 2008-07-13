@@ -21,13 +21,11 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
+import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JMenuItemDriver;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
@@ -43,38 +41,35 @@ import static org.fest.swing.core.Timeout.timeout;
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixtureTest {
+public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> implements
+    KeyboardInputSimulationFixtureTestCase, StateVerificationFixtureTestCase {
 
-  private Robot robot;
-  private ComponentFinder finder;
   private JMenuItemDriver driver;
   private JMenuItem target;
   private JMenuItemFixture fixture;
   
-  @BeforeMethod public void setUp() {
-    robot = createMock(Robot.class);
-    finder = createMock(ComponentFinder.class);
+  void onSetUp() {
     driver = createMock(JMenuItemDriver.class);
     target = new JMenuItem("A Button");
-    fixture = new JMenuItemFixture(robot, target);
+    fixture = new JMenuItemFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfGivenActionIsNull() {
     Action action = null;
-    new JMenuItemFixture(robot, action);
+    new JMenuItemFixture(robot(), action);
   }
   
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new EasyMockTemplate(robot, finder) {
+    new EasyMockTemplate(robot(), finder()) {
       protected void expectations() {
-        expect(robot.finder()).andReturn(finder);
-        expect(finder.findByName("c", JMenuItem.class, false)).andReturn(target);
+        expect(robot().finder()).andReturn(finder());
+        expect(finder().findByName("c", JMenuItem.class, false)).andReturn(target);
       }
       
       protected void codeToTest() {
-        fixture = new JMenuItemFixture(robot, "c");
+        fixture = new JMenuItemFixture(robot(), "c");
         assertThat(fixture.component()).isSameAs(target);
       }
     }.run();
@@ -85,7 +80,7 @@ public class JMenuItemFixtureTest {
       private static final long serialVersionUID = 1L;
       public void actionPerformed(ActionEvent e) {}
     };
-    fixture = new JMenuItemFixture(robot, action);
+    fixture = new JMenuItemFixture(robot(), action);
     assertThat(fixture.component().getAction()).isSameAs(action);
   }
   
@@ -230,4 +225,8 @@ public class JMenuItemFixtureTest {
   private void assertThatReturnsThis(JMenuItemFixture result) {
     assertThat(result).isSameAs(fixture);
   }
+
+  ComponentDriver driver() { return driver; }
+
+  JMenuItem target() { return target; }
 }
