@@ -204,6 +204,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JFileChooserFixture pressAndReleaseKeys(int... keyCodes) {
@@ -215,6 +217,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * Simulates a user pressing the given key on this fixture's <code>{@link JFileChooser}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JFileChooserFixture pressKey(int keyCode) {
@@ -226,6 +229,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * Simulates a user releasing the given key on this fixture's <code>{@link JFileChooser}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JFileChooserFixture releaseKey(int keyCode) {

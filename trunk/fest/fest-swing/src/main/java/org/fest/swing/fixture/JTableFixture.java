@@ -98,8 +98,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Returns a fixture that verifies the font of the given table cell.
    * @param cell the given table cell.
    * @return a fixture that verifies the font of the given table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public FontFixture fontAt(TableCell cell) {
     Font font = driver.font(target, cell);
@@ -110,8 +110,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Returns a fixture that verifies the background color of the given table cell.
    * @param cell the given table cell.
    * @return a fixture that verifies the background color of the given table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public ColorFixture backgroundAt(TableCell cell) {
     Color background = driver.background(target, cell);
@@ -122,8 +122,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Returns a fixture that verifies the foreground color of the given table cell.
    * @param cell the given table cell.
    * @return a fixture that verifies the foreground color of the given table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public ColorFixture foregroundAt(TableCell cell) {
     Color foreground = driver.foreground(target, cell);
@@ -139,6 +139,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @param cell the given table cell.
    * @param value the expected value.
    * @return this fixture.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the value of the given cell is not equal to the expected one.
    */
   public JTableFixture requireCellValue(TableCell cell, String value) {
@@ -150,8 +152,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Returns a fixture that manages the table cell specified by the given row and column.
    * @param cell the cell of interest.
    * @return a fixture that manages the table cell specified by the given row and column.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public JTableCellFixture cell(TableCell cell) {
     driver.validate(target, cell);
@@ -162,8 +164,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Simulates a user selecting the given cell (row and column) of this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to select.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public JTableFixture selectCell(TableCell cell) {
     driver.selectCell(target, cell);
@@ -174,9 +176,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Simulates a user selecting the given cells of this fixture's <code>{@link JTable}</code>.
    * @param cells the cells to select.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cells</code> is <code>null</code> or empty.
-   * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
+   * @throws NullPointerException if <code>cells</code> is <code>null</code> or empty.
+   * @throws IllegalArgumentException if <code>cells</code> is <code>null</code> or empty.
+   * @throws NullPointerException if any element in <code>cells</code> is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public JTableFixture selectCells(TableCell... cells) {
     driver.selectCells(target, cells);
@@ -208,8 +211,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Simulates a user dragging an item from this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to drag.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public JTableFixture drag(TableCell cell) {
     driver.drag(target, cell);
@@ -220,8 +223,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Simulates a user dropping an item to this fixture's <code>{@link JTable}</code>.
    * @param cell the cell to drop the dragging item into.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public JTableFixture drop(TableCell cell) {
     driver.drop(target, cell);
@@ -241,8 +244,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Converts the given cell into a coordinate pair.
    * @param cell the given cell.
    * @return the coordinates of the given cell.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public Point pointAt(TableCell cell) {
     return driver.pointAt(target, cell);
@@ -264,8 +267,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * <code>{@link JTable}</code>, using this fixture's <code>{@link JTableCellReader}</code>.
    * @param cell the given cell.
    * @return the <code>String</code> representation of the value of a cell in this fixture's <code>JTable</code>.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellReader(JTableCellReader)
    */
   public String valueAt(TableCell cell) {
@@ -308,8 +311,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @param cell the cell to click.
    * @param button the mouse button to use.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public JTableFixture click(TableCell cell, MouseButton button) {
     click(cell, button, 1);
@@ -322,10 +325,12 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @param cell the cell to click.
    * @param mouseClickInfo specifies the mouse button to use and how many times to click.
    * @return this fixture.
-   * @throws ActionFailedException if <code>cell</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of the <code>cell</code> are out of bounds.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public JTableFixture click(TableCell cell, MouseClickInfo mouseClickInfo) {
+    if (mouseClickInfo == null) throw new NullPointerException("The given MouseClickInfo should not be null");
     click(cell, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
@@ -375,6 +380,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JTableFixture pressAndReleaseKeys(int... keyCodes) {
@@ -386,6 +393,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Simulates a user pressing the given key on this fixture's <code>{@link JTable}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JTableFixture pressKey(int keyCode) {
@@ -397,6 +405,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Simulates a user releasing the given key on this fixture's <code>{@link JTable}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JTableFixture releaseKey(int keyCode) {
@@ -481,9 +490,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Returns a <code>{@link JTableHeaderFixture}</code> wrapping the <code>{@link JTableHeader}</code> in this
    * fixture's <code>{@link JTable}</code>.
    * @return a <code>JTableHeaderFixture</code> wrapping the <code>JTableHeader</code> in this fixture's
-   *          <code>JTable</code>.
-   * @throws AssertionError if the <code>JTableHeader</code> in this fixture's <code>JTable</code> is
-   *          <code>null</code>.
+   * <code>JTable</code>.
+   * @throws AssertionError if the <code>JTableHeader</code> in this fixture's <code>JTable</code> is <code>null</code>.
    */
   public JTableHeaderFixture tableHeader() {
     JTableHeader tableHeader = target.getTableHeader();
@@ -495,6 +503,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Asserts that the given cell in this fixture's <code>{@link JTable}</code> is editable.
    * @param cell the given cell.
    * @return this fixture.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the given cell is not editable.
    */
   public JTableFixture requireEditable(TableCell cell) {
@@ -506,6 +516,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Asserts that the given cell in this fixture's <code>{@link JTable}</code> is not editable.
    * @param cell the given cell.
    * @return this fixture.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the given cell is editable.
    */
   public JTableFixture requireNotEditable(TableCell cell) {
@@ -522,8 +534,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @return this fixture.
    * @throws AssertionError if the given <code>JTable</code> is not enabled.
    * @throws AssertionError if the given table cell is not editable.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this fixture's <code>JTableCellValueReader</code> is unable to enter the given 
    * value.
    * @see #cellWriter(JTableCellWriter)

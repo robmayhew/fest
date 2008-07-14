@@ -106,6 +106,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * @param from the starting point of the selection.
    * @param to the last item to select (inclusive.)
    * @return this fixture.
+   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public JListFixture selectItems(Range.From from, Range.To to) {
     driver.selectItems(target, from, to);
@@ -116,9 +118,10 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
    * @param indices the indices of the items to select.
    * @return this fixture.
-   * @throws ActionFailedException if the given array is <code>null</code> or empty.
-   * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
-   *         in the <code>JList</code>.
+   * @throws NullPointerException if the given array is <code>null</code>.
+   * @throws IllegalArgumentException if the given array is empty.
+   * @throws IndexOutOfBoundsException if any of the indices is negative or greater than the index of the last item in 
+   * the <code>JList</code>.
    */
   public JListFixture selectItems(int...indices) {
     driver.selectItems(target, indices);
@@ -129,8 +132,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to select.
    * @return this fixture.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public JListFixture selectItem(int index) {
     driver.selectItem(target, index);
@@ -141,9 +144,10 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user selecting the specified items in this fixture's <code>{@link JList}</code>.
    * @param items the text of the items to select.
    * @return this fixture.
-   * @throws ActionFailedException if the given array is <code>null</code> or empty.
+   * @throws NullPointerException if the given array is <code>null</code>.
+   * @throws IllegalArgumentException if the given array is empty.
    * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
-   *         found.
+   * found.
    * @see #cellReader(JListCellReader)
    */
   public JListFixture selectItems(String...items) {
@@ -207,6 +211,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * <code>{@link JList}</code> match the given text items.
    * @param items text items to match.
    * @return this fixture.
+   * @throws NullPointerException if the given array is <code>null</code>.
    * @throws AssertionError if the selected items do not match the given text items.
    * @see #cellReader(JListCellReader)
    */
@@ -242,7 +247,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Returns a fixture that manages the list item specified by the given index.
    * @param index of the item.
    * @return a fixture that manages the list item specified by the given index.
-   * @throws ActionFailedException if the index is out of bounds.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
    */
   public JListItemFixture item(int index) {
     return new JListItemFixture(this, index);
@@ -333,6 +338,7 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JList}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @see java.awt.event.KeyEvent
    */
   public JListFixture pressAndReleaseKeys(int... keyCodes) {

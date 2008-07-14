@@ -139,8 +139,8 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
    * @return the value of the element under the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JComboBox</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JComboBox</code>.
    * @see #cellReader(JComboBoxCellReader)
    */
   public String value(JComboBox comboBox, int index) {
@@ -156,8 +156,8 @@ public class JComboBoxDriver extends JComponentDriver {
    * Selects the item under the given index in the <code>{@link JComboBox}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JComboBox</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JComboBox</code>.
    */
   public void selectItem(final JComboBox comboBox, int index) {
     final int validatedIndex = validateIndex(comboBox, index);
@@ -178,7 +178,7 @@ public class JComboBoxDriver extends JComponentDriver {
   int validateIndex(JComboBox comboBox, int index) {
     int itemCount = size(comboBox);
     if (index >= 0 && index < itemCount) return index;
-    throw new LocationUnavailableException(concat(
+    throw new IndexOutOfBoundsException(concat(
         "Item index (", valueOf(index), ") should be between [0] and [",
         valueOf(itemCount - 1), "] (inclusive)"));
   }

@@ -173,6 +173,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * does not affect the current focus.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JSliderFixture pressAndReleaseKeys(int... keyCodes) {
@@ -184,6 +186,7 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * Simulates a user pressing the given key on this fixture's <code>{@link JSlider}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JSliderFixture pressKey(int keyCode) {
@@ -195,6 +198,7 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * Simulates a user releasing the given key on this fixture's <code>{@link JSlider}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JSliderFixture releaseKey(int keyCode) {

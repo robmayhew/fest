@@ -85,7 +85,7 @@ public class JTreeDriver extends JComponentDriver {
    * </p>
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
@@ -110,13 +110,15 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given rows.
    * @param tree the target <code>JTree</code>.
    * @param rows the rows to select.
-   * @throws ActionFailedException if the array of rows is <code>null</code> or empty.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws NullPointerException if the array of rows is <code>null</code>.
+   * @throws IllegalArgumentException if the array of rows is empty.
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
   public void selectRows(final JTree tree, final int[] rows) {
-    if (isEmptyArray(rows)) throw actionFailure("The array of rows should not be null or empty");
+    if (rows == null) throw new NullPointerException("The array of rows should not be null");
+    if (isEmptyArray(rows)) throw new IllegalArgumentException("The array of rows should not be empty");
     if (!tree.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
       @Override int elementCount() {
@@ -135,7 +137,7 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the row to select.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -265,7 +267,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param row the given row.
    * @return a driver that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -290,7 +292,7 @@ public class JTreeDriver extends JComponentDriver {
    * Starts a drag operation at the location of the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -302,7 +304,7 @@ public class JTreeDriver extends JComponentDriver {
    * Ends a drag operation at the location of the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
@@ -348,9 +350,11 @@ public class JTreeDriver extends JComponentDriver {
    * Asserts that the given <code>{@link JTree}</code>'s selected rows are equal to the given one.
    * @param tree the target <code>JTree</code>.
    * @param rows the indices of the rows, expected to be selected.
+   * @throws NullPointerException if the array of row indices is <code>null</code>.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given rows.
    */
   public void requireSelection(JTree tree, int[] rows) {
+    if (rows == null) throw new NullPointerException("The array of row indices should not be null");
     for (int row : rows)
       requireSelection(tree, tree.getPathForRow(row));
   }
@@ -359,11 +363,13 @@ public class JTreeDriver extends JComponentDriver {
    * Asserts that the given <code>{@link JTree}</code>'s selected paths are equal to the given one.
    * @param tree the target <code>JTree</code>.
    * @param paths the given paths, expected to be selected.
+   * @throws NullPointerException if the array of paths is <code>null</code>.
    * @throws LocationUnavailableException if any of the given paths cannot be found.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given paths.
    * @see #separator(String)
    */
   public void requireSelection(JTree tree, String[] paths) {
+    if (paths == null) throw new NullPointerException("The array of paths should not be null");
     for (String path : paths)
       requireSelection(tree, findMatchingPath(tree, path));
   }

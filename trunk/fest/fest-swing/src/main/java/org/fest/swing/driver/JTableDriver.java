@@ -34,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.*;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
@@ -86,8 +86,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the <code>String</code> representation of the value at the given cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellReader(JTableCellReader)
    */
   public String value(JTable table, JTableCell cell) {
@@ -102,9 +102,12 @@ public class JTableDriver extends JComponentDriver {
    * @param row the given row.
    * @param column the given column.
    * @return the <code>String</code> representation of the value at the given row and column.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellReader(JTableCellReader)
    */
   public String value(JTable table, int row, int column) {
+    validateRow(table, row);
+    validateColumn(table, column);
     return cellReader.valueAt(table, row, column);
   }
 
@@ -113,8 +116,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the font of the given table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public Font font(JTable table, JTableCell cell) {
     validate(table, cell);
@@ -139,8 +142,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the foreground color of the given table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public Color foreground(JTable table, JTableCell cell) {
     validate(table, cell);
@@ -151,12 +154,14 @@ public class JTableDriver extends JComponentDriver {
    * Selects the given cells of the <code>{@link JTable}</code>.
    * @param table the target <code>JTable</code>.
    * @param cells the cells to select.
-   * @throws ActionFailedException if <code>cells</code> is <code>null</code> or empty.
-   * @throws ActionFailedException if any element in <code>cells</code> is <code>null</code>.
-   * @throws ActionFailedException if any of the indices of any of the <code>cells</code> are out of bounds.
+   * @throws NullPointerException if <code>cells</code> is <code>null</code> or empty.
+   * @throws IllegalArgumentException if <code>cells</code> is <code>null</code> or empty.
+   * @throws NullPointerException if any element in <code>cells</code> is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public void selectCells(final JTable table, final JTableCell[] cells) {
-    if (Arrays.isEmpty(cells)) throw actionFailure("Array of table cells to select should be null or empty");
+    if (cells == null) throw new NullPointerException("Array of table cells to select should be null");
+    if (Arrays.isEmpty(cells)) throw new IllegalArgumentException("Array of table cells to select should beempty");
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return cells.length;
@@ -184,8 +189,8 @@ public class JTableDriver extends JComponentDriver {
    * Selects the given cell, if it is not selected already.
    * @param table the target <code>JTable</code>.
    * @param cell the cell to select.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void selectCell(JTable table, JTableCell cell) {
     if (!table.isEnabled()) return;
@@ -204,8 +209,8 @@ public class JTableDriver extends JComponentDriver {
    * @param cell the table cell.
    * @param mouseButton the mouse button to use.
    * @param times the number of times to click the cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void click(JTable table, JTableCell cell, MouseButton mouseButton, int times) {
     validate(table, cell);
@@ -217,8 +222,8 @@ public class JTableDriver extends JComponentDriver {
    * Starts a drag operation at the location of the given table cell.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void drag(JTable table, JTableCell cell) {
     validate(table, cell);
@@ -230,8 +235,8 @@ public class JTableDriver extends JComponentDriver {
    * Starts a drop operation at the location of the given table cell.
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void drop(JTable table, JTableCell cell) {
     validate(table, cell);
@@ -256,8 +261,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the coordinates of the given row and column.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public Point pointAt(JTable table, JTableCell cell) {
     validate(table, cell);
@@ -299,8 +304,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given table cell.
    * @param value the expected value.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the value of the given cell is not equal to the expected one.
    */
   public void requireCellValue(JTable table, JTableCell cell, String value) {
@@ -330,8 +335,8 @@ public class JTableDriver extends JComponentDriver {
    * @param value the given value.
    * @throws AssertionError if the given <code>JTable</code> is not enabled.
    * @throws AssertionError if the given table cell is not editable.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given 
    * value.
    * @see #cellWriter(JTableCellWriter)
@@ -346,8 +351,8 @@ public class JTableDriver extends JComponentDriver {
    * Asserts that the given table cell is editable.
    * @param table the target <code>JTable</code>.
    * @param cell the given table cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the given table cell is not editable.
    */
   public void requireEditable(JTable table, JTableCell cell) {
@@ -358,6 +363,8 @@ public class JTableDriver extends JComponentDriver {
    * Asserts that the given table cell is not editable.
    * @param table the target <code>JTable</code>.
    * @param cell the given table cell.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the given table cell is editable.
    */
   public void requireNotEditable(JTable table, JTableCell cell) {
@@ -376,8 +383,8 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
    * @return the editor in the given cell of the <code>JTable</code>.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellWriter(JTableCellWriter)
    */
   public Component cellEditor(JTable table, JTableCell cell) {
@@ -391,8 +398,8 @@ public class JTableDriver extends JComponentDriver {
    * <code>{@link Component}</code> returned by <code>{@link #cellEditor(JTable, JTableCell)}</code>.
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #cellWriter(JTableCellWriter)
    */
@@ -407,8 +414,8 @@ public class JTableDriver extends JComponentDriver {
    * <code>{@link Component}</code> returned by <code>{@link #cellEditor(JTable, JTableCell)}</code>.
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #cellWriter(JTableCellWriter)
    */
@@ -423,8 +430,8 @@ public class JTableDriver extends JComponentDriver {
    * <code>{@link Component}</code> returned by <code>{@link #cellEditor(JTable, JTableCell)}</code>.
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #cellWriter(JTableCellWriter)
    */
@@ -437,11 +444,11 @@ public class JTableDriver extends JComponentDriver {
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
    * @param table the target <code>JTable</code>.
    * @param cell to validate.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void validate(JTable table, JTableCell cell) {
-    if (cell == null) throw actionFailure("Table cell cannot be null");
+    if (cell == null) throw new NullPointerException("Table cell cannot be null");
     cell.validateBoundsIn(table);
   }
 

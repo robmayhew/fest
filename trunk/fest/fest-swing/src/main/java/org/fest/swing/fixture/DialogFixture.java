@@ -161,7 +161,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
-   * @throws NullPointerException if the given code is not a valid key code.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */
   public DialogFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -173,8 +173,9 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Dialog}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
-   * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   public DialogFixture pressAndReleaseKeys(int... keyCodes) {
     driver.pressAndReleaseKeys(target, keyCodes);
@@ -185,8 +186,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user pressing the given key on this fixture's <code>{@link Dialog}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
-   * @see java.awt.event.KeyEvent
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see java.awt.event.KeyEvent
    */
   public DialogFixture pressKey(int keyCode) {
     driver.pressKey(target, keyCode);
@@ -197,8 +198,8 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * Simulates a user releasing the given key on this fixture's <code>{@link Dialog}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
-   * @see java.awt.event.KeyEvent
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see java.awt.event.KeyEvent
    */
   public DialogFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);

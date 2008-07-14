@@ -289,7 +289,7 @@ public class JComboBoxDriverTest {
     try {
       driver.validateIndex(comboBox, -1);
       fail();
-    } catch (LocationUnavailableException e) {
+    } catch (IndexOutOfBoundsException e) {
       assertThat(e).message().contains("Item index (-1) should be between [0] and [2]");
     }
   }
@@ -298,7 +298,7 @@ public class JComboBoxDriverTest {
     try {
       driver.validateIndex(comboBox, 6);
       fail();
-    } catch (LocationUnavailableException e) {
+    } catch (IndexOutOfBoundsException e) {
       assertThat(e).message().contains("Item index (6) should be between [0] and [2]");
     }
   }

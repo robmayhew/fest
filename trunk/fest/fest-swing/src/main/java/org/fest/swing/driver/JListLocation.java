@@ -20,8 +20,6 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 
-import org.fest.swing.exception.LocationUnavailableException;
-
 import static java.lang.String.valueOf;
 
 import static org.fest.util.Strings.concat;
@@ -39,8 +37,8 @@ public class JListLocation {
    * @param list the target <code>JList</code>.
    * @param index the given index.
    * @return the coordinates of the item at the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public Point pointAt(JList list, int index) {
     validate(list, index);
@@ -52,13 +50,13 @@ public class JListLocation {
    * Verifies that the given index is valid.
    * @param list the target <code>JList</code>.
    * @param index the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public void validate(JList list, int index) {
     int itemCount = sizeOf(list);
     if (index >= 0 && index < itemCount) return;
-    throw new LocationUnavailableException(concat(
+    throw new IndexOutOfBoundsException(concat(
         "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [",  valueOf(itemCount - 1),
         "] (inclusive)"));
   }

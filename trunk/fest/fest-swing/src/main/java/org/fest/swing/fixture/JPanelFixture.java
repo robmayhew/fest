@@ -143,6 +143,8 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
    * fixture.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JPanelFixture pressAndReleaseKeys(int... keyCodes) {
@@ -154,6 +156,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
    * Simulates a user pressing the given key on this fixture's <code>{@link JPanel}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JPanelFixture pressKey(int keyCode) {
@@ -165,6 +168,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
    * Simulates a user releasing the given key on this fixture's <code>{@link JPanel}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JPanelFixture releaseKey(int keyCode) {

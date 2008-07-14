@@ -142,6 +142,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JLabel}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JLabelFixture pressAndReleaseKeys(int... keyCodes) {
@@ -153,6 +155,7 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * Simulates a user pressing the given key on this fixture's <code>{@link JLabel}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JLabelFixture pressKey(int keyCode) {
@@ -164,6 +167,7 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * Simulates a user releasing the given key on this fixture's <code>{@link JLabel}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JLabelFixture releaseKey(int keyCode) {

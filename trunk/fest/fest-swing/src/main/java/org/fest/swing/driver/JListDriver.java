@@ -39,7 +39,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
@@ -114,11 +113,13 @@ public class JListDriver extends JComponentDriver {
    * Selects the items matching the given values.
    * @param list the target <code>JList</code>.
    * @param values the values to match.
-   * @throws ActionFailedException if the given array is <code>null</code> or empty.
+   * @throws NullPointerException if the given array is <code>null</code>.
+   * @throws IllegalArgumentException if the given array is empty.
    * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
   public void selectItems(final JList list, final String[] values) {
-    if (Arrays.isEmpty(values)) throw actionFailure("Array of values should not be null or empty");
+    if (values == null) throw new NullPointerException("Array of values should not be null");
+    if (Arrays.isEmpty(values)) throw new IllegalArgumentException("Array of values should not beempty");
     if (!list.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
@@ -158,12 +159,14 @@ public class JListDriver extends JComponentDriver {
    * Selects the items under the given indices.
    * @param list the target <code>JList</code>.
    * @param indices the indices of the items to select.
-   * @throws ActionFailedException if the given array is <code>null</code> or empty.
-   * @throws LocationUnavailableException if any of the indices is negative or greater than the index of the last item
-   *         in the <code>JList</code>.
+   * @throws NullPointerException if the given array is <code>null</code>.
+   * @throws IllegalArgumentException if the given array is empty.
+   * @throws IndexOutOfBoundsException if any of the indices is negative or greater than the index of the last item in 
+   * the <code>JList</code>.
    */
   public void selectItems(final JList list, final int[] indices) {
-    if (isEmptyArray(indices)) throw actionFailure("The array of indices should not be null or empty");
+    if (indices == null) throw new NullPointerException("The array of indices should not be null");
+    if (isEmptyArray(indices)) throw new IllegalArgumentException("The array of indices should not be empty");
     if (!list.isEnabled()) return;
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
@@ -183,8 +186,8 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param from the starting point of the selection.
    * @param to the last item to select.
-   * @throws LocationUnavailableException if the any index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public void selectItems(JList list, From from, To to) {
     selectItems(list, from.value, to.value);
@@ -195,8 +198,8 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param start the starting point of the selection.
    * @param end the last item to select (inclusive.)
-   * @throws LocationUnavailableException if the any index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public void selectItems(JList list, int start, int end) {
     selectItem(list, start);
@@ -209,8 +212,8 @@ public class JListDriver extends JComponentDriver {
    * Selects the item under the given index using left mouse button once.
    * @param list the target <code>JList</code>.
    * @param index the index of the item to click.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public void selectItem(JList list, int index) {
     if (list.isSelectedIndex(index)) return;
@@ -223,8 +226,8 @@ public class JListDriver extends JComponentDriver {
    * @param index the index of the item to click.
    * @param button the button to use.
    * @param times the number of times to click.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   public void clickItem(JList list, int index, MouseButton button, int times) {
     if (!list.isEnabled()) return;
@@ -248,9 +251,11 @@ public class JListDriver extends JComponentDriver {
    * Verifies that the selected items in the <code>{@link JList}</code> match the given values.
    * @param list the target <code>JList</code>.
    * @param items the values to match.
+   * @throws NullPointerException if the given array is <code>null</code>.
    * @throws AssertionError if the selected items do not match the given values.
    */
   public void requireSelectedItems(JList list, String... items) {
+    if (items == null) throw new NullPointerException("The array of items should not be null");
     int[] selectedIndices = list.getSelectedIndices();
     int currentSelectionCount = selectedIndices.length;
     if (currentSelectionCount == 0) failNoSelection(list);
@@ -402,8 +407,8 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param index the given index.
    * @return the value of the element under the given index.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    * @see #cellReader(JListCellReader)
    */
   public String value(JList list, int index) {

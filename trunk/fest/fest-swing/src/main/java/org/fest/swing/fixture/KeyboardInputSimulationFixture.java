@@ -27,9 +27,10 @@ import org.fest.swing.util.Platform;
 public interface KeyboardInputSimulationFixture {
 
   /**
-   * Simulates a user pressing and releasing the given keys on this fixture's GUI component .
+   * Simulates a user pressing and releasing the given keys on this fixture's GUI component.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */

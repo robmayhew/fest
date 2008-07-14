@@ -198,10 +198,12 @@ public class ComponentDriver {
    * Simulates a user pressing and releasing the given keys on the <code>{@link Component}</code>.
    * @param c the target component.
    * @param keyCodes one or more codes of the keys to press.
-   * @throws IllegalArgumentException if the given code is not a valid key code. *
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public void pressAndReleaseKeys(Component c, int... keyCodes) {
+    if (keyCodes == null) throw new NullPointerException("The array of key codes should not be null");
     focus(c);
     robot.pressAndReleaseKeys(keyCodes);
   }

@@ -90,13 +90,13 @@ public class JTreeDriverTest {
     assertThat(dragTree.getSelectionCount()).isZero();
   }
 
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfRowArrayIsNull() {
     int[] rows = null;
     driver.selectRows(dragTree, rows);
   }
   
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfRowArrayIsEmpty() {
     int[] rows = new int[0];
     driver.selectRows(dragTree, rows);
@@ -247,6 +247,11 @@ public class JTreeDriverTest {
     return (DefaultMutableTreeNode)node.getChildAt(0);
   }
 
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfRowIndexArrayIsNull() {
+    driver.requireSelection(dragTree, (int[])null);
+  }
+  
   public void shouldPassIfRowIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
@@ -282,6 +287,11 @@ public class JTreeDriverTest {
       assertThat(e).message().contains("property:'selectionPath'")
                              .contains("expected:<[root, branch1]> but was:<[root]>");
     }
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfExpectedPathArrayIsNull() {
+    driver.requireSelection(dragTree, (String[])null);
   }
 
   public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {

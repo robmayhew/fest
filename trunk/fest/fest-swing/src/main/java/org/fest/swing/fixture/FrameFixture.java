@@ -205,7 +205,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
    * @return this fixture.
-   * @throws IllegalArgumentException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see KeyPressInfo
    */
@@ -218,6 +218,8 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link Frame}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public FrameFixture pressAndReleaseKeys(int... keyCodes) {
@@ -229,6 +231,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Simulates a user pressing the given key on this fixture's <code>{@link Frame}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public FrameFixture pressKey(int keyCode) {
@@ -240,6 +243,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * Simulates a user releasing the given key on this fixture's <code>{@link Frame}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public FrameFixture releaseKey(int keyCode) {

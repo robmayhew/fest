@@ -53,7 +53,7 @@ import static org.fest.swing.util.Platform.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class ComponentDriverTest {
+@Test public class ComponentDriverTest {
 
   private Robot robot;
   private DragAndDrop dragAndDrop;
@@ -67,7 +67,7 @@ public class ComponentDriverTest {
     driver = new ComponentDriver(robot, dragAndDrop);
   }
 
-  @Test public void shouldClickComponent() {
+  public void shouldClickComponent() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         robot.click(c);
@@ -80,7 +80,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldClickComponentUsingGivenMouseButton() {
+  public void shouldClickComponentUsingGivenMouseButton() {
     final MouseButton button = LEFT_BUTTON;
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -94,7 +94,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldClickComponentUsingGivenMouseButtonAndTimes() {
+  public void shouldClickComponentUsingGivenMouseButtonAndTimes() {
     final MouseButton button = LEFT_BUTTON;
     final int times = 2;
     new EasyMockTemplate(robot) {
@@ -109,7 +109,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldClickComponentAtGivenPoint() {
+  public void shouldClickComponentAtGivenPoint() {
     final Point point = new Point(0, 0);
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -123,7 +123,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldDoubleClickComponent() {
+  public void shouldDoubleClickComponent() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         robot.doubleClick(c);
@@ -136,7 +136,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldRightClickComponent() {
+  public void shouldRightClickComponent() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         robot.rightClick(c);
@@ -149,7 +149,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldGiveFocusAndWaitForFocusGain() {
+  public void shouldGiveFocusAndWaitForFocusGain() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         robot.focusAndWaitForFocusGain(c);
@@ -162,7 +162,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldReturnSettingsFromRobot() {
+  public void shouldReturnSettingsFromRobot() {
     final Settings settings = new Settings();
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -175,13 +175,13 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldPassIfSizeIsEqualToExpected() {
+  public void shouldPassIfSizeIsEqualToExpected() {
     Dimension size = new Dimension(10, 10);
     c.setSize(size);
     driver.requireSize(c, size);
   }
 
-  @Test public void shouldFailIfSizeIsNotEqualToExpected() {
+  public void shouldFailIfSizeIsNotEqualToExpected() {
     c.setSize(new Dimension(10, 10));
     try {
       driver.requireSize(c, new Dimension(20, 20));
@@ -192,12 +192,12 @@ public class ComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfVisibleAsAnticipated() {
+  public void shouldPassIfVisibleAsAnticipated() {
     c.setVisible(true);
     driver.requireVisible(c);
   }
 
-  @Test public void shouldFailIfNotVisibleAndExpectingVisible() {
+  public void shouldFailIfNotVisibleAndExpectingVisible() {
     c.setVisible(false);
     try {
       driver.requireVisible(c);
@@ -208,12 +208,12 @@ public class ComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfNotVisibleAsAnticipated() {
+  public void shouldPassIfNotVisibleAsAnticipated() {
     c.setVisible(false);
     driver.requireNotVisible(c);
   }
 
-  @Test public void shouldFailIfVisibleAndExpectingNotVisible() {
+  public void shouldFailIfVisibleAndExpectingNotVisible() {
     c.setVisible(true);
     try {
       driver.requireNotVisible(c);
@@ -224,12 +224,12 @@ public class ComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfEnabledAsAnticipated() {
+  public void shouldPassIfEnabledAsAnticipated() {
     c.setEnabled(true);
     driver.requireEnabled(c);
   }
 
-  @Test public void shouldFailIfNotEnabledAndExpectingEnabled() {
+  public void shouldFailIfNotEnabledAndExpectingEnabled() {
     c.setEnabled(false);
     try {
       driver.requireEnabled(c);
@@ -240,7 +240,7 @@ public class ComponentDriverTest {
     }
   }
 
-  @Test public void shouldPassIfComponentIsEnabledBeforeTimeout() {
+  public void shouldPassIfComponentIsEnabledBeforeTimeout() {
     c.setEnabled(false);
     Runnable task = new Runnable() {
       public void run() {
@@ -265,12 +265,12 @@ public class ComponentDriverTest {
     driver.requireEnabled(c, timeout(100));
   }
 
-  @Test public void shouldPassIfComponentDisabledAsAnticipated() {
+  public void shouldPassIfComponentDisabledAsAnticipated() {
     c.setEnabled(false);
     driver.requireDisabled(c);
   }
 
-  @Test public void shouldFailIfEnabledAndExpectingDisabled() {
+  public void shouldFailIfEnabledAndExpectingDisabled() {
     c.setEnabled(true);
     try {
       driver.requireDisabled(c);
@@ -281,7 +281,7 @@ public class ComponentDriverTest {
     }
   }
 
-  @Test public void shouldPressAndReleaseKeys() {
+  public void shouldPressAndReleaseKeys() {
     final int[] keys = { 6, 8 };
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -297,7 +297,12 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldPressKey() {
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfKeyArrayIsNull() {
+    driver.pressAndReleaseKeys(c, (int[])null);
+  }
+  
+  public void shouldPressKey() {
     final int key = 6;
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -313,7 +318,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldReleaseKey() {
+  public void shouldReleaseKey() {
     final int key = 6;
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -329,7 +334,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldGiveFocus() {
+  public void shouldGiveFocus() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         robot.focus(c);
@@ -342,7 +347,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldDrag() {
+  public void shouldDrag() {
     final Point point = new Point(0, 0);
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -356,7 +361,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldDragOver() {
+  public void shouldDragOver() {
     final Point point = new Point(0, 0);
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -370,7 +375,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldDrop() {
+  public void shouldDrop() {
     final Point point = new Point(0, 0);
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -384,46 +389,46 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldReturnIsResizableIfComponentIsDialog() {
+  public void shouldReturnIsResizableIfComponentIsDialog() {
     Component c = new JDialog();
     assertThat(driver.isUserResizable(c)).isTrue();
   }
 
-  @Test public void shouldReturnIsResizableIfComponentIsFrame() {
+  public void shouldReturnIsResizableIfComponentIsFrame() {
     Component c = new JFrame();
     assertThat(driver.isUserResizable(c)).isTrue();
   }
 
-  @Test public void shouldReturnIsResizableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
+  public void shouldReturnIsResizableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
     if (isWindowsOrMac()) return;
     Component c = new JTextField();
     assertThat(driver.isUserResizable(c)).isTrue();
   }
 
-  @Test public void shouldReturnIsNotResizableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
+  public void shouldReturnIsNotResizableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
     if (!isWindowsOrMac()) return;
     Component c = new JTextField();
     assertThat(driver.isUserResizable(c)).isFalse();
     return;
   }
 
-  @Test public void shouldReturnIsMovableIfComponentIsDialog() {
+  public void shouldReturnIsMovableIfComponentIsDialog() {
     Component c = new JDialog();
     assertThat(driver.isUserMovable(c)).isTrue();
   }
 
-  @Test public void shouldReturnIsMovableIfComponentIsFrame() {
+  public void shouldReturnIsMovableIfComponentIsFrame() {
     Component c = new JFrame();
     assertThat(driver.isUserMovable(c)).isTrue();
   }
 
-  @Test public void shouldReturnIsMovableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
+  public void shouldReturnIsMovableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
     if (isWindowsOrMac()) return;
     Component c = new JTextField();
     assertThat(driver.isUserMovable(c)).isTrue();
   }
 
-  @Test public void shouldReturnIsNotMovableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
+  public void shouldReturnIsNotMovableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
     if (!isWindowsOrMac()) return;
     Component c = new JTextField();
     assertThat(driver.isUserMovable(c)).isFalse();
@@ -434,7 +439,7 @@ public class ComponentDriverTest {
     return isWindows() || isMacintosh();
   }
   
-  @Test public void shouldPerformAccessibleAction() {
+  public void shouldPerformAccessibleAction() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         robot.invokeLater(same(c), eqTask(new PerformDefaultAccessibleActionTask(c)));
@@ -468,7 +473,7 @@ public class ComponentDriverTest {
     public void appendTo(StringBuffer buffer) {}
   }
   
-  @Test public void shouldNotWaitIfComponentIsReady() {
+  public void shouldNotWaitIfComponentIsReady() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         expect(robot.isReadyForInput(c)).andReturn(true);
@@ -484,7 +489,7 @@ public class ComponentDriverTest {
     }.run();
   }
   
-  @Test public void shouldWaitUntilComponentIsReady() {
+  public void shouldWaitUntilComponentIsReady() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         expect(robot.isReadyForInput(c)).andReturn(false);
@@ -497,7 +502,7 @@ public class ComponentDriverTest {
     }.run();
   }
 
-  @Test public void shouldReturnFalseComponentIsReady() {
+  public void shouldReturnFalseComponentIsReady() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         expect(robot.isReadyForInput(c)).andReturn(false).atLeastOnce();

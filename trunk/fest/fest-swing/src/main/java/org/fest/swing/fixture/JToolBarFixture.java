@@ -195,6 +195,8 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
    * does not affect the current focus.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JToolBarFixture pressAndReleaseKeys(int...keyCodes) {
@@ -206,6 +208,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
    * Simulates a user pressing the given key on this fixture's <code>{@link JToolBar}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JToolBarFixture pressKey(int keyCode) {
@@ -217,6 +220,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
    * Simulates a user releasing the given key on this fixture's <code>{@link JToolBar}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JToolBarFixture releaseKey(int keyCode) {

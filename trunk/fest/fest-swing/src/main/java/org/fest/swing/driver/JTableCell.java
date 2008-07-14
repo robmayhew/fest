@@ -17,11 +17,8 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.exception.ActionFailedException;
-
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
 /**
@@ -55,18 +52,38 @@ public abstract class JTableCell {
   /**
    * Validates the indices of this cell regarding the given table.
    * @param table the table to use to validate this cell's indices.
-   * @throws ActionFailedException if any of the indices is out of bounds. 
+   * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
+   * have any rows.
    */
   public void validateBoundsIn(JTable table) {
-    int rowCount = table.getRowCount();
-    if (rowCount == 0) throw actionFailure("Table does not contain any rows");
-    validateIndex(row, rowCount, "row");
+    if (table.getRowCount() == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
+    validateRow(table, row);
+    validateColumn(table, column);
+  }
+
+  /**
+   * Validates that the given row index exists in the given table.
+   * @param table the table the given table.
+   * @param row the row to validate.
+   * @throws IndexOutOfBoundsException if the row index is out of bounds.
+   */
+  protected static void validateRow(JTable table, int row) {
+    validateIndex(row, table.getRowCount(), "row");
+  }
+
+  /**
+   * Validates that the given column index exists in the given table.
+   * @param table the table the given table.
+   * @param column the column to validate.
+   * @throws IndexOutOfBoundsException if the column index is out of bounds.
+   */
+  protected static void validateColumn(JTable table, int column) {
     validateIndex(column, table.getColumnCount(), "column");
   }
   
-  private void validateIndex(int index, int itemCount, String indexName) {
+  private static void validateIndex(int index, int itemCount, String indexName) {
     if (index >= 0 && index < itemCount) return; 
-    throw actionFailure(concat(
+    throw new IndexOutOfBoundsException(concat(
         indexName, " ", quote(valueOf(index)), " should be between ", quote("0"), " and ", 
         quote(valueOf(itemCount))));
   }

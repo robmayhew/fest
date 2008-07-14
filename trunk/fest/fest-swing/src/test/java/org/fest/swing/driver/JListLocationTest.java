@@ -25,7 +25,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestFrame;
 import org.fest.swing.testing.TestList;
 
@@ -69,7 +68,7 @@ public class JListLocationTest {
     try {
       location.pointAt(list, 8);
       fail();
-    } catch (LocationUnavailableException expected) {
+    } catch (IndexOutOfBoundsException expected) {
       assertThat(expected).message().isEqualTo("Item index (8) should be between [0] and [2] (inclusive)");
     }
   }

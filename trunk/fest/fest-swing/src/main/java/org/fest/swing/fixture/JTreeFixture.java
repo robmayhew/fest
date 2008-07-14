@@ -154,7 +154,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user dragging a row from this fixture's <code>{@link JTree}</code>.
    * @param row the index of the row to drag.
    * @return this fixture.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -178,7 +178,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user dropping an item into this fixture's <code>{@link JTree}</code>.
    * @param row the row to drop the item to.
    * @return this fixture.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
@@ -227,7 +227,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -240,9 +240,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user selecting the tree nodes at the given rows.
    * @param rows the indices of the rows to select.
    * @return this fixture.
-   * @throws ActionFailedException if the array of rows is <code>null</code> or empty.
-   * @throws ActionFailedException if the any of the given rows is less than zero or equal than or greater than the
-   *         number of visible rows in the <code>JTree</code>.
+   * @throws NullPointerException if the array of rows is <code>null</code>.
+   * @throws IllegalArgumentException if the array of rows is empty.
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
+   *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
   public JTreeFixture selectRows(int... rows) {
@@ -254,7 +255,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user toggling the open/closed state of the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -267,7 +268,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Shows a pop-up menu at the position of the node in the given row.
    * @param row the index of the row invoking the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
-   * @throws ActionFailedException if the given row is less than zero or equal than or greater than the number of
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -313,9 +314,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
 
   /**
    * Simulates a user pressing and releasing the given keys in this fixture's <code>{@link JTree}</code>.
-   * This method does not affect the current focus.
    * @param keyCodes the codes of the keys to press.
    * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JTreeFixture pressAndReleaseKeys(int...keyCodes) {
@@ -327,6 +329,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user pressing the given key on this fixture's <code>{@link JTree}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   public JTreeFixture pressKey(int keyCode) {
@@ -339,6 +342,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalArgumentException if any of the given code is not a valid key code.
    */
   public JTreeFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
@@ -422,6 +426,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Asserts that this fixture's <code>{@link JTree}</code> selection is equal to the given paths.
    * @param paths the given paths, expected to be selected.
    * @return this fixture.
+   * @throws NullPointerException if the array of paths is <code>null</code>.
    * @throws LocationUnavailableException if any of the given path cannot be found.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given paths.
    */
@@ -433,6 +438,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   /**
    * Asserts that this fixture's <code>{@link JTree}</code>'s selected rows are equal to the given one.
    * @param rows the indices of the rows, expected to be selected.
+   * @throws NullPointerException if the array of row indices is <code>null</code>.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given rows.
    * @return this fixture.
    */

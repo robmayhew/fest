@@ -28,7 +28,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestFrame;
@@ -107,7 +106,7 @@ public class JListDriverTest {
     try {
       driver.value(dragList, 6);
       fail();
-    } catch (LocationUnavailableException expected) {
+    } catch (IndexOutOfBoundsException expected) {
       assertThat(expected).message().isEqualTo("Item index (6) should be between [0] and [2] (inclusive)");
     }
   }
@@ -159,13 +158,13 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArrayOfValuesToSelectIsNull() {
     String[] values = null;
     driver.selectItems(dragList, values);
   }
   
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfArrayOfValuesToSelectIsEmpty() {
     String[] values = new String[0];
     driver.selectItems(dragList, values);
@@ -188,13 +187,13 @@ public class JListDriverTest {
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
   }
   
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArrayOfIndicesToSelectIsNull() {
     int[] indices = null;
     driver.selectItems(dragList, indices);
   }
   
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfArrayOfIndicesToSelectIsEmpty() {
     int[] indices = new int[0];
     driver.selectItems(dragList, indices);
@@ -274,6 +273,11 @@ public class JListDriverTest {
     dragList.setSelectedIndices(new int[] { 0, 1 });
     driver.requireSelectedItems(dragList, "one", "two");
     assertCellReaderWasCalled();
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfExpectedSelectedItemsIsNull() {
+    driver.requireSelectedItems(dragList, (String[])null);
   }
 
   public void shouldFailIfExpectingSelectedItemsButThereIsNone() {
