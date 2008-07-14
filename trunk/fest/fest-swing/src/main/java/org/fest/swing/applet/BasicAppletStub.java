@@ -26,6 +26,7 @@ import java.util.Map;
  * Understands a basic (and limited) implementation of <code>{@link AppletStub}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class BasicAppletStub implements AppletStub {
 
@@ -38,9 +39,13 @@ public class BasicAppletStub implements AppletStub {
    * @param viewer the window to host the applet.
    * @param context the applet context.
    * @param parameters the parameters included in an applet HTML tag.
+   * @throws NullPointerException if <code>viewer</code> is <code>null</code>.
+   * @throws NullPointerException if <code>context</code> is <code>null</code>.
+   * @throws NullPointerException if <code>parameters</code> is <code>null</code>.
    */
   public BasicAppletStub(Window viewer, AppletContext context, Map<String, String> parameters) {
     this(viewer, context);
+    if (parameters == null) throw new NullPointerException("The map of parameters should not be null");
     this.parameters.putAll(parameters);
   }
 
@@ -48,8 +53,12 @@ public class BasicAppletStub implements AppletStub {
    * Creates a new </code>{@link BasicAppletStub}</code>.
    * @param viewer the window to host the applet.
    * @param context the applet context.
+   * @throws NullPointerException if <code>viewer</code> is <code>null</code>.
+   * @throws NullPointerException if <code>context</code> is <code>null</code>.
    */
   public BasicAppletStub(Window viewer, AppletContext context) {
+    if (viewer == null) throw new NullPointerException("The apple viewer should not be null");
+    if (context == null) throw new NullPointerException("The AppletContext should not be null");
     this.viewer = viewer;
     this.context = context;
   }

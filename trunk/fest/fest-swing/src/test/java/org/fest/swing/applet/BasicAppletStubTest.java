@@ -48,6 +48,31 @@ public class BasicAppletStubTest {
     stub = new BasicAppletStub(viewer, context);
   }
   
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfViewerIsNullInConstructorWithNoParameterMap() {
+    new BasicAppletStub(null, context);
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfContextIsNullInConstructorWithNoParameterMap() {
+    new BasicAppletStub(viewer, null);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfViewerIsNullInConstructorWithParameterMap() {
+    new BasicAppletStub(null, context, new HashMap<String, String>());
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfContextIsNullInConstructorWithParameterMap() {
+    new BasicAppletStub(viewer, null, new HashMap<String, String>());
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfParameterMapIsNull() {
+    new BasicAppletStub(viewer, context, null);
+  }
+
   public void shouldBeActive() {
     assertThat(stub.isActive()).isTrue();
   }

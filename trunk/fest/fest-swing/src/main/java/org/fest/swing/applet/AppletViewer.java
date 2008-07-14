@@ -34,6 +34,7 @@ import static org.fest.util.Strings.concat;
  * Understands a window that displays an <code>{@link Applet}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class AppletViewer extends JFrame implements StatusDisplay {
 
@@ -49,6 +50,7 @@ public class AppletViewer extends JFrame implements StatusDisplay {
    * Creates a new </code>{@link AppletViewer}</code>. This constructor creates new instances of 
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>.
    * @param applet the applet to view.
+   * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    */
   public AppletViewer(Applet applet) {
     load(applet, new BasicAppletStub(this, new BasicAppletContext(this)));
@@ -59,6 +61,8 @@ public class AppletViewer extends JFrame implements StatusDisplay {
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>.
    * @param applet the applet to view.
    * @param parameters the parameters included in an applet HTML tag.
+   * @throws NullPointerException if <code>applet</code> is <code>null</code>.
+   * @throws NullPointerException if <code>parameters</code> is <code>null</code>.
    */
   public AppletViewer(Applet applet, Map<String, String> parameters) {
     load(applet, new BasicAppletStub(this, new BasicAppletContext(this), parameters));
@@ -68,12 +72,16 @@ public class AppletViewer extends JFrame implements StatusDisplay {
    * Creates a new </code>{@link AppletViewer}</code>.
    * @param applet the applet to view.
    * @param stub the applet's stub.
+   * @throws NullPointerException if <code>applet</code> is <code>null</code>.
+   * @throws NullPointerException if <code>stub</code> is <code>null</code>.   
    */
   public AppletViewer(Applet applet, AppletStub stub) {
     load(applet, stub);
   }
 
   private void load(Applet applet, AppletStub stub) {
+    if (applet == null) throw new NullPointerException("The applet to load should not be null");
+    if (stub == null) throw new NullPointerException("The AppletStub should not be null");
     setUpFrame(applet);
     addContent(applet);
     setUpApplet(applet, stub);
