@@ -36,7 +36,7 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  */
 @Test(groups = GUI)
-public class AppletViewerGUITest {
+public class AppletViewerTests {
 
   private MyApplet applet;
   private FrameFixture fixture;
