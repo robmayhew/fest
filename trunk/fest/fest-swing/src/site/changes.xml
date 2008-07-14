@@ -28,7 +28,7 @@
         Replaced IllegalArgumentException with NullPointerException when a method argument has null as its value. 
       </action>
       <action dev="alruiz" type="fix">
-        Replaced ActionFailedException and LocationUnavailableException with IndexOutOfBoundsException when indices are
+        Replaced ActionFailedException and LocationUnavailableException with IndexOutOfBoundsException when an index is
         out of bound (e.g. the row index in a JTable.) 
       </action>
     </release>
