@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.testing.MyApplet;
 
 import static javax.swing.SwingUtilities.getAncestorOfClass;
 

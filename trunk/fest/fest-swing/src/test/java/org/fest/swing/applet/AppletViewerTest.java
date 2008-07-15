@@ -18,6 +18,7 @@ package org.fest.swing.applet;
 import java.applet.AppletStub;
 import java.util.Map;
 
+import org.fest.swing.testing.MyApplet;
 import org.testng.annotations.Test;
 
 /**

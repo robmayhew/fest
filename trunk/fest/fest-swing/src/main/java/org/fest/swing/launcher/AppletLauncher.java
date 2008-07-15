@@ -14,13 +14,16 @@
  */
 package org.fest.swing.launcher;
 
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.*;
 
 import java.applet.Applet;
+import java.applet.AppletStub;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.applet.BasicAppletContext;
+import org.fest.swing.applet.BasicAppletStub;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.launcher.AppletParameter.AppletParameterBuilder;
 
@@ -86,21 +89,29 @@ public class AppletLauncher {
    * given type has a default constructor.
    * @param appletType the type of applet to instantiate.
    * @return the created applet launcher.
+   * @throws NullPointerException if the given type name is <code>null</code>.
+   * @throws IllegalArgumentException if the given type name is empty.
    * @throws IllegalArgumentException if the given type is not a subclass of <code>java.applet.Applet</code>.
    * @throws UnexpectedException if the given type cannot be loaded.
    * @throws UnexpectedException if a new instance of the given type cannot be instantiated.
    */
   public static AppletLauncher applet(String appletType) {
+    if (appletType == null) throw new NullPointerException("The name of the applet type should not be null");
+    if (isEmpty(appletType)) throw new IllegalArgumentException("The name of the applet type should not be empty");
+    Object o = load(appletType);
+    if (!(o instanceof Applet))
+      throw new IllegalArgumentException(concat("The given type is not a subclass of ", Applet.class.getName()));
+    return applet((Applet)o);
+  }
+
+  private static Object load(String typeName) {
     try {
-      Class<?> type = Class.forName(appletType);
-      Object o = type.newInstance();
-      if (!(o instanceof Applet))
-        throw new IllegalArgumentException(concat("The given type is not a subclass of ", Applet.class.getName()));
-      return applet((Applet) o);
+      Class<?> type = Class.forName(typeName);
+      return type.newInstance();
     } catch (ClassNotFoundException e) {
-      throw new UnexpectedException(concat("Unable to load class ", appletType), e);
+      throw new UnexpectedException(concat("Unable to load class ", typeName), e);
     } catch (Exception e) {
-      throw cannotInstantiateApplet(appletType, e);
+      throw cannotInstantiateApplet(typeName, e);
     }
   }
 
@@ -109,9 +120,11 @@ public class AppletLauncher {
    * given type has a default constructor.
    * @param appletType the type of applet to instantiate.
    * @return the created applet launcher.
+   * @throws NullPointerException if the given type is <code>null</code>.
    * @throws UnexpectedException if a new instance of the given type cannot be instantiated.
    */
   public static AppletLauncher applet(Class<? extends Applet> appletType) {
+    if (appletType == null) throw new NullPointerException("The applet type should not be null");
     try {
       return applet(appletType.newInstance());
     } catch (Exception e) {
@@ -127,6 +140,7 @@ public class AppletLauncher {
    * Creates a new applet launcher.
    * @param applet the applet to launch.
    * @return the created applet launcher.
+   * @throws NullPointerException if the given applet is <code>null</code>.
    */
   public static AppletLauncher applet(Applet applet) {
     return new AppletLauncher(applet);
@@ -153,15 +167,28 @@ public class AppletLauncher {
    * Sets the parameters for the applet to launch, as an alternative to <code>{@link #withParameters(Map)}</code>.
    * @param newParameters the parameters for the applet to launch.
    * @throws NullPointerException if <code>newParameters</code> is <code>null</code>.
+   * @throws NullPointerException if any parameter is <code>null</code>.
    */
   public void withParameters(AppletParameter... newParameters) {
     if (newParameters == null) throw new NullPointerException("The array of parameters should not be null");
     parameters.clear();
-    for (AppletParameter parameter : newParameters)
-      parameters.put(parameter.name, parameter.value);
+    for (AppletParameter parameter : newParameters) add(parameter);
   }
 
+  private void add(AppletParameter parameter) {
+    if (parameter == null) throw new NullPointerException("Found a null parameter");
+    parameters.put(parameter.name, parameter.value);
+  }
+
+  /**
+   * Launches the applet in a <code>{@link AppletViewer}</code> (using implementations of
+   * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>. To provide your own
+   * <code>{@link AppletStub}</code> create a new <code>{@link AppletViewer}</code> directly.
+   * @return the created <code>AppletViewer</code>.
+   */
   public AppletViewer start() {
-    return new AppletViewer(applet, parameters);
+    AppletViewer viewer = new AppletViewer(applet, parameters);
+    viewer.setVisible(true);
+    return viewer;
   }
 }

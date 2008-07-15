@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.applet;
+package org.fest.swing.testing;
 
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
