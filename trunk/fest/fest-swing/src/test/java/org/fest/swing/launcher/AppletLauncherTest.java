@@ -20,6 +20,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 import java.applet.Applet;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 
@@ -71,11 +73,6 @@ import org.testng.annotations.Test;
   @Test(groups = GUI) public void shouldLoadAndLaunchApplet() {
     viewer = AppletLauncher.applet(MyApplet.class.getName()).start();
     assertAppletWasLaunched();
-  }
-
-  private void assertAppletWasLaunched() {
-    assertThat(viewer.isShowing()).isTrue();
-    assertThat(viewer.applet()).isInstanceOf(MyApplet.class);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
@@ -136,5 +133,52 @@ import org.testng.annotations.Test;
     private static final long serialVersionUID = 1L;
 
     AnApplet(String name) {}
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfParameterMapIsNull() {
+    Map<String, String> parameters = null;
+    AppletLauncher.applet(new MyApplet()).withParameters(parameters);
+  }
+
+  @Test(groups = GUI) public void shouldSetParametersInMap() {
+    Map<String, String> parameters = new HashMap<String, String>();
+    parameters.put("bgcolor", "blue");
+    parameters.put("color", "red");
+    applet = new MyApplet();
+    viewer = AppletLauncher.applet(applet).withParameters(parameters).start();
+    assertAppletWasLaunched();
+    assertThat(applet.getParameter("bgcolor")).isEqualTo("blue");
+    assertThat(applet.getParameter("color")).isEqualTo("red");
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfParameterArrayIsNull() {
+    AppletParameter[] parameters = null;
+    AppletLauncher.applet(new MyApplet()).withParameters(parameters);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfParameterInArrayIsNull() {
+    AppletParameter[] parameters = new AppletParameter[2];
+    parameters[0] = AppletParameter.name("bgcolor").value("blue");
+    parameters[1] = null;
+    AppletLauncher.applet(new MyApplet()).withParameters(parameters);
+  }
+
+  @Test(groups = GUI) public void shouldSetParametersInArray() {
+    applet = new MyApplet();
+    viewer = AppletLauncher.applet(applet).withParameters(
+        AppletParameter.name("bgcolor").value("blue"),
+        AppletParameter.name("color").value("red")
+    ).start();
+    assertAppletWasLaunched();
+    assertThat(applet.getParameter("bgcolor")).isEqualTo("blue");
+    assertThat(applet.getParameter("color")).isEqualTo("red");
+  }
+
+  private void assertAppletWasLaunched() {
+    assertThat(viewer.isShowing()).isTrue();
+    assertThat(viewer.applet()).isInstanceOf(MyApplet.class);
   }
 }

@@ -14,6 +14,8 @@
  */
 package org.fest.swing.launcher;
 
+import static javax.swing.SwingUtilities.invokeAndWait;
+import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.util.Strings.*;
 
 import java.applet.Applet;
@@ -155,24 +157,28 @@ public class AppletLauncher {
    * Sets the parameters for the applet to launch, as an alternative to
    * <code>{@link #withParameters(AppletParameter...)}</code>.
    * @param newParameters the parameters for the applet to launch.
+   * @return this launcher.
    * @throws NullPointerException if <code>newParameters</code> is <code>null</code>.
    */
-  public void withParameters(Map<String, String> newParameters) {
+  public AppletLauncher withParameters(Map<String, String> newParameters) {
     if (newParameters == null) throw new NullPointerException("The map of parameters should not be null");
     parameters.clear();
     parameters.putAll(newParameters);
+    return this;
   }
 
   /**
    * Sets the parameters for the applet to launch, as an alternative to <code>{@link #withParameters(Map)}</code>.
    * @param newParameters the parameters for the applet to launch.
+   * @return this launcher.
    * @throws NullPointerException if <code>newParameters</code> is <code>null</code>.
    * @throws NullPointerException if any parameter is <code>null</code>.
    */
-  public void withParameters(AppletParameter... newParameters) {
+  public AppletLauncher withParameters(AppletParameter... newParameters) {
     if (newParameters == null) throw new NullPointerException("The array of parameters should not be null");
     parameters.clear();
     for (AppletParameter parameter : newParameters) add(parameter);
+    return this;
   }
 
   private void add(AppletParameter parameter) {
@@ -187,8 +193,16 @@ public class AppletLauncher {
    * @return the created <code>AppletViewer</code>.
    */
   public AppletViewer start() {
-    AppletViewer viewer = new AppletViewer(applet, parameters);
-    viewer.setVisible(true);
+    final AppletViewer viewer = new AppletViewer(applet, parameters);
+    try {
+      invokeAndWait(new Runnable() {
+        public void run() {
+          viewer.setVisible(true);
+        }
+      });
+    } catch (Exception e) {
+      throw unexpected(e);
+    }
     return viewer;
   }
 }
