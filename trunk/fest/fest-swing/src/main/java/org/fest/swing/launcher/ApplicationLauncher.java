@@ -15,12 +15,12 @@
  */
 package org.fest.swing.launcher;
 
-import org.fest.reflect.exception.ReflectionError;
-
 import static java.util.Arrays.copyOf;
-
 import static org.fest.reflect.core.Reflection.staticMethod;
 import static org.fest.util.Strings.*;
+
+import org.fest.reflect.exception.ReflectionError;
+import org.fest.swing.exception.UnexpectedException;
 
 /**
  * Understands execution of a Java application from a class that has a "main" method.
@@ -32,7 +32,7 @@ import static org.fest.util.Strings.*;
  *
  * // or
  *
- * ApplicationLauncher.application(&quot;org.fest.swing.application.JavaApp&quot;).start();
+ * ApplicationLauncher.{@link #application(String) application}(&quot;org.fest.swing.application.JavaApp&quot;).{@link #start() start}();
  * </pre>
  *
  * </p>
@@ -40,11 +40,11 @@ import static org.fest.util.Strings.*;
  * The following example shows how to start an application with arguments:
  *
  * <pre>
- * ApplicationLauncher.application(JavaApp.class).withArgs(&quot;arg1&quot;, &quot;arg2&quot;).start();
+ * ApplicationLauncher.{@link #application(Class) application}(JavaApp.class).{@link #withArgs(String...) withArgs}(&quot;arg1&quot;, &quot;arg2&quot;).{@link #start() start}();
  *
  * // or
  *
- * ApplicationLauncher.application(&quot;org.fest.swing.application.JavaApp&quot;).withArgs(&quot;arg1&quot;, &quot;arg2&quot;).start();
+ * ApplicationLauncher.{@link #application(String) application}(&quot;org.fest.swing.application.JavaApp&quot;).{@link #withArgs(String...) withArgs}(&quot;arg1&quot;, &quot;arg2&quot;).{@link #start() start}();
  * </pre>
  *
  * </p>
@@ -57,14 +57,14 @@ public class ApplicationLauncher {
    * Starting point of the fluent interface.
    * @param applicationTypeName the fully qualified name of the class containing the "main" method.
    * @return the created <code>ApplicationStarter</code>.
-   * @throws ReflectionError if the class specified in the given name cannot be loaded.
+   * @throws UnexpectedException if the class specified in the given name cannot be loaded.
    */
   public static ApplicationLauncher application(String applicationTypeName) {
     try {
       Class<?> applicationType = ApplicationLauncher.class.getClassLoader().loadClass(applicationTypeName);
       return application(applicationType);
     } catch (ClassNotFoundException e) {
-      throw new ReflectionError(concat("Unable to load class ", quote(applicationTypeName)), e);
+      throw new UnexpectedException(concat("Unable to load class ", quote(applicationTypeName)), e);
     }
   }
 
