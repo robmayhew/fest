@@ -53,7 +53,7 @@ public class AppletViewerGuiTest {
   }
   
   @AfterMethod public void tearDown() {
-    fixture.close();
+    viewer.unloadApplet();
     assertThat(applet.stopped()).isTrue();
     assertThat(applet.destroyed()).isTrue();
     fixture.cleanUp();

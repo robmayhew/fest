@@ -15,7 +15,6 @@
  */
 package org.fest.swing.applet;
 
-import java.applet.Applet;
 import java.awt.event.WindowEvent;
 
 import org.testng.annotations.BeforeMethod;
@@ -35,20 +34,18 @@ import static org.easymock.classextension.EasyMock.*;
 @Test
 public class StopAppletWindowListenerTest {
 
-  private Applet applet;
+  private AppletViewer appletViewer;
   private StopAppletWindowListener listener;
 
   @BeforeMethod public void setUp() {
-    applet = createStrictMock(Applet.class);
-    listener = new StopAppletWindowListener(applet);
+    appletViewer = createStrictMock(AppletViewer.class);
+    listener = new StopAppletWindowListener(appletViewer);
   }
   
   public void shouldStopAndDestroyAppletWhenWindowIsClosing() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {
-        applet.stop();
-        expectLastCall().once();
-        applet.destroy();
+        appletViewer.unloadApplet();
         expectLastCall().once();
       }
 
@@ -59,7 +56,7 @@ public class StopAppletWindowListenerTest {
   }
 
   public void shouldNotDoAnythingWhenWindowOpened() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {}
 
       protected void codeToTest() {
@@ -69,7 +66,7 @@ public class StopAppletWindowListenerTest {
   }
 
   public void shouldNotDoAnythingWhenWindowClosed() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {}
 
       protected void codeToTest() {
@@ -79,7 +76,7 @@ public class StopAppletWindowListenerTest {
   }
 
   public void shouldNotDoAnythingWhenWindowIconified() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {}
 
       protected void codeToTest() {
@@ -89,7 +86,7 @@ public class StopAppletWindowListenerTest {
   }
 
   public void shouldNotDoAnythingWhenWindowDeiconified() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {}
 
       protected void codeToTest() {
@@ -99,7 +96,7 @@ public class StopAppletWindowListenerTest {
   }
 
   public void shouldNotDoAnythingWhenWindowActivated() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {}
 
       protected void codeToTest() {
@@ -109,7 +106,7 @@ public class StopAppletWindowListenerTest {
   }
 
   public void shouldNotDoAnythingWhenWindowDeactivated() {
-    new EasyMockTemplate(applet) {
+    new EasyMockTemplate(appletViewer) {
       protected void expectations() {}
 
       protected void codeToTest() {

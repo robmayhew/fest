@@ -105,7 +105,7 @@ public class AppletViewer extends JFrame implements StatusDisplay {
     setTitle(concat(APPLET_VIEWER_TITLE, applet.getClass().getName()));
     setSize(DEFAULT_SIZE);
     setLayout(new BorderLayout());
-    addWindowListener(new StopAppletWindowListener(applet));
+    addWindowListener(new StopAppletWindowListener(this));
   }
 
   private void addContent() {
@@ -126,8 +126,7 @@ public class AppletViewer extends JFrame implements StatusDisplay {
     applet.start();
   }
   
-  /** Stops and destroys the applet loaded in this viewer. */
-  public void unloadApplet() {
+  void unloadApplet() {
     applet.stop();
     applet.destroy();
   }

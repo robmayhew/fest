@@ -28,14 +28,14 @@ import java.awt.event.WindowListener;
  * @author Yvonne Wang
  */
 class StopAppletWindowListener extends WindowAdapter {
-  private final Applet applet;
 
-  StopAppletWindowListener(Applet applet) {
-    this.applet = applet;
+  private final AppletViewer owner;
+
+  StopAppletWindowListener(AppletViewer owner) {
+    this.owner = owner;
   }
 
   @Override public void windowClosing(WindowEvent e) {
-    applet.stop();
-    applet.destroy();
+    owner.unloadApplet();
   }
 }
