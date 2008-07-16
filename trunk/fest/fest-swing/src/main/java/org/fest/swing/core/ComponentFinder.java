@@ -121,7 +121,7 @@ public interface ComponentFinder {
   <T extends Component> T findByName(String name, Class<T> type);
 
   /**
-   * Finds a <strong>showing</code> <code>{@link Component}</code> by name and type.
+   * Finds a <code>{@link Component}</code> by name and type.
    * @param <T> the parameterized type of the component to find.
    * @param name the name of the component to find.
    * @param type the type of the component to find.
@@ -171,7 +171,7 @@ public interface ComponentFinder {
   Component findByName(String name);
 
   /**
-   * Finds a <strong>showing</strong> <code>{@link Component}</code> by name.
+   * Finds a <code>{@link Component}</code> by name.
    * @param name the name of the component to find.
    * @param showing indicates whether the component to find should be visible (or showing) or not.
    * @return the found component.
@@ -214,8 +214,7 @@ public interface ComponentFinder {
   <T extends Component> T findByName(Container root, String name, Class<T> type);
 
   /**
-   * Finds a <strong>showing</strong> <code>{@link Component}</code> by name and type in the hierarchy under the given 
-   * root.
+   * Finds a <code>{@link Component}</code> by name and type in the hierarchy under the given root.
    * @param <T> the parameterized type of the component to find.
    * @param root the root used as the starting point of the search.
    * @param name the name of the component to find.
@@ -241,7 +240,7 @@ public interface ComponentFinder {
   Component findByName(Container root, String name);
 
   /**
-   * Finds a <strong>showing</strong> <code>{@link Component}</code> by name in the hierarchy under the given root.
+   * Finds a <code>{@link Component}</code> by name in the hierarchy under the given root.
    * @param root the root used as the starting point of the search.
    * @param name the name of the component to find.
    * @param showing indicates whether the component to find should be visible (or showing) or not.
