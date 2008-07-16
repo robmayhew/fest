@@ -36,7 +36,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class AppletViewer extends JFrame implements StatusDisplay {
+public class BasicAppletViewer extends JFrame implements StatusDisplay {
 
   private static final long serialVersionUID = 1L;
 
@@ -51,35 +51,35 @@ public class AppletViewer extends JFrame implements StatusDisplay {
   private AppletStub stub;
 
   /**
-   * Creates a new </code>{@link AppletViewer}</code>. This constructor creates new instances of
+   * Creates a new </code>{@link BasicAppletViewer}</code>. This constructor creates new instances of
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>.
    * @param applet the applet to view.
    * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    */
-  public AppletViewer(Applet applet) {
+  public BasicAppletViewer(Applet applet) {
     load(applet, new BasicAppletStub(this, new BasicAppletContext(this)));
   }
 
   /**
-   * Creates a new </code>{@link AppletViewer}</code>. This constructor creates new instances of
+   * Creates a new </code>{@link BasicAppletViewer}</code>. This constructor creates new instances of
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>.
    * @param applet the applet to view.
    * @param parameters the parameters included in an applet HTML tag.
    * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    * @throws NullPointerException if <code>parameters</code> is <code>null</code>.
    */
-  public AppletViewer(Applet applet, Map<String, String> parameters) {
+  public BasicAppletViewer(Applet applet, Map<String, String> parameters) {
     load(applet, new BasicAppletStub(this, new BasicAppletContext(this), parameters));
   }
 
   /**
-   * Creates a new </code>{@link AppletViewer}</code>.
+   * Creates a new </code>{@link BasicAppletViewer}</code>.
    * @param applet the applet to view.
    * @param stub the applet's stub.
    * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    * @throws NullPointerException if <code>stub</code> is <code>null</code>.
    */
-  public AppletViewer(Applet applet, AppletStub stub) {
+  public BasicAppletViewer(Applet applet, AppletStub stub) {
     load(applet, stub);
   }
 
@@ -124,6 +124,12 @@ public class AppletViewer extends JFrame implements StatusDisplay {
   private void loadApplet() {
     applet.init();
     applet.start();
+  }
+  
+  /** Stops and destroys the applet loaded in this viewer. */
+  public void unloadApplet() {
+    applet.stop();
+    applet.destroy();
   }
 
   /**

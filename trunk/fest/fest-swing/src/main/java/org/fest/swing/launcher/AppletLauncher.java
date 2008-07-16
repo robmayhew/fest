@@ -23,7 +23,7 @@ import java.applet.AppletStub;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.applet.BasicAppletViewer;
 import org.fest.swing.applet.BasicAppletContext;
 import org.fest.swing.applet.BasicAppletStub;
 import org.fest.swing.exception.UnexpectedException;
@@ -36,16 +36,16 @@ import org.fest.swing.launcher.AppletParameter.AppletParameterBuilder;
  * applet to launch:
  *
  * <pre>
- * {@link AppletViewer AppletViewer} viewer = AppletLauncher.{@link #applet(String) applet}(&quot;org.fest.swing.applet.MyApplet&quot;).{@link #start() start}();
+ * {@link BasicAppletViewer BasicAppletViewer} viewer = AppletLauncher.{@link #applet(String) applet}(&quot;org.fest.swing.applet.MyApplet&quot;).{@link #start() start}();
  *
  * // or
  *
  *
- * {@link AppletViewer AppletViewer} viewer = AppletLauncher.{@link #applet(Class) applet}(MyApplet.class).{@link #start() start}();
+ * {@link BasicAppletViewer BasicAppletViewer} viewer = AppletLauncher.{@link #applet(Class) applet}(MyApplet.class).{@link #start() start}();
  *
  * // or
  *
- * {@link AppletViewer AppletViewer} viewer = AppletLauncher.{@link #applet(Applet) applet}(new MyApplet()).{@link #start() start}();
+ * {@link BasicAppletViewer BasicAppletViewer} viewer = AppletLauncher.{@link #applet(Applet) applet}(new MyApplet()).{@link #start() start}();
  * </pre>
  *
  * </p>
@@ -55,7 +55,7 @@ import org.fest.swing.launcher.AppletParameter.AppletParameterBuilder;
  * target="_blank">HTML "param" tag</a>:
  *
  * <pre>
- * {@link AppletViewer AppletViewer} viewer = AppletLauncher.{@link #applet(Applet) applet}(new MyApplet())
+ * {@link BasicAppletViewer BasicAppletViewer} viewer = AppletLauncher.{@link #applet(Applet) applet}(new MyApplet())
  *                                     .{@link #withParameters(Map) withParameters}(
  *                                         {@link AppletParameter#name(String) name}(&quot;bgcolor&quot;).{@link AppletParameterBuilder#value(String) value}(&quot;blue&quot;),
  *                                         {@link AppletParameter#name(String) name}(&quot;color&quot;).{@link AppletParameterBuilder#value(String) value}(&quot;red&quot;),
@@ -70,7 +70,7 @@ import org.fest.swing.launcher.AppletParameter.AppletParameterBuilder;
  * parameters.put(&quot;color&quot;, &quot;red&quot;);
  * parameters.put(&quot;pause&quot;, &quot;200&quot;);
  *
- * {@link AppletViewer AppletViewer} viewer = AppletLauncher.{@link #applet(Applet) applet}(new MyApplet()).{@link #withParameters(Map) withParameters}(parameters).{@link #start() start}();
+ * {@link BasicAppletViewer BasicAppletViewer} viewer = AppletLauncher.{@link #applet(Applet) applet}(new MyApplet()).{@link #withParameters(Map) withParameters}(parameters).{@link #start() start}();
  *
  *
  * </pre>
@@ -187,13 +187,13 @@ public class AppletLauncher {
   }
 
   /**
-   * Launches the applet in a <code>{@link AppletViewer}</code> (using implementations of
+   * Launches the applet in a <code>{@link BasicAppletViewer}</code> (using implementations of
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>. To provide your own
-   * <code>{@link AppletStub}</code> create a new <code>{@link AppletViewer}</code> directly.
-   * @return the created <code>AppletViewer</code>.
+   * <code>{@link AppletStub}</code> create a new <code>{@link BasicAppletViewer}</code> directly.
+   * @return the created <code>BasicAppletViewer</code>.
    */
-  public AppletViewer start() {
-    final AppletViewer viewer = new AppletViewer(applet, parameters);
+  public BasicAppletViewer start() {
+    final BasicAppletViewer viewer = new BasicAppletViewer(applet, parameters);
     try {
       invokeAndWait(new Runnable() {
         public void run() {

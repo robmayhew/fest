@@ -22,26 +22,26 @@ import org.fest.swing.testing.MyApplet;
 import org.testng.annotations.Test;
 
 /**
- * Tests for <code>{@link AppletViewer}</code>.
+ * Tests for <code>{@link BasicAppletViewer}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test public class AppletViewerTest {
+@Test public class BasicAppletViewerTest {
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfAppletIsNull() {
-    new AppletViewer(null);
+    new BasicAppletViewer(null);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfAppletStubIsNull() {
-    new AppletViewer(new MyApplet(), (AppletStub)null);
+    new BasicAppletViewer(new MyApplet(), (AppletStub)null);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterMapIsNull() {
     Map<String, String> parameters = null;
-    new AppletViewer(new MyApplet(), parameters);
+    new BasicAppletViewer(new MyApplet(), parameters);
   }
 }

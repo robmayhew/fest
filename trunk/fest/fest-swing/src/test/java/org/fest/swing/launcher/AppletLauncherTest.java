@@ -25,7 +25,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 
-import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.applet.BasicAppletViewer;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.MyApplet;
 import org.testng.annotations.AfterMethod;
@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 @Test public class AppletLauncherTest {
 
   private MyApplet applet;
-  private AppletViewer viewer;
+  private BasicAppletViewer viewer;
 
   @AfterMethod public void tearDown() {
     disposeViewer();
