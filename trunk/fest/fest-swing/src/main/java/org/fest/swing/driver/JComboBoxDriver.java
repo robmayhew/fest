@@ -169,9 +169,10 @@ public class JComboBoxDriver extends JComponentDriver {
       robot.invokeAndWait(new Runnable() {
         public void run() {
           comboBox.setSelectedIndex(validatedIndex);
-          if (isDropDownVisible(comboBox)) dropDownVisibleThroughUIDelegate(comboBox, false);
         }
       });
+    } finally {
+      hideDropDownListIfVisible(comboBox);
     }
   }
 
@@ -190,6 +191,14 @@ public class JComboBoxDriver extends JComponentDriver {
     // Location of pop-up button activator is LAF-dependent
     robot.invokeAndWait(new Runnable() {
       public void run() { dropDownVisibleThroughUIDelegate(comboBox, true); }
+    });
+  }
+
+  private void hideDropDownListIfVisible(final JComboBox comboBox) {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        if (isDropDownVisible(comboBox)) dropDownVisibleThroughUIDelegate(comboBox, false);
+      }
     });
   }
 

@@ -21,6 +21,9 @@
       <action dev="alruiz, wanghy" type="remove" issue="165" due-to="Simeon Fitch">
         Removed method 'click(JMenuItem, MouseButton)' in org.fest.swing.fixture.JMenuItemFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="173" due-to="fred76131">
+        Methods 'selectItem' ensure the drop-down list in a  JComboBox is hidden after a selection has been made.
+      </action>
       <action dev="alruiz" type="remove">
         Removed all methods related to keyboard input simulation from JListItemFixture and JTableCellFixture.
       </action>
