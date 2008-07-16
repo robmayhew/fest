@@ -31,21 +31,21 @@ import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
 /**
- * Tests for <code>{@link BasicAppletViewer}</code>.
+ * Tests for <code>{@link AppletViewer}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = GUI)
-public class BasicAppletViewerGuiTest {
+public class AppletViewerGuiTest {
 
   private MyApplet applet;
   private FrameFixture fixture;
-  private BasicAppletViewer viewer;
+  private AppletViewer viewer;
 
   @BeforeMethod public void setUp() {
     applet = new MyApplet();
-    viewer = new BasicAppletViewer(applet);
+    viewer = new AppletViewer(applet);
     fixture = new FrameFixture(viewer);
     fixture.show();
     assertThat(applet.initialized()).isTrue();
@@ -62,7 +62,7 @@ public class BasicAppletViewerGuiTest {
   public void shouldLoadApplet() {
     assertThat(applet.isShowing()).isTrue();
     assertThat(viewer.getTitle()).isEqualTo(concat("Applet Viewer: ", MyApplet.class.getName()));
-    Container ancestor = getAncestorOfClass(BasicAppletViewer.class, applet);
+    Container ancestor = getAncestorOfClass(AppletViewer.class, applet);
     assertThat(ancestor).isSameAs(viewer);
     fixture.label("status").requireText("Applet loaded");
     assertThat(viewer.applet()).isSameAs(applet);
