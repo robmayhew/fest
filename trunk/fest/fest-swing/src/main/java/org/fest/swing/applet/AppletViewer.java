@@ -15,11 +15,6 @@
  */
 package org.fest.swing.applet;
 
-import static java.awt.BorderLayout.*;
-import static javax.swing.BorderFactory.*;
-import static javax.swing.border.BevelBorder.LOWERED;
-import static org.fest.util.Strings.concat;
-
 import java.applet.Applet;
 import java.applet.AppletStub;
 import java.awt.BorderLayout;
@@ -28,6 +23,12 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import static java.awt.BorderLayout.*;
+import static javax.swing.BorderFactory.*;
+import static javax.swing.border.BevelBorder.LOWERED;
+
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a window that displays an <code>{@link Applet}</code>.
@@ -90,12 +91,12 @@ public class AppletViewer extends JFrame implements StatusDisplay {
     setUpApplet();
   }
 
-  private Applet validated(Applet applet) {
+  private static Applet validated(Applet applet) {
     if (applet == null) throw new NullPointerException("The applet to load should not be null");
     return applet;
   }
 
-  private AppletStub validated(AppletStub stub) {
+  private static AppletStub validated(AppletStub stub) {
     if (stub == null) throw new NullPointerException("The AppletStub should not be null");
     return stub;
   }
@@ -116,11 +117,11 @@ public class AppletViewer extends JFrame implements StatusDisplay {
 
   private void setUpApplet() {
     applet.setStub(stub);
-    start(applet);
+    loadApplet();
     showStatus(APPLET_LOADED_MESSAGE);
   }
 
-  private void start(Applet applet) {
+  private void loadApplet() {
     applet.init();
     applet.start();
   }

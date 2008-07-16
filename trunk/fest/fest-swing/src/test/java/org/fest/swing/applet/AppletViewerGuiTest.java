@@ -65,5 +65,7 @@ public class AppletViewerGuiTest {
     Container ancestor = getAncestorOfClass(AppletViewer.class, applet);
     assertThat(ancestor).isSameAs(viewer);
     fixture.label("status").requireText("Applet loaded");
+    assertThat(viewer.applet()).isSameAs(applet);
+    assertThat(viewer.stub()).isInstanceOf(BasicAppletStub.class);
   }
 }
