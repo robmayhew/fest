@@ -46,31 +46,27 @@ public class MyApplet extends JApplet {
     add(button);
   }
   
-  @Override public void init() {
+  @Override public void init() { 
     initialized = true;
-    super.init();
   }
-
-  @Override public void destroy() {
-    destroyed = true;
-    super.destroy();
-  }
-
+  
   @Override public void start() {
     started = true;
-    super.start();
   }
 
   @Override public void stop() {
     stopped = true;
-    super.stop();
+  }
+  
+  @Override public void destroy() {
+    destroyed = true;
   }
 
   public boolean initialized() { return initialized; }
+  
+  public boolean started() { return started; }
+  
+  public boolean stopped() { return stopped; }
 
   public boolean destroyed() { return destroyed; }
-
-  public boolean started() { return started; }
-
-  public boolean stopped() { return stopped; }
 }
