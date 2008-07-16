@@ -61,11 +61,18 @@ public class AppletViewerGuiTest {
   
   public void shouldLoadApplet() {
     assertThat(applet.isShowing()).isTrue();
+    assertThat(viewer.appletLoaded()).isTrue();
     assertThat(viewer.getTitle()).isEqualTo(concat("Applet Viewer: ", MyApplet.class.getName()));
     Container ancestor = getAncestorOfClass(AppletViewer.class, applet);
     assertThat(ancestor).isSameAs(viewer);
     fixture.label("status").requireText("Applet loaded");
     assertThat(viewer.applet()).isSameAs(applet);
     assertThat(viewer.stub()).isInstanceOf(BasicAppletStub.class);
+  }
+  
+  public void shouldReloadApplet() {
+    viewer.reloadApplet();
+    assertThat(applet.isShowing()).isTrue();
+    assertThat(viewer.appletLoaded()).isTrue();
   }
 }

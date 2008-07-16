@@ -32,6 +32,18 @@ import static org.fest.util.Strings.concat;
 
 /**
  * Understands a window that displays an <code>{@link Applet}</code>.
+ * <p>
+ * Typical usage:
+ * <pre>
+ * AppletViewer viewer = new AppletViewer(new MyApplet());
+ * 
+ * // test the applet, viewer can be wrapped with a FrameFixture.
+ * FrameFixture viewerFixture = new FrameFixture(viewer);
+ * 
+ * viewer.unloadApplet() // stops and destroys the applet
+ * viewerFixture.cleanUp();
+ * </pre>
+ * </p>
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -47,8 +59,8 @@ public class AppletViewer extends JFrame implements StatusDisplay {
   private final JLabel statusLabel = new JLabel();
 
   private Applet applet;
-
   private AppletStub stub;
+  private boolean loaded;
 
   /**
    * Creates a new </code>{@link AppletViewer}</code>. This constructor creates new instances of
@@ -105,7 +117,6 @@ public class AppletViewer extends JFrame implements StatusDisplay {
     setTitle(concat(APPLET_VIEWER_TITLE, applet.getClass().getName()));
     setSize(DEFAULT_SIZE);
     setLayout(new BorderLayout());
-    addWindowListener(new StopAppletWindowListener(this));
   }
 
   private void addContent() {
@@ -117,20 +128,37 @@ public class AppletViewer extends JFrame implements StatusDisplay {
 
   private void setUpApplet() {
     applet.setStub(stub);
-    loadApplet();
+    reloadApplet();
     showStatus(APPLET_LOADED_MESSAGE);
   }
 
-  private void loadApplet() {
+  /**
+   * Initializes and starts the applet in this viewer.
+   */
+  public void reloadApplet() {
+    if (loaded) unloadApplet();
     applet.init();
     applet.start();
-  }
-  
-  void unloadApplet() {
-    applet.stop();
-    applet.destroy();
+    loaded = true;
   }
 
+  /**
+   * Stops and destroys the applet loaded in this viewer. This method should be called before closing or disposing this
+   * viewer.
+   */
+  public void unloadApplet() {
+    if (!loaded) return;
+    applet.stop();
+    applet.destroy();
+    loaded = false;
+  }
+  
+  /**
+   * Indicates whether the applet in this viewer is loaded or not.
+   * @return <code>true</code> if this applet is loaded, <code>false</code> otherwise.
+   */
+  public boolean appletLoaded() { return loaded; }
+  
   /**
    * Displays the given status message.
    * @param status the status to display.

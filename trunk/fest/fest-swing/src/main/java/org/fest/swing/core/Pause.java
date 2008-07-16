@@ -36,7 +36,7 @@ public final class Pause {
   /**
    * Waits until the given condition is <code>true</code>.
    * @param condition the condition to verify.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out (more 30 seconds).
+   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out (more than 30 seconds).
    */
   public static void pause(Condition condition) {
     pause(condition, DEFAULT_DELAY);
