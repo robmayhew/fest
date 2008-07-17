@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -96,7 +96,7 @@ public class ScrollJTreeElementTest {
     return node.getUserObject();
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTree dragTree = new TestTree("drag");

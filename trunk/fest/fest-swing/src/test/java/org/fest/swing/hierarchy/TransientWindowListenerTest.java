@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
@@ -44,12 +44,12 @@ public class TransientWindowListenerTest {
   private TransientWindowListener listener;
   private WindowFilter mockWindowFilter;
   private TestDialog eventSource;
-  private TestFrame dialogParent;
+  private TestWindow dialogParent;
 
   @BeforeMethod public void setUp() {
     mockWindowFilter = createMock(MockWindowFilter.class);
     listener = new TransientWindowListener(mockWindowFilter);
-    dialogParent = new TestFrame(getClass());
+    dialogParent = new TestWindow(getClass());
     eventSource = new TestDialog(dialogParent);
   }
 

@@ -24,12 +24,12 @@ import javax.swing.JButton;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.testing.TestFrame.showInTest;
+import static org.fest.swing.testing.TestWindow.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
@@ -71,7 +71,7 @@ public class ScreenshotTakerTest {
   }
 
   @Test public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
-    TestFrame frame = showInTest(getClass());
+    TestWindow frame = showInTest(getClass());
     pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame, imagePath);
@@ -80,7 +80,7 @@ public class ScreenshotTakerTest {
   }
 
   @Test(groups = GUI) public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
-    class CustomFrame extends TestFrame {
+    class CustomFrame extends TestWindow {
       private static final long serialVersionUID = 1L;
       
       final JButton button = new JButton("Hello");

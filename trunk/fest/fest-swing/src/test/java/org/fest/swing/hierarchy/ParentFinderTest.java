@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
@@ -40,7 +40,7 @@ public class ParentFinderTest {
   }
 
   @Test public void shouldReturnParentOfComponent() {
-    TestFrame frame = new TestFrame(getClass());
+    TestWindow frame = new TestWindow(getClass());
     JTextField textField = new JTextField();
     frame.add(textField);
     assertThat(finder.parentOf(textField)).isSameAs(frame.getContentPane());

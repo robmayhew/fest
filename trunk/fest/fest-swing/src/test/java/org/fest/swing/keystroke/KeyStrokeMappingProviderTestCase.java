@@ -28,7 +28,7 @@ import org.testng.annotations.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.testing.KeyRecorder;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -119,7 +119,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
     public void remove() {}
   }
   
-  static class MyFrame extends TestFrame {
+  static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextArea textArea = new JTextArea(3, 8);

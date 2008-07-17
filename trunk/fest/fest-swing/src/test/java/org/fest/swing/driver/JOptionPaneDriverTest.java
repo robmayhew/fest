@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.JOptionPane.*;
 
@@ -242,7 +242,7 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  public static class MyFrame extends TestFrame {
+  public static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private final Robot robot;

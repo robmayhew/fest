@@ -30,7 +30,7 @@ import java.util.List;
 import org.easymock.classextension.EasyMock;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -53,14 +53,14 @@ public class WindowMonitorTest {
   private Windows windows;
   private Context context;
   private WindowStatus windowStatus;
-  private TestFrame frame;
+  private TestWindow frame;
 
   @BeforeMethod public void setUp() {
     toolkit = ToolkitStub.createNew();
     windows = createMock(Windows.class);
     context = createMock(Context.class);
     windowStatus = createMock(WindowStatus.class);
-    frame = new TestFrame(WindowMonitorTest.class);
+    frame = new TestWindow(WindowMonitorTest.class);
     createWindowMonitor();
   }
 

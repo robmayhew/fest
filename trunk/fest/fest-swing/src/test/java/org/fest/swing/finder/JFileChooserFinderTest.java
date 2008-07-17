@@ -31,7 +31,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JFileChooserFixture;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -105,7 +105,7 @@ public class JFileChooserFinderTest {
     assertThat(found.target).isSameAs(frame.fileChooser);    
   }
   
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton browseButton = new JButton("Browse");

@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
@@ -122,7 +122,7 @@ public class ComponentDriverGuiTest {
     PRESSED, RELEASED
   }
   
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textField = new JTextField(20);

@@ -26,7 +26,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 /**
  * Understands a <code>{@link JFrame}</code> that simulates a login window.
@@ -34,7 +34,7 @@ import org.fest.swing.testing.TestFrame;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class LauncherWindow extends TestFrame {
+public class LauncherWindow extends TestWindow {
 
   private static final long serialVersionUID = 1L;
 

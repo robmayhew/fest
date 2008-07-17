@@ -25,7 +25,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Arrays.array;
@@ -66,7 +66,7 @@ public class FormattingTest {
   }
 
   @Test public void shouldFormatFrame() {
-    TestFrame frame = TestFrame.showInTest(getClass());
+    TestWindow frame = TestWindow.showInTest(getClass());
     frame.setName("frame");
     String formatted = formatted(frame);
     String expected = "[name='frame', title='FormattingTest', enabled=true, visible=true, showing=true]";

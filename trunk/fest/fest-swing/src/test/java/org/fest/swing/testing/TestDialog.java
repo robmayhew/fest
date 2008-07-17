@@ -15,10 +15,7 @@
  */
 package org.fest.swing.testing;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
+import java.awt.*;
 
 import javax.swing.JDialog;
 import javax.swing.UIManager;
@@ -55,6 +52,8 @@ public class TestDialog extends JDialog {
   }
   
   public void display(final Dimension size) {
+    Window owner = getOwner();
+    if (owner instanceof TestWindow && !owner.isShowing()) ((TestWindow)owner).display();
     try {
       invokeAndWait(new Runnable() {
         public void run() {

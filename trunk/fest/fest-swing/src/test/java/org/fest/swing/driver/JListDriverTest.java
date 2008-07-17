@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestList;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
@@ -390,7 +390,7 @@ public class JListDriverTest {
     driver.cellReader(null);
   }
   
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
     private static final Dimension LIST_SIZE = new Dimension(80, 40);
 

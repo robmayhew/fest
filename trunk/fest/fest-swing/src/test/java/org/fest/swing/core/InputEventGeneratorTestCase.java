@@ -28,7 +28,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.util.AWT;
 
 import static java.awt.event.KeyEvent.*;
@@ -132,7 +132,7 @@ public abstract class InputEventGeneratorTestCase {
     Point point() { return point; }
   }
   
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textBox = new JTextField(20);

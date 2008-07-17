@@ -129,7 +129,7 @@ public class TableDialogEditDemo extends JPanel {
    */
   static void createAndShowGUI() {
     // Create and set up the window.
-    TestFrame frame = new TestFrame(TableDialogEditDemo.class);
+    TestWindow frame = new TestWindow(TableDialogEditDemo.class);
     frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     // Create and set up the content pane.

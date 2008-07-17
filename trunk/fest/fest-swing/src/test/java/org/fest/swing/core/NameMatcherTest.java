@@ -20,7 +20,7 @@ import javax.swing.JButton;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -65,7 +65,7 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnTrueIfNameMatchingAndIsShowing() {
-    TestFrame frame = new TestFrame(NameMatcherTest.class);
+    TestWindow frame = new TestWindow(NameMatcherTest.class);
     frame.add(button);
     frame.display();
     matcher = new NameMatcher(NAME, true);
@@ -75,7 +75,7 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
-    TestFrame frame = new TestFrame(NameMatcherTest.class);
+    TestWindow frame = new TestWindow(NameMatcherTest.class);
     frame.add(button);
     frame.display();
     matcher = new NameMatcher("b", true);

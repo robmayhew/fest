@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,7 +38,7 @@ public class WindowEventQueueMappingTest {
 
   private EventQueue eventQueue;
   private ToolkitStub toolkit;
-  private TestFrame frame;
+  private TestWindow frame;
   private WindowEventQueueMapping mapping;
   private Map<EventQueue, Map<Window, Boolean>> queueMap;
 
@@ -99,7 +99,7 @@ public class WindowEventQueueMappingTest {
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
   public void shouldReturnWindows() {
-    TestFrame anotherFrame = testFrame(toolkit);
+    TestWindow anotherFrame = testFrame(toolkit);
     mapping.addQueueFor(frame);
     mapping.addQueueFor(anotherFrame);
     Collection<Window> windows = mapping.windows();
@@ -110,15 +110,15 @@ public class WindowEventQueueMappingTest {
   public void shouldReturnEventQueues() {
     EventQueue anotherEventQueue = new EventQueue();
     ToolkitStub anotherToolkit = ToolkitStub.createNew(anotherEventQueue);
-    TestFrame anotherFrame = testFrame(anotherToolkit);
+    TestWindow anotherFrame = testFrame(anotherToolkit);
     mapping.addQueueFor(frame);
     mapping.addQueueFor(anotherFrame);
     Collection<EventQueue> eventQueues = mapping.eventQueues();
     assertThat(eventQueues).containsOnly(eventQueue, anotherEventQueue);
   }
 
-  private TestFrame testFrame(final Toolkit toolkit) {
-    return new TestFrame(WindowEventQueueMappingTest.class) {
+  private TestWindow testFrame(final Toolkit toolkit) {
+    return new TestWindow(WindowEventQueueMappingTest.class) {
       private static final long serialVersionUID = 1L;
 
       @Override public Toolkit getToolkit() {

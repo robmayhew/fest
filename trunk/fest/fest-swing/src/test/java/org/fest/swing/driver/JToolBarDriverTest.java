@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.BorderLayout.*;
 import static javax.swing.SwingUtilities.getWindowAncestor;
@@ -136,7 +136,7 @@ public class JToolBarDriverTest {
     return frame.toolBar;
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final BorderLayout borderLayout = new BorderLayout();

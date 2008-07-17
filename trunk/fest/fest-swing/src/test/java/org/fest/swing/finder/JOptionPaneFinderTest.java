@@ -31,7 +31,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -100,7 +100,7 @@ public class JOptionPaneFinderTest {
     JFileChooserFinder.findFileChooser().using(robot);
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton messageButton = new JButton("Message");

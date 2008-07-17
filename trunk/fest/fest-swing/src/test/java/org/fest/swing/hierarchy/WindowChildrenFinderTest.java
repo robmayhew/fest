@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -56,7 +56,7 @@ public class WindowChildrenFinderTest {
   }
   
   @Test public void shouldReturnOwnedWindowsIfComponentIsWindow() {
-    TestFrame frame = TestFrame.showInTest(getClass());
+    TestWindow frame = TestWindow.showInTest(getClass());
     TestDialog dialog = TestDialog.showInTest(frame);
     dialog.display();
     Collection<Component> children = finder.nonExplicitChildrenOf(frame);

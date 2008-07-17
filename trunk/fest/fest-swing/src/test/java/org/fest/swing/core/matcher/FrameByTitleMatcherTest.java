@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -47,11 +47,11 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
     Class<FrameByTitleMatcher> testType = FrameByTitleMatcher.class;
-    TestFrame frame = new TestFrame(testType);
+    TestWindow frame = new TestWindow(testType);
     try {
       frame.display();
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getName());
-      assertThat(matcher.matches(frame)).isFalse();
+      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getSimpleName());
+      assertThat(matcher.matches(frame)).isTrue();
     } finally {
       frame.destroy();
     }
@@ -66,7 +66,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    TestFrame frame = new TestFrame(FrameByTitleMatcher.class);
+    TestWindow frame = new TestWindow(FrameByTitleMatcher.class);
     try {
       frame.display();
       FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");

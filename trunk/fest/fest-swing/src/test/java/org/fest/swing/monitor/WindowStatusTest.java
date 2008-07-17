@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -41,11 +41,11 @@ public class WindowStatusTest {
 
   private WindowStatus status;
 
-  private TestFrame frame;
+  private TestWindow frame;
   private Windows windows;
   
   @BeforeMethod public void setUp() throws Exception {
-    frame = new TestFrame(getClass());
+    frame = new TestWindow(getClass());
     windows = createMock(Windows.class);
     status = new WindowStatus(windows);
   }

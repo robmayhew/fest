@@ -23,7 +23,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
@@ -38,7 +38,7 @@ import static org.fest.swing.util.ReflectionUtils.mapField;
 public class WindowsTest {
 
   private Windows windows;
-  private TestFrame frame;
+  private TestWindow frame;
   
   private Map<Window, TimerTask> pending;
   private Map<Window, Boolean> open;
@@ -46,7 +46,7 @@ public class WindowsTest {
   private Map<Window, Boolean> hidden;
   
   @BeforeMethod public void setUp() {
-    frame = new TestFrame(getClass());
+    frame = new TestWindow(getClass());
     windows = new Windows();
     pending = mapField("pending", windows);
     open = mapField("open", windows);

@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -47,11 +47,11 @@ public class WindowAvailabilityMonitorTest {
 
   private ToolkitStub toolkit;
   private Windows windows;
-  private TestFrame frame;
+  private TestWindow frame;
 
   @BeforeMethod public void setUp() throws Exception {
     toolkit = ToolkitStub.createNew();
-    frame = new TestFrame(getClass());
+    frame = new TestWindow(getClass());
     windows = createMock(Windows.class);
     monitor = new WindowAvailabilityMonitor(windows);
   }

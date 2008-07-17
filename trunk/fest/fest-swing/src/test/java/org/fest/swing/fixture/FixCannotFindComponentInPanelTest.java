@@ -25,7 +25,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=20&can=2&q=" target="_blank">issue 20</a>.
@@ -34,7 +34,7 @@ import org.fest.swing.testing.TestFrame;
  */
 public class FixCannotFindComponentInPanelTest {
 
-  class MyFrame extends TestFrame {
+  class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private final JPanel panel = new JPanel();

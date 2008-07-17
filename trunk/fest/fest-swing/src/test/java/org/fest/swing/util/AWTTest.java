@@ -22,10 +22,10 @@ import javax.swing.JTextField;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestFrame.showInTest;
+import static org.fest.swing.testing.TestWindow.showInTest;
 
 /**
  * Tests for <code>{@link AWT}</code>.
@@ -47,7 +47,7 @@ public class AWTTest {
   }
   
   @Test public void shouldReturnInsetsFromContainer() {
-    TestFrame frame = showInTest(getClass());
+    TestWindow frame = showInTest(getClass());
     Insets insets = AWT.insetsFrom(frame);
     assertThat(insets).isEqualTo(frame.getInsets());
     frame.destroy();
@@ -59,7 +59,7 @@ public class AWTTest {
   }
 
   @Test public void shouldReturnEmptyInsetsIfContainerInsetsIsNull() {
-    TestFrame frame = new TestFrame(getClass()) {
+    TestWindow frame = new TestWindow(getClass()) {
       private static final long serialVersionUID = 1L;
       @Override public Insets getInsets() {
         return null;

@@ -26,7 +26,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -59,7 +59,7 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldFilterOwnedWindows() {
-    TestFrame frame = new TestFrame(getClass());
+    TestWindow frame = new TestWindow(getClass());
     TestDialog dialog = new TestDialog(frame);
     implictlyIgnored.put(frame, true);
     implictlyIgnored.put(dialog, true);
@@ -103,14 +103,14 @@ public class WindowFilterTest {
   
   @Test public void shouldReturnTrueIfWindowParentIsFiltered() {
     Component c = new JButton();
-    TestFrame frame = new TestFrame(getClass());
+    TestWindow frame = new TestWindow(getClass());
     frame.add(c);
     ignored.put(frame, true);
     assertThat(filter.isIgnored(c)).isTrue();
   }
   
   @Test public void shouldReturnTrueIfParentOfWindowIsFiltered() {
-    TestFrame frame = new TestFrame(getClass());
+    TestWindow frame = new TestWindow(getClass());
     TestDialog dialog = new TestDialog(frame);
     ignored.put(frame, true);
     assertThat(filter.isIgnored(dialog)).isTrue();

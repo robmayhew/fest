@@ -22,7 +22,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
 import static javax.swing.BoxLayout.Y_AXIS;
@@ -36,7 +36,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-class FrameWithAllSupportedComponents extends TestFrame {
+class FrameWithAllSupportedComponents extends TestWindow {
 
   private static final long serialVersionUID = 1L;
 

@@ -29,17 +29,17 @@ import static javax.swing.SwingUtilities.*;
  *
  * @author Alex Ruiz
  */
-public class TestFrame extends JFrame {
+public class TestWindow extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestFrame showInTest(Class<?> testClass) {
-    TestFrame f = new TestFrame(testClass);
+  public static TestWindow showInTest(Class<?> testClass) {
+    TestWindow f = new TestWindow(testClass);
     f.display();
     return f;
   }
   
-  public TestFrame(Class<?> testClass) {
+  public TestWindow(Class<?> testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
     chooseLookAndFeel();

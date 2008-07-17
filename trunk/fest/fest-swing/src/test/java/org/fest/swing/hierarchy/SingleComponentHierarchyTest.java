@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.*;
 
@@ -146,7 +146,7 @@ public class SingleComponentHierarchyTest {
     }.run();
   }
 
-  private static class CustomFrame extends TestFrame {
+  private static class CustomFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textField = new JTextField();

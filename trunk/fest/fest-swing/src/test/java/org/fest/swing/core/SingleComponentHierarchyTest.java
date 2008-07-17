@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.hierarchy.ComponentHierarchy;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -44,12 +44,12 @@ import static org.fest.assertions.Assertions.assertThat;
 public class SingleComponentHierarchyTest {
 
   private ComponentHierarchy delegate;
-  private TestFrame root;
+  private TestWindow root;
   private SingleComponentHierarchy hierarchy;
   
   @BeforeMethod public void setUp() {
     delegate = createMock(ComponentHierarchy.class);
-    root = new TestFrame(SingleComponentHierarchyTest.class);
+    root = new TestWindow(SingleComponentHierarchyTest.class);
     hierarchy = new SingleComponentHierarchy(root, delegate);
   }
   

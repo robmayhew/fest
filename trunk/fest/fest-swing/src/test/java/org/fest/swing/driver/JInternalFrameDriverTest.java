@@ -32,7 +32,7 @@ import org.fest.swing.driver.JInternalFrameDriver.SetPropertyTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -220,7 +220,7 @@ public class JInternalFrameDriverTest {
     assertThat(internalFrame.getHeight()).isEqualTo(newHeight);
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private final JDesktopPane desktopPane;

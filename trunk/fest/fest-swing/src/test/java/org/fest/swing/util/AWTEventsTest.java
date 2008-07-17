@@ -25,7 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.event.ComponentEvent.*;
 import static java.awt.event.WindowEvent.*;
@@ -39,10 +39,10 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class AWTEventsTest {
 
-  private TestFrame source;
+  private TestWindow source;
 
   @BeforeMethod public void setUp() {
-    source = new TestFrame(getClass());
+    source = new TestWindow(getClass());
   }
 
   @AfterMethod public void tearDown() {

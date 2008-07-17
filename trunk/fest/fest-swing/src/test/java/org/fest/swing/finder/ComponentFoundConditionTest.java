@@ -24,11 +24,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestFrame.showInTest;
+import static org.fest.swing.testing.TestWindow.showInTest;
 
 /**
  * Tests for <code>{@link ComponentFoundCondition}</code>.
@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestFrame.showInTest;
 public class ComponentFoundConditionTest {
 
   private TypeMatcher matcher;
-  private TestFrame toFind;
+  private TestWindow toFind;
 
   private ComponentFoundCondition condition;
 
@@ -54,7 +54,7 @@ public class ComponentFoundConditionTest {
   }
 
   @Test public void shouldReturnTrueInTestAndReferenceFoundComponent() {
-    matcher.typeToMatch(TestFrame.class);
+    matcher.typeToMatch(TestWindow.class);
     assertThat(condition.test()).isTrue();
     assertThat(condition.found()).isSameAs(toFind);
   }

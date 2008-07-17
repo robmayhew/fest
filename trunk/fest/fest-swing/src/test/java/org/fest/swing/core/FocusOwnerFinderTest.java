@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
@@ -40,11 +40,11 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class FocusOwnerFinderTest {
 
-  private TestFrame frame;
+  private TestWindow frame;
   private JTextField textField;
 
   @BeforeMethod public void setUp() {
-    frame = new TestFrame(FocusOwnerFinder.class);
+    frame = new TestWindow(FocusOwnerFinder.class);
     textField = new JTextField(20);
     frame.add(textField);
     frame.display();

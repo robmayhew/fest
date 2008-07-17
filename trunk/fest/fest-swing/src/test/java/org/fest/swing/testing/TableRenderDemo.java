@@ -160,7 +160,7 @@ public class TableRenderDemo extends JPanel {
    */
   static void createAndShowGUI() {
     // Create and set up the window.
-    TestFrame frame = new TestFrame(TableRenderDemo.class);
+    TestWindow frame = new TestWindow(TableRenderDemo.class);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // Create and set up the content pane.

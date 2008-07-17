@@ -34,7 +34,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestTree;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -382,7 +382,7 @@ public class JTreeDriverTest {
     driver.cellReader(null);
   }
   
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TREE_SIZE = new Dimension(200, 100);

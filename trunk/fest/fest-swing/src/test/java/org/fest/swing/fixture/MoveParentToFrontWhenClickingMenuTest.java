@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.Pause.pause;
@@ -89,7 +89,7 @@ public class MoveParentToFrontWhenClickingMenuTest {
     return new Object[][] { { ROBOT }, { AWT } };
   }
   
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JMenuItem menuItemFromMenuBar = new JMenuItem("New");

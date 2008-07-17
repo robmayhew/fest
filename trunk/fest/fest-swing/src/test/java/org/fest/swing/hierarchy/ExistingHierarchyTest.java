@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.Condition;
 import org.fest.swing.monitor.WindowMonitor;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;
@@ -60,7 +60,7 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldReturnParentOfComponent() {
-    final TestFrame frame = new TestFrame(getClass());
+    final TestWindow frame = new TestWindow(getClass());
     final JTextField textField = new JTextField();
     final ParentFinder finder = MockParentFinder.mock();
     field("parentFinder").ofType(ParentFinder.class).in(hierarchy).set(finder);
@@ -93,7 +93,7 @@ public class ExistingHierarchyTest {
   }
   
   @Test(groups = GUI) public void shouldDisposeWindow() {
-    class CustomFrame extends TestFrame {
+    class CustomFrame extends TestWindow {
       private static final long serialVersionUID = 1L;
 
       boolean disposed;

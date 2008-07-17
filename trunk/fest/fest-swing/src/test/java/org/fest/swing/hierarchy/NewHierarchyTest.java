@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 
 import static java.awt.AWTEvent.*;
@@ -118,7 +118,7 @@ public class NewHierarchyTest {
 
   // TODO Test method dispose(Window)
 
-  private static class CustomFrame extends TestFrame {
+  private static class CustomFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textField = new JTextField(20);

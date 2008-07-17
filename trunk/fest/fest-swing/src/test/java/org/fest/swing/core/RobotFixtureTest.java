@@ -32,7 +32,7 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -226,7 +226,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldCloseWindow() {
-    final TestFrame w = new TestFrame(getClass());
+    final TestWindow w = new TestWindow(getClass());
     w.display();
     robot.close(w);
     pause(new Condition("Window closed") {
@@ -238,7 +238,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldNotCloseWindowIfWindowNotShowing() {
-    TestFrame w = new TestFrame(getClass());
+    TestWindow w = new TestWindow(getClass());
     w.display();
     w.setVisible(false);
     assertThat(w.isShowing()).isFalse();
@@ -283,7 +283,7 @@ public class RobotFixtureTest {
     }
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textFieldWithPopup = new JTextField("With Pop-up Menu");

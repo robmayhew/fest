@@ -20,14 +20,14 @@ import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 /**
  * Understands an MDI frame.
  *
  * @author Alex Ruiz
  */
-public class MDIFrame extends TestFrame {
+public class MDIFrame extends TestWindow {
 
   private static final long serialVersionUID = 1L;
 

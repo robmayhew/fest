@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.testing.PrintStreamStub;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.format.Formatting.format;
@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicComponentPrinterTest {
 
-  protected static class MainWindow extends TestFrame {
+  protected static class MainWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A button");

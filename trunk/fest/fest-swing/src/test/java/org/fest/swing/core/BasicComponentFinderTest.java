@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -41,7 +41,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicComponentFinderTest {
 
-  protected static class MainWindow extends TestFrame {
+  protected static class MainWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A Button");

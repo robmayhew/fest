@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -41,7 +41,7 @@ public class DisposalMonitorTest {
   private DisposalMonitor monitor;
   
   @BeforeMethod public void setUp() {
-    frame = new TestFrame(DisposalMonitorTest.class);
+    frame = new TestWindow(DisposalMonitorTest.class);
     disposedWindows = new HashMap<Window, Boolean>();
     monitor = new DisposalMonitor(disposedWindows);
     frame.addComponentListener(monitor);

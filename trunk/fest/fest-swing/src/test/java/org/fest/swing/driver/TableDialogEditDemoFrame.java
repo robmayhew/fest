@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 
 import org.fest.swing.testing.TableDialogEditDemo;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 /**
  * Understands a frame hosting <code>{@link TableDialogEditDemo}</code>.
@@ -26,7 +26,7 @@ import org.fest.swing.testing.TestFrame;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class TableDialogEditDemoFrame extends TestFrame {
+class TableDialogEditDemoFrame extends TestWindow {
   private static final long serialVersionUID = 1L;
 
   final JTable table;

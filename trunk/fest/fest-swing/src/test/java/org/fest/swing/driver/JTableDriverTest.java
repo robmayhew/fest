@@ -30,7 +30,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestTable;
 
 import static java.awt.Color.BLUE;
@@ -422,7 +422,7 @@ public class JTableDriverTest {
     driver.cellWriter(null);
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TABLE_SIZE = new Dimension(400, 100);

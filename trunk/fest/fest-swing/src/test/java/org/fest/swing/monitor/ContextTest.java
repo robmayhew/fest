@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -43,13 +43,13 @@ public class ContextTest {
   private ToolkitStub toolkit;
   private WindowEventQueueMapping windowEventQueueMapping;
   private EventQueueMapping eventQueueMapping;
-  private TestFrame frame;
+  private TestWindow frame;
   private Context context;
 
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
     toolkit = ToolkitStub.createNew(eventQueue);
-    frame = new TestFrame(ContextTest.class);
+    frame = new TestWindow(ContextTest.class);
     windowEventQueueMapping = createMock(WindowEventQueueMapping.class);
     eventQueueMapping = createMock(EventQueueMapping.class);
     createContext();
@@ -73,7 +73,7 @@ public class ContextTest {
   }
 
   @Test public void shouldReturnRootWindows() {
-    final TestFrame anotherFrame = new TestFrame(ContextTest.class);
+    final TestWindow anotherFrame = new TestWindow(ContextTest.class);
     new EasyMockTemplate(windowEventQueueMapping) {
       protected void expectations() {
         expect(windowEventQueueMapping.windows()).andReturn(frameInList());

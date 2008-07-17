@@ -25,7 +25,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -100,7 +100,7 @@ public class JPopupMenuDriverTest {
     return frame.popupMenu;
   }
 
-  private static class MyFrame extends TestFrame {
+  private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private final JMenuItem firstMenuItem = new JMenuItem("First");

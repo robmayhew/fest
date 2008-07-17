@@ -35,7 +35,7 @@ import javax.swing.JTextField;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.TestFrame;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -55,10 +55,10 @@ public class ContextMonitorTest {
 
   private Windows windows;
   private Context context;
-  private TestFrame frame;
+  private TestWindow frame;
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = new TestFrame(ContextMonitorTest.class);
+    frame = new TestWindow(ContextMonitorTest.class);
     windows = createMock(Windows.class);
     context = createMock(Context.class);
     monitor = new ContextMonitor(context, windows);
