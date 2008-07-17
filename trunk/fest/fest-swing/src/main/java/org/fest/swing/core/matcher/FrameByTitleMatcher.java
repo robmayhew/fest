@@ -18,7 +18,8 @@ package org.fest.swing.core.matcher;
 import java.awt.Frame;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.util.Objects;
+
+import static org.fest.util.Objects.areEqual;
 
 /**
  * Understands matching a <code>{@link Frame}</code> whose title is equal to the provided one.
@@ -50,7 +51,7 @@ public class FrameByTitleMatcher extends GenericTypeMatcher<Frame> {
   private final String title;
 
   private FrameByTitleMatcher(String title) {
-    this.title = title;
+    this(title, false);
   }
 
   private FrameByTitleMatcher(String title, boolean requireShowing) {
@@ -65,7 +66,6 @@ public class FrameByTitleMatcher extends GenericTypeMatcher<Frame> {
    * otherwise <code>false</code>. 
    */
   protected boolean isMatching(Frame frame) {
-    return Objects.areEqual(frame.getTitle(), title);
+    return areEqual(frame.getTitle(), title);
   }
-
 }

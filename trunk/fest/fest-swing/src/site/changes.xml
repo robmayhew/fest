@@ -9,6 +9,9 @@
       <action dev="alruiz, wanghy" type="add" issue="11">
         Added org.fest.swing.applet.AppletViewer and helper classes in package org.fest.swing.applet.
       </action>
+      <action dev="alruiz, wanghy" type="fix" issue="158" due-to="vnguyen.sqa">
+        Added component matchers using commonly used search criteria to package org.fest.swing.core.matchers.
+      </action>
       <action dev="alruiz, wanghy" type="fix" issue="165" due-to="Simeon Fitch">
         Replaced method 'select(JMenuItem)' with 'click(JMenuItem)' in org.fest.swing.fixture.JMenuItemFixture.
       </action>

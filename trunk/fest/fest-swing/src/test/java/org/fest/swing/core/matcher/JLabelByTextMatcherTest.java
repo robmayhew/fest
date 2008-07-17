@@ -15,7 +15,7 @@
  */
 package org.fest.swing.core.matcher;
 
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import org.testng.annotations.Test;
 
@@ -25,60 +25,64 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link FrameByTitleMatcher}</code>.
+ * Tests for <code>{@link JLabelByTextMatcher}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class FrameByTitleMatcherTest {
+@Test public class JLabelByTextMatcherTest {
 
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
-    String title = "Hello";
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle(title);
-    JFrame frame = new JFrame(title);
-    assertThat(matcher.matches(frame)).isTrue();
+    String text = "Hello";
+    JLabelByTextMatcher matcher = JLabelByTextMatcher.withText(text);
+    JLabel label = new JLabel(text);
+    assertThat(matcher.matches(label)).isTrue();
   }
   
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle("Hello");
-    JFrame frame = new JFrame("Bye");
-    assertThat(matcher.matches(frame)).isFalse();
+    JLabelByTextMatcher matcher = JLabelByTextMatcher.withText("Hello");
+    JLabel label = new JLabel("Bye");
+    assertThat(matcher.matches(label)).isFalse();
   }
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    Class<FrameByTitleMatcher> testType = FrameByTitleMatcher.class;
-    TestWindow frame = new TestWindow(testType);
+    TestWindow frame = new TestWindow(JLabelByTextMatcher.class);
+    String text = "Hello";
+    JLabel label = new JLabel(text);
+    frame.add(label);
     try {
       frame.display();
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getSimpleName());
-      assertThat(matcher.matches(frame)).isTrue();
+      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
+      assertThat(matcher.matches(label)).isTrue();
     } finally {
       frame.destroy();
     }
   } 
   
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
-    String title = "Hello";
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(title);
-    JFrame frame = new JFrame(title);
-    assertThat(matcher.matches(frame)).isFalse();    
+    String text = "Hello";
+    JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
+    JLabel label = new JLabel(text);
+    assertThat(matcher.matches(label)).isFalse();    
   }
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    TestWindow frame = new TestWindow(FrameByTitleMatcher.class);
+    TestWindow frame = new TestWindow(JLabelByTextMatcher.class);
+    JLabel label = new JLabel("Bye");
+    frame.add(label);
     try {
       frame.display();
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
-      assertThat(matcher.matches(frame)).isFalse();
+      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
+      assertThat(matcher.matches(label)).isFalse();
     } finally {
       frame.destroy();
     }
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
-    JFrame frame = new JFrame("Bye");
-    assertThat(matcher.matches(frame)).isFalse();    
+    JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
+    JLabel label = new JLabel("Bye");
+    assertThat(matcher.matches(label)).isFalse();    
   }
 }

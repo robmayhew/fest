@@ -26,7 +26,7 @@ import java.awt.Component;
  */
 public abstract class GenericTypeMatcher<T extends Component> implements ComponentMatcher {
 
-  private boolean requireShowing;
+  private final boolean requireShowing;
 
   /** Creates a new </code>{@link GenericTypeMatcher}</code>. The component to match does not have to be showing. */
   public GenericTypeMatcher() {
@@ -73,12 +73,4 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
    * @return <code>true</code> if the component to find has to be showing, <code>false</code> otherwise.
    */
   public final boolean requireShowing() { return requireShowing; }
-
-  /**
-   * Sets this matcher to match either showing or not showing components.
-   * @param shouldRequireShowing indicates if the component to match should be showing or not.
-   */
-  public final void requireShowing(boolean shouldRequireShowing) { 
-    requireShowing = shouldRequireShowing; 
-  }
 }

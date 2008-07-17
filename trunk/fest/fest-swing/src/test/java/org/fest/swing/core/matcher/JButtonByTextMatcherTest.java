@@ -15,7 +15,7 @@
  */
 package org.fest.swing.core.matcher;
 
-import javax.swing.JFrame;
+import javax.swing.JButton;
 
 import org.testng.annotations.Test;
 
@@ -25,60 +25,64 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link FrameByTitleMatcher}</code>.
+ * Tests for <code>{@link JButtonByTextMatcher}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class FrameByTitleMatcherTest {
+@Test public class JButtonByTextMatcherTest {
 
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
-    String title = "Hello";
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle(title);
-    JFrame frame = new JFrame(title);
-    assertThat(matcher.matches(frame)).isTrue();
+    String text = "Hello";
+    JButtonByTextMatcher matcher = JButtonByTextMatcher.withText(text);
+    JButton button = new JButton(text);
+    assertThat(matcher.matches(button)).isTrue();
   }
   
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle("Hello");
-    JFrame frame = new JFrame("Bye");
-    assertThat(matcher.matches(frame)).isFalse();
+    JButtonByTextMatcher matcher = JButtonByTextMatcher.withText("Hello");
+    JButton button = new JButton("Bye");
+    assertThat(matcher.matches(button)).isFalse();
   }
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    Class<FrameByTitleMatcher> testType = FrameByTitleMatcher.class;
-    TestWindow frame = new TestWindow(testType);
+    TestWindow frame = new TestWindow(JButtonByTextMatcher.class);
+    String text = "Hello";
+    JButton button = new JButton(text);
+    frame.add(button);
     try {
       frame.display();
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getSimpleName());
-      assertThat(matcher.matches(frame)).isTrue();
+      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing(text);
+      assertThat(matcher.matches(button)).isTrue();
     } finally {
       frame.destroy();
     }
   } 
   
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
-    String title = "Hello";
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(title);
-    JFrame frame = new JFrame(title);
-    assertThat(matcher.matches(frame)).isFalse();    
+    String text = "Hello";
+    JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing(text);
+    JButton button = new JButton(text);
+    assertThat(matcher.matches(button)).isFalse();    
   }
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    TestWindow frame = new TestWindow(FrameByTitleMatcher.class);
+    TestWindow frame = new TestWindow(JButtonByTextMatcher.class);
+    JButton button = new JButton("Bye");
+    frame.add(button);
     try {
       frame.display();
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
-      assertThat(matcher.matches(frame)).isFalse();
+      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
+      assertThat(matcher.matches(button)).isFalse();
     } finally {
       frame.destroy();
     }
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
-    JFrame frame = new JFrame("Bye");
-    assertThat(matcher.matches(frame)).isFalse();    
+    JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
+    JButton button = new JButton("Bye");
+    assertThat(matcher.matches(button)).isFalse();    
   }
 }

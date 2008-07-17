@@ -75,12 +75,11 @@ public class GenericTypeMatcherTest {
   }
 
   @Test public void shouldReturnFalseIfComponentIsNotShowing() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(true) {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }
     };
-    matcher.requireShowing(true);
     assertThat(matcher.matches(new JButton())).isFalse();
   }
 }
