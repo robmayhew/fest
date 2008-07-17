@@ -164,13 +164,9 @@ public class JComboBoxDriver extends JComponentDriver {
     if (!comboBox.isEnabled()) return;
     showDropDownList(comboBox);
     try {
-      listDriver.selectItem(dropDownList(), index);
+      listDriver.selectItem(dropDownList(), validatedIndex);
     } catch (ComponentLookupException e) {
-      robot.invokeAndWait(new Runnable() {
-        public void run() {
-          comboBox.setSelectedIndex(validatedIndex);
-        }
-      });
+      robot.invokeAndWait(new SetSelectedIndexTask(comboBox, validatedIndex));
     } finally {
       hideDropDownListIfVisible(comboBox);
     }
@@ -316,5 +312,19 @@ public class JComboBoxDriver extends JComponentDriver {
   public void cellReader(JComboBoxCellReader newCellReader) {
     validateCellReader(newCellReader);
     cellReader = newCellReader;
+  }
+
+  private static class SetSelectedIndexTask implements Runnable {
+    private final JComboBox comboBox;
+    private final int index;
+
+    public SetSelectedIndexTask(JComboBox comboBox, int index) {
+      this.comboBox = comboBox;
+      this.index = index;
+    }
+
+    public void run() {
+      comboBox.setSelectedIndex(index);
+    }
   }
 }
