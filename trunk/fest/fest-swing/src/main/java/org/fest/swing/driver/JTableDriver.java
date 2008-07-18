@@ -160,8 +160,8 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public void selectCells(final JTable table, final JTableCell[] cells) {
-    if (cells == null) throw new NullPointerException("Array of table cells to select should be null");
-    if (Arrays.isEmpty(cells)) throw new IllegalArgumentException("Array of table cells to select should beempty");
+    if (cells == null) throw new NullPointerException("Array of table cells to select should not be null");
+    if (Arrays.isEmpty(cells)) throw new IllegalArgumentException("Array of table cells to select should not be empty");
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return cells.length;

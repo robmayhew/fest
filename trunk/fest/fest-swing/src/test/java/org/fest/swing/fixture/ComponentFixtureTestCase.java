@@ -18,12 +18,16 @@ import java.awt.Component;
 
 import org.testng.annotations.BeforeMethod;
 
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.driver.ComponentDriver;
 
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Understands test methods for implementations of <code>{@link ComponentFixture}</code>.
@@ -58,5 +62,57 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
   @SuppressWarnings("unchecked") Class<T> targetType() {
     return (Class<T>) target().getClass();
+  }
+
+  private abstract class FixtureCreationTemplate extends EasyMockTemplate {
+    FixtureCreationTemplate() {
+      super(robot(), finder());
+    }
+    
+    protected final void expectations() {
+      expect(robot().finder()).andReturn(finder());
+      expect(robot().settings()).andReturn(settings());
+      expectComponentLookup();
+    }
+    
+    abstract void expectComponentLookup();
+    
+    protected final void codeToTest() {
+      ComponentFixture<T> fixture = fixture();
+      assertThat(fixture.component()).isSameAs(target());
+    }
+    
+    abstract ComponentFixture<T> fixture();
+  }
+
+  abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
+    void expectComponentLookup() {
+      expect(finder().findByType(targetType(), requireShowing())).andReturn(target());
+    }
+  }
+  
+  abstract class FixtureCreationByNameTemplate extends FixtureCreationTemplate {
+    private final String name = "c";
+
+    final void expectComponentLookup() {
+      expect(finder().findByName(name, targetType(), requireShowing())).andReturn(target());
+    }
+
+    final ComponentFixture<T> fixture() {
+      return fixtureWithName(name);
+    }
+
+    abstract ComponentFixture<T> fixtureWithName(String name);
+  }
+  
+  @SuppressWarnings("unchecked")
+  void replaceInputSimulatorIn(Object fixture) {
+    assertThat(fixture).isInstanceOf(ComponentFixture.class);
+    ComponentFixture<? extends Component> componentFixture = (ComponentFixture<? extends Component>)fixture;
+    componentFixture.inputSimulator(new InputSimulator(driver(), target()));
+  }
+  
+  private boolean requireShowing() {
+    return settings().componentLookupScope().requireShowing();
   }
 }

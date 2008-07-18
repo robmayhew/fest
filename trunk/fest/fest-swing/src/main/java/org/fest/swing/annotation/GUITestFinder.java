@@ -17,8 +17,6 @@ package org.fest.swing.annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 
-import static org.fest.swing.exception.UnexpectedException.unexpected;
-
 /**
  * Understands utility methods related to GUI tests. A GUI test is a class or method annotated with
  * <code>{@link org.fest.swing.annotation.GUITest}</code>.
@@ -53,9 +51,9 @@ public final class GUITestFinder {
     try {
       return type.getDeclaredMethod(methodName, parameterTypes);
     } catch (NoSuchMethodException e) {
-      throw unexpected(e);
+      return null;
     } catch (RuntimeException e) {
-      throw unexpected(e);
+      return null;
     }
   }
   

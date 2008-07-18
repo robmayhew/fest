@@ -98,6 +98,7 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> im
   }
 
   @Test public void shouldPressAndReleaseKey() {
+    replaceInputSimulatorIn(fixture);
     final int keyCode = VK_A;
     final int[] modifiers = { SHIFT_MASK };
     new EasyMockTemplate(driver) {

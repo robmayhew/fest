@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JLabelDriver;
-import org.fest.swing.fixture.CommonComponentFixtureTestCase.FixtureCreationByNameTemplate;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;

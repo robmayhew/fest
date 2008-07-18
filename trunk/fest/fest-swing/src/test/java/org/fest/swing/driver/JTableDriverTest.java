@@ -28,10 +28,9 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestTable;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
@@ -90,13 +89,13 @@ public class JTableDriverTest {
     assertDragTableHasNoSelection();
   }
   
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class) 
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class) 
   public void shouldThrowErrorIfArrayOfCellsToSelectIsNull() {
     JTableCell[] cells = null;
     driver.selectCells(dragTable, cells);
   }
 
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class) 
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class) 
   public void shouldThrowErrorIfArrayOfCellsToSelectIsEmpty() {
     JTableCell[] cells = new JTableCell[0];
     driver.selectCells(dragTable, cells);

@@ -664,9 +664,7 @@ public class RobotFixture implements Robot {
       JOptionPane found = finder().findByType(JOptionPane.class, true);
       if (found == null) return;
       fail(concat("Expecting no JOptionPane to be showing, but found:<", format(found), ">"));
-    } catch (ComponentLookupException e) {
-      throw unexpected(e);
-    }
+    } catch (ComponentLookupException e) {}
   }
 
   /** ${@inheritDoc} */

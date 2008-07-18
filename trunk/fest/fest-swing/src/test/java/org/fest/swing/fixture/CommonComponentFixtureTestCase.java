@@ -71,6 +71,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
   }
 
   public void shouldClickUsingGivenMouseClickInfo() {
+    replaceInputSimulatorIn(fixture());
     final MouseClickInfo mouseClickInfo = middleButton().times(2);
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -129,6 +130,7 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
   }
 
   public void shouldPressAndReleaseKey() {
+    replaceInputSimulatorIn(fixture());
     final int keyCode = VK_A;
     final int[] modifiers = { SHIFT_MASK };
     new EasyMockTemplate(driver()) {
@@ -262,50 +264,5 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     assertThat(result).isSameAs(fixture());
   }
 
-  abstract CommonComponentFixture fixture();
-  
-  private boolean requireShowing() {
-    return settings().componentLookupScope().requireShowing();
-  }
-  
-  private abstract class FixtureCreationTemplate extends EasyMockTemplate {
-    FixtureCreationTemplate() {
-      super(robot(), finder());
-    }
-    
-    protected final void expectations() {
-      expect(robot().finder()).andReturn(finder());
-      expect(robot().settings()).andReturn(settings());
-      expectComponentLookup();
-    }
-    
-    abstract void expectComponentLookup();
-    
-    protected final void codeToTest() {
-      ComponentFixture<T> fixture = fixture();
-      assertThat(fixture.component()).isSameAs(target());
-    }
-    
-    abstract ComponentFixture<T> fixture();
-  }
-
-  abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
-    void expectComponentLookup() {
-      expect(finder().findByType(targetType(), requireShowing())).andReturn(target());
-    }
-  }
-  
-  abstract class FixtureCreationByNameTemplate extends FixtureCreationTemplate {
-    private final String name = "c";
-
-    final void expectComponentLookup() {
-      expect(finder().findByName(name, targetType(), requireShowing())).andReturn(target());
-    }
-
-    final ComponentFixture<T> fixture() {
-      return fixtureWithName(name);
-    }
-
-    abstract ComponentFixture<T> fixtureWithName(String name);
-  }
+  abstract CommonComponentFixture fixture(); 
 }
