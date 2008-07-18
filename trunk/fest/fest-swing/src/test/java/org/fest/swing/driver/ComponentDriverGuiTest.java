@@ -112,8 +112,8 @@ public class ComponentDriverGuiTest {
     
     @Override public String toString() {
       StringBuilder b = new StringBuilder();
-      b.append("type=").append(type);
-      b.append("keyCode=").append(keyCode);
+      b.append("type=").append(type).append(", ");
+      b.append("keyCode=").append(keyCode).append("]");
       return b.toString();
     }
   }

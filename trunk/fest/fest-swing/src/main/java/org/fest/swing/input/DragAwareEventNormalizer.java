@@ -23,8 +23,6 @@ import java.util.logging.Logger;
 import static java.util.logging.Level.WARNING;
 import static javax.swing.SwingUtilities.invokeAndWait;
 
-import static org.fest.swing.exception.UnexpectedException.unexpected;
-
 /**
  * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream:
  * <ul>
@@ -63,9 +61,7 @@ class DragAwareEventNormalizer extends EventNormalizer {
     if (dragAwareEventQueue == null) return;
     try {
       dragAwareEventQueue.pop();
-    } catch (EmptyStackException e) {
-      throw unexpected(e);
-    }
+    } catch (EmptyStackException e) {}
     dragAwareEventQueue = null;
   }
 }
