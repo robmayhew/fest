@@ -469,9 +469,12 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Updates the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s. The default
    * value is "/".
    * @param separator the new separator.
+   * @return this fixture.
+   * @throws NullPointerException if the given separator is <code>null</code>.
    */
-  public void separator(String separator) {
+  public JTreeFixture separator(String separator) {
     driver.separator(separator);
+    return this;
   }
   
   /**
@@ -480,8 +483,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * is <code>{@link BasicJTreeCellReader}</code>.
    * @param cellReader the new <code>JTreeCellValueReader</code> to use.
    * @throws NullPointerException if <code>cellReader</code> is <code>null</code>.
+   * @return this fixture.
    */
-  public void cellReader(JTreeCellReader cellReader) {
+  public JTreeFixture cellReader(JTreeCellReader cellReader) {
     driver.cellReader(cellReader);
+    return this;
   }
 }

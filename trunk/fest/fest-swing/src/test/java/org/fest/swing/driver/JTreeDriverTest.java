@@ -34,8 +34,8 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestTree;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -380,6 +380,16 @@ public class JTreeDriverTest {
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfSeparatorIsNull() {
+    driver.separator(null);
+  }
+  
+  public void shouldSetPathSeparator() {
+    driver.separator("|");
+    assertThat(driver.separator()).isEqualTo("|");
   }
   
   private static class MyFrame extends TestWindow {

@@ -272,7 +272,7 @@ public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
       }
       
       protected void codeToTest() {
-        fixture.cellReader(reader);
+        assertThatReturnsThis(fixture.cellReader(reader));
       }
     }.run();
   }
@@ -300,7 +300,7 @@ public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
       }
       
       protected void codeToTest() {
-        fixture.separator(separator);
+        assertThatReturnsThis(fixture.separator(separator));
       }
     }.run();
   }

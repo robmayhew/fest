@@ -359,7 +359,7 @@ public class JListFixtureTest extends CommonComponentFixtureTestCase<JList> {
       }
       
       protected void codeToTest() {
-        fixture.cellReader(reader);
+        assertThatReturnsThis(fixture.cellReader(reader));
       }
     }.run();
   }

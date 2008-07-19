@@ -27,11 +27,29 @@
       <action dev="alruiz" type="remove" issue="166" due-to="Simeon Fitch">
         Added class org.fest.swing.fixture.GenericComponentFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="167" due-to="Juhos Csaba-Zsolt">
+        Method 'cellReader(JComboBoxCellReader)' in org.fest.swing.fixture.JComboBoxFixture now returns 'this'.
+      </action>
+      <action dev="alruiz" type="fix" issue="167" due-to="Juhos Csaba-Zsolt">
+        Method 'cellReader(JListCellReader)' in org.fest.swing.fixture.JListFixture now returns 'this'.
+      </action>
+      <action dev="alruiz" type="fix" issue="167" due-to="Juhos Csaba-Zsolt">
+        Method 'cellReader(JTableCellReader)' in org.fest.swing.fixture.JTableFixture now returns 'this'.
+      </action>
+      <action dev="alruiz" type="fix" issue="167" due-to="Juhos Csaba-Zsolt">
+        Method 'cellWriter(JTableCellWriter)' in org.fest.swing.fixture.JTableFixture now returns 'this'.
+      </action>
+      <action dev="alruiz" type="fix" issue="167" due-to="Juhos Csaba-Zsolt">
+        Method 'cellReader(JTreeCellReader)' in org.fest.swing.fixture.JTreeFixture now returns 'this'.
+      </action>
       <action dev="alruiz" type="fix" issue="173" due-to="fred76131">
         Methods 'selectItem' ensure the drop-down list in a  JComboBox is hidden after a selection has been made.
       </action>
       <action dev="wanghy" type="fix" issue="177" due-to="Juhos Csaba-Zsolt">
         JTableCellWriters now wait for the editor to show on the screen before starting editing a JTable cell.
+      </action>
+      <action dev="alruiz" type="fix" issue="179" due-to="Juhos Csaba-Zsolt">
+        Method 'separator(String)' in org.fest.swing.fixture.JTreeFixture now returns 'this'.
       </action>
       <action dev="alruiz" type="remove">
         Removed all methods related to keyboard input simulation from JListItemFixture and JTableCellFixture.

@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
@@ -238,7 +239,21 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
       }
 
       protected void codeToTest() {
-        fixture.cellReader(reader);
+        assertThatReturnsThis(fixture.cellReader(reader));
+      }
+    }.run();
+  }
+
+  public void shouldSetCellWriterInDriver() {
+    final JTableCellWriter writer = createMock(JTableCellWriter.class);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.cellWriter(writer);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.cellWriter(writer));
       }
     }.run();
   }

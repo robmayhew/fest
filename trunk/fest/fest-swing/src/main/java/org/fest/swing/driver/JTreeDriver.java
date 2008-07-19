@@ -481,8 +481,10 @@ public class JTreeDriver extends JComponentDriver {
   /**
    * Updates the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    * @param newSeparator the new separator.
+   * @throws NullPointerException if the given separator is <code>null</code>.
    */
   public void separator(String newSeparator) {
+    if (newSeparator == null) throw new NullPointerException("The path separator should not be null");
     separator = newSeparator;
   }
 

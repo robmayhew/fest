@@ -552,9 +552,11 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * is <code>{@link BasicJTableCellReader}</code>.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.
    * @throws NullPointerException if <code>cellReader</code> is <code>null</code>.
+   * @return this fixture.
    */
-  public void cellReader(JTableCellReader cellReader) {
+  public JTableFixture cellReader(JTableCellReader cellReader) {
     driver.cellReader(cellReader);
+    return this;
   }
 
   /**
@@ -563,8 +565,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * is <code>{@link BasicJTableCellWriter}</code>.
    * @param cellWriter the new <code>JTableCellValueWriter</code> to use.
    * @throws NullPointerException if <code>cellWriter</code> is <code>null</code>.
+   * @return this fixture.
    */
-  public void cellWriter(JTableCellWriter cellWriter) {
+  public JTableFixture cellWriter(JTableCellWriter cellWriter) {
     driver.cellWriter(cellWriter);
+    return this;
   }
 }

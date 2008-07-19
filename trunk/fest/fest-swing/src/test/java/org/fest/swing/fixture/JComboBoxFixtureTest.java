@@ -214,7 +214,7 @@ public class JComboBoxFixtureTest extends CommonComponentFixtureTestCase<JComboB
       }
 
       protected void codeToTest() {
-        fixture.cellReader(reader);
+        assertThatReturnsThis(fixture.cellReader(reader));
       }
     }.run();
   }

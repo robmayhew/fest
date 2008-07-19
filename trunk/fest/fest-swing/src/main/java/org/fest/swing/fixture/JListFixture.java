@@ -505,9 +505,11 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * this fixture's <code>{@link JList}</code> and the values expected in a test. The default implementation to use
    * is <code>{@link BasicJListCellReader}</code>.
    * @param cellReader the new <code>JListCellValueReader</code> to use.
+   * @return this fixture.
    * @throws NullPointerException if <code>cellReader</code> is <code>null</code>.
    */
-  public void cellReader(JListCellReader cellReader) {
+  public JListFixture cellReader(JListCellReader cellReader) {
     driver.cellReader(cellReader);
+    return this;
   }
 }
