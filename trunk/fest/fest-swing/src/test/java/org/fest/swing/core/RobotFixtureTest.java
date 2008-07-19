@@ -46,7 +46,6 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
-import static org.fest.swing.core.RobotFixtureTest.KeyActionType.*;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
@@ -195,12 +194,12 @@ public class RobotFixtureTest {
     robot.pressAndReleaseKey(VK_C, new int[] { CTRL_MASK, SHIFT_MASK });
     List<KeyAction> actions = recorder.actions;
     assertThat(actions).containsOnly(
-        action(PRESSED, VK_SHIFT),
-        action(PRESSED, VK_CONTROL),
-        action(PRESSED, VK_C),
-        action(RELEASED, VK_C),
-        action(RELEASED, VK_CONTROL),
-        action(RELEASED, VK_SHIFT)
+        action(KEY_PRESSED,  VK_SHIFT),
+        action(KEY_PRESSED,  VK_CONTROL),
+        action(KEY_PRESSED,  VK_C),
+        action(KEY_RELEASED, VK_C),
+        action(KEY_RELEASED, VK_CONTROL),
+        action(KEY_RELEASED, VK_SHIFT)
     );
   }
 
@@ -315,23 +314,23 @@ public class RobotFixtureTest {
     }
     
     @Override public void keyPressed(KeyEvent e) {
-      actions.add(action(KeyActionType.PRESSED, e.getKeyCode()));
+      actions.add(action(KEY_PRESSED, e.getKeyCode()));
     }
 
     @Override public void keyReleased(KeyEvent e) {
-      actions.add(action(KeyActionType.RELEASED, e.getKeyCode()));
+      actions.add(action(KEY_RELEASED, e.getKeyCode()));
     }    
   }
   
   static class KeyAction {
-    final KeyActionType type;
+    final int type;
     final int keyCode;
 
-    static KeyAction action(KeyActionType type, int keyCode) {
+    static KeyAction action(int type, int keyCode) {
       return new KeyAction(type, keyCode);
     }
     
-    private KeyAction(KeyActionType type, int keyCode) {
+    private KeyAction(int type, int keyCode) {
       this.type = type;
       this.keyCode = keyCode;
     }
@@ -341,17 +340,15 @@ public class RobotFixtureTest {
       if (obj == null) return false;
       if (getClass() != obj.getClass()) return false;
       final KeyAction other = (KeyAction) obj;
-      if (keyCode != other.keyCode) return false;
-      if (type == null && other.type != null) return false;
-      if (!type.equals(other.type)) return false;
-      return true;
+      if (type != other.type) return false;
+      return keyCode == other.keyCode;
     }
 
     @Override public int hashCode() {
       final int prime = 31;
       int result = 1;
+      result = prime * result + type;
       result = prime * result + keyCode;
-      result = prime * result + ((type == null) ? 0 : type.hashCode());
       return result;
     }
     
@@ -361,10 +358,6 @@ public class RobotFixtureTest {
       b.append("keyCode=").append(keyCode).append("]");
       return b.toString();
     }
-  }
-  
-  static enum KeyActionType {
-    PRESSED, RELEASED
   }
 
   private static class MyFrame extends TestWindow {
