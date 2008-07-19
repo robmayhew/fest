@@ -15,8 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Container;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -36,6 +34,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements CommonComponentFixture {
 
   private JPopupMenuDriver driver;
+  private final JMenuItemFinder menuItemFinder;
   
   /**
    * Creates a new <code>{@link JPopupMenuFixture}</code>.
@@ -46,6 +45,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements C
    */
   public JPopupMenuFixture(Robot robot, JPopupMenu target) {
     super(robot, target);
+    menuItemFinder = new JMenuItemFinder(robot, target);
     updateDriver(new JPopupMenuDriver(robot));
   }
 
@@ -54,7 +54,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements C
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>,
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link JPopupMenu}</code>,
    * which name matches the specified one.
    * @param name the name to match.
    * @return a fixture that manages the <code>JMenuItem</code> found.
@@ -66,7 +66,7 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements C
   }
 
   /**
-   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link Container}</code>,
+   * Finds a <code>{@link JMenuItem}</code>, contained in this fixture's <code>{@link JPopupMenu}</code>,
    * that matches the specified search criteria.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
    * @return a fixture that manages the <code>JMenuItem</code> found.
@@ -77,6 +77,28 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements C
    */
   public JMenuItemFixture menuItem(GenericTypeMatcher<? extends JMenuItem> matcher) {
     return new JMenuItemFixture(robot, driver.menuItem(target, matcher));
+  }
+
+  /**
+   * Finds a <code>{@link JMenuItem}</code> in this fixture's <code>{@link JPopupMenu}</code>, which path matches
+   * the given one.
+   * <p>
+   * For example, if we are looking for the menu with text "New" contained under the menu with text "File", we can
+   * simply call
+   *
+   * <pre>
+   * JPopupMenuFixture popupMenu = tree.showPopupMenu();
+   * JMenuItemFixture menuItem = popupMenu.<strong>menuItemWithPath(&quot;File&quot;, &quot;Menu&quot;)</strong>;
+   * </pre>
+   *
+   * </p>
+   * @param path the path of the menu to find.
+   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @throws ComponentLookupException if a <code>JMenuItem</code> under the given path could not be found.
+   * @throws AssertionError if the <code>Component</code> found under the given path is not a <code>JMenuItem</code>.
+   */
+  public JMenuItemFixture menuItemWithPath(String... path) {
+    return new JMenuItemFixture(robot, menuItemFinder.menuItemWithPath(path));
   }
 
   /**
