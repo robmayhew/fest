@@ -20,6 +20,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -34,12 +38,15 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestWindow;
 
+import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
+import static org.fest.swing.core.RobotFixtureTest.KeyActionType.*;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
@@ -182,6 +189,21 @@ public class RobotFixtureTest {
     assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
+  public void shouldPressKeyAndModifiers() {
+    textFieldWithPopup.requestFocusInWindow();
+    KeyPressRecorder recorder = KeyPressRecorder.attachTo(textFieldWithPopup);
+    robot.pressAndReleaseKey(VK_C, new int[] { CTRL_MASK, SHIFT_MASK });
+    List<KeyAction> actions = recorder.actions;
+    assertThat(actions).containsOnly(
+        action(PRESSED, VK_SHIFT),
+        action(PRESSED, VK_CONTROL),
+        action(PRESSED, VK_C),
+        action(RELEASED, VK_C),
+        action(RELEASED, VK_CONTROL),
+        action(RELEASED, VK_SHIFT)
+    );
+  }
+
   public void shouldPressGivenKeyWithoutReleasingIt() {
     textFieldWithPopup.requestFocusInWindow();
     KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
@@ -281,6 +303,68 @@ public class RobotFixtureTest {
     } catch (AssertionError e) {
       assertThat(e).message().contains("Expecting no JOptionPane to be showing");
     }
+  }
+
+  static class KeyPressRecorder extends KeyAdapter {
+    final List<KeyAction> actions = new ArrayList<KeyAction>();
+
+    static KeyPressRecorder attachTo(Component c) {
+      KeyPressRecorder recorder = new KeyPressRecorder();
+      c.addKeyListener(recorder);
+      return recorder;
+    }
+    
+    @Override public void keyPressed(KeyEvent e) {
+      actions.add(action(KeyActionType.PRESSED, e.getKeyCode()));
+    }
+
+    @Override public void keyReleased(KeyEvent e) {
+      actions.add(action(KeyActionType.RELEASED, e.getKeyCode()));
+    }    
+  }
+  
+  static class KeyAction {
+    final KeyActionType type;
+    final int keyCode;
+
+    static KeyAction action(KeyActionType type, int keyCode) {
+      return new KeyAction(type, keyCode);
+    }
+    
+    private KeyAction(KeyActionType type, int keyCode) {
+      this.type = type;
+      this.keyCode = keyCode;
+    }
+    
+    @Override public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
+      final KeyAction other = (KeyAction) obj;
+      if (keyCode != other.keyCode) return false;
+      if (type == null && other.type != null) return false;
+      if (!type.equals(other.type)) return false;
+      return true;
+    }
+
+    @Override public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + keyCode;
+      result = prime * result + ((type == null) ? 0 : type.hashCode());
+      return result;
+    }
+    
+    @Override public String toString() {
+      StringBuilder b = new StringBuilder();
+      b.append("type=").append(type).append(", ");
+      b.append("keyCode=").append(keyCode).append("]");
+      return b.toString();
+    }
+  }
+  
+  static enum KeyActionType {
+    PRESSED, RELEASED
   }
 
   private static class MyFrame extends TestWindow {

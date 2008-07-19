@@ -57,6 +57,10 @@
       <action dev="alruiz" type="fix">
         Moved classes KeyPressInfo and MouseClickInfo from package org.fest.swing.fixture to org.fest.swing.core.
       </action>
+      <action dev="alruiz" type="fix">
+        Replaced method 'pressAndReleaseKey(int keyCode, int modifiers)' with 
+        'pressAndReleaseKey(int keyCode, int... modifiers)' in org.fest.swing.core.RobotFixture.
+      </action>
       <action dev="alruiz" type="remove">
         Removed all methods related to keyboard input simulation from JListItemFixture and JTableCellFixture.
       </action>

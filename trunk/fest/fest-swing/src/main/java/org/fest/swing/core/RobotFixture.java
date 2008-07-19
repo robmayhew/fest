@@ -474,8 +474,13 @@ public class RobotFixture implements Robot {
   }
 
   /** ${@inheritDoc} */
-  public void pressAndReleaseKey(int keyCode, int modifiers) {
-    keyPressAndRelease(keyCode, modifiers);
+  public void pressAndReleaseKey(int keyCode, int... modifiers) {
+    int modifier = 0;
+    if (modifiers != null && modifiers.length > 0) {
+      modifier = modifiers[0];
+      for(int i = 1; i < modifiers.length; i++) modifier |= modifiers[i];
+    }
+    keyPressAndRelease(keyCode, modifier);
   }
 
   /** ${@inheritDoc} */

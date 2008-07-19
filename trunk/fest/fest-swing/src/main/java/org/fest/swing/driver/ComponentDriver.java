@@ -246,12 +246,7 @@ public class ComponentDriver {
    */
   public void pressAndReleaseKey(Component c, int keyCode, int[] modifiers) {
     focus(c);
-    int modifier = 0;
-    if (modifiers != null && modifiers.length > 0) {
-      modifier = modifiers[0];
-      for(int i = 1; i < modifiers.length; i++) modifier |= modifiers[i];
-    }
-    robot.pressAndReleaseKey(keyCode, modifier);
+    robot.pressAndReleaseKey(keyCode, modifiers);
   }
 
   /**

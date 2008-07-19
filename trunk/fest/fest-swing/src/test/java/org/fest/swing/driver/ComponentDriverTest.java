@@ -28,13 +28,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.MouseClickInfo;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Settings;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.StopWatch;
 
+import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.KeyEvent.VK_R;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -311,6 +310,39 @@ import static org.fest.swing.util.Platform.*;
     driver.pressAndReleaseKey(c, null);
   }
   
+  public void shouldPressAndReleaseKeysUsingKeyPressInfo() {
+    final KeyPressInfo keyPressInfo = KeyPressInfo.keyCode(VK_R).modifiers(SHIFT_MASK);
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        robot.focus(c);
+        expectLastCall().once();
+        robot.pressAndReleaseKey(keyPressInfo.keyCode(), keyPressInfo.modifiers());
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.pressAndReleaseKey(c, keyPressInfo);
+      }
+    }.run();
+  }
+  
+  public void shouldPressAndReleaseKeysWithModifiers() {
+    final int keyCode = VK_R;
+    final int[] modifiers = { SHIFT_MASK };
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        robot.focus(c);
+        expectLastCall().once();
+        robot.pressAndReleaseKey(keyCode, modifiers);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.pressAndReleaseKey(c, keyCode, modifiers);
+      }
+    }.run();
+  }
+
   public void shouldPressAndReleaseKeys() {
     final int[] keys = { 6, 8 };
     new EasyMockTemplate(robot) {

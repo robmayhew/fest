@@ -255,7 +255,7 @@ public interface Robot {
    * @param modifiers the given modifiers.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
-  void pressAndReleaseKey(int keyCode, int modifiers);
+  void pressAndReleaseKey(int keyCode, int... modifiers);
 
   /**
    * Simulates a user pressing and releasing the given keys. This method does not affect the current focus.
