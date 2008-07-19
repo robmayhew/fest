@@ -19,9 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -95,7 +93,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -283,7 +281,7 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
    * @see KeyPressInfo
    */
   public JOptionPaneFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 
+import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JMenuItemDriver;
@@ -110,7 +111,7 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
    * @see KeyPressInfo
    */
   public JMenuItemFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

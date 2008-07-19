@@ -20,9 +20,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import org.fest.swing.cell.JTreeCellReader;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.BasicJTreeCellReader;
 import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -128,7 +126,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTreeFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -308,7 +306,7 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @see KeyPressInfo
    */
   public JTreeFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

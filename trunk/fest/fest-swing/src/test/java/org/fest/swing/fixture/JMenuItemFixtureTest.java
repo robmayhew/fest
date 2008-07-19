@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JMenuItemDriver;
@@ -34,6 +35,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.Timeout.timeout;
 
 /**
@@ -98,26 +100,19 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> im
   }
 
   @Test public void shouldPressAndReleaseKey() {
-    replaceInputSimulatorIn(fixture);
-    final int keyCode = VK_A;
-    final int[] modifiers = { SHIFT_MASK };
+    final KeyPressInfo keyPressInfo = keyCode(VK_A).modifiers(SHIFT_MASK);
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.pressAndReleaseKey(eq(target), eq(keyCode), aryEq(modifiers));
+        driver.pressAndReleaseKey(target, keyPressInfo);
         expectLastCall().once();
       }
 
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.pressAndReleaseKey(KeyPressInfo.keyCode(keyCode).modifiers(modifiers)));
+        assertThatReturnsThis(fixture.pressAndReleaseKey(keyPressInfo));
       }
     }.run();
   }
 
-  @Test(expectedExceptions = NullPointerException.class) 
-  public void shouldThrowErrorIfKeyPressInfoIsNull() {
-    fixture.pressAndReleaseKey(null);
-  }
-  
   @Test public void shouldPressAndReleaseKeys() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

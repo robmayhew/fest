@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JToggleButton;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -110,7 +108,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JToggleButtonFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -151,7 +149,7 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @see KeyPressInfo
    */
   public JToggleButtonFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

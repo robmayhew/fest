@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JRadioButton;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -93,7 +91,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JRadioButtonFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -134,7 +132,7 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @see KeyPressInfo
    */
   public JRadioButtonFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

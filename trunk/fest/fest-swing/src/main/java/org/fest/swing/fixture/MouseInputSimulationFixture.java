@@ -16,6 +16,7 @@
 package org.fest.swing.fixture;
 
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
 
 /**
  * Understands simulation of mouse input on a GUI component.

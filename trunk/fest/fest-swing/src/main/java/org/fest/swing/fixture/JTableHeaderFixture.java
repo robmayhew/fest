@@ -18,6 +18,7 @@ package org.fest.swing.fixture;
 import javax.swing.JPopupMenu;
 import javax.swing.table.JTableHeader;
 
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTableHeaderDriver;
 import org.fest.swing.exception.ComponentLookupException;

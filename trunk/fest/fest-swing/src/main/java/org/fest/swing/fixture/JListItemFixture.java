@@ -19,6 +19,7 @@ import javax.swing.JList;
 
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;

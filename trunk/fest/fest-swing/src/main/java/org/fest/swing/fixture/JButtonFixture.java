@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JButton;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -95,7 +93,7 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JButtonFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -136,7 +134,7 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @see KeyPressInfo
    */
   public JButtonFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

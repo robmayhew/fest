@@ -51,8 +51,6 @@ public abstract class ComponentFixture<T extends Component> {
   /** This fixture's <code>{@link Component}</code>. */
   public final T target;
   
-  private InputSimulator inputSimulator;
-
   /**
    * Creates a new <code>{@link ComponentFixture}</code>.
    * @param robot performs simulation of user events on a <code>Component</code>.
@@ -120,30 +118,6 @@ public abstract class ComponentFixture<T extends Component> {
   public ComponentFixture(Robot robot, T target) {
     this.robot = notNullRobot(robot);
     this.target = notNullTarget(target);
-    inputSimulator(new InputSimulator(robot, target));
-  }
-
-  final void inputSimulator(InputSimulator newInputSimulator) {
-    inputSimulator = newInputSimulator;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link Component}</code>.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
-   */
-  protected final void doClick(MouseClickInfo mouseClickInfo) {
-    inputSimulator.click(mouseClickInfo);
-  }
-  
-  /**
-   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Component}</code>.
-   * @param keyPressInfo specifies the key and modifiers to press.
-   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
-   * @throws IllegalArgumentException if the given code is not a valid key code.
-   */
-  protected final void doPressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    inputSimulator.pressAndReleaseKey(keyPressInfo);
   }
 
   /**

@@ -28,6 +28,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
 
@@ -38,7 +39,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.fixture.TableCell.row;
 
 /**

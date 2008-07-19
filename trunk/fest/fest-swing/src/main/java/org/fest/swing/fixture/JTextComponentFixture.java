@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -128,7 +126,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTextComponentFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -188,7 +186,7 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @see KeyPressInfo
    */
   public JTextComponentFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

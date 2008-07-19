@@ -13,7 +13,7 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.core;
 
 import java.awt.Event;
 import java.awt.event.KeyEvent;
@@ -37,8 +37,8 @@ import static java.util.Arrays.copyOf;
  * <p>
  * Specify that 'SHIFT' + 'R' should be pressed:
  * <pre>
- * // import static org.fest.swing.fixture.MouseClickInfo.*;
- * MouseClickInfo i = key(VK_R).modifiers(SHIFT_MASK);
+ * // import static org.fest.swing.fixture.KeyPressInfo.*;
+ * KeyPressInfo i = key(VK_R).modifiers(SHIFT_MASK);
  * </pre>
  * </p>
  * <p>

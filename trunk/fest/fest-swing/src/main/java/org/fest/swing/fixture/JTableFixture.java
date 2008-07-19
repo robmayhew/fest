@@ -24,9 +24,7 @@ import javax.swing.table.JTableHeader;
 
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.BasicJTableCellReader;
 import org.fest.swing.driver.BasicJTableCellWriter;
 import org.fest.swing.driver.JTableDriver;
@@ -301,7 +299,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JTableFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -371,7 +369,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @see KeyPressInfo
    */
   public JTableFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

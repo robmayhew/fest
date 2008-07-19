@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTableDriver;
 
@@ -35,7 +36,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.fixture.TableCell.row;
 
 /**

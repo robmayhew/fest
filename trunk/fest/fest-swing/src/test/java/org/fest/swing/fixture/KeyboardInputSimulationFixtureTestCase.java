@@ -26,8 +26,6 @@ interface KeyboardInputSimulationFixtureTestCase {
 
   void shouldPressAndReleaseKey();
 
-  void shouldThrowErrorIfKeyPressInfoIsNull();
-
   void shouldPressAndReleaseKeys();
 
   void shouldPressKey();

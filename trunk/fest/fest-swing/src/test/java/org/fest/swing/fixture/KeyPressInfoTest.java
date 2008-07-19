@@ -17,6 +17,8 @@ package org.fest.swing.fixture;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.KeyPressInfo;
+
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.VK_C;
 

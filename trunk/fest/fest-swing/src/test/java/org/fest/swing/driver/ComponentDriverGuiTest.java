@@ -15,6 +15,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
@@ -34,6 +36,9 @@ import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.ComponentDriverGuiTest.KeyAction.action;
+import static org.fest.swing.driver.ComponentDriverGuiTest.KeyActionType.*;
+import static org.fest.swing.driver.ComponentDriverGuiTest.KeyPressRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -57,36 +62,63 @@ public class ComponentDriverGuiTest {
     robot.showWindow(frame);
   }
   
-  public void shouldPressKeyAndModifiers() {
-    final List<KeyAction> actions = new ArrayList<KeyAction>();
-    textField.addKeyListener(new KeyAdapter() {
-      @Override public void keyPressed(KeyEvent e) {
-        actions.add(new KeyAction(KeyActionType.PRESSED, e.getKeyCode()));
-      }
+  public void shouldPressKeyAndModifiersUsingKeyPressInfo() {
+    KeyPressRecorder recorder = attachTo(textField);
+    driver.pressAndReleaseKey(textField, KeyPressInfo.keyCode(VK_R).modifiers(SHIFT_MASK));
+    List<KeyAction> actions = recorder.actions;
+    assertThat(actions).containsOnly(
+        action(PRESSED, VK_SHIFT),
+        action(PRESSED, VK_R),
+        action(RELEASED, VK_R),
+        action(RELEASED, VK_SHIFT)
+    );
+  }
 
-      @Override public void keyReleased(KeyEvent e) {
-        actions.add(new KeyAction(KeyActionType.RELEASED, e.getKeyCode()));
-      }
-    });
+  public void shouldPressKeyAndModifiers() {
+    KeyPressRecorder recorder = attachTo(textField);
     driver.pressAndReleaseKey(textField, VK_C, new int[] { CTRL_MASK, SHIFT_MASK });
-    assertThat(actions).hasSize(6);
-    assertThat(actions.get(0)).isEqualTo(new KeyAction(KeyActionType.PRESSED, VK_SHIFT));
-    assertThat(actions.get(1)).isEqualTo(new KeyAction(KeyActionType.PRESSED, VK_CONTROL));
-    assertThat(actions.get(2)).isEqualTo(new KeyAction(KeyActionType.PRESSED, VK_C));
-    assertThat(actions.get(3)).isEqualTo(new KeyAction(KeyActionType.RELEASED, VK_C));
-    assertThat(actions.get(4)).isEqualTo(new KeyAction(KeyActionType.RELEASED, VK_CONTROL));
-    assertThat(actions.get(5)).isEqualTo(new KeyAction(KeyActionType.RELEASED, VK_SHIFT));
+    List<KeyAction> actions = recorder.actions;
+    assertThat(actions).containsOnly(
+        action(PRESSED, VK_SHIFT),
+        action(PRESSED, VK_CONTROL),
+        action(PRESSED, VK_C),
+        action(RELEASED, VK_C),
+        action(RELEASED, VK_CONTROL),
+        action(RELEASED, VK_SHIFT)
+    );
   }
   
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 
-  private static class KeyAction {
+  static class KeyPressRecorder extends KeyAdapter {
+    final List<KeyAction> actions = new ArrayList<KeyAction>();
+
+    static KeyPressRecorder attachTo(Component c) {
+      KeyPressRecorder recorder = new KeyPressRecorder();
+      c.addKeyListener(recorder);
+      return recorder;
+    }
+    
+    @Override public void keyPressed(KeyEvent e) {
+      actions.add(action(KeyActionType.PRESSED, e.getKeyCode()));
+    }
+
+    @Override public void keyReleased(KeyEvent e) {
+      actions.add(action(KeyActionType.RELEASED, e.getKeyCode()));
+    }    
+  }
+  
+  static class KeyAction {
     final KeyActionType type;
     final int keyCode;
 
-    KeyAction(KeyActionType type, int keyCode) {
+    static KeyAction action(KeyActionType type, int keyCode) {
+      return new KeyAction(type, keyCode);
+    }
+    
+    private KeyAction(KeyActionType type, int keyCode) {
       this.type = type;
       this.keyCode = keyCode;
     }
@@ -118,7 +150,7 @@ public class ComponentDriverGuiTest {
     }
   }
   
-  private static enum KeyActionType {
+  static enum KeyActionType {
     PRESSED, RELEASED
   }
   

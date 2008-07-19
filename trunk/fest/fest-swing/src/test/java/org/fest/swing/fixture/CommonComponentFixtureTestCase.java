@@ -20,17 +20,20 @@ import java.awt.Component;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Timeout;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
+import static org.fest.swing.core.MouseClickInfo.middleButton;
 import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.fixture.MouseClickInfo.middleButton;
 
 
 /**
@@ -71,11 +74,10 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
   }
 
   public void shouldClickUsingGivenMouseClickInfo() {
-    replaceInputSimulatorIn(fixture());
     final MouseClickInfo mouseClickInfo = middleButton().times(2);
     new EasyMockTemplate(driver()) {
       protected void expectations() {
-        driver().click(target(), MIDDLE_BUTTON, 2);
+        driver().click(target(), mouseClickInfo);
         expectLastCall().once();
       }
 
@@ -83,11 +85,6 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
         assertThatReturnsThis(fixture().click(mouseClickInfo));
       }
     }.run();
-  }
-
-  @Test(expectedExceptions = NullPointerException.class) 
-  public void shouldThrowErrorIfMouseClickInfoIsNull() {
-    fixture().click((MouseClickInfo)null);
   }
 
   public void shouldDoubleClick() {
@@ -130,26 +127,19 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
   }
 
   public void shouldPressAndReleaseKey() {
-    replaceInputSimulatorIn(fixture());
-    final int keyCode = VK_A;
-    final int[] modifiers = { SHIFT_MASK };
+    final KeyPressInfo keyPressInfo = keyCode(VK_A).modifiers(SHIFT_MASK);
     new EasyMockTemplate(driver()) {
       protected void expectations() {
-        driver().pressAndReleaseKey(eq(target()), eq(keyCode), aryEq(modifiers));
+        driver().pressAndReleaseKey(target(), keyPressInfo);
         expectLastCall().once();
       }
 
       protected void codeToTest() {
-        assertThatReturnsThis(fixture().pressAndReleaseKey(KeyPressInfo.keyCode(keyCode).modifiers(modifiers)));
+        assertThatReturnsThis(fixture().pressAndReleaseKey(keyPressInfo));
       }
     }.run();
   }
 
-  @Test(expectedExceptions = NullPointerException.class) 
-  public void shouldThrowErrorIfKeyPressInfoIsNull() {
-    fixture().pressAndReleaseKey(null);
-  }
-  
   public void shouldPressAndReleaseKeys() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {

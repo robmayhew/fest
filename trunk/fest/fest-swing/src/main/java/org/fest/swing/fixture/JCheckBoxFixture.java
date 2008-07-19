@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JCheckBox;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -110,7 +108,7 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    */
   public JCheckBoxFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -151,7 +149,7 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @see KeyPressInfo
    */
   public JCheckBoxFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

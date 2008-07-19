@@ -19,9 +19,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JFileChooserDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -144,7 +142,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JFileChooserFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
   
@@ -195,7 +193,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @see KeyPressInfo
    */
   public JFileChooserFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

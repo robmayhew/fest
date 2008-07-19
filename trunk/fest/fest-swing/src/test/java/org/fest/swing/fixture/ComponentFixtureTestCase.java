@@ -105,13 +105,6 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
     abstract ComponentFixture<T> fixtureWithName(String name);
   }
   
-  @SuppressWarnings("unchecked")
-  void replaceInputSimulatorIn(Object fixture) {
-    assertThat(fixture).isInstanceOf(ComponentFixture.class);
-    ComponentFixture<? extends Component> componentFixture = (ComponentFixture<? extends Component>)fixture;
-    componentFixture.inputSimulator(new InputSimulator(driver(), target()));
-  }
-  
   private boolean requireShowing() {
     return settings().componentLookupScope().requireShowing();
   }

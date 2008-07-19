@@ -17,9 +17,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JScrollBarDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -94,7 +92,7 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> impl
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JScrollBarFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -135,7 +133,7 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> impl
    * @see KeyPressInfo
    */
   public JScrollBarFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -41,6 +42,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.driver.ComponentDriverTest.PerformDefaultAccessibleActionTaskMatcher.eqTask;
@@ -94,6 +96,29 @@ import static org.fest.swing.util.Platform.*;
     }.run();
   }
 
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfMouseClickInfoIsNull() {
+    MouseClickInfo info = null;
+    driver.click(c, info);
+  }
+  
+  public void shouldClickComponentUsingMouseClickInfo() {
+    final MouseButton button = LEFT_BUTTON;
+    final int times = 2;
+    final MouseClickInfo info = button(button).times(times);
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        robot.click(c, button, times);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        driver.click(c, info);
+      }
+    }.run();
+    
+  }
+  
   public void shouldClickComponentUsingGivenMouseButtonAndTimes() {
     final MouseButton button = LEFT_BUTTON;
     final int times = 2;
@@ -281,6 +306,11 @@ import static org.fest.swing.util.Platform.*;
     }
   }
 
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfKeyPressInfoIsNull() {
+    driver.pressAndReleaseKey(c, null);
+  }
+  
   public void shouldPressAndReleaseKeys() {
     final int[] keys = { 6, 8 };
     new EasyMockTemplate(robot) {

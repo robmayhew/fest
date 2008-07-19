@@ -20,9 +20,7 @@ import java.awt.Point;
 
 import javax.swing.JToolBar;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JToolBarDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -145,7 +143,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JToolBarFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -186,7 +184,7 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
    * @see KeyPressInfo
    */
   public JToolBarFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

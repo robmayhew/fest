@@ -16,9 +16,7 @@ package org.fest.swing.fixture;
 
 import javax.swing.JPanel;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -93,7 +91,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JPanelFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -134,7 +132,7 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
    * @see KeyPressInfo
    */
   public JPanelFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

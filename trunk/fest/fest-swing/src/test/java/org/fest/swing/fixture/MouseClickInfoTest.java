@@ -17,6 +17,8 @@ package org.fest.swing.fixture;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.MouseClickInfo;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 

@@ -83,6 +83,17 @@ public class ComponentDriver {
   }
 
   /**
+   * Simulates a user clicking the given mouse button, the given times on the given <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to click on.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   */
+  public void click(Component c, MouseClickInfo mouseClickInfo) {
+    if (mouseClickInfo == null) throw new NullPointerException("The given MouseClickInfo should not be null");
+    click(c, mouseClickInfo.button(), mouseClickInfo.times());
+  }
+
+  /**
    * Simulates a user double-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
    */
@@ -212,10 +223,26 @@ public class ComponentDriver {
    * Simulates a user pressing and releasing the given key on the <code>{@link Component}</code>. Modifiers is a
    * mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param c the target component.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @see java.awt.event.KeyEvent
+   * @see java.awt.event.InputEvent
+   */
+  public void pressAndReleaseKey(Component c, KeyPressInfo keyPressInfo) {
+    if (keyPressInfo == null) throw new NullPointerException("The given KeyPressInfo should not be null");
+    pressAndReleaseKey(c, keyPressInfo.keyCode(), keyPressInfo.modifiers());
+  }
+
+  /**
+   * Simulates a user pressing and releasing the given key on the <code>{@link Component}</code>. Modifiers is a
+   * mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param c the target component.
    * @param keyCode the code of the key to press.
    * @param modifiers the given modifiers.
    * @throws IllegalArgumentException if the given code is not a valid key code. *
    * @see java.awt.event.KeyEvent
+   * @see java.awt.event.InputEvent
    */
   public void pressAndReleaseKey(Component c, int keyCode, int[] modifiers) {
     focus(c);

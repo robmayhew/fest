@@ -20,9 +20,7 @@ import java.awt.Point;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.JInternalFrameDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -218,7 +216,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public JInternalFrameFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -259,7 +257,7 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    * @see KeyPressInfo
    */
   public JInternalFrameFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 

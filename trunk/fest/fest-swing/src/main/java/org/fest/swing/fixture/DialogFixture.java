@@ -19,10 +19,7 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.DialogDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -121,7 +118,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    */
   public DialogFixture click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -165,7 +162,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @see KeyPressInfo
    */
   public DialogFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
   

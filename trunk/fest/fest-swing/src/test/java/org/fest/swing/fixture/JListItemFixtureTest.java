@@ -26,7 +26,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.fixture.MouseClickInfo.leftButton;
+import static org.fest.swing.core.MouseClickInfo.leftButton;
 
 /**
  * Tests for <code>{@link JListItemFixture}</code>.

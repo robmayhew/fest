@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 
 import java.awt.event.KeyEvent;
 
+import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.util.Platform;
 
 /**

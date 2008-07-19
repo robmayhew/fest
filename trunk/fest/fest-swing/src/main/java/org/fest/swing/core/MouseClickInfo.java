@@ -13,9 +13,8 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.core;
 
-import org.fest.swing.core.MouseButton;
 
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.util.Strings.concat;

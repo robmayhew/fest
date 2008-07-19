@@ -16,9 +16,7 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.core.*;
 import org.fest.swing.driver.ComponentDriver;
 
 /**
@@ -113,7 +111,7 @@ public abstract class GenericComponentFixture<T extends Component> extends Compo
 
   /** {@inheritDoc} */
   public GenericComponentFixture<T> click(MouseClickInfo mouseClickInfo) {
-    doClick(mouseClickInfo);
+    driver.click(target, mouseClickInfo);
     return this;
   }
 
@@ -138,7 +136,7 @@ public abstract class GenericComponentFixture<T extends Component> extends Compo
 
   /** {@inheritDoc} */
   public GenericComponentFixture<T> pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    doPressAndReleaseKey(keyPressInfo);
+    driver.pressAndReleaseKey(target, keyPressInfo);
     return this;
   }
 
