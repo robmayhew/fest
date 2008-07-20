@@ -22,12 +22,13 @@ import java.util.Map;
 
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
+import static java.lang.String.valueOf;
 
-import static org.fest.util.Strings.*;
-import static java.lang.String.*;
+import static org.fest.util.Strings.concat;
 
 /**
- * Understands mappings between key modifier masks and the codes for the keys:
+ * Understands utility methods related to input modifiers. This class also maps modifier masks to key codes for the 
+ * following modifiers:
  * <ul>
  * <li>Alt</li>
  * <li>AltGraph</li>
@@ -95,7 +96,7 @@ public class Modifiers {
   }
   
   /**
-   * Updates the given modifier mask with the given key code, only if the key code belong to a modifier key. 
+   * Updates the given modifier mask with the given key code, only if the given key code belongs to a modifier key. 
    * @param keyCode the given key code.
    * @param modifierMask the given modifier mask.
    * @return the updated modifier mask.

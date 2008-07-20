@@ -48,6 +48,10 @@
       <action dev="alruiz" type="fix" issue="173" due-to="fred76131">
         Methods 'selectItem' ensure the drop-down list in a  JComboBox is hidden after a selection has been made.
       </action>
+      <action dev="alruiz" type="remove" issue="174" due-to="Simeon Fitch">
+        Added class org.fest.swing.core.EmergencyAbortListener to abort running FEST-Swing tests using a predefined key 
+        combination.
+      </action>
       <action dev="wanghy" type="fix" issue="177" due-to="Juhos Csaba-Zsolt">
         JTableCellWriters now wait for the editor to show on the screen before starting editing a JTable cell.
       </action>
