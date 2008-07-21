@@ -20,6 +20,8 @@ import static org.fest.swing.util.System.LINE_SEPARATOR;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
+import java.lang.reflect.Array;
+
 /**
  * Understands utility methods for arrays.
  *
@@ -101,6 +103,36 @@ public final class Arrays {
       if (i != lineSize - 1) b.append(", ");
     }
     b.append("]");
+  }
+
+  /**
+   * Creates and returns a copy of the given array.
+   * @param array the array to copy.
+   * @return the created copy.
+   * @throws NullPointerException if the array to copy is <code>null</code>.
+   */
+  public static int[] copyOf(int[] array) {
+    if (array == null) throw new NullPointerException("The array to copy should not be null");
+    int arraySize = array.length;
+    int[] copy = new int[arraySize];
+    for (int i = 0; i < arraySize; i++) copy[i] = array[i];
+    return copy;
+  }
+
+
+  /**
+   * Creates and returns a copy of the given array.
+   * @param <T> the generic type of the array.
+   * @param array the array to copy.
+   * @return the created copy.
+   * @throws NullPointerException if the array to copy is <code>null</code>.
+   */
+  @SuppressWarnings("unchecked") public static <T> T[] copyOf(T[] array) {
+    if (array == null) throw new NullPointerException("The array to copy should not be null");
+    int arraySize = array.length;
+    T[] copy = (T[])Array.newInstance(array.getClass().getComponentType(), arraySize);
+    for (int i = 0; i < arraySize; i++) copy[i] = array[i];
+    return copy;
   }
 
   private Arrays() {}

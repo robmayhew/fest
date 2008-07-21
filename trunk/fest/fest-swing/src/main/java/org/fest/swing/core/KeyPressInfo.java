@@ -15,12 +15,12 @@
  */
 package org.fest.swing.core;
 
+import static org.fest.swing.util.Arrays.copyOf;
+
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 
 import org.fest.swing.util.Platform;
-
-import static java.util.Arrays.copyOf;
 
 /**
  * Understands information about pressing a keyboard key.
@@ -79,8 +79,9 @@ public final class KeyPressInfo {
    * Returns the modifiers to use when pressing <code>{@link #keyCode the specified key}</code>.
    * @return the modifiers to use.
    */
-  public int[] modifiers() { 
-    return copyOf(modifiers, modifiers.length);
+  public int[] modifiers() {
+    if (modifiers == null) return new int[0];
+    return copyOf(modifiers);
   }
   
   /**
@@ -96,7 +97,7 @@ public final class KeyPressInfo {
    */
   public KeyPressInfo modifiers(int... newModifiers) {
     if (newModifiers == null) throw new NullPointerException("The array of modifiers should not be null");
-    modifiers = copyOf(newModifiers, newModifiers.length);
+    modifiers = copyOf(newModifiers);
     return this;
-  }
+  }  
 }

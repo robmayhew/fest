@@ -15,7 +15,7 @@
  */
 package org.fest.swing.launcher;
 
-import static java.util.Arrays.copyOf;
+import static org.fest.swing.util.Arrays.copyOf;
 import static org.fest.reflect.core.Reflection.staticMethod;
 import static org.fest.util.Strings.*;
 
@@ -92,7 +92,7 @@ public class ApplicationLauncher {
    */
   public ApplicationLauncher withArgs(String...newArgs) {
     if (newArgs == null) throw new NullPointerException("The array of arguments should not be null");
-    args = copyOf(newArgs, newArgs.length);
+    args = copyOf(newArgs);
     return this;
   }
 

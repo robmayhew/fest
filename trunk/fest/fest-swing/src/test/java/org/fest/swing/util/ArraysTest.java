@@ -29,13 +29,13 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz 
  */
-public class ArraysTest {
+@Test public class ArraysTest {
 
-  @Test public void shouldPassAsEqualIfBothArraysAreNull() {
+  public void shouldPassAsEqualIfBothArraysAreNull() {
     Arrays.assertEquals(null, null, "");
   }
   
-  @Test public void shouldFailIfActualArrayIsNullAndExpectedArrayIsNotNull() {
+  public void shouldFailIfActualArrayIsNullAndExpectedArrayIsNotNull() {
     expectAssertionError("[test] expected:<[]> but was:<null>").on(new CodeToTest() {
       public void run() {
         Arrays.assertEquals(null, new String[0][], "test");
@@ -43,7 +43,7 @@ public class ArraysTest {
     });
   }
   
-  @Test public void shouldFailIfActualArrayIsNotNullAndExpectedArrayIsNull() {
+  public void shouldFailIfActualArrayIsNotNullAndExpectedArrayIsNull() {
     expectAssertionError("[test] expected:<null> but was:<[]>").on(new CodeToTest() {
       public void run() {
         Arrays.assertEquals(new String[0][], null, "test");
@@ -51,7 +51,7 @@ public class ArraysTest {
     });
   }
   
-  @Test public void shouldFailIfActualAndExpectedHaveDifferentDimensions() {
+  public void shouldFailIfActualAndExpectedHaveDifferentDimensions() {
     expectAssertionError("[test] expected:<[[]]> but was:<[]>").on(new CodeToTest() {
       public void run() {
         Arrays.assertEquals(new String[0][], new String[1][0], "test");
@@ -59,7 +59,7 @@ public class ArraysTest {
     });    
   }
   
-  @Test public void shouldFailIfActualAndExpectedHaveSameDimensionButDifferentData() {
+  public void shouldFailIfActualAndExpectedHaveSameDimensionButDifferentData() {
     final String[][] actual = { { "Hello" } };
     final String[][] expected = { { "Bye" } };
     expectAssertionError("[test] expected:<[['Bye']]> but was:<[['Hello']]>").on(new CodeToTest() {
@@ -69,27 +69,27 @@ public class ArraysTest {
     });    
   }
 
-  @Test public void shouldPassIfBothArraysAreEqual() {
+  public void shouldPassIfBothArraysAreEqual() {
     String[][] actual = { { "Hello" } };
     String[][] expected = { { "Hello" } };
     Arrays.assertEquals(actual, expected, "test");
   }
 
-  @Test public void shouldReturnNullWordIfArrayIsNull() {
+  public void shouldReturnNullWordIfArrayIsNull() {
     assertThat(Arrays.format(null)).isEqualTo("null");
   }
   
-  @Test public void shouldReturnEmptyBracesIfFirstDimensionIsZero() {
+  public void shouldReturnEmptyBracesIfFirstDimensionIsZero() {
     String[][] array = new String[0][];
     assertThat(Arrays.format(array)).isEqualTo("[]");
   }
   
-  @Test public void shouldReturnEmptyBracesIfSecondDimensionIsZero() {
+  public void shouldReturnEmptyBracesIfSecondDimensionIsZero() {
     String[][] array = new String[1][0];
     assertThat(Arrays.format(array)).isEqualTo("[[]]");
   }
   
-  @Test public void shouldFormatArray() {
+  public void shouldFormatArray() {
     String[][] array = {
         { "0-0", "0-1", "0-2"},
         { "1-0", "1-1", "1-2"},
@@ -103,5 +103,38 @@ public class ArraysTest {
         " ['3-0', '3-1', '3-2']]"
     );
     assertThat(Arrays.format(array)).isEqualTo(formatted);
+  }
+ 
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfIntArrayToCopyIsNull() {
+    int[] original = null;
+    Arrays.copyOf(original);
+  }
+  
+  public void shouldReturnEmptyIntArrayIfArrayToCopyIsEmtpy() {
+    assertThat(Arrays.copyOf(new int[0])).isEmpty();
+  }
+  
+  public void shouldReturnCopyOfIntArray() {
+    int[] original = { 1, 2, 3 };
+    int[] copy = Arrays.copyOf(original);
+    assertThat(copy).isEqualTo(original).isNotSameAs(original);
+  }
+
+  
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfObjectArrayToCopyIsNull() {
+    Object[] original = null;
+    Arrays.copyOf(original);
+  }
+  
+  public void shouldReturnEmptyObjectArrayIfArrayToCopyIsEmtpy() {
+    assertThat(Arrays.copyOf(new Object[0])).isEmpty();
+  }
+  
+  public void shouldReturnCopyOfObjectArray() {
+    Object[] original = { "hello", "bye" };
+    Object[] copy = Arrays.copyOf(original);
+    assertThat(copy).isEqualTo(original).isNotSameAs(original);
   }
 }
