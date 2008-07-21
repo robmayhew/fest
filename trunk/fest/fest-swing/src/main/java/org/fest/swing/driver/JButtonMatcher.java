@@ -31,6 +31,11 @@ final class JButtonMatcher extends GenericTypeMatcher<JButton> {
   private final String textToMatch;
 
   JButtonMatcher(String textToMatch) {
+    this(textToMatch, true);
+  }
+  
+  JButtonMatcher(String textToMatch, boolean requireShowing) {
+    super(requireShowing);
     this.textToMatch = textToMatch;
   }
 

@@ -9,6 +9,9 @@
       <action dev="alruiz, wanghy" type="add" issue="11">
         Added org.fest.swing.applet.AppletViewer and helper classes in package org.fest.swing.applet.
       </action>
+      <action dev="wanghy" type="add" issue="14">
+        JFileChooserDriver checks that lookup of buttons search for visible (or 'showing') buttons.
+      </action>
       <action dev="alruiz, wanghy" type="fix" issue="146" due-to="Juhos Csaba-Zsolt">
         Added method 'menuItemWithPath(String...)' to org.fest.swing.fixture.JPopupMenuFixture.
       </action>

@@ -170,7 +170,7 @@ public class JFileChooserDriver extends JComponentDriver {
   }
 
   private JButton findButton(JFileChooser fileChooser, String text) {
-    return robot.finder().find(fileChooser, new JButtonMatcher(text));
+    return robot.finder().find(fileChooser, new JButtonMatcher(text, true));
   }
   
   private ComponentLookupException cannotFindButton(String name, String text) {
