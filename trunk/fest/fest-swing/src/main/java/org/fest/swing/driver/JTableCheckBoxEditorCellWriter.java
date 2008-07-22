@@ -48,11 +48,6 @@ public class JTableCheckBoxEditorCellWriter extends AbstractJTableCellWriter  {
   /** ${@inheritDoc} */
   public void startCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
-    startEditing(table, row, column);
-  }
-
-  private void startEditing(JTable table, int row, int column) {
-    clickCell(table, row, column, 2);
   }
 
   /** ${@inheritDoc} */

@@ -16,17 +16,22 @@
 package org.fest.swing.driver;
 
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.driver.BasicJTreeCellReader;
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.testing.CustomCellRenderer;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -35,7 +40,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class BasicJTreeCellReaderTest {
+@Test public class BasicJTreeCellReaderTest {
 
   private JTree tree;
   private BasicJTreeCellReader reader;
@@ -48,16 +53,34 @@ public class BasicJTreeCellReaderTest {
     reader = new BasicJTreeCellReader();
   }
 
-  @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
+  public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
     JLabel label = new JLabel("First");
     tree.setCellRenderer(new CustomCellRenderer(label));
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo(label.getText());
   }
 
-  @Test public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
+  public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
     tree.setCellRenderer(new CustomCellRenderer(new JToolBar()));
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo(root.getUserObject());
+  }
+  
+  public void shouldReturnNullIfTextOfModelValueIsDefaultToString() {
+    class Person {}
+    tree = createMock(JTree.class);
+    final TreeCellRenderer renderer = createMock(TreeCellRenderer.class);
+    final Person value = new Person();
+    new EasyMockTemplate(tree) {
+      protected void expectations() {
+        expect(tree.getCellRenderer()).andReturn(renderer);
+        expect(renderer.getTreeCellRendererComponent(tree, value, false, false, false, 0, false)).andReturn(new JButton());
+        expect(tree.convertValueToText(value, false, false, false, 0, false)).andReturn(value.toString());
+      }
+
+      protected void codeToTest() {
+        assertThat(reader.valueAt(tree, value)).isNull();
+      }
+    }.run();
   }
 }

@@ -28,9 +28,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -40,7 +46,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class AbstractJTableCellWriterTest {
+@Test(groups = GUI) public class AbstractJTableCellWriterTest {
 
   private Robot robot;
   private TableDialogEditDemoFrame frame;
@@ -75,5 +81,29 @@ public class AbstractJTableCellWriterTest {
         { 0, 3, JTextField.class },
         { 0, 4, JCheckBox.class }
     };
+  }
+  
+  public void shouldThrowErrorIfEditorToHandleIsNull() {
+    try {
+      writer.cannotHandleEditor(null);
+      fail();
+    } catch (ActionFailedException e) {
+      assertThat(e).message().contains("Unable to handle editor component of type <null>");
+    }
+  }
+  
+  public void shouldReturnNullEditorComponentIfCellEditorIsNull() {
+    final JTable table = createMock(JTable.class);
+    final int row = 6;
+    final int column = 8;
+    new EasyMockTemplate(table) {
+      protected void expectations() {
+        expect(table.getCellEditor(row, column)).andReturn(null);
+      }
+
+      protected void codeToTest() {
+        assertThat(writer.editorForCell(table, row, column)).isNull();
+      }
+    }.run();
   }
 }

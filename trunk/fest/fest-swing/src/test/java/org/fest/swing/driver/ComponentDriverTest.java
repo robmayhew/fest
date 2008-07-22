@@ -19,9 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import org.easymock.IArgumentMatcher;
 import org.testng.annotations.BeforeMethod;
@@ -564,7 +562,7 @@ import static org.fest.swing.util.Platform.*;
     }.run();
   }
 
-  public void shouldReturnFalseComponentIsReady() {
+  public void shouldReturnFalseIfComponentIsNeverReady() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
         expect(robot.isReadyForInput(c)).andReturn(false).atLeastOnce();
@@ -575,4 +573,22 @@ import static org.fest.swing.util.Platform.*;
       }
     }.run();
   }
+  
+  public void shouldReturnFalseIfJPopupMenuIsNeverVisible() {
+    final JPopupMenu popupMenu = createMock(JPopupMenu.class);
+    final JMenu invoker = createMock(JMenu.class);
+    new EasyMockTemplate(robot, popupMenu, invoker) {
+      protected void expectations() {
+        expect(robot.isReadyForInput(popupMenu)).andReturn(false).atLeastOnce();
+        expect(popupMenu.getInvoker()).andReturn(invoker).atLeastOnce();
+        robot.jitter(invoker);
+        expectLastCall().atLeastOnce();
+      }
+
+      protected void codeToTest() {
+        assertThat(driver.waitForShowing(popupMenu, 100)).isFalse();
+      }
+    }.run();
+  }
+  
 }

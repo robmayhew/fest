@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**
- * Understands the base implementation of all default readers in this packages.
+ * Understands the base implementation of all default readers in this package.
  *
  * @author Alex Ruiz
  */

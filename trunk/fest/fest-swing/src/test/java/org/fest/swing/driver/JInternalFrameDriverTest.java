@@ -27,8 +27,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.driver.JInternalFrameDriver.Action;
-import org.fest.swing.driver.JInternalFrameDriver.SetPropertyTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
@@ -37,7 +35,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JInternalFrameDriver.Action.MAXIMIZE;
+import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -70,10 +68,10 @@ public class JInternalFrameDriverTest {
 
   public void shouldThrowErrorWithExceptionInSetPropertyTask() {
     final PropertyVetoException vetoed = new PropertyVetoException("Test", null);
-    Action action = MAXIMIZE;
-    SetPropertyTask task = new SetPropertyTask(internalFrame, action) {
-      public void run() {
-        veto.cause = vetoed;
+    JInternalFrameAction action = MAXIMIZE;
+    JInternalFrameSetPropertyTask task = new JInternalFrameSetPropertyTask(internalFrame, action) {
+      public void execute() throws PropertyVetoException {
+        throw vetoed;
       }
     };
     try {

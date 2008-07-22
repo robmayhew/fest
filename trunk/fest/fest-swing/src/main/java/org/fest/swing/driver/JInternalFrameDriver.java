@@ -14,11 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.driver.JInternalFrameDriver.Action.*;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -27,7 +22,13 @@ import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.driver.JInternalFrameSetPropertyTask.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
+
+import static org.fest.swing.driver.JInternalFrameAction.*;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JInternalFrame}</code>. Unlike
@@ -107,7 +108,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     maximizeOrNormalize(frame, NORMALIZE);
   }
 
-  private void maximizeOrNormalize(JInternalFrame frame, Action action) {
+  private void maximizeOrNormalize(JInternalFrame frame, JInternalFrameAction action) {
     Container clickTarget = frame;
     if (frame.isIcon()) clickTarget = frame.getDesktopIcon();
     Point p = maximizeLocation(clickTarget);
@@ -116,17 +117,13 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     setProperty(new SetMaximumTask(frame, action));
   }
 
-  private static class SetMaximumTask extends SetPropertyTask {
-    SetMaximumTask(JInternalFrame target, Action action) {
+  private static class SetMaximumTask extends JInternalFrameSetPropertyTask {
+    SetMaximumTask(JInternalFrame target, JInternalFrameAction action) {
       super(target, action);
     }
 
-    public void run() {
-      try {
-        target.setMaximum(action.value);
-      } catch (PropertyVetoException e) {
-        veto.cause = e;
-      }
+    public void execute() throws PropertyVetoException {
+      target.setMaximum(action.value);
     }
   }
 
@@ -158,36 +155,22 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     setProperty(new SetIconTask(frame, DEICONIFY));
   }
 
-  private static class SetIconTask extends SetPropertyTask {
-    SetIconTask(JInternalFrame target, Action action) {
+  private static class SetIconTask extends JInternalFrameSetPropertyTask {
+    SetIconTask(JInternalFrame target, JInternalFrameAction action) {
       super(target, action);
     }
 
-    public void run() {
-      try {
-        target.setIcon(action.value);
-      } catch (PropertyVetoException e) {
-        veto.cause = e;
-      }
+    public void execute() throws PropertyVetoException {
+      target.setIcon(action.value);
     }
   }
 
-  void setProperty(SetPropertyTask task) {
+  void setProperty(JInternalFrameSetPropertyTask task) {
     robot.invokeAndWait(task);
-    PropertyVetoException vetoError = task.veto.cause;
+    PropertyVeto veto = task.veto();
+    PropertyVetoException vetoError = veto != null ? veto.cause() : null;
     if (vetoError == null) return;
     throw actionFailure(concat(task.action.name, " of ", format(task.target), " was vetoed: <", vetoError.getMessage(), ">"));
-  }
-
-  static abstract class SetPropertyTask implements Runnable {
-    final JInternalFrame target;
-    final Action action;
-    final PropertyVeto veto = new PropertyVeto();
-
-    SetPropertyTask(JInternalFrame target, Action action) {
-      this.target = target;
-      this.action = action;
-    }
   }
 
   /**
@@ -251,21 +234,5 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     public void run() {
       target.doDefaultCloseAction();
     }
-  }
-
-  static enum Action {
-    MAXIMIZE("Maximize", true), NORMALIZE("Normalize", false), ICONIFY("Iconify", true), DEICONIFY("Deiconify", false);
-
-    final String name;
-    final boolean value;
-
-    private Action(String name, boolean value) {
-      this.name = name;
-      this.value = value;
-    }
-  }
-
-  static class PropertyVeto {
-    PropertyVetoException cause = null;
   }
 }

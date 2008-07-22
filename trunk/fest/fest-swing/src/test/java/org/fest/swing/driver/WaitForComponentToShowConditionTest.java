@@ -15,12 +15,12 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link WaitForComponentToShowCondition}</code>.
@@ -34,7 +34,7 @@ import org.testng.annotations.Test;
 
   @BeforeMethod public void setUp() {
     c = new ComponentStub();
-    condition = new WaitForComponentToShowCondition(c);
+    condition = WaitForComponentToShowCondition.untilShowing(c);
   }
 
   public void shouldReturnTrueIfComponentIsShowing() {

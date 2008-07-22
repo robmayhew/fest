@@ -59,6 +59,10 @@ public class JMenuItemMatcherTest {
     assertThat(found).isSameAs(frame.logoutMenuItem);
   }
   
+  @Test public void shouldShowPathInToString() {
+    assertThat(matcher.toString()).contains("label='Logout|Logout'");
+  }
+  
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
