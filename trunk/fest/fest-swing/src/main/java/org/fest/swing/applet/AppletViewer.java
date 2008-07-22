@@ -147,7 +147,6 @@ public class AppletViewer extends JFrame implements StatusDisplay {
    * viewer.
    */
   public void unloadApplet() {
-    if (!loaded) return;
     applet.stop();
     applet.destroy();
     loaded = false;

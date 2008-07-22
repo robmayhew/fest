@@ -313,18 +313,4 @@ public class JComboBoxDriver extends JComponentDriver {
     validateCellReader(newCellReader);
     cellReader = newCellReader;
   }
-
-  private static class SetSelectedIndexTask implements Runnable {
-    private final JComboBox comboBox;
-    private final int index;
-
-    public SetSelectedIndexTask(JComboBox comboBox, int index) {
-      this.comboBox = comboBox;
-      this.index = index;
-    }
-
-    public void run() {
-      comboBox.setSelectedIndex(index);
-    }
-  }
 }
