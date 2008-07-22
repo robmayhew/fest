@@ -25,11 +25,13 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.util.Collections.list;
 
@@ -51,6 +53,15 @@ public class ApplicationLauncherTest {
     robot.cleanUp();
   }
 
+  public void shouldThrowErrorIfApplicationClassNameIsInvalid() {
+    try {
+      ApplicationLauncher.application("Hello").start();
+      fail();
+    } catch (UnexpectedException e) {
+      assertThat(e).message().contains("Unable to load class 'Hello'");
+    }
+  }
+  
   public void shouldLaunchApplicationWithoutArguments() {
     ApplicationLauncher.application(JavaApp.class).start();
     assertFrameIsShowing();
