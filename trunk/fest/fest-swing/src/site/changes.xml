@@ -62,6 +62,10 @@
         Method 'separator(String)' in org.fest.swing.fixture.JTreeFixture now returns 'this'.
       </action>
       <action dev="alruiz" type="fix">
+        Moved abstract methods in org.fest.swing.fixture.ComponentFixture to the interfaces FocusableComponentFixture, 
+        KeyboardInputSimulationFixture, MouseInputSimulationFixture and StateVerificationFixture.
+      </action>
+      <action dev="alruiz" type="fix">
         Moved classes KeyPressInfo and MouseClickInfo from package org.fest.swing.fixture to org.fest.swing.core.
       </action>
       <action dev="alruiz" type="fix">
