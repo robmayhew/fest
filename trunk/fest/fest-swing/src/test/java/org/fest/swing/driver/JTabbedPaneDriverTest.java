@@ -26,9 +26,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.assertions.IntAssert;
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestWindow;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -63,6 +68,23 @@ public class JTabbedPaneDriverTest {
     robot.cleanUp();
   }
 
+  public void shouldSetTabDirectlyIfLocationOfTabNotFound() {
+    tabbedPane.setSelectedIndex(0);
+    final JTabbedPaneLocation location = createMock(JTabbedPaneLocation.class);
+    final int index = 1; 
+    driver = new JTabbedPaneDriver(robot, location);
+    new EasyMockTemplate(location) {
+      protected void expectations() {
+        expect(location.pointAt(tabbedPane, index)).andThrow(new LocationUnavailableException("Thrown on purpose"));
+      }
+
+      protected void codeToTest() {
+        driver.selectTab(tabbedPane, index);
+        assertThatSelectedTabIndexIsEqualTo(index);
+      }
+    }.run();
+  }
+  
   @Test(groups = GUI, dataProvider = "tabIndexProvider")
   public void shouldSelectTabWithGivenIndex(int index) {
     driver.selectTab(tabbedPane, index);

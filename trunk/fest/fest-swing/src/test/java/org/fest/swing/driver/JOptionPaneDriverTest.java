@@ -241,7 +241,7 @@ public class JOptionPaneDriverTest {
                              .contains("expected:<'Plain Message'> but was:<'Error Message'>");
     }
   }
-
+  
   public static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 

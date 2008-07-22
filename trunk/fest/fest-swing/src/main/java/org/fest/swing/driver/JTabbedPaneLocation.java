@@ -14,11 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Strings.match;
-import static org.fest.util.Strings.*;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -27,13 +22,19 @@ import javax.swing.JTabbedPane;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Strings.*;
+
 /**
  * Understands encapsulation of a location on a <code>{@link JTabbedPane}</code> (notably a tab).
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JTabbedPaneLocation {
+public class JTabbedPaneLocation {
 
   /**
    * Returns the index of the first tab that matches the given <code>String</code>.

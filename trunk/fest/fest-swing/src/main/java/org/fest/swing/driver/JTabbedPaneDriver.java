@@ -37,11 +37,20 @@ public class JTabbedPaneDriver extends JComponentDriver {
 
   /**
    * Creates a new </code>{@link JTabbedPaneDriver}</code>.
-   * @param robot
+   * @param robot the robot to use to simulate user input.
    */
   public JTabbedPaneDriver(Robot robot) {
+    this(robot, new JTabbedPaneLocation());
+  }
+
+  /**
+   * Creates a new </code>{@link JTabbedPaneDriver}</code>.
+   * @param robot the robot to use to simulate user input.
+   * @param location knows how to find the location of a tab.
+   */
+  JTabbedPaneDriver(Robot robot, JTabbedPaneLocation location) {
     super(robot);
-    location = new JTabbedPaneLocation();
+    this.location = location;
   }
 
   /**

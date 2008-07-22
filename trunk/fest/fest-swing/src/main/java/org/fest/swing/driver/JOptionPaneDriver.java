@@ -16,8 +16,6 @@
 package org.fest.swing.driver;
 
 import java.awt.Dialog;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -30,8 +28,7 @@ import org.fest.swing.exception.ComponentLookupException;
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
+import static org.fest.swing.driver.JOptionPaneMessageTypes.messageTypeAsText;
 
 /**
  * Understands simulation of user input on a <code>{@link JOptionPane}</code>. Unlike <code>JOptionPaneFixture</code>,
@@ -47,15 +44,6 @@ public class JOptionPaneDriver extends JComponentDriver {
   private static final String OPTIONS_PROPERTY = "options";
   private static final String TITLE_PROPERTY = "title";
   
-  private static final Map<Integer, String> messageMap = new HashMap<Integer, String>();
-  static {
-    messageMap.put(ERROR_MESSAGE, "Error Message");
-    messageMap.put(INFORMATION_MESSAGE, "Information Message");
-    messageMap.put(WARNING_MESSAGE, "Warning Message");
-    messageMap.put(QUESTION_MESSAGE, "Question Message");
-    messageMap.put(PLAIN_MESSAGE, "Plain Message");
-  }
-
   /**
    * Creates a new </code>{@link JOptionPaneDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -219,10 +207,5 @@ public class JOptionPaneDriver extends JComponentDriver {
 
   private String actualMessageTypeAsText(JOptionPane optionPane) {
     return messageTypeAsText(optionPane.getMessageType());
-  }
-
-  private String messageTypeAsText(int messageType) {
-    if (messageMap.containsKey(messageType)) return messageMap.get(messageType);
-    throw actionFailure(concat("The message type <", messageType, "> is not valid"));
   }
 }

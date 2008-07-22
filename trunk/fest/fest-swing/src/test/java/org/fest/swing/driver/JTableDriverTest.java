@@ -77,6 +77,11 @@ public class JTableDriverTest {
     robot.cleanUp();
   }
 
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfCellToValidateIsNull() {
+    driver.validate(dragTable, null);
+  }
+  
   @Test(groups = GUI, dataProvider = "cells")
   public void shouldSelectCell(int row, int column) {
     driver.selectCell(dragTable, cell(row, column));

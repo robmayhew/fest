@@ -30,8 +30,8 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestList;
+import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
@@ -129,6 +129,16 @@ public class JListDriverTest {
     assertCellReaderWasCalled();
   }
 
+  public void shouldClickItemWithGivenText() {
+    dragList.setSelectedIndex(-1);
+    ClickRecorder recorder = ClickRecorder.attachTo(dragList);
+    driver.clickItem(dragList, "two", RIGHT_BUTTON, 2);
+    assertThat(recorder).clicked(RIGHT_BUTTON)
+                        .timesClicked(2);
+    Point pointClicked = recorder.pointClicked();
+    assertThat(dragList.locationToIndex(pointClicked)).isEqualTo(1);
+  }
+  
   public void shouldSelectItemAtGivenIndex() {
     driver.selectItem(dragList, 2);
     assertThat(dragList.getSelectedValue()).isEqualTo("three");

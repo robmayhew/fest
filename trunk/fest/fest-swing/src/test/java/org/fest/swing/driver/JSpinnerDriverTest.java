@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Dimension;
 
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
@@ -137,6 +138,12 @@ public class JSpinnerDriverTest {
     }
   }
 
+  @Test(groups = GUI, expectedExceptions=ActionFailedException.class)
+  public void shouldThrowErrorIfTextComponentEditorNotFoundWhenEnteringText() {
+    spinner.setEditor(new JLabel());
+    driver.enterText(spinner, "hello");
+  }
+  
   public void shouldEnterText() {
     driver.enterText(spinner, "Gandalf");
     assertLastValueIsSelected();

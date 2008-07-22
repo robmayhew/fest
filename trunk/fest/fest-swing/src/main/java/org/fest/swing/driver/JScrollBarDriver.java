@@ -14,17 +14,18 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JScrollBar}</code>. Unlike <code>JScrollBarFixture</code>,
@@ -36,6 +37,8 @@ import org.fest.swing.exception.ActionFailedException;
  */
 public class JScrollBarDriver extends JComponentDriver {
 
+  private static final String VALUE_PROPERTY = "value";
+  
   private final JScrollBarLocation location = new JScrollBarLocation();
 
   /**
@@ -192,6 +195,6 @@ public class JScrollBarDriver extends JComponentDriver {
    * @throws AssertionError if the value of the <code>JScrollBar</code> is not equal to the given one.
    */
   public void requireValue(JScrollBar scrollBar, int value) {
-    assertThat(scrollBar.getValue()).isEqualTo(value);
+    assertThat(scrollBar.getValue()).as(propertyName(scrollBar, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

@@ -57,6 +57,22 @@ public class JScrollBarDriverTest {
     robot.cleanUp();
   }
 
+  public void shouldPassIfValueIsEqualToExpected() {
+    scrollBar.setValue(30);
+    driver.requireValue(scrollBar, 30);
+  }
+  
+  public void shouldFailIfValueIsNotEqualToExpected() {
+    scrollBar.setValue(30);
+    try {
+      driver.requireValue(scrollBar, 20);
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'value'")
+                             .contains("expected:<20> but was:<30>");
+    }
+  }
+  
   @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToScrollUnitUpIsZeroOrNegative(int times) {
     try {
