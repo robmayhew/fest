@@ -35,12 +35,12 @@ import static org.fest.swing.core.InputModifiers.*;
  * private EmergencyAbortListener listener;  
  * 
  * 
- * @BeforeMethod public void setUp() {
+ * \@BeforeMethod public void setUp() {
  *   // set up your test fixture.
  *   listener = EmergencyAbortListener.registerInToolkit();
  * }
  * 
- * @AfterMethod public void tearDown() {
+ * \@AfterMethod public void tearDown() {
  *   // clean up resources.
  *   listener.unregister();  
  * }
