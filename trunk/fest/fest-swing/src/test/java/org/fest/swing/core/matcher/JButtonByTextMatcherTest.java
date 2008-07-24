@@ -19,6 +19,7 @@ import javax.swing.JButton;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -46,10 +47,9 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    TestWindow frame = new TestWindow(JButtonByTextMatcher.class);
-    String text = "Hello";
-    JButton button = new JButton(text);
-    frame.add(button);
+    final String text = "Hello";
+    JButton button = button(text);
+    TestWindow frame = frameWith(button);
     try {
       frame.display();
       JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing(text);
@@ -57,8 +57,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
     } finally {
       frame.destroy();
     }
-  } 
-  
+  }
+
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String text = "Hello";
     JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing(text);
@@ -68,9 +68,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    TestWindow frame = new TestWindow(JButtonByTextMatcher.class);
-    JButton button = new JButton("Bye");
-    frame.add(button);
+    JButton button = button("Bye");
+    TestWindow frame = frameWith(button);
     try {
       frame.display();
       JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
@@ -78,6 +77,24 @@ import static org.fest.swing.testing.TestGroups.GUI;
     } finally {
       frame.destroy();
     }
+  }
+
+  private JButton button(final String text) {
+    return new GuiTask<JButton>() {
+      protected JButton executeInEDT() {
+        return new JButton(text);
+      }
+    }.run();
+  } 
+
+  private TestWindow frameWith(final JButton button) {
+    return new GuiTask<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        TestWindow f = new TestWindow(JButtonByTextMatcher.class);
+        f.add(button);
+        return f;
+      }
+    }.run();
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {

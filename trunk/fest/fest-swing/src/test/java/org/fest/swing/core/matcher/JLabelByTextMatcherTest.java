@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -34,7 +35,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String text = "Hello";
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withText(text);
-    JLabel label = new JLabel(text);
+    JLabel label = label(text);
     assertThat(matcher.matches(label)).isTrue();
   }
   
@@ -46,10 +47,9 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    TestWindow frame = new TestWindow(JLabelByTextMatcher.class);
     String text = "Hello";
-    JLabel label = new JLabel(text);
-    frame.add(label);
+    JLabel label = label(text);
+    TestWindow frame = windowWith(label);
     try {
       frame.display();
       JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
@@ -62,15 +62,14 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String text = "Hello";
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
-    JLabel label = new JLabel(text);
+    JLabel label = label(text);
     assertThat(matcher.matches(label)).isFalse();    
   }
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    TestWindow frame = new TestWindow(JLabelByTextMatcher.class);
-    JLabel label = new JLabel("Bye");
-    frame.add(label);
+    JLabel label = label("Bye");
+    TestWindow frame = windowWith(label);
     try {
       frame.display();
       JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
@@ -80,6 +79,24 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
   }
 
+  private JLabel label(final String text) {
+    return new GuiTask<JLabel>() {
+      protected JLabel executeInEDT() {
+        return new JLabel(text);
+      }
+    }.run();
+  }
+
+  private TestWindow windowWith(final JLabel label) {
+    return new GuiTask<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        TestWindow f = new TestWindow(JLabelByTextMatcher.class);
+        f.add(label);
+        return f;
+      }
+    }.run();
+  }
+  
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
     JLabel label = new JLabel("Bye");
