@@ -21,6 +21,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.MyApplet;
 
@@ -44,35 +45,103 @@ public class AppletViewerGuiTest {
   private AppletViewer viewer;
 
   @BeforeMethod public void setUp() {
-    applet = new MyApplet();
-    viewer = new AppletViewer(applet);
+    applet = new GuiTask<MyApplet>() {
+      protected MyApplet executeInEDT() {
+        return new MyApplet();
+      }
+    }.run();
+    viewer = new GuiTask<AppletViewer>() {
+      protected AppletViewer executeInEDT() {
+        return new AppletViewer(applet);
+      }
+    }.run();
     fixture = new FrameFixture(viewer);
     fixture.show();
-    assertThat(applet.initialized()).isTrue();
-    assertThat(applet.started()).isTrue();
+    assertThatAppletIsInitializedAndStarted();
+  }
+  
+  private void assertThatAppletIsInitializedAndStarted() {
+    boolean initialized = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return applet.initialized();
+      }
+    }.run();
+    assertThat(initialized).isTrue();
+    boolean started = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return applet.started();
+      }
+    }.run();
+    assertThat(started).isTrue();
   }
   
   @AfterMethod public void tearDown() {
-    viewer.unloadApplet();
-    assertThat(applet.stopped()).isTrue();
-    assertThat(applet.destroyed()).isTrue();
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        viewer.unloadApplet();
+        return null;
+      }
+    }.run();
+    assertThatApplietIsStoppedAndDestroyed();
     fixture.cleanUp();
+  }
+
+  private void assertThatApplietIsStoppedAndDestroyed() {
+    boolean stopped = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return applet.stopped();
+      }
+    }.run();
+    assertThat(stopped).isTrue();
+    boolean destroyed = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return applet.destroyed();
+      }
+    }.run();
+    assertThat(destroyed).isTrue();
   }
   
   public void shouldLoadApplet() {
-    assertThat(applet.isShowing()).isTrue();
-    assertThat(viewer.appletLoaded()).isTrue();
-    assertThat(viewer.getTitle()).isEqualTo(concat("Applet Viewer: ", MyApplet.class.getName()));
+    assertThatAppletIsShowing();
+    assertThatAppletIsLoaded();
+    assertThatAppletViewerHasCorrectTitle();
     Container ancestor = getAncestorOfClass(AppletViewer.class, applet);
     assertThat(ancestor).isSameAs(viewer);
     fixture.label("status").requireText("Applet loaded");
     assertThat(viewer.applet()).isSameAs(applet);
     assertThat(viewer.stub()).isInstanceOf(BasicAppletStub.class);
   }
+
+  private void assertThatAppletViewerHasCorrectTitle() {
+    String title = new GuiTask<String>() {
+      protected String executeInEDT() {
+        return viewer.getTitle();
+      }
+    }.run();
+    assertThat(title).isEqualTo(concat("Applet Viewer: ", MyApplet.class.getName()));
+  }
   
   public void shouldReloadApplet() {
     viewer.reloadApplet();
-    assertThat(applet.isShowing()).isTrue();
-    assertThat(viewer.appletLoaded()).isTrue();
+    assertThatAppletIsShowing();
+    assertThatAppletIsLoaded();
+  }
+
+  private void assertThatAppletIsShowing() {
+    boolean showing = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return applet.isShowing();
+      }
+    }.run();
+    assertThat(showing).isTrue();
+  }
+  
+  private void assertThatAppletIsLoaded() {
+    boolean loaded = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return viewer.appletLoaded();
+      }
+    }.run();
+    assertThat(loaded).isTrue();
   }
 }
