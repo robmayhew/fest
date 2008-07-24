@@ -33,14 +33,18 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, BUG })
-public class FindFrameByNameAndType {
+public class FindFrameByNameAndTypeTest {
 
   private MyFrame frame;
   private Robot robot;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new MyFrame();
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     robot.showWindow(frame);
   }
 
@@ -52,16 +56,14 @@ public class FindFrameByNameAndType {
     try {
       findFrame("yourFrame").using(robot);
       fail("Should not find frame");
-    } catch (WaitTimedOutError expected) {
-
-    }
+    } catch (WaitTimedOutError expected) {}
   }
 
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     public MyFrame() {
-      super(FindFrameByNameAndType.class);
+      super(FindFrameByNameAndTypeTest.class);
       setName("myFrame");
     }
   }

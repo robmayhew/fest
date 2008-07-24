@@ -16,10 +16,13 @@ package org.fest.swing.core;
 
 import java.awt.Toolkit;
 
+import org.testng.annotations.Test;
+
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link AWTEventGenerator}</code>.
@@ -27,6 +30,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@Test(groups = GUI)
 public class AWTEventGeneratorTest extends InputEventGeneratorTestCase {
 
   private AWTEventGenerator generator;

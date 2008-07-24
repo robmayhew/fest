@@ -40,7 +40,11 @@ public class FocusMonitorTest {
   private MyFrame frame;
   
   @BeforeMethod public void setUp() {
-    frame = new MyFrame();
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     frame.display();
     setFocusOn(frame.button);
     monitor = FocusMonitor.addFocusMonitorTo(frame.button);

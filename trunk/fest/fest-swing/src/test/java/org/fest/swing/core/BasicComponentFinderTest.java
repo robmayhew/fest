@@ -41,34 +41,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicComponentFinderTest {
 
-  protected static class MainWindow extends TestWindow {
-    private static final long serialVersionUID = 1L;
-
-    final JButton button = new JButton("A Button");
-    final JTextField textField = new JTextField("A TextField");
-    final JTextField anotherTextField = new JTextField("Another TextField");
-
-    static MainWindow beVisible() {
-      MainWindow window = new MainWindow();
-      window.display();
-      return window;
-    }
-    
-    MainWindow() {
-      super(BasicComponentFinderTest.class);
-      add(button);
-      add(textField);
-      add(anotherTextField);
-      button.setName("button");
-    }
-  }
-
-  private ComponentFinder finder;
+  private BasicComponentFinder finder;
   private MainWindow window;
   private MainWindow anotherWindow;
   
   @BeforeMethod public void setUp() {
-    finder = BasicComponentFinder.finderWithNewAwtHierarchy();
+    finder = (BasicComponentFinder)BasicComponentFinder.finderWithNewAwtHierarchy();
     window = MainWindow.beVisible();
   }
   
@@ -280,5 +258,31 @@ public class BasicComponentFinderTest {
       }
     });
     assertThat(found).containsOnly(anotherWindow.button);
+  }
+
+  protected static class MainWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JButton button = new JButton("A Button");
+    final JTextField textField = new JTextField("A TextField");
+    final JTextField anotherTextField = new JTextField("Another TextField");
+
+    static MainWindow beVisible() {
+      return new GuiTask<MainWindow>() {
+        protected MainWindow executeInEDT() {
+          MainWindow window = new MainWindow();
+          window.display();
+          return window;
+        }
+      }.run();
+    }
+    
+    MainWindow() {
+      super(BasicComponentFinderTest.class);
+      add(button);
+      add(textField);
+      add(anotherTextField);
+      button.setName("button");
+    }
   }
 }

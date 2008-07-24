@@ -22,7 +22,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import static javax.swing.SwingUtilities.*;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands the base window for all GUI tests.
@@ -33,10 +33,14 @@ public class TestWindow extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestWindow showInTest(Class<?> testClass) {
-    TestWindow f = new TestWindow(testClass);
-    f.display();
-    return f;
+  public static TestWindow showInTest(final Class<?> testClass) {
+    return new GuiTask<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        TestWindow f = new TestWindow(testClass);
+        f.display();
+        return f;
+      }
+    }.run();
   }
   
   public TestWindow(Class<?> testClass) {
@@ -54,19 +58,16 @@ public class TestWindow extends JFrame {
   }
   
   public void display(final Dimension size) {
-    try {
-      invokeAndWait(new Runnable() {
-        public void run() {
-          beforeDisplayed();
-          setPreferredSize(size);
-          pack();
-          setLocation(100, 100);
-          setVisible(true);
-        }
-      });
-    } catch (Exception e) {
-      throw new RuntimeException("Unable to show frame", e);
-    }
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        beforeDisplayed();
+        setPreferredSize(size);
+        pack();
+        setLocation(100, 100);
+        setVisible(true);
+        return null;
+      }
+    }.run();
   }
   
   protected void beforeDisplayed() {}
@@ -84,11 +85,12 @@ public class TestWindow extends JFrame {
   }
   
   public void destroy() {
-    invokeLater(new Runnable() {
-      public void run() {
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
         setVisible(false);
         dispose();
+        return null;
       }
-    });
+    }.run();
   }
 }

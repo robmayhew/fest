@@ -15,13 +15,17 @@
  */
 package org.fest.swing.core;
 
+import org.testng.annotations.Test;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link RobotEventGenerator}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class RobotEventGeneratorTest extends InputEventGeneratorTestCase {
 
   private Settings settings;

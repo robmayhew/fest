@@ -17,7 +17,8 @@ package org.fest.swing.testing;
 
 import java.awt.Component;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.fest.swing.core.Condition;
+
 import static org.fest.swing.core.Pause.pause;
 
 /**
@@ -27,10 +28,13 @@ import static org.fest.swing.core.Pause.pause;
  */
 public final class FocusSetter {
 
-  public static void setFocusOn(Component c) {
+  public static void setFocusOn(final Component c) {
     c.requestFocusInWindow();
-    pause(200);
-    assertThat(c.hasFocus());
+    pause(new Condition("component gets focus") {
+      public boolean test() {
+        return c.hasFocus();
+      }          
+    });
   }
 
   private FocusSetter() {}

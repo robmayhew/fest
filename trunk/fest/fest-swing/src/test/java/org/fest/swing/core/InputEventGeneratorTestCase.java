@@ -46,16 +46,19 @@ import static org.fest.swing.util.AWT.centerOf;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = GUI)
 public abstract class InputEventGeneratorTestCase {
 
   private MyFrame frame;
   private InputEventGenerator generator;
 
-  protected static final String MOVE_MOUSE_TEST = "MoveMouseTest";
+  protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
   
   @BeforeMethod public void setUp() throws Exception {
-    frame = new MyFrame();
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     onSetUp();
     generator = generator();
     frame.display();
@@ -109,7 +112,16 @@ public abstract class InputEventGeneratorTestCase {
     generator.pressKey(keyToPress, CHAR_UNDEFINED);
     generator.releaseKey(keyToPress);
     pause(200);
-    assertThat(frame.textBox.getText()).isEqualTo(expectedText);
+    assertThatTextBoxTextIsEqualTo(expectedText);
+  }
+
+  private void assertThatTextBoxTextIsEqualTo(String expectedText) {
+    String text = new GuiTask<String>() {
+      protected String executeInEDT() {
+        return frame.textBox.getText();
+      }
+    }.run();
+    assertThat(text).isEqualTo(expectedText);
   }
   
   @DataProvider(name = "keys") public Object[][] keys() {

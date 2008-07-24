@@ -20,7 +20,7 @@ import java.awt.*;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 
-import static javax.swing.SwingUtilities.*;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands the base window for all GUI tests.
@@ -32,10 +32,14 @@ public class TestDialog extends JDialog {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestDialog showInTest(Frame owner) {
-    TestDialog d = new TestDialog(owner);
-    d.display();
-    return d;
+  public static TestDialog showInTest(final Frame owner) {
+    return new GuiTask<TestDialog>() {
+      protected TestDialog executeInEDT() {
+        TestDialog d = new TestDialog(owner);
+        d.display();
+        return d;
+      }
+    }.run();
   }
   
   public TestDialog(Frame owner) {
@@ -54,19 +58,16 @@ public class TestDialog extends JDialog {
   public void display(final Dimension size) {
     Window owner = getOwner();
     if (owner instanceof TestWindow && !owner.isShowing()) ((TestWindow)owner).display();
-    try {
-      invokeAndWait(new Runnable() {
-        public void run() {
-          beforeDisplayed();
-          chooseLookAndFeel();
-          setPreferredSize(size);
-          pack();
-          setVisible(true);
-        }
-      });
-    } catch (Exception e) {
-      throw new RuntimeException("Unable to show dialog", e);
-    }
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        beforeDisplayed();
+        chooseLookAndFeel();
+        setPreferredSize(size);
+        pack();
+        setVisible(true);
+        return null;
+      }
+    }.run();
   }
   
   protected void beforeDisplayed() {}
@@ -84,11 +85,12 @@ public class TestDialog extends JDialog {
   }
   
   public void destroy() {
-    invokeLater(new Runnable() {
-      public void run() {
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
         setVisible(false);
         dispose();
+        return null;
       }
-    });
+    }.run();
   }
 }

@@ -39,60 +39,43 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicComponentPrinterTest {
 
-  protected static class MainWindow extends TestWindow {
-    private static final long serialVersionUID = 1L;
+  private BasicComponentPrinter printer;
 
-    final JButton button = new JButton("A button");
-
-    static MainWindow show(Class<?> testClass) {
-      MainWindow window = new MainWindow(testClass);
-      window.display();
-      return window;
-    }
-
-    MainWindow(Class<?> testClass) {
-      super(testClass);
-      add(button);
-    }
-  }
-
-  private ComponentPrinter printer;
-
-  private MainWindow firstWindow;
-  private MainWindow secondWindow;
+  private MainWindow window1;
+  private MainWindow window2;
 
   @BeforeMethod public void setUp() {
-    printer = BasicComponentPrinter.printerWithNewAwtHierarchy();
-    firstWindow = MainWindow.show(getClass());
-    firstWindow.button.setName("firstButton");
-    secondWindow = MainWindow.show(getClass());
-    secondWindow.button.setName("secondButton");
+    printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithNewAwtHierarchy();
+    window1 = MainWindow.show(getClass());
+    window1.button.setName("button1");
+    window2 = MainWindow.show(getClass());
+    window2.button.setName("button2");
   }
 
   @AfterMethod public void tearDown() {
-    firstWindow.destroy();
-    secondWindow.destroy();
+    window1.destroy();
+    window2.destroy();
   }
 
   public void shouldCreatePrinterWithExistingHierarchy() {
-    printer = BasicComponentPrinter.printerWithCurrentAwtHierarchy();
-    assertThat(((BasicComponentPrinter)printer).hierarchy()).isInstanceOf(ExistingHierarchy.class);
+    printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithCurrentAwtHierarchy();
+    assertThat(printer.hierarchy()).isInstanceOf(ExistingHierarchy.class);
   }
 
   public void shouldPrintAllComponents() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out);
-    assertThat(out.printed()).contains(format(firstWindow),
-                                       format(firstWindow.button),
-                                       format(secondWindow),
-                                       format(secondWindow.button));
+    assertThat(out.printed()).contains(format(window1),
+                                       format(window1.button),
+                                       format(window2),
+                                       format(window2.button));
   }
 
   public void shouldPrintAllComponentsOfGivenType() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, JButton.class);
-    assertThat(out.printed()).containsOnly(format(firstWindow.button),
-                                           format(secondWindow.button));
+    assertThat(out.printed()).containsOnly(format(window1.button),
+                                           format(window2.button));
   }
 
   public void shouldNotPrintComponentsOfNonMatchingType() {
@@ -103,16 +86,37 @@ public class BasicComponentPrinterTest {
 
   public void shouldPrintComponentsUnderGivenRootOnly() {
     PrintStreamStub out = new PrintStreamStub();
-    printer.printComponents(out, firstWindow);
-    assertThat(out.printed()).contains(format(firstWindow),
-                                       format(firstWindow.button))
-                             .excludes(format(secondWindow),
-                                       format(secondWindow.button));
+    printer.printComponents(out, window1);
+    assertThat(out.printed()).contains(format(window1),
+                                       format(window1.button))
+                             .excludes(format(window2),
+                                       format(window2.button));
   }
 
   public void shouldPrintAllComponentsOfGivenTypeUnderGivenRootOnly() {
     PrintStreamStub out = new PrintStreamStub();
-    printer.printComponents(out, JButton.class, firstWindow);
-    assertThat(out.printed()).containsOnly(format(firstWindow.button));
+    printer.printComponents(out, JButton.class, window1);
+    assertThat(out.printed()).containsOnly(format(window1.button));
+  }
+
+  static class MainWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JButton button = new JButton("A button");
+
+    static MainWindow show(final Class<?> testClass) {
+      return new GuiTask<MainWindow>() {
+        protected MainWindow executeInEDT() {
+          MainWindow window = new MainWindow(testClass);
+          window.display();
+          return window;
+        }
+      }.run();
+    }
+
+    MainWindow(Class<?> testClass) {
+      super(testClass);
+      add(button);
+    }
   }
 }

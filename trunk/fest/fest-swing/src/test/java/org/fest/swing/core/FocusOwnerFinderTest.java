@@ -44,9 +44,14 @@ public class FocusOwnerFinderTest {
   private JTextField textField;
 
   @BeforeMethod public void setUp() {
-    frame = new TestWindow(FocusOwnerFinder.class);
-    textField = new JTextField(20);
-    frame.add(textField);
+    frame = new GuiTask<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        TestWindow w = new TestWindow(FocusOwnerFinder.class);
+        textField = new JTextField(20);
+        w.add(textField);
+        return w;
+      }      
+    }.run();
     frame.display();
   }
 
