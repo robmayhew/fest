@@ -94,7 +94,7 @@ public class ScrollJTreeElementTest {
 
   private Object selection() {
     return new GuiTask<Object>() {
-      protected Object accessGui() {
+      protected Object executeInEDT() {
         Object lastPathComponent = frame.dragTree.getSelectionPath().getLastPathComponent();
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)lastPathComponent;
         return node.getUserObject();

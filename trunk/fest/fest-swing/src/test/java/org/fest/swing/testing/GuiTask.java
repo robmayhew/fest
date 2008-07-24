@@ -35,14 +35,14 @@ public abstract class GuiTask<T> {
    * @throws UnexpectedException wrapping any exception thrown when executing an action in the event dispatch thread.
    */
   public final T run() {
-    if (isEventDispatchThread()) return accessGui();
+    if (isEventDispatchThread()) return executeInEDT();
     final Reference<T> result = new Reference<T>();
     final Reference<Throwable> error = new Reference<Throwable>();
     try {
       invokeAndWait(new Runnable() {
         public void run() {
           try {
-            result.target = accessGui();
+            result.target = executeInEDT();
           } catch (Exception e) {
             error.target = e;
           }
@@ -59,7 +59,7 @@ public abstract class GuiTask<T> {
    * Specifies the action to execute in the event dispatch thread.
    * @return the result of the execution of the action.
    */
-  protected abstract T accessGui();
+  protected abstract T executeInEDT();
   
   private static class Reference<T> {
     T target;

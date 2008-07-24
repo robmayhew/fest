@@ -59,7 +59,7 @@ public class JComboBoxDriverTest {
     driver = new JComboBoxDriver(robot);
     driver.cellReader(cellReader);
     MyFrame frame = new GuiTask<MyFrame>() {
-      protected MyFrame accessGui() {
+      protected MyFrame executeInEDT() {
         return new MyFrame();
       }
     }.run();
@@ -114,7 +114,7 @@ public class JComboBoxDriverTest {
 
   private void assertThatSelectedItemIsEqualTo(String expected) {
     Object selectedItem = new GuiTask<Object>() {
-      protected Object accessGui() {
+      protected Object executeInEDT() {
         return comboBox.getSelectedItem();
       }
     }.run();
@@ -141,7 +141,7 @@ public class JComboBoxDriverTest {
   private void assertThatListContains(final JList list, final String...expected) {
     final int expectedSize = expected.length;
     new GuiTask<Void>() {
-      protected Void accessGui() {
+      protected Void executeInEDT() {
         ListModel model = list.getModel();
         assertThat(model.getSize()).isEqualTo(expectedSize);
         for (int i = 0; i < expectedSize; i++)
@@ -241,7 +241,7 @@ public class JComboBoxDriverTest {
     assertThat(editor).isInstanceOf(JTextComponent.class);
     final JTextComponent textBox = (JTextComponent)editor;
     String selectedText = new GuiTask<String>() {
-      protected String accessGui() {
+      protected String executeInEDT() {
         return textBox.getSelectedText();
       }
     }.run();
@@ -301,7 +301,7 @@ public class JComboBoxDriverTest {
   
   private void selectIndexInComboBox(final int index) {
     new GuiTask<Void>() {
-      protected Void accessGui() {
+      protected Void executeInEDT() {
         comboBox.setSelectedIndex(index);
         return null;
       }
@@ -310,7 +310,7 @@ public class JComboBoxDriverTest {
 
   private void assertThatSelectedIndexIsEqualTo(int expected) {
     int selectedIndex = new GuiTask<Integer>() {
-      protected Integer accessGui() {
+      protected Integer executeInEDT() {
         return comboBox.getSelectedIndex();
       }
     }.run();
@@ -327,7 +327,7 @@ public class JComboBoxDriverTest {
 
   private void setComboBoxEditable(final boolean editable) {
     new GuiTask<Void>() {
-      protected Void accessGui() {
+      protected Void executeInEDT() {
         comboBox.setEditable(editable);
         return null;
       }
@@ -340,7 +340,7 @@ public class JComboBoxDriverTest {
 
   private void setComboBoxEnabled(final boolean enabled) {
     new GuiTask<Void>() {
-      protected Void accessGui() {
+      protected Void executeInEDT() {
         comboBox.setEnabled(enabled);
         return null;
       }
@@ -350,7 +350,7 @@ public class JComboBoxDriverTest {
   private String textInComboBox() {
     final Component editor = comboBoxEditor();
     String text = new GuiTask<String>() {
-      protected String accessGui() {
+      protected String executeInEDT() {
         if (editor instanceof JLabel) return ((JLabel)editor).getText();
         if (editor instanceof JTextComponent) return ((JTextComponent)editor).getText();
         return null;
@@ -361,7 +361,7 @@ public class JComboBoxDriverTest {
 
   private Component comboBoxEditor() {
     return new GuiTask<Component>() {
-      protected Component accessGui() {
+      protected Component executeInEDT() {
         return comboBox.getEditor().getEditorComponent();
       }
     }.run();
@@ -427,7 +427,7 @@ public class JComboBoxDriverTest {
 
   private boolean isDropDownListVisible() {
     return new GuiTask<Boolean>() {
-      protected Boolean accessGui() {
+      protected Boolean executeInEDT() {
         return comboBox.getUI().isPopupVisible(comboBox);
       }
     }.run();
