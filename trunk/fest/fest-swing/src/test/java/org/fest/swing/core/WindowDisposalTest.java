@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, BUG })
+@Test(groups = { BUG })
 public class WindowDisposalTest {
 
   private ComponentHierarchy hierarchy;
