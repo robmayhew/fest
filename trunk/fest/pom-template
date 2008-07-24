@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
-
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>pom-template</artifactId>
@@ -183,44 +181,36 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <configuration>
           <templateFile>${basedir}/src/site/site.vm</templateFile>
         </configuration>
       </plugin>
-      <!--plugin>
-        <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
-        <configuration>
-          <licenseLocation>../clover.license</licenseLocation>
-          <includesTestSourceRoots>false</includesTestSourceRoots>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>instrument</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+      <!--
+        <plugin> <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover-plugin</artifactId> <configuration>
+        <licenseLocation>../clover.license</licenseLocation>
+        <includesTestSourceRoots>false</includesTestSourceRoots>
+        </configuration> <executions> <execution>
+        <phase>pre-site</phase> <goals> <goal>instrument</goal> </goals>
+        </execution> </executions> </plugin>
+      -->
     </plugins>
   </build>
   <reporting>
     <plugins>
-      <!--plugin>
-        <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
-        <configuration>
-          <licenseLocation>../clover.license</licenseLocation>
-          <includesTestSourceRoots>false</includesTestSourceRoots>
-        </configuration>
-      </plugin-->
+      <!--
+        <plugin> <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover-plugin</artifactId> <configuration>
+        <licenseLocation>../clover.license</licenseLocation>
+        <includesTestSourceRoots>false</includesTestSourceRoots>
+        </configuration> </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -233,19 +223,19 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <id>html</id>
-            <configuration>
-              <links>
-                <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-              </links>
-            </configuration>
-            <reports>
-              <report>javadoc</report>
-            </reports>
-          </reportSet>
-        </reportSets>
+        <configuration>
+          <aggregate>true</aggregate>
+          <minmemory>128m</minmemory>
+          <maxmemory>512m</maxmemory>
+          <breakiterator>true</breakiterator>
+          <quiet>true</quiet>
+          <source>1.5</source>
+          <verbose>false</verbose>
+          <linksource>true</linksource>
+          <links>
+            <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+          </links>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -254,10 +244,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

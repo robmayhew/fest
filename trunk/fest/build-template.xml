@@ -42,8 +42,7 @@
            deprecation="${compiler.deprecation}"
            optimize="${compiler.optimize}"
            source="${compiler.javac.source}"
-           target="${compiler.javac.target}"
-           excludes="org/fest/swing/hierarchy/**,org/fest/swing/monitor/**,org/fest/swing/util/Swing.java">
+           target="${compiler.javac.target}">
       <src path="${src.main.java.dir}" />
       <classpath refid="dependency.classpath" />
     </javac>
@@ -109,8 +108,7 @@
            deprecation="${compiler.deprecation}"
            optimize="${compiler.optimize}"
            source="${compiler.javac.source}"
-           target="${compiler.javac.target}"
-           excludes="org/fest/swing/hierarchy/**,org/fest/swing/monitor/**,org/fest/swing/util/SwingTest.java">
+           target="${compiler.javac.target}">
       <src path="${src.test.java.dir}" />
       <classpath>
         <pathelement location="${target.classes.dir}" />
@@ -122,10 +120,22 @@
 
   <target name="test" depends="compile">
     <testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2">
-      <classfileset dir="${target.test.classes.dir}" includes="**/*Test.class" />
       <classpath location="${target.test.classes.dir}" />
       <classpath location="${target.classes.dir}" />
       <classpath refid="dependency.classpath" />
+      <xmlfileset dir="." includes="testng.xml"/>
+    </testng>
+  </target>
+
+  <target name="test-report" depends="compile">
+    <testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2" 
+      listeners="org.uncommons.reportng.HTMLReporter">
+      <classpath location="${target.test.classes.dir}" />
+      <classpath location="${target.classes.dir}" />
+      <classpath refid="dependency.classpath" />
+      <xmlfileset dir="." includes="testng.xml"/>
+      <sysproperty key="org.uncommons.reportng.title" 
+        value="${maven.project.name} v. ${maven.project.version} - Test Report"/>
     </testng>
   </target>
 
