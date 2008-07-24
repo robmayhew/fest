@@ -101,7 +101,7 @@ public class BasicAppletStub implements AppletStub {
    * @see AppletStub#getDocumentBase()
    */
   public URL getDocumentBase() {
-    return getClass().getResource(".");
+    return Thread.currentThread().getContextClassLoader().getResource(".");
   }
 
   /**

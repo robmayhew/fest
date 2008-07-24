@@ -27,8 +27,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.GuiTask;
 import org.fest.swing.testing.TestTree;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -70,7 +71,7 @@ public class ScrollJTreeElementTest {
     fixture.tree("drag").drag("root/99");
     fixture.tree("drop").drop("root/90");
     assertPathNotFoundInDragTree("root/99");
-    pause(200);
+    pause(500);
     fixture.tree("drop").selectPath("root/90/99");
   }
 
@@ -78,7 +79,7 @@ public class ScrollJTreeElementTest {
     fixture.tree("drag").drag(99);
     fixture.tree("drop").drop(90);
     assertPathNotFoundInDragTree("root/99");
-    pause(200);
+    pause(500);
     fixture.tree("drop").selectPath("root/90/99");
   }
 
@@ -92,8 +93,13 @@ public class ScrollJTreeElementTest {
   }
 
   private Object selection() {
-    DefaultMutableTreeNode node = (DefaultMutableTreeNode)frame.dragTree.getSelectionPath().getLastPathComponent();
-    return node.getUserObject();
+    return new GuiTask<Object>() {
+      protected Object accessGui() {
+        Object lastPathComponent = frame.dragTree.getSelectionPath().getLastPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)lastPathComponent;
+        return node.getUserObject();
+      }
+    }.run();
   }
 
   private static class MyFrame extends TestWindow {

@@ -59,7 +59,7 @@ public class AppletViewer extends JFrame implements StatusDisplay {
   private final JLabel statusLabel = new JLabel();
 
   private Applet applet;
-  private AppletStub stub;
+  private transient AppletStub stub;
   private boolean loaded;
 
   /**

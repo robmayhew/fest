@@ -191,9 +191,10 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   private void hideDropDownListIfVisible(final JComboBox comboBox) {
+    if (!isDropDownVisible(comboBox)) return;
     robot.invokeAndWait(new Runnable() {
       public void run() {
-        if (isDropDownVisible(comboBox)) dropDownVisibleThroughUIDelegate(comboBox, false);
+        dropDownVisibleThroughUIDelegate(comboBox, false);
       }
     });
   }

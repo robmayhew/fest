@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0b1" date="TBD" description="Subsequent release">
+    <release version="1.0b1" date="2008-07-22" description="Subsequent release">
       <action dev="alruiz, wanghy" type="add" issue="11">
         Added org.fest.swing.applet.AppletViewer and helper classes in package org.fest.swing.applet.
       </action>
@@ -144,7 +144,8 @@
       </action>
       <action dev="wanghy" type="remove">
         Removed methods 'increment' and 'decrement' in JSliderFixture. These methods were not communicating their
-        intention properly and are not needed since JSliderFixture has the methods 'slideToMaximum' and 'slideToMinimum'
+        intention properly and are not needed since JSliderFixture has the methods 'slideToMaximum' and 
+        'slideToMinimum'.
       </action>
       <action dev="alruiz" type="add">
         Added method 'controlOrCommandMask' to org.fest.swing.util.Platform.

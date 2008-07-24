@@ -196,14 +196,22 @@ public class AppletLauncher {
   public AppletViewer start() {
     final AppletViewer viewer = new AppletViewer(applet, parameters);
     try {
-      invokeAndWait(new Runnable() {
-        public void run() {
-          viewer.setVisible(true);
-        }
-      });
+      invokeAndWait(new SetVisibleTask(viewer));
     } catch (Exception e) {
       throw unexpected(e);
     }
     return viewer;
+  }
+
+  private static class SetVisibleTask implements Runnable {
+    private final AppletViewer viewer;
+
+    SetVisibleTask(AppletViewer viewer) {
+      this.viewer = viewer;
+    }
+
+    public void run() {
+      viewer.setVisible(true);
+    }
   }
 }
