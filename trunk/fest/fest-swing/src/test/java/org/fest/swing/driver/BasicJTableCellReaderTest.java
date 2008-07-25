@@ -27,7 +27,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.driver.BasicJTableCellReader;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -37,7 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class BasicJTableCellReaderTest {
+@Test public class BasicJTableCellReaderTest {
 
   private JTable table;
   private BasicJTableCellReader reader;
@@ -47,7 +46,7 @@ public class BasicJTableCellReaderTest {
     reader = new BasicJTableCellReader();
   }
 
-  @Test public void shouldReturnModelValueToStringIfRendererNotRecognized() {
+  public void shouldReturnModelValueToStringIfRendererNotRecognized() {
     DefaultTableModel model = new DefaultTableModel(new Object[][] { { new Jedi("Yoda") } }, new Object[] { "Names" });
     table.setModel(model);
     updateRendererComponent(0, new JToolBar());
@@ -55,35 +54,35 @@ public class BasicJTableCellReaderTest {
     assertThat(value).isEqualTo("Yoda");
   }
 
-  @Test public void shouldReturnFontFromRenderer() {
+  public void shouldReturnFontFromRenderer() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
     Font font = reader.fontAt(table, 0, 0);
     assertThat(font).isEqualTo(label.getFont());
   }
 
-  @Test public void shouldReturnBackgroundColorFromRenderer() {
+  public void shouldReturnBackgroundColorFromRenderer() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
     Color background = reader.backgroundAt(table, 0, 0);
     assertThat(background).isEqualTo(label.getBackground());
   }
 
-  @Test public void shouldReturnForegroundColorFromRenderer() {
+  public void shouldReturnForegroundColorFromRenderer() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
     Color foreground = reader.foregroundAt(table, 0, 0);
     assertThat(foreground).isEqualTo(label.getForeground());
   }
 
-  @Test public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
+  public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
     JLabel label = new JLabel("Hello");
     updateRendererComponent(0, label);
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo(label.getText());
   }
   
-  @Test public void shouldReturnSelectionFromCellRendererIfRendererIsJComboBox() {
+  public void shouldReturnSelectionFromCellRendererIfRendererIsJComboBox() {
     JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
     comboBox.setSelectedIndex(1);
     updateRendererComponent(0, comboBox);
@@ -91,7 +90,7 @@ public class BasicJTableCellReaderTest {
     assertThat(value).isEqualTo("Two");
   }
   
-  @Test public void shouldReturnNullIfRendererIsJComboBoxWithoutSelection() {
+  public void shouldReturnNullIfRendererIsJComboBoxWithoutSelection() {
     JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
     comboBox.setSelectedIndex(-1);
     updateRendererComponent(0, comboBox);
