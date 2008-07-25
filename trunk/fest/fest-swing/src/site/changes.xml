@@ -5,6 +5,11 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="1.0b2" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="fix" issue="186" due-to="Michael Hüttermann">
+        BasicJTableCellReader obtains the value of a cell from a JTable, not from a TableModel anymore.
+      </action>
+    </release>
     <release version="1.0b1" date="2008-07-22" description="Subsequent release">
       <action dev="alruiz, wanghy" type="add" issue="11">
         Added org.fest.swing.applet.AppletViewer and helper classes in package org.fest.swing.applet.
