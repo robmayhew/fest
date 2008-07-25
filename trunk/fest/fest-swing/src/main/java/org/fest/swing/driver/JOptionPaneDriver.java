@@ -22,7 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
+import org.fest.swing.core.matcher.JButtonByTextMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static javax.swing.JOptionPane.*;
@@ -59,7 +61,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not have the given title.
    */
   public void requireTitle(JOptionPane optionPane, String title) {
-    String actualTitle = ((Dialog)optionPane.getRootPane().getParent()).getTitle();
+    String actualTitle = new GetTitleTask(optionPane).run();
     assertThat(actualTitle).as(propertyName(optionPane, TITLE_PROPERTY)).isEqualTo(title);
   }
 
@@ -70,7 +72,8 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not show the given message.
    */
   public void requireMessage(JOptionPane optionPane, Object message) {
-    assertThat(optionPane.getMessage()).as(propertyName(optionPane, MESSAGE_PROPERTY)).isEqualTo(message);
+    Object actualMessage = new GetMessageTask(optionPane).run();
+    assertThat(actualMessage).as(propertyName(optionPane, MESSAGE_PROPERTY)).isEqualTo(message);
   }
 
   /**
@@ -80,7 +83,8 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not have the given options.
    */
   public void requireOptions(JOptionPane optionPane, Object[] options) {
-    assertThat(optionPane.getOptions()).as(propertyName(optionPane, OPTIONS_PROPERTY)).isEqualTo(options);
+    Object[] actualOptions = new GetOptionsTask(optionPane).run();
+    assertThat(actualOptions).as(propertyName(optionPane, OPTIONS_PROPERTY)).isEqualTo(options);
   }
 
   /**
@@ -136,7 +140,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws ComponentLookupException if the a button with the given text cannot be found.
    */
   public JButton buttonWithText(JOptionPane optionPane, String text) {
-    return robot.finder().find(optionPane, new JButtonMatcher(text));
+    return robot.finder().find(optionPane, JButtonByTextMatcher.withTextAndShowing(text));
   }
 
   /**
@@ -205,7 +209,55 @@ public class JOptionPaneDriver extends JComponentDriver {
     assertThat(actualType).as(propertyName(optionPane, MESSAGE_TYPE_PROPERTY)).isEqualTo(messageTypeAsText(expected));
   }
 
-  private String actualMessageTypeAsText(JOptionPane optionPane) {
-    return messageTypeAsText(optionPane.getMessageType());
+  private String actualMessageTypeAsText(final JOptionPane optionPane) {
+    return messageTypeAsText(new GetMessageTypeTask(optionPane).run());
+  }
+
+  private static class GetOptionsTask extends GuiTask<Object[]> {
+    private final JOptionPane optionPane;
+
+    GetOptionsTask(JOptionPane optionPane) {
+      this.optionPane = optionPane;
+    }
+
+    protected Object[] executeInEDT() {
+      return optionPane.getOptions();
+    }
+  }
+
+  private static class GetTitleTask extends GuiTask<String> {
+    private final JOptionPane optionPane;
+
+    private GetTitleTask(JOptionPane optionPane) {
+      this.optionPane = optionPane;
+    }
+
+    protected String executeInEDT() {
+      return ((Dialog)optionPane.getRootPane().getParent()).getTitle();
+    }
+  }
+
+  private static class GetMessageTask extends GuiTask<Object> {
+    private final JOptionPane optionPane;
+
+    private GetMessageTask(JOptionPane optionPane) {
+      this.optionPane = optionPane;
+    }
+
+    protected Object executeInEDT() {
+      return optionPane.getMessage();
+    }
+  }
+
+  private static class GetMessageTypeTask extends GuiTask<Integer> {
+    private final JOptionPane optionPane;
+
+    private GetMessageTypeTask(JOptionPane optionPane) {
+      this.optionPane = optionPane;
+    }
+
+    protected Integer executeInEDT() {
+      return optionPane.getMessageType();
+    }
   }
 }

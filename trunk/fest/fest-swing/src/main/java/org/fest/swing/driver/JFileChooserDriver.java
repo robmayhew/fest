@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.core.matcher.JButtonByTextMatcher;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -170,7 +171,7 @@ public class JFileChooserDriver extends JComponentDriver {
   }
 
   private JButton findButton(JFileChooser fileChooser, String text) {
-    return robot.finder().find(fileChooser, new JButtonMatcher(text, true));
+    return robot.finder().find(fileChooser, JButtonByTextMatcher.withTextAndShowing(text));
   }
   
   private ComponentLookupException cannotFindButton(String name, String text) {
