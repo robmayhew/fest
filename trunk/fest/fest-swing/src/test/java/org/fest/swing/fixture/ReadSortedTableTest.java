@@ -82,12 +82,13 @@ public class ReadSortedTableTest {
       final JTextField textBox = new JTextField(20);
       textBox.getDocument().addDocumentListener(new DocumentListener() {
         public void insertUpdate(DocumentEvent e) { filterTable(); }
-        public void removeUpdate(DocumentEvent e) { filterTable();}
-        public void changedUpdate(DocumentEvent e) { }
-
+        public void removeUpdate(DocumentEvent e) { filterTable(); }
+        
         private void filterTable() {
           sorter.setRowFilter(regexFilter(textBox.getText(), 0));
         }
+        
+        public void changedUpdate(DocumentEvent e) {}
       });
       textBox.setName("textBox");
       return textBox;
