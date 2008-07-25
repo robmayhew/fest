@@ -100,6 +100,6 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
   }
   
   private Object cellAt(JTable table, int row, int column) {
-    return table.getModel().getValueAt(row, column);
+    return table.getValueAt(row, column);
   }
 }
