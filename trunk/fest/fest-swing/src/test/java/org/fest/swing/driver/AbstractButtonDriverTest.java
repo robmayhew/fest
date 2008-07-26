@@ -19,12 +19,15 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.assertions.AssertExtension;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestWindow;
@@ -48,7 +51,11 @@ public class AbstractButtonDriverTest {
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     driver = new AbstractButtonDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     checkBox = frame.checkBox;
     robot.showWindow(frame);
   }
@@ -58,28 +65,23 @@ public class AbstractButtonDriverTest {
   }
   
   public void shouldClickButton() {
-    final boolean[] clicked = new boolean[1];
-    checkBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        clicked[0] = true;
-      }
-    });
+    ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
-    assertThat(clicked[0]).isTrue();
+    assertThat(recorder).actionWasPerformed();
   }
   
   public void shouldNotClickButtonIfButtonDisabled() {
-    final boolean[] clicked = new boolean[1];
-    checkBox.setEnabled(false);
-    checkBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        clicked[0] = true;
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        checkBox.setEnabled(false);
+        return null;
       }
-    });
+    }.run();
+    ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
-    assertThat(clicked[0]).isFalse();
+    assertThat(recorder).actionWasNotPerformed();
   }
-
+  
   public void shouldPassIfTextIsEqualToExpectedOne() {
     driver.requireText(checkBox, "Hello");
   }
@@ -95,36 +97,52 @@ public class AbstractButtonDriverTest {
   }
 
   public void shouldNotSelectIfButtonAlreadySelected() {
-    checkBox.setSelected(true);
+    selectCheckBox();
     driver.select(checkBox);
-    assertThat(checkBox.isSelected()).isTrue();
+    assertThatCheckBoxIsSelected();
   }
   
   public void shouldSelectButton() {
-    checkBox.setSelected(false);
+    unselectCheckBox();
     driver.select(checkBox);
-    assertThat(checkBox.isSelected()).isTrue();
+    assertThatCheckBoxIsSelected();
   }
 
+  private void assertThatCheckBoxIsSelected() {
+    assertThat(isCheckBoxSelected()).isTrue();
+  }
+  
   public void shouldNotUnselectIfButtonAlreadySelected() {
-    checkBox.setSelected(false);
+    unselectCheckBox();
     driver.unselect(checkBox);
-    assertThat(checkBox.isSelected()).isFalse();
+    assertThatCheckBoxIsNotSelected();
   }
   
   public void shouldUnselectButton() {
-    checkBox.setSelected(true);
+    selectCheckBox();
     driver.unselect(checkBox);
-    assertThat(checkBox.isSelected()).isFalse();
+    assertThatCheckBoxIsNotSelected();
+  }
+
+  private void assertThatCheckBoxIsNotSelected() {
+    assertThat(isCheckBoxSelected()).isFalse();
+  }
+
+  private boolean isCheckBoxSelected() {
+    return new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return checkBox.isSelected();
+      }
+    }.run();
   }
 
   public void shouldPassIfButtonIsSelectedAsAnticipated() {
-    checkBox.setSelected(true);
+    selectCheckBox();
     driver.requireSelected(checkBox);
   }
   
   public void shouldFailIfButtonIsNotSelectedAndExpectingSelected() {
-    checkBox.setSelected(false);
+    unselectCheckBox();
     try {
       driver.requireSelected(checkBox);
       fail();
@@ -135,12 +153,16 @@ public class AbstractButtonDriverTest {
   }
   
   public void shouldPassIfButtonIsUnselectedAsAnticipated() {
-    checkBox.setSelected(false);
+    unselectCheckBox();
     driver.requireNotSelected(checkBox);
   }
 
+  private void unselectCheckBox() {
+    setCheckBoxSelected(false);
+  }
+
   public void shouldFailIfButtonIsSelectedAndExpectingNotSelected() {
-    checkBox.setSelected(true);
+    selectCheckBox();
     try {
       driver.requireNotSelected(checkBox);
       fail();
@@ -149,7 +171,21 @@ public class AbstractButtonDriverTest {
                              .contains("expected:<false> but was:<true>");
     }
   }
-  
+
+  private void selectCheckBox() {
+    setCheckBoxSelected(true);
+  }
+
+  private void setCheckBoxSelected(final boolean selected) {
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        checkBox.setSelected(selected);
+        return null;
+      }
+    }.run();
+  }
+
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
@@ -159,6 +195,30 @@ public class AbstractButtonDriverTest {
       super(AbstractButtonDriverTest.class);
       add(checkBox);
       setPreferredSize(new Dimension(200, 200));
+    }
+  }
+
+  private static class ActionPerformedRecorder implements ActionListener, AssertExtension {
+    private boolean actionPerformed;
+
+    static ActionPerformedRecorder attachTo(AbstractButton button) {
+      ActionPerformedRecorder r = new ActionPerformedRecorder();
+      button.addActionListener(r);
+      return r;
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+      actionPerformed = true;
+    }
+    
+    ActionPerformedRecorder actionWasPerformed() {
+      assertThat(actionPerformed).isTrue();
+      return this;
+    }
+
+    ActionPerformedRecorder actionWasNotPerformed() {
+      assertThat(actionPerformed).isFalse();
+      return this;
     }
   }
 }

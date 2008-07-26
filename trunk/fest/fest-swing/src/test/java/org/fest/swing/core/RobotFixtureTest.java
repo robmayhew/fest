@@ -65,12 +65,25 @@ public class RobotFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new MyFrame();
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     textFieldWithPopup = frame.textFieldWithPopup;
     textFieldWithoutPopup = frame.textFieldWithoutPopup;
     robot.showWindow(frame); // implicitly test 'showWindow(Window)'
-    assertThat(frame.isVisible()).isTrue();
-    assertThat(frame.getLocationOnScreen()).isEqualTo(new Point(100, 100));
+    assertThatFrameIsShowing();
+    assertThatFrameIsInCorrectPosition(new Point(100, 100));
+  }
+
+  private void assertThatFrameIsShowing() {
+    boolean showing = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return frame.isShowing();
+      }
+    }.run();
+    assertThat(showing).isTrue();
   }
 
   @AfterMethod public void tearDown() {
@@ -112,6 +125,15 @@ public class RobotFixtureTest {
     assertThat(window.getLocationOnScreen()).isEqualTo(new Point(0, 0));
   }
 
+  private void assertThatFrameIsInCorrectPosition(Point expected) {
+    Point position = new GuiTask<Point>() {
+      protected Point executeInEDT() {
+        return frame.getLocationOnScreen();
+      }
+    }.run();
+    assertThat(position).isEqualTo(expected);
+  }
+  
   public void shouldClickComponent() {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.click(textFieldWithoutPopup);

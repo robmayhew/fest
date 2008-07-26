@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -47,8 +48,9 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param expected the text to match.
    * @throws AssertionError if the text of the button is not equal to the given one.
    */
-  public void requireText(AbstractButton button, String expected) {
-    assertThat(button.getText()).as(propertyName(button, TEXT_PROPERTY)).isEqualTo(expected);
+  public void requireText(final AbstractButton button, String expected) {
+    String text = new GetTextTask(button).run();
+    assertThat(text).as(propertyName(button, TEXT_PROPERTY)).isEqualTo(expected);
   }
 
   /**
@@ -56,7 +58,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the target button.
    */
   public void select(AbstractButton button) {
-    if (button.isSelected()) return;
+    if (isButtonSelected(button)) return;
     click(button);
   }
 
@@ -65,7 +67,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the target button.
    */
   public void unselect(AbstractButton button) {
-    if (!button.isSelected()) return;
+    if (!isButtonSelected(button)) return;
     click(button);
   }
   
@@ -75,7 +77,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws AssertionError if the button is not selected.
    */
   public void requireSelected(AbstractButton button) {
-    assertThat(button.isSelected()).as(selectedProperty(button)).isTrue();
+    assertButtonIsSelected(button, true);
   }
   
   /**
@@ -84,10 +86,42 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws AssertionError if the button is selected.
    */
   public void requireNotSelected(AbstractButton button) {
-    assertThat(button.isSelected()).as(selectedProperty(button)).isFalse();
+    assertButtonIsSelected(button, false);
+  }
+
+  private void assertButtonIsSelected(AbstractButton button, boolean selected) {
+    assertThat(isButtonSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
+  }
+  
+  private boolean isButtonSelected(final AbstractButton button) {
+    return new IsSelectedTask(button).run();
   }
 
   private static String selectedProperty(AbstractButton button) {
     return propertyName(button, SELECTED_PROPERTY);
+  }
+
+  private static class GetTextTask extends GuiTask<String> {
+    private final AbstractButton button;
+
+    GetTextTask(AbstractButton button) {
+      this.button = button;
+    }
+
+    protected String executeInEDT() {
+      return button.getText();
+    }
+  }
+
+  private static class IsSelectedTask extends GuiTask<Boolean> {
+    private final AbstractButton button;
+
+    IsSelectedTask(AbstractButton button) {
+      this.button = button;
+    }
+
+    protected Boolean executeInEDT() {
+      return button.isSelected();
+    }
   }
 }

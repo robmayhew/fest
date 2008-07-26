@@ -69,6 +69,11 @@ public class ClickRecorder extends MouseAdapter implements AssertExtension {
     pointClicked = e.getPoint();
   }
 
+  public ClickRecorder wasNotClicked() {
+    assertThat(clickedButton).isNull();
+    return this;
+  }
+
   public ClickRecorder clicked(MouseButton button) {
     assertThat(clickedButton).isEqualTo(button);
     return this;

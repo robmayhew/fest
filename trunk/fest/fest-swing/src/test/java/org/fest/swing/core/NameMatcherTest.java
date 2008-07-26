@@ -65,8 +65,7 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnTrueIfNameMatchingAndIsShowing() {
-    TestWindow frame = new TestWindow(NameMatcherTest.class);
-    frame.add(button);
+    TestWindow frame = testWindow();
     frame.display();
     matcher = new NameMatcher(NAME, true);
     assertThat(matcher.matches(button)).isTrue();
@@ -75,12 +74,21 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
-    TestWindow frame = new TestWindow(NameMatcherTest.class);
-    frame.add(button);
+    TestWindow frame = testWindow();
     frame.display();
     matcher = new NameMatcher("b", true);
     assertThat(matcher.matches(button)).isFalse();
     frame.destroy();
+  }
+
+  private TestWindow testWindow() {
+    return new GuiTask<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        TestWindow w = new TestWindow(NameMatcherTest.class);
+        w.add(button);
+        return w;
+      }
+    }.run();
   }
   
   @Test public void shouldReturnFalseIfNameMatchingAndIsNotShowing() {

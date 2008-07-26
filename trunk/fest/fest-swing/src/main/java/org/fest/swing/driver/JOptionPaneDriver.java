@@ -228,7 +228,7 @@ public class JOptionPaneDriver extends JComponentDriver {
   private static class GetTitleTask extends GuiTask<String> {
     private final JOptionPane optionPane;
 
-    private GetTitleTask(JOptionPane optionPane) {
+    GetTitleTask(JOptionPane optionPane) {
       this.optionPane = optionPane;
     }
 
@@ -240,7 +240,7 @@ public class JOptionPaneDriver extends JComponentDriver {
   private static class GetMessageTask extends GuiTask<Object> {
     private final JOptionPane optionPane;
 
-    private GetMessageTask(JOptionPane optionPane) {
+    GetMessageTask(JOptionPane optionPane) {
       this.optionPane = optionPane;
     }
 
@@ -252,7 +252,7 @@ public class JOptionPaneDriver extends JComponentDriver {
   private static class GetMessageTypeTask extends GuiTask<Integer> {
     private final JOptionPane optionPane;
 
-    private GetMessageTypeTask(JOptionPane optionPane) {
+    GetMessageTypeTask(JOptionPane optionPane) {
       this.optionPane = optionPane;
     }
 
