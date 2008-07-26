@@ -48,7 +48,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param expected the text to match.
    * @throws AssertionError if the text of the button is not equal to the given one.
    */
-  public void requireText(final AbstractButton button, String expected) {
+  public void requireText(AbstractButton button, String expected) {
     String text = new GetTextTask(button).run();
     assertThat(text).as(propertyName(button, TEXT_PROPERTY)).isEqualTo(expected);
   }
@@ -93,7 +93,7 @@ public class AbstractButtonDriver extends JComponentDriver {
     assertThat(isButtonSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
   }
   
-  private boolean isButtonSelected(final AbstractButton button) {
+  private boolean isButtonSelected(AbstractButton button) {
     return new IsSelectedTask(button).run();
   }
 

@@ -29,6 +29,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -46,7 +47,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI) public class AbstractJTableCellWriterTest {
+public class AbstractJTableCellWriterTest {
 
   private Robot robot;
   private TableDialogEditDemoFrame frame;
@@ -54,13 +55,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    writer = new AbstractJTableCellWriter(robot) {
-      public void enterValue(JTable table, int row, int column, String value) {}
-      public void startCellEditing(JTable table, int row, int column) {}
-      public void stopCellEditing(JTable table, int row, int column) {}
-      public void cancelCellEditing(JTable table, int row, int column) {}
-    };
-    frame = new TableDialogEditDemoFrame();
+    writer = new ConcreteJTableCellWriter(robot);
+    frame = new GuiTask<TableDialogEditDemoFrame>() {
+      protected TableDialogEditDemoFrame executeInEDT() {
+        return new TableDialogEditDemoFrame();
+      }
+    }.run();
     robot.showWindow(frame, new Dimension(500, 100));
   }
 
@@ -83,7 +83,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     };
   }
   
-  public void shouldThrowErrorIfEditorToHandleIsNull() {
+  @Test public void shouldThrowErrorIfEditorToHandleIsNull() {
     try {
       writer.cannotHandleEditor(null);
       fail();
@@ -92,7 +92,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
   }
   
-  public void shouldReturnNullEditorComponentIfCellEditorIsNull() {
+  @Test public void shouldReturnNullEditorComponentIfCellEditorIsNull() {
     final JTable table = createMock(JTable.class);
     final int row = 6;
     final int column = 8;
@@ -105,5 +105,19 @@ import static org.fest.swing.testing.TestGroups.GUI;
         assertThat(writer.editorForCell(table, row, column)).isNull();
       }
     }.run();
+  }
+
+  private static class ConcreteJTableCellWriter extends AbstractJTableCellWriter {
+    ConcreteJTableCellWriter(Robot robot) {
+      super(robot);
+    }
+
+    public void enterValue(JTable table, int row, int column, String value) {}
+
+    public void startCellEditing(JTable table, int row, int column) {}
+
+    public void stopCellEditing(JTable table, int row, int column) {}
+
+    public void cancelCellEditing(JTable table, int row, int column) {}
   }
 }
