@@ -61,7 +61,7 @@ import static org.fest.util.Arrays.array;
 public class ContainerFixtureTest {
 
   private static final Dimension PREFERRED_DIMENSION = new Dimension(100, 100);
-  
+
   private ContainerFixture<TestWindow> fixture;
   private Robot robot;
   private TestWindow window;
@@ -83,9 +83,9 @@ public class ContainerFixtureTest {
   public void shouldFindButtonByType() {
     JButton expectedButton = addJButton();
     JButtonFixture buttonFixture = fixture.button();
-    assertThat(buttonFixture.target).isSameAs(expectedButton);        
+    assertThat(buttonFixture.target).isSameAs(expectedButton);
   }
-  
+
   public void shouldFindButtonWithGivenMatcher() {
     JButton expectedButton = addJButton();
     GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
@@ -153,7 +153,7 @@ public class ContainerFixtureTest {
     JComboBoxFixture comboBoxFixture = fixture.comboBox();
     assertThat(comboBoxFixture.target).isSameAs(expectedComboBox);
   }
-  
+
   public void shouldFindComboBoxWithGivenMatcher() {
     JComboBox expectedComboBox = addJComboBox();
     GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
@@ -181,7 +181,7 @@ public class ContainerFixtureTest {
       }
     }.run();
   }
-  
+
   public void shouldFindDialogByType() {
     JDialog expectedDialog = addJDialog();
     DialogFixture dialogFixture = fixture.dialog();
@@ -217,7 +217,7 @@ public class ContainerFixtureTest {
       }
     }.run();
   }
-  
+
   public void shouldFindFileChooserByType() {
     JFileChooser expectedFileChooser = addJFileChooser();
     JFileChooserFixture fileChooserFixture = fixture.fileChooser();
@@ -798,6 +798,40 @@ public class ContainerFixtureTest {
         toolBar.setName("toolBar");
         addToWindowAndDisplay(toolBar);
         return toolBar;
+      }
+    }.run();
+  }
+
+  public void shouldFindTreeByType() {
+    JTree expectedTree = addJTree();
+    JTreeFixture treeFixture = fixture.tree();
+    assertThat(treeFixture.target).isSameAs(expectedTree);
+  }
+
+  public void shouldFindTreeWithGivenMatcher() {
+    JTree expectedTree = addJTree();
+    GenericTypeMatcher<JTree> columnMatcher = new GenericTypeMatcher<JTree>() {
+      protected boolean isMatching(JTree tree) {
+        return "tree".equals(nameOf(tree));
+      }
+    };
+    JTreeFixture treeFixture = fixture.tree(columnMatcher);
+    assertThat(treeFixture.target).isSameAs(expectedTree);
+  }
+
+  public void shouldFindTreeWithGivenName() {
+    JTree expectedTree = addJTree();
+    JTreeFixture treeFixture = fixture.tree("tree");
+    assertThat(treeFixture.target).isSameAs(expectedTree);
+  }
+
+  private JTree addJTree() {
+    return new GuiTask<JTree>() {
+      protected JTree executeInEDT() {
+        JTree tree = new JTree(array("One", "Two"));
+        tree.setName("tree");
+        addToWindowAndDisplay(tree);
+        return tree;
       }
     }.run();
   }

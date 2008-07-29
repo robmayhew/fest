@@ -1,15 +1,15 @@
 /*
  * Created on Aug 22, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.testing;
@@ -24,21 +24,23 @@ import javax.swing.TransferHandler;
 import static java.awt.datatransfer.DataFlavor.stringFlavor;
 
 /**
- * Understands importing and exporting strings. 
- * Adapted from the tutorial 
+ * Understands importing and exporting strings.
+ * Adapted from the tutorial
  * <a href="http://java.sun.com/docs/books/tutorial/uiswing/dnd/intro.html" target="_blank">Introduction to Drag and Drop and Data Transfer</a>.
- * 
- * @param <T> specifies the type of component that this class can handle 
+ *
+ * @param <T> specifies the type of component that this class can handle
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
 public abstract class StringTransferHandler<T extends JComponent> extends TransferHandler {
 
+  private static final long serialVersionUID = 1L;
+
   private static final int[] DEFAULT_ROWS = null;
   private static final int DEFAULT_ADD_INDEX = -1;
   private static final int DEFAULT_ADD_COUNT = 0;
-  
+
   protected int[] rows;
   protected int addIndex; // Location where items were added
   protected int addCount; // Number of items added.
@@ -50,8 +52,8 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
   public StringTransferHandler() {
     reset();
   }
-  
-  @SuppressWarnings("unchecked") 
+
+  @SuppressWarnings("unchecked")
   @Override protected Transferable createTransferable(JComponent c) {
     return new StringSelection(exportString((T)c));
   }
@@ -60,9 +62,9 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
     return COPY_OR_MOVE;
   }
 
-  @SuppressWarnings("unchecked") 
+  @SuppressWarnings("unchecked")
   @Override public boolean importData(JComponent c, Transferable t) {
-    if (!canImport(c, t.getTransferDataFlavors())) return false; 
+    if (!canImport(c, t.getTransferDataFlavors())) return false;
     try {
       String str = (String) t.getTransferData(stringFlavor);
       importString((T)c, str);
@@ -71,7 +73,7 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
     return false;
   }
 
-  @SuppressWarnings("unchecked") 
+  @SuppressWarnings("unchecked")
   @Override protected void exportDone(JComponent c, Transferable data, int action) {
     cleanup((T)c, action == MOVE);
     reset();
@@ -84,7 +86,7 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
   }
 
   @Override public boolean canImport(JComponent c, DataFlavor[] flavors) {
-    for (DataFlavor flavor : flavors) if (stringFlavor.equals(flavor)) return true; 
+    for (DataFlavor flavor : flavors) if (stringFlavor.equals(flavor)) return true;
     return false;
   }
 }
