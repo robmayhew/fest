@@ -32,6 +32,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.task.IsAbstractButtonSelectedTask.isSelected;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -119,7 +120,7 @@ public class AbstractButtonDriverTest {
   }
 
   private void assertThatCheckBoxIsSelected() {
-    assertThat(isCheckBoxSelected()).isTrue();
+    assertThat(isSelected(checkBox)).isTrue();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -139,15 +140,7 @@ public class AbstractButtonDriverTest {
   }
 
   private void assertThatCheckBoxIsNotSelected() {
-    assertThat(isCheckBoxSelected()).isFalse();
-  }
-
-  private boolean isCheckBoxSelected() {
-    return new GuiTask<Boolean>() {
-      protected Boolean executeInEDT() {
-        return checkBox.isSelected();
-      }
-    }.run();
+    assertThat(isSelected(checkBox)).isFalse();
   }
 
   public void shouldPassIfButtonIsSelectedAsAnticipated() {

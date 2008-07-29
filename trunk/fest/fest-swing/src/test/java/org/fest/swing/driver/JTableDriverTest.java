@@ -43,6 +43,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.task.GetJTableCellValueTask.cellValueOf;
 import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -82,7 +83,7 @@ public class JTableDriverTest {
   public void shouldThrowErrorIfCellToValidateIsNull() {
     driver.validate(dragTable, null);
   }
-  
+
   @Test(groups = GUI, dataProvider = "cells")
   public void shouldSelectCell(int row, int column) {
     driver.selectCell(dragTable, cell(row, column));
@@ -94,14 +95,14 @@ public class JTableDriverTest {
     driver.selectCell(dragTable, cell(0, 0));
     assertDragTableHasNoSelection();
   }
-  
-  @Test(groups = GUI, expectedExceptions = NullPointerException.class) 
+
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArrayOfCellsToSelectIsNull() {
     JTableCell[] cells = null;
     driver.selectCells(dragTable, cells);
   }
 
-  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class) 
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfArrayOfCellsToSelectIsEmpty() {
     JTableCell[] cells = new JTableCell[0];
     driver.selectCells(dragTable, cells);
@@ -186,9 +187,9 @@ public class JTableDriverTest {
     driver.drag(dragTable, cell(3, 0));
     driver.drop(dropTable, cell(1, 0));
     assertThat(rowCountOf(dragTable)).isEqualTo(dragRowCount - 1);
-    assertThat(dragTable.getValueAt(3, 0)).isEqualTo(createCellTextUsing(4, 0));
+    assertThat(cellValueOf(dragTable, 3, 0)).isEqualTo(createCellTextUsing(4, 0));
     assertThat(rowCountOf(dropTable)).isEqualTo(dropRowCount + 1);
-    assertThat(dropTable.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
+    assertThat(cellValueOf(dropTable, 2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
   public void shouldPassIfCellValueIsEqualToExpected() {
@@ -287,19 +288,19 @@ public class JTableDriverTest {
       }
     }.run();
   }
-  
+
   @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfTableIsNotEnabledWhenEditingCell() {
     dragTable.setEnabled(false);
     driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
   }
-  
+
   @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfCellToEditIsNotEditable() {
     assertThat(dragTable.isCellEditable(0, 0)).isFalse();
     driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
   }
-  
+
   public void shouldReturnEditorComponentInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
     final Component editor = new JTextField("Hello");
@@ -315,7 +316,7 @@ public class JTableDriverTest {
       }
     }.run();
   }
-  
+
   public void shouldStartCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
@@ -369,7 +370,7 @@ public class JTableDriverTest {
     dragTable.cellEditable(0, 0, true);
     driver.requireEditable(dragTable, cell(0, 0));
   }
-  
+
   public void shouldFailIfCellIsNotEditableAndExpectingEditable() {
     dragTable.cellEditable(0, 0, false);
     try {
@@ -381,12 +382,12 @@ public class JTableDriverTest {
                              .contains("expected:<true> but was:<false>");
     }
   }
-  
+
   public void shouldPassIfCellIsNotEditableAsAnticipated() {
     dragTable.cellEditable(0, 0, false);
     driver.requireNotEditable(dragTable, cell(0, 0));
   }
-  
+
   public void shouldFailIfCellIsEditableAndExpectingNotEditable() {
     dragTable.cellEditable(0, 0, true);
     try {
@@ -421,7 +422,7 @@ public class JTableDriverTest {
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }
-  
+
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellWriterIsNull() {
     driver.cellWriter(null);

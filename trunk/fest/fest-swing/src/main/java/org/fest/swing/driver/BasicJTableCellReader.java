@@ -1,16 +1,16 @@
 /*
  * Created on Apr 14, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -27,8 +27,12 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
+import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.task.GetJLabelTextTask.textOf;
+import static org.fest.swing.task.GetJTableCellValueTask.cellValueOf;
+import static org.fest.swing.task.IsAbstractButtonSelectedTask.isSelected;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.
@@ -39,16 +43,16 @@ import static org.fest.swing.task.GetJLabelTextTask.textOf;
 public class BasicJTableCellReader extends BaseValueReader implements JTableCellReader {
 
   private final JComboBoxCellReader comboBoxCellValueReader = new BasicJComboBoxCellReader();
-  
+
   /**
-   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test. This method first 
+   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test. This method first
    * tries to return the value displayed in the <code>JTable</code>'s cell renderer.
    * <ul>
    * <li>if the renderer is a <code>{@link JLabel}</code>, this method returns its text</li>
    * <li>if the renderer is a <code>{@link JComboBox}</code>, this method returns the value of its selection</li>
    * <li>if the renderer is a <code>{@link JCheckBox}</code>, this method returns whether it is selected or not</li>
    * </ul>
-   * If it fails reading the cell renderer, this method will get the value from the <code>toString</code> implementation 
+   * If it fails reading the cell renderer, this method will get the value from the <code>toString</code> implementation
    * of the object stored in the <code>JTable</code>'s model at the specified indices.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
@@ -60,17 +64,17 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
   public String valueAt(JTable table, int row, int column) {
     Component c = cellRendererComponent(table, row, column);
     if (c instanceof JLabel) return textOf((JLabel)c);
-    if (c instanceof JCheckBox) return String.valueOf(((JCheckBox)c).isSelected());
-    if (c instanceof JComboBox) return valueAt((JComboBox)c);
-    return valueFrom(cellAt(table, row, column));
+    if (c instanceof JCheckBox) return String.valueOf(isSelected(((JCheckBox)c)));
+    if (c instanceof JComboBox) return valueOf((JComboBox)c);
+    return valueFrom(cellValueOf(table, row, column));
   }
 
-  private String valueAt(JComboBox comboBox) {
-    int selectedIndex = comboBox.getSelectedIndex();
+  private String valueOf(JComboBox comboBox) {
+    int selectedIndex = selectedIndexOf(comboBox);
     if (selectedIndex == -1) return null;
     return comboBoxCellValueReader.valueAt(comboBox, selectedIndex);
   }
-  
+
   /** {@inheritDoc} */
   public Font fontAt(JTable table, int row, int column) {
     return cellRendererComponent(table, row, column).getFont();
@@ -80,14 +84,14 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
   public Color backgroundAt(JTable table, int row, int column) {
     return cellRendererComponent(table, row, column).getBackground();
   }
-  
+
   /** {@inheritDoc} */
   public Color foregroundAt(JTable table, int row, int column) {
     return cellRendererComponent(table, row, column).getForeground();
   }
 
   /**
-   * Returns the <code>{@link Component}</code> used by the <code>{@link TableCellRenderer}</code> in the given 
+   * Returns the <code>{@link Component}</code> used by the <code>{@link TableCellRenderer}</code> in the given
    * <code>{@link JTable}</code>.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
@@ -95,13 +99,25 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
    * @return the <code>Component</code> used by the <code>TableCellRenderer</code> in the given <code>JTable</code>.
    */
   protected final Component cellRendererComponent(JTable table, int row, int column) {
-    Object value = cellAt(table, row, column);
-    TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-    boolean cellSelected = table.isCellSelected(row, column);
-    return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
+    return new GetCellRendererComponentTask(table, row, column).run();
   }
-  
-  private Object cellAt(JTable table, int row, int column) {
-    return table.getValueAt(row, column);
+
+  private static class GetCellRendererComponentTask extends GuiTask<Component> {
+    private final JTable table;
+    private final int row;
+    private final int column;
+
+    GetCellRendererComponentTask(JTable table, int row, int column) {
+      this.table = table;
+      this.row = row;
+      this.column = column;
+    }
+
+    protected Component executeInEDT() {
+      Object value = table.getValueAt(row, column);
+      TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+      boolean cellSelected = table.isCellSelected(row, column);
+      return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
+    }
   }
 }

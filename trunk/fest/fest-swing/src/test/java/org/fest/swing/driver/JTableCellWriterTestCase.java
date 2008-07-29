@@ -30,6 +30,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetJTableCellValueTask.cellValueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -103,6 +104,6 @@ public abstract class JTableCellWriterTestCase {
   protected final JTableCellWriter writer() { return writer; }
 
   protected final Object valueAt(int row, int column) {
-    return frame.table.getValueAt(row, column);
+    return cellValueOf(frame.table, row, column);
   }
 }

@@ -40,6 +40,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.task.GetJComboBoxItemCountTask.itemCountOf;
+import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
@@ -121,7 +122,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws AssertionError if the selected item does not match the given value.
    */
   public void requireSelection(JComboBox comboBox, String value) {
-    int selectedIndex = comboBox.getSelectedIndex();
+    int selectedIndex = selectedIndexOf(comboBox);
     if (selectedIndex == -1)
       fail(concat("[", selectedIndexProperty(comboBox), "] No selection"));
     assertThat(value(comboBox, selectedIndex)).as(selectedIndexProperty(comboBox)).isEqualTo(value);
@@ -133,7 +134,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JComboBox</code> has a selection.
    */
   public void requireNoSelection(JComboBox comboBox) {
-    assertThat(comboBox.getSelectedIndex()).as(selectedIndexProperty(comboBox)).isEqualTo(-1);
+    assertThat(selectedIndexOf(comboBox)).as(selectedIndexProperty(comboBox)).isEqualTo(-1);
   }
 
   /**
@@ -142,7 +143,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
    * @return the value of the element under the given index.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JComboBox</code>.
    * @see #cellReader(JComboBoxCellReader)
    */
@@ -159,7 +160,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * Selects the item under the given index in the <code>{@link JComboBox}</code>.
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JComboBox</code>.
    */
   public void selectItem(final JComboBox comboBox, int index) {
@@ -207,7 +208,7 @@ public class JComboBoxDriver extends JComponentDriver {
       public void run() {
         comboBox.getUI().setPopupVisible(comboBox, visible);
       }
-    });    
+    });
   }
 
   /**

@@ -37,6 +37,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -121,7 +122,7 @@ public class JComboBoxDriverTest {
     }.run();
     assertThat(selectedItem).isEqualTo(expected);
   }
-  
+
   @Test(groups = GUI, expectedExceptions = LocationUnavailableException.class)
   public void shouldThrowErrorIfTextOfItemToSelectDoesNotExist() {
     driver.selectItem(comboBox, "hundred");
@@ -295,11 +296,11 @@ public class JComboBoxDriverTest {
     driver.replaceText(comboBox, "Hello");
     assertThat(textInComboBox()).isEqualTo("Hello");
   }
-  
+
   private void selectFirstItemInComboBox() {
     selectIndexInComboBox(0);
   }
-  
+
   private void selectIndexInComboBox(final int index) {
     new GuiTask<Void>() {
       protected Void executeInEDT() {
@@ -310,11 +311,7 @@ public class JComboBoxDriverTest {
   }
 
   private void assertThatSelectedIndexIsEqualTo(int expected) {
-    int selectedIndex = new GuiTask<Integer>() {
-      protected Integer executeInEDT() {
-        return comboBox.getSelectedIndex();
-      }
-    }.run();
+    int selectedIndex = selectedIndexOf(comboBox);
     assertThat(selectedIndex).isEqualTo(expected);
   }
 
@@ -367,7 +364,7 @@ public class JComboBoxDriverTest {
       }
     }.run();
   }
-  
+
   public void shouldPassIfComboBoxIsNotEditable() {
     comboBox.setEditable(false);
     driver.requireNotEditable(comboBox);
@@ -442,7 +439,7 @@ public class JComboBoxDriverTest {
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 

@@ -27,6 +27,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -56,7 +57,7 @@ public class SelectJComboBoxItemTest {
   public void shouldScrollToSelectLastItem() {
     int toSelect = 99;
     fixture.selectItem(toSelect);
-    assertThat(target.getSelectedIndex()).isEqualTo(toSelect);
+    assertThat(selectedIndexOf(target)).isEqualTo(toSelect);
   }
 
   private static class MyFrame extends TestWindow {
