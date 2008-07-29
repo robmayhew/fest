@@ -196,19 +196,12 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   boolean isDropDownVisible(final JComboBox comboBox) {
-    return new GuiTask<Boolean>() {
-      protected Boolean executeInEDT() {
-        return comboBox.getUI().isPopupVisible(comboBox);
-      }
-    }.run();
+    return new IsPopupVisibleTask(comboBox).run();
   }
 
   void dropDownVisibleThroughUIDelegate(final JComboBox comboBox, final boolean visible) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        comboBox.getUI().setPopupVisible(comboBox, visible);
-      }
-    });
+    robot.invokeAndWait(new SetPopupVisibleTask(comboBox, visible));
+    robot.waitForIdle();
   }
 
   /**
@@ -230,7 +223,7 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   public void selectAllText(JComboBox comboBox) {
     if (!canAccessEditorIn(comboBox)) return;
-    Component editor = comboBox.getEditor().getEditorComponent();
+    Component editor = new GetEditorComponentTask(comboBox).run();
     if (!(editor instanceof JComponent)) return;
     focus(editor);
     invokeAction((JComponent) editor, selectAllAction);
@@ -248,12 +241,8 @@ public class JComboBoxDriver extends JComponentDriver {
     robot.enterText(text);
   }
 
-  private boolean canAccessEditorIn(final JComboBox comboBox) {
-    return new GuiTask<Boolean>() {
-      protected Boolean executeInEDT() {
-        return comboBox.isEditable() && comboBox.isEnabled();
-      }
-    }.run();
+  private boolean canAccessEditorIn(JComboBox comboBox) {
+    return new CanAccessEditorTask(comboBox).run();
   }
 
   /**
@@ -295,8 +284,9 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @throws AssertionError if the <code>JComboBox</code> is not editable.
    */
-  public void requireEditable(JComboBox comboBox) {
-    assertThat(comboBox.isEditable()).as(editableProperty(comboBox)).isTrue();
+  public void requireEditable(final JComboBox comboBox) {
+    boolean editable = new IsEditableTask(comboBox).run();
+    assertThat(editable).as(editableProperty(comboBox)).isTrue();
   }
 
   /**
@@ -321,5 +311,67 @@ public class JComboBoxDriver extends JComponentDriver {
   public void cellReader(JComboBoxCellReader newCellReader) {
     validateCellReader(newCellReader);
     cellReader = newCellReader;
+  }
+
+  private static class IsEditableTask extends GuiTask<Boolean> {
+    private final JComboBox comboBox;
+
+    IsEditableTask(JComboBox comboBox) {
+      this.comboBox = comboBox;
+    }
+
+    protected Boolean executeInEDT() {
+      return comboBox.isEditable();
+    }
+  }
+
+  private static class GetEditorComponentTask extends GuiTask<Component> {
+    private final JComboBox comboBox;
+
+    GetEditorComponentTask(JComboBox comboBox) {
+      this.comboBox = comboBox;
+    }
+
+    protected Component executeInEDT() {
+      return comboBox.getEditor().getEditorComponent();
+    }
+  }
+
+  private static class CanAccessEditorTask extends GuiTask<Boolean> {
+    private final JComboBox comboBox;
+
+    CanAccessEditorTask(JComboBox comboBox) {
+      this.comboBox = comboBox;
+    }
+
+    protected Boolean executeInEDT() {
+      return comboBox.isEditable() && comboBox.isEnabled();
+    }
+  }
+
+  private static class SetPopupVisibleTask implements Runnable {
+    private final JComboBox comboBox;
+    private final boolean visible;
+
+    SetPopupVisibleTask(JComboBox comboBox, boolean visible) {
+      this.comboBox = comboBox;
+      this.visible = visible;
+    }
+
+    public void run() {
+      comboBox.getUI().setPopupVisible(comboBox, visible);
+    }
+  }
+
+  private static class IsPopupVisibleTask extends GuiTask<Boolean> {
+    private final JComboBox comboBox;
+
+    IsPopupVisibleTask(JComboBox comboBox) {
+      this.comboBox = comboBox;
+    }
+
+    protected Boolean executeInEDT() {
+      return comboBox.getUI().isPopupVisible(comboBox);
+    }
   }
 }
