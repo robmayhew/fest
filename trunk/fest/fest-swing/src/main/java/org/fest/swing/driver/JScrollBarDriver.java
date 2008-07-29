@@ -25,6 +25,8 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.task.GetJScrollBarValueTask.valueOf;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -137,10 +139,10 @@ public class JScrollBarDriver extends JComponentDriver {
   }
 
   private void scroll(JScrollBar scrollBar, Point where, int count) {
-    if (!scrollBar.isEnabled()) return;
+    if (!isEnabled(scrollBar)) return;
     // For now, do it programmatically, faking the mouse movement and clicking
     robot.moveMouse(scrollBar, where.x, where.y);
-    int value = scrollBar.getValue() + count;
+    int value = valueOf(scrollBar) + count;
     setValueProperty(scrollBar, value);
   }
 
@@ -152,8 +154,8 @@ public class JScrollBarDriver extends JComponentDriver {
    */
   public void scrollTo(JScrollBar scrollBar, final int position) {
     validatePosition(scrollBar, position);
-    if (!scrollBar.isEnabled()) return;
-    Point thumb = location.thumbLocation(scrollBar, scrollBar.getValue());
+    if (!isEnabled(scrollBar)) return;
+    Point thumb = location.thumbLocation(scrollBar, valueOf(scrollBar));
     robot.moveMouse(scrollBar, thumb.x, thumb.y);
     thumb = location.thumbLocation(scrollBar, position);
     robot.moveMouse(scrollBar, thumb.x, thumb.y);
@@ -195,6 +197,6 @@ public class JScrollBarDriver extends JComponentDriver {
    * @throws AssertionError if the value of the <code>JScrollBar</code> is not equal to the given one.
    */
   public void requireValue(JScrollBar scrollBar, int value) {
-    assertThat(scrollBar.getValue()).as(propertyName(scrollBar, VALUE_PROPERTY)).isEqualTo(value);
+    assertThat(valueOf(scrollBar)).as(propertyName(scrollBar, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

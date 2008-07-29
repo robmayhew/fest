@@ -31,6 +31,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetJSliderValueTask.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -88,7 +89,7 @@ public abstract class JSliderDriverTestCase {
 
   public void shouldNotSlideToMaximumIfSliderIsNotEnabled() {
     clearAndDisableSlider();
-    int value = slider.getValue();
+    int value = valueOf(slider);
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
@@ -107,7 +108,7 @@ public abstract class JSliderDriverTestCase {
   }
 
   private void assertThatSliderValueIsEqualTo(int expected) {
-    assertThat(slider.getValue()).isEqualTo(expected);
+    assertThat(valueOf(slider)).isEqualTo(expected);
   }
 
   public void shouldThrowErrorIfValueIsLessThanMinimum() {
@@ -135,7 +136,7 @@ public abstract class JSliderDriverTestCase {
         slider.setEnabled(false);
       }
     });
-    assertThat(slider.isEnabled()).isFalse();
+    robot.waitForIdle();
   }
 
   private static class MyFrame extends TestWindow {

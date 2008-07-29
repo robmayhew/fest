@@ -242,7 +242,7 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @return the text of this fixture's <code>JButton</code>. 
    */
   public String text() {
-    return target.getText();
+    return driver.textOf(target);
   }
 }
 

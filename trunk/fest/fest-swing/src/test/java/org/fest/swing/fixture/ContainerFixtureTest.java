@@ -15,27 +15,42 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Adjustable;
 import java.awt.Component;
-import java.util.Collection;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.task.*;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
+import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.task.GetComponentBackgroundTask.backgroundOf;
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
+import static org.fest.swing.task.GetDialogTitleTask.titleOf;
+import static org.fest.swing.task.GetJComboBoxItemCountTask.itemCountOf;
+import static org.fest.swing.task.GetJOptionPaneMessageTask.messageOf;
+import static org.fest.swing.task.GetJTabbedPaneTabCountTask.tabCountOf;
+import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
+import static org.fest.swing.task.GetJToolBarOrientationTask.isHorizontal;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link ContainerFixture}</code>.
@@ -45,19 +60,20 @@ import static org.fest.util.Strings.concat;
 @Test(groups = GUI)
 public class ContainerFixtureTest {
 
-  private ContainerFixture<FrameWithAllSupportedComponents> fixture;
+  private static final Dimension PREFERRED_DIMENSION = new Dimension(100, 100);
+  
+  private ContainerFixture<TestWindow> fixture;
   private Robot robot;
-  private FrameWithAllSupportedComponents window;
-
-  private JButtonFixture findButton() {
-    return fixture.button("button");
-  }
+  private TestWindow window;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new FrameWithAllSupportedComponents(getClass());
-    fixture = new ContainerFixture<FrameWithAllSupportedComponents>(robot, window) {};
-    robot.showWindow(window);
+    window = new GuiTask<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        return new TestWindow(ContainerFixtureTest.class);
+      }
+    }.run();
+    fixture = new ContainerFixture<TestWindow>(robot, window) {};
   }
 
   @AfterMethod public void tearDown() {
@@ -65,505 +81,729 @@ public class ContainerFixtureTest {
   }
 
   public void shouldFindButtonByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.button();
-      }
-    };
-    find(finder, window.button);
+    JButton expectedButton = addJButton();
+    JButtonFixture buttonFixture = fixture.button();
+    assertThat(buttonFixture.target).isSameAs(expectedButton);        
   }
   
   public void shouldFindButtonWithGivenMatcher() {
+    JButton expectedButton = addJButton();
     GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
-        return "A Button".equals(button.getText());
+        return "A Button".equals(textOf(button));
       }
     };
-    JButtonFixture button = fixture.button(textMatcher);
-    assertThat(button.target).isSameAs(window.button);
+    JButtonFixture buttonFixture = fixture.button(textMatcher);
+    assertThat(buttonFixture.target).isSameAs(expectedButton);
   }
 
   public void shouldFindButtonWithGivenName() {
-    JButtonFixture button = findButton();
-    assertThat(button.target).isSameAs(window.button);
+    JButton expectedButton = addJButton();
+    JButtonFixture buttonFixture = fixture.button("button");
+    assertThat(buttonFixture.target).isSameAs(expectedButton);
+  }
+
+  private JButton addJButton() {
+    return new GuiTask<JButton>() {
+      protected JButton executeInEDT() {
+        JButton button = new JButton("A Button");
+        button.setName("button");
+        addToWindowAndDisplay(button);
+        return button;
+      }
+    }.run();
   }
 
   public void shouldFindCheckBoxByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.checkBox();
-      }
-    };
-    find(finder, window.checkBox);
+    JCheckBox expectedCheckBox = addJCheckBox();
+    JCheckBoxFixture checkBoxFixture = fixture.checkBox();
+    assertThat(checkBoxFixture.target).isSameAs(expectedCheckBox);
   }
 
   public void shouldFindCheckBoxWithGivenMatcher() {
+    JCheckBox expectedCheckBox = addJCheckBox();
     GenericTypeMatcher<JCheckBox> textMatcher = new GenericTypeMatcher<JCheckBox>() {
       protected boolean isMatching(JCheckBox checkBox) {
-        return "A CheckBox".equals(checkBox.getText());
+        return "A CheckBox".equals(textOf(checkBox));
       }
     };
-    JCheckBoxFixture checkbox = fixture.checkBox(textMatcher);
-    assertThat(checkbox.target).isSameAs(window.checkBox);
+    JCheckBoxFixture checkboxFixture = fixture.checkBox(textMatcher);
+    assertThat(checkboxFixture.target).isSameAs(expectedCheckBox);
   }
 
   public void shouldFindCheckBoxWithGivenName() {
-    JCheckBoxFixture checkBox = fixture.checkBox("checkBox");
-    assertThat(checkBox.target).isSameAs(window.checkBox);
+    JCheckBox expectedCheckBox = addJCheckBox();
+    JCheckBoxFixture checkBoxFixture = fixture.checkBox("checkBox");
+    assertThat(checkBoxFixture.target).isSameAs(expectedCheckBox);
+  }
+
+  private JCheckBox addJCheckBox() {
+    return new GuiTask<JCheckBox>() {
+      protected JCheckBox executeInEDT() {
+        JCheckBox checkBox = new JCheckBox("A CheckBox");
+        checkBox.setName("checkBox");
+        addToWindowAndDisplay(checkBox);
+        return checkBox;
+      }
+    }.run();
   }
 
   public void shouldFindComboBoxByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.comboBox();
-      }
-    };
-    find(finder, window.comboBox);
+    JComboBox expectedComboBox = addJComboBox();
+    JComboBoxFixture comboBoxFixture = fixture.comboBox();
+    assertThat(comboBoxFixture.target).isSameAs(expectedComboBox);
   }
-
+  
   public void shouldFindComboBoxWithGivenMatcher() {
+    JComboBox expectedComboBox = addJComboBox();
     GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
       protected boolean isMatching(JComboBox comboBox) {
-        return comboBox.getItemCount() == 3;
+        return itemCountOf(comboBox) == 3;
       }
     };
-    JComboBoxFixture comboBox = fixture.comboBox(itemCountMatcher);
-    assertThat(comboBox.target).isSameAs(window.comboBox);
+    JComboBoxFixture comboBoxFixture = fixture.comboBox(itemCountMatcher);
+    assertThat(comboBoxFixture.target).isSameAs(expectedComboBox);
   }
 
   public void shouldFindComboBoxWithGivenName() {
-    JComboBoxFixture comboBox = fixture.comboBox("comboBox");
-    assertThat(comboBox.target).isSameAs(window.comboBox);
+    JComboBox expectedComboBox = addJComboBox();
+    JComboBoxFixture comboBoxFixture = fixture.comboBox("comboBox");
+    assertThat(comboBoxFixture.target).isSameAs(expectedComboBox);
   }
 
-  public void shouldFindDialogByType() {
-    window.dialog.setVisible(true);
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.dialog();
+  private JComboBox addJComboBox() {
+    return new GuiTask<JComboBox>() {
+      protected JComboBox executeInEDT() {
+        JComboBox comboBox = new JComboBox(array("first", "second", "third"));
+        comboBox.setName("comboBox");
+        addToWindowAndDisplay(comboBox);
+        return comboBox;
       }
-    };
-    find(finder, window.dialog);
+    }.run();
+  }
+  
+  public void shouldFindDialogByType() {
+    JDialog expectedDialog = addJDialog();
+    DialogFixture dialogFixture = fixture.dialog();
+    assertThat(dialogFixture.target).isSameAs(expectedDialog);
   }
 
   public void shouldFindDialogWithGivenMatcher() {
+    JDialog expectedDialog = addJDialog();
     GenericTypeMatcher<JDialog> titleMatcher = new GenericTypeMatcher<JDialog>() {
       protected boolean isMatching(JDialog dialog) {
-        return "A Dialog".equals(dialog.getTitle());
+        return "A Dialog".equals(titleOf(dialog));
       }
     };
-    DialogFixture dialog = fixture.dialog(titleMatcher);
-    assertThat(dialog.target).isSameAs(window.dialog);
+    DialogFixture dialogFixture = fixture.dialog(titleMatcher);
+    assertThat(dialogFixture.target).isSameAs(expectedDialog);
   }
 
   public void shouldFindDialogWithGivenName() {
-    window.dialog.pack();
-    window.dialog.setVisible(true);
-    DialogFixture dialog = fixture.dialog("dialog");
-    assertThat(dialog.target).isSameAs(window.dialog);
+    JDialog expectedDialog = addJDialog();
+    DialogFixture dialogFixture = fixture.dialog("dialog");
+    assertThat(dialogFixture.target).isSameAs(expectedDialog);
   }
 
-  public void shouldFindFileChooserByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.fileChooser();
+  private JDialog addJDialog() {
+    return new GuiTask<JDialog>() {
+      protected JDialog executeInEDT() {
+        JDialog dialog = new JDialog(window, "A Dialog");
+        dialog.setName("dialog");
+        window.display();
+        dialog.pack();
+        dialog.setVisible(true);
+        return dialog;
       }
-    };
-    find(finder, window.fileChooser);
+    }.run();
+  }
+  
+  public void shouldFindFileChooserByType() {
+    JFileChooser expectedFileChooser = addJFileChooser();
+    JFileChooserFixture fileChooserFixture = fixture.fileChooser();
+    assertThat(fileChooserFixture.target).isSameAs(expectedFileChooser);
   }
 
   public void shouldFindFileChooserWithGivenMatcher() {
+    JFileChooser expectedFileChooser = addJFileChooser();
     GenericTypeMatcher<JFileChooser> nameMatcher = new GenericTypeMatcher<JFileChooser>() {
       protected boolean isMatching(JFileChooser fileChooser) {
-        return "fileChooser".equals(fileChooser.getName());
+        return "fileChooser".equals(nameOf(fileChooser));
       }
     };
-    JFileChooserFixture fileChooser = fixture.fileChooser(nameMatcher);
-    assertThat(fileChooser.target).isEqualTo(window.fileChooser);
+    JFileChooserFixture fileChooserFixture = fixture.fileChooser(nameMatcher);
+    assertThat(fileChooserFixture.target).isEqualTo(expectedFileChooser);
   }
 
   public void shouldFindFileChooserWithGivenName() {
-    JFileChooserFixture fileChooser = fixture.fileChooser("fileChooser");
-    assertThat(fileChooser.target).isSameAs(window.fileChooser);
+    JFileChooser expectedFileChooser = addJFileChooser();
+    JFileChooserFixture fileChooserFixture = fixture.fileChooser("fileChooser");
+    assertThat(fileChooserFixture.target).isSameAs(expectedFileChooser);
+  }
+
+  private JFileChooser addJFileChooser() {
+    return new GuiTask<JFileChooser>() {
+      protected JFileChooser executeInEDT() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setName("fileChooser");
+        addToWindowAndDisplay(fileChooser);
+        return fileChooser;
+      }
+    }.run();
   }
 
   public void shouldFindLabelByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.label();
-      }
-    };
-    find(finder, window.label);
+    JLabel expectedLabel = addJLabel();
+    JLabelFixture labelFixture = fixture.label();
+    assertThat(labelFixture.target).isSameAs(expectedLabel);
   }
 
   public void shouldFindLabelWithGivenMatcher() {
+    JLabel expectedLabel = addJLabel();
     GenericTypeMatcher<JLabel> textMatcher = new GenericTypeMatcher<JLabel>() {
       protected boolean isMatching(JLabel label) {
-        return "A Label".equals(label.getText());
+        return "A Label".equals(GetJLabelTextTask.textOf(label));
       }
     };
-    JLabelFixture label = fixture.label(textMatcher);
-    assertThat(label.target).isSameAs(window.label);
+    JLabelFixture labelFixture = fixture.label(textMatcher);
+    assertThat(labelFixture.target).isSameAs(expectedLabel);
   }
 
   public void shouldFindLabelWithGivenName() {
-    JLabelFixture label = fixture.label("label");
-    assertThat(label.target).isSameAs(window.label);
+    JLabel expectedLabel = addJLabel();
+    JLabelFixture labelFixture = fixture.label("label");
+    assertThat(labelFixture.target).isSameAs(expectedLabel);
+  }
+
+  private JLabel addJLabel() {
+    return new GuiTask<JLabel>() {
+      protected JLabel executeInEDT() {
+        JLabel label = new JLabel("A Label");
+        label.setName("label");
+        addToWindowAndDisplay(label);
+        return label;
+      }
+    }.run();
   }
 
   public void shouldFindListByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.list();
-      }
-    };
-    find(finder, window.list);
+    JList expectedList = addJList();
+    JListFixture listFixture = fixture.list();
+    assertThat(listFixture.target).isSameAs(expectedList);
   }
 
   public void shouldFindListWithGivenMatcher() {
+    JList expectedList = addJList();
     GenericTypeMatcher<JList> nameMatcher = new GenericTypeMatcher<JList>() {
       protected boolean isMatching(JList list) {
-        return "list".equals(list.getName());
+        return "list".equals(nameOf(list));
       }
     };
-    JListFixture list = fixture.list(nameMatcher);
-    assertThat(list.target).isSameAs(window.list);
+    JListFixture listFixture = fixture.list(nameMatcher);
+    assertThat(listFixture.target).isSameAs(expectedList);
   }
 
   public void shouldFindListWithGivenName() {
-    JListFixture list = fixture.list("list");
-    assertThat(list.target).isSameAs(window.list);
+    JList expectedList = addJList();
+    JListFixture listFixture = fixture.list("list");
+    assertThat(listFixture.target).isSameAs(expectedList);
+  }
+
+  private JList addJList() {
+    return new GuiTask<JList>() {
+      protected JList executeInEDT() {
+        JList list = new JList();
+        list.setName("list");
+        addToWindowAndDisplay(list);
+        return list;
+      }
+    }.run();
   }
 
   public void shouldFindMenuWithGivenMatcher() {
+    JMenuItem expectedMenuItem = addJMenuItem();
     GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
       protected boolean isMatching(JMenuItem menuItem) {
-        return "A Submenu".equals(menuItem.getText());
+        return "A Submenu".equals(GetAbstractButtonTextTask.textOf(menuItem));
       }
     };
-    JMenuItemFixture menuItem = fixture.menuItem(textMatcher);
-    assertThat(menuItem.target).isSameAs(window.subMenu);
+    JMenuItemFixture menuItemFixture = fixture.menuItem(textMatcher);
+    assertThat(menuItemFixture.target).isSameAs(expectedMenuItem);
   }
 
   public void shouldFindMenuWithGivenName() {
-    JMenuItemFixture menuItem = fixture.menuItem("menu");
-    assertThat(menuItem.target).isSameAs(window.menu);
+    JMenuItem expectedMenuItem = addJMenuItem();
+    JMenuItemFixture menuItem = fixture.menuItem("subMenu");
+    assertThat(menuItem.target).isSameAs(expectedMenuItem);
   }
 
   public void shouldFindMenuWithGivenPath() {
-    JMenuItemFixture menuItem = fixture.menuItemWithPath("A Menu", "A Submenu");
-    assertThat(menuItem.target).isSameAs(window.subMenu);
+    JMenuItem expectedMenuItem = addJMenuItem();
+    JMenuItemFixture menuItemFixture = fixture.menuItemWithPath("A Menu", "A Submenu");
+    assertThat(menuItemFixture.target).isSameAs(expectedMenuItem);
+  }
+
+  private JMenuItem addJMenuItem() {
+    return new GuiTask<JMenuItem>() {
+      protected JMenuItem executeInEDT() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("A Menu");
+        JMenuItem subMenu = new JMenu("A Submenu");
+        subMenu.setName("subMenu");
+        menu.add(subMenu);
+        menuBar.add(menu);
+        window.setJMenuBar(menuBar);
+        window.display();
+        return subMenu;
+      }
+    }.run();
   }
 
   public void shouldFindPanelByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.panel();
-      }
-    };
-    find(finder, window.panel);
+    JPanel expectedPanel = addJPanel();
+    JPanelFixture panelFixture = fixture.panel();
+    assertThat(panelFixture.target).isSameAs(expectedPanel);
   }
 
   public void shouldFindPanelWithGivenMatcher() {
+    JPanel expectedPanel = addJPanel();
     GenericTypeMatcher<JPanel> colorMatcher = new GenericTypeMatcher<JPanel>() {
       protected boolean isMatching(JPanel panel) {
-        return RED.equals(panel.getBackground());
+        return RED.equals(backgroundOf(panel));
       }
     };
-    JPanelFixture panel = fixture.panel(colorMatcher);
-    assertThat(panel.target).isSameAs(window.panel);
+    JPanelFixture panelFixture = fixture.panel(colorMatcher);
+    assertThat(panelFixture.target).isSameAs(expectedPanel);
   }
 
   public void shouldFindPanelWithGivenName() {
-    JPanelFixture panel = fixture.panel("panel");
-    assertThat(panel.target).isSameAs(window.panel);
+    JPanel expectedPanel = addJPanel();
+    JPanelFixture panelFixture = fixture.panel("panel");
+    assertThat(panelFixture.target).isSameAs(expectedPanel);
+  }
+
+  private JPanel addJPanel() {
+    return new GuiTask<JPanel>() {
+      protected JPanel executeInEDT() {
+        JPanel panel = new JPanel();
+        window.getRootPane().setContentPane(panel);
+        panel.setName("panel");
+        panel.setBackground(RED);
+        window.display();
+        return panel;
+      }
+    }.run();
   }
 
   public void shouldFindOptionPane() {
-    findButton().click();
-    JOptionPaneFixture optionPane = fixture.optionPane();
-    assertThat(optionPane.target.getMessage()).isEqualTo("A Message");
+    final JButton button = addJButton();
+    // show option pane when clicking button
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        button.setName("button");
+        button.addMouseListener(new MouseAdapter() {
+          @Override public void mousePressed(MouseEvent e) {
+            JOptionPane.showMessageDialog(window, "A Message");
+          }
+        });
+        return null;
+      }
+    }.run();
+    robot.click(button);
+    JOptionPaneFixture optionPaneFixture = fixture.optionPane();
+    assertThat(messageOf(optionPaneFixture.target)).isEqualTo("A Message");
   }
 
   public void shouldFindRadioButtonByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.radioButton();
-      }
-    };
-    find(finder, window.radioButton);
+    JRadioButton expectedRadioButton = addJRadioButton();
+    JRadioButtonFixture radioButtonFixture = fixture.radioButton();
+    assertThat(radioButtonFixture.target).isSameAs(expectedRadioButton);
   }
 
   public void shouldFindRadioButtonWithGivenMatcher() {
+    JRadioButton expectedRadioButton = addJRadioButton();
     GenericTypeMatcher<JRadioButton> textMatcher = new GenericTypeMatcher<JRadioButton>() {
       protected boolean isMatching(JRadioButton radioButton) {
-        return "A Radio Button".equals(radioButton.getText());
+        return "A Radio Button".equals(GetAbstractButtonTextTask.textOf(radioButton));
       }
     };
-    JRadioButtonFixture radioButton = fixture.radioButton(textMatcher);
-    assertThat(radioButton.target).isSameAs(window.radioButton);
+    JRadioButtonFixture radioButtonFixture = fixture.radioButton(textMatcher);
+    assertThat(radioButtonFixture.target).isSameAs(expectedRadioButton);
   }
 
   public void shouldFindRadioButtonWithGivenName() {
-    JRadioButtonFixture radioButton = fixture.radioButton("radioButton");
-    assertThat(radioButton.target).isSameAs(window.radioButton);
+    JRadioButton expectedRadioButton = addJRadioButton();
+    JRadioButtonFixture radioButtonFixture = fixture.radioButton("radioButton");
+    assertThat(radioButtonFixture.target).isSameAs(expectedRadioButton);
+  }
+
+  private JRadioButton addJRadioButton() {
+    return new GuiTask<JRadioButton>() {
+      protected JRadioButton executeInEDT() {
+        JRadioButton radioButton = new JRadioButton("A Radio Button");
+        radioButton.setName("radioButton");
+        addToWindowAndDisplay(radioButton);
+        return radioButton;
+      }
+    }.run();
   }
 
   public void shouldFindScrollBarByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.scrollBar();
-      }
-    };
-    find(finder, window.scrollBar);
+    JScrollBar expectedScrollBar = addJScrollBar();
+    JScrollBarFixture scrollBarFixture = fixture.scrollBar();
+    assertThat(scrollBarFixture.target).isSameAs(expectedScrollBar);
   }
 
   public void shouldFindScrollBarWithGivenMatcher() {
+    JScrollBar expectedScrollBar = addJScrollBar();
     GenericTypeMatcher<JScrollBar> valueMatcher = new GenericTypeMatcher<JScrollBar>() {
       protected boolean isMatching(JScrollBar scrollBar) {
-        return scrollBar.getValue() == 10;
+        return GetJScrollBarValueTask.valueOf(scrollBar) == 10;
       }
     };
-    JScrollBarFixture scrollBar = fixture.scrollBar(valueMatcher);
-    assertThat(scrollBar.target).isSameAs(window.scrollBar);
+    JScrollBarFixture scrollBarFixture = fixture.scrollBar(valueMatcher);
+    assertThat(scrollBarFixture.target).isSameAs(expectedScrollBar);
   }
 
   public void shouldFindScrollBarWithGivenName() {
-    JScrollBarFixture scrollBar = fixture.scrollBar("scrollBar");
-    assertThat(scrollBar.target).isSameAs(window.scrollBar);
+    JScrollBar expectedScrollBar = addJScrollBar();
+    JScrollBarFixture scrollBarFixture = fixture.scrollBar("scrollBar");
+    assertThat(scrollBarFixture.target).isSameAs(expectedScrollBar);
+  }
+
+  private JScrollBar addJScrollBar() {
+    return new GuiTask<JScrollBar>() {
+      protected JScrollBar executeInEDT() {
+        JScrollBar scrollBar = new JScrollBar(Adjustable.HORIZONTAL);
+        scrollBar.setName("scrollBar");
+        scrollBar.setValue(10);
+        addToWindowAndDisplay(scrollBar);
+        return scrollBar;
+      }
+    }.run();
   }
 
   public void shouldFindScrollPane() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.scrollPane();
-      }
-    };
-    find(finder, window.scrollPane);
+    JScrollPane expectedScrollPane = addJScrollPane();
+    JScrollPaneFixture scrollPaneFixture = fixture.scrollPane();
+    assertThat(scrollPaneFixture.target).isSameAs(expectedScrollPane);
   }
 
   public void shouldFindScrollPaneWithGivenMatcher() {
+    JScrollPane expectedScrollPane = addJScrollPane();
     GenericTypeMatcher<JScrollPane> nameMatcher = new GenericTypeMatcher<JScrollPane>() {
       protected boolean isMatching(JScrollPane scrollPane) {
-        return "scrollPane".equals(scrollPane.getName());
+        return "scrollPane".equals(nameOf(scrollPane));
       }
     };
-    JScrollPaneFixture scrollPane = fixture.scrollPane(nameMatcher);
-    assertThat(scrollPane.target).isSameAs(window.scrollPane);
+    JScrollPaneFixture scrollPaneFixture = fixture.scrollPane(nameMatcher);
+    assertThat(scrollPaneFixture.target).isSameAs(expectedScrollPane);
   }
 
   public void shouldFindScrollPaneWithGivenName() {
-    JScrollPaneFixture scrollPane = fixture.scrollPane("scrollPane");
-    assertThat(scrollPane.target).isSameAs(window.scrollPane);
+    JScrollPane expectedScrollPane = addJScrollPane();
+    JScrollPaneFixture scrollPaneFixture = fixture.scrollPane("scrollPane");
+    assertThat(scrollPaneFixture.target).isSameAs(expectedScrollPane);
+  }
+
+  private JScrollPane addJScrollPane() {
+    return new GuiTask<JScrollPane>() {
+      protected JScrollPane executeInEDT() {
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setName("scrollPane");
+        scrollPane.setPreferredSize(PREFERRED_DIMENSION);
+        addToWindowAndDisplay(scrollPane);
+        return scrollPane;
+      }
+    }.run();
   }
 
   public void shouldFindSliderByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.slider();
-      }
-    };
-    find(finder, window.slider);
+    JSlider expectedSlider = addJSlider();
+    JSliderFixture sliderFixture = fixture.slider();
+    assertThat(sliderFixture.target).isSameAs(expectedSlider);
   }
 
   public void shouldFindSliderWithGivenMatcher() {
+    JSlider expectedSlider = addJSlider();
     GenericTypeMatcher<JSlider> valueMatcher = new GenericTypeMatcher<JSlider>() {
       protected boolean isMatching(JSlider slider) {
-        return slider.getValue() == 15;
+        return GetJSliderValueTask.valueOf(slider) == 15;
       }
     };
-    JSliderFixture slider = fixture.slider(valueMatcher);
-    assertThat(slider.target).isSameAs(window.slider);
+    JSliderFixture sliderFixture = fixture.slider(valueMatcher);
+    assertThat(sliderFixture.target).isSameAs(expectedSlider);
   }
 
   public void shouldFindSliderWithGivenName() {
-    JSliderFixture slider = fixture.slider("slider");
-    assertThat(slider.target).isSameAs(window.slider);
+    JSlider expectedSlider = addJSlider();
+    JSliderFixture sliderFixture = fixture.slider("slider");
+    assertThat(sliderFixture.target).isSameAs(expectedSlider);
+  }
+
+  private JSlider addJSlider() {
+    return new GuiTask<JSlider>() {
+      protected JSlider executeInEDT() {
+        JSlider slider = new JSlider(10, 20, 15);
+        slider.setName("slider");
+        addToWindowAndDisplay(slider);
+        return slider;
+      }
+    }.run();
   }
 
   public void shouldFindSpinnerByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.spinner();
-      }
-    };
-    find(finder, window.spinner);
+    JSpinner expectedSpinner = addJSpinner();
+    JSpinnerFixture spinnerFixture = fixture.spinner();
+    assertThat(spinnerFixture.target).isSameAs(expectedSpinner);
   }
 
   public void shouldFindSpinnerWithGivenMatcher() {
+    JSpinner expectedSpinner = addJSpinner();
     GenericTypeMatcher<JSpinner> valueMatcher = new GenericTypeMatcher<JSpinner>() {
       protected boolean isMatching(JSpinner spinner) {
-        return spinner.getModel().getValue().equals("One");
+        return GetJSpinnerValueTask.valueOf(spinner).equals("One");
       }
     };
-    JSpinnerFixture spinner = fixture.spinner(valueMatcher);
-    assertThat(spinner.target).isSameAs(window.spinner);
+    JSpinnerFixture spinnerFixture = fixture.spinner(valueMatcher);
+    assertThat(spinnerFixture.target).isSameAs(expectedSpinner);
   }
 
   public void shouldFindSpinnerWithGivenName() {
-    JSpinnerFixture spinner = fixture.spinner("spinner");
-    assertThat(spinner.target).isSameAs(window.spinner);
+    JSpinner expectedSpinner = addJSpinner();
+    JSpinnerFixture spinnerFixture = fixture.spinner("spinner");
+    assertThat(spinnerFixture.target).isSameAs(expectedSpinner);
+  }
+
+  private JSpinner addJSpinner() {
+    return new GuiTask<JSpinner>() {
+      protected JSpinner executeInEDT() {
+        JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
+        spinner.setName("spinner");
+        addToWindowAndDisplay(spinner);
+        return spinner;
+      }
+    }.run();
   }
 
   public void shouldFindSplitPaneByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.splitPane();
-      }
-    };
-    find(finder, window.splitPane);
+    JSplitPane expectedSplitPane = addJSplitPane();
+    JSplitPaneFixture splitPaneFixture = fixture.splitPane();
+    assertThat(splitPaneFixture.target).isSameAs(expectedSplitPane);
   }
 
   public void shouldFindSplitPaneWithGivenMatcher() {
+    JSplitPane expectedSplitPane = addJSplitPane();
     GenericTypeMatcher<JSplitPane> matcher = new GenericTypeMatcher<JSplitPane>() {
-      protected boolean isMatching(JSplitPane splitPane) {
-        return splitPane.getRightComponent() instanceof JList;
+      protected boolean isMatching(final JSplitPane splitPane) {
+        Component rightComponent = new GuiTask<Component>() {
+          protected Component executeInEDT() {
+            return splitPane.getRightComponent();
+          }
+        }.run();
+        return rightComponent instanceof JList;
       }
     };
-    JSplitPaneFixture splitPane = fixture.splitPane(matcher);
-    assertThat(splitPane.target).isSameAs(window.splitPane);
+    JSplitPaneFixture splitPaneFixture = fixture.splitPane(matcher);
+    assertThat(splitPaneFixture.target).isSameAs(expectedSplitPane);
   }
 
   public void shouldFindSplitPaneWithGivenName() {
-    JSplitPaneFixture splitPane = fixture.splitPane("splitPane");
-    assertThat(splitPane.target).isSameAs(window.splitPane);
+    JSplitPane expectedSplitPane = addJSplitPane();
+    JSplitPaneFixture splitPaneFixture = fixture.splitPane("splitPane");
+    assertThat(splitPaneFixture.target).isSameAs(expectedSplitPane);
+  }
+
+  private JSplitPane addJSplitPane() {
+    return new GuiTask<JSplitPane>() {
+      protected JSplitPane executeInEDT() {
+        JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
+        splitPane.setName("splitPane");
+        splitPane.setPreferredSize(PREFERRED_DIMENSION);
+        addToWindowAndDisplay(splitPane);
+        return splitPane;
+      }
+    }.run();
   }
 
   public void shouldFindTabbedPaneByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.tabbedPane();
-      }
-    };
-    find(finder, window.tabbedPane);
+    JTabbedPane expectedTabbedPane = addJTabbedPane();
+    JTabbedPaneFixture tabbedPaneFixture = fixture.tabbedPane();
+    assertThat(tabbedPaneFixture.target).isSameAs(expectedTabbedPane);
   }
 
   public void shouldFindTabbedPaneWithGivenMatcher() {
+    JTabbedPane expectedTabbedPane = addJTabbedPane();
     GenericTypeMatcher<JTabbedPane> tabCountMatcher = new GenericTypeMatcher<JTabbedPane>() {
       protected boolean isMatching(JTabbedPane tabbedPane) {
-        return tabbedPane.getTabCount() == 1;
+        return tabCountOf(tabbedPane) == 1;
       }
     };
-    JTabbedPaneFixture tabbedPane = fixture.tabbedPane(tabCountMatcher);
-    assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
+    JTabbedPaneFixture tabbedPaneFixture = fixture.tabbedPane(tabCountMatcher);
+    assertThat(tabbedPaneFixture.target).isSameAs(expectedTabbedPane);
   }
 
   public void shouldFindTabbedPaneWithGivenName() {
-    JTabbedPaneFixture tabbedPane = fixture.tabbedPane("tabbedPane");
-    assertThat(tabbedPane.target).isSameAs(window.tabbedPane);
+    JTabbedPane expectedTabbedPane = addJTabbedPane();
+    JTabbedPaneFixture tabbedPaneFixture = fixture.tabbedPane("tabbedPane");
+    assertThat(tabbedPaneFixture.target).isSameAs(expectedTabbedPane);
+  }
+
+  private JTabbedPane addJTabbedPane() {
+    return new GuiTask<JTabbedPane>() {
+      protected JTabbedPane executeInEDT() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setName("tabbedPane");
+        tabbedPane.addTab("A Tab", new JPanel());
+        addToWindowAndDisplay(tabbedPane);
+        return tabbedPane;
+      }
+    }.run();
   }
 
   public void shouldFindTableByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.table();
-      }
-    };
-    find(finder, window.table);
+    JTable expectedTable = addJTable();
+    JTableFixture tableFixture = fixture.table();
+    assertThat(tableFixture.target).isSameAs(expectedTable);
   }
 
   public void shouldFindTableWithGivenMatcher() {
+    JTable expectedTable = addJTable();
     GenericTypeMatcher<JTable> rowCountMatcher = new GenericTypeMatcher<JTable>() {
       protected boolean isMatching(JTable table) {
-        return table.getRowCount() == 6;
+        return rowCountOf(table) == 6;
       }
     };
-    JTableFixture table = fixture.table(rowCountMatcher);
-    assertThat(table.target).isSameAs(window.table);
+    JTableFixture tableFixture = fixture.table(rowCountMatcher);
+    assertThat(tableFixture.target).isSameAs(expectedTable);
   }
 
   public void shouldFindTableWithGivenName() {
-    JTableFixture table = fixture.table("table");
-    assertThat(table.target).isSameAs(window.table);
+    JTable expectedTable = addJTable();
+    JTableFixture tableFixture = fixture.table("table");
+    assertThat(tableFixture.target).isSameAs(expectedTable);
+  }
+
+  private JTable addJTable() {
+    return new GuiTask<JTable>() {
+      protected JTable executeInEDT() {
+        JTable table = new JTable(6, 8);
+        table.setName("table");
+        addToWindowAndDisplay(table);
+        return table;
+      }
+    }.run();
   }
 
   public void shouldFindTextComponentByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.textBox();
-      }
-    };
-    find(finder, window.textField);
+    JTextComponent expectedTextComponent = addJTextComponent();
+    JTextComponentFixture textComponentFixture = fixture.textBox();
+    assertThat(textComponentFixture.target).isSameAs(expectedTextComponent);
   }
 
   public void shouldFindTextComponentWithGivenMatcher() {
+    JTextComponent expectedTextComponent = addJTextComponent();
     GenericTypeMatcher<JTextField> columnMatcher = new GenericTypeMatcher<JTextField>() {
-      protected boolean isMatching(JTextField textField) {
-        return textField.getColumns() == 10;
+      protected boolean isMatching(final JTextField textField) {
+        int columns = new GuiTask<Integer>() {
+          protected Integer executeInEDT() {
+            return textField.getColumns();
+          }
+        }.run();
+        return columns == 10;
       }
     };
-    JTextComponentFixture textField = fixture.textBox(columnMatcher);
-    assertThat(textField.target).isSameAs(window.textField);
+    JTextComponentFixture textComponentFixture = fixture.textBox(columnMatcher);
+    assertThat(textComponentFixture.target).isSameAs(expectedTextComponent);
   }
 
   public void shouldFindTextComponentWithGivenName() {
-    JTextComponentFixture textField = fixture.textBox("textField");
-    assertThat(textField.target).isSameAs(window.textField);
+    JTextComponent expectedTextComponent = addJTextComponent();
+    JTextComponentFixture textComponentFixture = fixture.textBox("textField");
+    assertThat(textComponentFixture.target).isSameAs(expectedTextComponent);
+  }
+
+  private JTextComponent addJTextComponent() {
+    return new GuiTask<JTextComponent>() {
+      protected JTextComponent executeInEDT() {
+        JTextField textField = new JTextField(10);
+        textField.setName("textField");
+        addToWindowAndDisplay(textField);
+        return textField;
+      }
+    }.run();
   }
 
   public void shouldFindToggleButtonByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.toggleButton();
-      }
-    };
-    find(finder, window.toggleButton);
+    JToggleButton expectedToggleButton = addJToggleButton();
+    JToggleButtonFixture toggleButtonFixture = fixture.toggleButton();
+    assertThat(toggleButtonFixture.target).isSameAs(expectedToggleButton);
   }
 
   public void shouldFindToggleButtonWithGivenMatcher() {
+    JToggleButton expectedToggleButton = addJToggleButton();
     GenericTypeMatcher<JToggleButton> textMatcher = new GenericTypeMatcher<JToggleButton>() {
       protected boolean isMatching(JToggleButton toggleButton) {
-        return "A ToggleButton".equals(toggleButton.getText());
+        return "A ToggleButton".equals(GetAbstractButtonTextTask.textOf(toggleButton));
       }
     };
-    JToggleButtonFixture checkbox = fixture.toggleButton(textMatcher);
-    assertThat(checkbox.target).isSameAs(window.toggleButton);
+    JToggleButtonFixture toggleButtonFixture = fixture.toggleButton(textMatcher);
+    assertThat(toggleButtonFixture.target).isSameAs(expectedToggleButton);
   }
 
   public void shouldFindToggleButtonWithGivenName() {
-    JToggleButtonFixture toggleButton = fixture.toggleButton("toggleButton");
-    assertThat(toggleButton.target).isSameAs(window.toggleButton);
+    JToggleButton expectedToggleButton = addJToggleButton();
+    JToggleButtonFixture toggleButtonFixture = fixture.toggleButton("toggleButton");
+    assertThat(toggleButtonFixture.target).isSameAs(expectedToggleButton);
+  }
+
+  private JToggleButton addJToggleButton() {
+    return new GuiTask<JToggleButton>() {
+      protected JToggleButton executeInEDT() {
+        JToggleButton toggleButton = new JToggleButton("A ToggleButton");
+        toggleButton.setName("toggleButton");
+        addToWindowAndDisplay(toggleButton);
+        return toggleButton;
+      }
+    }.run();
   }
 
   public void shouldFindToolBarByType() {
-    FindFunction finder = new FindFunction() {
-      @Override ComponentFixture<? extends Component> perform() {
-        return fixture.toolBar();
-      }
-    };
-    find(finder, window.toolBar);
+    JToolBar expectedToolBar = addJToolBar();
+    JToolBarFixture toolBarFixture = fixture.toolBar();
+    assertThat(toolBarFixture.target).isSameAs(expectedToolBar);
   }
 
   public void shouldFindToolBarWithGivenMatcher() {
+    JToolBar expectedToolBar = addJToolBar();
     GenericTypeMatcher<JToolBar> columnMatcher = new GenericTypeMatcher<JToolBar>() {
       protected boolean isMatching(JToolBar toolBar) {
-        return toolBar.getOrientation() == HORIZONTAL && "toolBar".equals(toolBar.getName());
+        return isHorizontal(toolBar) && "toolBar".equals(nameOf(toolBar));
       }
     };
-    JToolBarFixture toolBar = fixture.toolBar(columnMatcher);
-    assertThat(toolBar.target).isSameAs(window.toolBar);
+    JToolBarFixture toolBarFixture = fixture.toolBar(columnMatcher);
+    assertThat(toolBarFixture.target).isSameAs(expectedToolBar);
   }
 
   public void shouldFindToolBarWithGivenName() {
-    JToolBarFixture toolBar = fixture.toolBar("toolBar");
-    assertThat(toolBar.target).isSameAs(window.toolBar);
+    JToolBar expectedToolBar = addJToolBar();
+    JToolBarFixture toolBarFixture = fixture.toolBar("toolBar");
+    assertThat(toolBarFixture.target).isSameAs(expectedToolBar);
   }
 
-  private void find(FindFunction findFunction, Component expected) {
-    try {
-      ComponentFixture<? extends Component> component = findFunction.perform();
-      assertThat(component.target).isSameAs(expected);        
-    } catch (ComponentLookupException e) {
-      Collection<? extends Component> found = e.found();
-      assertThat(found).isNotEmpty();
-      for (Component c : found) if (c == expected) return;
-      fail(concat("Unable to find ", expected));
-    }
+  private JToolBar addJToolBar() {
+    return new GuiTask<JToolBar>() {
+      protected JToolBar executeInEDT() {
+        JToolBar toolBar = new JToolBar(HORIZONTAL);
+        toolBar.setName("toolBar");
+        addToWindowAndDisplay(toolBar);
+        return toolBar;
+      }
+    }.run();
   }
-  
-  private static abstract class FindFunction {
-    FindFunction() {}
-    
-    abstract ComponentFixture<? extends Component> perform();
+
+  private void addToWindowAndDisplay(Component c) {
+    window.add(c);
+    window.display();
   }
 }

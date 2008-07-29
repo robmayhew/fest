@@ -31,6 +31,7 @@ import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JOptionPaneMessageTypes.messageTypeAsText;
+import static org.fest.swing.task.GetJOptionPaneMessageTask.messageOf;
 
 /**
  * Understands simulation of user input on a <code>{@link JOptionPane}</code>. Unlike <code>JOptionPaneFixture</code>,
@@ -72,7 +73,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not show the given message.
    */
   public void requireMessage(JOptionPane optionPane, Object message) {
-    Object actualMessage = new GetMessageTask(optionPane).run();
+    Object actualMessage = messageOf(optionPane);
     assertThat(actualMessage).as(propertyName(optionPane, MESSAGE_PROPERTY)).isEqualTo(message);
   }
 
@@ -234,18 +235,6 @@ public class JOptionPaneDriver extends JComponentDriver {
 
     protected String executeInEDT() {
       return ((Dialog)optionPane.getRootPane().getParent()).getTitle();
-    }
-  }
-
-  private static class GetMessageTask extends GuiTask<Object> {
-    private final JOptionPane optionPane;
-
-    GetMessageTask(JOptionPane optionPane) {
-      this.optionPane = optionPane;
-    }
-
-    protected Object executeInEDT() {
-      return optionPane.getMessage();
     }
   }
 

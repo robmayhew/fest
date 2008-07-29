@@ -25,6 +25,8 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+
 /**
  * Understands simulation of user input on a <code>{@link JPopupMenu}</code>. Unlike <code>JPopupMenuFixture</code>,
  * this driver only focuses on behavior present only in <code>{@link JPopupMenu}</code>s. This class is intended for
@@ -56,7 +58,7 @@ public class JPopupMenuDriver extends JComponentDriver {
 
   static String asString(MenuElement e) {
     Component c = e.getComponent();
-    if (c instanceof JMenuItem) return ((JMenuItem) c).getText();
+    if (c instanceof JMenuItem) return textOf((JMenuItem)c);
     return "-";
   }
 

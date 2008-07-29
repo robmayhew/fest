@@ -23,6 +23,7 @@ import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -44,7 +45,7 @@ public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
     JTabbedPane tabbedPane = (JTabbedPane)c;
     return concat(
         tabbedPane.getClass().getName(), "[",
-        "name=", quote(tabbedPane.getName()), ", ",
+        "name=", quote(nameOf(tabbedPane)), ", ",
         "selectedTabIndex=", valueOf(tabbedPane.getSelectedIndex()), ", ",
         "selectedTabTitle=", selectedTab(tabbedPane), ", ",
         "tabCount=", valueOf(tabbedPane.getTabCount()), ", ",

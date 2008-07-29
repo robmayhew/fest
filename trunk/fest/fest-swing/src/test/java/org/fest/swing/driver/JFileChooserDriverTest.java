@@ -27,7 +27,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Pause;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -37,6 +36,7 @@ import static javax.swing.JFileChooser.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.*;
 import static org.fest.util.Strings.isEmpty;
@@ -69,7 +69,11 @@ public class JFileChooserDriverTest {
   public void shouldFindCancelButton() {
     JButton cancelButton = driver.cancelButton(fileChooser);
     assertThat(cancelButton).isNotNull();
-    assertThat(cancelButton.getText()).isEqualTo(UIManager.getString("FileChooser.cancelButtonText"));
+    assertThat(textOf(cancelButton)).isEqualTo(cancelButtonText());
+  }
+
+  private String cancelButtonText() {
+    return UIManager.getString("FileChooser.cancelButtonText");
   }
   
   public void shouldSelectFile() {
@@ -109,7 +113,7 @@ public class JFileChooserDriverTest {
   public void shouldFindApproveButton() {
     JButton approveButton = driver.approveButton(fileChooser);
     assertThat(approveButton).isNotNull();
-    assertThat(approveButton.getText()).isEqualTo(approveButtonText());
+    assertThat(textOf(approveButton)).isEqualTo(approveButtonText());
   }
   
   private String approveButtonText() {

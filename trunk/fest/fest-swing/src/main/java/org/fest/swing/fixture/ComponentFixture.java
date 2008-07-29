@@ -25,6 +25,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentDriver.propertyName;
 import static org.fest.swing.fixture.ComponentFixtureValidator.*;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetComponentBackgroundTask.backgroundOf;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
@@ -133,7 +134,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return a fixture that verifies the background color of this fixture's <code>Component</code>.
    */
   public final ColorFixture background() {
-    return new ColorFixture(target.getBackground(), propertyName(target, BACKGROUND_PROPERTY));
+    return new ColorFixture(backgroundOf(target), propertyName(target, BACKGROUND_PROPERTY));
   }
   
   /**

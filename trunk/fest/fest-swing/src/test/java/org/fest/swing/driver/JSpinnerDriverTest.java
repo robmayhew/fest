@@ -25,6 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -32,6 +33,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetJSpinnerValueTask.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -140,7 +142,12 @@ public class JSpinnerDriverTest {
 
   @Test(groups = GUI, expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTextComponentEditorNotFoundWhenEnteringText() {
-    spinner.setEditor(new JLabel());
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        spinner.setEditor(new JLabel());
+        return null;
+      }
+    }.run();
     driver.enterText(spinner, "hello");
   }
   
@@ -176,11 +183,16 @@ public class JSpinnerDriverTest {
   }
 
   private void selectLastValue() {
-    spinner.setValue("Gandalf");
+    new GuiTask<Void>() {
+      protected Void executeInEDT() {
+        spinner.setValue("Gandalf");
+        return null;
+      }
+    }.run();
   }
 
   private void assertThatSpinnerValueIsEqualTo(Object expected) {
-    assertThat(spinner.getValue()).isEqualTo(expected);
+    assertThat(valueOf(spinner)).isEqualTo(expected);
   }
 
   private void clearAndDisableSpinner() {
@@ -190,7 +202,7 @@ public class JSpinnerDriverTest {
         spinner.setEnabled(false);
       }
     });
-    assertThat(spinner.isEnabled()).isFalse();
+    robot.waitForIdle();
   }
   
   private static class MyFrame extends TestWindow {

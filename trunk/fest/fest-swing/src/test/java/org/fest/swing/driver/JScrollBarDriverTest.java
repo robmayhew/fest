@@ -30,6 +30,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetJScrollBarValueTask.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -92,7 +93,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollUnitUpTheGivenNumberOfTimesIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollUnitUp(scrollBar, 6);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -104,7 +105,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollUnitUpIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollUnitUp(scrollBar);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -128,7 +129,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollUnitDownTheGivenNumberOfTimesIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollUnitDown(scrollBar, 8);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -140,7 +141,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollUnitDownIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollUnitDown(scrollBar);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -164,7 +165,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollBlockUpTheGivenNumberOfTimesIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollBlockUp(scrollBar, 2);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -176,7 +177,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollBlockUpIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollBlockUp(scrollBar);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -200,7 +201,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollBlockUpDownTheGivenNumberOfTimesIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollBlockDown(scrollBar, 2);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -212,7 +213,7 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollBlockDownIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollBlockDown(scrollBar);
     assertThatScrollBarValueIsEqualTo(value);
   }
@@ -224,13 +225,13 @@ public class JScrollBarDriverTest {
 
   public void shouldNotScrollToGivenPositionIfScrollBarIsNotEnabled() {
     clearAndDisableScrollBar();
-    int value = scrollBar.getValue();
+    int value = valueOf(scrollBar);
     driver.scrollTo(scrollBar, 68);
     assertThatScrollBarValueIsEqualTo(value);
   }
 
   private void assertThatScrollBarValueIsEqualTo(int expected) {
-    assertThat(scrollBar.getValue()).isEqualTo(expected);
+    assertThat(valueOf(scrollBar)).isEqualTo(expected);
   }
 
   public void shouldThrowErrorIfPositionIsLessThanMinimum() {
@@ -258,7 +259,7 @@ public class JScrollBarDriverTest {
         scrollBar.setEnabled(false);
       }
     });
-    assertThat(scrollBar.isEnabled()).isFalse();
+    robot.waitForIdle();
   }
 
   private static class MyFrame extends TestWindow {

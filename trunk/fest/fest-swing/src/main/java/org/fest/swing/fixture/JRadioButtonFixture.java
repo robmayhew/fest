@@ -261,6 +261,6 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @return the text of this fixture's <code>JRadioButton</code>. 
    */
   public String text() {
-    return target.getText();
+    return driver.textOf(target);
   }
 }

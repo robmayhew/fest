@@ -19,6 +19,8 @@ import java.awt.Component;
 
 import javax.accessibility.AccessibleAction;
 
+import org.fest.swing.core.GuiTask;
+
 /**
  * Understands finding <code>{@link AccessibleAction}</code>s associated to <code>{@link Component}</code>s.
  *
@@ -32,6 +34,18 @@ class AccessibleActionFinder {
    * @return the <code>AccessibleAction</code> associated to the given <code>Component</code>.
    */
   AccessibleAction accessibleActionFrom(Component c) {
-    return c.getAccessibleContext().getAccessibleAction();
+    return new GetAccessibleActionTask(c).run();
+  }
+
+  private static class GetAccessibleActionTask extends GuiTask<AccessibleAction> {
+    private final Component c;
+
+    GetAccessibleActionTask(Component c) {
+      this.c = c;
+    }
+
+    protected AccessibleAction executeInEDT() {
+      return c.getAccessibleContext().getAccessibleAction();
+    }
   }
 }

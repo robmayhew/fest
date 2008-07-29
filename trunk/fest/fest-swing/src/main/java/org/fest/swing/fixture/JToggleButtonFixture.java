@@ -278,6 +278,6 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @return the text of this fixture's <code>JToggleButton</code>.
    */
   public String text() {
-    return target.getText();
+    return driver.textOf(target);
   }
 }

@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
@@ -32,6 +33,7 @@ import static javax.swing.JSplitPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -57,7 +59,7 @@ public class JSplitPaneDriverTest {
   
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldMoveDividerToGivenLocation(int orientation) {
-    MyFrame frame = new MyFrame(orientation);
+    MyFrame frame = myFrame(orientation);
     splitPane = frame.splitPane;
     robot.showWindow(frame);
     int newLocation = splitPane.getDividerLocation() + 100;
@@ -75,7 +77,8 @@ public class JSplitPaneDriverTest {
         splitPane.setEnabled(false);
       }
     });
-    assertThat(splitPane.isEnabled()).isFalse();
+    robot.waitForIdle();
+    assertThat(isEnabled(frame)).isFalse();
     int originalLocation = splitPane.getDividerLocation();
     driver.moveDividerTo(splitPane, originalLocation + 100);
     assertThat(splitPane.getDividerLocation()).isEqualTo(originalLocation);
@@ -83,6 +86,14 @@ public class JSplitPaneDriverTest {
   
   @DataProvider(name = "orientations") public Object[][] orientations() {
     return new Object[][] { { VERTICAL_SPLIT }, { HORIZONTAL_SPLIT } };
+  }
+
+  private MyFrame myFrame(final int orientation) {
+    return new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame(orientation);
+      }
+    }.run();
   }
 
   private static class MyFrame extends TestWindow {

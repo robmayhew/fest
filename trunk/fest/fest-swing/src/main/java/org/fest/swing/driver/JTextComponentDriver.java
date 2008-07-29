@@ -34,6 +34,7 @@ import static javax.swing.text.DefaultEditorKit.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.*;
 
 /**
@@ -71,7 +72,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void replaceText(JTextComponent textBox, String text) {
-    if (!textBox.isEnabled()) return;
+    if (!isEnabled(textBox)) return;
     selectAll(textBox);
     if (isEmpty(text) && !isEmpty(textBox.getText())) {
       invokeAction(textBox, deletePrevCharAction);
@@ -85,7 +86,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the target <code>JTextComponent</code>.
    */
   public void selectAll(JTextComponent textBox) {
-    if (!textBox.isEnabled()) return;
+    if (!isEnabled(textBox)) return;
     scrollToVisible(textBox, 0);
     invokeAction(textBox, selectAllAction);
   }
@@ -96,7 +97,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param text the text to enter.
    */
   public void enterText(JTextComponent textBox, String text) {
-    if (!textBox.isEnabled()) return;
+    if (!isEnabled(textBox)) return;
     focus(textBox);
     robot.enterText(text);
   }
@@ -108,7 +109,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws ActionFailedException if selecting the text fails.
    */
   public void selectText(JTextComponent textBox, String text) {
-    if (!textBox.isEnabled()) return;
+    if (!isEnabled(textBox)) return;
     String actualText = textBox.getText();
     if (isEmpty(actualText)) return;
     int indexFound = actualText.indexOf(text);
@@ -124,7 +125,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws ActionFailedException if selecting the text in the given range fails.
    */
   public void selectText(JTextComponent textBox, int start, int end) {
-    if (!textBox.isEnabled() || isEmpty(textBox.getText())) return;
+    if (!isEnabled(textBox) || isEmpty(textBox.getText())) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
     robot.invokeAndWait(new TextSelectionTask(textBox, start, end));

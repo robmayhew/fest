@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JLabel;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.task.GetJLabelTextTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -47,6 +48,15 @@ public class JLabelDriver extends JComponentDriver {
    * @throws AssertionError if the text of the <code>JLabel</code> is not equal to the given one.
    */
   public void requireText(JLabel label, String expected) {
-    assertThat(label.getText()).as(propertyName(label, TEXT_PROPERTY)).isEqualTo(expected);
+    assertThat(textOf(label)).as(propertyName(label, TEXT_PROPERTY)).isEqualTo(expected);
+  }
+
+  /**
+   * Returns the text of the given <code>{@link JLabel}</code>.
+   * @param label the given <code>JLabel</code>.
+   * @return the text of the given <code>JLabel</code>.
+   */
+  public String textOf(JLabel label) {
+    return GetJLabelTextTask.textOf(label);
   }
 }

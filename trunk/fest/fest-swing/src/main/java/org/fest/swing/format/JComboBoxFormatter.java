@@ -21,10 +21,12 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -44,7 +46,7 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
     JComboBox comboBox = (JComboBox)c;
     return concat(
         comboBox.getClass().getName(), "[",
-        "name=", quote(comboBox.getName()), ", ",
+        "name=", quote(nameOf(comboBox)), ", ",
         "selectedItem=", quote(comboBox.getSelectedItem()), ", ",
         "contents=", Arrays.format(contentsOf(comboBox)),  ", ",
         "editable=", valueOf(comboBox.isEditable()), ", ",
@@ -55,11 +57,15 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
     );
   }
 
-  private Object[] contentsOf(JComboBox comboBox) {
-    List<Object> contents = new ArrayList<Object>();
-    int count = comboBox.getItemCount();
-    for (int i = 0; i < count; i++) contents.add(comboBox.getItemAt(i));
-    return contents.toArray();
+  private Object[] contentsOf(final JComboBox comboBox) {
+    return new GuiTask<Object[]>() {
+      protected Object[] executeInEDT() {
+        List<Object> contents = new ArrayList<Object>();
+        int count = comboBox.getItemCount();
+        for (int i = 0; i < count; i++) contents.add(comboBox.getItemAt(i));
+        return contents.toArray();
+      }
+    }.run();
   }
 
   /**

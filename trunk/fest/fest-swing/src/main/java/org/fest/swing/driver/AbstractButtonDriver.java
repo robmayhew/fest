@@ -19,6 +19,7 @@ import javax.swing.AbstractButton;
 
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
+import org.fest.swing.task.GetAbstractButtonTextTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -49,8 +50,17 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws AssertionError if the text of the button is not equal to the given one.
    */
   public void requireText(AbstractButton button, String expected) {
-    String text = new GetTextTask(button).run();
+    String text = textOf(button);
     assertThat(text).as(propertyName(button, TEXT_PROPERTY)).isEqualTo(expected);
+  }
+
+  /**
+   * Returns the text of the given button.
+   * @param button the given button.
+   * @return the text of the given button.
+   */
+  public String textOf(AbstractButton button) {
+    return GetAbstractButtonTextTask.textOf(button);
   }
 
   /**
@@ -99,18 +109,6 @@ public class AbstractButtonDriver extends JComponentDriver {
 
   private static String selectedProperty(AbstractButton button) {
     return propertyName(button, SELECTED_PROPERTY);
-  }
-
-  private static class GetTextTask extends GuiTask<String> {
-    private final AbstractButton button;
-
-    GetTextTask(AbstractButton button) {
-      this.button = button;
-    }
-
-    protected String executeInEDT() {
-      return button.getText();
-    }
   }
 
   private static class IsSelectedTask extends GuiTask<Boolean> {

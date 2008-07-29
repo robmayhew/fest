@@ -14,14 +14,17 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.concat;
-
 import javax.swing.JSlider;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.task.GetJSliderValueTask.valueOf;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JSlider}</code>. Unlike <code>JSliderFixture</code>, this
@@ -68,8 +71,8 @@ public class JSliderDriver extends JComponentDriver {
    */
   public void slide(JSlider slider, int value) {
     validateValue(slider, value);
-    if (!slider.isEnabled()) return;
-    drag(slider, location.pointAt(slider, slider.getValue()));
+    if (!isEnabled(slider)) return;
+    drag(slider, location.pointAt(slider, valueOf(slider)));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
     robot.invokeAndWait(new SetValueTask(slider, value));

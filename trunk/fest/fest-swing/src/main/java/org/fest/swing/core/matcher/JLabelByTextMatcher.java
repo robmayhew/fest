@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 import org.fest.swing.core.GenericTypeMatcher;
 
+import static org.fest.swing.task.GetJLabelTextTask.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -66,6 +67,6 @@ public class JLabelByTextMatcher extends GenericTypeMatcher<JLabel> {
    * <code>false</code> otherwise.
    */
   protected boolean isMatching(JLabel label) {
-    return areEqual(label.getText(), text);
+    return areEqual(textOf(label), text);
   }
 }

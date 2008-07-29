@@ -28,6 +28,8 @@ import javax.swing.table.TableCellRenderer;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
 
+import static org.fest.swing.task.GetJLabelTextTask.textOf;
+
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.
  *
@@ -57,7 +59,7 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
    */
   public String valueAt(JTable table, int row, int column) {
     Component c = cellRendererComponent(table, row, column);
-    if (c instanceof JLabel) return ((JLabel)c).getText();
+    if (c instanceof JLabel) return textOf((JLabel)c);
     if (c instanceof JCheckBox) return String.valueOf(((JCheckBox)c).isSelected());
     if (c instanceof JComboBox) return valueAt((JComboBox)c);
     return valueFrom(cellAt(table, row, column));

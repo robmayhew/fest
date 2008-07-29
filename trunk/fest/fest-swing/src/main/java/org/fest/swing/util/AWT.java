@@ -26,6 +26,7 @@ import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
 
@@ -112,7 +113,7 @@ public class AWT {
    */
   public static String quoteNameOf(Component c) {
     if (c == null) return null;
-    return quote(c.getName());
+    return quote(nameOf(c));
   }
 
   /**

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -118,7 +119,7 @@ public class Formatting {
     if (c == null) return NULL_COMPONENT_MESSAGE;
     ComponentFormatter formatter = formatterFor(c.getClass());
     if (formatter != null) return formatter.format(c);
-    String name = c.getName();
+    String name = nameOf(c);
     if (isEmpty(name)) return c.toString();
     return concat(c.getClass().getName(), "[name=", quote(name), "]");
   }

@@ -32,6 +32,7 @@ import org.fest.swing.util.TimeoutWatch;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
@@ -179,7 +180,7 @@ public class ComponentDriver {
    * @throws AssertionError if the <code>Component</code> is disabled.
    */
   public void requireEnabled(Component c) {
-    assertThat(c.isEnabled()).as(enabledProperty(c)).isTrue();
+    assertThat(isEnabled(c)).as(enabledProperty(c)).isTrue();
   }
 
   /**
@@ -198,7 +199,7 @@ public class ComponentDriver {
    * @throws AssertionError if the <code>Component</code> is enabled.
    */
   public void requireDisabled(Component c) {
-    assertThat(c.isEnabled()).as(enabledProperty(c)).isFalse();
+    assertThat(isEnabled(c)).as(enabledProperty(c)).isFalse();
   }
 
   private static String enabledProperty(Component c) {

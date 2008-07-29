@@ -39,6 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -73,7 +74,7 @@ public class JOptionPaneDriverTest {
     setUpMessageWithOptions("First", "Second");
     JOptionPane optionPane = showJOptionPane();
     JButton button = driver.buttonWithText(optionPane, "Second");
-    assertThat(button.getText()).isEqualTo("Second");
+    assertThat(textOf(button)).isEqualTo("Second");
   }
 
   public void shouldFindOKButton() {
@@ -115,7 +116,7 @@ public class JOptionPaneDriverTest {
 
   private void assertThatButtonHasTextFromUIManager(JButton button, String textKey) {
     String expected = UIManager.getString(textKey);
-    assertThat(button.getText()).isEqualTo(expected);
+    assertThat(textOf(button)).isEqualTo(expected);
   }
   
   public void shouldFindTextComponentInOptionPane() {

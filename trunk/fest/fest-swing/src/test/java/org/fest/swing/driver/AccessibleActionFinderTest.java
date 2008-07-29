@@ -15,21 +15,20 @@
  */
 package org.fest.swing.driver;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Component;
-import java.lang.reflect.Method;
 
 import javax.accessibility.AccessibleAction;
 import javax.accessibility.AccessibleContext;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.driver.AccessibleActionFinder;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link AccessibleActionFinder}</code>.
@@ -44,8 +43,7 @@ public class AccessibleActionFinderTest {
   private AccessibleActionFinder finder;
 
   @BeforeMethod public void setUp() throws Exception {
-    Method getAccessibleContext = Component.class.getDeclaredMethod("getAccessibleContext");
-    component = createMock(Component.class, new Method[] { getAccessibleContext });
+    component = createMock(Component.class);
     context = createMock(AccessibleContext.class);
     action = createMock(AccessibleAction.class);
     finder = new AccessibleActionFinder();

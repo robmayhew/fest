@@ -19,6 +19,7 @@ import java.awt.Dialog;
 
 import org.fest.swing.core.GenericTypeMatcher;
 
+import static org.fest.swing.task.GetDialogTitleTask.titleOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -66,6 +67,6 @@ public class DialogByTitleMatcher extends GenericTypeMatcher<Dialog> {
    * otherwise <code>false</code>. 
    */
   protected boolean isMatching(Dialog dialog) {
-    return areEqual(dialog.getTitle(), title);
+    return areEqual(titleOf(dialog), title);
   }
 }

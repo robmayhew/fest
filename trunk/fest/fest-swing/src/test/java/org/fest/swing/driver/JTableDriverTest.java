@@ -43,6 +43,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestTable.*;
@@ -180,13 +181,13 @@ public class JTableDriverTest {
   }
 
   public void shouldDragAndDrop() throws Exception {
-    int dragRowCount = dragTable.getRowCount();
-    int dropRowCount = dropTable.getRowCount();
+    int dragRowCount = rowCountOf(dragTable);
+    int dropRowCount = rowCountOf(dropTable);
     driver.drag(dragTable, cell(3, 0));
     driver.drop(dropTable, cell(1, 0));
-    assertThat(dragTable.getRowCount()).isEqualTo(dragRowCount - 1);
+    assertThat(rowCountOf(dragTable)).isEqualTo(dragRowCount - 1);
     assertThat(dragTable.getValueAt(3, 0)).isEqualTo(createCellTextUsing(4, 0));
-    assertThat(dropTable.getRowCount()).isEqualTo(dropRowCount + 1);
+    assertThat(rowCountOf(dropTable)).isEqualTo(dropRowCount + 1);
     assertThat(dropTable.getValueAt(2, 0)).isEqualTo(createCellTextUsing(3, 0));
   }
 
@@ -409,7 +410,7 @@ public class JTableDriverTest {
         dragTable.setEnabled(false);
       }
     });
-    assertThat(dragTable.isEnabled()).isFalse();
+    robot.waitForIdle();
   }
 
   private void assertDragTableHasNoSelection() {

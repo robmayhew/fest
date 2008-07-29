@@ -21,6 +21,7 @@ import org.fest.swing.core.Robot;
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 
 /**
  * Understands simulation of user input on a <code>{@link JSplitPane}</code>. Unlike <code>JSplitPaneFixture</code>, 
@@ -46,7 +47,7 @@ public class JSplitPaneDriver extends JComponentDriver {
    * @param location the location to move the divider to.
    */
   public void moveDividerTo(JSplitPane splitPane, int location) {
-    if (!splitPane.isEnabled()) return;
+    if (!isEnabled(splitPane)) return;
     // Move as close as possible, then set the position
     simulateMovingDivider(splitPane, location);
     robot.invokeAndWait(splitPane, new SetDividerLocationTask(splitPane, location));

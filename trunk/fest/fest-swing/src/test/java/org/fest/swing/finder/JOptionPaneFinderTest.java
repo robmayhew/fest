@@ -37,6 +37,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.task.GetJOptionPaneMessageTask.messageOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
 
@@ -72,7 +73,7 @@ public class JOptionPaneFinderTest {
     clickMessageButton();
     GenericTypeMatcher<JOptionPane> matcher = new GenericTypeMatcher<JOptionPane>() {
       protected boolean isMatching(JOptionPane optionPane) {
-        return "A message".equals(optionPane.getMessage());
+        return "A message".equals(messageOf(optionPane));
       }
     };
     JOptionPaneFixture found = JOptionPaneFinder.findOptionPane(matcher).using(robot);

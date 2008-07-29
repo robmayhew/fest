@@ -28,6 +28,8 @@ import static java.lang.String.valueOf;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetJSpinnerValueTask.valueOf;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -97,7 +99,7 @@ public class JSpinnerDriver extends JComponentDriver {
   }
 
   private void pressKey(JSpinner spinner, int key) {
-    if (!spinner.isEnabled()) return;
+    if (!isEnabled(spinner)) return;
     focus(spinner);
     robot.pressAndReleaseKeys(key);
   }
@@ -112,7 +114,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
   public void enterText(JSpinner spinner, String text) {
-    if (!spinner.isEnabled()) return;
+    if (!isEnabled(spinner)) return;
     try {
       JTextComponent editor = robot.finder().findByType(spinner, JTextComponent.class);
       textComponentDriver.replaceText(editor, text);
@@ -129,6 +131,6 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws AssertionError if the value of the <code>JSpinner</code> is not equal to the given one.
    */
   public void requireValue(JSpinner spinner, Object value) {
-    assertThat(spinner.getValue()).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
+    assertThat(valueOf(spinner)).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

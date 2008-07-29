@@ -14,18 +14,19 @@
  */
 package org.fest.swing.driver;
 
-import static java.awt.BorderLayout.*;
-import static java.lang.Math.max;
-import static javax.swing.SwingConstants.HORIZONTAL;
-import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Insets;
 import java.awt.Point;
 
 import javax.swing.JToolBar;
+
+import static java.awt.BorderLayout.*;
+import static java.lang.Math.max;
+
+import static org.fest.swing.task.GetJToolBarOrientationTask.isHorizontal;
+import static org.fest.util.Arrays.format;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a visible location on a <code>{@link JToolBar}</code>.
@@ -90,10 +91,6 @@ public final class JToolBarLocation {
       if (validConstraint.equals(constraint)) return;
     throw new IllegalArgumentException(
         concat(quote(constraint), " is not a valid constraint. Valid constraints are ", format(VALID_CONSTRAINTS)));
-  }
-
-  private boolean isHorizontal(JToolBar toolBar) {
-    return toolBar.getOrientation() == HORIZONTAL;
   }
 
   private int verticalDockingYCoordinate(Container dock, Insets insets, int offset) {

@@ -23,6 +23,9 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static org.fest.swing.task.GetJTabbedPaneTabCountTask.tabCountOf;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+
 /**
  * Understands simulation of user input on a <code>{@link JTabbedPane}</code>. Unlike <code>JTabbedPaneFixture</code>,
  * this driver only focuses on behavior present only in <code>{@link JTabbedPane}</code>s. This class is intended for
@@ -59,7 +62,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @return the titles of all the tabs.
    */
   public String[] tabTitles(JTabbedPane tabbedPane) {
-    int count = tabbedPane.getTabCount();
+    int count = tabCountOf(tabbedPane);
     String[] titles = new String[count];
     for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
     return titles;
@@ -72,7 +75,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @throws LocationUnavailableException if a tab matching the given title could not be found.
    */
   public void selectTab(JTabbedPane tabbedPane, String title) {
-    if (!tabbedPane.isEnabled()) return;
+    if (!isEnabled(tabbedPane)) return;
     int index = location.indexOf(tabbedPane, title);
     selectTab(tabbedPane, index);
   }
@@ -84,7 +87,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @throws ActionFailedException if the given index is not within the <code>JTabbedPane</code> bounds.
    */
   public void selectTab(JTabbedPane tabbedPane, int index) {
-    if (!tabbedPane.isEnabled()) return;
+    if (!isEnabled(tabbedPane)) return;
     try {
       Point p = location.pointAt(tabbedPane, index);
       click(tabbedPane, p);
@@ -96,6 +99,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
 
   void setTabDirectly(JTabbedPane tabbedPane, int index) {
     robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));
+    robot.waitForIdle();
   }  
 
   private static class SetSelectedIndexTask implements Runnable {

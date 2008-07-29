@@ -35,6 +35,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.*;
 import static org.fest.swing.driver.JTableCell.*;
+import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
@@ -193,7 +195,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void selectCell(JTable table, JTableCell cell) {
-    if (!table.isEnabled()) return;
+    if (!isEnabled(table)) return;
     validate(table, cell);
     if (isCellSelected(table, cell)) return;
     click(table, cell, LEFT_BUTTON, 1);
@@ -290,7 +292,7 @@ public class JTableDriver extends JComponentDriver {
    * @see #cellReader(JTableCellReader)
    */
   public String[][] contents(JTable table) {
-    int rowCount = table.getRowCount();
+    int rowCount = rowCountOf(table);
     int columnCount = table.getColumnCount();
     String[][] contents = new String[rowCount][columnCount];
     for (int row = 0; row < rowCount; row++)

@@ -278,6 +278,6 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return the text of this fixture's <code>JCheckBox</code>. 
    */
   public String text() {
-    return target.getText();
+    return driver.textOf(target);
   }
 }

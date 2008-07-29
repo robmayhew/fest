@@ -19,6 +19,7 @@ import javax.swing.JTable;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -56,7 +57,7 @@ public abstract class JTableCell {
    * have any rows.
    */
   public void validateBoundsIn(JTable table) {
-    if (table.getRowCount() == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
+    if (rowCountOf(table) == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
     validateRow(table, row);
     validateColumn(table, column);
   }
@@ -68,7 +69,7 @@ public abstract class JTableCell {
    * @throws IndexOutOfBoundsException if the row index is out of bounds.
    */
   protected static void validateRow(JTable table, int row) {
-    validateIndex(row, table.getRowCount(), "row");
+    validateIndex(row, rowCountOf(table), "row");
   }
 
   /**

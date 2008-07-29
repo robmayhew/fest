@@ -25,6 +25,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ComponentLookupException;
@@ -38,6 +39,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.task.GetJComboBoxItemCountTask.itemCountOf;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Objects.areEqual;
@@ -80,7 +83,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @see #cellReader(JComboBoxCellReader)
    */
   public String[] contentsOf(JComboBox comboBox) {
-    int itemCount = size(comboBox);
+    int itemCount = itemCountOf(comboBox);
     String[] items = new String[itemCount];
     for (int i = 0; i < itemCount; i++)
       items[i] = value(comboBox, i);
@@ -96,7 +99,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @see #cellReader(JComboBoxCellReader)
    */
   public void selectItem(JComboBox comboBox, String value) {
-    int itemCount = size(comboBox);
+    int itemCount = itemCountOf(comboBox);
     for (int i = 0; i < itemCount; i++) {
       if (areEqual(value(comboBox, i), value)) {
         selectItem(comboBox, i);
@@ -161,7 +164,7 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   public void selectItem(final JComboBox comboBox, int index) {
     final int validatedIndex = validateIndex(comboBox, index);
-    if (!comboBox.isEnabled()) return;
+    if (!isEnabled(comboBox)) return;
     showDropDownList(comboBox);
     try {
       listDriver.selectItem(dropDownList(), validatedIndex);
@@ -173,38 +176,38 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   int validateIndex(JComboBox comboBox, int index) {
-    int itemCount = size(comboBox);
+    int itemCount = itemCountOf(comboBox);
     if (index >= 0 && index < itemCount) return index;
     throw new IndexOutOfBoundsException(concat(
         "Item index (", valueOf(index), ") should be between [0] and [",
         valueOf(itemCount - 1), "] (inclusive)"));
   }
 
-  private int size(JComboBox comboBox) { return comboBox.getItemCount(); }
-
   void showDropDownList(final JComboBox comboBox) {
-    if (isDropDownVisible(comboBox) || !comboBox.isEnabled()) return;
+    if (isDropDownVisible(comboBox) || !isEnabled(comboBox)) return;
     // Location of pop-up button activator is LAF-dependent
-    robot.invokeAndWait(new Runnable() {
-      public void run() { dropDownVisibleThroughUIDelegate(comboBox, true); }
-    });
+    dropDownVisibleThroughUIDelegate(comboBox, true);
   }
 
   private void hideDropDownListIfVisible(final JComboBox comboBox) {
     if (!isDropDownVisible(comboBox)) return;
+    dropDownVisibleThroughUIDelegate(comboBox, false);
+  }
+
+  boolean isDropDownVisible(final JComboBox comboBox) {
+    return new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return comboBox.getUI().isPopupVisible(comboBox);
+      }
+    }.run();
+  }
+
+  void dropDownVisibleThroughUIDelegate(final JComboBox comboBox, final boolean visible) {
     robot.invokeAndWait(new Runnable() {
       public void run() {
-        dropDownVisibleThroughUIDelegate(comboBox, false);
+        comboBox.getUI().setPopupVisible(comboBox, visible);
       }
-    });
-  }
-
-  boolean isDropDownVisible(JComboBox comboBox) {
-    return comboBox.getUI().isPopupVisible(comboBox);
-  }
-
-  void dropDownVisibleThroughUIDelegate(JComboBox comboBox, boolean visible) {
-    comboBox.getUI().setPopupVisible(comboBox, visible);
+    });    
   }
 
   /**
@@ -244,8 +247,12 @@ public class JComboBoxDriver extends JComponentDriver {
     robot.enterText(text);
   }
 
-  private boolean canAccessEditorIn(JComboBox comboBox) {
-    return comboBox.isEditable() && comboBox.isEnabled();
+  private boolean canAccessEditorIn(final JComboBox comboBox) {
+    return new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() {
+        return comboBox.isEditable() && comboBox.isEnabled();
+      }
+    }.run();
   }
 
   /**

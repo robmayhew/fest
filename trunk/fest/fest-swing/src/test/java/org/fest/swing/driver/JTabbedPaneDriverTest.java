@@ -156,7 +156,7 @@ public class JTabbedPaneDriverTest {
         tabbedPane.setEnabled(false);
       }
     });
-    assertThat(tabbedPane.isEnabled()).isEqualTo(false);
+    robot.waitForIdle();
   }
   
   private static class MyFrame extends TestWindow {

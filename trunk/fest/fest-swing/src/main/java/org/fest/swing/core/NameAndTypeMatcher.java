@@ -19,6 +19,7 @@ import java.awt.Component;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -73,7 +74,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    *         specified in this matcher, <code>false</code> otherwise.
    */
   public boolean matches(Component c) {
-    return areEqual(name, c.getName()) && type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
+    return areEqual(name, nameOf(c)) && type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
   }
 
   @Override public String toString() {

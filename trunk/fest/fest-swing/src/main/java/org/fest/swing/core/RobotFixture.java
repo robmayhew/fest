@@ -575,9 +575,8 @@ public class RobotFixture implements Robot {
       // Force a yield
       pause();
       // Abbot: this does not detect invocation events (i.e. what gets posted with EventQueue.invokeLater), so if
-      // someone
-      // is repeatedly posting one, we might get stuck. Not too worried, since if a Runnable keeps calling invokeLater
-      // on itself, *nothing* else gets much chance to run, so it seems to be a bad programming practice.
+      // someone is repeatedly posting one, we might get stuck. Not too worried, since if a Runnable keeps calling 
+      // invokeLater on itself, *nothing* else gets much chance to run, so it seems to be a bad programming practice.
     } while (eventQueue.peekEvent() != null);
   }
 

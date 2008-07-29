@@ -26,6 +26,7 @@ import org.fest.util.Arrays;
 import static java.lang.String.valueOf;
 import static javax.swing.tree.TreeSelectionModel.*;
 
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -54,7 +55,7 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
     JTree tree = (JTree)c;
     return concat(
         tree.getClass().getName(), "[",
-        "name=", quote(tree.getName()), ", ",
+        "name=", quote(nameOf(tree)), ", ",
         "selectionCount=", valueOf(tree.getSelectionCount()), ", ",
         "selectionPaths=", Arrays.format(selectionPaths(tree)), ", ",
         "selectionMode=", selectionMode(tree), ", ",

@@ -22,6 +22,7 @@ import javax.swing.JFileChooser;
 import static java.lang.String.valueOf;
 import static javax.swing.JFileChooser.*;
 
+import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -48,7 +49,7 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
     JFileChooser fileChooser = (JFileChooser)c;
     return concat(
         fileChooser.getClass().getName(), "[",
-        "name=", quote(fileChooser.getName()), ", ",
+        "name=", quote(nameOf(fileChooser)), ", ",
         "dialogTitle=", quote(fileChooser.getDialogTitle()), ", ",
         "dialogType=", DIALOG_TYPES.get(fileChooser.getDialogType()), ", ",
         "currentDirectory=", fileChooser.getCurrentDirectory(), ", ",

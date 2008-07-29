@@ -39,6 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
@@ -119,8 +120,8 @@ public class JListDriver extends JComponentDriver {
    */
   public void selectItems(final JList list, final String[] values) {
     if (values == null) throw new NullPointerException("Array of values should not be null");
-    if (Arrays.isEmpty(values)) throw new IllegalArgumentException("Array of values should not beempty");
-    if (!list.isEnabled()) return;
+    if (Arrays.isEmpty(values)) throw new IllegalArgumentException("Array of values should not be empty");
+    if (!isEnabled(list)) return;
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return values.length;
@@ -167,7 +168,7 @@ public class JListDriver extends JComponentDriver {
   public void selectItems(final JList list, final int[] indices) {
     if (indices == null) throw new NullPointerException("The array of indices should not be null");
     if (isEmptyArray(indices)) throw new IllegalArgumentException("The array of indices should not be empty");
-    if (!list.isEnabled()) return;
+    if (!isEnabled(list)) return;
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return indices.length;
@@ -230,7 +231,7 @@ public class JListDriver extends JComponentDriver {
    * <code>JList</code>.
    */
   public void clickItem(JList list, int index, MouseButton button, int times) {
-    if (!list.isEnabled()) return;
+    if (!isEnabled(list)) return;
     scrollToVisible(list, index);
     robot.click(list, location.pointAt(list, index), button, times);
   }

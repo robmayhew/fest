@@ -43,6 +43,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
@@ -91,7 +92,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
    */
   public void toggleRow(JTree tree, int row) {
-    if (!tree.isEnabled()) return;
+    if (!isEnabled(tree)) return;
     // Alternatively, we can reflect into the UI and do a single click on the appropriate expand location, but this is
     // safer.
     Point p = location.pointAt(tree, row);
@@ -119,7 +120,7 @@ public class JTreeDriver extends JComponentDriver {
   public void selectRows(final JTree tree, final int[] rows) {
     if (rows == null) throw new NullPointerException("The array of rows should not be null");
     if (isEmptyArray(rows)) throw new IllegalArgumentException("The array of rows should not be empty");
-    if (!tree.isEnabled()) return;
+    if (!isEnabled(tree)) return;
     new MultipleSelectionTemplate(robot) {
       @Override int elementCount() {
         return rows.length;
@@ -142,7 +143,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public void selectRow(JTree tree, int row) {
-    if (!tree.isEnabled()) return;
+    if (!isEnabled(tree)) return;
     selectPath(tree, location.pathFor(tree, row));
   }
 
@@ -155,7 +156,7 @@ public class JTreeDriver extends JComponentDriver {
    */
   public void selectPaths(final JTree tree, final String[] paths) {
     if (Arrays.isEmpty(paths)) throw actionFailure("The array of paths should not be null or empty");
-    if (!tree.isEnabled()) return;
+    if (!isEnabled(tree)) return;
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return paths.length;
@@ -174,7 +175,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given path cannot be found.
    */
   public void selectPath(JTree tree, String path) {
-    if (!tree.isEnabled()) return;
+    if (!isEnabled(tree)) return;
     TreePath treePath = findMatchingPath(tree, path);
     selectPath(tree, treePath);
   }

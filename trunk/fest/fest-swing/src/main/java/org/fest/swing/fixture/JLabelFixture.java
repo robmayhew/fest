@@ -229,7 +229,7 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * @return the text of this fixture's <code>JLabel</code>.
    */
   public String text() {
-    return target.getText();
+    return driver.textOf(target);
   }
 
   /**

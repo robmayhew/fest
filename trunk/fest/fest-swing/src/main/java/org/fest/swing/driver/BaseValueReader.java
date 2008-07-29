@@ -19,6 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 
+import static org.fest.swing.task.GetJLabelTextTask.textOf;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**
@@ -37,7 +38,7 @@ public abstract class BaseValueReader {
    *         type.
    */
   protected final String valueFrom(Component renderer) {
-    if (renderer instanceof JLabel) return ((JLabel)renderer).getText();
+    if (renderer instanceof JLabel) return textOf((JLabel)renderer);
     return null;
   }
 

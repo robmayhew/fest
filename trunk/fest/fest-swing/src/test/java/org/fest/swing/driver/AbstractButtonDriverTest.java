@@ -82,6 +82,10 @@ public class AbstractButtonDriverTest {
     assertThat(recorder).actionWasNotPerformed();
   }
   
+  public void shouldReturnButtonText() {
+    assertThat(driver.textOf(checkBox)).isEqualTo("Hello");
+  }
+  
   public void shouldPassIfTextIsEqualToExpectedOne() {
     driver.requireText(checkBox, "Hello");
   }

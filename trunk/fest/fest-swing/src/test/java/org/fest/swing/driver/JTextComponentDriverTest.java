@@ -214,8 +214,7 @@ public class JTextComponentDriverTest {
         textField.setEnabled(false);
       }
     });
-    assertThat(textField.getText()).isEqualTo(text);
-    assertThat(textField.isEnabled()).isFalse();
+    robot.waitForIdle();
   }
 
   private static class MyFrame extends TestWindow {
