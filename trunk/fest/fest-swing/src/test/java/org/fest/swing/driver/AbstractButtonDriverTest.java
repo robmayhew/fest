@@ -1,16 +1,16 @@
 /*
  * Created on Apr 5, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -27,9 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.assertions.AssertExtension;
-import org.fest.swing.core.GuiTask;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.*;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -63,14 +61,18 @@ public class AbstractButtonDriverTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
-  public void shouldClickButton() {
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldClickButton(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
     assertThat(recorder).actionWasPerformed();
   }
-  
-  public void shouldNotClickButtonIfButtonDisabled() {
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     new GuiTask<Void>() {
       protected Void executeInEDT() {
         checkBox.setEnabled(false);
@@ -81,15 +83,15 @@ public class AbstractButtonDriverTest {
     driver.click(checkBox);
     assertThat(recorder).actionWasNotPerformed();
   }
-  
+
   public void shouldReturnButtonText() {
     assertThat(driver.textOf(checkBox)).isEqualTo("Hello");
   }
-  
+
   public void shouldPassIfTextIsEqualToExpectedOne() {
     driver.requireText(checkBox, "Hello");
   }
-  
+
   public void shouldFailIfTextIsNotEqualToExpectedOne() {
     try {
       driver.requireText(checkBox, "Bye");
@@ -100,13 +102,17 @@ public class AbstractButtonDriverTest {
     }
   }
 
-  public void shouldNotSelectIfButtonAlreadySelected() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSelectIfButtonAlreadySelected(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     selectCheckBox();
     driver.select(checkBox);
     assertThatCheckBoxIsSelected();
   }
-  
-  public void shouldSelectButton() {
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectButton(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     unselectCheckBox();
     driver.select(checkBox);
     assertThatCheckBoxIsSelected();
@@ -115,14 +121,18 @@ public class AbstractButtonDriverTest {
   private void assertThatCheckBoxIsSelected() {
     assertThat(isCheckBoxSelected()).isTrue();
   }
-  
-  public void shouldNotUnselectIfButtonAlreadySelected() {
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotUnselectIfButtonAlreadySelected(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     unselectCheckBox();
     driver.unselect(checkBox);
     assertThatCheckBoxIsNotSelected();
   }
-  
-  public void shouldUnselectButton() {
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldUnselectButton(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     selectCheckBox();
     driver.unselect(checkBox);
     assertThatCheckBoxIsNotSelected();
@@ -144,7 +154,7 @@ public class AbstractButtonDriverTest {
     selectCheckBox();
     driver.requireSelected(checkBox);
   }
-  
+
   public void shouldFailIfButtonIsNotSelectedAndExpectingSelected() {
     unselectCheckBox();
     try {
@@ -155,7 +165,7 @@ public class AbstractButtonDriverTest {
                              .contains("expected:<true> but was:<false>");
     }
   }
-  
+
   public void shouldPassIfButtonIsUnselectedAsAnticipated() {
     unselectCheckBox();
     driver.requireNotSelected(checkBox);
@@ -210,11 +220,11 @@ public class AbstractButtonDriverTest {
       button.addActionListener(r);
       return r;
     }
-    
+
     public void actionPerformed(ActionEvent e) {
       actionPerformed = true;
     }
-    
+
     ActionPerformedRecorder actionWasPerformed() {
       assertThat(actionPerformed).isTrue();
       return this;

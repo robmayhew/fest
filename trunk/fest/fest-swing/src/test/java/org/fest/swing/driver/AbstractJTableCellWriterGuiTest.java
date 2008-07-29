@@ -47,7 +47,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class AbstractJTableCellWriterTest {
+public class AbstractJTableCellWriterGuiTest {
 
   private Robot robot;
   private TableDialogEditDemoFrame frame;
