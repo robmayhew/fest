@@ -23,6 +23,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -49,7 +50,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public void resizeWidthTo(Window w, int width) {
-    resizeTo(w, new Dimension(width, w.getSize().height));
+    resizeTo(w, new Dimension(width, sizeOf(w).height));
   }
 
   /**
@@ -59,7 +60,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>Window</code> is not resizable.
    */
   public void resizeHeightTo(Window w, int height) {
-    resizeTo(w, new Dimension(w.getSize().width, height));
+    resizeTo(w, new Dimension(sizeOf(w).width, height));
   }
 
   /**

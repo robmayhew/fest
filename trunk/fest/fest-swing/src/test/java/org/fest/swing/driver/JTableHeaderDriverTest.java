@@ -33,12 +33,13 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
-import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestTable;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -110,7 +111,7 @@ public class JTableHeaderDriverTest {
     driver.showPopupMenu(tableHeader, 1);
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
     assertColumnClicked(recorder, 1);
-    assertThat(popupMenu.isVisible()).isTrue();
+    assertThat(isVisible(popupMenu)).isTrue();
   }
 
   public void shouldShowPopupMenuAtItemWithName() {
@@ -119,7 +120,7 @@ public class JTableHeaderDriverTest {
     driver.showPopupMenu(tableHeader, "1");
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
     assertColumnClicked(recorder, 1);
-    assertThat(popupMenu.isVisible()).isTrue();
+    assertThat(isVisible(popupMenu)).isTrue();
   }
 
   private JPopupMenu popupMenuForHeader() {
@@ -128,7 +129,7 @@ public class JTableHeaderDriverTest {
     tableHeader.setComponentPopupMenu(popupMenu);
     return popupMenu;
   }
-  
+
   private void assertColumnClicked(ClickRecorder recorder, int columnIndex) {
     Point pointClicked = recorder.pointClicked();
     int columnAtPoint = tableHeader.getTable().columnAtPoint(pointClicked);

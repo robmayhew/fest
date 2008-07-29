@@ -36,6 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
+import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -165,11 +166,11 @@ public class JInternalFrameDriverTest {
   public final void shouldResizeInternalFrameToGivenSize() {
     FluentDimension newSize = internalFrameSize().addToWidth(20).addToHeight(40);
     driver.resize(internalFrame, newSize.width, newSize.height);
-    assertThat(internalFrame.getSize()).isEqualTo(newSize);
+    assertThat(sizeOf(internalFrame)).isEqualTo(newSize);
   }
 
   private final FluentDimension internalFrameSize() {
-    return new FluentDimension(internalFrame.getSize());
+    return new FluentDimension(sizeOf(internalFrame));
   }
 
   public final void shouldMoveInternalFrame() {
@@ -199,9 +200,9 @@ public class JInternalFrameDriverTest {
   }
 
   public void shouldResizeInternalFrame() {
-    Dimension newSize = new FluentDimension(internalFrame.getSize()).addToWidth(60).addToHeight(60);
+    Dimension newSize = new FluentDimension(sizeOf(internalFrame)).addToWidth(60).addToHeight(60);
     driver.resizeTo(internalFrame, newSize);
-    assertThat(internalFrame.getSize()).isEqualTo(newSize);
+    assertThat(sizeOf(internalFrame)).isEqualTo(newSize);
   }
 
   public void shouldResizeWidth() {

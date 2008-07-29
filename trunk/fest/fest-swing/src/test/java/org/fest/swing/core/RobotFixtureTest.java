@@ -46,6 +46,8 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
+import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
+import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
@@ -120,7 +122,7 @@ public class RobotFixtureTest {
     Dimension size = new Dimension(100, 100);
     MyWindow window = new MyWindow();
     robot.showWindow(window, size, false);
-    assertThat(window.getSize()).isEqualTo(size);
+    assertThat(sizeOf(window)).isEqualTo(size);
     assertThat(window.packed()).isFalse();
     assertThat(window.getLocationOnScreen()).isEqualTo(new Point(0, 0));
   }
@@ -133,7 +135,7 @@ public class RobotFixtureTest {
     }.run();
     assertThat(position).isEqualTo(expected);
   }
-  
+
   public void shouldClickComponent() {
     ClickRecorder recorder = attachTo(textFieldWithoutPopup);
     robot.click(textFieldWithoutPopup);
@@ -274,10 +276,10 @@ public class RobotFixtureTest {
     robot.close(w);
     pause(new Condition("Window closed") {
       @Override public boolean test() {
-        return !w.isVisible();
+        return !isVisible(w);
       }
     });
-    assertThat(w.isVisible()).isFalse();
+    assertThat(isVisible(w)).isFalse();
   }
 
   public void shouldNotCloseWindowIfWindowNotShowing() {
@@ -334,16 +336,16 @@ public class RobotFixtureTest {
       c.addKeyListener(recorder);
       return recorder;
     }
-    
+
     @Override public void keyPressed(KeyEvent e) {
       actions.add(action(KEY_PRESSED, e.getKeyCode()));
     }
 
     @Override public void keyReleased(KeyEvent e) {
       actions.add(action(KEY_RELEASED, e.getKeyCode()));
-    }    
+    }
   }
-  
+
   static class KeyAction {
     final int type;
     final int keyCode;
@@ -351,12 +353,12 @@ public class RobotFixtureTest {
     static KeyAction action(int type, int keyCode) {
       return new KeyAction(type, keyCode);
     }
-    
+
     private KeyAction(int type, int keyCode) {
       this.type = type;
       this.keyCode = keyCode;
     }
-    
+
     @Override public boolean equals(Object obj) {
       if (this == obj) return true;
       if (obj == null) return false;
@@ -373,7 +375,7 @@ public class RobotFixtureTest {
       result = prime * result + keyCode;
       return result;
     }
-    
+
     @Override public String toString() {
       StringBuilder b = new StringBuilder();
       b.append("type=").append(type).append(", ");

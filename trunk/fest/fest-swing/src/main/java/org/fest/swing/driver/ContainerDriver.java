@@ -24,6 +24,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 import static org.fest.util.Strings.concat;
 
@@ -51,7 +52,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param height the height to resize the <code>Container</code> to.
    */
   public void resize(Container c, int width, int height) {
-    Dimension size = c.getSize();
+    Dimension size = sizeOf(c);
     resizeBy(c, width - size.width, height - size.height);
   }
 

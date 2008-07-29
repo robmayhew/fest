@@ -39,7 +39,7 @@ public final class GetJTableCellValueTask extends GuiTask<Object> {
    * @return the value in the given <code>JTable</code> cell.
    */
   public static Object cellValueOf(JTable table, int row, int column) {
-    return new GetJTableCellValueTask(table, row, column);
+    return new GetJTableCellValueTask(table, row, column).run();
   }
 
   private GetJTableCellValueTask(JTable table, int row, int column) {

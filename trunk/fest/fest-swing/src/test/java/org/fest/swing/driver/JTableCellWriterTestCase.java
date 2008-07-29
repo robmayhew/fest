@@ -24,6 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -49,7 +50,11 @@ public abstract class JTableCellWriterTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = createWriter(robot);
-    frame = new TableDialogEditDemoFrame();
+    frame = new GuiTask<TableDialogEditDemoFrame>() {
+      protected TableDialogEditDemoFrame executeInEDT() {
+        return new TableDialogEditDemoFrame();
+      }
+    }.run();
     robot.showWindow(frame, new Dimension(500, 100));
   }
 

@@ -32,7 +32,9 @@ import org.fest.swing.util.TimeoutWatch;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
@@ -149,7 +151,7 @@ public class ComponentDriver {
    * @throws AssertionError if the size of the <code>Window</code> is not equal to the given size.
    */
   public void requireSize(Component c, Dimension size) {
-    assertThat(c.getSize()).as(propertyName(c, SIZE_PROPERTY)).isEqualTo(size);
+    assertThat(sizeOf(c)).as(propertyName(c, SIZE_PROPERTY)).isEqualTo(size);
   }
 
   /**
@@ -158,7 +160,7 @@ public class ComponentDriver {
    * @throws AssertionError if the <code>Component</code> is not visible.
    */
   public void requireVisible(Component c) {
-    assertThat(c.isVisible()).as(visibleProperty(c)).isTrue();
+    assertThat(isVisible(c)).as(visibleProperty(c)).isTrue();
   }
 
   /**
@@ -167,7 +169,7 @@ public class ComponentDriver {
    * @throws AssertionError if the <code>Component</code> is visible.
    */
   public void requireNotVisible(Component c) {
-    assertThat(c.isVisible()).as(visibleProperty(c)).isFalse();
+    assertThat(isVisible(c)).as(visibleProperty(c)).isFalse();
   }
 
   private static String visibleProperty(Component c) {

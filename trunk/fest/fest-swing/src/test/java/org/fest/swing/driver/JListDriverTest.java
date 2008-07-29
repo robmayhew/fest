@@ -39,6 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
@@ -138,7 +139,7 @@ public class JListDriverTest {
     Point pointClicked = recorder.pointClicked();
     assertThat(dragList.locationToIndex(pointClicked)).isEqualTo(1);
   }
-  
+
   public void shouldSelectItemAtGivenIndex() {
     driver.selectItem(dragList, 2);
     assertThat(dragList.getSelectedValue()).isEqualTo("three");
@@ -149,7 +150,7 @@ public class JListDriverTest {
     driver.selectItem(dragList, 1);
     assertThat(dragList.getSelectedIndex()).isEqualTo(1);
   }
-  
+
   public void shouldNotSelectItemAtGivenIndexIfListIsNotEnabled() {
     clearAndDisableDragList();
     driver.selectItem(dragList, 2);
@@ -173,7 +174,7 @@ public class JListDriverTest {
     String[] values = null;
     driver.selectItems(dragList, values);
   }
-  
+
   @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfArrayOfValuesToSelectIsEmpty() {
     String[] values = new String[0];
@@ -196,13 +197,13 @@ public class JListDriverTest {
     driver.selectItems(dragList, new int[] { 1, 2 });
     assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
   }
-  
+
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArrayOfIndicesToSelectIsNull() {
     int[] indices = null;
     driver.selectItems(dragList, indices);
   }
-  
+
   @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfArrayOfIndicesToSelectIsEmpty() {
     int[] indices = new int[0];
@@ -284,7 +285,7 @@ public class JListDriverTest {
     driver.requireSelectedItems(dragList, "one", "two");
     assertCellReaderWasCalled();
   }
-  
+
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfExpectedSelectedItemsIsNull() {
     driver.requireSelectedItems(dragList, (String[])null);
@@ -341,7 +342,7 @@ public class JListDriverTest {
     ClickRecorder recorder = attachTo(dragList);
     driver.showPopupMenu(dragList, "one");
     recorder.clicked(RIGHT_BUTTON);
-    assertThat(popupMenu.isVisible()).isTrue();
+    assertThat(isVisible(popupMenu)).isTrue();
     assertCellReaderWasCalled();
   }
 
@@ -350,7 +351,7 @@ public class JListDriverTest {
     ClickRecorder recorder = attachTo(dragList);
     driver.showPopupMenu(dragList, 0);
     recorder.clicked(RIGHT_BUTTON);
-    assertThat(popupMenu.isVisible()).isTrue();
+    assertThat(isVisible(popupMenu)).isTrue();
   }
 
   private JPopupMenu popupMenuFor(JList list) {
@@ -399,7 +400,7 @@ public class JListDriverTest {
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
     private static final Dimension LIST_SIZE = new Dimension(80, 40);
