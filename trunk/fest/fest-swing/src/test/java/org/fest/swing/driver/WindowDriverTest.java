@@ -31,6 +31,7 @@ import org.fest.swing.testing.FluentDimension;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetComponentLocationOnScreenTask.locationOnScreenOf;
 import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -79,7 +80,7 @@ public class WindowDriverTest {
   public void shouldMoveWindow() {
     Point newPosition = new Point(200, 200);
     driver.moveTo(frame, newPosition);
-    assertThat(frame.getLocationOnScreen()).isEqualTo(newPosition);
+    assertThat(locationOnScreenOf(frame)).isEqualTo(newPosition);
   }
 
   public void shouldCloseWindow() {

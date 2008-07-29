@@ -15,13 +15,8 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Platform.*;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
-
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 
 import org.fest.swing.core.Robot;
@@ -29,6 +24,13 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Settings;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
+
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
+import static org.fest.swing.util.Platform.*;
+import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 
 /**
  * Understands drag and drop.
@@ -77,8 +79,9 @@ class DragAndDrop {
   }
 
   private void mouseMoveOnWindowsAndMacintosh(Component target, int x, int y) {
-    int dx = distance(x, target.getWidth());
-    int dy = distance(y, target.getHeight());
+    Dimension size = sizeOf(target);
+    int dx = distance(x, size.width);
+    int dy = distance(y, size.height);
     if (dx == 0 && dy == 0) dx = DRAG_THRESHOLD;
     mouseMove(target,
         point(x + dx / 4, y + dy / 4),

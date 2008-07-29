@@ -1,16 +1,16 @@
 /*
  * Created on May 6, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.image;
@@ -35,9 +35,9 @@ public final class ScreenshotTaker {
 
   /** Extension of the image files containing the screenshots taken by instances of this class (png). */
   public static final String PNG_EXTENSION = "png";
-  
+
   private final Robot robot;
-  
+
   /**
    * Creates a new <code>{@link ScreenshotTaker}</code>.
    * @throws ImageException if a AWT Robot (the responsible for taking screenshots) cannot be instantiated.
@@ -63,8 +63,8 @@ public final class ScreenshotTaker {
   }
 
   /**
-   * Takes a screenshot of the desktop. 
-   * @return the screenshot of the desktop. 
+   * Takes a screenshot of the desktop.
+   * @return the screenshot of the desktop.
    * @throws SecurityException if <code>readDisplayPixels</code> permission is not granted.
    */
   public BufferedImage takeDesktopScreenshot() {
@@ -92,6 +92,7 @@ public final class ScreenshotTaker {
    * @throws SecurityException if <code>readDisplayPixels</code> permission is not granted.
    */
   public BufferedImage takeScreenshotOf(Component c) {
+    // TODO access from EDT
     Point locationOnScreen = c.getLocationOnScreen();
     Dimension size = c.getSize();
     Rectangle r = new Rectangle(locationOnScreen.x,  locationOnScreen.y, size.width, size.height);
@@ -115,10 +116,10 @@ public final class ScreenshotTaker {
       throw new ImageException(concat("Unable to save image as ", quote(filePath)), e);
     }
   }
-  
+
   private void validate(String imageFilePath) {
     if (isEmpty(imageFilePath)) throw new ImageException("The image path cannot be empty");
-    if (!imageFilePath.endsWith(PNG_EXTENSION)) 
+    if (!imageFilePath.endsWith(PNG_EXTENSION))
       throw new ImageException(concat("The image file should be a ", PNG_EXTENSION.toUpperCase(Locale.getDefault())));
   }
 }

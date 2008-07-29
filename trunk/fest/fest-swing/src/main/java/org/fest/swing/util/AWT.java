@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.fest.swing.task.GetComponentLocationOnScreenTask;
+
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
 
@@ -138,7 +140,8 @@ public class AWT {
    *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
   public static Point locationOnScreenOf(Component c) {
-    if (!isAWTTreeLockHeld()) new Point(c.getLocationOnScreen());
+    if (!isAWTTreeLockHeld()) return new Point(GetComponentLocationOnScreenTask.locationOnScreenOf(c));
+    // TODO access from EDT
     if (!c.isShowing()) return null;
     Point location = new Point(c.getLocation());
     if (c instanceof Window) return location;

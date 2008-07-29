@@ -24,6 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
@@ -32,6 +33,7 @@ import static java.awt.Frame.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetComponentLocationOnScreenTask.locationOnScreenOf;
 import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -49,7 +51,11 @@ public class FrameDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new JFrame(getClass().getName());
+    frame = new GuiTask<Frame>() {
+      protected Frame executeInEDT() {
+        return new JFrame(getClass().getName());
+      }
+    }.run();
     driver = new FrameDriver(robot);
     robot.showWindow(frame);
   }
@@ -98,6 +104,6 @@ public class FrameDriverTest {
   }
 
   private FluentPoint frameLocationOnScreen() {
-    return new FluentPoint(frame.getLocationOnScreen());
+    return new FluentPoint(locationOnScreenOf(frame));
   }
 }

@@ -139,21 +139,7 @@ public class FrameDriver extends WindowDriver {
   }
 
   private void updateFrameExtendedState(Frame frame, int state) {
-    robot.invokeLater(frame, new SetExtendedStateTask(frame, state));
-  }
-
-  private static class SetExtendedStateTask implements Runnable {
-    private final Frame target;
-    private final int state;
-
-    SetExtendedStateTask(Frame target, int state) {
-      this.target = target;
-      this.state = state;
-    }
-
-    public void run() {
-      target.setExtendedState(state);
-    }
+    frame.setExtendedState(state);
   }
 
   private boolean supportsMaximize() {

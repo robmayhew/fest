@@ -46,6 +46,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
+import static org.fest.swing.task.GetComponentLocationOnScreenTask.locationOnScreenOf;
 import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
 import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
@@ -124,16 +125,11 @@ public class RobotFixtureTest {
     robot.showWindow(window, size, false);
     assertThat(sizeOf(window)).isEqualTo(size);
     assertThat(window.packed()).isFalse();
-    assertThat(window.getLocationOnScreen()).isEqualTo(new Point(0, 0));
+    assertThat(locationOnScreenOf(window)).isEqualTo(new Point(0, 0));
   }
 
   private void assertThatFrameIsInCorrectPosition(Point expected) {
-    Point position = new GuiTask<Point>() {
-      protected Point executeInEDT() {
-        return frame.getLocationOnScreen();
-      }
-    }.run();
-    assertThat(position).isEqualTo(expected);
+    assertThat(locationOnScreenOf(frame)).isEqualTo(expected);
   }
 
   public void shouldClickComponent() {

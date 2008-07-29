@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -64,8 +65,9 @@ public abstract class ContainerDriver extends ComponentDriver {
    */
   protected void resizeBy(Container c, int horizontally, int vertically) {
     simulateResizeStarted(c, horizontally, vertically);
-    Dimension size = new Dimension(c.getWidth() + horizontally, c.getHeight() + vertically);
-    robot.invokeAndWait(c, new SetSizeTask(c, size));
+    Dimension size = sizeOf(c);
+    Dimension newSize = new Dimension(size.width + horizontally, size.height + vertically);
+    robot.invokeAndWait(c, new SetSizeTask(c, newSize));
     simulateResizeComplete(c);
     robot.waitForIdle();
   }
@@ -90,9 +92,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to resize a window.
    */
   protected Point resizeLocationOf(Container c) {
-    Dimension size = c.getSize();
-    Insets insets = c.getInsets();
-    return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
+    return new GetResizeLocationTask(c).run();
   }
 
   /**
@@ -149,8 +149,42 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to move a container (or window.)
    */
   protected Point moveLocation(Container c) {
-    Dimension size = c.getSize();
-    Insets insets = c.getInsets();
-    return new Point(size.width / 2, insets.top / 2);
+    return new GetMoveLocationTask(c).run();
+  }
+
+  private static class GetResizeLocationTask extends GetLocationTask {
+    GetResizeLocationTask(Container c) {
+      super(c);
+    }
+
+    Point location(Dimension size, Insets insets) {
+      return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
+    }
+  }
+
+  private static class GetMoveLocationTask extends GetLocationTask {
+    GetMoveLocationTask(Container c) {
+      super(c);
+    }
+
+    Point location(Dimension size, Insets insets) {
+      return new Point(size.width / 2, insets.top / 2);
+    }
+  }
+
+  private static abstract class GetLocationTask extends GuiTask<Point> {
+    private final Container c;
+
+    GetLocationTask(Container c) {
+      this.c = c;
+    }
+
+    protected final Point executeInEDT() {
+      Dimension size = c.getSize();
+      Insets insets = c.getInsets();
+      return location(size, insets);
+    }
+
+    abstract Point location(Dimension size, Insets insets);
   }
 }
