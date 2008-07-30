@@ -22,6 +22,7 @@ import java.awt.Point;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.util.Pair;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -92,7 +93,10 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to resize a window.
    */
   protected Point resizeLocationOf(Container c) {
-    return new GetResizeLocationTask(c).run();
+    Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
+    Dimension size = pair.first;
+    Insets insets = pair.second;
+    return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
   }
 
   /**
@@ -149,42 +153,21 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to move a container (or window.)
    */
   protected Point moveLocation(Container c) {
-    return new GetMoveLocationTask(c).run();
+    Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
+    Dimension size = pair.first;
+    Insets insets = pair.second;
+    return new Point(size.width / 2, insets.top / 2);
   }
 
-  private static class GetResizeLocationTask extends GetLocationTask {
-    GetResizeLocationTask(Container c) {
-      super(c);
-    }
-
-    Point location(Dimension size, Insets insets) {
-      return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
-    }
-  }
-
-  private static class GetMoveLocationTask extends GetLocationTask {
-    GetMoveLocationTask(Container c) {
-      super(c);
-    }
-
-    Point location(Dimension size, Insets insets) {
-      return new Point(size.width / 2, insets.top / 2);
-    }
-  }
-
-  private static abstract class GetLocationTask extends GuiTask<Point> {
+  private static class GetSizeAndInsetsTask extends GuiTask<Pair<Dimension, Insets>> {
     private final Container c;
 
-    GetLocationTask(Container c) {
+    GetSizeAndInsetsTask(Container c) {
       this.c = c;
     }
 
-    protected final Point executeInEDT() {
-      Dimension size = c.getSize();
-      Insets insets = c.getInsets();
-      return location(size, insets);
+    protected Pair<Dimension, Insets> executeInEDT() {
+      return new Pair<Dimension, Insets>(c.getSize(), c.getInsets());
     }
-
-    abstract Point location(Dimension size, Insets insets);
   }
 }
