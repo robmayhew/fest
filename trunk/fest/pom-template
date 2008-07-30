@@ -39,8 +39,6 @@
   <contributors>
     <contributor>
       <name>Andres Almiray</name>
-      <organization>Oracle</organization>
-      <organizationUrl>http://www.oracle.com/</organizationUrl>
       <email>aalmiray at users.sourceforge.net</email>
       <url>http://www.jroller.com/aalmiray/</url>
     </contributor>
@@ -59,6 +57,10 @@
     </contributor>
     <contributor>
       <name>Pavol Bernhauser</name>
+    </contributor>
+    <contributor>
+      <name>Cédric Beust</name>
+      <url>http://beust.com/weblog/</url>
     </contributor>
     <contributor>
       <name>Wim Boffe</name>
