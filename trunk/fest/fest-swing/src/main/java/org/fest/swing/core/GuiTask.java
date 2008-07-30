@@ -38,7 +38,19 @@ public abstract class GuiTask<T> {
    */
   public final T run() {
     calledFromEDT = isEventDispatchThread();
-    if (calledFromEDT) return executeInEDT();
+    if (calledFromEDT) return invokeDirectlyInEDT();
+    return invokeInEDTAndWait();
+  }
+
+  private T invokeDirectlyInEDT() {
+    try {
+      return executeInEDT();
+    } catch (Throwable t) {
+      throw unexpected(t);
+    }
+  }
+
+  private T invokeInEDTAndWait() {
     final Reference<T> result = new Reference<T>();
     final Reference<Throwable> error = new Reference<Throwable>();
     try {
@@ -46,8 +58,8 @@ public abstract class GuiTask<T> {
         public void run() {
           try {
             result.target = executeInEDT();
-          } catch (Exception e) {
-            error.target = e;
+          } catch (Throwable t) {
+            error.target = t;
           }
         }
       });
@@ -63,8 +75,9 @@ public abstract class GuiTask<T> {
   /**
    * Specifies the action to execute in the event dispatch thread.
    * @return the result of the execution of the action.
+   * @throws Throwable any error thrown when executing an action in the event dispatch thread.
    */
-  protected abstract T executeInEDT();
+  protected abstract T executeInEDT() throws Throwable;
 
   static class Reference<T> {
     T target;

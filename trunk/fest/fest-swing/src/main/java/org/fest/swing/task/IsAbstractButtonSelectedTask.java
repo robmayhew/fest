@@ -19,7 +19,7 @@ import javax.swing.AbstractButton;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns whether a <code>{@link AbstractButton}</code> is selected or not.
+ * Understands a task that indicates whether a <code>{@link AbstractButton}</code> is selected or not.
  *
  * @author Yvonne Wang
  */
@@ -27,7 +27,7 @@ public class IsAbstractButtonSelectedTask extends GuiTask<Boolean> {
   private final AbstractButton button;
 
   /**
-   * Returns whether the given <code>{@link AbstractButton}</code> is selected or not. This action is executed in the
+   * Indicates whether the given <code>{@link AbstractButton}</code> is selected or not. This action is executed in the
    * event dispatch thread.
    * @param button the given <code>AbstractButton</code>.
    * @return <code>true</code> if the given <code>AbstractButton</code> is selected, <code>false</code> otherwise.
@@ -41,8 +41,8 @@ public class IsAbstractButtonSelectedTask extends GuiTask<Boolean> {
   }
 
   /**
-   * Returns whether this task's <code>{@link AbstractButton}</code> is selected or not. This action is executed in the
-   * event dispatch thread.
+   * Indicates whether this task's <code>{@link AbstractButton}</code> is selected or not. This action is executed in
+   * the event dispatch thread.
    * @return <code>true</code> if this task's <code>AbstractButton</code> is selected, <code>false</code> otherwise.
    */
   protected Boolean executeInEDT() {

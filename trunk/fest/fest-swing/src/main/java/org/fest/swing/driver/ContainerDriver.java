@@ -94,8 +94,10 @@ public abstract class ContainerDriver extends ComponentDriver {
    */
   protected Point resizeLocationOf(Container c) {
     Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
-    Dimension size = pair.first;
-    Insets insets = pair.second;
+    return resizeLocation(pair.first, pair.second);
+  }
+
+  private Point resizeLocation(Dimension size, Insets insets) {
     return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
   }
 
@@ -135,14 +137,14 @@ public abstract class ContainerDriver extends ComponentDriver {
 
   private void simulateMoveStarted(Container c, int horizontally, int vertically) {
     if (!isUserMovable(c)) return;
-    Point p = moveLocation(c);
+    Point p = moveLocationOf(c);
     robot.moveMouse(c, p.x, p.y);
     robot.moveMouse(c, p.x + horizontally, p.y + vertically);
   }
 
   private void simulateMoveComplete(Container c) {
     if (!isUserMovable(c)) return;
-    Point p = moveLocation(c);
+    Point p = moveLocationOf(c);
     robot.moveMouse(c, p.x, p.y);
   }
 
@@ -152,10 +154,12 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param c the given <code>Container</code>.
    * @return where the mouse usually grabs to move a container (or window.)
    */
-  protected Point moveLocation(Container c) {
+  protected Point moveLocationOf(Container c) {
     Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
-    Dimension size = pair.first;
-    Insets insets = pair.second;
+    return moveLocation(pair.first, pair.second);
+  }
+
+  private Point moveLocation(Dimension size, Insets insets) {
     return new Point(size.width / 2, insets.top / 2);
   }
 

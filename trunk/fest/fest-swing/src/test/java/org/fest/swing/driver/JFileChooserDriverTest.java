@@ -1,16 +1,16 @@
 /*
  * Created on Feb 26, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -27,6 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -53,19 +54,23 @@ public class JFileChooserDriverTest {
   private Robot robot;
   private JFileChooser fileChooser;
   private JFileChooserDriver driver;
-  
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JFileChooserDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     fileChooser = frame.fileChooser;
     robot.showWindow(frame);
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   public void shouldFindCancelButton() {
     JButton cancelButton = driver.cancelButton(fileChooser);
     assertThat(cancelButton).isNotNull();
@@ -75,17 +80,22 @@ public class JFileChooserDriverTest {
   private String cancelButtonText() {
     return UIManager.getString("FileChooser.cancelButtonText");
   }
-  
+
   public void shouldSelectFile() {
     File temporaryFile = newTemporaryFile();
     driver.selectFile(fileChooser, temporaryFile);
-    assertThat(fileChooser.getSelectedFile()).isSameAs(temporaryFile);
+    File selectedFile = new GuiTask<File>() {
+      protected File executeInEDT() {
+        return fileChooser.getSelectedFile();
+      }
+    }.run();
+    assertThat(selectedFile).isSameAs(temporaryFile);
     temporaryFile.delete();
   }
-  
+
   public void shouldThrowErrorIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
     File temporaryFile = newTemporaryFile();
-    fileChooser.setFileSelectionMode(DIRECTORIES_ONLY);
+    setFileSelectionMode(DIRECTORIES_ONLY);
     try {
       driver.selectFile(fileChooser, temporaryFile);
       fail();
@@ -95,11 +105,11 @@ public class JFileChooserDriverTest {
       temporaryFile.delete();
     }
   }
-  
+
   @Test(dependsOnMethods = "shouldSelectFile")
   public void shouldThrowErrorIfChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
     File temporaryFolder = newTemporaryFolder();
-    fileChooser.setFileSelectionMode(FILES_ONLY);
+    setFileSelectionMode(FILES_ONLY);
     try {
       driver.selectFile(fileChooser, temporaryFolder);
       fail();
@@ -109,24 +119,36 @@ public class JFileChooserDriverTest {
       temporaryFolder.delete();
     }
   }
-  
+
+  private void setFileSelectionMode(final int mode) {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        fileChooser.setFileSelectionMode(mode);
+      }
+    });
+  }
+
   public void shouldFindApproveButton() {
     JButton approveButton = driver.approveButton(fileChooser);
     assertThat(approveButton).isNotNull();
     assertThat(textOf(approveButton)).isEqualTo(approveButtonText());
   }
-  
+
   private String approveButtonText() {
-    String text = fileChooser.getApproveButtonText();
-    if (!isEmpty(text)) return text;
-    return fileChooser.getUI().getApproveButtonText(fileChooser);
+    return new GuiTask<String>() {
+      protected String executeInEDT() {
+        String text = fileChooser.getApproveButtonText();
+        if (!isEmpty(text)) return text;
+        return fileChooser.getUI().getApproveButtonText(fileChooser);
+      }
+    }.run();
   }
-  
+
   public void shouldFindFileNameTextBox() {
     JTextField fileNameTextBox = driver.fileNameTextBox(fileChooser);
     assertThat(fileNameTextBox).isNotNull();
   }
-  
+
   public void shouldSetCurrentDirectory() {
     String homePath = System.getProperty("user.home");
     File userHome = new File(homePath);
@@ -137,9 +159,14 @@ public class JFileChooserDriverTest {
   }
 
   private String currentDirectoryAbsolutePath() {
-    return fileChooser.getCurrentDirectory().getAbsolutePath();
+    File currentDirectory = new GuiTask<File>() {
+      protected File executeInEDT() {
+        return fileChooser.getCurrentDirectory();
+      }
+    }.run();
+    return currentDirectory.getAbsolutePath();
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 

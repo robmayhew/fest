@@ -20,7 +20,9 @@ import java.awt.Point;
 import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JInternalFrame.JDesktopIcon;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JInternalFrameSetPropertyTask.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
@@ -28,6 +30,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.IsJInternalFrameIconifiedTask.isIconified;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -36,6 +39,7 @@ import static org.fest.util.Strings.concat;
  * <code>{@link JInternalFrame}</code>s. This class is intended for internal use only.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
@@ -94,9 +98,25 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
   public void maximize(JInternalFrame frame) {
-    if (!frame.isMaximizable())
+    if (!isMaximizable(frame))
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not maximizable"));
     maximizeOrNormalize(frame, MAXIMIZE);
+  }
+
+  private boolean isMaximizable(JInternalFrame frame) {
+    return new IsInternalFrameMaximizableTask(frame).run();
+  }
+
+  private static class IsInternalFrameMaximizableTask extends GuiTask<Boolean> {
+    private final JInternalFrame frame;
+
+    IsInternalFrameMaximizableTask(JInternalFrame frame) {
+      this.frame = frame;
+    }
+
+    protected Boolean executeInEDT() {
+      return frame.isMaximizable();
+    }
   }
 
   /**
@@ -110,10 +130,10 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
   private void maximizeOrNormalize(JInternalFrame frame, JInternalFrameAction action) {
     Container clickTarget = frame;
-    if (frame.isIcon()) clickTarget = frame.getDesktopIcon();
+    if (isIconified(frame)) clickTarget = desktopIconOf(frame);
     Point p = maximizeLocation(clickTarget);
     robot.moveMouse(clickTarget, p.x, p.y);
-    if (frame.isIcon()) deiconify(frame);
+    if (isIconified(frame)) deiconify(frame);
     setProperty(new SetMaximumTask(frame, action));
   }
 
@@ -133,13 +153,29 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public void iconify(JInternalFrame frame) {
-    if (frame.isIcon()) return;
-    if (!frame.isIconifiable())
+  public void iconify(final JInternalFrame frame) {
+    if (isIconified(frame)) return;
+    if (!isIconifiable(frame))
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not iconifiable"));
     Point p = iconifyLocation(frame);
     robot.moveMouse(frame, p.x, p.y);
     setProperty(new SetIconTask(frame, ICONIFY));
+  }
+
+  private boolean isIconifiable(final JInternalFrame frame) {
+    return new IsIconifiableTask(frame).run();
+  }
+
+  private static class IsIconifiableTask extends GuiTask<Boolean> {
+    private final JInternalFrame frame;
+
+    IsIconifiableTask(JInternalFrame frame) {
+      this.frame = frame;
+    }
+
+    protected Boolean executeInEDT() {
+      return frame.isIconifiable();
+    }
   }
 
   /**
@@ -148,11 +184,27 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
   public void deiconify(JInternalFrame frame) {
-    if (!frame.isIcon()) return;
-    Container c = frame.getDesktopIcon();
+    if (!isIconified(frame)) return;
+    Container c = desktopIconOf(frame);
     Point p = iconifyLocation(c);
     robot.moveMouse(c, p.x, p.y);
     setProperty(new SetIconTask(frame, DEICONIFY));
+  }
+
+  private JDesktopIcon desktopIconOf(final JInternalFrame frame) {
+    return new GetJDesktopIconTask(frame).run();
+  }
+
+  private static class GetJDesktopIconTask extends GuiTask<JDesktopIcon> {
+    private final JInternalFrame frame;
+
+    GetJDesktopIconTask(JInternalFrame frame) {
+      this.frame = frame;
+    }
+
+    protected JDesktopIcon executeInEDT() {
+      return frame.getDesktopIcon();
+    }
   }
 
   private static class SetIconTask extends JInternalFrameSetPropertyTask {
@@ -215,13 +267,29 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param frame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the <code>JInternalFrame</code> is not closable.
    */
-  public void close(final JInternalFrame frame) {
-    if (!frame.isClosable())
+  public void close(JInternalFrame frame) {
+    if (!isClosable(frame))
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not closable"));
     // This is LAF-specific, so it must be done programmatically.
     Point p = closeLocation(frame);
     robot.moveMouse(frame, p.x, p.y);
     robot.invokeAndWait(new CloseFrameTask(frame));
+  }
+
+  private boolean isClosable(final JInternalFrame frame) {
+    return new IsClosableTask(frame).run();
+  }
+
+  private static class IsClosableTask extends GuiTask<Boolean> {
+    private final JInternalFrame frame;
+
+    IsClosableTask(JInternalFrame frame) {
+      this.frame = frame;
+    }
+
+    protected Boolean executeInEDT() {
+      return frame.isClosable();
+    }
   }
 
   private static class CloseFrameTask implements Runnable {

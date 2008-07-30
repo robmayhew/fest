@@ -26,6 +26,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
@@ -37,6 +38,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
+import static org.fest.swing.task.IsJInternalFrameIconifiedTask.isIconified;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -57,7 +59,11 @@ public class JInternalFrameDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JInternalFrameDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     internalFrame = frame.internalFrame;
     desktopPane = frame.desktopPane;
     robot.showWindow(frame);
@@ -84,27 +90,31 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  public void shouldNotIconifyAlreadyIconifiedInternalFrame() throws PropertyVetoException {
-    internalFrame.setIcon(true);
+  public void shouldNotIconifyAlreadyIconifiedInternalFrame() {
+    setIcon(true);
     driver.iconify(internalFrame);
-    assertThat(internalFrame.isIcon()).isTrue();
+    assertThat(isIconified(internalFrame)).isTrue();
   }
 
-  public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame() throws PropertyVetoException {
-    internalFrame.setIcon(false);
+  public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame() {
+    setIcon(false);
     driver.deiconify(internalFrame);
-    assertThat(internalFrame.isIcon()).isFalse();
+    assertThat(isIconified(internalFrame)).isFalse();
   }
 
   public void shouldIconifyAndDeiconifyInternalFrame() {
     driver.iconify(internalFrame);
-    assertThat(internalFrame.isIcon()).isTrue();
+    assertThat(isIconified(internalFrame)).isTrue();
     driver.deiconify(internalFrame);
-    assertThat(internalFrame.isIcon()).isFalse();
+    assertThat(isIconified(internalFrame)).isFalse();
   }
 
   public void shouldThrowErrorIfIconifyingFrameThatIsNotIconifiable() {
-    internalFrame.setIconifiable(false);
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        internalFrame.setIconifiable(false);
+      }
+    });
     try {
       driver.iconify(internalFrame);
       fail();
@@ -116,17 +126,21 @@ public class JInternalFrameDriverTest {
 
   public void shouldMaximizeInternalFrame() {
     driver.maximize(internalFrame);
-    assertThat(internalFrame.isMaximum()).isTrue();
+    assertThat(isMaximized()).isTrue();
   }
 
-  public void shouldMaximizeIconifiedInternalFrame() throws PropertyVetoException {
-    internalFrame.setIcon(true);
+  public void shouldMaximizeIconifiedInternalFrame() {
+    setIcon(true);
     driver.maximize(internalFrame);
-    assertThat(internalFrame.isMaximum()).isTrue();
+    assertThat(isMaximized()).isTrue();
   }
 
   public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable() {
-    internalFrame.setMaximizable(false);
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        internalFrame.setMaximizable(false);
+      }
+    });
     try {
       driver.maximize(internalFrame);
       fail();
@@ -142,15 +156,32 @@ public class JInternalFrameDriverTest {
     assertIsNormalized();
   }
 
-  public void shouldNormalizeIconifiedInternalFrame() throws PropertyVetoException {
-    internalFrame.setIcon(true);
+  public void shouldNormalizeIconifiedInternalFrame() {
+    setIcon(true);
     driver.normalize(internalFrame);
     assertIsNormalized();
   }
 
+  private void setIcon(boolean icon) {
+    new GuiTask<Void>() {
+      protected Void executeInEDT() throws PropertyVetoException {
+        internalFrame.setIcon(true);
+        return null;
+      }
+    }.run();
+  }
+
   private void assertIsNormalized() {
-    assertThat(internalFrame.isIcon()).isFalse();
-    assertThat(internalFrame.isMaximum()).isFalse();
+    assertThat(isIconified(internalFrame)).isFalse();
+    assertThat(isMaximized()).isFalse();
+  }
+
+  private boolean isMaximized() {
+    return new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() throws Throwable {
+        return internalFrame.isMaximum();
+      }
+    }.run();
   }
 
   public void shouldMoveInternalFrameToFront() {
@@ -180,16 +211,29 @@ public class JInternalFrameDriverTest {
   }
 
   private FluentPoint internalFrameLocation() {
-    return new FluentPoint(internalFrame.getLocation());
+    return new FluentPoint(new GuiTask<Point>() {
+      protected Point executeInEDT() throws Throwable {
+        return internalFrame.getLocation();
+      }
+    }.run());
   }
 
   public void shouldCloseInternalFrame() {
     driver.close(internalFrame);
-    assertThat(internalFrame.isClosed()).isTrue();
+    boolean closed = new GuiTask<Boolean>() {
+      protected Boolean executeInEDT() throws Throwable {
+        return internalFrame.isClosed();
+      }
+    }.run();
+    assertThat(closed).isTrue();
   }
 
   public void shouldThrowErrorIfClosingFrameThatIsNotClosable() {
-    internalFrame.setClosable(false);
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        internalFrame.setClosable(false);
+      }
+    });
     try {
       driver.close(internalFrame);
       fail();
@@ -207,16 +251,32 @@ public class JInternalFrameDriverTest {
 
   public void shouldResizeWidth() {
     int newWidth = 600;
-    assertThat(internalFrame.getWidth()).isNotEqualTo(newWidth);
+    assertThat(internalFrameWidth()).isNotEqualTo(newWidth);
     driver.resizeWidthTo(internalFrame, newWidth);
-    assertThat(internalFrame.getWidth()).isEqualTo(newWidth);
+    assertThat(internalFrameWidth()).isEqualTo(newWidth);
+  }
+
+  private int internalFrameWidth() {
+    return new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return internalFrame.getWidth();
+      }
+    }.run();
   }
 
   public void shouldResizeHeight() {
     int newHeight = 600;
-    assertThat(internalFrame.getHeight()).isNotEqualTo(newHeight);
+    assertThat(internalFrameHeight()).isNotEqualTo(newHeight);
     driver.resizeHeightTo(internalFrame, newHeight);
-    assertThat(internalFrame.getHeight()).isEqualTo(newHeight);
+    assertThat(internalFrameHeight()).isEqualTo(newHeight);
+  }
+
+  private int internalFrameHeight() {
+    return new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return internalFrame.getHeight();
+      }
+    }.run();
   }
 
   private static class MyFrame extends TestWindow {

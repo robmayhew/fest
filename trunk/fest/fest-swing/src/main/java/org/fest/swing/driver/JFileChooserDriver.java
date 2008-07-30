@@ -1,16 +1,16 @@
 /*
  * Created on Feb 26, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -22,6 +22,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.matcher.JButtonByTextMatcher;
 import org.fest.swing.exception.ActionFailedException;
@@ -36,8 +37,8 @@ import static org.fest.util.Strings.*;
  * Understands simulation of user input on a <code>{@link JFileChooser}</code>. Unlike
  * <code>JFileChooserFixture</code>, this driver only focuses on behavior present only in
  * <code>{@link JFileChooser}</code>s. This class is intended for internal use only.
- * 
- * @author Yvonne Wang 
+ *
+ * @author Yvonne Wang
  * @author Alex Ruiz
  */
 public class JFileChooserDriver extends JComponentDriver {
@@ -54,23 +55,35 @@ public class JFileChooserDriver extends JComponentDriver {
    * Selects the given file in the <code>{@link JFileChooser}</code>.
    * @param fileChooser the target <code>JFileChooser</code>.
    * @param file the file to select.
-   * @throws ActionFailedException if the <code>JFileChooser</code> can select directories only and the file to select 
+   * @throws ActionFailedException if the <code>JFileChooser</code> can select directories only and the file to select
    *         is not a directory.
-   * @throws ActionFailedException if the <code>JFileChooser</code> cannot select directories and the file to select is 
+   * @throws ActionFailedException if the <code>JFileChooser</code> cannot select directories and the file to select is
    *         a directory.
    */
   public void selectFile(JFileChooser fileChooser, File file) {
-    int mode = fileChooser.getFileSelectionMode();
+    int mode = new GetFileSelectionModeTask(fileChooser).run();
     boolean isFolder = file.isDirectory();
-    if (mode == FILES_ONLY && isFolder) 
+    if (mode == FILES_ONLY && isFolder)
       throw cannotSelectFile(file, "the file chooser cannot open directories");
-    if (mode == DIRECTORIES_ONLY && !isFolder) 
+    if (mode == DIRECTORIES_ONLY && !isFolder)
       throw cannotSelectFile(file, "the file chooser can only open directories");
     robot.invokeAndWait(new SelectFileTask(fileChooser, file));
   }
 
   private ActionFailedException cannotSelectFile(File file, String reason) {
     throw actionFailure(concat("Unable to select file ", file, ": ", reason));
+  }
+
+  private static class GetFileSelectionModeTask extends GuiTask<Integer> {
+    private final JFileChooser fileChooser;
+
+    GetFileSelectionModeTask(JFileChooser fileChooser) {
+      this.fileChooser = fileChooser;
+    }
+
+    protected Integer executeInEDT() {
+      return fileChooser.getFileSelectionMode();
+    }
   }
 
   private static class SelectFileTask implements Runnable {
@@ -86,7 +99,7 @@ public class JFileChooserDriver extends JComponentDriver {
       fileChooser.setSelectedFile(file);
     }
   }
-  
+
   /**
    * Sets the current directory in the <code>{@link JFileChooser}</code> to the given one.
    * @param fileChooser the target <code>JFileChooser</code>.
@@ -126,7 +139,7 @@ public class JFileChooserDriver extends JComponentDriver {
    * @throws ComponentLookupException if the "Cancel" button cannot be found.
    */
   public void clickCancelButton(JFileChooser fileChooser) {
-    clickButton(cancelButton(fileChooser));    
+    clickButton(cancelButton(fileChooser));
   }
 
   /**
@@ -164,21 +177,33 @@ public class JFileChooserDriver extends JComponentDriver {
     return approveButton;
   }
 
-  private String approveButtonText(JFileChooser fileChooser) {
-    String text = fileChooser.getApproveButtonText();
-    if (isEmpty(text)) text = fileChooser.getUI().getApproveButtonText(fileChooser);
-    return text;
+  private String approveButtonText(final JFileChooser fileChooser) {
+    return new GetApproveButtonTextTask(fileChooser).run();
+  }
+
+  private static class GetApproveButtonTextTask extends GuiTask<String> {
+    private final JFileChooser fileChooser;
+
+    GetApproveButtonTextTask(JFileChooser fileChooser) {
+      this.fileChooser = fileChooser;
+    }
+
+    protected String executeInEDT() {
+      String text = fileChooser.getApproveButtonText();
+      if (isEmpty(text)) text = fileChooser.getUI().getApproveButtonText(fileChooser);
+      return text;
+    }
   }
 
   private JButton findButton(JFileChooser fileChooser, String text) {
     return robot.finder().find(fileChooser, JButtonByTextMatcher.withTextAndShowing(text));
   }
-  
+
   private ComponentLookupException cannotFindButton(String name, String text) {
     throw new ComponentLookupException(concat(
         "Unable to find ", quote(name), " button with text ", quote(text)));
   }
-  
+
   private void clickButton(JButton button) {
     requireEnabled(button);
     click(button);

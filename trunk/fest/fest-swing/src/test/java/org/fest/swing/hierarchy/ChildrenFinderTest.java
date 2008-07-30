@@ -1,16 +1,16 @@
 /*
  * Created on Oct 26, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.hierarchy;
@@ -40,22 +40,24 @@ import static org.fest.util.Collections.list;
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
+ *
+ * TODO access components in EDT
  */
 public class ChildrenFinderTest {
 
   private ChildrenFinder finder;
-  
+
   private JDesktopPaneChildrenFinder desktopPaneChildrenFinder;
   private JMenuChildrenFinder menuChildrenFinder;
   private WindowChildrenFinder windowChildrenFinder;
-  
+
   @BeforeMethod public void setUp() {
     finder = new ChildrenFinder();
     desktopPaneChildrenFinder = new JDesktopPaneChildrenFinder();
     menuChildrenFinder = new JMenuChildrenFinder();
     windowChildrenFinder = new WindowChildrenFinder();
   }
-  
+
   @Test public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() throws Exception {
     MDIFrame frame = showInTest(getClass());
     frame.internalFrame().setIcon(true);
@@ -63,7 +65,7 @@ public class ChildrenFinderTest {
     assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
     frame.destroy();
   }
-  
+
   @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
     JMenu menu = new JMenu();
     assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
@@ -77,7 +79,7 @@ public class ChildrenFinderTest {
     dialog.destroy();
     frame.destroy();
   }
-  
+
   @Test(groups = GUI) public void shouldReturnChildrenOfContainer() {
     TestWindow frame = new TestWindow(getClass());
     JTextField textField = new JTextField();

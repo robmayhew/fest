@@ -19,7 +19,7 @@ import java.awt.Component;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns a <code>{@link Component}</code> is visible or not.
+ * Understands a task that indicates whether a <code>{@link Component}</code> is visible or not.
  *
  * @author Yvonne Wang
  */
@@ -28,7 +28,7 @@ public final class IsComponentVisibleTask extends GuiTask<Boolean> {
   private final Component component;
 
   /**
-   * Returns whether the given <code>{@link Component}</code> is visible or not. This action is executed in the event
+   * Indicates whether the given <code>{@link Component}</code> is visible or not. This action is executed in the event
    * dispatch thread.
    * @param component the given <code>Component</code>.
    * @return <code>true</code> if the given <code>Component</code> is visible, <code>false</code> otherwise.
@@ -42,8 +42,8 @@ public final class IsComponentVisibleTask extends GuiTask<Boolean> {
   }
 
   /**
-   * Returns whether this task's <code>{@link Component}</code> is visible or not. This action is executed in the event
-   * dispatch thread.
+   * Indicates whether this task's <code>{@link Component}</code> is visible or not. This action is executed in the
+   * event dispatch thread.
    * @return <code>true</code> if this task's <code>Component</code> is visible, <code>false</code> otherwise.
    */
   protected Boolean executeInEDT() {
