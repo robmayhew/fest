@@ -23,6 +23,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
@@ -46,7 +47,11 @@ public class JLabelDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JLabelDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     label = frame.label;
     robot.showWindow(frame);
   }
@@ -56,18 +61,26 @@ public class JLabelDriverTest {
   }
 
   public void shouldPassIfHasExpectedText() {
-    label.setText("Hi");
+    setLabelText("Hi");
     driver.requireText(label, "Hi");
   }
 
   public void shouldFailIfDoesNotHaveExpectedText() {
-    label.setText("Hi");
+    setLabelText("Hi");
     try {
       driver.requireText(label, "Bye");
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'text'").contains("expected:<'Bye'> but was:<'Hi'>");
     }
+  }
+
+  private void setLabelText(final String text) {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        label.setText(text);
+      }
+    });
   }
 
   private static class MyFrame extends TestWindow {

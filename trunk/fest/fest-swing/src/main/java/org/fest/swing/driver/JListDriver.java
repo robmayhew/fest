@@ -20,9 +20,9 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
-import javax.swing.ListModel;
 
 import org.fest.swing.cell.JListCellReader;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -39,6 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.task.GetJListSelectedItemTask.selectedIndexOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
@@ -94,7 +95,7 @@ public class JListDriver extends JComponentDriver {
    * @see #cellReader(JListCellReader)
    */
   public String[] selectionOf(JList list) {
-    int[] selectedIndices = list.getSelectedIndices();
+    int[] selectedIndices = selectedIndicesOf(list);
     int selectionCount = selectedIndices.length;
     String[] values = new String[selectionCount];
     for (int i = 0; i < selectionCount; i++)
@@ -102,12 +103,20 @@ public class JListDriver extends JComponentDriver {
     return values;
   }
 
-  private int sizeOf(JList list) {
-    return model(list).getSize();
+  private int sizeOf(final JList list) {
+    return new GetSizeTask(list).run();
   }
 
-  private ListModel model(JList list) {
-    return list.getModel();
+  private static class GetSizeTask extends GuiTask<Integer> {
+    private final JList list;
+
+    GetSizeTask(JList list) {
+      this.list = list;
+    }
+
+    protected Integer executeInEDT() throws Throwable {
+      return list.getModel().getSize();
+    }
   }
 
   /**
@@ -162,7 +171,7 @@ public class JListDriver extends JComponentDriver {
    * @param indices the indices of the items to select.
    * @throws NullPointerException if the given array is <code>null</code>.
    * @throws IllegalArgumentException if the given array is empty.
-   * @throws IndexOutOfBoundsException if any of the indices is negative or greater than the index of the last item in 
+   * @throws IndexOutOfBoundsException if any of the indices is negative or greater than the index of the last item in
    * the <code>JList</code>.
    */
   public void selectItems(final JList list, final int[] indices) {
@@ -181,13 +190,13 @@ public class JListDriver extends JComponentDriver {
   }
 
   private boolean isEmptyArray(int[] array) { return array == null || array.length == 0; }
-  
+
   /**
    * Selects the items in the specified range.
    * @param list the target <code>JList</code>.
    * @param from the starting point of the selection.
    * @param to the last item to select.
-   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
   public void selectItems(JList list, From from, To to) {
@@ -199,7 +208,7 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param start the starting point of the selection.
    * @param end the last item to select (inclusive.)
-   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
   public void selectItems(JList list, int start, int end) {
@@ -213,12 +222,30 @@ public class JListDriver extends JComponentDriver {
    * Selects the item under the given index using left mouse button once.
    * @param list the target <code>JList</code>.
    * @param index the index of the item to click.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
   public void selectItem(JList list, int index) {
-    if (list.isSelectedIndex(index)) return;
+    if (isSelectedIndex(list, index)) return;
     clickItem(list, index, LEFT_BUTTON, 1);
+  }
+
+  private boolean isSelectedIndex(final JList list, final int index) {
+    return new IsSelectedIndexTask(list, index).run();
+  }
+
+  private static class IsSelectedIndexTask extends GuiTask<Boolean> {
+    private final JList list;
+    private final int index;
+
+    IsSelectedIndexTask(JList list, int index) {
+      this.list = list;
+      this.index = index;
+    }
+
+    protected Boolean executeInEDT() throws Throwable {
+      return list.isSelectedIndex(index);
+    }
   }
 
   /**
@@ -227,7 +254,7 @@ public class JListDriver extends JComponentDriver {
    * @param index the index of the item to click.
    * @param button the button to use.
    * @param times the number of times to click.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
   public void clickItem(JList list, int index, MouseButton button, int times) {
@@ -243,7 +270,7 @@ public class JListDriver extends JComponentDriver {
    * @throws AssertionError if the selected item does not match the value.
    */
   public void requireSelection(JList list, String value) {
-    int selectedIndex = list.getSelectedIndex();
+    int selectedIndex = selectedIndexOf(list);
     if (selectedIndex == -1) failNoSelection(list);
     assertThat(value(list, selectedIndex)).as(selectedIndexProperty(list)).isEqualTo(value);
   }
@@ -257,7 +284,7 @@ public class JListDriver extends JComponentDriver {
    */
   public void requireSelectedItems(JList list, String... items) {
     if (items == null) throw new NullPointerException("The array of items should not be null");
-    int[] selectedIndices = list.getSelectedIndices();
+    int[] selectedIndices = selectedIndicesOf(list);
     int currentSelectionCount = selectedIndices.length;
     if (currentSelectionCount == 0) failNoSelection(list);
     assertThat(currentSelectionCount).as(propertyName(list, SELECTED_INDICES_LENGTH_PROPERTY)).isEqualTo(items.length);
@@ -267,13 +294,29 @@ public class JListDriver extends JComponentDriver {
     }
   }
 
+  private int[] selectedIndicesOf(final JList list) {
+    return new GetSelectedIndicesTask(list).run();
+  }
+
+  private static class GetSelectedIndicesTask extends GuiTask<int[]> {
+    private final JList list;
+
+    GetSelectedIndicesTask(JList list) {
+      this.list = list;
+    }
+
+    protected int[] executeInEDT() throws Throwable {
+      return list.getSelectedIndices();
+    }
+  }
+
   /**
    * Verifies that the <code>{@link JList}</code> does not have a selection.
    * @param list the target <code>JList</code>.
    * @throws AssertionError if the <code>JList</code> has a selection.
    */
   public void requireNoSelection(JList list) {
-    assertThat(list.getSelectedIndex()).as(selectedIndexProperty(list)).isEqualTo(-1);
+    assertThat(selectedIndexOf(list)).as(selectedIndexProperty(list)).isEqualTo(-1);
   }
 
   private void failNoSelection(JList list) {
@@ -339,10 +382,6 @@ public class JListDriver extends JComponentDriver {
     super.drop(list, centerOf(list));
   }
 
-  private Rectangle itemBounds(JList list, int index) {
-    return list.getCellBounds(index, index);
-  }
-
   private Point pointAt(JList list, int index) {
     return location.pointAt(list, index);
   }
@@ -377,6 +416,24 @@ public class JListDriver extends JComponentDriver {
     super.scrollToVisible(list, itemBounds(list, index));
   }
 
+  private Rectangle itemBounds(final JList list, final int index) {
+    return new GetItemBoundsTask(list, index).run();
+  }
+
+  private static class GetItemBoundsTask extends GuiTask<Rectangle> {
+    private final JList list;
+    private final int index;
+
+    GetItemBoundsTask(JList list, int index) {
+      this.list = list;
+      this.index = index;
+    }
+
+    protected Rectangle executeInEDT() {
+      return list.getCellBounds(index, index);
+    }
+  }
+
   /**
    * Returns the coordinates of the first item matching the given value.
    * @param list the target <code>JList</code>
@@ -408,7 +465,7 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param index the given index.
    * @return the value of the element under the given index.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    * @see #cellReader(JListCellReader)
    */

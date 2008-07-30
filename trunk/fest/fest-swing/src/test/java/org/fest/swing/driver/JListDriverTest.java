@@ -27,6 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
@@ -39,6 +40,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.GetJListSelectedItemTask.selectedIndexOf;
 import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -65,7 +67,11 @@ public class JListDriverTest {
     cellReader = new JListCellReaderStub();
     driver = new JListDriver(robot);
     driver.cellReader(cellReader);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() {
+        return new MyFrame();
+      }
+    }.run();
     dragList = frame.dragList;
     dropList = frame.dropList;
     robot.showWindow(frame);
@@ -77,7 +83,7 @@ public class JListDriverTest {
 
   public void shouldReturnLocationOfValue() {
     Point p = driver.pointAt(dragList, "two");
-    int index = dragList.locationToIndex(p);
+    int index = locationToIndex(dragList, p);
     assertThat(index).isEqualTo(1);
     assertCellReaderWasCalled();
   }
@@ -131,24 +137,40 @@ public class JListDriverTest {
   }
 
   public void shouldClickItemWithGivenText() {
-    dragList.setSelectedIndex(-1);
+    selectIndex(dragList, -1);
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     driver.clickItem(dragList, "two", RIGHT_BUTTON, 2);
     assertThat(recorder).clicked(RIGHT_BUTTON)
                         .timesClicked(2);
     Point pointClicked = recorder.pointClicked();
-    assertThat(dragList.locationToIndex(pointClicked)).isEqualTo(1);
+    assertThat(locationToIndex(dragList, pointClicked)).isEqualTo(1);
+  }
+
+  private void selectIndex(final JList list, final int index) {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        list.setSelectedIndex(index);
+      }
+    });
+  }
+
+  private Integer locationToIndex(final JList list, final Point p) {
+    return new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return list.locationToIndex(p);
+      }
+    }.run();
   }
 
   public void shouldSelectItemAtGivenIndex() {
     driver.selectItem(dragList, 2);
-    assertThat(dragList.getSelectedValue()).isEqualTo("three");
+    assertThat(selectedValueOf(dragList)).isEqualTo("three");
   }
 
   public void shouldNotSelectItemIfAlreadySelected() {
-    dragList.setSelectedIndex(1);
+    selectIndex(dragList, 1);
     driver.selectItem(dragList, 1);
-    assertThat(dragList.getSelectedIndex()).isEqualTo(1);
+    assertThat(selectedIndexOf(dragList)).isEqualTo(1);
   }
 
   public void shouldNotSelectItemAtGivenIndexIfListIsNotEnabled() {
@@ -159,8 +181,16 @@ public class JListDriverTest {
 
   public void shouldSelectItemWithGivenText() {
     driver.selectItem(dragList, "two");
-    assertThat(dragList.getSelectedValue()).isEqualTo("two");
+    assertThat(selectedValueOf(dragList)).isEqualTo("two");
     assertCellReaderWasCalled();
+  }
+
+  private Object selectedValueOf(final JList list) {
+    return new GuiTask<Object>() {
+      protected Object executeInEDT() throws Throwable {
+        return list.getSelectedValue();
+      }
+    }.run();
   }
 
   public void shouldNotSelectItemWithGivenTextIfListIsNotEnabled() {
@@ -183,7 +213,7 @@ public class JListDriverTest {
 
   public void shouldSelectItemsWithGivenText() {
     driver.selectItems(dragList, array("two", "three"));
-    assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
+    assertThat(selectedItemsOf(dragList)).isEqualTo(array("two", "three"));
     assertCellReaderWasCalled();
   }
 
@@ -195,7 +225,7 @@ public class JListDriverTest {
 
   public void shouldSelectItemsWithGivenIndices() {
     driver.selectItems(dragList, new int[] { 1, 2 });
-    assertThat(dragList.getSelectedValues()).isEqualTo(array("two", "three"));
+    assertThat(selectedItemsOf(dragList)).isEqualTo(array("two", "three"));
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -212,7 +242,7 @@ public class JListDriverTest {
 
   public void shouldSelectItemsWithGivenIndicesEvenIfIndexArrayHasOneElement() {
     driver.selectItems(dragList, new int[] { 1 });
-    assertThat(dragList.getSelectedValues()).isEqualTo(array("two"));
+    assertThat(selectedItemsOf(dragList)).isEqualTo(array("two"));
   }
 
   public void shouldNotSelectItemsWithGivenIndicesIfListIsNotEnabled() {
@@ -223,7 +253,7 @@ public class JListDriverTest {
 
   public void shouldSelectItemsInFluentRange() {
     driver.selectItems(dragList, from(0), to(1));
-    assertThat(dragList.getSelectedValues()).isEqualTo(array("one", "two"));
+    assertThat(selectedItemsOf(dragList)).isEqualTo(array("one", "two"));
   }
 
   public void shouldNotSelectItemsInFluentRangeIfListIsNotEnabled() {
@@ -234,7 +264,15 @@ public class JListDriverTest {
 
   public void shouldSelectItemsInGivenRange() {
     driver.selectItems(dragList, 0, 1);
-    assertThat(dragList.getSelectedValues()).isEqualTo(array("one", "two"));
+    assertThat(selectedItemsOf(dragList)).isEqualTo(array("one", "two"));
+  }
+
+  private Object[] selectedItemsOf(final JList list) {
+    return new GuiTask<Object[]>() {
+      protected Object[] executeInEDT() throws Throwable {
+        return list.getSelectedValues();
+      }
+    }.run();
   }
 
   public void shouldNotSelectItemsInGivenRangeIfListIsNotEnabled() {
@@ -255,13 +293,13 @@ public class JListDriverTest {
   }
 
   public void shouldPassIfSelectionIsEqualToExpectedOne() {
-    dragList.setSelectedIndex(0);
+    selectIndex(dragList, 0);
     driver.requireSelection(dragList, "one");
     assertCellReaderWasCalled();
   }
 
   public void shouldFailIfExpectingSelectionButThereIsNone() {
-    dragList.setSelectedIndex(-1);
+    selectIndex(dragList, -1);
     try {
       driver.requireSelection(dragList, "one");
       fail();
@@ -271,7 +309,7 @@ public class JListDriverTest {
   }
 
   public void shouldFailIfSelectionIsNotEqualToExpectedOne() {
-    dragList.setSelectedIndex(1);
+    selectIndex(dragList, 1);
     try {
       driver.requireSelection(dragList, "one");
       fail();
@@ -281,7 +319,11 @@ public class JListDriverTest {
   }
 
   public void shouldPassIfSelectedItemsIsEqualToExpectedOnes() {
-    dragList.setSelectedIndices(new int[] { 0, 1 });
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        dragList.setSelectedIndices(new int[] { 0, 1 });
+      }
+    });
     driver.requireSelectedItems(dragList, "one", "two");
     assertCellReaderWasCalled();
   }
@@ -292,7 +334,7 @@ public class JListDriverTest {
   }
 
   public void shouldFailIfExpectingSelectedItemsButThereIsNone() {
-    dragList.setSelectedIndex(-1);
+    selectIndex(dragList, -1);
     try {
       driver.requireSelectedItems(dragList, "one", "two");
       fail();
@@ -302,7 +344,7 @@ public class JListDriverTest {
   }
 
   public void shouldFailIfSelectedItemCountIsNotEqualToExpectedOnes() {
-    dragList.setSelectedIndex(2);
+    selectIndex(dragList, 2);
     try {
       driver.requireSelectedItems(dragList, "one", "two");
       fail();
@@ -312,7 +354,7 @@ public class JListDriverTest {
   }
 
   public void shouldFailIfSelectedItemsIsNotEqualToExpectedOnes() {
-    dragList.setSelectedIndex(2);
+    selectIndex(dragList, 2);
     try {
       driver.requireSelectedItems(dragList, "one");
       fail();
@@ -322,12 +364,12 @@ public class JListDriverTest {
   }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
-    dragList.setSelectedIndex(-1);
+    selectIndex(dragList, -1);
     driver.requireNoSelection(dragList);
   }
 
   public void shouldFailIfHasSelectionAndExpectingNoSelection() {
-    dragList.setSelectedIndex(0);
+    selectIndex(dragList, 0);
     try {
       driver.requireNoSelection(dragList);
       fail();
@@ -384,12 +426,16 @@ public class JListDriverTest {
   }
 
   private void clearAndDisableDragList() {
-    dragList.setSelectedIndex(-1);
-    dragList.setEnabled(false);
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        dragList.setSelectedIndex(-1);
+        dragList.setEnabled(false);
+      }
+    });
   }
 
   private void assertDragListHasNoSelection() {
-    assertThat(dragList.getSelectedIndex()).isEqualTo(-1);
+    assertThat(selectedIndexOf(dragList)).isEqualTo(-1);
   }
 
   private void assertCellReaderWasCalled() {
