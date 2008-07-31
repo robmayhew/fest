@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 import static org.fest.swing.util.AWT.isSharedInvisibleFrame;
 
 /**
@@ -55,7 +56,7 @@ class WindowFilter {
     if (c == null) return false;
     // TODO if ("sun.plugin.ConsoleWindow".equals(c.getClass().getName())) return !trackAppletConsole;
     if (ignored.containsKey(c)) return true;
-    if (c instanceof Window && isIgnored(c.getParent())) return true;
+    if (c instanceof Window && isIgnored(parentOf(c))) return true;
     return !(c instanceof Window) && isWindowIgnored(c);
   }
 

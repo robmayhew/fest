@@ -34,6 +34,7 @@ import static javax.swing.text.DefaultEditorKit.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.*;
 
@@ -196,10 +197,10 @@ public class JTextComponentDriver extends JComponentDriver {
   private void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
     Point origin = origin(textBox);
-    Container parent = textBox.getParent();
+    Container parent = parentOf(textBox);
     while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
       addRectangleCoordinatesToPoint(parent.getBounds(), origin);
-      parent = parent.getParent();
+      parent = parentOf(parent);
     }
     if (parent == null || parent instanceof CellRendererPane) return;
     super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(origin, r));

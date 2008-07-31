@@ -22,6 +22,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
@@ -50,16 +51,44 @@ public class JPopupMenuDriver extends JComponentDriver {
    * @return the contents of the pop-up menu as a <code>String</code> array.
    */
   public String[] menuLabelsOf(JPopupMenu popupMenu) {
-    MenuElement[] subElements = popupMenu.getSubElements();
+    MenuElement[] subElements = subElementsOf(popupMenu);
     String[] result = new String[subElements.length];
     for (int i = 0; i < subElements.length; i++) result[i] = asString(subElements[i]);
     return result;
   }
 
-  static String asString(MenuElement e) {
-    Component c = e.getComponent();
+  private MenuElement[] subElementsOf(JPopupMenu popupMenu) {
+    return new GetSubElementsTask(popupMenu).run();
+  }
+
+  private static class GetSubElementsTask extends GuiTask<MenuElement[]> {
+    private final JPopupMenu popupMenu;
+
+    GetSubElementsTask(JPopupMenu popupMenu) {
+      this.popupMenu = popupMenu;
+    }
+
+    protected MenuElement[] executeInEDT() throws Throwable {
+      return popupMenu.getSubElements();
+    }
+  }
+
+  static String asString(final MenuElement e) {
+    Component c = new GetMenuElementComponent(e).run();
     if (c instanceof JMenuItem) return textOf((JMenuItem)c);
     return "-";
+  }
+
+  private static class GetMenuElementComponent extends GuiTask<Component> {
+    private final MenuElement e;
+
+    GetMenuElementComponent(MenuElement e) {
+      this.e = e;
+    }
+
+    protected Component executeInEDT() throws Throwable {
+      return e.getComponent();
+    }
   }
 
   /**

@@ -22,6 +22,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+
 /**
  * Understands the information collected by the monitors in this package.
  *
@@ -69,7 +71,7 @@ class Windows {
   void markExisting(Window w) {
     synchronized(lock) {
       addWindowTo(w, open);
-      if (!w.isShowing()) addWindowTo(w, hidden);
+      if (!isShowing(w)) addWindowTo(w, hidden);
     }
   }
   

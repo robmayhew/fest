@@ -15,12 +15,13 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Component;
 
 import org.fest.swing.core.Condition;
+
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a condition that verifies that a <code>{@link Component}</code> is showing on the screen.
@@ -58,7 +59,7 @@ public class WaitForComponentToShowCondition extends Condition {
    * <code>false</code> otherwise
    */
   public boolean test() {
-    return c.isShowing();
+    return isShowing(c);
   }
 
 }

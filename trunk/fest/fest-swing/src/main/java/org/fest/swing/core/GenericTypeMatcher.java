@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+
 /**
  * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 
  * custom search criteria.
@@ -55,7 +57,7 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
-      return (!requireShowing() || c.isShowing()) && isMatching((T)c);
+      return (!requireShowing() || isShowing(c)) && isMatching((T)c);
     } catch(ClassCastException ignored) {
       return false;
     }

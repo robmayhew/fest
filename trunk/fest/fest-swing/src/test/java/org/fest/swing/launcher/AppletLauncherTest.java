@@ -15,21 +15,23 @@
  */
 package org.fest.swing.launcher;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.applet.Applet;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
+
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.MyApplet;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link AppletLauncher}</code>.
@@ -178,7 +180,7 @@ import org.testng.annotations.Test;
   }
 
   private void assertAppletWasLaunched() {
-    assertThat(viewer.isShowing()).isTrue();
+    assertThat(isShowing(viewer)).isTrue();
     assertThat(viewer.applet()).isInstanceOf(MyApplet.class);
   }
 }

@@ -48,6 +48,7 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
 import static org.fest.swing.task.GetComponentLocationOnScreenTask.locationOnScreenOf;
 import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -76,17 +77,8 @@ public class RobotFixtureTest {
     textFieldWithPopup = frame.textFieldWithPopup;
     textFieldWithoutPopup = frame.textFieldWithoutPopup;
     robot.showWindow(frame); // implicitly test 'showWindow(Window)'
-    assertThatFrameIsShowing();
-    assertThatFrameIsInCorrectPosition(new Point(100, 100));
-  }
-
-  private void assertThatFrameIsShowing() {
-    boolean showing = new GuiTask<Boolean>() {
-      protected Boolean executeInEDT() {
-        return frame.isShowing();
-      }
-    }.run();
-    assertThat(showing).isTrue();
+    assertThat(isShowing(frame)).isTrue();
+    assertThat(locationOnScreenOf(frame)).isEqualTo(new Point(100, 100));
   }
 
   @AfterMethod public void tearDown() {
@@ -126,10 +118,6 @@ public class RobotFixtureTest {
     assertThat(sizeOf(window)).isEqualTo(size);
     assertThat(window.packed()).isFalse();
     assertThat(locationOnScreenOf(window)).isEqualTo(new Point(0, 0));
-  }
-
-  private void assertThatFrameIsInCorrectPosition(Point expected) {
-    assertThat(locationOnScreenOf(frame)).isEqualTo(expected);
   }
 
   public void shouldClickComponent() {
@@ -282,9 +270,9 @@ public class RobotFixtureTest {
     TestWindow w = new TestWindow(getClass());
     w.display();
     w.setVisible(false);
-    assertThat(w.isShowing()).isFalse();
+    assertThat(isShowing(w)).isFalse();
     robot.close(w);
-    assertThat(w.isShowing()).isFalse();
+    assertThat(isShowing(w)).isFalse();
   }
 
   public void shouldGiveFocus() {

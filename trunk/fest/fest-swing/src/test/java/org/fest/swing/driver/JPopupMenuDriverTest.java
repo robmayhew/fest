@@ -15,20 +15,21 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
 import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestWindow;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
@@ -50,7 +51,11 @@ public class JPopupMenuDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new MyFrame();
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     robot.showWindow(frame);
     driver = new JPopupMenuDriver(robot);
   }
@@ -65,17 +70,24 @@ public class JPopupMenuDriverTest {
   }
 
   public void shouldReturnDashIfNotMenuItem() {
-    final MenuElement menuElement = createMock(MenuElement.class);
-    final JButton button = new JButton();
-    new EasyMockTemplate(menuElement) {
-      protected void expectations() {
-        expect(menuElement.getComponent()).andReturn(button);
+    class MyMenuElement implements MenuElement {
+      private final JButton button = new JButton();
+
+      public Component getComponent() {
+        return button;
       }
 
-      protected void codeToTest() {
-        assertThat(JPopupMenuDriver.asString(menuElement)).isEqualTo("-");
+      public MenuElement[] getSubElements() { return null; }
+      public void menuSelectionChanged(boolean isIncluded) {}
+      public void processKeyEvent(KeyEvent event, MenuElement[] path, MenuSelectionManager manager) {}
+      public void processMouseEvent(MouseEvent event, MenuElement[] path, MenuSelectionManager manager) {}
+    }
+    MenuElement e = new GuiTask<MenuElement>() {
+      protected MenuElement executeInEDT() throws Throwable {
+        return new MyMenuElement();
       }
     }.run();
+    assertThat(JPopupMenuDriver.asString(e)).isEqualTo("-");
   }
 
   public void shouldReturnsPopupLabels() {
@@ -85,7 +97,7 @@ public class JPopupMenuDriverTest {
 
   public void shouldFindMenuItemByName() {
     JMenuItem found = driver.menuItem(popupMenu(), "first");
-    assertThat(found).isSameAs(frame.firstMenuItem);
+    assertThat(found).isSameAs(frame.menuItem1);
   }
 
   public void shouldFindMenuItemWithGivenMatcher() {
@@ -94,7 +106,7 @@ public class JPopupMenuDriverTest {
         return "Second".equals(textOf(menuItem));
       }
     });
-    assertThat(found).isSameAs(frame.secondMenuItem);
+    assertThat(found).isSameAs(frame.menuItem2);
   }
 
   private JPopupMenu popupMenu() {
@@ -104,18 +116,20 @@ public class JPopupMenuDriverTest {
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    private final JMenuItem firstMenuItem = new JMenuItem("First");
-    private final JMenuItem secondMenuItem = new JMenuItem("Second");
-    private final JTextField withPopup = new JTextField("With Pop-up Menu");
-    private final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
+    final JTextField withPopup = new JTextField("With Pop-up Menu");
+    
+    final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
+    
+    final JMenuItem menuItem1 = new JMenuItem("First");
+    final JMenuItem menuItem2 = new JMenuItem("Second");
 
     MyFrame() {
       super(JPopupMenuDriverTest.class);
       add(withPopup);
       withPopup.setComponentPopupMenu(popupMenu);
-      popupMenu.add(firstMenuItem);
-      firstMenuItem.setName("first");
-      popupMenu.add(secondMenuItem);
+      popupMenu.add(menuItem1);
+      menuItem1.setName("first");
+      popupMenu.add(menuItem2);
     }
   }
 }

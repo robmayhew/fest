@@ -20,8 +20,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.task.GetAbstractButtonTextTask;
 
+import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.task.GetJPopupMenuInvokerTask.invokerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -60,14 +61,10 @@ public class JMenuItemMatcher implements ComponentMatcher {
     return textOf(menuItem);
   }
 
-  private String textOf(JMenuItem menuItem) {
-    return GetAbstractButtonTextTask.textOf(menuItem);
-  }
-  
   private Component parentOf(JMenuItem menuItem) {
-    Component parent = menuItem.getParent();
+    Component parent = parentOf(menuItem);
     if (parent instanceof JPopupMenu) 
-      parent = ((JPopupMenu) parent).getInvoker();
+      parent = invokerOf((JPopupMenu)parent);
     return parent;
   }
 

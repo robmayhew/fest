@@ -28,6 +28,7 @@ import org.fest.swing.testing.MyApplet;
 import static javax.swing.SwingUtilities.getAncestorOfClass;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -128,12 +129,7 @@ public class AppletViewerGuiTest {
   }
 
   private void assertThatAppletIsShowing() {
-    boolean showing = new GuiTask<Boolean>() {
-      protected Boolean executeInEDT() {
-        return applet.isShowing();
-      }
-    }.run();
-    assertThat(showing).isTrue();
+    assertThat(isShowing(applet)).isTrue();
   }
   
   private void assertThatAppletIsLoaded() {

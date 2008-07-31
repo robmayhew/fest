@@ -23,6 +23,8 @@ import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
+
 /**
  * Understands a mapping of unique event queues to the set of root windows found on each queue.
  *
@@ -41,7 +43,7 @@ class WindowEventQueueMapping {
     EventQueue queue = component.getToolkit().getSystemEventQueue();
     Map<Window, Boolean> windowMapping = queueMap.get(queue);
     if (windowMapping == null) windowMapping = createWindowMapping(queue);
-    if (!(component instanceof Window) || component.getParent() != null) return;
+    if (!(component instanceof Window) || parentOf(component) != null) return;
     windowMapping.put((Window)component, TRUE);
   }
 

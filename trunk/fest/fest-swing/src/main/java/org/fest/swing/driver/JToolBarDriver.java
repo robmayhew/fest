@@ -29,6 +29,7 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.reflect.core.Reflection.field;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -61,7 +62,7 @@ public class JToolBarDriver extends JComponentDriver {
     if (ui instanceof BasicToolBarUI) return ((BasicToolBarUI) ui).isFloating();
     // Have to guess; probably ought to check for sibling components
     Window w = getWindowAncestor(toolBar);
-    return !(w instanceof Frame) && toolBar.getParent().getComponentCount() == 1;
+    return !(w instanceof Frame) && parentOf(toolBar).getComponentCount() == 1;
   }
 
   /**

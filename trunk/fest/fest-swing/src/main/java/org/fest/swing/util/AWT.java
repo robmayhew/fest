@@ -23,12 +23,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fest.swing.task.GetComponentLocationOnScreenTask;
+import org.fest.swing.task.GetJPopupMenuInvokerTask;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.task.GetComponentNameTask.nameOf;
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
 
@@ -126,8 +129,8 @@ public class AWT {
    *         <code>Component</code> is not on a pop-up of any sort.
    */
   public static Component invokerOf(Component c) {
-    if (c instanceof JPopupMenu) return ((JPopupMenu) c).getInvoker();
-    Container parent = c.getParent();
+    if (c instanceof JPopupMenu) return GetJPopupMenuInvokerTask.invokerOf((JPopupMenu)c);
+    Container parent = parentOf(c);
     return parent != null ? invokerOf(parent) : null;
   }
 
@@ -142,10 +145,10 @@ public class AWT {
   public static Point locationOnScreenOf(Component c) {
     if (!isAWTTreeLockHeld()) return new Point(GetComponentLocationOnScreenTask.locationOnScreenOf(c));
     // TODO access from EDT
-    if (!c.isShowing()) return null;
+    if (!isShowing(c)) return null;
     Point location = new Point(c.getLocation());
     if (c instanceof Window) return location;
-    Container parent = c.getParent();
+    Container parent = parentOf(c);
     if (parent == null) return null;
     Point parentLocation = locationOnScreenOf(parent);
     location.translate(parentLocation.x, parentLocation.y);
@@ -173,8 +176,8 @@ public class AWT {
     Component source = c;
     Point coordinates = where;
     while (!(c instanceof Window) && !eventTypeEnabled(source, eventId)) {
-      coordinates = convertPoint(source, coordinates.x, coordinates.y, source.getParent());
-      source = source.getParent();
+      coordinates = convertPoint(source, coordinates.x, coordinates.y, parentOf(source));
+      source = parentOf(source);
     }
     return new MouseEventTarget(source, coordinates);
   }

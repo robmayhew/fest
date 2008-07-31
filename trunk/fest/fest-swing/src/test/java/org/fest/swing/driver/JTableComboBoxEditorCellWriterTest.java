@@ -15,13 +15,15 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import javax.swing.JComboBox;
+
+import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 
 /**
  * Tests for <code>{@link JTableComboBoxEditorCellWriter}</code>.
@@ -45,9 +47,9 @@ public class JTableComboBoxEditorCellWriterTest extends JTableCellWriterTestCase
     int column = 2;
     JComboBox editor = (JComboBox)writer().editorForCell(table(), row, column);
     writer().startCellEditing(table(), row, column);
-    assertThat(editor.isShowing()).isTrue();
+    assertThat(isShowing(editor)).isTrue();
     writer().cancelCellEditing(table(), row, column);
     assertThat(valueAt(row, column)).isEqualTo("Snowboarding");
-    assertThat(editor.isShowing()).isFalse();
+    assertThat(isShowing(editor)).isFalse();
   }
 }

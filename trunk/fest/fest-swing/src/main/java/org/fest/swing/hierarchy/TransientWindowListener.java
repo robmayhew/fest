@@ -20,6 +20,7 @@ import java.awt.event.AWTEventListener;
 
 import javax.swing.SwingUtilities;
 
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 import static org.fest.swing.util.AWTEvents.*;
 
 /**
@@ -65,7 +66,7 @@ public final class TransientWindowListener implements AWTEventListener {
   }
 
   private void filterIfParentIsFiltered(Window w) {
-    if (!filter.isIgnored(w.getParent())) return;
+    if (!filter.isIgnored(parentOf(w))) return;
     filter.ignore(w);
   }
 

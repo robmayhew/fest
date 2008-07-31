@@ -24,6 +24,8 @@ import java.util.Stack;
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.MouseEvent.*;
 
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+
 /**
  * Understands a description mouse-related operations.
  *
@@ -105,7 +107,7 @@ class MouseInfo {
     if (componentStack.empty()) return null;
     Component c = componentStack.peek().get();
     // Make sure we don't return a component that has gone away.
-    if (c != null && c.isShowing()) return c;
+    if (c != null && isShowing(c)) return c;
     componentStack.pop();
     locationStack.pop();
     screenLocationStack.pop();

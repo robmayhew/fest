@@ -15,15 +15,17 @@
  */
 package org.fest.swing.monitor;
 
-import static java.awt.AWTEvent.*;
-import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
-import static java.awt.event.WindowEvent.*;
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
+
+import static java.awt.AWTEvent.*;
+import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
+import static java.awt.event.WindowEvent.*;
+
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 
 /**
  * Understands a monitor for components and event queues.
@@ -90,7 +92,7 @@ final class ContextMonitor implements AWTEventListener {
   }
 
   private void recognizeAsClosedWindow(Component component) {
-    if (component.getParent() == null) context.removeContextFor(component);
-    if (component instanceof Window) windows.markAsClosed((Window) component);
+    if (parentOf(component) == null) context.removeContextFor(component);
+    if (component instanceof Window) windows.markAsClosed((Window)component);
   }
 }

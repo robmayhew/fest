@@ -51,6 +51,8 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
+import static org.fest.swing.task.GetJPopupMenuInvokerTask.invokerOf;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
@@ -162,7 +164,7 @@ public class RobotFixture implements Robot {
 
   private void waitForWindow(Window w) {
     long start = currentTimeMillis();
-    while ((isRobotMode() && !windowMonitor.isWindowReady(w)) || !w.isShowing()) {
+    while ((isRobotMode() && !windowMonitor.isWindowReady(w)) || !isShowing(w)) {
       long elapsed = currentTimeMillis() - start;
       if (elapsed > WINDOW_DELAY)
         throw new WaitTimedOutError(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
@@ -172,7 +174,7 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public void close(Window w) {
-    if (!w.isShowing()) return;
+    if (!isShowing(w)) return;
     focus(w);
     // Move to a corner and "pretend" to use the window manager control
     try {
@@ -429,7 +431,7 @@ public class RobotFixture implements Robot {
     while (!isReadyForInput(c)) {
       if (c instanceof JPopupMenu) {
         // wiggle the mouse over the parent menu item to ensure the sub-menu shows
-        Component invoker = ((JPopupMenu)c).getInvoker();
+        Component invoker = invokerOf((JPopupMenu)c);
         if (invoker instanceof JMenu)
           jitter(invoker, new Point(invoker.getWidth() / 2, invoker.getHeight() / 2));
       }
@@ -625,10 +627,10 @@ public class RobotFixture implements Robot {
 
   /** ${@inheritDoc} */
   public boolean isReadyForInput(Component c) {
-    if (isAWTMode()) return c.isShowing();
+    if (isAWTMode()) return isShowing(c);
     Window w = ancestorOf(c);
     if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
-    return c.isShowing() && windowMonitor.isWindowReady(w);
+    return isShowing(c) && windowMonitor.isWindowReady(w);
   }
 
   private boolean isAWTMode() {

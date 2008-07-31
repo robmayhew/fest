@@ -25,6 +25,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
@@ -49,7 +52,11 @@ public class JMenuItemDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JMenuItemDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     menuItem = frame.menuNew;
     robot.showWindow(frame);
   }
@@ -58,7 +65,9 @@ public class JMenuItemDriverTest {
     robot.cleanUp();
   }
 
-  public void shouldClickMenu() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldClickMenu(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     ClickRecorder clickRecorder = attachTo(menuItem);
     driver.click(menuItem);
     clickRecorder.wasClicked();

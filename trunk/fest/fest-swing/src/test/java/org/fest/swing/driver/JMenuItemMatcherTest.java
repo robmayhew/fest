@@ -27,16 +27,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JMenuItemMatcher}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI) 
 public class JMenuItemMatcherTest {
 
   private ComponentFinder finder;
@@ -45,7 +48,11 @@ public class JMenuItemMatcherTest {
   
   @BeforeMethod public void setUp() {
     finder = finderWithNewAwtHierarchy();
-    frame = new MyFrame();
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     frame.display();
     matcher = new JMenuItemMatcher("Logout", "Logout");
   }
@@ -54,12 +61,12 @@ public class JMenuItemMatcherTest {
     frame.destroy();
   }
   
-  @Test public void shouldFindSecondLogoutMenu() {
+  public void shouldFindSecondLogoutMenu() {
     Component found = finder.find(frame, matcher);
     assertThat(found).isSameAs(frame.logoutMenuItem);
   }
   
-  @Test public void shouldShowPathInToString() {
+  public void shouldShowPathInToString() {
     assertThat(matcher.toString()).contains("label='Logout|Logout'");
   }
   

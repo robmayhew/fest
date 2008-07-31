@@ -33,6 +33,7 @@ import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 import static org.fest.util.Collections.list;
 
 /**
@@ -92,11 +93,11 @@ public class ApplicationLauncherTest {
   }
   
   private void assertFrameIsShowing() {
-    FrameFixture frame = WindowFinder.findFrame(new GenericTypeMatcher<Frame>() {
+    FrameFixture frameFixture = WindowFinder.findFrame(new GenericTypeMatcher<Frame>() {
       protected boolean isMatching(Frame frame) {
-        return "Java Application".equals(frame.getTitle()) && frame.isShowing();
+        return "Java Application".equals(frame.getTitle()) && isShowing(frame);
       }
     }).using(robot);
-    assertThat(frame).isNotNull();
+    assertThat(frameFixture).isNotNull();
   }
 }

@@ -15,8 +15,6 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Window;
 
 import javax.swing.JButton;
@@ -24,10 +22,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
-import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.TestWindow;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 
 /**
  * Tests for <code>{@link WindowAncestorFinder}</code>.
@@ -71,7 +73,7 @@ public class WindowAncestorFinderTest {
 
   @Test public void shouldReturnParentAsAncestorIfComponentIsMenuElementAndInvokerIsNull() {
     Window ancestor = WindowAncestorFinder.ancestorOf(frame.popupMenu);
-    assertThat(ancestor).isSameAs(frame.popupMenu.getParent());
+    assertThat(ancestor).isSameAs(parentOf(frame.popupMenu));
   }
 
   private static class MyFrame extends TestWindow {

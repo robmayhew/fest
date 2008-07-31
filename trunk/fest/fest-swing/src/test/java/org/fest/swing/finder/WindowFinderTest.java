@@ -39,6 +39,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.GetComponentNameTask.nameOf;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -122,7 +123,7 @@ public class WindowFinderTest {
     launchFrame();
     GenericTypeMatcher<JFrame> matcher = new GenericTypeMatcher<JFrame>() {
       protected boolean isMatching(JFrame frame) {
-        return "frame".equals(nameOf(frame)) && frame.isShowing();
+        return "frame".equals(nameOf(frame)) && isShowing(frame);
       }
     };
     FrameFixture frame = WindowFinder.findFrame(matcher).using(launcher.robot);
@@ -201,7 +202,7 @@ public class WindowFinderTest {
     launchDialog();
     GenericTypeMatcher<JDialog> matcher = new GenericTypeMatcher<JDialog>() {
       protected boolean isMatching(JDialog dialog) {
-        return "dialog".equals(nameOf(dialog)) && dialog.isShowing();
+        return "dialog".equals(nameOf(dialog)) && isShowing(dialog);
       }
     };
     DialogFixture dialog = WindowFinder.findDialog(matcher).using(launcher.robot);

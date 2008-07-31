@@ -23,6 +23,7 @@ import java.awt.Window;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
 import static org.fest.reflect.core.Reflection.staticField;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
 
 /**
  * Understands lookup of a <code>{@link Component}</code> owning the input focus.
@@ -49,7 +50,7 @@ public final class FocusOwnerFinder {
     for (Container c : new ExistingHierarchy().roots()) {
       if (!(c instanceof Window)) continue;
       Window w = (Window) c;
-      if (w.isShowing() && (focus = focusOwner(w)) != null) break;
+      if (isShowing(w) && (focus = focusOwner(w)) != null) break;
     }
     return focus;
   }

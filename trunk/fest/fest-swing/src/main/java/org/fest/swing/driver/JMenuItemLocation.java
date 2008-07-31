@@ -21,6 +21,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
+import static org.fest.swing.task.GetJPopupMenuInvokerTask.invokerOf;
+import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+
 /**
  * Understands the location of a <code>{@link JMenuItem}</code>.
  *
@@ -38,10 +42,10 @@ public final class JMenuItemLocation {
    * @param menuItem the target <code>JMenuItem</code>.
    */
   public JMenuItemLocation(JMenuItem menuItem) {
-    parentOrInvoker = menuItem.getParent();
+    parentOrInvoker = parentOf(menuItem);
     if (parentOrInvoker instanceof JPopupMenu) {
       parentPopup = (JPopupMenu)parentOrInvoker;
-      parentOrInvoker = ((JPopupMenu)parentOrInvoker).getInvoker();
+      parentOrInvoker = invokerOf((JPopupMenu)parentOrInvoker);
     }
     inMenuBar = parentOrInvoker instanceof JMenuBar;
   }
@@ -49,7 +53,7 @@ public final class JMenuItemLocation {
   /**
    * Indicates whether the <code>{@link JMenuItem}</code> is in a <code>{@link JMenuBar}</code>.
    * @return <code>true</code> if the <code>JMenuItem</code> is in a <code>JMenuBar</code>, <code>false</code> 
-   *         otherwise.
+   * otherwise.
    */
   public boolean inMenuBar() {
     return inMenuBar;
@@ -58,11 +62,11 @@ public final class JMenuItemLocation {
   /**
    * Indicates whether the parent of the <code>{@link JMenuItem}</code> is another menu.
    * @return <code>true</code> if the parent of the <code>JMenuItem</code> is another menu, <code>false</code> 
-   *         otherwise.
+   * otherwise.
    */
   public boolean isParentAMenu() {
     if (!(parentOrInvoker instanceof JMenuItem)) return false;
-    return parentPopup == null || !parentPopup.isShowing();
+    return parentPopup == null || !isShowing(parentPopup);
   }
   
   /**

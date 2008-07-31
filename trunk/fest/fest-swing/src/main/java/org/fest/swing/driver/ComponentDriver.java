@@ -33,6 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
+import static org.fest.swing.task.GetJPopupMenuInvokerTask.invokerOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.util.Platform.*;
@@ -362,7 +363,7 @@ public class ComponentDriver {
     while (!robot.isReadyForInput(c)) {
       if (c instanceof JPopupMenu) {
         // move the mouse over the parent menu item to ensure the sub-menu shows
-        Component invoker = ((JPopupMenu)c).getInvoker();
+        Component invoker = invokerOf((JPopupMenu)c);
         if (invoker instanceof JMenu) robot.jitter(invoker);
       }
       if (watch.isTimeOut()) return false;

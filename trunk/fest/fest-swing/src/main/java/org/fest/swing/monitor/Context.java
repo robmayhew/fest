@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.fest.swing.task.GetComponentParentTask.parentOf;
 import static org.fest.util.Collections.list;
 
 /**
@@ -90,8 +91,8 @@ class Context {
   EventQueue eventQueueFor(Component c) {
     Component component = c;
     // Components above the applet in the hierarchy may or may not share the same context with the applet itself.
-    while (!(component instanceof java.applet.Applet) && component.getParent() != null)
-      component = component.getParent();
+    while (!(component instanceof java.applet.Applet) && parentOf(component) != null)
+      component = parentOf(component);
     synchronized (lock) {
       return eventQueueMapping.queueFor(component);
     }
