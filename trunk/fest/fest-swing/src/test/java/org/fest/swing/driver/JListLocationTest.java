@@ -1,16 +1,16 @@
 /*
  * Created on Feb 24, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -24,9 +24,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.TestList;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -45,25 +46,33 @@ public class JListLocationTest {
   private Robot robot;
   private JList list;
   private JListLocation location;
-  
+
   @BeforeMethod public void setUp() {
     location = new JListLocation();
     robot = robotWithNewAwtHierarchy();
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     list = frame.list;
     robot.showWindow(frame);
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   public void shouldReturnLocationOfIndex() {
-    Point p = location.pointAt(list, 2);
-    int index = list.locationToIndex(p);
+    final Point p = location.pointAt(list, 2);
+    int index = new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return list.locationToIndex(p);
+      }
+    }.run();
     assertThat(index).isEqualTo(2);
   }
-  
+
   public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForLocation() {
     try {
       location.pointAt(list, 8);
@@ -72,12 +81,12 @@ public class JListLocationTest {
       assertThat(expected).message().isEqualTo("Item index (8) should be between [0] and [2] (inclusive)");
     }
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final TestList list = new TestList("one", "two", "three");
-    
+
     MyFrame() {
       super(JListLocationTest.class);
       add(list);

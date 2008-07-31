@@ -20,8 +20,11 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 
+import org.fest.swing.core.GuiTask;
+
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.task.GetJListSizeTask.sizeOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -37,20 +40,34 @@ public class JListLocation {
    * @param list the target <code>JList</code>.
    * @param index the given index.
    * @return the coordinates of the item at the given index.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
-  public Point pointAt(JList list, int index) {
+  public Point pointAt(final JList list, final int index) {
     validate(list, index);
-    Rectangle rect = list.getCellBounds(index, index);
+    Rectangle rect = new GetCellBoundsTask(index, list).run();
     return new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
+  }
+
+  private static class GetCellBoundsTask extends GuiTask<Rectangle> {
+    private final int index;
+    private final JList list;
+
+    GetCellBoundsTask(int index, JList list) {
+      this.index = index;
+      this.list = list;
+    }
+
+    protected Rectangle executeInEDT() throws Throwable {
+      return list.getCellBounds(index, index);
+    }
   }
 
   /**
    * Verifies that the given index is valid.
    * @param list the target <code>JList</code>.
    * @param index the given index.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
   public void validate(JList list, int index) {
@@ -59,9 +76,5 @@ public class JListLocation {
     throw new IndexOutOfBoundsException(concat(
         "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [",  valueOf(itemCount - 1),
         "] (inclusive)"));
-  }
-
-  private int sizeOf(JList list) {
-    return list.getModel().getSize();
   }
 }

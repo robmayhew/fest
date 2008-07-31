@@ -40,6 +40,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.task.GetJListSelectedItemTask.selectedIndexOf;
+import static org.fest.swing.task.GetJListSizeTask.sizeOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
@@ -101,22 +102,6 @@ public class JListDriver extends JComponentDriver {
     for (int i = 0; i < selectionCount; i++)
       values[i] = value(list, selectedIndices[i]);
     return values;
-  }
-
-  private int sizeOf(final JList list) {
-    return new GetSizeTask(list).run();
-  }
-
-  private static class GetSizeTask extends GuiTask<Integer> {
-    private final JList list;
-
-    GetSizeTask(JList list) {
-      this.list = list;
-    }
-
-    protected Integer executeInEDT() throws Throwable {
-      return list.getModel().getSize();
-    }
   }
 
   /**

@@ -18,6 +18,8 @@ package org.fest.swing.driver;
 import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -29,19 +31,22 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
 public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter(Robot robot) {
     return new BasicJTableCellWriter(robot);
   }
 
-  public void shouldSelectItemInComboBoxEditor() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectItemInComboBoxEditor(EventMode eventMode) {
+    robot().settings().eventMode(eventMode);
     writer().enterValue(table(), 0, 2, "Pool");
     assertThat(valueAt(0, 2)).isEqualTo("Pool");
   }
 
-  public void shouldSelectItemInCheckBoxEditor() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectItemInCheckBoxEditor(EventMode eventMode) {
+    robot().settings().eventMode(eventMode);
     int row = 0;
     int column = 4;
     writer().enterValue(table(), row, column, "false");
@@ -52,7 +57,9 @@ public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
     assertThat(valueAt(row,column)).isEqualTo(false);
   }
 
-  public void shouldEnterTextInTextComponentEditor() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldEnterTextInTextComponentEditor(EventMode eventMode) {
+    robot().settings().eventMode(eventMode);
     writer().enterValue(table(), 4, 3, "8");
     assertThat(valueAt(4, 3)).isEqualTo(8);
   }

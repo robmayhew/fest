@@ -20,6 +20,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.listener.EventDispatchThreadedEventListener;
 
 import static java.awt.AWTEvent.*;
@@ -95,6 +96,8 @@ public class InputState {
       eventScreenLocation = locationOnScreenOf(event.getComponent());
     } catch (IllegalComponentStateException e) {
       // component might be hidden by the time we process this event
+    } catch (UnexpectedException e) {
+      if (!(e.getCause() instanceof IllegalComponentStateException)) throw e;
     }
     synchronized (this) {
       lastEventTime(event);

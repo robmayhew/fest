@@ -353,7 +353,7 @@ public class RobotFixture implements Robot {
     eventGenerator().pressMouse(c, where, mask);
     for (int i = times; i > 1; i--) {
       eventGenerator().releaseMouse(mask);
-      eventGenerator().pressMouse(mask);
+      eventGenerator().pressMouse(c, where, mask);
     }
     settings.delayBetweenEvents(delayBetweenEvents);
     eventGenerator().releaseMouse(mask);
@@ -419,6 +419,7 @@ public class RobotFixture implements Robot {
     if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
     eventGenerator().moveMouse(c, x, y);
+    waitForIdle();
   }
 
   // Wait the given number of milliseconds for the component to be showing and ready.
@@ -575,7 +576,7 @@ public class RobotFixture implements Robot {
       // Force a yield
       pause();
       // Abbot: this does not detect invocation events (i.e. what gets posted with EventQueue.invokeLater), so if
-      // someone is repeatedly posting one, we might get stuck. Not too worried, since if a Runnable keeps calling 
+      // someone is repeatedly posting one, we might get stuck. Not too worried, since if a Runnable keeps calling
       // invokeLater on itself, *nothing* else gets much chance to run, so it seems to be a bad programming practice.
     } while (eventQueue.peekEvent() != null);
   }

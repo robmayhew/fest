@@ -26,6 +26,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -90,26 +92,34 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  public void shouldNotIconifyAlreadyIconifiedInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotIconifyAlreadyIconifiedInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     setIcon(true);
     driver.iconify(internalFrame);
     assertThat(isIconified(internalFrame)).isTrue();
   }
 
-  public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     setIcon(false);
     driver.deiconify(internalFrame);
     assertThat(isIconified(internalFrame)).isFalse();
   }
 
-  public void shouldIconifyAndDeiconifyInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldIconifyAndDeiconifyInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.iconify(internalFrame);
     assertThat(isIconified(internalFrame)).isTrue();
     driver.deiconify(internalFrame);
     assertThat(isIconified(internalFrame)).isFalse();
   }
 
-  public void shouldThrowErrorIfIconifyingFrameThatIsNotIconifiable() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfIconifyingFrameThatIsNotIconifiable(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     robot.invokeAndWait(new Runnable() {
       public void run() {
         internalFrame.setIconifiable(false);
@@ -124,18 +134,24 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  public void shouldMaximizeInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldMaximizeInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.maximize(internalFrame);
     assertThat(isMaximized()).isTrue();
   }
 
-  public void shouldMaximizeIconifiedInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldMaximizeIconifiedInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     setIcon(true);
     driver.maximize(internalFrame);
     assertThat(isMaximized()).isTrue();
   }
 
-  public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     robot.invokeAndWait(new Runnable() {
       public void run() {
         internalFrame.setMaximizable(false);
@@ -150,13 +166,17 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  public void shouldNormalizeInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNormalizeInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.maximize(internalFrame);
     driver.normalize(internalFrame);
     assertIsNormalized();
   }
 
-  public void shouldNormalizeIconifiedInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNormalizeIconifiedInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     setIcon(true);
     driver.normalize(internalFrame);
     assertIsNormalized();
@@ -184,17 +204,23 @@ public class JInternalFrameDriverTest {
     }.run();
   }
 
-  public void shouldMoveInternalFrameToFront() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldMoveInternalFrameToFront(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.moveToFront(internalFrame);
     assertThat(desktopPane.getComponentZOrder(internalFrame)).isEqualTo(0);
   }
 
-  public void shouldMoveInternalFrameToBack() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldMoveInternalFrameToBack(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.moveToBack(internalFrame);
     assertThat(desktopPane.getComponentZOrder(internalFrame)).isEqualTo(1);
   }
 
-  public final void shouldResizeInternalFrameToGivenSize() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public final void shouldResizeInternalFrameToGivenSize(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     FluentDimension newSize = internalFrameSize().addToWidth(20).addToHeight(40);
     driver.resize(internalFrame, newSize.width, newSize.height);
     assertThat(sizeOf(internalFrame)).isEqualTo(newSize);
@@ -204,7 +230,9 @@ public class JInternalFrameDriverTest {
     return new FluentDimension(sizeOf(internalFrame));
   }
 
-  public final void shouldMoveInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public final void shouldMoveInternalFrame(EventMode eventModel) {
+    robot.settings().eventMode(eventModel);
     Point p = internalFrameLocation().addToX(10).addToY(10);
     driver.moveTo(internalFrame, p);
     assertThat(internalFrameLocation()).isEqualTo(p);
@@ -218,7 +246,9 @@ public class JInternalFrameDriverTest {
     }.run());
   }
 
-  public void shouldCloseInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldCloseInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.close(internalFrame);
     boolean closed = new GuiTask<Boolean>() {
       protected Boolean executeInEDT() throws Throwable {
@@ -228,7 +258,9 @@ public class JInternalFrameDriverTest {
     assertThat(closed).isTrue();
   }
 
-  public void shouldThrowErrorIfClosingFrameThatIsNotClosable() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfClosingFrameThatIsNotClosable(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     robot.invokeAndWait(new Runnable() {
       public void run() {
         internalFrame.setClosable(false);
@@ -243,13 +275,17 @@ public class JInternalFrameDriverTest {
     }
   }
 
-  public void shouldResizeInternalFrame() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldResizeInternalFrame(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     Dimension newSize = new FluentDimension(sizeOf(internalFrame)).addToWidth(60).addToHeight(60);
     driver.resizeTo(internalFrame, newSize);
     assertThat(sizeOf(internalFrame)).isEqualTo(newSize);
   }
 
-  public void shouldResizeWidth() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldResizeWidth(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     int newWidth = 600;
     assertThat(internalFrameWidth()).isNotEqualTo(newWidth);
     driver.resizeWidthTo(internalFrame, newWidth);
@@ -264,7 +300,9 @@ public class JInternalFrameDriverTest {
     }.run();
   }
 
-  public void shouldResizeHeight() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldResizeHeight(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     int newHeight = 600;
     assertThat(internalFrameHeight()).isNotEqualTo(newHeight);
     driver.resizeHeightTo(internalFrame, newHeight);
