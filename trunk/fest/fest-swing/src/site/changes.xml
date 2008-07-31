@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.0b2" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="fix" issue="165" due-to="filimono">
+        RobotFixture now specifies the coordinates to click on when using AWT event mode.
+      </action>
       <action dev="alruiz" type="fix" issue="186" due-to="Michael Hüttermann">
         BasicJTableCellReader obtains the value of a cell from a JTable, not from a TableModel anymore.
       </action>
