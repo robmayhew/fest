@@ -16,10 +16,14 @@
 package org.fest.swing.driver;
 
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JScrollBar;
 
-import static java.awt.Adjustable.HORIZONTAL;
+import org.fest.swing.core.GuiTask;
+
+import static java.awt.Adjustable.*;
 
 /**
  * Understands encapsulation of a location in a <code>{@link JScrollBar}</code>.
@@ -28,9 +32,20 @@ import static java.awt.Adjustable.HORIZONTAL;
  * @author Alex Ruiz
  */
 public final class JScrollBarLocation {
-
+  // TODO Test horizontal scroll bar
+  
   private static final int BLOCK_OFFSET = 4;
 
+  private final Map<Integer, JScrollBarLocationStrategy> strategyMap = new HashMap<Integer, JScrollBarLocationStrategy>();
+  
+  /**
+   * Creates a new </code>{@link JScrollBarLocation}</code>.
+   */
+  public JScrollBarLocation() {
+    strategyMap.put(HORIZONTAL, new HorizontalJScrollBarLocationStrategy());
+    strategyMap.put(VERTICAL, new VerticalJScrollBarLocationStrategy());
+  }
+  
   /**
    * Returns the location where to move the mouse pointer to scroll to the given position.
    * @param scrollBar the target <code>JScrollBar</code>.
@@ -38,11 +53,24 @@ public final class JScrollBarLocation {
    * @return the location where to move the mouse pointer to scroll to the given position.
    */
   public Point thumbLocation(JScrollBar scrollBar, int position) {
-    double fraction = (double) position / (scrollBar.getMaximum() - scrollBar.getMinimum());
-    int arrow = arrow(scrollBar);
-    if (isHorizontal(scrollBar))
-      return new Point(arrow + (int) (fraction * (scrollBar.getWidth() - 2 * arrow)), arrow / 2);
-    return new Point(arrow / 2, arrow + (int) (fraction * (scrollBar.getHeight() - 2 * arrow)));
+    double fraction = (double) position / maximumMinusMinimum(scrollBar);
+    return locationStrategyFor(scrollBar).thumbLocation(scrollBar, fraction);
+  }
+
+  private int maximumMinusMinimum(final JScrollBar scrollBar) {
+    return new MaximumMinusMinimumTask(scrollBar).run();
+  }
+
+  private final class MaximumMinusMinimumTask extends GuiTask<Integer> {
+    private final JScrollBar scrollBar;
+
+    MaximumMinusMinimumTask(JScrollBar scrollBar) {
+      this.scrollBar = scrollBar;
+    }
+
+    protected Integer executeInEDT() throws Throwable {
+      return scrollBar.getMaximum() - scrollBar.getMinimum();
+    }
   }
 
   /**
@@ -68,9 +96,7 @@ public final class JScrollBarLocation {
   }
 
   private Point blockLocation(JScrollBar scrollBar, Point unitLocation, int offset) {
-    if (isHorizontal(scrollBar)) unitLocation.x += offset;
-    else unitLocation.y += offset;
-    return unitLocation;
+    return locationStrategyFor(scrollBar).blockLocation(scrollBar, unitLocation, offset);
   }
 
   /**
@@ -79,9 +105,7 @@ public final class JScrollBarLocation {
    * @return the location where to move the mouse pointer to scroll one unit up (or right.)
    */
   public Point unitLocationToScrollUp(JScrollBar scrollBar) {
-    int arrow = arrow(scrollBar);
-    if (isHorizontal(scrollBar)) return new Point(scrollBar.getWidth() - arrow / 2, arrow / 2);
-    return new Point(arrow / 2, scrollBar.getHeight() - arrow / 2);
+    return locationStrategyFor(scrollBar).unitLocationToScrollUp(scrollBar);
   }
 
   /**
@@ -90,15 +114,27 @@ public final class JScrollBarLocation {
    * @return the location where to move the mouse pointer to scroll one unit down (or left.)
    */
   public Point unitLocationToScrollDown(JScrollBar scrollBar) {
-    int arrow = arrow(scrollBar);
+    int arrow = locationStrategyFor(scrollBar).arrow(scrollBar);
     return new Point(arrow / 2, arrow / 2);
   }
 
-  private int arrow(JScrollBar scrollBar) {
-    return isHorizontal(scrollBar) ? scrollBar.getHeight() : scrollBar.getWidth();
+  private JScrollBarLocationStrategy locationStrategyFor(JScrollBar scrollBar) {
+    return strategyMap.get(orientationOf(scrollBar));
   }
 
-  private boolean isHorizontal(JScrollBar scrollBar) {
-    return scrollBar.getOrientation() == HORIZONTAL;
+  private int orientationOf(final JScrollBar scrollBar) {
+    return new GetOrientationTask(scrollBar).run();
+  }
+
+  private static class GetOrientationTask extends GuiTask<Integer> {
+    private final JScrollBar scrollBar;
+
+    GetOrientationTask(JScrollBar scrollBar) {
+      this.scrollBar = scrollBar;
+    }
+
+    protected Integer executeInEDT() throws Throwable {
+      return scrollBar.getOrientation();
+    }
   }
 }

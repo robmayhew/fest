@@ -24,12 +24,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.GetJSliderValueTask.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -50,7 +54,11 @@ public abstract class JSliderDriverTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyFrame frame = new MyFrame(getClass(), orientation());
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame(getClass(), orientation());
+      }
+    }.run();
     slider = frame.slider;
     robot.showWindow(frame);
   }
@@ -64,47 +72,79 @@ public abstract class JSliderDriverTestCase {
   }
 
   @Test(dataProvider = "valueProvider")
-  public void shouldSlideToValue(int value) {
+  public void shouldSlideToValue(int value, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.slide(slider, value);
     assertThatSliderValueIsEqualTo(value);
   }
 
   @DataProvider(name = "valueProvider")
   public Object[][] valueProvider() {
-    return new Object[][] { { 5 }, { 10 }, { 28 }, { 20 } };
+    return new Object[][] { 
+        {  5, AWT }, {  5, ROBOT }, 
+        { 10, AWT }, { 10, ROBOT }, 
+        { 28, AWT }, { 28, ROBOT }, 
+        { 20, AWT }, { 20, ROBOT } 
+    };
   }
 
-  public void shouldNotSlideToValueIfSliderIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSlideToValueIfSliderIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
     int value = 10;
-    slider.setValue(value);
+    setJSliderValue(value);
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
 
-  public void shouldSlideToMaximum() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSlideToMaximum(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.slideToMaximum(slider);
-    assertThatSliderValueIsEqualTo(slider.getMaximum());
+    assertThatSliderValueIsEqualTo(sliderMaximum());
   }
 
-  public void shouldNotSlideToMaximumIfSliderIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSlideToMaximumIfSliderIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
     int value = valueOf(slider);
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
 
-  public void shouldSlideToMinimum() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSlideToMinimum(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(slider.getMinimum());
   }
 
-  public void shouldNotSlideToMinimumIfSliderIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSlideToMinimumIfSliderIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
-    int value = slider.getMaximum();
-    slider.setValue(value);
+    int value = sliderMaximum();
+    setJSliderValue(value);
     driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(value);
+  }
+
+  private int sliderMaximum() {
+    return new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return slider.getMaximum();
+      }
+    }.run();
+  }
+
+  private void setJSliderValue(final int value) {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        slider.setValue(value);        
+      }
+    });
   }
 
   private void assertThatSliderValueIsEqualTo(int expected) {
@@ -137,6 +177,14 @@ public abstract class JSliderDriverTestCase {
       }
     });
     robot.waitForIdle();
+  }
+  
+  protected int sliderOrientation() {
+    return new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return slider.getOrientation();
+      }
+    }.run();
   }
 
   private static class MyFrame extends TestWindow {

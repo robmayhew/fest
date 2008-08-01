@@ -15,10 +15,12 @@
  */
 package org.fest.swing.driver;
 
-import static javax.swing.SwingConstants.VERTICAL;
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.testng.annotations.Test;
+
+import static javax.swing.SwingConstants.VERTICAL;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JSliderDriver}</code>.
@@ -32,7 +34,8 @@ public class VerticalJSliderDriverTest extends JSliderDriverTestCase {
     return VERTICAL;
   }
 
-  @Test public void shouldHaveGivenOrientation() {
-    assertThat(slider().getOrientation()).isEqualTo(VERTICAL);
+  @Test(groups = GUI)
+  public void shouldHaveGivenOrientation() {
+    assertThat(sliderOrientation()).isEqualTo(VERTICAL);
   }
 }

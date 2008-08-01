@@ -16,8 +16,10 @@ package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.util.Pair;
 
 import static java.lang.String.valueOf;
 
@@ -52,7 +54,19 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    */
   public void slideToMaximum(JSlider slider) {
-    slide(slider, slider.getMaximum());
+    slide(slider, new GetMaximumTask(slider).run());
+  }
+
+  private static class GetMaximumTask extends GuiTask<Integer> {
+    private final JSlider slider;
+
+    GetMaximumTask(JSlider slider) {
+      this.slider = slider;
+    }
+    
+    protected Integer executeInEDT() {
+      return slider.getMaximum();
+    }
   }
 
   /**
@@ -60,7 +74,19 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    */
   public void slideToMinimum(JSlider slider) {
-    slide(slider, slider.getMinimum());
+    slide(slider, new GetMinimumTask(slider).run());
+  }
+
+  private static class GetMinimumTask extends GuiTask<Integer> {
+    private final JSlider slider;
+
+    GetMinimumTask(JSlider slider) {
+      this.slider = slider;
+    }
+    
+    protected Integer executeInEDT() {
+      return slider.getMinimum();
+    }
   }
 
   /**
@@ -77,15 +103,7 @@ public class JSliderDriver extends JComponentDriver {
     // the drag is only approximate, so set the value directly
     robot.invokeAndWait(new SetValueTask(slider, value));
   }
-
-  private void validateValue(JSlider slider, int value) {
-    int min = slider.getMinimum();
-    int max = slider.getMaximum();
-    if (value >= min && value <= max) return;
-    throw actionFailure(concat(
-        "Value <", valueOf(value), "> is not within the JSlider bounds of <", valueOf(min), "> and <", valueOf(max), ">"));
-  }
-
+  
   private static class SetValueTask implements Runnable {
     private final JSlider target;
     private final int value;
@@ -97,6 +115,27 @@ public class JSliderDriver extends JComponentDriver {
 
     public void run() {
       target.setValue(value);
+    }
+  }
+
+  private void validateValue(JSlider slider, int value) {
+    Pair<Integer, Integer> minAndMax = new GetMinimumAndMaximumTask(slider).run();
+    int min = minAndMax.one;
+    int max = minAndMax.two;
+    if (value >= min && value <= max) return;
+    throw actionFailure(concat(
+        "Value <", valueOf(value), "> is not within the JSlider bounds of <", valueOf(min), "> and <", valueOf(max), ">"));
+  }
+
+  private static class GetMinimumAndMaximumTask extends GuiTask<Pair<Integer, Integer>> {
+    private final JSlider slider;
+
+    GetMinimumAndMaximumTask(JSlider slider) {
+      this.slider = slider;
+    }
+    
+    protected Pair<Integer, Integer> executeInEDT() {
+      return new Pair<Integer, Integer>(slider.getMinimum(), slider.getMaximum());
     }
   }
 }

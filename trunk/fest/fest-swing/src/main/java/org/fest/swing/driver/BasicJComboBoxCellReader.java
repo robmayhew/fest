@@ -32,7 +32,7 @@ import org.fest.swing.core.GuiTask;
  */
 public class BasicJComboBoxCellReader extends BaseValueReader implements JComboBoxCellReader {
 
-  private static final JList REFERENCE_JLIST = new JList();
+  static final JList REFERENCE_JLIST = new JList();
 
   /**
    * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test. This method first
