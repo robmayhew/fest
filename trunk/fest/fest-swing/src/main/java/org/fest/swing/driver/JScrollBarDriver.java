@@ -18,8 +18,10 @@ import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.util.Pair;
 
 import static java.lang.String.valueOf;
 
@@ -68,7 +70,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollUnitUp(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll up one unit");
     Point where = location.unitLocationToScrollUp(scrollBar);
-    scroll(scrollBar, where, times * scrollBar.getUnitIncrement());
+    scroll(scrollBar, where, times * unitIncrementOf(scrollBar));
   }
 
   /**
@@ -88,7 +90,23 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollUnitDown(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll down one unit");
     Point where = location.unitLocationToScrollDown(scrollBar);
-    scroll(scrollBar, where, times * scrollBar.getUnitIncrement() * -1);
+    scroll(scrollBar, where, times * unitIncrementOf(scrollBar) * -1);
+  }
+
+  private int unitIncrementOf(JScrollBar scrollBar) {
+    return new GetUnitIncrementTask(scrollBar).run();
+  }
+
+  private static class GetUnitIncrementTask extends GuiTask<Integer> {
+    private final JScrollBar scrollBar;
+
+    GetUnitIncrementTask(JScrollBar scrollBar) {
+      this.scrollBar = scrollBar;
+    }
+
+    protected Integer executeInEDT() {
+      return scrollBar.getUnitIncrement();
+    }
   }
 
   /**
@@ -108,7 +126,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollBlockUp(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll up one block");
     Point where = location.blockLocationToScrollUp(scrollBar);
-    scroll(scrollBar, where, times * scrollBar.getBlockIncrement());
+    scroll(scrollBar, where, times * blockIncrementOf(scrollBar));
   }
 
   /**
@@ -128,7 +146,23 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollBlockDown(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll down one block");
     Point where = location.blockLocationToScrollDown(scrollBar);
-    scroll(scrollBar, where, times * scrollBar.getBlockIncrement() * -1);
+    scroll(scrollBar, where, times * blockIncrementOf(scrollBar) * -1);
+  }
+
+  private int blockIncrementOf(JScrollBar scrollBar) {
+    return new GetBlockIncrementTask(scrollBar).run();
+  }
+
+  private static class GetBlockIncrementTask extends GuiTask<Integer> {
+    private final JScrollBar scrollBar;
+
+    GetBlockIncrementTask(JScrollBar scrollBar) {
+      this.scrollBar = scrollBar;
+    }
+
+    protected Integer executeInEDT() {
+      return scrollBar.getBlockIncrement();
+    }
   }
 
   private void validateTimes(int times, String action) {
@@ -162,31 +196,46 @@ public class JScrollBarDriver extends JComponentDriver {
     setValueProperty(scrollBar, position);
   }
 
-  private void validatePosition(JScrollBar scrollBar, final int position) {
-    int min = scrollBar.getMinimum();
-    int max = scrollBar.getMaximum();
+  private void validatePosition(JScrollBar scrollBar, int position) {
+    Pair<Integer, Integer> minAndMax = new GetMinimumAndMaximumTask(scrollBar).run();
+    int min = minAndMax.one;
+    int max = minAndMax.two;
     if (position >= min && position <= max) return;
     throw actionFailure(concat(
         "Position <", valueOf(position), "> is not within the JScrollBar bounds of <",
         valueOf(min), "> and <", valueOf(max), ">"));
   }
+  
+  private static class GetMinimumAndMaximumTask extends GuiTask<Pair<Integer, Integer>> {
+    private final JScrollBar scrollBar;
 
-  private void setValueProperty(final JScrollBar scrollBar, final int value) {
+    GetMinimumAndMaximumTask(JScrollBar scrollBar) {
+      this.scrollBar = scrollBar;
+    }
+    
+    protected Pair<Integer, Integer> executeInEDT() throws Throwable {
+      int min = scrollBar.getMinimum();
+      int max = scrollBar.getMaximum();
+      return new Pair<Integer, Integer>(min, max);
+    }
+  }
+
+  private void setValueProperty(JScrollBar scrollBar, int value) {
     robot.invokeLater(scrollBar, new SetValueTask(scrollBar, value));
     robot.waitForIdle();
   }
 
   private static class SetValueTask implements Runnable {
-    private final JScrollBar target;
+    private final JScrollBar scrollBar;
     private final int value;
 
-    SetValueTask(JScrollBar target, int value) {
-      this.target = target;
+    SetValueTask(JScrollBar scrollBar, int value) {
+      this.scrollBar = scrollBar;
       this.value = value;
     }
 
     public void run() {
-      target.setValue(value);
+      scrollBar.setValue(value);
     }
   }
 

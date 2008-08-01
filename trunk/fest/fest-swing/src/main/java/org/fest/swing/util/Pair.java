@@ -17,28 +17,27 @@ package org.fest.swing.util;
 
 /**
  * Understands a pair of values.
- * @param <F> the generic type of the first value in this pair.
- * @param <S> the generic type of the second value in this pair.
+ * @param <O> the generic type of the 1st. value in this pair.
+ * @param <T> the generic type of the 2nd. value in this pair.
  *
  * @author Yvonne Wang
- *
+ * @author Alex Ruiz
  */
-public class Pair<F, S> {
+public class Pair<O, T> {
 
   /** The first value in this pair. */
-  public final F first;
+  public final O one;
 
   /** The second value in this pair. */
-  public final S second;
+  public final T two;
 
   /**
    * Creates a new </code>{@link Pair}</code>.
-   * @param first the first value in this pair.
-   * @param second the second value in this pair.
+   * @param one the 1st. value in this pair.
+   * @param two the 2nd. value in this pair.
    */
-  public Pair(F first, S second) {
-    this.first = first;
-    this.second = second;
+  public Pair(O one, T two) {
+    this.one = one;
+    this.two = two;
   }
-
 }

@@ -94,7 +94,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    */
   protected Point resizeLocationOf(Container c) {
     Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
-    return resizeLocation(pair.first, pair.second);
+    return resizeLocation(pair.one, pair.two);
   }
 
   private Point resizeLocation(Dimension size, Insets insets) {
@@ -156,7 +156,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    */
   protected Point moveLocationOf(Container c) {
     Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
-    return moveLocation(pair.first, pair.second);
+    return moveLocation(pair.one, pair.two);
   }
 
   private Point moveLocation(Dimension size, Insets insets) {
