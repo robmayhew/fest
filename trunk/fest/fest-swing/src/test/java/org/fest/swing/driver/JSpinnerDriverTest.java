@@ -25,9 +25,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -53,7 +56,11 @@ public class JSpinnerDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSpinnerDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     spinner = frame.spinner;
     robot.showWindow(frame);
   }
@@ -62,25 +69,33 @@ public class JSpinnerDriverTest {
     robot.cleanUp();
   }
 
-  public void shouldIncrementValue() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldIncrementValue(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     assertFirstValueIsSelected();
     driver.increment(spinner);
     assertThatSpinnerValueIsEqualTo("Sam");
   }
 
-  public void shouldNotIncrementValueIfSpinnerIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotIncrementValueIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSpinner();
     driver.increment(spinner);
     assertFirstValueIsSelected();
   }
   
-  public void shouldIncrementValueTheGivenTimes() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldIncrementValueTheGivenTimes(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     assertFirstValueIsSelected();
     driver.increment(spinner, 2);
     assertLastValueIsSelected();
   }
 
-  public void shouldNotIncrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotIncrementValueTheGivenTimesIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSpinner();
     driver.increment(spinner, 2);
     assertFirstValueIsSelected();
@@ -98,13 +113,17 @@ public class JSpinnerDriverTest {
     }
   }
 
-  public void shouldDecrementValue() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldDecrementValue(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.increment(spinner);
     driver.decrement(spinner);
     assertFirstValueIsSelected();
   }
 
-  public void shouldNotDecrementValueIfSpinnerIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotDecrementValueIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSpinner();
     selectLastValue();
     driver.decrement(spinner);
@@ -115,13 +134,17 @@ public class JSpinnerDriverTest {
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
 
-  public void shouldDecrementValueTheGivenTimes() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldDecrementValueTheGivenTimes(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     selectLastValue();
     driver.decrement(spinner, 2);
     assertFirstValueIsSelected();
   }
 
-  public void shouldNotDecrementValueTheGivenTimesIfSpinnerIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotDecrementValueTheGivenTimesIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSpinner();
     selectLastValue();
     driver.decrement(spinner, 2);
@@ -142,21 +165,34 @@ public class JSpinnerDriverTest {
 
   @Test(groups = GUI, expectedExceptions=ActionFailedException.class)
   public void shouldThrowErrorIfTextComponentEditorNotFoundWhenEnteringText() {
-    new GuiTask<Void>() {
-      protected Void executeInEDT() {
-        spinner.setEditor(new JLabel());
-        return null;
-      }
-    }.run();
+    setJLabelAsJSpinnerEditor();
     driver.enterText(spinner, "hello");
   }
   
-  public void shouldEnterText() {
+  @Test(groups = GUI, expectedExceptions=ComponentLookupException.class)
+  public void shouldThrowErrorIfTextComponentEditorNotFound() {
+    setJLabelAsJSpinnerEditor();
+    driver.editor(spinner);
+  }
+
+  private void setJLabelAsJSpinnerEditor() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        spinner.setEditor(new JLabel());
+      }
+    });
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldEnterText(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.enterText(spinner, "Gandalf");
     assertLastValueIsSelected();
   }
 
-  public void shouldNotEnterTextIfSpinnerIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotEnterTextIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableSpinner();
     driver.enterText(spinner, "Gandalf");
     assertFirstValueIsSelected();
@@ -183,12 +219,11 @@ public class JSpinnerDriverTest {
   }
 
   private void selectLastValue() {
-    new GuiTask<Void>() {
-      protected Void executeInEDT() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
         spinner.setValue("Gandalf");
-        return null;
       }
-    }.run();
+    });
   }
 
   private void assertThatSpinnerValueIsEqualTo(Object expected) {
