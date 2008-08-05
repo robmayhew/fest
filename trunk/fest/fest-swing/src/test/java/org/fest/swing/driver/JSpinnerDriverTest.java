@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
+import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -37,6 +38,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.GetJSpinnerValueTask.valueOf;
+import static org.fest.swing.task.GetJTextComponentTextTask.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -184,10 +186,28 @@ public class JSpinnerDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldEnterTextAndCommit(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    driver.enterTextAndCommit(spinner, "Gandalf");
+    assertLastValueIsSelected();
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotEnterTextAndCommitIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    clearAndDisableSpinner();
+    driver.enterTextAndCommit(spinner, "Gandalf");
+    assertFirstValueIsSelected();
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldEnterText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
+    setValue("Frodo");
     driver.enterText(spinner, "Gandalf");
-    assertLastValueIsSelected();
+    JTextComponent editor = driver.editor(spinner);
+    assertThat(textOf(editor)).isEqualTo("Gandalf");
+    assertThatSpinnerValueIsEqualTo("Frodo");
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -219,9 +239,13 @@ public class JSpinnerDriverTest {
   }
 
   private void selectLastValue() {
+    setValue("Gandalf");
+  }
+
+  private void setValue(final String value) {
     robot.invokeAndWait(new Runnable() {
       public void run() {
-        spinner.setValue("Gandalf");
+        spinner.setValue(value);
       }
     });
   }

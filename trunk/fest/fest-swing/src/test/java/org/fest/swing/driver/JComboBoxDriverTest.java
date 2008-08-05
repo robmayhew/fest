@@ -29,13 +29,14 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.*;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.task.GetJLabelTextTask;
+import org.fest.swing.task.GetJTextComponentTextTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
-import static org.fest.swing.task.GetJLabelTextTask.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -356,12 +357,8 @@ public class JComboBoxDriverTest {
 
   private String textInComboBox() {
     final Component editor = comboBoxEditor();
-    if (editor instanceof JLabel) return textOf((JLabel)editor);
-    if (editor instanceof JTextComponent) return new GuiTask<String>() {
-      protected String executeInEDT() {
-        return ((JTextComponent) editor).getText();
-      }
-    }.run();
+    if (editor instanceof JLabel) return GetJLabelTextTask.textOf((JLabel)editor);
+    if (editor instanceof JTextComponent) return GetJTextComponentTextTask.textOf((JTextComponent)editor);
     return null;
   }
 

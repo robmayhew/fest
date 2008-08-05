@@ -1,16 +1,16 @@
 /*
  * Created on Apr 3, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.core;
@@ -36,6 +36,7 @@ import static java.awt.event.KeyEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.task.GetJTextComponentTextTask.textOf;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
@@ -52,7 +53,7 @@ public abstract class InputEventGeneratorTestCase {
   private InputEventGenerator generator;
 
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
-  
+
   @BeforeMethod public void setUp() throws Exception {
     frame = new GuiTask<MyFrame>() {
       protected MyFrame executeInEDT() {
@@ -63,7 +64,7 @@ public abstract class InputEventGeneratorTestCase {
     generator = generator();
     frame.display();
   }
-  
+
   void onSetUp() throws Exception {}
 
   abstract InputEventGenerator generator();
@@ -72,7 +73,7 @@ public abstract class InputEventGeneratorTestCase {
     frame.destroy();
   }
 
-  @Test(groups = { GUI, MOVE_MOUSE_TEST } ) 
+  @Test(groups = { GUI, MOVE_MOUSE_TEST } )
   public void shouldMoveMouse() {
     MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(frame);
     Point center = centerOf(frame);
@@ -80,8 +81,8 @@ public abstract class InputEventGeneratorTestCase {
     pause(200);
     assertThat(recorder.point()).isEqualTo(center);
   }
-  
-  @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST) 
+
+  @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST)
   public void shouldClickMouseButtonOnComponent(MouseButton button) {
     ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
     Point center = centerOf(frame.textBox);
@@ -91,7 +92,7 @@ public abstract class InputEventGeneratorTestCase {
     recorder.clicked(button);
     assertThat(recorder.pointClicked()).isEqualTo(center);
   }
-  
+
   @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST)
   public void shouldClickMouseButton(MouseButton button) {
     Point center = AWT.centerOf(frame);
@@ -102,11 +103,11 @@ public abstract class InputEventGeneratorTestCase {
     pause(200);
     assertThat(recorder.clicked(button));
   }
-  
+
   @DataProvider(name = "mouseButtons") public Object[][] mouseButtons() {
     return new Object[][] { { LEFT_BUTTON }, { MIDDLE_BUTTON }, { RIGHT_BUTTON } };
   }
-  
+
   @Test(dataProvider = "keys") public void shouldTypeKey(int keyToPress, String expectedText) {
     setFocusOn(frame.textBox);
     generator.pressKey(keyToPress, CHAR_UNDEFINED);
@@ -116,14 +117,10 @@ public abstract class InputEventGeneratorTestCase {
   }
 
   private void assertThatTextBoxTextIsEqualTo(String expectedText) {
-    String text = new GuiTask<String>() {
-      protected String executeInEDT() {
-        return frame.textBox.getText();
-      }
-    }.run();
+    String text = textOf(frame.textBox);
     assertThat(text).isEqualTo(expectedText);
   }
-  
+
   @DataProvider(name = "keys") public Object[][] keys() {
     return new Object[][] { { VK_A , "a" }, { VK_S, "s" }, { VK_D, "d" } };
   }
@@ -136,19 +133,19 @@ public abstract class InputEventGeneratorTestCase {
       c.addMouseMotionListener(recorder);
       return recorder;
     }
-    
+
     @Override public void mouseMoved(MouseEvent e) {
       point = e.getPoint();
     }
-    
+
     Point point() { return point; }
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textBox = new JTextField(20);
-    
+
     public MyFrame() {
       super(InputEventGeneratorTestCase.class);
       add(textBox);

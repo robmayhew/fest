@@ -6,6 +6,12 @@
   </properties>
   <body>
     <release version="1.0b2" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="fix" issue="161" due-to="filimono">
+        Method 'enterText(String)' in JSpinnerFixture no longer commits the value to the underlying JSpinner.
+      </action>
+      <action dev="wanghy" type="fix" issue="161" due-to="filimono">
+        Added the method 'enterTextAndCommit(String)' in JSpinnerFixture to enter and commit a value in a JSpinner. 
+      </action>
       <action dev="alruiz" type="fix" issue="165" due-to="filimono">
         RobotFixture now specifies the coordinates to click on when using AWT event mode.
       </action>

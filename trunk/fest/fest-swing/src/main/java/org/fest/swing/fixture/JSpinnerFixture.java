@@ -22,6 +22,7 @@ import org.fest.swing.core.*;
 import org.fest.swing.driver.JSpinnerDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.UnexpectedException;
 
 /**
  * Understands simulation of user events on a <code>{@link JSpinner}</code> and verification of the state of such
@@ -62,11 +63,11 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   private void createDriver() {
     updateDriver(new JSpinnerDriver(robot));
   }
-  
+
   final void updateDriver(JSpinnerDriver newDriver) {
     driver = newDriver;
   }
-  
+
   /**
    * Verifies that the value of this fixture's <code>{@link JSpinner}</code> is equal to the given one.
    * @param value the expected value of this fixture's <code>JSpinner</code>.
@@ -119,16 +120,30 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   }
 
   /**
-   * Simulates a user entering the given text in this fixture's <code>{@link JSpinner}</code> and pressing
-   * &quot;Enter&quot; (assuming its editor has a <code>{@link JTextComponent}</code> under it.)
+   * Simulates a user entering the given text in this fixture's <code>{@link JSpinner}</code> (assuming its editor has a
+   * <code>{@link JTextComponent}</code> under it.) This method does not commit the value to the <code>JSpinner</code>.
    * @param text the text to enter.
    * @return this fixture.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
-   *          cannot be found.
-   * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   * cannot be found.
+   * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
    */
   public JSpinnerFixture enterText(String text) {
     driver.enterText(target, text);
+    return this;
+  }
+
+  /**
+   * Simulates a user entering and committing the given text in this fixture's <code>{@link JSpinner}</code> (assuming
+   * its editor has a <code>{@link JTextComponent}</code> under it.)
+   * @param text the text to enter.
+   * @return this fixture.
+   * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
+   * cannot be found.
+   * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   */
+  public JSpinnerFixture enterTextAndCommit(String text) {
+    driver.enterTextAndCommit(target, text);
     return this;
   }
 

@@ -1,16 +1,16 @@
 /*
  * Created on Jul 1, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -36,7 +36,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
   private JSpinnerDriver driver;
   private JSpinner target;
   private JSpinnerFixture fixture;
-  
+
   void onSetUp() {
     driver = createMock(JSpinnerDriver.class);
     target = new JSpinner();
@@ -58,20 +58,20 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
         driver.requireValue(target, "A Value");
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireValue("A Value"));
       }
     }.run();
   }
-  
+
   @Test public void shouldIncrementTheGivenTimes() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.increment(target, 8);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.increment(8));
       }
@@ -84,7 +84,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
         driver.increment(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.increment());
       }
@@ -97,7 +97,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
         driver.decrement(target, 8);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.decrement(8));
       }
@@ -110,7 +110,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
         driver.decrement(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.decrement());
       }
@@ -123,9 +123,22 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
         driver.enterText(target, "Some Text");
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.enterText("Some Text"));
+      }
+    }.run();
+  }
+
+  @Test public void shouldEnterTextAndCommit() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.enterTextAndCommit(target, "Some Text");
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.enterTextAndCommit("Some Text"));
       }
     }.run();
   }

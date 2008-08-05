@@ -15,18 +15,21 @@
  */
 package org.fest.swing.driver;
 
+import java.text.ParseException;
+
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.UnexpectedException;
 
-import static java.awt.event.KeyEvent.VK_ENTER;
 import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.task.GetJSpinnerValueTask.valueOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
@@ -134,19 +137,34 @@ public class JSpinnerDriver extends JComponentDriver {
   }
 
   /**
-   * Enters the given text in the <code>{@link JSpinner}</code>, assuming its editor has a
+   * Enters and commits the given text in the <code>{@link JSpinner}</code>, assuming its editor has a
    * <code>{@link JTextComponent}</code> under it.
    * @param spinner the target <code>JSpinner</code>.
    * @param text the text to enter.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
-   *          cannot be found.
-   * @throws ActionFailedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   * cannot be found.
+   * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   */
+  public void enterTextAndCommit(JSpinner spinner, String text) {
+    if (!isEnabled(spinner)) return;
+    enterText(spinner, text);
+    robot.invokeAndWait(new CommitEditTask(spinner));
+  }
+
+  /**
+   * Enters the given text in the <code>{@link JSpinner}</code>, assuming its editor has a
+   * <code>{@link JTextComponent}</code> under it. This method does not commit the value to the <code>JSpinner</code>.
+   * @param spinner the target <code>JSpinner</code>.
+   * @param text the text to enter.
+   * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
+   * cannot be found.
+   * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   * @see #enterTextAndCommit(JSpinner, String)
    */
   public void enterText(JSpinner spinner, String text) {
     if (!isEnabled(spinner)) return;
     try {
       textComponentDriver.replaceText(editor(spinner), text);
-      robot.pressAndReleaseKeys(VK_ENTER);
     } catch (ComponentLookupException e) {
       throw actionFailure(concat("Unable to find editor for ", format(spinner)));
     }
@@ -161,6 +179,22 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public JTextComponent editor(JSpinner spinner) {
     return robot.finder().findByType(spinner, JTextComponent.class);
+  }
+
+  private static class CommitEditTask implements Runnable {
+    private final JSpinner spinner;
+
+    CommitEditTask(JSpinner spinner) {
+      this.spinner = spinner;
+    }
+
+    public void run() {
+      try {
+        spinner.commitEdit();
+      } catch (ParseException e) {
+        throw unexpected(e);
+      }
+    }
   }
 
   /**
