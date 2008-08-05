@@ -22,7 +22,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static java.awt.event.KeyEvent.*;
+import static java.awt.event.KeyEvent.VK_ENTER;
 import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -70,7 +70,18 @@ public class JSpinnerDriver extends JComponentDriver {
    * @param spinner the target <code>JSpinner</code>.
    */
   public void increment(JSpinner spinner) {
-    pressKey(spinner, VK_UP);
+    if (!isEnabled(spinner)) return;
+    robot.invokeAndWait(new IncrementValueTask(spinner));
+  }
+
+  private static class IncrementValueTask extends SetValueTask {
+    IncrementValueTask(JSpinner spinner) {
+      super(spinner);
+    }
+
+    public void run() {
+      setValue(spinner.getNextValue());
+    }
   }
 
   /**
@@ -89,19 +100,37 @@ public class JSpinnerDriver extends JComponentDriver {
     throw actionFailure(concat(
         "The number of times to ", action, " should be greater than zero, but was <", valueOf(times), ">"));
   }
-  
+
   /**
    * Decrements the value of the <code>{@link JSpinner}</code>.
    * @param spinner the target <code>JSpinner</code>.
    */
   public void decrement(JSpinner spinner) {
-    pressKey(spinner, VK_DOWN);
+    if (!isEnabled(spinner)) return;
+    robot.invokeAndWait(new DecrementValueTask(spinner));
   }
 
-  private void pressKey(JSpinner spinner, int key) {
-    if (!isEnabled(spinner)) return;
-    focus(spinner);
-    robot.pressAndReleaseKeys(key);
+  private static class DecrementValueTask extends SetValueTask {
+    DecrementValueTask(JSpinner spinner) {
+      super(spinner);
+    }
+
+    public void run() {
+      setValue(spinner.getPreviousValue());
+    }
+  }
+
+  private static abstract class SetValueTask implements Runnable {
+    final JSpinner spinner;
+
+    SetValueTask(JSpinner spinner) {
+      this.spinner = spinner;
+    }
+
+    final void setValue(Object value) {
+      if (value == null) return;
+      spinner.setValue(value);
+    }
   }
 
   /**
@@ -116,12 +145,22 @@ public class JSpinnerDriver extends JComponentDriver {
   public void enterText(JSpinner spinner, String text) {
     if (!isEnabled(spinner)) return;
     try {
-      JTextComponent editor = robot.finder().findByType(spinner, JTextComponent.class);
-      textComponentDriver.replaceText(editor, text);
+      textComponentDriver.replaceText(editor(spinner), text);
       robot.pressAndReleaseKeys(VK_ENTER);
     } catch (ComponentLookupException e) {
       throw actionFailure(concat("Unable to find editor for ", format(spinner)));
     }
+  }
+
+  /**
+   * Returns the <code>{@link JTextComponent}</code> used as editor in the given <code>{@link JSpinner}</code>.
+   * @param spinner the target <code>JSpinner</code>.
+   * @return the <code>JTextComponent</code> used as editor in the given <code>JSpinner</code>.
+   * @throws ComponentLookupException if the given <code>JSpinner</code> does not have a <code>JTextComponent</code> as
+   * editor.
+   */
+  public JTextComponent editor(JSpinner spinner) {
+    return robot.finder().findByType(spinner, JTextComponent.class);
   }
 
   /**

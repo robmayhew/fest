@@ -84,7 +84,7 @@ public class JSpinnerDriverTest {
     driver.increment(spinner);
     assertFirstValueIsSelected();
   }
-  
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldIncrementValueTheGivenTimes(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -168,7 +168,7 @@ public class JSpinnerDriverTest {
     setJLabelAsJSpinnerEditor();
     driver.enterText(spinner, "hello");
   }
-  
+
   @Test(groups = GUI, expectedExceptions=ComponentLookupException.class)
   public void shouldThrowErrorIfTextComponentEditorNotFound() {
     setJLabelAsJSpinnerEditor();
@@ -239,7 +239,7 @@ public class JSpinnerDriverTest {
     });
     robot.waitForIdle();
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 
