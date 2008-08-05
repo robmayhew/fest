@@ -37,7 +37,7 @@ abstract class JScrollBarLocationStrategy {
 
   abstract Point unitLocationToScrollUp(JScrollBar scrollBar);
 
-  final int widthOf(final JScrollBar scrollBar) {
+  final int widthOf(JScrollBar scrollBar) {
     return new GetWidthTask(scrollBar).run();
   }
 
@@ -53,7 +53,7 @@ abstract class JScrollBarLocationStrategy {
     }
   }
 
-  final int heightOf(final JScrollBar scrollBar) {
+  final int heightOf(JScrollBar scrollBar) {
     return new GetHeightTask(scrollBar).run();
   }
 
