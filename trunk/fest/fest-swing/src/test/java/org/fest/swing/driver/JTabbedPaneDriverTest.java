@@ -25,8 +25,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.assertions.IntAssert;
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -37,6 +39,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -59,7 +62,11 @@ public class JTabbedPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTabbedPaneDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyFrame frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame();
+      }
+    }.run();
     tabbedPane = frame.tabbedPane;
     robot.showWindow(frame);
   }
@@ -68,10 +75,12 @@ public class JTabbedPaneDriverTest {
     robot.cleanUp();
   }
 
-  public void shouldSetTabDirectlyIfLocationOfTabNotFound() {
-    tabbedPane.setSelectedIndex(0);
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSetTabDirectlyIfLocationOfTabNotFound(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    selectFirstTab();
     final JTabbedPaneLocation location = createMock(JTabbedPaneLocation.class);
-    final int index = 1; 
+    final int index = 1;
     driver = new JTabbedPaneDriver(robot, location);
     new EasyMockTemplate(location) {
       protected void expectations() {
@@ -84,21 +93,33 @@ public class JTabbedPaneDriverTest {
       }
     }.run();
   }
-  
+
+  private void selectFirstTab() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
+        tabbedPane.setSelectedIndex(0);
+      }
+    });
+  }
+
   @Test(groups = GUI, dataProvider = "tabIndexProvider")
-  public void shouldSelectTabWithGivenIndex(int index) {
+  public void shouldSelectTabWithGivenIndex(int index, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.selectTab(tabbedPane, index);
     assertThatSelectedTabIndexIsEqualTo(index);
   }
-  
-  public void shouldNotSelectTabWithGivenIndexIfTabbedPaneIsNotEnabled() {
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSelectTabWithGivenIndexIfTabbedPaneIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableTabbedPane();
     driver.selectTab(tabbedPane, 1);
     assertThatSelectedTabIndexIsEqualTo(0);
   }
 
   @Test(groups = GUI, dataProvider = "tabIndexProvider")
-  public void shouldSetTabWithGivenIndexDirectly(int index) {
+  public void shouldSetTabWithGivenIndexDirectly(int index, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.setTabDirectly(tabbedPane, index);
     pause(200);
     assertThatSelectedTabIndexIsEqualTo(index);
@@ -106,11 +127,17 @@ public class JTabbedPaneDriverTest {
 
   @DataProvider(name = "tabIndexProvider")
   public Object[][] tabIndices() {
-    return new Object[][] { { 0 }, { 1 } };
+    return new Object[][] {
+        { 0, AWT },
+        { 0, ROBOT },
+        { 1, AWT },
+        { 1, ROBOT }
+    };
   }
 
   @Test(groups = GUI, dataProvider = "indexOutOfBoundsProvider")
-  public void shouldThrowErrorIfIndexOutOfBounds(int index) {
+  public void shouldThrowErrorIfIndexOutOfBounds(int index, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     try {
       driver.selectTab(tabbedPane, index);
       fail();
@@ -122,27 +149,43 @@ public class JTabbedPaneDriverTest {
 
   @DataProvider(name = "indexOutOfBoundsProvider")
   public Object[][] indicesOutOfBounds() {
-    return new Object[][] { { -1 }, { 2 } };
+    return new Object[][] {
+        { -1, AWT },
+        { -1, ROBOT },
+        { 2, AWT },
+        { 2, ROBOT }
+    };
   }
 
-  public void shouldSelectFirstTab() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectFirstTab(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.selectTab(tabbedPane, "First");
     assertThatSelectedTabIndexIsEqualTo(0);
   }
 
-  public void shouldSelectSecondTab() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectSecondTab(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     driver.selectTab(tabbedPane, "Second");
     assertThatSelectedTabIndexIsEqualTo(1);
   }
 
-  public void shouldNotSelectTabWithGivenTitleIfTabbedPaneIsNotEnabled() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSelectTabWithGivenTitleIfTabbedPaneIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     clearAndDisableTabbedPane();
     driver.selectTab(tabbedPane, "Second");
     assertThatSelectedTabIndexIsEqualTo(0);
   }
-  
-  private IntAssert assertThatSelectedTabIndexIsEqualTo(int expected) {
-    return assertThat(tabbedPane.getSelectedIndex()).isEqualTo(expected);
+
+  private void assertThatSelectedTabIndexIsEqualTo(int expected) {
+    int selectedIndex = new GuiTask<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return tabbedPane.getSelectedIndex();
+      }
+    }.run();
+    assertThat(selectedIndex).isEqualTo(expected);
   }
 
   public void shouldReturnTabTitles() {
@@ -158,7 +201,7 @@ public class JTabbedPaneDriverTest {
     });
     robot.waitForIdle();
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 

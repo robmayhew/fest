@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.EventMode;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
@@ -32,6 +33,7 @@ import org.fest.swing.testing.TestWindow;
 import static javax.swing.JSplitPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -56,9 +58,10 @@ public class JSplitPaneDriverTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   @Test(groups = GUI, dataProvider = "orientations")
-  public void shouldMoveDividerToGivenLocation(int orientation) {
+  public void shouldMoveDividerToGivenLocation(int orientation, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     MyFrame frame = myFrame(orientation);
     splitPane = frame.splitPane;
     robot.showWindow(frame);
@@ -68,8 +71,9 @@ public class JSplitPaneDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "orientations")
-  public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation) {
-    MyFrame frame = new MyFrame(orientation);
+  public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    MyFrame frame = myFrame(orientation);
     splitPane = frame.splitPane;
     robot.showWindow(frame);
     robot.invokeAndWait(new Runnable() {
@@ -78,14 +82,19 @@ public class JSplitPaneDriverTest {
       }
     });
     robot.waitForIdle();
-    assertThat(isEnabled(frame)).isFalse();
+    assertThat(isEnabled(splitPane)).isFalse();
     int originalLocation = splitPane.getDividerLocation();
     driver.moveDividerTo(splitPane, originalLocation + 100);
     assertThat(splitPane.getDividerLocation()).isEqualTo(originalLocation);
   }
-  
+
   @DataProvider(name = "orientations") public Object[][] orientations() {
-    return new Object[][] { { VERTICAL_SPLIT }, { HORIZONTAL_SPLIT } };
+    return new Object[][] {
+        { VERTICAL_SPLIT, AWT },
+        { VERTICAL_SPLIT, ROBOT },
+        { HORIZONTAL_SPLIT, AWT },
+        { HORIZONTAL_SPLIT, ROBOT }
+    };
   }
 
   private MyFrame myFrame(final int orientation) {

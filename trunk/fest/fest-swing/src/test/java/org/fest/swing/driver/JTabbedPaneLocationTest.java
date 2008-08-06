@@ -15,55 +15,59 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.LocationUnavailableException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.LocationUnavailableException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTabbedPaneLocation}</code>.
  *
  * @author Yvonne Wang
  */
+@Test(groups = GUI)
 public class JTabbedPaneLocationTest {
 
   private JTabbedPane tabbedPane;
   private JTabbedPaneLocation location;
 
   @BeforeMethod public void setUp() {
-    tabbedPane = new JTabbedPane();
-    tabbedPane.addTab("first", new JPanel());
-    tabbedPane.addTab("second", new JPanel());
+    tabbedPane = new GuiTask<JTabbedPane>() {
+      protected JTabbedPane executeInEDT() throws Throwable {
+        return new MyTabbedPane();
+      }
+    }.run();
     location = new JTabbedPaneLocation();
   }
 
-  @Test public void shouldReturnIndexOfTabTitle() {
+  public void shouldReturnIndexOfTabTitle() {
     int index = location.indexOf(tabbedPane, "second");
     assertThat(index).isEqualTo(1);
   }
 
-  @Test public void shouldThrowErrorIfCannotFindTabWithGivenTitle() {
-    tabbedPane.removeTabAt(1);
-    tabbedPane.removeTabAt(0);
+  public void shouldThrowErrorIfCannotFindTabWithGivenTitle() {
     try {
-      location.indexOf(tabbedPane, "second");
+      location.indexOf(tabbedPane, "third");
       fail();
     } catch (LocationUnavailableException e) {
-      assertThat(e).message().isEqualTo("Unable to find a tab with title 'second'");
+      assertThat(e).message().isEqualTo("Unable to find a tab with title 'third'");
     }
   }
 
-  @Test public void shouldPassIfIndexIfValid() {
+  public void shouldPassIfIndexIfValid() {
     location.validateIndex(tabbedPane, 0);
   }
 
-  @Test public void shouldFailIfIndexIsNegative() {
+  public void shouldFailIfIndexIsNegative() {
     try {
       location.validateIndex(tabbedPane, -1);
       fail();
@@ -72,12 +76,21 @@ public class JTabbedPaneLocationTest {
     }
   }
 
-  @Test public void shouldFailIfIndexIsGreaterThanLastTabIndex() {
+  public void shouldFailIfIndexIsGreaterThanLastTabIndex() {
     try {
       location.validateIndex(tabbedPane, 2);
       fail();
     } catch (ActionFailedException e) {
       assertThat(e).message().isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
+    }
+  }
+
+  private static class MyTabbedPane extends JTabbedPane {
+    private static final long serialVersionUID = 1L;
+
+    MyTabbedPane() {
+      addTab("first", new JPanel());
+      addTab("second", new JPanel());
     }
   }
 }

@@ -19,6 +19,7 @@ import java.awt.Point;
 
 import javax.swing.JTabbedPane;
 
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -62,10 +63,22 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @return the titles of all the tabs.
    */
   public String[] tabTitles(JTabbedPane tabbedPane) {
-    int count = tabCountOf(tabbedPane);
-    String[] titles = new String[count];
-    for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
-    return titles;
+    return new GetTitlesTask(tabbedPane).run();
+  }
+
+  private static class GetTitlesTask extends GuiTask<String[]> {
+    private final JTabbedPane tabbedPane;
+
+    GetTitlesTask(JTabbedPane tabbedPane) {
+      this.tabbedPane = tabbedPane;
+    }
+
+    protected String[] executeInEDT() throws Throwable {
+      int count = tabCountOf(tabbedPane);
+      String[] titles = new String[count];
+      for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
+      return titles;
+    }
   }
 
   /**
@@ -100,7 +113,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
   void setTabDirectly(JTabbedPane tabbedPane, int index) {
     robot.invokeAndWait(new SetSelectedIndexTask(tabbedPane, index));
     robot.waitForIdle();
-  }  
+  }
 
   private static class SetSelectedIndexTask implements Runnable {
     private final JTabbedPane target;
