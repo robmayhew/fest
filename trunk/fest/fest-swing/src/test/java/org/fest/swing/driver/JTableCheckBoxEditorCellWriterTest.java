@@ -15,11 +15,15 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableCheckBoxEditorCellWriter}</code>.
@@ -33,7 +37,9 @@ public class JTableCheckBoxEditorCellWriterTest extends JTableCellWriterTestCase
     return new JTableCheckBoxEditorCellWriter(robot);
   }
 
-  @Test public void shouldSelectItemInCheckBoxEditor() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectItemInCheckBoxEditor(EventMode eventMode) {
+    robot().settings().eventMode(eventMode);
     int row = 0;
     int column = 4;
     writer().enterValue(table(), row, column, "false");

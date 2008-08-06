@@ -24,6 +24,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -64,7 +66,9 @@ public abstract class JTableCellWriterTestCase {
     robot.cleanUp();
   }
 
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     try {
       writer.enterValue(frame.table, 0, 1, "hello");
       fail();
@@ -73,7 +77,9 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     try {
       writer.startCellEditing(frame.table, 0, 1);
       fail();
@@ -82,7 +88,9 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStopingEditing() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStopingEditing(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     try {
       writer.stopCellEditing(frame.table, 0, 1);
       fail();
@@ -91,7 +99,9 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenCancellingEditing() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenCancellingEditing(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     try {
       writer.cancelCellEditing(frame.table, 0, 1);
       fail();

@@ -20,10 +20,13 @@ import javax.swing.JComboBox;
 import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableComboBoxEditorCellWriter}</code>.
@@ -37,12 +40,16 @@ public class JTableComboBoxEditorCellWriterTest extends JTableCellWriterTestCase
     return new JTableComboBoxEditorCellWriter(robot);
   }
 
-  @Test public void shouldSelectItemInComboBoxEditor() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectItemInComboBoxEditor(EventMode eventMode) {
+    robot().settings().eventMode(eventMode);
     writer().enterValue(table(), 0, 2, "Pool");
     assertThat(valueAt(0, 2)).isEqualTo("Pool");
   }
 
-  @Test public void shouldCancelEditing() {
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldCancelEditing(EventMode eventMode) {
+    robot().settings().eventMode(eventMode);
     int row = 0;
     int column = 2;
     JComboBox editor = (JComboBox)writer().editorForCell(table(), row, column);
