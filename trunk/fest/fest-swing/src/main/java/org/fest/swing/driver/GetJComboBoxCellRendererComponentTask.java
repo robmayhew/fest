@@ -30,18 +30,18 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class GetJComboBoxListCellRendererComponentTask extends GuiTask<Component> {
+class GetJComboBoxCellRendererComponentTask extends GuiTask<Component> {
   
   static final JList REFERENCE_JLIST = new JList();
 
   private final JComboBox comboBox;
   private final int index;
 
-  static Component listCellRendererComponentOf(JComboBox comboBox, int index) {
-    return new GetJComboBoxListCellRendererComponentTask(comboBox, index).run();
+  static Component cellRendererIn(JComboBox comboBox, int index) {
+    return new GetJComboBoxCellRendererComponentTask(comboBox, index).run();
   }
   
-  private GetJComboBoxListCellRendererComponentTask(JComboBox comboBox, int index) {
+  private GetJComboBoxCellRendererComponentTask(JComboBox comboBox, int index) {
     this.index = index;
     this.comboBox = comboBox;
   }

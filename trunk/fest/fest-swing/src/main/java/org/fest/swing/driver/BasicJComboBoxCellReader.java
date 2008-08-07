@@ -23,7 +23,7 @@ import javax.swing.ListCellRenderer;
 import org.fest.swing.cell.JComboBoxCellReader;
 
 import static org.fest.swing.driver.GetJComboBoxItemAtIndexTask.itemAt;
-import static org.fest.swing.driver.GetJComboBoxListCellRendererComponentTask.listCellRendererComponentOf;
+import static org.fest.swing.driver.GetJComboBoxCellRendererComponentTask.cellRendererIn;
 
 /**
  * Understands the default implementation of <code>{@link JComboBoxCellReader}</code>.
@@ -58,6 +58,6 @@ public class BasicJComboBoxCellReader extends BaseValueReader implements JComboB
    * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JComboBox</code>.
    */
   protected final Component cellRendererComponent(JComboBox comboBox, int index) {
-    return listCellRendererComponentOf(comboBox, index);
+    return cellRendererIn(comboBox, index);
   }
 }

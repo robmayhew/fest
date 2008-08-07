@@ -28,14 +28,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.GetJComboBoxListCellRendererComponentTask.REFERENCE_JLIST;
+import static org.fest.swing.driver.GetJComboBoxCellRendererComponentTask.REFERENCE_JLIST;
 
 /**
- * Tests for <code>{@link GetJComboBoxListCellRendererComponentTask}</code>.
+ * Tests for <code>{@link GetJComboBoxCellRendererComponentTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetJComboBoxListCellRendererComponentTaskTest {
+@Test public class GetJComboBoxCellRendererComponentTaskTest {
 
   public void shouldReturnCellRendererComponentOfJComboBoxItem() {
     final JComboBox comboBox = createMock(JComboBox.class);
@@ -51,7 +51,7 @@ import static org.fest.swing.driver.GetJComboBoxListCellRendererComponentTask.RE
       }
 
       protected void codeToTest() {
-        assertThat(GetJComboBoxListCellRendererComponentTask.listCellRendererComponentOf(comboBox, index)).isSameAs(renderer);
+        assertThat(GetJComboBoxCellRendererComponentTask.cellRendererIn(comboBox, index)).isSameAs(renderer);
       }
     }.run();
   }
