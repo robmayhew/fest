@@ -20,9 +20,10 @@ import java.awt.Component;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the name of a <code>{@link Component}</code>.
- *
- * @author Alex Ruiz 
+ * Understands an action, executed in the event dispatch thread, that returns the name of a
+ * <code>{@link Component}</code>.
+ * 
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
 public final class GetComponentNameTask extends GuiTask<String> {

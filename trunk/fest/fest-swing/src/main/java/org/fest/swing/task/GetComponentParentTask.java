@@ -21,9 +21,10 @@ import java.awt.Container;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the parent of a <code>{@link Component}</code>.
- *
- * @author Alex Ruiz 
+ * Understands an action, executed in the event dispatch thread, that returns the parent of a
+ * <code>{@link Component}</code>.
+ * 
+ * @author Alex Ruiz
  */
 public class GetComponentParentTask extends GuiTask<Container> {
 

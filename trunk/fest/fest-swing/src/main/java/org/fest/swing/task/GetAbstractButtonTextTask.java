@@ -20,12 +20,14 @@ import javax.swing.AbstractButton;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the text of an <code>{@link AbstractButton}</code>.
- *
- * @author Alex Ruiz 
+ * Understands an action, executed in the event dispatch thread, that returns the text of an
+ * <code>{@link AbstractButton}</code>.
+ * 
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
 public final class GetAbstractButtonTextTask extends GuiTask<String> {
+  
   private final AbstractButton button;
 
   /**

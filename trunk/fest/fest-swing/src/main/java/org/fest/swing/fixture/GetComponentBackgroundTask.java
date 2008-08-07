@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.fixture;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -20,22 +20,17 @@ import java.awt.Component;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the background color of a <code>{@link Component}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the background color of a
+ * <code>{@link Component}</code>.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class GetComponentBackgroundTask extends GuiTask<Color> {
+final class GetComponentBackgroundTask extends GuiTask<Color> {
 
   private final Component component;
 
-  /**
-   * Returns the background color of the given <code>{@link Component}</code>. This action is executed in the event
-   * dispatch thread.
-   * @param component the given <code>Component</code>.
-   * @return the background color of the given <code>Component</code>.
-   */
-  public static Color backgroundOf(Component component) {
+  static Color backgroundOf(Component component) {
     return new GetComponentBackgroundTask(component).run();
   }
 
@@ -43,11 +38,6 @@ public final class GetComponentBackgroundTask extends GuiTask<Color> {
     this.component = component;
   }
 
-  /**
-   * Returns the background color in this task's <code>{@link Component}</code>. This action is executed in the event
-   * dispatch thread.
-   * @return the background color in this task's <code>Component</code>.
-   */
   protected Color executeInEDT() {
     return component.getBackground();
   }

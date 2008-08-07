@@ -18,8 +18,8 @@ package org.fest.swing.core.matcher;
 import javax.swing.JButton;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.task.GetAbstractButtonTextTask;
 
+import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -67,6 +67,6 @@ public class JButtonByTextMatcher extends GenericTypeMatcher<JButton> {
    * <code>false</code> otherwise.
    */
   protected boolean isMatching(JButton button) {
-    return areEqual(GetAbstractButtonTextTask.textOf(button), text);
+    return areEqual(textOf(button), text);
   }
 }

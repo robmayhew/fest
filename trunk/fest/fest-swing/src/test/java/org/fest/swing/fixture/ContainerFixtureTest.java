@@ -40,8 +40,8 @@ import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
-import static org.fest.swing.task.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.swing.task.GetDialogTitleTask.titleOf;
 import static org.fest.swing.task.GetJComboBoxItemCountTask.itemCountOf;

@@ -42,6 +42,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.IsJTableCellEditableTask.isCellEditable;
 import static org.fest.swing.driver.JTableCell.cell;
 import static org.fest.swing.task.GetJTableCellValueTask.cellValueOf;
 import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
@@ -297,8 +298,9 @@ public class JTableDriverTest {
 
   @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfCellToEditIsNotEditable() {
-    assertThat(dragTable.isCellEditable(0, 0)).isFalse();
-    driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
+    JTableCell cell = cell(0, 0);
+    assertThat(isCellEditable(dragTable, cell)).isFalse();
+    driver.enterValueInCell(dragTable, cell, "Hello");
   }
 
   public void shouldReturnEditorComponentInCell() {

@@ -34,6 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.*;
+import static org.fest.swing.driver.IsJTableCellEditableTask.isCellEditable;
 import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
@@ -375,7 +376,7 @@ public class JTableDriver extends JComponentDriver {
 
   private void requireEditableEqualTo(JTable table, JTableCell cell, boolean editable) {
     validate(table, cell);
-    boolean cellEditable = table.isCellEditable(cell.row, cell.column);
+    boolean cellEditable = isCellEditable(table, cell);
     assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
   }
 

@@ -20,7 +20,7 @@ import java.awt.Point;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the location of a <code>{@link Component}</code> on screen.
+ * Understands an action, executed in the event dispatch thread, that returns the location of a <code>{@link Component}</code> on screen.
  *
  * @author Yvonne Wang
  */
