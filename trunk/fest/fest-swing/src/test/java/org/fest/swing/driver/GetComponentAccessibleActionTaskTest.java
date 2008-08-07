@@ -20,7 +20,6 @@ import java.awt.Component;
 import javax.accessibility.AccessibleAction;
 import javax.accessibility.AccessibleContext;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -31,25 +30,16 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link AccessibleActionFinder}</code>.
+ * Tests for <code>{@link GetComponentAccessibleActionTask}</code>.
  *
  * @author Alex Ruiz
  */
-public class AccessibleActionFinderTest {
+@Test public class GetComponentAccessibleActionTaskTest {
 
-  private Component component;
-  private AccessibleContext context;
-  private AccessibleAction action;
-  private AccessibleActionFinder finder;
-
-  @BeforeMethod public void setUp() throws Exception {
-    component = createMock(Component.class);
-    context = createMock(AccessibleContext.class);
-    action = createMock(AccessibleAction.class);
-    finder = new AccessibleActionFinder();
-  }
-
-  @Test public void shouldFindAccessibleAction() {
+  public void shouldFindAccessibleAction() {
+    final Component component = createMock(Component.class);
+    final AccessibleContext context = createMock(AccessibleContext.class);
+    final AccessibleAction action = createMock(AccessibleAction.class);
     new EasyMockTemplate(component, context, action) {
       protected void expectations() {
         expect(component.getAccessibleContext()).andReturn(context);
@@ -57,7 +47,7 @@ public class AccessibleActionFinderTest {
       }
 
       protected void codeToTest() {
-        AccessibleAction found = finder.accessibleActionFrom(component);
+        AccessibleAction found = GetComponentAccessibleActionTask.accessibleActionFrom(component);
         assertThat(found).isSameAs(action);
       }
     }.run();

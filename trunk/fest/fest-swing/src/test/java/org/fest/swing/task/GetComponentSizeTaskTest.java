@@ -16,7 +16,7 @@
 package org.fest.swing.task;
 
 import java.awt.Component;
-import java.awt.Container;
+import java.awt.Dimension;
 
 import org.testng.annotations.Test;
 
@@ -28,22 +28,22 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetComponentSizeTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetComponentSizeTaskTest {
 
-  public void shouldReturnParentOfComponent() {
+  public void shouldReturnSizeOfComponent() {
     final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
+    final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(component) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(component.getSize()).andReturn(size);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetComponentSizeTask.sizeOf(component)).isSameAs(size);
       }
     }.run();
   }

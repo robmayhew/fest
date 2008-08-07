@@ -24,7 +24,7 @@ import org.fest.swing.core.GuiTask;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.task.GetJListSizeTask.sizeOf;
+import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -71,7 +71,7 @@ public class JListLocation {
    * <code>JList</code>.
    */
   public void validate(JList list, int index) {
-    int itemCount = sizeOf(list);
+    int itemCount = elementCountOf(list);
     if (index >= 0 && index < itemCount) return;
     throw new IndexOutOfBoundsException(concat(
         "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [",  valueOf(itemCount - 1),

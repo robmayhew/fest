@@ -13,11 +13,12 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JList;
+import javax.swing.ListModel;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -28,23 +29,29 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJListElementCountTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJListElementCountTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  @Test(dataProvider = "elementCounts")
+  public void shouldReturnElementCountOfJList(final int elementCount) {
+    final JList list = createMock(JList.class);
+    final ListModel model = createMock(ListModel.class);
+    new EasyMockTemplate(list, model) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(list.getModel()).andReturn(model);
+        expect(model.getSize()).andReturn(elementCount);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJListElementCountTask.elementCountOf(list)).isEqualTo(elementCount);
       }
     }.run();
   }
+  
+  @DataProvider(name = "elementCounts") public Object[][] elementCounts() {
+    return new Object[][] { { 1 }, { 6 }, { 8 } };
+  }  
 }

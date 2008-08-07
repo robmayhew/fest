@@ -15,8 +15,7 @@
  */
 package org.fest.swing.task;
 
-import java.awt.Component;
-import java.awt.Container;
+import java.awt.Dialog;
 
 import org.testng.annotations.Test;
 
@@ -28,22 +27,22 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetDialogTitleTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetDialogTitleTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  public void shouldReturnTitleOfDialog() {
+    final Dialog dialog = createMock(Dialog.class);
+    final String title = "hello";
+    new EasyMockTemplate(dialog) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(dialog.getTitle()).andReturn(title);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetDialogTitleTask.titleOf(dialog)).isSameAs(title);
       }
     }.run();
   }

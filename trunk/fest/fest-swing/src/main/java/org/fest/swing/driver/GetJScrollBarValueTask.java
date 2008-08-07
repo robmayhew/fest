@@ -12,29 +12,24 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the value of a <code>{@link JScrollBar}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the value of a
+ * <code>{@link JScrollBar}</code>.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class GetJScrollBarValueTask extends GuiTask<Integer> {
+final class GetJScrollBarValueTask extends GuiTask<Integer> {
 
   private final JScrollBar scrollBar;
 
-  /**
-   * Returns the value of the given <code>{@link JScrollBar}</code>. This action is executed in the event dispatch
-   * thread.
-   * @param scrollBar the given <code>JScrollBar</code>.
-   * @return the value of the given <code>JScrollBar</code>.
-   */
-  public static int valueOf(JScrollBar scrollBar) {
+  static int valueOf(JScrollBar scrollBar) {
     return new GetJScrollBarValueTask(scrollBar).run();
   }
 
@@ -42,11 +37,6 @@ public final class GetJScrollBarValueTask extends GuiTask<Integer> {
     this.scrollBar = scrollBar;
   }
 
-  /**
-   * Returns the value in this task's <code>{@link JScrollBar}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the value in this task's <code>JScrollBar</code>.
-   */
   protected Integer executeInEDT() {
     return scrollBar.getValue();
   }

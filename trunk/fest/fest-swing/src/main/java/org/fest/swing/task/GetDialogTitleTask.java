@@ -19,7 +19,8 @@ import java.awt.Dialog;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the title of a <code>{@link Dialog}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the title of a 
+ * <code>{@link Dialog}</code>.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang

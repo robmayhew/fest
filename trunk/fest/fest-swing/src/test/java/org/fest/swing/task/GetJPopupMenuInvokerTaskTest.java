@@ -16,7 +16,8 @@
 package org.fest.swing.task;
 
 import java.awt.Component;
-import java.awt.Container;
+
+import javax.swing.JPopupMenu;
 
 import org.testng.annotations.Test;
 
@@ -28,22 +29,22 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJPopupMenuInvokerTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJPopupMenuInvokerTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  public void shouldReturnInvokderOfJPopupMenu() {
+    final JPopupMenu popupMenu = createMock(JPopupMenu.class);
+    final Component invoker = createMock(Component.class);
+    new EasyMockTemplate(popupMenu) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(popupMenu.getInvoker()).andReturn(invoker);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJPopupMenuInvokerTask.invokerOf(popupMenu)).isSameAs(invoker);
       }
     }.run();
   }

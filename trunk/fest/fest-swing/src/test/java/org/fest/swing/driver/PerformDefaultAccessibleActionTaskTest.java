@@ -15,49 +15,56 @@
  */
 package org.fest.swing.driver;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-
 import java.awt.Component;
 
 import javax.accessibility.AccessibleAction;
+import javax.accessibility.AccessibleContext;
 import javax.swing.JTextField;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.driver.AccessibleActionFinder;
-import org.fest.swing.driver.PerformDefaultAccessibleActionTask;
-import org.fest.swing.exception.ActionFailedException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.testing.TestGroups;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 /**
  * Tests for <code>{@link PerformDefaultAccessibleActionTask}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = TestGroups.GUI)
 public class PerformDefaultAccessibleActionTaskTest {
 
   private Component component;
-  private AccessibleActionFinder finder;
+  private AccessibleContext context;
   private AccessibleAction action;
   private PerformDefaultAccessibleActionTask task;
 
   @BeforeMethod public void setUp() {
-    component = new JTextField();
-    finder = createMock(AccessibleActionFinder.class);
+    context = createMock(AccessibleContext.class);
     action = createMock(AccessibleAction.class);
+    component = new GuiTask<Component>() {
+      protected Component executeInEDT() throws Throwable {
+        return new MyComponent(context);
+      }
+    }.run();
   }
 
   @Test public void shouldExecuteFirstActionInAccessibleAction() {
-    new EasyMockTemplate(finder, action) {
+    new EasyMockTemplate(context, action) {
       protected void expectations() {
-        expect(finder.accessibleActionFrom(component)).andReturn(action);
+        expect(context.getAccessibleAction()).andReturn(action);
         expect(action.getAccessibleActionCount()).andReturn(1);
         expect(action.doAccessibleAction(0)).andReturn(true);
       }
 
       protected void codeToTest() {
-        task = new PerformDefaultAccessibleActionTask(finder, component);
+        task = new PerformDefaultAccessibleActionTask(component);
         task.run();
       }
     }.run();
@@ -65,28 +72,42 @@ public class PerformDefaultAccessibleActionTaskTest {
 
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfAccessibleActionIsNull() {
-    new EasyMockTemplate(finder, action) {
+    new EasyMockTemplate(context) {
       protected void expectations() {
-        expect(finder.accessibleActionFrom(component)).andReturn(null);
+        expect(context.getAccessibleAction()).andReturn(null);
       }
 
       protected void codeToTest() {
-        task = new PerformDefaultAccessibleActionTask(finder, component);
+        task = new PerformDefaultAccessibleActionTask(component);
       }
     }.run();
   }
 
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfAccessibleActionIsEmpty() {
-    new EasyMockTemplate(finder, action) {
+    new EasyMockTemplate(context, action) {
       protected void expectations() {
-        expect(finder.accessibleActionFrom(component)).andReturn(action);
+        expect(context.getAccessibleAction()).andReturn(action);
         expect(action.getAccessibleActionCount()).andReturn(0);
       }
 
       protected void codeToTest() {
-        task = new PerformDefaultAccessibleActionTask(finder, component);
+        task = new PerformDefaultAccessibleActionTask(component);
       }
     }.run();
+  }
+  
+  private static class MyComponent extends JTextField {
+    private static final long serialVersionUID = 1L;
+    
+    private final AccessibleContext accessibleContext;
+
+    MyComponent(AccessibleContext accessibleContext) {
+      this.accessibleContext = accessibleContext;
+    }
+
+    @Override public AccessibleContext getAccessibleContext() {
+      return accessibleContext;
+    }
   }
 }

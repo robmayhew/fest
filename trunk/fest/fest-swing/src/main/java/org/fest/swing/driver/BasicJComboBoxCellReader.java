@@ -18,11 +18,12 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.swing.JComboBox;
-import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import org.fest.swing.cell.JComboBoxCellReader;
-import org.fest.swing.core.GuiTask;
+
+import static org.fest.swing.driver.GetJComboBoxItemAtIndexTask.itemAt;
+import static org.fest.swing.driver.GetJComboBoxListCellRendererComponentTask.listCellRendererComponentOf;
 
 /**
  * Understands the default implementation of <code>{@link JComboBoxCellReader}</code>.
@@ -31,8 +32,6 @@ import org.fest.swing.core.GuiTask;
  * @author Yvonne Wang
  */
 public class BasicJComboBoxCellReader extends BaseValueReader implements JComboBoxCellReader {
-
-  static final JList REFERENCE_JLIST = new JList();
 
   /**
    * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test. This method first
@@ -59,40 +58,6 @@ public class BasicJComboBoxCellReader extends BaseValueReader implements JComboB
    * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JComboBox</code>.
    */
   protected final Component cellRendererComponent(JComboBox comboBox, int index) {
-    Component renderer = new GetListCellRendererComponentTask(comboBox, index).run();
-    return renderer;
-  }
-
-  private Object itemAt(JComboBox comboBox, int index) {
-    return new GetItemAtIndexTask(comboBox, index).run();
-  }
-
-  private static class GetItemAtIndexTask extends GuiTask<Object> {
-    private final JComboBox comboBox;
-    private final int index;
-
-    GetItemAtIndexTask(JComboBox comboBox, int index) {
-      this.index = index;
-      this.comboBox = comboBox;
-    }
-
-    protected Object executeInEDT() {
-      return comboBox.getItemAt(index);
-    }
-  }
-
-  private static class GetListCellRendererComponentTask extends GuiTask<Component> {
-    private final JComboBox comboBox;
-    private final int index;
-
-    GetListCellRendererComponentTask(JComboBox comboBox, int index) {
-      this.index = index;
-      this.comboBox = comboBox;
-    }
-
-    protected Component executeInEDT() {
-      Object item = comboBox.getItemAt(index);
-      return comboBox.getRenderer().getListCellRendererComponent(REFERENCE_JLIST, item, index, true, true);
-    }
+    return listCellRendererComponentOf(comboBox, index);
   }
 }

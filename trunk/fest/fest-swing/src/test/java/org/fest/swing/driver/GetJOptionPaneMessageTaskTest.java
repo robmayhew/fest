@@ -13,10 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JOptionPane;
 
 import org.testng.annotations.Test;
 
@@ -28,22 +27,22 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJOptionPaneMessageTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJOptionPaneMessageTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  public void shouldReturnMessageOfJOptionPane() {
+    final JOptionPane optionPane = createMock(JOptionPane.class);
+    final String message = "Hello";
+    new EasyMockTemplate(optionPane) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(optionPane.getMessage()).andReturn(message);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJOptionPaneMessageTask.messageOf(optionPane)).isSameAs(message);
       }
     }.run();
   }

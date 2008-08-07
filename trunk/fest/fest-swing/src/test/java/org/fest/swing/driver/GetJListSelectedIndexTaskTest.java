@@ -13,11 +13,11 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JList;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -28,23 +28,27 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJListSelectedIndexTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJListSelectedIndexTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  @Test(dataProvider = "selectedIndices")
+  public void shouldReturnItemCountOfJList(final int selectedIndex) {
+    final JList list = createMock(JList.class);
+    new EasyMockTemplate(list) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(list.getSelectedIndex()).andReturn(selectedIndex);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJListSelectedIndexTask.selectedIndexOf(list)).isEqualTo(selectedIndex);
       }
     }.run();
   }
+  
+  @DataProvider(name = "selectedIndices") public Object[][] selectedIndices() {
+    return new Object[][] { { 0 }, { 6 }, { 8 } };
+  }  
 }

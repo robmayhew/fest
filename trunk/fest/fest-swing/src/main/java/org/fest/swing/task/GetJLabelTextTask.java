@@ -20,7 +20,7 @@ import javax.swing.JLabel;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the text of a <code>{@link JLabel}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the text of a <code>{@link JLabel}</code>.
  *
  * @author Alex Ruiz 
  * @author Yvonne Wang

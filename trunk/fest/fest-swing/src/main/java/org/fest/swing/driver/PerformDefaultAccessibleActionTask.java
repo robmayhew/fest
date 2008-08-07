@@ -22,6 +22,7 @@ import javax.swing.Action;
 
 import org.fest.swing.exception.ActionFailedException;
 
+import static org.fest.swing.driver.GetComponentAccessibleActionTask.accessibleActionFrom;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
@@ -35,7 +36,6 @@ import static org.fest.util.Strings.concat;
 class PerformDefaultAccessibleActionTask implements Runnable {
 
   private static final int DEFAULT_ACTION_INDEX = 0;
-  private static final AccessibleActionFinder FINDER = new AccessibleActionFinder();
 
   final AccessibleAction action;
 
@@ -46,11 +46,7 @@ class PerformDefaultAccessibleActionTask implements Runnable {
    *         or if the <code>AccessibleAction</code> is empty.
    */
   PerformDefaultAccessibleActionTask(Component c) {
-    this(FINDER, c);
-  }
-
-  PerformDefaultAccessibleActionTask(AccessibleActionFinder finder, Component c) {
-    action = finder.accessibleActionFrom(c);
+    action = accessibleActionFrom(c);
     if (action == null || action.getAccessibleActionCount() == 0)
       throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
   }

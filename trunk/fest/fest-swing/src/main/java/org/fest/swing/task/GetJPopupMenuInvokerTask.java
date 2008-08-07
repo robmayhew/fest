@@ -22,9 +22,10 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the invoker of a <code>{@link JPopupMenu}</code>.
- *
- * @author Alex Ruiz 
+ * Understands an action, executed in the event dispatch thread, that returns the invoker of a
+ * <code>{@link JPopupMenu}</code>.
+ * 
+ * @author Alex Ruiz
  */
 public class GetJPopupMenuInvokerTask extends GuiTask<Component> {
 

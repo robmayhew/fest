@@ -13,28 +13,23 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import javax.swing.JOptionPane;
 
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the message of a <code>{@link JOptionPane}</code>.
- *
- * @author Alex Ruiz 
+ * Understands an action, executed in the event dispatch thread, that returns the message of a
+ * <code>{@link JOptionPane}</code>.
+ * 
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class GetJOptionPaneMessageTask extends GuiTask<Object> {
+class GetJOptionPaneMessageTask extends GuiTask<Object> {
   private final JOptionPane optionPane;
 
-  /**
-   * Returns the message of the given <code>{@link JOptionPane}</code>. This action is executed in the event dispatch
-   * thread.
-   * @param optionPane the given <code>JOptionPane</code>.
-   * @return the message of the given <code>JOptionPane</code>.
-   */
-  public static Object messageOf(JOptionPane optionPane) {
+  static Object messageOf(JOptionPane optionPane) {
     return new GetJOptionPaneMessageTask(optionPane).run();
   }
 
@@ -42,11 +37,6 @@ public class GetJOptionPaneMessageTask extends GuiTask<Object> {
     this.optionPane = optionPane;
   }
 
-  /**
-   * Returns the message in this task's <code>{@link JOptionPane}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the message in this task's <code>JOptionPane</code>.
-   */
   protected Object executeInEDT() {
     return optionPane.getMessage();
   }

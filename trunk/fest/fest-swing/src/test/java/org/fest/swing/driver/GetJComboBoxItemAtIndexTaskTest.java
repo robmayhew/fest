@@ -13,10 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JComboBox;
 
 import org.testng.annotations.Test;
 
@@ -28,23 +27,25 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJComboBoxItemAtIndexTask}</code>.
  *
- * @author Alex Ruiz
+ * @author Alex Ruiz 
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJComboBoxItemAtIndexTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  public void shouldReturnItemAtIndexInJComboBox() {
+    final JComboBox comboBox = createMock(JComboBox.class);
+    final int index = 8;
+    final String value = "Hello";
+    new EasyMockTemplate(comboBox) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(comboBox.getItemAt(index)).andReturn(value);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJComboBoxItemAtIndexTask.itemAt(comboBox, index)).isEqualTo(value);
       }
     }.run();
+
   }
 }

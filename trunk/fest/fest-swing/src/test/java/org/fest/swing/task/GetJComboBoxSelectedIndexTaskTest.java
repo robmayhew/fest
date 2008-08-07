@@ -15,9 +15,9 @@
  */
 package org.fest.swing.task;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JComboBox;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -28,23 +28,27 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJComboBoxSelectedIndexTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJComboBoxSelectedIndexTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  @Test(dataProvider = "selectedIndices")
+  public void shouldReturnItemCountOfJComboBox(final int selectedIndex) {
+    final JComboBox comboBox = createMock(JComboBox.class);
+    new EasyMockTemplate(comboBox) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(comboBox.getSelectedIndex()).andReturn(selectedIndex);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJComboBoxSelectedIndexTask.selectedIndexOf(comboBox)).isEqualTo(selectedIndex);
       }
     }.run();
   }
+  
+  @DataProvider(name = "selectedIndices") public Object[][] selectedIndices() {
+    return new Object[][] { { 0 }, { 6 }, { 8 } };
+  }  
 }

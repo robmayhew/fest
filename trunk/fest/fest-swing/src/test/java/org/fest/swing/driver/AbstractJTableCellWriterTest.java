@@ -15,20 +15,32 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JTable;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.ClickRecorder;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link AbstractJTableCellWriter}</code>.
@@ -36,14 +48,26 @@ import static org.fest.assertions.Fail.fail;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class AbstractJTableCellWriterTest {
+@Test(groups = GUI) 
+public class AbstractJTableCellWriterTest {
 
   private Robot robot;
+  private TableDialogEditDemoFrame frame;
   private AbstractJTableCellWriter writer;
 
   @BeforeMethod public void setUp() {
-    robot = createMock(Robot.class);
+    robot = robotWithNewAwtHierarchy();
     writer = new AbstractJTableCellWriterStub(robot);
+    frame = new GuiTask<TableDialogEditDemoFrame>() {
+      protected TableDialogEditDemoFrame executeInEDT() {
+        return new TableDialogEditDemoFrame();
+      }
+    }.run();
+    robot.showWindow(frame, new Dimension(500, 100));
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldThrowErrorIfEditorToHandleIsNull() {
@@ -55,18 +79,49 @@ import static org.fest.assertions.Fail.fail;
     }
   }
 
-  public void shouldReturnNullEditorComponentIfCellEditorIsNull() {
-    final JTable table = createMock(JTable.class);
-    final int row = 6;
-    final int column = 8;
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.getCellEditor(row, column)).andReturn(null);
-      }
+  @Test(groups = GUI, dataProvider = "cellEditors")
+  public void shouldReturnEditorForCell(int row, int column, Class<Component> editorType) {
+    Component editor = writer.editorForCell(frame.table, row, column);
+    assertThat(editor).isNotNull().isInstanceOf(editorType);
+  }
 
-      protected void codeToTest() {
-        assertThat(writer.editorForCell(table, row, column)).isNull();
-      }
-    }.run();
+  @DataProvider(name = "cellEditors")
+  public Object[][] cellEditors() {
+    return new Object[][] {
+        { 0, 2, JComboBox.class },
+        { 0, 3, JTextField.class },
+        { 0, 4, JCheckBox.class }
+    };
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldClickCellOnce(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    ClickRecorder recorder = ClickRecorder.attachTo(frame.table);
+    int row = 0;
+    int column = 0;
+    Point cellCenter = centerOfCell(row, column);
+    writer.clickCell(frame.table, row, column);
+    assertThat(recorder).clicked(LEFT_BUTTON)
+                        .timesClicked(1)
+                        .clickedAt(cellCenter);
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldClickCell(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    ClickRecorder recorder = ClickRecorder.attachTo(frame.table);
+    int row = 0;
+    int column = 0;
+    Point cellCenter = centerOfCell(row, column);
+    writer.clickCell(frame.table, row, column, 2);
+    assertThat(recorder).clicked(LEFT_BUTTON)
+                        .timesClicked(2)
+                        .clickedAt(cellCenter);
+  }
+
+  private Point centerOfCell(int row, int column) {
+    Rectangle r = frame.table.getCellRect(row, column, false);
+    return new Point(r.x + r.width / 2, r.y + r.height / 2);
   }
 }

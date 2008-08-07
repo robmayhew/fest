@@ -42,7 +42,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.GetJListSelectedItemTask.selectedIndexOf;
+import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;

@@ -13,11 +13,11 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JComboBox;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
@@ -28,23 +28,27 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJComboBoxItemCountTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJComboBoxItemCountTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  @Test(dataProvider = "itemCounts")
+  public void shouldReturnItemCountOfJComboBox(final int itemCount) {
+    final JComboBox comboBox = createMock(JComboBox.class);
+    new EasyMockTemplate(comboBox) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(comboBox.getItemCount()).andReturn(itemCount);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJComboBoxItemCountTask.itemCountOf(comboBox)).isEqualTo(itemCount);
       }
     }.run();
+  }
+  
+  @DataProvider(name = "itemCounts") public Object[][] itemCounts() {
+    return new Object[][] { { 1 }, { 6 }, { 8 }, { 26 } };
   }
 }

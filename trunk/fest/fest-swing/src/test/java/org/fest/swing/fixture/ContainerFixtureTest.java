@@ -31,7 +31,10 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
-import org.fest.swing.task.*;
+import org.fest.swing.task.GetAbstractButtonTextTask;
+import org.fest.swing.task.GetJLabelTextTask;
+import org.fest.swing.task.GetJSliderValueTask;
+import org.fest.swing.task.GetJSpinnerValueTask;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
@@ -44,8 +47,6 @@ import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
 import static org.fest.swing.task.GetComponentNameTask.nameOf;
 import static org.fest.swing.task.GetDialogTitleTask.titleOf;
-import static org.fest.swing.task.GetJComboBoxItemCountTask.itemCountOf;
-import static org.fest.swing.task.GetJOptionPaneMessageTask.messageOf;
 import static org.fest.swing.task.GetJTabbedPaneTabCountTask.tabCountOf;
 import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
 import static org.fest.swing.task.GetJToolBarOrientationTask.isHorizontal;
@@ -158,7 +159,7 @@ public class ContainerFixtureTest {
     JComboBox expectedComboBox = addJComboBox();
     GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
       protected boolean isMatching(JComboBox comboBox) {
-        return itemCountOf(comboBox) == 3;
+        return nameOf(comboBox).equals("comboBox");
       }
     };
     JComboBoxFixture comboBoxFixture = fixture.comboBox(itemCountMatcher);
@@ -398,20 +399,27 @@ public class ContainerFixtureTest {
   public void shouldFindOptionPane() {
     final JButton button = addJButton();
     // show option pane when clicking button
-    new GuiTask<Void>() {
-      protected Void executeInEDT() {
+    robot.invokeAndWait(new Runnable() {
+      public void run() {
         button.setName("button");
         button.addMouseListener(new MouseAdapter() {
           @Override public void mousePressed(MouseEvent e) {
             JOptionPane.showMessageDialog(window, "A Message");
           }
         });
-        return null;
       }
-    }.run();
+    });
     robot.click(button);
     JOptionPaneFixture optionPaneFixture = fixture.optionPane();
     assertThat(messageOf(optionPaneFixture.target)).isEqualTo("A Message");
+  }
+
+  private Object messageOf(final JOptionPane optionPane) {
+    return new GuiTask<Object>() {
+      protected Object executeInEDT() throws Throwable {
+        return optionPane.getMessage();
+      }
+    }.run();
   }
 
   public void shouldFindRadioButtonByType() {
@@ -458,7 +466,7 @@ public class ContainerFixtureTest {
     JScrollBar expectedScrollBar = addJScrollBar();
     GenericTypeMatcher<JScrollBar> valueMatcher = new GenericTypeMatcher<JScrollBar>() {
       protected boolean isMatching(JScrollBar scrollBar) {
-        return GetJScrollBarValueTask.valueOf(scrollBar) == 10;
+        return scrollBar.getName().equals("scrollBar");
       }
     };
     JScrollBarFixture scrollBarFixture = fixture.scrollBar(valueMatcher);

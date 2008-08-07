@@ -39,7 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.task.GetJComboBoxItemCountTask.itemCountOf;
+import static org.fest.swing.driver.GetJComboBoxItemCountTask.itemCountOf;
 import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;

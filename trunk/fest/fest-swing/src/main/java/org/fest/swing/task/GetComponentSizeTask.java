@@ -20,8 +20,9 @@ import java.awt.Dimension;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the size of a <code>{@link Component}</code>.
- *
+ * Understands an action, executed in the event dispatch thread, that returns the size of a
+ * <code>{@link Component}</code>.
+ * 
  * @author Yvonne Wang
  */
 public final class GetComponentSizeTask extends GuiTask<Dimension> {

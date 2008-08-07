@@ -15,8 +15,7 @@
  */
 package org.fest.swing.task;
 
-import java.awt.Component;
-import java.awt.Container;
+import javax.swing.JLabel;
 
 import org.testng.annotations.Test;
 
@@ -28,22 +27,22 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link GetComponentParentTask}</code>
+ * Tests for <code>{@link GetJLabelTextTask}</code>.
  *
- * @author Alex Ruiz
+ * @author Alex Ruiz 
  */
-@Test public class GetComponentParentTaskTest {
+@Test public class GetJLabelTextTaskTest {
 
-  public void shouldReturnParentOfComponent() {
-    final Component component = createMock(Component.class);
-    final Container parent = createMock(Container.class);
-    new EasyMockTemplate(component) {
+  public void shouldReturnTextOfJLabel() {
+    final JLabel label = createMock(JLabel.class);
+    final String text = "Hello";
+    new EasyMockTemplate(label) {
       protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
+        expect(label.getText()).andReturn(text);
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentParentTask.parentOf(component)).isSameAs(parent);
+        assertThat(GetJLabelTextTask.textOf(label)).isSameAs(text);
       }
     }.run();
   }

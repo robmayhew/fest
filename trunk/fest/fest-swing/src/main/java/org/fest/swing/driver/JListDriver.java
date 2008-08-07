@@ -39,8 +39,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.task.GetJListSelectedItemTask.selectedIndexOf;
-import static org.fest.swing.task.GetJListSizeTask.sizeOf;
+import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
+import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
@@ -82,7 +82,7 @@ public class JListDriver extends JComponentDriver {
    * @see #cellReader(JListCellReader)
    */
   public String[] contentsOf(JList list) {
-    String[] values = new String[sizeOf(list)];
+    String[] values = new String[elementCountOf(list)];
     for (int i = 0; i < values.length; i++)
       values[i] = value(list, i);
     return values;
@@ -438,7 +438,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public int indexOf(JList list, String value) {
-    int size = sizeOf(list);
+    int size = elementCountOf(list);
     for (int i = 0; i < size; i++)
       if (areEqual(value, value(list, i))) return i;
     throw indexNotFoundFor(value);

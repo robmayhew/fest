@@ -18,14 +18,13 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.table.TableCellEditor;
 
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.GetJTableCellEditorComponentTask.cellEditorComponentOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 
@@ -86,24 +85,6 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
 
   /** ${@inheritDoc} */
   public Component editorForCell(final JTable table, final int row, final int column) {
-    return new GetCellEditorComponentTask(table, row, column).run();
-  }
-
-  private static class GetCellEditorComponentTask extends GuiTask<Component> {
-    private final JTable table;
-    private final int row;
-    private final int column;
-
-    GetCellEditorComponentTask(JTable table, int row, int column) {
-      this.table = table;
-      this.row = row;
-      this.column = column;
-    }
-
-    protected Component executeInEDT() {
-      TableCellEditor cellEditor = table.getCellEditor(row, column);
-      if (cellEditor == null) return null;
-      return cellEditor.getTableCellEditorComponent(table, table.getValueAt(row, column), false, row, column);
-    }
+    return cellEditorComponentOf(table, row, column);
   }
 }

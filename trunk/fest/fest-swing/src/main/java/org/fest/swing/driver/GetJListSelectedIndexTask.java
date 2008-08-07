@@ -12,39 +12,29 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import javax.swing.JList;
 
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the smallest selection index in a <code>{@link JList}</code>.
- *
+ * Understands an action, executed in the event dispatch thread, that returns the smallest selection index in a
+ * <code>{@link JList}</code>.
+ * 
  * @author Yvonne Wang
  */
-public class GetJListSelectedItemTask extends GuiTask<Integer> {
+class GetJListSelectedIndexTask extends GuiTask<Integer> {
   private final JList list;
 
-  /**
-   * Returns the smallest selection index in the given <code>{@link JList}</code>. This action is executed in the event
-   * dispatch thread.
-   * @param list the given <code>JList</code>.
-   * @return the smallest selection index in the given <code>JList</code>.
-   */
-  public static int selectedIndexOf(JList list) {
-    return new GetJListSelectedItemTask(list).run();
+  static int selectedIndexOf(JList list) {
+    return new GetJListSelectedIndexTask(list).run();
   }
 
-  private GetJListSelectedItemTask(JList list) {
+  private GetJListSelectedIndexTask(JList list) {
     this.list = list;
   }
 
-  /**
-   * Returns the smallest selection index in this task's <code>{@link JList}</code>. This action is executed in the
-   * event dispatch thread.
-   * @return the smallest selection index in this task's <code>JList</code>.
-   */
   protected Integer executeInEDT() {
     return list.getSelectedIndex();
   }

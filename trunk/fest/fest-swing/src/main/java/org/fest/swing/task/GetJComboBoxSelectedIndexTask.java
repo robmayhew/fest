@@ -19,8 +19,9 @@ import javax.swing.JComboBox;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that returns the selected index in a <code>{@link JComboBox}</code>.
- *
+ * Understands an action, executed in the event dispatch thread, that returns the selected index in a
+ * <code>{@link JComboBox}</code>.
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
