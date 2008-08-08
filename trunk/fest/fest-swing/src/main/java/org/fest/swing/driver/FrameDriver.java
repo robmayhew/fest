@@ -25,6 +25,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static java.awt.Frame.*;
 
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.FrameDeiconifiedCondition.untilDeiconified;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
@@ -74,20 +75,7 @@ public class FrameDriver extends WindowDriver {
    */
   public void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    pause(new UntilDeiconified(frame));
-  }
-
-  private static class UntilDeiconified extends Condition {
-    private final Frame target;
-
-    UntilDeiconified(Frame target) {
-      super("frame being deiconified");
-      this.target = target;
-    }
-
-    public boolean test() {
-      return target.getExtendedState() != ICONIFIED;
-    }
+    pause(untilDeiconified(frame));
   }
 
   /**
