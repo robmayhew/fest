@@ -1,5 +1,5 @@
 /*
- * Created on Aug 6, 2008
+ * Created on Aug 8, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,31 +15,29 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JTable;
+import java.awt.Dialog;
 
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a
- * <code>{@link JTable}</code> is editable or not.
+ * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Dialog}</code> is
+ * modal or not.
  * 
  * @author Alex Ruiz
  */
-class IsJTableCellEditableTask extends GuiTask<Boolean> {
-  
-  private final JTable table;
-  private final JTableCell cell;
+class IsDialogModalTask extends GuiTask<Boolean> {
 
-  static boolean isCellEditable(JTable table, JTableCell cell) {
-    return new IsJTableCellEditableTask(table, cell).run();
+  private final Dialog dialog;
+
+  static boolean isModal(Dialog dialog) {
+    return new IsDialogModalTask(dialog).run();
   }
   
-  private IsJTableCellEditableTask(JTable table, JTableCell cell) {
-    this.table = table;
-    this.cell = cell;
+  private IsDialogModalTask(Dialog dialog) {
+    this.dialog = dialog;
   }
   
   protected Boolean executeInEDT() throws Throwable {
-    return table.isCellEditable(cell.row, cell.column);
+    return dialog.isModal();
   }
 }

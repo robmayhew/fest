@@ -20,6 +20,7 @@ import java.awt.Dialog;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.IsDialogModalTask.isModal;
 
 /**
  * Understands simulation of user input on a <code>{@link Dialog}</code>. Unlike <code>DialogFixture</code>, this
@@ -44,6 +45,6 @@ public class DialogDriver extends WindowDriver {
    * @throws AssertionError if this fixture's <code>Dialog</code> is not modal.
    */
   public void requireModal(Dialog dialog) {
-    assertThat(dialog.isModal()).as(propertyName(dialog, "modal")).isTrue();
+    assertThat(isModal(dialog)).as(propertyName(dialog, "modal")).isTrue();
   }
 }
