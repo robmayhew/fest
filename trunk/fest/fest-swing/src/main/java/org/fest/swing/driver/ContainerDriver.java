@@ -93,12 +93,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to resize a window.
    */
   protected Point resizeLocationOf(Container c) {
-    Pair<Dimension, Insets> pair = new GetSizeAndInsetsTask(c).run();
-    return resizeLocation(pair.one, pair.two);
-  }
-
-  private Point resizeLocation(Dimension size, Insets insets) {
-    return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
+    return GetContainerResizeLocationTask.resizeLocationOf(c);
   }
 
   /**
