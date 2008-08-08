@@ -21,7 +21,9 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import org.fest.swing.cell.JListCellReader;
-import org.fest.swing.core.GuiTask;
+
+import static org.fest.swing.driver.GetJListCellRendererComponentTask.cellRendererIn;
+import static org.fest.swing.driver.GetJListElementAtIndexTask.elementAt;
 
 /**
  * Understands the default implementation of <code>{@link JListCellReader}</code>.
@@ -55,39 +57,6 @@ public class BasicJListCellReader extends BaseValueReader implements JListCellRe
    * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JList</code>.
    */
   protected final Component cellRendererComponent(final JList list, final int index) {
-    return new GetCellRendererComponentTask(list, index).run();
-  }
-
-  private Object elementAt(JList list, int index) {
-    return new GetElementAtIndexTask(list, index).run();
-  }
-
-  private static class GetElementAtIndexTask extends GuiTask<Object> {
-    private final JList list;
-    private final int index;
-
-     GetElementAtIndexTask(JList list, int index) {
-      this.list = list;
-      this.index = index;
-    }
-
-    protected Object executeInEDT() {
-      return list.getModel().getElementAt(index);
-    }
-  }
-
-  private static class GetCellRendererComponentTask extends GuiTask<Component> {
-    private final JList list;
-    private final int index;
-
-    GetCellRendererComponentTask(JList list, int index) {
-      this.list = list;
-      this.index = index;
-    }
-
-    protected Component executeInEDT() {
-      Object element = list.getModel().getElementAt(index);
-      return list.getCellRenderer().getListCellRendererComponent(list, element, index, false, false);
-    }
+    return cellRendererIn(list, index);
   }
 }

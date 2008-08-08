@@ -1,5 +1,5 @@
 /*
- * Created on Aug 6, 2008
+ * Created on Aug 7, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,37 +17,31 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
-import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
 import org.fest.swing.core.GuiTask;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
- * list renderer for a particular item in a <code>{@link JComboBox}</code>.
+ * list renderer for a particular item in a <code>{@link JList}</code>.
  * 
  * @author Alex Ruiz
  */
-class GetJComboBoxCellRendererComponentTask extends GuiTask<Component> {
-  
-  static final JList REFERENCE_JLIST = new JList();
-
-  private final JComboBox comboBox;
+class GetJListCellRendererComponentTask extends GuiTask<Component> {
+  private final JList list;
   private final int index;
 
-  static Component cellRendererIn(JComboBox comboBox, int index) {
-    return new GetJComboBoxCellRendererComponentTask(comboBox, index).run();
+  static Component cellRendererIn(JList list, int index) {
+    return new GetJListCellRendererComponentTask(list, index).run();
   }
   
-  private GetJComboBoxCellRendererComponentTask(JComboBox comboBox, int index) {
+  private GetJListCellRendererComponentTask(JList list, int index) {
+    this.list = list;
     this.index = index;
-    this.comboBox = comboBox;
   }
 
   protected Component executeInEDT() {
-    Object item = comboBox.getItemAt(index);
-    ListCellRenderer renderer = comboBox.getRenderer();
-    return renderer.getListCellRendererComponent(REFERENCE_JLIST, item, index, true, true);
+    Object element = list.getModel().getElementAt(index);
+    return list.getCellRenderer().getListCellRendererComponent(list, element, index, false, false);
   }
 }
