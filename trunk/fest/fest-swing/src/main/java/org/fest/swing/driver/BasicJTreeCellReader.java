@@ -15,14 +15,13 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 
 import javax.swing.JTree;
-import javax.swing.tree.TreeCellRenderer;
 
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.driver.GetJTreeCellRendererTask.cellRendererIn;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**
@@ -41,41 +40,23 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
    * @see BaseValueReader#valueFrom(java.awt.Component)
    */
   public String valueAt(JTree tree, Object modelValue) {
-    String value = valueFrom(cellRendererComponent(tree, modelValue));
+    String value = valueFrom(cellRendererIn(tree, modelValue));
     if (value != null) return value;
     return valueToText(tree, modelValue);
   }
 
-  private Component cellRendererComponent(JTree tree, Object modelValue) {
-    return new GetTreeCellRendererComponentTask(modelValue, tree).run();
-  }
-
   private String valueToText(final JTree tree, final Object modelValue) {
-    String text = new ConvertValueToTextTask(tree, modelValue).run();
+    String text = new JTreeConvertValueToTextTask(tree, modelValue).run();
     if (isDefaultToString(text)) return null;
     return text;
   }
 
-  private static class GetTreeCellRendererComponentTask extends GuiTask<Component> {
-    private final Object modelValue;
-    private final JTree tree;
+  private static class JTreeConvertValueToTextTask extends GuiTask<String> {
 
-    GetTreeCellRendererComponentTask(Object modelValue, JTree tree) {
-      this.modelValue = modelValue;
-      this.tree = tree;
-    }
-
-    protected Component executeInEDT() {
-      TreeCellRenderer r = tree.getCellRenderer();
-      return r.getTreeCellRendererComponent(tree, modelValue, false, false, false, 0, false);
-    }
-  }
-
-  private static class ConvertValueToTextTask extends GuiTask<String> {
     private final JTree tree;
     private final Object modelValue;
 
-    ConvertValueToTextTask(JTree tree, Object modelValue) {
+    JTreeConvertValueToTextTask(JTree tree, Object modelValue) {
       this.tree = tree;
       this.modelValue = modelValue;
     }

@@ -23,7 +23,7 @@ import javax.swing.ListCellRenderer;
 import org.fest.swing.cell.JComboBoxCellReader;
 
 import static org.fest.swing.driver.GetJComboBoxItemAtIndexTask.itemAt;
-import static org.fest.swing.driver.GetJComboBoxCellRendererComponentTask.cellRendererIn;
+import static org.fest.swing.driver.GetJComboBoxCellRendererTask.cellRendererIn;
 
 /**
  * Understands the default implementation of <code>{@link JComboBoxCellReader}</code>.

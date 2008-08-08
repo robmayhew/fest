@@ -29,7 +29,7 @@ import org.fest.swing.core.GuiTask;
  * 
  * @author Alex Ruiz
  */
-class GetJComboBoxCellRendererComponentTask extends GuiTask<Component> {
+class GetJComboBoxCellRendererTask extends GuiTask<Component> {
   
   static final JList REFERENCE_JLIST = new JList();
 
@@ -37,10 +37,10 @@ class GetJComboBoxCellRendererComponentTask extends GuiTask<Component> {
   private final int index;
 
   static Component cellRendererIn(JComboBox comboBox, int index) {
-    return new GetJComboBoxCellRendererComponentTask(comboBox, index).run();
+    return new GetJComboBoxCellRendererTask(comboBox, index).run();
   }
   
-  private GetJComboBoxCellRendererComponentTask(JComboBox comboBox, int index) {
+  private GetJComboBoxCellRendererTask(JComboBox comboBox, int index) {
     this.index = index;
     this.comboBox = comboBox;
   }

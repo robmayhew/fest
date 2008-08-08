@@ -27,8 +27,8 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
-import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.driver.GetJTableCellRendererTask.cellRendererIn;
 import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.task.GetJLabelTextTask.textOf;
 import static org.fest.swing.task.GetJTableCellValueTask.cellValueOf;
@@ -99,25 +99,6 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
    * @return the <code>Component</code> used by the <code>TableCellRenderer</code> in the given <code>JTable</code>.
    */
   protected final Component cellRendererComponent(JTable table, int row, int column) {
-    return new GetCellRendererComponentTask(table, row, column).run();
-  }
-
-  private static class GetCellRendererComponentTask extends GuiTask<Component> {
-    private final JTable table;
-    private final int row;
-    private final int column;
-
-    GetCellRendererComponentTask(JTable table, int row, int column) {
-      this.table = table;
-      this.row = row;
-      this.column = column;
-    }
-
-    protected Component executeInEDT() {
-      Object value = table.getValueAt(row, column);
-      TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-      boolean cellSelected = table.isCellSelected(row, column);
-      return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
-    }
+    return cellRendererIn(table, row, column);
   }
 }

@@ -15,41 +15,101 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
+import java.util.Locale;
 
-import javax.accessibility.AccessibleAction;
-import javax.accessibility.AccessibleContext;
+import javax.accessibility.*;
+import javax.swing.JButton;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link GetComponentAccessibleActionTask}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test public class GetComponentAccessibleActionTaskTest {
+@Test(groups = GUI)
+public class GetComponentAccessibleActionTaskTest {
 
-  public void shouldFindAccessibleAction() {
-    final Component component = createMock(Component.class);
-    final AccessibleContext context = createMock(AccessibleContext.class);
-    final AccessibleAction action = createMock(AccessibleAction.class);
-    new EasyMockTemplate(component, context, action) {
-      protected void expectations() {
-        expect(component.getAccessibleContext()).andReturn(context);
-        expect(context.getAccessibleAction()).andReturn(action);
-      }
+  private MyFrame frame;
+  private AccessibleAction action;
 
-      protected void codeToTest() {
-        AccessibleAction found = GetComponentAccessibleActionTask.accessibleActionFrom(component);
-        assertThat(found).isSameAs(action);
+  @BeforeMethod public void setUp() {
+    action = createMock(AccessibleAction.class);
+    frame = new GuiTask<MyFrame>() {
+      protected MyFrame executeInEDT() throws Throwable {
+        return new MyFrame(action);
       }
     }.run();
+    frame.display();
+  }
+
+  @AfterMethod public void tearDown() {
+    frame.destroy();
+  }
+
+  public void shouldFindAccessibleAction() {
+    AccessibleAction actualAction = GetComponentAccessibleActionTask.accessibleActionFrom(frame.button);
+    assertThat(actualAction).isSameAs(action);
+  }
+
+  private static class MyFrame extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyButton button = new MyButton("Hello");
+
+    MyFrame(AccessibleAction action) {
+      super(GetComponentAccessibleActionTaskTest.class);
+      AccessibleContext context = new MyAccessibleContext(action);
+      button.accessibleContext(context);
+      add(button);
+    }
+  }
+
+  private static class MyButton extends JButton {
+    private static final long serialVersionUID = 1L;
+
+    private AccessibleContext accessibleContext;
+
+    public MyButton(String text) {
+      super(text);
+    }
+
+    void accessibleContext(AccessibleContext newAccessibleContext) {
+      accessibleContext = newAccessibleContext;
+    }
+
+    @Override public AccessibleContext getAccessibleContext() {
+      return accessibleContext;
+    }
+  }
+
+  private static class MyAccessibleContext extends AccessibleContext {
+    private final AccessibleAction accessibleAction;
+
+    MyAccessibleContext(AccessibleAction accessibleAction) {
+      this.accessibleAction = accessibleAction;
+    }
+
+    @Override public AccessibleAction getAccessibleAction() {
+      return accessibleAction;
+    }
+
+    public Accessible getAccessibleChild(int i) { return null; }
+    public int getAccessibleChildrenCount() { return 0; }
+    public int getAccessibleIndexInParent() { return 0; }
+    public AccessibleRole getAccessibleRole() { return null; }
+    public AccessibleStateSet getAccessibleStateSet() { return null; }
+    public Locale getLocale() { return null; }
   }
 }

@@ -21,10 +21,11 @@ import org.fest.swing.core.GuiTask;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the smallest selection index in a
  * <code>{@link JList}</code>.
- * 
+ *
  * @author Yvonne Wang
  */
 class GetJListSelectedIndexTask extends GuiTask<Integer> {
+
   private final JList list;
 
   static int selectedIndexOf(JList list) {

@@ -24,7 +24,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.GetJTableCellEditorComponentTask.cellEditorComponentOf;
+import static org.fest.swing.driver.GetJTableCellEditorTask.cellEditorIn;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 
@@ -85,6 +85,6 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
 
   /** ${@inheritDoc} */
   public Component editorForCell(final JTable table, final int row, final int column) {
-    return cellEditorComponentOf(table, row, column);
+    return cellEditorIn(table, row, column);
   }
 }
