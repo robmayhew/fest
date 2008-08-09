@@ -20,10 +20,9 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiTask;
-
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.driver.GetJListCellBoundsTask.cellBoundsOf;
 import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
 import static org.fest.util.Strings.concat;
 
@@ -32,6 +31,7 @@ import static org.fest.util.Strings.concat;
  * value.)
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class JListLocation {
 
@@ -43,24 +43,10 @@ public class JListLocation {
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
-  public Point pointAt(final JList list, final int index) {
+  public Point pointAt(JList list, int index) {
     validate(list, index);
-    Rectangle rect = new GetCellBoundsTask(index, list).run();
-    return new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
-  }
-
-  private static class GetCellBoundsTask extends GuiTask<Rectangle> {
-    private final int index;
-    private final JList list;
-
-    GetCellBoundsTask(int index, JList list) {
-      this.index = index;
-      this.list = list;
-    }
-
-    protected Rectangle executeInEDT() throws Throwable {
-      return list.getCellBounds(index, index);
-    }
+    Rectangle cellBounds = cellBoundsOf(list, index);
+    return new Point(cellBounds.x + cellBounds.width / 2, cellBounds.y + cellBounds.height / 2);
   }
 
   /**
