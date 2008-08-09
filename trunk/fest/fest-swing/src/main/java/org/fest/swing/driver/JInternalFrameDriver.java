@@ -20,13 +20,15 @@ import java.awt.Point;
 import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JInternalFrame.JDesktopIcon;
 
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JInternalFrameSetPropertyTask.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
 
+import static org.fest.swing.driver.GetJInternalFrameDesktopIconTask.desktopIconOf;
+import static org.fest.swing.driver.IsJInternalFrameClosableTask.isClosable;
+import static org.fest.swing.driver.IsJInternalFrameIconifiableTask.isIconifiable;
+import static org.fest.swing.driver.IsJInternalFrameMaximizableTask.isMaximizable;
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -56,19 +58,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param frame the target <code>JInternalFrame</code>.
    */
   public void moveToFront(JInternalFrame frame) {
-    robot.invokeAndWait(new MoveToFrontTask(frame));
-  }
-
-  private static class MoveToFrontTask implements Runnable {
-    private final JInternalFrame f;
-
-    MoveToFrontTask(JInternalFrame f) {
-      this.f = f;
-    }
-
-    public void run() {
-      f.toFront();
-    }
+    robot.invokeAndWait(new MoveJInternalFrameToFrontTask(frame));
   }
 
   /**
@@ -76,19 +66,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param frame the target <code>JInternalFrame</code>.
    */
   public void moveToBack(JInternalFrame frame) {
-    robot.invokeAndWait(new MoveToBackTask(frame));
-  }
-
-  private static class MoveToBackTask implements Runnable {
-    private final JInternalFrame f;
-
-    MoveToBackTask(JInternalFrame f) {
-      this.f = f;
-    }
-
-    public void run() {
-      f.toBack();
-    }
+    robot.invokeAndWait(new MoveJInternalFrameToBackTask(frame));
   }
 
   /**
@@ -103,22 +81,6 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     maximizeOrNormalize(frame, MAXIMIZE);
   }
 
-  private boolean isMaximizable(JInternalFrame frame) {
-    return new IsInternalFrameMaximizableTask(frame).run();
-  }
-
-  private static class IsInternalFrameMaximizableTask extends GuiTask<Boolean> {
-    private final JInternalFrame frame;
-
-    IsInternalFrameMaximizableTask(JInternalFrame frame) {
-      this.frame = frame;
-    }
-
-    protected Boolean executeInEDT() {
-      return frame.isMaximizable();
-    }
-  }
-
   /**
    * Normalizes the given <code>{@link JInternalFrame}</code>, deconifying it first if it is iconified.
    * @param frame the target <code>JInternalFrame</code>.
@@ -130,21 +92,11 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
   private void maximizeOrNormalize(JInternalFrame frame, JInternalFrameAction action) {
     Container clickTarget = frame;
-    if (isIconified(frame)) clickTarget = desktopIconOf(frame);
+    if (isIconified(frame)) clickTarget = GetJInternalFrameDesktopIconTask.desktopIconOf(frame);
     Point p = maximizeLocation(clickTarget);
     robot.moveMouse(clickTarget, p.x, p.y);
     if (isIconified(frame)) deiconify(frame);
-    setProperty(new SetMaximumTask(frame, action));
-  }
-
-  private static class SetMaximumTask extends JInternalFrameSetPropertyTask {
-    SetMaximumTask(JInternalFrame target, JInternalFrameAction action) {
-      super(target, action);
-    }
-
-    public void execute() throws PropertyVetoException {
-      target.setMaximum(action.value);
-    }
+    setProperty(new SetJInternalFrameMaximumTask(frame, action));
   }
 
   /**
@@ -153,29 +105,13 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public void iconify(final JInternalFrame frame) {
+  public void iconify(JInternalFrame frame) {
     if (isIconified(frame)) return;
     if (!isIconifiable(frame))
       throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not iconifiable"));
     Point p = iconifyLocation(frame);
     robot.moveMouse(frame, p.x, p.y);
-    setProperty(new SetIconTask(frame, ICONIFY));
-  }
-
-  private boolean isIconifiable(final JInternalFrame frame) {
-    return new IsIconifiableTask(frame).run();
-  }
-
-  private static class IsIconifiableTask extends GuiTask<Boolean> {
-    private final JInternalFrame frame;
-
-    IsIconifiableTask(JInternalFrame frame) {
-      this.frame = frame;
-    }
-
-    protected Boolean executeInEDT() {
-      return frame.isIconifiable();
-    }
+    setProperty(new SetJInternalFrameIconTask(frame, ICONIFY));
   }
 
   /**
@@ -188,33 +124,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     Container c = desktopIconOf(frame);
     Point p = iconifyLocation(c);
     robot.moveMouse(c, p.x, p.y);
-    setProperty(new SetIconTask(frame, DEICONIFY));
-  }
-
-  private JDesktopIcon desktopIconOf(final JInternalFrame frame) {
-    return new GetJDesktopIconTask(frame).run();
-  }
-
-  private static class GetJDesktopIconTask extends GuiTask<JDesktopIcon> {
-    private final JInternalFrame frame;
-
-    GetJDesktopIconTask(JInternalFrame frame) {
-      this.frame = frame;
-    }
-
-    protected JDesktopIcon executeInEDT() {
-      return frame.getDesktopIcon();
-    }
-  }
-
-  private static class SetIconTask extends JInternalFrameSetPropertyTask {
-    SetIconTask(JInternalFrame target, JInternalFrameAction action) {
-      super(target, action);
-    }
-
-    public void execute() throws PropertyVetoException {
-      target.setIcon(action.value);
-    }
+    setProperty(new SetJInternalFrameIconTask(frame, DEICONIFY));
   }
 
   void setProperty(JInternalFrameSetPropertyTask task) {
@@ -273,34 +183,6 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     // This is LAF-specific, so it must be done programmatically.
     Point p = closeLocation(frame);
     robot.moveMouse(frame, p.x, p.y);
-    robot.invokeAndWait(new CloseFrameTask(frame));
-  }
-
-  private boolean isClosable(final JInternalFrame frame) {
-    return new IsClosableTask(frame).run();
-  }
-
-  private static class IsClosableTask extends GuiTask<Boolean> {
-    private final JInternalFrame frame;
-
-    IsClosableTask(JInternalFrame frame) {
-      this.frame = frame;
-    }
-
-    protected Boolean executeInEDT() {
-      return frame.isClosable();
-    }
-  }
-
-  private static class CloseFrameTask implements Runnable {
-    private final JInternalFrame target;
-
-    CloseFrameTask(JInternalFrame target) {
-      this.target = target;
-    }
-
-    public void run() {
-      target.doDefaultCloseAction();
-    }
+    robot.invokeAndWait(new CloseJInternalFrameTask(frame));
   }
 }
