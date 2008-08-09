@@ -30,6 +30,7 @@ import org.fest.swing.exception.ComponentLookupException;
 
 import static javax.swing.JFileChooser.*;
 
+import static org.fest.swing.driver.GetJFileChooserApproveButtonTextTask.approveButtonTextFrom;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -171,28 +172,10 @@ public class JFileChooserDriver extends JComponentDriver {
    * @throws ComponentLookupException if the "Approve" button cannot be found.
    */
   public JButton approveButton(JFileChooser fileChooser) {
-    String buttonText = approveButtonText(fileChooser);
+    String buttonText = approveButtonTextFrom(fileChooser);
     JButton approveButton = findButton(fileChooser, buttonText);
     if (approveButton == null) throw cannotFindButton("Approve", buttonText);
     return approveButton;
-  }
-
-  private String approveButtonText(final JFileChooser fileChooser) {
-    return new GetApproveButtonTextTask(fileChooser).run();
-  }
-
-  private static class GetApproveButtonTextTask extends GuiTask<String> {
-    private final JFileChooser fileChooser;
-
-    GetApproveButtonTextTask(JFileChooser fileChooser) {
-      this.fileChooser = fileChooser;
-    }
-
-    protected String executeInEDT() {
-      String text = fileChooser.getApproveButtonText();
-      if (isEmpty(text)) text = fileChooser.getUI().getApproveButtonText(fileChooser);
-      return text;
-    }
   }
 
   private JButton findButton(JFileChooser fileChooser, String text) {
