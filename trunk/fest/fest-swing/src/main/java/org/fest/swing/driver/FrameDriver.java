@@ -18,7 +18,6 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -26,6 +25,9 @@ import static java.awt.Frame.*;
 
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.FrameDeiconifiedCondition.untilDeiconified;
+import static org.fest.swing.driver.FrameIconifiedCondition.untilIconified;
+import static org.fest.swing.driver.FrameMaximizedCondition.untilMaximized;
+import static org.fest.swing.driver.FrameNormalizedCondition.untilNormalized;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
@@ -53,20 +55,7 @@ public class FrameDriver extends WindowDriver {
     Point p = iconifyLocation(frame);
     if (p != null) robot.moveMouse(frame, p.x, p.y);
     updateFrameExtendedState(frame, ICONIFIED);
-    pause(new UntilIconified(frame));
-  }
-
-  private static class UntilIconified extends Condition {
-    private final Frame target;
-
-    UntilIconified(Frame target) {
-      super("frame being iconified");
-      this.target = target;
-    }
-
-    public boolean test() {
-      return target.getExtendedState() == ICONIFIED;
-    }
+    pause(untilIconified(frame));
   }
 
   /**
@@ -84,20 +73,7 @@ public class FrameDriver extends WindowDriver {
    */
   public void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    pause(new UntilNormalized(frame));
-  }
-
-  private static class UntilNormalized extends Condition {
-    private final Frame target;
-
-    UntilNormalized(Frame target) {
-      super("frame being normalized");
-      this.target = target;
-    }
-
-    public boolean test() {
-      return target.getExtendedState() == NORMAL;
-    }
+    pause(untilNormalized(frame));
   }
 
   /**
@@ -108,29 +84,17 @@ public class FrameDriver extends WindowDriver {
   public void maximize(Frame frame) {
     Point p = maximizeLocation(frame);
     if (p != null) robot.moveMouse(frame, p.x, p.y);
-    if (!supportsMaximize()) throw actionFailure("Platform does not support maximizing frames");
+    if (!supportsMaximize(Toolkit.getDefaultToolkit())) 
+      throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
-    pause(new UntilMaximized(frame));
-  }
-
-  private static class UntilMaximized extends Condition {
-    private final Frame target;
-
-    UntilMaximized(Frame target) {
-      super("frame being maximized");
-      this.target = target;
-    }
-
-    public boolean test() {
-      return (target.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
-    }
+    pause(untilMaximized(frame));
   }
 
   private void updateFrameExtendedState(Frame frame, int state) {
     frame.setExtendedState(state);
   }
 
-  private boolean supportsMaximize() {
-    return Toolkit.getDefaultToolkit().isFrameStateSupported(MAXIMIZED_BOTH);
+  static boolean supportsMaximize(Toolkit toolkit) {
+    return toolkit.isFrameStateSupported(MAXIMIZED_BOTH);
   }
 }

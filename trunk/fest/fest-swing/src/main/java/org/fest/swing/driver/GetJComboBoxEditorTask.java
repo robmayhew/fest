@@ -15,31 +15,31 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
+import java.awt.Component;
 
-import org.fest.swing.core.Condition;
+import javax.swing.JComboBox;
 
-import static java.awt.Frame.ICONIFIED;
+import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a condition that verifies that a <code>{@link Frame}</code> has been deiconified.
+ * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as 
+ * editor of a given <code>{@link JComboBox}</code>. 
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
  */
-class FrameDeiconifiedCondition extends Condition {
+class GetJComboBoxEditorTask extends GuiTask<Component> {
   
-  private final Frame frame;
+  private final JComboBox comboBox;
 
-  static FrameDeiconifiedCondition untilDeiconified(Frame frame) {
-    return new FrameDeiconifiedCondition(frame);
+  static Component editorOf(JComboBox comboBox) {
+    return new GetJComboBoxEditorTask(comboBox).run();
   }
   
-  private FrameDeiconifiedCondition(Frame target) {
-    super("frame being deiconified");
-    this.frame = target;
+  private GetJComboBoxEditorTask(JComboBox comboBox) {
+    this.comboBox = comboBox;
   }
 
-  public boolean test() {
-    return frame.getExtendedState() != ICONIFIED;
+  protected Component executeInEDT() {
+    return comboBox.getEditor().getEditorComponent();
   }
 }

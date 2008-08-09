@@ -15,31 +15,28 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
+import javax.swing.JComboBox;
 
-import org.fest.swing.core.Condition;
-
-import static java.awt.Frame.ICONIFIED;
+import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a condition that verifies that a <code>{@link Frame}</code> has been deiconified.
+ * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link JComboBox}</code> 
+ * is editable or not.
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
  */
-class FrameDeiconifiedCondition extends Condition {
-  
-  private final Frame frame;
+class IsJComboBoxEditableTask extends GuiTask<Boolean> {
+  private final JComboBox comboBox;
 
-  static FrameDeiconifiedCondition untilDeiconified(Frame frame) {
-    return new FrameDeiconifiedCondition(frame);
+  static boolean isEditable(JComboBox comboBox) {
+    return new IsJComboBoxEditableTask(comboBox).run();
   }
   
-  private FrameDeiconifiedCondition(Frame target) {
-    super("frame being deiconified");
-    this.frame = target;
+  private IsJComboBoxEditableTask(JComboBox comboBox) {
+    this.comboBox = comboBox;
   }
 
-  public boolean test() {
-    return frame.getExtendedState() != ICONIFIED;
+  protected Boolean executeInEDT() {
+    return comboBox.isEditable();
   }
 }

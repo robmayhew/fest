@@ -15,31 +15,24 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
-
-import org.fest.swing.core.Condition;
-
-import static java.awt.Frame.ICONIFIED;
+import javax.swing.JComboBox;
 
 /**
- * Understands a condition that verifies that a <code>{@link Frame}</code> has been deiconified.
+ * Understands a task that shows/hides the drop-down menu of a <code>{@link JComboBox}</code>.
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
  */
-class FrameDeiconifiedCondition extends Condition {
+class SetJComboBoxDropDownVisibleTask implements Runnable {
   
-  private final Frame frame;
+  private final JComboBox comboBox;
+  private final boolean visible;
 
-  static FrameDeiconifiedCondition untilDeiconified(Frame frame) {
-    return new FrameDeiconifiedCondition(frame);
-  }
-  
-  private FrameDeiconifiedCondition(Frame target) {
-    super("frame being deiconified");
-    this.frame = target;
+  SetJComboBoxDropDownVisibleTask(JComboBox comboBox, boolean visible) {
+    this.comboBox = comboBox;
+    this.visible = visible;
   }
 
-  public boolean test() {
-    return frame.getExtendedState() != ICONIFIED;
+  public void run() {
+    comboBox.getUI().setPopupVisible(comboBox, visible);
   }
 }

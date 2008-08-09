@@ -15,31 +15,32 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
+import java.awt.Rectangle;
 
-import org.fest.swing.core.Condition;
+import javax.swing.JComponent;
 
-import static java.awt.Frame.ICONIFIED;
+import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a condition that verifies that a <code>{@link Frame}</code> has been deiconified.
+ * Understands an action, executed in the event dispatch thread, that returns the "visible rectangle" of a 
+ * <code>{@link JComponent}</code>.
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-class FrameDeiconifiedCondition extends Condition {
+class GetJComponentVisibleRectTask extends GuiTask<Rectangle> {
   
-  private final Frame frame;
+  private final JComponent component;
 
-  static FrameDeiconifiedCondition untilDeiconified(Frame frame) {
-    return new FrameDeiconifiedCondition(frame);
+  static Rectangle visibleRectOf(JComponent component) {
+    return new GetJComponentVisibleRectTask(component).run();
   }
   
-  private FrameDeiconifiedCondition(Frame target) {
-    super("frame being deiconified");
-    this.frame = target;
+  private GetJComponentVisibleRectTask(JComponent component) {
+    this.component = component;
   }
 
-  public boolean test() {
-    return frame.getExtendedState() != ICONIFIED;
+  protected Rectangle executeInEDT() {
+    return component.getVisibleRect();
   }
 }

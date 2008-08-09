@@ -20,14 +20,12 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
-import static org.fest.swing.driver.Actions.findActionKey;
-import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
+import static org.fest.swing.driver.GetJComponentKeyStrokesForActionTask.keyStrokesForAction;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -72,7 +70,7 @@ public class JComponentDriver extends ContainerDriver {
    *         visible <code>Rectangle</code>.
    */
   protected final boolean isVisible(JComponent c, Rectangle r) {
-    return visibleRectangleOf(c).contains(r);
+    return GetJComponentVisibleRectTask.visibleRectOf(c).contains(r);
   }
 
   /**
@@ -84,12 +82,7 @@ public class JComponentDriver extends ContainerDriver {
    *         visible <code>Rectangle</code>.
    */
   protected final boolean isVisible(JComponent c, Point p) {
-    return visibleRectangleOf(c).contains(p);
-  }
-
-  private Rectangle visibleRectangleOf(final JComponent c) {
-    Rectangle visibleRect = new GetVisibleRectTask(c).run();
-    return visibleRect;
+    return GetJComponentVisibleRectTask.visibleRectOf(c).contains(p);
   }
 
   /**
@@ -104,11 +97,7 @@ public class JComponentDriver extends ContainerDriver {
    */
   public final void invokeAction(JComponent c, String name) {
     focusAndWaitForFocusGain(c);
-    // From Abbot: On OSX/1.3.1, some action map keys are actions instead of strings.
-    // On XP/1.4.1, all action map keys are strings.
-    // If we can't look it up with the string key we saved, check all the actions for a corresponding name.
-    KeyStroke[] keyStrokes = new GetKeyStrokesForAction(c, name).run();
-    for (KeyStroke keyStroke : keyStrokes) {
+    for (KeyStroke keyStroke : keyStrokesForAction(c, name)) {
       try {
         type(keyStroke);
         robot.waitForIdle();
@@ -124,32 +113,5 @@ public class JComponentDriver extends ContainerDriver {
       return;
     }
     robot.pressAndReleaseKey(keyStroke.getKeyCode(), keyStroke.getModifiers());
-  }
-
-  private static class GetVisibleRectTask extends GuiTask<Rectangle> {
-    private final JComponent c;
-
-    GetVisibleRectTask(JComponent c) {
-      this.c = c;
-    }
-
-    protected Rectangle executeInEDT() {
-      return c.getVisibleRect();
-    }
-  }
-
-  private static class GetKeyStrokesForAction extends GuiTask<KeyStroke[]> {
-    private final JComponent c;
-    private final String actionName;
-
-    GetKeyStrokesForAction(JComponent c, String actionName) {
-      this.c = c;
-      this.actionName = actionName;
-    }
-
-    protected KeyStroke[] executeInEDT() {
-      Object key = findActionKey(actionName, c.getActionMap());
-      return findKeyStrokesForAction(actionName, key, c.getInputMap());
-    }
   }
 }

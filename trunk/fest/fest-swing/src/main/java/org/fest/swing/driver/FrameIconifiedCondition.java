@@ -22,24 +22,23 @@ import org.fest.swing.core.Condition;
 import static java.awt.Frame.ICONIFIED;
 
 /**
- * Understands a condition that verifies that a <code>{@link Frame}</code> has been deiconified.
+ * Understands a condition that verifies that a <code>{@link Frame}</code> has been iconified.
  *
  * @author Alex Ruiz 
  */
-class FrameDeiconifiedCondition extends Condition {
-  
+class FrameIconifiedCondition extends Condition {
   private final Frame frame;
 
-  static FrameDeiconifiedCondition untilDeiconified(Frame frame) {
-    return new FrameDeiconifiedCondition(frame);
+  static FrameIconifiedCondition untilIconified(Frame frame) {
+    return new FrameIconifiedCondition(frame);
   }
   
-  private FrameDeiconifiedCondition(Frame target) {
-    super("frame being deiconified");
-    this.frame = target;
+  private FrameIconifiedCondition(Frame frame) {
+    super("frame being iconified");
+    this.frame = frame;
   }
 
   public boolean test() {
-    return frame.getExtendedState() != ICONIFIED;
+    return frame.getExtendedState() == ICONIFIED;
   }
 }
