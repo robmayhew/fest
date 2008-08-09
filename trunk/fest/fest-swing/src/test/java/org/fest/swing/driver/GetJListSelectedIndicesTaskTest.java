@@ -15,13 +15,12 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dialog;
+import javax.swing.JList;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.BooleanProvider;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -29,27 +28,28 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link IsDialogModalTask}</code>.
+ * Tests for <code>{@link GetJListSelectedIndicesTask}</code>.
  *
- * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class IsDialogModalTaskTest {
+@Test public class GetJListSelectedIndicesTaskTest {
 
-  private Dialog dialog;
+  private JList list;
+  private int[] selectedIndices;
 
   @BeforeMethod public void setUp() {
-    dialog = createMock(Dialog.class);
+    list = createMock(JList.class);
+    selectedIndices = new int[] { 6, 8 };
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
-  public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
-    new EasyMockTemplate(dialog) {
+  public void shouldReturnSelectedIndicesOfJList() {
+    new EasyMockTemplate(list) {
       protected void expectations() {
-        expect(dialog.isModal()).andReturn(modal);
+        expect(list.getSelectedIndices()).andReturn(selectedIndices);
       }
 
       protected void codeToTest() {
-        assertThat(IsDialogModalTask.isModal(dialog)).isEqualTo(modal);
+        assertThat(GetJListSelectedIndicesTask.selectedIndicesOf(list)).isEqualTo(selectedIndices);
       }
     }.run();
   }

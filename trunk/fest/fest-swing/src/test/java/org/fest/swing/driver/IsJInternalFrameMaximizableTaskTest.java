@@ -20,11 +20,13 @@ import javax.swing.JInternalFrame;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.assertions.Assertions;
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.BooleanProvider;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link IsJInternalFrameMaximizableTask}</code>.
@@ -39,14 +41,15 @@ import static org.easymock.classextension.EasyMock.createMock;
     internalFrame = createMock(JInternalFrame.class);
   }
 
-  public void shouldIndicateIfJInternalFrameIsMaximizable() {
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  public void shouldIndicateIfJInternalFrameIsMaximizable(final boolean maximizable) {
     new EasyMockTemplate(internalFrame) {
       protected void expectations() {
-        expect(internalFrame.isMaximizable()).andReturn(true);
+        expect(internalFrame.isMaximizable()).andReturn(maximizable);
       }
 
       protected void codeToTest() {
-        Assertions.assertThat(IsJInternalFrameMaximizableTask.isMaximizable(internalFrame)).isTrue();
+        assertThat(IsJInternalFrameMaximizableTask.isMaximizable(internalFrame)).isEqualTo(maximizable);
       }
     }.run();
   }

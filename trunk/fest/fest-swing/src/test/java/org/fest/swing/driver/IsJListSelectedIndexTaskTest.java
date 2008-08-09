@@ -15,7 +15,7 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dialog;
+import javax.swing.JList;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,27 +29,29 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link IsDialogModalTask}</code>.
+ * Tests for <code>{@link IsJListSelectedIndexTask}</code>.
  *
- * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class IsDialogModalTaskTest {
+public class IsJListSelectedIndexTaskTest {
 
-  private Dialog dialog;
+  private JList list;
+  private int index;
 
   @BeforeMethod public void setUp() {
-    dialog = createMock(Dialog.class);
+    list = createMock(JList.class);
+    index = 8;
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
-  public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
-    new EasyMockTemplate(dialog) {
+  public void shouldIndicateWhetherIndexIsSelectedOrNot(final boolean selected) {
+    new EasyMockTemplate(list) {
       protected void expectations() {
-        expect(dialog.isModal()).andReturn(modal);
+        expect(list.isSelectedIndex(index)).andReturn(selected);
       }
 
       protected void codeToTest() {
-        assertThat(IsDialogModalTask.isModal(dialog)).isEqualTo(modal);
+        assertThat(IsJListSelectedIndexTask.isSelectedIndex(list, index)).isEqualTo(selected);
       }
     }.run();
   }

@@ -20,11 +20,13 @@ import javax.swing.JInternalFrame;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.assertions.Assertions;
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.BooleanProvider;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link IsJInternalFrameIconifiableTask}</code>.
@@ -39,14 +41,15 @@ import static org.easymock.classextension.EasyMock.createMock;
     internalFrame = createMock(JInternalFrame.class);
   }
 
-  public void shouldIndicateIfJInternalFrameIsIconifiable() {
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  public void shouldIndicateIfJInternalFrameIsIconifiable(final boolean iconifiable) {
     new EasyMockTemplate(internalFrame) {
       protected void expectations() {
-        expect(internalFrame.isIconifiable()).andReturn(true);
+        expect(internalFrame.isIconifiable()).andReturn(iconifiable);
       }
 
       protected void codeToTest() {
-        Assertions.assertThat(IsJInternalFrameIconifiableTask.isIconifiable(internalFrame)).isTrue();
+        assertThat(IsJInternalFrameIconifiableTask.isIconifiable(internalFrame)).isEqualTo(iconifiable);
       }
     }.run();
   }

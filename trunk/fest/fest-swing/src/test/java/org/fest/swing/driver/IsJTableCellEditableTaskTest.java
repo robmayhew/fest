@@ -18,10 +18,10 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.BooleanProvider;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -44,7 +44,7 @@ import static org.fest.swing.driver.JTableCell.cell;
     cell = cell(6, 8);
   }
 
-  @Test(dataProvider = "booleans")
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldIndicateWhetherCellIsEditableOrNot(final boolean editable) {
     new EasyMockTemplate(table) {
       protected void expectations() {
@@ -55,9 +55,5 @@ import static org.fest.swing.driver.JTableCell.cell;
         assertThat(IsJTableCellEditableTask.isCellEditable(table, cell)).isEqualTo(editable);
       }
     }.run();
-  }
-
-  @DataProvider(name = "booleans") public Object[][] booleans() {
-    return new Object[][] { { true }, { false } };
   }
 }

@@ -15,13 +15,14 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dialog;
+import java.awt.Rectangle;
+
+import javax.swing.JList;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.BooleanProvider;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -29,28 +30,32 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link IsDialogModalTask}</code>.
+ * Tests for <code>{@link GetJListCellBoundsTask}</code>.
  *
- * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class IsDialogModalTaskTest {
+@Test public class GetJListCellBoundsTaskTest {
 
-  private Dialog dialog;
+  private JList list;
+  private int index;
+  private Rectangle rectangle;
 
   @BeforeMethod public void setUp() {
-    dialog = createMock(Dialog.class);
+    list = createMock(JList.class);
+    index = 8;
+    rectangle = new Rectangle(800, 600);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
-  public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
-    new EasyMockTemplate(dialog) {
+  public void shouldReturnCellBoundsOfJList() {
+    new EasyMockTemplate(list) {
       protected void expectations() {
-        expect(dialog.isModal()).andReturn(modal);
+        expect(list.getCellBounds(index, index)).andReturn(rectangle);
       }
 
       protected void codeToTest() {
-        assertThat(IsDialogModalTask.isModal(dialog)).isEqualTo(modal);
+        assertThat(GetJListCellBoundsTask.cellBoundsOf(list, index)).isSameAs(rectangle);
       }
     }.run();
   }
+
 }

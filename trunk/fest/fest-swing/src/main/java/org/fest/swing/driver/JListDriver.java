@@ -16,13 +16,11 @@
 package org.fest.swing.driver;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.fest.swing.cell.JListCellReader;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -39,8 +37,11 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
+import static org.fest.swing.driver.GetJListCellBoundsTask.cellBoundsOf;
 import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
+import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
+import static org.fest.swing.driver.GetJListSelectedIndicesTask.selectedIndicesOf;
+import static org.fest.swing.driver.IsJListSelectedIndexTask.isSelectedIndex;
 import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
@@ -96,7 +97,7 @@ public class JListDriver extends JComponentDriver {
    * @see #cellReader(JListCellReader)
    */
   public String[] selectionOf(JList list) {
-    int[] selectedIndices = selectedIndicesOf(list);
+    int[] selectedIndices = GetJListSelectedIndicesTask.selectedIndicesOf(list);
     int selectionCount = selectedIndices.length;
     String[] values = new String[selectionCount];
     for (int i = 0; i < selectionCount; i++)
@@ -132,7 +133,7 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param value the value to match.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * the <code>JList</code>.
    */
   public void selectItem(JList list, String value) {
     selectItem(list, indexOf(list, value));
@@ -215,24 +216,6 @@ public class JListDriver extends JComponentDriver {
     clickItem(list, index, LEFT_BUTTON, 1);
   }
 
-  private boolean isSelectedIndex(final JList list, final int index) {
-    return new IsSelectedIndexTask(list, index).run();
-  }
-
-  private static class IsSelectedIndexTask extends GuiTask<Boolean> {
-    private final JList list;
-    private final int index;
-
-    IsSelectedIndexTask(JList list, int index) {
-      this.list = list;
-      this.index = index;
-    }
-
-    protected Boolean executeInEDT() throws Throwable {
-      return list.isSelectedIndex(index);
-    }
-  }
-
   /**
    * Clicks the item under the given index, using the specified mouse button, the given number times.
    * @param list the target <code>JList</code>.
@@ -276,22 +259,6 @@ public class JListDriver extends JComponentDriver {
     for (int i = 0; i < currentSelectionCount; i++) {
       String description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
       assertThat(value(list, selectedIndices[i])).as(description).isEqualTo(items[i]);
-    }
-  }
-
-  private int[] selectedIndicesOf(final JList list) {
-    return new GetSelectedIndicesTask(list).run();
-  }
-
-  private static class GetSelectedIndicesTask extends GuiTask<int[]> {
-    private final JList list;
-
-    GetSelectedIndicesTask(JList list) {
-      this.list = list;
-    }
-
-    protected int[] executeInEDT() throws Throwable {
-      return list.getSelectedIndices();
     }
   }
 
@@ -398,25 +365,7 @@ public class JListDriver extends JComponentDriver {
   }
 
   private void scrollToVisible(JList list, int index) {
-    super.scrollToVisible(list, itemBounds(list, index));
-  }
-
-  private Rectangle itemBounds(final JList list, final int index) {
-    return new GetItemBoundsTask(list, index).run();
-  }
-
-  private static class GetItemBoundsTask extends GuiTask<Rectangle> {
-    private final JList list;
-    private final int index;
-
-    GetItemBoundsTask(JList list, int index) {
-      this.list = list;
-      this.index = index;
-    }
-
-    protected Rectangle executeInEDT() {
-      return list.getCellBounds(index, index);
-    }
+    super.scrollToVisible(list, cellBoundsOf(list, index));
   }
 
   /**

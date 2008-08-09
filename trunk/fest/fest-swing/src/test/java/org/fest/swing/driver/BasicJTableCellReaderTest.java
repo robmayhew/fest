@@ -23,10 +23,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -139,7 +139,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     assertThat(value).isNull();
   }
 
-  @Test(dataProvider = "booleans")
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldReturnIsSelectedIfRendererIsJCheckBox(final boolean selected) {
     new GuiTask<Void>() {
       protected Void executeInEDT() {
@@ -150,10 +150,6 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }.run();
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo(String.valueOf(selected));
-  }
-
-  @DataProvider(name = "booleans") public Object[][] booleans() {
-    return new Object[][] { { true }, { false } };
   }
 
   private void updateRendererComponent(int column, Component c) {
