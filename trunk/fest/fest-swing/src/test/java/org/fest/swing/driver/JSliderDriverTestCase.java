@@ -35,7 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.query.GetJSliderValueTask.valueOf;
+import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

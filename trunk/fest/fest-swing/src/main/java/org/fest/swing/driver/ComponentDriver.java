@@ -33,7 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.query.GetJPopupMenuInvokerTask.invokerOf;
+import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.query.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.util.Platform.*;

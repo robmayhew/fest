@@ -11,7 +11,7 @@ import org.fest.swing.core.GuiQuery;
  *
  * @author Alex Ruiz 
  */
-public class GetJMenuPopupMenuTask extends GuiQuery<JPopupMenu> {
+public class JMenuPopupMenuQuery extends GuiQuery<JPopupMenu> {
   
   private final JMenu menu;
 
@@ -22,17 +22,17 @@ public class GetJMenuPopupMenuTask extends GuiQuery<JPopupMenu> {
    * @return the pop-up menu associated with the given <code>JMenu</code>.
    */
   public static JPopupMenu popupMenuOf(JMenu menu) {
-    return new GetJMenuPopupMenuTask(menu).run();
+    return new JMenuPopupMenuQuery(menu).run();
   }
   
-  private GetJMenuPopupMenuTask(JMenu menu) {
+  private JMenuPopupMenuQuery(JMenu menu) {
     this.menu = menu;
   }
 
   /**
-   * Returns the pop-up menu associated with this task's <code>{@link JMenu}</code>. This action is executed in the
+   * Returns the pop-up menu associated with this query's <code>{@link JMenu}</code>. This action is executed in the
    * event dispatch thread.
-   * @return the pop-up menu associated with this task's <code>JMenu</code>.
+   * @return the pop-up menu associated with this query's <code>JMenu</code>.
    */
   protected JPopupMenu executeInEDT() {
     return menu.getPopupMenu();

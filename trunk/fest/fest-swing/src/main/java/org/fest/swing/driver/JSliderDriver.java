@@ -19,11 +19,9 @@ import javax.swing.JSlider;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.query.GetJSliderValueTask;
 import org.fest.swing.util.Pair;
 
-import static java.lang.String.valueOf;
-
+import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -98,7 +96,7 @@ public class JSliderDriver extends JComponentDriver {
   public void slide(JSlider slider, int value) {
     validateValue(slider, value);
     if (!isEnabled(slider)) return;
-    drag(slider, location.pointAt(slider, GetJSliderValueTask.valueOf(slider)));
+    drag(slider, location.pointAt(slider, valueOf(slider)));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
     robot.invokeAndWait(new SetValueTask(slider, value));
@@ -123,8 +121,7 @@ public class JSliderDriver extends JComponentDriver {
     int min = minAndMax.one;
     int max = minAndMax.two;
     if (value >= min && value <= max) return;
-    throw actionFailure(concat(
-        "Value <", valueOf(value), "> is not within the JSlider bounds of <", valueOf(min), "> and <", valueOf(max), ">"));
+    throw actionFailure(concat("Value <", value, "> is not within the JSlider bounds of <", min, "> and <", max, ">"));
   }
 
   private static class GetMinimumAndMaximumTask extends GuiQuery<Pair<Integer, Integer>> {

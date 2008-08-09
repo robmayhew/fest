@@ -27,7 +27,7 @@ import org.fest.swing.core.GuiQuery;
  * 
  * @author Alex Ruiz
  */
-public class GetJPopupMenuInvokerTask extends GuiQuery<Component> {
+public class JPopupMenuInvokerQuery extends GuiQuery<Component> {
 
   private final JPopupMenu popupMenu;
 
@@ -38,17 +38,17 @@ public class GetJPopupMenuInvokerTask extends GuiQuery<Component> {
    * @return the invoker of the given <code>JPopupMenu</code>.
    */
   public static Component invokerOf(JPopupMenu popupMenu) {
-    return new GetJPopupMenuInvokerTask(popupMenu).run();
+    return new JPopupMenuInvokerQuery(popupMenu).run();
   }
 
-  private GetJPopupMenuInvokerTask(JPopupMenu popupMenu) {
+  private JPopupMenuInvokerQuery(JPopupMenu popupMenu) {
     this.popupMenu = popupMenu;
   }
 
   /**
-   * Returns the invoker in this task's <code>{@link JPopupMenu}</code>. This action is executed in the event dispatch 
+   * Returns the invoker in this query's <code>{@link JPopupMenu}</code>. This action is executed in the event dispatch 
    * thread.
-   * @return the invoker in this task's <code>JPopupMenu</code>.
+   * @return the invoker in this query's <code>JPopupMenu</code>.
    */
   protected Component executeInEDT() throws Throwable {
     return popupMenu.getInvoker();

@@ -23,7 +23,7 @@ import javax.swing.JMenu;
 
 import static java.util.Collections.emptyList;
 
-import static org.fest.swing.query.GetJMenuPopupMenuTask.popupMenuOf;
+import static org.fest.swing.query.JMenuPopupMenuQuery.popupMenuOf;
 import static org.fest.util.Collections.list;
 
 /**

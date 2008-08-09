@@ -23,7 +23,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fest.swing.query.ComponentLocationOnScreenQuery;
-import org.fest.swing.query.GetJPopupMenuInvokerTask;
+import org.fest.swing.query.JPopupMenuInvokerQuery;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
@@ -129,7 +129,7 @@ public class AWT {
    *         <code>Component</code> is not on a pop-up of any sort.
    */
   public static Component invokerOf(Component c) {
-    if (c instanceof JPopupMenu) return GetJPopupMenuInvokerTask.invokerOf((JPopupMenu)c);
+    if (c instanceof JPopupMenu) return JPopupMenuInvokerQuery.invokerOf((JPopupMenu)c);
     Container parent = parentOf(c);
     return parent != null ? invokerOf(parent) : null;
   }

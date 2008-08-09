@@ -32,9 +32,8 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.query.AbstractButtonTextQuery;
-import org.fest.swing.query.JLabelTextQuery;
-import org.fest.swing.query.GetJSliderValueTask;
 import org.fest.swing.query.GetJSpinnerValueTask;
+import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
@@ -536,7 +535,7 @@ public class ContainerFixtureTest {
     JSlider expectedSlider = addJSlider();
     GenericTypeMatcher<JSlider> valueMatcher = new GenericTypeMatcher<JSlider>() {
       protected boolean isMatching(JSlider slider) {
-        return GetJSliderValueTask.valueOf(slider) == 15;
+        return "slider".equals(slider.getName());
       }
     };
     JSliderFixture sliderFixture = fixture.slider(valueMatcher);

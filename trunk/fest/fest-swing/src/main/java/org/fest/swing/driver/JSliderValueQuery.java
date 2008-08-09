@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
@@ -24,28 +24,18 @@ import org.fest.swing.core.GuiQuery;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class GetJSliderValueTask extends GuiQuery<Integer> {
+final class JSliderValueQuery extends GuiQuery<Integer> {
 
   private final JSlider slider;
 
-  /**
-   * Returns the value of the given <code>{@link JSlider}</code>. This action is executed in the event dispatch thread.
-   * @param slider the given <code>JSlider</code>.
-   * @return the value of the given <code>JSlider</code>.
-   */
-  public static int valueOf(JSlider slider) {
-    return new GetJSliderValueTask(slider).run();
+  static int valueOf(JSlider slider) {
+    return new JSliderValueQuery(slider).run();
   }
 
-  private GetJSliderValueTask(JSlider slider) {
+  private JSliderValueQuery(JSlider slider) {
     this.slider = slider;
   }
 
-  /**
-   * Returns the value in this task's <code>{@link JSlider}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the value in this task's <code>JSlider</code>.
-   */
   protected Integer executeInEDT() {
     return slider.getValue();
   }

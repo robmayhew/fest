@@ -22,7 +22,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
-import static org.fest.swing.query.GetJPopupMenuInvokerTask.invokerOf;
+import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 
 /**

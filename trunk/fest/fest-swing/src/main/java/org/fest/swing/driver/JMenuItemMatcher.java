@@ -22,7 +22,7 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.core.ComponentMatcher;
 
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
-import static org.fest.swing.query.GetJPopupMenuInvokerTask.invokerOf;
+import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
