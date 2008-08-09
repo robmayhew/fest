@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link JComboBox}</code> 
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz
  */
-class IsJComboBoxEditableTask extends GuiTask<Boolean> {
+class IsJComboBoxEditableTask extends GuiQuery<Boolean> {
   private final JComboBox comboBox;
 
   static boolean isEditable(JComboBox comboBox) {

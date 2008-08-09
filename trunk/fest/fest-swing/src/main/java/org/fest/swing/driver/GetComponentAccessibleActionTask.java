@@ -19,7 +19,7 @@ import java.awt.Component;
 
 import javax.accessibility.AccessibleAction;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that finds <code>{@link AccessibleAction}</code>s
@@ -27,7 +27,7 @@ import org.fest.swing.core.GuiTask;
  * 
  * @author Alex Ruiz
  */
-class GetComponentAccessibleActionTask extends GuiTask<AccessibleAction> {
+class GetComponentAccessibleActionTask extends GuiQuery<AccessibleAction> {
 
   private final Component component;
 

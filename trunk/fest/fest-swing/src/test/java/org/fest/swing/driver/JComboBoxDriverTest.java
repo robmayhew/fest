@@ -29,14 +29,14 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.*;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.task.GetJLabelTextTask;
-import org.fest.swing.task.GetJTextComponentTextTask;
+import org.fest.swing.query.JLabelTextQuery;
+import org.fest.swing.query.GetJTextComponentTextTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
+import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -59,7 +59,7 @@ public class JComboBoxDriverTest {
     cellReader = new JComboBoxCellReaderStub();
     driver = new JComboBoxDriver(robot);
     driver.cellReader(cellReader);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
@@ -124,7 +124,7 @@ public class JComboBoxDriverTest {
   }
 
   private void assertThatSelectedItemIsEqualTo(String expected) {
-    Object selectedItem = new GuiTask<Object>() {
+    Object selectedItem = new GuiQuery<Object>() {
       protected Object executeInEDT() {
         return comboBox.getSelectedItem();
       }
@@ -153,7 +153,7 @@ public class JComboBoxDriverTest {
 
   private void assertThatListContains(final JList list, final String...expected) {
     final int expectedSize = expected.length;
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         ListModel model = list.getModel();
         assertThat(model.getSize()).isEqualTo(expectedSize);
@@ -259,7 +259,7 @@ public class JComboBoxDriverTest {
     Component editor = comboBoxEditor();
     assertThat(editor).isInstanceOf(JTextComponent.class);
     final JTextComponent textBox = (JTextComponent)editor;
-    String selectedText = new GuiTask<String>() {
+    String selectedText = new GuiQuery<String>() {
       protected String executeInEDT() {
         return textBox.getSelectedText();
       }
@@ -357,13 +357,13 @@ public class JComboBoxDriverTest {
 
   private String textInComboBox() {
     final Component editor = comboBoxEditor();
-    if (editor instanceof JLabel) return GetJLabelTextTask.textOf((JLabel)editor);
+    if (editor instanceof JLabel) return JLabelTextQuery.textOf((JLabel)editor);
     if (editor instanceof JTextComponent) return GetJTextComponentTextTask.textOf((JTextComponent)editor);
     return null;
   }
 
   private Component comboBoxEditor() {
-    return new GuiTask<Component>() {
+    return new GuiQuery<Component>() {
       protected Component executeInEDT() {
         return comboBox.getEditor().getEditorComponent();
       }
@@ -451,7 +451,7 @@ public class JComboBoxDriverTest {
   }
 
   private boolean isDropDownListVisible() {
-    return new GuiTask<Boolean>() {
+    return new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return comboBox.getUI().isPopupVisible(comboBox);
       }

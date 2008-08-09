@@ -29,12 +29,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
-import org.fest.swing.task.GetAbstractButtonTextTask;
-import org.fest.swing.task.GetJLabelTextTask;
-import org.fest.swing.task.GetJSliderValueTask;
-import org.fest.swing.task.GetJSpinnerValueTask;
+import org.fest.swing.query.AbstractButtonTextQuery;
+import org.fest.swing.query.JLabelTextQuery;
+import org.fest.swing.query.GetJSliderValueTask;
+import org.fest.swing.query.GetJSpinnerValueTask;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
@@ -44,12 +44,12 @@ import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
-import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
-import static org.fest.swing.task.GetComponentNameTask.nameOf;
-import static org.fest.swing.task.GetDialogTitleTask.titleOf;
-import static org.fest.swing.task.GetJTabbedPaneTabCountTask.tabCountOf;
-import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
-import static org.fest.swing.task.GetJToolBarOrientationTask.isHorizontal;
+import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
+import static org.fest.swing.query.ComponentNameQuery.nameOf;
+import static org.fest.swing.query.DialogTitleQuery.titleOf;
+import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
+import static org.fest.swing.query.GetJTableRowCountTask.rowCountOf;
+import static org.fest.swing.query.GetJToolBarOrientationTask.isHorizontal;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -69,7 +69,7 @@ public class ContainerFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new GuiTask<TestWindow>() {
+    window = new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         return new TestWindow(ContainerFixtureTest.class);
       }
@@ -105,7 +105,7 @@ public class ContainerFixtureTest {
   }
 
   private JButton addJButton() {
-    return new GuiTask<JButton>() {
+    return new GuiQuery<JButton>() {
       protected JButton executeInEDT() {
         JButton button = new JButton("A Button");
         button.setName("button");
@@ -139,7 +139,7 @@ public class ContainerFixtureTest {
   }
 
   private JCheckBox addJCheckBox() {
-    return new GuiTask<JCheckBox>() {
+    return new GuiQuery<JCheckBox>() {
       protected JCheckBox executeInEDT() {
         JCheckBox checkBox = new JCheckBox("A CheckBox");
         checkBox.setName("checkBox");
@@ -173,7 +173,7 @@ public class ContainerFixtureTest {
   }
 
   private JComboBox addJComboBox() {
-    return new GuiTask<JComboBox>() {
+    return new GuiQuery<JComboBox>() {
       protected JComboBox executeInEDT() {
         JComboBox comboBox = new JComboBox(array("first", "second", "third"));
         comboBox.setName("comboBox");
@@ -207,7 +207,7 @@ public class ContainerFixtureTest {
   }
 
   private JDialog addJDialog() {
-    return new GuiTask<JDialog>() {
+    return new GuiQuery<JDialog>() {
       protected JDialog executeInEDT() {
         JDialog dialog = new JDialog(window, "A Dialog");
         dialog.setName("dialog");
@@ -243,7 +243,7 @@ public class ContainerFixtureTest {
   }
 
   private JFileChooser addJFileChooser() {
-    return new GuiTask<JFileChooser>() {
+    return new GuiQuery<JFileChooser>() {
       protected JFileChooser executeInEDT() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setName("fileChooser");
@@ -263,7 +263,7 @@ public class ContainerFixtureTest {
     JLabel expectedLabel = addJLabel();
     GenericTypeMatcher<JLabel> textMatcher = new GenericTypeMatcher<JLabel>() {
       protected boolean isMatching(JLabel label) {
-        return "A Label".equals(GetJLabelTextTask.textOf(label));
+        return "A Label".equals(JLabelTextQuery.textOf(label));
       }
     };
     JLabelFixture labelFixture = fixture.label(textMatcher);
@@ -277,7 +277,7 @@ public class ContainerFixtureTest {
   }
 
   private JLabel addJLabel() {
-    return new GuiTask<JLabel>() {
+    return new GuiQuery<JLabel>() {
       protected JLabel executeInEDT() {
         JLabel label = new JLabel("A Label");
         label.setName("label");
@@ -311,7 +311,7 @@ public class ContainerFixtureTest {
   }
 
   private JList addJList() {
-    return new GuiTask<JList>() {
+    return new GuiQuery<JList>() {
       protected JList executeInEDT() {
         JList list = new JList();
         list.setName("list");
@@ -325,7 +325,7 @@ public class ContainerFixtureTest {
     JMenuItem expectedMenuItem = addJMenuItem();
     GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
       protected boolean isMatching(JMenuItem menuItem) {
-        return "A Submenu".equals(GetAbstractButtonTextTask.textOf(menuItem));
+        return "A Submenu".equals(AbstractButtonTextQuery.textOf(menuItem));
       }
     };
     JMenuItemFixture menuItemFixture = fixture.menuItem(textMatcher);
@@ -345,7 +345,7 @@ public class ContainerFixtureTest {
   }
 
   private JMenuItem addJMenuItem() {
-    return new GuiTask<JMenuItem>() {
+    return new GuiQuery<JMenuItem>() {
       protected JMenuItem executeInEDT() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("A Menu");
@@ -384,7 +384,7 @@ public class ContainerFixtureTest {
   }
 
   private JPanel addJPanel() {
-    return new GuiTask<JPanel>() {
+    return new GuiQuery<JPanel>() {
       protected JPanel executeInEDT() {
         JPanel panel = new JPanel();
         window.getRootPane().setContentPane(panel);
@@ -415,7 +415,7 @@ public class ContainerFixtureTest {
   }
 
   private Object messageOf(final JOptionPane optionPane) {
-    return new GuiTask<Object>() {
+    return new GuiQuery<Object>() {
       protected Object executeInEDT() throws Throwable {
         return optionPane.getMessage();
       }
@@ -432,7 +432,7 @@ public class ContainerFixtureTest {
     JRadioButton expectedRadioButton = addJRadioButton();
     GenericTypeMatcher<JRadioButton> textMatcher = new GenericTypeMatcher<JRadioButton>() {
       protected boolean isMatching(JRadioButton radioButton) {
-        return "A Radio Button".equals(GetAbstractButtonTextTask.textOf(radioButton));
+        return "A Radio Button".equals(AbstractButtonTextQuery.textOf(radioButton));
       }
     };
     JRadioButtonFixture radioButtonFixture = fixture.radioButton(textMatcher);
@@ -446,7 +446,7 @@ public class ContainerFixtureTest {
   }
 
   private JRadioButton addJRadioButton() {
-    return new GuiTask<JRadioButton>() {
+    return new GuiQuery<JRadioButton>() {
       protected JRadioButton executeInEDT() {
         JRadioButton radioButton = new JRadioButton("A Radio Button");
         radioButton.setName("radioButton");
@@ -480,7 +480,7 @@ public class ContainerFixtureTest {
   }
 
   private JScrollBar addJScrollBar() {
-    return new GuiTask<JScrollBar>() {
+    return new GuiQuery<JScrollBar>() {
       protected JScrollBar executeInEDT() {
         JScrollBar scrollBar = new JScrollBar(Adjustable.HORIZONTAL);
         scrollBar.setName("scrollBar");
@@ -515,7 +515,7 @@ public class ContainerFixtureTest {
   }
 
   private JScrollPane addJScrollPane() {
-    return new GuiTask<JScrollPane>() {
+    return new GuiQuery<JScrollPane>() {
       protected JScrollPane executeInEDT() {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setName("scrollPane");
@@ -550,7 +550,7 @@ public class ContainerFixtureTest {
   }
 
   private JSlider addJSlider() {
-    return new GuiTask<JSlider>() {
+    return new GuiQuery<JSlider>() {
       protected JSlider executeInEDT() {
         JSlider slider = new JSlider(10, 20, 15);
         slider.setName("slider");
@@ -584,7 +584,7 @@ public class ContainerFixtureTest {
   }
 
   private JSpinner addJSpinner() {
-    return new GuiTask<JSpinner>() {
+    return new GuiQuery<JSpinner>() {
       protected JSpinner executeInEDT() {
         JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
         spinner.setName("spinner");
@@ -604,7 +604,7 @@ public class ContainerFixtureTest {
     JSplitPane expectedSplitPane = addJSplitPane();
     GenericTypeMatcher<JSplitPane> matcher = new GenericTypeMatcher<JSplitPane>() {
       protected boolean isMatching(final JSplitPane splitPane) {
-        Component rightComponent = new GuiTask<Component>() {
+        Component rightComponent = new GuiQuery<Component>() {
           protected Component executeInEDT() {
             return splitPane.getRightComponent();
           }
@@ -623,7 +623,7 @@ public class ContainerFixtureTest {
   }
 
   private JSplitPane addJSplitPane() {
-    return new GuiTask<JSplitPane>() {
+    return new GuiQuery<JSplitPane>() {
       protected JSplitPane executeInEDT() {
         JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
         splitPane.setName("splitPane");
@@ -658,7 +658,7 @@ public class ContainerFixtureTest {
   }
 
   private JTabbedPane addJTabbedPane() {
-    return new GuiTask<JTabbedPane>() {
+    return new GuiQuery<JTabbedPane>() {
       protected JTabbedPane executeInEDT() {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setName("tabbedPane");
@@ -693,7 +693,7 @@ public class ContainerFixtureTest {
   }
 
   private JTable addJTable() {
-    return new GuiTask<JTable>() {
+    return new GuiQuery<JTable>() {
       protected JTable executeInEDT() {
         JTable table = new JTable(6, 8);
         table.setName("table");
@@ -713,7 +713,7 @@ public class ContainerFixtureTest {
     JTextComponent expectedTextComponent = addJTextComponent();
     GenericTypeMatcher<JTextField> columnMatcher = new GenericTypeMatcher<JTextField>() {
       protected boolean isMatching(final JTextField textField) {
-        int columns = new GuiTask<Integer>() {
+        int columns = new GuiQuery<Integer>() {
           protected Integer executeInEDT() {
             return textField.getColumns();
           }
@@ -732,7 +732,7 @@ public class ContainerFixtureTest {
   }
 
   private JTextComponent addJTextComponent() {
-    return new GuiTask<JTextComponent>() {
+    return new GuiQuery<JTextComponent>() {
       protected JTextComponent executeInEDT() {
         JTextField textField = new JTextField(10);
         textField.setName("textField");
@@ -752,7 +752,7 @@ public class ContainerFixtureTest {
     JToggleButton expectedToggleButton = addJToggleButton();
     GenericTypeMatcher<JToggleButton> textMatcher = new GenericTypeMatcher<JToggleButton>() {
       protected boolean isMatching(JToggleButton toggleButton) {
-        return "A ToggleButton".equals(GetAbstractButtonTextTask.textOf(toggleButton));
+        return "A ToggleButton".equals(AbstractButtonTextQuery.textOf(toggleButton));
       }
     };
     JToggleButtonFixture toggleButtonFixture = fixture.toggleButton(textMatcher);
@@ -766,7 +766,7 @@ public class ContainerFixtureTest {
   }
 
   private JToggleButton addJToggleButton() {
-    return new GuiTask<JToggleButton>() {
+    return new GuiQuery<JToggleButton>() {
       protected JToggleButton executeInEDT() {
         JToggleButton toggleButton = new JToggleButton("A ToggleButton");
         toggleButton.setName("toggleButton");
@@ -800,7 +800,7 @@ public class ContainerFixtureTest {
   }
 
   private JToolBar addJToolBar() {
-    return new GuiTask<JToolBar>() {
+    return new GuiQuery<JToolBar>() {
       protected JToolBar executeInEDT() {
         JToolBar toolBar = new JToolBar(HORIZONTAL);
         toolBar.setName("toolBar");
@@ -834,7 +834,7 @@ public class ContainerFixtureTest {
   }
 
   private JTree addJTree() {
-    return new GuiTask<JTree>() {
+    return new GuiQuery<JTree>() {
       protected JTree executeInEDT() {
         JTree tree = new JTree(array("One", "Two"));
         tree.setName("tree");

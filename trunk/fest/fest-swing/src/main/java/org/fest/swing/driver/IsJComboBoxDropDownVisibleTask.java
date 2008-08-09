@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether the drop-down list of a
@@ -24,7 +24,7 @@ import org.fest.swing.core.GuiTask;
  * 
  * @author Alex Ruiz
  */
-class IsJComboBoxDropDownVisibleTask extends GuiTask<Boolean> {
+class IsJComboBoxDropDownVisibleTask extends GuiQuery<Boolean> {
   
   private final JComboBox comboBox;
 

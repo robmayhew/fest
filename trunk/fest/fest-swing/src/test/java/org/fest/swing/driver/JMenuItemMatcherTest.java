@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -48,7 +48,7 @@ public class JMenuItemMatcherTest {
   
   @BeforeMethod public void setUp() {
     finder = finderWithNewAwtHierarchy();
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame();
       }

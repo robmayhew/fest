@@ -20,7 +20,7 @@ import java.awt.Component;
 import javax.swing.JTree;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
@@ -28,7 +28,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJTreeCellRendererTask extends GuiTask<Component> {
+class GetJTreeCellRendererTask extends GuiQuery<Component> {
 
   private final Object modelValue;
   private final JTree tree;

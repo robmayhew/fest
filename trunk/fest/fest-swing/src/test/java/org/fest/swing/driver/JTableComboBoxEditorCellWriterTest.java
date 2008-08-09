@@ -25,7 +25,7 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

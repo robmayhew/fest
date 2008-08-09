@@ -31,9 +31,9 @@ import org.fest.swing.testing.FluentDimension;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.GetComponentLocationOnScreenTask.locationOnScreenOf;
-import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
-import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

@@ -24,7 +24,7 @@ import javax.swing.JToolBar;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -43,7 +43,7 @@ public class BasicJComboBoxCellReaderTest {
   private BasicJComboBoxCellReader reader;
 
   @BeforeMethod public void setUp() {
-    comboBox = new GuiTask<JComboBox>() {
+    comboBox = new GuiQuery<JComboBox>() {
       protected JComboBox executeInEDT() {
         return new JComboBox(new Object[] { "First" });
       }
@@ -52,7 +52,7 @@ public class BasicJComboBoxCellReaderTest {
   }
 
   public void shouldReturnModelValueToString() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         comboBox.setModel(new DefaultComboBoxModel(array(new Jedi("Yoda"))));
         return null;
@@ -63,7 +63,7 @@ public class BasicJComboBoxCellReaderTest {
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         comboBox.setModel(new DefaultComboBoxModel(new Object[] { null }));
         comboBox.setRenderer(new CustomCellRenderer(new JToolBar()));
@@ -75,7 +75,7 @@ public class BasicJComboBoxCellReaderTest {
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         comboBox.setModel(new DefaultComboBoxModel(array(new Jedi(null))));
         comboBox.setRenderer(new CustomCellRenderer(new JLabel("First")));

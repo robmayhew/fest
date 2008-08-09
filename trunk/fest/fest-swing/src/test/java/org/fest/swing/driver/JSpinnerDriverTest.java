@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -37,8 +37,8 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.GetJSpinnerValueTask.valueOf;
-import static org.fest.swing.task.GetJTextComponentTextTask.textOf;
+import static org.fest.swing.query.GetJSpinnerValueTask.valueOf;
+import static org.fest.swing.query.GetJTextComponentTextTask.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -58,7 +58,7 @@ public class JSpinnerDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSpinnerDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame();
       }

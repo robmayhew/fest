@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JLabel;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.task.GetJLabelTextTask;
+import org.fest.swing.query.JLabelTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -57,6 +57,6 @@ public class JLabelDriver extends JComponentDriver {
    * @return the text of the given <code>JLabel</code>.
    */
   public String textOf(JLabel label) {
-    return GetJLabelTextTask.textOf(label);
+    return JLabelTextQuery.textOf(label);
   }
 }

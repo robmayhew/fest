@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
@@ -43,7 +43,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
-import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
+import static org.fest.swing.query.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
@@ -69,7 +69,7 @@ public class JListDriverTest {
     cellReader = new JListCellReaderStub();
     driver = new JListDriver(robot);
     driver.cellReader(cellReader);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
@@ -159,7 +159,7 @@ public class JListDriverTest {
   }
 
   private int locationToIndex(final JList list, final Point p) {
-    return new GuiTask<Integer>() {
+    return new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return list.locationToIndex(p);
       }
@@ -198,7 +198,7 @@ public class JListDriverTest {
   }
 
   private Object selectedValueOf(final JList list) {
-    return new GuiTask<Object>() {
+    return new GuiQuery<Object>() {
       protected Object executeInEDT() throws Throwable {
         return list.getSelectedValue();
       }
@@ -298,7 +298,7 @@ public class JListDriverTest {
   }
 
   private Object[] selectedItemsOf(final JList list) {
-    return new GuiTask<Object[]>() {
+    return new GuiQuery<Object[]>() {
       protected Object[] executeInEDT() throws Throwable {
         return list.getSelectedValues();
       }

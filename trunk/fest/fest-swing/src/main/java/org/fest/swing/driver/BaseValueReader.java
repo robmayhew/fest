@@ -19,7 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 
-import static org.fest.swing.task.GetJLabelTextTask.textOf;
+import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**

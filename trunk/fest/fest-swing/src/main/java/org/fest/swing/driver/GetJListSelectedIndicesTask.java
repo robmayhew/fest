@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the selection indices in a
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJListSelectedIndicesTask extends GuiTask<int[]> {
+class GetJListSelectedIndicesTask extends GuiQuery<int[]> {
 
   private final JList list;
 

@@ -19,7 +19,7 @@ import javax.swing.JButton;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -80,7 +80,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   private JButton button(final String text) {
-    return new GuiTask<JButton>() {
+    return new GuiQuery<JButton>() {
       protected JButton executeInEDT() {
         return new JButton(text);
       }
@@ -88,7 +88,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   } 
 
   private TestWindow frameWith(final JButton button) {
-    return new GuiTask<TestWindow>() {
+    return new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow f = new TestWindow(JButtonByTextMatcher.class);
         f.add(button);

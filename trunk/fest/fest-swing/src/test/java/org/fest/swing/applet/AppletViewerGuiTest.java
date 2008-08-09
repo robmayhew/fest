@@ -21,14 +21,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.MyApplet;
 
 import static javax.swing.SwingUtilities.getAncestorOfClass;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -46,12 +46,12 @@ public class AppletViewerGuiTest {
   private AppletViewer viewer;
 
   @BeforeMethod public void setUp() {
-    applet = new GuiTask<MyApplet>() {
+    applet = new GuiQuery<MyApplet>() {
       protected MyApplet executeInEDT() {
         return new MyApplet();
       }
     }.run();
-    viewer = new GuiTask<AppletViewer>() {
+    viewer = new GuiQuery<AppletViewer>() {
       protected AppletViewer executeInEDT() {
         return new AppletViewer(applet);
       }
@@ -62,13 +62,13 @@ public class AppletViewerGuiTest {
   }
   
   private void assertThatAppletIsInitializedAndStarted() {
-    boolean initialized = new GuiTask<Boolean>() {
+    boolean initialized = new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.initialized();
       }
     }.run();
     assertThat(initialized).isTrue();
-    boolean started = new GuiTask<Boolean>() {
+    boolean started = new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.started();
       }
@@ -77,7 +77,7 @@ public class AppletViewerGuiTest {
   }
   
   @AfterMethod public void tearDown() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         viewer.unloadApplet();
         return null;
@@ -88,13 +88,13 @@ public class AppletViewerGuiTest {
   }
 
   private void assertThatApplietIsStoppedAndDestroyed() {
-    boolean stopped = new GuiTask<Boolean>() {
+    boolean stopped = new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.stopped();
       }
     }.run();
     assertThat(stopped).isTrue();
-    boolean destroyed = new GuiTask<Boolean>() {
+    boolean destroyed = new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.destroyed();
       }
@@ -114,7 +114,7 @@ public class AppletViewerGuiTest {
   }
 
   private void assertThatAppletViewerHasCorrectTitle() {
-    String title = new GuiTask<String>() {
+    String title = new GuiQuery<String>() {
       protected String executeInEDT() {
         return viewer.getTitle();
       }
@@ -133,7 +133,7 @@ public class AppletViewerGuiTest {
   }
   
   private void assertThatAppletIsLoaded() {
-    boolean loaded = new GuiTask<Boolean>() {
+    boolean loaded = new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return viewer.appletLoaded();
       }

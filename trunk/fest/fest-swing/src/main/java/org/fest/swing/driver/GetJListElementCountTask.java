@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of elements in a
@@ -24,7 +24,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJListElementCountTask extends GuiTask<Integer> {
+class GetJListElementCountTask extends GuiQuery<Integer> {
 
   private final JList list;
 

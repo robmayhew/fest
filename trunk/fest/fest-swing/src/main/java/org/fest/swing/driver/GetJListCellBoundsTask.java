@@ -19,7 +19,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the bounding rectangle, in the
@@ -27,7 +27,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJListCellBoundsTask extends GuiTask<Rectangle> {
+class GetJListCellBoundsTask extends GuiQuery<Rectangle> {
 
   private final JList list;
   private final int index;

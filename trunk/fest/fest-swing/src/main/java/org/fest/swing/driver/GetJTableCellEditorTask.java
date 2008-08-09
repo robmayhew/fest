@@ -20,7 +20,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> of a
@@ -29,7 +29,7 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class GetJTableCellEditorTask extends GuiTask<Component> {
+class GetJTableCellEditorTask extends GuiQuery<Component> {
   private final JTable table;
   private final int row;
   private final int column;

@@ -18,14 +18,14 @@ import java.awt.Point;
 
 import javax.swing.JSplitPane;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.util.Pair;
 
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 
 /**
  * Understands simulation of user input on a <code>{@link JSplitPane}</code>. Unlike <code>JSplitPaneFixture</code>,
@@ -87,7 +87,7 @@ public class JSplitPaneDriver extends JComponentDriver {
     simulateMovingDivider(splitPane, new Point(x, dividerLocation), new Point(x, location));
   }
 
-  private static class GetWidthAndDividerLocationTask extends GuiTask<Pair<Integer, Integer>> {
+  private static class GetWidthAndDividerLocationTask extends GuiQuery<Pair<Integer, Integer>> {
     private final JSplitPane splitPane;
 
     GetWidthAndDividerLocationTask(JSplitPane splitPane) {
@@ -107,7 +107,7 @@ public class JSplitPaneDriver extends JComponentDriver {
     simulateMovingDivider(splitPane, new Point(dividerLocation, y), new Point(location, y));
   }
 
-  private static class GetHeightAndDividerLocationTask extends GuiTask<Pair<Integer, Integer>> {
+  private static class GetHeightAndDividerLocationTask extends GuiQuery<Pair<Integer, Integer>> {
     private final JSplitPane splitPane;
 
     GetHeightAndDividerLocationTask(JSplitPane splitPane) {

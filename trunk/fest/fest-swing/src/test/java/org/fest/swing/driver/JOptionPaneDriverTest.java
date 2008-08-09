@@ -28,7 +28,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
@@ -39,7 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -58,7 +58,7 @@ public class JOptionPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JOptionPaneDriver(robot);
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
@@ -106,7 +106,7 @@ public class JOptionPaneDriverTest {
   }
 
   private void setUpConfirmMessage() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpConfirmMessage();
         return null;
@@ -127,7 +127,7 @@ public class JOptionPaneDriverTest {
   }
 
   private void setUpInputMessage() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpInputMessage();
         return null;
@@ -149,7 +149,7 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpManuallyCreatedOptionPane("Jedi");
         return null;
@@ -171,7 +171,7 @@ public class JOptionPaneDriverTest {
   }
 
   private JOptionPane showMessageWithTitle(final String title) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpMessageWithTitle(title);
         return null;
@@ -199,7 +199,7 @@ public class JOptionPaneDriverTest {
   }
 
   private void setUpMessageWithOptions(final String... options) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpMessageWithOptions(options);
         return null;
@@ -225,7 +225,7 @@ public class JOptionPaneDriverTest {
   }
 
   private void setUpMessageWithText(final String text) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpMessageWithText(text);
         return null;
@@ -258,7 +258,7 @@ public class JOptionPaneDriverTest {
   }
 
   private void setUpInformationMessage() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpInformationMessage();
         return null;
@@ -279,7 +279,7 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpWarningMessage();
         return null;
@@ -302,7 +302,7 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       @Override protected Void executeInEDT() {
         frame.setUpQuestionMessage();
         return null;
@@ -325,7 +325,7 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       @Override protected Void executeInEDT() {
         frame.setUpPlainMessage();
         return null;
@@ -348,7 +348,7 @@ public class JOptionPaneDriverTest {
   }
   
   private void setUpErrorMessage() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         frame.setUpErrorMessage();
         return null;

@@ -32,7 +32,7 @@ import static org.fest.swing.driver.IsJInternalFrameMaximizableTask.isMaximizabl
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.IsJInternalFrameIconifiedTask.isIconified;
+import static org.fest.swing.query.IsJInternalFrameIconifiedTask.isIconified;
 import static org.fest.util.Strings.concat;
 
 /**

@@ -22,7 +22,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands the base window for all GUI tests.
@@ -34,7 +34,7 @@ public class TestWindow extends JFrame {
   private static final long serialVersionUID = 1L;
 
   public static TestWindow showInTest(final Class<?> testClass) {
-    return new GuiTask<TestWindow>() {
+    return new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow f = new TestWindow(testClass);
         f.display();
@@ -58,7 +58,7 @@ public class TestWindow extends JFrame {
   }
   
   public void display(final Dimension size) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         beforeDisplayed();
         setPreferredSize(size);
@@ -85,7 +85,7 @@ public class TestWindow extends JFrame {
   }
   
   public void destroy() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         setVisible(false);
         dispose();

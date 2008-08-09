@@ -22,7 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 
 /**
  * Understands the information collected by the monitors in this package.

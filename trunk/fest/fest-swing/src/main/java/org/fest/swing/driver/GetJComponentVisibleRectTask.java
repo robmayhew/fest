@@ -19,7 +19,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the "visible rectangle" of a 
@@ -28,7 +28,7 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class GetJComponentVisibleRectTask extends GuiTask<Rectangle> {
+class GetJComponentVisibleRectTask extends GuiQuery<Rectangle> {
   
   private final JComponent component;
 

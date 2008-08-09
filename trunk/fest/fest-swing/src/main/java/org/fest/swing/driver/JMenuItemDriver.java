@@ -20,7 +20,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -30,7 +29,8 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.GetJMenuPopupMenuTask.popupMenuOf;
+import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.util.Strings.concat;
 
@@ -83,13 +83,9 @@ public class JMenuItemDriver extends JComponentDriver {
     ensurePopupIsShowing(menuItem);
   }
 
-  private void ensurePopupIsShowing(final JMenuItem menuItem) {
+  private void ensurePopupIsShowing(JMenuItem menuItem) {
     if (!(menuItem instanceof JMenu)) return;
-    JPopupMenu popup = new GuiTask<JPopupMenu>() {
-      protected JPopupMenu executeInEDT() {
-        return ((JMenu)menuItem).getPopupMenu();
-      }
-    }.run();
+    JPopupMenu popup = popupMenuOf((JMenu)menuItem);
     if (!waitForShowing(popup, robot.settings().timeoutToFindPopup()))
       throw actionFailure(concat("Clicking on menu item <", format(menuItem), "> never showed a pop-up menu"));
     waitForSubMenuToShow();
@@ -103,20 +99,8 @@ public class JMenuItemDriver extends JComponentDriver {
   private void moveToFront(Window w) {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
-    robot.invokeAndWait(w, new MoveToFrontTask(w));
+    robot.invokeAndWait(w, new MoveWindowToFrontTask(w));
     robot.moveMouse(w);
-  }
-
-  private static class MoveToFrontTask implements Runnable {
-    private final Window target;
-
-    MoveToFrontTask(Window target) {
-      this.target = target;
-    }
-
-    public void run() {
-      target.toFront();
-    }
   }
 
   private void waitForSubMenuToShow() {

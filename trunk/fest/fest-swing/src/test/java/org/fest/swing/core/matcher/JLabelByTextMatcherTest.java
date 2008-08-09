@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -80,7 +80,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   private JLabel label(final String text) {
-    return new GuiTask<JLabel>() {
+    return new GuiQuery<JLabel>() {
       protected JLabel executeInEDT() {
         return new JLabel(text);
       }
@@ -88,7 +88,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   private TestWindow windowWith(final JLabel label) {
-    return new GuiTask<TestWindow>() {
+    return new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow f = new TestWindow(JLabelByTextMatcher.class);
         f.add(label);

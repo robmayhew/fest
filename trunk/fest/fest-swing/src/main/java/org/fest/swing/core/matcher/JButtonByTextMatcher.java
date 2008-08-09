@@ -19,7 +19,7 @@ import javax.swing.JButton;
 
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**

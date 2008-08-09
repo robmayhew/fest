@@ -19,7 +19,7 @@ import java.awt.Dialog;
 
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.task.GetDialogTitleTask.titleOf;
+import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.util.Objects.areEqual;
 
 /**

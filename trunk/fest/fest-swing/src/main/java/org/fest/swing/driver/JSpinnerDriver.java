@@ -24,6 +24,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.query.GetJSpinnerValueTask;
 
 import static java.lang.String.valueOf;
 
@@ -31,8 +32,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.GetJSpinnerValueTask.valueOf;
-import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -204,6 +204,6 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws AssertionError if the value of the <code>JSpinner</code> is not equal to the given one.
    */
   public void requireValue(JSpinner spinner, Object value) {
-    assertThat(valueOf(spinner)).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
+    assertThat(GetJSpinnerValueTask.valueOf(spinner)).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

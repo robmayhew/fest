@@ -21,7 +21,7 @@ import javax.swing.JTabbedPane;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
@@ -41,7 +41,7 @@ public class JTabbedPaneLocationTest {
   private JTabbedPaneLocation location;
 
   @BeforeMethod public void setUp() {
-    tabbedPane = new GuiTask<JTabbedPane>() {
+    tabbedPane = new GuiQuery<JTabbedPane>() {
       protected JTabbedPane executeInEDT() throws Throwable {
         return new MyTabbedPane();
       }

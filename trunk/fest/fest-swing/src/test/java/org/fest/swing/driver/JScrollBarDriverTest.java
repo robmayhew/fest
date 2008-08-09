@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -52,7 +52,7 @@ public class JScrollBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JScrollBarDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }

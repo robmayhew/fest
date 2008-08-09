@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -62,7 +62,7 @@ public class JTabbedPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTabbedPaneDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame();
       }
@@ -180,7 +180,7 @@ public class JTabbedPaneDriverTest {
   }
 
   private void assertThatSelectedTabIndexIsEqualTo(int expected) {
-    int selectedIndex = new GuiTask<Integer>() {
+    int selectedIndex = new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return tabbedPane.getSelectedIndex();
       }

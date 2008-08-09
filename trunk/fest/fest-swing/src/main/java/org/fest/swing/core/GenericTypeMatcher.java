@@ -17,7 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 
 /**
  * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 

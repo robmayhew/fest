@@ -30,7 +30,7 @@ import org.fest.swing.testing.MyApplet;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

@@ -32,7 +32,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.task.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -50,7 +50,7 @@ public class AbstractButtonDriverTest {
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     driver = new AbstractButtonDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
@@ -74,7 +74,7 @@ public class AbstractButtonDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         checkBox.setEnabled(false);
         return null;
@@ -184,7 +184,7 @@ public class AbstractButtonDriverTest {
   }
 
   private void setCheckBoxSelected(final boolean selected) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         checkBox.setSelected(selected);
         return null;

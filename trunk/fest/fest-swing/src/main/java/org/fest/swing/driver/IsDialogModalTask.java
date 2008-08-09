@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Dialog;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Dialog}</code> is
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  * 
  * @author Alex Ruiz
  */
-class IsDialogModalTask extends GuiTask<Boolean> {
+class IsDialogModalTask extends GuiQuery<Boolean> {
 
   private final Dialog dialog;
 

@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text used in the "cancel button" of a
@@ -26,7 +26,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJFileChooserCancelButtonTextTask extends GuiTask<String> {
+class GetJFileChooserCancelButtonTextTask extends GuiQuery<String> {
 
   private static final String CANCEL_BUTTON_TEXT_KEY = "FileChooser.cancelButtonText";
 

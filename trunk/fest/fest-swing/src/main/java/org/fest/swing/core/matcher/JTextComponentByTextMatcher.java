@@ -19,7 +19,7 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.task.GetJTextComponentTextTask.textOf;
+import static org.fest.swing.query.GetJTextComponentTextTask.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**

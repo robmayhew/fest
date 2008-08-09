@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether editor of a 
@@ -26,7 +26,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz
  */
-class IsJComboBoxEditorAccessibleTask extends GuiTask<Boolean> {
+class IsJComboBoxEditorAccessibleTask extends GuiQuery<Boolean> {
   
   private final JComboBox comboBox;
 

@@ -24,7 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestList;
 import org.fest.swing.testing.TestWindow;
@@ -50,7 +50,7 @@ public class JListLocationTest {
   @BeforeMethod public void setUp() {
     location = new JListLocation();
     robot = robotWithNewAwtHierarchy();
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame();
       }
@@ -65,7 +65,7 @@ public class JListLocationTest {
 
   public void shouldReturnLocationOfIndex() {
     final Point p = location.pointAt(list, 2);
-    int index = new GuiTask<Integer>() {
+    int index = new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return list.locationToIndex(p);
       }

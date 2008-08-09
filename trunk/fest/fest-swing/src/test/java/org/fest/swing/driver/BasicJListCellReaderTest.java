@@ -24,7 +24,7 @@ import javax.swing.JToolBar;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -43,7 +43,7 @@ public class BasicJListCellReaderTest {
   private BasicJListCellReader reader;
 
   @BeforeMethod public void setUp() {
-    list = new GuiTask<JList>() {
+    list = new GuiQuery<JList>() {
       protected JList executeInEDT() {
         return new JList();
       }
@@ -52,7 +52,7 @@ public class BasicJListCellReaderTest {
   }
 
   public void shouldReturnModelValueToString() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         DefaultListModel model = new DefaultListModel();
         model.addElement(new Jedi("Yoda"));
@@ -65,7 +65,7 @@ public class BasicJListCellReaderTest {
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         DefaultListModel model = new DefaultListModel();
         model.addElement(null);
@@ -79,7 +79,7 @@ public class BasicJListCellReaderTest {
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         DefaultListModel model = new DefaultListModel();
         model.addElement(new Jedi(null));

@@ -24,7 +24,7 @@ import javax.swing.JToolBar;
 import static java.awt.BorderLayout.*;
 import static java.lang.Math.max;
 
-import static org.fest.swing.task.GetJToolBarOrientationTask.isHorizontal;
+import static org.fest.swing.query.GetJToolBarOrientationTask.isHorizontal;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 

@@ -17,7 +17,7 @@ package org.fest.swing.fixture;
 import java.awt.Color;
 import java.awt.Component;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the background color of a
@@ -26,7 +26,7 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class GetComponentBackgroundTask extends GuiTask<Color> {
+final class GetComponentBackgroundTask extends GuiQuery<Color> {
 
   private final Component component;
 

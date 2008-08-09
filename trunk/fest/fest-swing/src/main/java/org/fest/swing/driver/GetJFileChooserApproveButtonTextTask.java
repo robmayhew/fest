@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 import static org.fest.util.Strings.isEmpty;
 
@@ -27,7 +27,7 @@ import static org.fest.util.Strings.isEmpty;
  *
  * @author Alex Ruiz
  */
-class GetJFileChooserApproveButtonTextTask extends GuiTask<String> {
+class GetJFileChooserApproveButtonTextTask extends GuiQuery<String> {
   
   private final JFileChooser fileChooser;
 

@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
@@ -58,7 +58,7 @@ public class AbstractJTableCellWriterTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = new AbstractJTableCellWriterStub(robot);
-    frame = new GuiTask<TableDialogEditDemoFrame>() {
+    frame = new GuiQuery<TableDialogEditDemoFrame>() {
       protected TableDialogEditDemoFrame executeInEDT() {
         return new TableDialogEditDemoFrame();
       }

@@ -40,7 +40,7 @@ public class FindFrameByNameAndTypeTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }

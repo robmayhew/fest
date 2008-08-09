@@ -18,7 +18,7 @@ import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.Pair;
@@ -27,7 +27,7 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -96,7 +96,7 @@ public class JScrollBarDriver extends JComponentDriver {
     return new GetUnitIncrementTask(scrollBar).run();
   }
 
-  private static class GetUnitIncrementTask extends GuiTask<Integer> {
+  private static class GetUnitIncrementTask extends GuiQuery<Integer> {
     private final JScrollBar scrollBar;
 
     GetUnitIncrementTask(JScrollBar scrollBar) {
@@ -152,7 +152,7 @@ public class JScrollBarDriver extends JComponentDriver {
     return new GetBlockIncrementTask(scrollBar).run();
   }
 
-  private static class GetBlockIncrementTask extends GuiTask<Integer> {
+  private static class GetBlockIncrementTask extends GuiQuery<Integer> {
     private final JScrollBar scrollBar;
 
     GetBlockIncrementTask(JScrollBar scrollBar) {
@@ -205,7 +205,7 @@ public class JScrollBarDriver extends JComponentDriver {
         valueOf(min), "> and <", valueOf(max), ">"));
   }
   
-  private static class GetMinimumAndMaximumTask extends GuiTask<Pair<Integer, Integer>> {
+  private static class GetMinimumAndMaximumTask extends GuiQuery<Pair<Integer, Integer>> {
     private final JScrollBar scrollBar;
 
     GetMinimumAndMaximumTask(JScrollBar scrollBar) {

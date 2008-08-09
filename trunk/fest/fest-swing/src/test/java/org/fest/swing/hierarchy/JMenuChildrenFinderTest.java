@@ -20,10 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -33,7 +39,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JMenuChildrenFinderTest {
+@Test public class JMenuChildrenFinderTest {
 
   private JMenuChildrenFinder finder;
   
@@ -41,17 +47,26 @@ public class JMenuChildrenFinderTest {
     finder = new JMenuChildrenFinder();
   }
   
-  @Test public void shouldReturnEmptyCollectionIfComponentIsNotJMenu() {
+  public void shouldReturnEmptyCollectionIfComponentIsNotJMenu() {
     assertThat(finder.nonExplicitChildrenOf(new JTextField())).isEmpty();
   }
   
-  @Test public void shouldReturnEmptyCollectionIfComponentIsNull() {
+  public void shouldReturnEmptyCollectionIfComponentIsNull() {
     assertThat(finder.nonExplicitChildrenOf(null)).isEmpty();
   }
   
-  @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
-    JMenu menu = new JMenu();
-    List<Component> children = new ArrayList<Component>(finder.nonExplicitChildrenOf(menu));
-    assertThat(children).containsOnly(menu.getPopupMenu());
+  public void shouldReturnPopupMenuIfComponentIsJMenu() {
+    final JMenu menu = createMock(JMenu.class);
+    final JPopupMenu popup = createMock(JPopupMenu.class);
+    new EasyMockTemplate(menu) {
+      protected void expectations() {
+        expect(menu.getPopupMenu()).andReturn(popup);
+      }
+
+      protected void codeToTest() {
+        List<Component> children = new ArrayList<Component>(finder.nonExplicitChildrenOf(menu));
+        assertThat(children).containsOnly(popup);
+      }
+    }.run();
   }
 }

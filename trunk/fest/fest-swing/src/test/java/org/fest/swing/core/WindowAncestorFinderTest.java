@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.GetComponentParentTask.parentOf;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
 
 /**
  * Tests for <code>{@link WindowAncestorFinder}</code>.

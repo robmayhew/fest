@@ -19,14 +19,14 @@ import java.awt.Rectangle;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.task.GetJTabbedPaneTabCountTask.tabCountOf;
+import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
 import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Strings.*;
 
@@ -46,7 +46,7 @@ public class JTabbedPaneLocation {
    * @throws LocationUnavailableException if a tab matching the given title could not be found.
    */
   public int indexOf(final JTabbedPane tabbedPane, final String title) {
-    int index = new GuiTask<Integer>() {
+    int index = new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
         int tabCount = tabbedPane.getTabCount();
         for (int i = 0; i < tabCount; i++)
@@ -68,7 +68,7 @@ public class JTabbedPaneLocation {
    */
   public Point pointAt(final JTabbedPane tabbedPane, final int index) {
     validateIndex(tabbedPane, index);
-    Rectangle rect = new GuiTask<Rectangle>() {
+    Rectangle rect = new GuiQuery<Rectangle>() {
       protected Rectangle executeInEDT() {
         return tabbedPane.getUI().getTabBounds(tabbedPane, index);
       }

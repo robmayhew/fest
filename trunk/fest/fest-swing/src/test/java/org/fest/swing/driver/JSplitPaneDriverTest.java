@@ -26,7 +26,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
@@ -35,7 +35,7 @@ import static javax.swing.JSplitPane.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -98,7 +98,7 @@ public class JSplitPaneDriverTest {
   }
 
   private MyFrame myFrame(final int orientation) {
-    return new GuiTask<MyFrame>() {
+    return new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame(orientation);
       }

@@ -24,7 +24,7 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 
-import static org.fest.swing.task.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use

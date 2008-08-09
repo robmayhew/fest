@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 import static org.fest.swing.driver.Actions.findActionKey;
 import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
@@ -30,7 +30,7 @@ import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class GetJComponentKeyStrokesForActionTask extends GuiTask<KeyStroke[]> {
+class GetJComponentKeyStrokesForActionTask extends GuiQuery<KeyStroke[]> {
   
   // TODO: write test case
   

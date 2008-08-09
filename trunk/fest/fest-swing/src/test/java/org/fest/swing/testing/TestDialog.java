@@ -20,7 +20,7 @@ import java.awt.*;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands the base window for all GUI tests.
@@ -33,7 +33,7 @@ public class TestDialog extends JDialog {
   private static final long serialVersionUID = 1L;
 
   public static TestDialog showInTest(final Frame owner) {
-    return new GuiTask<TestDialog>() {
+    return new GuiQuery<TestDialog>() {
       protected TestDialog executeInEDT() {
         TestDialog d = new TestDialog(owner);
         d.display();
@@ -58,7 +58,7 @@ public class TestDialog extends JDialog {
   public void display(final Dimension size) {
     Window owner = getOwner();
     if (owner instanceof TestWindow && !owner.isShowing()) ((TestWindow)owner).display();
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         beforeDisplayed();
         chooseLookAndFeel();
@@ -85,7 +85,7 @@ public class TestDialog extends JDialog {
   }
   
   public void destroy() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         setVisible(false);
         dispose();

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-import static org.fest.swing.task.GetComponentNameTask.nameOf;
+import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**

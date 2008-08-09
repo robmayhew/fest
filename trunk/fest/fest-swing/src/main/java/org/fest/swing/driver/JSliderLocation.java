@@ -20,7 +20,7 @@ import java.awt.Point;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 import static javax.swing.SwingConstants.VERTICAL;
 
@@ -49,7 +49,7 @@ public final class JSliderLocation {
     return new GetOrientationTask(slider).run();
   }
   
-  private static class GetOrientationTask extends GuiTask<Integer> {
+  private static class GetOrientationTask extends GuiQuery<Integer> {
     private final JSlider slider;
     
     GetOrientationTask(JSlider slider) {
@@ -105,7 +105,7 @@ public final class JSliderLocation {
     }
   }
 
-  private static abstract class LocationTask extends GuiTask<Point> {
+  private static abstract class LocationTask extends GuiQuery<Point> {
     final JSlider slider;
     private final int value;
 

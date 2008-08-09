@@ -23,7 +23,7 @@ import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 
-import static org.fest.swing.task.GetComponentParentTask.parentOf;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
 
 /**
  * Understands a mapping of unique event queues to the set of root windows found on each queue.

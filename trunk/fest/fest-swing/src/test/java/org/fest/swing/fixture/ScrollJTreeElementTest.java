@@ -26,7 +26,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTree;
 import org.fest.swing.testing.TestWindow;
@@ -93,7 +93,7 @@ public class ScrollJTreeElementTest {
   }
 
   private Object selection() {
-    return new GuiTask<Object>() {
+    return new GuiQuery<Object>() {
       protected Object executeInEDT() {
         Object lastPathComponent = frame.dragTree.getSelectionPath().getLastPathComponent();
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)lastPathComponent;

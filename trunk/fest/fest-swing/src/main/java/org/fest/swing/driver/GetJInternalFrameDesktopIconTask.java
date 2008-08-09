@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link JDesktopIcon}</code> used
@@ -26,7 +26,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJInternalFrameDesktopIconTask extends GuiTask<JDesktopIcon> {
+class GetJInternalFrameDesktopIconTask extends GuiQuery<JDesktopIcon> {
 
   private final JInternalFrame internalFrame;
 

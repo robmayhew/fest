@@ -18,10 +18,10 @@ package org.fest.swing.driver;
 import javax.swing.AbstractButton;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.task.GetAbstractButtonTextTask;
+import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
 
 /**
  * Understands simulation of user input on an <code>{@link AbstractButton}</code>. This class is intended for internal
@@ -60,7 +60,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @return the text of the given button.
    */
   public String textOf(AbstractButton button) {
-    return GetAbstractButtonTextTask.textOf(button);
+    return AbstractButtonTextQuery.textOf(button);
   }
 
   /**

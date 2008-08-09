@@ -19,8 +19,8 @@ import java.awt.Component;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.task.GetComponentNameTask.nameOf;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentNameQuery.nameOf;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 

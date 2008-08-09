@@ -22,11 +22,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 
 /**
  * Understands simulation of user input on a <code>{@link JPopupMenu}</code>. Unlike <code>JPopupMenuFixture</code>,
@@ -61,7 +61,7 @@ public class JPopupMenuDriver extends JComponentDriver {
     return new GetSubElementsTask(popupMenu).run();
   }
 
-  private static class GetSubElementsTask extends GuiTask<MenuElement[]> {
+  private static class GetSubElementsTask extends GuiQuery<MenuElement[]> {
     private final JPopupMenu popupMenu;
 
     GetSubElementsTask(JPopupMenu popupMenu) {
@@ -79,7 +79,7 @@ public class JPopupMenuDriver extends JComponentDriver {
     return "-";
   }
 
-  private static class GetMenuElementComponent extends GuiTask<Component> {
+  private static class GetMenuElementComponent extends GuiQuery<Component> {
     private final MenuElement e;
 
     GetMenuElementComponent(MenuElement e) {

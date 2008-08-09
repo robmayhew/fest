@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.CustomCellRenderer;
 
@@ -44,7 +44,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private BasicJTableCellReader reader;
 
   @BeforeMethod public void setUp() {
-    table = new GuiTask<JTable>() {
+    table = new GuiQuery<JTable>() {
       protected JTable executeInEDT() {
         return new JTable(1, 1);
       }
@@ -53,7 +53,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnNullIfRendererNotRecognized() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         DefaultTableModel model = new DefaultTableModel(new Object[][] { { new Jedi("Yoda") } }, new Object[] { "Names" });
         table.setModel(model);
@@ -66,7 +66,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnFontFromRenderer() {
-    Font expectedFont = new GuiTask<Font>() {
+    Font expectedFont = new GuiQuery<Font>() {
       protected Font executeInEDT() {
         JLabel label = new JLabel("Hello");
         updateRendererComponent(0, label);
@@ -78,7 +78,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnBackgroundColorFromRenderer() {
-    Color expectedBackground = new GuiTask<Color>() {
+    Color expectedBackground = new GuiQuery<Color>() {
       protected Color executeInEDT() {
         JLabel label = new JLabel("Hello");
         updateRendererComponent(0, label);
@@ -90,7 +90,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnForegroundColorFromRenderer() {
-    Color expectedForeground = new GuiTask<Color>() {
+    Color expectedForeground = new GuiQuery<Color>() {
       protected Color executeInEDT() {
         JLabel label = new JLabel("Hello");
         updateRendererComponent(0, label);
@@ -102,7 +102,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    String expectedText = new GuiTask<String>() {
+    String expectedText = new GuiQuery<String>() {
       protected String executeInEDT() {
         JLabel label = new JLabel("Hello");
         updateRendererComponent(0, label);
@@ -114,7 +114,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnSelectionFromCellRendererIfRendererIsJComboBox() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
         comboBox.setSelectedIndex(1);
@@ -127,7 +127,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnNullIfRendererIsJComboBoxWithoutSelection() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
         comboBox.setSelectedIndex(-1);
@@ -141,7 +141,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldReturnIsSelectedIfRendererIsJCheckBox(final boolean selected) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         JCheckBox checkBox = new JCheckBox("Hello", selected);
         updateRendererComponent(0, checkBox);

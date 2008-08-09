@@ -20,7 +20,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.util.Collections;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
@@ -56,7 +56,7 @@ public final class TestList extends JList {
   }
 
   public String[] elements() {
-    return new GuiTask<String[]>() {
+    return new GuiQuery<String[]>() {
       protected String[] executeInEDT() throws Throwable {
         int count = model.getSize();
         String[] elements = new String[count];

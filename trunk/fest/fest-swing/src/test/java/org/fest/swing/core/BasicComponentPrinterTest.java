@@ -105,7 +105,7 @@ public class BasicComponentPrinterTest {
     final JButton button = new JButton("A button");
 
     static MainWindow show(final Class<?> testClass) {
-      return new GuiTask<MainWindow>() {
+      return new GuiQuery<MainWindow>() {
         protected MainWindow executeInEDT() {
           MainWindow window = new MainWindow(testClass);
           window.display();

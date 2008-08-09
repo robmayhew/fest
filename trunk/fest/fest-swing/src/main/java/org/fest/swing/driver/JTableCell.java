@@ -17,11 +17,11 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.task.GetJTableRowCountTask.rowCountOf;
+import static org.fest.swing.query.GetJTableRowCountTask.rowCountOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -88,7 +88,7 @@ public abstract class JTableCell {
     return new GetColumnCountTask(table).run();
   }
 
-  private static class GetColumnCountTask extends GuiTask<Integer> {
+  private static class GetColumnCountTask extends GuiQuery<Integer> {
     private final JTable table;
 
     GetColumnCountTask(JTable table) {

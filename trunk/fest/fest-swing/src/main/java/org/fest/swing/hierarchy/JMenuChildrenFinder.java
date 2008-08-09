@@ -23,6 +23,7 @@ import javax.swing.JMenu;
 
 import static java.util.Collections.emptyList;
 
+import static org.fest.swing.query.GetJMenuPopupMenuTask.popupMenuOf;
 import static org.fest.util.Collections.list;
 
 /**
@@ -34,10 +35,6 @@ final class JMenuChildrenFinder implements ChildrenFinderStrategy {
     
   public Collection<Component> nonExplicitChildrenOf(Container c) {
     if (!(c instanceof JMenu)) return emptyList();
-    return list(popupMenuFrom((JMenu)c));
-  }
-
-  private Component popupMenuFrom(JMenu menu) {
-    return menu.getPopupMenu();
+    return list((Component)popupMenuOf((JMenu)c));
   }
 }

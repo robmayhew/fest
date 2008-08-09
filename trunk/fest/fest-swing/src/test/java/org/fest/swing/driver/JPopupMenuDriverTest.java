@@ -26,13 +26,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -51,7 +51,7 @@ public class JPopupMenuDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame();
       }
@@ -82,7 +82,7 @@ public class JPopupMenuDriverTest {
       public void processKeyEvent(KeyEvent event, MenuElement[] path, MenuSelectionManager manager) {}
       public void processMouseEvent(MouseEvent event, MenuElement[] path, MenuSelectionManager manager) {}
     }
-    MenuElement e = new GuiTask<MenuElement>() {
+    MenuElement e = new GuiQuery<MenuElement>() {
       protected MenuElement executeInEDT() throws Throwable {
         return new MyMenuElement();
       }

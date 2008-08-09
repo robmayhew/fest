@@ -20,7 +20,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
@@ -28,7 +28,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJTableCellRendererTask extends GuiTask<Component> {
+class GetJTableCellRendererTask extends GuiQuery<Component> {
 
   private final JTable table;
   private final int row;

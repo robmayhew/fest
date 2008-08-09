@@ -24,7 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.classextension.EasyMock.createMock;
@@ -46,7 +46,7 @@ public class GetComponentAccessibleActionTaskTest {
 
   @BeforeMethod public void setUp() {
     action = createMock(AccessibleAction.class);
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame(action);
       }

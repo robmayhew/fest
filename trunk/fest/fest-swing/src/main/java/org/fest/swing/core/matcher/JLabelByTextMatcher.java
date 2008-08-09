@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.task.GetJLabelTextTask.textOf;
+import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**

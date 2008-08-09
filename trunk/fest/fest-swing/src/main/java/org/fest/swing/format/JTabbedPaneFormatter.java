@@ -23,7 +23,7 @@ import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.task.GetComponentNameTask.nameOf;
+import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**

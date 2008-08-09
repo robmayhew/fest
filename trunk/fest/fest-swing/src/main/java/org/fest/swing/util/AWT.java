@@ -22,16 +22,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import org.fest.swing.task.GetComponentLocationOnScreenTask;
-import org.fest.swing.task.GetJPopupMenuInvokerTask;
+import org.fest.swing.query.ComponentLocationOnScreenQuery;
+import org.fest.swing.query.GetJPopupMenuInvokerTask;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.task.GetComponentNameTask.nameOf;
-import static org.fest.swing.task.GetComponentParentTask.parentOf;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentNameQuery.nameOf;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
 
@@ -143,7 +143,7 @@ public class AWT {
    *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
   public static Point locationOnScreenOf(Component c) {
-    if (!isAWTTreeLockHeld()) return new Point(GetComponentLocationOnScreenTask.locationOnScreenOf(c));
+    if (!isAWTTreeLockHeld()) return new Point(ComponentLocationOnScreenQuery.locationOnScreenOf(c));
     // TODO access from EDT
     if (!isShowing(c)) return null;
     Point location = new Point(c.getLocation());

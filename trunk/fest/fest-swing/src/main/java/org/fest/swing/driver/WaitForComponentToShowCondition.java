@@ -20,7 +20,7 @@ import java.awt.Component;
 import org.fest.swing.core.Condition;
 
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 import static org.fest.util.Strings.concat;
 
 /**

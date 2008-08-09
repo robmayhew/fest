@@ -25,7 +25,7 @@ import javax.swing.tree.DefaultTreeModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -45,7 +45,7 @@ public class BasicJTreeCellReaderTest {
   private DefaultMutableTreeNode root;
 
   @BeforeMethod public void setUp() {
-    tree = new GuiTask<JTree>() {
+    tree = new GuiQuery<JTree>() {
       protected JTree executeInEDT() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
         root.add(new DefaultMutableTreeNode("Node1"));
@@ -57,7 +57,7 @@ public class BasicJTreeCellReaderTest {
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    String expectedText = new GuiTask<String>() {
+    String expectedText = new GuiQuery<String>() {
       protected String executeInEDT() {
         JLabel label = new JLabel("First");
         tree.setCellRenderer(new CustomCellRenderer(label));
@@ -69,7 +69,7 @@ public class BasicJTreeCellReaderTest {
   }
 
   public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         tree.setCellRenderer(new CustomCellRenderer(new JToolBar()));
         return null;
@@ -81,12 +81,12 @@ public class BasicJTreeCellReaderTest {
 
   public void shouldReturnNullIfTextOfModelValueIsDefaultToString() {
     class Person {}
-    root = new GuiTask<DefaultMutableTreeNode>() {
+    root = new GuiQuery<DefaultMutableTreeNode>() {
       protected DefaultMutableTreeNode executeInEDT() {
         return new DefaultMutableTreeNode(new Person());
       }
     }.run();
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() {
         DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
         model.setRoot(root);

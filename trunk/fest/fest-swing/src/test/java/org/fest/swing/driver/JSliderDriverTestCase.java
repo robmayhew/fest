@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -35,7 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.GetJSliderValueTask.valueOf;
+import static org.fest.swing.query.GetJSliderValueTask.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -54,7 +54,7 @@ public abstract class JSliderDriverTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() throws Throwable {
         return new MyFrame(getClass(), orientation());
       }
@@ -132,7 +132,7 @@ public abstract class JSliderDriverTestCase {
   }
 
   private int sliderMaximum() {
-    return new GuiTask<Integer>() {
+    return new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return slider.getMaximum();
       }
@@ -180,7 +180,7 @@ public abstract class JSliderDriverTestCase {
   }
   
   protected int sliderOrientation() {
-    return new GuiTask<Integer>() {
+    return new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return slider.getOrientation();
       }

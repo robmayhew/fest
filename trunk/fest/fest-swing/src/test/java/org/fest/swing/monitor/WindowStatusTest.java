@@ -31,7 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 
 /**
  * Tests for <code>{@link WindowStatus}</code>.

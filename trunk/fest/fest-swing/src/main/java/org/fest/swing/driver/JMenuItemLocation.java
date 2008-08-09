@@ -21,9 +21,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import static org.fest.swing.task.GetComponentParentTask.parentOf;
-import static org.fest.swing.task.GetJPopupMenuInvokerTask.invokerOf;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.GetJPopupMenuInvokerTask.invokerOf;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 
 /**
  * Understands the location of a <code>{@link JMenuItem}</code>.

@@ -29,7 +29,7 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.reflect.core.Reflection.field;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.GetComponentParentTask.parentOf;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
 import static org.fest.util.Strings.*;
 
 /**

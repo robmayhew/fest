@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the file-selection mode of a
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class GetJFileChooserFileSelectionModeTask extends GuiTask<Integer> {
+class GetJFileChooserFileSelectionModeTask extends GuiQuery<Integer> {
 
   private final JFileChooser fileChooser;
 

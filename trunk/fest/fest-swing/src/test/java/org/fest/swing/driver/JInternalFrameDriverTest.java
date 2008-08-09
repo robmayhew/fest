@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
@@ -39,8 +39,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
-import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
-import static org.fest.swing.task.IsJInternalFrameIconifiedTask.isIconified;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.IsJInternalFrameIconifiedTask.isIconified;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -61,7 +61,7 @@ public class JInternalFrameDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JInternalFrameDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
@@ -183,7 +183,7 @@ public class JInternalFrameDriverTest {
   }
 
   private void setIcon(boolean icon) {
-    new GuiTask<Void>() {
+    new GuiQuery<Void>() {
       protected Void executeInEDT() throws PropertyVetoException {
         internalFrame.setIcon(true);
         return null;
@@ -197,7 +197,7 @@ public class JInternalFrameDriverTest {
   }
 
   private boolean isMaximized() {
-    return new GuiTask<Boolean>() {
+    return new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() throws Throwable {
         return internalFrame.isMaximum();
       }
@@ -239,7 +239,7 @@ public class JInternalFrameDriverTest {
   }
 
   private FluentPoint internalFrameLocation() {
-    return new FluentPoint(new GuiTask<Point>() {
+    return new FluentPoint(new GuiQuery<Point>() {
       protected Point executeInEDT() throws Throwable {
         return internalFrame.getLocation();
       }
@@ -250,7 +250,7 @@ public class JInternalFrameDriverTest {
   public void shouldCloseInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.close(internalFrame);
-    boolean closed = new GuiTask<Boolean>() {
+    boolean closed = new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() throws Throwable {
         return internalFrame.isClosed();
       }
@@ -293,7 +293,7 @@ public class JInternalFrameDriverTest {
   }
 
   private int internalFrameWidth() {
-    return new GuiTask<Integer>() {
+    return new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return internalFrame.getWidth();
       }
@@ -310,7 +310,7 @@ public class JInternalFrameDriverTest {
   }
 
   private int internalFrameHeight() {
-    return new GuiTask<Integer>() {
+    return new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return internalFrame.getHeight();
       }

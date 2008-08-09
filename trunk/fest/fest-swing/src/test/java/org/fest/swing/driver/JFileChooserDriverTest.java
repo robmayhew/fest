@@ -27,7 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -37,7 +37,7 @@ import static javax.swing.JFileChooser.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.GetAbstractButtonTextTask.textOf;
+import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.*;
 import static org.fest.util.Strings.isEmpty;
@@ -58,7 +58,7 @@ public class JFileChooserDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JFileChooserDriver(robot);
-    MyFrame frame = new GuiTask<MyFrame>() {
+    MyFrame frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
@@ -84,7 +84,7 @@ public class JFileChooserDriverTest {
   public void shouldSelectFile() {
     File temporaryFile = newTemporaryFile();
     driver.selectFile(fileChooser, temporaryFile);
-    File selectedFile = new GuiTask<File>() {
+    File selectedFile = new GuiQuery<File>() {
       protected File executeInEDT() {
         return fileChooser.getSelectedFile();
       }
@@ -135,7 +135,7 @@ public class JFileChooserDriverTest {
   }
 
   private String approveButtonText() {
-    return new GuiTask<String>() {
+    return new GuiQuery<String>() {
       protected String executeInEDT() {
         String text = fileChooser.getApproveButtonText();
         if (!isEmpty(text)) return text;
@@ -159,7 +159,7 @@ public class JFileChooserDriverTest {
   }
 
   private String currentDirectoryAbsolutePath() {
-    File currentDirectory = new GuiTask<File>() {
+    File currentDirectory = new GuiQuery<File>() {
       protected File executeInEDT() {
         return fileChooser.getCurrentDirectory();
       }

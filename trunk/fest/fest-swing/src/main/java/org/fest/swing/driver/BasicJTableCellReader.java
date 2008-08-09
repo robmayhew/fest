@@ -29,10 +29,10 @@ import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
 
 import static org.fest.swing.driver.GetJTableCellRendererTask.cellRendererIn;
-import static org.fest.swing.task.GetJComboBoxSelectedIndexTask.selectedIndexOf;
-import static org.fest.swing.task.GetJLabelTextTask.textOf;
-import static org.fest.swing.task.GetJTableCellValueTask.cellValueOf;
-import static org.fest.swing.task.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.query.JLabelTextQuery.textOf;
+import static org.fest.swing.query.GetJTableCellValueTask.cellValueOf;
+import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.

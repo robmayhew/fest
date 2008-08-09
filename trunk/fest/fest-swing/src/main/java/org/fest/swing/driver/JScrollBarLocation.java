@@ -21,7 +21,7 @@ import java.util.Map;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 import static java.awt.Adjustable.*;
 
@@ -61,7 +61,7 @@ public final class JScrollBarLocation {
     return new MaximumMinusMinimumTask(scrollBar).run();
   }
 
-  private final class MaximumMinusMinimumTask extends GuiTask<Integer> {
+  private final class MaximumMinusMinimumTask extends GuiQuery<Integer> {
     private final JScrollBar scrollBar;
 
     MaximumMinusMinimumTask(JScrollBar scrollBar) {
@@ -126,7 +126,7 @@ public final class JScrollBarLocation {
     return new GetOrientationTask(scrollBar).run();
   }
 
-  private static class GetOrientationTask extends GuiTask<Integer> {
+  private static class GetOrientationTask extends GuiQuery<Integer> {
     private final JScrollBar scrollBar;
 
     GetOrientationTask(JScrollBar scrollBar) {

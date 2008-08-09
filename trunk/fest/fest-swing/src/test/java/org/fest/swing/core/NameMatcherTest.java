@@ -82,7 +82,7 @@ public class NameMatcherTest {
   }
 
   private TestWindow testWindow() {
-    return new GuiTask<TestWindow>() {
+    return new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow w = new TestWindow(NameMatcherTest.class);
         w.add(button);

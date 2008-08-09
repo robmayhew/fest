@@ -19,7 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as 
@@ -27,7 +27,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz
  */
-class GetJComboBoxEditorTask extends GuiTask<Component> {
+class GetJComboBoxEditorTask extends GuiQuery<Component> {
   
   private final JComboBox comboBox;
 

@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of items in a
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class GetJComboBoxItemCountTask extends GuiTask<Integer> {
+class GetJComboBoxItemCountTask extends GuiQuery<Integer> {
 
   private final JComboBox comboBox;
 

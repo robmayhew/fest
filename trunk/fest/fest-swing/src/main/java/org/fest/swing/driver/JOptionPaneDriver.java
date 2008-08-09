@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.matcher.JButtonByTextMatcher;
 import org.fest.swing.exception.ComponentLookupException;
@@ -214,7 +214,7 @@ public class JOptionPaneDriver extends JComponentDriver {
     return messageTypeAsText(new GetMessageTypeTask(optionPane).run());
   }
 
-  private static class GetOptionsTask extends GuiTask<Object[]> {
+  private static class GetOptionsTask extends GuiQuery<Object[]> {
     private final JOptionPane optionPane;
 
     GetOptionsTask(JOptionPane optionPane) {
@@ -226,7 +226,7 @@ public class JOptionPaneDriver extends JComponentDriver {
     }
   }
 
-  private static class GetTitleTask extends GuiTask<String> {
+  private static class GetTitleTask extends GuiQuery<String> {
     private final JOptionPane optionPane;
 
     GetTitleTask(JOptionPane optionPane) {
@@ -238,7 +238,7 @@ public class JOptionPaneDriver extends JComponentDriver {
     }
   }
 
-  private static class GetMessageTypeTask extends GuiTask<Integer> {
+  private static class GetMessageTypeTask extends GuiQuery<Integer> {
     private final JOptionPane optionPane;
 
     GetMessageTypeTask(JOptionPane optionPane) {

@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestGroups;
 
@@ -48,7 +48,7 @@ public class PerformDefaultAccessibleActionTaskTest {
   @BeforeMethod public void setUp() {
     context = createMock(AccessibleContext.class);
     action = createMock(AccessibleAction.class);
-    component = new GuiTask<Component>() {
+    component = new GuiQuery<Component>() {
       protected Component executeInEDT() throws Throwable {
         return new MyComponent(context);
       }

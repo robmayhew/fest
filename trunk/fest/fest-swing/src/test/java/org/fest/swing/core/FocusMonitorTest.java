@@ -40,7 +40,7 @@ public class FocusMonitorTest {
   private MyFrame frame;
   
   @BeforeMethod public void setUp() {
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }

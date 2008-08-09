@@ -21,7 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
@@ -29,7 +29,7 @@ import org.fest.swing.core.GuiTask;
  * 
  * @author Alex Ruiz
  */
-class GetJComboBoxCellRendererTask extends GuiTask<Component> {
+class GetJComboBoxCellRendererTask extends GuiQuery<Component> {
   
   static final JList REFERENCE_JLIST = new JList();
 

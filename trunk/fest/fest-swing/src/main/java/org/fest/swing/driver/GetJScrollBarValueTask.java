@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the value of a
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class GetJScrollBarValueTask extends GuiTask<Integer> {
+final class GetJScrollBarValueTask extends GuiQuery<Integer> {
 
   private final JScrollBar scrollBar;
 

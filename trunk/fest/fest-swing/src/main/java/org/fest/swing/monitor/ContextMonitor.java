@@ -25,7 +25,7 @@ import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
 
 import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-import static org.fest.swing.task.GetComponentParentTask.parentOf;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
 
 /**
  * Understands a monitor for components and event queues.

@@ -19,7 +19,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the point where the mouse usually grabs to
@@ -27,7 +27,7 @@ import org.fest.swing.core.GuiTask;
  * 
  * @author Alex Ruiz
  */
-class GetContainerMoveLocationTask extends GuiTask<Point> {
+class GetContainerMoveLocationTask extends GuiQuery<Point> {
 
   private final Container container;
 

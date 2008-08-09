@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -80,7 +80,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   private JTextField textField(final String text) {
-    return new GuiTask<JTextField>() {
+    return new GuiQuery<JTextField>() {
       protected JTextField executeInEDT() {
         return new JTextField(text);
       }
@@ -88,7 +88,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
   
   private TestWindow windowWith(final JTextField textField) {
-    return new GuiTask<TestWindow>() {
+    return new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow f = new TestWindow(JTextComponentByTextMatcher.class);
         f.add(textField);

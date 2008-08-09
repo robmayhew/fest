@@ -19,7 +19,7 @@ package org.fest.swing.driver;
 import javax.swing.JTree;
 
 import org.fest.swing.cell.JTreeCellReader;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 import static org.fest.swing.driver.GetJTreeCellRendererTask.cellRendererIn;
 import static org.fest.swing.util.Strings.isDefaultToString;
@@ -51,7 +51,7 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
     return text;
   }
 
-  private static class JTreeConvertValueToTextTask extends GuiTask<String> {
+  private static class JTreeConvertValueToTextTask extends GuiQuery<String> {
 
     private final JTree tree;
     private final Object modelValue;

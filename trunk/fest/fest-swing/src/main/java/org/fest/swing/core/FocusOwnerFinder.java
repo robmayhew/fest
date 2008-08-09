@@ -23,7 +23,7 @@ import java.awt.Window;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
 import static org.fest.reflect.core.Reflection.staticField;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
 
 /**
  * Understands lookup of a <code>{@link Component}</code> owning the input focus.

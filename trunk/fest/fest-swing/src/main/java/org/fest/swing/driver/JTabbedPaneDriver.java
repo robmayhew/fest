@@ -19,13 +19,13 @@ import java.awt.Point;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
-import static org.fest.swing.task.GetJTabbedPaneTabCountTask.tabCountOf;
-import static org.fest.swing.task.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
+import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
 
 /**
  * Understands simulation of user input on a <code>{@link JTabbedPane}</code>. Unlike <code>JTabbedPaneFixture</code>,
@@ -66,7 +66,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
     return new GetTitlesTask(tabbedPane).run();
   }
 
-  private static class GetTitlesTask extends GuiTask<String[]> {
+  private static class GetTitlesTask extends GuiQuery<String[]> {
     private final JTabbedPane tabbedPane;
 
     GetTitlesTask(JTabbedPane tabbedPane) {

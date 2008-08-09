@@ -21,12 +21,12 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.task.GetComponentNameTask.nameOf;
+import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -58,7 +58,7 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
   }
 
   private Object[] contentsOf(final JComboBox comboBox) {
-    return new GuiTask<Object[]>() {
+    return new GuiQuery<Object[]>() {
       protected Object[] executeInEDT() {
         List<Object> contents = new ArrayList<Object>();
         int count = comboBox.getItemCount();

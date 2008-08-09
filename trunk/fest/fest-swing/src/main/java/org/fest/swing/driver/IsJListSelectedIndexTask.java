@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a
@@ -25,7 +25,7 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class IsJListSelectedIndexTask extends GuiTask<Boolean> {
+class IsJListSelectedIndexTask extends GuiQuery<Boolean> {
 
   private final JList list;
   private final int index;

@@ -268,7 +268,7 @@ public class BasicComponentFinderTest {
     final JTextField anotherTextField = new JTextField("Another TextField");
 
     static MainWindow beVisible() {
-      return new GuiTask<MainWindow>() {
+      return new GuiQuery<MainWindow>() {
         protected MainWindow executeInEDT() {
           MainWindow window = new MainWindow();
           window.display();

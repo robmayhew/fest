@@ -46,10 +46,10 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
-import static org.fest.swing.task.GetComponentLocationOnScreenTask.locationOnScreenOf;
-import static org.fest.swing.task.GetComponentSizeTask.sizeOf;
-import static org.fest.swing.task.IsComponentShowingTask.isShowing;
-import static org.fest.swing.task.IsComponentVisibleTask.isVisible;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.IsComponentVisibleTask.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
@@ -69,7 +69,7 @@ public class RobotFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new GuiTask<MyFrame>() {
+    frame = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }

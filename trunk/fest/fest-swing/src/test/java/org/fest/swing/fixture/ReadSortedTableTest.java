@@ -27,7 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
@@ -48,7 +48,7 @@ public class ReadSortedTableTest {
   private FrameFixture frame;
   
   @BeforeMethod public void setUp() {
-    MyFrame window = new GuiTask<MyFrame>() {
+    MyFrame window = new GuiQuery<MyFrame>() {
       protected MyFrame executeInEDT() {
         return new MyFrame();
       }
