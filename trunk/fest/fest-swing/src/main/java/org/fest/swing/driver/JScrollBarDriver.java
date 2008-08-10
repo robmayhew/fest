@@ -27,7 +27,7 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
 
 /**

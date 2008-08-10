@@ -32,7 +32,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

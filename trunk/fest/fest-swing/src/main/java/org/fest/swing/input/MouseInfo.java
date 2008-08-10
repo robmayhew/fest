@@ -24,7 +24,7 @@ import java.util.Stack;
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.MouseEvent.*;
 
-import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 
 /**
  * Understands a description mouse-related operations.

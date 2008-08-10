@@ -52,7 +52,7 @@ import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
-import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;

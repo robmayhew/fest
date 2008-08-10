@@ -23,7 +23,7 @@ import javax.swing.JPopupMenu;
 
 import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
-import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 
 /**
  * Understands the location of a <code>{@link JMenuItem}</code>.

@@ -38,7 +38,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.GetJSpinnerValueTask.valueOf;
-import static org.fest.swing.query.GetJTextComponentTextTask.textOf;
+import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;

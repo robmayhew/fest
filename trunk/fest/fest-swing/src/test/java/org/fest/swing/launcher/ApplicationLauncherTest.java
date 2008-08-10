@@ -33,7 +33,7 @@ import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.util.Collections.list;
 
 /**

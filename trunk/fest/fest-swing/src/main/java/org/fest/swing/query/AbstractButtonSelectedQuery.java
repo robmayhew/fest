@@ -19,11 +19,14 @@ import javax.swing.AbstractButton;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that indicates whether a <code>{@link AbstractButton}</code> is selected or not.
+ * Understands an action, executed in the event dispatch thread, that indicates whether an 
+ * <code>{@link AbstractButton}</code> is selected or not.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public class IsAbstractButtonSelectedTask extends GuiQuery<Boolean> {
+public class AbstractButtonSelectedQuery extends GuiQuery<Boolean> {
+  
   private final AbstractButton button;
 
   /**
@@ -33,17 +36,17 @@ public class IsAbstractButtonSelectedTask extends GuiQuery<Boolean> {
    * @return <code>true</code> if the given <code>AbstractButton</code> is selected, <code>false</code> otherwise.
    */
   public static boolean isSelected(AbstractButton button) {
-    return new IsAbstractButtonSelectedTask(button).run();
+    return new AbstractButtonSelectedQuery(button).run();
   }
 
-  private IsAbstractButtonSelectedTask(AbstractButton button) {
+  private AbstractButtonSelectedQuery(AbstractButton button) {
     this.button = button;
   }
 
   /**
-   * Indicates whether this task's <code>{@link AbstractButton}</code> is selected or not. This action is executed in
+   * Indicates whether this query's <code>{@link AbstractButton}</code> is selected or not. This action is executed in
    * the event dispatch thread.
-   * @return <code>true</code> if this task's <code>AbstractButton</code> is selected, <code>false</code> otherwise.
+   * @return <code>true</code> if this query's <code>AbstractButton</code> is selected, <code>false</code> otherwise.
    */
   protected Boolean executeInEDT() {
     return button.isSelected();

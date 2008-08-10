@@ -21,7 +21,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 
 /**
  * Understands simulation of user input on an <code>{@link AbstractButton}</code>. This class is intended for internal

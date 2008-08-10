@@ -30,9 +30,9 @@ import static org.fest.swing.driver.IsJInternalFrameClosableTask.isClosable;
 import static org.fest.swing.driver.IsJInternalFrameIconifiableTask.isIconifiable;
 import static org.fest.swing.driver.IsJInternalFrameMaximizableTask.isMaximizable;
 import static org.fest.swing.driver.JInternalFrameAction.*;
+import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.IsJInternalFrameIconifiedTask.isIconified;
 import static org.fest.util.Strings.concat;
 
 /**

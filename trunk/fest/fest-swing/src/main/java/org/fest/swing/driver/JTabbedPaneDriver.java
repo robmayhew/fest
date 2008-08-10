@@ -25,7 +25,7 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
 /**
  * Understands simulation of user input on a <code>{@link JTabbedPane}</code>. Unlike <code>JTabbedPaneFixture</code>,

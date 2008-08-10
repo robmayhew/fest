@@ -1,5 +1,5 @@
 /*
- * Created on Jul 26, 2008
+ * Created on Jul 29, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -19,35 +19,36 @@ import java.awt.Component;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that indicates whether a <code>{@link Component}</code> is enabled or not.
+ * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code> 
+ * is visible or not.
  *
- * @author Alex Ruiz
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public final class IsComponentEnabledTask extends GuiQuery<Boolean> {
+public final class ComponentVisibleQuery extends GuiQuery<Boolean> {
 
   private final Component component;
 
   /**
-   * Indicates whether the given <code>{@link Component}</code> is enabled or not. This action is executed in the event
+   * Indicates whether the given <code>{@link Component}</code> is visible or not. This action is executed in the event
    * dispatch thread.
    * @param component the given <code>Component</code>.
-   * @return <code>true</code> if the given <code>Component</code> is enabled, <code>false</code> otherwise.
+   * @return <code>true</code> if the given <code>Component</code> is visible, <code>false</code> otherwise.
    */
-  public static boolean isEnabled(Component component) {
-    return new IsComponentEnabledTask(component).run();
+  public static boolean isVisible(Component component) {
+    return new ComponentVisibleQuery(component).run();
   }
 
-  private IsComponentEnabledTask(Component component) {
+  private ComponentVisibleQuery(Component component) {
     this.component = component;
   }
 
   /**
-   * Indicates whether this task's <code>{@link Component}</code> is enabled or not. This action is executed in the
+   * Indicates whether this query's <code>{@link Component}</code> is visible or not. This action is executed in the
    * event dispatch thread.
-   * @return <code>true</code> if this task's <code>Component</code> is enabled, <code>false</code> otherwise.
+   * @return <code>true</code> if this query's <code>Component</code> is visible, <code>false</code> otherwise.
    */
   protected Boolean executeInEDT() {
-    return component.isEnabled();
+    return component.isVisible();
   }
 }

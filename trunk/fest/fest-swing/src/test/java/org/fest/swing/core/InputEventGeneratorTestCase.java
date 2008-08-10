@@ -36,7 +36,7 @@ import static java.awt.event.KeyEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.query.GetJTextComponentTextTask.textOf;
+import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;

@@ -39,7 +39,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
-import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

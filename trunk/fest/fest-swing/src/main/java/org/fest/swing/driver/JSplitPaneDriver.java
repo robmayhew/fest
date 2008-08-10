@@ -25,7 +25,7 @@ import org.fest.swing.util.Pair;
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
 /**
  * Understands simulation of user input on a <code>{@link JSplitPane}</code>. Unlike <code>JSplitPaneFixture</code>,

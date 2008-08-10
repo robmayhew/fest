@@ -43,7 +43,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 

@@ -28,7 +28,7 @@ import org.fest.swing.testing.MyApplet;
 import static javax.swing.SwingUtilities.getAncestorOfClass;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.query.IsComponentShowingTask.isShowing;
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 

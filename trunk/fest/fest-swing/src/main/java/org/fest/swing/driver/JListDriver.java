@@ -42,7 +42,7 @@ import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
 import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.driver.GetJListSelectedIndicesTask.selectedIndicesOf;
 import static org.fest.swing.driver.IsJListSelectedIndexTask.isSelectedIndex;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;

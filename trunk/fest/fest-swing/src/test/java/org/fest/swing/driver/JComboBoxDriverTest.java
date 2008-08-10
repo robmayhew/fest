@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.*;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.query.JLabelTextQuery;
-import org.fest.swing.query.GetJTextComponentTextTask;
+import org.fest.swing.query.JTextComponentTextQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -358,7 +358,7 @@ public class JComboBoxDriverTest {
   private String textInComboBox() {
     final Component editor = comboBoxEditor();
     if (editor instanceof JLabel) return JLabelTextQuery.textOf((JLabel)editor);
-    if (editor instanceof JTextComponent) return GetJTextComponentTextTask.textOf((JTextComponent)editor);
+    if (editor instanceof JTextComponent) return JTextComponentTextQuery.textOf((JTextComponent)editor);
     return null;
   }
 

@@ -30,7 +30,7 @@ import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.JMenuPopupMenuQuery.popupMenuOf;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.util.Strings.concat;
 

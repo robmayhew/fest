@@ -19,11 +19,13 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that returns the text of a <code>{@link JTextComponent}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the text of a 
+ * <code>{@link JTextComponent}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public final class GetJTextComponentTextTask extends GuiQuery<String> {
+public final class JTextComponentTextQuery extends GuiQuery<String> {
   private final JTextComponent textComponent;
 
   /**
@@ -33,17 +35,17 @@ public final class GetJTextComponentTextTask extends GuiQuery<String> {
    * @return the text of the given <code>JTextComponent</code>.
    */
   public static String textOf(JTextComponent textComponent) {
-    return new GetJTextComponentTextTask(textComponent).run();
+    return new JTextComponentTextQuery(textComponent).run();
   }
 
-  private GetJTextComponentTextTask(JTextComponent textComponent) {
+  private JTextComponentTextQuery(JTextComponent textComponent) {
     this.textComponent = textComponent;
   }
 
   /**
-   * Returns the text in this task's <code>{@link JTextComponent}</code>. This action is executed in the event dispatch
+   * Returns the text in this query's <code>{@link JTextComponent}</code>. This action is executed in the event dispatch
    * thread.
-   * @return the text in this task's <code>JTextComponent</code>.
+   * @return the text in this query's <code>JTextComponent</code>.
    */
   protected String executeInEDT() {
     return textComponent.getText();

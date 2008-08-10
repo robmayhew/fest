@@ -37,7 +37,7 @@ import static org.fest.swing.driver.CommonValidations.*;
 import static org.fest.swing.driver.IsJTableCellEditableTask.isCellEditable;
 import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.query.GetJTableRowCountTask.rowCountOf;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;

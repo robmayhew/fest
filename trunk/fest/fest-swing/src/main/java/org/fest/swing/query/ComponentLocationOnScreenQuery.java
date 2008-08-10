@@ -20,7 +20,8 @@ import java.awt.Point;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the location of a <code>{@link Component}</code> on screen.
+ * Understands an action, executed in the event dispatch thread, that returns the location of a 
+ * <code>{@link Component}</code> on screen.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz

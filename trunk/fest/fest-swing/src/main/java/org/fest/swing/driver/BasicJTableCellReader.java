@@ -32,7 +32,7 @@ import static org.fest.swing.driver.GetJTableCellRendererTask.cellRendererIn;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.swing.query.GetJTableCellValueTask.cellValueOf;
-import static org.fest.swing.query.IsAbstractButtonSelectedTask.isSelected;
+import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.

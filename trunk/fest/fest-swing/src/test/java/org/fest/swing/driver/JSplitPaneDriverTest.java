@@ -35,7 +35,7 @@ import static javax.swing.JSplitPane.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.query.IsComponentEnabledTask.isEnabled;
+import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

@@ -39,8 +39,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
+import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.query.IsJInternalFrameIconifiedTask.isIconified;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 

@@ -19,11 +19,12 @@ import java.awt.Component;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that indicates whether a <code>{@link Component}</code> is showing or not.
- *
+ * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code>
+ * is showing or not.
+ * 
  * @author Alex Ruiz
  */
-public final class IsComponentShowingTask extends GuiQuery<Boolean> {
+public class ComponentShowingQuery extends GuiQuery<Boolean> {
 
   private final Component component;
 
@@ -34,17 +35,17 @@ public final class IsComponentShowingTask extends GuiQuery<Boolean> {
    * @return <code>true</code> if the given <code>Component</code> is showing, <code>false</code> otherwise.
    */
   public static boolean isShowing(Component component) {
-    return new IsComponentShowingTask(component).run();
+    return new ComponentShowingQuery(component).run();
   }
 
-  private IsComponentShowingTask(Component component) {
+  private ComponentShowingQuery(Component component) {
     this.component = component;
   }
 
   /**
-   * Indicates whether this task's <code>{@link Component}</code> is showing or not. This action is executed in the
+   * Indicates whether this query's <code>{@link Component}</code> is showing or not. This action is executed in the
    * event dispatch thread.
-   * @return <code>true</code> if this task's <code>Component</code> is showing, <code>false</code> otherwise.
+   * @return <code>true</code> if this query's <code>Component</code> is showing, <code>false</code> otherwise.
    */
   protected Boolean executeInEDT() {
     return component.isShowing();
