@@ -90,7 +90,7 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to resize a window.
    */
   protected Point resizeLocationOf(Container c) {
-    return GetContainerResizeLocationTask.resizeLocationOf(c);
+    return ContainerResizeLocationQuery.resizeLocationOf(c);
   }
 
   /**
@@ -147,6 +147,6 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @return where the mouse usually grabs to move a container (or window.)
    */
   protected Point moveLocationOf(Container c) {
-    return GetContainerMoveLocationTask.moveLocationOf(c);
+    return ContainerMoveLocationQuery.moveLocationOf(c);
   }
 }

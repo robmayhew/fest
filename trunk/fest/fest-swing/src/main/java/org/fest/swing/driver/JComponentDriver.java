@@ -25,7 +25,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
-import static org.fest.swing.driver.GetJComponentKeyStrokesForActionTask.keyStrokesForAction;
+import static org.fest.swing.driver.JComponentKeyStrokesForActionQuery.keyStrokesForAction;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -70,7 +70,7 @@ public class JComponentDriver extends ContainerDriver {
    *         visible <code>Rectangle</code>.
    */
   protected final boolean isVisible(JComponent c, Rectangle r) {
-    return GetJComponentVisibleRectTask.visibleRectOf(c).contains(r);
+    return JComponentVisibleRectQuery.visibleRectOf(c).contains(r);
   }
 
   /**
@@ -82,7 +82,7 @@ public class JComponentDriver extends ContainerDriver {
    *         visible <code>Rectangle</code>.
    */
   protected final boolean isVisible(JComponent c, Point p) {
-    return GetJComponentVisibleRectTask.visibleRectOf(c).contains(p);
+    return JComponentVisibleRectQuery.visibleRectOf(c).contains(p);
   }
 
   /**

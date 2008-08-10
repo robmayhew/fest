@@ -25,7 +25,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JInternalFrameSetPropertyTask.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.driver.GetJInternalFrameDesktopIconTask.desktopIconOf;
+import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf;
 import static org.fest.swing.driver.IsJInternalFrameClosableTask.isClosable;
 import static org.fest.swing.driver.IsJInternalFrameIconifiableTask.isIconifiable;
 import static org.fest.swing.driver.IsJInternalFrameMaximizableTask.isMaximizable;
@@ -92,7 +92,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
   private void maximizeOrNormalize(JInternalFrame frame, JInternalFrameAction action) {
     Container clickTarget = frame;
-    if (isIconified(frame)) clickTarget = GetJInternalFrameDesktopIconTask.desktopIconOf(frame);
+    if (isIconified(frame)) clickTarget = JInternalFrameDesktopIconQuery.desktopIconOf(frame);
     Point p = maximizeLocation(clickTarget);
     robot.moveMouse(clickTarget, p.x, p.y);
     if (isIconified(frame)) deiconify(frame);

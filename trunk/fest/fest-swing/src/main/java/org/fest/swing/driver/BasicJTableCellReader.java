@@ -29,9 +29,9 @@ import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
 
 import static org.fest.swing.driver.GetJTableCellRendererTask.cellRendererIn;
+import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
-import static org.fest.swing.query.GetJTableCellValueTask.cellValueOf;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 
 /**

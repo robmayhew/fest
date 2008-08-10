@@ -45,8 +45,6 @@ import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
-import static org.fest.swing.query.GetJTableRowCountTask.rowCountOf;
-import static org.fest.swing.query.GetJToolBarOrientationTask.isHorizontal;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -676,7 +674,7 @@ public class ContainerFixtureTest {
     JTable expectedTable = addJTable();
     GenericTypeMatcher<JTable> rowCountMatcher = new GenericTypeMatcher<JTable>() {
       protected boolean isMatching(JTable table) {
-        return rowCountOf(table) == 6;
+        return "table".equals(table.getName());
       }
     };
     JTableFixture tableFixture = fixture.table(rowCountMatcher);
@@ -783,7 +781,7 @@ public class ContainerFixtureTest {
     JToolBar expectedToolBar = addJToolBar();
     GenericTypeMatcher<JToolBar> columnMatcher = new GenericTypeMatcher<JToolBar>() {
       protected boolean isMatching(JToolBar toolBar) {
-        return isHorizontal(toolBar) && "toolBar".equals(nameOf(toolBar));
+        return "toolBar".equals(nameOf(toolBar));
       }
     };
     JToolBarFixture toolBarFixture = fixture.toolBar(columnMatcher);

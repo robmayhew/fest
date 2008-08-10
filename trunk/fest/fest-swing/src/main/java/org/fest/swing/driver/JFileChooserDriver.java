@@ -28,9 +28,9 @@ import org.fest.swing.exception.ComponentLookupException;
 import static javax.swing.JFileChooser.*;
 
 import static org.fest.swing.core.matcher.JButtonByTextMatcher.withTextAndShowing;
-import static org.fest.swing.driver.GetJFileChooserApproveButtonTextTask.approveButtonTextFrom;
-import static org.fest.swing.driver.GetJFileChooserCancelButtonTextTask.cancelButtonText;
-import static org.fest.swing.driver.GetJFileChooserFileSelectionModeTask.fileSelectionModeOf;
+import static org.fest.swing.driver.JFileChooserApproveButtonTextQuery.approveButtonTextFrom;
+import static org.fest.swing.driver.JFileChooserCancelButtonTextQuery.cancelButtonText;
+import static org.fest.swing.driver.JFileChooserFileSelectionModeQuery.fileSelectionModeOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 

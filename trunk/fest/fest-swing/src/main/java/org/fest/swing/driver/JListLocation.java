@@ -22,7 +22,7 @@ import javax.swing.JList;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.driver.GetJListCellBoundsTask.cellBoundsOf;
+import static org.fest.swing.driver.JListCellBoundsQuery.cellBoundsOf;
 import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
 import static org.fest.util.Strings.concat;
 

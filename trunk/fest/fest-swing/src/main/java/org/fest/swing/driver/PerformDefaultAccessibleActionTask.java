@@ -22,7 +22,7 @@ import javax.swing.Action;
 
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.driver.GetComponentAccessibleActionTask.accessibleActionFrom;
+import static org.fest.swing.driver.ComponentAccessibleActionQuery.accessibleActionFrom;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;

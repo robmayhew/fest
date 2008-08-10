@@ -21,7 +21,7 @@ import org.fest.swing.core.GuiQuery;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.query.GetJTableRowCountTask.rowCountOf;
+import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.util.Strings.*;
 
 /**

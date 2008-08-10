@@ -37,7 +37,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.GetJListCellBoundsTask.cellBoundsOf;
+import static org.fest.swing.driver.JListCellBoundsQuery.cellBoundsOf;
 import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
 import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
 import static org.fest.swing.driver.GetJListSelectedIndicesTask.selectedIndicesOf;

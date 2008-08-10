@@ -33,7 +33,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.query.GetJTableCellValueTask.cellValueOf;
+import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
