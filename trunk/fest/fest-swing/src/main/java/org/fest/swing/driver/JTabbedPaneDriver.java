@@ -24,7 +24,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
-import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
 /**
@@ -74,7 +73,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
     }
 
     protected String[] executeInEDT() throws Throwable {
-      int count = tabCountOf(tabbedPane);
+      int count = tabbedPane.getTabCount();
       String[] titles = new String[count];
       for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
       return titles;

@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.JTabbedPane;
 
@@ -24,28 +24,17 @@ import org.fest.swing.core.GuiQuery;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class GetJTabbedPaneTabCountTask extends GuiQuery<Integer> {
+class JTabbedPaneTabCountQuery extends GuiQuery<Integer> {
   private final JTabbedPane tabbedPane;
 
-  /**
-   * Returns the number of tabs in the given <code>{@link JTabbedPane}</code>. This action is executed in the event 
-   * dispatch thread.
-   * @param tabbedPane the given <code>JTabbedPane</code>.
-   * @return the number of tabs in the given <code>JTabbedPane</code>.
-   */
-  public static int tabCountOf(JTabbedPane tabbedPane) {
-    return new GetJTabbedPaneTabCountTask(tabbedPane).run();
+  static int tabCountOf(JTabbedPane tabbedPane) {
+    return new JTabbedPaneTabCountQuery(tabbedPane).run();
   }
 
-  private GetJTabbedPaneTabCountTask(JTabbedPane tabbedPane) {
+  private JTabbedPaneTabCountQuery(JTabbedPane tabbedPane) {
     this.tabbedPane = tabbedPane;
   }
 
-  /**
-   * Returns the number of tabs in this task's <code>{@link JTabbedPane}</code>. This action is executed in the event
-   * dispatch thread.
-   * @return the number of tabs in this task's <code>JTabbedPane</code>.
-   */
   protected Integer executeInEDT() {
     return tabbedPane.getTabCount();
   }

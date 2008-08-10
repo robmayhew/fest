@@ -24,11 +24,9 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
-import org.fest.swing.query.GetJSpinnerValueTask;
-
-import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.format.Formatting.format;
@@ -101,7 +99,7 @@ public class JSpinnerDriver extends JComponentDriver {
   private void validate(int times, String action) {
     if (times > 0) return;
     throw actionFailure(concat(
-        "The number of times to ", action, " should be greater than zero, but was <", valueOf(times), ">"));
+        "The number of times to ", action, " should be greater than zero, but was <", times, ">"));
   }
 
   /**
@@ -204,6 +202,6 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws AssertionError if the value of the <code>JSpinner</code> is not equal to the given one.
    */
   public void requireValue(JSpinner spinner, Object value) {
-    assertThat(GetJSpinnerValueTask.valueOf(spinner)).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
+    assertThat(valueOf(spinner)).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

@@ -32,7 +32,6 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.query.AbstractButtonTextQuery;
-import org.fest.swing.query.GetJSpinnerValueTask;
 import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.testing.TestWindow;
 
@@ -46,7 +45,6 @@ import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
-import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
 import static org.fest.swing.query.GetJTableRowCountTask.rowCountOf;
 import static org.fest.swing.query.GetJToolBarOrientationTask.isHorizontal;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -569,7 +567,7 @@ public class ContainerFixtureTest {
     JSpinner expectedSpinner = addJSpinner();
     GenericTypeMatcher<JSpinner> valueMatcher = new GenericTypeMatcher<JSpinner>() {
       protected boolean isMatching(JSpinner spinner) {
-        return GetJSpinnerValueTask.valueOf(spinner).equals("One");
+        return "spinner".equals(spinner.getName());
       }
     };
     JSpinnerFixture spinnerFixture = fixture.spinner(valueMatcher);
@@ -643,7 +641,7 @@ public class ContainerFixtureTest {
     JTabbedPane expectedTabbedPane = addJTabbedPane();
     GenericTypeMatcher<JTabbedPane> tabCountMatcher = new GenericTypeMatcher<JTabbedPane>() {
       protected boolean isMatching(JTabbedPane tabbedPane) {
-        return tabCountOf(tabbedPane) == 1;
+        return "tabbedPane".equals(tabbedPane.getName());
       }
     };
     JTabbedPaneFixture tabbedPaneFixture = fixture.tabbedPane(tabCountMatcher);

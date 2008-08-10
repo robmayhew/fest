@@ -25,8 +25,8 @@ import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.driver.JTabbedPaneTabCountQuery.tabCountOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.GetJTabbedPaneTabCountTask.tabCountOf;
 import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Strings.*;
 

@@ -12,40 +12,31 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.JSpinner;
 
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that returns the value of a <code>{@link JSpinner}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the value of a 
+ * <code>{@link JSpinner}</code>.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class GetJSpinnerValueTask extends GuiQuery<Object> {
+final class JSpinnerValueQuery extends GuiQuery<Object> {
 
   private final JSpinner spinner;
 
-  /**
-   * Returns the value of the given <code>{@link JSpinner}</code>. This action is executed in the event dispatch thread.
-   * @param spinner the given <code>JSpinner</code>.
-   * @return the value of the given <code>JSpinner</code>.
-   */
-  public static Object valueOf(JSpinner spinner) {
-    return new GetJSpinnerValueTask(spinner).run();
+  static Object valueOf(JSpinner spinner) {
+    return new JSpinnerValueQuery(spinner).run();
   }
 
-  private GetJSpinnerValueTask(JSpinner spinner) {
+  private JSpinnerValueQuery(JSpinner spinner) {
     this.spinner = spinner;
   }
 
-  /**
-   * Returns the value in this task's <code>{@link JSpinner}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the value in this task's <code>JSpinner</code>.
-   */
   protected Object executeInEDT() {
     return spinner.getValue();
   }
