@@ -24,7 +24,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.GetJTableCellEditorTask.cellEditorIn;
+import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 

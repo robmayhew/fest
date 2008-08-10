@@ -26,9 +26,9 @@ import org.fest.swing.driver.JInternalFrameSetPropertyTask.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf;
-import static org.fest.swing.driver.IsJInternalFrameClosableTask.isClosable;
-import static org.fest.swing.driver.IsJInternalFrameIconifiableTask.isIconifiable;
-import static org.fest.swing.driver.IsJInternalFrameMaximizableTask.isMaximizable;
+import static org.fest.swing.driver.JInternalFrameClosableQuery.isClosable;
+import static org.fest.swing.driver.JInternalFrameIconifiableQuery.isIconifiable;
+import static org.fest.swing.driver.JInternalFrameMaximizableQuery.isMaximizable;
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;

@@ -21,7 +21,7 @@ import javax.swing.JTree;
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.driver.GetJTreeCellRendererTask.cellRendererIn;
+import static org.fest.swing.driver.JTreeCellRendererQuery.cellRendererIn;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**

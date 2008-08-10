@@ -37,11 +37,11 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.driver.JListIsSelectedIndexQuery.isSelectedIndex;
 import static org.fest.swing.driver.JListCellBoundsQuery.cellBoundsOf;
-import static org.fest.swing.driver.GetJListElementCountTask.elementCountOf;
-import static org.fest.swing.driver.GetJListSelectedIndexTask.selectedIndexOf;
-import static org.fest.swing.driver.GetJListSelectedIndicesTask.selectedIndicesOf;
-import static org.fest.swing.driver.IsJListSelectedIndexTask.isSelectedIndex;
+import static org.fest.swing.driver.JListElementCountQuery.elementCountOf;
+import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.driver.JListSelectedIndicesQuery.selectedIndicesOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
@@ -97,7 +97,7 @@ public class JListDriver extends JComponentDriver {
    * @see #cellReader(JListCellReader)
    */
   public String[] selectionOf(JList list) {
-    int[] selectedIndices = GetJListSelectedIndicesTask.selectedIndicesOf(list);
+    int[] selectedIndices = JListSelectedIndicesQuery.selectedIndicesOf(list);
     int selectionCount = selectedIndices.length;
     String[] values = new String[selectionCount];
     for (int i = 0; i < selectionCount; i++)

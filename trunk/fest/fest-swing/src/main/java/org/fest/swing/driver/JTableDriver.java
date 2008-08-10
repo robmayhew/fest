@@ -34,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.*;
-import static org.fest.swing.driver.IsJTableCellEditableTask.isCellEditable;
+import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;

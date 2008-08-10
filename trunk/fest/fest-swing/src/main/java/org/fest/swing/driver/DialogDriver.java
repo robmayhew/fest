@@ -20,7 +20,7 @@ import java.awt.Dialog;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.IsDialogModalTask.isModal;
+import static org.fest.swing.driver.DialogModalQuery.isModal;
 
 /**
  * Understands simulation of user input on a <code>{@link Dialog}</code>. Unlike <code>DialogFixture</code>, this

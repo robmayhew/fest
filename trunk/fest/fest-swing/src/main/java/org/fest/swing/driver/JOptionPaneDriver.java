@@ -30,7 +30,7 @@ import org.fest.swing.exception.ComponentLookupException;
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.GetJOptionPaneMessageTask.messageOf;
+import static org.fest.swing.driver.JOptionPaneMessageQuery.messageOf;
 import static org.fest.swing.driver.JOptionPaneMessageTypes.messageTypeAsText;
 
 /**

@@ -23,7 +23,7 @@ import javax.swing.ListCellRenderer;
 import org.fest.swing.cell.JListCellReader;
 
 import static org.fest.swing.driver.JListCellRendererQuery.cellRendererIn;
-import static org.fest.swing.driver.GetJListElementAtIndexTask.elementAt;
+import static org.fest.swing.driver.JListElementAtIndexQuery.elementAt;
 
 /**
  * Understands the default implementation of <code>{@link JListCellReader}</code>.
