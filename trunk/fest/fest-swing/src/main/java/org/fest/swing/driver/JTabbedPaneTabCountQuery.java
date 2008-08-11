@@ -19,7 +19,8 @@ import javax.swing.JTabbedPane;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that returns the number of tabs in a <code>{@link JTabbedPane}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the number of tabs in a 
+ * <code>{@link JTabbedPane}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

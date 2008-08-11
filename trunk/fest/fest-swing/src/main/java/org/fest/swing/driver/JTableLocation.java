@@ -58,7 +58,7 @@ public final class JTableLocation {
    * @return the bounds of the given row and column.
    */
   public Rectangle cellBounds(JTable table, int row, int column) {
-    return table.getCellRect(row, column, false);
+    return JTableCellRectQuery.cellBoundsOf(table, row, column);
   }
 
 }

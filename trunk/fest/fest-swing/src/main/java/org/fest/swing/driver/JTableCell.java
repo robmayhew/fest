@@ -17,10 +17,9 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.core.GuiQuery;
-
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.util.Strings.*;
 
@@ -29,8 +28,9 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public abstract class JTableCell {
-
+public class JTableCell {
+  // TODO look for usages of this class and remove subclassing
+  
   /** The row of the cell. */
   public final int row;
 
@@ -82,22 +82,6 @@ public abstract class JTableCell {
    */
   protected static void validateColumn(JTable table, int column) {
     validateIndex(column, columnCountOf(table), "column");
-  }
-
-  private static int columnCountOf(JTable table) {
-    return new GetColumnCountTask(table).run();
-  }
-
-  private static class GetColumnCountTask extends GuiQuery<Integer> {
-    private final JTable table;
-
-    GetColumnCountTask(JTable table) {
-      this.table = table;
-    }
-
-    protected Integer executeInEDT() throws Throwable {
-      return table.getColumnCount();
-    }
   }
 
   private static void validateIndex(int index, int itemCount, String indexName) {

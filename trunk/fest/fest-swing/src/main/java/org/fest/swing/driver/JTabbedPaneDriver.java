@@ -19,11 +19,11 @@ import java.awt.Point;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static org.fest.swing.driver.JTabbedPaneTabTitlesQuery.tabTitlesOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
 /**
@@ -62,22 +62,7 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @return the titles of all the tabs.
    */
   public String[] tabTitles(JTabbedPane tabbedPane) {
-    return new GetTitlesTask(tabbedPane).run();
-  }
-
-  private static class GetTitlesTask extends GuiQuery<String[]> {
-    private final JTabbedPane tabbedPane;
-
-    GetTitlesTask(JTabbedPane tabbedPane) {
-      this.tabbedPane = tabbedPane;
-    }
-
-    protected String[] executeInEDT() throws Throwable {
-      int count = tabbedPane.getTabCount();
-      String[] titles = new String[count];
-      for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
-      return titles;
-    }
+    return tabTitlesOf(tabbedPane);
   }
 
   /**

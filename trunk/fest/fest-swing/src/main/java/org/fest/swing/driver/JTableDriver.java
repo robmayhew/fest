@@ -34,9 +34,15 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.*;
-import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCell.*;
+import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
+import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
+import static org.fest.swing.driver.JTableSelectedCellQuery.selectedCellOf;
+import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
+import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
+import static org.fest.swing.driver.JTableSelectionQuery.hasSelection;
+import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
@@ -79,8 +85,8 @@ public class JTableDriver extends JComponentDriver {
    * @see #cellReader(JTableCellReader)
    */
   public String selectionValue(JTable table) {
-    if (table.getSelectedRowCount() == 0) return null;
-    return value(table, table.getSelectedRow(), table.getSelectedColumn());
+    if (selectedRowCountOf(table) == 0) return null;
+    return value(table, selectedCellOf(table));
   }
 
   /**
@@ -182,9 +188,9 @@ public class JTableDriver extends JComponentDriver {
    * @throws AssertionError is the <code>JTable</code> has a selection.
    */
   public void requireNoSelection(JTable table) {
-    if (table.getSelectedColumnCount() == 0 && table.getSelectedRowCount() == 0) return;
-    String message = concat("[", propertyName(table, SELECTION_PROPERTY), "] expected no selection but was:<rows",
-        format(table.getSelectedRows()), ", columns", format(table.getSelectedColumns()), ">");
+    if (!hasSelection(table)) return;
+    String message = concat("[", propertyName(table, SELECTION_PROPERTY), "] expected no selection but was:<rows=",
+        format(selectedRowsIn(table)), ", columns=", format(selectedRowsIn(table)), ">");
     fail(message);
   }
 
@@ -198,12 +204,8 @@ public class JTableDriver extends JComponentDriver {
   public void selectCell(JTable table, JTableCell cell) {
     if (!isEnabled(table)) return;
     validate(table, cell);
-    if (isCellSelected(table, cell)) return;
+    if (isCellSelected(table, cell.row, cell.column)) return;
     click(table, cell, LEFT_BUTTON, 1);
-  }
-
-  private boolean isCellSelected(JTable table, JTableCell cell) {
-    return table.isRowSelected(cell.row) && table.isColumnSelected(cell.column) && table.getSelectedRowCount() == 1;
   }
 
   /**
@@ -294,7 +296,7 @@ public class JTableDriver extends JComponentDriver {
    */
   public String[][] contents(JTable table) {
     int rowCount = rowCountOf(table);
-    int columnCount = table.getColumnCount();
+    int columnCount = columnCountOf(table);
     String[][] contents = new String[rowCount][columnCount];
     for (int row = 0; row < rowCount; row++)
       for (int col = 0; col < columnCount; col++)

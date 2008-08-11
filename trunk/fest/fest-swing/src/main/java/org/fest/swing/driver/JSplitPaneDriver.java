@@ -18,13 +18,12 @@ import java.awt.Point;
 
 import javax.swing.JSplitPane;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
-import org.fest.swing.util.Pair;
 
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.JSplitPaneSizeAndDividerLocationQuery.sizeAndDividerLocationOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
 /**
@@ -80,43 +79,19 @@ public class JSplitPaneDriver extends JComponentDriver {
   }
 
   private void simulateMovingDividerVertically(JSplitPane splitPane, int location) {
-    Pair<Integer, Integer> widthAndDividerLocation = new GetWidthAndDividerLocationTask(splitPane).run();
-    int width = widthAndDividerLocation.one;
-    int dividerLocation = widthAndDividerLocation.two;
+    JSplitPaneSizeAndDividerLocation sizeAndDividerLocation = sizeAndDividerLocationOf(splitPane);
+    int width = sizeAndDividerLocation.size().width;
+    int dividerLocation = sizeAndDividerLocation.dividerLocation();
     int x = width / 2;
     simulateMovingDivider(splitPane, new Point(x, dividerLocation), new Point(x, location));
   }
 
-  private static class GetWidthAndDividerLocationTask extends GuiQuery<Pair<Integer, Integer>> {
-    private final JSplitPane splitPane;
-
-    GetWidthAndDividerLocationTask(JSplitPane splitPane) {
-      this.splitPane = splitPane;
-    }
-
-    protected Pair<Integer, Integer> executeInEDT() {
-      return new Pair<Integer, Integer>(splitPane.getWidth(), splitPane.getDividerLocation());
-    }
-  }
-
   private void simulateMovingDividerHorizontally(JSplitPane splitPane, int location) {
-    Pair<Integer, Integer> heightAndDividerLocation = new GetHeightAndDividerLocationTask(splitPane).run();
-    int height = heightAndDividerLocation.one;
-    int dividerLocation = heightAndDividerLocation.two;
+    JSplitPaneSizeAndDividerLocation sizeAndDividerLocation = sizeAndDividerLocationOf(splitPane);
+    int height = sizeAndDividerLocation.size().height;
+    int dividerLocation = sizeAndDividerLocation.dividerLocation();
     int y = height / 2;
     simulateMovingDivider(splitPane, new Point(dividerLocation, y), new Point(location, y));
-  }
-
-  private static class GetHeightAndDividerLocationTask extends GuiQuery<Pair<Integer, Integer>> {
-    private final JSplitPane splitPane;
-
-    GetHeightAndDividerLocationTask(JSplitPane splitPane) {
-      this.splitPane = splitPane;
-    }
-
-    protected Pair<Integer, Integer> executeInEDT() {
-      return new Pair<Integer, Integer>(splitPane.getHeight(), splitPane.getDividerLocation());
-    }
   }
 
   private void simulateMovingDivider(JSplitPane splitPane, Point start, Point end) {
