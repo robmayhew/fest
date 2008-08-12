@@ -47,23 +47,23 @@ class RobotEventGenerator implements InputEventGenerator {
 
   Robot robot() { return robot; }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {
     moveMouse(c, where.x, where.y);
     pressMouse(buttons);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(int buttons) {
     robot.mousePress(buttons);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseMouse(int buttons) {
     robot.mouseRelease(buttons);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
     try {
       Point point = locationOnScreenOf(c);
@@ -75,7 +75,7 @@ class RobotEventGenerator implements InputEventGenerator {
     }
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressKey(int keyCode, char keyChar) {
     try {
       robot.keyPress(keyCode);
@@ -84,7 +84,7 @@ class RobotEventGenerator implements InputEventGenerator {
     }
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseKey(int keyCode) {
     robot.keyRelease(keyCode);
     if (!isOSX()) return;

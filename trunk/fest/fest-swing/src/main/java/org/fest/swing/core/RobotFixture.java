@@ -51,8 +51,8 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
-import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
@@ -125,27 +125,27 @@ public class RobotFixture implements Robot {
     finder = new BasicComponentFinder(this.hierarchy);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public ComponentPrinter printer() {
     return finder().printer();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public ComponentFinder finder() {
     return finder;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void showWindow(Window w) {
     showWindow(w, null, true);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void showWindow(Window w, Dimension size) {
     showWindow(w, size, true);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void showWindow(final Window w, final Dimension size, final boolean pack) {
     EventQueue.invokeLater(new Runnable() {
       public void run() {
@@ -172,7 +172,7 @@ public class RobotFixture implements Robot {
     }
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void close(Window w) {
     if (!isShowing(w)) return;
     focus(w);
@@ -214,12 +214,12 @@ public class RobotFixture implements Robot {
     return new Point(insets.left + 15, insets.top / 2);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void focus(Component c) {
     focus(c, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void focusAndWaitForFocusGain(Component c) {
     focus(c, true);
   }
@@ -261,29 +261,29 @@ public class RobotFixture implements Robot {
     moveMouse(w); // For pointer-focus systems
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void invokeAndWait(Runnable action) {
     invokeAndWait(null, action);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void invokeAndWait(Component c, Runnable action) {
     invokeLater(c, action);
     waitForIdle();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void invokeLater(Component c, Runnable action) {
     EventQueue queue = eventQueueFor(c);
     queue.postEvent(new InvocationEvent(toolkit, action));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void cleanUp() {
     cleanUp(true);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void cleanUpWithoutDisposingWindows() {
     cleanUp(false);
   }
@@ -316,32 +316,32 @@ public class RobotFixture implements Robot {
     click(c, LEFT_BUTTON);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void rightClick(Component c) {
     click(c, RIGHT_BUTTON);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void click(Component c, MouseButton button) {
     click(c, button, 1);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void doubleClick(Component c) {
     click(c, LEFT_BUTTON, 2);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void click(Component c, MouseButton button, int times) {
     click(c, centerOf(c), button, times);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void click(Component c, Point where) {
     click(c, where, LEFT_BUTTON, 1);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void click(Component c, Point where, MouseButton button, int times) {
     focus(c);
     int mask = button.mask;
@@ -363,13 +363,13 @@ public class RobotFixture implements Robot {
     waitForIdle();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressModifiers(int modifierMask) {
     for (int modifierKey : keysFor(modifierMask))
       pressKey(modifierKey);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseModifiers(int modifierMask) {
     // For consistency, release in the reverse order of press.
     int[] modifierKeys = keysFor(modifierMask);
@@ -377,46 +377,46 @@ public class RobotFixture implements Robot {
       releaseKey(modifierKeys[i]);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(MouseButton button) {
     eventGenerator().pressMouse(button.mask);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(Component c, Point where) {
     pressMouse(c, where, LEFT_BUTTON);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(Component c, Point where, MouseButton button) {
     jitter(c, where);
     moveMouse(c, where.x, where.y);
     eventGenerator().pressMouse(c, where, button.mask);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void jitter(Component c) {
     jitter(c, centerOf(c));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void jitter(Component c, Point where) {
     int x = where.x;
     int y = where.y;
     moveMouse(c, (x > 0 ? x - 1 : x + 1), y);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void moveMouse(Component c) {
     moveMouse(c, centerOf(c));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void moveMouse(Component c, Point p) {
     moveMouse(c, p.x, p.y);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
     if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
@@ -441,13 +441,13 @@ public class RobotFixture implements Robot {
     return true;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void enterText(String text) {
     if (isEmpty(text)) return;
     for (char character : text.toCharArray()) type(character);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void type(char character) {
     KeyStroke keyStroke = keyStrokeFor(character);
     if (keyStroke == null) {
@@ -477,12 +477,12 @@ public class RobotFixture implements Robot {
     return c != null ? windowMonitor.eventQueueFor(c) : toolkit.getSystemEventQueue();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressAndReleaseKey(int keyCode, int... modifiers) {
     keyPressAndRelease(keyCode, unify(modifiers));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressAndReleaseKeys(int... keyCodes) {
     for (int keyCode : keyCodes) {
       keyPressAndRelease(keyCode, 0);
@@ -500,7 +500,7 @@ public class RobotFixture implements Robot {
     releaseModifiers(updatedModifiers);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressKey(int keyCode) {
     keyPress(keyCode);
     waitForIdle();
@@ -510,23 +510,23 @@ public class RobotFixture implements Robot {
     eventGenerator().pressKey(keyCode, CHAR_UNDEFINED);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseKey(int keyCode) {
     eventGenerator().releaseKey(keyCode);
     waitForIdle();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseLeftMouseButton() {
     releaseMouseButton(LEFT_BUTTON);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseMouseButton(MouseButton button) {
     mouseRelease(button.mask);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseMouseButtons() {
     int buttons = inputState.buttons();
     if (buttons == 0) return;
@@ -541,7 +541,7 @@ public class RobotFixture implements Robot {
     return eventGenerators.current();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void waitForIdle() {
     waitIfNecessary();
     Collection<EventQueue> queues = windowMonitor.allEventQueues();
@@ -603,17 +603,17 @@ public class RobotFixture implements Robot {
     RobotIdleLock() {}
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public boolean isDragging() {
     return inputState.dragInProgress();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public JPopupMenu showPopupMenu(Component invoker) {
     return showPopupMenu(invoker, centerOf(invoker));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public JPopupMenu showPopupMenu(Component invoker, Point location) {
     click(invoker, location, RIGHT_BUTTON, 1);
     JPopupMenu popup = findActivePopupMenu();
@@ -625,7 +625,7 @@ public class RobotFixture implements Robot {
     return popup;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public boolean isReadyForInput(Component c) {
     if (isAWTMode()) return isShowing(c);
     Window w = ancestorOf(c);
@@ -637,7 +637,7 @@ public class RobotFixture implements Robot {
     return AWT.equals(settings.eventMode());
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public JPopupMenu findActivePopupMenu() {
     JPopupMenu popup = activePopupMenu();
     if (popup != null || isEventDispatchThread()) return popup;
@@ -657,7 +657,7 @@ public class RobotFixture implements Robot {
     }
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void requireNoJOptionPaneIsShowing() {
     try {
       JOptionPane found = finder().findByType(JOptionPane.class, true);
@@ -666,12 +666,12 @@ public class RobotFixture implements Robot {
     } catch (ComponentLookupException e) {}
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Settings settings() {
     return settings;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public ComponentHierarchy hierarchy() {
     return hierarchy;
   }

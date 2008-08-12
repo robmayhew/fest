@@ -39,7 +39,7 @@ public class JTableCheckBoxEditorCellWriter extends AbstractJTableCellWriter  {
     super(robot);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void enterValue(JTable table, int row, int column, String value) {
     JCheckBox editor = editor(table, row, column);
     boolean realValue = Boolean.parseBoolean(value);
@@ -47,17 +47,17 @@ public class JTableCheckBoxEditorCellWriter extends AbstractJTableCellWriter  {
     clickCell(table, row, column);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void startCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void stopCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void cancelCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
   }

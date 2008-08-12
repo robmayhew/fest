@@ -179,7 +179,6 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     }.run();
   }
 
-  /** ${@inheritDoc} */
   public void shouldRequireDisabled() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -193,7 +192,6 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     }.run();
   }
   
-  /** ${@inheritDoc} */
   public void shouldRequireEnabled() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -207,7 +205,6 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     }.run();
   }
 
-  /** ${@inheritDoc} */
   public void shouldRequireEnabledUsingTimeout() {
     final Timeout timeout = timeout(2000);
     new EasyMockTemplate(driver()) {
@@ -222,7 +219,6 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     }.run();
   }
 
-  /** ${@inheritDoc} */
   public void shouldRequireNotVisible() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {
@@ -236,7 +232,6 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     }.run();
   }
 
-  /** ${@inheritDoc} */
   public void shouldRequireVisible() {
     new EasyMockTemplate(driver()) {
       protected void expectations() {

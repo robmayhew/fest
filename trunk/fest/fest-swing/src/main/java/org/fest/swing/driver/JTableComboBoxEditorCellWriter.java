@@ -41,26 +41,26 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
     driver = new JComboBoxDriver(robot);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void enterValue(JTable table, int row, int column, String value) {
     JComboBox editor = editor(table, row, column);
     startCellEditing(table, row, column);
     driver.selectItem(editor, value);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void startCellEditing(JTable table, int row, int column) {
     JComboBox editor = editor(table, row, column);
     clickCell(table, row, column);
     pause(new WaitForComponentToShowCondition(editor));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void stopCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void cancelCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
     robot.invokeAndWait(new CancelTableCellEditingTask(table, row, column));

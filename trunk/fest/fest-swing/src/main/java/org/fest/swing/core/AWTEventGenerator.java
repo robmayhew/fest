@@ -55,7 +55,7 @@ class AWTEventGenerator implements InputEventGenerator {
     this.eventPoster = eventPoster;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
     Component target = c;
     Component eventSource = c;
@@ -93,7 +93,7 @@ class AWTEventGenerator implements InputEventGenerator {
     return x < 0 || y < 0 || x >= c.getWidth() || y >= c.getHeight();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseMouse(int buttons) {
     Component c = null;
     MouseEvent lastMousePress = eventPoster.lastMousePress();
@@ -145,7 +145,7 @@ class AWTEventGenerator implements InputEventGenerator {
     eventPoster.postEvent(target, new MouseEvent(target, eventId, when, modifiers, x, y, clickCount, false));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(int buttons) {
     Component c = inputState.mouseComponent();
     if (c == null) return;
@@ -153,7 +153,7 @@ class AWTEventGenerator implements InputEventGenerator {
     pressMouse(c, where, buttons);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {
     long current = currentTimeMillis();
     MouseEvent lastMousePress = eventPoster.lastMousePress();
@@ -170,7 +170,7 @@ class AWTEventGenerator implements InputEventGenerator {
     eventPoster.postEvent(source, new MouseEvent(source, MOUSE_PRESSED, current, modifiers, x, y, count, popupTrigger));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressKey(int keyCode, char keyChar) {
     char keyCharCopy = keyChar;
     int modifiers = inputState.modifiers();
@@ -182,7 +182,7 @@ class AWTEventGenerator implements InputEventGenerator {
     if (keyCharCopy != CHAR_UNDEFINED) postKeyEvent(KEY_TYPED, mask, VK_UNDEFINED, keyCharCopy);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void releaseKey(int keyCode) {
     int mods = inputState.modifiers();
     if (isModifier(keyCode)) mods &= ~maskFor(keyCode);

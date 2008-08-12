@@ -40,7 +40,7 @@ class ProtectingTimerTask extends TimerTask {
     this.task = task;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void run() {
     if (isCanceled()) {
       cancel();

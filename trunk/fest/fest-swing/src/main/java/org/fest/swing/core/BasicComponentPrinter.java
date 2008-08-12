@@ -65,22 +65,22 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   
   ComponentHierarchy hierarchy() { return hierarchy; }
   
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void printComponents(PrintStream out) {
     printComponents(out, (Container)null);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void printComponents(PrintStream out, Container root) {
     printComponents(out, null, root);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void printComponents(PrintStream out, Class<? extends Component> type) {
     printComponents(out, type, null);
   }
   
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
     print(hierarchy(root), type, out);
   }

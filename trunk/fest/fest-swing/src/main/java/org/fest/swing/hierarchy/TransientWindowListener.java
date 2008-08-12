@@ -36,7 +36,7 @@ public final class TransientWindowListener implements AWTEventListener {
     this.filter = filter;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void eventDispatched(AWTEvent e) {
     if (windowOpened(e) || windowShown(e)) {
       filter(sourceOf(e));

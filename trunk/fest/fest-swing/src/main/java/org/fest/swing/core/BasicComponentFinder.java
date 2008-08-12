@@ -72,89 +72,89 @@ public final class BasicComponentFinder implements ComponentFinder {
     includeHierarchyIfComponentNotFound(true);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public ComponentPrinter printer() { return printer; }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByType(Class<T> type) {
     return findByType(type, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByType(Class<T> type, boolean showing) {
     return type.cast(find(new TypeMatcher(type, showing)));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByType(Container root, Class<T> type) {
     return findByType(root, type, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
     return type.cast(find(root, new TypeMatcher(type, showing)));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByName(String name, Class<T> type) {
     return findByName(name, type, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
     Component found = find(new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component findByName(String name) {
     return findByName(name, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component findByName(String name, boolean showing) {
     return find(new NameMatcher(name, showing));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   @SuppressWarnings("unchecked")
   public <T extends Component> T find(GenericTypeMatcher<T> m) {
     return (T)find((ComponentMatcher)m);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component find(ComponentMatcher m) {
     return find(hierarchy, m);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return findByName(root, name, type, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
     Component found = find(root, new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component findByName(Container root, String name) {
     return findByName(root, name, false);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component findByName(Container root, String name, boolean showing) {
     return find(root, new NameMatcher(name, showing));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   @SuppressWarnings("unchecked")
   public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
     return (T)find(root, (ComponentMatcher)m);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component find(Container root, ComponentMatcher m) {
     return find(hierarchy(root), m);
   }
@@ -197,22 +197,22 @@ public final class BasicComponentFinder implements ComponentFinder {
     throw new ComponentLookupException(message.toString(), found);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public boolean includeHierarchyIfComponentNotFound() {
     return includeHierarchyInComponentLookupException;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void includeHierarchyIfComponentNotFound(boolean newValue) {
     includeHierarchyInComponentLookupException = newValue;
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Collection<Component> findAll(ComponentMatcher m) {
     return finderDelegate.find(hierarchy, m);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Collection<Component> findAll(Container root, ComponentMatcher m) {
     return finderDelegate.find(hierarchy(root), m);
   }

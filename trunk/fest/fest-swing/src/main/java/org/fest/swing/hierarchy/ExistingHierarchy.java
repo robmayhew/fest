@@ -56,12 +56,12 @@ public class ExistingHierarchy implements ComponentHierarchy {
     static final ExistingHierarchy INSTANCE = new ExistingHierarchy();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Collection<? extends Container> roots() {
     return windowMonitor.rootWindows();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Container parentOf(Component c) {
     return parentFinder.parentOf(c);
   }

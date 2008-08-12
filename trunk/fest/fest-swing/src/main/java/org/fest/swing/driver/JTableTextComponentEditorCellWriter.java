@@ -42,7 +42,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     driver = new JTextComponentDriver(robot);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void enterValue(JTable table, int row, int column, String value) {
     JTextComponent editor = editor(table, row, column);
     startCellEditing(table, row, column);
@@ -50,14 +50,14 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     stopEditing(editor);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void startCellEditing(JTable table, int row, int column) {
     JTextComponent editor = editor(table, row, column);
     clickCell(table, row, column, 2);
     pause(new WaitForComponentToShowCondition(editor));
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void stopCellEditing(JTable table, int row, int column) {
     stopEditing(editor(table, row, column));
   }
@@ -66,7 +66,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     driver.pressAndReleaseKeys(editor, VK_ENTER);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void cancelCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
     robot.invokeAndWait(new CancelTableCellEditingTask(table, row, column));

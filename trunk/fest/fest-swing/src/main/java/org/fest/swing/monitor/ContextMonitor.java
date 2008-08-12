@@ -48,7 +48,7 @@ final class ContextMonitor implements AWTEventListener {
     attachAsWeakEventListener(toolkit, this, EVENT_MASK);
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void eventDispatched(AWTEvent e) {
     if (!(e instanceof ComponentEvent)) return;
     ComponentEvent event = (ComponentEvent) e;

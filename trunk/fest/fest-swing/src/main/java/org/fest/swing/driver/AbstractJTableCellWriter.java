@@ -83,7 +83,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     return editor.getClass().getName();
   }
 
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public Component editorForCell(final JTable table, final int row, final int column) {
     return cellEditorIn(table, row, column);
   }
