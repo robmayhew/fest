@@ -21,6 +21,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.Pair;
 
+import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -99,23 +100,9 @@ public class JSliderDriver extends JComponentDriver {
     drag(slider, location.pointAt(slider, valueOf(slider)));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
-    robot.invokeAndWait(new SetValueTask(slider, value));
+    robot.invokeAndWait(setValue(slider, value));
   }
   
-  private static class SetValueTask implements Runnable {
-    private final JSlider target;
-    private final int value;
-
-    SetValueTask(JSlider target, int value) {
-      this.target = target;
-      this.value = value;
-    }
-
-    public void run() {
-      target.setValue(value);
-    }
-  }
-
   private void validateValue(JSlider slider, int value) {
     Pair<Integer, Integer> minAndMax = new GetMinimumAndMaximumTask(slider).run();
     int min = minAndMax.one;

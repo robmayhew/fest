@@ -41,7 +41,7 @@ import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
         throw toThrow;
       }
     };
-    task.run();
+    task.executeInEDT();
     assertThat(task.veto().cause()).isSameAs(toThrow);
   }
   
@@ -49,7 +49,7 @@ import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
     JInternalFrameSetPropertyTask task = new JInternalFrameSetPropertyTask(new JInternalFrame(), MAXIMIZE) {
       void execute() {}
     };
-    task.run();
+    task.executeInEDT();
     assertThat(task.veto()).isNull();
   }
 }

@@ -19,12 +19,15 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.core.GuiTask;
+
 /**
- * Understands a template for tasks that set a property in a <code>{@link JInternalFrame}</code>.
+ * Understands a template for tasks that set a property in a <code>{@link JInternalFrame}</code>. This task should be 
+ * executed in the event dispatch thread.
  *
  * @author Alex Ruiz 
  */
-abstract class JInternalFrameSetPropertyTask implements Runnable {
+abstract class JInternalFrameSetPropertyTask extends GuiTask {
   
   final JInternalFrame target;
   final JInternalFrameAction action;
@@ -36,7 +39,7 @@ abstract class JInternalFrameSetPropertyTask implements Runnable {
     this.action = action;
   }
 
-  public final void run() {
+  protected final void executeInEDT() {
     try {
       execute();
     } catch (PropertyVetoException e) {

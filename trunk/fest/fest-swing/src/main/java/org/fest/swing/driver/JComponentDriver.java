@@ -58,7 +58,7 @@ public class JComponentDriver extends ContainerDriver {
     // in function. Fortunately, Swing's Scrollable makes for a simple solution.
     // NOTE: absolutely MUST wait for idle in order for the scroll to finish, and the UI to update so that the next
     // action goes to the proper location within the scrolled component.
-    robot.invokeAndWait(new ScrollRectToVisibleTask(c, r));
+    robot.invokeAndWait(new JComponentScrollRectToVisibleTask(c, r));
   }
 
   /**

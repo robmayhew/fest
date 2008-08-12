@@ -347,7 +347,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty.
    */
   protected final void performAccessibleActionOf(Component c) {
-    robot.invokeLater(c, new PerformDefaultAccessibleActionTask(c));
+    robot.invokeLater(c, new ComponentPerformDefaultAccessibleActionTask(c));
   }
 
   /**

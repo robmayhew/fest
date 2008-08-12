@@ -65,7 +65,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     simulateResizeStarted(c, horizontally, vertically);
     Dimension size = sizeOf(c);
     Dimension newSize = new Dimension(size.width + horizontally, size.height + vertically);
-    robot.invokeAndWait(c, new SetSizeTask(c, newSize));
+    robot.invokeAndWait(c, new ComponentSetSizeTask(c, newSize));
     simulateResizeComplete(c);
     robot.waitForIdle();
   }
@@ -118,7 +118,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     simulateMoveStarted(c, horizontally, vertically);
     Point location = new Point(onScreen.x + horizontally, onScreen.y + vertically);
-    robot.invokeAndWait(c, new SetLocationTask(c, location));
+    robot.invokeAndWait(c, new ComponentSetLocationTask(c, location));
     simulateMoveComplete(c);
     robot.waitForIdle();
   }

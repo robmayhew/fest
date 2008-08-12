@@ -502,7 +502,7 @@ import static org.fest.swing.util.Platform.*;
   public void shouldPerformAccessibleAction() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
-        robot.invokeLater(same(c), eqTask(new PerformDefaultAccessibleActionTask(c)));
+        robot.invokeLater(same(c), eqTask(new ComponentPerformDefaultAccessibleActionTask(c)));
         expectLastCall().once();
       }
 
@@ -513,20 +513,20 @@ import static org.fest.swing.util.Platform.*;
   }
 
   static class PerformDefaultAccessibleActionTaskMatcher implements IArgumentMatcher {
-    static PerformDefaultAccessibleActionTask eqTask(PerformDefaultAccessibleActionTask expected) {
+    static ComponentPerformDefaultAccessibleActionTask eqTask(ComponentPerformDefaultAccessibleActionTask expected) {
       reportMatcher(new PerformDefaultAccessibleActionTaskMatcher(expected));
       return expected;
     }
     
-    private final PerformDefaultAccessibleActionTask expected;
+    private final ComponentPerformDefaultAccessibleActionTask expected;
     
-    PerformDefaultAccessibleActionTaskMatcher(PerformDefaultAccessibleActionTask expected) {
+    PerformDefaultAccessibleActionTaskMatcher(ComponentPerformDefaultAccessibleActionTask expected) {
       this.expected = expected;
     }
     
     public boolean matches(Object o) {
-      if (!(o instanceof PerformDefaultAccessibleActionTask)) return false;
-      PerformDefaultAccessibleActionTask actual = (PerformDefaultAccessibleActionTask)o;
+      if (!(o instanceof ComponentPerformDefaultAccessibleActionTask)) return false;
+      ComponentPerformDefaultAccessibleActionTask actual = (ComponentPerformDefaultAccessibleActionTask)o;
       return expected.action == actual.action; 
     }
     

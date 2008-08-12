@@ -1,5 +1,5 @@
 /*
- * Created on Jul 22, 2008
+ * Created on Aug 12, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,58 +15,53 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JTable;
-import javax.swing.table.TableCellEditor;
+import javax.swing.JSpinner;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 /**
- * Tests for <code>{@link JTableCancelCellEditingTask}</code>.
+ * Tests for <code>{@link JSpinnerDecrementValueTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class CancelTableCellEditingTaskTest {
+@Test public class JSpinnerDecrementValueTaskTest {
 
-  private JTable table;
-  private int row;
-  private int column;
-  private JTableCancelCellEditingTask task;
+  private JSpinner spinner;
+  private Object value;
   
   @BeforeMethod public void setUp() {
-    table = createMock(JTable.class);
-    row = 6;
-    column = 8;
-    task = JTableCancelCellEditingTask.cancelCellEditingOf(table, row, column);
+    spinner = createMock(JSpinner.class);
+    value = "Hello";
   }
   
-  public void shouldCancelCellEditingIfTableCellHasEditor() {
-    final TableCellEditor editor = createMock(TableCellEditor.class);
-    new EasyMockTemplate(table, editor) {
+  public void shouldDecrementValue() {
+    new EasyMockTemplate(spinner) {
       protected void expectations() {
-        expect(table.getCellEditor(row, column)).andReturn(editor);
-        editor.cancelCellEditing();
+        expect(spinner.getPreviousValue()).andReturn(value);
+        spinner.setValue(value);
+        expectLastCall().once();
       }
 
       protected void codeToTest() {
-        task.executeInEDT();
+        JSpinnerDecrementValueTask.decrementValueOf(spinner).executeInEDT();
       }
     }.run();
   }
-
-  public void shouldNotCancelCellEditingIfTableCellHasNoEditor() {
-    new EasyMockTemplate(table) {
+  
+  public void shouldNotDecrementValueIfPreviousValueIsNull() {
+    new EasyMockTemplate(spinner) {
       protected void expectations() {
-        expect(table.getCellEditor(row, column)).andReturn(null);
+        expect(spinner.getPreviousValue()).andReturn(null);
       }
 
       protected void codeToTest() {
-        task.executeInEDT();
+        JSpinnerDecrementValueTask.decrementValueOf(spinner).executeInEDT();
       }
     }.run();
   }

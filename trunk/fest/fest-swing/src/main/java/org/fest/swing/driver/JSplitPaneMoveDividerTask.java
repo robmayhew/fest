@@ -1,5 +1,5 @@
 /*
- * Created on Aug 11, 2008
+ * Created on Aug 12, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,34 +15,31 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.text.JTextComponent;
+import javax.swing.JSplitPane;
 
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task should be executed in 
- * the event dispatch thread.
- *
+ * Understands a task that sets the location of the divider of a <code>{@link JSplitPane}</code> .This task should be
+ * executed in the event dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-class JTextComponentSelectTextTask extends GuiTask {
+class JSplitPaneMoveDividerTask extends GuiTask {
   
-  private final JTextComponent textBox;
-  private final int start;
-  private final int end;
+  private final JSplitPane splitPane;
+  private final int location;
 
-  static JTextComponentSelectTextTask selectTextIn(JTextComponent textBox, int start, int end) {
-    return new JTextComponentSelectTextTask(textBox, start, end);
+  static JSplitPaneMoveDividerTask moveDividerOf(JSplitPane splitPane, int location) {
+    return new JSplitPaneMoveDividerTask(splitPane, location);
   }
   
-  private JTextComponentSelectTextTask(JTextComponent textBox, int start, int end) {
-    this.textBox = textBox;
-    this.start = start;
-    this.end = end;
+  private JSplitPaneMoveDividerTask(JSplitPane splitPane, int location) {
+    this.splitPane = splitPane;
+    this.location = location;
   }
 
   protected void executeInEDT() {
-    textBox.setCaretPosition(start);
-    textBox.moveCaretPosition(end);
+    splitPane.setDividerLocation(location);
   }
 }

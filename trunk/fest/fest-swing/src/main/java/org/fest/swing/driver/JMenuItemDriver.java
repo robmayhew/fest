@@ -29,8 +29,8 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.JMenuPopupMenuQuery.popupMenuOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.query.JMenuPopupMenuQuery.popupMenuOf;
 import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.util.Strings.concat;
 
@@ -99,7 +99,7 @@ public class JMenuItemDriver extends JComponentDriver {
   private void moveToFront(Window w) {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
-    robot.invokeAndWait(w, new MoveWindowToFrontTask(w));
+    robot.invokeAndWait(w, new WindowMoveToFrontTask(w));
     robot.moveMouse(w);
   }
 
@@ -123,7 +123,7 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
-    robot.invokeAndWait(new ClickButtonTask(menuItem));
+    robot.invokeAndWait(AbstractButtonClickTask.click(menuItem));
     // TODO wait for idle
   }
 }

@@ -15,7 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.text.ParseException;
 
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
@@ -26,9 +25,11 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.JSpinnerCommitEditTask.commitEditIn;
+import static org.fest.swing.driver.JSpinnerDecrementValueTask.decrementValueOf;
+import static org.fest.swing.driver.JSpinnerIncrementValueTask.incrementValueOf;
 import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -72,17 +73,7 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public void increment(JSpinner spinner) {
     if (!isEnabled(spinner)) return;
-    robot.invokeAndWait(new IncrementValueTask(spinner));
-  }
-
-  private static class IncrementValueTask extends SetValueTask {
-    IncrementValueTask(JSpinner spinner) {
-      super(spinner);
-    }
-
-    public void run() {
-      setValue(spinner.getNextValue());
-    }
+    robot.invokeAndWait(incrementValueOf(spinner));
   }
 
   /**
@@ -108,30 +99,7 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public void decrement(JSpinner spinner) {
     if (!isEnabled(spinner)) return;
-    robot.invokeAndWait(new DecrementValueTask(spinner));
-  }
-
-  private static class DecrementValueTask extends SetValueTask {
-    DecrementValueTask(JSpinner spinner) {
-      super(spinner);
-    }
-
-    public void run() {
-      setValue(spinner.getPreviousValue());
-    }
-  }
-
-  private static abstract class SetValueTask implements Runnable {
-    final JSpinner spinner;
-
-    SetValueTask(JSpinner spinner) {
-      this.spinner = spinner;
-    }
-
-    final void setValue(Object value) {
-      if (value == null) return;
-      spinner.setValue(value);
-    }
+    robot.invokeAndWait(decrementValueOf(spinner));
   }
 
   /**
@@ -146,7 +114,7 @@ public class JSpinnerDriver extends JComponentDriver {
   public void enterTextAndCommit(JSpinner spinner, String text) {
     if (!isEnabled(spinner)) return;
     enterText(spinner, text);
-    robot.invokeAndWait(new CommitEditTask(spinner));
+    robot.invokeAndWait(commitEditIn(spinner));
   }
 
   /**
@@ -177,22 +145,6 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public JTextComponent editor(JSpinner spinner) {
     return robot.finder().findByType(spinner, JTextComponent.class);
-  }
-
-  private static class CommitEditTask implements Runnable {
-    private final JSpinner spinner;
-
-    CommitEditTask(JSpinner spinner) {
-      this.spinner = spinner;
-    }
-
-    public void run() {
-      try {
-        spinner.commitEdit();
-      } catch (ParseException e) {
-        throw unexpected(e);
-      }
-    }
   }
 
   /**

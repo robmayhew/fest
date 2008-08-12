@@ -26,6 +26,7 @@ import org.fest.swing.util.Pair;
 import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -220,22 +221,8 @@ public class JScrollBarDriver extends JComponentDriver {
   }
 
   private void setValueProperty(JScrollBar scrollBar, int value) {
-    robot.invokeLater(scrollBar, new SetValueTask(scrollBar, value));
+    robot.invokeLater(scrollBar, setValue(scrollBar, value));
     robot.waitForIdle();
-  }
-
-  private static class SetValueTask implements Runnable {
-    private final JScrollBar scrollBar;
-    private final int value;
-
-    SetValueTask(JScrollBar scrollBar, int value) {
-      this.scrollBar = scrollBar;
-      this.value = value;
-    }
-
-    public void run() {
-      scrollBar.setValue(value);
-    }
   }
 
   /**

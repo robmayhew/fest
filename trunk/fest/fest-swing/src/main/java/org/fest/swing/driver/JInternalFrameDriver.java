@@ -25,12 +25,12 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JInternalFrameSetPropertyTask.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf;
+import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.driver.JInternalFrameClosableQuery.isClosable;
+import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf;
+import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.driver.JInternalFrameIconifiableQuery.isIconifiable;
 import static org.fest.swing.driver.JInternalFrameMaximizableQuery.isMaximizable;
-import static org.fest.swing.driver.JInternalFrameAction.*;
-import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
@@ -55,76 +55,76 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
   /**
    * Brings the given <code>{@link JInternalFrame}</code> to the front.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    */
-  public void moveToFront(JInternalFrame frame) {
-    robot.invokeAndWait(new MoveJInternalFrameToFrontTask(frame));
+  public void moveToFront(JInternalFrame internalFrame) {
+    robot.invokeAndWait(new JInternalFrameMoveToFrontTask(internalFrame));
   }
 
   /**
    * Brings the given <code>{@link JInternalFrame}</code> to the back.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    */
-  public void moveToBack(JInternalFrame frame) {
-    robot.invokeAndWait(new MoveJInternalFrameToBackTask(frame));
+  public void moveToBack(JInternalFrame internalFrame) {
+    robot.invokeAndWait(new JInternalFrameMoveToBackTask(internalFrame));
   }
 
   /**
    * Maximizes the given <code>{@link JInternalFrame}</code>, deconifying it first if it is iconified.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not maximizable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public void maximize(JInternalFrame frame) {
-    if (!isMaximizable(frame))
-      throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not maximizable"));
-    maximizeOrNormalize(frame, MAXIMIZE);
+  public void maximize(JInternalFrame internalFrame) {
+    if (!isMaximizable(internalFrame))
+      throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not maximizable"));
+    maximizeOrNormalize(internalFrame, MAXIMIZE);
   }
 
   /**
    * Normalizes the given <code>{@link JInternalFrame}</code>, deconifying it first if it is iconified.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public void normalize(JInternalFrame frame) {
-    maximizeOrNormalize(frame, NORMALIZE);
+  public void normalize(JInternalFrame internalFrame) {
+    maximizeOrNormalize(internalFrame, NORMALIZE);
   }
 
-  private void maximizeOrNormalize(JInternalFrame frame, JInternalFrameAction action) {
-    Container clickTarget = frame;
-    if (isIconified(frame)) clickTarget = JInternalFrameDesktopIconQuery.desktopIconOf(frame);
+  private void maximizeOrNormalize(JInternalFrame internalFrame, JInternalFrameAction action) {
+    Container clickTarget = internalFrame;
+    if (isIconified(internalFrame)) clickTarget = JInternalFrameDesktopIconQuery.desktopIconOf(internalFrame);
     Point p = maximizeLocation(clickTarget);
     robot.moveMouse(clickTarget, p.x, p.y);
-    if (isIconified(frame)) deiconify(frame);
-    setProperty(new SetJInternalFrameMaximumTask(frame, action));
+    if (isIconified(internalFrame)) deiconify(internalFrame);
+    setProperty(new SetJInternalFrameMaximumTask(internalFrame, action));
   }
 
   /**
    * Iconifies the given <code>{@link JInternalFrame}</code>.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public void iconify(JInternalFrame frame) {
-    if (isIconified(frame)) return;
-    if (!isIconifiable(frame))
-      throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not iconifiable"));
-    Point p = iconifyLocation(frame);
-    robot.moveMouse(frame, p.x, p.y);
-    setProperty(new SetJInternalFrameIconTask(frame, ICONIFY));
+  public void iconify(JInternalFrame internalFrame) {
+    if (isIconified(internalFrame)) return;
+    if (!isIconifiable(internalFrame))
+      throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not iconifiable"));
+    Point p = iconifyLocation(internalFrame);
+    robot.moveMouse(internalFrame, p.x, p.y);
+    setProperty(new SetJInternalFrameIconTask(internalFrame, ICONIFY));
   }
 
   /**
    * De-iconifies the given <code>{@link JInternalFrame}</code>.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
-  public void deiconify(JInternalFrame frame) {
-    if (!isIconified(frame)) return;
-    Container c = desktopIconOf(frame);
+  public void deiconify(JInternalFrame internalFrame) {
+    if (!isIconified(internalFrame)) return;
+    Container c = desktopIconOf(internalFrame);
     Point p = iconifyLocation(c);
     robot.moveMouse(c, p.x, p.y);
-    setProperty(new SetJInternalFrameIconTask(frame, DEICONIFY));
+    setProperty(new SetJInternalFrameIconTask(internalFrame, DEICONIFY));
   }
 
   void setProperty(JInternalFrameSetPropertyTask task) {
@@ -137,11 +137,11 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
   /**
    * Resizes the <code>{@link JInternalFrame}</code> horizontally.
-   * @param w the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @param width the width that the <code>JInternalFrame</code> should have after being resized.
    */
-  public void resizeWidthTo(JInternalFrame w, int width) {
-    resizeTo(w, new Dimension(width, w.getHeight()));
+  public void resizeWidthTo(JInternalFrame internalFrame, int width) {
+    resizeTo(internalFrame, new Dimension(width, internalFrame.getHeight()));
   }
 
   /**
@@ -155,34 +155,34 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
 
   /**
    * Resizes the <code>{@link JInternalFrame}</code> to the given size.
-   * @param w the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @param size the size to resize the <code>JInternalFrame</code> to.
    */
-  public void resizeTo(JInternalFrame w, Dimension size) {
-    resize(w, size.width, size.height);
+  public void resizeTo(JInternalFrame internalFrame, Dimension size) {
+    resize(internalFrame, size.width, size.height);
   }
 
   /**
    * Moves the <code>{@link JInternalFrame}</code> to the given location.
-   * @param w the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @param where the location to move the <code>JInternalFrame</code> to.
    * @throws ActionFailedException if the given <code>JInternalFrame</code> is not showing on the screen.
    */
-  public void moveTo(JInternalFrame w, Point where) {
-    move(w, where.x, where.y);
+  public void moveTo(JInternalFrame internalFrame, Point where) {
+    move(internalFrame, where.x, where.y);
   }
 
   /**
    * Closes the given <code>{@link JInternalFrame}</code>.
-   * @param frame the target <code>JInternalFrame</code>.
+   * @param internalFrame the target <code>JInternalFrame</code>.
    * @throws ActionFailedException if the <code>JInternalFrame</code> is not closable.
    */
-  public void close(JInternalFrame frame) {
-    if (!isClosable(frame))
-      throw actionFailure(concat("The JInternalFrame <", format(frame), "> is not closable"));
+  public void close(JInternalFrame internalFrame) {
+    if (!isClosable(internalFrame))
+      throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not closable"));
     // This is LAF-specific, so it must be done programmatically.
-    Point p = closeLocation(frame);
-    robot.moveMouse(frame, p.x, p.y);
-    robot.invokeAndWait(new CloseJInternalFrameTask(frame));
+    Point p = closeLocation(internalFrame);
+    robot.moveMouse(internalFrame, p.x, p.y);
+    robot.invokeAndWait(JInternalFrameCloseTask.close(internalFrame));
   }
 }

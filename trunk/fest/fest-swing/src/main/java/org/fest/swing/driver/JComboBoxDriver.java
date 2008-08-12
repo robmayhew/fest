@@ -175,7 +175,7 @@ public class JComboBoxDriver extends JComponentDriver {
     try {
       listDriver.selectItem(dropDownList(), validatedIndex);
     } catch (ComponentLookupException e) {
-      robot.invokeAndWait(new SetSelectedIndexTask(comboBox, validatedIndex));
+      robot.invokeAndWait(new JComboBoxSelectedItemAtIndexTask(comboBox, validatedIndex));
     } finally {
       hideDropDownListIfVisible(comboBox);
     }
@@ -201,7 +201,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   private void dropDownVisibleThroughUIDelegate(JComboBox comboBox, final boolean visible) {
-    robot.invokeAndWait(new SetJComboBoxDropDownVisibleTask(comboBox, visible));
+    robot.invokeAndWait(new JComboBoxSetDropDownVisibleTask(comboBox, visible));
     robot.waitForIdle();
   }
 

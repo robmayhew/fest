@@ -71,7 +71,7 @@ public class JFileChooserDriver extends JComponentDriver {
       throw cannotSelectFile(file, "the file chooser cannot open directories");
     if (mode == DIRECTORIES_ONLY && !isFolder)
       throw cannotSelectFile(file, "the file chooser can only open directories");
-    robot.invokeAndWait(new SetJFileChooserSelectedFileTask(fileChooser, file));
+    robot.invokeAndWait(new JFileChooserSelectFileTask(fileChooser, file));
   }
 
   private ActionFailedException cannotSelectFile(File file, String reason) {
@@ -84,7 +84,7 @@ public class JFileChooserDriver extends JComponentDriver {
    * @param dir the directory to set as current.
    */
   public void setCurrentDirectory(JFileChooser fileChooser, File dir) {
-    robot.invokeAndWait(new SetJFileChooserCurrentDirectoryTask(fileChooser, dir));
+    robot.invokeAndWait(new JFileChooserSetCurrentDirectoryTask(fileChooser, dir));
   }
 
   /**

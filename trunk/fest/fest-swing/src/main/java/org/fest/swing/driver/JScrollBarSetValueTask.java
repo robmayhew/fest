@@ -15,34 +15,31 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.text.JTextComponent;
+import javax.swing.JScrollBar;
 
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task should be executed in 
- * the event dispatch thread.
+ * Understands a task that sets the value of a <code>{@link JScrollBar}</code>.This task should be executed in the event 
+ * dispatch thread.
  *
- * @author Alex Ruiz
+ * @author Alex Ruiz 
  */
-class JTextComponentSelectTextTask extends GuiTask {
+class JScrollBarSetValueTask extends GuiTask {
   
-  private final JTextComponent textBox;
-  private final int start;
-  private final int end;
+  private final JScrollBar scrollBar;
+  private final int value;
 
-  static JTextComponentSelectTextTask selectTextIn(JTextComponent textBox, int start, int end) {
-    return new JTextComponentSelectTextTask(textBox, start, end);
+  static JScrollBarSetValueTask setValue(JScrollBar scrollBar, int value) {
+    return new JScrollBarSetValueTask(scrollBar, value);
   }
   
-  private JTextComponentSelectTextTask(JTextComponent textBox, int start, int end) {
-    this.textBox = textBox;
-    this.start = start;
-    this.end = end;
+  private JScrollBarSetValueTask(JScrollBar scrollBar, int value) {
+    this.scrollBar = scrollBar;
+    this.value = value;
   }
 
   protected void executeInEDT() {
-    textBox.setCaretPosition(start);
-    textBox.moveCaretPosition(end);
+    scrollBar.setValue(value);
   }
 }

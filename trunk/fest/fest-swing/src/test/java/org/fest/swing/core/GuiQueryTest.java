@@ -54,6 +54,8 @@ import static org.fest.assertions.Assertions.assertThat;
   }
 
   private static class GuiQueryInEDT extends GuiQuery<Boolean> {
+    GuiQueryInEDT() {}
+    
     protected Boolean executeInEDT() {
       return isEventDispatchThread();
     }
