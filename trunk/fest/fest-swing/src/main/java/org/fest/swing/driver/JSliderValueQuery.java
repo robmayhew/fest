@@ -19,7 +19,8 @@ import javax.swing.JSlider;
 import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that returns the value of a <code>{@link JSlider}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the value of a 
+ * <code>{@link JSlider}</code>.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang

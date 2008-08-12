@@ -16,11 +16,12 @@ package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.util.Pair;
 
+import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
+import static org.fest.swing.driver.JSliderMinAndMaxQuery.minAndMaxOf;
+import static org.fest.swing.driver.JSliderMinimumQuery.minimumOf;
 import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -53,19 +54,7 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    */
   public void slideToMaximum(JSlider slider) {
-    slide(slider, new GetMaximumTask(slider).run());
-  }
-
-  private static class GetMaximumTask extends GuiQuery<Integer> {
-    private final JSlider slider;
-
-    GetMaximumTask(JSlider slider) {
-      this.slider = slider;
-    }
-    
-    protected Integer executeInEDT() {
-      return slider.getMaximum();
-    }
+    slide(slider, maximumOf(slider));
   }
 
   /**
@@ -73,19 +62,7 @@ public class JSliderDriver extends JComponentDriver {
    * @param slider the target <code>JSlider</code>.
    */
   public void slideToMinimum(JSlider slider) {
-    slide(slider, new GetMinimumTask(slider).run());
-  }
-
-  private static class GetMinimumTask extends GuiQuery<Integer> {
-    private final JSlider slider;
-
-    GetMinimumTask(JSlider slider) {
-      this.slider = slider;
-    }
-    
-    protected Integer executeInEDT() {
-      return slider.getMinimum();
-    }
+    slide(slider, minimumOf(slider));
   }
 
   /**
@@ -104,22 +81,10 @@ public class JSliderDriver extends JComponentDriver {
   }
   
   private void validateValue(JSlider slider, int value) {
-    Pair<Integer, Integer> minAndMax = new GetMinimumAndMaximumTask(slider).run();
-    int min = minAndMax.one;
-    int max = minAndMax.two;
+    MinimumAndMaximum minAndMax = minAndMaxOf(slider);
+    int min = minAndMax.minimum;
+    int max = minAndMax.maximum;
     if (value >= min && value <= max) return;
     throw actionFailure(concat("Value <", value, "> is not within the JSlider bounds of <", min, "> and <", max, ">"));
-  }
-
-  private static class GetMinimumAndMaximumTask extends GuiQuery<Pair<Integer, Integer>> {
-    private final JSlider slider;
-
-    GetMinimumAndMaximumTask(JSlider slider) {
-      this.slider = slider;
-    }
-    
-    protected Pair<Integer, Integer> executeInEDT() {
-      return new Pair<Integer, Integer>(slider.getMinimum(), slider.getMaximum());
-    }
   }
 }

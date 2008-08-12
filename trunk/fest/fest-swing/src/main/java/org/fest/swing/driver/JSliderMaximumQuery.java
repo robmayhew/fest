@@ -1,5 +1,5 @@
 /*
- * Created on Aug 11, 2008
+ * Created on Aug 12, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,29 +17,27 @@ package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
 
 /**
- * Understands a task that sets the value of a <code>{@link JSlider}</code>. This task should be executed in the event 
- * dispatch thread.
+ * Understands an action, executed in the event dispatch thread, that returns the maximum value supported by a 
+ * <code>{@link JSlider}</code>.
  *
- * @author Alex Ruiz 
+ * @author Yvonne Wang 
  */
-class JSliderSetValueTask extends GuiTask {
+class JSliderMaximumQuery extends GuiQuery<Integer> {
   
   private final JSlider slider;
-  private final int value;
 
-  static JSliderSetValueTask setValue(JSlider slider, int value) {
-    return new JSliderSetValueTask(slider, value);
+  static int maximumOf(JSlider slider) {
+    return new JSliderMaximumQuery(slider).run();
   }
   
-  private JSliderSetValueTask(JSlider slider, int value) {
+  private JSliderMaximumQuery(JSlider slider) {
     this.slider = slider;
-    this.value = value;
   }
-
-  protected void executeInEDT() {
-    slider.setValue(value);
+  
+  protected Integer executeInEDT() {
+    return slider.getMaximum();
   }
 }
