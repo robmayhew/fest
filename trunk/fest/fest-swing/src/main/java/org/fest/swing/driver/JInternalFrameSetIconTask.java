@@ -20,17 +20,22 @@ import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 
 /**
- * Understands a task that maximizes or restores a <code>{@link JInternalFrame}</code>.
- *
+ * Understands a task that iconifies or de-iconifies a <code>{@link JInternalFrame}</code>. This task should be executed
+ * in the event dispatch thread.
+ * 
  * @author Yvonne Wang
  */
-class SetJInternalFrameMaximumTask extends JInternalFrameSetPropertyTask {
+class JInternalFrameSetIconTask extends JInternalFrameSetPropertyTaskTemplate {
 
-  SetJInternalFrameMaximumTask(JInternalFrame target, JInternalFrameAction action) {
-    super(target, action);
+  static JInternalFrameSetIconTask setIcon(JInternalFrame internalFrame, JInternalFrameAction action) {
+    return new JInternalFrameSetIconTask(internalFrame, action);
+  }
+  
+  private JInternalFrameSetIconTask(JInternalFrame internalFrame, JInternalFrameAction action) {
+    super(internalFrame, action);
   }
 
   public void execute() throws PropertyVetoException {
-    target.setMaximum(action.value);
+    target.setIcon(action.value);
   }
 }

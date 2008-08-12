@@ -78,7 +78,7 @@ public class JInternalFrameDriverTest {
   public void shouldThrowErrorWithExceptionInSetPropertyTask() {
     final PropertyVetoException vetoed = new PropertyVetoException("Test", null);
     JInternalFrameAction action = MAXIMIZE;
-    JInternalFrameSetPropertyTask task = new JInternalFrameSetPropertyTask(internalFrame, action) {
+    JInternalFrameSetPropertyTaskTemplate task = new JInternalFrameSetPropertyTaskTemplate(internalFrame, action) {
       public void execute() throws PropertyVetoException {
         throw vetoed;
       }

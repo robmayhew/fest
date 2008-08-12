@@ -20,7 +20,7 @@ import javax.swing.JTabbedPane;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that selects the tab with the given index in a <code>{@link JTabbedPane}</code> .This task should
+ * Understands a task that selects the tab with the given index in a <code>{@link JTabbedPane}</code>. This task should
  * be executed in the event dispatch thread.
  * 
  * @author Alex Ruiz

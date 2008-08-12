@@ -48,7 +48,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JSplitPaneMoveDividerTask.moveDividerOf(splitPane, location).executeInEDT();
+        JSplitPaneMoveDividerTask.moveDivider(splitPane, location).executeInEDT();
       }
     }.run();
   }

@@ -43,6 +43,7 @@ import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.driver.ComponentDriverTest.PerformDefaultAccessibleActionTaskMatcher.eqTask;
+import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.util.Platform.*;
 
@@ -502,7 +503,7 @@ import static org.fest.swing.util.Platform.*;
   public void shouldPerformAccessibleAction() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
-        robot.invokeLater(same(c), eqTask(new ComponentPerformDefaultAccessibleActionTask(c)));
+        robot.invokeLater(same(c), eqTask(performDefaultAccessibleActionOf(c)));
         expectLastCall().once();
       }
 

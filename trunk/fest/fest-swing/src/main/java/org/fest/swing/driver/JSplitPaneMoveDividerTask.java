@@ -20,7 +20,7 @@ import javax.swing.JSplitPane;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that sets the location of the divider of a <code>{@link JSplitPane}</code> .This task should be
+ * Understands a task that sets the location of the divider of a <code>{@link JSplitPane}</code>. This task should be
  * executed in the event dispatch thread.
  * 
  * @author Alex Ruiz
@@ -30,7 +30,7 @@ class JSplitPaneMoveDividerTask extends GuiTask {
   private final JSplitPane splitPane;
   private final int location;
 
-  static JSplitPaneMoveDividerTask moveDividerOf(JSplitPane splitPane, int location) {
+  static JSplitPaneMoveDividerTask moveDivider(JSplitPane splitPane, int location) {
     return new JSplitPaneMoveDividerTask(splitPane, location);
   }
   

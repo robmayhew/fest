@@ -46,7 +46,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        new JInternalFrameMoveToFrontTask(internalFrame).executeInEDT();
+        JInternalFrameMoveToFrontTask.toFront(internalFrame).executeInEDT();
       }
     }.run();
   }

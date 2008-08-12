@@ -28,15 +28,15 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 
 /**
- * Tests for <code>{@link JInternalFrameSetPropertyTask}</code>.
+ * Tests for <code>{@link JInternalFrameSetPropertyTaskTemplate}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JInternalFrameSetPropertyTaskTest {
+@Test public class JInternalFrameSetPropertyTaskTemplateTest {
 
   public void shouldSavePropertyVetoExceptionThrown() {
     final PropertyVetoException toThrow = new PropertyVetoException("Testing", createMock(PropertyChangeEvent.class));
-    JInternalFrameSetPropertyTask task = new JInternalFrameSetPropertyTask(new JInternalFrame(), MAXIMIZE) {
+    JInternalFrameSetPropertyTaskTemplate task = new JInternalFrameSetPropertyTaskTemplate(new JInternalFrame(), MAXIMIZE) {
       void execute() throws PropertyVetoException {
         throw toThrow;
       }
@@ -46,7 +46,7 @@ import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
   }
   
   public void shouldReturnNullVetoIfPropertyVetoExceptionNeverThrown() {
-    JInternalFrameSetPropertyTask task = new JInternalFrameSetPropertyTask(new JInternalFrame(), MAXIMIZE) {
+    JInternalFrameSetPropertyTaskTemplate task = new JInternalFrameSetPropertyTaskTemplate(new JInternalFrame(), MAXIMIZE) {
       void execute() {}
     };
     task.executeInEDT();

@@ -40,13 +40,17 @@ class ComponentPerformDefaultAccessibleActionTask extends GuiTask {
 
   final AccessibleAction action;
 
+  static ComponentPerformDefaultAccessibleActionTask performDefaultAccessibleActionOf(Component c) {
+    return new ComponentPerformDefaultAccessibleActionTask(c);
+  }
+  
   /**
    * Creates a new </code>{@link ComponentPerformDefaultAccessibleActionTask}</code>.
    * @param c the <code>Component</code> containing the <code>AccessibleAction</code> to execute.
    * @throws ActionFailedException if the <code>Component</code> does not contain an <code>AccessibleAction</code>
-   *         or if the <code>AccessibleAction</code> is empty.
+   * or if the <code>AccessibleAction</code> is empty.
    */
-  ComponentPerformDefaultAccessibleActionTask(Component c) {
+  private ComponentPerformDefaultAccessibleActionTask(Component c) {
     action = accessibleActionFrom(c);
     if (action == null || action.getAccessibleActionCount() == 0)
       throw actionFailure(concat("Unable to perform accessible action for ", format(c)));

@@ -50,7 +50,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        new JFileChooserSelectFileTask(fileChooser, file).executeInEDT();
+        JFileChooserSelectFileTask.selectFileIn(fileChooser, file).executeInEDT();
       }
     }.run();
   }

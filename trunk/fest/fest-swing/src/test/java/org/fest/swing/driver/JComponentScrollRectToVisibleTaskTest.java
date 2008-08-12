@@ -43,7 +43,7 @@ public class JComponentScrollRectToVisibleTaskTest {
     Method scrollRectToVisible = JComponent.class.getDeclaredMethod("scrollRectToVisible", Rectangle.class);
     c = createMock(JComponent.class, new Method[] { scrollRectToVisible });
     rectangle = new Rectangle(80, 60);
-    task = new JComponentScrollRectToVisibleTask(c, rectangle);
+    task = JComponentScrollRectToVisibleTask.scrollRectToVisible(c, rectangle);
   }
 
   @Test public void shouldScrollRectToVisible() {

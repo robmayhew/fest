@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JSpinner;
 
 /**
- * Understands a task that decrements the value of a <code>{@link JSpinner}</code> .This task should be executed in the
+ * Understands a task that decrements the value of a <code>{@link JSpinner}</code>. This task should be executed in the
  * event dispatch thread.
  * 
  * @author Alex Ruiz

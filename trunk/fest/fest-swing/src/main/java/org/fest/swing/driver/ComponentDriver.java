@@ -31,11 +31,12 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
+import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
@@ -347,7 +348,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty.
    */
   protected final void performAccessibleActionOf(Component c) {
-    robot.invokeLater(c, new ComponentPerformDefaultAccessibleActionTask(c));
+    robot.invokeLater(c, performDefaultAccessibleActionOf(c));
   }
 
   /**

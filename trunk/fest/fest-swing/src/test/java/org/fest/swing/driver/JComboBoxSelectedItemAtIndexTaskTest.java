@@ -48,7 +48,7 @@ public class JComboBoxSelectedItemAtIndexTaskTest {
       }
 
       protected void codeToTest() {
-        new JComboBoxSelectedItemAtIndexTask(comboBox, index).executeInEDT();
+        JComboBoxSelectedItemAtIndexTask.selectItemIn(comboBox, index).executeInEDT();
       }
     }.run();
   }

@@ -27,35 +27,35 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.driver.JInternalFrameAction.DEICONIFY;
+import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 
 /**
- * Tests for <code>{@link SetJInternalFrameIconTask}</code>.
+ * Tests for <code>{@link JInternalFrameSetMaximumTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class SetJInternalFrameIconTaskTest {
+@Test public class JInternalFrameSetMaximumTaskTest {
 
   private JInternalFrame internalFrame;
   private JInternalFrameAction action;
 
   @BeforeMethod public void setUp() {
     internalFrame = createMock(JInternalFrame.class);
-    action = DEICONIFY;
+    action = MAXIMIZE;
   }
 
   public void shouldCloseJInternalFrame() {
     new EasyMockTemplate(internalFrame) {
       protected void expectations() {
         try {
-          internalFrame.setIcon(action.value);
+          internalFrame.setMaximum(action.value);
         } catch (PropertyVetoException e) {}
         expectLastCall().once();
       }
 
       protected void codeToTest() {
         try {
-          new SetJInternalFrameIconTask(internalFrame, action).execute();
+          JInternalFrameSetMaximumTask.setMaximum(internalFrame, action).execute();
         } catch (PropertyVetoException e) {}
       }
     }.run();

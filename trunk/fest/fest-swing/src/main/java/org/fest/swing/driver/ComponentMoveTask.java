@@ -26,12 +26,16 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz
  */
-class ComponentSetLocationTask extends GuiTask {
+class ComponentMoveTask extends GuiTask {
 
   private final Component component;
   private final Point location;
 
-  ComponentSetLocationTask(Component component, Point location) {
+  static ComponentMoveTask moveTo(Component component, Point location) {
+    return new ComponentMoveTask(component, location);
+  }
+  
+  private ComponentMoveTask(Component component, Point location) {
     this.component = component;
     this.location = location;
   }

@@ -1,5 +1,5 @@
 /*
- * Created on Feb 23, 2008
+ * Created on Aug 8, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,9 +15,9 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Point;
-import java.lang.reflect.Method;
+import java.beans.PropertyVetoException;
+
+import javax.swing.JInternalFrame;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -27,34 +27,38 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.driver.JInternalFrameAction.DEICONIFY;
+
 /**
- * Test for <code>{@link ComponentSetLocationTask}</code>.
+ * Tests for <code>{@link JInternalFrameSetIconTask}</code>.
  *
- * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class ComponentSetLocationTaskTest {
+@Test public class JInternalFrameSetIconTaskTest {
 
-  private Component c;
-  private Point location;
-  private ComponentSetLocationTask task;
+  private JInternalFrame internalFrame;
+  private JInternalFrameAction action;
 
-  @BeforeMethod public void setUp() throws Exception {
-    Method setLocation = Component.class.getDeclaredMethod("setLocation", Point.class);
-    c = createMock(Component.class, new Method[] { setLocation });
-    location = new Point(80, 60);
-    task = new ComponentSetLocationTask(c, location);
+  @BeforeMethod public void setUp() {
+    internalFrame = createMock(JInternalFrame.class);
+    action = DEICONIFY;
   }
 
-  @Test public void shouldSetLocation() {
-    new EasyMockTemplate(c) {
+  public void shouldCloseJInternalFrame() {
+    new EasyMockTemplate(internalFrame) {
       protected void expectations() {
-        c.setLocation(location);
-        expectLastCall();
+        try {
+          internalFrame.setIcon(action.value);
+        } catch (PropertyVetoException e) {}
+        expectLastCall().once();
       }
 
       protected void codeToTest() {
-        task.executeInEDT();
+        try {
+          JInternalFrameSetIconTask.setIcon(internalFrame, action).execute();
+        } catch (PropertyVetoException e) {}
       }
     }.run();
   }
+
 }

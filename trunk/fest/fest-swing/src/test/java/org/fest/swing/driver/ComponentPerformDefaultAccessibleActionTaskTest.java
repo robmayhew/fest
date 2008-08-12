@@ -43,7 +43,6 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
   private Component component;
   private AccessibleContext context;
   private AccessibleAction action;
-  private ComponentPerformDefaultAccessibleActionTask task;
 
   @BeforeMethod public void setUp() {
     context = createMock(AccessibleContext.class);
@@ -64,8 +63,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        task = new ComponentPerformDefaultAccessibleActionTask(component);
-        task.executeInEDT();
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf(component).executeInEDT();
       }
     }.run();
   }
@@ -78,7 +76,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        task = new ComponentPerformDefaultAccessibleActionTask(component);
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf(component);
       }
     }.run();
   }
@@ -92,7 +90,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        task = new ComponentPerformDefaultAccessibleActionTask(component);
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf(component);
       }
     }.run();
   }

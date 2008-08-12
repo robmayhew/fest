@@ -32,7 +32,11 @@ class JFileChooserSelectFileTask extends GuiTask {
   private final JFileChooser fileChooser;
   private final File file;
 
-  JFileChooserSelectFileTask(JFileChooser fileChooser, File file) {
+  static JFileChooserSelectFileTask selectFileIn(JFileChooser fileChooser, File file) {
+    return new JFileChooserSelectFileTask(fileChooser, file);
+  }
+  
+  private JFileChooserSelectFileTask(JFileChooser fileChooser, File file) {
     this.fileChooser = fileChooser;
     this.file = file;
   }

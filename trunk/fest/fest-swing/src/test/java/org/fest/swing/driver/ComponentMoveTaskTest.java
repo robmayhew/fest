@@ -15,45 +15,41 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
-import java.lang.reflect.Method;
+import java.awt.Component;
+import java.awt.Point;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
-import static java.awt.Frame.NORMAL;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 /**
- * Tests for <code>{@link FrameSetExtendedStateTask}</code>.
+ * Test for <code>{@link ComponentMoveTask}</code>.
  *
  * @author Alex Ruiz
  */
-public class FrameSetExtendedStateTaskTest {
+public class ComponentMoveTaskTest {
 
-  private Frame f;
-  private int state;
-  private FrameSetExtendedStateTask task;
+  private Component c;
+  private Point location;
 
   @BeforeMethod public void setUp() throws Exception {
-    Method setExtendedState = Frame.class.getDeclaredMethod("setExtendedState", int.class);
-    f = createMock(Frame.class, new Method[] { setExtendedState });
-    state = NORMAL;
-    task = new FrameSetExtendedStateTask(f, state);
+    c = createMock(Component.class);
+    location = new Point(80, 60);
   }
 
-  @Test public void shouldSetExtendedState() {
-    new EasyMockTemplate(f) {
-      @Override protected void expectations() {
-        f.setExtendedState(state);
+  @Test public void shouldSetLocation() {
+    new EasyMockTemplate(c) {
+      protected void expectations() {
+        c.setLocation(location);
         expectLastCall();
       }
 
-      @Override protected void codeToTest() {
-        task.executeInEDT();
+      protected void codeToTest() {
+        ComponentMoveTask.moveTo(c, location).executeInEDT();
       }
     }.run();
   }

@@ -15,16 +15,16 @@
  */
 package org.fest.swing.driver;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-
 import java.awt.Component;
 import java.awt.Dimension;
-import java.lang.reflect.Method;
 
-import org.fest.mocks.EasyMockTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.classextension.EasyMock.createMock;
 
 /**
  * Test for <code>{@link ComponentSetSizeTask}</code>.
@@ -35,13 +35,10 @@ public class ComponentSetSizeTaskTest {
 
   private Component c;
   private Dimension size;
-  private ComponentSetSizeTask task;
 
   @BeforeMethod public void setUp() throws Exception {
-    Method setSize = Component.class.getDeclaredMethod("setSize", Dimension.class);
-    c = createMock(Component.class, new Method[] { setSize });
+    c = createMock(Component.class);
     size = new Dimension(80, 60);
-    task = new ComponentSetSizeTask(c, size);
   }
 
   @Test public void shouldSetSize() {
@@ -52,7 +49,7 @@ public class ComponentSetSizeTaskTest {
       }
 
       protected void codeToTest() {
-        task.executeInEDT();
+        ComponentSetSizeTask.setSize(c, size).executeInEDT();
       }
     }.run();
   }

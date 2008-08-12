@@ -27,14 +27,14 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz 
  */
-abstract class JInternalFrameSetPropertyTask extends GuiTask {
+abstract class JInternalFrameSetPropertyTaskTemplate extends GuiTask {
   
   final JInternalFrame target;
   final JInternalFrameAction action;
   
   private PropertyVeto veto;
 
-  JInternalFrameSetPropertyTask(JInternalFrame target, JInternalFrameAction action) {
+  JInternalFrameSetPropertyTaskTemplate(JInternalFrame target, JInternalFrameAction action) {
     this.target = target;
     this.action = action;
   }

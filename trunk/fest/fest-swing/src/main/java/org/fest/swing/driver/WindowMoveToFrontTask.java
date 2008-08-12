@@ -20,15 +20,20 @@ import java.awt.Window;
 import org.fest.swing.core.GuiTask;
 
 /**
- * Understands a task that moves a <code>{@link Window}</code> to the front and gives it input focus.
- *
- * @author Alex Ruiz 
+ * Understands a task that moves a <code>{@link Window}</code> to the front and gives it input focus. This task should
+ * be executed in the event dispatch thread.
+ * 
+ * @author Alex Ruiz
  */
 class WindowMoveToFrontTask extends GuiTask {
   
   private final Window window;
 
-  WindowMoveToFrontTask(Window window) {
+  static WindowMoveToFrontTask toFront(Window window) {
+    return new WindowMoveToFrontTask(window);
+  }
+  
+  private WindowMoveToFrontTask(Window window) {
     this.window = window;
   }
 

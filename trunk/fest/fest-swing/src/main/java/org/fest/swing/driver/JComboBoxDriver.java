@@ -38,13 +38,15 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
-import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
 import static org.fest.swing.driver.JComboBoxDropDownVisibleQuery.isDropDownVisible;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
-import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
+import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
+import static org.fest.swing.driver.JComboBoxSelectedItemAtIndexTask.selectItemIn;
+import static org.fest.swing.driver.JComboBoxSetDropDownVisibleTask.setDropDownVisibleIn;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Objects.areEqual;
@@ -175,7 +177,7 @@ public class JComboBoxDriver extends JComponentDriver {
     try {
       listDriver.selectItem(dropDownList(), validatedIndex);
     } catch (ComponentLookupException e) {
-      robot.invokeAndWait(new JComboBoxSelectedItemAtIndexTask(comboBox, validatedIndex));
+      robot.invokeAndWait(selectItemIn(comboBox, validatedIndex));
     } finally {
       hideDropDownListIfVisible(comboBox);
     }
@@ -201,7 +203,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   private void dropDownVisibleThroughUIDelegate(JComboBox comboBox, final boolean visible) {
-    robot.invokeAndWait(new JComboBoxSetDropDownVisibleTask(comboBox, visible));
+    robot.invokeAndWait(setDropDownVisibleIn(comboBox, visible));
     robot.waitForIdle();
   }
 
