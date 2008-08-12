@@ -28,7 +28,7 @@ import javax.swing.table.TableCellRenderer;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
 
-import static org.fest.swing.driver.JTableCellRenderer.cellRendererIn;
+import static org.fest.swing.driver.JTableCellRendererQuery.cellRendererIn;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.query.JLabelTextQuery.textOf;

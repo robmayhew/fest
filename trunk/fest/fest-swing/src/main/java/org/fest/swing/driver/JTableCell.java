@@ -29,7 +29,6 @@ import static org.fest.util.Strings.*;
  * @author Alex Ruiz
  */
 public class JTableCell {
-  // TODO look for usages of this class and remove subclassing
   
   /** The row of the cell. */
   public final int row;
@@ -39,7 +38,7 @@ public class JTableCell {
 
   // to be used in tests
   static JTableCell cell(int row, int column) {
-    return new JTableCell(row, column) {};
+    return new JTableCell(row, column);
   }
 
   /**

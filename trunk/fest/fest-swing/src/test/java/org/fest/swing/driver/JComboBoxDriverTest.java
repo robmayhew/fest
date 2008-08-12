@@ -443,11 +443,7 @@ public class JComboBoxDriverTest {
   }
 
   private void setComboBoxEnabled(final boolean enabled) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        comboBox.setEnabled(enabled);
-      }
-    });
+    robot.invokeAndWait(new ComponentEnableSetterTask(comboBox, enabled));
   }
 
   private boolean isDropDownListVisible() {

@@ -14,10 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static java.lang.String.valueOf;
-import static org.fest.swing.util.Strings.match;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -25,11 +21,17 @@ import javax.swing.table.JTableHeader;
 
 import org.fest.swing.exception.LocationUnavailableException;
 
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.util.Strings.match;
+import static org.fest.util.Strings.*;
+
 /**
  * Understands encapsulation of the location of a <code>{@link JTableHeader}</code> (a coordinate, column index or
  * value.)
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public class JTableHeaderLocation {
 
@@ -41,9 +43,14 @@ public class JTableHeaderLocation {
    * @throws LocationUnavailableException if a column with a matching name cannot be found.
    */
   public Point pointAt(JTableHeader tableHeader, String columnName) {
-    int validatedIndex = validatedIndex(tableHeader, indexOf(tableHeader, columnName));
-    Rectangle r = tableHeader.getHeaderRect(validatedIndex);
-    return new Point(r.x + r.width / 2, r.y + r.height / 2);
+    int validatedIndex = -1;
+    try {
+      validatedIndex = validatedIndex(tableHeader, indexOf(tableHeader, columnName));
+    } catch (IndexOutOfBoundsException e) {
+      throw new LocationUnavailableException(concat(
+          "Unable to find column with name ", quote(columnName)));
+    }
+    return point(tableHeader, validatedIndex);
   }
 
   /**
@@ -51,18 +58,21 @@ public class JTableHeaderLocation {
    * @param tableHeader the target <code>JTableHeader</code>.
    * @param index the given index.
    * @return the coordinates of the column under the given index.
-   * @throws LocationUnavailableException if the index is out of bounds.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
    */
   public Point pointAt(JTableHeader tableHeader, int index) {
-    int validatedIndex = validatedIndex(tableHeader, index);
-    Rectangle r = tableHeader.getHeaderRect(validatedIndex);
+    return point(tableHeader, validatedIndex(tableHeader, index));
+  }
+
+  private Point point(JTableHeader tableHeader, int index) {
+    Rectangle r = tableHeader.getHeaderRect(index);
     return new Point(r.x + r.width / 2, r.y + r.height / 2);
   }
 
   private int validatedIndex(JTableHeader tableHeader, int index) {
     int itemCount = columnCount(tableHeader);
     if (index >= 0 && index < itemCount) return index;
-    throw new LocationUnavailableException(concat(
+    throw new IndexOutOfBoundsException(concat(
         "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [",  valueOf(itemCount - 1),
         "] (inclusive)"));
   }

@@ -29,17 +29,17 @@ import org.fest.swing.core.GuiQuery;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JTableCellRenderer extends GuiQuery<Component> {
+class JTableCellRendererQuery extends GuiQuery<Component> {
 
   private final JTable table;
   private final int row;
   private final int column;
 
   static Component cellRendererIn(JTable table, int row, int column) {
-    return new JTableCellRenderer(table, row, column).run();
+    return new JTableCellRendererQuery(table, row, column).run();
   }
 
-  private JTableCellRenderer(JTable table, int row, int column) {
+  private JTableCellRendererQuery(JTable table, int row, int column) {
     this.table = table;
     this.row = row;
     this.column = column;

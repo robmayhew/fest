@@ -34,12 +34,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link JTableCellRenderer}</code>.
+ * Tests for <code>{@link JTableCellRendererQuery}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class JTableCellRendererTest {
+@Test public class JTableCellRendererQueryTest {
 
   private MyFrame frame;
 
@@ -58,7 +58,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(dataProvider = "rendererTypes", groups = GUI)
   public void shouldReturnRendererComponentOfJTableCell(int column, Class<?> rendererType) {
-    Component renderer = JTableCellRenderer.cellRendererIn(frame.table, 0, column);
+    Component renderer = JTableCellRendererQuery.cellRendererIn(frame.table, 0, column);
     assertThat(renderer).isInstanceOf(rendererType);
   }
 

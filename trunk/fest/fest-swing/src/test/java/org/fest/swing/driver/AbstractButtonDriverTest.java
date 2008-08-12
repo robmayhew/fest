@@ -74,12 +74,7 @@ public class AbstractButtonDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        checkBox.setEnabled(false);
-        return null;
-      }
-    }.run();
+    robot.invokeAndWait(new ComponentEnableSetterTask(checkBox, false));
     ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
     assertThat(recorder).actionWasNotPerformed();

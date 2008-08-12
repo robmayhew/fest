@@ -67,7 +67,7 @@ public class JTableHeaderDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "indicesOutOfBound", expectedExceptions = LocationUnavailableException.class)
+  @Test(groups = GUI, dataProvider = "indicesOutOfBound", expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIndexOutOfBounds(int columnIndex) {
     driver.clickColumn(tableHeader, columnIndex);
   }
@@ -156,5 +156,4 @@ public class JTableHeaderDriverTest {
       return scrollPane;
     }
   }
-
 }

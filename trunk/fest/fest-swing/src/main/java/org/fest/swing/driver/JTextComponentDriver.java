@@ -21,21 +21,28 @@ import java.awt.Rectangle;
 import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 
 import static java.lang.Math.*;
 import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.JComponentOriginQuery.originOf;
+import static org.fest.swing.driver.JComponentVisibleRectQuery.visibleRectOf;
+import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
+import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextIn;
+import static org.fest.swing.driver.JTextComponentSelectionEndQuery.selectionEndOf;
+import static org.fest.swing.driver.JTextComponentSelectionStartQuery.selectionStartOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -75,7 +82,7 @@ public class JTextComponentDriver extends JComponentDriver {
   public void replaceText(JTextComponent textBox, String text) {
     if (!isEnabled(textBox)) return;
     selectAll(textBox);
-    if (isEmpty(text) && !isEmpty(textBox.getText())) {
+    if (isEmpty(text) && !isEmpty(textOf(textBox))) {
       invokeAction(textBox, deletePrevCharAction);
       return;
     }
@@ -111,7 +118,7 @@ public class JTextComponentDriver extends JComponentDriver {
    */
   public void selectText(JTextComponent textBox, String text) {
     if (!isEnabled(textBox)) return;
-    String actualText = textBox.getText();
+    String actualText = textOf(textBox);
     if (isEmpty(actualText)) return;
     int indexFound = actualText.indexOf(text);
     if (indexFound == -1) return;
@@ -126,28 +133,11 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws ActionFailedException if selecting the text in the given range fails.
    */
   public void selectText(JTextComponent textBox, int start, int end) {
-    if (!isEnabled(textBox) || isEmpty(textBox.getText())) return;
+    if (!isEnabled(textBox) || isEmpty(textOf(textBox))) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
-    robot.invokeAndWait(new TextSelectionTask(textBox, start, end));
+    robot.invokeAndWait(selectTextIn(textBox, start, end));
     verifySelectionMade(textBox, start, end);
-  }
-
-  private static class TextSelectionTask implements Runnable {
-    private final JTextComponent textBox;
-    private final int start;
-    private final int end;
-
-    TextSelectionTask(JTextComponent textBox, int start, int end) {
-      this.textBox = textBox;
-      this.start = start;
-      this.end = end;
-    }
-
-    public void run() {
-      textBox.setCaretPosition(start);
-      textBox.moveCaretPosition(end);
-    }
   }
 
   /**
@@ -171,8 +161,8 @@ public class JTextComponentDriver extends JComponentDriver {
   private Rectangle locationOf(JTextComponent textBox, int index) {
     Rectangle r = null;
     try {
-      r = textBox.modelToView(index);
-    } catch (BadLocationException e) {
+      r = JTextComponentModelToViewQuery.modelToView(textBox, index);
+    } catch (UnexpectedException e) {
       throw actionFailure(concat("Unable to get location for index '", valueOf(index), "' in ", format(textBox)));
     }
     if (r != null) return r;
@@ -180,7 +170,7 @@ public class JTextComponentDriver extends JComponentDriver {
   }
 
   private boolean isRectangleVisible(JTextComponent textBox, Rectangle r) {
-    return textBox.getVisibleRect().contains(r.x, r.y);
+    return visibleRectOf(textBox).contains(r.x, r.y);
   }
 
   private String formatOriginOf(Rectangle r) {
@@ -196,7 +186,7 @@ public class JTextComponentDriver extends JComponentDriver {
 
   private void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
-    Point origin = origin(textBox);
+    Point origin = originOf(textBox);
     Container parent = parentOf(textBox);
     while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
       addRectangleCoordinatesToPoint(parent.getBounds(), origin);
@@ -204,10 +194,6 @@ public class JTextComponentDriver extends JComponentDriver {
     }
     if (parent == null || parent instanceof CellRendererPane) return;
     super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(origin, r));
-  }
-
-  private Point origin(JTextComponent textBox) {
-    return new Point(textBox.getX(), textBox.getY());
   }
 
   private void addRectangleCoordinatesToPoint(Rectangle r, Point p) {
@@ -227,8 +213,8 @@ public class JTextComponentDriver extends JComponentDriver {
   }
 
   private void verifySelectionMade(JTextComponent textBox, int start, int end) {
-    int actualStart = textBox.getSelectionStart();
-    int actualEnd = textBox.getSelectionEnd();
+    int actualStart = selectionStartOf(textBox);
+    int actualEnd = selectionEndOf(textBox);
     if (actualStart == min(start, end) && actualEnd == max(start, end)) return;
     throw actionFailure(concat(
         "Unable to select text using indices '", valueOf(start), "' and '", valueOf(end),
@@ -242,7 +228,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the text of the <code>JTextComponent</code> is not equal to the given one.
    */
   public void requireText(JTextComponent textBox, String expected) {
-    assertThat(textBox.getText()).as(textProperty(textBox)).isEqualTo(expected);
+    assertThat(textOf(textBox)).as(textProperty(textBox)).isEqualTo(expected);
   }
 
   /**
@@ -251,7 +237,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTextComponent</code> is not empty.
    */
   public void requireEmpty(JTextComponent textBox) {
-    assertThat(textBox.getText()).as(textProperty(textBox)).isEmpty();
+    assertThat(textOf(textBox)).as(textProperty(textBox)).isEmpty();
   }
 
   private static String textProperty(JTextComponent textBox) {
@@ -264,7 +250,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTextComponent</code> is not editable.
    */
   public void requireEditable(JTextComponent textBox) {
-    assertThat(textBox.isEditable()).as(editableProperty(textBox)).isTrue();
+    assertEditable(textBox, true);
   }
 
   /**
@@ -273,9 +259,13 @@ public class JTextComponentDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTextComponent</code> is editable.
    */
   public void requireNotEditable(JTextComponent textBox) {
-    assertThat(textBox.isEditable()).as(editableProperty(textBox)).isFalse();
+    assertEditable(textBox, false);
   }
 
+  private void assertEditable(JTextComponent textBox, boolean editable) {
+    assertThat(isEditable(textBox)).as(editableProperty(textBox)).isEqualTo(editable);
+  }
+  
   private static String editableProperty(JTextComponent textBox) {
     return propertyName(textBox, EDITABLE_PROPERTY);
   }

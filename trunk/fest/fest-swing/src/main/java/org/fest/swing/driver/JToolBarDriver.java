@@ -17,7 +17,6 @@ package org.fest.swing.driver;
 import java.awt.*;
 
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 import javax.swing.plaf.ToolBarUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
 
@@ -72,7 +71,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
   public void makeFloat(JToolBar toolBar) {
-    Window w = SwingUtilities.getWindowAncestor(toolBar);
+    Window w = getWindowAncestor(toolBar);
     Point where = w.getLocation();
     floatTo(toolBar, where.x, where.y);
   }
