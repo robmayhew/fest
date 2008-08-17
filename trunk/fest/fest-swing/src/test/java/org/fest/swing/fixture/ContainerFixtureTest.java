@@ -40,7 +40,6 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
@@ -48,6 +47,8 @@ import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
+
+import static org.fest.swing.core.GuiActionRunner.*;
 
 /**
  * Tests for <code>{@link ContainerFixture}</code>.
