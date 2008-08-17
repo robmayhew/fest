@@ -56,7 +56,7 @@ public class WindowChildrenFinderTest {
   }
   
   @Test public void shouldReturnOwnedWindowsIfComponentIsWindow() {
-    TestWindow frame = TestWindow.showInTest(getClass());
+    TestWindow frame = TestWindow.showNewInTest(getClass());
     TestDialog dialog = TestDialog.showInTest(frame);
     dialog.display();
     Collection<Component> children = finder.nonExplicitChildrenOf(frame);

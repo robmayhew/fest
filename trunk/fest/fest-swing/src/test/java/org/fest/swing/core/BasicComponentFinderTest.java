@@ -29,6 +29,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -42,12 +43,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class BasicComponentFinderTest {
 
   private BasicComponentFinder finder;
-  private MainWindow window;
-  private MainWindow anotherWindow;
+  private MyWindow window;
+  private MyWindow anotherWindow;
   
   @BeforeMethod public void setUp() {
     finder = (BasicComponentFinder)BasicComponentFinder.finderWithNewAwtHierarchy();
-    window = MainWindow.beVisible();
+    window = MyWindow.showNew();
   }
   
   @AfterMethod public void tearDown() {
@@ -70,7 +71,7 @@ public class BasicComponentFinderTest {
   }
 
   public void shouldFindComponentByTypeAndContainer() {
-    anotherWindow = MainWindow.beVisible();
+    anotherWindow = MyWindow.showNew();
     JButton button = finder.findByType(anotherWindow, JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -99,7 +100,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentByNameAndContainer() {
-    anotherWindow = MainWindow.beVisible();
+    anotherWindow = MyWindow.showNew();
     anotherWindow.button.setName("anotherButton");
     Component button = finder.findByName(anotherWindow, "anotherButton");
     assertThat(button).isSameAs(anotherWindow.button);
@@ -140,7 +141,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentByNameAndTypeAndContainer() {
-    anotherWindow = MainWindow.beVisible();
+    anotherWindow = MyWindow.showNew();
     JButton button = finder.findByName(anotherWindow, "button", JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -251,7 +252,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldReturnAllMatchingComponentsInGivenRoot() {
-    anotherWindow = MainWindow.beVisible();
+    anotherWindow = MyWindow.showNew();
     Collection<Component> found = finder.findAll(anotherWindow, new ComponentMatcher() {
       public boolean matches(Component c) {
         return c instanceof JButton;
@@ -260,28 +261,26 @@ public class BasicComponentFinderTest {
     assertThat(found).containsOnly(anotherWindow.button);
   }
 
-  protected static class MainWindow extends TestWindow {
+  protected static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A Button");
     final JTextField textField = new JTextField("A TextField");
     final JTextField anotherTextField = new JTextField("Another TextField");
 
-    static MainWindow beVisible() {
-      return new GuiQuery<MainWindow>() {
-        protected MainWindow executeInEDT() {
-          MainWindow window = new MainWindow();
-          window.display();
-          return window;
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
         }
-      }.run();
+      });
+      window.display();
+      return window;
     }
     
-    MainWindow() {
+    MyWindow() {
       super(BasicComponentFinderTest.class);
-      add(button);
-      add(textField);
-      add(anotherTextField);
+      addComponents(button, textField, anotherTextField);
       button.setName("button");
     }
   }

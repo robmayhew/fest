@@ -28,6 +28,7 @@ import org.fest.swing.testing.MyApplet;
 import static javax.swing.SwingUtilities.getAncestorOfClass;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
@@ -46,33 +47,33 @@ public class AppletViewerGuiTest {
   private AppletViewer viewer;
 
   @BeforeMethod public void setUp() {
-    applet = new GuiQuery<MyApplet>() {
+    applet = execute(new GuiQuery<MyApplet>() {
       protected MyApplet executeInEDT() {
         return new MyApplet();
       }
-    }.run();
-    viewer = new GuiQuery<AppletViewer>() {
+    });
+    viewer = execute(new GuiQuery<AppletViewer>() {
       protected AppletViewer executeInEDT() {
         return new AppletViewer(applet);
       }
-    }.run();
+    });
     fixture = new FrameFixture(viewer);
     fixture.show();
     assertThatAppletIsInitializedAndStarted();
   }
   
   private void assertThatAppletIsInitializedAndStarted() {
-    boolean initialized = new GuiQuery<Boolean>() {
+    boolean initialized = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.initialized();
       }
-    }.run();
+    });
     assertThat(initialized).isTrue();
-    boolean started = new GuiQuery<Boolean>() {
+    boolean started = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.started();
       }
-    }.run();
+    });
     assertThat(started).isTrue();
   }
   
@@ -88,17 +89,17 @@ public class AppletViewerGuiTest {
   }
 
   private void assertThatApplietIsStoppedAndDestroyed() {
-    boolean stopped = new GuiQuery<Boolean>() {
+    boolean stopped = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.stopped();
       }
-    }.run();
+    });
     assertThat(stopped).isTrue();
-    boolean destroyed = new GuiQuery<Boolean>() {
+    boolean destroyed = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return applet.destroyed();
       }
-    }.run();
+    });
     assertThat(destroyed).isTrue();
   }
   
@@ -114,11 +115,11 @@ public class AppletViewerGuiTest {
   }
 
   private void assertThatAppletViewerHasCorrectTitle() {
-    String title = new GuiQuery<String>() {
+    String title = execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return viewer.getTitle();
       }
-    }.run();
+    });
     assertThat(title).isEqualTo(concat("Applet Viewer: ", MyApplet.class.getName()));
   }
   
@@ -133,11 +134,11 @@ public class AppletViewerGuiTest {
   }
   
   private void assertThatAppletIsLoaded() {
-    boolean loaded = new GuiQuery<Boolean>() {
+    boolean loaded = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return viewer.appletLoaded();
       }
-    }.run();
+    });
     assertThat(loaded).isTrue();
   }
 }

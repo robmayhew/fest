@@ -15,6 +15,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
@@ -24,10 +25,13 @@ import javax.swing.JToolBar;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -43,52 +47,74 @@ public class BasicJListCellReaderTest {
   private BasicJListCellReader reader;
 
   @BeforeMethod public void setUp() {
-    list = new GuiQuery<JList>() {
-      protected JList executeInEDT() {
-        return new JList();
-      }
-    }.run();
+    list = newList();
     reader = new BasicJListCellReader();
   }
 
+  private static JList newList() {
+    return execute(new GuiQuery<JList>() { 
+      protected JList executeInEDT() { return new JList(); }
+    });
+  }
+
   public void shouldReturnModelValueToString() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        DefaultListModel model = new DefaultListModel();
-        model.addElement(new Jedi("Yoda"));
-        list.setModel(model);
-        return null;
-      }
-    }.run();
+    setModelValue(list, new Jedi("Yoda"));
     Object value = reader.valueAt(list, 0);
     assertThat(value).isEqualTo("Yoda");
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        DefaultListModel model = new DefaultListModel();
-        model.addElement(null);
-        list.setModel(model);
-        list.setCellRenderer(new CustomCellRenderer(new JToolBar()));
-        return null;
-      }
-    }.run();
+    setModelValue(list, null);
+    setRendererComponent(list, notRecognizedRenderer());
     Object value = reader.valueAt(list, 0);
     assertThat(value).isNull();
   }
 
-  public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        DefaultListModel model = new DefaultListModel();
-        model.addElement(new Jedi(null));
-        list.setModel(model);
-        list.setCellRenderer(new CustomCellRenderer(new JLabel("First")));
-        return null;
+  private static Component notRecognizedRenderer() {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return new JToolBar();
       }
-    }.run();
-    Object value = reader.valueAt(list, 0);
+    });
+  }
+
+  public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
+    setModelValue(list, new Jedi(null));
+    JLabel renderer = labelWithText("First");
+    setRendererComponent(this.list, renderer);
+    Object value = reader.valueAt(this.list, 0);
     assertThat(value).isEqualTo("First");
+  }
+
+  private static JLabel labelWithText(final String text) {
+    return execute(new GuiQuery<JLabel>() {
+      protected JLabel executeInEDT() {
+        return new JLabel(text);
+      }
+    });
+  }
+
+  private static void setModelValue(final JList list, final Object value) {
+    GuiActionRunner.execute(new GuiTask() {
+      protected void executeInEDT() {
+        list.setModel(new MyListModel(value));
+      }
+    });
+  }
+  
+  private static void setRendererComponent(final JList list, final Component renderer) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        list.setCellRenderer(new CustomCellRenderer(renderer));
+      }
+    });
+  }
+  
+  private static class MyListModel extends DefaultListModel {
+    private static final long serialVersionUID = 1L;
+
+    MyListModel(Object... values) {
+      for (Object value : values) addElement(value);
+    }
   }
 }

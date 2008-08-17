@@ -19,6 +19,8 @@ import java.awt.Dialog;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Dialog}</code> is
  * modal or not.
@@ -30,7 +32,7 @@ class DialogModalQuery extends GuiQuery<Boolean> {
   private final Dialog dialog;
 
   static boolean isModal(Dialog dialog) {
-    return new DialogModalQuery(dialog).run();
+    return execute(new DialogModalQuery(dialog));
   }
   
   private DialogModalQuery(Dialog dialog) {

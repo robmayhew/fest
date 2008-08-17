@@ -148,7 +148,7 @@ public class AWT {
     if (!isShowing(c)) return null;
     Point location = new Point(c.getLocation());
     if (c instanceof Window) return location;
-    Container parent = parentOf(c);
+    Container parent = c.getParent();
     if (parent == null) return null;
     Point parentLocation = locationOnScreenOf(parent);
     location.translate(parentLocation.x, parentLocation.y);

@@ -15,6 +15,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
@@ -26,9 +27,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -45,56 +48,76 @@ public class BasicJTreeCellReaderTest {
   private DefaultMutableTreeNode root;
 
   @BeforeMethod public void setUp() {
-    tree = new GuiQuery<JTree>() {
-      protected JTree executeInEDT() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
-        root.add(new DefaultMutableTreeNode("Node1"));
-        return new JTree(new DefaultTreeModel(root));
+    root = execute(new GuiQuery<DefaultMutableTreeNode>() {
+      protected DefaultMutableTreeNode executeInEDT() {
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
+        rootNode.add(new DefaultMutableTreeNode("Node1"));
+        return rootNode;
       }
-    }.run();
-    root = (DefaultMutableTreeNode)tree.getModel().getRoot();
+    });
+    tree = newTreeWith(new DefaultTreeModel(root));
     reader = new BasicJTreeCellReader();
   }
 
-  public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    String expectedText = new GuiQuery<String>() {
-      protected String executeInEDT() {
-        JLabel label = new JLabel("First");
-        tree.setCellRenderer(new CustomCellRenderer(label));
-        return label.getText();
+  private static JTree newTreeWith(final DefaultTreeModel rootNode) {
+    return execute(new GuiQuery<JTree>() {
+      protected JTree executeInEDT() {
+        return new JTree(rootNode);
       }
-    }.run();
+    });
+  }
+
+  public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
+    JLabel label = execute(new GuiQuery<JLabel>() {
+      protected JLabel executeInEDT() {
+        return new JLabel("First");
+      }
+    });
+    setCellRendererComponent(tree, label);
     Object value = reader.valueAt(tree, root);
-    assertThat(value).isEqualTo(expectedText);
+    assertThat(value).isEqualTo("First");
   }
 
   public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        tree.setCellRenderer(new CustomCellRenderer(new JToolBar()));
-        return null;
-      }
-    }.run();
+    setCellRendererComponent(tree, unrecognizedRenderer());
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo(root.getUserObject());
   }
 
   public void shouldReturnNullIfTextOfModelValueIsDefaultToString() {
     class Person {}
-    root = new GuiQuery<DefaultMutableTreeNode>() {
+    root = execute(new GuiQuery<DefaultMutableTreeNode>() {
       protected DefaultMutableTreeNode executeInEDT() {
         return new DefaultMutableTreeNode(new Person());
       }
-    }.run();
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-        model.setRoot(root);
-        tree.setCellRenderer(new CustomCellRenderer(new JToolBar()));
-        return null;
-      }
-    }.run();
+    });
+    setRootInTree(tree, root);
+    setCellRendererComponent(tree, unrecognizedRenderer());
     Object value = reader.valueAt(tree, root);
     assertThat(value).isNull();
+  }
+
+  private static void setRootInTree(final JTree tree, final DefaultMutableTreeNode root) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        ((DefaultTreeModel)tree.getModel()).setRoot(root);
+      }
+    });
+  }
+
+  private static void setCellRendererComponent(final JTree tree, final Component renderer) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tree.setCellRenderer(new CustomCellRenderer(renderer));
+      }
+    });
+  }
+  
+  private Component unrecognizedRenderer() {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return new JToolBar();
+      }
+    });
   }
 }

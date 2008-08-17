@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether the drop-down list of a
  * <code>{@link JComboBox}</code> is visible or not.
@@ -29,7 +31,7 @@ class JComboBoxDropDownVisibleQuery extends GuiQuery<Boolean> {
   private final JComboBox comboBox;
 
   static boolean isDropDownVisible(JComboBox comboBox) {
-    return new JComboBoxDropDownVisibleQuery(comboBox).run();
+    return execute(new JComboBoxDropDownVisibleQuery(comboBox));
   }
 
   private JComboBoxDropDownVisibleQuery(JComboBox comboBox) {

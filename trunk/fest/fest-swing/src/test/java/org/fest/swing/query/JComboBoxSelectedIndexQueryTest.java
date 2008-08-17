@@ -22,19 +22,19 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.query.JComboBoxSelectedIndexQuery;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JComboBoxSelectedIndexQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JComboBoxSelectedIndexQueryTest {
+@Test(groups = EDT_QUERY) public class JComboBoxSelectedIndexQueryTest {
 
   private JComboBox comboBox;
 
@@ -42,7 +42,7 @@ import static org.fest.assertions.Assertions.assertThat;
     comboBox = createMock(JComboBox.class);
   }
 
-  @Test(dataProvider = "selectedIndices")
+  @Test(dataProvider = "selectedIndices", groups = EDT_QUERY)
   public void shouldReturnItemCountOfJComboBox(final int selectedIndex) {
     new EasyMockTemplate(comboBox) {
       protected void expectations() {

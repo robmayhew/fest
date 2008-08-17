@@ -136,7 +136,7 @@ public class JTextComponentDriver extends JComponentDriver {
     if (!isEnabled(textBox) || isEmpty(textOf(textBox))) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
-    robot.invokeAndWait(selectTextIn(textBox, start, end));
+    selectTextIn(textBox, start, end);
     verifySelectionMade(textBox, start, end);
   }
 

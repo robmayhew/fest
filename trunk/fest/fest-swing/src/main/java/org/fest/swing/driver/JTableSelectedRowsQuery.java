@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the selected rows in a
  * <code>{@link JTable}</code>.
@@ -30,7 +32,7 @@ class JTableSelectedRowsQuery extends GuiQuery<int[]> {
   private final JTable table;
 
   static int[] selectedRowsIn(JTable table) {
-    return new JTableSelectedRowsQuery(table).run();
+    return execute(new JTableSelectedRowsQuery(table));
   }
   
   private JTableSelectedRowsQuery(JTable table) {

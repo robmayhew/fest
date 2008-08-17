@@ -30,13 +30,15 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JTextComponentModelToViewQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JTextComponentModelToViewQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTextComponentModelToViewQueryTest {
 
   private JTextComponent textBox;
   private int pos;

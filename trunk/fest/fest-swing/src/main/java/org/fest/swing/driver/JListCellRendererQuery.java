@@ -21,6 +21,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular item in a <code>{@link JList}</code>.
@@ -33,7 +35,7 @@ class JListCellRendererQuery extends GuiQuery<Component> {
   private final int index;
 
   static Component cellRendererIn(JList list, int index) {
-    return new JListCellRendererQuery(list, index).run();
+    return execute(new JListCellRendererQuery(list, index));
   }
 
   private JListCellRendererQuery(JList list, int index) {

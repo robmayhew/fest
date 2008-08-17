@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link JTable}</code> 
  * has any selection or not.
@@ -30,7 +32,7 @@ class JTableSelectionQuery extends GuiQuery<Boolean> {
   private final JTable table;
 
   static boolean hasSelection(JTable table) {
-    return new JTableSelectionQuery(table).run();
+    return execute(new JTableSelectionQuery(table));
   }
   
   private JTableSelectionQuery(JTable table) {

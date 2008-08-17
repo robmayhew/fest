@@ -40,9 +40,10 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
+import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -53,7 +54,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
+@Test(groups = GUI, enabled = false)
 public class ContainerFixtureTest {
 
   private static final Dimension PREFERRED_DIMENSION = new Dimension(100, 100);
@@ -64,11 +65,7 @@ public class ContainerFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        return new TestWindow(ContainerFixtureTest.class);
-      }
-    }.run();
+    window = TestWindow.showNewInTest(getClass());
     fixture = new ContainerFixture<TestWindow>(robot, window) {};
   }
 
@@ -100,14 +97,14 @@ public class ContainerFixtureTest {
   }
 
   private JButton addJButton() {
-    return new GuiQuery<JButton>() {
+    return execute(new GuiQuery<JButton>() {
       protected JButton executeInEDT() {
         JButton button = new JButton("A Button");
         button.setName("button");
         addToWindowAndDisplay(button);
         return button;
       }
-    }.run();
+    });
   }
 
   public void shouldFindCheckBoxByType() {
@@ -134,14 +131,14 @@ public class ContainerFixtureTest {
   }
 
   private JCheckBox addJCheckBox() {
-    return new GuiQuery<JCheckBox>() {
+    return execute(new GuiQuery<JCheckBox>() {
       protected JCheckBox executeInEDT() {
         JCheckBox checkBox = new JCheckBox("A CheckBox");
         checkBox.setName("checkBox");
         addToWindowAndDisplay(checkBox);
         return checkBox;
       }
-    }.run();
+    });
   }
 
   public void shouldFindComboBoxByType() {
@@ -168,14 +165,14 @@ public class ContainerFixtureTest {
   }
 
   private JComboBox addJComboBox() {
-    return new GuiQuery<JComboBox>() {
+    return execute(new GuiQuery<JComboBox>() {
       protected JComboBox executeInEDT() {
         JComboBox comboBox = new JComboBox(array("first", "second", "third"));
         comboBox.setName("comboBox");
         addToWindowAndDisplay(comboBox);
         return comboBox;
       }
-    }.run();
+    });
   }
 
   public void shouldFindDialogByType() {
@@ -202,7 +199,7 @@ public class ContainerFixtureTest {
   }
 
   private JDialog addJDialog() {
-    return new GuiQuery<JDialog>() {
+    return execute(new GuiQuery<JDialog>() {
       protected JDialog executeInEDT() {
         JDialog dialog = new JDialog(window, "A Dialog");
         dialog.setName("dialog");
@@ -211,7 +208,7 @@ public class ContainerFixtureTest {
         dialog.setVisible(true);
         return dialog;
       }
-    }.run();
+    });
   }
 
   public void shouldFindFileChooserByType() {
@@ -238,14 +235,14 @@ public class ContainerFixtureTest {
   }
 
   private JFileChooser addJFileChooser() {
-    return new GuiQuery<JFileChooser>() {
+    return execute(new GuiQuery<JFileChooser>() {
       protected JFileChooser executeInEDT() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setName("fileChooser");
         addToWindowAndDisplay(fileChooser);
         return fileChooser;
       }
-    }.run();
+    });
   }
 
   public void shouldFindLabelByType() {
@@ -272,14 +269,14 @@ public class ContainerFixtureTest {
   }
 
   private JLabel addJLabel() {
-    return new GuiQuery<JLabel>() {
+    return execute(new GuiQuery<JLabel>() {
       protected JLabel executeInEDT() {
         JLabel label = new JLabel("A Label");
         label.setName("label");
         addToWindowAndDisplay(label);
         return label;
       }
-    }.run();
+    });
   }
 
   public void shouldFindListByType() {
@@ -306,14 +303,14 @@ public class ContainerFixtureTest {
   }
 
   private JList addJList() {
-    return new GuiQuery<JList>() {
+    return execute(new GuiQuery<JList>() {
       protected JList executeInEDT() {
         JList list = new JList();
         list.setName("list");
         addToWindowAndDisplay(list);
         return list;
       }
-    }.run();
+    });
   }
 
   public void shouldFindMenuWithGivenMatcher() {
@@ -340,7 +337,7 @@ public class ContainerFixtureTest {
   }
 
   private JMenuItem addJMenuItem() {
-    return new GuiQuery<JMenuItem>() {
+    return execute(new GuiQuery<JMenuItem>() {
       protected JMenuItem executeInEDT() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("A Menu");
@@ -352,7 +349,7 @@ public class ContainerFixtureTest {
         window.display();
         return subMenu;
       }
-    }.run();
+    });
   }
 
   public void shouldFindPanelByType() {
@@ -379,7 +376,7 @@ public class ContainerFixtureTest {
   }
 
   private JPanel addJPanel() {
-    return new GuiQuery<JPanel>() {
+    return execute(new GuiQuery<JPanel>() {
       protected JPanel executeInEDT() {
         JPanel panel = new JPanel();
         window.getRootPane().setContentPane(panel);
@@ -388,7 +385,7 @@ public class ContainerFixtureTest {
         window.display();
         return panel;
       }
-    }.run();
+    });
   }
 
   public void shouldFindOptionPane() {
@@ -410,11 +407,11 @@ public class ContainerFixtureTest {
   }
 
   private Object messageOf(final JOptionPane optionPane) {
-    return new GuiQuery<Object>() {
+    return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() throws Throwable {
         return optionPane.getMessage();
       }
-    }.run();
+    });
   }
 
   public void shouldFindRadioButtonByType() {
@@ -441,14 +438,14 @@ public class ContainerFixtureTest {
   }
 
   private JRadioButton addJRadioButton() {
-    return new GuiQuery<JRadioButton>() {
+    return execute(new GuiQuery<JRadioButton>() {
       protected JRadioButton executeInEDT() {
         JRadioButton radioButton = new JRadioButton("A Radio Button");
         radioButton.setName("radioButton");
         addToWindowAndDisplay(radioButton);
         return radioButton;
       }
-    }.run();
+    });
   }
 
   public void shouldFindScrollBarByType() {
@@ -475,7 +472,7 @@ public class ContainerFixtureTest {
   }
 
   private JScrollBar addJScrollBar() {
-    return new GuiQuery<JScrollBar>() {
+    return execute(new GuiQuery<JScrollBar>() {
       protected JScrollBar executeInEDT() {
         JScrollBar scrollBar = new JScrollBar(Adjustable.HORIZONTAL);
         scrollBar.setName("scrollBar");
@@ -483,7 +480,7 @@ public class ContainerFixtureTest {
         addToWindowAndDisplay(scrollBar);
         return scrollBar;
       }
-    }.run();
+    });
   }
 
   public void shouldFindScrollPane() {
@@ -510,7 +507,7 @@ public class ContainerFixtureTest {
   }
 
   private JScrollPane addJScrollPane() {
-    return new GuiQuery<JScrollPane>() {
+    return execute(new GuiQuery<JScrollPane>() {
       protected JScrollPane executeInEDT() {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setName("scrollPane");
@@ -518,7 +515,7 @@ public class ContainerFixtureTest {
         addToWindowAndDisplay(scrollPane);
         return scrollPane;
       }
-    }.run();
+    });
   }
 
   public void shouldFindSliderByType() {
@@ -545,14 +542,14 @@ public class ContainerFixtureTest {
   }
 
   private JSlider addJSlider() {
-    return new GuiQuery<JSlider>() {
+    return execute(new GuiQuery<JSlider>() {
       protected JSlider executeInEDT() {
         JSlider slider = new JSlider(10, 20, 15);
         slider.setName("slider");
         addToWindowAndDisplay(slider);
         return slider;
       }
-    }.run();
+    });
   }
 
   public void shouldFindSpinnerByType() {
@@ -579,14 +576,14 @@ public class ContainerFixtureTest {
   }
 
   private JSpinner addJSpinner() {
-    return new GuiQuery<JSpinner>() {
+    return execute(new GuiQuery<JSpinner>() {
       protected JSpinner executeInEDT() {
         JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
         spinner.setName("spinner");
         addToWindowAndDisplay(spinner);
         return spinner;
       }
-    }.run();
+    });
   }
 
   public void shouldFindSplitPaneByType() {
@@ -599,11 +596,11 @@ public class ContainerFixtureTest {
     JSplitPane expectedSplitPane = addJSplitPane();
     GenericTypeMatcher<JSplitPane> matcher = new GenericTypeMatcher<JSplitPane>() {
       protected boolean isMatching(final JSplitPane splitPane) {
-        Component rightComponent = new GuiQuery<Component>() {
+        Component rightComponent = execute(new GuiQuery<Component>() {
           protected Component executeInEDT() {
             return splitPane.getRightComponent();
           }
-        }.run();
+        });
         return rightComponent instanceof JList;
       }
     };
@@ -618,7 +615,7 @@ public class ContainerFixtureTest {
   }
 
   private JSplitPane addJSplitPane() {
-    return new GuiQuery<JSplitPane>() {
+    return execute(new GuiQuery<JSplitPane>() {
       protected JSplitPane executeInEDT() {
         JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
         splitPane.setName("splitPane");
@@ -626,7 +623,7 @@ public class ContainerFixtureTest {
         addToWindowAndDisplay(splitPane);
         return splitPane;
       }
-    }.run();
+    });
   }
 
   public void shouldFindTabbedPaneByType() {
@@ -653,7 +650,7 @@ public class ContainerFixtureTest {
   }
 
   private JTabbedPane addJTabbedPane() {
-    return new GuiQuery<JTabbedPane>() {
+    return execute(new GuiQuery<JTabbedPane>() {
       protected JTabbedPane executeInEDT() {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setName("tabbedPane");
@@ -661,7 +658,7 @@ public class ContainerFixtureTest {
         addToWindowAndDisplay(tabbedPane);
         return tabbedPane;
       }
-    }.run();
+    });
   }
 
   public void shouldFindTableByType() {
@@ -688,14 +685,14 @@ public class ContainerFixtureTest {
   }
 
   private JTable addJTable() {
-    return new GuiQuery<JTable>() {
+    return execute(new GuiQuery<JTable>() {
       protected JTable executeInEDT() {
         JTable table = new JTable(6, 8);
         table.setName("table");
         addToWindowAndDisplay(table);
         return table;
       }
-    }.run();
+    });
   }
 
   public void shouldFindTextComponentByType() {
@@ -708,11 +705,11 @@ public class ContainerFixtureTest {
     JTextComponent expectedTextComponent = addJTextComponent();
     GenericTypeMatcher<JTextField> columnMatcher = new GenericTypeMatcher<JTextField>() {
       protected boolean isMatching(final JTextField textField) {
-        int columns = new GuiQuery<Integer>() {
+        int columns = execute(new GuiQuery<Integer>() {
           protected Integer executeInEDT() {
             return textField.getColumns();
           }
-        }.run();
+        });
         return columns == 10;
       }
     };
@@ -727,14 +724,14 @@ public class ContainerFixtureTest {
   }
 
   private JTextComponent addJTextComponent() {
-    return new GuiQuery<JTextComponent>() {
+    return execute(new GuiQuery<JTextComponent>() {
       protected JTextComponent executeInEDT() {
         JTextField textField = new JTextField(10);
         textField.setName("textField");
         addToWindowAndDisplay(textField);
         return textField;
       }
-    }.run();
+    });
   }
 
   public void shouldFindToggleButtonByType() {
@@ -761,14 +758,14 @@ public class ContainerFixtureTest {
   }
 
   private JToggleButton addJToggleButton() {
-    return new GuiQuery<JToggleButton>() {
+    return execute(new GuiQuery<JToggleButton>() {
       protected JToggleButton executeInEDT() {
         JToggleButton toggleButton = new JToggleButton("A ToggleButton");
         toggleButton.setName("toggleButton");
         addToWindowAndDisplay(toggleButton);
         return toggleButton;
       }
-    }.run();
+    });
   }
 
   public void shouldFindToolBarByType() {
@@ -795,14 +792,14 @@ public class ContainerFixtureTest {
   }
 
   private JToolBar addJToolBar() {
-    return new GuiQuery<JToolBar>() {
+    return execute(new GuiQuery<JToolBar>() {
       protected JToolBar executeInEDT() {
         JToolBar toolBar = new JToolBar(HORIZONTAL);
         toolBar.setName("toolBar");
         addToWindowAndDisplay(toolBar);
         return toolBar;
       }
-    }.run();
+    });
   }
 
   public void shouldFindTreeByType() {
@@ -829,14 +826,14 @@ public class ContainerFixtureTest {
   }
 
   private JTree addJTree() {
-    return new GuiQuery<JTree>() {
+    return execute(new GuiQuery<JTree>() {
       protected JTree executeInEDT() {
         JTree tree = new JTree(array("One", "Two"));
         tree.setName("tree");
         addToWindowAndDisplay(tree);
         return tree;
       }
-    }.run();
+    });
   }
 
   private void addToWindowAndDisplay(Component c) {

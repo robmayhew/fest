@@ -20,6 +20,8 @@ import javax.swing.UIManager;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text used in the "cancel button" of a
  * <code>{@link JFileChooser}</code>.
@@ -34,7 +36,7 @@ class JFileChooserCancelButtonTextQuery extends GuiQuery<String> {
   private static final String CANCEL_BUTTON_TEXT_KEY = "FileChooser.cancelButtonText";
 
   static String cancelButtonText() {
-    return QUERY_INSTANCE.run();
+    return execute(QUERY_INSTANCE);
   }
 
   private JFileChooserCancelButtonTextQuery() {}

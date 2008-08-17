@@ -31,6 +31,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -50,13 +51,9 @@ public class JListLocationTest {
   @BeforeMethod public void setUp() {
     location = new JListLocation();
     robot = robotWithNewAwtHierarchy();
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    list = frame.list;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    list = window.list;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -65,12 +62,16 @@ public class JListLocationTest {
 
   public void shouldReturnLocationOfIndex() {
     final Point p = location.pointAt(list, 2);
-    int index = new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
-        return list.locationToIndex(p);
-      }
-    }.run();
+    int index = locationToIndex(list, p);
     assertThat(index).isEqualTo(2);
+  }
+
+  private static Integer locationToIndex(final JList list, final Point location) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() throws Throwable {
+        return list.locationToIndex(location);
+      }
+    });
   }
 
   public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForLocation() {
@@ -82,12 +83,18 @@ public class JListLocationTest {
     }
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final TestList list = new TestList("one", "two", "three");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JListLocationTest.class);
       add(list);
       list.setPreferredSize(new Dimension(60, 80));

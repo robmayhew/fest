@@ -26,6 +26,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -33,7 +34,8 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-@Test public class JTabbedPaneTabTitlesQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTabbedPaneTabTitlesQueryTest {
 
   private JTabbedPane tabbedPane;
   private String[] tabNames;

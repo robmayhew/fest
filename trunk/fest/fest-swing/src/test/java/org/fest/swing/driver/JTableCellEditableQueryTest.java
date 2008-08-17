@@ -28,13 +28,15 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JTableCellEditableQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JTableCellEditableQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTableCellEditableQueryTest {
 
   private JTable table;
   private JTableCell cell;
@@ -44,7 +46,7 @@ import static org.fest.swing.driver.JTableCell.cell;
     cell = cell(6, 8);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
   public void shouldIndicateWhetherCellIsEditableOrNot(final boolean editable) {
     new EasyMockTemplate(table) {
       protected void expectations() {

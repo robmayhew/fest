@@ -18,6 +18,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the smallest selection index in a
  * <code>{@link JList}</code>.
@@ -30,7 +32,7 @@ class JListSelectedIndexQuery extends GuiQuery<Integer> {
   private final JList list;
 
   static int selectedIndexOf(JList list) {
-    return new JListSelectedIndexQuery(list).run();
+    return execute(new JListSelectedIndexQuery(list));
   }
 
   private JListSelectedIndexQuery(JList list) {

@@ -43,7 +43,7 @@ import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
 import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
 import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
-import static org.fest.swing.driver.JComboBoxSelectedItemAtIndexTask.selectItemIn;
+import static org.fest.swing.driver.JComboBoxSelectItemAtIndexTask.selectItemIn;
 import static org.fest.swing.driver.JComboBoxSetDropDownVisibleTask.setDropDownVisibleIn;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;

@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the selected index in a
  * <code>{@link JComboBox}</code>.
@@ -36,7 +38,7 @@ public class JComboBoxSelectedIndexQuery extends GuiQuery<Integer> {
    * @return the selected index in the given <code>JComboBox</code>.
    */
   public static int selectedIndexOf(JComboBox comboBox) {
-    return new JComboBoxSelectedIndexQuery(comboBox).run();
+    return execute(new JComboBoxSelectedIndexQuery(comboBox));
   }
 
   private JComboBoxSelectedIndexQuery(JComboBox comboBox) {

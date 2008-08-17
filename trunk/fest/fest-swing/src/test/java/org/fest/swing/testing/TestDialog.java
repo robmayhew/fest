@@ -21,6 +21,9 @@ import javax.swing.JDialog;
 import javax.swing.UIManager;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands the base window for all GUI tests.
@@ -33,13 +36,13 @@ public class TestDialog extends JDialog {
   private static final long serialVersionUID = 1L;
 
   public static TestDialog showInTest(final Frame owner) {
-    return new GuiQuery<TestDialog>() {
+    TestDialog dialog = execute(new GuiQuery<TestDialog>() {
       protected TestDialog executeInEDT() {
-        TestDialog d = new TestDialog(owner);
-        d.display();
-        return d;
+        return new TestDialog(owner);
       }
-    }.run();
+    });
+    dialog.display();
+    return dialog;
   }
   
   public TestDialog(Frame owner) {
@@ -58,16 +61,15 @@ public class TestDialog extends JDialog {
   public void display(final Dimension size) {
     Window owner = getOwner();
     if (owner instanceof TestWindow && !owner.isShowing()) ((TestWindow)owner).display();
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         beforeDisplayed();
         chooseLookAndFeel();
         setPreferredSize(size);
         pack();
         setVisible(true);
-        return null;
       }
-    }.run();
+    });
   }
   
   protected void beforeDisplayed() {}
@@ -85,12 +87,11 @@ public class TestDialog extends JDialog {
   }
   
   public void destroy() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         setVisible(false);
         dispose();
-        return null;
       }
-    }.run();
+    });
   }
 }

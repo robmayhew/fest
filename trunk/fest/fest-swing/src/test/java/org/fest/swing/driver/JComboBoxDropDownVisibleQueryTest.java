@@ -28,13 +28,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JComboBoxDropDownVisibleQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JComboBoxDropDownVisibleQueryTest {
+@Test(groups = EDT_QUERY)
+public class JComboBoxDropDownVisibleQueryTest {
 
   private JComboBox comboBox;
   private ComboBoxUI ui;
@@ -44,7 +46,7 @@ import static org.fest.assertions.Assertions.assertThat;
     ui = createMock(ComboBoxUI.class);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
   public void shouldSetDropDownVisible(final boolean visible) {
     new EasyMockTemplate(comboBox, ui) {
       protected void expectations() {

@@ -27,13 +27,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JComboBoxItemCountQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JComboBoxItemCountQueryTest {
+@Test(groups = EDT_QUERY)
+public class JComboBoxItemCountQueryTest {
 
   private JComboBox comboBox;
 
@@ -41,7 +43,7 @@ import static org.fest.assertions.Assertions.assertThat;
     comboBox = createMock(JComboBox.class);
   }
 
-  @Test(dataProvider = "itemCounts")
+  @Test(dataProvider = "itemCounts", groups = EDT_QUERY)
   public void shouldReturnItemCountOfJComboBox(final int itemCount) {
     new EasyMockTemplate(comboBox) {
       protected void expectations() {

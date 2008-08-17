@@ -34,6 +34,7 @@ import org.fest.swing.util.AWT;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
@@ -49,22 +50,18 @@ import static org.fest.swing.util.AWT.centerOf;
  */
 public abstract class InputEventGeneratorTestCase {
 
-  private MyFrame frame;
+  private MyWindow frame;
   private InputEventGenerator generator;
 
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
+    frame = MyWindow.showNewInTest(getClass());
     onSetUp();
     generator = generator();
     frame.display();
   }
-
+  
   void onSetUp() throws Exception {}
 
   abstract InputEventGenerator generator();
@@ -108,7 +105,8 @@ public abstract class InputEventGeneratorTestCase {
     return new Object[][] { { LEFT_BUTTON }, { MIDDLE_BUTTON }, { RIGHT_BUTTON } };
   }
 
-  @Test(dataProvider = "keys") public void shouldTypeKey(int keyToPress, String expectedText) {
+  @Test(dataProvider = "keys") 
+  public void shouldTypeKey(int keyToPress, String expectedText) {
     setFocusOn(frame.textBox);
     generator.pressKey(keyToPress, CHAR_UNDEFINED);
     generator.releaseKey(keyToPress);
@@ -141,14 +139,22 @@ public abstract class InputEventGeneratorTestCase {
     Point point() { return point; }
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textBox = new JTextField(20);
 
-    public MyFrame() {
-      super(InputEventGeneratorTestCase.class);
-      add(textBox);
+    static MyWindow showNewInTest(final Class<? extends InputEventGeneratorTestCase> testClass) {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(testClass); }
+      });
+      window.display();
+      return window;
+    }
+    
+    public MyWindow(Class<? extends InputEventGeneratorTestCase> testClass) {
+      super(testClass);
+      addComponents(textBox);
     }
   }
 }

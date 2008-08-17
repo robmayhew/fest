@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -65,30 +66,20 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnTrueIfNameMatchingAndIsShowing() {
-    TestWindow frame = testWindow();
-    frame.display();
+    MyWindow window = MyWindow.showNew();
+    window.display();
     matcher = new NameMatcher(NAME, true);
-    assertThat(matcher.matches(button)).isTrue();
-    frame.destroy();
+    assertThat(matcher.matches(window.button)).isTrue();
+    window.destroy();
   }
 
   @Test(groups = GUI) 
   public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
-    TestWindow frame = testWindow();
-    frame.display();
+    MyWindow window = MyWindow.showNew();
+    window.display();
     matcher = new NameMatcher("b", true);
-    assertThat(matcher.matches(button)).isFalse();
-    frame.destroy();
-  }
-
-  private TestWindow testWindow() {
-    return new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        TestWindow w = new TestWindow(NameMatcherTest.class);
-        w.add(button);
-        return w;
-      }
-    }.run();
+    assertThat(matcher.matches(window.button)).isFalse();
+    window.destroy();
   }
   
   @Test public void shouldReturnFalseIfNameMatchingAndIsNotShowing() {
@@ -103,5 +94,25 @@ public class NameMatcherTest {
   
   @Test public void shouldReturnNameAndIsShowingInToString() {
     assertThat(matcher.toString()).contains("name='c'").contains("requireShowing=false");
+  }
+
+  protected static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JButton button = new JButton("A Button");
+
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+    
+    MyWindow() {
+      super(NameMatcherTest.class);
+      addComponents(button);
+      button.setName("button");
+    }
   }
 }

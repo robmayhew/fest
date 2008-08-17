@@ -21,6 +21,8 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the invoker of a
  * <code>{@link JPopupMenu}</code>.
@@ -38,7 +40,7 @@ public class JPopupMenuInvokerQuery extends GuiQuery<Component> {
    * @return the invoker of the given <code>JPopupMenu</code>.
    */
   public static Component invokerOf(JPopupMenu popupMenu) {
-    return new JPopupMenuInvokerQuery(popupMenu).run();
+    return execute(new JPopupMenuInvokerQuery(popupMenu));
   }
 
   private JPopupMenuInvokerQuery(JPopupMenu popupMenu) {

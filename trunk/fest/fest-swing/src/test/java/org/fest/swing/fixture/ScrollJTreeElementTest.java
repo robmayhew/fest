@@ -33,6 +33,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -45,11 +46,11 @@ import static org.fest.swing.testing.TestGroups.*;
 public class ScrollJTreeElementTest {
 
   private FrameFixture fixture;
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = new MyFrame();
-    fixture = new FrameFixture(frame);
+    window = MyWindow.newWindow();
+    fixture = new FrameFixture(window);
     fixture.show();
   }
 
@@ -59,12 +60,12 @@ public class ScrollJTreeElementTest {
 
   public void shouldScrollToSelectElementByPath() {
     fixture.tree("drag").selectPath("root/100/100.1");
-    assertThat(selection()).isEqualTo("100.1");
+    assertThat(selectionOf(window.dragTree)).isEqualTo("100.1");
   }
 
   public void shouldScrollToSelectElementByIndex() {
     fixture.tree("drag").selectRow(99);
-    assertThat(selection()).isEqualTo("99");
+    assertThat(selectionOf(window.dragTree)).isEqualTo("99");
   }
   
   public void shouldScrollToDragAndDropByPath() {
@@ -92,23 +93,29 @@ public class ScrollJTreeElementTest {
     }
   }
 
-  private Object selection() {
-    return new GuiQuery<Object>() {
+  private static Object selectionOf(final JTree tree) {
+    return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() {
-        Object lastPathComponent = frame.dragTree.getSelectionPath().getLastPathComponent();
+        Object lastPathComponent = tree.getSelectionPath().getLastPathComponent();
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)lastPathComponent;
         return node.getUserObject();
       }
-    }.run();
+    });
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTree dragTree = new TestTree("drag");
     final JTree dropTree = new TestTree("drop");
 
-    public MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    public MyWindow() {
       super(ScrollJTreeElementTest.class);
       dragTree.setModel(model());
       add(scrollPaneFor(dragTree));

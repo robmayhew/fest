@@ -25,6 +25,8 @@ import org.fest.util.Collections;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands a list that:
  * <ul>
@@ -40,7 +42,7 @@ import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 public final class TestList extends JList {
   private static final long serialVersionUID = 1L;
 
-  private final DefaultListModel model = new DefaultListModel();
+  final DefaultListModel model = new DefaultListModel();
 
   public TestList(String...elements) {
     this(null, Collections.list(elements));
@@ -56,14 +58,14 @@ public final class TestList extends JList {
   }
 
   public String[] elements() {
-    return new GuiQuery<String[]>() {
-      protected String[] executeInEDT() throws Throwable {
+    return execute(new GuiQuery<String[]>() {
+      protected String[] executeInEDT() {
         int count = model.getSize();
         String[] elements = new String[count];
         for (int i = 0; i < count; i++) elements[i] = (String)model.get(i);
         return elements;
       }
-    }.run();
+    });
   }
 
   private static class ListTransferHandler extends StringTransferHandler<JList> {

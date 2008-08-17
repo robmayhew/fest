@@ -19,12 +19,21 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
+/**
+ * Understands an action, executed in the event dispatch thread, that returns the number of columns in a
+ * <code>{@link JTable}</code>.
+ * 
+ * @author Yvonne Wang
+ * @author Alex Ruiz
+ */
 class JTableColumnCountQuery extends GuiQuery<Integer> {
   
   private final JTable table;
 
   static int columnCountOf(JTable table) {
-    return new JTableColumnCountQuery(table).run();
+    return execute(new JTableColumnCountQuery(table));
   }
   
   private JTableColumnCountQuery(JTable table) {

@@ -31,7 +31,7 @@ import static org.fest.assertions.ImageAssert.read;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestWindow.showInTest;
+import static org.fest.swing.testing.TestWindow.showNewInTest;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 
@@ -72,7 +72,7 @@ public class ScreenshotTakerTest {
   }
 
   @Test public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
-    TestWindow frame = showInTest(getClass());
+    TestWindow frame = showNewInTest(getClass());
     pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame, imagePath);

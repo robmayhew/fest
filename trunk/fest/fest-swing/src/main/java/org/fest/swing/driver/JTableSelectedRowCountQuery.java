@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of selected rows in a 
  * <code>{@link JTable}</code>.
@@ -31,7 +33,7 @@ class JTableSelectedRowCountQuery extends GuiQuery<Integer> {
   private final JTable table;
 
   static int selectedRowCountOf(JTable table) {
-    return new JTableSelectedRowCountQuery(table).run();
+    return execute(new JTableSelectedRowCountQuery(table));
   }
   
   private JTableSelectedRowCountQuery(JTable table) {

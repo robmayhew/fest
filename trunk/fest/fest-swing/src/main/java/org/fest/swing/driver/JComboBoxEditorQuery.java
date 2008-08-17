@@ -21,6 +21,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as 
  * editor of a given <code>{@link JComboBox}</code>. 
@@ -32,7 +34,7 @@ class JComboBoxEditorQuery extends GuiQuery<Component> {
   private final JComboBox comboBox;
 
   static Component editorOf(JComboBox comboBox) {
-    return new JComboBoxEditorQuery(comboBox).run();
+    return execute(new JComboBoxEditorQuery(comboBox));
   }
   
   private JComboBoxEditorQuery(JComboBox comboBox) {

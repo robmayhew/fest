@@ -18,6 +18,8 @@ import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates if a <code>{@link JInternalFrame}</code> 
  * is iconified or not.
@@ -29,7 +31,7 @@ class JInternalFrameIconQuery extends GuiQuery<Boolean> {
   private final JInternalFrame frame;
 
   static boolean isIconified(JInternalFrame frame) {
-    return new JInternalFrameIconQuery(frame).run();
+    return execute(new JInternalFrameIconQuery(frame));
   }
 
   private JInternalFrameIconQuery(JInternalFrame frame) {

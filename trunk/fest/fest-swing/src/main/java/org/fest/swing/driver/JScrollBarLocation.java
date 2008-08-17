@@ -22,8 +22,11 @@ import java.util.Map;
 import javax.swing.JScrollBar;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiActionRunner;
 
 import static java.awt.Adjustable.*;
+
+import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
 
 /**
  * Understands encapsulation of a location in a <code>{@link JScrollBar}</code>.
@@ -57,20 +60,9 @@ public final class JScrollBarLocation {
     return locationStrategyFor(scrollBar).thumbLocation(scrollBar, fraction);
   }
 
-  private int maximumMinusMinimum(final JScrollBar scrollBar) {
-    return new MaximumMinusMinimumTask(scrollBar).run();
-  }
-
-  private final class MaximumMinusMinimumTask extends GuiQuery<Integer> {
-    private final JScrollBar scrollBar;
-
-    MaximumMinusMinimumTask(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-
-    protected Integer executeInEDT() throws Throwable {
-      return scrollBar.getMaximum() - scrollBar.getMinimum();
-    }
+  private int maximumMinusMinimum(JScrollBar scrollBar) {
+    MinimumAndMaximum minAndMax = minAndMaxOf(scrollBar);
+    return minAndMax.maximum - minAndMax.minimum;
   }
 
   /**
@@ -119,17 +111,19 @@ public final class JScrollBarLocation {
   }
 
   private JScrollBarLocationStrategy locationStrategyFor(JScrollBar scrollBar) {
-    return strategyMap.get(orientationOf(scrollBar));
+    return strategyMap.get(JScrollBarOrientationQuery.orientationOf(scrollBar));
   }
 
-  private int orientationOf(final JScrollBar scrollBar) {
-    return new GetOrientationTask(scrollBar).run();
-  }
-
-  private static class GetOrientationTask extends GuiQuery<Integer> {
+  private static class JScrollBarOrientationQuery extends GuiQuery<Integer> {
+    
+    // TODO make top-level
     private final JScrollBar scrollBar;
 
-    GetOrientationTask(JScrollBar scrollBar) {
+    static Integer orientationOf(JScrollBar scrollBar) {
+      return GuiActionRunner.execute(new JScrollBarOrientationQuery(scrollBar));
+    }
+    
+    private JScrollBarOrientationQuery(JScrollBar scrollBar) {
       this.scrollBar = scrollBar;
     }
 

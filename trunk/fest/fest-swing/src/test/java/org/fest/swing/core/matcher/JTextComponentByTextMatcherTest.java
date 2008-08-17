@@ -23,6 +23,7 @@ import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -35,7 +36,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String text = "Hello";
     JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withText(text);
-    JTextField textField = textField(text);
+    JTextField textField = new JTextField(text);
     assertThat(matcher.matches(textField)).isTrue();
   }
   
@@ -47,59 +48,55 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    String text = "Hello";
-    JTextField textField = textField(text);
-    TestWindow frame = windowWith(textField);
+    MyWindow window = MyWindow.showNew();
     try {
-      frame.display();
-      JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing(text);
-      assertThat(matcher.matches(textField)).isTrue();
+      JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing("Hello");
+      assertThat(matcher.matches(window.textField)).isTrue();
     } finally {
-      frame.destroy();
+      window.destroy();
     }
   } 
   
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String text = "Hello";
     JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing(text);
-    JTextField textField = textField(text);
+    JTextField textField = new JTextField(text);
     assertThat(matcher.matches(textField)).isFalse();    
   }
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    JTextField textField = textField("Bye");
-    TestWindow frame = windowWith(textField);
+    MyWindow window = MyWindow.showNew();
     try {
-      frame.display();
-      JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing("Hello");
-      assertThat(matcher.matches(textField)).isFalse();
+      JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing("Bye");
+      assertThat(matcher.matches(window.textField)).isFalse();
     } finally {
-      frame.destroy();
+      window.destroy();
     }
-  }
-
-  private JTextField textField(final String text) {
-    return new GuiQuery<JTextField>() {
-      protected JTextField executeInEDT() {
-        return new JTextField(text);
-      }
-    }.run();
-  }
-  
-  private TestWindow windowWith(final JTextField textField) {
-    return new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        TestWindow f = new TestWindow(JTextComponentByTextMatcher.class);
-        f.add(textField);
-        return f;
-      }
-    }.run();
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
     JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing("Hello");
     JTextField textField = new JTextField("Bye");
     assertThat(matcher.matches(textField)).isFalse();    
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+    
+    final JTextField textField = new JTextField("Hello");
+    
+    MyWindow() {
+      super(JLabelByTextMatcherTest.class);
+      addComponents(textField);
+    }
   }
 }

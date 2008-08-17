@@ -19,6 +19,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the element at a given index in a
  * <code>{@link JList}</code>.
@@ -32,7 +34,7 @@ class JListElementAtIndexQuery extends GuiQuery<Object> {
   private final int index;
 
   static Object elementAt(JList list, int index) {
-    return new JListElementAtIndexQuery(list, index).run();
+    return execute(new JListElementAtIndexQuery(list, index));
   }
 
   private JListElementAtIndexQuery(JList list, int index) {

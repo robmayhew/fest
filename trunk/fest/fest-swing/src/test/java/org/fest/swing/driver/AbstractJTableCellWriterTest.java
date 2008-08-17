@@ -38,6 +38,7 @@ import org.fest.swing.testing.ClickRecorder;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -58,12 +59,16 @@ public class AbstractJTableCellWriterTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = new AbstractJTableCellWriterStub(robot);
-    frame = new GuiQuery<TableDialogEditDemoFrame>() {
+    frame = newFrame();
+    robot.showWindow(frame, new Dimension(500, 100));
+  }
+
+  private static TableDialogEditDemoFrame newFrame() {
+    return execute(new GuiQuery<TableDialogEditDemoFrame>() {
       protected TableDialogEditDemoFrame executeInEDT() {
         return new TableDialogEditDemoFrame();
       }
-    }.run();
-    robot.showWindow(frame, new Dimension(500, 100));
+    });
   }
 
   @AfterMethod public void tearDown() {

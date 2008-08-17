@@ -18,6 +18,8 @@ import java.awt.Dialog;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the title of a 
  * <code>{@link Dialog}</code>.
@@ -34,7 +36,7 @@ public final class DialogTitleQuery extends GuiQuery<String> {
    * @return the title of the given <code>Dialog</code>.
    */
   public static String titleOf(Dialog dialog) {
-    return new DialogTitleQuery(dialog).run();
+    return execute(new DialogTitleQuery(dialog));
   }
 
   private DialogTitleQuery(Dialog dialog) {

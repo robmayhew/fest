@@ -43,12 +43,13 @@ import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -63,22 +64,18 @@ import static org.fest.swing.util.AWT.centerOf;
 public class RobotFixtureTest {
 
   private Robot robot;
-  private MyFrame frame;
+  private MyWindow window;
   private JTextField textFieldWithPopup;
   private JTextField textFieldWithoutPopup;
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    textFieldWithPopup = frame.textFieldWithPopup;
-    textFieldWithoutPopup = frame.textFieldWithoutPopup;
-    robot.showWindow(frame); // implicitly test 'showWindow(Window)'
-    assertThat(isShowing(frame)).isTrue();
-    assertThat(locationOnScreenOf(frame)).isEqualTo(new Point(100, 100));
+    window = MyWindow.showNew();
+    textFieldWithPopup = window.textFieldWithPopup;
+    textFieldWithoutPopup = window.textFieldWithoutPopup;
+    robot.showWindow(window); // implicitly test 'showWindow(Window)'
+    assertThat(isShowing(window)).isTrue();
+    assertThat(locationOnScreenOf(window)).isEqualTo(new Point(100, 100));
   }
 
   @AfterMethod public void tearDown() {
@@ -101,7 +98,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldNotPackWindowAsSpecified() {
-    class MyWindow extends JWindow {
+    class WindowToShow extends JWindow {
       private static final long serialVersionUID = 1L;
       private boolean packed;
 
@@ -113,11 +110,15 @@ public class RobotFixtureTest {
       boolean packed() { return packed; }
     }
     Dimension size = new Dimension(100, 100);
-    MyWindow window = new MyWindow();
-    robot.showWindow(window, size, false);
-    assertThat(sizeOf(window)).isEqualTo(size);
-    assertThat(window.packed()).isFalse();
-    assertThat(locationOnScreenOf(window)).isEqualTo(new Point(0, 0));
+    WindowToShow w = execute(new GuiQuery<WindowToShow>() {
+      protected WindowToShow executeInEDT() {
+        return new WindowToShow();
+      }
+    });
+    robot.showWindow(w, size, false);
+    assertThat(sizeOf(w)).isEqualTo(size);
+    assertThat(w.packed()).isFalse();
+    assertThat(locationOnScreenOf(w)).isEqualTo(new Point(0, 0));
   }
 
   public void shouldClickComponent() {
@@ -246,7 +247,7 @@ public class RobotFixtureTest {
   public void shouldReturnActivePopupMenu() {
     robot.showPopupMenu(textFieldWithPopup);
     JPopupMenu found = robot.findActivePopupMenu();
-    assertThat(found).isSameAs(frame.popupMenu);
+    assertThat(found).isSameAs(window.popupMenu);
   }
 
   public void shouldReturnNullIfActivePopupMenuNotFound() {
@@ -294,7 +295,7 @@ public class RobotFixtureTest {
   }
 
   private JPopupMenu popupMenu() {
-    return frame.popupMenu;
+    return window.popupMenu;
   }
 
   public void shouldPassIfNoJOptionPaneIsShowing() {
@@ -302,7 +303,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldFailIfJOptionPaneIsShowingAndExpectingNotShowing() throws Exception {
-    robot.click(frame.button);
+    robot.click(window.button);
     pause(500);
     try {
       robot.requireNoJOptionPaneIsShowing();
@@ -362,13 +363,13 @@ public class RobotFixtureTest {
 
     @Override public String toString() {
       StringBuilder b = new StringBuilder();
-      b.append("type=").append(type).append(", ");
+      b.append("[type=").append(type).append(", ");
       b.append("keyCode=").append(keyCode).append("]");
       return b.toString();
     }
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textFieldWithPopup = new JTextField("With Pop-up Menu");
@@ -376,14 +377,20 @@ public class RobotFixtureTest {
     final JButton button = new JButton("Click Me");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
-    MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+
+    MyWindow() {
       super(RobotFixtureTest.class);
-      add(textFieldWithPopup);
-      add(textFieldWithoutPopup);
-      add(button);
+      addComponents(textFieldWithPopup, textFieldWithoutPopup, button);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          JOptionPane.showMessageDialog(MyFrame.this, "A Message");
+          JOptionPane.showMessageDialog(MyWindow.this, "A Message");
         }
       });
       textFieldWithPopup.setComponentPopupMenu(popupMenu);

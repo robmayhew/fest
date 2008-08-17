@@ -22,6 +22,8 @@ import javax.swing.table.TableCellEditor;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> of a
  * <code>{@link JTable}</code> cell editor.
@@ -35,7 +37,7 @@ class JTableCellEditorQuery extends GuiQuery<Component> {
   private final int column;
 
   static Component cellEditorIn(JTable table, int row, int column) {
-    return new JTableCellEditorQuery(table, row, column).run();
+    return execute(new JTableCellEditorQuery(table, row, column));
   }
 
   private JTableCellEditorQuery(JTable table, int row, int column) {

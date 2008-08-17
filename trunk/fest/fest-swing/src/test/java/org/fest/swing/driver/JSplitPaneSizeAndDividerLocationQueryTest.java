@@ -28,13 +28,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JSplitPaneSizeAndDividerLocationQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JSplitPaneSizeAndDividerLocationQueryTest {
+@Test(groups = EDT_QUERY)
+public class JSplitPaneSizeAndDividerLocationQueryTest {
 
   private JSplitPane splitPane;
   private Dimension size;

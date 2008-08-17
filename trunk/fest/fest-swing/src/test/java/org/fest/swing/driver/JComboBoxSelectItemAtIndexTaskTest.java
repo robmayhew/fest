@@ -1,5 +1,5 @@
 /*
- * Created on Aug 6, 2008
+ * Created on Jul 21, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,38 +13,42 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.driver;
 
-import java.awt.Color;
-import java.awt.Component;
+import javax.swing.JComboBox;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
-import static java.awt.Color.BLUE;
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 /**
- * Tests for <code>{@link GetComponentBackgroundTask}</code>.
+ * Tests for <code>{@link JComboBoxSelectItemAtIndexTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class GetComponentBackgroundTaskTest {
+public class JComboBoxSelectItemAtIndexTaskTest {
 
-  public void shouldReturnComponentBackground() {
-    final Component component = createMock(Component.class);
-    final Color background = BLUE;
-    new EasyMockTemplate(component) {
+  private JComboBox comboBox;
+  private int index;
+
+  @BeforeMethod public void setUp() {
+    comboBox = createMock(JComboBox.class);
+    index = 6;
+  }
+  
+  @Test public void shouldSetSelectedIndex() {
+    new EasyMockTemplate(comboBox) {
       protected void expectations() {
-        expect(component.getBackground()).andReturn(background);
+        comboBox.setSelectedIndex(index);
+        expectLastCall().once();
       }
 
       protected void codeToTest() {
-        assertThat(GetComponentBackgroundTask.backgroundOf(component)).isSameAs(background);
+        JComboBoxSelectItemAtIndexTask.selectItemIn(comboBox, index).executeInEDT();
       }
     }.run();
   }

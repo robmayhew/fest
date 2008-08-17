@@ -19,6 +19,8 @@ import javax.swing.JSlider;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the minimum and maximum values supported
  * by a <code>{@link JSlider}</code>.
@@ -30,7 +32,7 @@ class JSliderMinAndMaxQuery extends GuiQuery<MinimumAndMaximum> {
   private final JSlider slider;
 
   static MinimumAndMaximum minAndMaxOf(JSlider slider) {
-    return new JSliderMinAndMaxQuery(slider).run();
+    return execute(new JSliderMinAndMaxQuery(slider));
   }
   
   private JSliderMinAndMaxQuery(JSlider slider) {

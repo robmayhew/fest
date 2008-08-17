@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of items in a
  * <code>{@link JComboBox}</code>.
@@ -30,7 +32,7 @@ class JComboBoxItemCountQuery extends GuiQuery<Integer> {
   private final JComboBox comboBox;
 
   static int itemCountOf(JComboBox comboBox) {
-    return new JComboBoxItemCountQuery(comboBox).run();
+    return execute(new JComboBoxItemCountQuery(comboBox));
   }
 
   private JComboBoxItemCountQuery(JComboBox comboBox) {

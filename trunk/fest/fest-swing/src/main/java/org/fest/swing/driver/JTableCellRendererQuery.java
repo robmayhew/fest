@@ -22,6 +22,8 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular cell in a <code>{@link JTable}</code>.
@@ -36,7 +38,7 @@ class JTableCellRendererQuery extends GuiQuery<Component> {
   private final int column;
 
   static Component cellRendererIn(JTable table, int row, int column) {
-    return new JTableCellRendererQuery(table, row, column).run();
+    return execute(new JTableCellRendererQuery(table, row, column));
   }
 
   private JTableCellRendererQuery(JTable table, int row, int column) {

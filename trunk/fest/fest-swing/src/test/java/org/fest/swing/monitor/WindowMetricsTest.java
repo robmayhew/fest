@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestWindow.showInTest;
+import static org.fest.swing.testing.TestWindow.showNewInTest;
 
 /**
  * Tests for <code>{@link WindowMetrics}</code>.
@@ -38,7 +38,7 @@ public class WindowMetricsTest {
   private TestWindow frame;
   
   @BeforeMethod public void setUp() {
-    frame = showInTest(getClass());
+    frame = showNewInTest(getClass());
     metrics = new WindowMetrics(frame);
   }
   

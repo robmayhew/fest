@@ -28,6 +28,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -36,6 +37,7 @@ import static javax.swing.JFileChooser.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -58,13 +60,9 @@ public class JFileChooserDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JFileChooserDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    fileChooser = frame.fileChooser;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    fileChooser = window.fileChooser;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -84,18 +82,22 @@ public class JFileChooserDriverTest {
   public void shouldSelectFile() {
     File temporaryFile = newTemporaryFile();
     driver.selectFile(fileChooser, temporaryFile);
-    File selectedFile = new GuiQuery<File>() {
-      protected File executeInEDT() {
-        return fileChooser.getSelectedFile();
-      }
-    }.run();
+    File selectedFile = selectedFileIn(fileChooser);
     assertThat(selectedFile).isSameAs(temporaryFile);
     temporaryFile.delete();
   }
 
+  private static File selectedFileIn(final JFileChooser fileChooser) {
+    return execute(new GuiQuery<File>() {
+      protected File executeInEDT() {
+        return fileChooser.getSelectedFile();
+      }
+    });
+  }
+
   public void shouldThrowErrorIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
     File temporaryFile = newTemporaryFile();
-    setFileSelectionMode(DIRECTORIES_ONLY);
+    setFileSelectionMode(fileChooser, DIRECTORIES_ONLY);
     try {
       driver.selectFile(fileChooser, temporaryFile);
       fail();
@@ -106,10 +108,9 @@ public class JFileChooserDriverTest {
     }
   }
 
-  @Test(dependsOnMethods = "shouldSelectFile")
   public void shouldThrowErrorIfChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
     File temporaryFolder = newTemporaryFolder();
-    setFileSelectionMode(FILES_ONLY);
+    setFileSelectionMode(fileChooser, FILES_ONLY);
     try {
       driver.selectFile(fileChooser, temporaryFolder);
       fail();
@@ -120,9 +121,9 @@ public class JFileChooserDriverTest {
     }
   }
 
-  private void setFileSelectionMode(final int mode) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
+  private static void setFileSelectionMode(final JFileChooser fileChooser, final int mode) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         fileChooser.setFileSelectionMode(mode);
       }
     });
@@ -131,17 +132,17 @@ public class JFileChooserDriverTest {
   public void shouldFindApproveButton() {
     JButton approveButton = driver.approveButton(fileChooser);
     assertThat(approveButton).isNotNull();
-    assertThat(textOf(approveButton)).isEqualTo(approveButtonText());
+    assertThat(textOf(approveButton)).isEqualTo(approveButtonText(fileChooser));
   }
 
-  private String approveButtonText() {
-    return new GuiQuery<String>() {
+  private static String approveButtonText(final JFileChooser fileChooser) {
+    return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         String text = fileChooser.getApproveButtonText();
         if (!isEmpty(text)) return text;
         return fileChooser.getUI().getApproveButtonText(fileChooser);
       }
-    }.run();
+    });
   }
 
   public void shouldFindFileNameTextBox() {
@@ -155,24 +156,30 @@ public class JFileChooserDriverTest {
     assertThat(userHome.isDirectory()).isTrue();
     String userHomeAbsolutePath = userHome.getAbsolutePath();
     driver.setCurrentDirectory(fileChooser, userHome);
-    assertThat(userHomeAbsolutePath).isEqualTo(currentDirectoryAbsolutePath());
+    assertThat(userHomeAbsolutePath).isEqualTo(currentDirectoryAbsolutePath(fileChooser));
   }
 
-  private String currentDirectoryAbsolutePath() {
-    File currentDirectory = new GuiQuery<File>() {
+  private static String currentDirectoryAbsolutePath(final JFileChooser fileChooser) {
+    File currentDirectory = execute(new GuiQuery<File>() {
       protected File executeInEDT() {
         return fileChooser.getCurrentDirectory();
       }
-    }.run();
+    });
     return currentDirectory.getAbsolutePath();
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JFileChooser fileChooser = new JFileChooser();
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
+    MyWindow() {
       super(JFileChooserDriverTest.class);
       fileChooser.setCurrentDirectory(temporaryFolder());
       fileChooser.setDialogType(OPEN_DIALOG);

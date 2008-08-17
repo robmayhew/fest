@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
@@ -58,14 +57,10 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
   }
 
   private Object[] contentsOf(final JComboBox comboBox) {
-    return new GuiQuery<Object[]>() {
-      protected Object[] executeInEDT() {
-        List<Object> contents = new ArrayList<Object>();
-        int count = comboBox.getItemCount();
-        for (int i = 0; i < count; i++) contents.add(comboBox.getItemAt(i));
-        return contents.toArray();
-      }
-    }.run();
+    List<Object> contents = new ArrayList<Object>();
+    int count = comboBox.getItemCount();
+    for (int i = 0; i < count; i++) contents.add(comboBox.getItemAt(i));
+    return contents.toArray();
   }
 
   /**

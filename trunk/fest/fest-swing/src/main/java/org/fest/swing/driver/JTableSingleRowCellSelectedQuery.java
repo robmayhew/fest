@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a 
  * <code>{@link JTable}</code> is selected or not.
@@ -32,7 +34,7 @@ class JTableSingleRowCellSelectedQuery extends GuiQuery<Boolean> {
   private final int column;
 
   static boolean isCellSelected(JTable table, int row, int column) {
-    return new JTableSingleRowCellSelectedQuery(table, row, column).run();
+    return execute(new JTableSingleRowCellSelectedQuery(table, row, column));
   }
   
   JTableSingleRowCellSelectedQuery(JTable table, int row, int column) {

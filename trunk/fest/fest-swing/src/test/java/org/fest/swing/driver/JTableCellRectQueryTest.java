@@ -28,12 +28,15 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+
 /**
  * Tests for <code>{@link JTableCellRectQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JTableCellRectQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTableCellRectQueryTest {
 
   private JTable table;
   private int row;

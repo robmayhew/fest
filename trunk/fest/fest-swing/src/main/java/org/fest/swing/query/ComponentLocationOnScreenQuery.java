@@ -19,6 +19,8 @@ import java.awt.Point;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the location of a 
  * <code>{@link Component}</code> on screen.
@@ -37,7 +39,7 @@ public final class ComponentLocationOnScreenQuery extends GuiQuery<Point> {
    * @return the location of the given <code>Component</code> on screen.
    */
   public static Point locationOnScreenOf(Component component) {
-    return new ComponentLocationOnScreenQuery(component).run();
+    return execute(new ComponentLocationOnScreenQuery(component));
   }
 
   private ComponentLocationOnScreenQuery(Component component) {

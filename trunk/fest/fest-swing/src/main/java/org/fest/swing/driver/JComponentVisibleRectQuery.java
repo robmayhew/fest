@@ -21,6 +21,8 @@ import javax.swing.JComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the "visible rectangle" of a 
  * <code>{@link JComponent}</code>.
@@ -33,7 +35,7 @@ class JComponentVisibleRectQuery extends GuiQuery<Rectangle> {
   private final JComponent component;
 
   static Rectangle visibleRectOf(JComponent component) {
-    return new JComponentVisibleRectQuery(component).run();
+    return execute(new JComponentVisibleRectQuery(component));
   }
   
   private JComponentVisibleRectQuery(JComponent component) {

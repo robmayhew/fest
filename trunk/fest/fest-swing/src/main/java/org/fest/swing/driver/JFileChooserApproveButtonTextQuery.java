@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.isEmpty;
 
 /**
@@ -32,7 +33,7 @@ class JFileChooserApproveButtonTextQuery extends GuiQuery<String> {
   private final JFileChooser fileChooser;
 
   static String approveButtonTextFrom(JFileChooser fileChooser) {
-    return new JFileChooserApproveButtonTextQuery(fileChooser).run();
+    return execute(new JFileChooserApproveButtonTextQuery(fileChooser));
   }
   
   private JFileChooserApproveButtonTextQuery(JFileChooser fileChooser) {

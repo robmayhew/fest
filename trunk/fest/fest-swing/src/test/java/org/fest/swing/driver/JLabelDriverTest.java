@@ -24,11 +24,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -47,13 +49,9 @@ public class JLabelDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JLabelDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    label = frame.label;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    label = window.label;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -61,12 +59,12 @@ public class JLabelDriverTest {
   }
 
   public void shouldPassIfHasExpectedText() {
-    setLabelText("Hi");
+    setLabelText(label, "Hi");
     driver.requireText(label, "Hi");
   }
 
   public void shouldFailIfDoesNotHaveExpectedText() {
-    setLabelText("Hi");
+    setLabelText(label, "Hi");
     try {
       driver.requireText(label, "Bye");
       fail();
@@ -75,20 +73,26 @@ public class JLabelDriverTest {
     }
   }
 
-  private void setLabelText(final String text) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
+  private static void setLabelText(final JLabel label, final String text) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         label.setText(text);
       }
     });
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JLabel label = new JLabel("This is a test");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JTextComponentDriverTest.class);
       add(label);
       setPreferredSize(new Dimension(200, 200));

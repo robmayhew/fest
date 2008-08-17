@@ -32,6 +32,7 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -47,16 +48,12 @@ public class JPopupMenuDriverTest {
 
   private Robot robot;
   private JPopupMenuDriver driver;
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    robot.showWindow(frame);
+    window = MyWindow.newWindow();
+    robot.showWindow(window);
     driver = new JPopupMenuDriver(robot);
   }
 
@@ -70,23 +67,7 @@ public class JPopupMenuDriverTest {
   }
 
   public void shouldReturnDashIfNotMenuItem() {
-    class MyMenuElement implements MenuElement {
-      private final JButton button = new JButton();
-
-      public Component getComponent() {
-        return button;
-      }
-
-      public MenuElement[] getSubElements() { return null; }
-      public void menuSelectionChanged(boolean isIncluded) {}
-      public void processKeyEvent(KeyEvent event, MenuElement[] path, MenuSelectionManager manager) {}
-      public void processMouseEvent(MouseEvent event, MenuElement[] path, MenuSelectionManager manager) {}
-    }
-    MenuElement e = new GuiQuery<MenuElement>() {
-      protected MenuElement executeInEDT() throws Throwable {
-        return new MyMenuElement();
-      }
-    }.run();
+    MenuElement e = MyMenuElement.newMenuElement();
     assertThat(JPopupMenuDriver.asString(e)).isEqualTo("-");
   }
 
@@ -97,7 +78,7 @@ public class JPopupMenuDriverTest {
 
   public void shouldFindMenuItemByName() {
     JMenuItem found = driver.menuItem(popupMenu(), "first");
-    assertThat(found).isSameAs(frame.menuItem1);
+    assertThat(found).isSameAs(window.menuItem1);
   }
 
   public void shouldFindMenuItemWithGivenMatcher() {
@@ -106,24 +87,28 @@ public class JPopupMenuDriverTest {
         return "Second".equals(textOf(menuItem));
       }
     });
-    assertThat(found).isSameAs(frame.menuItem2);
+    assertThat(found).isSameAs(window.menuItem2);
   }
 
   private JPopupMenu popupMenu() {
-    return frame.popupMenu;
+    return window.popupMenu;
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField withPopup = new JTextField("With Pop-up Menu");
-    
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
-    
     final JMenuItem menuItem1 = new JMenuItem("First");
     final JMenuItem menuItem2 = new JMenuItem("Second");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JPopupMenuDriverTest.class);
       add(withPopup);
       withPopup.setComponentPopupMenu(popupMenu);
@@ -131,5 +116,28 @@ public class JPopupMenuDriverTest {
       menuItem1.setName("first");
       popupMenu.add(menuItem2);
     }
+  }
+
+  private static class MyMenuElement implements MenuElement {
+    private final JButton button = new JButton();
+
+    static MenuElement newMenuElement() {
+      return execute(new GuiQuery<MenuElement>() {
+        protected MenuElement executeInEDT() throws Throwable {
+          return new MyMenuElement();
+        }
+      });
+    }
+    
+    MyMenuElement() {}
+    
+    public Component getComponent() {
+      return button;
+    }
+
+    public MenuElement[] getSubElements() { return null; }
+    public void menuSelectionChanged(boolean isIncluded) {}
+    public void processKeyEvent(KeyEvent event, MenuElement[] path, MenuSelectionManager manager) {}
+    public void processMouseEvent(MouseEvent event, MenuElement[] path, MenuSelectionManager manager) {}
   }
 }

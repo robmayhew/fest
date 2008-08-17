@@ -18,6 +18,8 @@ import java.awt.Component;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code> 
  * is visible or not.
@@ -36,7 +38,7 @@ public final class ComponentVisibleQuery extends GuiQuery<Boolean> {
    * @return <code>true</code> if the given <code>Component</code> is visible, <code>false</code> otherwise.
    */
   public static boolean isVisible(Component component) {
-    return new ComponentVisibleQuery(component).run();
+    return execute(new ComponentVisibleQuery(component));
   }
 
   private ComponentVisibleQuery(Component component) {

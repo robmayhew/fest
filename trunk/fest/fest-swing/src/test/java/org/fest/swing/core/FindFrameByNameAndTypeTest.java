@@ -23,6 +23,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 import static org.fest.swing.testing.TestGroups.*;
@@ -35,17 +36,13 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, BUG })
 public class FindFrameByNameAndTypeTest {
 
-  private MyFrame frame;
+  private MyWindow window;
   private Robot robot;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    robot.showWindow(frame);
+    window = MyWindow.showNew();
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -59,10 +56,18 @@ public class FindFrameByNameAndTypeTest {
     } catch (WaitTimedOutError expected) {}
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    public MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+
+    MyWindow() {
       super(FindFrameByNameAndTypeTest.class);
       setName("myFrame");
     }

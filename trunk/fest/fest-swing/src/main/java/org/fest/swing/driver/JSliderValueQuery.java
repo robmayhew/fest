@@ -18,6 +18,8 @@ import javax.swing.JSlider;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the value of a 
  * <code>{@link JSlider}</code>.
@@ -30,7 +32,7 @@ final class JSliderValueQuery extends GuiQuery<Integer> {
   private final JSlider slider;
 
   static int valueOf(JSlider slider) {
-    return new JSliderValueQuery(slider).run();
+    return execute(new JSliderValueQuery(slider));
   }
 
   private JSliderValueQuery(JSlider slider) {

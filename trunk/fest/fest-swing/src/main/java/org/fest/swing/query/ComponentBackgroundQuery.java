@@ -12,12 +12,14 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.query;
 
 import java.awt.Color;
 import java.awt.Component;
 
 import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the background color of a
@@ -26,18 +28,29 @@ import org.fest.swing.core.GuiQuery;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class GetComponentBackgroundTask extends GuiQuery<Color> {
+public final class ComponentBackgroundQuery extends GuiQuery<Color> {
 
   private final Component component;
 
-  static Color backgroundOf(Component component) {
-    return new GetComponentBackgroundTask(component).run();
+  /**
+   * Returns the background color of the given <code>{@link Component}</code>. This action is executed in the event
+   * dispatch thread.
+   * @param component the given <code>Component</code>.
+   * @return the background color of the given <code>Component</code>.
+   */
+  public static Color backgroundOf(Component component) {
+    return execute(new ComponentBackgroundQuery(component));
   }
 
-  private GetComponentBackgroundTask(Component component) {
+  private ComponentBackgroundQuery(Component component) {
     this.component = component;
   }
 
+  /**
+   * Returns the background color of this query's <code>{@link Component}</code>. This action is executed in the event
+   * dispatch thread.
+   * @return the background color of this query's <code>Component</code>.
+   */
   protected Color executeInEDT() {
     return component.getBackground();
   }

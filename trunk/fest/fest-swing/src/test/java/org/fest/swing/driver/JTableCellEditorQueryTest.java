@@ -32,34 +32,30 @@ import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableCellEditorQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
+@Test(groups = { GUI, EDT_QUERY })
 public class JTableCellEditorQueryTest {
 
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.showNew();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
-  @Test(dataProvider = "editorTypes", groups = GUI)
+  @Test(dataProvider = "editorTypes", groups = { GUI, EDT_QUERY })
   public void shouldReturnEditorComponentOfJTableCell(int column, Class<?> editorType) {
-    Component editor = JTableCellEditorQuery.cellEditorIn(frame.table, 0, column);
+    Component editor = JTableCellEditorQuery.cellEditorIn(window.table, 0, column);
     assertThat(editor).isInstanceOf(editorType);
   }
 
@@ -71,12 +67,22 @@ public class JTableCellEditorQueryTest {
     };
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTable table;
 
-    MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    MyWindow() {
       super(JTableCellEditorQueryTest.class);
       TableRenderDemo newContentPane = new TableRenderDemo();
       newContentPane.setOpaque(true); // content panes must be opaque

@@ -32,6 +32,8 @@ import org.fest.swing.testing.TestGroups;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Tests for <code>{@link ComponentPerformDefaultAccessibleActionTask}</code>.
  *
@@ -47,11 +49,11 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
   @BeforeMethod public void setUp() {
     context = createMock(AccessibleContext.class);
     action = createMock(AccessibleAction.class);
-    component = new GuiQuery<Component>() {
-      protected Component executeInEDT() throws Throwable {
+    component = execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
         return new MyComponent(context);
       }
-    }.run();
+    });
   }
 
   @Test public void shouldExecuteFirstActionInAccessibleAction() {

@@ -19,6 +19,8 @@ import javax.swing.JSplitPane;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the size and divider location of a
  * <code>{@link JSplitPane}</code>.
@@ -30,7 +32,7 @@ public class JSplitPaneSizeAndDividerLocationQuery extends GuiQuery<JSplitPaneSi
   private final JSplitPane splitPane;
 
   static JSplitPaneSizeAndDividerLocation sizeAndDividerLocationOf(JSplitPane splitPane) {
-    return new JSplitPaneSizeAndDividerLocationQuery(splitPane).run();
+    return execute(new JSplitPaneSizeAndDividerLocationQuery(splitPane));
   }
   
   private JSplitPaneSizeAndDividerLocationQuery(JSplitPane splitPane) {

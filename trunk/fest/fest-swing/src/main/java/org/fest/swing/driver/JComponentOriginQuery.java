@@ -21,6 +21,8 @@ import javax.swing.JComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the origin of a
  * <code>{@link JComponent}</code>.
@@ -32,7 +34,7 @@ class JComponentOriginQuery extends GuiQuery<Point> {
   private final JComponent component;
 
   static Point originOf(JComponent component) {
-    return new JComponentOriginQuery(component).run();
+    return execute(new JComponentOriginQuery(component));
   }
   
   private JComponentOriginQuery(JComponent component) {

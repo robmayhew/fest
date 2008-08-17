@@ -22,6 +22,8 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that converts the location in the model of a
  * <code>{@link JTextComponent}</code> to a place in the view coordinate system.
@@ -34,7 +36,7 @@ class JTextComponentModelToViewQuery extends GuiQuery<Rectangle> {
   private final int pos;
 
   static Rectangle modelToView(JTextComponent textBox, int pos) {
-    return new JTextComponentModelToViewQuery(textBox, pos).run();
+    return execute(new JTextComponentModelToViewQuery(textBox, pos));
   }
   
   private JTextComponentModelToViewQuery(JTextComponent textBox, int pos) {

@@ -26,7 +26,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.testing.TestWindow.showInTest;
+import static org.fest.swing.testing.TestWindow.showNewInTest;
 
 /**
  * Tests for <code>{@link AWT}</code>.
@@ -48,7 +48,7 @@ public class AWTTest {
   }
 
   @Test public void shouldReturnInsetsFromContainer() {
-    TestWindow frame = showInTest(getClass());
+    TestWindow frame = showNewInTest(getClass());
     Insets insets = AWT.insetsFrom(frame);
     assertThat(insets).isEqualTo(frame.getInsets());
     frame.destroy();

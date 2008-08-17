@@ -27,13 +27,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JComboBoxEditorAccessibleQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JComboBoxEditorAccessibleQueryTest {
+@Test(groups = EDT_QUERY)
+public class JComboBoxEditorAccessibleQueryTest {
 
   private JComboBox comboBox;
 
@@ -54,7 +56,7 @@ import static org.fest.assertions.Assertions.assertThat;
     }.run();
   }
 
-  @Test(dataProvider = "notEditableOrDisabled")
+  @Test(dataProvider = "notEditableOrDisabled", groups = EDT_QUERY)
   public void shouldReturnFalseIfJComboBoxIsNotEditableOrNotEnabled(final boolean editable, final boolean enabled) {
     new EasyMockTemplate(comboBox) {
       protected void expectations() {

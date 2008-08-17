@@ -27,6 +27,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -41,12 +42,16 @@ public class JTabbedPaneLocationTest {
   private JTabbedPaneLocation location;
 
   @BeforeMethod public void setUp() {
-    tabbedPane = new GuiQuery<JTabbedPane>() {
-      protected JTabbedPane executeInEDT() throws Throwable {
+    tabbedPane = newTabbedPane();
+    location = new JTabbedPaneLocation();
+  }
+
+  private static JTabbedPane newTabbedPane() {
+    return execute(new GuiQuery<JTabbedPane>() {
+      protected JTabbedPane executeInEDT() {
         return new MyTabbedPane();
       }
-    }.run();
-    location = new JTabbedPaneLocation();
+    });
   }
 
   public void shouldReturnIndexOfTabTitle() {

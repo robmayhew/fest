@@ -19,6 +19,8 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a 
  * <code>{@link JTextComponent}</code> is editable or not.
@@ -30,7 +32,7 @@ class JTextComponentEditableQuery extends GuiQuery<Boolean> {
   private final JTextComponent textBox;
 
   static boolean isEditable(JTextComponent textBox) {
-    return new JTextComponentEditableQuery(textBox).run();
+    return execute(new JTextComponentEditableQuery(textBox));
   }
   
   private JTextComponentEditableQuery(JTextComponent textBox) {

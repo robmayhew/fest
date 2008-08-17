@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JInternalFrameClosableQuery}</code>.
@@ -34,7 +35,8 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class JInternalFrameClosableQueryTest {
+@Test(groups = EDT_QUERY)
+public class JInternalFrameClosableQueryTest {
 
   private JInternalFrame internalFrame;
 
@@ -42,7 +44,7 @@ import static org.fest.assertions.Assertions.assertThat;
     internalFrame = createMock(JInternalFrame.class);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
   public void shouldIndicateIfJInternalFrameIsClosable(final boolean closable) {
     new EasyMockTemplate(internalFrame) {
       protected void expectations() {

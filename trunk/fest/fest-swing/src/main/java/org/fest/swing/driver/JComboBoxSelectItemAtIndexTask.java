@@ -25,16 +25,16 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz 
  */
-class JComboBoxSelectedItemAtIndexTask extends GuiTask {
+class JComboBoxSelectItemAtIndexTask extends GuiTask {
   
   private final JComboBox comboBox;
   private final int index;
 
-  static JComboBoxSelectedItemAtIndexTask selectItemIn(JComboBox comboBox, int index) {
-    return new JComboBoxSelectedItemAtIndexTask(comboBox, index);
+  static JComboBoxSelectItemAtIndexTask selectItemIn(JComboBox comboBox, int index) {
+    return new JComboBoxSelectItemAtIndexTask(comboBox, index);
   }
   
-  private JComboBoxSelectedItemAtIndexTask(JComboBox comboBox, int index) {
+  private JComboBoxSelectItemAtIndexTask(JComboBox comboBox, int index) {
     this.comboBox = comboBox;
     this.index = index;
   }

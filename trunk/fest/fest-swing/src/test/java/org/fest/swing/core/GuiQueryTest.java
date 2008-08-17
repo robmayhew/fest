@@ -15,11 +15,9 @@
  */
 package org.fest.swing.core;
 
-import javax.swing.SwingUtilities;
-
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery.Reference;
+import org.fest.swing.exception.ActionFailedException;
 
 import static javax.swing.SwingUtilities.isEventDispatchThread;
 
@@ -33,24 +31,17 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 @Test public class GuiQueryTest {
 
+  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldExecuteInEDTWhenNotCalledInEDT() {
     GuiQueryInEDT task = new GuiQueryInEDT();
     assertThat(isEventDispatchThread()).isFalse();
-    boolean ranFromEDT = task.run();
-    assertThat(task.calledFromEDT()).isFalse();
-    assertThat(ranFromEDT).isTrue();
+    task.run();
   }
 
-  public void shouldExecuteInEDTWhenCalledInEDT() throws Exception {
+  public void shouldExecuteInEDTWhenCalledInEDT() {
     final GuiQueryInEDT task = new GuiQueryInEDT();
-    final Reference<Boolean> ranFromEDTReference = new Reference<Boolean>();
-    SwingUtilities.invokeAndWait(new Runnable() {
-      public void run() {
-        ranFromEDTReference.target = task.run();
-      }
-    });
-    assertThat(task.calledFromEDT()).isTrue();
-    assertThat(ranFromEDTReference.target).isEqualTo(true);
+    boolean executedFromEDT = GuiActionRunner.execute(task);
+    assertThat(executedFromEDT).isTrue();
   }
 
   private static class GuiQueryInEDT extends GuiQuery<Boolean> {

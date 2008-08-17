@@ -28,6 +28,7 @@ import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -40,23 +41,16 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class FocusOwnerFinderTest {
 
-  private TestWindow frame;
+  private MyWindow window;
   private JTextField textField;
 
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        TestWindow w = new TestWindow(FocusOwnerFinder.class);
-        textField = new JTextField(20);
-        w.add(textField);
-        return w;
-      }      
-    }.run();
-    frame.display();
+    window = MyWindow.showNew();
+    window.display();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   public void shouldFindFocusOwner() {
@@ -72,7 +66,7 @@ public class FocusOwnerFinderTest {
   }
 
   public void shouldFindFocusInOwnedWindow() {
-    TestDialog dialog = new TestDialog(frame);
+    TestDialog dialog = new TestDialog(window);
     JButton button = new JButton("Click me");
     dialog.add(button);
     dialog.display();
@@ -80,5 +74,24 @@ public class FocusOwnerFinderTest {
     Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
     assertThat(focusOwner).isSameAs(button);
     dialog.destroy();
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+    
+    final JTextField textBox = new JTextField(20); 
+    
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+
+    MyWindow() {
+      super(FocusOwnerFinderTest.class);
+      addComponents(textBox);
+    }
   }
 }

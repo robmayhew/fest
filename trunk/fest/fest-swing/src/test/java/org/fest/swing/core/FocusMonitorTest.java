@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -37,45 +38,48 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class FocusMonitorTest {
 
   private FocusMonitor monitor;
-  private MyFrame frame;
+  private MyWindow window;
   
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
-    setFocusOn(frame.button);
-    monitor = FocusMonitor.addFocusMonitorTo(frame.button);
+    window = MyWindow.showNew();
+    window.display();
+    setFocusOn(window.button);
+    monitor = FocusMonitor.addFocusMonitorTo(window.button);
     assertThat(monitor.hasFocus()).isTrue();
   }
   
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
   
   public void shouldReturnFalseIfLosesFocus() {
-    setFocusOn(frame.textBox);
+    setFocusOn(window.textBox);
     assertThat(monitor.hasFocus()).isFalse();
   }
 
   public void shouldNotHaveFocusIsComponentIsNotFocusOwner() {
-    setFocusOn(frame.textBox);
-    monitor = FocusMonitor.addFocusMonitorTo(frame.button);
+    setFocusOn(window.textBox);
+    monitor = FocusMonitor.addFocusMonitorTo(window.button);
     assertThat(monitor.hasFocus()).isFalse();
   }
   
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
     final JButton button = new JButton("Click Me");
     final JTextField textBox = new JTextField(20); 
     
-    MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+
+    MyWindow() {
       super(FocusMonitorTest.class);
-      add(button);
-      add(textBox);
+      addComponents(button, textBox);
     }
   }
 }

@@ -21,6 +21,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns rectangle for the cell in a 
  * <code>{@link JTable}</code>.
@@ -34,7 +36,7 @@ class JTableCellRectQuery extends GuiQuery<Rectangle> {
   private final int column;
 
   static Rectangle cellBoundsOf(JTable table, int row, int column) {
-    return new JTableCellRectQuery(table, row, column).run();
+    return execute(new JTableCellRectQuery(table, row, column));
   }
   
   private JTableCellRectQuery(JTable table, int row, int column) {

@@ -27,13 +27,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JInternalFrameDesktopIconQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JInternalFrameDesktopIconQueryTest {
+@Test(groups = EDT_QUERY)
+public class JInternalFrameDesktopIconQueryTest {
 
   private JInternalFrame internalFrame;
   private JDesktopIcon desktopIcon;

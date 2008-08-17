@@ -23,18 +23,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.query.ComponentLocationOnScreenQuery;
 
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link ComponentLocationOnScreenQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class ComponentLocationOnScreenQueryTest {
+@Test(groups = EDT_QUERY)
+public class ComponentLocationOnScreenQueryTest {
 
   private Component component;
   private Point location;

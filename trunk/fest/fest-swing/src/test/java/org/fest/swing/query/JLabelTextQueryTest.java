@@ -21,19 +21,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.query.JLabelTextQuery;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JLabelTextQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JLabelTextQueryTest {
+@Test(groups = EDT_QUERY) public class JLabelTextQueryTest {
 
   private JLabel label;
   private String text;

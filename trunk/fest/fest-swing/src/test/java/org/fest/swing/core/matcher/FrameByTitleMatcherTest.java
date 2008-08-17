@@ -47,7 +47,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
     Class<FrameByTitleMatcher> testType = FrameByTitleMatcher.class;
-    TestWindow frame = TestWindow.showInTest(testType);
+    TestWindow frame = TestWindow.showNewInTest(testType);
     try {
       FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getSimpleName());
       assertThat(matcher.matches(frame)).isTrue();
@@ -65,7 +65,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    TestWindow frame = TestWindow.showInTest(FrameByTitleMatcher.class);
+    TestWindow frame = TestWindow.showNewInTest(FrameByTitleMatcher.class);
     try {
       FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
       assertThat(matcher.matches(frame)).isFalse();

@@ -15,10 +15,7 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
 import java.awt.Point;
-
-import javax.swing.JFrame;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -26,10 +23,10 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
+import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Frame.*;
 
@@ -48,18 +45,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class FrameDriverTest {
 
   private Robot robot;
-  private Frame frame;
+  private TestWindow frame;
   private FrameDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new GuiQuery<Frame>() {
-      protected Frame executeInEDT() {
-        return new JFrame(getClass().getName());
-      }
-    }.run();
+    frame = TestWindow.showNewInTest(getClass());
     driver = new FrameDriver(robot);
-    robot.showWindow(frame);
   }
 
   @AfterMethod public void tearDown() {

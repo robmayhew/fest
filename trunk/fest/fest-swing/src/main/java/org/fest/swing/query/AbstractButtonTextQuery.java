@@ -19,6 +19,8 @@ import javax.swing.AbstractButton;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text of an
  * <code>{@link AbstractButton}</code>.
@@ -37,7 +39,7 @@ public final class AbstractButtonTextQuery extends GuiQuery<String> {
    * @return the text of the given <code>AbstractButton</code>.
    */
   public static String textOf(AbstractButton button) {
-    return new AbstractButtonTextQuery(button).run();
+    return execute(new AbstractButtonTextQuery(button));
   }
   
   private AbstractButtonTextQuery(AbstractButton button) {

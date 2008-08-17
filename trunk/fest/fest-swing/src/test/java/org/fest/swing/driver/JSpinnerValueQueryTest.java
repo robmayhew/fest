@@ -26,12 +26,15 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+
 /**
  * Tests for <code>{@link JSpinnerValueQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JSpinnerValueQueryTest {
+@Test(groups = EDT_QUERY)
+public class JSpinnerValueQueryTest {
 
   private JSpinner spinner;
   private Object value;
@@ -41,7 +44,7 @@ import static org.easymock.classextension.EasyMock.createMock;
     value = "Hello";
   }
   
-  public void shouldReturnValueOfJSpinner() {
+  @Test(groups = EDT_QUERY) public void shouldReturnValueOfJSpinner() {
     new EasyMockTemplate(spinner) {
       protected void expectations() {
         expect(spinner.getValue()).andReturn(value);

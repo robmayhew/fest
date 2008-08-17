@@ -19,6 +19,8 @@ import java.awt.Dimension;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the size of a
  * <code>{@link Component}</code>.
@@ -36,7 +38,7 @@ public final class ComponentSizeQuery extends GuiQuery<Dimension> {
    * @return the size of the given <code>Component</code>.
    */
   public static Dimension sizeOf(Component component) {
-    return new ComponentSizeQuery(component).run();
+    return execute(new ComponentSizeQuery(component));
   }
 
   private ComponentSizeQuery(Component component) {

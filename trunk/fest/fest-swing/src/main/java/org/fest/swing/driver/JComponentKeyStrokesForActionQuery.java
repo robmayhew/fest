@@ -20,6 +20,7 @@ import javax.swing.KeyStroke;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.Actions.findActionKey;
 import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
 
@@ -38,7 +39,7 @@ class JComponentKeyStrokesForActionQuery extends GuiQuery<KeyStroke[]> {
   private final String actionName;
 
   static KeyStroke[] keyStrokesForAction(JComponent component, String actionName) {
-    return new JComponentKeyStrokesForActionQuery(component, actionName).run();
+    return execute(new JComponentKeyStrokesForActionQuery(component, actionName));
   }
   
   private JComponentKeyStrokesForActionQuery(JComponent component, String actionName) {

@@ -26,11 +26,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link BasicJTableCellReader}</code>.
@@ -38,121 +41,132 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Alex Ruiz
  * @author Yvonne Price
  */
-@Test(groups = GUI) public class BasicJTableCellReaderTest {
+@Test(groups = GUI) 
+public class BasicJTableCellReaderTest {
 
   private JTable table;
   private BasicJTableCellReader reader;
 
   @BeforeMethod public void setUp() {
-    table = new GuiQuery<JTable>() {
-      protected JTable executeInEDT() {
-        return new JTable(1, 1);
-      }
-    }.run();
+    table = newTable();
     reader = new BasicJTableCellReader();
   }
 
+  private static JTable newTable() {
+    return execute(new GuiQuery<JTable>() {
+      protected JTable executeInEDT() { return new JTable(1, 1); }
+    });
+  }
+
   public void shouldReturnNullIfRendererNotRecognized() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        DefaultTableModel model = new DefaultTableModel(new Object[][] { { new Jedi("Yoda") } }, new Object[] { "Names" });
-        table.setModel(model);
-        updateRendererComponent(0, new JToolBar());
-        return null;
-      }
-    }.run();
+    setModelData(table, new Object[][] { array(new Jedi("Yoda")) }, array("Names"));
+    setCellRendererComponent(table, unrecognizedRenderer());
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isNull();
   }
 
+  private static void setModelData(final JTable table, final Object[][] data, final Object[] columnNames) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.setModel(new DefaultTableModel(data, columnNames));
+      }
+    });
+  }
+  
+  private static Component unrecognizedRenderer() {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return new JToolBar();
+      }
+    });
+  }
+  
   public void shouldReturnFontFromRenderer() {
-    Font expectedFont = new GuiQuery<Font>() {
+    final JLabel label = setJLabelAsCellRenderer(table);
+    // TODO replace with font query
+    Font expectedFont = execute(new GuiQuery<Font>() {
       protected Font executeInEDT() {
-        JLabel label = new JLabel("Hello");
-        updateRendererComponent(0, label);
         return label.getFont();
       }
-    }.run();
+    });
     Font font = reader.fontAt(table, 0, 0);
     assertThat(font).isEqualTo(expectedFont);
   }
 
   public void shouldReturnBackgroundColorFromRenderer() {
-    Color expectedBackground = new GuiQuery<Color>() {
+    final JLabel label = setJLabelAsCellRenderer(table);
+    Color expectedBackground = execute(new GuiQuery<Color>() {
       protected Color executeInEDT() {
-        JLabel label = new JLabel("Hello");
-        updateRendererComponent(0, label);
         return label.getBackground();
       }
-    }.run();
+    });
     Color background = reader.backgroundAt(table, 0, 0);
     assertThat(background).isEqualTo(expectedBackground);
   }
 
   public void shouldReturnForegroundColorFromRenderer() {
-    Color expectedForeground = new GuiQuery<Color>() {
+    final JLabel label = setJLabelAsCellRenderer(table);
+    Color expectedForeground = execute(new GuiQuery<Color>() {
       protected Color executeInEDT() {
-        JLabel label = new JLabel("Hello");
-        updateRendererComponent(0, label);
         return label.getForeground();
       }
-    }.run();
+    });
     Color foreground = reader.foregroundAt(table, 0, 0);
     assertThat(foreground).isEqualTo(expectedForeground);
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    String expectedText = new GuiQuery<String>() {
-      protected String executeInEDT() {
-        JLabel label = new JLabel("Hello");
-        updateRendererComponent(0, label);
-        return label.getText();
-      }
-    }.run();
+    setJLabelAsCellRenderer(table);
     Object value = reader.valueAt(table, 0, 0);
-    assertThat(value).isEqualTo(expectedText);
+    assertThat(value).isEqualTo("Hello");
+  }
+
+  private static JLabel setJLabelAsCellRenderer(JTable table) {
+    JLabel label = execute(new GuiQuery<JLabel>() {
+      protected JLabel executeInEDT() {
+        return new JLabel("Hello");
+      }
+    });
+    setCellRendererComponent(table, label);
+    return label;
   }
 
   public void shouldReturnSelectionFromCellRendererIfRendererIsJComboBox() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
-        comboBox.setSelectedIndex(1);
-        updateRendererComponent(0, comboBox);
-        return null;
-      }
-    }.run();
+    setJComboBoxAsCellRenderer(table, 1);
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo("Two");
   }
 
   public void shouldReturnNullIfRendererIsJComboBoxWithoutSelection() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        JComboBox comboBox = new JComboBox(new Object[] { "One", "Two" });
-        comboBox.setSelectedIndex(-1);
-        updateRendererComponent(0, comboBox);
-        return null;
-      }
-    }.run();
+    setJComboBoxAsCellRenderer(table, -1);
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isNull();
   }
 
+  private static void setJComboBoxAsCellRenderer(final JTable table, final int comboBoxSelectedIndex) {
+    JComboBox renderer = execute(new GuiQuery<JComboBox>() {
+      protected JComboBox executeInEDT() {
+        JComboBox comboBox = new JComboBox(array("One", "Two"));
+        comboBox.setSelectedIndex(comboBoxSelectedIndex);
+        return comboBox;
+      }
+    });
+    setCellRendererComponent(table, renderer);
+  }
+
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldReturnIsSelectedIfRendererIsJCheckBox(final boolean selected) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        JCheckBox checkBox = new JCheckBox("Hello", selected);
-        updateRendererComponent(0, checkBox);
-        return null;
-      }
-    }.run();
+    JCheckBox checkBox = new JCheckBox("Hello", selected);
+    setCellRendererComponent(table, checkBox);
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo(String.valueOf(selected));
   }
 
-  private void updateRendererComponent(int column, Component c) {
-    table.getColumnModel().getColumn(column).setCellRenderer(new CustomCellRenderer(c));
+  private static void setCellRendererComponent(final JTable table, final Component renderer) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.getColumnModel().getColumn(0).setCellRenderer(new CustomCellRenderer(renderer));
+      }
+    });
   }
 }

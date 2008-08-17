@@ -72,7 +72,7 @@ public class ChildrenFinderTest {
   }
 
   @Test(groups = GUI) public void shouldReturnOwnedWindowsIfComponentIsWindow() {
-    TestWindow frame = TestWindow.showInTest(getClass());
+    TestWindow frame = TestWindow.showNewInTest(getClass());
     TestDialog dialog = TestDialog.showInTest(frame);
     dialog.display();
     assertThat(finder.childrenOf(frame)).containsOnly(childrenOf(frame));

@@ -19,6 +19,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the item at a given index in a
  * <code>{@link JComboBox}</code>.
@@ -32,7 +34,7 @@ class JComboBoxItemAtIndexQuery extends GuiQuery<Object> {
   private final int index;
 
   static Object itemAt(JComboBox comboBox, int index) {
-    return new JComboBoxItemAtIndexQuery(comboBox, index).run();
+    return execute(new JComboBoxItemAtIndexQuery(comboBox, index));
   }
 
   private JComboBoxItemAtIndexQuery(JComboBox comboBox, int index) {

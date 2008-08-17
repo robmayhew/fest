@@ -19,6 +19,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link JComboBox}</code> 
  * is editable or not.
@@ -26,10 +28,11 @@ import org.fest.swing.core.GuiQuery;
  * @author Alex Ruiz
  */
 class JComboBoxEditableQuery extends GuiQuery<Boolean> {
+  
   private final JComboBox comboBox;
 
   static boolean isEditable(JComboBox comboBox) {
-    return new JComboBoxEditableQuery(comboBox).run();
+    return execute(new JComboBoxEditableQuery(comboBox));
   }
   
   private JComboBoxEditableQuery(JComboBox comboBox) {

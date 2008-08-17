@@ -21,11 +21,12 @@ import javax.swing.JScrollBar;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.util.Pair;
 
 import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -70,7 +71,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollUnitUp(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll up one unit");
     Point where = location.unitLocationToScrollUp(scrollBar);
-    scroll(scrollBar, where, times * unitIncrementOf(scrollBar));
+    scroll(scrollBar, where, times * JScrollBarUnitIncrementQuery.unitIncrementOf(scrollBar));
   }
 
   /**
@@ -90,17 +91,18 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollUnitDown(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll down one unit");
     Point where = location.unitLocationToScrollDown(scrollBar);
-    scroll(scrollBar, where, times * unitIncrementOf(scrollBar) * -1);
+    scroll(scrollBar, where, times * JScrollBarUnitIncrementQuery.unitIncrementOf(scrollBar) * -1);
   }
 
-  private int unitIncrementOf(JScrollBar scrollBar) {
-    return new GetUnitIncrementTask(scrollBar).run();
-  }
-
-  private static class GetUnitIncrementTask extends GuiQuery<Integer> {
+  private static class JScrollBarUnitIncrementQuery extends GuiQuery<Integer> {
+    // TODO make top-level
     private final JScrollBar scrollBar;
 
-    GetUnitIncrementTask(JScrollBar scrollBar) {
+    static int unitIncrementOf(JScrollBar scrollBar) {
+      return execute(new JScrollBarUnitIncrementQuery(scrollBar));
+    }
+    
+    JScrollBarUnitIncrementQuery(JScrollBar scrollBar) {
       this.scrollBar = scrollBar;
     }
 
@@ -126,7 +128,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollBlockUp(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll up one block");
     Point where = location.blockLocationToScrollUp(scrollBar);
-    scroll(scrollBar, where, times * blockIncrementOf(scrollBar));
+    scroll(scrollBar, where, times * JScrollBarBlockIncrementQuery.blockIncrementOf(scrollBar));
   }
 
   /**
@@ -146,17 +148,18 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollBlockDown(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll down one block");
     Point where = location.blockLocationToScrollDown(scrollBar);
-    scroll(scrollBar, where, times * blockIncrementOf(scrollBar) * -1);
+    scroll(scrollBar, where, times * JScrollBarBlockIncrementQuery.blockIncrementOf(scrollBar) * -1);
   }
 
-  private int blockIncrementOf(JScrollBar scrollBar) {
-    return new GetBlockIncrementTask(scrollBar).run();
-  }
-
-  private static class GetBlockIncrementTask extends GuiQuery<Integer> {
+  private static class JScrollBarBlockIncrementQuery extends GuiQuery<Integer> {
+    
     private final JScrollBar scrollBar;
 
-    GetBlockIncrementTask(JScrollBar scrollBar) {
+    static int blockIncrementOf(JScrollBar scrollBar) {
+      return execute(new JScrollBarBlockIncrementQuery(scrollBar));
+    }
+    
+    private JScrollBarBlockIncrementQuery(JScrollBar scrollBar) {
       this.scrollBar = scrollBar;
     }
 
@@ -197,29 +200,15 @@ public class JScrollBarDriver extends JComponentDriver {
   }
 
   private void validatePosition(JScrollBar scrollBar, int position) {
-    Pair<Integer, Integer> minAndMax = new GetMinimumAndMaximumTask(scrollBar).run();
-    int min = minAndMax.one;
-    int max = minAndMax.two;
+    MinimumAndMaximum minAndMax = minAndMaxOf(scrollBar);
+    int min = minAndMax.minimum;
+    int max = minAndMax.maximum;
     if (position >= min && position <= max) return;
     throw actionFailure(concat(
         "Position <", valueOf(position), "> is not within the JScrollBar bounds of <",
         valueOf(min), "> and <", valueOf(max), ">"));
   }
   
-  private static class GetMinimumAndMaximumTask extends GuiQuery<Pair<Integer, Integer>> {
-    private final JScrollBar scrollBar;
-
-    GetMinimumAndMaximumTask(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-    
-    protected Pair<Integer, Integer> executeInEDT() throws Throwable {
-      int min = scrollBar.getMinimum();
-      int max = scrollBar.getMaximum();
-      return new Pair<Integer, Integer>(min, max);
-    }
-  }
-
   private void setValueProperty(JScrollBar scrollBar, int value) {
     robot.invokeLater(scrollBar, setValue(scrollBar, value));
     robot.waitForIdle();

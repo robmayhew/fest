@@ -1,5 +1,5 @@
 /*
- * Created on Jul 21, 2008
+ * Created on Aug 8, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,40 +15,45 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JComboBox;
+import java.awt.Insets;
+
+import javax.swing.JComponent;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+
 /**
- * Tests for <code>{@link JComboBoxSelectedItemAtIndexTask}</code>.
+ * Tests for <code>{@link ContainerInsetsQuery}</code>.
  *
  * @author Alex Ruiz
  */
-public class JComboBoxSelectedItemAtIndexTaskTest {
+@Test(groups = EDT_QUERY)
+public class ContainerInsetsQueryTest {
 
-  private JComboBox comboBox;
-  private int index;
+  private JComponent component;
+  private Insets insets;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    index = 6;
+    component = createMock(JComponent.class);
+    insets = new Insets(6, 8, 6, 8);
   }
   
-  @Test public void shouldSetSelectedIndex() {
-    new EasyMockTemplate(comboBox) {
+  public void shouldReturnInsetsOfJComponent() {
+    new EasyMockTemplate(component) {
       protected void expectations() {
-        comboBox.setSelectedIndex(index);
-        expectLastCall().once();
+        expect(component.getInsets()).andReturn(insets);
       }
 
       protected void codeToTest() {
-        JComboBoxSelectedItemAtIndexTask.selectItemIn(comboBox, index).executeInEDT();
+        assertThat(ContainerInsetsQuery.insetsOf(component)).isSameAs(insets);
       }
     }.run();
   }

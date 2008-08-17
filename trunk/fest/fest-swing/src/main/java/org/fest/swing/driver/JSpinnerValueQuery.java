@@ -18,6 +18,8 @@ import javax.swing.JSpinner;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the value of a 
  * <code>{@link JSpinner}</code>.
@@ -30,7 +32,7 @@ final class JSpinnerValueQuery extends GuiQuery<Object> {
   private final JSpinner spinner;
 
   static Object valueOf(JSpinner spinner) {
-    return new JSpinnerValueQuery(spinner).run();
+    return execute(new JSpinnerValueQuery(spinner));
   }
 
   private JSpinnerValueQuery(JSpinner spinner) {

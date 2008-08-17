@@ -18,10 +18,11 @@ package org.fest.swing.testing;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 
@@ -83,12 +84,15 @@ public final class TestTable extends JTable {
   }
   
   public void cellEditable(final int row, final int column, final boolean editable) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() throws Throwable {
+    cellEditable(model, row, column, editable);
+  }
+
+  private static void cellEditable(final CustomModel model, final int row, final int column, final boolean editable) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         model.cellEditable(row, column, editable);
-        return null;
       }
-    }.run();
+    });
   }
 
   private static class CustomModel extends DefaultTableModel {

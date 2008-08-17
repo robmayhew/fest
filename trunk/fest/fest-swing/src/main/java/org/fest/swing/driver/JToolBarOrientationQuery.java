@@ -20,6 +20,8 @@ import org.fest.swing.core.GuiQuery;
 
 import static javax.swing.SwingConstants.*;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns whether a <code>{@link JToolBar}</code> is
  * horizontal or vertical.
@@ -39,7 +41,7 @@ class JToolBarOrientationQuery extends GuiQuery<Integer> {
   }
 
   static int orientationOf(JToolBar toolBar) {
-    return new JToolBarOrientationQuery(toolBar).run();
+    return execute(new JToolBarOrientationQuery(toolBar));
   }
 
   private JToolBarOrientationQuery(JToolBar toolBar) {

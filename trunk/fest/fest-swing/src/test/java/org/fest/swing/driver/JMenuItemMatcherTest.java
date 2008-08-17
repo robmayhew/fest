@@ -32,6 +32,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -43,39 +44,45 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class JMenuItemMatcherTest {
 
   private ComponentFinder finder;
-  private MyFrame frame;
+  private MyWindow window;
   private JMenuItemMatcher matcher;
   
   @BeforeMethod public void setUp() {
     finder = finderWithNewAwtHierarchy();
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.showNew();
+    window.display();
     matcher = new JMenuItemMatcher("Logout", "Logout");
   }
   
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
   
   public void shouldFindSecondLogoutMenu() {
-    Component found = finder.find(frame, matcher);
-    assertThat(found).isSameAs(frame.logoutMenuItem);
+    Component found = finder.find(window, matcher);
+    assertThat(found).isSameAs(window.logoutMenuItem);
   }
   
   public void shouldShowPathInToString() {
     assertThat(matcher.toString()).contains("label='Logout|Logout'");
   }
   
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JMenuItem logoutMenuItem = new JMenuItem("Logout"); 
     
-    public MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    public MyWindow() {
       super(JMenuItemMatcherTest.class);
       JMenuBar menuBar = new JMenuBar();
       JMenu logoutMenu = new JMenu("Logout");

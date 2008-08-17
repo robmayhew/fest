@@ -18,6 +18,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of rows in a 
  * <code>{@link JTable}</code>.
@@ -30,7 +32,7 @@ class JTableRowCountQuery extends GuiQuery<Integer> {
   private final JTable table;
 
   static int rowCountOf(JTable table) {
-    return new JTableRowCountQuery(table).run();
+    return execute(new JTableRowCountQuery(table));
   }
 
   private JTableRowCountQuery(JTable table) {

@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text of a <code>{@link JLabel}</code>.
  *
@@ -35,7 +37,7 @@ public final class JLabelTextQuery extends GuiQuery<String> {
    * @return the text of the given <code>JLabel</code>.
    */
   public static String textOf(JLabel label) {
-    return new JLabelTextQuery(label).run();
+    return execute(new JLabelTextQuery(label));
   }
   
   private JLabelTextQuery(JLabel label) {

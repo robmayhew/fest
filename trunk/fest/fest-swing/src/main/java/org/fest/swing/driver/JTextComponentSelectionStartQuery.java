@@ -19,6 +19,8 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the start position of the selected text in 
  * a <code>{@link JTextComponent}</code>.
@@ -30,7 +32,7 @@ class JTextComponentSelectionStartQuery extends GuiQuery<Integer> {
   private final JTextComponent textBox;
 
   static int selectionStartOf(JTextComponent textBox) {
-    return new JTextComponentSelectionStartQuery(textBox).run();
+    return execute(new JTextComponentSelectionStartQuery(textBox));
   }
   
   private JTextComponentSelectionStartQuery(JTextComponent textBox) {

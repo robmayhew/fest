@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the value in a <code>{@link JTable}</code> 
  * cell.
@@ -33,7 +35,7 @@ class JTableCellValueQuery extends GuiQuery<Object> {
   private final int column;
 
   static Object cellValueOf(JTable table, int row, int column) {
-    return new JTableCellValueQuery(table, row, column).run();
+    return execute(new JTableCellValueQuery(table, row, column));
   }
 
   private JTableCellValueQuery(JTable table, int row, int column) {

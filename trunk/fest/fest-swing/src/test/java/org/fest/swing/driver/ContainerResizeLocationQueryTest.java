@@ -29,13 +29,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link ContainerResizeLocationQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class ContainerResizeLocationQueryTest {
+@Test(groups = EDT_QUERY)
+public class ContainerResizeLocationQueryTest {
 
   private Container container;
   private Dimension size;

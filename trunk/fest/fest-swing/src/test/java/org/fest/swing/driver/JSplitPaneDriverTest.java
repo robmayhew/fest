@@ -33,7 +33,9 @@ import org.fest.swing.testing.TestWindow;
 import static javax.swing.JSplitPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -62,9 +64,8 @@ public class JSplitPaneDriverTest {
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldMoveDividerToGivenLocation(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyFrame frame = myFrame(orientation);
-    splitPane = frame.splitPane;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.showNew(orientation);
+    splitPane = window.splitPane;
     int newLocation = splitPane.getDividerLocation() + 100;
     driver.moveDividerTo(splitPane, newLocation);
     assertThat(splitPane.getDividerLocation()).isEqualTo(newLocation);
@@ -73,15 +74,9 @@ public class JSplitPaneDriverTest {
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyFrame frame = myFrame(orientation);
-    splitPane = frame.splitPane;
-    robot.showWindow(frame);
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        splitPane.setEnabled(false);
-      }
-    });
-    robot.waitForIdle();
+    MyWindow window = MyWindow.showNew(orientation);
+    splitPane = window.splitPane;
+    disable(splitPane);
     assertThat(isEnabled(splitPane)).isFalse();
     int originalLocation = splitPane.getDividerLocation();
     driver.moveDividerTo(splitPane, originalLocation + 100);
@@ -97,20 +92,22 @@ public class JSplitPaneDriverTest {
     };
   }
 
-  private MyFrame myFrame(final int orientation) {
-    return new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame(orientation);
-      }
-    }.run();
-  }
-
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JSplitPane splitPane;
 
-    MyFrame(int orientation) {
+    static MyWindow showNew(final int orientation) {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(orientation);
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    MyWindow(int orientation) {
       super(JSplitPaneDriverTest.class);
       splitPane = new JSplitPane(orientation, new JList(), new JList());
       splitPane.setDividerLocation(150);

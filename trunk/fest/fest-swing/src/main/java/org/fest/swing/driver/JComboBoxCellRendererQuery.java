@@ -23,6 +23,8 @@ import javax.swing.ListCellRenderer;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular item in a <code>{@link JComboBox}</code>.
@@ -37,7 +39,7 @@ class JComboBoxCellRendererQuery extends GuiQuery<Component> {
   private final int index;
 
   static Component cellRendererIn(JComboBox comboBox, int index) {
-    return new JComboBoxCellRendererQuery(comboBox, index).run();
+    return execute(new JComboBoxCellRendererQuery(comboBox, index));
   }
   
   private JComboBoxCellRendererQuery(JComboBox comboBox, int index) {

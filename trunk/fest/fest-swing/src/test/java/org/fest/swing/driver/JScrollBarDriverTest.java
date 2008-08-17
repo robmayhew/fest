@@ -32,7 +32,10 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
@@ -52,13 +55,9 @@ public class JScrollBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JScrollBarDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    scrollBar = frame.scrollBar;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    scrollBar = window.scrollBar;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -66,12 +65,12 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldPassIfValueIsEqualToExpected() {
-    setScrollBarValueTo(30);
+    setValue(scrollBar, 30);
     driver.requireValue(scrollBar, 30);
   }
   
   public void shouldFailIfValueIsNotEqualToExpected() {
-    setScrollBarValueTo(30);
+    setValue(scrollBar, 30);
     try {
       driver.requireValue(scrollBar, 20);
       fail();
@@ -81,14 +80,6 @@ public class JScrollBarDriverTest {
     }
   }
 
-  private void setScrollBarValueTo(final int value) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        scrollBar.setValue(value);
-      }
-    });
-  }
-  
   @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToScrollUnitUpIsZeroOrNegative(int times) {
     try {
@@ -308,21 +299,22 @@ public class JScrollBarDriverTest {
   }
 
   private void clearAndDisableScrollBar() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        scrollBar.setValue(0);
-        scrollBar.setEnabled(false);
-      }
-    });
-    robot.waitForIdle();
+    setValue(scrollBar, 0);
+    disable(scrollBar);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JScrollBar scrollBar = new JScrollBar();
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JScrollBarDriverTest.class);
       add(scrollBar);
       scrollBar.setPreferredSize(new Dimension(20, 100));

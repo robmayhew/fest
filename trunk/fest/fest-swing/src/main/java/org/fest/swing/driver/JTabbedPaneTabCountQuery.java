@@ -18,6 +18,8 @@ import javax.swing.JTabbedPane;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of tabs in a 
  * <code>{@link JTabbedPane}</code>.
@@ -29,7 +31,7 @@ class JTabbedPaneTabCountQuery extends GuiQuery<Integer> {
   private final JTabbedPane tabbedPane;
 
   static int tabCountOf(JTabbedPane tabbedPane) {
-    return new JTabbedPaneTabCountQuery(tabbedPane).run();
+    return execute(new JTabbedPaneTabCountQuery(tabbedPane));
   }
 
   private JTabbedPaneTabCountQuery(JTabbedPane tabbedPane) {

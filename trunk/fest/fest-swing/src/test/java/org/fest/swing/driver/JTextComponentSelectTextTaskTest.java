@@ -28,9 +28,8 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
-import static javax.swing.SwingUtilities.invokeAndWait;
-
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedTextOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -44,23 +43,18 @@ public class JTextComponentSelectTextTaskTest {
 
   static final String TEXTBOX_TEXT = "Hello World";
 
-  private MyFrame myFrame;
+  private MyWindow window;
   private JTextComponent textBox;
 
   @BeforeMethod public void setUp() {
-    myFrame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    textBox = myFrame.textBox;
-    myFrame.display();
+    window = MyWindow.newWindow();
+    textBox = window.textBox;
+    window.display();
   }
   
   @Test(dataProvider = "selectionIndices", groups = GUI)
-  public void shouldSelectText(int start, int end) throws Exception {
-    JTextComponentSelectTextTask task = JTextComponentSelectTextTask.selectTextIn(textBox, start, end);
-    invokeAndWait(task);
+  public void shouldSelectText(int start, int end) {
+    JTextComponentSelectTextTask.selectTextIn(textBox, start, end);
     String selection = selectedTextOf(textBox);
     assertThat(selection).isEqualTo(TEXTBOX_TEXT.substring(start, end));
   }
@@ -74,16 +68,21 @@ public class JTextComponentSelectTextTaskTest {
   }
   
   @AfterMethod public void tearDown() {
-    myFrame.destroy();
+    window.destroy();
   }
 
-  private static class MyFrame extends TestWindow {
-
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    private final JTextField textBox = new JTextField(20);
+    final JTextField textBox = new JTextField(20);
     
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
+    MyWindow() {
       super(JTextComponentSelectTextTaskTest.class);
       setPreferredSize(new Dimension(80, 60));
       add(textBox);

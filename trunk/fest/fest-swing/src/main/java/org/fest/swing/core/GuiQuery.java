@@ -15,11 +15,11 @@
  */
 package org.fest.swing.core;
 
-import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.exception.ActionFailedException;
 
-import static javax.swing.SwingUtilities.*;
+import static javax.swing.SwingUtilities.isEventDispatchThread;
 
-import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
  * Understands executing an action, in the event dispatch thread, that returns a value.
@@ -27,50 +27,23 @@ import static org.fest.swing.exception.UnexpectedException.unexpected;
  *
  * @author Alex Ruiz
  */
-public abstract class GuiQuery<T> {
+public abstract class GuiQuery<T> extends GuiAction {
 
-  private boolean calledFromEDT;
-
+  private T result;
+  
   /**
-   * Executes an action in the event dispatch thread. This method waits until the action has finish its execution.
-   * @return the result of the action executed in the main thread.
-   * @throws UnexpectedException wrapping any exception thrown when executing an action in the event dispatch thread.
+   * Executes the query in the event dispatch thread. This method waits until the action has finish its execution.
+   * @throws ActionFailedException if this task is not executed in the event dispatch thread.
    */
-  public final T run() {
-    calledFromEDT = isEventDispatchThread();
-    if (calledFromEDT) return invokeDirectlyInEDT();
-    return invokeInEDTAndWait();
-  }
-
-  private T invokeDirectlyInEDT() {
+  public final void run() {
+    if (!isEventDispatchThread())
+      throw actionFailure("Task should be executed in the event dispatch thread");
     try {
-      return executeInEDT();
+      result = executeInEDT();
     } catch (Throwable t) {
-      throw unexpected(t);
+      catchedException(t);
     }
   }
-
-  private T invokeInEDTAndWait() {
-    final Reference<T> result = new Reference<T>();
-    final Reference<Throwable> error = new Reference<Throwable>();
-    try {
-      invokeAndWait(new Runnable() {
-        public void run() {
-          try {
-            result.target = executeInEDT();
-          } catch (Throwable t) {
-            error.target = t;
-          }
-        }
-      });
-    } catch (Exception e) {
-      throw unexpected(e);
-    }
-    if (error.target != null) throw unexpected(error.target);
-    return result.target;
-  }
-
-  boolean calledFromEDT() { return calledFromEDT; }
 
   /**
    * Specifies the action to execute in the event dispatch thread.
@@ -79,9 +52,5 @@ public abstract class GuiQuery<T> {
    */
   protected abstract T executeInEDT() throws Throwable;
 
-  static class Reference<T> {
-    T target;
-
-    Reference() {}
-  }
+  final T result() { return result; }
 }

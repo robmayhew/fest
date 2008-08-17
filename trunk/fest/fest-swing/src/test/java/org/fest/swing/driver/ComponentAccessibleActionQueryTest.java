@@ -30,7 +30,8 @@ import org.fest.swing.testing.TestWindow;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentAccessibleActionQuery}</code>.
@@ -38,37 +39,40 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = GUI)
+@Test(groups = { GUI, EDT_QUERY })
 public class ComponentAccessibleActionQueryTest {
 
-  private MyFrame frame;
+  private MyWindow window;
   private AccessibleAction action;
 
   @BeforeMethod public void setUp() {
     action = createMock(AccessibleAction.class);
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame(action);
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.showNew(action);
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   public void shouldFindAccessibleAction() {
-    AccessibleAction actualAction = ComponentAccessibleActionQuery.accessibleActionFrom(frame.button);
+    AccessibleAction actualAction = ComponentAccessibleActionQuery.accessibleActionFrom(window.button);
     assertThat(actualAction).isSameAs(action);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    static MyWindow showNew(final AccessibleAction action) {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(action); }
+      });
+      window.display();
+      return window;
+    }
+    
     final MyButton button = new MyButton("Hello");
 
-    MyFrame(AccessibleAction action) {
+    MyWindow(AccessibleAction action) {
       super(ComponentAccessibleActionQueryTest.class);
       AccessibleContext context = new MyAccessibleContext(action);
       button.accessibleContext(context);

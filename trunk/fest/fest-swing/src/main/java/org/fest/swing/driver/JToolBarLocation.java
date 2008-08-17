@@ -14,17 +14,16 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Insets;
-import java.awt.Point;
+import java.awt.*;
 
 import javax.swing.JToolBar;
 
 import static java.awt.BorderLayout.*;
 import static java.lang.Math.max;
 
+import static org.fest.swing.driver.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.driver.JToolBarOrientationQuery.isHorizontal;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
@@ -44,14 +43,15 @@ public final class JToolBarLocation {
    * @return the point where to grab the given <code>JToolBar</code>.
    */
   public Point pointToGrab(JToolBar toolBar) {
-    Insets insets = toolBar.getInsets();
+    Insets insets = insetsOf(toolBar);
+    Dimension size = sizeOf(toolBar);
     if (max(max(max(insets.left, insets.top), insets.right), insets.bottom) == insets.left)
-      return new Point(insets.left / 2, toolBar.getHeight() / 2);
+      return new Point(insets.left / 2, size.height / 2);
     if (max(max(insets.top, insets.right), insets.bottom) == insets.top)
-      return new Point(toolBar.getWidth() / 2, insets.top / 2);
+      return new Point(size.width / 2, insets.top / 2);
     if (max(insets.right, insets.bottom) == insets.right)
-      return new Point(toolBar.getWidth() - insets.right / 2, toolBar.getHeight() / 2);
-    return new Point(toolBar.getWidth() / 2, toolBar.getHeight() - insets.bottom / 2);
+      return new Point(size.width - insets.right / 2, size.height / 2);
+    return new Point(size.width / 2, size.height - insets.bottom / 2);
   }
 
   /**
@@ -67,23 +67,25 @@ public final class JToolBarLocation {
    */
   public Point dockLocation(JToolBar toolBar, Container dock, String constraint) {
     validate(constraint);
-    Insets insets = dock.getInsets();
+    Insets insets = insetsOf(dock);
+    Dimension toolBarSize = sizeOf(toolBar);
     // BasicToolBarUI prioritizes location N/E/W/S by proximity to the respective border. Close to top border is N, even
     // if close to the left or right border.
-    int offset = isHorizontal(toolBar) ? toolBar.getHeight() : toolBar.getWidth();
+    int offset = isHorizontal(toolBar) ? toolBarSize.height : toolBarSize.width;
+    Dimension dockSize = sizeOf(dock);
     if (NORTH.equals(constraint))
-      return new Point(dock.getWidth() / 2, insets.top);
+      return new Point(dockSize.width / 2, insets.top);
     if (EAST.equals(constraint))
-      return new Point(dock.getWidth() - insets.right - 1, verticalDockingYCoordinate(dock, insets, offset));
+      return new Point(dockSize.width - insets.right - 1, verticalDockingYCoordinate(dockSize.height, insets, offset));
     if (WEST.equals(constraint))
-      return new Point(insets.left, verticalDockingYCoordinate(dock, insets, offset));
-    int x = dock.getWidth() / 2;
+      return new Point(insets.left, verticalDockingYCoordinate(dockSize.height, insets, offset));
+    int x = dockSize.width / 2;
     // Make sure we don't get mistaken for EAST or WEST
     if (x < insets.left + offset)
       x = insets.left + offset;
-    else if (x > dock.getWidth() - insets.right - offset - 1)
-      x = dock.getWidth() - insets.right - offset - 1;
-    return new Point(x, dock.getHeight() - insets.bottom - 1);
+    else if (x > dockSize.width - insets.right - offset - 1)
+      x = dockSize.width - insets.right - offset - 1;
+    return new Point(x, dockSize.height - insets.bottom - 1);
   }
 
   private void validate(String constraint) {
@@ -93,8 +95,8 @@ public final class JToolBarLocation {
         concat(quote(constraint), " is not a valid constraint. Valid constraints are ", format(VALID_CONSTRAINTS)));
   }
 
-  private int verticalDockingYCoordinate(Container dock, Insets insets, int offset) {
-    int y = dock.getHeight() / 2;
+  private int verticalDockingYCoordinate(int dockHeight, Insets insets, int offset) {
+    int y = dockHeight / 2;
     // Make sure we don't get mistaken for NORTH
     if (y < insets.top + offset) y = insets.top + offset;
     return y;

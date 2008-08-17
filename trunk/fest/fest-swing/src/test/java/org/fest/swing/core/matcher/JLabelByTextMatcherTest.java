@@ -23,6 +23,7 @@ import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -35,7 +36,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String text = "Hello";
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withText(text);
-    JLabel label = label(text);
+    JLabel label = new JLabel(text);
     assertThat(matcher.matches(label)).isTrue();
   }
   
@@ -47,59 +48,55 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    String text = "Hello";
-    JLabel label = label(text);
-    TestWindow frame = windowWith(label);
+    MyWindow window = MyWindow.showNew();
     try {
-      frame.display();
-      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
-      assertThat(matcher.matches(label)).isTrue();
+      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
+      assertThat(matcher.matches(window.label)).isTrue();
     } finally {
-      frame.destroy();
+      window.destroy();
     }
   } 
   
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String text = "Hello";
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
-    JLabel label = label(text);
+    JLabel label = new JLabel(text);
     assertThat(matcher.matches(label)).isFalse();    
   }
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    JLabel label = label("Bye");
-    TestWindow frame = windowWith(label);
+    MyWindow window = MyWindow.showNew();
     try {
-      frame.display();
-      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
-      assertThat(matcher.matches(label)).isFalse();
+      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Bye");
+      assertThat(matcher.matches(window.label)).isFalse();
     } finally {
-      frame.destroy();
+      window.destroy();
     }
-  }
-
-  private JLabel label(final String text) {
-    return new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        return new JLabel(text);
-      }
-    }.run();
-  }
-
-  private TestWindow windowWith(final JLabel label) {
-    return new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        TestWindow f = new TestWindow(JLabelByTextMatcher.class);
-        f.add(label);
-        return f;
-      }
-    }.run();
   }
   
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
     JLabel label = new JLabel("Bye");
     assertThat(matcher.matches(label)).isFalse();    
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+      window.display();
+      return window;
+    }
+    
+    final JLabel label = new JLabel("Bye");
+    
+    MyWindow() {
+      super(JLabelByTextMatcherTest.class);
+      addComponents(label);
+    }
   }
 }

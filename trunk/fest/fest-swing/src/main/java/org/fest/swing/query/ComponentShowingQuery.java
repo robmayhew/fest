@@ -18,6 +18,8 @@ import java.awt.Component;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code>
  * is showing or not.
@@ -35,7 +37,7 @@ public class ComponentShowingQuery extends GuiQuery<Boolean> {
    * @return <code>true</code> if the given <code>Component</code> is showing, <code>false</code> otherwise.
    */
   public static boolean isShowing(Component component) {
-    return new ComponentShowingQuery(component).run();
+    return execute(new ComponentShowingQuery(component));
   }
 
   private ComponentShowingQuery(Component component) {

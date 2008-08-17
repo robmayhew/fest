@@ -23,15 +23,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.Robot;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedTextOf;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
@@ -53,13 +52,9 @@ public class JTextComponentDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTextComponentDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    textField = frame.textField;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    textField = window.textField;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -76,7 +71,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotDeleteTextIfTextComponentIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextAndDisableTextField("Hello");
+    setTextAndDisableTextField(textField, "Hello");
     driver.deleteText(textField);
     assertThat(textOf(textField)).isEqualTo("Hello");
   }
@@ -84,7 +79,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldDeleteTextInEmptyTextComponent(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo("");
+    setTextFieldTextTo(textField, "");
     driver.deleteText(textField);
     assertThat(textOf(textField)).isNullOrEmpty();
   }
@@ -92,7 +87,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldReplaceText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo("Hi");
+    setTextFieldTextTo(textField, "Hi");
     driver.replaceText(textField, "Bye");
     assertThat(textOf(textField)).isEqualTo("Bye");
   }
@@ -100,7 +95,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectAllText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo("Hello");
+    setTextFieldTextTo(textField, "Hello");
     driver.selectAll(textField);
     assertThat(selectedTextOf(textField)).isEqualTo(textOf(textField));
   }
@@ -108,7 +103,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotSelectAllTextIfTextComponentIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextAndDisableTextField("Hello");
+    setTextAndDisableTextField(textField, "Hello");
     driver.selectAll(textField);
     assertThat(selectedTextOf(textField)).isNullOrEmpty();
   }
@@ -116,7 +111,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldEnterText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo("");
+    setTextFieldTextTo(textField, "");
     String textToEnter = "Entering text";
     driver.enterText(textField, textToEnter);
     assertThat(textOf(textField)).isEqualTo(textToEnter);
@@ -141,7 +136,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotSelectTextRangeIfTextComponentIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextAndDisableTextField("This is a test");
+    setTextAndDisableTextField(textField, "This is a test");
     driver.selectText(textField, 8, 14);
     assertThat(selectedTextOf(textField)).isNullOrEmpty();
   }
@@ -158,7 +153,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectGivenTextOnly(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo("Hello World");
+    setTextFieldTextTo(textField, "Hello World");
     driver.selectText(textField, "llo W");
     assertThat(selectedTextOf(textField)).isEqualTo("llo W");
   }
@@ -166,18 +161,18 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotSelectGivenTextIfTextComponentIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextAndDisableTextField("Hello World");
+    setTextAndDisableTextField(textField, "Hello World");
     driver.selectText(textField, "llo W");
     assertThat(selectedTextOf(textField)).isNullOrEmpty();
   }
 
   public void shouldPassIfTextComponentIsEditable() {
-    setTextFieldEditable(true);
+    setTextFieldEditable(textField, true);
     driver.requireEditable(textField);
   }
 
   public void shouldFailIfTextComponentIsNotEditableAndExpectingEditable() {
-    setTextFieldEditable(false);
+    setTextFieldEditable(textField, false);
     try {
       driver.requireEditable(textField);
       fail();
@@ -187,12 +182,12 @@ public class JTextComponentDriverTest {
   }
 
   public void shouldPassIfTextComponentIsNotEditable() {
-    setTextFieldEditable(false);
+    setTextFieldEditable(textField, false);
     driver.requireNotEditable(textField);
   }
 
   public void shouldFailIfTextComponentIsEditableAndExpectingNotEditable() {
-    setTextFieldEditable(true);
+    setTextFieldEditable(textField, true);
     try {
       driver.requireNotEditable(textField);
       fail();
@@ -202,12 +197,12 @@ public class JTextComponentDriverTest {
   }
 
   public void shouldPassIfHasExpectedText() {
-    setTextFieldTextTo("Hi");
+    setTextFieldTextTo(textField, "Hi");
     driver.requireText(textField, "Hi");
   }
 
   public void shouldFailIfDoesNotHaveExpectedText() {
-    setTextFieldTextTo("Hi");
+    setTextFieldTextTo(textField, "Hi");
     try {
       driver.requireText(textField, "Bye");
       fail();
@@ -217,17 +212,17 @@ public class JTextComponentDriverTest {
   }
 
   public void shouldPassIfEmpty() {
-    setTextFieldTextTo("");
+    setTextFieldTextTo(textField, "");
     driver.requireEmpty(textField);
   }
 
   public void shouldPassIfTextIsNull() {
-    setTextFieldTextTo(null);
+    setTextFieldTextTo(textField, null);
     driver.requireEmpty(textField);
   }
 
   public void shouldFailIfNotEmpty() {
-    setTextFieldTextTo("Hi");
+    setTextFieldTextTo(textField, "Hi");
     try {
       driver.requireEmpty(textField);
       fail();
@@ -237,43 +232,42 @@ public class JTextComponentDriverTest {
   }
 
   private void clearAndDisableTextField() {
-    setTextAndDisableTextField("");
+    setTextAndDisableTextField(textField, "");
   }
 
-  private void setTextFieldEditable(final boolean editable) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
+  private static void setTextFieldEditable(final JTextField textField, final boolean editable) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         textField.setEditable(editable);
       }
     });
-    robot.waitForIdle();
   }
 
-  private void setTextFieldTextTo(final String text) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
+  private static void setTextFieldTextTo(final JTextField textField, final String text) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         textField.setText(text);
       }
     });
-    robot.waitForIdle();
   }
   
-  private void setTextAndDisableTextField(final String text) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        textField.setText(text);
-        textField.setEnabled(false);
-      }
-    });
-    robot.waitForIdle();
+  private void setTextAndDisableTextField(final JTextField textField, final String text) {
+    setTextFieldTextTo(textField, text);
+    disable(textField);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTextField textField = new JTextField("This is a test");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JTextComponentDriverTest.class);
       add(textField);
       setPreferredSize(new Dimension(200, 200));

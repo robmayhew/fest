@@ -19,6 +19,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a
  * <code>{@link JList}</code> is selected or not.
@@ -32,7 +34,7 @@ class JListIsSelectedIndexQuery extends GuiQuery<Boolean> {
   private final int index;
 
   static boolean isSelectedIndex(JList list, int index) {
-    return new JListIsSelectedIndexQuery(list, index).run();
+    return execute(new JListIsSelectedIndexQuery(list, index));
   }
 
   private JListIsSelectedIndexQuery(JList list, int index) {

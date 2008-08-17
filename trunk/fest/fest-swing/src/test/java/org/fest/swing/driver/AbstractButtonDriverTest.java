@@ -27,12 +27,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.assertions.AssertExtension;
-import org.fest.swing.core.*;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
+import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -48,15 +55,11 @@ public class AbstractButtonDriverTest {
   private AbstractButtonDriver driver;
 
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = robotWithNewAwtHierarchy();
     driver = new AbstractButtonDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    checkBox = frame.checkBox;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    checkBox = window.checkBox;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -74,7 +77,7 @@ public class AbstractButtonDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    robot.invokeAndWait(new ComponentEnableSetterTask(checkBox, false));
+    disable(checkBox);
     ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
     assertThat(recorder).actionWasNotPerformed();
@@ -160,7 +163,7 @@ public class AbstractButtonDriverTest {
   }
 
   private void unselectCheckBox() {
-    setCheckBoxSelected(false);
+    setSelected(checkBox, false);
   }
 
   public void shouldFailIfButtonIsSelectedAndExpectingNotSelected() {
@@ -175,24 +178,21 @@ public class AbstractButtonDriverTest {
   }
 
   private void selectCheckBox() {
-    setCheckBoxSelected(true);
+    setSelected(checkBox, true);
   }
 
-  private void setCheckBoxSelected(final boolean selected) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        checkBox.setSelected(selected);
-        return null;
-      }
-    }.run();
-  }
-
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
     final JCheckBox checkBox = new JCheckBox("Hello", true);
 
-    public MyFrame() {
+    public MyWindow() {
       super(AbstractButtonDriverTest.class);
       add(checkBox);
       setPreferredSize(new Dimension(200, 200));

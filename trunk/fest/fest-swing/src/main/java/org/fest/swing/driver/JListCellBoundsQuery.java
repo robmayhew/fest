@@ -21,6 +21,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the bounding rectangle, in the
  * <code>{@link JList}</code>'s coordinate system, for the given cell index.
@@ -34,7 +36,7 @@ class JListCellBoundsQuery extends GuiQuery<Rectangle> {
   private final int index;
 
   static Rectangle cellBoundsOf(JList list, int index) {
-    return new JListCellBoundsQuery(list, index).run();
+    return execute(new JListCellBoundsQuery(list, index));
   }
 
   private JListCellBoundsQuery(JList list, int index) {

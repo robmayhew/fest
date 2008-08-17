@@ -21,6 +21,8 @@ import java.awt.Point;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the point where the mouse usually grabs to
  * resize a <code>{@link Container}</code>
@@ -32,7 +34,7 @@ class ContainerResizeLocationQuery extends GuiQuery<Point> {
   private final Container container;
 
   static Point resizeLocationOf(Container container) {
-    return new ContainerResizeLocationQuery(container).run();
+    return execute(new ContainerResizeLocationQuery(container));
   }
   
   private ContainerResizeLocationQuery(Container container) {

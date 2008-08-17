@@ -20,6 +20,8 @@ import java.awt.Container;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the parent of a
  * <code>{@link Component}</code>.
@@ -37,7 +39,7 @@ public class ComponentParentTaskQuery extends GuiQuery<Container> {
    * @return the parent of the given <code>Component</code>.
    */
   public static Container parentOf(Component component) {
-    return new ComponentParentTaskQuery(component).run();
+    return execute(new ComponentParentTaskQuery(component));
   }
 
   private ComponentParentTaskQuery(Component c) {

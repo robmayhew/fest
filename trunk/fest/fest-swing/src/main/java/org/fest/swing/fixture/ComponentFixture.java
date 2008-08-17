@@ -24,8 +24,8 @@ import org.fest.swing.exception.ComponentLookupException;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentDriver.propertyName;
 import static org.fest.swing.fixture.ComponentFixtureValidator.*;
-import static org.fest.swing.fixture.GetComponentBackgroundTask.backgroundOf;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such

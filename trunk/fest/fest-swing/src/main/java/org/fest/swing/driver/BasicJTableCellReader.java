@@ -30,9 +30,10 @@ import org.fest.swing.cell.JTableCellReader;
 
 import static org.fest.swing.driver.JTableCellRendererQuery.cellRendererIn;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
+import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
+import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
-import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.
@@ -82,7 +83,7 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
 
   /** {@inheritDoc} */
   public Color backgroundAt(JTable table, int row, int column) {
-    return cellRendererComponent(table, row, column).getBackground();
+    return backgroundOf(cellRendererComponent(table, row, column));
   }
 
   /** {@inheritDoc} */

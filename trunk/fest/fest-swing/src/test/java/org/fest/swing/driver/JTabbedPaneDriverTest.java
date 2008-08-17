@@ -39,9 +39,12 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTabbedPaneSelectTabTask.selectTabIn;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -62,13 +65,9 @@ public class JTabbedPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTabbedPaneDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    tabbedPane = frame.tabbedPane;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    tabbedPane = window.tabbedPane;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -78,7 +77,7 @@ public class JTabbedPaneDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSetTabDirectlyIfLocationOfTabNotFound(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    selectFirstTab();
+    selectTabIn(tabbedPane, 0);
     final JTabbedPaneLocation location = createMock(JTabbedPaneLocation.class);
     final int index = 1;
     driver = new JTabbedPaneDriver(robot, location);
@@ -92,14 +91,6 @@ public class JTabbedPaneDriverTest {
         assertThatSelectedTabIndexIsEqualTo(index);
       }
     }.run();
-  }
-
-  private void selectFirstTab() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        tabbedPane.setSelectedIndex(0);
-      }
-    });
   }
 
   @Test(groups = GUI, dataProvider = "tabIndexProvider")
@@ -180,12 +171,16 @@ public class JTabbedPaneDriverTest {
   }
 
   private void assertThatSelectedTabIndexIsEqualTo(int expected) {
-    int selectedIndex = new GuiQuery<Integer>() {
+    int selectedIndex = selectedIndexIn(tabbedPane);
+    assertThat(selectedIndex).isEqualTo(expected);
+  }
+
+  private static int selectedIndexIn(final JTabbedPane tabbedPane) {
+    return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return tabbedPane.getSelectedIndex();
       }
-    }.run();
-    assertThat(selectedIndex).isEqualTo(expected);
+    });
   }
 
   public void shouldReturnTabTitles() {
@@ -193,21 +188,22 @@ public class JTabbedPaneDriverTest {
   }
 
   private void clearAndDisableTabbedPane() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        tabbedPane.setSelectedIndex(0);
-        tabbedPane.setEnabled(false);
-      }
-    });
-    robot.waitForIdle();
+    selectTabIn(tabbedPane, 0);
+    disable(tabbedPane);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTabbedPane tabbedPane = new JTabbedPane();
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
+    MyWindow() {
       super(JTabbedPaneDriverTest.class);
       tabbedPane.addTab("First", new JPanel());
       tabbedPane.addTab("Second", new JPanel());

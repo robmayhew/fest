@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
@@ -66,7 +67,7 @@ public class FormattingTest {
   }
 
   @Test public void shouldFormatFrame() {
-    TestWindow frame = TestWindow.showInTest(getClass());
+    TestWindow frame = TestWindow.showNewInTest(getClass());
     frame.setName("frame");
     String formatted = formatted(frame);
     String expected = "[name='frame', title='FormattingTest', enabled=true, visible=true, showing=true]";
@@ -143,7 +144,7 @@ public class FormattingTest {
     JMenuItem menuItem = new JMenuItem();
     menuItem.setText("a Menu Item");
     menuItem.setName("menuItem");
-    menuItem.setSelected(true);
+    setSelected(menuItem, true);
     String formatted = formatted(menuItem);
     String expected = "[name='menuItem', text='a Menu Item', selected=true, enabled=true, visible=true, showing=false]";
     assertThat(formatted).isEqualTo(expected(menuItem, expected));
@@ -256,7 +257,7 @@ public class FormattingTest {
     JRadioButton radio = new JRadioButton();
     radio.setText("a Radio");
     radio.setName("radio");
-    radio.setSelected(true);
+    setSelected(radio, true);
     String formatted = formatted(radio);
     String expected = "[name='radio', text='a Radio', selected=true, enabled=true, visible=true, showing=false]";
     assertThat(formatted).isEqualTo(expected(radio, expected));

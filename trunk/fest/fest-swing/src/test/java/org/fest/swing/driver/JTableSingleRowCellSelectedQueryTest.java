@@ -26,13 +26,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JTableSingleRowCellSelectedQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JTableSingleRowCellSelectedQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTableSingleRowCellSelectedQueryTest {
 
   private JTable table;
   private int row;

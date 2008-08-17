@@ -30,6 +30,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
@@ -37,6 +38,7 @@ import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
@@ -58,7 +60,7 @@ public class JTableHeaderDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTableHeaderDriver(robot);
-    MyFrame frame = new MyFrame();
+    MyWindow frame = MyWindow.newWindow();
     tableHeader = frame.table.getTableHeader();
     robot.showWindow(frame);
   }
@@ -106,7 +108,7 @@ public class JTableHeaderDriverTest {
   }
 
   public void shouldShowPopupMenuAtItemWithIndex() {
-    JPopupMenu popupMenu = popupMenuForHeader();
+    JPopupMenu popupMenu = popupMenuFor(tableHeader);
     ClickRecorder recorder = attachTo(tableHeader);
     driver.showPopupMenu(tableHeader, 1);
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
@@ -115,7 +117,7 @@ public class JTableHeaderDriverTest {
   }
 
   public void shouldShowPopupMenuAtItemWithName() {
-    JPopupMenu popupMenu = popupMenuForHeader();
+    JPopupMenu popupMenu = popupMenuFor(tableHeader);
     ClickRecorder recorder = attachTo(tableHeader);
     driver.showPopupMenu(tableHeader, "1");
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
@@ -123,34 +125,47 @@ public class JTableHeaderDriverTest {
     assertThat(isVisible(popupMenu)).isTrue();
   }
 
-  private JPopupMenu popupMenuForHeader() {
-    JPopupMenu popupMenu = new JPopupMenu();
-    popupMenu.add(new JMenuItem("Frodo"));
-    tableHeader.setComponentPopupMenu(popupMenu);
-    return popupMenu;
+  private static JPopupMenu popupMenuFor(final JTableHeader tableHeader) {
+    return execute(new GuiQuery<JPopupMenu>() {
+      protected JPopupMenu executeInEDT() {
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(new JMenuItem("Frodo"));
+        tableHeader.setComponentPopupMenu(popupMenu);
+        return popupMenu;
+      }
+    });
   }
 
   private void assertColumnClicked(ClickRecorder recorder, int columnIndex) {
-    Point pointClicked = recorder.pointClicked();
-    int columnAtPoint = tableHeader.getTable().columnAtPoint(pointClicked);
+    int columnAtPoint = columnAtPoint(tableHeader, recorder.pointClicked());
     assertThat(columnAtPoint).isEqualTo(columnIndex);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static int columnAtPoint(final JTableHeader header, Point point) {
+    return header.getTable().columnAtPoint(point);
+  }
+
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TABLE_SIZE = new Dimension(400, 200);
 
     final TestTable table;
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
+    MyWindow() {
       super(JTableHeaderDriverTest.class);
       table = new TestTable(6, 2);
       add(decorate(table));
       setPreferredSize(new Dimension(600, 400));
     }
 
-    private Component decorate(JTable table) {
+    private static Component decorate(JTable table) {
       JScrollPane scrollPane = new JScrollPane(table);
       scrollPane.setPreferredSize(TABLE_SIZE);
       return scrollPane;

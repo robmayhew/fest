@@ -27,6 +27,7 @@ import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -41,14 +42,14 @@ public class BasicComponentPrinterTest {
 
   private BasicComponentPrinter printer;
 
-  private MainWindow window1;
-  private MainWindow window2;
+  private MyWindow window1;
+  private MyWindow window2;
 
   @BeforeMethod public void setUp() {
     printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithNewAwtHierarchy();
-    window1 = MainWindow.show(getClass());
+    window1 = MyWindow.showNew();
     window1.button.setName("button1");
-    window2 = MainWindow.show(getClass());
+    window2 = MyWindow.showNew();
     window2.button.setName("button2");
   }
 
@@ -99,24 +100,24 @@ public class BasicComponentPrinterTest {
     assertThat(out.printed()).containsOnly(format(window1.button));
   }
 
-  static class MainWindow extends TestWindow {
+  static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A button");
 
-    static MainWindow show(final Class<?> testClass) {
-      return new GuiQuery<MainWindow>() {
-        protected MainWindow executeInEDT() {
-          MainWindow window = new MainWindow(testClass);
-          window.display();
-          return window;
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
         }
-      }.run();
+      });
+      window.display();
+      return window;
     }
 
-    MainWindow(Class<?> testClass) {
-      super(testClass);
-      add(button);
+    MyWindow() {
+      super(BasicComponentPrinterTest.class);
+      addComponents(button);
     }
   }
 }

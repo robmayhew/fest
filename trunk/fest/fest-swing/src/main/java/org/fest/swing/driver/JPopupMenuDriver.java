@@ -26,6 +26,7 @@ import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 
 /**
@@ -51,20 +52,21 @@ public class JPopupMenuDriver extends JComponentDriver {
    * @return the contents of the pop-up menu as a <code>String</code> array.
    */
   public String[] menuLabelsOf(JPopupMenu popupMenu) {
-    MenuElement[] subElements = subElementsOf(popupMenu);
+    MenuElement[] subElements = JPopupMenuElementsQuery.elementsOf(popupMenu);
     String[] result = new String[subElements.length];
     for (int i = 0; i < subElements.length; i++) result[i] = asString(subElements[i]);
     return result;
   }
 
-  private MenuElement[] subElementsOf(JPopupMenu popupMenu) {
-    return new GetSubElementsTask(popupMenu).run();
-  }
-
-  private static class GetSubElementsTask extends GuiQuery<MenuElement[]> {
+  private static class JPopupMenuElementsQuery extends GuiQuery<MenuElement[]> {
+    // TODO Make top-level
     private final JPopupMenu popupMenu;
 
-    GetSubElementsTask(JPopupMenu popupMenu) {
+    static MenuElement[] elementsOf(JPopupMenu popupMenu) {
+      return execute(new JPopupMenuElementsQuery(popupMenu));
+    }
+    
+    private JPopupMenuElementsQuery(JPopupMenu popupMenu) {
       this.popupMenu = popupMenu;
     }
 
@@ -74,15 +76,20 @@ public class JPopupMenuDriver extends JComponentDriver {
   }
 
   static String asString(final MenuElement e) {
-    Component c = new GetMenuElementComponent(e).run();
+    Component c = MenuElementComponentQuery.componentIn(e);
     if (c instanceof JMenuItem) return textOf((JMenuItem)c);
     return "-";
   }
 
-  private static class GetMenuElementComponent extends GuiQuery<Component> {
+  private static class MenuElementComponentQuery extends GuiQuery<Component> {
+    
     private final MenuElement e;
 
-    GetMenuElementComponent(MenuElement e) {
+    static Component componentIn(MenuElement e) {
+      return execute(new MenuElementComponentQuery(e));
+    }
+    
+    private MenuElementComponentQuery(MenuElement e) {
       this.e = e;
     }
 

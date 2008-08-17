@@ -28,7 +28,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestWindow.showInTest;
+import static org.fest.swing.testing.TestWindow.showNewInTest;
 
 /**
  * Tests for <code>{@link ComponentFoundCondition}</code>.
@@ -46,7 +46,7 @@ public class ComponentFoundConditionTest {
   @BeforeMethod public void setUp() {
     matcher = new TypeMatcher();
     condition = new ComponentFoundCondition("",  finderWithNewAwtHierarchy(), matcher);
-    toFind = showInTest(getClass());
+    toFind = showNewInTest(getClass());
   }
 
   @AfterMethod public void tearDown() {

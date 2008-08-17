@@ -32,6 +32,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -52,13 +53,9 @@ public class JMenuItemDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JMenuItemDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    menuItem = frame.menuNew;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    menuItem = window.menuNew;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -73,13 +70,19 @@ public class JMenuItemDriverTest {
     clickRecorder.wasClicked();
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JMenu menuFile = new JMenu("File");
     final JMenuItem menuNew = new JMenuItem("New");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }    
+    
+    MyWindow() {
       super(JMenuItemDriverTest.class);
       setJMenuBar(new JMenuBar());
       menuFile.add(menuNew);

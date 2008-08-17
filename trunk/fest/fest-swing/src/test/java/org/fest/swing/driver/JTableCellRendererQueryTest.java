@@ -31,7 +31,8 @@ import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableCellRendererQuery}</code>.
@@ -39,26 +40,22 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class JTableCellRendererQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTableCellRendererQueryTest {
 
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.showNew();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
-  @Test(dataProvider = "rendererTypes", groups = GUI)
+  @Test(dataProvider = "rendererTypes", groups = { GUI, EDT_QUERY })
   public void shouldReturnRendererComponentOfJTableCell(int column, Class<?> rendererType) {
-    Component renderer = JTableCellRendererQuery.cellRendererIn(frame.table, 0, column);
+    Component renderer = JTableCellRendererQuery.cellRendererIn(window.table, 0, column);
     assertThat(renderer).isInstanceOf(rendererType);
   }
 
@@ -70,12 +67,22 @@ import static org.fest.swing.testing.TestGroups.GUI;
     };
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTable table;
 
-    MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    MyWindow() {
       super(JTableCellEditorQueryTest.class);
       TableRenderDemo newContentPane = new TableRenderDemo();
       newContentPane.setOpaque(true); // content panes must be opaque

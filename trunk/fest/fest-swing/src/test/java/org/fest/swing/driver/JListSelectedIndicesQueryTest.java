@@ -26,6 +26,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JListSelectedIndicesQuery}</code>.
@@ -33,7 +34,8 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class JListSelectedIndicesQueryTest {
+@Test(groups = EDT_QUERY)
+public class JListSelectedIndicesQueryTest {
 
   private JList list;
   private int[] selectedIndices;

@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the message of a
  * <code>{@link JOptionPane}</code>.
@@ -27,10 +29,11 @@ import org.fest.swing.core.GuiQuery;
  * @author Yvonne Wang
  */
 class JOptionPaneMessageQuery extends GuiQuery<Object> {
+  
   private final JOptionPane optionPane;
 
   static Object messageOf(JOptionPane optionPane) {
-    return new JOptionPaneMessageQuery(optionPane).run();
+    return execute(new JOptionPaneMessageQuery(optionPane));
   }
 
   private JOptionPaneMessageQuery(JOptionPane optionPane) {

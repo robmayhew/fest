@@ -27,10 +27,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.Robot;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestList;
@@ -40,6 +37,7 @@ import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
@@ -69,14 +67,10 @@ public class JListDriverTest {
     cellReader = new JListCellReaderStub();
     driver = new JListDriver(robot);
     driver.cellReader(cellReader);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    dragList = frame.dragList;
-    dropList = frame.dropList;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    dragList = window.dragList;
+    dropList = window.dropList;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -121,15 +115,21 @@ public class JListDriverTest {
   }
 
   public void shouldReturnSelection() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        dragList.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
-        dragList.setSelectedIndices(new int[] { 0, 2 });
-      }
-    });
+    final TestList list = dragList;
+    final int[] indices = new int[] { 0, 2 };
+    select(list, indices);
     String[] selection = driver.selectionOf(dragList);
     assertThat(selection).containsOnly("one", "three");
     assertCellReaderWasCalled();
+  }
+
+  private static void select(final JList list, final int[] indices) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        list.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+        list.setSelectedIndices(indices);
+      }
+    });
   }
 
   public void shouldReturnListContents() {
@@ -150,20 +150,20 @@ public class JListDriverTest {
     assertThat(locationToIndex(dragList, pointClicked)).isEqualTo(1);
   }
 
-  private void selectIndex(final JList list, final int index) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
+  private static void selectIndex(final JList list, final int index) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         list.setSelectedIndex(index);
       }
     });
   }
 
-  private int locationToIndex(final JList list, final Point p) {
-    return new GuiQuery<Integer>() {
+  private static int locationToIndex(final JList list, final Point p) {
+    return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return list.locationToIndex(p);
       }
-    }.run();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -197,12 +197,12 @@ public class JListDriverTest {
     assertCellReaderWasCalled();
   }
 
-  private Object selectedValueOf(final JList list) {
-    return new GuiQuery<Object>() {
+  private static Object selectedValueOf(final JList list) {
+    return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() throws Throwable {
         return list.getSelectedValue();
       }
-    }.run();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -297,12 +297,12 @@ public class JListDriverTest {
     assertThat(selectedItemsOf(dragList)).isEqualTo(array("one", "two"));
   }
 
-  private Object[] selectedItemsOf(final JList list) {
-    return new GuiQuery<Object[]>() {
+  private static Object[] selectedItemsOf(final JList list) {
+    return execute(new GuiQuery<Object[]>() {
       protected Object[] executeInEDT() throws Throwable {
         return list.getSelectedValues();
       }
-    }.run();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -351,11 +351,7 @@ public class JListDriverTest {
   }
 
   public void shouldPassIfSelectedItemsIsEqualToExpectedOnes() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        dragList.setSelectedIndices(new int[] { 0, 1 });
-      }
-    });
+    select(dragList, new int[] { 0, 1 });
     driver.requireSelectedItems(dragList, "one", "two");
     assertCellReaderWasCalled();
   }
@@ -468,10 +464,14 @@ public class JListDriverTest {
   }
 
   private void clearAndDisableDragList() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        dragList.setSelectedIndex(-1);
-        dragList.setEnabled(false);
+    clearAndDisableDragList(dragList);
+  }
+
+  private static void clearAndDisableDragList(final JList list) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        list.setSelectedIndex(-1);
+        list.setEnabled(false);
       }
     });
   }
@@ -489,14 +489,20 @@ public class JListDriverTest {
     driver.cellReader(null);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     private static final Dimension LIST_SIZE = new Dimension(80, 40);
 
     final TestList dragList = new TestList("one", "two", "three");
     final TestList dropList = new TestList("four", "five", "six");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JListDriverTest.class);
       dragList.setName("dragList");
       dropList.setName("dropList");

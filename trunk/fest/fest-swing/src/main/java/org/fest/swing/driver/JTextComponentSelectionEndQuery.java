@@ -19,6 +19,8 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the end position of the selected text in 
  * a <code>{@link JTextComponent}</code>.
@@ -30,7 +32,7 @@ class JTextComponentSelectionEndQuery extends GuiQuery<Integer> {
   private final JTextComponent textBox;
 
   static int selectionEndOf(JTextComponent textBox) {
-    return new JTextComponentSelectionEndQuery(textBox).run();
+    return execute(new JTextComponentSelectionEndQuery(textBox));
   }
   
   private JTextComponentSelectionEndQuery(JTextComponent textBox) {

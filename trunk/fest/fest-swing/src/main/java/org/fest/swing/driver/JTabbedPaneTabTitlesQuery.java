@@ -19,6 +19,8 @@ import javax.swing.JTabbedPane;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the titles of the tabs in a 
  * <code>{@link JTabbedPane}</code>.
@@ -30,7 +32,7 @@ class JTabbedPaneTabTitlesQuery extends GuiQuery<String[]> {
   private final JTabbedPane tabbedPane;
 
   static String[] tabTitlesOf(JTabbedPane tabbedPane) {
-    return new JTabbedPaneTabTitlesQuery(tabbedPane).run();
+    return execute(new JTabbedPaneTabTitlesQuery(tabbedPane));
   }
 
   private JTabbedPaneTabTitlesQuery(JTabbedPane tabbedPane) {

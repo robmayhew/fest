@@ -26,18 +26,19 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.Robot;
+import org.fest.swing.core.*;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
 import org.fest.swing.testing.TestWindow;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -61,14 +62,10 @@ public class JInternalFrameDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JInternalFrameDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    internalFrame = frame.internalFrame;
-    desktopPane = frame.desktopPane;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    internalFrame = window.internalFrame;
+    desktopPane = window.desktopPane;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -95,7 +92,7 @@ public class JInternalFrameDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotIconifyAlreadyIconifiedInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setIcon(true);
+    setIcon(internalFrame, true);
     driver.iconify(internalFrame);
     assertThat(isIconified(internalFrame)).isTrue();
   }
@@ -103,7 +100,7 @@ public class JInternalFrameDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotDeiconifyAlreadyDeiconifiedInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setIcon(false);
+    setIcon(internalFrame, false);
     driver.deiconify(internalFrame);
     assertThat(isIconified(internalFrame)).isFalse();
   }
@@ -120,11 +117,7 @@ public class JInternalFrameDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldThrowErrorIfIconifyingFrameThatIsNotIconifiable(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        internalFrame.setIconifiable(false);
-      }
-    });
+    setNotIconifiable(internalFrame);
     try {
       driver.iconify(internalFrame);
       fail();
@@ -134,29 +127,33 @@ public class JInternalFrameDriverTest {
     }
   }
 
+  private static void setNotIconifiable(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.setIconifiable(false);
+      }
+    });
+  }
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldMaximizeInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.maximize(internalFrame);
-    assertThat(isMaximized()).isTrue();
+    assertThat(isMaximized(internalFrame)).isTrue();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldMaximizeIconifiedInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setIcon(true);
+    setIcon(internalFrame, true);
     driver.maximize(internalFrame);
-    assertThat(isMaximized()).isTrue();
+    assertThat(isMaximized(internalFrame)).isTrue();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        internalFrame.setMaximizable(false);
-      }
-    });
+    setNotMaximizable(internalFrame);
     try {
       driver.maximize(internalFrame);
       fail();
@@ -164,6 +161,14 @@ public class JInternalFrameDriverTest {
       assertThat(e).message().contains("The JInternalFrame <")
                              .contains("> is not maximizable");
     }
+  }
+
+  private static void setNotMaximizable(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.setMaximizable(false);
+      }
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -177,31 +182,30 @@ public class JInternalFrameDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNormalizeIconifiedInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setIcon(true);
+    setIcon(internalFrame, true);
     driver.normalize(internalFrame);
     assertIsNormalized();
   }
 
-  private void setIcon(boolean icon) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() throws PropertyVetoException {
-        internalFrame.setIcon(true);
-        return null;
+  private void setIcon(final JInternalFrame internalFrame, final boolean icon) {
+    execute(new GuiTask() {
+      protected void executeInEDT() throws PropertyVetoException {
+        internalFrame.setIcon(icon);
       }
-    }.run();
+    });
   }
 
   private void assertIsNormalized() {
     assertThat(isIconified(internalFrame)).isFalse();
-    assertThat(isMaximized()).isFalse();
+    assertThat(isMaximized(internalFrame)).isFalse();
   }
 
-  private boolean isMaximized() {
-    return new GuiQuery<Boolean>() {
+  private static final boolean isMaximized(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() throws Throwable {
         return internalFrame.isMaximum();
       }
-    }.run();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -239,33 +243,29 @@ public class JInternalFrameDriverTest {
   }
 
   private FluentPoint internalFrameLocation() {
-    return new FluentPoint(new GuiQuery<Point>() {
-      protected Point executeInEDT() throws Throwable {
-        return internalFrame.getLocation();
-      }
-    }.run());
+    return new FluentPoint(locationOf(internalFrame));
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldCloseInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.close(internalFrame);
-    boolean closed = new GuiQuery<Boolean>() {
+    boolean closed = isClosed(internalFrame);
+    assertThat(closed).isTrue();
+  }
+
+  private static Boolean isClosed(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() throws Throwable {
         return internalFrame.isClosed();
       }
-    }.run();
-    assertThat(closed).isTrue();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldThrowErrorIfClosingFrameThatIsNotClosable(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        internalFrame.setClosable(false);
-      }
-    });
+    setNotClosable(internalFrame);
     try {
       driver.close(internalFrame);
       fail();
@@ -273,6 +273,14 @@ public class JInternalFrameDriverTest {
       assertThat(e).message().contains("The JInternalFrame <")
                              .contains("> is not closable");
     }
+  }
+
+  private static void setNotClosable(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.setClosable(false);
+      }
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -287,43 +295,49 @@ public class JInternalFrameDriverTest {
   public void shouldResizeWidth(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     int newWidth = 600;
-    assertThat(internalFrameWidth()).isNotEqualTo(newWidth);
+    assertThat(widthOf(internalFrame)).isNotEqualTo(newWidth);
     driver.resizeWidthTo(internalFrame, newWidth);
-    assertThat(internalFrameWidth()).isEqualTo(newWidth);
+    assertThat(widthOf(internalFrame)).isEqualTo(newWidth);
   }
 
-  private int internalFrameWidth() {
-    return new GuiQuery<Integer>() {
+  private static int widthOf(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return internalFrame.getWidth();
       }
-    }.run();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldResizeHeight(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     int newHeight = 600;
-    assertThat(internalFrameHeight()).isNotEqualTo(newHeight);
+    assertThat(heightOf(internalFrame)).isNotEqualTo(newHeight);
     driver.resizeHeightTo(internalFrame, newHeight);
-    assertThat(internalFrameHeight()).isEqualTo(newHeight);
+    assertThat(heightOf(internalFrame)).isEqualTo(newHeight);
   }
 
-  private int internalFrameHeight() {
-    return new GuiQuery<Integer>() {
+  private static int heightOf(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return internalFrame.getHeight();
       }
-    }.run();
+    });
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    private final JDesktopPane desktopPane;
-    private final JInternalFrame internalFrame;
+    final JDesktopPane desktopPane;
+    final JInternalFrame internalFrame;
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JInternalFrameDriverTest.class);
       MyInternalFrame.resetIndex();
       desktopPane = new JDesktopPane();
@@ -355,7 +369,7 @@ public class JInternalFrameDriverTest {
     }
 
     MyInternalFrame() {
-      super(concat("Internal Frame ", String.valueOf(index++)), true, true, true, true);
+      super(concat("Internal Frame ", valueOf(index++)), true, true, true, true);
       setSize(200, 100);
     }
   }

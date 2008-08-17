@@ -41,7 +41,9 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCell.cell;
@@ -73,14 +75,10 @@ public class JTableDriverTest {
     cellReader = new JTableCellReaderStub();
     driver = new JTableDriver(robot);
     driver.cellReader(cellReader);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    dragTable = frame.dragTable;
-    dropTable = frame.dropTable;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow();
+    dragTable = window.dragTable;
+    dropTable = window.dropTable;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -175,11 +173,11 @@ public class JTableDriverTest {
   }
   
   private static boolean isCellSelected(final JTable table, final int row, final int column) {
-    return new GuiQuery<Boolean>() {
+    return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() throws Throwable {
         return table.isCellSelected(row, column);
       }
-    }.run();
+    });
   }
 
   @Test(groups = GUI, dataProvider = "cells")
@@ -209,20 +207,20 @@ public class JTableDriverTest {
   }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        dragTable.clearSelection();
-      }
-    });
+    clearSelection(dragTable);
     driver.requireNoSelection(dragTable);
   }
 
-  public void shouldFailIfHasSelectionAndExpectingNoSelection() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        dragTable.changeSelection(0, 0, false, false);
+  private static void clearSelection(final JTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.clearSelection();
       }
     });
+  }
+
+  public void shouldFailIfHasSelectionAndExpectingNoSelection() {
+    selectFirstCellOf(dragTable);
     try {
       driver.requireNoSelection(dragTable);
       fail();
@@ -232,14 +230,22 @@ public class JTableDriverTest {
     }
   }
 
+  private static void selectFirstCellOf(final JTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.changeSelection(0, 0, false, false);
+      }
+    });
+  }
+
   public void shouldReturnNullAsSelectionContentIfNoSelectedCell() {
     assertThat(selectedRowCountOf(dragTable)).isZero();
     assertThat(driver.selectionValue(dragTable)).isNull();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDrop(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  // @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldDragAndDrop(/* EventMode eventMode */) {
+    // robot.settings().eventMode(eventMode);
     int dragRowCount = rowCountOf(dragTable);
     int dropRowCount = rowCountOf(dropTable);
     driver.drag(dragTable, cell(3, 0));
@@ -271,11 +277,7 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     final JPopupMenu popupMenu = new JPopupMenu();
     popupMenu.add(new JMenuItem("Leia"));
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        dragTable.setComponentPopupMenu(popupMenu);
-      }
-    });
+    setPopupMenuTo(dragTable, popupMenu);
     ClickRecorder recorder = attachTo(dragTable);
     driver.showPopupMenuAt(dragTable, cell(0, 1));
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
@@ -284,13 +286,21 @@ public class JTableDriverTest {
     assertThat(pointClicked).isEqualTo(pointAtCell);
   }
 
+  private static void setPopupMenuTo(final TestTable table, final JPopupMenu popupMenu) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.setComponentPopupMenu(popupMenu);
+      }
+    });
+  }
+
   public void shouldReturnCellFont() {
-    final JTableCellReader cellReader = mockCellReader();
+    final JTableCellReader mockCellReader = mockCellReader();
     final Font font = new Font("SansSerif", PLAIN, 8);
-    driver.cellReader(cellReader);
-    new EasyMockTemplate(cellReader) {
+    driver.cellReader(mockCellReader);
+    new EasyMockTemplate(mockCellReader) {
       protected void expectations() {
-        expect(cellReader.fontAt(dragTable, 0, 0)).andReturn(font);
+        expect(mockCellReader.fontAt(dragTable, 0, 0)).andReturn(font);
       }
 
       protected void codeToTest() {
@@ -301,12 +311,12 @@ public class JTableDriverTest {
   }
 
   public void shouldReturnCellBackgroundColor() {
-    final JTableCellReader cellReader = mockCellReader();
+    final JTableCellReader mockCellReader = mockCellReader();
     final Color background = BLUE;
-    driver.cellReader(cellReader);
-    new EasyMockTemplate(cellReader) {
+    driver.cellReader(mockCellReader);
+    new EasyMockTemplate(mockCellReader) {
       protected void expectations() {
-        expect(cellReader.backgroundAt(dragTable, 0, 0)).andReturn(background);
+        expect(mockCellReader.backgroundAt(dragTable, 0, 0)).andReturn(background);
       }
 
       protected void codeToTest() {
@@ -317,12 +327,12 @@ public class JTableDriverTest {
   }
 
   public void shouldReturnCellForegroundColor() {
-    final JTableCellReader cellReader = mockCellReader();
+    final JTableCellReader mockCellReader = mockCellReader();
     final Color foreground = BLUE;
-    driver.cellReader(cellReader);
-    new EasyMockTemplate(cellReader) {
+    driver.cellReader(mockCellReader);
+    new EasyMockTemplate(mockCellReader) {
       protected void expectations() {
-        expect(cellReader.foregroundAt(dragTable, 0, 0)).andReturn(foreground);
+        expect(mockCellReader.foregroundAt(dragTable, 0, 0)).andReturn(foreground);
       }
 
       protected void codeToTest() {
@@ -336,8 +346,7 @@ public class JTableDriverTest {
     return createMock(JTableCellReader.class);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldEnterValueInCell(EventMode eventMode) {
+  @Test public void shouldEnterValueInCell(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     dragTable.cellEditable(0, 0, true);
     final JTableCellWriter cellWriter = mockCellWriter();
@@ -357,7 +366,7 @@ public class JTableDriverTest {
 
   @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfTableIsNotEnabledWhenEditingCell() {
-    robot.invokeAndWait(new ComponentEnableSetterTask(dragTable, false));
+    disable(dragTable);
     driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
   }
 
@@ -368,7 +377,7 @@ public class JTableDriverTest {
     driver.enterValueInCell(dragTable, cell, "Hello");
   }
 
-  public void shouldReturnEditorComponentInCell() {
+  @Test public void shouldReturnEditorComponentInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
     final Component editor = new JTextField("Hello");
     driver.cellWriter(cellWriter);
@@ -384,7 +393,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  public void shouldStartCellEditing() {
+  @Test public void shouldStartCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
@@ -399,7 +408,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  public void shouldStopCellEditing() {
+  @Test public void shouldStopCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
@@ -414,7 +423,7 @@ public class JTableDriverTest {
     }.run();
   }
 
-  public void shouldCancelCellEditing() {
+  @Test public void shouldCancelCellEditing() {
     final JTableCellWriter cellWriter = mockCellWriter();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
@@ -495,7 +504,7 @@ public class JTableDriverTest {
     driver.cellWriter(null);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TABLE_SIZE = new Dimension(400, 100);
@@ -506,6 +515,12 @@ public class JTableDriverTest {
     final TestTable dragTable = new TestTable(ROW_COUNT, COLUMN_COUNT);
     final TestTable dropTable = new TestTable(dropTableData(2, COLUMN_COUNT), columnNames(COLUMN_COUNT));
 
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
     private static Object[][] dropTableData(int rowCount, int columnCount) {
       Object[][] data = new Object[rowCount][columnCount];
       for (int i = 0; i < rowCount; i++)
@@ -514,7 +529,7 @@ public class JTableDriverTest {
       return data;
     }
 
-    MyFrame() {
+    MyWindow() {
       super(JTableDriverTest.class);
       add(decorate(dragTable));
       add(decorate(dropTable));

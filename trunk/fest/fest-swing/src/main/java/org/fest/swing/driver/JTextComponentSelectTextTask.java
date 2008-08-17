@@ -19,6 +19,8 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task should be executed in 
  * the event dispatch thread.
@@ -31,8 +33,8 @@ class JTextComponentSelectTextTask extends GuiTask {
   private final int start;
   private final int end;
 
-  static JTextComponentSelectTextTask selectTextIn(JTextComponent textBox, int start, int end) {
-    return new JTextComponentSelectTextTask(textBox, start, end);
+  static void selectTextIn(JTextComponent textBox, int start, int end) {
+    execute(new JTextComponentSelectTextTask(textBox, start, end));
   }
   
   private JTextComponentSelectTextTask(JTextComponent textBox, int start, int end) {

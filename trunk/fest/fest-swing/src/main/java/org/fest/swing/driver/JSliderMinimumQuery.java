@@ -19,6 +19,8 @@ import javax.swing.JSlider;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the minimum value supported by a 
  * <code>{@link JSlider}</code>.
@@ -30,7 +32,7 @@ class JSliderMinimumQuery extends GuiQuery<Integer> {
   private final JSlider slider;
 
   static int minimumOf(JSlider slider) {
-    return new JSliderMinimumQuery(slider).run();
+    return execute(new JSliderMinimumQuery(slider));
   }
   
   private JSliderMinimumQuery(JSlider slider) {

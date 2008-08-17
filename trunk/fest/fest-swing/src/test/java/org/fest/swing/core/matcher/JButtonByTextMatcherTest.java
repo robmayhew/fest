@@ -23,6 +23,7 @@ import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -47,15 +48,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    final String text = "Hello";
-    JButton button = button(text);
-    TestWindow frame = frameWith(button);
+    MyWindow window = MyWindow.showNew();
     try {
-      frame.display();
-      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing(text);
-      assertThat(matcher.matches(button)).isTrue();
+      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
+      assertThat(matcher.matches(window.button)).isTrue();
     } finally {
-      frame.destroy();
+      window.destroy();
     }
   }
 
@@ -67,39 +65,38 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   @Test(groups = GUI)
-  public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    JButton button = button("Bye");
-    TestWindow frame = frameWith(button);
+  public void shouldReturnFalseIfFrameIsShowingAndTextIsNotEqualToExpected() {
+    MyWindow window = MyWindow.showNew();
     try {
-      frame.display();
-      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
-      assertThat(matcher.matches(button)).isFalse();
+      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Bye");
+      assertThat(matcher.matches(window.button)).isFalse();
     } finally {
-      frame.destroy();
+      window.destroy();
     }
-  }
-
-  private JButton button(final String text) {
-    return new GuiQuery<JButton>() {
-      protected JButton executeInEDT() {
-        return new JButton(text);
-      }
-    }.run();
-  } 
-
-  private TestWindow frameWith(final JButton button) {
-    return new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        TestWindow f = new TestWindow(JButtonByTextMatcher.class);
-        f.add(button);
-        return f;
-      }
-    }.run();
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
     JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
     JButton button = new JButton("Bye");
     assertThat(matcher.matches(button)).isFalse();    
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); } 
+      });
+      window.display();
+      return window;
+    }
+    
+    final JButton button = new JButton("Hello");
+    
+    MyWindow() {
+      super(JButtonByTextMatcherTest.class);
+      addComponents(button);
+    }
   }
 }

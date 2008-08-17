@@ -18,6 +18,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of elements in a
  * <code>{@link JList}</code>.
@@ -30,7 +32,7 @@ class JListElementCountQuery extends GuiQuery<Integer> {
   private final JList list;
 
   static int elementCountOf(JList list) {
-    return new JListElementCountQuery(list).run();
+    return execute(new JListElementCountQuery(list));
   }
 
   private JListElementCountQuery(JList list) {

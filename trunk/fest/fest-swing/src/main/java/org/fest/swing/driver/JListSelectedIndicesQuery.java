@@ -19,6 +19,8 @@ import javax.swing.JList;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the selection indices in a
  * <code>{@link JList}</code>.
@@ -31,7 +33,7 @@ class JListSelectedIndicesQuery extends GuiQuery<int[]> {
   private final JList list;
 
   static int[] selectedIndicesOf(JList list) {
-    return new JListSelectedIndicesQuery(list).run();
+    return execute(new JListSelectedIndicesQuery(list));
   }
 
   private JListSelectedIndicesQuery(JList list) {

@@ -18,6 +18,8 @@ import javax.swing.JScrollBar;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the value of a
  * <code>{@link JScrollBar}</code>.
@@ -30,7 +32,7 @@ final class JScrollBarValueQuery extends GuiQuery<Integer> {
   private final JScrollBar scrollBar;
 
   static int valueOf(JScrollBar scrollBar) {
-    return new JScrollBarValueQuery(scrollBar).run();
+    return execute(new JScrollBarValueQuery(scrollBar));
   }
 
   private JScrollBarValueQuery(JScrollBar scrollBar) {

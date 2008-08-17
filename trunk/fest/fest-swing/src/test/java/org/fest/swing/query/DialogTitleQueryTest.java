@@ -21,19 +21,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.query.DialogTitleQuery;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link DialogTitleQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class DialogTitleQueryTest {
+@Test(groups = EDT_QUERY) public class DialogTitleQueryTest {
 
   private Dialog dialog;
   private String title;

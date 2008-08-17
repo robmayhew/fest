@@ -35,6 +35,7 @@ import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -46,27 +47,27 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class JTableHeaderLocationTest {
 
-  private MyFrame frame;
+  private MyWindow window;
   private JTableHeaderLocation location;
   private JTableHeader tableHeader;
   
   @BeforeMethod public void setUp() {
     location = new JTableHeaderLocation();
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
-    tableHeader = new GuiQuery<JTableHeader>() {
+    window = MyWindow.newWindow();
+    window.display();
+    tableHeader = headerOf(window.table);
+  }
+
+  private static JTableHeader headerOf(final JTable table) {
+    return execute(new GuiQuery<JTableHeader>() {
       protected JTableHeader executeInEDT() throws Throwable {
-        return frame.table.getTableHeader();
+        return table.getTableHeader();
       }
-    }.run();
+    });
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
   
   @Test(groups = GUI, dataProvider = "columnIndices")
@@ -90,9 +91,18 @@ public class JTableHeaderLocationTest {
   }
 
   private Point expectedPoint(int index) {
-    Rectangle r = tableHeader.getHeaderRect(index);
+    final JTableHeader header = tableHeader;
+    Rectangle r = rectOf(header, index);
     Point expected = new Point(r.x + r.width / 2, r.y + r.height / 2);
     return expected;
+  }
+
+  private static Rectangle rectOf(final JTableHeader tableHeader, final int index) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return tableHeader.getHeaderRect(index);
+      }
+    });
   }
 
   @Test(groups = GUI, dataProvider = "indicesOutOfBound", expectedExceptions = IndexOutOfBoundsException.class)
@@ -109,21 +119,29 @@ public class JTableHeaderLocationTest {
     location.pointAt(tableHeader, "Hello");
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TABLE_SIZE = new Dimension(400, 200);
 
     final TestTable table;
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() throws Throwable {
+          return new MyWindow();
+        }
+      });
+    }
+
+    MyWindow() {
       super(JTableHeaderLocationTest.class);
       table = new TestTable(6, 2);
       add(decorate(table));
       setPreferredSize(new Dimension(600, 400));
     }
 
-    private Component decorate(JTable table) {
+    private static Component decorate(JTable table) {
       JScrollPane scrollPane = new JScrollPane(table);
       scrollPane.setPreferredSize(TABLE_SIZE);
       return scrollPane;

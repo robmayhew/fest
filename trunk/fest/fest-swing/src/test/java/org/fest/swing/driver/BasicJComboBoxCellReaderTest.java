@@ -16,6 +16,9 @@
 package org.fest.swing.driver;
 
 
+
+import java.awt.Component;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -25,9 +28,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -43,46 +48,51 @@ public class BasicJComboBoxCellReaderTest {
   private BasicJComboBoxCellReader reader;
 
   @BeforeMethod public void setUp() {
-    comboBox = new GuiQuery<JComboBox>() {
-      protected JComboBox executeInEDT() {
-        return new JComboBox(new Object[] { "First" });
-      }
-    }.run();
+    comboBox = newComboBox();
     reader = new BasicJComboBoxCellReader();
   }
 
-  public void shouldReturnModelValueToString() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        comboBox.setModel(new DefaultComboBoxModel(array(new Jedi("Yoda"))));
-        return null;
+  private static JComboBox newComboBox() {
+    return execute(new GuiQuery<JComboBox>() {
+      protected JComboBox executeInEDT() {
+        return new JComboBox(new Object[] { "First" });
       }
-    }.run();
+    });
+  }
+
+  public void shouldReturnModelValueToString() {
+    setModelValues(comboBox, array(new Jedi("Yoda")));
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isEqualTo("Yoda");
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        comboBox.setModel(new DefaultComboBoxModel(new Object[] { null }));
-        comboBox.setRenderer(new CustomCellRenderer(new JToolBar()));
-        return null;
-      }
-    }.run();
+    setModelValues(comboBox, new Object[] { null });
+    setRendererComponent(comboBox, new JToolBar());
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isNull();
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        comboBox.setModel(new DefaultComboBoxModel(array(new Jedi(null))));
-        comboBox.setRenderer(new CustomCellRenderer(new JLabel("First")));
-        return null;
-      }
-    }.run();
+    setModelValues(comboBox, array(new Jedi(null)));
+    setRendererComponent(comboBox, new JLabel("First"));
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isEqualTo("First");
+  }
+  
+  private static void setModelValues(final JComboBox comboBox, final Object[] values) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setModel(new DefaultComboBoxModel(values));
+      }
+    });
+  }
+  
+  private static void setRendererComponent(final JComboBox comboBox, final Component renderer) {
+    execute(new GuiTask() {
+      protected void executeInEDT() throws Throwable {
+        comboBox.setRenderer(new CustomCellRenderer(renderer));
+      }
+    });
   }
 }

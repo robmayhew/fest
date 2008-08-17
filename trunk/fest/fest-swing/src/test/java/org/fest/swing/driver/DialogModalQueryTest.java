@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link DialogModalQuery}</code>.
@@ -41,7 +42,7 @@ public class DialogModalQueryTest {
     dialog = createMock(Dialog.class);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
   public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
     new EasyMockTemplate(dialog) {
       protected void expectations() {

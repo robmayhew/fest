@@ -26,13 +26,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JScrollBarValueQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JScrollBarValueQueryTest {
+@Test(groups = EDT_QUERY)
+public class JScrollBarValueQueryTest {
 
   private JScrollBar scrollBar;
   private int value;

@@ -19,6 +19,8 @@ import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a
  * <code>{@link JInternalFrame}</code> is maximizable or not.
@@ -31,7 +33,7 @@ class JInternalFrameMaximizableQuery extends GuiQuery<Boolean> {
   private final JInternalFrame internalFrame;
 
   static boolean isMaximizable(JInternalFrame internalFrame) {
-    return new JInternalFrameMaximizableQuery(internalFrame).run();
+    return execute(new JInternalFrameMaximizableQuery(internalFrame));
   }
 
   private JInternalFrameMaximizableQuery(JInternalFrame internalFrame) {

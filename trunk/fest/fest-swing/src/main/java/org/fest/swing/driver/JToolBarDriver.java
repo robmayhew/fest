@@ -25,7 +25,11 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static javax.swing.SwingUtilities.getWindowAncestor;
 
-import static org.fest.reflect.core.Reflection.field;
+import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
+import static org.fest.swing.driver.JToolBarDockingSourceQuery.dockingSourceOf;
+import static org.fest.swing.driver.JToolBarFloatableQuery.isFloatable;
+import static org.fest.swing.driver.JToolBarIsFloatingQuery.isJToolBarFloating;
+import static org.fest.swing.driver.JToolBarUIQuery.uiOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
@@ -57,8 +61,8 @@ public class JToolBarDriver extends JComponentDriver {
    * @return <code>true</code> if the <code>JToolBar</code> is floating, <code>false</code> otherwise.
    */
   public boolean isFloating(JToolBar toolBar) {
-    ToolBarUI ui = toolBar.getUI();
-    if (ui instanceof BasicToolBarUI) return ((BasicToolBarUI) ui).isFloating();
+    ToolBarUI ui = uiOf(toolBar);
+    if (ui instanceof BasicToolBarUI) return isJToolBarFloating((BasicToolBarUI)ui);
     // Have to guess; probably ought to check for sibling components
     Window w = getWindowAncestor(toolBar);
     return !(w instanceof Frame) && parentOf(toolBar).getComponentCount() == 1;
@@ -72,7 +76,7 @@ public class JToolBarDriver extends JComponentDriver {
    */
   public void makeFloat(JToolBar toolBar) {
     Window w = getWindowAncestor(toolBar);
-    Point where = w.getLocation();
+    Point where = locationOf(w);
     floatTo(toolBar, where.x, where.y);
   }
 
@@ -85,7 +89,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
   public void floatTo(JToolBar toolBar, int x, int y) {
-    if (!toolBar.isFloatable()) throw actionFailure(concat("JToolbar <", format(toolBar), "> is not floatable"));
+    if (!isFloatable(toolBar)) throw actionFailure(concat("JToolbar <", format(toolBar), "> is not floatable"));
     Window w = getWindowAncestor(toolBar);
     drag(toolBar, location.pointToGrab(toolBar));
     drop(w, new Point(x - w.getX(), y - w.getY()));
@@ -109,11 +113,8 @@ public class JToolBarDriver extends JComponentDriver {
       throw actionFailure(concat("Failed to dock <", format(toolBar), "> using constraint ", quote(constraint)));
   }
 
-  private Container dockFor(JToolBar toolBar) {
-    Container dock = null;
-    try {
-      dock = field("dockingSource").ofType(Container.class).in(toolBar.getUI()).get();
-    } catch (RuntimeException e) {}
+  private Container dockFor(final JToolBar toolBar) {
+    Container dock = dockingSourceOf(toolBar);
     if (dock != null) return dock;
     throw actionFailure("Unabled to determine dock for JToolBar");
   }

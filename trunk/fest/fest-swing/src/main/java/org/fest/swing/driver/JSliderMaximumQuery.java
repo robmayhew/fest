@@ -19,6 +19,8 @@ import javax.swing.JSlider;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the maximum value supported by a 
  * <code>{@link JSlider}</code>.
@@ -30,7 +32,7 @@ class JSliderMaximumQuery extends GuiQuery<Integer> {
   private final JSlider slider;
 
   static int maximumOf(JSlider slider) {
-    return new JSliderMaximumQuery(slider).run();
+    return execute(new JSliderMaximumQuery(slider));
   }
   
   private JSliderMaximumQuery(JSlider slider) {

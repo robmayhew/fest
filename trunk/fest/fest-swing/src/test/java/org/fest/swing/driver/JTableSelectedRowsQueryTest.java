@@ -26,6 +26,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JTableSelectedRowsQuery}</code>.
@@ -33,7 +34,8 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test public class JTableSelectedRowsQueryTest {
+@Test(groups = EDT_QUERY)
+public class JTableSelectedRowsQueryTest {
 
   private JTable table;
   private int[] selectedRows;

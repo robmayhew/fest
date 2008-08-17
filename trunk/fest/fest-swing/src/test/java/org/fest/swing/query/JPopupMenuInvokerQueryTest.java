@@ -23,19 +23,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.query.JPopupMenuInvokerQuery;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link JPopupMenuInvokerQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JPopupMenuInvokerQueryTest {
+@Test(groups = EDT_QUERY) public class JPopupMenuInvokerQueryTest {
 
   private JPopupMenu popupMenu;
   private Component invoker;

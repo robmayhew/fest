@@ -15,8 +15,6 @@
  */
 package org.fest.swing.core;
 
-import javax.swing.SwingUtilities;
-
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ActionFailedException;
@@ -35,10 +33,10 @@ import static org.fest.assertions.Assertions.assertThat;
     new GuiTaskInEDT().run();
   }
 
-  public void shouldExecuteInEDTWhenCalledInEDT() throws Exception {
+  public void shouldExecuteInEDTWhenCalledInEDT() {
     final GuiTaskInEDT task = new GuiTaskInEDT();
-    SwingUtilities.invokeAndWait(task);
-    assertThat(task.executed).isEqualTo(true);
+    GuiActionRunner.execute(task);
+    assertThat(task.executed()).isEqualTo(true);
   }
 
   private static class GuiTaskInEDT extends GuiTask {

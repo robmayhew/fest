@@ -34,6 +34,7 @@ import org.fest.swing.testing.TestWindow;
 import static javax.swing.RowFilter.regexFilter;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.fixture.TableCell.row;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -48,12 +49,7 @@ public class ReadSortedTableTest {
   private FrameFixture frame;
   
   @BeforeMethod public void setUp() {
-    MyFrame window = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    frame = new FrameFixture(window);
+    frame = new FrameFixture(MyWindow.newWindow());
     frame.show();
   }
   
@@ -66,12 +62,18 @@ public class ReadSortedTableTest {
     assertThat(frame.table("table").valueAt(row(0).column(0))).isEqualTo("2-0");
   }
   
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
     final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>();
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(ReadSortedTableTest.class);
       add(textBox());
       add(table());

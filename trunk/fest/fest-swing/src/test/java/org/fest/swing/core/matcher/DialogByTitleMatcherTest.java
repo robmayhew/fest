@@ -48,7 +48,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfDialogIsShowingAndTitleIsEqualToExpected() {
-    TestWindow window = TestWindow.showInTest(DialogByTitleMatcher.class);
+    TestWindow window = TestWindow.showNewInTest(DialogByTitleMatcher.class);
     TestDialog dialog = TestDialog.showInTest(window);
     String title = "Hello";
     dialog.setTitle(title);
@@ -70,7 +70,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfDialogIsShowingAndTitleIsNotEqualToExpected() {
-    TestWindow window = TestWindow.showInTest(DialogByTitleMatcher.class);
+    TestWindow window = TestWindow.showNewInTest(DialogByTitleMatcher.class);
     TestDialog dialog = TestDialog.showInTest(window);
     try {
       DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing("Hello");

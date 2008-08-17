@@ -19,6 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a
  * <code>{@link JTable}</code> is editable or not.
@@ -31,7 +33,7 @@ class JTableCellEditableQuery extends GuiQuery<Boolean> {
   private final JTableCell cell;
 
   static boolean isCellEditable(JTable table, JTableCell cell) {
-    return new JTableCellEditableQuery(table, cell).run();
+    return execute(new JTableCellEditableQuery(table, cell));
   }
   
   private JTableCellEditableQuery(JTable table, JTableCell cell) {

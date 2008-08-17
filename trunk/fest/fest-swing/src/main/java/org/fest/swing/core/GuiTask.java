@@ -16,31 +16,27 @@
 package org.fest.swing.core;
 
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 
 import static javax.swing.SwingUtilities.isEventDispatchThread;
-
-import static org.fest.swing.exception.UnexpectedException.unexpected;
 
 /**
  * Understands a <code>{@link Runnable}</code> that should be executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-public abstract class GuiTask implements Runnable {
+public abstract class GuiTask extends GuiAction {
 
   /** 
    * Runs this task action and verifies that it is executed in the event dispatch thread.
    * @throws ActionFailedException if this task is not executed in the event dispatch thread.
-   * @throws UnexpectedException wrapping any exception thrown when executing an action in the event dispatch thread.
    */
   public final void run() {
     if (!isEventDispatchThread())
       throw ActionFailedException.actionFailure("Task should be executed in the event dispatch thread");
     try {
       executeInEDT();
-    } catch (Throwable e) {
-      throw unexpected(e);
+    } catch (Throwable t) {
+      catchedException(t);
     }
   }
 

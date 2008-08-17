@@ -19,6 +19,8 @@ import java.awt.Component;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the name of a
  * <code>{@link Component}</code>.
@@ -36,7 +38,7 @@ public final class ComponentNameQuery extends GuiQuery<String> {
    * @return the name of the given <code>Component</code>.
    */
   public static String nameOf(Component component) {
-    return new ComponentNameQuery(component).run();
+    return execute(new ComponentNameQuery(component));
   }
   
   private ComponentNameQuery(Component component) {

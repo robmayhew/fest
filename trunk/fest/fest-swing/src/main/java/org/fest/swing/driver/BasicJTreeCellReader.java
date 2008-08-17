@@ -21,6 +21,7 @@ import javax.swing.JTree;
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTreeCellRendererQuery.cellRendererIn;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
@@ -46,16 +47,21 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
   }
 
   private String valueToText(final JTree tree, final Object modelValue) {
-    String text = new JTreeConvertValueToTextTask(tree, modelValue).run();
+    String text = JTreeConvertValueToTextTask.convertValueToText(tree, modelValue);
     if (isDefaultToString(text)) return null;
     return text;
   }
 
-  private static class JTreeConvertValueToTextTask extends GuiQuery<String> {
-
+  static class JTreeConvertValueToTextTask extends GuiQuery<String> {
+    // TODO Move to top-level
+    
     private final JTree tree;
     private final Object modelValue;
 
+    static String convertValueToText(JTree tree, Object modelValue) {
+      return execute(new JTreeConvertValueToTextTask(tree, modelValue));
+    }
+    
     JTreeConvertValueToTextTask(JTree tree, Object modelValue) {
       this.tree = tree;
       this.modelValue = modelValue;

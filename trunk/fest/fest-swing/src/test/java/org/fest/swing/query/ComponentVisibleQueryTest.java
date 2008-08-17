@@ -27,12 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link ComponentVisibleQuery}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = EDT_QUERY)
 public class ComponentVisibleQueryTest {
 
   private Component component;
@@ -41,7 +43,7 @@ public class ComponentVisibleQueryTest {
     component = createMock(Component.class);
   }
   
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
   public void shouldIndicateIfComponentIsVisible(final boolean visible) {
     new EasyMockTemplate(component) {
       protected void expectations() {

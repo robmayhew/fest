@@ -19,6 +19,8 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether editor of a 
  * <code>{@link JComboBox}</code> is accessible or not. To be accessible, a <code>JComboBox</code> needs to be enabled 
@@ -31,7 +33,7 @@ class JComboBoxEditorAccessibleQuery extends GuiQuery<Boolean> {
   private final JComboBox comboBox;
 
   static boolean isEditorAccessible(JComboBox comboBox) {
-    return new JComboBoxEditorAccessibleQuery(comboBox).run();
+    return execute(new JComboBoxEditorAccessibleQuery(comboBox));
   }
   
   private JComboBoxEditorAccessibleQuery(JComboBox comboBox) {

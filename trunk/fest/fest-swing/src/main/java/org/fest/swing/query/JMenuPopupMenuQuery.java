@@ -5,6 +5,8 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the pop-up menu associated with a 
  * <code>{@link JMenu}</code>.
@@ -22,7 +24,7 @@ public class JMenuPopupMenuQuery extends GuiQuery<JPopupMenu> {
    * @return the pop-up menu associated with the given <code>JMenu</code>.
    */
   public static JPopupMenu popupMenuOf(JMenu menu) {
-    return new JMenuPopupMenuQuery(menu).run();
+    return execute(new JMenuPopupMenuQuery(menu));
   }
   
   private JMenuPopupMenuQuery(JMenu menu) {

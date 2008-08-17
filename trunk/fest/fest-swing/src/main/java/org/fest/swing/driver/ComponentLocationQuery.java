@@ -1,5 +1,5 @@
 /*
- * Created on Aug 10, 2008
+ * Created on Aug 13, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,27 +13,35 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Point;
+
+import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that enables or disables a <code>{@link Component}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the location (top-left corner) of a
+ * <code>{@link Component}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class ComponentEnableSetterTask implements Runnable {
+class ComponentLocationQuery extends GuiQuery<Point> {
 
   private final Component component;
-  private final boolean enabled;
 
-  public ComponentEnableSetterTask(Component component, boolean enabled) {
-    this.component = component;
-    this.enabled = enabled;
+  static Point locationOf(Component component) {
+    return execute(new ComponentLocationQuery(component));
   }
   
-  public void run() {
-    component.setEnabled(enabled);
+  private ComponentLocationQuery(Component component) {
+    this.component = component;
   }
 
+  protected Point executeInEDT() throws Throwable {
+    return component.getLocation();
+  }
 }

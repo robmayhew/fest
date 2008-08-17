@@ -23,6 +23,9 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands the base window for all GUI tests.
@@ -33,14 +36,14 @@ public class TestWindow extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestWindow showInTest(final Class<?> testClass) {
-    return new GuiQuery<TestWindow>() {
+  public static TestWindow showNewInTest(final Class<?> testClass) {
+    TestWindow window = execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
-        TestWindow f = new TestWindow(testClass);
-        f.display();
-        return f;
+        return new TestWindow(testClass);
       }
-    }.run();
+    });
+    window.display();
+    return window;
   }
   
   public TestWindow(Class<?> testClass) {
@@ -58,16 +61,15 @@ public class TestWindow extends JFrame {
   }
   
   public void display(final Dimension size) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         beforeDisplayed();
         setPreferredSize(size);
         pack();
         setLocation(100, 100);
         setVisible(true);
-        return null;
       }
-    }.run();
+    });
   }
   
   protected void beforeDisplayed() {}
@@ -85,12 +87,11 @@ public class TestWindow extends JFrame {
   }
   
   public void destroy() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         setVisible(false);
         dispose();
-        return null;
       }
-    }.run();
+    });
   }
 }

@@ -18,6 +18,8 @@ import javax.swing.AbstractButton;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether an 
  * <code>{@link AbstractButton}</code> is selected or not.
@@ -36,7 +38,7 @@ public class AbstractButtonSelectedQuery extends GuiQuery<Boolean> {
    * @return <code>true</code> if the given <code>AbstractButton</code> is selected, <code>false</code> otherwise.
    */
   public static boolean isSelected(AbstractButton button) {
-    return new AbstractButtonSelectedQuery(button).run();
+    return execute(new AbstractButtonSelectedQuery(button));
   }
 
   private AbstractButtonSelectedQuery(AbstractButton button) {

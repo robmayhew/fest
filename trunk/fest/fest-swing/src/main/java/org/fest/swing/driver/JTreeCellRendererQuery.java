@@ -22,6 +22,8 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular cell in a <code>{@link JTree}</code>.
@@ -35,7 +37,7 @@ class JTreeCellRendererQuery extends GuiQuery<Component> {
   private final JTree tree;
 
   static Component cellRendererIn(JTree tree, Object modelValue) {
-    return new JTreeCellRendererQuery(tree, modelValue).run();
+    return execute(new JTreeCellRendererQuery(tree, modelValue));
   }
 
   private JTreeCellRendererQuery(JTree tree, Object modelValue) {

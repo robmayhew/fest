@@ -18,6 +18,8 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text of a 
  * <code>{@link JTextComponent}</code>.
@@ -35,7 +37,7 @@ public final class JTextComponentTextQuery extends GuiQuery<String> {
    * @return the text of the given <code>JTextComponent</code>.
    */
   public static String textOf(JTextComponent textComponent) {
-    return new JTextComponentTextQuery(textComponent).run();
+    return execute(new JTextComponentTextQuery(textComponent));
   }
 
   private JTextComponentTextQuery(JTextComponent textComponent) {

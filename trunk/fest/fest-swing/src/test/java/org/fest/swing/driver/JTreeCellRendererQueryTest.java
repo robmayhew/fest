@@ -29,7 +29,8 @@ import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeCellRendererQuery}</code>.
@@ -37,35 +38,37 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
+@Test(groups = { GUI, EDT_QUERY })
 public class JTreeCellRendererQueryTest {
 
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.newWindow();
+    window.display();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   public void shouldReturnCellRendererComponentOfJTree() {
-    Component renderer = JTreeCellRendererQuery.cellRendererIn(frame.tree, "one");
+    Component renderer = JTreeCellRendererQuery.cellRendererIn(window.tree, "one");
     assertThat(renderer).isInstanceOf(JLabel.class);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTree tree = new JTree(new Object[] { "one", "two", "three" });
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+
+    MyWindow() {
       super(JTreeCellRendererQueryTest.class);
       tree.setPreferredSize(new Dimension(80, 60));
       add(tree);

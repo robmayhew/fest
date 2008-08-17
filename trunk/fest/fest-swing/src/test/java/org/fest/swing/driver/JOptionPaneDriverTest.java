@@ -29,6 +29,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
@@ -37,6 +38,7 @@ import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
@@ -53,17 +55,13 @@ public class JOptionPaneDriverTest {
 
   private Robot robot;
   private JOptionPaneDriver driver;
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JOptionPaneDriver(robot);
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() {
-        return new MyFrame();
-      }
-    }.run();
-    robot.showWindow(frame);
+    window = MyWindow.newWindow();
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -71,47 +69,38 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldFindButtonWithGivenTextInOptionPane() {
-    setUpMessageWithOptions("First", "Second");
+    window.setUpMessageWithOptions("First", "Second");
     JOptionPane optionPane = showJOptionPane();
     JButton button = driver.buttonWithText(optionPane, "Second");
     assertThat(textOf(button)).isEqualTo("Second");
   }
 
   public void shouldFindOKButton() {
-    setUpInformationMessage();
+    window.setUpInformationMessage();
     JOptionPane optionPane = showJOptionPane();
     JButton button = driver.okButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.okButtonText");
   }
 
   public void shouldFindCancelButton() {
-    setUpInputMessage();
+    window.setUpInputMessage();
     JOptionPane optionPane = showJOptionPane();
     JButton button = driver.cancelButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.cancelButtonText");
   }
 
   public void shouldFindYesButton() {
-    setUpConfirmMessage();
+    window.setUpConfirmMessage();
     JOptionPane optionPane = showJOptionPane();
     JButton button = driver.yesButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.yesButtonText");
   }
 
   public void shouldFindNoButton() {
-    setUpConfirmMessage();
+    window.setUpConfirmMessage();
     JOptionPane optionPane = showJOptionPane();
     JButton button = driver.noButton(optionPane);
     assertThatButtonHasTextFromUIManager(button, "OptionPane.noButtonText");
-  }
-
-  private void setUpConfirmMessage() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpConfirmMessage();
-        return null;
-      }
-    }.run();
   }
 
   private void assertThatButtonHasTextFromUIManager(JButton button, String textKey) {
@@ -120,48 +109,43 @@ public class JOptionPaneDriverTest {
   }
   
   public void shouldFindTextComponentInOptionPane() {
-    setUpInputMessage();
+    window.setUpInputMessage();
     JOptionPane optionPane = showJOptionPane();
     JTextComponent textBox = driver.textBox(optionPane);
     assertThat(textBox).isNotNull();
   }
 
-  private void setUpInputMessage() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpInputMessage();
-        return null;
-      }
-    }.run();
-  }
-
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class) 
   public void shouldNotFindTextComponentInOptionPaneIfNotInputMessage() {
-    setUpErrorMessage();
+    window.setUpErrorMessage();
     JOptionPane optionPane = showJOptionPane();
     driver.textBox(optionPane);
   }
 
   public void shouldPassIfMatchingTitle() {
-    final String title = "Star Wars";
-    JOptionPane optionPane = showMessageWithTitle(title);
-    driver.requireTitle(optionPane, title);
+    setUpMessageWithTitle(window, "Star Wars");
+    JOptionPane optionPane = showJOptionPane();
+    driver.requireTitle(optionPane, "Star Wars");
   }
 
   public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpManuallyCreatedOptionPane("Jedi");
-        return null;
-      }
-    }.run();
+    setUpManuallyCreatedOptionPaneWithTitle(window, "Jedi");
     JOptionPane optionPane = showJOptionPane();
     driver.requireTitle(optionPane, "Jedi");
   }
 
+  private static void setUpManuallyCreatedOptionPaneWithTitle(final MyWindow window, final String title) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        window.setUpManuallyCreatedOptionPaneWithTitle(title);
+      }
+    });
+  }
+
   public void shouldFailIfNotMatchingTitle() {
     final String title = "Yoda";
-    JOptionPane optionPane = showMessageWithTitle(title);
+    setUpMessageWithTitle(window, title);
+    JOptionPane optionPane =showJOptionPane(); 
     try {
       driver.requireTitle(optionPane, "Darth Vader");
       fail();
@@ -170,24 +154,22 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  private JOptionPane showMessageWithTitle(final String title) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpMessageWithTitle(title);
-        return null;
+  private static void setUpMessageWithTitle(final MyWindow window, final String title) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        window.setUpMessageWithTitle(title);
       }
-    }.run();
-    return showJOptionPane();
+    });
   }
 
   public void shouldPassIfMatchingOptions() {
-    setUpMessageWithOptions("First", "Second");
+    window.setUpMessageWithOptions("First", "Second");
     JOptionPane optionPane = showJOptionPane();
     driver.requireOptions(optionPane, array("First", "Second"));
   }
 
   public void shouldFailIfNotMatchingOptions() {
-    setUpMessageWithOptions("First", "Second");
+    window.setUpMessageWithOptions("First", "Second");
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireOptions(optionPane, array("Third"));
@@ -198,23 +180,14 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  private void setUpMessageWithOptions(final String... options) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpMessageWithOptions(options);
-        return null;
-      }
-    }.run();
-  }
-
   public void shouldPassIfMatchingMessage() {
-    setUpMessageWithText("Leia");
+    window.setUpMessageWithText("Leia");
     JOptionPane optionPane = showJOptionPane();
     driver.requireMessage(optionPane, "Leia");
   }
 
   public void shouldFailIfNotMatchingMessage() {
-    setUpMessageWithText("Palpatine");
+    window.setUpMessageWithText("Palpatine");
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireMessage(optionPane, "Anakin");
@@ -224,23 +197,14 @@ public class JOptionPaneDriverTest {
     }
   }
 
-  private void setUpMessageWithText(final String text) {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpMessageWithText(text);
-        return null;
-      }
-    }.run();
-  }
-
   public void shouldPassIfExpectedAndActualMessageTypeIsError() {
-    setUpErrorMessage();
+    window.setUpErrorMessage();
     JOptionPane optionPane = showJOptionPane();
     driver.requireErrorMessage(optionPane);
   }
 
   public void shouldFailIfExpectedMessageTypeIsErrorAndActualIsNot() {
-    setUpInformationMessage();
+    window.setUpInformationMessage();
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireErrorMessage(optionPane);
@@ -252,22 +216,13 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsInformation() {
-    setUpInformationMessage();
+    window.setUpInformationMessage();
     JOptionPane optionPane = showJOptionPane();
     driver.requireInformationMessage(optionPane);
   }
 
-  private void setUpInformationMessage() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpInformationMessage();
-        return null;
-      }
-    }.run();
-  }
-
   public void shouldFailIfExpectedMessageTypeIsInformationAndActualIsNot() {
-    setUpErrorMessage();
+    window.setUpErrorMessage();
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireInformationMessage(optionPane);
@@ -279,18 +234,13 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsWarning() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpWarningMessage();
-        return null;
-      }
-    }.run();
+    window.setUpWarningMessage();
     JOptionPane optionPane = showJOptionPane();
     driver.requireWarningMessage(optionPane);
   }
 
   public void shouldFailIfExpectedMessageTypeIsWarningAndActualIsNot() {
-    setUpErrorMessage();
+    window.setUpErrorMessage();
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireWarningMessage(optionPane);
@@ -302,18 +252,13 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsQuestion() {
-    new GuiQuery<Void>() {
-      @Override protected Void executeInEDT() {
-        frame.setUpQuestionMessage();
-        return null;
-      }
-    }.run();
+    window.setUpQuestionMessage();
     JOptionPane optionPane = showJOptionPane();
     driver.requireQuestionMessage(optionPane);
   }
 
   public void shouldFailIfExpectedMessageTypeIsQuestionAndActualIsNot() {
-    setUpErrorMessage();
+    window.setUpErrorMessage();
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireQuestionMessage(optionPane);
@@ -325,18 +270,13 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfExpectedAndActualMessageTypeIsPlain() {
-    new GuiQuery<Void>() {
-      @Override protected Void executeInEDT() {
-        frame.setUpPlainMessage();
-        return null;
-      }
-    }.run();
+    window.setUpPlainMessage();
     JOptionPane optionPane = showJOptionPane();
     driver.requirePlainMessage(optionPane);
   }
 
   public void shouldFailIfExpectedMessageTypeIsPlainAndActualIsNot() {
-    setUpErrorMessage();
+    window.setUpErrorMessage();
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requirePlainMessage(optionPane);
@@ -346,28 +286,25 @@ public class JOptionPaneDriverTest {
                              .contains("expected:<'Plain Message'> but was:<'Error Message'>");
     }
   }
-  
-  private void setUpErrorMessage() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
-        frame.setUpErrorMessage();
-        return null;
-      }
-    }.run();
-  }
 
   private JOptionPane showJOptionPane() {
-    robot.click(frame.button);
+    robot.click(window.button);
     pause(500);
     return robot.finder().findByType(JOptionPane.class, true);
   }
 
-  public static class MyFrame extends TestWindow {
+  public static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("Click me");
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
+    MyWindow() {
       super(JOptionPaneDriverTest.class);
       add(button);
     }
@@ -380,10 +317,10 @@ public class JOptionPaneDriverTest {
       setUpOptionPane(message, "Title", INFORMATION_MESSAGE);
     }
 
-    void setUpMessageWithOptions(final Object[] options) {
+    void setUpMessageWithOptions(final Object... options) {
       setUpOptionPaneOnMouseClick(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
-          showOptionDialog(MyFrame.this, "Message", "Title", YES_NO_OPTION, QUESTION_MESSAGE, null, options,
+          showOptionDialog(MyWindow.this, "Message", "Title", YES_NO_OPTION, QUESTION_MESSAGE, null, options,
               options[0]);
         }
       });
@@ -392,7 +329,7 @@ public class JOptionPaneDriverTest {
     void setUpInputMessage() {
       setUpOptionPaneOnMouseClick(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
-          showInputDialog(MyFrame.this, "Message");
+          showInputDialog(MyWindow.this, "Message");
         }
       });
     }
@@ -400,7 +337,7 @@ public class JOptionPaneDriverTest {
     void setUpConfirmMessage() {
       setUpOptionPaneOnMouseClick(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
-          JOptionPane.showConfirmDialog(MyFrame.this, "Text");
+          JOptionPane.showConfirmDialog(MyWindow.this, "Text");
         }
       });
     }
@@ -432,28 +369,29 @@ public class JOptionPaneDriverTest {
     private void setUpOptionPane(final String text, final String title, final int messageType) {
       setUpOptionPaneOnMouseClick(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
-          showMessageDialog(MyFrame.this, text, title, messageType);
+          showMessageDialog(MyWindow.this, text, title, messageType);
         }
       });
     }
 
-    void setUpManuallyCreatedOptionPane(final String title) {
+    void setUpManuallyCreatedOptionPaneWithTitle(final String title) {
       setUpOptionPaneOnMouseClick(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent e) {
           JOptionPane optionPane = new JOptionPane("Manually Created");
-          JDialog dialog = optionPane.createDialog(MyFrame.this, title);
+          JDialog dialog = optionPane.createDialog(MyWindow.this, title);
           dialog.setVisible(true);
         }
       });
     }
 
-    private void setUpOptionPaneOnMouseClick(MouseListener l) {
-      removeAllMouseListeners();
-      button.addMouseListener(l);
-    }
-
-    private void removeAllMouseListeners() {
-      for (MouseListener l : button.getMouseListeners()) button.removeMouseListener(l);
+    private void setUpOptionPaneOnMouseClick(final MouseListener toAdd) {
+      execute(new GuiTask() {
+        protected void executeInEDT() {
+          for (MouseListener toRemove : button.getMouseListeners()) 
+            button.removeMouseListener(toRemove);
+          button.addMouseListener(toAdd);
+        }
+      });
     }
   }
 }

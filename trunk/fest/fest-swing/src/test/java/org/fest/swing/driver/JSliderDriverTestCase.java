@@ -33,8 +33,13 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JSliderLocation.JSliderOrientationQuery.orientationOf;
+import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
+import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -54,13 +59,9 @@ public abstract class JSliderDriverTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyFrame frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame(getClass(), orientation());
-      }
-    }.run();
-    slider = frame.slider;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.newWindow(getClass(), orientation());
+    slider = window.slider;
+    robot.showWindow(window);
   }
 
   abstract int orientation();
@@ -93,7 +94,7 @@ public abstract class JSliderDriverTestCase {
     robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
     int value = 10;
-    setJSliderValue(value);
+    JSliderSetValueTask.setValue(slider, value);
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
@@ -102,7 +103,7 @@ public abstract class JSliderDriverTestCase {
   public void shouldSlideToMaximum(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.slideToMaximum(slider);
-    assertThatSliderValueIsEqualTo(sliderMaximum());
+    assertThatSliderValueIsEqualTo(maximumOf(slider));
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -125,26 +126,10 @@ public abstract class JSliderDriverTestCase {
   public void shouldNotSlideToMinimumIfSliderIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
-    int value = sliderMaximum();
-    setJSliderValue(value);
+    int value = maximumOf(slider);
+    setValue(slider, value);
     driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(value);
-  }
-
-  private int sliderMaximum() {
-    return new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
-        return slider.getMaximum();
-      }
-    }.run();
-  }
-
-  private void setJSliderValue(final int value) {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        slider.setValue(value);        
-      }
-    });
   }
 
   private void assertThatSliderValueIsEqualTo(int expected) {
@@ -170,29 +155,28 @@ public abstract class JSliderDriverTestCase {
   }
 
   private void clearAndDisableSlider() {
-    robot.invokeAndWait(new Runnable() {
-      public void run() {
-        slider.setValue(0);
-        slider.setEnabled(false);
-      }
-    });
-    robot.waitForIdle();
+    setValue(slider, 0);
+    disable(slider);
   }
   
   protected int sliderOrientation() {
-    return new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
-        return slider.getOrientation();
-      }
-    }.run();
+    return orientationOf(slider);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JSlider slider = new JSlider();
 
-    MyFrame(Class<?> testClass, int orientation) {
+    static MyWindow newWindow(final Class<? extends JSliderDriverTestCase> testClass, final int orientation) {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(testClass, orientation);
+        }
+      });
+    }
+
+    MyWindow(Class<? extends JSliderDriverTestCase> testClass, int orientation) {
       super(testClass);
       add(slider);
       slider.setOrientation(orientation);

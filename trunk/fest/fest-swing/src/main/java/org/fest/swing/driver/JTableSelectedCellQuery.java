@@ -19,6 +19,7 @@ import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTableCell.cell;
 
 /**
@@ -33,7 +34,7 @@ class JTableSelectedCellQuery extends GuiQuery<JTableCell> {
   private final JTable table;
 
   static JTableCell selectedCellOf(JTable table) {
-    return new JTableSelectedCellQuery(table).run();
+    return execute(new JTableSelectedCellQuery(table));
   }
   
   private JTableSelectedCellQuery(JTable table) {

@@ -25,12 +25,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxCellRendererQuery}</code>.
@@ -40,24 +41,20 @@ import static org.fest.swing.testing.TestGroups.GUI;
  */
 public class JComboBoxCellRendererQueryTest {
 
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.showNew();
+    window.display();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
-  @Test(dataProvider = "comboBoxContents", groups = GUI)
+  @Test(dataProvider = "comboBoxContents", groups = { GUI, EDT_QUERY })
   public void shouldReturnCellRendererComponentOfJComboBox(int index, String itemText) {
-    Component renderer = JComboBoxCellRendererQuery.cellRendererIn(frame.comboBox, index);
+    Component renderer = JComboBoxCellRendererQuery.cellRendererIn(window.comboBox, index);
     assertThat(renderer).isInstanceOf(JLabel.class);
     assertThat(textOf((JLabel)renderer)).isEqualTo(itemText);
   }
@@ -70,12 +67,22 @@ public class JComboBoxCellRendererQueryTest {
     };
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    static MyWindow showNew() {
+      MyWindow window = GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
     final JComboBox comboBox = new JComboBox(new Object[] { "one", "two", "three" });
 
-    MyFrame() {
+    MyWindow() {
       super(JComboBoxCellRendererQueryTest.class);
       add(comboBox);
     }

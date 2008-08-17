@@ -30,34 +30,32 @@ import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JListCellRendererQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JListCellRendererQueryTest {
+@Test(groups = EDT_QUERY) 
+public class JListCellRendererQueryTest {
 
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = new GuiQuery<MyFrame>() {
-      protected MyFrame executeInEDT() throws Throwable {
-        return new MyFrame();
-      }
-    }.run();
-    frame.display();
+    window = MyWindow.showNew();
+    window.display();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
-  @Test(dataProvider = "listContents", groups = GUI)
+  @Test(dataProvider = "listContents", groups = { GUI, EDT_QUERY })
   public void shouldReturnCellRendererComponentOfJList(int index, String itemText) {
-    Component renderer = JListCellRendererQuery.cellRendererIn(frame.list, index);
+    Component renderer = JListCellRendererQuery.cellRendererIn(window.list, index);
     assertThat(renderer).isInstanceOf(JLabel.class);
     assertThat(textOf((JLabel)renderer)).isEqualTo(itemText);
   }
@@ -70,12 +68,22 @@ import static org.fest.swing.testing.TestGroups.GUI;
     };
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JList list = new JList(new Object[] { "one", "two", "three" });
 
-    MyFrame() {
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+
+    MyWindow() {
       super(JListCellRendererQueryTest.class);
       list.setPreferredSize(new Dimension(80, 60));
       add(list);
