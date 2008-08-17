@@ -23,7 +23,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.driver.ComponentDriver;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -41,7 +41,7 @@ public class JToggleButtonFixtureTest extends CommonComponentFixtureTestCase<JTo
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = new JToggleButton("A ToggleButton");
+    target = new JToggleButton();
     fixture = new JToggleButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -81,7 +81,16 @@ public class JToggleButtonFixtureTest extends CommonComponentFixtureTestCase<JTo
   }
 
   @Test public void shouldReturnText() {
-    assertThat(fixture.text()).isEqualTo(target.getText());
+    final String text = "A Toggle Button";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.textOf(target)).andReturn(text);
+      }
+      
+      protected void codeToTest() {
+        assertThat(fixture.text()).isEqualTo(text);
+      }
+    }.run();
   }
   
   @Test public void shouldRequireText() {

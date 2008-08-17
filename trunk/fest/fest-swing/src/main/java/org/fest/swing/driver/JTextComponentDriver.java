@@ -41,7 +41,7 @@ import static org.fest.swing.driver.JTextComponentSelectionStartQuery.selectionS
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.util.Strings.*;
 
@@ -136,7 +136,7 @@ public class JTextComponentDriver extends JComponentDriver {
     if (!isEnabled(textBox) || isEmpty(textOf(textBox))) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
-    selectTextIn(textBox, start, end);
+    robot.invokeAndWait(selectTextIn(textBox, start, end));
     verifySelectionMade(textBox, start, end);
   }
 

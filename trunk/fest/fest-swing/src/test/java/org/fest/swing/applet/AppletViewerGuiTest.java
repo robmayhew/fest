@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.MyApplet;
 
@@ -78,12 +79,11 @@ public class AppletViewerGuiTest {
   }
   
   @AfterMethod public void tearDown() {
-    new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         viewer.unloadApplet();
-        return null;
       }
-    }.run();
+    });
     assertThatApplietIsStoppedAndDestroyed();
     fixture.cleanUp();
   }

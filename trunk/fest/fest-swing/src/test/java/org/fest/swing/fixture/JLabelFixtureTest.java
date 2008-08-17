@@ -23,7 +23,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JLabelDriver;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -41,7 +41,7 @@ public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
   
   void onSetUp() {
     driver = createMock(JLabelDriver.class);
-    target = new JLabel("A Label");
+    target = new JLabel();
     fixture = new JLabelFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -55,7 +55,16 @@ public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
   }
 
   @Test public void shouldReturnText() {
-    assertThat(fixture.text()).isEqualTo(target.getText());
+    final String text = "A Label";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.textOf(target)).andReturn(text);
+      }
+      
+      protected void codeToTest() {
+        assertThat(fixture.text()).isEqualTo(text);
+      }
+    }.run();
   }
   
   @Test public void shouldRequireText() {

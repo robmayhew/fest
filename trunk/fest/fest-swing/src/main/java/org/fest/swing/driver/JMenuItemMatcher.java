@@ -22,6 +22,7 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.core.ComponentMatcher;
 
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
@@ -55,13 +56,13 @@ public class JMenuItemMatcher implements ComponentMatcher {
   }
 
   private String pathOf(JMenuItem menuItem) {
-    Component parent = parentOf(menuItem);
+    Component parent = parentOrInvokerOf(menuItem);
     if (parent instanceof JMenuItem) 
       return concat(pathOf((JMenuItem)parent), SEPARATOR, textOf(menuItem)); 
     return textOf(menuItem);
   }
 
-  private Component parentOf(JMenuItem menuItem) {
+  private Component parentOrInvokerOf(JMenuItem menuItem) {
     Component parent = parentOf(menuItem);
     if (parent instanceof JPopupMenu) 
       parent = invokerOf((JPopupMenu)parent);

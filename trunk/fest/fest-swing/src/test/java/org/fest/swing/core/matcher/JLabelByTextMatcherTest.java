@@ -92,7 +92,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
       return window;
     }
     
-    final JLabel label = new JLabel("Bye");
+    final JLabel label = new JLabel("Hello");
     
     MyWindow() {
       super(JLabelByTextMatcherTest.class);

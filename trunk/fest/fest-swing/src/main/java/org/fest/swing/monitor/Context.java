@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.util.Collections.list;
 
 /**

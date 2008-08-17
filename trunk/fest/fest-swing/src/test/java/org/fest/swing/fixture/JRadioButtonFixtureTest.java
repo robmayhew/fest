@@ -23,7 +23,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.driver.ComponentDriver;
 
-import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -42,7 +42,7 @@ public class JRadioButtonFixtureTest extends CommonComponentFixtureTestCase<JRad
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = new JRadioButton("A CheckBox");
+    target = new JRadioButton();
     fixture = new JRadioButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -56,7 +56,16 @@ public class JRadioButtonFixtureTest extends CommonComponentFixtureTestCase<JRad
   }
   
   @Test public void shouldReturnText() {
-    assertThat(fixture.text()).isEqualTo(target.getText());
+    final String text = "A Radio Button";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.textOf(target)).andReturn(text);
+      }
+      
+      protected void codeToTest() {
+        assertThat(fixture.text()).isEqualTo(text);
+      }
+    }.run();
   }
   
   @Test public void shouldRequireText() {

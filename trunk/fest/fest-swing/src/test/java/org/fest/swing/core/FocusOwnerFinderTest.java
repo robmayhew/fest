@@ -46,7 +46,7 @@ public class FocusOwnerFinderTest {
 
   @BeforeMethod public void setUp() {
     window = MyWindow.showNew();
-    window.display();
+    textField = window.textBox;
   }
 
   @AfterMethod public void tearDown() {

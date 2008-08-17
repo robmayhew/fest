@@ -30,7 +30,7 @@ import static javax.swing.SwingUtilities.*;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;

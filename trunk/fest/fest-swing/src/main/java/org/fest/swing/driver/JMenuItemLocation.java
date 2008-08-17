@@ -21,7 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 

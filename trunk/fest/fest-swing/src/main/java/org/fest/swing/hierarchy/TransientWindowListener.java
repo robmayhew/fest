@@ -20,7 +20,7 @@ import java.awt.event.AWTEventListener;
 
 import javax.swing.SwingUtilities;
 
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.util.AWTEvents.*;
 
 /**

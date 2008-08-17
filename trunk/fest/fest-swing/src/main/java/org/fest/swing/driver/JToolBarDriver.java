@@ -32,7 +32,7 @@ import static org.fest.swing.driver.JToolBarIsFloatingQuery.isJToolBarFloating;
 import static org.fest.swing.driver.JToolBarUIQuery.uiOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentParentTaskQuery.parentOf;
+import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.util.Strings.*;
 
 /**

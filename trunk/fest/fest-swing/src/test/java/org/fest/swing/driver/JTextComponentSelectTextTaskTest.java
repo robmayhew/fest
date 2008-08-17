@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
@@ -54,7 +55,7 @@ public class JTextComponentSelectTextTaskTest {
   
   @Test(dataProvider = "selectionIndices", groups = GUI)
   public void shouldSelectText(int start, int end) {
-    JTextComponentSelectTextTask.selectTextIn(textBox, start, end);
+    GuiActionRunner.execute(JTextComponentSelectTextTask.selectTextIn(textBox, start, end));
     String selection = selectedTextOf(textBox);
     assertThat(selection).isEqualTo(TEXTBOX_TEXT.substring(start, end));
   }

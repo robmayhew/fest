@@ -22,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.ActivateWindowTask;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -45,7 +44,6 @@ public class ActivateWindowTaskTest {
   
   @Test public void shouldActivateWindow() {
     new EasyMockTemplate(w) {
-
       protected void expectations() {
         w.toFront();
         expectLastCall().atLeastOnce();
@@ -54,7 +52,6 @@ public class ActivateWindowTaskTest {
       protected void codeToTest() {
         task.run();
       }
-
     }.run();
   }
 }

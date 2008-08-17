@@ -28,7 +28,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-public class ComponentParentTaskQuery extends GuiQuery<Container> {
+public class ComponentParentQuery extends GuiQuery<Container> {
 
   private final Component c;
 
@@ -39,10 +39,10 @@ public class ComponentParentTaskQuery extends GuiQuery<Container> {
    * @return the parent of the given <code>Component</code>.
    */
   public static Container parentOf(Component component) {
-    return execute(new ComponentParentTaskQuery(component));
+    return execute(new ComponentParentQuery(component));
   }
 
-  private ComponentParentTaskQuery(Component c) {
+  private ComponentParentQuery(Component c) {
     this.c = c;
   }
 

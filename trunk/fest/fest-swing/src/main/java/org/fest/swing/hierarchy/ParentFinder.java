@@ -23,12 +23,12 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
-import org.fest.swing.query.ComponentParentTaskQuery;
+import org.fest.swing.query.ComponentParentQuery;
 import org.fest.swing.query.JPopupMenuInvokerQuery;
 
 /**
  * Understands how to find the parent of a <code>{@link Component}</code>. Unlike
- * <code>{@link ComponentParentTaskQuery}</code> and <code>{@link JPopupMenuInvokerQuery}</code>, this class is not
+ * <code>{@link ComponentParentQuery}</code> and <code>{@link JPopupMenuInvokerQuery}</code>, this class is not
  * limited to simply call <code>{@link Component#getParent()}</code> and <code>{@link JPopupMenu#getInvoker()}</code>.
  * This class returns the most likely parent based on the type of a given <code>Component</code>.
  * 
@@ -42,7 +42,7 @@ class ParentFinder {
    * @return the parent for the given component.
    */
   Container parentOf(Component c) {
-    Container p = ComponentParentTaskQuery.parentOf(c);
+    Container p = ComponentParentQuery.parentOf(c);
     if (p == null && c instanceof JInternalFrame) p = parentOf((JInternalFrame)c);
     return p;
   }
@@ -63,7 +63,7 @@ class ParentFinder {
    */
   Component invokerFor(Component c) {
       if (c instanceof JPopupMenu) return JPopupMenuInvokerQuery.invokerOf((JPopupMenu)c);
-      Component parent = ComponentParentTaskQuery.parentOf(c);
+      Component parent = ComponentParentQuery.parentOf(c);
       if (parent == null) return null;
       return invokerFor(parent);
   }

@@ -30,12 +30,12 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link ComponentParentTaskQuery}</code>
+ * Tests for <code>{@link ComponentParentQuery}</code>
  *
  * @author Alex Ruiz
  */
 @Test(groups = EDT_QUERY)
-public class ComponentParentTaskQueryTest {
+public class ComponentParentQueryTest {
 
   private Component component;
   private Container parent;
@@ -52,7 +52,7 @@ public class ComponentParentTaskQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ComponentParentTaskQuery.parentOf(component)).isSameAs(parent);
+        assertThat(ComponentParentQuery.parentOf(component)).isSameAs(parent);
       }
     }.run();
   }
