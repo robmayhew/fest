@@ -94,7 +94,7 @@ public abstract class JSliderDriverTestCase {
     robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
     int value = 10;
-    JSliderSetValueTask.setValue(slider, value);
+    setJSliderValue(value);
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
@@ -127,7 +127,7 @@ public abstract class JSliderDriverTestCase {
     robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
     int value = maximumOf(slider);
-    setValue(slider, value);
+    setJSliderValue(value);
     driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
@@ -155,8 +155,13 @@ public abstract class JSliderDriverTestCase {
   }
 
   private void clearAndDisableSlider() {
-    setValue(slider, 0);
+    final int value = 0;
+    setJSliderValue(value);
     disable(slider);
+  }
+
+  private void setJSliderValue(final int value) {
+    execute(setValue(slider, value));
   }
   
   protected int sliderOrientation() {

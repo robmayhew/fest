@@ -346,8 +346,7 @@ public class JTableDriverTest {
     return createMock(JTableCellReader.class);
   }
 
-  @Test public void shouldEnterValueInCell(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  @Test public void shouldEnterValueInCell() {
     dragTable.cellEditable(0, 0, true);
     final JTableCellWriter cellWriter = mockCellWriter();
     final String value = "Hello";

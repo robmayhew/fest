@@ -123,28 +123,19 @@ public class JOptionPaneDriverTest {
   }
 
   public void shouldPassIfMatchingTitle() {
-    setUpMessageWithTitle(window, "Star Wars");
+    window.setUpMessageWithTitle("Star Wars");
     JOptionPane optionPane = showJOptionPane();
     driver.requireTitle(optionPane, "Star Wars");
   }
 
   public void shouldPassIfMatchingTitleWhenOptionPaneCreatedManually() {
-    setUpManuallyCreatedOptionPaneWithTitle(window, "Jedi");
+    window.setUpManuallyCreatedOptionPaneWithTitle("Jedi");
     JOptionPane optionPane = showJOptionPane();
     driver.requireTitle(optionPane, "Jedi");
   }
 
-  private static void setUpManuallyCreatedOptionPaneWithTitle(final MyWindow window, final String title) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        window.setUpManuallyCreatedOptionPaneWithTitle(title);
-      }
-    });
-  }
-
   public void shouldFailIfNotMatchingTitle() {
-    final String title = "Yoda";
-    setUpMessageWithTitle(window, title);
+    window.setUpMessageWithTitle("Yoda");
     JOptionPane optionPane =showJOptionPane(); 
     try {
       driver.requireTitle(optionPane, "Darth Vader");
@@ -152,14 +143,6 @@ public class JOptionPaneDriverTest {
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'title'").contains("expected:<'Darth Vader'> but was:<'Yoda'>");
     }
-  }
-
-  private static void setUpMessageWithTitle(final MyWindow window, final String title) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        window.setUpMessageWithTitle(title);
-      }
-    });
   }
 
   public void shouldPassIfMatchingOptions() {
