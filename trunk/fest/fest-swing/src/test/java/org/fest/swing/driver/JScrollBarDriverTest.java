@@ -35,7 +35,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
+import static org.fest.swing.driver.JScrollBarSetValueTask.setValueTask;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
@@ -65,12 +65,12 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldPassIfValueIsEqualToExpected() {
-    setValue(scrollBar, 30);
+    setValueTask(scrollBar, 30);
     driver.requireValue(scrollBar, 30);
   }
   
   public void shouldFailIfValueIsNotEqualToExpected() {
-    setValue(scrollBar, 30);
+    setValueTask(scrollBar, 30);
     try {
       driver.requireValue(scrollBar, 20);
       fail();
@@ -299,7 +299,7 @@ public class JScrollBarDriverTest {
   }
 
   private void clearAndDisableScrollBar() {
-    setValue(scrollBar, 0);
+    setValueTask(scrollBar, 0);
     disable(scrollBar);
   }
 

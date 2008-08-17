@@ -50,7 +50,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JFileChooserSetCurrentDirectoryTask.setCurrentDirectoryIn(fileChooser, dir).executeInEDT();
+        JFileChooserSetCurrentDirectoryTask.setCurrentDirectoryTask(fileChooser, dir).executeInEDT();
       }
     }.run();
   }

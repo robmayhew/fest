@@ -29,7 +29,7 @@ class AbstractButtonClickTask extends GuiTask {
   
   private final AbstractButton button;
 
-  static AbstractButtonClickTask click(AbstractButton button) {
+  static AbstractButtonClickTask clickTask(AbstractButton button) {
     return new AbstractButtonClickTask(button);
   }
   

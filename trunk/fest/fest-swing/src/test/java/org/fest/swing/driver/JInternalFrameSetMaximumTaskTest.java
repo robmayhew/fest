@@ -55,7 +55,7 @@ import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 
       protected void codeToTest() {
         try {
-          JInternalFrameSetMaximumTask.setMaximum(internalFrame, action).execute();
+          JInternalFrameSetMaximumTask.setMaximumTask(internalFrame, action).execute();
         } catch (PropertyVetoException e) {}
       }
     }.run();

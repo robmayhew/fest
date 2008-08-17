@@ -27,7 +27,7 @@ import javax.swing.JInternalFrame;
  */
 class JInternalFrameSetIconTask extends JInternalFrameSetPropertyTaskTemplate {
 
-  static JInternalFrameSetIconTask setIcon(JInternalFrame internalFrame, JInternalFrameAction action) {
+  static JInternalFrameSetIconTask setIconTask(JInternalFrame internalFrame, JInternalFrameAction action) {
     return new JInternalFrameSetIconTask(internalFrame, action);
   }
   

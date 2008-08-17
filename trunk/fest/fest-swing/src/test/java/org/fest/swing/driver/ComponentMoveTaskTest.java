@@ -49,7 +49,7 @@ public class ComponentMoveTaskTest {
       }
 
       protected void codeToTest() {
-        ComponentMoveTask.moveTo(c, location).executeInEDT();
+        ComponentMoveTask.moveTask(c, location).executeInEDT();
       }
     }.run();
   }

@@ -30,7 +30,7 @@ class JComboBoxSetDropDownVisibleTask extends GuiTask {
   private final JComboBox comboBox;
   private final boolean visible;
 
-  static JComboBoxSetDropDownVisibleTask setDropDownVisibleIn(JComboBox comboBox, boolean visible) {
+  static JComboBoxSetDropDownVisibleTask setDropDownVisibleTask(JComboBox comboBox, boolean visible) {
     return new JComboBoxSetDropDownVisibleTask(comboBox, visible);
   }
   

@@ -39,7 +39,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JSliderLocation.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
-import static org.fest.swing.driver.JSliderSetValueTask.setValue;
+import static org.fest.swing.driver.JSliderSetValueTask.setValueTask;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -161,7 +161,7 @@ public abstract class JSliderDriverTestCase {
   }
 
   private void setJSliderValue(final int value) {
-    execute(setValue(slider, value));
+    execute(setValueTask(slider, value));
   }
   
   protected int sliderOrientation() {

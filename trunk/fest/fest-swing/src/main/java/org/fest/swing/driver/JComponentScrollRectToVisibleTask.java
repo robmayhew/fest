@@ -32,7 +32,7 @@ class JComponentScrollRectToVisibleTask extends GuiTask {
   private final JComponent component;
   private final Rectangle visibleRectangle;
 
-  static JComponentScrollRectToVisibleTask scrollRectToVisible(JComponent component, Rectangle visibleRectangle) {
+  static JComponentScrollRectToVisibleTask scrollRectToVisibleTask(JComponent component, Rectangle visibleRectangle) {
     return new JComponentScrollRectToVisibleTask(component, visibleRectangle);
   }
   

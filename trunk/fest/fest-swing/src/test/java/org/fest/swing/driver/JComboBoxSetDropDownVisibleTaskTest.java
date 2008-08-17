@@ -52,7 +52,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JComboBoxSetDropDownVisibleTask.setDropDownVisibleIn(comboBox, visible).executeInEDT();
+        JComboBoxSetDropDownVisibleTask.setDropDownVisibleTask(comboBox, visible).executeInEDT();
       }
     }.run();
   }

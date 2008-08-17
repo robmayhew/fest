@@ -55,7 +55,7 @@ public class JTextComponentSelectTextTaskTest {
   
   @Test(dataProvider = "selectionIndices", groups = GUI)
   public void shouldSelectText(int start, int end) {
-    GuiActionRunner.execute(JTextComponentSelectTextTask.selectTextIn(textBox, start, end));
+    GuiActionRunner.execute(JTextComponentSelectTextTask.selectTextTask(textBox, start, end));
     String selection = selectedTextOf(textBox);
     assertThat(selection).isEqualTo(TEXTBOX_TEXT.substring(start, end));
   }

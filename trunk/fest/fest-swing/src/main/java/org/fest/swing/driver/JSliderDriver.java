@@ -22,7 +22,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
 import static org.fest.swing.driver.JSliderMinAndMaxQuery.minAndMaxOf;
 import static org.fest.swing.driver.JSliderMinimumQuery.minimumOf;
-import static org.fest.swing.driver.JSliderSetValueTask.setValue;
+import static org.fest.swing.driver.JSliderSetValueTask.setValueTask;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -77,7 +77,7 @@ public class JSliderDriver extends JComponentDriver {
     drag(slider, location.pointAt(slider, valueOf(slider)));
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
-    robot.invokeAndWait(setValue(slider, value));
+    robot.invokeAndWait(setValueTask(slider, value));
   }
   
   private void validateValue(JSlider slider, int value) {

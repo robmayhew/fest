@@ -37,7 +37,7 @@ public class AbstractButtonClickTaskTest {
 
   @BeforeClass public void setUp() {
     button = createMock(AbstractButton.class);
-    task = AbstractButtonClickTask.click(button);
+    task = AbstractButtonClickTask.clickTask(button);
   }
 
   @Test public void shouldClickButton() {

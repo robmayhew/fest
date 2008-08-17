@@ -30,7 +30,7 @@ class JScrollBarSetValueTask extends GuiTask {
   private final JScrollBar scrollBar;
   private final int value;
 
-  static JScrollBarSetValueTask setValue(JScrollBar scrollBar, int value) {
+  static JScrollBarSetValueTask setValueTask(JScrollBar scrollBar, int value) {
     return new JScrollBarSetValueTask(scrollBar, value);
   }
   

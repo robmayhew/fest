@@ -25,7 +25,7 @@ import javax.swing.JSpinner;
  */
 class JSpinnerIncrementValueTask extends JSpinnerSetValueTaskTemplate {
   
-  static JSpinnerIncrementValueTask incrementValueOf(JSpinner spinner) {
+  static JSpinnerIncrementValueTask incrementValueTask(JSpinner spinner) {
     return new JSpinnerIncrementValueTask(spinner);
   }
   

@@ -31,7 +31,7 @@ class ComponentMoveTask extends GuiTask {
   private final Component component;
   private final Point location;
 
-  static ComponentMoveTask moveTo(Component component, Point location) {
+  static ComponentMoveTask moveTask(Component component, Point location) {
     return new ComponentMoveTask(component, location);
   }
   

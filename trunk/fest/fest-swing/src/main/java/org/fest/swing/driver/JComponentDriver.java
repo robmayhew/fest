@@ -26,7 +26,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
 import static org.fest.swing.driver.JComponentKeyStrokesForActionQuery.keyStrokesForAction;
-import static org.fest.swing.driver.JComponentScrollRectToVisibleTask.scrollRectToVisible;
+import static org.fest.swing.driver.JComponentScrollRectToVisibleTask.scrollRectToVisibleTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -59,7 +59,7 @@ public class JComponentDriver extends ContainerDriver {
     // in function. Fortunately, Swing's Scrollable makes for a simple solution.
     // NOTE: absolutely MUST wait for idle in order for the scroll to finish, and the UI to update so that the next
     // action goes to the proper location within the scrolled component.
-    robot.invokeAndWait(scrollRectToVisible(c, r));
+    robot.invokeAndWait(scrollRectToVisibleTask(c, r));
   }
 
   /**

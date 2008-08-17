@@ -29,7 +29,7 @@ class JInternalFrameMoveToBackTask extends GuiTask {
 
   private final JInternalFrame internalFrame;
 
-  static JInternalFrameMoveToBackTask toBack(JInternalFrame internalFrame) {
+  static JInternalFrameMoveToBackTask toBackTask(JInternalFrame internalFrame) {
     return new JInternalFrameMoveToBackTask(internalFrame);
   }
   

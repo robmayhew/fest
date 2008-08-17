@@ -31,7 +31,7 @@ class ComponentSetSizeTask extends GuiTask {
   private final Component c;
   private final Dimension size;
 
-  static ComponentSetSizeTask setSize(Component c, Dimension size) {
+  static ComponentSetSizeTask setSizeTask(Component c, Dimension size) {
     return new ComponentSetSizeTask(c, size);
   }
   

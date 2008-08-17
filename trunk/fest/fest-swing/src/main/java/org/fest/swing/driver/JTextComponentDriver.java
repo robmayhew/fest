@@ -35,7 +35,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JComponentOriginQuery.originOf;
 import static org.fest.swing.driver.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
-import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextIn;
+import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextTask;
 import static org.fest.swing.driver.JTextComponentSelectionEndQuery.selectionEndOf;
 import static org.fest.swing.driver.JTextComponentSelectionStartQuery.selectionStartOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -136,7 +136,7 @@ public class JTextComponentDriver extends JComponentDriver {
     if (!isEnabled(textBox) || isEmpty(textOf(textBox))) return;
     robot.moveMouse(textBox, scrollToVisible(textBox, start));
     robot.moveMouse(textBox, scrollToVisible(textBox, end));
-    robot.invokeAndWait(selectTextIn(textBox, start, end));
+    robot.invokeAndWait(selectTextTask(textBox, start, end));
     verifySelectionMade(textBox, start, end);
   }
 

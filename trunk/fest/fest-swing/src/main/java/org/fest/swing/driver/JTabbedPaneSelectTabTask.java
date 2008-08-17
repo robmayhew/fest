@@ -30,7 +30,7 @@ class JTabbedPaneSelectTabTask extends GuiTask {
   private final JTabbedPane tabbedPane;
   private final int index;
 
-  static JTabbedPaneSelectTabTask selectTabIn(JTabbedPane tabbedPane, int index) {
+  static JTabbedPaneSelectTabTask selectTabTask(JTabbedPane tabbedPane, int index) {
     return new JTabbedPaneSelectTabTask(tabbedPane, index);
   }
   

@@ -44,7 +44,7 @@ import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTabbedPaneSelectTabTask.selectTabIn;
+import static org.fest.swing.driver.JTabbedPaneSelectTabTask.selectTabTask;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -77,7 +77,7 @@ public class JTabbedPaneDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSetTabDirectlyIfLocationOfTabNotFound(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    selectTabIn(tabbedPane, 0);
+    selectTabTask(tabbedPane, 0);
     final JTabbedPaneLocation location = createMock(JTabbedPaneLocation.class);
     final int index = 1;
     driver = new JTabbedPaneDriver(robot, location);
@@ -188,7 +188,7 @@ public class JTabbedPaneDriverTest {
   }
 
   private void clearAndDisableTabbedPane() {
-    selectTabIn(tabbedPane, 0);
+    selectTabTask(tabbedPane, 0);
     disable(tabbedPane);
   }
 

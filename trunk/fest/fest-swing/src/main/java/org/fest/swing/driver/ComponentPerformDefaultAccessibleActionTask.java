@@ -40,7 +40,7 @@ class ComponentPerformDefaultAccessibleActionTask extends GuiTask {
 
   final AccessibleAction action;
 
-  static ComponentPerformDefaultAccessibleActionTask performDefaultAccessibleActionOf(Component c) {
+  static ComponentPerformDefaultAccessibleActionTask performDefaultAccessibleActionTask(Component c) {
     return new ComponentPerformDefaultAccessibleActionTask(c);
   }
   

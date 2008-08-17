@@ -42,7 +42,7 @@ import static org.easymock.classextension.EasyMock.createMock;
     table = createMock(JTable.class);
     row = 6;
     column = 8;
-    task = JTableCancelCellEditingTask.cancelCellEditingOf(table, row, column);
+    task = JTableCancelCellEditingTask.cancelCellEditingTask(table, row, column);
   }
   
   public void shouldCancelCellEditingIfTableCellHasEditor() {

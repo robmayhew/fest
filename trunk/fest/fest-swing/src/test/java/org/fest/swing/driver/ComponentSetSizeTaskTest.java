@@ -49,7 +49,7 @@ public class ComponentSetSizeTaskTest {
       }
 
       protected void codeToTest() {
-        ComponentSetSizeTask.setSize(c, size).executeInEDT();
+        ComponentSetSizeTask.setSizeTask(c, size).executeInEDT();
       }
     }.run();
   }

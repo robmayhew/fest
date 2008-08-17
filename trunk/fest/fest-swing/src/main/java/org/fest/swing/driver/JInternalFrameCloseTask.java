@@ -29,7 +29,7 @@ class JInternalFrameCloseTask extends GuiTask {
 
   private final JInternalFrame internalFrame;
 
-  static JInternalFrameCloseTask close(JInternalFrame internalFrame) {
+  static JInternalFrameCloseTask closeTask(JInternalFrame internalFrame) {
     return new JInternalFrameCloseTask(internalFrame);
   }
   

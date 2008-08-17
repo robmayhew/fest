@@ -29,7 +29,7 @@ class JInternalFrameMoveToFrontTask extends GuiTask {
 
   private final JInternalFrame internalFrame;
 
-  static JInternalFrameMoveToFrontTask toFront(JInternalFrame internalFrame) {
+  static JInternalFrameMoveToFrontTask toFrontTask(JInternalFrame internalFrame) {
     return new JInternalFrameMoveToFrontTask(internalFrame);
   }
   

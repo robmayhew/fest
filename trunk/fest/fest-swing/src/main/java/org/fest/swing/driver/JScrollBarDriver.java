@@ -27,7 +27,7 @@ import static java.lang.String.valueOf;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
-import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
+import static org.fest.swing.driver.JScrollBarSetValueTask.setValueTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -210,7 +210,7 @@ public class JScrollBarDriver extends JComponentDriver {
   }
   
   private void setValueProperty(JScrollBar scrollBar, int value) {
-    robot.invokeLater(scrollBar, setValue(scrollBar, value));
+    robot.invokeLater(scrollBar, setValueTask(scrollBar, value));
     robot.waitForIdle();
   }
 

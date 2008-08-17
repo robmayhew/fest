@@ -46,7 +46,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
       
       protected void codeToTest() {
-        WindowMoveToFrontTask.toFront(window).executeInEDT();
+        WindowMoveToFrontTask.toFrontTask(window).executeInEDT();
       }
     }.run();
   }

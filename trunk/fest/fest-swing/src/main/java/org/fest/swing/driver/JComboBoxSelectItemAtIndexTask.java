@@ -30,7 +30,7 @@ class JComboBoxSelectItemAtIndexTask extends GuiTask {
   private final JComboBox comboBox;
   private final int index;
 
-  static JComboBoxSelectItemAtIndexTask selectItemIn(JComboBox comboBox, int index) {
+  static JComboBoxSelectItemAtIndexTask selectItemTask(JComboBox comboBox, int index) {
     return new JComboBoxSelectItemAtIndexTask(comboBox, index);
   }
   

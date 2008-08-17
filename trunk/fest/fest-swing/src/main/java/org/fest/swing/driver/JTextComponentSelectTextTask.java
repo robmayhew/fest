@@ -31,7 +31,7 @@ class JTextComponentSelectTextTask extends GuiTask {
   private final int start;
   private final int end;
 
-  static JTextComponentSelectTextTask selectTextIn(JTextComponent textBox, int start, int end) {
+  static JTextComponentSelectTextTask selectTextTask(JTextComponent textBox, int start, int end) {
     return new JTextComponentSelectTextTask(textBox, start, end);
   }
   

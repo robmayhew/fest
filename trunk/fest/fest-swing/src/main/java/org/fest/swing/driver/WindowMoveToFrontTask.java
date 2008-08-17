@@ -29,7 +29,7 @@ class WindowMoveToFrontTask extends GuiTask {
   
   private final Window window;
 
-  static WindowMoveToFrontTask toFront(Window window) {
+  static WindowMoveToFrontTask toFrontTask(Window window) {
     return new WindowMoveToFrontTask(window);
   }
   

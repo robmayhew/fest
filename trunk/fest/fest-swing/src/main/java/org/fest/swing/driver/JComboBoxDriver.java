@@ -43,8 +43,8 @@ import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
 import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
 import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
-import static org.fest.swing.driver.JComboBoxSelectItemAtIndexTask.selectItemIn;
-import static org.fest.swing.driver.JComboBoxSetDropDownVisibleTask.setDropDownVisibleIn;
+import static org.fest.swing.driver.JComboBoxSelectItemAtIndexTask.selectItemTask;
+import static org.fest.swing.driver.JComboBoxSetDropDownVisibleTask.setDropDownVisibleTask;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -177,7 +177,7 @@ public class JComboBoxDriver extends JComponentDriver {
     try {
       listDriver.selectItem(dropDownList(), validatedIndex);
     } catch (ComponentLookupException e) {
-      robot.invokeAndWait(selectItemIn(comboBox, validatedIndex));
+      robot.invokeAndWait(selectItemTask(comboBox, validatedIndex));
     } finally {
       hideDropDownListIfVisible(comboBox);
     }
@@ -203,7 +203,7 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   private void dropDownVisibleThroughUIDelegate(JComboBox comboBox, final boolean visible) {
-    robot.invokeAndWait(setDropDownVisibleIn(comboBox, visible));
+    robot.invokeAndWait(setDropDownVisibleTask(comboBox, visible));
     robot.waitForIdle();
   }
 

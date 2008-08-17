@@ -30,7 +30,7 @@ class JSplitPaneMoveDividerTask extends GuiTask {
   private final JSplitPane splitPane;
   private final int location;
 
-  static JSplitPaneMoveDividerTask moveDivider(JSplitPane splitPane, int location) {
+  static JSplitPaneMoveDividerTask moveDividerTask(JSplitPane splitPane, int location) {
     return new JSplitPaneMoveDividerTask(splitPane, location);
   }
   

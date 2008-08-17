@@ -55,7 +55,7 @@ import static org.fest.swing.exception.UnexpectedException.unexpected;
 
       protected void codeToTest() {
         try {
-          JSpinnerCommitEditTask.commitEditIn(spinner).executeInEDT();
+          JSpinnerCommitEditTask.commitEditTask(spinner).executeInEDT();
         } catch (ParseException e) {
           throw unexpected(e);
         }

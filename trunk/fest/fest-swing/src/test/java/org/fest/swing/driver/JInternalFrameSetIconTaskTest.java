@@ -55,7 +55,7 @@ import static org.fest.swing.driver.JInternalFrameAction.DEICONIFY;
 
       protected void codeToTest() {
         try {
-          JInternalFrameSetIconTask.setIcon(internalFrame, action).execute();
+          JInternalFrameSetIconTask.setIconTask(internalFrame, action).execute();
         } catch (PropertyVetoException e) {}
       }
     }.run();

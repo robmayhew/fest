@@ -26,7 +26,7 @@ import javax.swing.JInternalFrame;
  */
 class JInternalFrameSetMaximumTask extends JInternalFrameSetPropertyTaskTemplate {
 
-  static JInternalFrameSetMaximumTask setMaximum(JInternalFrame internalFrame, JInternalFrameAction action) {
+  static JInternalFrameSetMaximumTask setMaximumTask(JInternalFrame internalFrame, JInternalFrameAction action) {
     return new JInternalFrameSetMaximumTask(internalFrame, action);
   }
   

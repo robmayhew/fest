@@ -48,7 +48,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JTabbedPaneSelectTabTask.selectTabIn(tabbedPane, index).executeInEDT();
+        JTabbedPaneSelectTabTask.selectTabTask(tabbedPane, index).executeInEDT();
       }
     }.run();
   }

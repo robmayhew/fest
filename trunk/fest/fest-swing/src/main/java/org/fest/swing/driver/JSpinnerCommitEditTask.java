@@ -31,7 +31,7 @@ class JSpinnerCommitEditTask extends GuiTask {
   
   private final JSpinner spinner;
 
-  static JSpinnerCommitEditTask commitEditIn(JSpinner spinner) {
+  static JSpinnerCommitEditTask commitEditTask(JSpinner spinner) {
     return new JSpinnerCommitEditTask(spinner);
   }
   

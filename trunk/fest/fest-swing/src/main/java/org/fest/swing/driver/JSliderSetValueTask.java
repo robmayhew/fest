@@ -30,7 +30,7 @@ class JSliderSetValueTask extends GuiTask {
   private final JSlider slider;
   private final int value;
 
-  static JSliderSetValueTask setValue(JSlider slider, int value) {
+  static JSliderSetValueTask setValueTask(JSlider slider, int value) {
     return new JSliderSetValueTask(slider, value);
   }
   

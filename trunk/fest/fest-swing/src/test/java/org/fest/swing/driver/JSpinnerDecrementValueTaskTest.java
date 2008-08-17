@@ -49,7 +49,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JSpinnerDecrementValueTask.decrementValueOf(spinner).executeInEDT();
+        JSpinnerDecrementValueTask.decrementValueTask(spinner).executeInEDT();
       }
     }.run();
   }
@@ -61,7 +61,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JSpinnerDecrementValueTask.decrementValueOf(spinner).executeInEDT();
+        JSpinnerDecrementValueTask.decrementValueTask(spinner).executeInEDT();
       }
     }.run();
   }

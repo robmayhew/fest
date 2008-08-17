@@ -46,7 +46,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JInternalFrameCloseTask.close(internalFrame).executeInEDT();
+        JInternalFrameCloseTask.closeTask(internalFrame).executeInEDT();
       }
     }.run();
   }

@@ -33,7 +33,7 @@ class JTableCancelCellEditingTask extends GuiTask {
   private final int row;
   private final int column;
 
-  static JTableCancelCellEditingTask cancelCellEditingOf(JTable table, int row, int column) {
+  static JTableCancelCellEditingTask cancelCellEditingTask(JTable table, int row, int column) {
     return new JTableCancelCellEditingTask(table, row, column);
   }
   

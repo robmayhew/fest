@@ -48,7 +48,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JScrollBarSetValueTask.setValue(scrollBar, value).executeInEDT();
+        JScrollBarSetValueTask.setValueTask(scrollBar, value).executeInEDT();
       }
     }.run();
   }

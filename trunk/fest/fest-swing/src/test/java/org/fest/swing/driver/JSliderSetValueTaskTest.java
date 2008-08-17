@@ -48,7 +48,7 @@ import static org.easymock.classextension.EasyMock.createMock;
       }
 
       protected void codeToTest() {
-        JSliderSetValueTask.setValue(slider, value).executeInEDT();
+        JSliderSetValueTask.setValueTask(slider, value).executeInEDT();
       }
     }.run();
   }

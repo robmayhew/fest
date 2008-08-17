@@ -32,7 +32,7 @@ class JFileChooserSetCurrentDirectoryTask extends GuiTask {
   private final JFileChooser fileChooser;
   private final File dir;
 
-  static JFileChooserSetCurrentDirectoryTask setCurrentDirectoryIn(JFileChooser fileChooser, File dir) {
+  static JFileChooserSetCurrentDirectoryTask setCurrentDirectoryTask(JFileChooser fileChooser, File dir) {
     return new JFileChooserSetCurrentDirectoryTask(fileChooser, dir);
   }
   

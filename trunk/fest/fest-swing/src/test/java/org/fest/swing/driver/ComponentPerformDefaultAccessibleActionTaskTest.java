@@ -65,7 +65,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf(component).executeInEDT();
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component).executeInEDT();
       }
     }.run();
   }
@@ -78,7 +78,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf(component);
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component);
       }
     }.run();
   }
@@ -92,7 +92,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionOf(component);
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component);
       }
     }.run();
   }
