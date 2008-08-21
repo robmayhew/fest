@@ -26,7 +26,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that finds <code>{@link AccessibleAction}</code>s
  * associated to <code>{@link Component}</code>s.
- * 
+ *
  * @author Alex Ruiz
  */
 class ComponentAccessibleActionQuery extends GuiQuery<AccessibleAction> {
@@ -37,10 +37,10 @@ class ComponentAccessibleActionQuery extends GuiQuery<AccessibleAction> {
     return execute(new ComponentAccessibleActionQuery(component));
   }
 
-  private ComponentAccessibleActionQuery(Component component) {
+  ComponentAccessibleActionQuery(Component component) {
     this.component = component;
   }
-  
+
   protected AccessibleAction executeInEDT() throws Throwable {
     return component.getAccessibleContext().getAccessibleAction();
   }

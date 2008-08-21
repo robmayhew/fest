@@ -1,5 +1,5 @@
 /*
- * Created on Aug 13, 2008
+ * Created on Aug 18, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,9 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Point;
+
+import javax.swing.JTree;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -30,32 +31,32 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link ComponentLocationQuery}</code>.
+ * Tests for <code>{@link JTreeRowAtPointQuery}</code>.
  *
- * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = EDT_QUERY)
-public class ComponentLocationQueryTest {
+public class JTreeRowAtPointQueryTest {
 
-  private Component component;
+  private JTree tree;
   private Point location;
-  private ComponentLocationQuery query;
+  private int row;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    location = new Point(80, 60);
-    query = new ComponentLocationQuery(component);
+    tree = createMock(JTree.class);
+    location = new Point(8, 6);
+    row = 8;
   }
 
-  public void shouldReturnMoveLocationOfContainer() {
-    new EasyMockTemplate(component) {
+  public void shouldReturnRowAtPoint() {
+    new EasyMockTemplate(tree) {
+
       protected void expectations() {
-        expect(component.getLocation()).andReturn(location);
+        expect(tree.getRowForLocation(location.x, location.y)).andReturn(row);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(location);
+        assertThat(JTreeRowAtPointQuery.rowAtPoint(tree, location)).isEqualTo(row);
       }
     }.run();
   }

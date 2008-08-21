@@ -24,6 +24,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
 
@@ -43,7 +44,7 @@ public final class JTreeLocation {
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
    * @return the coordinates of the given row.
-   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of 
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
    *         visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
@@ -59,7 +60,7 @@ public final class JTreeLocation {
    * @throws LocationUnavailableException if any part of the path is not visible.
    */
   public Point pointAt(JTree tree, TreePath path) {
-    Rectangle pathBounds = tree.getPathBounds(path);
+    Rectangle pathBounds = pathBoundsOf(tree, path);
     if (pathBounds != null)
         return new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
     throw new LocationUnavailableException(concat("The tree path ", format(path.getPath()), " is not visible"));

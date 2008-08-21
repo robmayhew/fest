@@ -32,6 +32,7 @@ import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
 import static org.fest.swing.driver.JComponentOriginQuery.originOf;
 import static org.fest.swing.driver.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
@@ -189,7 +190,7 @@ public class JTextComponentDriver extends JComponentDriver {
     Point origin = originOf(textBox);
     Container parent = parentOf(textBox);
     while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
-      addRectangleCoordinatesToPoint(parent.getBounds(), origin);
+      addRectangleCoordinatesToPoint(boundsOf(parent), origin);
       parent = parentOf(parent);
     }
     if (parent == null || parent instanceof CellRendererPane) return;
@@ -265,7 +266,7 @@ public class JTextComponentDriver extends JComponentDriver {
   private void assertEditable(JTextComponent textBox, boolean editable) {
     assertThat(isEditable(textBox)).as(editableProperty(textBox)).isEqualTo(editable);
   }
-  
+
   private static String editableProperty(JTextComponent textBox) {
     return propertyName(textBox, EDITABLE_PROPERTY);
   }

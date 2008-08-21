@@ -31,6 +31,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Pause;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -95,7 +96,7 @@ public class JTreeDriverTest {
     int[] rows = null;
     driver.selectRows(dragTree, rows);
   }
-  
+
   @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfRowArrayIsEmpty() {
     int[] rows = new int[0];
@@ -162,7 +163,7 @@ public class JTreeDriverTest {
     String[] paths = null;
     driver.selectPaths(dragTree, paths);
   }
-  
+
   @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfPathArrayIsEmpty() {
     String[] paths = new String[0];
@@ -251,7 +252,7 @@ public class JTreeDriverTest {
   public void shouldThrowErrorIfRowIndexArrayIsNull() {
     driver.requireSelection(dragTree, (int[])null);
   }
-  
+
   public void shouldPassIfRowIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree.getModel());
     TreePath path = new TreePath(array(root, root.getFirstChild()));
@@ -264,6 +265,16 @@ public class JTreeDriverTest {
     TreePath path = new TreePath(array(root, root.getFirstChild()));
     dragTree.setSelectionPath(path);
     driver.requireSelection(dragTree, array("root/branch1"));
+  }
+
+  public void shouldPassIfPathsAreSelected() {
+    DefaultMutableTreeNode root = rootOf(dragTree.getModel());
+    TreeNode branch1 = root.getFirstChild();
+    TreePath rootBranch1 = new TreePath(array(root, branch1));
+    TreePath rootBranch1Branch11 = new TreePath(array(root, branch1, branch1.getChildAt(0)));
+    dragTree.setSelectionPaths(array(rootBranch1, rootBranch1Branch11));
+    Pause.pause(5000);
+    driver.requireSelection(dragTree, array("root/branch1", "root/branch1/branch1.1"));
   }
 
   public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection() {
@@ -381,17 +392,17 @@ public class JTreeDriverTest {
   public void shouldThrowErrorIfCellReaderIsNull() {
     driver.cellReader(null);
   }
-  
+
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfSeparatorIsNull() {
     driver.separator(null);
   }
-  
+
   public void shouldSetPathSeparator() {
     driver.separator("|");
     assertThat(driver.separator()).isEqualTo("|");
   }
-  
+
   private static class MyFrame extends TestWindow {
     private static final long serialVersionUID = 1L;
 

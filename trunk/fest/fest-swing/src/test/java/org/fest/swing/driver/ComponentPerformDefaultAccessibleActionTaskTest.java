@@ -96,10 +96,10 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
     }.run();
   }
-  
+
   private static class MyComponent extends JTextField {
     private static final long serialVersionUID = 1L;
-    
+
     private final AccessibleContext accessibleContext;
 
     MyComponent(AccessibleContext accessibleContext) {

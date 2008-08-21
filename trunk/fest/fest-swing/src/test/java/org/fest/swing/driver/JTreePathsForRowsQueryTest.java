@@ -1,5 +1,5 @@
 /*
- * Created on Aug 13, 2008
+ * Created on Aug 20, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,8 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Point;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,34 +28,47 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.util.Arrays.array;
 
 /**
- * Tests for <code>{@link ComponentLocationQuery}</code>.
+ * Tests for <code>{@link JTreePathsForRowsQuery}</code>.
  *
- * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = EDT_QUERY)
-public class ComponentLocationQueryTest {
+public class JTreePathsForRowsQueryTest {
 
-  private Component component;
-  private Point location;
-  private ComponentLocationQuery query;
+  private JTree tree;
+  private int[] rows;
+  private TreePath[] paths;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    location = new Point(80, 60);
-    query = new ComponentLocationQuery(component);
+    tree = createMock(JTree.class);
+    rows = new int[] { 6, 8 };
+    paths = array(createMock(TreePath.class), createMock(TreePath.class));
   }
 
-  public void shouldReturnMoveLocationOfContainer() {
-    new EasyMockTemplate(component) {
+  public void shouldReturnPathsForRows() {
+    new EasyMockTemplate(tree) {
       protected void expectations() {
-        expect(component.getLocation()).andReturn(location);
+        for (int i = 0; i < paths.length; i++)
+          expect(tree.getPathForRow(rows[i])).andReturn(paths[i]);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(location);
+        assertThat(JTreePathsForRowsQuery.pathsForRows(tree, rows)).isEqualTo(paths);
+      }
+    }.run();
+  }
+
+  public void shouldReturnPathForRow() {
+    new EasyMockTemplate(tree) {
+      protected void expectations() {
+        expect(tree.getPathForRow(rows[0])).andReturn(paths[0]);
+      }
+
+      protected void codeToTest() {
+        assertThat(JTreePathsForRowsQuery.pathForRow(tree, rows[0])).isEqualTo(paths[0]);
       }
     }.run();
   }

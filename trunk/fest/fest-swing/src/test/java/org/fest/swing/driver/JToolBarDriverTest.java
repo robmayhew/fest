@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -34,7 +35,10 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -47,46 +51,62 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class JToolBarDriverTest {
 
   private Robot robot;
-  private MyFrame frame;
+  private MyWindow window;
+  private JToolBar toolBar;
   private JToolBarDriver driver;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JToolBarDriver(robot);
-    frame = new MyFrame();
-    robot.showWindow(frame);
+    window = MyWindow.newWindow();
+    toolBar = window.toolBar;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 
-  public void shouldThrowErrorWhenFloatingNotFloatableToolBar() {
-    toolBar().setFloatable(false);
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorWhenFloatingNotFloatableToolBar(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    setNotFloatable(toolBar);
     try {
-      driver.makeFloat(toolBar());
+      driver.makeFloat(toolBar);
       fail();
     } catch (ActionFailedException e) {
       assertThat(e).message().contains("is not floatable");
     }
   }
 
-  public void shouldFloatToolbar() {
-    Window oldAncestor = toolbarAncestor();
-    driver.makeFloat(toolBar());
-    Window newAncestor = toolbarAncestor();
+  private static void setNotFloatable(final JToolBar toolBar) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        toolBar.setFloatable(false);
+      }
+    });
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldFloatToolbar(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    Window oldAncestor = ancestorOf(toolBar);
+    driver.makeFloat(toolBar);
+    Window newAncestor = ancestorOf(toolBar);
     assertThat(newAncestor).isNotSameAs(oldAncestor);
   }
 
-  public void shouldFloatToolbarToPoint() {
-    Window oldAncestor = toolbarAncestor();
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldFloatToolbarToPoint(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    Window oldAncestor = ancestorOf(toolBar);
     Point where = whereToFloatTo();
-    driver.floatTo(toolBar(), where.x, where.y);
+    driver.floatTo(toolBar, where.x, where.y);
     assertToolBarIsFloating(oldAncestor);
   }
 
   private void assertToolBarIsFloating(Window oldAncestor) {
-    Window newAncestor = toolbarAncestor();
+    Window newAncestor = ancestorOf(toolBar);
     assertThat(newAncestor).isNotSameAs(oldAncestor);
     Point newAncestorLocation = newAncestor.getLocation();
     Point oldAncestorLocation = oldAncestor.getLocation();
@@ -94,55 +114,74 @@ public class JToolBarDriverTest {
     assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
   }
 
-  @Test(dependsOnMethods = "shouldFloatToolbarToPoint")
-  public void shouldUnfloatToolbar() {
-    Window oldAncestor = toolbarAncestor();
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldUnfloatToolbar(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    Window oldAncestor = ancestorOf(toolBar);
     Point where = whereToFloatTo();
-    driver.floatTo(toolBar(), where.x, where.y);
-    driver.unfloat(toolBar());
-    assertThat(toolbarAncestor()).isSameAs(oldAncestor);
+    driver.floatTo(toolBar, where.x, where.y);
+    driver.unfloat(toolBar);
+    assertThat(ancestorOf(toolBar)).isSameAs(oldAncestor);
   }
 
-  @Test(dependsOnMethods = "shouldFloatToolbarToPoint", dataProvider = "unfloatConstraints")
-  public void shouldUnfloatToolbarToGivenPosition(String constraint) {
-    Window originalAncestor = toolbarAncestor();
+  @Test(dataProvider = "unfloatConstraints")
+  public void shouldUnfloatToolbarToGivenPosition(String constraint, EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    Window originalAncestor = ancestorOf(toolBar);
     Point where = whereToFloatTo();
-    driver.floatTo(toolBar(), where.x, where.y);
-    driver.unfloat(toolBar(), constraint);
-    assertThat(toolbarAncestor()).isSameAs(originalAncestor);
-    assertThat(componentAt(constraint)).isSameAs(toolBar());
+    driver.floatTo(toolBar, where.x, where.y);
+    driver.unfloat(toolBar, constraint);
+    assertThat(ancestorOf(toolBar)).isSameAs(originalAncestor);
+    assertThat(componentAt(constraint)).isSameAs(toolBar);
   }
 
   private Component componentAt(String constraint) {
-    return frame.borderLayout.getLayoutComponent(constraint);
+    return window.borderLayout.getLayoutComponent(constraint);
   }
 
   private Point whereToFloatTo() {
-    Rectangle bounds = toolbarAncestor().getBounds();
+    Rectangle bounds = boundsOf(ancestorOf(toolBar));
     int x = bounds.x + bounds.width + 10;
     int y = bounds.y + bounds.height + 10;
     return new Point(x, y);
   }
 
   @DataProvider(name = "unfloatConstraints") public Object[][] unfloatConstraints() {
-    return new Object[][] { { NORTH }, { EAST }, { SOUTH }, { WEST } };
+    return new Object[][] {
+        { NORTH, AWT },
+        { NORTH, ROBOT },
+        { EAST, AWT },
+        { EAST, ROBOT },
+        { SOUTH, AWT },
+        { SOUTH, ROBOT },
+        { WEST, AWT },
+        { WEST, ROBOT }
+      };
   }
 
-  private Window toolbarAncestor() {
-    return getWindowAncestor(toolBar());
+  private static Window ancestorOf(final JToolBar toolBar) {
+    return execute(new GuiQuery<Window>() {
+      protected Window executeInEDT() {
+        return getWindowAncestor(toolBar);
+      }
+    });
   }
 
-  private JToolBar toolBar() {
-    return frame.toolBar;
-  }
-
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final BorderLayout borderLayout = new BorderLayout();
     final JToolBar toolBar = new JToolBar();
 
-    MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+
+    MyWindow() {
       super(JToolBarDriverTest.class);
       toolBar.setFloatable(true);
       setLayout(borderLayout);

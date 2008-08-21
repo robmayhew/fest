@@ -1,5 +1,5 @@
 /*
- * Created on Aug 13, 2008
+ * Created on Aug 18, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,8 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Point;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,34 +28,33 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.util.Arrays.array;
 
 /**
- * Tests for <code>{@link ComponentLocationQuery}</code>.
+ * Tests for <code>{@link JTreeSelectionPathsQuery}</code>.
  *
- * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = EDT_QUERY)
-public class ComponentLocationQueryTest {
+public class JTreeSelectionPathsQueryTest {
 
-  private Component component;
-  private Point location;
-  private ComponentLocationQuery query;
+  private JTree tree;
+  private TreePath[] paths;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    location = new Point(80, 60);
-    query = new ComponentLocationQuery(component);
+    tree = createMock(JTree.class);
+    paths = array(createMock(TreePath.class));
   }
 
-  public void shouldReturnMoveLocationOfContainer() {
-    new EasyMockTemplate(component) {
+  public void shouldIndicateIfPathExpanded() {
+    new EasyMockTemplate(tree) {
+
       protected void expectations() {
-        expect(component.getLocation()).andReturn(location);
+        expect(tree.getSelectionPaths()).andReturn(paths);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(location);
+        assertThat(JTreeSelectionPathsQuery.selectionPathsOf(tree)).isEqualTo(paths);
       }
     }.run();
   }

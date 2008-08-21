@@ -1,5 +1,5 @@
 /*
- * Created on Aug 13, 2008
+ * Created on Aug 18, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,9 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.Point;
+import java.awt.Rectangle;
+
+import javax.swing.JTree;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -30,33 +31,33 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link ComponentLocationQuery}</code>.
+ * Tests for <code>{@link JTreeRowBoundsQuery}</code>.
  *
- * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = EDT_QUERY)
-public class ComponentLocationQueryTest {
+public class JTreeRowBoundsQueryTest {
 
-  private Component component;
-  private Point location;
-  private ComponentLocationQuery query;
+  private JTree tree;
+  private int row;
+  private Rectangle rowBounds;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    location = new Point(80, 60);
-    query = new ComponentLocationQuery(component);
+    tree = createMock(JTree.class);
+    row = 8;
+    rowBounds = new Rectangle(80, 60);
   }
 
-  public void shouldReturnMoveLocationOfContainer() {
-    new EasyMockTemplate(component) {
+  public void shouldReturnBoundsOfRow() {
+    new EasyMockTemplate(tree) {
       protected void expectations() {
-        expect(component.getLocation()).andReturn(location);
+        expect(tree.getRowBounds(row)).andReturn(rowBounds);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(location);
+        assertThat(JTreeRowBoundsQuery.rowBoundsOf(tree, row)).isEqualTo(rowBounds);
       }
     }.run();
   }
+
 }
