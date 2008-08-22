@@ -18,16 +18,15 @@ import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
-import static java.lang.String.valueOf;
-
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.driver.JScrollBarBlockIncrementQuery.blockIncrementOf;
 import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValueTask;
+import static org.fest.swing.driver.JScrollBarUnitIncrementQuery.unitIncrementOf;
+import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -71,7 +70,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollUnitUp(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll up one unit");
     Point where = location.unitLocationToScrollUp(scrollBar);
-    scroll(scrollBar, where, times * JScrollBarUnitIncrementQuery.unitIncrementOf(scrollBar));
+    scroll(scrollBar, where, times * unitIncrementOf(scrollBar));
   }
 
   /**
@@ -91,24 +90,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollUnitDown(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll down one unit");
     Point where = location.unitLocationToScrollDown(scrollBar);
-    scroll(scrollBar, where, times * JScrollBarUnitIncrementQuery.unitIncrementOf(scrollBar) * -1);
-  }
-
-  private static class JScrollBarUnitIncrementQuery extends GuiQuery<Integer> {
-    // TODO make top-level
-    private final JScrollBar scrollBar;
-
-    static int unitIncrementOf(JScrollBar scrollBar) {
-      return execute(new JScrollBarUnitIncrementQuery(scrollBar));
-    }
-    
-    JScrollBarUnitIncrementQuery(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-
-    protected Integer executeInEDT() {
-      return scrollBar.getUnitIncrement();
-    }
+    scroll(scrollBar, where, times * unitIncrementOf(scrollBar) * -1);
   }
 
   /**
@@ -128,7 +110,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollBlockUp(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll up one block");
     Point where = location.blockLocationToScrollUp(scrollBar);
-    scroll(scrollBar, where, times * JScrollBarBlockIncrementQuery.blockIncrementOf(scrollBar));
+    scroll(scrollBar, where, times * blockIncrementOf(scrollBar));
   }
 
   /**
@@ -148,30 +130,13 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollBlockDown(JScrollBar scrollBar, int times) {
     validateTimes(times, "scroll down one block");
     Point where = location.blockLocationToScrollDown(scrollBar);
-    scroll(scrollBar, where, times * JScrollBarBlockIncrementQuery.blockIncrementOf(scrollBar) * -1);
-  }
-
-  private static class JScrollBarBlockIncrementQuery extends GuiQuery<Integer> {
-    // TODO make top-level
-    private final JScrollBar scrollBar;
-
-    static int blockIncrementOf(JScrollBar scrollBar) {
-      return execute(new JScrollBarBlockIncrementQuery(scrollBar));
-    }
-    
-    private JScrollBarBlockIncrementQuery(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-
-    protected Integer executeInEDT() {
-      return scrollBar.getBlockIncrement();
-    }
+    scroll(scrollBar, where, times * blockIncrementOf(scrollBar) * -1);
   }
 
   private void validateTimes(int times, String action) {
     if (times > 0) return;
     String message = concat(
-        "The number of times to ", action, " should be greater than zero, but was <", valueOf(times), ">");
+        "The number of times to ", action, " should be greater than zero, but was <", times, ">");
     throw actionFailure(message);
   }
 
@@ -179,7 +144,7 @@ public class JScrollBarDriver extends JComponentDriver {
     if (!isEnabled(scrollBar)) return;
     // For now, do it programmatically, faking the mouse movement and clicking
     robot.moveMouse(scrollBar, where.x, where.y);
-    int value = JScrollBarValueQuery.valueOf(scrollBar) + count;
+    int value = valueOf(scrollBar) + count;
     setValueProperty(scrollBar, value);
   }
 
@@ -192,7 +157,7 @@ public class JScrollBarDriver extends JComponentDriver {
   public void scrollTo(JScrollBar scrollBar, final int position) {
     validatePosition(scrollBar, position);
     if (!isEnabled(scrollBar)) return;
-    Point thumb = location.thumbLocation(scrollBar, JScrollBarValueQuery.valueOf(scrollBar));
+    Point thumb = location.thumbLocation(scrollBar, valueOf(scrollBar));
     robot.moveMouse(scrollBar, thumb.x, thumb.y);
     thumb = location.thumbLocation(scrollBar, position);
     robot.moveMouse(scrollBar, thumb.x, thumb.y);
@@ -205,8 +170,7 @@ public class JScrollBarDriver extends JComponentDriver {
     int max = minAndMax.maximum;
     if (position >= min && position <= max) return;
     throw actionFailure(concat(
-        "Position <", valueOf(position), "> is not within the JScrollBar bounds of <",
-        valueOf(min), "> and <", valueOf(max), ">"));
+        "Position <", position, "> is not within the JScrollBar bounds of <", min, "> and <", max, ">"));
   }
   
   private void setValueProperty(JScrollBar scrollBar, int value) {
@@ -221,6 +185,6 @@ public class JScrollBarDriver extends JComponentDriver {
    * @throws AssertionError if the value of the <code>JScrollBar</code> is not equal to the given one.
    */
   public void requireValue(JScrollBar scrollBar, int value) {
-    assertThat(JScrollBarValueQuery.valueOf(scrollBar)).as(propertyName(scrollBar, VALUE_PROPERTY)).isEqualTo(value);
+    assertThat(valueOf(scrollBar)).as(propertyName(scrollBar, VALUE_PROPERTY)).isEqualTo(value);
   }
 }

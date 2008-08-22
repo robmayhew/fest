@@ -1,5 +1,5 @@
 /*
- * Created on Aug 21, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
+import static java.awt.Adjustable.HORIZONTAL;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
@@ -29,36 +30,32 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link JScrollBarMinAndMaxQuery}</code>.
+ * Tests for <code>{@link JScrollBarOrientationQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = EDT_QUERY)
-public class JScrollBarMinAndMaxQueryTest {
+public class JScrollBarOrientationQueryTest {
 
   private JScrollBar scrollBar;
-  private int minimum;
-  private int maximum;
-  private JScrollBarMinAndMaxQuery query;
+  private int orientation;
+  private JScrollBarOrientationQuery query;
 
   @BeforeMethod public void setUp() {
     scrollBar = createMock(JScrollBar.class);
-    minimum = 6;
-    maximum = 8;
-    query = new JScrollBarMinAndMaxQuery(scrollBar);
+    orientation = HORIZONTAL;
+    query = new JScrollBarOrientationQuery(scrollBar);
   }
   
   public void shouldReturnMinimumAndMaximumValuesOfJScrollBar() {
     new EasyMockTemplate(scrollBar) {
       protected void expectations() {
-        expect(scrollBar.getMinimum()).andReturn(minimum);
-        expect(scrollBar.getMaximum()).andReturn(maximum);
+        expect(scrollBar.getOrientation()).andReturn(orientation);
       }
 
       protected void codeToTest() {
-        MinimumAndMaximum minAndMax = query.executeInEDT();
-        assertThat(minAndMax.minimum).isEqualTo(minimum);
-        assertThat(minAndMax.maximum).isEqualTo(maximum);
+        assertThat(query.executeInEDT()).isEqualTo(orientation);
       }
     }.run();
   }

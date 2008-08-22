@@ -20,15 +20,15 @@ import java.awt.Point;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
 
 import static javax.swing.SwingConstants.VERTICAL;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JSliderLocation.JSliderHorizontalLocationQueryStrategy.locationForHorizontalOrientation;
 import static org.fest.swing.driver.JSliderLocation.JSliderOrientationQuery.orientationOf;
-import static org.fest.swing.driver.JSliderLocation.VerticalLocationTask.locationForVerticalOrientation;
+import static org.fest.swing.driver.JSliderLocation.JSliderVerticalLocationQueryStrategy.locationForVerticalOrientation;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**
@@ -51,6 +51,8 @@ public final class JSliderLocation {
   }
 
   static class JSliderOrientationQuery extends GuiQuery<Integer> {
+    // TODO make top-level
+    
     private final JSlider slider;
     
     static int orientationOf(JSlider slider) {
@@ -66,13 +68,13 @@ public final class JSliderLocation {
     }
   }
 
-  static class VerticalLocationTask extends JSliderLocationQueryStrategy {
+  static class JSliderVerticalLocationQueryStrategy extends JSliderLocationQueryStrategy {
     
     static Point locationForVerticalOrientation(JSlider slider, int value) {
-      return execute(new VerticalLocationTask(slider, value));
+      return execute(new JSliderVerticalLocationQueryStrategy(slider, value));
     }
     
-    private VerticalLocationTask(JSlider slider, int value) {
+    private JSliderVerticalLocationQueryStrategy(JSlider slider, int value) {
       super(slider, value);
     }
 

@@ -19,10 +19,9 @@ package org.fest.swing.driver;
 import javax.swing.JTree;
 
 import org.fest.swing.cell.JTreeCellReader;
-import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTreeCellRendererQuery.cellRendererIn;
+import static org.fest.swing.driver.JTreeConvertValueToTextQuery.convertValueToText;
 import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**
@@ -46,29 +45,9 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
     return valueToText(tree, modelValue);
   }
 
-  private String valueToText(final JTree tree, final Object modelValue) {
-    String text = JTreeConvertValueToTextQuery.convertValueToText(tree, modelValue);
+  private String valueToText(JTree tree, Object modelValue) {
+    String text = convertValueToText(tree, modelValue);
     if (isDefaultToString(text)) return null;
     return text;
-  }
-
-  static class JTreeConvertValueToTextQuery extends GuiQuery<String> {
-    // TODO Move to top-level
-    
-    private final JTree tree;
-    private final Object modelValue;
-
-    static String convertValueToText(JTree tree, Object modelValue) {
-      return execute(new JTreeConvertValueToTextQuery(tree, modelValue));
-    }
-    
-    JTreeConvertValueToTextQuery(JTree tree, Object modelValue) {
-      this.tree = tree;
-      this.modelValue = modelValue;
-    }
-
-    protected String executeInEDT() {
-      return tree.convertValueToText(modelValue, false, false, false, 0, false);
-    }
   }
 }

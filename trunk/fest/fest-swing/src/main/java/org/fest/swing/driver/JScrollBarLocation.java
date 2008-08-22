@@ -21,12 +21,10 @@ import java.util.Map;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiActionRunner;
-
 import static java.awt.Adjustable.*;
 
 import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
+import static org.fest.swing.driver.JScrollBarOrientationQuery.orientationOf;
 
 /**
  * Understands encapsulation of a location in a <code>{@link JScrollBar}</code>.
@@ -111,24 +109,6 @@ public final class JScrollBarLocation {
   }
 
   private JScrollBarLocationStrategy locationStrategyFor(JScrollBar scrollBar) {
-    return strategyMap.get(JScrollBarOrientationQuery.orientationOf(scrollBar));
-  }
-
-  private static class JScrollBarOrientationQuery extends GuiQuery<Integer> {
-    
-    // TODO make top-level
-    private final JScrollBar scrollBar;
-
-    static Integer orientationOf(JScrollBar scrollBar) {
-      return GuiActionRunner.execute(new JScrollBarOrientationQuery(scrollBar));
-    }
-    
-    private JScrollBarOrientationQuery(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-
-    protected Integer executeInEDT() throws Throwable {
-      return scrollBar.getOrientation();
-    }
+    return strategyMap.get(orientationOf(scrollBar));
   }
 }

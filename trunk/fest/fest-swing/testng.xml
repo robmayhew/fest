@@ -26,6 +26,7 @@
       <package name="org.fest.swing.launcher"/>
       <package name="org.fest.swing.listener"/>
       <package name="org.fest.swing.monitor"/>
+      <package name="org.fest.swing.query"/>
       <package name="org.fest.swing.util"/>
     </packages>
   </test>
