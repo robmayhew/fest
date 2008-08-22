@@ -21,7 +21,6 @@ import java.awt.Point;
 
 import javax.swing.*;
 
-import org.easymock.IArgumentMatcher;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -42,8 +41,6 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
-import static org.fest.swing.driver.ComponentDriverTest.PerformDefaultAccessibleActionTaskMatcher.eqTask;
-import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.util.Platform.*;
 
@@ -498,40 +495,6 @@ import static org.fest.swing.util.Platform.*;
 
   private boolean isWindowsOrMac() {
     return isWindows() || isMacintosh();
-  }
-  
-  public void shouldPerformAccessibleAction() {
-    new EasyMockTemplate(robot) {
-      protected void expectations() {
-        robot.invokeLater(same(c), eqTask(performDefaultAccessibleActionTask(c)));
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        driver.performAccessibleActionOf(c);
-      }
-    }.run();
-  }
-
-  static class PerformDefaultAccessibleActionTaskMatcher implements IArgumentMatcher {
-    static ComponentPerformDefaultAccessibleActionTask eqTask(ComponentPerformDefaultAccessibleActionTask expected) {
-      reportMatcher(new PerformDefaultAccessibleActionTaskMatcher(expected));
-      return expected;
-    }
-    
-    private final ComponentPerformDefaultAccessibleActionTask expected;
-    
-    PerformDefaultAccessibleActionTaskMatcher(ComponentPerformDefaultAccessibleActionTask expected) {
-      this.expected = expected;
-    }
-    
-    public boolean matches(Object o) {
-      if (!(o instanceof ComponentPerformDefaultAccessibleActionTask)) return false;
-      ComponentPerformDefaultAccessibleActionTask actual = (ComponentPerformDefaultAccessibleActionTask)o;
-      return expected.action == actual.action; 
-    }
-    
-    public void appendTo(StringBuffer buffer) {}
   }
   
   public void shouldNotWaitIfComponentIsReady() {

@@ -42,11 +42,13 @@ public class ContainerResizeLocationQueryTest {
   private Container container;
   private Dimension size;
   private Insets insets;
+  private ContainerResizeLocationQuery query;
   
   @BeforeMethod public void setUp() {
     container = createMock(Container.class);
     size = new Dimension(800, 600);
     insets = new Insets(2, 5, 6, 8);
+    query = new ContainerResizeLocationQuery(container);
   }
   
   public void shouldReturnResizeLocationOfContainer() {
@@ -57,7 +59,7 @@ public class ContainerResizeLocationQueryTest {
       }
 
       protected void codeToTest() {
-        Point resizeLocation = ContainerResizeLocationQuery.resizeLocationOf(container);
+        Point resizeLocation = query.executeInEDT();
         assertThat(resizeLocation.x).isEqualTo(796);
         assertThat(resizeLocation.y).isEqualTo(597);
       }

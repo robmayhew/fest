@@ -39,6 +39,7 @@ import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.JComboBoxDropDownVisibleQuery.isDropDownVisible;
+import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -415,19 +416,11 @@ public class JComboBoxDriverTest {
   }
 
   private void makeComboBoxEditable() {
-    setComboBoxEditable(comboBox, true);
+    setEditable(comboBox, true);
   }
 
   private void makeComboBoxNotEditable() {
-    setComboBoxEditable(comboBox, false);
-  }
-
-  private static void setComboBoxEditable(final JComboBox comboBox, final boolean editable) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        comboBox.setEditable(editable);
-      }
-    });
+    setEditable(comboBox, false);
   }
 
   private void assertDropDownVisible() {

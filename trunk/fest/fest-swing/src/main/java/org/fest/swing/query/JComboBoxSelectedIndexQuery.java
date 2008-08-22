@@ -41,7 +41,7 @@ public class JComboBoxSelectedIndexQuery extends GuiQuery<Integer> {
     return execute(new JComboBoxSelectedIndexQuery(comboBox));
   }
 
-  private JComboBoxSelectedIndexQuery(JComboBox comboBox) {
+  JComboBoxSelectedIndexQuery(JComboBox comboBox) {
     this.comboBox = comboBox;
   }
 

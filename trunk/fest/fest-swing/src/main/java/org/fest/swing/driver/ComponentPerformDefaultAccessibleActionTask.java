@@ -18,12 +18,12 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.accessibility.AccessibleAction;
+import javax.accessibility.AccessibleContext;
 import javax.swing.Action;
 
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.driver.ComponentAccessibleActionQuery.accessibleActionFrom;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
@@ -38,25 +38,26 @@ class ComponentPerformDefaultAccessibleActionTask extends GuiTask {
 
   private static final int DEFAULT_ACTION_INDEX = 0;
 
-  final AccessibleAction action;
+  private final Component component;
 
-  static ComponentPerformDefaultAccessibleActionTask performDefaultAccessibleActionTask(Component c) {
-    return new ComponentPerformDefaultAccessibleActionTask(c);
+  static ComponentPerformDefaultAccessibleActionTask performDefaultAccessibleActionTask(Component component) {
+    return new ComponentPerformDefaultAccessibleActionTask(component);
   }
   
   /**
    * Creates a new </code>{@link ComponentPerformDefaultAccessibleActionTask}</code>.
-   * @param c the <code>Component</code> containing the <code>AccessibleAction</code> to execute.
+   * @param component the <code>Component</code> containing the <code>AccessibleAction</code> to execute.
    * @throws ActionFailedException if the <code>Component</code> does not contain an <code>AccessibleAction</code>
    * or if the <code>AccessibleAction</code> is empty.
    */
-  private ComponentPerformDefaultAccessibleActionTask(Component c) {
-    action = accessibleActionFrom(c);
-    if (action == null || action.getAccessibleActionCount() == 0)
-      throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
+  private ComponentPerformDefaultAccessibleActionTask(Component component) {
+    this.component = component;
   }
 
   protected void executeInEDT() {
+    AccessibleAction action = component.getAccessibleContext().getAccessibleAction();
+    if (action == null || action.getAccessibleActionCount() == 0)
+      throw actionFailure(concat("Unable to perform accessible action for ", format(component)));
     action.doAccessibleAction(DEFAULT_ACTION_INDEX);
   }
 }

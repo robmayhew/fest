@@ -47,22 +47,22 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
   }
 
   private String valueToText(final JTree tree, final Object modelValue) {
-    String text = JTreeConvertValueToTextTask.convertValueToText(tree, modelValue);
+    String text = JTreeConvertValueToTextQuery.convertValueToText(tree, modelValue);
     if (isDefaultToString(text)) return null;
     return text;
   }
 
-  static class JTreeConvertValueToTextTask extends GuiQuery<String> {
+  static class JTreeConvertValueToTextQuery extends GuiQuery<String> {
     // TODO Move to top-level
     
     private final JTree tree;
     private final Object modelValue;
 
     static String convertValueToText(JTree tree, Object modelValue) {
-      return execute(new JTreeConvertValueToTextTask(tree, modelValue));
+      return execute(new JTreeConvertValueToTextQuery(tree, modelValue));
     }
     
-    JTreeConvertValueToTextTask(JTree tree, Object modelValue) {
+    JTreeConvertValueToTextQuery(JTree tree, Object modelValue) {
       this.tree = tree;
       this.modelValue = modelValue;
     }

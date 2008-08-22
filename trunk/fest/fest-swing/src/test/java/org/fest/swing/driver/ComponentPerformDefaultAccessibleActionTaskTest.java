@@ -16,9 +16,9 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.util.Locale;
 
-import javax.accessibility.AccessibleAction;
-import javax.accessibility.AccessibleContext;
+import javax.accessibility.*;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
@@ -27,11 +27,14 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.TestGroups;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
@@ -42,66 +45,82 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 @Test(groups = TestGroups.GUI)
 public class ComponentPerformDefaultAccessibleActionTaskTest {
 
+  private AccessibleAction accessibleAction;
+  private AccessibleContextStub accessibleContext;
   private Component component;
-  private AccessibleContext context;
-  private AccessibleAction action;
+  private ComponentPerformDefaultAccessibleActionTask task;
 
   @BeforeMethod public void setUp() {
-    context = createMock(AccessibleContext.class);
-    action = createMock(AccessibleAction.class);
-    component = execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        return new MyComponent(context);
-      }
-    });
+    accessibleAction = createMock(AccessibleAction.class);
+    accessibleContext = new AccessibleContextStub(accessibleAction);
+    component = MyComponent.newComponent(accessibleContext);
+    task = ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component);
   }
 
-  @Test public void shouldExecuteFirstActionInAccessibleAction() {
-    new EasyMockTemplate(context, action) {
+  public void shouldExecuteFirstActionInAccessibleAction() {
+    new EasyMockTemplate(accessibleAction) {
       protected void expectations() {
-        expect(context.getAccessibleAction()).andReturn(action);
-        expect(action.getAccessibleActionCount()).andReturn(1);
-        expect(action.doAccessibleAction(0)).andReturn(true);
+        expect(accessibleAction.getAccessibleActionCount()).andReturn(1);
+        expect(accessibleAction.doAccessibleAction(0)).andReturn(true);
       }
 
       protected void codeToTest() {
-        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component).executeInEDT();
+        execute(task);
       }
     }.run();
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfAccessibleActionIsNull() {
-    new EasyMockTemplate(context) {
-      protected void expectations() {
-        expect(context.getAccessibleAction()).andReturn(null);
-      }
-
-      protected void codeToTest() {
-        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component);
-      }
-    }.run();
+    accessibleContext.accessibleAction(null);
+    try {
+      new EasyMockTemplate(accessibleAction) {
+        protected void expectations() {}
+  
+        protected void codeToTest() {
+          execute(task);
+        }
+      }.run();
+      fail();
+    } catch (UnexpectedException e) {
+      assertActionFailedThrown(e);
+    }
   }
 
-  @Test(expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorIfAccessibleActionIsEmpty() {
-    new EasyMockTemplate(context, action) {
-      protected void expectations() {
-        expect(context.getAccessibleAction()).andReturn(action);
-        expect(action.getAccessibleActionCount()).andReturn(0);
-      }
-
-      protected void codeToTest() {
-        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component);
-      }
-    }.run();
+    try {
+      new EasyMockTemplate(accessibleAction) {
+        protected void expectations() {
+          expect(accessibleAction.getAccessibleActionCount()).andReturn(0);
+        }
+  
+        protected void codeToTest() {
+          execute(task);
+        }
+      }.run();
+      fail();
+    } catch (UnexpectedException e) {
+      assertActionFailedThrown(e);
+    }
   }
 
+  private void assertActionFailedThrown(UnexpectedException e) {
+    assertThat(e.getCause()).isInstanceOf(ActionFailedException.class)
+                            .message().contains("Unable to perform accessible action for");
+  }
+  
   private static class MyComponent extends JTextField {
     private static final long serialVersionUID = 1L;
-
+    
     private final AccessibleContext accessibleContext;
 
+    static MyComponent newComponent(final AccessibleContext accessibleContext) {
+      return execute(new GuiQuery<MyComponent>() {
+        protected MyComponent executeInEDT() {
+          return new MyComponent(accessibleContext);
+        }
+      });
+    }
+    
     MyComponent(AccessibleContext accessibleContext) {
       this.accessibleContext = accessibleContext;
     }
@@ -109,5 +128,28 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
     @Override public AccessibleContext getAccessibleContext() {
       return accessibleContext;
     }
+  }
+  
+  private static class AccessibleContextStub extends AccessibleContext {
+    private AccessibleAction accessibleAction;
+
+    AccessibleContextStub(AccessibleAction newAccessibleAction) {
+      accessibleAction(newAccessibleAction);
+    }
+    
+    void accessibleAction(AccessibleAction newAccessibleAction) {
+      this.accessibleAction = newAccessibleAction; 
+    }
+
+    @Override public AccessibleAction getAccessibleAction() {
+      return accessibleAction;
+    }
+
+    public Accessible getAccessibleChild(int i) { return null; }
+    public int getAccessibleChildrenCount() { return 0; }
+    public int getAccessibleIndexInParent() { return 0; }
+    public AccessibleRole getAccessibleRole() { return null; }
+    public AccessibleStateSet getAccessibleStateSet() { return null; }
+    public Locale getLocale() { return null; }
   }
 }

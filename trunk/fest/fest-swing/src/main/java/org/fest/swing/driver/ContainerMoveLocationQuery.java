@@ -25,7 +25,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the point where the mouse usually grabs to
- * move a <code>{@link Container}</code>
+ * move a <code>{@link Container}</code>.
  * 
  * @author Alex Ruiz
  */
@@ -37,16 +37,15 @@ class ContainerMoveLocationQuery extends GuiQuery<Point> {
     return execute(new ContainerMoveLocationQuery(container));
   }
   
-  private ContainerMoveLocationQuery(Container container) {
+  ContainerMoveLocationQuery(Container container) {
     this.container = container;
   }
   
-  protected Point executeInEDT() throws Throwable {
+  protected Point executeInEDT() {
     return moveLocation(container.getSize(), container.getInsets());
   }
 
   private Point moveLocation(Dimension size, Insets insets) {
     return new Point(size.width / 2, insets.top / 2);
   }
-
 }

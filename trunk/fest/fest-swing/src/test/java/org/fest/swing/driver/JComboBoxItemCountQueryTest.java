@@ -38,9 +38,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JComboBoxItemCountQueryTest {
 
   private JComboBox comboBox;
+  private JComboBoxItemCountQuery query;
 
   @BeforeMethod public void setUp() {
     comboBox = createMock(JComboBox.class);
+    query = new JComboBoxItemCountQuery(comboBox);
   }
 
   @Test(dataProvider = "itemCounts", groups = EDT_QUERY)
@@ -51,7 +53,7 @@ public class JComboBoxItemCountQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JComboBoxItemCountQuery.itemCountOf(comboBox)).isEqualTo(itemCount);
+        assertThat(query.executeInEDT()).isEqualTo(itemCount);
       }
     }.run();
   }

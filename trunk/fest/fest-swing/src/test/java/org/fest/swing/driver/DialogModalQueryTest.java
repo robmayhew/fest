@@ -37,9 +37,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class DialogModalQueryTest {
 
   private Dialog dialog;
+  private DialogModalQuery query;
 
   @BeforeMethod public void setUp() {
     dialog = createMock(Dialog.class);
+    query = new DialogModalQuery(dialog);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -50,7 +52,7 @@ public class DialogModalQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(DialogModalQuery.isModal(dialog)).isEqualTo(modal);
+        assertThat(query.executeInEDT()).isEqualTo(modal);
       }
     }.run();
   }

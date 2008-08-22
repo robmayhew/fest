@@ -38,9 +38,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class AbstractButtonSelectedQueryTest {
 
   private AbstractButton button;
+  private AbstractButtonSelectedQuery query;
 
   @BeforeMethod public void setUp() {
     button = createMock(AbstractButton.class);
+    query = new AbstractButtonSelectedQuery(button);
   }
   
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -51,7 +53,7 @@ public class AbstractButtonSelectedQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(AbstractButtonSelectedQuery.isSelected(button)).isEqualTo(selected);
+        assertThat(query.executeInEDT()).isEqualTo(selected);
       }
     }.run();
   }

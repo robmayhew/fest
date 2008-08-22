@@ -37,9 +37,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 @Test(groups = EDT_QUERY) public class JComboBoxSelectedIndexQueryTest {
 
   private JComboBox comboBox;
+  private JComboBoxSelectedIndexQuery query;
 
   @BeforeMethod public void setUp() {
     comboBox = createMock(JComboBox.class);
+    query = new JComboBoxSelectedIndexQuery(comboBox);
   }
 
   @Test(dataProvider = "selectedIndices", groups = EDT_QUERY)
@@ -50,7 +52,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
       }
 
       protected void codeToTest() {
-        assertThat(JComboBoxSelectedIndexQuery.selectedIndexOf(comboBox)).isEqualTo(selectedIndex);
+        assertThat(query.executeInEDT()).isEqualTo(selectedIndex);
       }
     }.run();
   }

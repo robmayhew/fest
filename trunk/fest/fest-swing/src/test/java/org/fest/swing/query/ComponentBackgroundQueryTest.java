@@ -22,27 +22,30 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.query.ComponentBackgroundQuery;
 
 import static java.awt.Color.BLUE;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
  * Tests for <code>{@link ComponentBackgroundQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class ComponentBackgroundQueryTest {
+@Test(groups = EDT_QUERY)
+public class ComponentBackgroundQueryTest {
 
   private Component component;
   private Color background;
+  private ComponentBackgroundQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(Component.class);
     background = BLUE;
+    query = new ComponentBackgroundQuery(component);
   }
   
   public void shouldReturnComponentBackground() {
@@ -52,7 +55,7 @@ import static org.fest.assertions.Assertions.assertThat;
       }
 
       protected void codeToTest() {
-        assertThat(ComponentBackgroundQuery.backgroundOf(component)).isSameAs(background);
+        assertThat(query.executeInEDT()).isSameAs(background);
       }
     }.run();
   }

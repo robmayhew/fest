@@ -35,7 +35,7 @@ class JComboBoxItemCountQuery extends GuiQuery<Integer> {
     return execute(new JComboBoxItemCountQuery(comboBox));
   }
 
-  private JComboBoxItemCountQuery(JComboBox comboBox) {
+  JComboBoxItemCountQuery(JComboBox comboBox) {
     this.comboBox = comboBox;
   }
 

@@ -38,10 +38,12 @@ public class ComponentNameQueryTest {
 
   private Component component;
   private String name;
+  private ComponentNameQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(Component.class);
     name = "mine";
+    query = new ComponentNameQuery(component);
   }
 
   public void shouldReturnComponentName() {
@@ -51,7 +53,7 @@ public class ComponentNameQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ComponentNameQuery.nameOf(component)).isSameAs(name);
+        assertThat(query.executeInEDT()).isSameAs(name);
       }
     }.run();
   }

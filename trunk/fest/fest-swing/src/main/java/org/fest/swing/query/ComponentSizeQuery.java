@@ -41,7 +41,7 @@ public final class ComponentSizeQuery extends GuiQuery<Dimension> {
     return execute(new ComponentSizeQuery(component));
   }
 
-  private ComponentSizeQuery(Component component) {
+  ComponentSizeQuery(Component component) {
     this.component = component;
   }
 

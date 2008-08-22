@@ -34,7 +34,7 @@ class JComboBoxDropDownVisibleQuery extends GuiQuery<Boolean> {
     return execute(new JComboBoxDropDownVisibleQuery(comboBox));
   }
 
-  private JComboBoxDropDownVisibleQuery(JComboBox comboBox) {
+  JComboBoxDropDownVisibleQuery(JComboBox comboBox) {
     this.comboBox = comboBox;
   }
 

@@ -30,7 +30,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  */
 public class ComponentParentQuery extends GuiQuery<Container> {
 
-  private final Component c;
+  private final Component component;
 
   /**
    * Returns the parent of the given <code>{@link Component}</code>. This action is executed in the event dispatch
@@ -42,8 +42,8 @@ public class ComponentParentQuery extends GuiQuery<Container> {
     return execute(new ComponentParentQuery(component));
   }
 
-  private ComponentParentQuery(Component c) {
-    this.c = c;
+  ComponentParentQuery(Component component) {
+    this.component = component;
   }
 
   /**
@@ -51,7 +51,7 @@ public class ComponentParentQuery extends GuiQuery<Container> {
    * thread.
    * @return the parent in this query's <code>Component</code>.
    */
-  protected Container executeInEDT() throws Throwable {
-    return c.getParent();
+  protected Container executeInEDT() {
+    return component.getParent();
   }
 }

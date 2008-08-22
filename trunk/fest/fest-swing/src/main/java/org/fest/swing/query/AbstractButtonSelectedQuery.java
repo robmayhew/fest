@@ -41,7 +41,7 @@ public class AbstractButtonSelectedQuery extends GuiQuery<Boolean> {
     return execute(new AbstractButtonSelectedQuery(button));
   }
 
-  private AbstractButtonSelectedQuery(AbstractButton button) {
+  AbstractButtonSelectedQuery(AbstractButton button) {
     this.button = button;
   }
 

@@ -35,7 +35,7 @@ class JComboBoxEditableQuery extends GuiQuery<Boolean> {
     return execute(new JComboBoxEditableQuery(comboBox));
   }
   
-  private JComboBoxEditableQuery(JComboBox comboBox) {
+  JComboBoxEditableQuery(JComboBox comboBox) {
     this.comboBox = comboBox;
   }
 

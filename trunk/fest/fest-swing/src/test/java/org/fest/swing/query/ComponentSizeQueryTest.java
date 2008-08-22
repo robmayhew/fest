@@ -38,10 +38,12 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
   private Component component;
   private Dimension size;
+  private ComponentSizeQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(Component.class);
     size = new Dimension(800, 600);
+    query = new ComponentSizeQuery(component);
   }
 
   public void shouldReturnSizeOfComponent() {
@@ -51,7 +53,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
       }
 
       protected void codeToTest() {
-        assertThat(ComponentSizeQuery.sizeOf(component)).isSameAs(size);
+        assertThat(query.executeInEDT()).isSameAs(size);
       }
     }.run();
   }

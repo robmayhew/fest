@@ -18,8 +18,8 @@ package org.fest.swing.driver;
 import java.awt.Container;
 import java.awt.Insets;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the insets of a
@@ -36,7 +36,7 @@ class ContainerInsetsQuery extends GuiQuery<Insets> {
     return GuiActionRunner.execute(new ContainerInsetsQuery(container));
   }
   
-  private ContainerInsetsQuery(Container container) {
+  ContainerInsetsQuery(Container container) {
     this.container = container;
   }
 

@@ -38,9 +38,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class ComponentVisibleQueryTest {
 
   private Component component;
+  private ComponentVisibleQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(Component.class);
+    query = new ComponentVisibleQuery(component);
   }
   
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -51,7 +53,7 @@ public class ComponentVisibleQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ComponentVisibleQuery.isVisible(component)).isEqualTo(visible);
+        assertThat(query.executeInEDT()).isEqualTo(visible);
       }
     }.run();
   }

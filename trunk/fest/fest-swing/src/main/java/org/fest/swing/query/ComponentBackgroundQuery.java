@@ -42,7 +42,7 @@ public final class ComponentBackgroundQuery extends GuiQuery<Color> {
     return execute(new ComponentBackgroundQuery(component));
   }
 
-  private ComponentBackgroundQuery(Component component) {
+  ComponentBackgroundQuery(Component component) {
     this.component = component;
   }
 

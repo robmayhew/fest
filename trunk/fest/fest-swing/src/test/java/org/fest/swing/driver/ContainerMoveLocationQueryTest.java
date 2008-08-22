@@ -42,11 +42,13 @@ public class ContainerMoveLocationQueryTest {
   private Container container;
   private Dimension size;
   private Insets insets;
+  private ContainerMoveLocationQuery query;
   
   @BeforeMethod public void setUp() {
     container = createMock(Container.class);
     size = new Dimension(800, 600);
     insets = new Insets(2, 5, 6, 8);
+    query = new ContainerMoveLocationQuery(container);
   }
   
   public void shouldReturnMoveLocationOfContainer() {
@@ -57,7 +59,7 @@ public class ContainerMoveLocationQueryTest {
       }
 
       protected void codeToTest() {
-        Point moveLocation = ContainerMoveLocationQuery.moveLocationOf(container);
+        Point moveLocation = query.executeInEDT();
         assertThat(moveLocation.x).isEqualTo(400);
         assertThat(moveLocation.y).isEqualTo(1);
       }

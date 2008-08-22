@@ -40,10 +40,12 @@ public class ContainerInsetsQueryTest {
 
   private JComponent component;
   private Insets insets;
+  private ContainerInsetsQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(JComponent.class);
     insets = new Insets(6, 8, 6, 8);
+    query = new ContainerInsetsQuery(component);
   }
   
   public void shouldReturnInsetsOfJComponent() {
@@ -53,7 +55,7 @@ public class ContainerInsetsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ContainerInsetsQuery.insetsOf(component)).isSameAs(insets);
+        assertThat(query.executeInEDT()).isSameAs(insets);
       }
     }.run();
   }

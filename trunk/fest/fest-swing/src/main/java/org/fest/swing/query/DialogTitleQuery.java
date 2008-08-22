@@ -28,6 +28,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  */
 public final class DialogTitleQuery extends GuiQuery<String> {
+  
   private final Dialog dialog;
 
   /**
@@ -39,7 +40,7 @@ public final class DialogTitleQuery extends GuiQuery<String> {
     return execute(new DialogTitleQuery(dialog));
   }
 
-  private DialogTitleQuery(Dialog dialog) {
+  DialogTitleQuery(Dialog dialog) {
     this.dialog = dialog;
   }
 

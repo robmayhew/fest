@@ -33,14 +33,17 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY) public class DialogTitleQueryTest {
+@Test(groups = EDT_QUERY) 
+public class DialogTitleQueryTest {
 
   private Dialog dialog;
   private String title;
+  private DialogTitleQuery query;
 
   @BeforeMethod public void setUp() {
     dialog = createMock(Dialog.class);
     title = "hello";
+    query = new DialogTitleQuery(dialog);
   }
 
   public void shouldReturnTitleOfDialog() {
@@ -50,7 +53,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
       }
 
       protected void codeToTest() {
-        assertThat(DialogTitleQuery.titleOf(dialog)).isSameAs(title);
+        assertThat(query.executeInEDT()).isSameAs(title);
       }
     }.run();
   }

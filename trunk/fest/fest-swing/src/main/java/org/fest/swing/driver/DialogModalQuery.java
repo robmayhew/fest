@@ -35,11 +35,11 @@ class DialogModalQuery extends GuiQuery<Boolean> {
     return execute(new DialogModalQuery(dialog));
   }
   
-  private DialogModalQuery(Dialog dialog) {
+  DialogModalQuery(Dialog dialog) {
     this.dialog = dialog;
   }
   
-  protected Boolean executeInEDT() throws Throwable {
+  protected Boolean executeInEDT() {
     return dialog.isModal();
   }
 }

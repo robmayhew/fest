@@ -39,10 +39,12 @@ public class ComponentParentQueryTest {
 
   private Component component;
   private Container parent;
+  private ComponentParentQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(Component.class);
     parent = createMock(Container.class);
+    query = new ComponentParentQuery(component);
   }
 
   public void shouldReturnParentOfComponent() {
@@ -52,7 +54,7 @@ public class ComponentParentQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ComponentParentQuery.parentOf(component)).isSameAs(parent);
+        assertThat(query.executeInEDT()).isSameAs(parent);
       }
     }.run();
   }

@@ -37,7 +37,7 @@ class JComboBoxItemAtIndexQuery extends GuiQuery<Object> {
     return execute(new JComboBoxItemAtIndexQuery(comboBox, index));
   }
 
-  private JComboBoxItemAtIndexQuery(JComboBox comboBox, int index) {
+  JComboBoxItemAtIndexQuery(JComboBox comboBox, int index) {
     this.index = index;
     this.comboBox = comboBox;
   }

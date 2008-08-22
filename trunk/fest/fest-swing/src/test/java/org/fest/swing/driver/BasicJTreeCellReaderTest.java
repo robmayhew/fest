@@ -48,15 +48,19 @@ public class BasicJTreeCellReaderTest {
   private DefaultMutableTreeNode root;
 
   @BeforeMethod public void setUp() {
-    root = execute(new GuiQuery<DefaultMutableTreeNode>() {
+    root = newRoot();
+    tree = newTreeWith(new DefaultTreeModel(root));
+    reader = new BasicJTreeCellReader();
+  }
+
+  private static DefaultMutableTreeNode newRoot() {
+    return execute(new GuiQuery<DefaultMutableTreeNode>() {
       protected DefaultMutableTreeNode executeInEDT() {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
         rootNode.add(new DefaultMutableTreeNode("Node1"));
         return rootNode;
       }
     });
-    tree = newTreeWith(new DefaultTreeModel(root));
-    reader = new BasicJTreeCellReader();
   }
 
   private static JTree newTreeWith(final DefaultTreeModel rootNode) {
@@ -68,14 +72,17 @@ public class BasicJTreeCellReaderTest {
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    JLabel label = execute(new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        return new JLabel("First");
-      }
-    });
-    setCellRendererComponent(tree, label);
+    setCellRendererComponent(tree, newJLabelWithText("First"));
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo("First");
+  }
+
+  private static JLabel newJLabelWithText(final String text) {
+    return execute(new GuiQuery<JLabel>() {
+      protected JLabel executeInEDT() {
+        return new JLabel(text);
+      }
+    });
   }
 
   public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
@@ -113,7 +120,7 @@ public class BasicJTreeCellReaderTest {
     });
   }
   
-  private Component unrecognizedRenderer() {
+  private static Component unrecognizedRenderer() {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
         return new JToolBar();

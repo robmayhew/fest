@@ -42,7 +42,7 @@ public final class ComponentLocationOnScreenQuery extends GuiQuery<Point> {
     return execute(new ComponentLocationOnScreenQuery(component));
   }
 
-  private ComponentLocationOnScreenQuery(Component component) {
+  ComponentLocationOnScreenQuery(Component component) {
     this.component = component;
   }
 

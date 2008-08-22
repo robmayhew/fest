@@ -39,11 +39,13 @@ public class JComboBoxItemAtIndexQueryTest {
   private JComboBox comboBox;
   private int index;
   private String value;
+  private JComboBoxItemAtIndexQuery query;
 
   @BeforeMethod public void setUp() {
     comboBox = createMock(JComboBox.class);
     index = 8;
     value = "Hello";
+    query = new JComboBoxItemAtIndexQuery(comboBox, index);
   }
 
   public void shouldReturnItemAtIndexInJComboBox() {
@@ -53,7 +55,7 @@ public class JComboBoxItemAtIndexQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JComboBoxItemAtIndexQuery.itemAt(comboBox, index)).isEqualTo(value);
+        assertThat(query.executeInEDT()).isEqualTo(value);
       }
     }.run();
   }

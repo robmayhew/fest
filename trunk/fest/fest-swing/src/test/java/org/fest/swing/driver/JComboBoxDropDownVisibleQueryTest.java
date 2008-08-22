@@ -40,10 +40,12 @@ public class JComboBoxDropDownVisibleQueryTest {
 
   private JComboBox comboBox;
   private ComboBoxUI ui;
+  private JComboBoxDropDownVisibleQuery query;
 
   @BeforeMethod public void setUp() {
     comboBox = createMock(JComboBox.class);
     ui = createMock(ComboBoxUI.class);
+    query = new JComboBoxDropDownVisibleQuery(comboBox);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -55,7 +57,7 @@ public class JComboBoxDropDownVisibleQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JComboBoxDropDownVisibleQuery.isDropDownVisible(comboBox)).isEqualTo(visible);
+        assertThat(query.executeInEDT()).isEqualTo(visible);
       }
     }.run();
   }

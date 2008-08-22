@@ -41,7 +41,7 @@ public final class ComponentVisibleQuery extends GuiQuery<Boolean> {
     return execute(new ComponentVisibleQuery(component));
   }
 
-  private ComponentVisibleQuery(Component component) {
+  ComponentVisibleQuery(Component component) {
     this.component = component;
   }
 

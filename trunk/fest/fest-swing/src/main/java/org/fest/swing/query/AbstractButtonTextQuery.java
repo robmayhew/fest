@@ -42,7 +42,7 @@ public final class AbstractButtonTextQuery extends GuiQuery<String> {
     return execute(new AbstractButtonTextQuery(button));
   }
   
-  private AbstractButtonTextQuery(AbstractButton button) {
+  AbstractButtonTextQuery(AbstractButton button) {
     this.button = button;
   }
 

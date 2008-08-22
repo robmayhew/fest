@@ -42,11 +42,13 @@ public class JComboBoxEditorQueryTest {
   private JComboBox comboBox;
   private ComboBoxEditor editor;
   private Component editorComponent;
+  private JComboBoxEditorQuery query;
   
   @BeforeMethod public void setUp() {
     comboBox = createMock(JComboBox.class);
     editor = createMock(ComboBoxEditor.class);
     editorComponent = createMock(Component.class);
+    query = new JComboBoxEditorQuery(comboBox);
   }
   
   public void shouldReturnEditorComponentFromJComboBox() {
@@ -57,7 +59,7 @@ public class JComboBoxEditorQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JComboBoxEditorQuery.editorOf(comboBox)).isSameAs(editorComponent);
+        assertThat(query.executeInEDT()).isSameAs(editorComponent);
       }
     }.run();
   }

@@ -38,9 +38,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class ComponentEnabledQueryTest {
 
   private Component component;
+  private ComponentEnabledQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(Component.class);
+    query = new ComponentEnabledQuery(component);
   }
   
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -51,7 +53,7 @@ public class ComponentEnabledQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ComponentEnabledQuery.isEnabled(component)).isEqualTo(enabled);
+        assertThat(query.executeInEDT()).isEqualTo(enabled);
       }
     }.run();
   }

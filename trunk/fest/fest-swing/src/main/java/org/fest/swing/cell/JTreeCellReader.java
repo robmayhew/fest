@@ -29,7 +29,7 @@ public interface JTreeCellReader {
    * Returns the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
    * @param tree the given <code>JTree</code>.
    * @param modelValue the value of a cell, retrieved from the model. 
-   * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
+   * @return the internal value of a cell in a <code>JTree</code> as expected in a test.
    */
   String valueAt(JTree tree, Object modelValue);
 }

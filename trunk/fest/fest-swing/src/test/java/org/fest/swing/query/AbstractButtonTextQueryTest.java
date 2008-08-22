@@ -38,10 +38,12 @@ public class AbstractButtonTextQueryTest {
 
   private AbstractButton button;
   private String text;
+  private AbstractButtonTextQuery query;
 
   @BeforeMethod public void setUp() {
     button = createMock(AbstractButton.class);
     text = "Click me";
+    query = new AbstractButtonTextQuery(button);
   }
 
   public void shouldReturnTextOfAbstractButton() {
@@ -51,7 +53,7 @@ public class AbstractButtonTextQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(AbstractButtonTextQuery.textOf(button)).isSameAs(text);
+        assertThat(query.executeInEDT()).isSameAs(text);
       }
     }.run();
   }

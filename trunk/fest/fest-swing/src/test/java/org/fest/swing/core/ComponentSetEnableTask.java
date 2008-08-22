@@ -37,7 +37,7 @@ public class ComponentSetEnableTask extends GuiTask {
     setEnabled(component, false);
   }
 
-  private static void setEnabled(Component component, boolean enabled) {
+  public static void setEnabled(Component component, boolean enabled) {
     execute(new ComponentSetEnableTask(component, enabled));
   }
   

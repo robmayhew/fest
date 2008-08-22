@@ -36,12 +36,11 @@ class JComboBoxEditorAccessibleQuery extends GuiQuery<Boolean> {
     return execute(new JComboBoxEditorAccessibleQuery(comboBox));
   }
   
-  private JComboBoxEditorAccessibleQuery(JComboBox comboBox) {
+  JComboBoxEditorAccessibleQuery(JComboBox comboBox) {
     this.comboBox = comboBox;
   }
 
   protected Boolean executeInEDT() {
-    boolean enabled = comboBox.isEnabled();
-    return comboBox.isEditable() && enabled;
+    return comboBox.isEditable() && comboBox.isEnabled();
   }
 }

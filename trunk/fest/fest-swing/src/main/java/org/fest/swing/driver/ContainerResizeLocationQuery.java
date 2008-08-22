@@ -37,11 +37,11 @@ class ContainerResizeLocationQuery extends GuiQuery<Point> {
     return execute(new ContainerResizeLocationQuery(container));
   }
   
-  private ContainerResizeLocationQuery(Container container) {
+  ContainerResizeLocationQuery(Container container) {
     this.container = container;
   }
   
-  protected Point executeInEDT() throws Throwable {
+  protected Point executeInEDT() {
     return resizeLocation(container.getSize(), container.getInsets());
   }
 

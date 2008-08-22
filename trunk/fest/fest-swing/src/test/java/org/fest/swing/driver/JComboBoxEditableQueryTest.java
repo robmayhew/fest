@@ -38,9 +38,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JComboBoxEditableQueryTest {
 
   private JComboBox comboBox;
+  private JComboBoxEditableQuery query;
 
   @BeforeMethod public void setUp() {
     comboBox = createMock(JComboBox.class);
+    query = new JComboBoxEditableQuery(comboBox);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -51,7 +53,7 @@ public class JComboBoxEditableQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JComboBoxEditableQuery.isEditable(comboBox)).isEqualTo(editable);
+        assertThat(query.executeInEDT()).isEqualTo(editable);
       }
     }.run();
   }

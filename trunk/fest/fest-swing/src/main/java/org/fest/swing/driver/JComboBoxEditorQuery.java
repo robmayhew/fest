@@ -37,7 +37,7 @@ class JComboBoxEditorQuery extends GuiQuery<Component> {
     return execute(new JComboBoxEditorQuery(comboBox));
   }
   
-  private JComboBoxEditorQuery(JComboBox comboBox) {
+  JComboBoxEditorQuery(JComboBox comboBox) {
     this.comboBox = comboBox;
   }
 

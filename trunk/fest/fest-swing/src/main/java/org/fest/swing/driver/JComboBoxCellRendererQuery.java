@@ -42,7 +42,7 @@ class JComboBoxCellRendererQuery extends GuiQuery<Component> {
     return execute(new JComboBoxCellRendererQuery(comboBox, index));
   }
   
-  private JComboBoxCellRendererQuery(JComboBox comboBox, int index) {
+  JComboBoxCellRendererQuery(JComboBox comboBox, int index) {
     this.index = index;
     this.comboBox = comboBox;
   }

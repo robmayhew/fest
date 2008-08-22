@@ -59,6 +59,7 @@ abstract class JScrollBarLocationStrategy {
     return execute(new HeightQuery(scrollBar));
   }
 
+  // TODO replace with getSize
   private static class HeightQuery extends GuiQuery<Integer> {
     private final JScrollBar scrollBar;
 

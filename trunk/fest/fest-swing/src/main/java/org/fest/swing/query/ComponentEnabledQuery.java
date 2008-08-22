@@ -41,7 +41,7 @@ public final class ComponentEnabledQuery extends GuiQuery<Boolean> {
     return execute(new ComponentEnabledQuery(component));
   }
 
-  private ComponentEnabledQuery(Component component) {
+  ComponentEnabledQuery(Component component) {
     this.component = component;
   }
 

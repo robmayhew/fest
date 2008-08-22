@@ -17,64 +17,75 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.core.ComponentSetEnableTask.setEnabled;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
+import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxEditorAccessibleQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = { GUI, EDT_QUERY })
 public class JComboBoxEditorAccessibleQueryTest {
 
+  private Robot robot;
   private JComboBox comboBox;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.newWindow();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
   }
 
-  public void shouldReturnTrueIfJComboBoxIsEnabledAndEditable() {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        expect(comboBox.isEditable()).andReturn(true);
-        expect(comboBox.isEnabled()).andReturn(true);
-      }
-
-      protected void codeToTest() {
-        assertThat(JComboBoxEditorAccessibleQuery.isEditorAccessible(comboBox)).isTrue();
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
-  @Test(dataProvider = "notEditableOrDisabled", groups = EDT_QUERY)
-  public void shouldReturnFalseIfJComboBoxIsNotEditableOrNotEnabled(final boolean editable, final boolean enabled) {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        expect(comboBox.isEditable()).andReturn(editable);
-        expect(comboBox.isEnabled()).andReturn(enabled);
-      }
-
-      protected void codeToTest() {
-        assertThat(JComboBoxEditorAccessibleQuery.isEditorAccessible(comboBox)).isFalse();
-      }
-    }.run();
+  @Test(dataProvider = "accessible", groups = { GUI, EDT_QUERY })
+  public void shouldReturnIndicateIfJComboBoxEditorIsAccessible(boolean editable, boolean enabled, boolean accessible) {
+    setEditable(comboBox, editable);
+    setEnabled(comboBox, enabled);
+    assertThat(JComboBoxEditorAccessibleQuery.isEditorAccessible(comboBox)).isEqualTo(accessible);
   }
 
-  @DataProvider(name = "notEditableOrDisabled") public Object[][] notEditableOrDisabled() {
+  @DataProvider(name = "accessible") public Object[][] accessible() {
     return new Object[][] {
-        { true , false },
-        { false , true },
-        { false , false },
+        { true , true , true  },
+        { true , false, false },
+        { false, true , false },
+        { false, false, false },
     };
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
+
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
+    public MyWindow() {
+      super(JComboBoxDriverTest.class);
+      add(comboBox);
+    }
   }
 }

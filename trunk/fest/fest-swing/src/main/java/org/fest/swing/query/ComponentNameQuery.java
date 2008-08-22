@@ -41,7 +41,7 @@ public final class ComponentNameQuery extends GuiQuery<String> {
     return execute(new ComponentNameQuery(component));
   }
   
-  private ComponentNameQuery(Component component) {
+  ComponentNameQuery(Component component) {
     this.component = component;
   }
 

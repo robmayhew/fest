@@ -39,10 +39,12 @@ public class ComponentLocationOnScreenQueryTest {
 
   private Component component;
   private Point location;
-
+  private ComponentLocationOnScreenQuery query;
+  
   @BeforeMethod public void setUp() {
     component = EasyMock.createMock(Component.class);
     location = new Point(6, 8);
+    query = new ComponentLocationOnScreenQuery(component);
   }
 
   public void shouldReturnComponentLocationOnScreen() {
@@ -52,7 +54,7 @@ public class ComponentLocationOnScreenQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(ComponentLocationOnScreenQuery.locationOnScreenOf(component)).isSameAs(location);
+        assertThat(query.executeInEDT()).isSameAs(location);
       }
     }.run();
   }
