@@ -13,17 +13,16 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
-import java.awt.Component;
-
-import javax.swing.JPopupMenu;
+import javax.swing.JOptionPane;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
@@ -31,30 +30,31 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link JPopupMenuInvokerQuery}</code>.
+ * Tests for <code>{@link JOptionPaneMessageQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY) public class JPopupMenuInvokerQueryTest {
+@Test(groups = EDT_QUERY)
+public class JOptionPaneMessageTypeQueryTest {
 
-  private JPopupMenu popupMenu;
-  private Component invoker;
-  private JPopupMenuInvokerQuery query;
+  private JOptionPane optionPane;
+  private int messageType;
+  private JOptionPaneMessageTypeQuery query;
 
   @BeforeMethod public void setUp() {
-    popupMenu = createMock(JPopupMenu.class);
-    invoker = createMock(Component.class);
-    query = new JPopupMenuInvokerQuery(popupMenu);
+    optionPane = createMock(JOptionPane.class);
+    messageType = INFORMATION_MESSAGE;
+    query = new JOptionPaneMessageTypeQuery(optionPane);
   }
 
-  public void shouldReturnInvokderOfJPopupMenu() {
-    new EasyMockTemplate(popupMenu) {
+  public void shouldReturnMessageTypeOfJOptionPane() {
+    new EasyMockTemplate(optionPane) {
       protected void expectations() {
-        expect(popupMenu.getInvoker()).andReturn(invoker);
+        expect(optionPane.getMessageType()).andReturn(messageType);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(invoker);
+        assertThat(query.executeInEDT()).isSameAs(messageType);
       }
     }.run();
   }

@@ -27,6 +27,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.driver.JPopupMenuElementsQuery.elementsOf;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 
 /**
@@ -52,27 +53,10 @@ public class JPopupMenuDriver extends JComponentDriver {
    * @return the contents of the pop-up menu as a <code>String</code> array.
    */
   public String[] menuLabelsOf(JPopupMenu popupMenu) {
-    MenuElement[] subElements = JPopupMenuElementsQuery.elementsOf(popupMenu);
+    MenuElement[] subElements = elementsOf(popupMenu);
     String[] result = new String[subElements.length];
     for (int i = 0; i < subElements.length; i++) result[i] = asString(subElements[i]);
     return result;
-  }
-
-  private static class JPopupMenuElementsQuery extends GuiQuery<MenuElement[]> {
-    // TODO Make top-level
-    private final JPopupMenu popupMenu;
-
-    static MenuElement[] elementsOf(JPopupMenu popupMenu) {
-      return execute(new JPopupMenuElementsQuery(popupMenu));
-    }
-    
-    private JPopupMenuElementsQuery(JPopupMenu popupMenu) {
-      this.popupMenu = popupMenu;
-    }
-
-    protected MenuElement[] executeInEDT() throws Throwable {
-      return popupMenu.getSubElements();
-    }
   }
 
   static String asString(final MenuElement e) {
@@ -82,7 +66,7 @@ public class JPopupMenuDriver extends JComponentDriver {
   }
 
   private static class MenuElementComponentQuery extends GuiQuery<Component> {
-    
+    // TODO make top-level
     private final MenuElement e;
 
     static Component componentIn(MenuElement e) {

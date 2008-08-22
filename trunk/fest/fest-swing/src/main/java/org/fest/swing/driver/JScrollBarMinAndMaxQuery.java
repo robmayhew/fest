@@ -28,18 +28,18 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Alex Ruiz
  */
 class JScrollBarMinAndMaxQuery extends GuiQuery<MinimumAndMaximum> {
-  // TODO TEST
+
   private final JScrollBar scrollBar;
 
   static MinimumAndMaximum minAndMaxOf(JScrollBar scrollBar) {
     return execute(new JScrollBarMinAndMaxQuery(scrollBar));
   }
   
-  private JScrollBarMinAndMaxQuery(JScrollBar scrollBar) {
+  JScrollBarMinAndMaxQuery(JScrollBar scrollBar) {
     this.scrollBar = scrollBar;
   }
   
-  protected MinimumAndMaximum executeInEDT() throws Throwable {
+  protected MinimumAndMaximum executeInEDT() {
     return new MinimumAndMaximum(scrollBar.getMinimum(), scrollBar.getMaximum());
   }
 }

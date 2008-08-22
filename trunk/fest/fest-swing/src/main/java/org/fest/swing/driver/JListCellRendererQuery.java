@@ -38,7 +38,7 @@ class JListCellRendererQuery extends GuiQuery<Component> {
     return execute(new JListCellRendererQuery(list, index));
   }
 
-  private JListCellRendererQuery(JList list, int index) {
+  JListCellRendererQuery(JList list, int index) {
     this.list = list;
     this.index = index;
   }

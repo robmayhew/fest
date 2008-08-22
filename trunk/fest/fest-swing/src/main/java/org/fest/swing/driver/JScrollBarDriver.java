@@ -152,7 +152,7 @@ public class JScrollBarDriver extends JComponentDriver {
   }
 
   private static class JScrollBarBlockIncrementQuery extends GuiQuery<Integer> {
-    
+    // TODO make top-level
     private final JScrollBar scrollBar;
 
     static int blockIncrementOf(JScrollBar scrollBar) {

@@ -1,64 +1,64 @@
 /*
- * Created on Aug 6, 2008
- *
+ * Created on Aug 21, 2008
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
 
-import javax.swing.JList;
-
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
-import org.fest.mocks.EasyMockTemplate;
-
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
+import javax.swing.JScrollBar;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 /**
- * Tests for <code>{@link JListSelectedIndexQuery}</code>.
+ * Tests for <code>{@link JScrollBarMinAndMaxQuery}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = EDT_QUERY)
-public class JListSelectedIndexQueryTest {
+public class JScrollBarMinAndMaxQueryTest {
 
-  private JList list;
-  private JListSelectedIndexQuery query;
+  private JScrollBar scrollBar;
+  private int minimum;
+  private int maximum;
+  private JScrollBarMinAndMaxQuery query;
 
   @BeforeMethod public void setUp() {
-    list = createMock(JList.class);
-    query = new JListSelectedIndexQuery(list);
+    scrollBar = createMock(JScrollBar.class);
+    minimum = 6;
+    maximum = 8;
+    query = new JScrollBarMinAndMaxQuery(scrollBar);
   }
-
-  @Test(dataProvider = "selectedIndices", groups = EDT_QUERY)
-  public void shouldReturnItemCountOfJList(final int selectedIndex) {
-    new EasyMockTemplate(list) {
+  
+  public void shouldReturnMinimumAndMaximumValuesOfJScrollBar() {
+    new EasyMockTemplate(scrollBar) {
       protected void expectations() {
-        expect(list.getSelectedIndex()).andReturn(selectedIndex);
+        expect(scrollBar.getMinimum()).andReturn(minimum);
+        expect(scrollBar.getMaximum()).andReturn(maximum);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(selectedIndex);
+        MinimumAndMaximum minAndMax = query.executeInEDT();
+        assertThat(minAndMax.minimum).isEqualTo(minimum);
+        assertThat(minAndMax.maximum).isEqualTo(maximum);
       }
     }.run();
   }
 
-  @DataProvider(name = "selectedIndices") public Object[][] selectedIndices() {
-    return new Object[][] { { 0 }, { 6 }, { 8 } };
-  }
 }

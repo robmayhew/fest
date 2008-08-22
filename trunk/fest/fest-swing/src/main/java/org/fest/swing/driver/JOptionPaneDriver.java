@@ -15,14 +15,12 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dialog;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.matcher.JButtonByTextMatcher;
 import org.fest.swing.exception.ComponentLookupException;
@@ -30,9 +28,11 @@ import org.fest.swing.exception.ComponentLookupException;
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JOptionPaneMessageQuery.messageOf;
+import static org.fest.swing.driver.JOptionPaneMessageTypeQuery.messageTypeOf;
 import static org.fest.swing.driver.JOptionPaneMessageTypes.messageTypeAsText;
+import static org.fest.swing.driver.JOptionPaneOptionsQuery.optionsOf;
+import static org.fest.swing.driver.JOptionPaneTitleQuery.titleOf;
 
 /**
  * Understands simulation of user input on a <code>{@link JOptionPane}</code>. Unlike <code>JOptionPaneFixture</code>,
@@ -63,7 +63,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not have the given title.
    */
   public void requireTitle(JOptionPane optionPane, String title) {
-    assertThat(JOptionPaneTitleQuery.titleOf(optionPane)).as(propertyName(optionPane, TITLE_PROPERTY)).isEqualTo(title);
+    assertThat(titleOf(optionPane)).as(propertyName(optionPane, TITLE_PROPERTY)).isEqualTo(title);
   }
 
   /**
@@ -84,7 +84,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws AssertionError if the </code>void</code> does not have the given options.
    */
   public void requireOptions(JOptionPane optionPane, Object[] options) {
-    Object[] actualOptions = JOptionPaneOptionsQuery.optionsOf(optionPane);
+    Object[] actualOptions = optionsOf(optionPane);
     assertThat(actualOptions).as(propertyName(optionPane, OPTIONS_PROPERTY)).isEqualTo(options);
   }
 
@@ -211,57 +211,6 @@ public class JOptionPaneDriver extends JComponentDriver {
   }
 
   private String actualMessageTypeAsText(final JOptionPane optionPane) {
-    return messageTypeAsText(JOptionPaneMessageTypeQuery.messageTypeOf(optionPane));
-  }
-
-  private static class JOptionPaneOptionsQuery extends GuiQuery<Object[]> {
-    
-    private final JOptionPane optionPane;
-
-    static Object[] optionsOf(JOptionPane optionPane) {
-      return execute(new JOptionPaneOptionsQuery(optionPane));
-    }
-    
-    private JOptionPaneOptionsQuery(JOptionPane optionPane) {
-      this.optionPane = optionPane;
-    }
-
-    protected Object[] executeInEDT() {
-      return optionPane.getOptions();
-    }
-  }
-
-  private static class JOptionPaneTitleQuery extends GuiQuery<String> {
-    // TODO: make top-level
-    private final JOptionPane optionPane;
-
-    static String titleOf(JOptionPane optionPane) {
-      return execute(new JOptionPaneTitleQuery(optionPane));
-    }
-    
-    private JOptionPaneTitleQuery(JOptionPane optionPane) {
-      this.optionPane = optionPane;
-    }
-
-    protected String executeInEDT() {
-      return ((Dialog)optionPane.getRootPane().getParent()).getTitle();
-    }
-  }
-
-  private static class JOptionPaneMessageTypeQuery extends GuiQuery<Integer> {
-    
-    private final JOptionPane optionPane;
-
-    static int messageTypeOf(JOptionPane optionPane) {
-      return execute(new JOptionPaneMessageTypeQuery(optionPane));
-    }
-    
-    private JOptionPaneMessageTypeQuery(JOptionPane optionPane) {
-      this.optionPane = optionPane;
-    }
-
-    protected Integer executeInEDT() {
-      return optionPane.getMessageType();
-    }
+    return messageTypeAsText(messageTypeOf(optionPane));
   }
 }

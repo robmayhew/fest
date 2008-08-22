@@ -39,7 +39,7 @@ class JListCellBoundsQuery extends GuiQuery<Rectangle> {
     return execute(new JListCellBoundsQuery(list, index));
   }
 
-  private JListCellBoundsQuery(JList list, int index) {
+  JListCellBoundsQuery(JList list, int index) {
     this.list = list;
     this.index = index;
   }

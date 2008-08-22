@@ -39,10 +39,12 @@ public class JListSelectedIndicesQueryTest {
 
   private JList list;
   private int[] selectedIndices;
+  private JListSelectedIndicesQuery query;
 
   @BeforeMethod public void setUp() {
     list = createMock(JList.class);
     selectedIndices = new int[] { 6, 8 };
+    query = new JListSelectedIndicesQuery(list);
   }
 
   public void shouldReturnSelectedIndicesOfJList() {
@@ -52,7 +54,7 @@ public class JListSelectedIndicesQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JListSelectedIndicesQuery.selectedIndicesOf(list)).isEqualTo(selectedIndices);
+        assertThat(query.executeInEDT()).isEqualTo(selectedIndices);
       }
     }.run();
   }

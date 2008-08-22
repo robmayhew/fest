@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY) 
+@Test(groups = { GUI, EDT_QUERY }) 
 public class JListCellRendererQueryTest {
 
   private MyWindow window;

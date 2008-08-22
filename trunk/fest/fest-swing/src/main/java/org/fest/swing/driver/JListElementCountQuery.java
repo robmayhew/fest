@@ -35,11 +35,11 @@ class JListElementCountQuery extends GuiQuery<Integer> {
     return execute(new JListElementCountQuery(list));
   }
 
-  private JListElementCountQuery(JList list) {
+  JListElementCountQuery(JList list) {
     this.list = list;
   }
 
-  protected Integer executeInEDT() throws Throwable {
+  protected Integer executeInEDT() {
     return list.getModel().getSize();
   }
 }

@@ -67,6 +67,7 @@ public final class JSliderLocation {
   }
 
   static class VerticalLocationTask extends JSliderLocationQueryStrategy {
+    
     static Point locationForVerticalOrientation(JSlider slider, int value) {
       return execute(new VerticalLocationTask(slider, value));
     }
@@ -89,6 +90,7 @@ public final class JSliderLocation {
   }
 
   static class JSliderHorizontalLocationQueryStrategy extends JSliderLocationQueryStrategy {
+    
     static Point locationForHorizontalOrientation(JSlider slider, int value) {
       return execute(new JSliderHorizontalLocationQueryStrategy(slider, value));
     }
@@ -111,6 +113,7 @@ public final class JSliderLocation {
   }
 
   static abstract class JSliderLocationQueryStrategy extends GuiQuery<Point> {
+    
     private final JSlider slider;
     private final int value;
 

@@ -43,7 +43,7 @@ public class JPopupMenuInvokerQuery extends GuiQuery<Component> {
     return execute(new JPopupMenuInvokerQuery(popupMenu));
   }
 
-  private JPopupMenuInvokerQuery(JPopupMenu popupMenu) {
+  JPopupMenuInvokerQuery(JPopupMenu popupMenu) {
     this.popupMenu = popupMenu;
   }
 
@@ -52,7 +52,7 @@ public class JPopupMenuInvokerQuery extends GuiQuery<Component> {
    * thread.
    * @return the invoker in this query's <code>JPopupMenu</code>.
    */
-  protected Component executeInEDT() throws Throwable {
+  protected Component executeInEDT() {
     return popupMenu.getInvoker();
   }
 }

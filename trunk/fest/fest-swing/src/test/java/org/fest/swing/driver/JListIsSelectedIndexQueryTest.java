@@ -39,10 +39,12 @@ public class JListIsSelectedIndexQueryTest {
 
   private JList list;
   private int index;
+  private JListIsSelectedIndexQuery query;
 
   @BeforeMethod public void setUp() {
     list = createMock(JList.class);
     index = 8;
+    query = new JListIsSelectedIndexQuery(list, index);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -53,7 +55,7 @@ public class JListIsSelectedIndexQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JListIsSelectedIndexQuery.isSelectedIndex(list, index)).isEqualTo(selected);
+        assertThat(query.executeInEDT()).isEqualTo(selected);
       }
     }.run();
   }

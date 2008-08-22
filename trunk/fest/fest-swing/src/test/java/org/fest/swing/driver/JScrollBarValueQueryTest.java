@@ -38,10 +38,12 @@ public class JScrollBarValueQueryTest {
 
   private JScrollBar scrollBar;
   private int value;
+  private JScrollBarValueQuery query;
 
   @BeforeMethod public void setUp() {
     scrollBar = createMock(JScrollBar.class);
     value = 8;
+    query = new JScrollBarValueQuery(scrollBar);
   }
   
   public void shouldReturnValueOfJScrollBar() {
@@ -51,7 +53,7 @@ public class JScrollBarValueQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JScrollBarValueQuery.valueOf(scrollBar)).isEqualTo(value);
+        assertThat(query.executeInEDT()).isEqualTo(value);
       }
     }.run();
   }

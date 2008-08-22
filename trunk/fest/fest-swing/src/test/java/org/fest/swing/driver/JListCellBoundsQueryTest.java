@@ -42,11 +42,13 @@ public class JListCellBoundsQueryTest {
   private JList list;
   private int index;
   private Rectangle rectangle;
+  private JListCellBoundsQuery query;
 
   @BeforeMethod public void setUp() {
     list = createMock(JList.class);
     index = 8;
     rectangle = new Rectangle(800, 600);
+    query = new JListCellBoundsQuery(list, index);
   }
 
   public void shouldReturnCellBoundsOfJList() {
@@ -56,7 +58,7 @@ public class JListCellBoundsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JListCellBoundsQuery.cellBoundsOf(list, index)).isSameAs(rectangle);
+        assertThat(query.executeInEDT()).isSameAs(rectangle);
       }
     }.run();
   }

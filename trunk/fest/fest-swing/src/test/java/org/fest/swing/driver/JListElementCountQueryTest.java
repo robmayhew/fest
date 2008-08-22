@@ -40,10 +40,12 @@ public class JListElementCountQueryTest {
 
   private JList list;
   private ListModel model;
+  private JListElementCountQuery query;
 
   @BeforeMethod public void setUp() {
     list = createMock(JList.class);
     model = createMock(ListModel.class);
+    query = new JListElementCountQuery(list);
   }
 
   @Test(dataProvider = "elementCounts", groups = EDT_QUERY)
@@ -55,7 +57,7 @@ public class JListElementCountQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JListElementCountQuery.elementCountOf(list)).isEqualTo(elementCount);
+        assertThat(query.executeInEDT()).isEqualTo(elementCount);
       }
     }.run();
   }

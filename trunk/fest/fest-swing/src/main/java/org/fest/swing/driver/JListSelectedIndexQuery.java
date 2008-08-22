@@ -35,7 +35,7 @@ class JListSelectedIndexQuery extends GuiQuery<Integer> {
     return execute(new JListSelectedIndexQuery(list));
   }
 
-  private JListSelectedIndexQuery(JList list) {
+  JListSelectedIndexQuery(JList list) {
     this.list = list;
   }
 

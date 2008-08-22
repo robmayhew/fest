@@ -38,10 +38,12 @@ public class JOptionPaneMessageQueryTest {
 
   private JOptionPane optionPane;
   private String message;
+  private JOptionPaneMessageQuery query;
 
   @BeforeMethod public void setUp() {
     optionPane = createMock(JOptionPane.class);
     message = "Hello";
+    query = new JOptionPaneMessageQuery(optionPane);
   }
 
   public void shouldReturnMessageOfJOptionPane() {
@@ -51,7 +53,7 @@ public class JOptionPaneMessageQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JOptionPaneMessageQuery.messageOf(optionPane)).isSameAs(message);
+        assertThat(query.executeInEDT()).isSameAs(message);
       }
     }.run();
   }

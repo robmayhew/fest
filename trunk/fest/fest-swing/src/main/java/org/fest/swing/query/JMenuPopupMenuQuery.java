@@ -27,7 +27,7 @@ public class JMenuPopupMenuQuery extends GuiQuery<JPopupMenu> {
     return execute(new JMenuPopupMenuQuery(menu));
   }
   
-  private JMenuPopupMenuQuery(JMenu menu) {
+  JMenuPopupMenuQuery(JMenu menu) {
     this.menu = menu;
   }
 

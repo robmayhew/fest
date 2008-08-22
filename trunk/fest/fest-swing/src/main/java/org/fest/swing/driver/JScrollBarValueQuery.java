@@ -35,7 +35,7 @@ final class JScrollBarValueQuery extends GuiQuery<Integer> {
     return execute(new JScrollBarValueQuery(scrollBar));
   }
 
-  private JScrollBarValueQuery(JScrollBar scrollBar) {
+  JScrollBarValueQuery(JScrollBar scrollBar) {
     this.scrollBar = scrollBar;
   }
 

@@ -38,10 +38,12 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
   private JMenu menu;
   private JPopupMenu popup;
+  private JMenuPopupMenuQuery query;
 
   @BeforeMethod public void setUp() {
     menu = createMock(JMenu.class);
     popup = createMock(JPopupMenu.class);
+    query = new JMenuPopupMenuQuery(menu);
   }
   
   public void shouldReturnJPopupMenuInJMenu() {
@@ -51,7 +53,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
       }
 
       protected void codeToTest() {
-        assertThat(JMenuPopupMenuQuery.popupMenuOf(menu)).isSameAs(popup);
+        assertThat(query.executeInEDT()).isSameAs(popup);
       }
     }.run();
   }

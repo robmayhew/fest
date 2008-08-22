@@ -37,12 +37,12 @@ class JListIsSelectedIndexQuery extends GuiQuery<Boolean> {
     return execute(new JListIsSelectedIndexQuery(list, index));
   }
 
-  private JListIsSelectedIndexQuery(JList list, int index) {
+  JListIsSelectedIndexQuery(JList list, int index) {
     this.list = list;
     this.index = index;
   }
 
-  protected Boolean executeInEDT() throws Throwable {
+  protected Boolean executeInEDT() {
     return list.isSelectedIndex(index);
   }
 }

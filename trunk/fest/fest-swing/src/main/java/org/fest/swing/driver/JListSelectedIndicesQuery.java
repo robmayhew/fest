@@ -36,11 +36,11 @@ class JListSelectedIndicesQuery extends GuiQuery<int[]> {
     return execute(new JListSelectedIndicesQuery(list));
   }
 
-  private JListSelectedIndicesQuery(JList list) {
+  JListSelectedIndicesQuery(JList list) {
     this.list = list;
   }
 
-  protected int[] executeInEDT() throws Throwable {
+  protected int[] executeInEDT() {
     return list.getSelectedIndices();
   }
 }

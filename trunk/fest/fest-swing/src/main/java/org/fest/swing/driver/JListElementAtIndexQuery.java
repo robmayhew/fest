@@ -37,7 +37,7 @@ class JListElementAtIndexQuery extends GuiQuery<Object> {
     return execute(new JListElementAtIndexQuery(list, index));
   }
 
-  private JListElementAtIndexQuery(JList list, int index) {
+  JListElementAtIndexQuery(JList list, int index) {
     this.list = list;
     this.index = index;
   }

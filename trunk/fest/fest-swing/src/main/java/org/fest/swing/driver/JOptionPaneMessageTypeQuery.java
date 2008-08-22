@@ -1,5 +1,5 @@
 /*
- * Created on Aug 12, 2008
+ * Created on Aug 21, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,31 +15,31 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JSlider;
+import static org.fest.swing.core.GuiActionRunner.execute;
+
+import javax.swing.JOptionPane;
 
 import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the maximum value supported by a 
- * <code>{@link JSlider}</code>.
- *
- * @author Yvonne Wang 
+ * Understands an action, executed in the event dispatch thread, that returns the type of message of a
+ * <code>{@link JOptionPane}</code>.
+ * 
+ * @author Alex Ruiz
  */
-class JSliderMaximumQuery extends GuiQuery<Integer> {
-  
-  private final JSlider slider;
+class JOptionPaneMessageTypeQuery extends GuiQuery<Integer> {
 
-  static int maximumOf(JSlider slider) {
-    return execute(new JSliderMaximumQuery(slider));
+  private final JOptionPane optionPane;
+
+  static int messageTypeOf(JOptionPane optionPane) {
+    return execute(new JOptionPaneMessageTypeQuery(optionPane));
   }
   
-  JSliderMaximumQuery(JSlider slider) {
-    this.slider = slider;
+  JOptionPaneMessageTypeQuery(JOptionPane optionPane) {
+    this.optionPane = optionPane;
   }
-  
+
   protected Integer executeInEDT() {
-    return slider.getMaximum();
+    return optionPane.getMessageType();
   }
 }

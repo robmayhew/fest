@@ -40,7 +40,7 @@ public final class JLabelTextQuery extends GuiQuery<String> {
     return execute(new JLabelTextQuery(label));
   }
   
-  private JLabelTextQuery(JLabel label) {
+  JLabelTextQuery(JLabel label) {
     this.label = label;
   }
 

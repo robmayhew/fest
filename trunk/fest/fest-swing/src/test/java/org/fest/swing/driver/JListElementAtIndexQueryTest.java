@@ -41,12 +41,14 @@ public class JListElementAtIndexQueryTest {
   private ListModel model;
   private int index;
   private Object cellValue;
+  private JListElementAtIndexQuery query;
 
   @BeforeMethod public void setUp() {
     list = createMock(JList.class);
     model = createMock(ListModel.class);
     index = 8;
     cellValue = "Hello";
+    query = new JListElementAtIndexQuery(list, index);
   }
 
   public void shouldReturnElementAtIndexInJList() {
@@ -57,7 +59,7 @@ public class JListElementAtIndexQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JListElementAtIndexQuery.elementAt(list, index)).isSameAs(cellValue);
+        assertThat(query.executeInEDT()).isSameAs(cellValue);
       }
     }.run();
   }
