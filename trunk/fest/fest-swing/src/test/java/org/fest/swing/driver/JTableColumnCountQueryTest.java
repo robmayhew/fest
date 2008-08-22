@@ -38,10 +38,12 @@ public class JTableColumnCountQueryTest {
 
   private JTable table;
   private int columnCount;
+  private JTableColumnCountQuery query;
   
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     columnCount = 8;
+    query = new JTableColumnCountQuery(table);
   }
   
   public void shouldReturnColumnCountOfJTable() {
@@ -51,7 +53,7 @@ public class JTableColumnCountQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableColumnCountQuery.columnCountOf(table)).isEqualTo(columnCount);
+        assertThat(query.executeInEDT()).isEqualTo(columnCount);
       }
     }.run();
   }

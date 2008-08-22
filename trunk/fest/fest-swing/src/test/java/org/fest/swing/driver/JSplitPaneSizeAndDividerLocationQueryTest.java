@@ -41,11 +41,13 @@ public class JSplitPaneSizeAndDividerLocationQueryTest {
   private JSplitPane splitPane;
   private Dimension size;
   private int dividerLocation;
+  private JSplitPaneSizeAndDividerLocationQuery query;
   
   @BeforeMethod public void setUp() {
     splitPane = createMock(JSplitPane.class);
     size = new Dimension(800, 600);
     dividerLocation = 8;
+    query = new JSplitPaneSizeAndDividerLocationQuery(splitPane);
   }
   
   public void shouldReturnSizeAndDividerLocationOfJSplitPane() {
@@ -56,8 +58,7 @@ public class JSplitPaneSizeAndDividerLocationQueryTest {
       }
 
       protected void codeToTest() {
-        JSplitPaneSizeAndDividerLocation sizeAndDividerLocation = 
-          JSplitPaneSizeAndDividerLocationQuery.sizeAndDividerLocationOf(splitPane);
+        JSplitPaneSizeAndDividerLocation sizeAndDividerLocation = query.executeInEDT();
         assertThat(sizeAndDividerLocation.size()).isEqualTo(size);
         assertThat(sizeAndDividerLocation.dividerLocation()).isEqualTo(dividerLocation);
       }

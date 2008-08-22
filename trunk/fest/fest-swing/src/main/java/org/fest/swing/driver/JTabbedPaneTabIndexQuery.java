@@ -1,5 +1,5 @@
 /*
- * Created on Aug 10, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,29 +20,34 @@ import javax.swing.JTabbedPane;
 import org.fest.swing.core.GuiQuery;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.util.Strings.match;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the titles of the tabs in a 
- * <code>{@link JTabbedPane}</code>.
- *
- * @author Alex Ruiz 
+ * Understands an action, executed in the event dispatch thread, that returns the index of a tab (in a
+ * <code>{@link JTabbedPane}</code>) whose title matches the given text. This action returns -1 if a matching tab could 
+ * not be found.
+ * 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-class JTabbedPaneTabTitlesQuery extends GuiQuery<String[]> {
+class JTabbedPaneTabIndexQuery extends GuiQuery<Integer> {
 
   private final JTabbedPane tabbedPane;
+  private final String title;
 
-  static String[] tabTitlesOf(JTabbedPane tabbedPane) {
-    return execute(new JTabbedPaneTabTitlesQuery(tabbedPane));
+  static int indexOfTab(JTabbedPane tabbedPane, String title) {
+    return execute(new JTabbedPaneTabIndexQuery(tabbedPane, title));
   }
-
-  JTabbedPaneTabTitlesQuery(JTabbedPane tabbedPane) {
+  
+  JTabbedPaneTabIndexQuery(JTabbedPane tabbedPane, String title) {
+    this.title = title;
     this.tabbedPane = tabbedPane;
   }
 
-  protected String[] executeInEDT() {
-    int count = tabbedPane.getTabCount();
-    String[] titles = new String[count];
-    for (int i = 0; i < count; i++) titles[i] = tabbedPane.getTitleAt(i);
-    return titles;
+  protected Integer executeInEDT() {
+    int tabCount = tabbedPane.getTabCount();
+    for (int i = 0; i < tabCount; i++)
+      if (match(title, tabbedPane.getTitleAt(i))) return i;
+    return -1;
   }
 }

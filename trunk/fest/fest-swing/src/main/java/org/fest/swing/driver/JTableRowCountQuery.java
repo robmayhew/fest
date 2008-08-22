@@ -35,7 +35,7 @@ class JTableRowCountQuery extends GuiQuery<Integer> {
     return execute(new JTableRowCountQuery(table));
   }
 
-  private JTableRowCountQuery(JTable table) {
+  JTableRowCountQuery(JTable table) {
     this.table = table;
   }
 

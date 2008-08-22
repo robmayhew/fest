@@ -39,10 +39,12 @@ public class JTableSelectedRowCountQueryTest {
 
   private JTable table;
   private int selectedRowCount;
+  private JTableSelectedRowCountQuery query;
   
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     selectedRowCount = 8;
+    query = new JTableSelectedRowCountQuery(table);
   }
   
   public void shouldReturnSelectedRowCountOfJTable() {
@@ -52,7 +54,7 @@ public class JTableSelectedRowCountQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableSelectedRowCountQuery.selectedRowCountOf(table)).isEqualTo(selectedRowCount);
+        assertThat(query.executeInEDT()).isEqualTo(selectedRowCount);
       }
     }.run();
   }

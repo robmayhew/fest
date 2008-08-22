@@ -35,11 +35,11 @@ public class JSplitPaneSizeAndDividerLocationQuery extends GuiQuery<JSplitPaneSi
     return execute(new JSplitPaneSizeAndDividerLocationQuery(splitPane));
   }
   
-  private JSplitPaneSizeAndDividerLocationQuery(JSplitPane splitPane) {
+  JSplitPaneSizeAndDividerLocationQuery(JSplitPane splitPane) {
     this.splitPane = splitPane;
   }
   
-  protected JSplitPaneSizeAndDividerLocation executeInEDT() throws Throwable {
+  protected JSplitPaneSizeAndDividerLocation executeInEDT() {
     return new JSplitPaneSizeAndDividerLocation(splitPane.getSize(), splitPane.getDividerLocation());
   }
 

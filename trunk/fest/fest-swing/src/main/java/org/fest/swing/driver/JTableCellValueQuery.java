@@ -38,7 +38,7 @@ class JTableCellValueQuery extends GuiQuery<Object> {
     return execute(new JTableCellValueQuery(table, row, column));
   }
 
-  private JTableCellValueQuery(JTable table, int row, int column) {
+  JTableCellValueQuery(JTable table, int row, int column) {
     this.table = table;
     this.row = row;
     this.column = column;

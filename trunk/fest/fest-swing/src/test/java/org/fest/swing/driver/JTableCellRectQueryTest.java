@@ -22,12 +22,12 @@ import javax.swing.JTable;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.assertions.Assertions;
 import org.fest.mocks.EasyMockTemplate;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
@@ -42,12 +42,14 @@ public class JTableCellRectQueryTest {
   private int row;
   private int column;
   private Rectangle rectangle;
+  private JTableCellRectQuery query;
 
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     row = 8;
     column = 6;
     rectangle = new Rectangle(80, 60);
+    query = new JTableCellRectQuery(table, row, column);
   }
   
   public void shouldReturnCellRectInJTable() {
@@ -57,7 +59,7 @@ public class JTableCellRectQueryTest {
       }
 
       protected void codeToTest() {
-        Assertions.assertThat(JTableCellRectQuery.cellBoundsOf(table, row, column)).isSameAs(rectangle);
+        assertThat(query.executeInEDT()).isSameAs(rectangle);
       }
     }.run();
   }

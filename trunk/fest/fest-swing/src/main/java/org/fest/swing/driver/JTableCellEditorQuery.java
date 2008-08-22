@@ -32,6 +32,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  */
 class JTableCellEditorQuery extends GuiQuery<Component> {
+  
   private final JTable table;
   private final int row;
   private final int column;
@@ -40,7 +41,7 @@ class JTableCellEditorQuery extends GuiQuery<Component> {
     return execute(new JTableCellEditorQuery(table, row, column));
   }
 
-  private JTableCellEditorQuery(JTable table, int row, int column) {
+  JTableCellEditorQuery(JTable table, int row, int column) {
     this.table = table;
     this.row = row;
     this.column = column;

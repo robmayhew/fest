@@ -36,11 +36,11 @@ class JTableSelectedRowCountQuery extends GuiQuery<Integer> {
     return execute(new JTableSelectedRowCountQuery(table));
   }
   
-  private JTableSelectedRowCountQuery(JTable table) {
+  JTableSelectedRowCountQuery(JTable table) {
     this.table = table;
   }
   
-  protected Integer executeInEDT() throws Throwable {
+  protected Integer executeInEDT() {
     return table.getSelectedRowCount();
   }
 }

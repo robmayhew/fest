@@ -41,7 +41,7 @@ class JTableCellRendererQuery extends GuiQuery<Component> {
     return execute(new JTableCellRendererQuery(table, row, column));
   }
 
-  private JTableCellRendererQuery(JTable table, int row, int column) {
+  JTableCellRendererQuery(JTable table, int row, int column) {
     this.table = table;
     this.row = row;
     this.column = column;

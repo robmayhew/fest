@@ -36,12 +36,12 @@ class JTableCellEditableQuery extends GuiQuery<Boolean> {
     return execute(new JTableCellEditableQuery(table, cell));
   }
   
-  private JTableCellEditableQuery(JTable table, JTableCell cell) {
+  JTableCellEditableQuery(JTable table, JTableCell cell) {
     this.table = table;
     this.cell = cell;
   }
   
-  protected Boolean executeInEDT() throws Throwable {
+  protected Boolean executeInEDT() {
     return table.isCellEditable(cell.row, cell.column);
   }
 }

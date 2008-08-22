@@ -37,11 +37,11 @@ class JTableSelectedCellQuery extends GuiQuery<JTableCell> {
     return execute(new JTableSelectedCellQuery(table));
   }
   
-  private JTableSelectedCellQuery(JTable table) {
+  JTableSelectedCellQuery(JTable table) {
     this.table = table;
   }
   
-  protected JTableCell executeInEDT() throws Throwable {
+  protected JTableCell executeInEDT() {
     return cell(table.getSelectedRow(), table.getSelectedColumn());
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Aug 9, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,10 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Rectangle;
+
 import javax.swing.JTabbedPane;
+import javax.swing.plaf.TabbedPaneUI;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,31 +32,36 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link JTabbedPaneTabCountQuery}</code>.
+ * Tests for <code>{@link JTabbedPaneTabBoundsQuery}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = EDT_QUERY)
-public class JTabbedPaneTabCountQueryTest {
+public class JTabbedPaneTabBoundsQueryTest {
 
   private JTabbedPane tabbedPane;
-  private int tabCount;
-  private JTabbedPaneTabCountQuery query;
+  private int index;
+  private TabbedPaneUI ui;
+  private Rectangle tabBounds;
+  private JTabbedPaneTabBoundsQuery query;
   
   @BeforeMethod public void setUp() {
     tabbedPane = createMock(JTabbedPane.class);
-    tabCount = 8;
-    query = new JTabbedPaneTabCountQuery(tabbedPane);
+    index = 8;
+    ui = createMock(TabbedPaneUI.class);
+    tabBounds = new Rectangle(80, 60);
+    query = new JTabbedPaneTabBoundsQuery(tabbedPane, index);
   }
   
-  public void shouldReturnTabCountOfJTabbedPane() {
-    new EasyMockTemplate(tabbedPane) {
+  public void shouldReturnTabBoundsInJTabbedPane() {
+    new EasyMockTemplate(tabbedPane, ui) {
       protected void expectations() {
-        expect(tabbedPane.getTabCount()).andReturn(tabCount);
+        expect(tabbedPane.getUI()).andReturn(ui);
+        expect(ui.getTabBounds(tabbedPane, index)).andReturn(tabBounds);
       }
-      
+
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(tabCount);
+        assertThat(query.executeInEDT()).isSameAs(tabBounds);
       }
     }.run();
   }

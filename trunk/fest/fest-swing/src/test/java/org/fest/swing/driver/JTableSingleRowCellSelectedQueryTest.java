@@ -39,11 +39,13 @@ public class JTableSingleRowCellSelectedQueryTest {
   private JTable table;
   private int row;
   private int column;
+  private JTableSingleRowCellSelectedQuery query;
 
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     row = 8;
     column = 6;
+    query = new JTableSingleRowCellSelectedQuery(table, row, column);
   }
   
   public void shouldReturnCellIsSelectedIfRowAndColumnAreSelected() {
@@ -55,7 +57,7 @@ public class JTableSingleRowCellSelectedQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, row, column)).isTrue();
+        assertThat(query.executeInEDT()).isEqualTo(true);
       }
     }.run();
   }
@@ -67,7 +69,7 @@ public class JTableSingleRowCellSelectedQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, row, column)).isFalse();
+        assertThat(query.executeInEDT()).isEqualTo(false);
       }
     }.run();
   }
@@ -80,7 +82,7 @@ public class JTableSingleRowCellSelectedQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, row, column)).isFalse();
+        assertThat(query.executeInEDT()).isEqualTo(false);
       }
     }.run();
   }
@@ -94,7 +96,7 @@ public class JTableSingleRowCellSelectedQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, row, column)).isFalse();
+        assertThat(query.executeInEDT()).isEqualTo(false);
       }
     }.run();
   }

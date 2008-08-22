@@ -40,10 +40,12 @@ public class JTableCellEditableQueryTest {
 
   private JTable table;
   private JTableCell cell;
+  private JTableCellEditableQuery query;
 
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     cell = cell(6, 8);
+    query = new JTableCellEditableQuery(table, cell);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -54,7 +56,7 @@ public class JTableCellEditableQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableCellEditableQuery.isCellEditable(table, cell)).isEqualTo(editable);
+        assertThat(query.executeInEDT()).isEqualTo(editable);
       }
     }.run();
   }

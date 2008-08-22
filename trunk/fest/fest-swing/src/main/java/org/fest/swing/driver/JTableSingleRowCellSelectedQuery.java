@@ -43,7 +43,7 @@ class JTableSingleRowCellSelectedQuery extends GuiQuery<Boolean> {
     this.column = column;
   }
   
-  protected Boolean executeInEDT() throws Throwable {
+  protected Boolean executeInEDT() {
     return table.isRowSelected(row) && table.isColumnSelected(column) && table.getSelectedRowCount() == 1;
   }
 }

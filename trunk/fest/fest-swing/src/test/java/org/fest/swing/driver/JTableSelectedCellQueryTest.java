@@ -40,11 +40,13 @@ public class JTableSelectedCellQueryTest {
   private JTable table;
   private int selectedRow;
   private int selectedColumn;
+  private JTableSelectedCellQuery query;
   
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     selectedRow = 8;
     selectedColumn = 6;
+    query = new JTableSelectedCellQuery(table);
   }
   
   public void shouldReturnSelectedCellOfJTable() {
@@ -55,7 +57,7 @@ public class JTableSelectedCellQueryTest {
       }
 
       protected void codeToTest() {
-        JTableCell selectedCell = JTableSelectedCellQuery.selectedCellOf(table);
+        JTableCell selectedCell = query.executeInEDT();
         assertThat(selectedCell.row).isEqualTo(selectedRow);
         assertThat(selectedCell.column).isEqualTo(selectedColumn);
       }

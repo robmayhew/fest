@@ -1,5 +1,5 @@
 /*
- * Created on Aug 10, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,35 +17,32 @@ package org.fest.swing.driver;
 
 import java.awt.Rectangle;
 
-import javax.swing.JTable;
+import javax.swing.JTabbedPane;
 
+import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns rectangle for the cell in a 
- * <code>{@link JTable}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the bounds of a tab in a 
+ * <code>{@link JTabbedPane}</code>.
  *
  * @author Alex Ruiz
  */
-class JTableCellRectQuery extends GuiQuery<Rectangle> {
-  
-  private final JTable table;
-  private final int row;
-  private final int column;
+class JTabbedPaneTabBoundsQuery extends GuiQuery<Rectangle> {
 
-  static Rectangle cellBoundsOf(JTable table, int row, int column) {
-    return execute(new JTableCellRectQuery(table, row, column));
+  private final int index;
+  private final JTabbedPane tabbedPane;
+
+  static Rectangle boundsOf(JTabbedPane tabbedPane, int index) {
+    return GuiActionRunner.execute(new JTabbedPaneTabBoundsQuery(tabbedPane, index));
   }
   
-  JTableCellRectQuery(JTable table, int row, int column) {
-    this.table = table;
-    this.row = row;
-    this.column = column;
+  JTabbedPaneTabBoundsQuery(JTabbedPane tabbedPane, int index) {
+    this.index = index;
+    this.tabbedPane = tabbedPane;
   }
 
   protected Rectangle executeInEDT() {
-    return table.getCellRect(row, column, false);
+    return tabbedPane.getUI().getTabBounds(tabbedPane, index);
   }
 }

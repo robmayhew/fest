@@ -15,17 +15,19 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JTable;
-
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.testing.TestTable;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
@@ -35,48 +37,53 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
  */
 @Test(groups = EDT_QUERY)
 public class JTableSelectionQueryTest {
-
-  private JTable table;
+  
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    table = createMock(JTable.class);
+    window = MyWindow.showNew();
   }
   
-  public void shouldIndicateNoSelectionIfSelectedRowAndColumnCountsIsZero() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.getSelectedRowCount()).andReturn(0);
-        expect(table.getSelectedColumnCount()).andReturn(0);
-      }
-
-      protected void codeToTest() {
-        assertThat(JTableSelectionQuery.hasSelection(table)).isFalse();
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    window.destroy();
+  }
+  
+  public void shouldReturnFalseIfTableHasNoSelection() {
+    clearSelectionOf(window.table);
+    assertThat(JTableSelectionQuery.hasSelection(window.table)).isFalse();
   }
 
-  public void shouldIndicateSelectionIfSelectedRowCountIsNotZero() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.getSelectedRowCount()).andReturn(1);
-      }
-
-      protected void codeToTest() {
-        assertThat(JTableSelectionQuery.hasSelection(table)).isTrue();
-      }
-    }.run();
+  public void shouldReturnTrueIfTableHasSelection() {
+    selectAllIn(window.table);
+    assertThat(JTableSelectionQuery.hasSelection(window.table)).isTrue();
   }
 
-  public void shouldIndicateSelectionIfSelectedRowCountIsZeroAndSelectedColumnCountIsNotZero() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.getSelectedRowCount()).andReturn(0);
-        expect(table.getSelectedColumnCount()).andReturn(1);
+  private static void selectAllIn(final TestTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.selectAll();
       }
+    });
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+    
+    static MyWindow showNew() {
+      MyWindow window = GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() throws Throwable {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    final TestTable table = new TestTable(2, 4);
 
-      protected void codeToTest() {
-        assertThat(JTableSelectionQuery.hasSelection(table)).isTrue();
-      }
-    }.run();
+    MyWindow() {
+      super(JTableSelectionQueryTest.class);
+      addComponents(table);
+    }
   }
 }

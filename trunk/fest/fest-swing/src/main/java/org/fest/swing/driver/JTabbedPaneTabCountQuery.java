@@ -28,13 +28,14 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  */
 class JTabbedPaneTabCountQuery extends GuiQuery<Integer> {
+  
   private final JTabbedPane tabbedPane;
 
   static int tabCountOf(JTabbedPane tabbedPane) {
     return execute(new JTabbedPaneTabCountQuery(tabbedPane));
   }
 
-  private JTabbedPaneTabCountQuery(JTabbedPane tabbedPane) {
+  JTabbedPaneTabCountQuery(JTabbedPane tabbedPane) {
     this.tabbedPane = tabbedPane;
   }
 

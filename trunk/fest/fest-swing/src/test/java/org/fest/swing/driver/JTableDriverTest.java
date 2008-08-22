@@ -49,6 +49,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCell.cell;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
+import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
@@ -207,16 +208,8 @@ public class JTableDriverTest {
   }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
-    clearSelection(dragTable);
+    clearSelectionOf(dragTable);
     driver.requireNoSelection(dragTable);
-  }
-
-  private static void clearSelection(final JTable table) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        table.clearSelection();
-      }
-    });
   }
 
   public void shouldFailIfHasSelectionAndExpectingNoSelection() {

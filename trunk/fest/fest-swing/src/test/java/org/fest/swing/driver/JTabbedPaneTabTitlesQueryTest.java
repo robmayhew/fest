@@ -39,10 +39,12 @@ public class JTabbedPaneTabTitlesQueryTest {
 
   private JTabbedPane tabbedPane;
   private String[] tabNames;
+  private JTabbedPaneTabTitlesQuery query;
   
   @BeforeMethod public void setUp() {
     tabbedPane = createMock(JTabbedPane.class);
     tabNames = array("One", "Two", "Three");
+    query = new JTabbedPaneTabTitlesQuery(tabbedPane);
   }
   
   public void shouldReturnTabNamesOfJTabbedPane() {
@@ -55,7 +57,7 @@ public class JTabbedPaneTabTitlesQueryTest {
       }
       
       protected void codeToTest() {
-        assertThat(JTabbedPaneTabTitlesQuery.tabTitlesOf(tabbedPane)).isEqualTo(tabNames);
+        assertThat(query.executeInEDT()).isEqualTo(tabNames);
       }
     }.run();
   }

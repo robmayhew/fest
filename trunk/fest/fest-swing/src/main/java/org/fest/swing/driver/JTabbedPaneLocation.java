@@ -19,17 +19,15 @@ import java.awt.Rectangle;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.driver.JTabbedPaneTabBoundsQuery.boundsOf;
 import static org.fest.swing.driver.JTabbedPaneTabCountQuery.tabCountOf;
+import static org.fest.swing.driver.JTabbedPaneTabIndexQuery.indexOfTab;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Strings.*;
 
 /**
@@ -48,31 +46,9 @@ public class JTabbedPaneLocation {
    * @throws LocationUnavailableException if a tab matching the given title could not be found.
    */
   public int indexOf(final JTabbedPane tabbedPane, final String title) {
-    int index = JTabbedPaneTabIndexQuery.indexOfTab(tabbedPane, title);
+    int index = indexOfTab(tabbedPane, title);
     if (index >= 0) return index;
     throw new LocationUnavailableException(concat("Unable to find a tab with title ", quote(title)));
-  }
-
-  private static class JTabbedPaneTabIndexQuery extends GuiQuery<Integer> {
-    // TODO make top-level
-    private final String title;
-    private final JTabbedPane tabbedPane;
-
-    static int indexOfTab(JTabbedPane tabbedPane, String title) {
-      return execute(new JTabbedPaneTabIndexQuery(tabbedPane, title));
-    }
-    
-    private JTabbedPaneTabIndexQuery(JTabbedPane tabbedPane, String title) {
-      this.title = title;
-      this.tabbedPane = tabbedPane;
-    }
-
-    protected Integer executeInEDT() {
-      int tabCount = tabbedPane.getTabCount();
-      for (int i = 0; i < tabCount; i++)
-        if (match(title, tabbedPane.getTitleAt(i))) return i;
-      return -1;
-    }
   }
 
   /**
@@ -85,30 +61,11 @@ public class JTabbedPaneLocation {
    */
   public Point pointAt(final JTabbedPane tabbedPane, final int index) {
     validateIndex(tabbedPane, index);
-    Rectangle rect = JTabbedPaneTabBoundsQuery.boundsOf(tabbedPane, index);
+    Rectangle rect = boundsOf(tabbedPane, index);
     // From Abbot: TODO figure out the effects of tab layout policy sometimes tabs are not directly visible
     if (rect == null || rect.x < 0)
       throw new LocationUnavailableException(concat("The tab '", valueOf(index), "' is not visible"));
     return new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
-  }
-
-  private static class JTabbedPaneTabBoundsQuery extends GuiQuery<Rectangle> {
-
-    private final int index;
-    private final JTabbedPane tabbedPane;
-
-    static Rectangle boundsOf(JTabbedPane tabbedPane, int index) {
-      return GuiActionRunner.execute(new JTabbedPaneTabBoundsQuery(tabbedPane, index));
-    }
-    
-    private JTabbedPaneTabBoundsQuery(JTabbedPane tabbedPane, int index) {
-      this.index = index;
-      this.tabbedPane = tabbedPane;
-    }
-
-    protected Rectangle executeInEDT() {
-      return tabbedPane.getUI().getTabBounds(tabbedPane, index);
-    }
   }
 
   void validateIndex(JTabbedPane tabbedPane, int index) {

@@ -40,12 +40,14 @@ public class JTableCellValueQueryTest {
   private int row;
   private int column;
   private Object value;
+  private JTableCellValueQuery query;
   
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     row = 8;
     column = 6;
     value = "Hello";
+    query = new JTableCellValueQuery(table, row, column);
   }
   
   public void shouldReturnJTableCellValue() {
@@ -55,7 +57,7 @@ public class JTableCellValueQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableCellValueQuery.cellValueOf(table, row, column)).isSameAs(value);
+        assertThat(query.executeInEDT()).isSameAs(value);
       }
     }.run();
   }

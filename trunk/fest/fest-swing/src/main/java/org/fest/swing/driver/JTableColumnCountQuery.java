@@ -36,11 +36,11 @@ class JTableColumnCountQuery extends GuiQuery<Integer> {
     return execute(new JTableColumnCountQuery(table));
   }
   
-  private JTableColumnCountQuery(JTable table) {
+  JTableColumnCountQuery(JTable table) {
     this.table = table;
   }
 
-  protected Integer executeInEDT() throws Throwable {
+  protected Integer executeInEDT() {
     return table.getColumnCount();
   }
 }

@@ -39,10 +39,12 @@ public class JTableSelectedColumnsQueryTest {
 
   private JTable table;
   private int[] selectedColumns;
+  private JTableSelectedColumnsQuery query;
   
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     selectedColumns = new int[] { 6, 8 };
+    query = new JTableSelectedColumnsQuery(table);
   }
   
   public void shouldReturnSelectedRowCountOfJTable() {
@@ -52,7 +54,7 @@ public class JTableSelectedColumnsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableSelectedColumnsQuery.selectedColumnsIn(table)).isSameAs(selectedColumns);
+        assertThat(query.executeInEDT()).isSameAs(selectedColumns);
       }
     }.run();
   }

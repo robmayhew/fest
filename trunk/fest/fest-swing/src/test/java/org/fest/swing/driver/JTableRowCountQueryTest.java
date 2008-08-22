@@ -38,10 +38,12 @@ public class JTableRowCountQueryTest {
   
   private JTable table;
   private int rowCount;
+  private JTableRowCountQuery query;
 
   @BeforeMethod public void setUp() {
     table = createMock(JTable.class);
     rowCount = 8;
+    query = new JTableRowCountQuery(table);
   }
   
   public void shouldReturnRowCountOfJTable() {
@@ -51,7 +53,7 @@ public class JTableRowCountQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTableRowCountQuery.rowCountOf(table)).isEqualTo(rowCount);
+        assertThat(query.executeInEDT()).isEqualTo(rowCount);
       }
     }.run();
   }

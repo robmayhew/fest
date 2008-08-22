@@ -35,11 +35,11 @@ class JTableSelectedRowsQuery extends GuiQuery<int[]> {
     return execute(new JTableSelectedRowsQuery(table));
   }
   
-  private JTableSelectedRowsQuery(JTable table) {
+  JTableSelectedRowsQuery(JTable table) {
     this.table = table;
   }
   
-  protected int[] executeInEDT() throws Throwable {
+  protected int[] executeInEDT() {
     return table.getSelectedRows();
   }
 }

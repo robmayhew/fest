@@ -35,12 +35,12 @@ class JTableSelectionQuery extends GuiQuery<Boolean> {
     return execute(new JTableSelectionQuery(table));
   }
   
-  private JTableSelectionQuery(JTable table) {
+  JTableSelectionQuery(JTable table) {
     this.table = table;
   }
   
-  protected Boolean executeInEDT() throws Throwable {
-    return (table.getSelectedRowCount() > 0) || (table.getSelectedColumnCount() > 0);
+  protected Boolean executeInEDT() {
+    return table.getSelectedRowCount() > 0 || table.getSelectedColumnCount() > 0;
   }
 
 }
