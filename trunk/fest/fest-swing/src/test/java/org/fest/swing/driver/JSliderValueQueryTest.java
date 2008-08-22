@@ -38,10 +38,12 @@ public class JSliderValueQueryTest {
 
   private JSlider slider;
   private int value;
+  private JSliderValueQuery query;
 
   @BeforeMethod public void setUp() {
     slider = createMock(JSlider.class);
     value = 8;
+    query = new JSliderValueQuery(slider);
   }
   
   public void shouldReturnValueOfJSlider() {
@@ -51,7 +53,7 @@ public class JSliderValueQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JSliderValueQuery.valueOf(slider)).isEqualTo(value);
+        assertThat(query.executeInEDT()).isEqualTo(value);
       }
     }.run();
   }

@@ -1,5 +1,5 @@
 /*
- * Created on Aug 12, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -22,24 +22,25 @@ import org.fest.swing.core.GuiQuery;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the minimum and maximum values supported
- * by a <code>{@link JSlider}</code>.
+ * Understands an action, executed in the event dispatch thread, that returns the orientation of a
+ * <code>{@link JSlider}</code>.
  * 
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class JSliderMinAndMaxQuery extends GuiQuery<MinimumAndMaximum> {
+class JSliderOrientationQuery extends GuiQuery<Integer> {
   
   private final JSlider slider;
-
-  static MinimumAndMaximum minAndMaxOf(JSlider slider) {
-    return execute(new JSliderMinAndMaxQuery(slider));
+  
+  static int orientationOf(JSlider slider) {
+    return execute(new JSliderOrientationQuery(slider));
   }
   
-  JSliderMinAndMaxQuery(JSlider slider) {
+  JSliderOrientationQuery(JSlider slider) {
     this.slider = slider;
   }
   
-  protected MinimumAndMaximum executeInEDT() {
-    return new MinimumAndMaximum(slider.getMinimum(), slider.getMaximum());
+  protected Integer executeInEDT() {
+    return slider.getOrientation();
   }
 }

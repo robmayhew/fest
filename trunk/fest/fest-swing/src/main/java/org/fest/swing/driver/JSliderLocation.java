@@ -20,15 +20,14 @@ import java.awt.Point;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
 
 import static javax.swing.SwingConstants.VERTICAL;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JSliderLocation.JSliderHorizontalLocationQueryStrategy.locationForHorizontalOrientation;
-import static org.fest.swing.driver.JSliderLocation.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.driver.JSliderLocation.JSliderVerticalLocationQueryStrategy.locationForVerticalOrientation;
+import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**
@@ -48,24 +47,6 @@ public final class JSliderLocation {
   public Point pointAt(JSlider slider, int value) {
     if (orientationOf(slider) == VERTICAL) return locationForVerticalOrientation(slider, value);
     return locationForHorizontalOrientation(slider, value);
-  }
-
-  static class JSliderOrientationQuery extends GuiQuery<Integer> {
-    // TODO make top-level
-    
-    private final JSlider slider;
-    
-    static int orientationOf(JSlider slider) {
-      return GuiActionRunner.execute(new JSliderOrientationQuery(slider));
-    }
-    
-    private JSliderOrientationQuery(JSlider slider) {
-      this.slider = slider;
-    }
-    
-    protected Integer executeInEDT() throws Throwable {
-      return slider.getOrientation();
-    }
   }
 
   static class JSliderVerticalLocationQueryStrategy extends JSliderLocationQueryStrategy {

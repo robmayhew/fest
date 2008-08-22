@@ -27,7 +27,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class JSpinnerValueQuery extends GuiQuery<Object> {
+class JSpinnerValueQuery extends GuiQuery<Object> {
 
   private final JSpinner spinner;
 
@@ -35,7 +35,7 @@ final class JSpinnerValueQuery extends GuiQuery<Object> {
     return execute(new JSpinnerValueQuery(spinner));
   }
 
-  private JSpinnerValueQuery(JSpinner spinner) {
+  JSpinnerValueQuery(JSpinner spinner) {
     this.spinner = spinner;
   }
 

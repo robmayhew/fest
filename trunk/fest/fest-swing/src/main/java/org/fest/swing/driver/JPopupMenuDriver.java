@@ -22,12 +22,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JPopupMenuElementsQuery.elementsOf;
+import static org.fest.swing.driver.MenuElementComponentQuery.componentIn;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 
 /**
@@ -60,26 +59,9 @@ public class JPopupMenuDriver extends JComponentDriver {
   }
 
   static String asString(final MenuElement e) {
-    Component c = MenuElementComponentQuery.componentIn(e);
+    Component c = componentIn(e);
     if (c instanceof JMenuItem) return textOf((JMenuItem)c);
     return "-";
-  }
-
-  private static class MenuElementComponentQuery extends GuiQuery<Component> {
-    // TODO make top-level
-    private final MenuElement e;
-
-    static Component componentIn(MenuElement e) {
-      return execute(new MenuElementComponentQuery(e));
-    }
-    
-    private MenuElementComponentQuery(MenuElement e) {
-      this.e = e;
-    }
-
-    protected Component executeInEDT() throws Throwable {
-      return e.getComponent();
-    }
   }
 
   /**

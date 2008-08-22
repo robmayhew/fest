@@ -1,5 +1,5 @@
 /*
- * Created on Aug 12, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,50 +15,48 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JSlider;
+import java.awt.Component;
+
+import javax.swing.MenuElement;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestGroups;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link JSliderMinAndMaxQuery}</code>.
+ * Tests for <code>{@link MenuElementComponentQuery}</code>.
  *
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = EDT_QUERY)
-public class JSliderMinAndMaxQueryTest {
+@Test(groups = TestGroups.EDT_QUERY)
+public class MenuElementComponentQueryTest {
 
-  private JSlider slider;
-  private int minimum;
-  private int maximum;
-  private JSliderMinAndMaxQuery query;
-
+  private MenuElement element;
+  private Component component;
+  private MenuElementComponentQuery query;
+  
   @BeforeMethod public void setUp() {
-    slider = createMock(JSlider.class);
-    minimum = 8;
-    maximum = 8;
-    query = new JSliderMinAndMaxQuery(slider);
+    element = createMock(MenuElement.class);
+    component = createMock(Component.class);
+    query = new MenuElementComponentQuery(element);
   }
   
-  public void shouldReturnMaximumValueOfJSlider() {
-    new EasyMockTemplate(slider) {
+  public void shouldReturnComponentOfMenuElement() {
+    new EasyMockTemplate(element) {
       protected void expectations() {
-        expect(slider.getMinimum()).andReturn(minimum);
-        expect(slider.getMaximum()).andReturn(maximum);
+        expect(element.getComponent()).andReturn(component);
       }
 
       protected void codeToTest() {
-        MinimumAndMaximum minAndMax = query.executeInEDT();
-        assertThat(minAndMax.minimum).isEqualTo(minimum);
-        assertThat(minAndMax.maximum).isEqualTo(maximum);
+        assertThat(query.executeInEDT()).isSameAs(component);
       }
     }.run();
   }

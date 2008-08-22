@@ -1,5 +1,5 @@
 /*
- * Created on Aug 12, 2008
+ * Created on Aug 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,31 +15,34 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JSlider;
+import java.awt.Component;
+
+import javax.swing.MenuElement;
 
 import org.fest.swing.core.GuiQuery;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the minimum and maximum values supported
- * by a <code>{@link JSlider}</code>.
- * 
+ * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used to 
+ * paint a <code>{@link MenuElement}</code>.
+ *
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class JSliderMinAndMaxQuery extends GuiQuery<MinimumAndMaximum> {
-  
-  private final JSlider slider;
+class MenuElementComponentQuery extends GuiQuery<Component> {
 
-  static MinimumAndMaximum minAndMaxOf(JSlider slider) {
-    return execute(new JSliderMinAndMaxQuery(slider));
+  private final MenuElement menuElement;
+
+  static Component componentIn(MenuElement menuElement) {
+    return execute(new MenuElementComponentQuery(menuElement));
   }
   
-  JSliderMinAndMaxQuery(JSlider slider) {
-    this.slider = slider;
+  MenuElementComponentQuery(MenuElement menuElement) {
+    this.menuElement = menuElement;
   }
-  
-  protected MinimumAndMaximum executeInEDT() {
-    return new MinimumAndMaximum(slider.getMinimum(), slider.getMaximum());
+
+  protected Component executeInEDT() {
+    return menuElement.getComponent();
   }
 }

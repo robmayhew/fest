@@ -35,7 +35,7 @@ final class JSliderValueQuery extends GuiQuery<Integer> {
     return execute(new JSliderValueQuery(slider));
   }
 
-  private JSliderValueQuery(JSlider slider) {
+  JSliderValueQuery(JSlider slider) {
     this.slider = slider;
   }
 

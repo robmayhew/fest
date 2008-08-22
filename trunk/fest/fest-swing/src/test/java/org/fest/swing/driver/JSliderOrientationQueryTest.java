@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 
+import static javax.swing.SwingConstants.HORIZONTAL;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
@@ -29,36 +30,32 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link JSliderMinAndMaxQuery}</code>.
+ * Tests for <code>{@link JSliderOrientationQuery}</code>.
  *
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = EDT_QUERY)
-public class JSliderMinAndMaxQueryTest {
+public class JSliderOrientationQueryTest {
 
   private JSlider slider;
-  private int minimum;
-  private int maximum;
-  private JSliderMinAndMaxQuery query;
+  private int orientation;
+  private JSliderOrientationQuery query;
 
   @BeforeMethod public void setUp() {
     slider = createMock(JSlider.class);
-    minimum = 8;
-    maximum = 8;
-    query = new JSliderMinAndMaxQuery(slider);
+    orientation = HORIZONTAL;
+    query = new JSliderOrientationQuery(slider);
   }
   
   public void shouldReturnMaximumValueOfJSlider() {
     new EasyMockTemplate(slider) {
       protected void expectations() {
-        expect(slider.getMinimum()).andReturn(minimum);
-        expect(slider.getMaximum()).andReturn(maximum);
+        expect(slider.getOrientation()).andReturn(orientation);
       }
 
       protected void codeToTest() {
-        MinimumAndMaximum minAndMax = query.executeInEDT();
-        assertThat(minAndMax.minimum).isEqualTo(minimum);
-        assertThat(minAndMax.maximum).isEqualTo(maximum);
+        assertThat(query.executeInEDT()).isEqualTo(orientation);
       }
     }.run();
   }

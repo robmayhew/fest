@@ -38,10 +38,12 @@ public class JSliderMaximumQueryTest {
 
   private JSlider slider;
   private int maximum;
-
+  private JSliderMaximumQuery query;
+  
   @BeforeMethod public void setUp() {
     slider = createMock(JSlider.class);
     maximum = 8;
+    query = new JSliderMaximumQuery(slider);
   }
   
   public void shouldReturnMaximumValueOfJSlider() {
@@ -51,7 +53,7 @@ public class JSliderMaximumQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JSliderMaximumQuery.maximumOf(slider)).isEqualTo(maximum);
+        assertThat(query.executeInEDT()).isEqualTo(maximum);
       }
     }.run();
   }

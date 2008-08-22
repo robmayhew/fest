@@ -38,10 +38,12 @@ public class JSpinnerValueQueryTest {
 
   private JSpinner spinner;
   private Object value;
+  private JSpinnerValueQuery query;
   
   @BeforeMethod public void setUp() {
     spinner = createMock(JSpinner.class);
     value = "Hello";
+    query = new JSpinnerValueQuery(spinner);
   }
   
   @Test(groups = EDT_QUERY) public void shouldReturnValueOfJSpinner() {
@@ -51,7 +53,7 @@ public class JSpinnerValueQueryTest {
       }
 
       protected void codeToTest() {
-        Assertions.assertThat(JSpinnerValueQuery.valueOf(spinner)).isSameAs(value);
+        Assertions.assertThat(query.executeInEDT()).isSameAs(value);
       }
     }.run();
   }

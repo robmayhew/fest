@@ -38,10 +38,12 @@ public class JSliderMinimumQueryTest {
 
   private JSlider slider;
   private int minimum;
+  private JSliderMinimumQuery query;
 
   @BeforeMethod public void setUp() {
     slider = createMock(JSlider.class);
     minimum = 8;
+    query = new JSliderMinimumQuery(slider);
   }
   
   public void shouldReturnMinimumValueOfJSlider() {
@@ -51,7 +53,7 @@ public class JSliderMinimumQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JSliderMinimumQuery.minimumOf(slider)).isEqualTo(minimum);
+        assertThat(query.executeInEDT()).isEqualTo(minimum);
       }
     }.run();
   }

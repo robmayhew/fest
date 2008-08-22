@@ -35,7 +35,7 @@ class JSliderMinimumQuery extends GuiQuery<Integer> {
     return execute(new JSliderMinimumQuery(slider));
   }
   
-  private JSliderMinimumQuery(JSlider slider) {
+  JSliderMinimumQuery(JSlider slider) {
     this.slider = slider;
   }
   
