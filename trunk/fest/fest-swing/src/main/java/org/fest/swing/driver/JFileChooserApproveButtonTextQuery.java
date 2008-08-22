@@ -36,7 +36,7 @@ class JFileChooserApproveButtonTextQuery extends GuiQuery<String> {
     return execute(new JFileChooserApproveButtonTextQuery(fileChooser));
   }
   
-  private JFileChooserApproveButtonTextQuery(JFileChooser fileChooser) {
+  JFileChooserApproveButtonTextQuery(JFileChooser fileChooser) {
     this.fileChooser = fileChooser;
   }
 

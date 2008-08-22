@@ -41,11 +41,13 @@ public class JComponentOriginQueryTest {
   private JComponent component;
   private int x;
   private int y;
+  private JComponentOriginQuery query;
   
   @BeforeMethod public void setUp() {
     component = createMock(JComponent.class);
     x = 8;
     y = 6;
+    query = new JComponentOriginQuery(component);
   }
   
   public void shouldReturnOriginOfJComponent() {
@@ -56,7 +58,7 @@ public class JComponentOriginQueryTest {
       }
 
       protected void codeToTest() {
-        Point origin = JComponentOriginQuery.originOf(component);
+        Point origin = query.executeInEDT();
         assertThat(origin.x).isEqualTo(x);
         assertThat(origin.y).isEqualTo(y);
       }

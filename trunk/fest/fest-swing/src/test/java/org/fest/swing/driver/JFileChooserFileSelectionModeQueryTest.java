@@ -40,10 +40,12 @@ public class JFileChooserFileSelectionModeQueryTest {
 
   private JFileChooser fileChooser;
   private int mode;
+  private JFileChooserFileSelectionModeQuery query;
 
   @BeforeMethod public void setUp() {
     fileChooser = createMock(JFileChooser.class);
     mode = FILES_ONLY;
+    query = new JFileChooserFileSelectionModeQuery(fileChooser);
   }
 
   public void shouldReturnApproveButtonTextFromJFileChooser() {
@@ -53,7 +55,7 @@ public class JFileChooserFileSelectionModeQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JFileChooserFileSelectionModeQuery.fileSelectionModeOf(fileChooser)).isEqualTo(mode);
+        assertThat(query.executeInEDT()).isEqualTo(mode);
       }
     }.run();
   }

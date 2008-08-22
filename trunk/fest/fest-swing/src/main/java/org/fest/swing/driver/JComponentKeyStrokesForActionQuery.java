@@ -42,7 +42,7 @@ class JComponentKeyStrokesForActionQuery extends GuiQuery<KeyStroke[]> {
     return execute(new JComponentKeyStrokesForActionQuery(component, actionName));
   }
   
-  private JComponentKeyStrokesForActionQuery(JComponent component, String actionName) {
+  JComponentKeyStrokesForActionQuery(JComponent component, String actionName) {
     this.component = component;
     this.actionName = actionName;
   }

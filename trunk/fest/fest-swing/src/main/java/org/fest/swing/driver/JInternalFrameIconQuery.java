@@ -34,7 +34,7 @@ class JInternalFrameIconQuery extends GuiQuery<Boolean> {
     return execute(new JInternalFrameIconQuery(frame));
   }
 
-  private JInternalFrameIconQuery(JInternalFrame frame) {
+  JInternalFrameIconQuery(JInternalFrame frame) {
     this.frame = frame;
   }
 

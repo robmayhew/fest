@@ -37,7 +37,7 @@ class JInternalFrameDesktopIconQuery extends GuiQuery<JDesktopIcon> {
     return execute(new JInternalFrameDesktopIconQuery(internalFrame));
   }
 
-  private JInternalFrameDesktopIconQuery(JInternalFrame internalFrame) {
+  JInternalFrameDesktopIconQuery(JInternalFrame internalFrame) {
     this.internalFrame = internalFrame;
   }
 

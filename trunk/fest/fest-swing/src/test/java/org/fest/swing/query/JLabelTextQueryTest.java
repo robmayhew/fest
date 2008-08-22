@@ -33,14 +33,17 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY) public class JLabelTextQueryTest {
+@Test(groups = EDT_QUERY) 
+public class JLabelTextQueryTest {
 
   private JLabel label;
   private String text;
+  private JLabelTextQuery query;
 
   @BeforeMethod public void setUp() {
     label = createMock(JLabel.class);
     text = "Hello";
+    query = new JLabelTextQuery(label);
   }
 
   public void shouldReturnTextOfJLabel() {
@@ -50,7 +53,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
       }
 
       protected void codeToTest() {
-        assertThat(JLabelTextQuery.textOf(label)).isSameAs(text);
+        assertThat(query.executeInEDT()).isSameAs(text);
       }
     }.run();
   }

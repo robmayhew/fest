@@ -39,10 +39,12 @@ public class JInternalFrameDesktopIconQueryTest {
 
   private JInternalFrame internalFrame;
   private JDesktopIcon desktopIcon;
+  private JInternalFrameDesktopIconQuery query;
 
   @BeforeMethod public void setUp() {
     internalFrame = createMock(JInternalFrame.class);
     desktopIcon = createMock(JDesktopIcon.class);
+    query = new JInternalFrameDesktopIconQuery(internalFrame);
   }
 
   public void shouldCloseJInternalFrame() {
@@ -52,7 +54,7 @@ public class JInternalFrameDesktopIconQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JInternalFrameDesktopIconQuery.desktopIconOf(internalFrame)).isSameAs(desktopIcon);
+        assertThat(query.executeInEDT()).isSameAs(desktopIcon);
       }
     }.run();
   }

@@ -38,7 +38,7 @@ class JComponentVisibleRectQuery extends GuiQuery<Rectangle> {
     return execute(new JComponentVisibleRectQuery(component));
   }
   
-  private JComponentVisibleRectQuery(JComponent component) {
+  JComponentVisibleRectQuery(JComponent component) {
     this.component = component;
   }
 

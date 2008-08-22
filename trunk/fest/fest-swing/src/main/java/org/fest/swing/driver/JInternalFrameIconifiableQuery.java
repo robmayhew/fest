@@ -36,7 +36,7 @@ class JInternalFrameIconifiableQuery extends GuiQuery<Boolean> {
     return execute(new JInternalFrameIconifiableQuery(internalFrame));
   }
 
-  private JInternalFrameIconifiableQuery(JInternalFrame internalFrame) {
+  JInternalFrameIconifiableQuery(JInternalFrame internalFrame) {
     this.internalFrame = internalFrame;
   }
 

@@ -39,7 +39,7 @@ class JFileChooserCancelButtonTextQuery extends GuiQuery<String> {
     return execute(QUERY_INSTANCE);
   }
 
-  private JFileChooserCancelButtonTextQuery() {}
+  JFileChooserCancelButtonTextQuery() {}
 
   protected String executeInEDT() {
     return UIManager.getString(CANCEL_BUTTON_TEXT_KEY);

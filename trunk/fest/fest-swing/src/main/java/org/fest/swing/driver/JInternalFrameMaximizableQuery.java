@@ -36,7 +36,7 @@ class JInternalFrameMaximizableQuery extends GuiQuery<Boolean> {
     return execute(new JInternalFrameMaximizableQuery(internalFrame));
   }
 
-  private JInternalFrameMaximizableQuery(JInternalFrame internalFrame) {
+  JInternalFrameMaximizableQuery(JInternalFrame internalFrame) {
     this.internalFrame = internalFrame;
   }
 

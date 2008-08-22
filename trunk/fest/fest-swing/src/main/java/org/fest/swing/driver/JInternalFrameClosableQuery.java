@@ -36,7 +36,7 @@ class JInternalFrameClosableQuery extends GuiQuery<Boolean> {
     return execute(new JInternalFrameClosableQuery(internalFrame));
   }
 
-  private JInternalFrameClosableQuery(JInternalFrame internalFrame) {
+  JInternalFrameClosableQuery(JInternalFrame internalFrame) {
     this.internalFrame = internalFrame;
   }
 

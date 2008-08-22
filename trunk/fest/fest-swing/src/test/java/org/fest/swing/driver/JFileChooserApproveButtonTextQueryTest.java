@@ -40,11 +40,13 @@ public class JFileChooserApproveButtonTextQueryTest {
   private JFileChooser fileChooser;
   private FileChooserUI ui;
   private String text;
+  private JFileChooserApproveButtonTextQuery query;
 
   @BeforeMethod public void setUp() {
     fileChooser = createMock(JFileChooser.class);
     ui = createMock(FileChooserUI.class);
     text = "Open";
+    query = new JFileChooserApproveButtonTextQuery(fileChooser);
   }
   
   public void shouldReturnApproveButtonTextFromJFileChooser() {
@@ -54,7 +56,7 @@ public class JFileChooserApproveButtonTextQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JFileChooserApproveButtonTextQuery.approveButtonTextFrom(fileChooser)).isSameAs(text);
+        assertThat(query.executeInEDT()).isSameAs(text);
       }
     }.run();
   }
@@ -68,7 +70,7 @@ public class JFileChooserApproveButtonTextQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JFileChooserApproveButtonTextQuery.approveButtonTextFrom(fileChooser)).isSameAs(text);
+        assertThat(query.executeInEDT()).isSameAs(text);
       }
     }.run();
   }

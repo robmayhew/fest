@@ -40,10 +40,12 @@ public class JComponentVisibleRectQueryTest {
 
   private JComponent component;
   private Rectangle rectangle;
+  private JComponentVisibleRectQuery query;
 
   @BeforeMethod public void setUp() {
     component = createMock(JComponent.class);
     rectangle = new Rectangle(800, 600);
+    query = new JComponentVisibleRectQuery(component);
   }
   
   public void shouldReturnVisibleRectOfJComponent() {
@@ -53,7 +55,7 @@ public class JComponentVisibleRectQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JComponentVisibleRectQuery.visibleRectOf(component)).isSameAs(rectangle);
+        assertThat(query.executeInEDT()).isSameAs(rectangle);
       }
     }.run();
   }

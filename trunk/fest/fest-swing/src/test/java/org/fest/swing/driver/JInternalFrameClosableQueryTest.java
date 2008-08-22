@@ -39,9 +39,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JInternalFrameClosableQueryTest {
 
   private JInternalFrame internalFrame;
-
+  private JInternalFrameClosableQuery query;
+  
   @BeforeMethod public void setUp() {
     internalFrame = createMock(JInternalFrame.class);
+    query = new JInternalFrameClosableQuery(internalFrame);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -52,7 +54,7 @@ public class JInternalFrameClosableQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JInternalFrameClosableQuery.isClosable(internalFrame)).isEqualTo(closable);
+        assertThat(query.executeInEDT()).isEqualTo(closable);
       }
     }.run();
   }

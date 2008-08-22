@@ -39,9 +39,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JInternalFrameMaximizableQueryTest {
 
   private JInternalFrame internalFrame;
+  private JInternalFrameMaximizableQuery query;
 
   @BeforeMethod public void setUp() {
     internalFrame = createMock(JInternalFrame.class);
+    query = new JInternalFrameMaximizableQuery(internalFrame);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -52,7 +54,7 @@ public class JInternalFrameMaximizableQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JInternalFrameMaximizableQuery.isMaximizable(internalFrame)).isEqualTo(maximizable);
+        assertThat(query.executeInEDT()).isEqualTo(maximizable);
       }
     }.run();
   }

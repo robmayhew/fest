@@ -37,11 +37,11 @@ class JComponentOriginQuery extends GuiQuery<Point> {
     return execute(new JComponentOriginQuery(component));
   }
   
-  private JComponentOriginQuery(JComponent component) {
+  JComponentOriginQuery(JComponent component) {
     this.component = component;
   }
   
-  protected Point executeInEDT() throws Throwable {
+  protected Point executeInEDT() {
     return new Point(component.getX(), component.getY());
   }
 }

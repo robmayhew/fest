@@ -39,9 +39,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JInternalFrameIconifiableQueryTest {
 
   private JInternalFrame internalFrame;
+  private JInternalFrameIconifiableQuery query;
 
   @BeforeMethod public void setUp() {
     internalFrame = createMock(JInternalFrame.class);
+    query = new JInternalFrameIconifiableQuery(internalFrame);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
@@ -52,7 +54,7 @@ public class JInternalFrameIconifiableQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JInternalFrameIconifiableQuery.isIconifiable(internalFrame)).isEqualTo(iconifiable);
+        assertThat(query.executeInEDT()).isEqualTo(iconifiable);
       }
     }.run();
   }

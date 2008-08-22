@@ -36,7 +36,7 @@ class JFileChooserFileSelectionModeQuery extends GuiQuery<Integer> {
     return execute(new JFileChooserFileSelectionModeQuery(fileChooser));
   }
 
-  private JFileChooserFileSelectionModeQuery(JFileChooser fileChooser) {
+  JFileChooserFileSelectionModeQuery(JFileChooser fileChooser) {
     this.fileChooser = fileChooser;
   }
 
