@@ -24,7 +24,7 @@ class JTextComponentSelectedTextQuery extends GuiQuery<String> {
     this.textBox = textBox;
   }
   
-  protected String executeInEDT() throws Throwable {
+  protected String executeInEDT() {
     return textBox.getSelectedText();
   }
 }

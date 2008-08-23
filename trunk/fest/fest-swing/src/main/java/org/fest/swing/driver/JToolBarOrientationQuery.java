@@ -18,8 +18,6 @@ import javax.swing.JToolBar;
 
 import org.fest.swing.core.GuiQuery;
 
-import static javax.swing.SwingConstants.*;
-
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
@@ -30,21 +28,14 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  */
 class JToolBarOrientationQuery extends GuiQuery<Integer> {
+
   private final JToolBar toolBar;
-
-  static boolean isHorizontal(JToolBar toolBar) {
-    return orientationOf(toolBar) == HORIZONTAL;
-  }
-
-  static boolean isVertical(JToolBar toolBar) {
-    return orientationOf(toolBar) == VERTICAL;
-  }
 
   static int orientationOf(JToolBar toolBar) {
     return execute(new JToolBarOrientationQuery(toolBar));
   }
 
-  private JToolBarOrientationQuery(JToolBar toolBar) {
+  JToolBarOrientationQuery(JToolBar toolBar) {
     this.toolBar = toolBar;
   }
 

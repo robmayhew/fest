@@ -41,27 +41,33 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JTextComponentModelToViewQueryTest {
 
   private JTextComponent textBox;
-  private int pos;
+  private int position;
   private Rectangle rectangle;
+  private JTextComponentModelToViewQuery query;
 
   @BeforeMethod public void setUp() {
     textBox = createMock(JTextComponent.class);
-    pos = 8;
+    position = 8;
     rectangle = new Rectangle(80, 60);
+    query = new JTextComponentModelToViewQuery(textBox, position);
   }
   
   public void shouldReturnModelToViewInJTextComponent() {
     new EasyMockTemplate(textBox) {
       protected void expectations() {
         try {
-          expect(textBox.modelToView(pos)).andReturn(rectangle);
+          expect(textBox.modelToView(position)).andReturn(rectangle);
         } catch (BadLocationException e) {
           throw unexpected(e);
         }
       }
 
       protected void codeToTest() {
-        assertThat(JTextComponentModelToViewQuery.modelToView(textBox, pos)).isSameAs(rectangle);
+        try {
+          assertThat(query.executeInEDT()).isSameAs(rectangle);
+        } catch (BadLocationException e) {
+          throw unexpected(e);
+        }
       }
     }.run();
   }

@@ -22,11 +22,11 @@ class JToolBarUIQuery extends GuiQuery<ToolBarUI> {
     return execute(new JToolBarUIQuery(toolBar));
   }
   
-  private JToolBarUIQuery(JToolBar toolBar) {
+  JToolBarUIQuery(JToolBar toolBar) {
     this.toolBar = toolBar;
   }
 
-  protected ToolBarUI executeInEDT() throws Throwable {
+  protected ToolBarUI executeInEDT() {
     return toolBar.getUI();
   }
 }

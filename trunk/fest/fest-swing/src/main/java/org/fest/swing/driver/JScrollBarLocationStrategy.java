@@ -19,9 +19,7 @@ import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 
 /**
  * Understands encapsulation of a location in a <code>{@link JScrollBar}</code> in a orientation-specific way.
@@ -40,35 +38,10 @@ abstract class JScrollBarLocationStrategy {
   abstract Point unitLocationToScrollUp(JScrollBar scrollBar);
 
   final int widthOf(JScrollBar scrollBar) {
-    return execute(new WidthQuery(scrollBar));
-  }
-
-  private static class WidthQuery extends GuiQuery<Integer> {
-    private final JScrollBar scrollBar;
-
-    WidthQuery(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-
-    protected Integer executeInEDT() throws Throwable {
-      return scrollBar.getWidth();
-    }
+    return sizeOf(scrollBar).width;
   }
 
   final int heightOf(JScrollBar scrollBar) {
-    return execute(new HeightQuery(scrollBar));
-  }
-
-  // TODO replace with getSize
-  private static class HeightQuery extends GuiQuery<Integer> {
-    private final JScrollBar scrollBar;
-
-    HeightQuery(JScrollBar scrollBar) {
-      this.scrollBar = scrollBar;
-    }
-
-    protected Integer executeInEDT() throws Throwable {
-      return scrollBar.getHeight();
-    }
+    return sizeOf(scrollBar).height;
   }
 }

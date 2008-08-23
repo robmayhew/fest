@@ -21,7 +21,7 @@ class JTreeSingleRowSelectedQuery extends GuiQuery<Boolean> {
     return execute(new JTreeSingleRowSelectedQuery(tree, row));
   }
 
-  private JTreeSingleRowSelectedQuery(JTree tree, int row) {
+  JTreeSingleRowSelectedQuery(JTree tree, int row) {
     this.tree = tree;
     this.row = row;
   }

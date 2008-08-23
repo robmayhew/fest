@@ -38,10 +38,12 @@ public class JTextComponentSelectionEndQueryTest {
 
   private JTextComponent textBox;
   private int selectionEnd;
+  private JTextComponentSelectionEndQuery query;
   
   @BeforeMethod public void setUp() {
     textBox = createMock(JTextComponent.class);
     selectionEnd = 8;
+    query = new JTextComponentSelectionEndQuery(textBox);
   }
   
   public void shouldReturnSelectionEndOfJTextComponent() {
@@ -51,7 +53,7 @@ public class JTextComponentSelectionEndQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTextComponentSelectionEndQuery.selectionEndOf(textBox)).isEqualTo(selectionEnd);
+        assertThat(query.executeInEDT()).isEqualTo(selectionEnd);
       }
     }.run();
   }

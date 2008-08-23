@@ -35,7 +35,7 @@ class JTextComponentSelectionEndQuery extends GuiQuery<Integer> {
     return execute(new JTextComponentSelectionEndQuery(textBox));
   }
   
-  private JTextComponentSelectionEndQuery(JTextComponent textBox) {
+  JTextComponentSelectionEndQuery(JTextComponent textBox) {
     this.textBox = textBox;
   }
   

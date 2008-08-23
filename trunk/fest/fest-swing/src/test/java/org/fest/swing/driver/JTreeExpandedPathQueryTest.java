@@ -40,10 +40,12 @@ public class JTreeExpandedPathQueryTest {
 
   private JTree tree;
   private TreePath path;
+  private JTreeExpandedPathQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     path = createMock(TreePath.class);
+    query = new JTreeExpandedPathQuery(tree, path);
   }
 
   @Test(groups = EDT_QUERY, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
@@ -55,7 +57,7 @@ public class JTreeExpandedPathQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreeExpandedPathQuery.isExpanded(tree, path)).isEqualTo(expanded);
+        assertThat(query.executeInEDT()).isEqualTo(expanded);
       }
     }.run();
   }

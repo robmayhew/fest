@@ -21,11 +21,11 @@ class JTreeUIQuery extends GuiQuery<TreeUI> {
     return execute(new JTreeUIQuery(tree));
   }
 
-  private JTreeUIQuery(JTree tree) {
+  JTreeUIQuery(JTree tree) {
     this.tree = tree;
   }
 
-  protected TreeUI executeInEDT() throws Throwable {
+  protected TreeUI executeInEDT() {
     return tree.getUI();
   }
 }

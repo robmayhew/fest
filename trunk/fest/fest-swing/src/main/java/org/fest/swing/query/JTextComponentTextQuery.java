@@ -40,7 +40,7 @@ public final class JTextComponentTextQuery extends GuiQuery<String> {
     return execute(new JTextComponentTextQuery(textComponent));
   }
 
-  private JTextComponentTextQuery(JTextComponent textComponent) {
+  JTextComponentTextQuery(JTextComponent textComponent) {
     this.textComponent = textComponent;
   }
 

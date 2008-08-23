@@ -40,10 +40,12 @@ public class JTreeSelectionPathsQueryTest {
 
   private JTree tree;
   private TreePath[] paths;
+  private JTreeSelectionPathsQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     paths = array(createMock(TreePath.class));
+    query = new JTreeSelectionPathsQuery(tree);
   }
 
   public void shouldIndicateIfPathExpanded() {
@@ -54,7 +56,7 @@ public class JTreeSelectionPathsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreeSelectionPathsQuery.selectionPathsOf(tree)).isEqualTo(paths);
+        assertThat(query.executeInEDT()).isEqualTo(paths);
       }
     }.run();
   }

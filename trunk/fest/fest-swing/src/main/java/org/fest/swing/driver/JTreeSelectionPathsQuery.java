@@ -21,11 +21,11 @@ class JTreeSelectionPathsQuery extends GuiQuery<TreePath[]> {
     return execute(new JTreeSelectionPathsQuery(tree));
   }
   
-  private JTreeSelectionPathsQuery(JTree tree) {
+  JTreeSelectionPathsQuery(JTree tree) {
     this.tree = tree;
   }
 
-  protected TreePath[] executeInEDT() throws Throwable {
+  protected TreePath[] executeInEDT() {
     return tree.getSelectionPaths();
   }
 }

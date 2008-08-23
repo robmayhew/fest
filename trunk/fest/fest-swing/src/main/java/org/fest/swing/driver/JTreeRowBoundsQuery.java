@@ -23,7 +23,7 @@ class JTreeRowBoundsQuery extends GuiQuery<Rectangle> {
     return execute(new JTreeRowBoundsQuery(tree, row));
   }
   
-  private JTreeRowBoundsQuery(JTree tree, int row) {
+  JTreeRowBoundsQuery(JTree tree, int row) {
     this.tree = tree;
     this.row = row;
   }

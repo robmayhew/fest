@@ -38,10 +38,12 @@ public class JTreeToggleClickCountQueryTest {
 
   private JTree tree;
   private int toggleClickCount;
+  private JTreeToggleClickCountQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     toggleClickCount = 2;
+    query = new JTreeToggleClickCountQuery(tree);
   }
 
   public void shouldReturnToggleClickCountOfJTree() {
@@ -52,7 +54,7 @@ public class JTreeToggleClickCountQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreeToggleClickCountQuery.toggleClickCountOf(tree)).isEqualTo(toggleClickCount);
+        assertThat(query.executeInEDT()).isEqualTo(toggleClickCount);
       }
     }.run();
   }

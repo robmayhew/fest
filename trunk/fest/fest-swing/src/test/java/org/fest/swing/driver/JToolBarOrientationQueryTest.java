@@ -39,57 +39,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JToolBarOrientationQueryTest {
 
   private JToolBar toolBar;
+  private JToolBarOrientationQuery query;
 
   @BeforeMethod public void setUp() {
     toolBar = createMock(JToolBar.class);
-  }
-  
-  public void shouldReturnIsHorizontalIfJToolBarOrientationIsHorizontal() {
-    new EasyMockTemplate(toolBar) {
-      protected void expectations() {
-        expect(toolBar.getOrientation()).andReturn(HORIZONTAL);
-      }
-
-      protected void codeToTest() {
-        assertThat(JToolBarOrientationQuery.isHorizontal(toolBar)).isTrue();
-      }
-    }.run();
-  }
-
-  public void shouldReturnFalseIfToolBarOrientationIsVerticalAndExpectingHorizontal() {
-    new EasyMockTemplate(toolBar) {
-      protected void expectations() {
-        expect(toolBar.getOrientation()).andReturn(VERTICAL);
-      }
-
-      protected void codeToTest() {
-        assertThat(JToolBarOrientationQuery.isHorizontal(toolBar)).isFalse();
-      }
-    }.run();
-  }
-
-  public void shouldReturnIsVerticalIfJToolBarOrientationIsVertical() {
-    new EasyMockTemplate(toolBar) {
-      protected void expectations() {
-        expect(toolBar.getOrientation()).andReturn(VERTICAL);
-      }
-
-      protected void codeToTest() {
-        assertThat(JToolBarOrientationQuery.isVertical(toolBar)).isTrue();
-      }
-    }.run();
-  }
-
-  public void shouldReturnFalseIfToolBarOrientationIsHorizontalAndExpectingVerical() {
-    new EasyMockTemplate(toolBar) {
-      protected void expectations() {
-        expect(toolBar.getOrientation()).andReturn(HORIZONTAL);
-      }
-
-      protected void codeToTest() {
-        assertThat(JToolBarOrientationQuery.isVertical(toolBar)).isFalse();
-      }
-    }.run();
+    query = new JToolBarOrientationQuery(toolBar);
   }
   
   @Test(dataProvider = "orientations")
@@ -100,7 +54,7 @@ public class JToolBarOrientationQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JToolBarOrientationQuery.orientationOf(toolBar)).isEqualTo(orientation);
+        assertThat(query.executeInEDT()).isEqualTo(orientation);
       }
     }.run();
   }

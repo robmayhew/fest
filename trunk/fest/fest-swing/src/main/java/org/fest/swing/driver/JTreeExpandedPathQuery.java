@@ -22,12 +22,12 @@ class JTreeExpandedPathQuery extends GuiQuery<Boolean> {
     return execute(new JTreeExpandedPathQuery(tree, path));
   }
 
-  private JTreeExpandedPathQuery(JTree tree, TreePath path) {
+  JTreeExpandedPathQuery(JTree tree, TreePath path) {
     this.tree = tree;
     this.path = path;
   }
 
-  protected Boolean executeInEDT() throws Throwable {
+  protected Boolean executeInEDT() {
     return tree.isExpanded(path);
   }
 }

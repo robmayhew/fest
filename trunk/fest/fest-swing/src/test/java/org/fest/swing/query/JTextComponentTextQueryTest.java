@@ -37,10 +37,12 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
   private JTextComponent textBox;
   private String text;
+  private JTextComponentTextQuery query;
   
   @BeforeMethod public void setUp() {
     textBox = createMock(JTextComponent.class);
     text = "Hello";
+    query = new JTextComponentTextQuery(textBox);
   }
   
   public void shouldReturnTextOfJTextComponent() {
@@ -50,7 +52,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
       }
       
       protected void codeToTest() {
-        assertThat(JTextComponentTextQuery.textOf(textBox)).isSameAs(text);
+        assertThat(query.executeInEDT()).isSameAs(text);
       }
     }.run();
   }

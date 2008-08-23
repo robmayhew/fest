@@ -41,11 +41,13 @@ public class JTreeRowBoundsQueryTest {
   private JTree tree;
   private int row;
   private Rectangle rowBounds;
+  private JTreeRowBoundsQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     row = 8;
     rowBounds = new Rectangle(80, 60);
+    query = new JTreeRowBoundsQuery(tree, row);
   }
 
   public void shouldReturnBoundsOfRow() {
@@ -55,7 +57,7 @@ public class JTreeRowBoundsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreeRowBoundsQuery.rowBoundsOf(tree, row)).isEqualTo(rowBounds);
+        assertThat(query.executeInEDT()).isEqualTo(rowBounds);
       }
     }.run();
   }

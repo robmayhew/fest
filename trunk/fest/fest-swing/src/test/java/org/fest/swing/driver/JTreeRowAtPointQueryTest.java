@@ -41,11 +41,13 @@ public class JTreeRowAtPointQueryTest {
   private JTree tree;
   private Point location;
   private int row;
+  private JTreeRowAtPointQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     location = new Point(8, 6);
     row = 8;
+    query = new JTreeRowAtPointQuery(tree, location);
   }
 
   public void shouldReturnRowAtPoint() {
@@ -56,7 +58,7 @@ public class JTreeRowAtPointQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreeRowAtPointQuery.rowAtPoint(tree, location)).isEqualTo(row);
+        assertThat(query.executeInEDT()).isEqualTo(row);
       }
     }.run();
   }

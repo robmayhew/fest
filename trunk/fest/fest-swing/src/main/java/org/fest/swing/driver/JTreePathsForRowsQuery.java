@@ -39,17 +39,12 @@ class JTreePathsForRowsQuery extends GuiQuery<TreePath[]> {
     return execute(new JTreePathsForRowsQuery(tree, rows));
   }
 
-  static TreePath pathForRow(JTree tree, int row) {
-    TreePath[] paths = execute(new JTreePathsForRowsQuery(tree, row));
-    return paths[0];
-  }
-
-  private JTreePathsForRowsQuery(JTree tree, int... rows) {
+  JTreePathsForRowsQuery(JTree tree, int... rows) {
     this.tree = tree;
     this.rows = rows;
   }
 
-  protected TreePath[] executeInEDT() throws Throwable {
+  protected TreePath[] executeInEDT() {
     int rowCount = rows.length;
     TreePath[] paths = new TreePath[rowCount];
     for (int i = 0; i < rowCount; i++)

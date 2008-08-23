@@ -40,10 +40,12 @@ public class JTreeUIQueryTest {
 
   private JTree tree;
   private TreeUI treeUI;
+  private JTreeUIQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     treeUI = createMock(TreeUI.class);
+    query = new JTreeUIQuery(tree);
   }
 
   public void shouldReturnTreeUIFromJTree() {
@@ -53,7 +55,7 @@ public class JTreeUIQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreeUIQuery.uiOf(tree)).isSameAs(treeUI);
+        assertThat(query.executeInEDT()).isSameAs(treeUI);
       }
     }.run();
   }

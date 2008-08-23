@@ -20,7 +20,7 @@ class JTreeToggleClickCountQuery extends GuiQuery<Integer> {
     return execute(new JTreeToggleClickCountQuery(tree));
   }
 
-  private JTreeToggleClickCountQuery(JTree tree) {
+  JTreeToggleClickCountQuery(JTree tree) {
     this.tree = tree;
   }
 

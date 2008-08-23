@@ -42,11 +42,13 @@ public class JTreePathBoundsQueryTest {
   private JTree tree;
   private TreePath path;
   private Rectangle pathBounds;
+  private JTreePathBoundsQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     path = createMock(TreePath.class);
     pathBounds = new Rectangle(80, 60);
+    query = new JTreePathBoundsQuery(tree, path);
   }
 
   public void shouldReturnBoundsOfComponent() {
@@ -56,7 +58,7 @@ public class JTreePathBoundsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreePathBoundsQuery.pathBoundsOf(tree, path)).isEqualTo(pathBounds);
+        assertThat(query.executeInEDT()).isEqualTo(pathBounds);
       }
     }.run();
   }

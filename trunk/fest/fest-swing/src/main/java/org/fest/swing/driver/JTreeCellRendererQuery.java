@@ -40,7 +40,7 @@ class JTreeCellRendererQuery extends GuiQuery<Component> {
     return execute(new JTreeCellRendererQuery(tree, modelValue));
   }
 
-  private JTreeCellRendererQuery(JTree tree, Object modelValue) {
+  JTreeCellRendererQuery(JTree tree, Object modelValue) {
     this.modelValue = modelValue;
     this.tree = tree;
   }

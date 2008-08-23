@@ -33,18 +33,18 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 class JTextComponentModelToViewQuery extends GuiQuery<Rectangle> {
 
   private final JTextComponent textBox;
-  private final int pos;
+  private final int position;
 
-  static Rectangle modelToView(JTextComponent textBox, int pos) {
-    return execute(new JTextComponentModelToViewQuery(textBox, pos));
+  static Rectangle modelToView(JTextComponent textBox, int position) {
+    return execute(new JTextComponentModelToViewQuery(textBox, position));
   }
   
-  private JTextComponentModelToViewQuery(JTextComponent textBox, int pos) {
+  JTextComponentModelToViewQuery(JTextComponent textBox, int position) {
     this.textBox = textBox;
-    this.pos = pos;
+    this.position = position;
   }
   
   protected Rectangle executeInEDT() throws BadLocationException {
-    return textBox.modelToView(pos);
+    return textBox.modelToView(position);
   }
 }

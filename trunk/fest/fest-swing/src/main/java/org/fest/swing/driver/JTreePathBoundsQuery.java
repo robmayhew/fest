@@ -21,15 +21,15 @@ class JTreePathBoundsQuery extends GuiQuery<Rectangle> {
   private final JTree tree;
 
   static Rectangle pathBoundsOf(JTree tree, TreePath path) {
-    return execute(new JTreePathBoundsQuery(path, tree));
+    return execute(new JTreePathBoundsQuery(tree, path));
   }
 
-  private JTreePathBoundsQuery(TreePath path, JTree tree) {
+  JTreePathBoundsQuery(JTree tree, TreePath path) {
     this.path = path;
     this.tree = tree;
   }
 
-  protected Rectangle executeInEDT() throws Throwable {
+  protected Rectangle executeInEDT() {
     return tree.getPathBounds(path);
   }
 }

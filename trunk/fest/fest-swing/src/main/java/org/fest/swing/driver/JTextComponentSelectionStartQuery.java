@@ -35,7 +35,7 @@ class JTextComponentSelectionStartQuery extends GuiQuery<Integer> {
     return execute(new JTextComponentSelectionStartQuery(textBox));
   }
   
-  private JTextComponentSelectionStartQuery(JTextComponent textBox) {
+  JTextComponentSelectionStartQuery(JTextComponent textBox) {
     this.textBox = textBox;
   }
   

@@ -38,9 +38,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JToolBarIsFloatingQueryTest {
 
   private BasicToolBarUI ui;
+  private JToolBarIsFloatingQuery query;
 
   @BeforeMethod public void setUp() {
     ui = createMock(BasicToolBarUI.class);
+    query = new JToolBarIsFloatingQuery(ui);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -51,7 +53,7 @@ public class JToolBarIsFloatingQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JToolBarIsFloatingQuery.isJToolBarFloating(ui)).isEqualTo(floating);
+        assertThat(query.executeInEDT()).isEqualTo(floating);
       }
     }.run();
   }

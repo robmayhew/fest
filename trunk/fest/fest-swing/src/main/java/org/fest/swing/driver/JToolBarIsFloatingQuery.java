@@ -22,11 +22,11 @@ class JToolBarIsFloatingQuery extends GuiQuery<Boolean> {
     return execute(new JToolBarIsFloatingQuery(ui));
   }
   
-  private JToolBarIsFloatingQuery(BasicToolBarUI ui) {
+  JToolBarIsFloatingQuery(BasicToolBarUI ui) {
     this.ui = ui;
   }
 
-  protected Boolean executeInEDT() throws Throwable {
+  protected Boolean executeInEDT() {
     return ui.isFloating();
   }
 }

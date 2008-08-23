@@ -40,10 +40,12 @@ public class JToolBarUIQueryTest {
 
   private JToolBar toolBar;
   private ToolBarUI toolBarUI;
+  private JToolBarUIQuery query;
   
   @BeforeMethod public void setUp() {
     toolBar = createMock(JToolBar.class);
     toolBarUI = createMock(ToolBarUI.class);
+    query = new JToolBarUIQuery(toolBar);
   }
   
   public void shouldReturnToolBarUIFromJToolBar() {
@@ -53,7 +55,7 @@ public class JToolBarUIQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JToolBarUIQuery.uiOf(toolBar)).isSameAs(toolBarUI);
+        assertThat(query.executeInEDT()).isSameAs(toolBarUI);
       }
     }.run();
   }

@@ -38,10 +38,12 @@ public class JTextComponentSelectionStartQueryTest {
 
   private JTextComponent textBox;
   private int selectionStart;
+  private JTextComponentSelectionStartQuery query;
   
   @BeforeMethod public void setUp() {
     textBox = createMock(JTextComponent.class);
     selectionStart = 8;
+    query = new JTextComponentSelectionStartQuery(textBox);
   }
   
   public void shouldReturnSelectionStartOfJTextComponent() {
@@ -51,7 +53,7 @@ public class JTextComponentSelectionStartQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTextComponentSelectionStartQuery.selectionStartOf(textBox)).isEqualTo(selectionStart);
+        assertThat(query.executeInEDT()).isEqualTo(selectionStart);
       }
     }.run();
   }

@@ -35,7 +35,7 @@ class JTextComponentEditableQuery extends GuiQuery<Boolean> {
     return execute(new JTextComponentEditableQuery(textBox));
   }
   
-  private JTextComponentEditableQuery(JTextComponent textBox) {
+  JTextComponentEditableQuery(JTextComponent textBox) {
     this.textBox = textBox;
   }
   

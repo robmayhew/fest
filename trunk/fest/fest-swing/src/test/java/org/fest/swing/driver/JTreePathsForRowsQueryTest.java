@@ -41,11 +41,13 @@ public class JTreePathsForRowsQueryTest {
   private JTree tree;
   private int[] rows;
   private TreePath[] paths;
+  private JTreePathsForRowsQuery query;
 
   @BeforeMethod public void setUp() {
     tree = createMock(JTree.class);
     rows = new int[] { 6, 8 };
     paths = array(createMock(TreePath.class), createMock(TreePath.class));
+    query = new JTreePathsForRowsQuery(tree, rows);
   }
 
   public void shouldReturnPathsForRows() {
@@ -56,19 +58,7 @@ public class JTreePathsForRowsQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTreePathsForRowsQuery.pathsForRows(tree, rows)).isEqualTo(paths);
-      }
-    }.run();
-  }
-
-  public void shouldReturnPathForRow() {
-    new EasyMockTemplate(tree) {
-      protected void expectations() {
-        expect(tree.getPathForRow(rows[0])).andReturn(paths[0]);
-      }
-
-      protected void codeToTest() {
-        assertThat(JTreePathsForRowsQuery.pathForRow(tree, rows[0])).isEqualTo(paths[0]);
+        assertThat(query.executeInEDT()).isEqualTo(paths);
       }
     }.run();
   }

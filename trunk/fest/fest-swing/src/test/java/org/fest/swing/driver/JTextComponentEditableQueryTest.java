@@ -1,5 +1,5 @@
 /*
- * Created on Aug 9, 2008
+ * Created on Aug 11, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -37,9 +37,11 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 public class JTextComponentEditableQueryTest {
 
   private JTextComponent textBox;
+  private JTextComponentEditableQuery query;
 
   @BeforeMethod public void setUp() {
     textBox = createMock(JTextComponent.class);
+    query = new JTextComponentEditableQuery(textBox);
   }
   
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
@@ -50,7 +52,7 @@ public class JTextComponentEditableQueryTest {
       }
 
       protected void codeToTest() {
-        assertThat(JTextComponentEditableQuery.isEditable(textBox)).isEqualTo(editable);
+        assertThat(query.executeInEDT()).isEqualTo(editable);
       }
     }.run();
   }
