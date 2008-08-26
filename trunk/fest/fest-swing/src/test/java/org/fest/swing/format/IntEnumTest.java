@@ -25,7 +25,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Alex Ruiz
  */
-public class IntEnumTest {
+@Test public class IntEnumTest {
 
   private IntEnum intEnum;
   
@@ -34,11 +34,11 @@ public class IntEnumTest {
     intEnum.put(0, "Zero");
   }
   
-  @Test public void shouldReturnValueForExistingKey() {
+  public void shouldReturnValueForExistingKey() {
     assertThat(intEnum.get(0)).isEqualTo("Zero");
   }
 
-  @Test public void shouldReturnKeyForNotExistingKey() {
+  public void shouldReturnKeyForNotExistingKey() {
     assertThat(intEnum.get(1)).isEqualTo("1");
   }
 }

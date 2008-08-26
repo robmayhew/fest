@@ -22,7 +22,11 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link JTabbedPaneFormatter}</code>.
@@ -30,15 +34,24 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JTabbedPaneFormatterTest {
+@Test public class JTabbedPaneFormatterTest {
 
   private JTabbedPane tabbedPane;
   private JTabbedPaneFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    tabbedPane = new JTabbedPane();
-    tabbedPane.setName("tabbedPane");
+    tabbedPane = newTabbedPane();
     formatter = new JTabbedPaneFormatter();
+  }
+  
+  private static JTabbedPane newTabbedPane() {
+    return execute(new GuiQuery<JTabbedPane>() {
+      protected JTabbedPane executeInEDT() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setName("tabbedPane");
+        return tabbedPane;
+      }
+    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -46,39 +59,54 @@ public class JTabbedPaneFormatterTest {
     formatter.format(new JTextField());
   }
 
-  @Test public void shouldFormatJTabbedPaneWithTabsAndSelection() {
-    tabbedPane.addTab("First", new JPanel());
-    tabbedPane.addTab("Second", new JPanel());
-    tabbedPane.setSelectedIndex(1);    
+  public void shouldFormatJTabbedPaneWithTabsAndSelection() {
+    addTwoTabsTo(tabbedPane);
+    setSelectedIndex(tabbedPane, 1);    
     String formatted = formatter.format(tabbedPane);
     assertThat(formatted).contains(tabbedPane.getClass().getName())
                          .contains("name='tabbedPane'")
                          .contains("selectedTabIndex=1")
-                         .contains("selectedTabTitle='Second'")
+                         .contains("selectedTabTitle='Two'")
                          .contains("tabCount=2")
-                         .contains("tabTitles=['First', 'Second']")
+                         .contains("tabTitles=['One', 'Two']")
                          .contains("enabled=true")
                          .contains("visible=true")
                          .contains("showing=false");
   }
 
-  @Test public void shouldFormatJTabbedPaneWithTabsAndNoSelection() {
-    tabbedPane.addTab("First", new JPanel());
-    tabbedPane.addTab("Second", new JPanel());
-    tabbedPane.setSelectedIndex(-1);    
+  public void shouldFormatJTabbedPaneWithTabsAndNoSelection() {
+    addTwoTabsTo(tabbedPane);
+    setSelectedIndex(tabbedPane, -1);    
     String formatted = formatter.format(tabbedPane);
     assertThat(formatted).contains(tabbedPane.getClass().getName())
                          .contains("name='tabbedPane'")
                          .contains("selectedTabIndex=-1")
                          .contains("selectedTabTitle=<No selection>")
                          .contains("tabCount=2")
-                         .contains("tabTitles=['First', 'Second']")
+                         .contains("tabTitles=['One', 'Two']")
                          .contains("enabled=true")
                          .contains("visible=true")
                          .contains("showing=false");
   }
 
-  @Test public void shouldFormatJTabbedPaneWithNoTabs() {
+  private static void addTwoTabsTo(final JTabbedPane tabbedPane) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tabbedPane.addTab("One", new JPanel());
+        tabbedPane.addTab("Two", new JPanel());
+      }
+    });
+  }
+  
+  private static void setSelectedIndex(final JTabbedPane tabbedPane, final int index) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tabbedPane.setSelectedIndex(index);
+      }
+    });
+  }
+
+  public void shouldFormatJTabbedPaneWithNoTabs() {
     String formatted = formatter.format(tabbedPane);
     assertThat(formatted).contains(tabbedPane.getClass().getName())
                          .contains("name='tabbedPane'")

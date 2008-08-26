@@ -75,7 +75,6 @@ public class FormattingTest {
     frame.destroy();
   }
 
-  @SuppressWarnings("unchecked")
   @Test public void shouldFormatJComboBox() {
     JComboBox comboBox = new JComboBox(array("One", 2, "Three", 4));
     comboBox.setName("comboBox");

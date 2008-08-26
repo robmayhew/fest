@@ -21,7 +21,10 @@ import javax.swing.JComboBox;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
@@ -30,33 +33,41 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-public class IntrospectionComponentFormatterTest {
+@Test public class IntrospectionComponentFormatterTest {
 
   private JButton button;
   private IntrospectionComponentFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    button = new JButton("Click Me");
-    button.setName("button");
+    button = newButton();
     formatter = new IntrospectionComponentFormatter(JButton.class, "name", "text");
   }
   
-  @Test public void shouldFormatComponent() {
+  private static JButton newButton() {
+    return execute(new GuiQuery<JButton>() {
+      protected JButton executeInEDT() {
+        JButton button = new JButton("Click Me");
+        button.setName("button");
+        return button;
+      }
+    });
+  }
+  
+  public void shouldFormatComponent() {
     String expected = concat(button.getClass().getName(), "[name='button', text='Click Me']");
     String formatted = formatter.format(button);
     assertThat(formatted).isEqualTo(expected);
   }
   
-  @Test public void shouldFormatEvenWithInvalidPropertyNames() {
+  public void shouldFormatEvenWithInvalidPropertyNames() {
     formatter = new IntrospectionComponentFormatter(JButton.class, "lastName", "text");
     String formatted = formatter.format(button);
     assertThat(formatted).contains("lastName=<Unable to read property")
                          .contains("text='Click Me'");
   }
 
-  @Test public void shouldFormatOneDimensionalArrayProperties() {
-    MyButton myButton = new MyButton();
-    myButton.setNames(array("Luke", "Leia"));
+  public void shouldFormatOneDimensionalArrayProperties() {
+    MyButton myButton = MyButton.newButton(array("Luke", "Leia"));
     formatter = new IntrospectionComponentFormatter(MyButton.class, "names", "text");
     String formatted = formatter.format(myButton);
     assertThat(formatted).contains("names=['Luke', 'Leia']");
@@ -65,20 +76,27 @@ public class IntrospectionComponentFormatterTest {
   private static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
-    MyButton() {}
+    static MyButton newButton(final String[] names) {
+      return execute(new GuiQuery<MyButton>() {
+        protected MyButton executeInEDT() {
+          return new MyButton(names);
+        }
+      });
+    }
     
-    private String[] names;
+    final String[] names;
 
+    MyButton(String[] names) {
+      this.names = names;
+    }
+
+    // to be called by introspector - do not remove
     public String[] getNames() {
       return names;
     }
-
-    public void setNames(String[] names) {
-      this.names = names;
-    }
   };
 
-  @Test public void shouldShowPropertyNamesInToString() {
+  public void shouldShowPropertyNamesInToString() {
     String s = formatter.toString();
     assertThat(s).contains("name").contains("text");
   }
@@ -98,7 +116,7 @@ public class IntrospectionComponentFormatterTest {
     formatter.format(null);
   }
   
-  @Test public void shouldFormatPropertyWithNameShowing() {
+  public void shouldFormatPropertyWithNameShowing() {
     formatter = new IntrospectionComponentFormatter(JButton.class, "showing");
     String formatted = formatter.format(button);
     String expected = concat(button.getClass().getName(), "[showing=false]");

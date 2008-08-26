@@ -21,8 +21,10 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxFormatter}</code>.
@@ -35,11 +37,22 @@ public class JComboBoxFormatterTest {
   private JComboBox comboBox;
   private JComboBoxFormatter formatter;
   
-  @SuppressWarnings("unchecked") 
   @BeforeClass public void setUp() {
-    comboBox = new JComboBox(array("One", 2, "Three", 4));
-    comboBox.setName("comboBox");
+    comboBox = newComboBox();
     formatter = new JComboBoxFormatter();
+  }
+  
+  private static JComboBox newComboBox() {
+    return GuiActionRunner.execute(new GuiQuery<JComboBox>() {
+      protected JComboBox executeInEDT() {
+        Object[] items = { "One", 2, "Three", 4 };
+        JComboBox comboBox = new JComboBox(items);
+        comboBox.setName("comboBox");
+        comboBox.setSelectedIndex(1);
+        comboBox.setEditable(true);
+        return comboBox;
+      }
+    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -48,8 +61,6 @@ public class JComboBoxFormatterTest {
   }
   
   @Test public void shouldFormatJComboBox() {
-    comboBox.setSelectedIndex(1);
-    comboBox.setEditable(true);
     String formatted = formatter.format(comboBox);
     assertThat(formatted).contains(comboBox.getClass().getName())
                          .contains("name='comboBox'")

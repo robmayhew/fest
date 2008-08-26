@@ -21,7 +21,12 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+
+import static javax.swing.JOptionPane.*;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link JOptionPaneFormatter}</code>.
@@ -29,23 +34,32 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JOptionPaneFormatterTest {
+@Test public class JOptionPaneFormatterTest {
 
   private JOptionPane optionPane;
   private JOptionPaneFormatter formatter;
   
   @BeforeClass public void setUp() {
-    optionPane = new JOptionPane("A message", JOptionPane.ERROR_MESSAGE);
-    optionPane.setOptionType(JOptionPane.DEFAULT_OPTION);
+    optionPane = newOptionPane();
     formatter = new JOptionPaneFormatter();
   }
 
+  private static JOptionPane newOptionPane() {
+    return execute(new GuiQuery<JOptionPane>() {
+      protected JOptionPane executeInEDT() {
+        JOptionPane optionPane = new JOptionPane("A message", ERROR_MESSAGE);
+        optionPane.setOptionType(DEFAULT_OPTION);
+        return optionPane;
+      }
+    });
+  }
+  
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJOptionPane() {
     formatter.format(new JTextField());
   }
 
-  @Test public void shouldFormatJOptionPane() {
+  public void shouldFormatJOptionPane() {
     String formatted = formatter.format(optionPane);
     assertThat(formatted).contains(optionPane.getClass().getName())
                          .contains("message='A message'")     

@@ -23,7 +23,13 @@ import javax.swing.tree.TreeSelectionModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
+
+import static javax.swing.tree.TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -32,27 +38,34 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTreeFormatterTest {
+@Test public class JTreeFormatterTest {
 
   private JTree tree;
   private JTreeFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    tree = new JTree(array("One", "Two", "Three"));
-    tree.setName("tree");
+    tree = newTree();
     formatter = new JTreeFormatter();
   }
 
+  private static JTree newTree() {
+    return execute(new GuiQuery<JTree>() {
+      protected JTree executeInEDT() {
+        JTree tree = new JTree(array("One", "Two", "Three"));
+        tree.setName("tree");
+        return tree;
+      }
+    });
+  }
+  
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTree() {
     formatter.format(new JTextField());
   }
   
-  @Test public void shouldFormatJTree() {
-    DefaultTreeSelectionModel model = new DefaultTreeSelectionModel();
-    model.setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
-    tree.setSelectionModel(model);
-    tree.setSelectionRow(1);
+  public void shouldFormatJTree() {
+    setContiguousSelectionModeTo(tree);
+    selectSecondRowIn(tree);
     String formatted = formatter.format(tree);
     assertThat(formatted).contains(tree.getClass().getName())
                          .contains("name='tree'")
@@ -64,8 +77,26 @@ public class JTreeFormatterTest {
                          .contains("showing=false");
   }
 
-  @Test public void shouldFormatJTreeWithoutSelectionModel() {
-    tree.setSelectionModel(null);
+  private static void setContiguousSelectionModeTo(final JTree tree) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        TreeSelectionModel model = new DefaultTreeSelectionModel();
+        model.setSelectionMode(CONTIGUOUS_TREE_SELECTION);
+        tree.setSelectionModel(model);
+      }
+    });
+  }
+
+  private static void selectSecondRowIn(final JTree tree) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tree.setSelectionRow(1);
+      }
+    });
+  }
+  
+  public void shouldFormatJTreeWithoutSelectionModel() {
+    setDiscontiguousSelectionModeTo(tree);
     String formatted = formatter.format(tree);
     assertThat(formatted).contains(tree.getClass().getName())
                          .contains("name='tree'")
@@ -75,5 +106,13 @@ public class JTreeFormatterTest {
                          .contains("enabled=true")
                          .contains("visible=true")
                          .contains("showing=false");
+  }
+
+  private static void setDiscontiguousSelectionModeTo(final JTree tree) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tree.setSelectionModel(null);
+      }
+    });
   }
 }

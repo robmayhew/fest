@@ -19,23 +19,19 @@ import java.awt.Window;
 
 /**
  * Understands activating a <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
+ * This task should be executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-class ActivateWindowTask implements Runnable {
+class ActivateWindowTask extends GuiTask {
 
   private final Window w;
 
-  /**
-   * Creates a new </code>{@link ActivateWindowTask}</code>.
-   * @param w the <code>Window</code> to activate.
-   */
   ActivateWindowTask(Window w) {
     this.w = w;
   }
 
-  /** Activates this task's <code>{@link Window}</code> */
-  public void run() {
+  protected void executeInEDT() {
     // FIXME figure out why two are sometimes needed
     w.toFront(); w.toFront();
   }

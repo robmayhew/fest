@@ -18,7 +18,6 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.accessibility.AccessibleAction;
-import javax.accessibility.AccessibleContext;
 import javax.swing.Action;
 
 import org.fest.swing.core.GuiTask;

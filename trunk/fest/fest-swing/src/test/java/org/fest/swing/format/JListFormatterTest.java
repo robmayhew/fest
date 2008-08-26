@@ -22,8 +22,10 @@ import javax.swing.ListSelectionModel;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link JListFormatter}</code>.
@@ -31,26 +33,35 @@ import static org.fest.util.Arrays.array;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JListFormatterTest {
+@Test public class JListFormatterTest {
 
   private JList list;
   private JListFormatter formatter;
   
-  @SuppressWarnings("unchecked") 
   @BeforeClass public void setUp() {
-    list = new JList(array("One", 2, "Three", 4));
-    list.setName("list");
-    list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    list.setSelectedIndices(new int[] { 0, 1 });
+    list = newList();
     formatter = new JListFormatter();
   }
 
+  private static JList newList() {
+    return execute(new GuiQuery<JList>() {
+      protected JList executeInEDT() {
+        Object[] items = {"One", 2, "Three", 4 };
+        JList list = new JList(items);
+        list.setName("list");
+        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        list.setSelectedIndices(new int[] { 0, 1 });
+        return list;
+      }
+    });
+  }
+  
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJList() {
     formatter.format(new JTextField());
   }
 
-  @Test public void shouldFormatJList() {
+  public void shouldFormatJList() {
     String formatted = formatter.format(list);
     assertThat(formatted).contains(list.getClass().getName())
                          .contains("name='list'")

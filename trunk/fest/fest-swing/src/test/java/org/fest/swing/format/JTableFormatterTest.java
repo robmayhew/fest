@@ -17,12 +17,16 @@ package org.fest.swing.format;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link JTableFormatter}</code>.
@@ -30,16 +34,25 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTableFormatterTest {
+@Test public class JTableFormatterTest {
 
   private JTable table;
   private JTableFormatter formatter;
 
   @BeforeClass public void setUp() {
-    table = new JTable(8, 6);
-    table.setName("table");
-    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    table = newTable();
     formatter = new JTableFormatter();
+  }
+  
+  private static JTable newTable() {
+    return execute(new GuiQuery<JTable>() {
+      protected JTable executeInEDT() {
+        JTable table = new JTable(8, 6);
+        table.setName("table");
+        table.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+        return table;
+      }
+    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -47,7 +60,7 @@ public class JTableFormatterTest {
     formatter.format(new JTextField());
   }
 
-  @Test public void shouldFormatJTable() {
+  public void shouldFormatJTable() {
     String formatted = formatter.format(table);
     assertThat(formatted).contains(table.getClass().getName())
                          .contains("name='table'")

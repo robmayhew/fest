@@ -25,6 +25,9 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
@@ -35,6 +38,7 @@ import static org.fest.util.Strings.*;
  * @author Yvonne Wang
  */
 public class Formatting {
+
 
   private static final String MAXIMUM = "maximum";
 
@@ -118,10 +122,14 @@ public class Formatting {
   public static String format(Component c) {
     if (c == null) return NULL_COMPONENT_MESSAGE;
     ComponentFormatter formatter = formatterFor(c.getClass());
-    if (formatter != null) return formatter.format(c);
+    if (formatter != null) return performFormatting(c, formatter);
     String name = nameOf(c);
     if (isEmpty(name)) return c.toString();
     return concat(c.getClass().getName(), "[name=", quote(name), "]");
+  }
+
+  private static String performFormatting(final Component c, final ComponentFormatter formatter) {
+    return execute(new ComponentFormatterExecutor(formatter, c));
   }
 
   private static ComponentFormatter formatterFor(Class<?> type) {
@@ -132,4 +140,19 @@ public class Formatting {
   }
 
   private Formatting() {}
+
+  private static final class ComponentFormatterExecutor extends GuiQuery<String> {
+    
+    private final ComponentFormatter formatter;
+    private final Component c;
+
+    ComponentFormatterExecutor(ComponentFormatter formatter, Component c) {
+      this.formatter = formatter;
+      this.c = c;
+    }
+
+    protected String executeInEDT() {
+      return formatter.format(c);
+    }
+  }
 }

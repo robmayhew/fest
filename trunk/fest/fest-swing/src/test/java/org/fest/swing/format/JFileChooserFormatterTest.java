@@ -18,10 +18,18 @@ package org.fest.swing.format;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.testing.TestWindow;
+
+import static javax.swing.JFileChooser.OPEN_DIALOG;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -30,25 +38,29 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class JFileChooserFormatterTest {
 
+  private MyWindow window;
   private JFileChooser fileChooser;
   private JFileChooserFormatter formatter;
   
   @BeforeClass public void setUp() {
-    fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("A file chooser");
-    fileChooser.setName("fileChooser");
-    fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+    window = MyWindow.showNew();
+    fileChooser = window.fileChooser;
     formatter = new JFileChooserFormatter();
   }
+
+  @AfterMethod public void tearDown() {
+    window.destroy();
+  }
   
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJFileChooser() {
     formatter.format(new JTextField());
   }
 
-  @Test public void shouldFormatJFileChooser() {
+  public void shouldFormatJFileChooser() {
     String formatted = formatter.format(fileChooser);
     assertThat(formatted).contains(fileChooser.getClass().getName())
                          .contains("name='fileChooser'")
@@ -60,4 +72,27 @@ public class JFileChooserFormatterTest {
                          .contains("showing=false");
   }
   
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+    
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    final JFileChooser fileChooser = new JFileChooser();
+
+    MyWindow() {
+      super(JFileChooserFormatterTest.class);
+      fileChooser.setDialogTitle("A file chooser");
+      fileChooser.setName("fileChooser");
+      fileChooser.setDialogType(OPEN_DIALOG);
+      addComponents(fileChooser);
+    }
+  }
 }

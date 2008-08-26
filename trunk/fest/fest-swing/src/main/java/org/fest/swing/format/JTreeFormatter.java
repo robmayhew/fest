@@ -61,8 +61,7 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
         "selectionMode=", selectionMode(tree), ", ",
         "enabled=", valueOf(tree.isEnabled()), ", ",
         "visible=", valueOf(tree.isVisible()), ", ",
-        "showing=", valueOf(tree.isShowing()),
-        "]"
+        "showing=", valueOf(tree.isShowing()), "]"
     );
   }
 
