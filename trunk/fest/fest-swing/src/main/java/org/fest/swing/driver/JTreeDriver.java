@@ -17,23 +17,16 @@ package org.fest.swing.driver;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.plaf.TreeUI;
 import javax.swing.plaf.basic.BasicTreeUI;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.fest.swing.cell.JTreeCellReader;
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.exception.*;
 import org.fest.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -41,12 +34,16 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.driver.JTreeChildrenShowUpCondition.untilChildrenShowUp;
+import static org.fest.swing.driver.JTreeEditableQuery.isEditable;
 import static org.fest.swing.driver.JTreeExpandPathTask.expandPathTask;
 import static org.fest.swing.driver.JTreeExpandedPathQuery.isExpanded;
+import static org.fest.swing.driver.JTreeMatchingPathQuery.matchingPathFor;
 import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
 import static org.fest.swing.driver.JTreePathsForRowsQuery.pathsForRows;
 import static org.fest.swing.driver.JTreeRowAtPointQuery.rowAtPoint;
 import static org.fest.swing.driver.JTreeRowBoundsQuery.rowBoundsOf;
+import static org.fest.swing.driver.JTreeSelectionCountQuery.selectionCountOf;
 import static org.fest.swing.driver.JTreeSelectionPathsQuery.selectionPathsOf;
 import static org.fest.swing.driver.JTreeSingleRowSelectedQuery.isSingleRowSelected;
 import static org.fest.swing.driver.JTreeToggleClickCountQuery.toggleClickCountOf;
@@ -55,7 +52,7 @@ import static org.fest.swing.driver.JTreeUIQuery.uiOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JTree}</code>. Unlike <code>JTreeFixture</code>, this
@@ -68,15 +65,10 @@ public class JTreeDriver extends JComponentDriver {
 
   private static final String EDITABLE_PROPERTY = "editable";
   private static final String SELECTION_PROPERTY = "selection";
-  private static final String SELECTION_PATH_PROPERTY = "selectionPath";
-
-  private static final String SEPARATOR = "/";
 
   private final JTreeLocation location;
-
-  private JTreeCellReader cellReader;
-  private String separator;
-
+  private final JTreePathFinder pathFinder;
+  
   /**
    * Creates a new </code>{@link JTreeDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -84,8 +76,7 @@ public class JTreeDriver extends JComponentDriver {
   public JTreeDriver(Robot robot) {
     super(robot);
     location = new JTreeLocation();
-    cellReader(new BasicJTreeCellReader());
-    separator(SEPARATOR);
+    pathFinder = new JTreePathFinder();
   }
 
   /**
@@ -233,25 +224,11 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   private void waitForChildrenToShowUp(JTree tree, TreePath path) {
+    int timeout = robot.settings().timeoutToBeVisible();
     try {
-      pause(new UntilChildrenShowUp(tree, path, path.toString()), robot.settings().timeoutToBeVisible());
+      pause(untilChildrenShowUp(tree, path), timeout);
     } catch (WaitTimedOutError e) {
       throw new LocationUnavailableException(e.getMessage());
-    }
-  }
-
-  private static class UntilChildrenShowUp extends Condition {
-    private final JTree tree;
-    private final Object lastInPath;
-
-    UntilChildrenShowUp(JTree tree, TreePath path, String pathDescription) {
-      super(concat(pathDescription, " to show"));
-      this.tree = tree;
-      this.lastInPath = path.getLastPathComponent();
-    }
-
-    public boolean test() {
-      return tree.getModel().getChildCount(lastInPath) != 0;
     }
   }
 
@@ -372,21 +349,24 @@ public class JTreeDriver extends JComponentDriver {
 
   private void requireSelection(JTree tree, TreePath[] paths) {
     TreePath[] selectionPaths = selectionPathsOf(tree);
-    if (Arrays.isEmpty(selectionPaths)) fail(concat("[", propertyName(tree, SELECTION_PROPERTY), "] No selection"));
-    assertThat(selectionPaths).as(propertyName(tree, SELECTION_PATH_PROPERTY)).containsOnly((Object[])paths);
+    if (Arrays.isEmpty(selectionPaths)) fail(concat("[", selectionProperty(tree), "] No selection"));
+    assertThat(selectionPaths).as(selectionProperty(tree)).isEqualTo(paths);
   }
-
+  
   /**
    * Asserts that the given <code>{@link JTree}</code> does not have any selection.
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> has a selection.
    */
   public void requireNoSelection(JTree tree) {
-    if (tree.getSelectionCount() == 0) return;
+    if (selectionCountOf(tree) == 0) return;
     String message = concat(
-        "[", propertyName(tree, SELECTION_PROPERTY), "] expected no selection but was:<",
-        format(selectionPathsOf(tree)), ">");
+        "[", selectionProperty(tree), "] expected no selection but was:<", format(selectionPathsOf(tree)), ">");
     fail(message);
+  }
+
+  private String selectionProperty(JTree tree) {
+    return propertyName(tree, SELECTION_PROPERTY);
   }
 
   /**
@@ -395,7 +375,7 @@ public class JTreeDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTree</code> is not editable.
    */
   public void requireEditable(JTree tree) {
-    assertThat(tree.isEditable()).as(editableProperty(tree)).isTrue();
+    assertEditable(tree, true);
   }
 
   /**
@@ -404,67 +384,25 @@ public class JTreeDriver extends JComponentDriver {
    * @throws AssertionError if the <code>JTree</code> is editable.
    */
   public void requireNotEditable(JTree tree) {
-    assertThat(tree.isEditable()).as(editableProperty(tree)).isFalse();
+    assertEditable(tree, false);
   }
 
+  private void assertEditable(JTree tree, boolean editable) {
+    assertThat(isEditable(tree)).as(editableProperty(tree)).isEqualTo(editable);
+  }
+  
   private static String editableProperty(JTree tree) {
     return propertyName(tree, EDITABLE_PROPERTY);
   }
 
   private TreePath findMatchingPath(JTree tree, String path) {
-    String[] pathStrings = splitPath(path);
-    TreeModel model = tree.getModel();
-    List<Object> newPathValues = new ArrayList<Object>(pathStrings.length + 1);
-    Object node = model.getRoot();
-    int pathElementCount = pathStrings.length;
-    for (int stringIndex = 0; stringIndex < pathElementCount; stringIndex++) {
-      String pathString = pathStrings[stringIndex];
-      Object match = null;
-      if (stringIndex == 0 && tree.isRootVisible()) {
-        if (!pathString.equals(value(tree, node))) throw pathNotFound(path);
-        newPathValues.add(node);
-        continue;
-      }
-      int childCount = model.getChildCount(node);
-      for (int childIndex = 0; childIndex < childCount; childIndex++) {
-        Object child = model.getChild(node, childIndex);
-        if (pathString.equals(value(tree, child))) {
-          if (match != null) throw multipleMatchingNodes(pathString, value(tree, node));
-          match = child;
-        }
-      }
-      if (match == null) throw pathNotFound(path);
-      newPathValues.add(match);
-      node = match;
+    try {
+      return matchingPathFor(tree, path, pathFinder);
+    } catch (UnexpectedException e) {
+      Throwable cause = e.getCause();
+      if (cause instanceof RuntimeException) throw (RuntimeException)cause;
+      throw e;
     }
-    return new TreePath(newPathValues.toArray());
-  }
-
-  private LocationUnavailableException pathNotFound(String path) {
-    throw new LocationUnavailableException(concat("Unable to find path ", quote(path)));
-  }
-
-  private String[] splitPath(String path) {
-    List<String> result = new ArrayList<String>();
-    int separatorSize = separator.length();
-    int index = 0;
-    int pathSize = path.length();
-    while (index < pathSize) {
-      int separatorPosition = path.indexOf(separator, index);
-      if (separatorPosition == -1) separatorPosition = pathSize;
-      result.add(path.substring(index, separatorPosition));
-      index = separatorPosition + separatorSize;
-    }
-    return result.toArray(new String[result.size()]);
-  }
-
-  private LocationUnavailableException multipleMatchingNodes(String matchingText, Object parentText) {
-    throw new LocationUnavailableException(
-        concat("There is more than one node with value ", quote(matchingText), " under ", quote(parentText)));
-  }
-
-  private String value(JTree tree, Object modelValue) {
-    return cellReader.valueAt(tree, modelValue);
   }
 
   /**
@@ -472,7 +410,7 @@ public class JTreeDriver extends JComponentDriver {
    * @return the separator to use when converting <code>{@link TreePath}</code>s to <code>String</code>s.
    */
   public String separator() {
-    return separator;
+    return pathFinder.separator();
   }
 
   /**
@@ -482,7 +420,7 @@ public class JTreeDriver extends JComponentDriver {
    */
   public void separator(String newSeparator) {
     if (newSeparator == null) throw new NullPointerException("The path separator should not be null");
-    separator = newSeparator;
+    pathFinder.separator(newSeparator);
   }
 
   /**
@@ -493,6 +431,6 @@ public class JTreeDriver extends JComponentDriver {
    */
   public void cellReader(JTreeCellReader newCellReader) {
     validateCellReader(newCellReader);
-    cellReader = newCellReader;
+    pathFinder.cellReader(newCellReader);
   }
 }

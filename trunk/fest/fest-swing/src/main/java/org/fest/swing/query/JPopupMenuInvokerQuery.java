@@ -29,7 +29,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-public class JPopupMenuInvokerQuery extends GuiQuery<Component> {
+public final class JPopupMenuInvokerQuery extends GuiQuery<Component> {
 
   private final JPopupMenu popupMenu;
 

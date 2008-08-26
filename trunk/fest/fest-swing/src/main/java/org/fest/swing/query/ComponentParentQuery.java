@@ -28,7 +28,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-public class ComponentParentQuery extends GuiQuery<Container> {
+public final class ComponentParentQuery extends GuiQuery<Container> {
 
   private final Component component;
 

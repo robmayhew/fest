@@ -22,9 +22,9 @@ import static java.awt.BorderLayout.*;
 import static java.lang.Math.max;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
-import static org.fest.swing.driver.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.driver.JToolBarOrientationQuery.orientationOf;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 

@@ -26,7 +26,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-public class ComponentShowingQuery extends GuiQuery<Boolean> {
+public final class ComponentShowingQuery extends GuiQuery<Boolean> {
 
   private final Component component;
 

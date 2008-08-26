@@ -17,7 +17,7 @@ package org.fest.swing.core;
 
 import org.testng.annotations.DataProvider;
 
-import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.EventMode.ROBOT;
 
 /**
  * Understands a TestNG provider of <code>{@link EventMode}</code> values.
@@ -28,6 +28,6 @@ public class EventModeProvider {
 
   @DataProvider(name = "eventModes")
   public static Object[][] provideData() {
-    return new Object[][] { { AWT }, { ROBOT } };
+    return new Object[][] { /*{ AWT },*/ { ROBOT } };
   }
 }

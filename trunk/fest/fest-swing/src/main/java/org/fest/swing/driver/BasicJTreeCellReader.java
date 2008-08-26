@@ -15,7 +15,6 @@
  */
 package org.fest.swing.driver;
 
-
 import javax.swing.JTree;
 
 import org.fest.swing.cell.JTreeCellReader;

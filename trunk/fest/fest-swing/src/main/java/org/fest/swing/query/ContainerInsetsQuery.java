@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.query;
 
 import java.awt.Container;
 import java.awt.Insets;
@@ -28,11 +28,17 @@ import org.fest.swing.core.GuiQuery;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class ContainerInsetsQuery extends GuiQuery<Insets> {
+public final class ContainerInsetsQuery extends GuiQuery<Insets> {
   
   private final Container container;
 
-  static Insets insetsOf(Container container) {
+  /**
+   * Returns the insets of the given <code>{@link Container}</code>. This action is executed in the event dispatch 
+   * thread.
+   * @param container the given <code>Container</code>. 
+   * @return the insets of the given <code>Container</code>.
+   */
+  public static Insets insetsOf(Container container) {
     return GuiActionRunner.execute(new ContainerInsetsQuery(container));
   }
   
@@ -40,6 +46,11 @@ class ContainerInsetsQuery extends GuiQuery<Insets> {
     this.container = container;
   }
 
+  /**
+   * Returns the insets of this query's <code>{@link Container}</code>. This action is executed in the event dispatch 
+   * thread.
+   * @return the insets of this query's <code>Container</code>.
+   */
   protected Insets executeInEDT() {
     return container.getInsets();
   }

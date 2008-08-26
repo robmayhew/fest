@@ -27,7 +27,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class AbstractButtonSelectedQuery extends GuiQuery<Boolean> {
+public final class AbstractButtonSelectedQuery extends GuiQuery<Boolean> {
   
   private final AbstractButton button;
 

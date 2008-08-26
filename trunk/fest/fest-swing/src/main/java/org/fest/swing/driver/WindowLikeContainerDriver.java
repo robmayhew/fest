@@ -22,6 +22,8 @@ import java.awt.Point;
 
 import org.fest.swing.core.Robot;
 
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.util.Platform.*;
 
 /**
@@ -49,8 +51,8 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
    * @return the coordinates of the 'close' button.
    */
   protected final Point closeLocation(Container c) {
-    Dimension size = c.getSize();
-    Insets insets = c.getInsets();
+    Dimension size = sizeOf(c);
+    Insets insets = insetsOf(c);
     if (isOSX()) return new Point(insets.left + 15, insets.top / 2);
     return new Point(size.width - insets.right - 10, insets.top / 2);
   }
@@ -61,7 +63,7 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
    * @return the coordinates of the 'iconify' button, returning (0, 0) if not found.
    */
   protected final Point iconifyLocation(Container c) {
-    Insets insets = c.getInsets();
+    Insets insets = insetsOf(c);
     // From Abbot: We know the exact layout of the window manager frames for w32 and  OSX. Currently no way of detecting
     // the WM under X11. Maybe we could send a WM message (WM_ICONIFY)?
     Point p = new Point();
@@ -69,7 +71,7 @@ public abstract class WindowLikeContainerDriver extends ContainerDriver {
     if (isOSX()) p.x = 35;
     if (isWindows()) {
       int offset = isWindowsXP() ? 64 : 45;
-      p.x = c.getSize().width - insets.right - offset;
+      p.x = sizeOf(c).width - insets.right - offset;
     }
     return p;
   }

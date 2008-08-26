@@ -1,5 +1,5 @@
 /*
- * Created on Aug 8, 2008
+ * Created on Aug 23, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,14 +15,13 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Insets;
-
-import javax.swing.JComponent;
+import javax.swing.JTree;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.BooleanProvider;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -31,31 +30,30 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.EDT_QUERY;
 
 /**
- * Tests for <code>{@link ContainerInsetsQuery}</code>.
+ * Tests for <code>{@link JTreeEditableQuery}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = EDT_QUERY)
-public class ContainerInsetsQueryTest {
+public class JTreeEditableQueryTest {
 
-  private JComponent component;
-  private Insets insets;
-  private ContainerInsetsQuery query;
-
+  private JTree tree;
+  private JTreeEditableQuery query;
+  
   @BeforeMethod public void setUp() {
-    component = createMock(JComponent.class);
-    insets = new Insets(6, 8, 6, 8);
-    query = new ContainerInsetsQuery(component);
+    tree = createMock(JTree.class);
+    query = new JTreeEditableQuery(tree);
   }
   
-  public void shouldReturnInsetsOfJComponent() {
-    new EasyMockTemplate(component) {
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  public void shouldIndicateIfJTreeIsEditable(final boolean editable) {
+    new EasyMockTemplate(tree) {
       protected void expectations() {
-        expect(component.getInsets()).andReturn(insets);
+        expect(tree.isEditable()).andReturn(editable);
       }
 
       protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(insets);
+        assertThat(query.executeInEDT()).isEqualTo(editable);
       }
     }.run();
   }

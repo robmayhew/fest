@@ -27,7 +27,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JComboBoxSelectedIndexQuery extends GuiQuery<Integer> {
+public final class JComboBoxSelectedIndexQuery extends GuiQuery<Integer> {
   
   private final JComboBox comboBox;
 
