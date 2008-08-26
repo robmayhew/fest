@@ -15,6 +15,8 @@
  */
 package org.fest.swing.format;
 
+import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
@@ -62,14 +64,23 @@ public class JFileChooserFormatterTest {
 
   public void shouldFormatJFileChooser() {
     String formatted = formatter.format(fileChooser);
+    final JFileChooser fileChooser2 = fileChooser;
     assertThat(formatted).contains(fileChooser.getClass().getName())
                          .contains("name='fileChooser'")
                          .contains("dialogTitle='A file chooser'")
                          .contains("dialogType=OPEN_DIALOG")
-                         .contains(concat("currentDirectory=", fileChooser.getCurrentDirectory()))
+                         .contains(concat("currentDirectory=", currentDirectoryOf(fileChooser2)))
                          .contains("enabled=true")
                          .contains("visible=true")
                          .contains("showing=false");
+  }
+
+  private static File currentDirectoryOf(final JFileChooser fileChooser) {
+    return execute(new GuiQuery<File>() {
+      protected File executeInEDT() {
+        return fileChooser.getCurrentDirectory();
+      }
+    });
   }
   
   private static class MyWindow extends TestWindow {

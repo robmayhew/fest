@@ -15,21 +15,19 @@
  */
 package org.fest.swing.format;
 
-import java.awt.Adjustable;
 import java.awt.Component;
 import java.util.logging.Logger;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultTreeSelectionModel;
-import javax.swing.tree.TreeSelectionModel;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.core.GuiQuery;
+
+import static java.awt.Adjustable.VERTICAL;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -38,11 +36,11 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class FormattingTest {
+@Test public class FormattingTest {
 
   private static Logger logger = Logger.getAnonymousLogger();
 
-  @Test public void shouldReplaceExistingFormatter() {
+  public void shouldReplaceExistingFormatter() {
     final Class<JComboBox> type = JComboBox.class;
     ComponentFormatter oldFormatter = Formatting.formatter(type);
     ComponentFormatter newFormatter = new ComponentFormatterTemplate() {
@@ -52,227 +50,367 @@ public class FormattingTest {
         return type;
       }
     };
-    Formatting.register(newFormatter);
-    assertThat(Formatting.formatter(type)).isSameAs(newFormatter);
-    Formatting.register(oldFormatter);
+    try {
+      Formatting.register(newFormatter);
+      assertThat(Formatting.formatter(type)).isSameAs(newFormatter);
+    } finally {
+      Formatting.register(oldFormatter);
+    }
   }
   
-  @Test public void shouldFormatDialog() {
-    JDialog dialog = new JDialog();
-    dialog.setTitle("A dialog");
-    dialog.setName("dialog");
-    String formatted = formatted(dialog);
-    String expected = "[name='dialog', title='A dialog', enabled=true, modal=false, visible=false, showing=false]";
-    assertThat(formatted).isEqualTo(expected(dialog, expected));
+  public void shouldFormatDialog() {
+    JDialog dialog = newJDialog();
+    assertThat(formatted(dialog)).contains(classNameOf(dialog))
+                                 .contains("name='dialog'")
+                                 .contains("title='A dialog'")
+                                 .contains("enabled=true")
+                                 .contains("modal=false")
+                                 .contains("visible=false")
+                                 .contains("showing=false");
   }
 
-  @Test public void shouldFormatFrame() {
-    TestWindow frame = TestWindow.showNewInTest(getClass());
-    frame.setName("frame");
-    String formatted = formatted(frame);
-    String expected = "[name='frame', title='FormattingTest', enabled=true, visible=true, showing=true]";
-    assertThat(formatted).isEqualTo(expected(frame, expected));
-    frame.destroy();
+  private static JDialog newJDialog() {
+    return execute(new GuiQuery<JDialog>() {
+      protected JDialog executeInEDT() {
+        JDialog dialog = new JDialog();
+        dialog.setName("dialog");
+        dialog.setTitle("A dialog");
+        return dialog;
+      }
+    });
   }
 
-  @Test public void shouldFormatJComboBox() {
-    JComboBox comboBox = new JComboBox(array("One", 2, "Three", 4));
-    comboBox.setName("comboBox");
-    comboBox.setSelectedIndex(1);
-    comboBox.setEditable(true);
-    String formatted = formatted(comboBox);
-    String expected = "[name='comboBox', selectedItem=2, contents=['One', 2, 'Three', 4], editable=true, " +
-    		"enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(comboBox, expected));
+  public void shouldFormatFrame() {
+    JFrame frame = newJFrame();
+    assertThat(formatted(frame)).contains(classNameOf(frame))
+                                .contains("name='frame'")
+                                .contains("title='A frame'")
+                                .contains("enabled=true")
+                                .contains("visible=false")
+                                .contains("showing=false");
+  }
+  
+  private static JFrame newJFrame() {
+    return execute(new GuiQuery<JFrame>() {
+      protected JFrame executeInEDT() {
+        JFrame frame = new JFrame("A frame");
+        frame.setName("frame");
+        return frame;
+      }
+    });
   }
 
-  @Test public void shouldFormatJButton() {
-    JButton button = new JButton("A button");
-    button.setName("button");
-    button.setEnabled(false);
-    String formatted = formatted(button);
-    String expected = "[name='button', text='A button', enabled=false, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(button, expected));
+  public void shouldFormatJComboBox() {
+    assertThat(Formatting.formatter(JComboBox.class)).isInstanceOf(JComboBoxFormatter.class);
   }
 
-  @Test public void shouldFormatJFileChooser() {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("A file chooser");
-    fileChooser.setName("fileChooser");
-    fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-    String formatted = formatted(fileChooser);
-    assertThat(formatted).isEqualTo(
-        expected(fileChooser,
-            concat("[name='fileChooser', dialogTitle='A file chooser', dialogType=OPEN_DIALOG, currentDirectory=",
-                fileChooser.getCurrentDirectory(), ", enabled=true, visible=true, showing=false]")));
+  public void shouldFormatJButton() {
+    JButton button = newJButton();
+    assertThat(formatted(button)).contains(classNameOf(button))
+                                 .contains("name='button'")
+                                 .contains("text='A button'")
+                                 .contains("enabled=false")
+                                 .contains("visible=true")
+                                 .contains("showing=false");
   }
 
-  @Test public void shouldFormatJLabel() {
-    JLabel label = new JLabel("A label");
-    label.setName("label");
-    String formatted = formatted(label);
-    String expected = "[name='label', text='A label', enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(label, expected));
+  private static JButton newJButton() {
+    return execute(new GuiQuery<JButton>() {
+      protected JButton executeInEDT() {
+        JButton button = new JButton("A button");
+        button.setEnabled(false);
+        button.setName("button");
+        return button;
+      }
+    });
   }
 
-  @Test public void shouldFormatJLayeredPane() {
-    JLayeredPane pane = new JLayeredPane();
-    String formatted = formatted(pane);
-    assertThat(formatted).isEqualTo(expected(pane, "[]"));
+  public void shouldFormatJFileChooser() {
+    assertThat(Formatting.formatter(JFileChooser.class)).isInstanceOf(JFileChooserFormatter.class);
   }
 
-  @SuppressWarnings("unchecked")
-  @Test public void shouldFormatJList() {
-    JList list = new JList(array("One", 2, "Three", 4));
-    list.setName("list");
-    list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    list.setSelectedIndices(new int[] { 0, 1 });
-    String formatted = formatted(list);
-    String expected = "[name='list', selectedValues=['One', 2], contents=['One', 2, 'Three', 4], " +
-    		"selectionMode=MULTIPLE_INTERVAL_SELECTION, enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(list, expected));
+  public void shouldFormatJLabel() {
+    JLabel label = newJLabel();
+    assertThat(formatted(label)).contains(classNameOf(label))
+                                .contains("name='label'")
+                                .contains("text='A label'")
+                                .contains("enabled=true")
+                                .contains("visible=true")
+                                .contains("showing=false");
   }
 
-  @Test public void shouldFormatJMenuBar() {
-    JMenuBar menuBar = new JMenuBar();
-    String formatted = formatted(menuBar);
-    assertThat(formatted).isEqualTo(expected(menuBar, "[]"));
+  private static JLabel newJLabel() {
+    return execute(new GuiQuery<JLabel>() {
+      protected JLabel executeInEDT() {
+        JLabel label = new JLabel("A label");
+        label.setName("label");
+        return label;
+      }
+    });
   }
 
-  @Test public void shouldFormatJMenuItem() {
-    JMenuItem menuItem = new JMenuItem();
-    menuItem.setText("a Menu Item");
-    menuItem.setName("menuItem");
-    setSelected(menuItem, true);
-    String formatted = formatted(menuItem);
-    String expected = "[name='menuItem', text='a Menu Item', selected=true, enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(menuItem, expected));
+  public void shouldFormatJLayeredPane() {
+    JLayeredPane pane = newJLayeredPane();
+    assertThat(formatted(pane)).isEqualTo(concat(classNameOf(pane), "[]"));
   }
 
-  @Test public void shouldFormatJOptionPane() {
-    JOptionPane optionPane = new JOptionPane("A message", JOptionPane.ERROR_MESSAGE);
-    optionPane.setOptionType(JOptionPane.DEFAULT_OPTION);
-    String formatted = formatted(optionPane);
-    String expected = "[message='A message', messageType=ERROR_MESSAGE, optionType=DEFAULT_OPTION, enabled=true, " +
-    		"visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(optionPane, expected));
+  private static JLayeredPane newJLayeredPane() {
+    return execute(new GuiQuery<JLayeredPane>() {
+      protected JLayeredPane executeInEDT() {
+        return new JLayeredPane();
+      }
+    });
   }
 
-  @Test public void shouldFormatJPanel() {
-    JPanel panel = new JPanel();
-    panel.setName("panel");
-    String formatted = formatted(panel);
-    assertThat(formatted).isEqualTo(expected(panel, "[name='panel']"));
+  public void shouldFormatJList() {
+    assertThat(Formatting.formatter(JList.class)).isInstanceOf(JListFormatter.class);
   }
 
-  @Test public void shouldFormatJPopupMenu() {
-    JPopupMenu popupMenu = new JPopupMenu("Menu");
-    popupMenu.setName("popupMenu");
-    String formatted = formatted(popupMenu);
-    String expected = "[name='popupMenu', label='Menu', enabled=true, visible=false, showing=false]";
-    assertThat(formatted).isEqualTo(expected(popupMenu, expected));
+  public void shouldFormatJMenuBar() {
+    JMenuBar menuBar = newJMenuBar();
+    assertThat(formatted(menuBar)).isEqualTo(concat(classNameOf(menuBar), "[]"));
   }
 
-  @Test public void shouldFormatJRootPane() {
-    JRootPane pane = new JRootPane();
-    String formatted = formatted(pane);
-    assertThat(formatted).isEqualTo(expected(pane, "[]"));
+  private static JMenuBar newJMenuBar() {
+    return execute(new GuiQuery<JMenuBar>() {
+      protected JMenuBar executeInEDT() {
+        return new JMenuBar();
+      }
+    });
   }
 
-  @Test public void shouldFormatJScrollBar() {
-    JScrollBar scrollBar = new JScrollBar(Adjustable.VERTICAL, 20, 10, 0, 60);
-    scrollBar.setName("scrollBar");
-    String formatted = formatted(scrollBar);
-    String expected = "[name='scrollBar', value=20, blockIncrement=10, minimum=0, maximum=60, enabled=true, " +
-    		"visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(scrollBar, expected));
+  public void shouldFormatJMenuItem() {
+    JMenuItem menuItem = newJMenuItem();
+    assertThat(formatted(menuItem)).contains(classNameOf(menuItem))
+                                   .contains("name='menuItem'")
+                                   .contains("text='A menu item'")
+                                   .contains("selected=true")
+                                   .contains("enabled=true")
+                                   .contains("visible=true")
+                                   .contains("showing=false");
   }
 
-  @Test public void shouldFormatJScrollPane() {
-    JScrollPane scrollPane = new JScrollPane();
-    scrollPane.setName("scrollPane");
-    String formatted = formatted(scrollPane);
-    String expected = "[name='scrollPane', enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(scrollPane, expected));
+  private static JMenuItem newJMenuItem() {
+    return execute(new GuiQuery<JMenuItem>() {
+      protected JMenuItem executeInEDT() {
+        JMenuItem menuItem = new JMenuItem();
+        menuItem.setName("menuItem");
+        menuItem.setSelected(true);
+        menuItem.setText("A menu item");
+        return menuItem;
+      }
+    });
   }
 
-  @Test public void shouldFormatJSlider() {
-    JSlider slider = new JSlider(2, 8, 6);
-    slider.setName("slider");
-    String formatted = formatted(slider);
-    String expected = "[name='slider', value=6, minimum=2, maximum=8, enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(slider, expected));
+  public void shouldFormatJOptionPane() {
+    assertThat(Formatting.formatter(JOptionPane.class)).isInstanceOf(JOptionPaneFormatter.class);
   }
 
-  @Test public void shouldFormatJSpinner() {
-    JSpinner spinner = new JSpinner(new SpinnerNumberModel(6, 2, 8, 1));
-    spinner.setName("spinner");
-    String formatted = formatted(spinner);
-    String expected = "[name='spinner', value=6, enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(spinner, expected));
+  public void shouldFormatJPanel() {
+    JPanel panel = newJPanel();
+    assertThat(formatted(panel)).contains(classNameOf(panel))
+                                .contains("name='panel'");
   }
 
-  @Test public void shouldFormatJTabbedPane() {
-    JTabbedPane tabbedPane = new JTabbedPane();
-    tabbedPane.addTab("First", new JPanel());
-    tabbedPane.addTab("Second", new JPanel());
-    tabbedPane.addTab("Third", new JPanel());
-    tabbedPane.setName("tabbedPane");
-    tabbedPane.setSelectedIndex(1);
-    String formatted = formatted(tabbedPane);
-    assertThat(formatted).isEqualTo(expected(tabbedPane, concat(
-        "[name='tabbedPane', selectedTabIndex=1, selectedTabTitle='Second', tabCount=3, ",
-        "tabTitles=['First', 'Second', 'Third'], enabled=true, visible=true, showing=false]"
-    )));
+  private static JPanel newJPanel() {
+    return execute(new GuiQuery<JPanel>() {
+      protected JPanel executeInEDT()  {
+        JPanel panel = new JPanel();
+        panel.setName("panel");
+        return panel;
+      }
+    });
   }
 
-  @Test public void shouldFormatJTable() {
-    JTable table = new JTable(8, 6);
-    table.setName("table");
-    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    String formatted = formatted(table);
-    assertThat(formatted).isEqualTo(expected(table, concat(
-        "[name='table', rowCount=8, columnCount=6, enabled=true, visible=true, showing=false]"
-    )));
+  public void shouldFormatJPopupMenu() {
+    JPopupMenu popupMenu = newJPopupMenu();
+    assertThat(formatted(popupMenu)).contains(classNameOf(popupMenu))
+                                    .contains("name='popupMenu'")
+                                    .contains("label='Menu'")
+                                    .contains("enabled=true")
+                                    .contains("visible=false")
+                                    .contains("showing=false");
   }
 
-  @Test public void shouldFormatJPasswordField() {
-    JPasswordField passwordField = new JPasswordField();
-    passwordField.setName("passwordField");
-    String formatted = formatted(passwordField);
-    String expected = "[name='passwordField', enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(passwordField, expected));
+  private static JPopupMenu newJPopupMenu() {
+    return execute(new GuiQuery<JPopupMenu>() {
+      protected JPopupMenu executeInEDT()  {
+        JPopupMenu popupMenu = new JPopupMenu("Menu");
+        popupMenu.setName("popupMenu");
+        return popupMenu;
+      }
+    });
   }
 
-  @Test public void shouldFormatJTextComponent() {
-    JTextField textField = new JTextField("Hello");
-    textField.setName("textField");
-    String formatted = formatted(textField);
-    String expected = "[name='textField', text='Hello', enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(textField, expected));
+  public void shouldFormatJRootPane() {
+    JRootPane pane = newJRootPane();
+    assertThat(formatted(pane)).isEqualTo(concat(classNameOf(pane), "[]"));
   }
 
-  @Test public void shouldFormatJToggleButton() {
-    JRadioButton radio = new JRadioButton();
-    radio.setText("a Radio");
-    radio.setName("radio");
-    setSelected(radio, true);
-    String formatted = formatted(radio);
-    String expected = "[name='radio', text='a Radio', selected=true, enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(radio, expected));
+  private static JRootPane newJRootPane() {
+    return execute(new GuiQuery<JRootPane>() {
+      protected JRootPane executeInEDT()  {
+        return new JRootPane();
+      }
+    });
   }
 
-  @Test public void shouldFormatJTree() {
-    JTree tree = new JTree(array("One", "Two", "Three"));
-    tree.setName("tree");
-    DefaultTreeSelectionModel model = new DefaultTreeSelectionModel();
-    model.setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
-    tree.setSelectionModel(model);
-    tree.setSelectionRow(1);
-    String formatted = formatted(tree);
-    String expected = "[name='tree', selectionCount=1, selectionPaths=['[root, Two]'], " +
-    		"selectionMode=CONTIGUOUS_TREE_SELECTION, enabled=true, visible=true, showing=false]";
-    assertThat(formatted).isEqualTo(expected(tree, expected));
+  public void shouldFormatJScrollBar() {
+    JScrollBar scrollBar = newJScrollBar();
+    assertThat(formatted(scrollBar)).contains(classNameOf(scrollBar))
+                                    .contains("name='scrollBar'")
+                                    .contains("value=20")
+                                    .contains("blockIncrement=10")
+                                    .contains("minimum=0")
+                                    .contains("maximum=60")
+                                    .contains("enabled=true")
+                                    .contains("visible=true")
+                                    .contains("showing=false");
+  }
+
+  private static JScrollBar newJScrollBar() {
+    return execute(new GuiQuery<JScrollBar>() {
+      protected JScrollBar executeInEDT()  {
+        JScrollBar scrollBar = new JScrollBar(VERTICAL, 20, 10, 0, 60);
+        scrollBar.setName("scrollBar");
+        return scrollBar;
+      }
+    });
+  }
+
+  public void shouldFormatJScrollPane() {
+    JScrollPane scrollPane = newJScrollPane();
+    assertThat(formatted(scrollPane)).contains(classNameOf(scrollPane))
+                                     .contains("name='scrollPane'")
+                                     .contains("enabled=true")
+                                     .contains("visible=true")
+                                     .contains("showing=false");
+  }
+
+  private static JScrollPane newJScrollPane() {
+    return execute(new GuiQuery<JScrollPane>() {
+      protected JScrollPane executeInEDT()  {
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setName("scrollPane");
+        return scrollPane;
+      }
+    });
+  }
+
+  public void shouldFormatJSlider() {
+    JSlider slider = newJSlider();
+    assertThat(formatted(slider)).contains(classNameOf(slider))
+                                 .contains("name='slider'")   
+                                 .contains("value=6")   
+                                 .contains("minimum=2")   
+                                 .contains("maximum=8")   
+                                 .contains("enabled=true")   
+                                 .contains("visible=true")   
+                                 .contains("showing=false"); 
+  }
+
+  private static JSlider newJSlider() {
+    return execute(new GuiQuery<JSlider>() {
+      protected JSlider executeInEDT()  {
+        JSlider slider = new JSlider(2, 8, 6);
+        slider.setName("slider");
+        return slider;
+      }
+    });
+  }
+
+  public void shouldFormatJSpinner() {
+    JSpinner spinner = newJSpinner();
+    assertThat(formatted(spinner)).contains(classNameOf(spinner))
+                                  .contains("name='spinner'")
+                                  .contains("value=6")
+                                  .contains("enabled=true")
+                                  .contains("visible=true")
+                                  .contains("showing=false");
+  }
+
+  private static JSpinner newJSpinner() {
+    return execute(new GuiQuery<JSpinner>() {
+      protected JSpinner executeInEDT()  {
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(6, 2, 8, 1));
+        spinner.setName("spinner");
+        return spinner;
+      }
+    });
+  }
+
+  public void shouldFormatJTabbedPane() {
+    assertThat(Formatting.formatter(JTabbedPane.class)).isInstanceOf(JTabbedPaneFormatter.class);
+  }
+
+  public void shouldFormatJTable() {
+    assertThat(Formatting.formatter(JTable.class)).isInstanceOf(JTableFormatter.class);
+  }
+
+  public void shouldFormatJPasswordField() {
+    JPasswordField passwordField = newJPasswordField();
+    assertThat(formatted(passwordField)).contains(classNameOf(passwordField))
+                                        .contains("name='passwordField'")
+                                        .contains("enabled=true")
+                                        .contains("visible=true")
+                                        .contains("showing=false");
+  }
+
+  private static JPasswordField newJPasswordField() {
+    return execute(new GuiQuery<JPasswordField>() {
+      protected JPasswordField executeInEDT()  {
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setName("passwordField");
+        return passwordField;
+      }
+    });
+  }
+
+  public void shouldFormatJTextComponent() {
+    JTextField textField = newJTextField();
+    assertThat(formatted(textField)).contains(classNameOf(textField))
+                                    .contains("name='textField'")
+                                    .contains("text='Hello'")
+                                    .contains("enabled=true")
+                                    .contains("visible=true")
+                                    .contains("showing=false");
+  }
+
+  private static JTextField newJTextField() {
+    return execute(new GuiQuery<JTextField>() {
+      protected JTextField executeInEDT()  {
+        JTextField textField = new JTextField("Hello");
+        textField.setName("textField");
+        return textField;
+      }
+    });
+  }
+
+  public void shouldFormatJToggleButton() {
+    JToggleButton toggleButton = newJToggleButton();
+    assertThat(formatted(toggleButton)).contains(classNameOf(toggleButton))
+                                       .contains("name='toggleButton'")
+                                       .contains("text='A toggle button'")
+                                       .contains("selected=true")
+                                       .contains("enabled=true")
+                                       .contains("visible=true")
+                                       .contains("showing=false");
+  }
+
+  private static JToggleButton newJToggleButton() {
+    return execute(new GuiQuery<JToggleButton>() {
+      protected JToggleButton executeInEDT()  {
+        JToggleButton toggleButton = new JToggleButton();
+        toggleButton.setName("toggleButton");
+        toggleButton.setSelected(true);
+        toggleButton.setText("A toggle button");
+        return toggleButton;
+      }
+    });
+  }
+
+  public void shouldFormatJTree() {
+    assertThat(Formatting.formatter(JTree.class)).isInstanceOf(JTreeFormatter.class);
   }
 
   private String formatted(Component c) {
@@ -281,11 +419,11 @@ public class FormattingTest {
     return formatted;
   }
 
-  private String expected(Component c, String properties) {
-    return concat(c.getClass().getName(), properties);
+  private static String classNameOf(Object o) {
+    return o.getClass().getName();
   }
-
-  @Test public void shouldReturnComponentIsNullIfComponentIsNull() {
+  
+  public void shouldReturnComponentIsNullIfComponentIsNull() {
     assertThat(Formatting.format(null)).isEqualTo("Null Component");
   }
 }
