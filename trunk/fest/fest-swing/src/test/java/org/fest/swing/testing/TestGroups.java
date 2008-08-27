@@ -24,7 +24,7 @@ public final class TestGroups {
 
   public static final String GUI = "GUI";
   public static final String BUG = "Bug";
-  public static final String EDT_QUERY = "EDT Query";
+  public static final String EDT_ACTION = "EDT Action";
   
   private TestGroups() {}
 }

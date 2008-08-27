@@ -16,7 +16,6 @@ package org.fest.swing.util;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -26,7 +25,7 @@ import org.fest.swing.query.ComponentLocationOnScreenQuery;
 import org.fest.swing.query.JPopupMenuInvokerQuery;
 
 import static java.awt.event.InputEvent.*;
-import static javax.swing.SwingUtilities.*;
+import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
@@ -89,25 +88,6 @@ public class AWT {
     // Must perform an additional check, since applets may have their own version in their AppContext
     return c instanceof Frame
         && (c == JOptionPane.getRootFrame() || c.getClass().getName().startsWith(ROOT_FRAME_CLASSNAME));
-  }
-
-  /**
-   * If the current thread is the AWT event thread, this method will simple execute the <code>{@link Runnable}</code>,
-   * otherwise the <code>{@link Runnable}</code> will be executed synchronously, blocking until all pending AWT events
-   * have been processed and <code>r.run()</code> returns.
-   * @param r the <code>Runnable</code> to execute.
-   * @exception InterruptedException if we're interrupted while waiting for the event dispatching thread to finish
-   *              executing <code>r.run()</code>.
-   * @exception InvocationTargetException if an exception is thrown while running <code>r</code>.
-   * @see SwingUtilities#isEventDispatchThread()
-   * @see SwingUtilities#invokeAndWait(Runnable)
-   */
-  public static void runInEventThreadAndWait(Runnable r) throws InterruptedException, InvocationTargetException {
-    if (isEventDispatchThread()) {
-      r.run();
-      return;
-    }
-    invokeAndWait(r);
   }
 
   /**

@@ -63,7 +63,7 @@ public class NewHierarchy extends ExistingHierarchy {
   }
 
   NewHierarchy(Toolkit toolkit, boolean ignoreExisting) {
-    this.filter = new WindowFilter(parentFinder, childrenFinder);
+    this.filter = new WindowFilter(parentFinder(), childrenFinder());
     transientWindowListener = new TransientWindowListener(filter);
     setUp(toolkit, ignoreExisting);
   }

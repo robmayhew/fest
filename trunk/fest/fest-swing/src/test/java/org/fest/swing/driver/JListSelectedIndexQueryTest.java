@@ -27,14 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JListSelectedIndexQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class JListSelectedIndexQueryTest {
 
   private JList list;
@@ -45,7 +45,7 @@ public class JListSelectedIndexQueryTest {
     query = new JListSelectedIndexQuery(list);
   }
 
-  @Test(dataProvider = "selectedIndices", groups = EDT_QUERY)
+  @Test(dataProvider = "selectedIndices", groups = EDT_ACTION)
   public void shouldReturnItemCountOfJList(final int selectedIndex) {
     new EasyMockTemplate(list) {
       protected void expectations() {

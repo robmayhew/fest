@@ -24,6 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
@@ -32,7 +33,7 @@ import static java.awt.event.WindowEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link TransientWindowListener}</code>.
@@ -44,18 +45,34 @@ public class TransientWindowListenerTest {
   private TransientWindowListener listener;
   private WindowFilter mockWindowFilter;
   private TestDialog eventSource;
-  private TestWindow dialogParent;
+  private TestWindow parent;
 
   @BeforeMethod public void setUp() {
     mockWindowFilter = createMock(MockWindowFilter.class);
     listener = new TransientWindowListener(mockWindowFilter);
-    dialogParent = new TestWindow(getClass());
-    eventSource = new TestDialog(dialogParent);
+    parent = newTestWindow();
+    eventSource = newTestDialog(parent);
+  }
+
+  private static TestWindow newTestWindow() {
+    return execute(new GuiQuery<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        return new TestWindow(TransientWindowListenerTest.class);
+      }
+    });
+  }
+  
+  private static TestDialog newTestDialog(final TestWindow parent) {
+    return execute(new GuiQuery<TestDialog>() {
+      protected TestDialog executeInEDT() {
+        return new TestDialog(parent);
+      }
+    });
   }
 
   @AfterMethod public void tearDown() {
     eventSource.destroy();
-    dialogParent.destroy();
+    parent.destroy();
   }
 
   @Test public void shouldUnfilterOpenedWindowIfImplicitFiltered() {
@@ -92,7 +109,7 @@ public class TransientWindowListenerTest {
     new EasyMockTemplate(mockWindowFilter) {
       protected void expectations() {
         expect(mockWindowFilter.isImplicitlyIgnored(eventSource)).andReturn(false);
-        expect(mockWindowFilter.isIgnored(dialogParent)).andReturn(true);
+        expect(mockWindowFilter.isIgnored(parent)).andReturn(true);
         mockWindowFilter.ignore(eventSource);
         expectLastCall();
       }
@@ -157,7 +174,7 @@ public class TransientWindowListenerTest {
     }.run();
   }
 
-  private void waitTillClosedEventIsHandled() { pause(2000); }
+  private void waitTillClosedEventIsHandled() { /*pause(2000);*/ }
 
   private WindowEvent closedWindowEvent() {
     return new WindowEvent(eventSource, WINDOW_CLOSED);

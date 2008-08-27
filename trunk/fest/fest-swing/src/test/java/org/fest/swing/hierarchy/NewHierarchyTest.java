@@ -24,6 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -31,6 +32,8 @@ import org.fest.swing.testing.ToolkitStub;
 import static java.awt.AWTEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -46,28 +49,27 @@ public class NewHierarchyTest {
 
   private ToolkitStub toolkit;
   private WindowFilter filter;
-  private CustomFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
     toolkit = ToolkitStub.createNew();
-    frame = new CustomFrame(getClass());
-    frame.display();
+    window = MyWindow.showNew();
     filter = new WindowFilter();
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   public void shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
     new NewHierarchy(toolkit, filter, true);
-    assertThat(filter.isIgnored(frame)).isTrue();
+    assertThat(filter.isIgnored(window)).isTrue();
     assertThatTransientWindowListenerWasAddedToToolkit();
   }
 
   public void shouldNotIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
     new NewHierarchy(toolkit, filter, false);
-    assertThat(filter.isIgnored(frame)).isFalse();
+    assertThat(filter.isIgnored(window)).isFalse();
     assertThatTransientWindowListenerWasAddedToToolkit();
   }
 
@@ -80,54 +82,63 @@ public class NewHierarchyTest {
 
   public void shouldReturnNoChildrenIfComponentIsFiltered() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
-    assertThat(hierarchy.childrenOf(frame)).isEmpty();
+    assertThat(hierarchy.childrenOf(window)).isEmpty();
   }
 
   public void shouldReturnUnfilteredChildrenOfUnfilteredComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, false);
-    filter.ignore(frame.textField);
-    assertThat(hierarchy.childrenOf(frame.getContentPane())).containsOnly(frame.comboBox);
+    filter.ignore(window.textField);
+    assertThat(hierarchy.childrenOf(contentPaneOf(window))).containsOnly(window.comboBox);
   }
 
   public void shouldNotContainFilteredComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
-    assertThat(hierarchy.contains(frame)).isFalse();
+    assertThat(hierarchy.contains(window)).isFalse();
   }
 
   public void shouldContainUnfilteredComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, false);
-    assertThat(hierarchy.contains(frame)).isTrue();
+    assertThat(hierarchy.contains(window)).isTrue();
   }
 
   public void shouldNotContainFilteredWindowsInRootWindows() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
-    assertThat(hierarchy.roots()).excludes(frame);
+    assertThat(hierarchy.roots()).excludes(window);
   }
 
   public void shouldContainUnfilteredWindowsInRootWindows() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, false);
-    assertThat(hierarchy.roots()).contains(frame);
+    assertThat(hierarchy.roots()).contains(window);
   }
 
   public void shouldRecognizeGivenComponent() {
     NewHierarchy hierarchy = new NewHierarchy(toolkit, filter, true);
-    assertThat(hierarchy.roots()).excludes(frame);
-    hierarchy.recognize(frame);
-    assertThat(hierarchy.roots()).contains(frame);
+    assertThat(hierarchy.roots()).excludes(window);
+    hierarchy.recognize(window);
+    assertThat(hierarchy.roots()).contains(window);
   }
 
   // TODO Test method dispose(Window)
 
-  private static class CustomFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final JTextField textField = new JTextField(20);
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
     final JComboBox comboBox = new JComboBox(array("One", "Two"));
+    final JTextField textField = new JTextField(20);
 
-    public CustomFrame(Class<?> testClass) {
-      super(testClass);
-      add(textField);
-      add(comboBox);
+    MyWindow() {
+      super(NewHierarchyTest.class);
+      addComponents(comboBox, textField);
     }
   }
 }

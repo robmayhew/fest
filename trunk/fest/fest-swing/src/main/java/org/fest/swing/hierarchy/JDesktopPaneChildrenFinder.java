@@ -15,8 +15,6 @@
  */
 package org.fest.swing.hierarchy;
 
-import static java.util.Collections.emptyList;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
@@ -24,6 +22,12 @@ import java.util.Collection;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.JInternalFrame.JDesktopIcon;
+
+import static java.util.Collections.emptyList;
+
+import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
+import static org.fest.swing.hierarchy.JDesktopIconInternalFrameQuery.internalFrameOf;
 
 /**
  * Understands how to find children components in a <code>{@link JDesktopPane}</code>.
@@ -41,9 +45,9 @@ final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy {
   // children of the desktop pane.
   private Collection<Component> internalFramesFromIcons(Container c) {
     Collection<Component> frames = new ArrayList<Component>();
-    for (Component child : c.getComponents()) {
-      if (child instanceof JInternalFrame.JDesktopIcon) {
-        JInternalFrame frame = ((JInternalFrame.JDesktopIcon)child).getInternalFrame();
+    for (Component child : componentsOf(c)) {
+      if (child instanceof JDesktopIcon) {
+        JInternalFrame frame = internalFrameOf(((JDesktopIcon)child));
         if (frame != null) frames.add(frame);
         continue;
       }

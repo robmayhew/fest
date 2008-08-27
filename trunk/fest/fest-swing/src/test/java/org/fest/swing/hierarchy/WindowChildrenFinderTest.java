@@ -24,10 +24,13 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link WindowChildrenFinder}</code>.
@@ -44,24 +47,43 @@ public class WindowChildrenFinderTest {
   }
   
   @Test public void shouldReturnEmptyCollectionIfComponentIsNotWindow() {
-    assertThat(finder.nonExplicitChildrenOf(new JTextField())).isEmpty();
+    assertThat(finder.nonExplicitChildrenOf(newJTextField())).isEmpty();
   }
   
+  private static JTextField newJTextField() {
+    return execute(new GuiQuery<JTextField>() {
+      protected JTextField executeInEDT() {
+        return new JTextField();
+      }
+    });
+  }
+
   @Test public void shouldReturnEmptyCollectionIfComponentIsNull() {
     assertThat(finder.nonExplicitChildrenOf(null)).isEmpty();
   }
-  
+
   @Test public void shouldReturnEmptyCollectionIfWindowNotHavingOwnedWindows() {
-    assertThat(finder.nonExplicitChildrenOf(new JFrame())).isEmpty();
+    assertThat(finder.nonExplicitChildrenOf(newJFrame())).isEmpty();
   }
   
-  @Test public void shouldReturnOwnedWindowsIfComponentIsWindow() {
-    TestWindow frame = TestWindow.showNewInTest(getClass());
-    TestDialog dialog = TestDialog.showInTest(frame);
-    dialog.display();
-    Collection<Component> children = finder.nonExplicitChildrenOf(frame);
-    assertThat(children).containsOnly(dialog);
-    dialog.destroy();
-    frame.destroy();
+  private static JFrame newJFrame() {
+    return execute(new GuiQuery<JFrame>() {
+      protected JFrame executeInEDT() {
+        return new JFrame();
+      }
+    });
+  }
+  
+  @Test(groups = GUI)
+  public void shouldReturnOwnedWindowsIfComponentIsWindow() {
+    TestWindow window = TestWindow.showNewInTest(getClass());
+    TestDialog dialog = TestDialog.showInTest(window);
+    Collection<Component> children = finder.nonExplicitChildrenOf(window);
+    try {
+      assertThat(children).containsOnly(dialog);
+    } finally {
+      dialog.destroy();
+      window.destroy();
+    }
   }
 }

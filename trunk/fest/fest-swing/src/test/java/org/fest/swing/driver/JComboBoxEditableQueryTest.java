@@ -27,14 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JComboBoxEditableQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class JComboBoxEditableQueryTest {
 
   private JComboBox comboBox;
@@ -45,7 +45,7 @@ public class JComboBoxEditableQueryTest {
     query = new JComboBoxEditableQuery(comboBox);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
   public void shouldIndicateIfJComboBoxIsEditable(final boolean editable) {
     new EasyMockTemplate(comboBox) {
       protected void expectations() {

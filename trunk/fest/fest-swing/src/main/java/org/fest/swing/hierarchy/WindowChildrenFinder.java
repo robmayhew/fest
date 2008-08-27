@@ -20,11 +20,12 @@ import java.awt.Container;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
 
-import static org.fest.util.Arrays.isEmpty;
-import static org.fest.util.Collections.list;
+import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
+import static org.fest.util.Collections.isEmpty;
 
 /**
  * Understands how to find children components in a <code>{@link Window}</code>.
@@ -39,11 +40,11 @@ final class WindowChildrenFinder implements ChildrenFinderStrategy {
   }
   
   private Collection<Component> ownedWindows(Window w) {
-    return windows(w.getOwnedWindows());
+    return windows(ownedWindowsOf(w));
   }
   
-  private Collection<Component> windows(Window[] windows) {
+  private Collection<Component> windows(List<Window> windows) {
     if (isEmpty(windows)) return emptyList();
-    return new ArrayList<Component>(list(windows));
+    return new ArrayList<Component>(windows);
   }
 }

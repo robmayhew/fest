@@ -18,20 +18,26 @@ package org.fest.swing.hierarchy;
 import java.awt.Component;
 import java.util.Collection;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconifyTask;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JDesktopPaneChildrenFinder}</code>.
  *
  * @author Alex Ruiz
  */
-public class JDesktopPaneChildrenFinderTest {
+@Test public class JDesktopPaneChildrenFinderTest {
 
   private JDesktopPaneChildrenFinder finder;
   
@@ -39,19 +45,35 @@ public class JDesktopPaneChildrenFinderTest {
     finder = new JDesktopPaneChildrenFinder();
   }
   
-  @Test public void shouldReturnEmptyCollectionIfComponentIsNotJDesktopPane() {
-    assertThat(finder.nonExplicitChildrenOf(new JTextField())).isEmpty();
+  public void shouldReturnEmptyCollectionIfComponentIsNotJDesktopPane() {
+    assertThat(finder.nonExplicitChildrenOf(newJTextField())).isEmpty();
+  }
+
+  private static JTextField newJTextField() {
+    return execute(new GuiQuery<JTextField>() {
+      protected JTextField executeInEDT() {
+        return new JTextField();
+      }
+    });
   }
   
-  @Test public void shouldReturnEmptyCollectionIfComponentIsNull() {
+  public void shouldReturnEmptyCollectionIfComponentIsNull() {
     assertThat(finder.nonExplicitChildrenOf(null)).isEmpty();
   }
   
-  @Test public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() throws Exception {
+  @Test(groups = GUI) 
+  public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
     MDIFrame frame = showInTest(getClass());
-    frame.internalFrame().setIcon(true);
+    iconify(frame.internalFrame());
     Collection<Component> children = finder.nonExplicitChildrenOf(frame.desktop());
-    assertThat(children).containsOnly(frame.internalFrame());
-    frame.destroy();
+    try {
+      assertThat(children).containsOnly(frame.internalFrame());
+    } finally {
+      frame.destroy();
+    }
+  }
+
+  private static void iconify(JInternalFrame internalFrame) {
+    execute(iconifyTask(internalFrame));
   }
 }

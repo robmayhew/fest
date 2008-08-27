@@ -27,7 +27,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JTextComponentEditableQuery}</code>.
@@ -44,7 +44,7 @@ public class JTextComponentEditableQueryTest {
     query = new JTextComponentEditableQuery(textBox);
   }
   
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
   public void shouldIndicateIfJTextComponentIsEditable(final boolean editable) {
     new EasyMockTemplate(textBox) {
       protected void expectations() {

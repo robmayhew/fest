@@ -40,7 +40,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JOptionPaneTitleQueryTest {
 
   private Robot robot;

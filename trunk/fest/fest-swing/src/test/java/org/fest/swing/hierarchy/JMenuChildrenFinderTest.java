@@ -16,22 +16,22 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JMenuChildrenFinder}</code>.
@@ -48,25 +48,60 @@ import static org.fest.assertions.Assertions.assertThat;
   }
   
   public void shouldReturnEmptyCollectionIfComponentIsNotJMenu() {
-    assertThat(finder.nonExplicitChildrenOf(new JTextField())).isEmpty();
+    assertThat(finder.nonExplicitChildrenOf(newJTextField())).isEmpty();
   }
-  
+
+  private static JTextField newJTextField() {
+    return execute(new GuiQuery<JTextField>() {
+      protected JTextField executeInEDT() {
+        return new JTextField();
+      }
+    });
+  }
+
   public void shouldReturnEmptyCollectionIfComponentIsNull() {
     assertThat(finder.nonExplicitChildrenOf(null)).isEmpty();
   }
   
+  @Test(groups = GUI)
   public void shouldReturnPopupMenuIfComponentIsJMenu() {
-    final JMenu menu = createMock(JMenu.class);
-    final JPopupMenu popup = createMock(JPopupMenu.class);
-    new EasyMockTemplate(menu) {
-      protected void expectations() {
-        expect(menu.getPopupMenu()).andReturn(popup);
+    MyWindow window = MyWindow.showNew();
+    Collection<Component> children = finder.nonExplicitChildrenOf(window.menu);
+    try {
+      assertThat(children).containsOnly(popupMenuOf(window.menu));
+    } finally {
+      window.destroy();
+    }
+  }
+  
+  private static JPopupMenu popupMenuOf(final JMenu menu) {
+    return execute(new GuiQuery<JPopupMenu>() {
+      protected JPopupMenu executeInEDT() {
+        return menu.getPopupMenu();
       }
+    }); 
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void codeToTest() {
-        List<Component> children = new ArrayList<Component>(finder.nonExplicitChildrenOf(menu));
-        assertThat(children).containsOnly(popup);
-      }
-    }.run();
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    final JMenu menu = new JMenu("Menu");
+    
+    MyWindow() {
+      super(JMenuChildrenFinderTest.class);
+      JMenuBar menuBar = new JMenuBar();
+      menuBar.add(menu);
+      setJMenuBar(menuBar);
+    }
   }
 }

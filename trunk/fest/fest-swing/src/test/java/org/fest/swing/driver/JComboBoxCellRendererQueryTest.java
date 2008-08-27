@@ -52,7 +52,7 @@ public class JComboBoxCellRendererQueryTest {
     window.destroy();
   }
 
-  @Test(dataProvider = "comboBoxContents", groups = { GUI, EDT_QUERY })
+  @Test(dataProvider = "comboBoxContents", groups = { GUI, EDT_ACTION })
   public void shouldReturnCellRendererComponentOfJComboBox(int index, String itemText) {
     Component renderer = JComboBoxCellRendererQuery.cellRendererIn(window.comboBox, index);
     assertThat(renderer).isInstanceOf(JLabel.class);

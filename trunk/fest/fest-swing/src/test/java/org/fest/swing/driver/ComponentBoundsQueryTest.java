@@ -27,14 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link ComponentBoundsQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class ComponentBoundsQueryTest {
 
   private Component component;

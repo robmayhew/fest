@@ -40,7 +40,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JTableCellEditorQueryTest {
 
   private MyWindow window;
@@ -53,7 +53,7 @@ public class JTableCellEditorQueryTest {
     window.destroy();
   }
 
-  @Test(dataProvider = "editorTypes", groups = { GUI, EDT_QUERY })
+  @Test(dataProvider = "editorTypes", groups = { GUI, EDT_ACTION })
   public void shouldReturnEditorComponentOfJTableCell(int column, Class<?> editorType) {
     Component editor = JTableCellEditorQuery.cellEditorIn(window.table, 0, column);
     assertThat(editor).isInstanceOf(editorType);

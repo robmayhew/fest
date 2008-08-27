@@ -15,11 +15,6 @@
  */
 package org.fest.swing.monitor;
 
-import static java.awt.AWTEvent.*;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Window;
@@ -27,14 +22,20 @@ import java.awt.event.AWTEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.easymock.classextension.EasyMock;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static java.awt.AWTEvent.*;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.
@@ -75,6 +76,7 @@ public class WindowMonitorTest {
         expectToMarkExisting(w);
         expectToAddContextFor(w);
         windows.attachNewWindowVisibilityMonitor(w);
+        // TODO all in EDT
         for (Window owned : w.getOwnedWindows()) expectToExamine(owned);
       }
 
@@ -92,9 +94,9 @@ public class WindowMonitorTest {
         monitor = new WindowMonitor(toolkit, context, windowStatus);
       }
     }.run();
-    EasyMock.reset(context);
-    EasyMock.reset(windows);
-    EasyMock.reset(windowStatus);
+    reset(context);
+    reset(windows);
+    reset(windowStatus);
   }
 
   @AfterMethod public void tearDown() {

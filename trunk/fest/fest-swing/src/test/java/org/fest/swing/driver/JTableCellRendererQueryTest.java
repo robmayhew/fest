@@ -40,7 +40,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JTableCellRendererQueryTest {
 
   private MyWindow window;
@@ -53,7 +53,7 @@ public class JTableCellRendererQueryTest {
     window.destroy();
   }
 
-  @Test(dataProvider = "rendererTypes", groups = { GUI, EDT_QUERY })
+  @Test(dataProvider = "rendererTypes", groups = { GUI, EDT_ACTION })
   public void shouldReturnRendererComponentOfJTableCell(int column, Class<?> rendererType) {
     Component renderer = JTableCellRendererQuery.cellRendererIn(window.table, 0, column);
     assertThat(renderer).isInstanceOf(rendererType);

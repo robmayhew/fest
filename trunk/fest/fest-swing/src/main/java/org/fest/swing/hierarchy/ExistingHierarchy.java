@@ -19,15 +19,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 import org.fest.swing.monitor.WindowMonitor;
 
-import static java.util.logging.Level.*;
-
-import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.hierarchy.WindowDisposeTask.disposeTask;
+import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 import static org.fest.swing.util.AWT.*;
-import static org.fest.util.Strings.concat;
+
 
 /**
  * Understands access to the current AWT hierarchy.
@@ -39,21 +38,17 @@ public class ExistingHierarchy implements ComponentHierarchy {
 
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
 
-  final ParentFinder parentFinder = new ParentFinder();
-  final ChildrenFinder childrenFinder = new ChildrenFinder();
+  private final ParentFinder parentFinder;
+  private final ChildrenFinder childrenFinder;
 
-  final Logger logger = Logger.getLogger(getClass().getName());
-
-  /**
-   * Returns the singleton instance of this class.
-   * @return the singleton instance of this class.
-   */
-  public static ExistingHierarchy instance() {
-    return SingletonHolder.INSTANCE;
+  /** Creates a new </code>{@link ExistingHierarchy}</code>. */
+  public ExistingHierarchy() {
+    this(new ParentFinder(), new ChildrenFinder());
   }
 
-  private static class SingletonHolder {
-    static final ExistingHierarchy INSTANCE = new ExistingHierarchy();
+  ExistingHierarchy(ParentFinder parentFinder, ChildrenFinder childrenFinder) {
+    this.parentFinder = parentFinder;
+    this.childrenFinder = childrenFinder;
   }
 
   /** {@inheritDoc} */
@@ -77,9 +72,9 @@ public class ExistingHierarchy implements ComponentHierarchy {
   }
 
   /**
-   * Returns all descendents of interest of the given component.
+   * Returns all descendants of interest of the given component.
    * @param c the given component.
-   * @return all descendents of interest of the given component.
+   * @return all descendants of interest of the given component.
    */
   public Collection<Component> childrenOf(Component c) {
     return childrenFinder.childrenOf(c);
@@ -91,24 +86,11 @@ public class ExistingHierarchy implements ComponentHierarchy {
    */
   public void dispose(Window w) {
     if (isAppletViewer(w)) return;
-    for (Window owned : w.getOwnedWindows()) dispose(owned);
+    for (Window owned : ownedWindowsOf(w)) dispose(owned);
     if (isSharedInvisibleFrame(w)) return;
-    try {
-      runInEventThreadAndWait(disposerFor(w));
-    } catch (Exception e) {
-      logger.log(INFO, concat("Failed to dispose window ", format(w)), e);
-    }
+    execute(disposeTask(w));
   }
 
-  private Runnable disposerFor(final Window w) {
-    return new Runnable() {
-      public void run() {
-        try {
-          w.dispose();
-        } catch (Throwable e) {
-          logger.log(WARNING, concat("Ignoring exception thrown when disposing the window ", format(w)), e);
-        }
-      }
-    };
-  }
+  ParentFinder parentFinder() { return parentFinder; }
+  ChildrenFinder childrenFinder() { return childrenFinder; }
 }

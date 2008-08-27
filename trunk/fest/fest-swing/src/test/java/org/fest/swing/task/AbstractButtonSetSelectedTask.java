@@ -22,7 +22,7 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that selects/diselects a <code>{@link AbstractButton}</code>.
+ * Understands a task that selects/deselects a <code>{@link AbstractButton}</code>.
  *
  * @author Alex Ruiz 
  */

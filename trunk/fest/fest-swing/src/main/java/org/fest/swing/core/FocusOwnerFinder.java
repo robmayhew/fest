@@ -19,11 +19,13 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
+import java.util.List;
 
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
 import static org.fest.reflect.core.Reflection.staticField;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 
 /**
  * Understands lookup of a <code>{@link Component}</code> owning the input focus.
@@ -58,9 +60,9 @@ public final class FocusOwnerFinder {
   private static Component focusOwner(Window w) {
     Component focus = w.getFocusOwner();
     if (focus != null) return focus;
-    Window[] owned = w.getOwnedWindows();
-    for (int i = 0; i < owned.length; i++)
-      if ((focus = owned[i].getFocusOwner()) != null) return focus;
+    List<Window> ownedWindows = ownedWindowsOf(w);
+    for (Window owndedWindow : ownedWindows)
+      if ((focus = owndedWindow.getFocusOwner()) != null) return focus;
     return focus;
   }
 

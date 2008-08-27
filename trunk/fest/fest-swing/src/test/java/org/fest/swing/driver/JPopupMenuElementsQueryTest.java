@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 import static org.fest.util.Arrays.array;
 
 import javax.swing.JPopupMenu;
@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class JPopupMenuElementsQueryTest {
 
   private JPopupMenu popupMenu;

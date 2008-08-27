@@ -26,6 +26,9 @@ import javax.swing.MenuElement;
 import org.fest.swing.query.ComponentParentQuery;
 import org.fest.swing.query.JPopupMenuInvokerQuery;
 
+import static org.fest.swing.hierarchy.JInternalFrameDesktopPaneQuery.desktopPaneOf;
+
+
 /**
  * Understands how to find the parent of a <code>{@link Component}</code>. Unlike
  * <code>{@link ComponentParentQuery}</code> and <code>{@link JPopupMenuInvokerQuery}</code>, this class is not
@@ -50,9 +53,7 @@ class ParentFinder {
   private Container parentOf(JInternalFrame internalFrame) {
     // From Abbot: workaround for bug in JInternalFrame: COMPONENT_HIDDEN is sent before the desktop icon is set, so
     // JInternalFrame.getDesktopPane will throw a NPE if called while dispatching that event. Reported against 1.4.x.
-    JInternalFrame.JDesktopIcon icon = internalFrame.getDesktopIcon();
-    if (icon != null) return icon.getDesktopPane();
-    return null;
+    return desktopPaneOf(internalFrame);
   }
 
   /**
@@ -62,10 +63,10 @@ class ParentFinder {
    * @return the invoker of the given component if found. Otherwise, <code>null</code>.
    */
   Component invokerFor(Component c) {
-      if (c instanceof JPopupMenu) return JPopupMenuInvokerQuery.invokerOf((JPopupMenu)c);
-      Component parent = ComponentParentQuery.parentOf(c);
-      if (parent == null) return null;
-      return invokerFor(parent);
+    if (c instanceof JPopupMenu) return JPopupMenuInvokerQuery.invokerOf((JPopupMenu)c);
+    Component parent = ComponentParentQuery.parentOf(c);
+    if (parent == null) return null;
+    return invokerFor(parent);
   }
 
   /**

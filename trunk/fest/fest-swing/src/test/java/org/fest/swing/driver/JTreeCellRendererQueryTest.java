@@ -38,7 +38,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeCellRendererQueryTest {
 
   private MyWindow window;

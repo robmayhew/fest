@@ -17,6 +17,8 @@ package org.fest.swing.monitor;
 import java.awt.*;
 import java.util.Collection;
 
+import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
+
 /**
  * Understands a monitor that keeps track of all known root windows (showing, hidden, closed.)
  * 
@@ -60,7 +62,7 @@ public final class WindowMonitor {
 
   private void examine(Window w) {
     windows.attachNewWindowVisibilityMonitor(w);
-    for (Window owned : w.getOwnedWindows()) examine(owned);
+    for (Window owned : ownedWindowsOf(w)) examine(owned);
     windows.markExisting(w);
     context.addContextFor(w);
   }

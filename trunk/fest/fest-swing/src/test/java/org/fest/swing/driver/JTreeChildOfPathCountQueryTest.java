@@ -37,7 +37,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz 
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeChildOfPathCountQueryTest {
 
   private MyWindow window;

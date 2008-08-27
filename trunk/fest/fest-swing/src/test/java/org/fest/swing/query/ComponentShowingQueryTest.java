@@ -27,14 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link ComponentShowingQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class ComponentShowingQueryTest {
 
   private Component component;
@@ -45,7 +45,7 @@ public class ComponentShowingQueryTest {
     query = new ComponentShowingQuery(component);
   }
   
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
   public void shouldIndicateIfComponentIsShowing(final boolean enabled) {
     new EasyMockTemplate(component) {
       protected void expectations() {

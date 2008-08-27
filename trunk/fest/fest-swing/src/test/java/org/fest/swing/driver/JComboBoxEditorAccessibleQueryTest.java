@@ -39,7 +39,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxEditorAccessibleQueryTest {
 
   private Robot robot;
@@ -56,7 +56,7 @@ public class JComboBoxEditorAccessibleQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "accessible", groups = { GUI, EDT_QUERY })
+  @Test(dataProvider = "accessible", groups = { GUI, EDT_ACTION })
   public void shouldReturnIndicateIfJComboBoxEditorIsAccessible(boolean editable, boolean enabled, boolean accessible) {
     setEditable(comboBox, editable);
     setEnabled(comboBox, enabled);

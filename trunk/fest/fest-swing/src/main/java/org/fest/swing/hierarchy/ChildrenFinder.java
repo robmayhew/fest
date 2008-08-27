@@ -23,7 +23,8 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 
-import static org.fest.util.Collections.list;
+import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
+
 
 /**
  * Understands how to find children components in a <code>{@link Container}</code>.
@@ -45,7 +46,7 @@ class ChildrenFinder {
     if (!(c instanceof Container)) return emptyList();
     Container container = (Container)c;
     Collection<Component> children = new ArrayList<Component>();
-    children.addAll(list(container.getComponents()));
+    children.addAll(componentsOf(container));
     children.addAll(nonExplicitChildrenOf(container));
     return children;
   }

@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY }) 
+@Test(groups = { GUI, EDT_ACTION }) 
 public class JListCellRendererQueryTest {
 
   private MyWindow window;
@@ -53,7 +53,7 @@ public class JListCellRendererQueryTest {
     window.destroy();
   }
 
-  @Test(dataProvider = "listContents", groups = { GUI, EDT_QUERY })
+  @Test(dataProvider = "listContents", groups = { GUI, EDT_ACTION })
   public void shouldReturnCellRendererComponentOfJList(int index, String itemText) {
     Component renderer = JListCellRendererQuery.cellRendererIn(window.list, index);
     assertThat(renderer).isInstanceOf(JLabel.class);

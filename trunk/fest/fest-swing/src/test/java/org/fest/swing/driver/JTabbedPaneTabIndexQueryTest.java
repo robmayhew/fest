@@ -37,7 +37,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JTabbedPaneTabIndexQueryTest {
 
   private MyWindow window;
@@ -50,7 +50,7 @@ public class JTabbedPaneTabIndexQueryTest {
     window.destroy();
   }
   
-  @Test(dataProvider = "tabTitlesAndIndices", groups = { GUI, EDT_QUERY })
+  @Test(dataProvider = "tabTitlesAndIndices", groups = { GUI, EDT_ACTION })
   public void shouldReturnIndexForTab(String tabTitle, int expectedIndex) {
     int index = JTabbedPaneTabIndexQuery.indexOfTab(window.tabbedPane, tabTitle);
     assertThat(index).isEqualTo(expectedIndex);

@@ -21,27 +21,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
+import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
+import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconifyTask;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Collections.list;
 
 /**
  * Tests for <code>{@link ChildrenFinder}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
- *
- * TODO access components in EDT
  */
 public class ChildrenFinderTest {
 
@@ -58,40 +61,78 @@ public class ChildrenFinderTest {
     windowChildrenFinder = new WindowChildrenFinder();
   }
 
-  @Test public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() throws Exception {
+  @Test(groups = GUI) public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
     MDIFrame frame = showInTest(getClass());
-    frame.internalFrame().setIcon(true);
+    iconify(frame.internalFrame());
     JDesktopPane desktop = frame.desktop();
-    assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
-    frame.destroy();
+    try {
+      assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
+    } finally {
+      frame.destroy();
+    }
+  }
+
+  private static void iconify(JInternalFrame internalFrame) {
+    execute(iconifyTask(internalFrame));
   }
 
   @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
-    JMenu menu = new JMenu();
+    JMenu menu = newJMenu();
     assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
   }
 
+  private static JMenu newJMenu() {
+    return execute(new GuiQuery<JMenu>() {
+      protected JMenu executeInEDT() {
+        return new JMenu();
+      }
+    });
+  }
+
   @Test(groups = GUI) public void shouldReturnOwnedWindowsIfComponentIsWindow() {
-    TestWindow frame = TestWindow.showNewInTest(getClass());
-    TestDialog dialog = TestDialog.showInTest(frame);
-    dialog.display();
-    assertThat(finder.childrenOf(frame)).containsOnly(childrenOf(frame));
-    dialog.destroy();
-    frame.destroy();
+    TestWindow window = TestWindow.showNewInTest(ChildrenFinderTest.class);
+    TestDialog dialog = TestDialog.showInTest(window);
+    try {
+      assertThat(finder.childrenOf(window)).containsOnly(childrenOf(window));
+    } finally {
+      dialog.destroy();
+      window.destroy();
+    }
   }
 
   @Test(groups = GUI) public void shouldReturnChildrenOfContainer() {
-    TestWindow frame = new TestWindow(getClass());
-    JTextField textField = new JTextField();
-    frame.add(textField);
-    frame.display();
-    assertThat(finder.childrenOf(frame.getContentPane())).containsOnly(textField);
-    frame.destroy();
+    MyWindow frame = MyWindow.showNew();
+    try {
+      assertThat(finder.childrenOf(contentPaneOf(frame))).containsOnly(frame.textField);
+    } finally {
+      frame.destroy();
+    }
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    final JTextField textField = new JTextField();
+    
+    MyWindow() {
+      super(ChildrenFinderTest.class);
+      addComponents(textField);
+    }
   }
 
   private Object[] childrenOf(Container c) {
     List<Component> children = new ArrayList<Component>();
-    children.addAll(list(c.getComponents()));
+    children.addAll(componentsOf(c));
     children.addAll(desktopPaneChildrenFinder.nonExplicitChildrenOf(c));
     children.addAll(menuChildrenFinder.nonExplicitChildrenOf(c));
     children.addAll(windowChildrenFinder.nonExplicitChildrenOf(c));

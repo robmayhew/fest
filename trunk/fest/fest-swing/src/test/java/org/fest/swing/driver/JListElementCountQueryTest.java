@@ -28,14 +28,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JListElementCountQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class JListElementCountQueryTest {
 
   private JList list;
@@ -48,7 +48,7 @@ public class JListElementCountQueryTest {
     query = new JListElementCountQuery(list);
   }
 
-  @Test(dataProvider = "elementCounts", groups = EDT_QUERY)
+  @Test(dataProvider = "elementCounts", groups = EDT_ACTION)
   public void shouldReturnElementCountOfJList(final int elementCount) {
     new EasyMockTemplate(list, model) {
       protected void expectations() {

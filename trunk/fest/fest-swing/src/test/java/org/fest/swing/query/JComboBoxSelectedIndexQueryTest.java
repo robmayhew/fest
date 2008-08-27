@@ -27,14 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JComboBoxSelectedIndexQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY) public class JComboBoxSelectedIndexQueryTest {
+@Test(groups = EDT_ACTION) public class JComboBoxSelectedIndexQueryTest {
 
   private JComboBox comboBox;
   private JComboBoxSelectedIndexQuery query;
@@ -44,7 +44,7 @@ import static org.fest.swing.testing.TestGroups.EDT_QUERY;
     query = new JComboBoxSelectedIndexQuery(comboBox);
   }
 
-  @Test(dataProvider = "selectedIndices", groups = EDT_QUERY)
+  @Test(dataProvider = "selectedIndices", groups = EDT_ACTION)
   public void shouldReturnItemCountOfJComboBox(final int selectedIndex) {
     new EasyMockTemplate(comboBox) {
       protected void expectations() {

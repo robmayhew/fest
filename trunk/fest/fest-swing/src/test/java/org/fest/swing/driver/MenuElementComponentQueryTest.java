@@ -36,7 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = TestGroups.EDT_QUERY)
+@Test(groups = TestGroups.EDT_ACTION)
 public class MenuElementComponentQueryTest {
 
   private MenuElement element;

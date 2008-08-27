@@ -37,7 +37,7 @@ import static org.fest.util.Arrays.array;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_QUERY })
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeSingleRowSelectedQueryTest {
 
   private MyWindow window;

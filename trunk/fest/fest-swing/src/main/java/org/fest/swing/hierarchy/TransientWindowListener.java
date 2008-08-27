@@ -18,7 +18,7 @@ import java.awt.AWTEvent;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
 
-import javax.swing.SwingUtilities;
+import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.util.AWTEvents.*;
@@ -48,7 +48,7 @@ public final class TransientWindowListener implements AWTEventListener {
       if (filter.isIgnored(w)) return;
       filter.implicitlyIgnore(w);
       // Filter this window only *after* any handlers for this event have finished.
-      SwingUtilities.invokeLater(new DisposeAction(w, filter));
+      invokeLater(new IgnoreWindowTask(w, filter));
     }
   }
 
@@ -68,21 +68,5 @@ public final class TransientWindowListener implements AWTEventListener {
   private void filterIfParentIsFiltered(Window w) {
     if (!filter.isIgnored(parentOf(w))) return;
     filter.ignore(w);
-  }
-
-  private static class DisposeAction implements Runnable {
-    private final Window w;
-    private final WindowFilter filter;
-
-    DisposeAction(Window w, WindowFilter filter) { 
-      this.w = w;
-      this.filter = filter; 
-    }
-
-    public void run() {
-      // If the window was shown again since we queued this action, it will have removed the window from the 
-      // implicitFiltered set, and we shouldn't filter.
-      if (filter.isImplicitlyIgnored(w)) filter.ignore(w);
-    }
   }
 }

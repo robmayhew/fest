@@ -28,14 +28,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JPopupMenuInvokerQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY) public class JPopupMenuInvokerQueryTest {
+@Test(groups = EDT_ACTION) public class JPopupMenuInvokerQueryTest {
 
   private JPopupMenu popupMenu;
   private Component invoker;

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
+import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 import static org.fest.swing.util.AWT.isSharedInvisibleFrame;
 
 /**
@@ -91,7 +92,7 @@ class WindowFilter {
     doFilter(c, ignore);
     implicitlyIgnored.remove(c);
     if (!(c instanceof Window)) return;
-    for (Window owned : ((Window)c).getOwnedWindows())
+    for (Window owned : ownedWindowsOf((Window)c))
       filter(owned, ignore);
   }
 

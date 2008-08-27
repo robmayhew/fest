@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Condition;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.testing.TestWindow;
 
@@ -33,8 +33,7 @@ import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -56,17 +55,17 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldAlwaysContainGivenComponent() {
-    assertThat(hierarchy.contains(new JTextField())).isTrue();
+    assertThat(hierarchy.contains(newJTextField())).isTrue();
   }
-  
+
   @Test public void shouldReturnParentOfComponent() {
-    final TestWindow frame = new TestWindow(getClass());
-    final JTextField textField = new JTextField();
-    final ParentFinder finder = MockParentFinder.mock();
-    field("parentFinder").ofType(ParentFinder.class).in(hierarchy).set(finder);
-    new EasyMockTemplate(finder) {
+    final TestWindow frame = newTestWindow();
+    final JTextField textField = newJTextField();
+    final ParentFinder parentFinder = MockParentFinder.mock();
+    hierarchy = new ExistingHierarchy(parentFinder, new ChildrenFinder());
+    new EasyMockTemplate(parentFinder) {
       @Override protected void expectations() {
-        expect(finder.parentOf(textField)).andReturn(frame);
+        expect(parentFinder.parentOf(textField)).andReturn(frame);
       }
 
       @Override protected void codeToTest() {
@@ -75,15 +74,23 @@ public class ExistingHierarchyTest {
     }.run();
     frame.destroy();
   }
+
+  private static TestWindow newTestWindow() {
+    return execute(new GuiQuery<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        return new TestWindow(ExistingHierarchyTest.class);
+      }
+    });
+  }
   
   @Test public void shouldReturnSubcomponents() {
-    final Component c = new JTextField();
-    final ChildrenFinder finder = MockChildrenFinder.mock();
-    field("childrenFinder").ofType(ChildrenFinder.class).in(hierarchy).set(finder);
+    final Component c = newJTextField();
+    final ChildrenFinder childrenFinder = MockChildrenFinder.mock();
+    hierarchy = new ExistingHierarchy(new ParentFinder(), childrenFinder);
     final Collection<Component> children = emptyList();
-    new EasyMockTemplate(finder) {
+    new EasyMockTemplate(childrenFinder) {
       @Override protected void expectations() {
-        expect(finder.childrenOf(c)).andReturn(children);
+        expect(childrenFinder.childrenOf(c)).andReturn(children);
       }
 
       @Override protected void codeToTest() {
@@ -92,30 +99,49 @@ public class ExistingHierarchyTest {
     }.run();
   }
   
-  @Test(groups = GUI) public void shouldDisposeWindow() {
-    class CustomFrame extends TestWindow {
-      private static final long serialVersionUID = 1L;
-
-      boolean disposed;
-      
-      public CustomFrame(Class<?> testClass) {
-        super(testClass);
-      }
-
-      @Override public void dispose() {
-        disposed = true;
-        super.dispose();
-      }
-    };
-    
-    final CustomFrame frame = new CustomFrame(getClass());
-    frame.display();
-    hierarchy.dispose(frame);
-    pause(new Condition("Window is disposed") {
-      @Override public boolean test() {
-        return frame.disposed;
+  private static JTextField newJTextField() {
+    return execute(new GuiQuery<JTextField>() {
+      protected JTextField executeInEDT() {
+        return new JTextField();
       }
     });
-    assertThat(frame.disposed).isTrue();
   }
+  
+  @Test(groups = GUI) public void shouldDisposeWindow() {
+    final MyWindow window = MyWindow.newWindow();
+    window.display();
+    hierarchy.dispose(window);
+    assertThat(disposed(window)).isTrue();
+  }
+
+  static boolean disposed(final MyWindow w) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return w.disposed;
+      }
+    });
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    boolean disposed;
+    
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+    
+    public MyWindow() {
+      super(ExistingHierarchyTest.class);
+    }
+
+    @Override public void dispose() {
+      disposed = true;
+      super.dispose();
+    }    
+  };
 }

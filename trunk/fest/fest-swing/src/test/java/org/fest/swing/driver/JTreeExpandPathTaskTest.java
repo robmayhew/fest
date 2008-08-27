@@ -26,14 +26,14 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JTreeExpandPathTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class JTreeExpandPathTaskTest {
 
   private JTree tree;

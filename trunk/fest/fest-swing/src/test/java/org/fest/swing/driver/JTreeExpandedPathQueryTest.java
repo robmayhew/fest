@@ -28,14 +28,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link JTreeExpandedPathQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class JTreeExpandedPathQueryTest {
 
   private JTree tree;
@@ -48,7 +48,7 @@ public class JTreeExpandedPathQueryTest {
     query = new JTreeExpandedPathQuery(tree, path);
   }
 
-  @Test(groups = EDT_QUERY, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(groups = EDT_ACTION, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldIndicateIfPathExpanded(final boolean expanded) {
     new EasyMockTemplate(tree) {
 

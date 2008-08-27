@@ -27,14 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_QUERY;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
  * Tests for <code>{@link AbstractButtonSelectedQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_QUERY)
+@Test(groups = EDT_ACTION)
 public class AbstractButtonSelectedQueryTest {
 
   private AbstractButton button;
@@ -45,7 +45,7 @@ public class AbstractButtonSelectedQueryTest {
     query = new AbstractButtonSelectedQuery(button);
   }
   
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_QUERY)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
   public void shouldIndicateIfAbstractButtonIsSelected(final boolean selected) {
     new EasyMockTemplate(button) {
       protected void expectations() {

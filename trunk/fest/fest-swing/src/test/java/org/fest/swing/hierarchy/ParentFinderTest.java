@@ -15,22 +15,28 @@
  */
 package org.fest.swing.hierarchy;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link ParentFinder}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class ParentFinderTest {
   
   private ParentFinder finder;
@@ -39,18 +45,52 @@ public class ParentFinderTest {
     finder = new ParentFinder();
   }
 
-  @Test public void shouldReturnParentOfComponent() {
-    TestWindow frame = new TestWindow(getClass());
-    JTextField textField = new JTextField();
-    frame.add(textField);
-    assertThat(finder.parentOf(textField)).isSameAs(frame.getContentPane());
-    frame.destroy();
+  public void shouldReturnParentOfComponent() {
+    MyWindow window = MyWindow.showNew();
+    try {
+      assertThat(finder.parentOf(window.textField)).isSameAs(contentPaneOf(window));
+    } finally {
+      window.destroy();
+    }
   }
   
-  @Test public void shouldReturnParentOfInternalFrame() {
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow showNew() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+      window.display();
+      return window;
+    }
+    
+    final JTextField textField = new JTextField();
+
+    MyWindow() {
+      super(ParentFinderTest.class);
+      addComponents(textField);
+    }
+  }
+  
+  public void shouldReturnParentOfInternalFrame() {
     MDIFrame frame = showInTest(getClass());
     JInternalFrame internalFrame = frame.internalFrame();
-    assertThat(finder.parentOf(internalFrame)).isSameAs(internalFrame.getDesktopIcon().getDesktopPane());
-    frame.destroy();
+    try {
+      assertThat(finder.parentOf(internalFrame)).isNotNull()
+                                                .isSameAs(desktopPaneOf(internalFrame));
+    } finally {
+      frame.destroy();
+    }
+  }
+
+  private static JDesktopPane desktopPaneOf(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<JDesktopPane>() {
+      protected JDesktopPane executeInEDT() {
+        return internalFrame.getDesktopIcon().getDesktopPane();
+      }
+    });
   }
 }
