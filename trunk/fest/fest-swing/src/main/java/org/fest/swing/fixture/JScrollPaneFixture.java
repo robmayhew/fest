@@ -72,6 +72,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @return a fixture managing the horizontal <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
    */
   public JScrollBarFixture horizontalScrollBar() {
+    // TODO call in EDT
     return scrollBarFixture(target.getHorizontalScrollBar());
   }
 
@@ -81,6 +82,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @return a fixture managing the vertical <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
    */
   public JScrollBarFixture verticalScrollBar() {
+    // TODO call in EDT
     return scrollBarFixture(target.getVerticalScrollBar());
   }
 

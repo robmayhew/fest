@@ -26,7 +26,7 @@ import static org.fest.swing.util.Platform.*;
  *
  * @author Alex Ruiz
  */
-public final class Settings {
+public class Settings {
 
   private static final int DEFAULT_DELAY = 30000;
   

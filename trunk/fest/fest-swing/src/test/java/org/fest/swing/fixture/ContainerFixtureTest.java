@@ -15,8 +15,8 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.Adjustable;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,25 +30,46 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.query.AbstractButtonTextQuery;
 import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
-import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JCheckBoxes.checkBox;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.factory.JDialogs.dialog;
+import static org.fest.swing.factory.JFileChoosers.fileChooser;
+import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.factory.JMenuBars.menuBar;
+import static org.fest.swing.factory.JMenuItems.menuItem;
+import static org.fest.swing.factory.JMenus.menu;
+import static org.fest.swing.factory.JPanels.panel;
+import static org.fest.swing.factory.JRadioButtons.radioButton;
+import static org.fest.swing.factory.JScrollBars.scrollBar;
+import static org.fest.swing.factory.JScrollPanes.scrollPane;
+import static org.fest.swing.factory.JSliders.slider;
+import static org.fest.swing.factory.JSpinners.spinner;
+import static org.fest.swing.factory.JSplitPanes.splitPane;
+import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
+import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.factory.JToggleButtons.toggleButton;
+import static org.fest.swing.factory.JToolBars.toolBar;
+import static org.fest.swing.factory.JTrees.tree;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.util.Arrays.array;
-
-import static org.fest.swing.core.GuiActionRunner.*;
 
 /**
  * Tests for <code>{@link ContainerFixture}</code>.
@@ -58,6 +79,8 @@ import static org.fest.swing.core.GuiActionRunner.*;
 @Test(groups = GUI, enabled = false)
 public class ContainerFixtureTest {
 
+  // TODO This class needs some serious refactoring
+  
   private static final Dimension PREFERRED_DIMENSION = new Dimension(100, 100);
 
   private ContainerFixture<TestWindow> fixture;
@@ -98,14 +121,11 @@ public class ContainerFixtureTest {
   }
 
   private JButton addJButton() {
-    return execute(new GuiQuery<JButton>() {
-      protected JButton executeInEDT() {
-        JButton button = new JButton("A Button");
-        button.setName("button");
-        addToWindowAndDisplay(button);
-        return button;
-      }
-    });
+    JButton button = button().withName("button")
+                             .withText("A Button")
+                             .createInEDT();
+    showWindowWith(button);
+    return button;
   }
 
   public void shouldFindCheckBoxByType() {
@@ -132,14 +152,11 @@ public class ContainerFixtureTest {
   }
 
   private JCheckBox addJCheckBox() {
-    return execute(new GuiQuery<JCheckBox>() {
-      protected JCheckBox executeInEDT() {
-        JCheckBox checkBox = new JCheckBox("A CheckBox");
-        checkBox.setName("checkBox");
-        addToWindowAndDisplay(checkBox);
-        return checkBox;
-      }
-    });
+    JCheckBox checkBox = checkBox().withName("checkBox")
+                                   .withText("A CheckBox")
+                                   .createInEDT();
+    showWindowWith(checkBox);
+    return checkBox;
   }
 
   public void shouldFindComboBoxByType() {
@@ -166,14 +183,11 @@ public class ContainerFixtureTest {
   }
 
   private JComboBox addJComboBox() {
-    return execute(new GuiQuery<JComboBox>() {
-      protected JComboBox executeInEDT() {
-        JComboBox comboBox = new JComboBox(array("first", "second", "third"));
-        comboBox.setName("comboBox");
-        addToWindowAndDisplay(comboBox);
-        return comboBox;
-      }
-    });
+    JComboBox comboBox = comboBox().withItems("first", "second", "third")
+                                   .withName("comboBox")
+                                   .createInEDT();
+    showWindowWith(comboBox);
+    return comboBox;
   }
 
   public void shouldFindDialogByType() {
@@ -200,16 +214,12 @@ public class ContainerFixtureTest {
   }
 
   private JDialog addJDialog() {
-    return execute(new GuiQuery<JDialog>() {
-      protected JDialog executeInEDT() {
-        JDialog dialog = new JDialog(window, "A Dialog");
-        dialog.setName("dialog");
-        window.display();
-        dialog.pack();
-        dialog.setVisible(true);
-        return dialog;
-      }
-    });
+    window.display();
+    JDialog dialog = dialog().withName("dialog")
+                             .withOwner(window)
+                             .withTitle("A Dialog")
+                             .createAndShowInEDT();
+    return dialog;
   }
 
   public void shouldFindFileChooserByType() {
@@ -236,14 +246,10 @@ public class ContainerFixtureTest {
   }
 
   private JFileChooser addJFileChooser() {
-    return execute(new GuiQuery<JFileChooser>() {
-      protected JFileChooser executeInEDT() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setName("fileChooser");
-        addToWindowAndDisplay(fileChooser);
-        return fileChooser;
-      }
-    });
+    JFileChooser fileChooser = fileChooser().withName("fileChooser")
+                                            .createInEDT();
+    showWindowWith(fileChooser);
+    return fileChooser;
   }
 
   public void shouldFindLabelByType() {
@@ -270,14 +276,11 @@ public class ContainerFixtureTest {
   }
 
   private JLabel addJLabel() {
-    return execute(new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        JLabel label = new JLabel("A Label");
-        label.setName("label");
-        addToWindowAndDisplay(label);
-        return label;
-      }
-    });
+    JLabel label = label().withName("label")
+                          .withText("A Label")
+                          .createInEDT();
+    showWindowWith(label);
+    return label;
   }
 
   public void shouldFindListByType() {
@@ -304,14 +307,9 @@ public class ContainerFixtureTest {
   }
 
   private JList addJList() {
-    return execute(new GuiQuery<JList>() {
-      protected JList executeInEDT() {
-        JList list = new JList();
-        list.setName("list");
-        addToWindowAndDisplay(list);
-        return list;
-      }
-    });
+    JList list = list().withName("list").createInEDT();
+    showWindowWith(list);
+    return list;
   }
 
   public void shouldFindMenuWithGivenMatcher() {
@@ -338,17 +336,23 @@ public class ContainerFixtureTest {
   }
 
   private JMenuItem addJMenuItem() {
-    return execute(new GuiQuery<JMenuItem>() {
-      protected JMenuItem executeInEDT() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("A Menu");
-        JMenuItem subMenu = new JMenu("A Submenu");
-        subMenu.setName("subMenu");
-        menu.add(subMenu);
-        menuBar.add(menu);
-        window.setJMenuBar(menuBar);
-        window.display();
-        return subMenu;
+    JMenuItem menuItem = menuItem().withName("subMenu")
+                                   .withText("A Submenu")
+                                   .createInEDT();
+    JMenu menu = menu().withText("A Menu")
+                       .withMenuItems(menuItem)
+                       .createInEDT();
+    JMenuBar menuBar = menuBar().withMenus(menu)
+                                .createInEDT();
+    setJMenuBar(window, menuBar);
+    window.display();
+    return menuItem;
+  }
+
+  private static void setJMenuBar(final JFrame frame, final JMenuBar menuBar) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        frame.setJMenuBar(menuBar);
       }
     });
   }
@@ -377,14 +381,18 @@ public class ContainerFixtureTest {
   }
 
   private JPanel addJPanel() {
-    return execute(new GuiQuery<JPanel>() {
-      protected JPanel executeInEDT() {
-        JPanel panel = new JPanel();
-        window.getRootPane().setContentPane(panel);
-        panel.setName("panel");
-        panel.setBackground(RED);
-        window.display();
-        return panel;
+    JPanel panel = panel().withBackground(RED)
+                          .withName("panel")
+                          .createInEDT();
+    setContentPane(window, panel);
+    window.display();
+    return panel;
+  }
+
+  private void setContentPane(final JFrame frame, final JPanel panel) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        frame.getRootPane().setContentPane(panel);
       }
     });
   }
@@ -439,14 +447,11 @@ public class ContainerFixtureTest {
   }
 
   private JRadioButton addJRadioButton() {
-    return execute(new GuiQuery<JRadioButton>() {
-      protected JRadioButton executeInEDT() {
-        JRadioButton radioButton = new JRadioButton("A Radio Button");
-        radioButton.setName("radioButton");
-        addToWindowAndDisplay(radioButton);
-        return radioButton;
-      }
-    });
+    JRadioButton radioButton = radioButton().withName("radioButton")
+                                            .withText("A Radio Button")
+                                            .createInEDT();
+    showWindowWith(radioButton);
+    return radioButton;
   }
 
   public void shouldFindScrollBarByType() {
@@ -473,15 +478,11 @@ public class ContainerFixtureTest {
   }
 
   private JScrollBar addJScrollBar() {
-    return execute(new GuiQuery<JScrollBar>() {
-      protected JScrollBar executeInEDT() {
-        JScrollBar scrollBar = new JScrollBar(Adjustable.HORIZONTAL);
-        scrollBar.setName("scrollBar");
-        scrollBar.setValue(10);
-        addToWindowAndDisplay(scrollBar);
-        return scrollBar;
-      }
-    });
+    JScrollBar scrollBar = scrollBar().withName("scrollBar")
+                                      .withValue(10)
+                                      .createInEDT();
+    showWindowWith(scrollBar);
+    return scrollBar;
   }
 
   public void shouldFindScrollPane() {
@@ -508,15 +509,11 @@ public class ContainerFixtureTest {
   }
 
   private JScrollPane addJScrollPane() {
-    return execute(new GuiQuery<JScrollPane>() {
-      protected JScrollPane executeInEDT() {
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setName("scrollPane");
-        scrollPane.setPreferredSize(PREFERRED_DIMENSION);
-        addToWindowAndDisplay(scrollPane);
-        return scrollPane;
-      }
-    });
+    JScrollPane scrollPane = scrollPane().withName("scrollPane")
+                                         .withPreferredSize(PREFERRED_DIMENSION)
+                                         .createInEDT();
+    showWindowWith(scrollPane);
+    return scrollPane;
   }
 
   public void shouldFindSliderByType() {
@@ -543,14 +540,13 @@ public class ContainerFixtureTest {
   }
 
   private JSlider addJSlider() {
-    return execute(new GuiQuery<JSlider>() {
-      protected JSlider executeInEDT() {
-        JSlider slider = new JSlider(10, 20, 15);
-        slider.setName("slider");
-        addToWindowAndDisplay(slider);
-        return slider;
-      }
-    });
+    JSlider slider = slider().withMinimum(10)
+                             .withMaximum(20)
+                             .withValue(15)
+                             .withName("slider")
+                             .createInEDT();
+    showWindowWith(slider);
+    return slider;
   }
 
   public void shouldFindSpinnerByType() {
@@ -577,14 +573,11 @@ public class ContainerFixtureTest {
   }
 
   private JSpinner addJSpinner() {
-    return execute(new GuiQuery<JSpinner>() {
-      protected JSpinner executeInEDT() {
-        JSpinner spinner = new JSpinner(new SpinnerListModel(array("One", "Two")));
-        spinner.setName("spinner");
-        addToWindowAndDisplay(spinner);
-        return spinner;
-      }
-    });
+    JSpinner spinner = spinner().withName("spinner")
+                                .withValues("One", "Two")
+                                .createInEDT();
+    showWindowWith(spinner);
+    return spinner;
   }
 
   public void shouldFindSplitPaneByType() {
@@ -616,15 +609,15 @@ public class ContainerFixtureTest {
   }
 
   private JSplitPane addJSplitPane() {
-    return execute(new GuiQuery<JSplitPane>() {
-      protected JSplitPane executeInEDT() {
-        JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT, new JList(), new JList());
-        splitPane.setName("splitPane");
-        splitPane.setPreferredSize(PREFERRED_DIMENSION);
-        addToWindowAndDisplay(splitPane);
-        return splitPane;
-      }
-    });
+    JSplitPane splitPane = splitPane().withName("splitPane")
+                                      .withRightComponent(newList())
+                                      .createInEDT();
+    showWindowWith(splitPane);
+    return splitPane;
+  }
+
+  private JList newList() {
+    return list().createInEDT();
   }
 
   public void shouldFindTabbedPaneByType() {
@@ -651,15 +644,11 @@ public class ContainerFixtureTest {
   }
 
   private JTabbedPane addJTabbedPane() {
-    return execute(new GuiQuery<JTabbedPane>() {
-      protected JTabbedPane executeInEDT() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setName("tabbedPane");
-        tabbedPane.addTab("A Tab", new JPanel());
-        addToWindowAndDisplay(tabbedPane);
-        return tabbedPane;
-      }
-    });
+    JTabbedPane tabbedPane = tabbedPane().withName("tabbedPane")
+                                         .withTabs("A Tab")
+                                         .createInEDT();
+    showWindowWith(tabbedPane);
+    return tabbedPane;
   }
 
   public void shouldFindTableByType() {
@@ -686,14 +675,12 @@ public class ContainerFixtureTest {
   }
 
   private JTable addJTable() {
-    return execute(new GuiQuery<JTable>() {
-      protected JTable executeInEDT() {
-        JTable table = new JTable(6, 8);
-        table.setName("table");
-        addToWindowAndDisplay(table);
-        return table;
-      }
-    });
+    JTable table = table().withRowCount(6)
+                          .withColumnCount(8)
+                          .withName("table")
+                          .createInEDT();
+    showWindowWith(table);
+    return table;
   }
 
   public void shouldFindTextComponentByType() {
@@ -725,14 +712,11 @@ public class ContainerFixtureTest {
   }
 
   private JTextComponent addJTextComponent() {
-    return execute(new GuiQuery<JTextComponent>() {
-      protected JTextComponent executeInEDT() {
-        JTextField textField = new JTextField(10);
-        textField.setName("textField");
-        addToWindowAndDisplay(textField);
-        return textField;
-      }
-    });
+    JTextField textField = textField().withColumns(10)
+                                      .withName("textField")
+                                      .createInEDT();
+    showWindowWith(textField);
+    return textField;
   }
 
   public void shouldFindToggleButtonByType() {
@@ -759,14 +743,11 @@ public class ContainerFixtureTest {
   }
 
   private JToggleButton addJToggleButton() {
-    return execute(new GuiQuery<JToggleButton>() {
-      protected JToggleButton executeInEDT() {
-        JToggleButton toggleButton = new JToggleButton("A ToggleButton");
-        toggleButton.setName("toggleButton");
-        addToWindowAndDisplay(toggleButton);
-        return toggleButton;
-      }
-    });
+    JToggleButton toggleButton = toggleButton().withName("toggleButton")
+                                               .withText("A ToggleButton")
+                                               .createInEDT();
+    showWindowWith(toggleButton);
+    return toggleButton;
   }
 
   public void shouldFindToolBarByType() {
@@ -793,14 +774,11 @@ public class ContainerFixtureTest {
   }
 
   private JToolBar addJToolBar() {
-    return execute(new GuiQuery<JToolBar>() {
-      protected JToolBar executeInEDT() {
-        JToolBar toolBar = new JToolBar(HORIZONTAL);
-        toolBar.setName("toolBar");
-        addToWindowAndDisplay(toolBar);
-        return toolBar;
-      }
-    });
+    JToolBar toolBar = toolBar().withName("toolBar")
+                                .withOrientation(HORIZONTAL)
+                                .createInEDT();
+    showWindowWith(toolBar);
+    return toolBar;
   }
 
   public void shouldFindTreeByType() {
@@ -827,18 +805,28 @@ public class ContainerFixtureTest {
   }
 
   private JTree addJTree() {
-    return execute(new GuiQuery<JTree>() {
-      protected JTree executeInEDT() {
-        JTree tree = new JTree(array("One", "Two"));
-        tree.setName("tree");
-        addToWindowAndDisplay(tree);
-        return tree;
-      }
-    });
+    JTree tree = tree().withName("tree")
+                       .withValues("One", "Two")
+                       .createInEDT();
+    showWindowWith(tree);
+    return tree;
   }
 
   private void addToWindowAndDisplay(Component c) {
     window.add(c);
     window.display();
+  }
+  
+  private void showWindowWith(Component c) {
+    add(window, c);
+    window.display();
+  }
+
+  private static void add(final Container container, final Component component) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        container.add(component);
+      }
+    });
   }
 }

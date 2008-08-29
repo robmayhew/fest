@@ -16,17 +16,15 @@
 package org.fest.swing.format;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JOptionPanes.optionPane;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JOptionPaneFormatter}</code>.
@@ -40,23 +38,16 @@ import static org.fest.swing.core.GuiActionRunner.execute;
   private JOptionPaneFormatter formatter;
   
   @BeforeClass public void setUp() {
-    optionPane = newOptionPane();
+    optionPane = optionPane().withMessage("A message")
+                             .withMessageType(ERROR_MESSAGE)
+                             .withOptionType(DEFAULT_OPTION)
+                             .createInEDT();
     formatter = new JOptionPaneFormatter();
-  }
-
-  private static JOptionPane newOptionPane() {
-    return execute(new GuiQuery<JOptionPane>() {
-      protected JOptionPane executeInEDT() {
-        JOptionPane optionPane = new JOptionPane("A message", ERROR_MESSAGE);
-        optionPane.setOptionType(DEFAULT_OPTION);
-        return optionPane;
-      }
-    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJOptionPane() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
 
   public void shouldFormatJOptionPane() {

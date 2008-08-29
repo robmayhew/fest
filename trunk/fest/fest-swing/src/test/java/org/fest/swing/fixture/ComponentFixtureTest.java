@@ -15,6 +15,10 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
@@ -22,6 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 
@@ -29,6 +34,8 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link ComponentFixture}</code>.
@@ -49,7 +56,7 @@ public class ComponentFixtureTest {
     settings = new Settings();
     type = JTextField.class;
     name = "textBox";
-    target = new JTextField();
+    target = textField().createInEDT();
   }
 
   @Test(expectedExceptions = NullPointerException.class)
@@ -126,23 +133,48 @@ public class ComponentFixtureTest {
 
   public void shouldReturnFontFixtureWithFontFromTarget() {
     FontFixture fontFixture = fixture().font();
-    assertThat(fontFixture.target()).isSameAs(target.getFont());
+    assertThat(fontFixture.target()).isSameAs(fontOf(target));
     assertThat(fontFixture.description()).contains("javax.swing.JTextField")
                                          .contains("property:'font'");
   }
 
+  private static Font fontOf(final Component component) {
+    return execute(new GuiQuery<Font>() {
+      protected Font executeInEDT() {
+        return component.getFont();
+      }
+    });
+  }
+
   public void shouldReturnColorFixtureWithBackgroundFromTarget() {
     ColorFixture colorFixture = fixture().background();
-    assertThat(colorFixture.target()).isSameAs(target.getBackground());
+    Component component = target;
+    assertThat(colorFixture.target()).isSameAs(backgroundOf(component));
     assertThat(colorFixture.description()).contains("javax.swing.JTextField")
                                           .contains("property:'background'");
   }
 
+  private static Color backgroundOf(final Component component) {
+    return execute(new GuiQuery<Color>() {
+      protected Color executeInEDT() {
+        return component.getBackground();
+      }
+    });
+  }
+
   public void shouldReturnColorFixtureWithForegroundFromTarget() {
     ColorFixture colorFixture = fixture().foreground();
-    assertThat(colorFixture.target()).isSameAs(target.getForeground());
+    assertThat(colorFixture.target()).isSameAs(foregroundOf(target));
     assertThat(colorFixture.description()).contains("javax.swing.JTextField")
                                           .contains("property:'foreground'");
+  }
+
+  private static Color foregroundOf(final Component component) {
+    return execute(new GuiQuery<Color>() {
+      protected Color executeInEDT() {
+        return component.getForeground();
+      }
+    });
   }
 
   public void shouldCastTarget() {

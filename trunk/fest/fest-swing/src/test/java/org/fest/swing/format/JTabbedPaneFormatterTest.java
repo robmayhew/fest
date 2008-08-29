@@ -17,16 +17,16 @@ package org.fest.swing.format;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTabbedPaneFormatter}</code>.
@@ -40,23 +40,13 @@ import static org.fest.swing.core.GuiActionRunner.execute;
   private JTabbedPaneFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    tabbedPane = newTabbedPane();
+    tabbedPane = tabbedPane().withName("tabbedPane").createInEDT();
     formatter = new JTabbedPaneFormatter();
-  }
-  
-  private static JTabbedPane newTabbedPane() {
-    return execute(new GuiQuery<JTabbedPane>() {
-      protected JTabbedPane executeInEDT() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setName("tabbedPane");
-        return tabbedPane;
-      }
-    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTabbedPane() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
 
   public void shouldFormatJTabbedPaneWithTabsAndSelection() {

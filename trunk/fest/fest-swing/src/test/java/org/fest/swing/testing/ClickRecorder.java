@@ -31,6 +31,7 @@ import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands a mouse listener that records mouse events.
+ * TODO call from EDT
  *
  * @author Alex Ruiz
  * @author Yvonne Wang 

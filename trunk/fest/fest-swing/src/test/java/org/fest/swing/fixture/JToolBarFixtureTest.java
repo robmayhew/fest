@@ -31,6 +31,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
 
 /**
@@ -47,17 +48,15 @@ public class JToolBarFixtureTest extends CommonComponentFixtureTestCase<JToolBar
   
   void onSetUp() {
     driver = createMock(JToolBarDriver.class);
-    target = new JToolBar();
+    target = toolBar().createInEDT();
     fixture = new JToolBarFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JToolBar> fixtureWithName(String name) {
-        return new JToolBarFixture(robot(), name);
-      }
-    }.run();
+    String name = "toolBar";
+    expectLookupByName(name, JToolBar.class);
+    verifyLookup(new JToolBarFixture(robot(), name));
   }
 
   @Test public void shouldFloatToPoint() {

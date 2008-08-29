@@ -26,6 +26,8 @@ import org.fest.swing.driver.JSliderDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.factory.JSliders.slider;
+
 /**
  * Tests for <code>{@link JSliderFixture}</code>.
  *
@@ -39,17 +41,15 @@ public class JSliderFixtureTest extends CommonComponentFixtureTestCase<JSlider> 
 
   void onSetUp() {
     driver = createMock(JSliderDriver.class);
-    target = new JSlider();
+    target = slider().createInEDT();
     fixture = new JSliderFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JSlider> fixtureWithName(String name) {
-        return new JSliderFixture(robot(), name);
-      }
-    }.run();
+    String name = "slider";
+    expectLookupByName(name, JSlider.class);
+    verifyLookup(new JSliderFixture(robot(), name));
   }
 
   @Test public void shouldSlideToValue() {

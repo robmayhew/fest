@@ -17,14 +17,14 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import javax.swing.JButton;
-
 import org.testng.annotations.Test;
 
 import org.fest.assertions.Assertions;
 import org.fest.swing.driver.ComponentDriver;
 
 import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.swing.factory.JButtons.button;
 
 /**
  * Tests for <code>{@link GenericComponentFixture}</code>.
@@ -39,7 +39,7 @@ import static org.easymock.classextension.EasyMock.createMock;
   
   void onSetUp() {
     driver = createMock(ComponentDriver.class);
-    target = new JButton();
+    target = button().createInEDT();
     fixture = new GenericComponentFixture<Component>(robot(), driver, target) {};
   }
 

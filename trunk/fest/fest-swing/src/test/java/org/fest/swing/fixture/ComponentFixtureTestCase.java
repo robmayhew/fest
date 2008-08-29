@@ -18,16 +18,16 @@ import java.awt.Component;
 
 import org.testng.annotations.BeforeMethod;
 
-import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.driver.ComponentDriver;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
 
 /**
  * Understands test methods for implementations of <code>{@link ComponentFixture}</code>.
@@ -40,11 +40,12 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   private Robot robot;
   private ComponentFinder finder;
   private Settings settings;
-
+  
   @BeforeMethod public final void setUp() {
     robot = createMock(Robot.class);
     finder = createMock(ComponentFinder.class);
     settings = new Settings();
+    settings.componentLookupScope(DEFAULT);
     onSetUp();
   }
 
@@ -54,58 +55,34 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
 
   ComponentFinder finder() { return finder; }
   
-  Settings settings() { return settings; }
-
   abstract T target();
 
   abstract ComponentDriver driver();
 
-  @SuppressWarnings("unchecked") Class<T> targetType() {
-    return (Class<T>) target().getClass();
-  }
-
-  private abstract class FixtureCreationTemplate extends EasyMockTemplate {
-    FixtureCreationTemplate() {
-      super(robot(), finder());
-    }
-    
-    protected final void expectations() {
-      expect(robot().finder()).andReturn(finder());
-      expect(robot().settings()).andReturn(settings());
-      expectComponentLookup();
-    }
-    
-    abstract void expectComponentLookup();
-    
-    protected final void codeToTest() {
-      ComponentFixture<T> fixture = fixture();
-      assertThat(fixture.component()).isSameAs(target());
-    }
-    
-    abstract ComponentFixture<T> fixture();
-  }
-
-  abstract class FixtureCreationByTypeTemplate extends FixtureCreationTemplate {
-    void expectComponentLookup() {
-      expect(finder().findByType(targetType(), requireShowing())).andReturn(target());
-    }
+  final void expectLookupByName(String name, Class<T> targetType) {
+    expectLookupByName(name, targetType, DEFAULT.requireShowing());
   }
   
-  abstract class FixtureCreationByNameTemplate extends FixtureCreationTemplate {
-    private final String name = "c";
+  final void expectLookupByName(String name, Class<T> targetType, boolean requireShowing) {
+    expect(robot.finder()).andReturn(finder);
+    expect(robot.settings()).andReturn(settings);
+    expect(finder.findByName(name, targetType, requireShowing)).andReturn(target());
+    replay(robot, finder);
+  }
 
-    final void expectComponentLookup() {
-      expect(finder().findByName(name, targetType(), requireShowing())).andReturn(target());
-    }
-
-    final ComponentFixture<T> fixture() {
-      return fixtureWithName(name);
-    }
-
-    abstract ComponentFixture<T> fixtureWithName(String name);
+  final void verifyLookup(ComponentFixture<? extends Component> fixture) {
+    verify(robot, finder);
+    assertThat(fixture.target).isSameAs(target());
   }
   
-  private boolean requireShowing() {
-    return settings().componentLookupScope().requireShowing();
+  final void expectLookupByType(Class<T> targetType) {
+    expectLookupByType(targetType, DEFAULT.requireShowing());
+  }
+
+  final void expectLookupByType(Class<T> targetType, boolean requireShowing) {
+    expect(robot.finder()).andReturn(finder);
+    expect(robot.settings()).andReturn(settings);
+    expect(finder.findByType(targetType, requireShowing)).andReturn(target());
+    replay(robot, finder);
   }
 }

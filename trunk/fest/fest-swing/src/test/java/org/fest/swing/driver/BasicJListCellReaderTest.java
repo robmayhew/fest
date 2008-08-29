@@ -20,18 +20,19 @@ import java.awt.Component;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JToolBar;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -47,14 +48,8 @@ public class BasicJListCellReaderTest {
   private BasicJListCellReader reader;
 
   @BeforeMethod public void setUp() {
-    list = newList();
+    list = list().createInEDT();
     reader = new BasicJListCellReader();
-  }
-
-  private static JList newList() {
-    return execute(new GuiQuery<JList>() { 
-      protected JList executeInEDT() { return new JList(); }
-    });
   }
 
   public void shouldReturnModelValueToString() {
@@ -65,33 +60,17 @@ public class BasicJListCellReaderTest {
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     setModelValue(list, null);
-    setRendererComponent(list, notRecognizedRenderer());
+    setRendererComponent(list, toolBar().createInEDT());
     Object value = reader.valueAt(list, 0);
     assertThat(value).isNull();
   }
 
-  private static Component notRecognizedRenderer() {
-    return execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        return new JToolBar();
-      }
-    });
-  }
-
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
     setModelValue(list, new Jedi(null));
-    JLabel renderer = labelWithText("First");
+    JLabel renderer = label().withText("First").createInEDT();
     setRendererComponent(this.list, renderer);
     Object value = reader.valueAt(this.list, 0);
     assertThat(value).isEqualTo("First");
-  }
-
-  private static JLabel labelWithText(final String text) {
-    return execute(new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        return new JLabel(text);
-      }
-    });
   }
 
   private static void setModelValue(final JList list, final Object value) {

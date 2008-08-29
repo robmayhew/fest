@@ -16,17 +16,15 @@
 package org.fest.swing.format;
 
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTableFormatter}</code>.
@@ -40,24 +38,17 @@ import static org.fest.swing.core.GuiActionRunner.execute;
   private JTableFormatter formatter;
 
   @BeforeClass public void setUp() {
-    table = newTable();
+    table = table().withRowCount(8)
+                   .withColumnCount(6)
+                   .withName("table")
+                   .withSelectionMode(MULTIPLE_INTERVAL_SELECTION)
+                   .createInEDT();
     formatter = new JTableFormatter();
-  }
-  
-  private static JTable newTable() {
-    return execute(new GuiQuery<JTable>() {
-      protected JTable executeInEDT() {
-        JTable table = new JTable(8, 6);
-        table.setName("table");
-        table.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
-        return table;
-      }
-    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTable() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
 
   public void shouldFormatJTable() {

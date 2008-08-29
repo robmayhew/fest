@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
 
 /**
  * Tests for <code>{@link JButtonFixture}</code>.
@@ -42,17 +43,15 @@ public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> 
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = new JButton();
+    target = button().createInEDT();
     fixture = new JButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JButton> fixtureWithName(String name) {
-        return new JButtonFixture(robot(), name);
-      }
-    }.run();
+    String name = "button";
+    expectLookupByName(name, JButton.class);
+    verifyLookup(new JButtonFixture(robot(), name));
   }
 
   @Test public void shouldReturnText() {
@@ -84,5 +83,4 @@ public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> 
   ComponentDriver driver() { return driver; }
   JButton target() { return target; }
   JButtonFixture fixture() { return fixture; }
-  Class<JButton> targetType() { return JButton.class; }
 }

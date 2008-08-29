@@ -24,10 +24,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Strings.concat;
@@ -40,13 +42,13 @@ import static org.fest.util.Strings.concat;
 @Test(groups = { GUI, BUG })
 public class FindContainerShowingOnly {
 
-  private MyFrame myFrame;
+  private MyWindow window;
   private Robot robot;
 
   @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();;
-    myFrame = new MyFrame();
-    robot.showWindow(myFrame, new Dimension(400, 300));
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.newWindow();
+    robot.showWindow(window, new Dimension(400, 300));
   }
 
   @AfterMethod public void tearDown() {
@@ -54,19 +56,27 @@ public class FindContainerShowingOnly {
   }
 
   public void shouldFindOnlyVisibleContainer() {
-    myFrame.notShowing.setVisible(false);
+    window.notShowing.setVisible(false);
     JInternalFrameFixture fixture = new JInternalFrameFixture(robot, "target");
-    assertThat(fixture.target).isSameAs(myFrame.showing);
+    assertThat(fixture.target).isSameAs(window.showing);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private final JDesktopPane desktop = new JDesktopPane();
     private final MyInternalFrame notShowing = new MyInternalFrame();
     private final MyInternalFrame showing = new MyInternalFrame();
 
-    public MyFrame() {
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+    
+    MyWindow() {
       super(FindContainerShowingOnly.class);
       setContentPane(desktop);
       addToDesktop(notShowing);

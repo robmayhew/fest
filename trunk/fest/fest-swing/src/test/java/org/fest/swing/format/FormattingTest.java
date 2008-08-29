@@ -28,6 +28,20 @@ import static java.awt.Adjustable.VERTICAL;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JDialogs.dialog;
+import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.factory.JMenuBars.menuBar;
+import static org.fest.swing.factory.JMenuItems.menuItem;
+import static org.fest.swing.factory.JPanels.panel;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
+import static org.fest.swing.factory.JScrollBars.scrollBar;
+import static org.fest.swing.factory.JScrollPanes.scrollPane;
+import static org.fest.swing.factory.JSliders.slider;
+import static org.fest.swing.factory.JSpinners.spinner;
+import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.factory.JToggleButtons.toggleButton;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -59,7 +73,9 @@ import static org.fest.util.Strings.concat;
   }
   
   public void shouldFormatDialog() {
-    JDialog dialog = newJDialog();
+    JDialog dialog = dialog().withName("dialog")
+                             .withTitle("A dialog")
+                             .createInEDT();
     assertThat(formatted(dialog)).contains(classNameOf(dialog))
                                  .contains("name='dialog'")
                                  .contains("title='A dialog'")
@@ -69,19 +85,10 @@ import static org.fest.util.Strings.concat;
                                  .contains("showing=false");
   }
 
-  private static JDialog newJDialog() {
-    return execute(new GuiQuery<JDialog>() {
-      protected JDialog executeInEDT() {
-        JDialog dialog = new JDialog();
-        dialog.setName("dialog");
-        dialog.setTitle("A dialog");
-        return dialog;
-      }
-    });
-  }
-
   public void shouldFormatFrame() {
-    JFrame frame = newJFrame();
+    JFrame frame = frame().withName("frame")
+                          .withTitle("A frame")
+                          .createInEDT();
     assertThat(formatted(frame)).contains(classNameOf(frame))
                                 .contains("name='frame'")
                                 .contains("title='A frame'")
@@ -90,22 +97,15 @@ import static org.fest.util.Strings.concat;
                                 .contains("showing=false");
   }
   
-  private static JFrame newJFrame() {
-    return execute(new GuiQuery<JFrame>() {
-      protected JFrame executeInEDT() {
-        JFrame frame = new JFrame("A frame");
-        frame.setName("frame");
-        return frame;
-      }
-    });
-  }
-
   public void shouldFormatJComboBox() {
     assertThat(Formatting.formatter(JComboBox.class)).isInstanceOf(JComboBoxFormatter.class);
   }
 
   public void shouldFormatJButton() {
-    JButton button = newJButton();
+    JButton button = button().enabled(false)
+                             .withName("button")
+                             .withText("A button")
+                             .createInEDT();
     assertThat(formatted(button)).contains(classNameOf(button))
                                  .contains("name='button'")
                                  .contains("text='A button'")
@@ -114,39 +114,20 @@ import static org.fest.util.Strings.concat;
                                  .contains("showing=false");
   }
 
-  private static JButton newJButton() {
-    return execute(new GuiQuery<JButton>() {
-      protected JButton executeInEDT() {
-        JButton button = new JButton("A button");
-        button.setEnabled(false);
-        button.setName("button");
-        return button;
-      }
-    });
-  }
-
   public void shouldFormatJFileChooser() {
     assertThat(Formatting.formatter(JFileChooser.class)).isInstanceOf(JFileChooserFormatter.class);
   }
 
   public void shouldFormatJLabel() {
-    JLabel label = newJLabel();
+    JLabel label = label().withName("label")
+                          .withText("A label")
+                          .createInEDT();
     assertThat(formatted(label)).contains(classNameOf(label))
                                 .contains("name='label'")
                                 .contains("text='A label'")
                                 .contains("enabled=true")
                                 .contains("visible=true")
                                 .contains("showing=false");
-  }
-
-  private static JLabel newJLabel() {
-    return execute(new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        JLabel label = new JLabel("A label");
-        label.setName("label");
-        return label;
-      }
-    });
   }
 
   public void shouldFormatJLayeredPane() {
@@ -167,20 +148,15 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldFormatJMenuBar() {
-    JMenuBar menuBar = newJMenuBar();
+    JMenuBar menuBar = menuBar().createInEDT();
     assertThat(formatted(menuBar)).isEqualTo(concat(classNameOf(menuBar), "[]"));
   }
 
-  private static JMenuBar newJMenuBar() {
-    return execute(new GuiQuery<JMenuBar>() {
-      protected JMenuBar executeInEDT() {
-        return new JMenuBar();
-      }
-    });
-  }
-
   public void shouldFormatJMenuItem() {
-    JMenuItem menuItem = newJMenuItem();
+    JMenuItem menuItem = menuItem().withName("menuItem")
+                                   .selected(true)
+                                   .withText("A menu item")
+                                   .createInEDT();
     assertThat(formatted(menuItem)).contains(classNameOf(menuItem))
                                    .contains("name='menuItem'")
                                    .contains("text='A menu item'")
@@ -190,56 +166,26 @@ import static org.fest.util.Strings.concat;
                                    .contains("showing=false");
   }
 
-  private static JMenuItem newJMenuItem() {
-    return execute(new GuiQuery<JMenuItem>() {
-      protected JMenuItem executeInEDT() {
-        JMenuItem menuItem = new JMenuItem();
-        menuItem.setName("menuItem");
-        menuItem.setSelected(true);
-        menuItem.setText("A menu item");
-        return menuItem;
-      }
-    });
-  }
-
   public void shouldFormatJOptionPane() {
     assertThat(Formatting.formatter(JOptionPane.class)).isInstanceOf(JOptionPaneFormatter.class);
   }
 
   public void shouldFormatJPanel() {
-    JPanel panel = newJPanel();
+    JPanel panel = panel().withName("panel").createInEDT();
     assertThat(formatted(panel)).contains(classNameOf(panel))
                                 .contains("name='panel'");
   }
 
-  private static JPanel newJPanel() {
-    return execute(new GuiQuery<JPanel>() {
-      protected JPanel executeInEDT()  {
-        JPanel panel = new JPanel();
-        panel.setName("panel");
-        return panel;
-      }
-    });
-  }
-
   public void shouldFormatJPopupMenu() {
-    JPopupMenu popupMenu = newJPopupMenu();
+    JPopupMenu popupMenu = popupMenu().withLabel("Menu")
+                                      .withName("popupMenu")
+                                      .createInEDT();
     assertThat(formatted(popupMenu)).contains(classNameOf(popupMenu))
                                     .contains("name='popupMenu'")
                                     .contains("label='Menu'")
                                     .contains("enabled=true")
                                     .contains("visible=false")
                                     .contains("showing=false");
-  }
-
-  private static JPopupMenu newJPopupMenu() {
-    return execute(new GuiQuery<JPopupMenu>() {
-      protected JPopupMenu executeInEDT()  {
-        JPopupMenu popupMenu = new JPopupMenu("Menu");
-        popupMenu.setName("popupMenu");
-        return popupMenu;
-      }
-    });
   }
 
   public void shouldFormatJRootPane() {
@@ -256,7 +202,13 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldFormatJScrollBar() {
-    JScrollBar scrollBar = newJScrollBar();
+    JScrollBar scrollBar = scrollBar().withBlockIncrement(10)
+                                      .withMinimum(0)
+                                      .withMaximum(60)
+                                      .withName("scrollBar")
+                                      .withOrientation(VERTICAL)
+                                      .withValue(20)
+                                      .createInEDT();
     assertThat(formatted(scrollBar)).contains(classNameOf(scrollBar))
                                     .contains("name='scrollBar'")
                                     .contains("value=20")
@@ -268,18 +220,8 @@ import static org.fest.util.Strings.concat;
                                     .contains("showing=false");
   }
 
-  private static JScrollBar newJScrollBar() {
-    return execute(new GuiQuery<JScrollBar>() {
-      protected JScrollBar executeInEDT()  {
-        JScrollBar scrollBar = new JScrollBar(VERTICAL, 20, 10, 0, 60);
-        scrollBar.setName("scrollBar");
-        return scrollBar;
-      }
-    });
-  }
-
   public void shouldFormatJScrollPane() {
-    JScrollPane scrollPane = newJScrollPane();
+    JScrollPane scrollPane = scrollPane().withName("scrollPane").createInEDT();
     assertThat(formatted(scrollPane)).contains(classNameOf(scrollPane))
                                      .contains("name='scrollPane'")
                                      .contains("enabled=true")
@@ -287,18 +229,12 @@ import static org.fest.util.Strings.concat;
                                      .contains("showing=false");
   }
 
-  private static JScrollPane newJScrollPane() {
-    return execute(new GuiQuery<JScrollPane>() {
-      protected JScrollPane executeInEDT()  {
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setName("scrollPane");
-        return scrollPane;
-      }
-    });
-  }
-
   public void shouldFormatJSlider() {
-    JSlider slider = newJSlider();
+    JSlider slider = slider().withMaximum(8)
+                             .withMinimum(2)
+                             .withValue(6)
+                             .withName("slider")
+                             .createInEDT();
     assertThat(formatted(slider)).contains(classNameOf(slider))
                                  .contains("name='slider'")   
                                  .contains("value=6")   
@@ -309,34 +245,16 @@ import static org.fest.util.Strings.concat;
                                  .contains("showing=false"); 
   }
 
-  private static JSlider newJSlider() {
-    return execute(new GuiQuery<JSlider>() {
-      protected JSlider executeInEDT()  {
-        JSlider slider = new JSlider(2, 8, 6);
-        slider.setName("slider");
-        return slider;
-      }
-    });
-  }
-
   public void shouldFormatJSpinner() {
-    JSpinner spinner = newJSpinner();
+    JSpinner spinner = spinner().withName("spinner")
+                                .withValues(6, 2, 8, 1)
+                                .createInEDT();
     assertThat(formatted(spinner)).contains(classNameOf(spinner))
                                   .contains("name='spinner'")
                                   .contains("value=6")
                                   .contains("enabled=true")
                                   .contains("visible=true")
                                   .contains("showing=false");
-  }
-
-  private static JSpinner newJSpinner() {
-    return execute(new GuiQuery<JSpinner>() {
-      protected JSpinner executeInEDT()  {
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(6, 2, 8, 1));
-        spinner.setName("spinner");
-        return spinner;
-      }
-    });
   }
 
   public void shouldFormatJTabbedPane() {
@@ -367,7 +285,9 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldFormatJTextComponent() {
-    JTextField textField = newJTextField();
+    JTextField textField = textField().withName("textField")
+                                      .withText("Hello")
+                                      .createInEDT();
     assertThat(formatted(textField)).contains(classNameOf(textField))
                                     .contains("name='textField'")
                                     .contains("text='Hello'")
@@ -376,18 +296,11 @@ import static org.fest.util.Strings.concat;
                                     .contains("showing=false");
   }
 
-  private static JTextField newJTextField() {
-    return execute(new GuiQuery<JTextField>() {
-      protected JTextField executeInEDT()  {
-        JTextField textField = new JTextField("Hello");
-        textField.setName("textField");
-        return textField;
-      }
-    });
-  }
-
   public void shouldFormatJToggleButton() {
-    JToggleButton toggleButton = newJToggleButton();
+    JToggleButton toggleButton = toggleButton().withName("toggleButton")
+                                               .selected(true)
+                                               .withText("A toggle button")
+                                               .createInEDT();
     assertThat(formatted(toggleButton)).contains(classNameOf(toggleButton))
                                        .contains("name='toggleButton'")
                                        .contains("text='A toggle button'")
@@ -395,18 +308,6 @@ import static org.fest.util.Strings.concat;
                                        .contains("enabled=true")
                                        .contains("visible=true")
                                        .contains("showing=false");
-  }
-
-  private static JToggleButton newJToggleButton() {
-    return execute(new GuiQuery<JToggleButton>() {
-      protected JToggleButton executeInEDT()  {
-        JToggleButton toggleButton = new JToggleButton();
-        toggleButton.setName("toggleButton");
-        toggleButton.setSelected(true);
-        toggleButton.setText("A toggle button");
-        return toggleButton;
-      }
-    });
   }
 
   public void shouldFormatJTree() {

@@ -31,19 +31,20 @@ import org.fest.swing.driver.JMenuItemDriver;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.Timeout.timeout;
+import static org.fest.swing.factory.JMenuItems.menuItem;
 
 /**
  * Tests for <code>{@link JMenuItemFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> implements
+@Test public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> implements
     KeyboardInputSimulationFixtureTestCase, StateVerificationFixtureTestCase {
 
   private JMenuItemDriver driver;
@@ -52,7 +53,7 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> im
   
   void onSetUp() {
     driver = createMock(JMenuItemDriver.class);
-    target = new JMenuItem("A Button");
+    target = menuItem().withText("A MenuItem").createInEDT();
     fixture = new JMenuItemFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -64,17 +65,9 @@ public class JMenuItemFixtureTest extends ComponentFixtureTestCase<JMenuItem> im
   }
   
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new EasyMockTemplate(robot(), finder()) {
-      protected void expectations() {
-        expect(robot().finder()).andReturn(finder());
-        expect(finder().findByName("c", JMenuItem.class, false)).andReturn(target);
-      }
-      
-      protected void codeToTest() {
-        fixture = new JMenuItemFixture(robot(), "c");
-        assertThat(fixture.component()).isSameAs(target);
-      }
-    }.run();
+    String name = "menuItem";
+    expectLookupByName(name, JMenuItem.class, false);
+    verifyLookup(new JMenuItemFixture(robot(), name));
   }
 
   @Test public void shouldCreateFixtureWithGivenAction() {

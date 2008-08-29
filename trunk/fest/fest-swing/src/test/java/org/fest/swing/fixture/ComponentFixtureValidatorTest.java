@@ -17,8 +17,6 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import javax.swing.JTextField;
-
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
@@ -26,6 +24,7 @@ import org.fest.swing.core.Robot;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link ComponentFixtureValidator}</code>.
@@ -46,7 +45,7 @@ public class ComponentFixtureValidatorTest {
   }
 
   public void shouldReturnTargetIfItIsNotNull() {
-    Component target = new JTextField();
+    Component target = textField().createInEDT();
     assertThat(ComponentFixtureValidator.notNullTarget(target)).isSameAs(target);
   }
   

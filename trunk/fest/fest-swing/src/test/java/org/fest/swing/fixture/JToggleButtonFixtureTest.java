@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JToggleButtons.toggleButton;
 
 /**
  * Tests for <code>{@link JToggleButtonFixture}</code>.
@@ -41,17 +42,15 @@ public class JToggleButtonFixtureTest extends CommonComponentFixtureTestCase<JTo
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = new JToggleButton();
+    target = toggleButton().createInEDT();
     fixture = new JToggleButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JToggleButton> fixtureWithName(String name) {
-        return new JToggleButtonFixture(robot(), name);
-      }
-    }.run();
+    String name = "toggleButton";
+    expectLookupByName(name, JToggleButton.class);
+    verifyLookup(new JToggleButtonFixture(robot(), name));
   }
 
   @Test public void shouldSelectCheckBox() {

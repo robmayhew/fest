@@ -41,6 +41,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.util.Platform.*;
 
@@ -60,7 +61,7 @@ import static org.fest.swing.util.Platform.*;
   @BeforeMethod public void setUp() {
     robot = createMock(Robot.class);
     dragAndDrop = createMock(DragAndDrop.class);
-    c = new JTextField();
+    c = textField().createInEDT();
     driver = new ComponentDriver(robot, dragAndDrop);
   }
 
@@ -459,14 +460,14 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldReturnIsResizableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
     if (isWindowsOrMac()) return;
-    Component c = new JTextField();
-    assertThat(driver.isUserResizable(c)).isTrue();
+    JTextField textField = textField().createInEDT();
+    assertThat(driver.isUserResizable(textField)).isTrue();
   }
 
   public void shouldReturnIsNotResizableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
     if (!isWindowsOrMac()) return;
-    Component c = new JTextField();
-    assertThat(driver.isUserResizable(c)).isFalse();
+    JTextField textField = textField().createInEDT();
+    assertThat(driver.isUserResizable(textField)).isFalse();
     return;
   }
 
@@ -482,14 +483,14 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldReturnIsMovableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
     if (isWindowsOrMac()) return;
-    Component c = new JTextField();
-    assertThat(driver.isUserMovable(c)).isTrue();
+    JTextField textField = textField().createInEDT();
+    assertThat(driver.isUserMovable(textField)).isTrue();
   }
 
   public void shouldReturnIsNotMovableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
     if (!isWindowsOrMac()) return;
-    Component c = new JTextField();
-    assertThat(driver.isUserMovable(c)).isFalse();
+    JTextField textField = textField().createInEDT();
+    assertThat(driver.isUserMovable(textField)).isFalse();
     return;
   }
 

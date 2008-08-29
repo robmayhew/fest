@@ -31,6 +31,7 @@ import org.fest.swing.core.Robot;
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JPopupMenuInvokerFixture}</code>.
@@ -46,7 +47,7 @@ public class JPopupMenuInvokerFixtureTest {
   
   @BeforeMethod public void setUp() {
     robot = EasyMock.createMock(Robot.class);
-    target = new JTextField();
+    target = textField().createInEDT();
     fixture = new JPopupMenuInvokerFixture<JTextComponent>(robot, target) {};
   }
   

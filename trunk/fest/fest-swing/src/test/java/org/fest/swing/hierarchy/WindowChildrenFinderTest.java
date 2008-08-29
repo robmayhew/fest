@@ -16,20 +16,20 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JFrame;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -47,15 +47,8 @@ public class WindowChildrenFinderTest {
   }
   
   @Test public void shouldReturnEmptyCollectionIfComponentIsNotWindow() {
-    assertThat(finder.nonExplicitChildrenOf(newJTextField())).isEmpty();
-  }
-  
-  private static JTextField newJTextField() {
-    return execute(new GuiQuery<JTextField>() {
-      protected JTextField executeInEDT() {
-        return new JTextField();
-      }
-    });
+    Container container = textField().createInEDT();
+    assertThat(finder.nonExplicitChildrenOf(container)).isEmpty();
   }
 
   @Test public void shouldReturnEmptyCollectionIfComponentIsNull() {
@@ -63,15 +56,8 @@ public class WindowChildrenFinderTest {
   }
 
   @Test public void shouldReturnEmptyCollectionIfWindowNotHavingOwnedWindows() {
-    assertThat(finder.nonExplicitChildrenOf(newJFrame())).isEmpty();
-  }
-  
-  private static JFrame newJFrame() {
-    return execute(new GuiQuery<JFrame>() {
-      protected JFrame executeInEDT() {
-        return new JFrame();
-      }
-    });
+    JFrame frame = frame().createInEDT();
+    assertThat(finder.nonExplicitChildrenOf(frame)).isEmpty();
   }
   
   @Test(groups = GUI)

@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JRadioButtons.radioButton;
 
 /**
  * Tests for <code>{@link JRadioButtonFixture}</code>.
@@ -42,17 +43,15 @@ public class JRadioButtonFixtureTest extends CommonComponentFixtureTestCase<JRad
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = new JRadioButton();
+    target = radioButton().createInEDT();
     fixture = new JRadioButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JRadioButton> fixtureWithName(String name) {
-        return new JRadioButtonFixture(robot(), name);
-      }
-    }.run();
+    String name = "radioButton";
+    expectLookupByName(name, JRadioButton.class);
+    verifyLookup(new JRadioButtonFixture(robot(), name));
   }
   
   @Test public void shouldReturnText() {

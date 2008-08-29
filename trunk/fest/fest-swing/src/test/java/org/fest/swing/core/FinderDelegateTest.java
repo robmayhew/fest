@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -35,6 +34,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.util.Collections.list;
 
 /**
@@ -59,7 +59,7 @@ public class FinderDelegateTest {
       }
     };
     dialog = new JDialog();
-    textField = new JTextField();
+    textField = textField().createInEDT();
     button = new JButton();
     finder = new FinderDelegate();
   }

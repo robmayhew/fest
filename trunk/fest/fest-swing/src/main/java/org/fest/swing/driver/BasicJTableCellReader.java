@@ -32,6 +32,8 @@ import static org.fest.swing.driver.JTableCellRendererQuery.cellRendererIn;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
+import static org.fest.swing.query.ComponentFontQuery.fontOf;
+import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
 
@@ -78,7 +80,7 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
 
   /** {@inheritDoc} */
   public Font fontAt(JTable table, int row, int column) {
-    return cellRendererComponent(table, row, column).getFont();
+    return fontOf(cellRendererComponent(table, row, column));
   }
 
   /** {@inheritDoc} */
@@ -88,7 +90,7 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
 
   /** {@inheritDoc} */
   public Color foregroundAt(JTable table, int row, int column) {
-    return cellRendererComponent(table, row, column).getForeground();
+    return foregroundOf(cellRendererComponent(table, row, column));
   }
 
   /**

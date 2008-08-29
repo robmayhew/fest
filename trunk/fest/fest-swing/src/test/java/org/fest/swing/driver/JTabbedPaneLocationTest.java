@@ -15,19 +15,17 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -42,29 +40,22 @@ public class JTabbedPaneLocationTest {
   private JTabbedPaneLocation location;
 
   @BeforeMethod public void setUp() {
-    tabbedPane = newTabbedPane();
+    tabbedPane = tabbedPane().withTabs("one", "two")
+                             .createInEDT();
     location = new JTabbedPaneLocation();
   }
 
-  private static JTabbedPane newTabbedPane() {
-    return execute(new GuiQuery<JTabbedPane>() {
-      protected JTabbedPane executeInEDT() {
-        return new MyTabbedPane();
-      }
-    });
-  }
-
   public void shouldReturnIndexOfTabTitle() {
-    int index = location.indexOf(tabbedPane, "second");
+    int index = location.indexOf(tabbedPane, "two");
     assertThat(index).isEqualTo(1);
   }
 
   public void shouldThrowErrorIfCannotFindTabWithGivenTitle() {
     try {
-      location.indexOf(tabbedPane, "third");
+      location.indexOf(tabbedPane, "three");
       fail();
     } catch (LocationUnavailableException e) {
-      assertThat(e).message().isEqualTo("Unable to find a tab with title 'third'");
+      assertThat(e).message().isEqualTo("Unable to find a tab with title 'three'");
     }
   }
 
@@ -87,15 +78,6 @@ public class JTabbedPaneLocationTest {
       fail();
     } catch (ActionFailedException e) {
       assertThat(e).message().isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
-    }
-  }
-
-  private static class MyTabbedPane extends JTabbedPane {
-    private static final long serialVersionUID = 1L;
-
-    MyTabbedPane() {
-      addTab("first", new JPanel());
-      addTab("second", new JPanel());
     }
   }
 }

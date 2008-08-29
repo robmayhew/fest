@@ -16,18 +16,17 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconifyTask;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -46,17 +45,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
   
   public void shouldReturnEmptyCollectionIfComponentIsNotJDesktopPane() {
-    assertThat(finder.nonExplicitChildrenOf(newJTextField())).isEmpty();
+    Container container = textField().createInEDT();
+    assertThat(finder.nonExplicitChildrenOf(container)).isEmpty();
   }
 
-  private static JTextField newJTextField() {
-    return execute(new GuiQuery<JTextField>() {
-      protected JTextField executeInEDT() {
-        return new JTextField();
-      }
-    });
-  }
-  
   public void shouldReturnEmptyCollectionIfComponentIsNull() {
     assertThat(finder.nonExplicitChildrenOf(null)).isEmpty();
   }

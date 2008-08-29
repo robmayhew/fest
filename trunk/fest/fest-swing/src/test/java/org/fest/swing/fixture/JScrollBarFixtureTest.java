@@ -26,6 +26,8 @@ import org.fest.swing.driver.JScrollBarDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.factory.JScrollBars.scrollBar;
+
 /**
  * Tests for <code>{@link JScrollBarFixture}</code>.
  *
@@ -39,17 +41,15 @@ public class JScrollBarFixtureTest extends CommonComponentFixtureTestCase<JScrol
   
   void onSetUp() {
     driver = createMock(JScrollBarDriver.class);
-    target = new JScrollBar();
+    target = scrollBar().createInEDT();
     fixture = new JScrollBarFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JScrollBar> fixtureWithName(String name) {
-        return new JScrollBarFixture(robot(), name);
-      }
-    }.run();
+    String name = "scrollBar";
+    expectLookupByName(name, JScrollBar.class);
+    verifyLookup(new JScrollBarFixture(robot(), name));
   }
 
   @Test public void shouldRequireValue() {

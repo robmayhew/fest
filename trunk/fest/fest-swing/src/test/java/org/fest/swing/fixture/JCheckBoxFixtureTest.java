@@ -27,13 +27,14 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JCheckBoxes.checkBox;
 
 /**
  * Tests for <code>{@link JCheckBoxFixture}</code>.
  *
  * @author Alex Ruiz
  */
-public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckBox> {
+@Test public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckBox> {
 
   private AbstractButtonDriver driver;
   private JCheckBox target;
@@ -41,20 +42,18 @@ public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckB
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = new JCheckBox();
+    target = checkBox().createInEDT();
     fixture = new JCheckBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JCheckBox> fixtureWithName(String name) {
-        return new JCheckBoxFixture(robot(), name);
-      }
-    }.run();
+  public void shouldCreateFixtureWithGivenComponentName() {
+    String name = "checkBox";
+    expectLookupByName(name, JCheckBox.class);
+    verifyLookup(new JCheckBoxFixture(robot(), name));
   }
 
-  @Test public void shouldSelectCheckBox() {
+  public void shouldSelectCheckBox() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.select(target);
@@ -67,7 +66,7 @@ public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckB
     }.run();
   }
   
-  @Test public void shoulUnselectCheckBox() {
+  public void shoulUnselectCheckBox() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.unselect(target);
@@ -80,7 +79,7 @@ public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckB
     }.run();
   }
 
-  @Test public void shouldReturnText() {
+  public void shouldReturnText() {
     final String text = "A CheckBox";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -93,7 +92,7 @@ public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckB
     }.run();
   }
   
-  @Test public void shouldRequireText() {
+  public void shouldRequireText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireText(target, "A CheckBox");
@@ -106,7 +105,7 @@ public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckB
     }.run();
   }
   
-  @Test public void shouldRequireNotSelected() {
+  public void shouldRequireNotSelected() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireNotSelected(target);
@@ -119,7 +118,7 @@ public class JCheckBoxFixtureTest extends CommonComponentFixtureTestCase<JCheckB
     }.run();
   }
   
-  @Test public void shouldRequireSelected() {
+  public void shouldRequireSelected() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireSelected(target);

@@ -25,7 +25,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=20&can=2&q=" target="_blank">issue 20</a>.
@@ -33,25 +36,11 @@ import org.fest.swing.testing.TestWindow;
  * @author Alex Ruiz
  */
 public class FixCannotFindComponentInPanelTest {
-
-  class MyFrame extends TestWindow {
-    private static final long serialVersionUID = 1L;
-
-    private final JPanel panel = new JPanel();
-    private final JList list = new JList();
-    
-    MyFrame(Class<?> testClass) {
-      super(testClass);
-      add(panel);
-      panel.add(new JScrollPane(list));
-      list.setName("list");
-    }
-  }
   
   private FrameFixture frame;
   
   @BeforeClass public void setUp() {
-    frame = new FrameFixture(new MyFrame(getClass()));
+    frame = new FrameFixture(MyWindow.newWindow());
     frame.show(new Dimension(400, 200));
   }
   
@@ -62,5 +51,26 @@ public class FixCannotFindComponentInPanelTest {
   @Test public void shouldFindList() {
     frame.list("list").requireVisible();
   }
-  
+
+  static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    private final JPanel panel = new JPanel();
+    private final JList list = new JList();
+    
+    static MyWindow newWindow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+    
+    MyWindow() {
+      super(FixCannotFindComponentInPanelTest.class);
+      add(panel);
+      panel.add(new JScrollPane(list));
+      list.setName("list");
+    }
+  }
 }

@@ -16,15 +16,13 @@
 package org.fest.swing.format;
 
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
-
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JComboBoxFormatter}</code>.
@@ -43,21 +41,16 @@ public class JComboBoxFormatterTest {
   }
   
   private static JComboBox newComboBox() {
-    return GuiActionRunner.execute(new GuiQuery<JComboBox>() {
-      protected JComboBox executeInEDT() {
-        Object[] items = { "One", 2, "Three", 4 };
-        JComboBox comboBox = new JComboBox(items);
-        comboBox.setName("comboBox");
-        comboBox.setSelectedIndex(1);
-        comboBox.setEditable(true);
-        return comboBox;
-      }
-    });
+    return comboBox().editable(true)
+                     .withItems("One", 2, "Three", 4)
+                     .withName("comboBox")
+                     .withSelectedIndex(1)
+                     .createInEDT();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJComboBox() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
   
   @Test public void shouldFormatJComboBox() {

@@ -30,6 +30,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -38,8 +39,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test
-public class JComboBoxFixtureTest extends CommonComponentFixtureTestCase<JComboBox> {
+@Test public class JComboBoxFixtureTest extends CommonComponentFixtureTestCase<JComboBox> {
 
   private JComboBoxDriver driver;
   private JComboBox target;
@@ -47,17 +47,15 @@ public class JComboBoxFixtureTest extends CommonComponentFixtureTestCase<JComboB
 
   void onSetUp() {
     driver = EasyMock.createMock(JComboBoxDriver.class);
-    target = new JComboBox();
+    target = comboBox().createInEDT();
     fixture = new JComboBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JComboBox> fixtureWithName(String name) {
-        return new JComboBoxFixture(robot(), name);
-      }
-    }.run();
+    String name = "comboBox";
+    expectLookupByName(name, JComboBox.class);
+    verifyLookup(new JCheckBoxFixture(robot(), name));
   }
 
   public void shouldReturnContents() {

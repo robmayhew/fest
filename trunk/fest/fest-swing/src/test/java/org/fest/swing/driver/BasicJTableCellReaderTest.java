@@ -32,6 +32,12 @@ import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
+import static org.fest.swing.query.ComponentFontQuery.fontOf;
+import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -48,14 +54,10 @@ public class BasicJTableCellReaderTest {
   private BasicJTableCellReader reader;
 
   @BeforeMethod public void setUp() {
-    table = newTable();
+    table = table().withColumnCount(1)
+                   .withRowCount(1)
+                   .createInEDT();
     reader = new BasicJTableCellReader();
-  }
-
-  private static JTable newTable() {
-    return execute(new GuiQuery<JTable>() {
-      protected JTable executeInEDT() { return new JTable(1, 1); }
-    });
   }
 
   public void shouldReturnNullIfRendererNotRecognized() {
@@ -83,36 +85,20 @@ public class BasicJTableCellReaderTest {
   
   public void shouldReturnFontFromRenderer() {
     final JLabel label = setJLabelAsCellRenderer(table);
-    // TODO replace with font query
-    Font expectedFont = execute(new GuiQuery<Font>() {
-      protected Font executeInEDT() {
-        return label.getFont();
-      }
-    });
     Font font = reader.fontAt(table, 0, 0);
-    assertThat(font).isEqualTo(expectedFont);
+    assertThat(font).isEqualTo(fontOf(label));
   }
 
   public void shouldReturnBackgroundColorFromRenderer() {
     final JLabel label = setJLabelAsCellRenderer(table);
-    Color expectedBackground = execute(new GuiQuery<Color>() {
-      protected Color executeInEDT() {
-        return label.getBackground();
-      }
-    });
     Color background = reader.backgroundAt(table, 0, 0);
-    assertThat(background).isEqualTo(expectedBackground);
+    assertThat(background).isEqualTo(backgroundOf(label));
   }
 
   public void shouldReturnForegroundColorFromRenderer() {
     final JLabel label = setJLabelAsCellRenderer(table);
-    Color expectedForeground = execute(new GuiQuery<Color>() {
-      protected Color executeInEDT() {
-        return label.getForeground();
-      }
-    });
     Color foreground = reader.foregroundAt(table, 0, 0);
-    assertThat(foreground).isEqualTo(expectedForeground);
+    assertThat(foreground).isEqualTo(foregroundOf(label));
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
@@ -122,11 +108,7 @@ public class BasicJTableCellReaderTest {
   }
 
   private static JLabel setJLabelAsCellRenderer(JTable table) {
-    JLabel label = execute(new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        return new JLabel("Hello");
-      }
-    });
+    JLabel label = label().withText("Hello").createInEDT(); 
     setCellRendererComponent(table, label);
     return label;
   }
@@ -143,14 +125,10 @@ public class BasicJTableCellReaderTest {
     assertThat(value).isNull();
   }
 
-  private static void setJComboBoxAsCellRenderer(final JTable table, final int comboBoxSelectedIndex) {
-    JComboBox renderer = execute(new GuiQuery<JComboBox>() {
-      protected JComboBox executeInEDT() {
-        JComboBox comboBox = new JComboBox(array("One", "Two"));
-        comboBox.setSelectedIndex(comboBoxSelectedIndex);
-        return comboBox;
-      }
-    });
+  private static void setJComboBoxAsCellRenderer(JTable table, int comboBoxSelectedIndex) {
+    JComboBox renderer = comboBox().withItems("One", "Two")
+                                   .withSelectedIndex(comboBoxSelectedIndex)
+                                   .createInEDT(); 
     setCellRendererComponent(table, renderer);
   }
 

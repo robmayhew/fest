@@ -34,6 +34,7 @@ import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -55,12 +56,13 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldAlwaysContainGivenComponent() {
-    assertThat(hierarchy.contains(newJTextField())).isTrue();
+    Component component = textField().createInEDT();
+    assertThat(hierarchy.contains(component)).isTrue();
   }
 
   @Test public void shouldReturnParentOfComponent() {
     final TestWindow frame = newTestWindow();
-    final JTextField textField = newJTextField();
+    final JTextField textField = textField().createInEDT();
     final ParentFinder parentFinder = MockParentFinder.mock();
     hierarchy = new ExistingHierarchy(parentFinder, new ChildrenFinder());
     new EasyMockTemplate(parentFinder) {
@@ -84,7 +86,7 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldReturnSubcomponents() {
-    final Component c = newJTextField();
+    final Component c = textField().createInEDT();
     final ChildrenFinder childrenFinder = MockChildrenFinder.mock();
     hierarchy = new ExistingHierarchy(new ParentFinder(), childrenFinder);
     final Collection<Component> children = emptyList();
@@ -97,14 +99,6 @@ public class ExistingHierarchyTest {
         assertThat(hierarchy.childrenOf(c)).isSameAs(children);
       }
     }.run();
-  }
-  
-  private static JTextField newJTextField() {
-    return execute(new GuiQuery<JTextField>() {
-      protected JTextField executeInEDT() {
-        return new JTextField();
-      }
-    });
   }
   
   @Test(groups = GUI) public void shouldDisposeWindow() {

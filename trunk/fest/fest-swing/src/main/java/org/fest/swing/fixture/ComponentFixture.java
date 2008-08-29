@@ -26,6 +26,8 @@ import static org.fest.swing.driver.ComponentDriver.propertyName;
 import static org.fest.swing.fixture.ComponentFixtureValidator.*;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
+import static org.fest.swing.query.ComponentFontQuery.fontOf;
+import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
 
 /**
  * Understands simulation of user events on a <code>{@link Component}</code> and verification of the state of such
@@ -126,7 +128,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return a fixture that verifies the font of this fixture's <code>Component</code>.
    */
   public final FontFixture font() {
-    return new FontFixture(target.getFont(), propertyName(target, FONT_PROPERTY));
+    return new FontFixture(fontOf(target), propertyName(target, FONT_PROPERTY));
   }
 
   /**
@@ -142,7 +144,7 @@ public abstract class ComponentFixture<T extends Component> {
    * @return a fixture that verifies the foreground color of this fixture's <code>Component</code>.
    */
   public final ColorFixture foreground() {
-    return new ColorFixture(target.getForeground(), propertyName(target, FOREGROUND_PROPERTY));
+    return new ColorFixture(foregroundOf(target), propertyName(target, FOREGROUND_PROPERTY));
   }
 
   /**

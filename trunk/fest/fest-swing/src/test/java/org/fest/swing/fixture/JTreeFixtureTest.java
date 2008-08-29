@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTrees.tree;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -46,17 +47,15 @@ public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
   
   void onSetUp() {
     driver = createMock(JTreeDriver.class);
-    target = new JTree();
+    target = tree().createInEDT();
     fixture = new JTreeFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JTree> fixtureWithName(String name) {
-        return new JTreeFixture(robot(), name);
-      }
-    }.run();
+    String name = "tree";
+    expectLookupByName(name, JTree.class);
+    verifyLookup(new JTreeFixture(robot(), name));
   }
 
   @Test public void shouldDragAtRow() {

@@ -31,13 +31,14 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JFileChoosers.fileChooser;
 
 /**
  * Tests for <code>{@link JFileChooserFixture}</code>.
  *
  * @author Yvonne Wang
  */
-public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFileChooser> {
+@Test public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFileChooser> {
 
   private JFileChooserDriver driver;
   private JFileChooser target;
@@ -45,28 +46,27 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
   
   void onSetUp() {
     driver = createMock(JFileChooserDriver.class);
-    target = new JFileChooser();
+    target = fileChooser().createInEDT();
     fixture = new JFileChooserFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JFileChooser> fixtureWithName(String name) {
-        return new JFileChooserFixture(robot(), name);
-      }
-    }.run();
+  public void shouldCreateFixtureWithGivenComponentName() {
+    String name = "fileChooser";
+    expectLookupByName(name, targetType());
+    verifyLookup(new JFileChooserFixture(robot(), name));
   }
 
-  @Test public void shouldCreateFixtureByType() {
-    new FixtureCreationByTypeTemplate() {
-      ComponentFixture<JFileChooser> fixture() {
-        return new JFileChooserFixture(robot());
-      }
-    }.run();
+  public void shouldCreateFixtureByType() {
+    expectLookupByType(targetType());
+    verifyLookup(new JFileChooserFixture(robot()));
   }
 
-  @Test public void shouldReturnFileNameTextBox() {
+  private Class<JFileChooser> targetType() {
+    return JFileChooser.class;
+  }
+
+  public void shouldReturnFileNameTextBox() {
     final JTextField fileNameTextBox = new JTextField();
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -80,7 +80,7 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
     }.run();
   }
   
-  @Test public void shouldClickApproveButton() {
+  public void shouldClickApproveButton() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.clickApproveButton(target);
@@ -93,7 +93,7 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
     }.run();
   }
   
-  @Test public void shouldReturnApproveButton() {
+  public void shouldReturnApproveButton() {
     final JButton approveButton = new JButton();
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -107,7 +107,7 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
     }.run();
   }
 
-  @Test public void shouldClickCancelButton() {
+  public void shouldClickCancelButton() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.clickCancelButton(target);
@@ -120,7 +120,7 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
     }.run();
   }
 
-  @Test public void shouldReturnCancelButton() {
+  public void shouldReturnCancelButton() {
     final JButton cancelButton = new JButton();
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -134,7 +134,7 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
     }.run();
   }
   
-  @Test public void shouldSelectFile() {
+  public void shouldSelectFile() {
     final File file = new File("fake");
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -148,7 +148,7 @@ public class JFileChooserFixtureTest extends CommonComponentFixtureTestCase<JFil
     }.run();
   }
 
-  @Test public void shouldSetCurrentDirectory() {
+  public void shouldSetCurrentDirectory() {
     final File file = new File("fake");
     new EasyMockTemplate(driver) {
       protected void expectations() {

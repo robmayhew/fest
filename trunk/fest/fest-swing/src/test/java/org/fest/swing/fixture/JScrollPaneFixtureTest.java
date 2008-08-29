@@ -15,7 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import org.testng.annotations.Test;
@@ -23,10 +22,11 @@ import org.testng.annotations.Test;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JComponentDriver;
 
-import static javax.swing.ScrollPaneConstants.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.factory.JScrollPanes.scrollPane;
 
 /**
  * Tests for <code>{@link JScrollPaneFixture}</code>.
@@ -41,17 +41,16 @@ public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScro
   
   void onSetUp() {
     driver = createMock(JComponentDriver.class);
-    target = new JScrollPane(new JList(), VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
+    target = scrollPane().withView(list().createInEDT())
+                         .createInEDT();
     fixture = new JScrollPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JScrollPane> fixtureWithName(String name) {
-        return new JScrollPaneFixture(robot(), name);
-      }
-    }.run();
+    String name = "scrollPane";
+    expectLookupByName(name, JScrollPane.class);
+    verifyLookup(new JScrollPaneFixture(robot(), name));
   }
 
   @Test public void shouldReturnHorizontalScrollBar() {

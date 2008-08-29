@@ -22,6 +22,7 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
@@ -30,6 +31,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -38,7 +41,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
+@Test public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
 
   private FrameDriver driver;
   private Frame target;
@@ -46,38 +49,51 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
   
   void onSetUp() {
     driver = createMock(FrameDriver.class);
-    target = new Frame("A Label");
+    target = frame().withName("frame")
+                    .withTitle("A Frame")
+                    .createInEDT();
     fixture = new FrameFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<Frame> fixtureWithName(String name) {
-        return new FrameFixture(robot(), name);
-      }
-    }.run();
+  public void shouldCreateFixtureWithGivenComponentName() {
+    String name = "frame";
+    expectLookupByName(name, Frame.class);
+    verifyLookup(new FrameFixture(robot(), name));
   }
   
   @Test(groups = GUI) 
   public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
     fixture = new FrameFixture(target);
-    assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
-    fixture.cleanUp();
+    try {
+      assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+    } finally {
+      fixture.cleanUp();
+    }
   }
 
   @Test(groups = GUI) 
   public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
-    target.setName("frame");
-    target.pack();
-    target.setVisible(true);
+    packAndSetVisible(target);
     fixture = new FrameFixture("frame");
-    assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
-    assertThat(fixture.component()).isSameAs(target);
-    fixture.cleanUp();
+    try {
+      assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+      assertThat(fixture.component()).isSameAs(target);
+    } finally {
+      fixture.cleanUp();
+    }
   }
 
-  @Test public void shouldRequireSize() {
+  private static void packAndSetVisible(final Frame frame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        frame.pack();
+        frame.setVisible(true);
+      }
+    });
+  }
+
+  public void shouldRequireSize() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -91,7 +107,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldIconify() {
+  public void shouldIconify() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.iconify(target);
@@ -104,7 +120,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
   
-  @Test public void shouldDeiconify() {
+  public void shouldDeiconify() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.deiconify(target);
@@ -117,7 +133,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldMaximize() {
+  public void shouldMaximize() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.maximize(target);
@@ -130,7 +146,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldNormalize() {
+  public void shouldNormalize() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.normalize(target);
@@ -143,7 +159,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
   
-  @Test public void shouldMoveToPoint() {
+  public void shouldMoveToPoint() {
     final Point p = new Point(6, 8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -157,7 +173,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
   
-  @Test public void shouldResizeHeight() {
+  public void shouldResizeHeight() {
     final int height = 68;
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -171,7 +187,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
   
-  @Test public void shouldResizeWidth() {
+  public void shouldResizeWidth() {
     final int width = 68;
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -185,7 +201,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldResizeWidthAndHeight() {
+  public void shouldResizeWidthAndHeight() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -199,7 +215,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldShow() {
+  public void shouldShow() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.show(target);
@@ -212,7 +228,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldShowWithGivenSize() {
+  public void shouldShowWithGivenSize() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -226,7 +242,7 @@ public class FrameFixtureTest extends CommonComponentFixtureTestCase<Frame> {
     }.run();
   }
 
-  @Test public void shouldClose() {
+  public void shouldClose() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.close(target);

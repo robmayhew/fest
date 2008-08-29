@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -43,17 +44,15 @@ public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabb
   
   void onSetUp() {
     driver = createMock(JTabbedPaneDriver.class);
-    target = new JTabbedPane();
+    target = tabbedPane().createInEDT();
     fixture = new JTabbedPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JTabbedPane> fixtureWithName(String name) {
-        return new JTabbedPaneFixture(robot(), name);
-      }
-    }.run();
+    String name = "tabbedPane";
+    expectLookupByName(name, JTabbedPane.class);
+    verifyLookup(new JTabbedPaneFixture(robot(), name));
   }
 
   @Test public void shouldSelectTabWithIndex() {

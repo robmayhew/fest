@@ -16,12 +16,12 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -31,6 +31,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -48,15 +49,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
   
   public void shouldReturnEmptyCollectionIfComponentIsNotJMenu() {
-    assertThat(finder.nonExplicitChildrenOf(newJTextField())).isEmpty();
-  }
-
-  private static JTextField newJTextField() {
-    return execute(new GuiQuery<JTextField>() {
-      protected JTextField executeInEDT() {
-        return new JTextField();
-      }
-    });
+    Container container = textField().createInEDT();
+    assertThat(finder.nonExplicitChildrenOf(container)).isEmpty();
   }
 
   public void shouldReturnEmptyCollectionIfComponentIsNull() {

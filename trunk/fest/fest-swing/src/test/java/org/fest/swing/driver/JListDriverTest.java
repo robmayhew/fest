@@ -41,7 +41,10 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.factory.JMenuItems.menuItem;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
+import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
@@ -429,9 +432,9 @@ public class JListDriverTest {
   }
 
   private JPopupMenu popupMenuFor(JList list) {
-    JPopupMenu popupMenu = new JPopupMenu();
-    popupMenu.add(new JMenuItem("Frodo"));
-    list.setComponentPopupMenu(popupMenu);
+    JMenuItem menuItem = menuItem().withText("Frodo").createInEDT();
+    JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createInEDT();
+    setPopupMenu(list, popupMenu);
     return popupMenu;
   }
 

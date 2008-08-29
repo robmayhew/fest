@@ -26,12 +26,14 @@ import org.fest.swing.driver.JSplitPaneDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.factory.JSplitPanes.splitPane;
+
 /**
  * Tests for <code>{@link JSplitPaneFixture}</code>.
  *
  * @author Yvonne Wang
  */
-public class JSplitPaneFixtureTest extends CommonComponentFixtureTestCase<JSplitPane> {
+@Test public class JSplitPaneFixtureTest extends CommonComponentFixtureTestCase<JSplitPane> {
 
   private JSplitPaneDriver driver;
   private JSplitPane target;
@@ -39,20 +41,18 @@ public class JSplitPaneFixtureTest extends CommonComponentFixtureTestCase<JSplit
   
   void onSetUp() {
     driver = createMock(JSplitPaneDriver.class);
-    target = new JSplitPane();
+    target = splitPane().createInEDT();
     fixture = new JSplitPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JSplitPane> fixtureWithName(String name) {
-        return new JSplitPaneFixture(robot(), name);
-      }
-    }.run();
+  public void shouldCreateFixtureWithGivenComponentName() {
+    String name = "splitPane";
+    expectLookupByName(name, JSplitPane.class);
+    verifyLookup(new JSplitPaneFixture(robot(), name));
   }
 
-  @Test public void shouldMoveDivider() {
+  public void shouldMoveDivider() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.moveDividerTo(target, 8);

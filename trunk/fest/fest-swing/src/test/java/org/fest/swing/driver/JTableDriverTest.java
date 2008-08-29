@@ -17,7 +17,10 @@ package org.fest.swing.driver;
 
 import java.awt.*;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -52,6 +55,8 @@ import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
+import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestTable.*;
@@ -270,21 +275,13 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     final JPopupMenu popupMenu = new JPopupMenu();
     popupMenu.add(new JMenuItem("Leia"));
-    setPopupMenuTo(dragTable, popupMenu);
+    setPopupMenu(dragTable, popupMenu);
     ClickRecorder recorder = attachTo(dragTable);
     driver.showPopupMenuAt(dragTable, cell(0, 1));
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
     Point pointClicked = recorder.pointClicked();
     Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
     assertThat(pointClicked).isEqualTo(pointAtCell);
-  }
-
-  private static void setPopupMenuTo(final TestTable table, final JPopupMenu popupMenu) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        table.setComponentPopupMenu(popupMenu);
-      }
-    });
   }
 
   public void shouldReturnCellFont() {
@@ -371,7 +368,7 @@ public class JTableDriverTest {
 
   @Test public void shouldReturnEditorComponentInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
-    final Component editor = new JTextField("Hello");
+    final Component editor = textField().withText("Hello").createInEDT();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
       protected void expectations() {

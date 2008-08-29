@@ -26,6 +26,8 @@ import org.fest.swing.driver.JSpinnerDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.factory.JSpinners.spinner;
+
 /**
  * Tests for <code>{@link JSpinnerFixture}</code>.
  *
@@ -39,17 +41,15 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
 
   void onSetUp() {
     driver = createMock(JSpinnerDriver.class);
-    target = new JSpinner();
+    target = spinner().createInEDT();
     fixture = new JSpinnerFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JSpinner> fixtureWithName(String name) {
-        return new JSpinnerFixture(robot(), name);
-      }
-    }.run();
+    String name = "spinner";
+    expectLookupByName(name, JSpinner.class);
+    verifyLookup(new JSpinnerFixture(robot(), name));
   }
 
   @Test public void shouldRequireValue() {

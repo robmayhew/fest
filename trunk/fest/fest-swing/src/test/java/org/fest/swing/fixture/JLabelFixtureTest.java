@@ -27,6 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JLabels.label;
 
 /**
  * Tests for <code>{@link JLabelFixture}</code>.
@@ -41,17 +42,15 @@ public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
   
   void onSetUp() {
     driver = createMock(JLabelDriver.class);
-    target = new JLabel();
+    target = label().createInEDT();
     fixture = new JLabelFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JLabel> fixtureWithName(String name) {
-        return new JLabelFixture(robot(), name);
-      }
-    }.run();
+    String name = "label";
+    expectLookupByName(name, JLabel.class);
+    verifyLookup(new JLabelFixture(robot(), name));
   }
 
   @Test public void shouldReturnText() {

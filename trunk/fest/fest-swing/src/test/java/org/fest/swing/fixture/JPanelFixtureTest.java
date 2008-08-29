@@ -25,6 +25,7 @@ import org.fest.swing.driver.JComponentDriver;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JPanels.panel;
 
 /**
  * Tests for <code>{@link JPanelFixture}</code>.
@@ -39,17 +40,15 @@ public class JPanelFixtureTest extends CommonComponentFixtureTestCase<JPanel> {
   
   void onSetUp() {
     driver = createMock(JComponentDriver.class);
-    target = new JPanel();
+    target = panel().createInEDT();
     fixture = new JPanelFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JPanel> fixtureWithName(String name) {
-        return new JPanelFixture(robot(), name);
-      }
-    }.run();
+    String name = "panel";
+    expectLookupByName(name, JPanel.class);
+    verifyLookup(new JPanelFixture(robot(), name));
   }
 
   @Test public void shouldBeContainerFixture() {

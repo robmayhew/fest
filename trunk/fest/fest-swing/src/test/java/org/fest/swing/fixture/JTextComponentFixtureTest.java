@@ -15,7 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.Test;
@@ -28,6 +27,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTextComponentFixture}</code>.
@@ -43,7 +43,7 @@ public class JTextComponentFixtureTest extends CommonComponentFixtureTestCase<JT
   
   void onSetUp() {
     driver = createMock(JTextComponentDriver.class);
-    target = new JTextField("A Label");
+    target = textField().withText("a text field").createInEDT();
     fixture = new JTextComponentFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -53,11 +53,9 @@ public class JTextComponentFixtureTest extends CommonComponentFixtureTestCase<JT
   }
 
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JTextComponent> fixtureWithName(String name) {
-        return new JTextComponentFixture(robot(), name);
-      }
-    }.run();
+    String name = "textComponent";
+    expectLookupByName(name, JTextComponent.class);
+    verifyLookup(new JTextComponentFixture(robot(), name));
   }
 
   @Test public void shouldDeleteText() {

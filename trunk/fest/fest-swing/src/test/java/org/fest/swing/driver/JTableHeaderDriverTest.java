@@ -41,7 +41,10 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.factory.JMenuItems.menuItem;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
+import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -125,15 +128,11 @@ public class JTableHeaderDriverTest {
     assertThat(isVisible(popupMenu)).isTrue();
   }
 
-  private static JPopupMenu popupMenuFor(final JTableHeader tableHeader) {
-    return execute(new GuiQuery<JPopupMenu>() {
-      protected JPopupMenu executeInEDT() {
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(new JMenuItem("Frodo"));
-        tableHeader.setComponentPopupMenu(popupMenu);
-        return popupMenu;
-      }
-    });
+  private static JPopupMenu popupMenuFor(JTableHeader tableHeader) {
+    JMenuItem menuItem = menuItem().withText("Frodo").createInEDT();
+    JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createInEDT();
+    setPopupMenu(tableHeader, popupMenu);
+    return popupMenu;
   }
 
   private void assertColumnClicked(ClickRecorder recorder, int columnIndex) {

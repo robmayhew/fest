@@ -40,6 +40,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
+import static org.fest.swing.factory.JTables.table;
 import static org.fest.swing.fixture.TableCell.row;
 
 /**
@@ -58,18 +59,16 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
 
   void onSetUp() {
     driver = createMock(JTableDriver.class);
-    target = new JTable();
+    target = table().createInEDT();
     fixture = new JTableFixture(robot(), target);
     fixture.updateDriver(driver);
     cell = row(6).column(8);
   }
 
   public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JTable> fixtureWithName(String name) {
-        return new JTableFixture(robot(), name);
-      }
-    }.run();
+    String name = "table";
+    expectLookupByName(name, JTable.class);
+    verifyLookup(new JTableFixture(robot(), name));
   }
 
   public void shouldSelectCell() {

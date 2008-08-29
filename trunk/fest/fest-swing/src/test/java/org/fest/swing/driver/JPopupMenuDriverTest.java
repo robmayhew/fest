@@ -99,6 +99,7 @@ public class JPopupMenuDriverTest {
 
     final JTextField withPopup = new JTextField("With Pop-up Menu");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
+    
     final JMenuItem menuItem1 = new JMenuItem("First");
     final JMenuItem menuItem2 = new JMenuItem("Second");
 

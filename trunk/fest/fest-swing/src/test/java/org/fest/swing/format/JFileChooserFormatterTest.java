@@ -18,7 +18,6 @@ package org.fest.swing.format;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -31,6 +30,7 @@ import static javax.swing.JFileChooser.OPEN_DIALOG;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -59,7 +59,7 @@ public class JFileChooserFormatterTest {
   
   @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJFileChooser() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
 
   public void shouldFormatJFileChooser() {

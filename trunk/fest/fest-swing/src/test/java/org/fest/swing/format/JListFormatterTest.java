@@ -16,16 +16,15 @@
 package org.fest.swing.format;
 
 import javax.swing.JList;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JListFormatter}</code>.
@@ -39,26 +38,17 @@ import static org.fest.swing.core.GuiActionRunner.execute;
   private JListFormatter formatter;
   
   @BeforeClass public void setUp() {
-    list = newList();
+    list = list().withItems("One", 2, "Three", 4)
+                 .withName("list")
+                 .withSelectedIndices(0, 1)
+                 .withSelectionMode(MULTIPLE_INTERVAL_SELECTION)
+                 .createInEDT();
     formatter = new JListFormatter();
-  }
-
-  private static JList newList() {
-    return execute(new GuiQuery<JList>() {
-      protected JList executeInEDT() {
-        Object[] items = {"One", 2, "Three", 4 };
-        JList list = new JList(items);
-        list.setName("list");
-        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        list.setSelectedIndices(new int[] { 0, 1 });
-        return list;
-      }
-    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJList() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
 
   public void shouldFormatJList() {

@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -44,7 +45,7 @@ public class JPopupMenuFixtureTest extends CommonComponentFixtureTestCase<JPopup
   
   void onSetUp() {
     driver = createMock(JPopupMenuDriver.class);
-    target = new JPopupMenu();
+    target = popupMenu().createInEDT();
     fixture = new JPopupMenuFixture(robot(), target);
     fixture.updateDriver(driver);
   }

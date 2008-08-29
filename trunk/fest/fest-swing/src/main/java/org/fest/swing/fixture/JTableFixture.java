@@ -492,6 +492,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @throws AssertionError if the <code>JTableHeader</code> in this fixture's <code>JTable</code> is <code>null</code>.
    */
   public JTableHeaderFixture tableHeader() {
+    // TODO call in EDT
     JTableHeader tableHeader = target.getTableHeader();
     assertThat(tableHeader).isNotNull();
     return new JTableHeaderFixture(robot, tableHeader);

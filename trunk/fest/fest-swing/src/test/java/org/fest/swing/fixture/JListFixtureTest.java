@@ -32,6 +32,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.factory.JLists.list;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
 
@@ -49,17 +50,15 @@ public class JListFixtureTest extends CommonComponentFixtureTestCase<JList> {
   
   void onSetUp() {
     driver = createMock(JListDriver.class);
-    target = new JList();
+    target = list().createInEDT();
     fixture = new JListFixture(robot(), target);
     fixture.updateDriver(driver);
   }
   
   @Test public void shouldCreateFixtureWithGivenComponentName() {
-    new FixtureCreationByNameTemplate() {
-      ComponentFixture<JList> fixtureWithName(String name) {
-        return new JListFixture(robot(), name);
-      }
-    }.run();
+    String name = "list";
+    expectLookupByName(name, JList.class);
+    verifyLookup(new JListFixture(robot(), name));
   }
 
   @Test public void shouldReturnContents() {

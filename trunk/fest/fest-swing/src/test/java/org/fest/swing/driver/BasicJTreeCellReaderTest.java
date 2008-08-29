@@ -18,7 +18,6 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.swing.JLabel;
-import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -28,10 +27,13 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.factory.JLabels;
+import org.fest.swing.factory.JTrees;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -49,7 +51,7 @@ public class BasicJTreeCellReaderTest {
 
   @BeforeMethod public void setUp() {
     root = newRoot();
-    tree = newTreeWith(new DefaultTreeModel(root));
+    tree = JTrees.tree().withRoot(root).createInEDT();
     reader = new BasicJTreeCellReader();
   }
 
@@ -63,26 +65,11 @@ public class BasicJTreeCellReaderTest {
     });
   }
 
-  private static JTree newTreeWith(final DefaultTreeModel rootNode) {
-    return execute(new GuiQuery<JTree>() {
-      protected JTree executeInEDT() {
-        return new JTree(rootNode);
-      }
-    });
-  }
-
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    setCellRendererComponent(tree, newJLabelWithText("First"));
+    JLabel label = JLabels.label().withText("First").createInEDT();
+    setCellRendererComponent(tree, label);
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo("First");
-  }
-
-  private static JLabel newJLabelWithText(final String text) {
-    return execute(new GuiQuery<JLabel>() {
-      protected JLabel executeInEDT() {
-        return new JLabel(text);
-      }
-    });
   }
 
   public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
@@ -121,10 +108,6 @@ public class BasicJTreeCellReaderTest {
   }
   
   private static Component unrecognizedRenderer() {
-    return execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        return new JToolBar();
-      }
-    });
+    return toolBar().createInEDT();
   }
 }

@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JOptionPanes.optionPane;
 
 /**
  * Tests for <code>{@link JOptionPaneFixture}</code>.
@@ -43,23 +44,14 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   
   void onSetUp() {
     driver = createMock(JOptionPaneDriver.class);
-    target = new JOptionPane("A Button");
+    target = optionPane().createInEDT();
     fixture = new JOptionPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
   @Test public void shouldCreateFixtureByType() {
-    new EasyMockTemplate(robot(), finder()) {
-      protected void expectations() {
-        expect(robot().finder()).andReturn(finder());
-        expect(finder().findByType(JOptionPane.class, true)).andReturn(target);
-      }
-      
-      protected void codeToTest() {
-        fixture = new JOptionPaneFixture(robot());
-        assertThat(fixture.component()).isSameAs(target);
-      }
-    }.run();
+    expectLookupByType(JOptionPane.class, true);
+    verifyLookup(new JOptionPaneFixture(robot()));
   }
 
   @Test public void shouldRequireTitle() {

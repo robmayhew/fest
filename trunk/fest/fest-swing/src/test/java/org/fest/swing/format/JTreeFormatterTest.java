@@ -15,7 +15,6 @@
  */
 package org.fest.swing.format;
 
-import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -23,14 +22,14 @@ import javax.swing.tree.TreeSelectionModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.factory.JTrees;
 
 import static javax.swing.tree.TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTreeFormatter}</code>.
@@ -44,23 +43,15 @@ import static org.fest.util.Arrays.array;
   private JTreeFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    tree = newTree();
+    tree = JTrees.tree().withName("tree")
+                        .withValues("One", "Two", "Three")
+                        .createInEDT();
     formatter = new JTreeFormatter();
-  }
-
-  private static JTree newTree() {
-    return execute(new GuiQuery<JTree>() {
-      protected JTree executeInEDT() {
-        JTree tree = new JTree(array("One", "Two", "Three"));
-        tree.setName("tree");
-        return tree;
-      }
-    });
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTree() {
-    formatter.format(new JTextField());
+    formatter.format(textField().createInEDT());
   }
   
   public void shouldFormatJTree() {

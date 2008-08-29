@@ -25,6 +25,7 @@ import org.fest.swing.core.GuiQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JButtons.button;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
@@ -39,18 +40,10 @@ import static org.fest.util.Strings.concat;
   private IntrospectionComponentFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    button = newButton();
+    button = button().withName("button")
+                     .withText("Click Me")
+                     .createInEDT();
     formatter = new IntrospectionComponentFormatter(JButton.class, "name", "text");
-  }
-  
-  private static JButton newButton() {
-    return execute(new GuiQuery<JButton>() {
-      protected JButton executeInEDT() {
-        JButton button = new JButton("Click Me");
-        button.setName("button");
-        return button;
-      }
-    });
   }
   
   public void shouldFormatComponent() {
