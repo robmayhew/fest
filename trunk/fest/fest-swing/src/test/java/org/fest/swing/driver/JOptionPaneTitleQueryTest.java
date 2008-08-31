@@ -48,7 +48,7 @@ public class JOptionPaneTitleQueryTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     robot.showWindow(window);
     robot.click(window.button);
     pause(100);
@@ -69,7 +69,7 @@ public class JOptionPaneTitleQueryTest {
 
     final JButton button = new JButton("Click Me");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

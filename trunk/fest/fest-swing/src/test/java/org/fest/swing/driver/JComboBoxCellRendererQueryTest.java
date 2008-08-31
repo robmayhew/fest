@@ -25,11 +25,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -44,7 +44,7 @@ public class JComboBoxCellRendererQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     window.display();
   }
 
@@ -70,11 +70,9 @@ public class JComboBoxCellRendererQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
-      MyWindow window = GuiActionRunner.execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+    static MyWindow createAndShowInEDT() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

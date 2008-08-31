@@ -24,10 +24,12 @@ import javax.swing.JButton;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -81,17 +83,7 @@ public class ScreenshotTakerTest {
   }
 
   @Test(groups = GUI) public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
-    class CustomFrame extends TestWindow {
-      private static final long serialVersionUID = 1L;
-
-      final JButton button = new JButton("Hello");
-
-      CustomFrame(Class<?> testClass) {
-        super(testClass);
-        add(button);
-      }
-    }
-    CustomFrame frame = new CustomFrame(getClass());
+    MyWindow frame = MyWindow.createInEDT();
     frame.display();
     pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
@@ -103,5 +95,24 @@ public class ScreenshotTakerTest {
   private String imageFileName() {
     UUID uuid = UUID.randomUUID();
     return concat(uuid.toString(), ".png");
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+    
+    final JButton button = new JButton("Hello");
+
+    MyWindow() {
+      super(ScreenshotTakerTest.class);
+      add(button);
+    }
   }
 }

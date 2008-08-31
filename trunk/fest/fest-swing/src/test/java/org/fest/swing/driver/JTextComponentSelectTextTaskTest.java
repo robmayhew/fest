@@ -48,7 +48,7 @@ public class JTextComponentSelectTextTaskTest {
   private JTextComponent textBox;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     textBox = window.textBox;
     window.display();
   }
@@ -77,7 +77,7 @@ public class JTextComponentSelectTextTaskTest {
 
     final JTextField textBox = new JTextField(20);
     
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

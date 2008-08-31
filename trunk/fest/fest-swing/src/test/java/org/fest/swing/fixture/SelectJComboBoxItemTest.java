@@ -22,10 +22,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.*;
@@ -44,10 +46,10 @@ public class SelectJComboBoxItemTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyFrame frame = new MyFrame();
-    target = frame.comboBox;
+    MyWindow window = MyWindow.createInEDT();
+    target = window.comboBox;
     fixture = new JComboBoxFixture(robot, target);
-    robot.showWindow(frame);
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -60,12 +62,18 @@ public class SelectJComboBoxItemTest {
     assertThat(selectedIndexOf(target)).isEqualTo(toSelect);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
+
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
 
     final JComboBox comboBox = new JComboBox();
 
-    public MyFrame() {
+    public MyWindow() {
       super(SelectJComboBoxItemTest.class);
       add(comboBox);
       int itemCount = 100;

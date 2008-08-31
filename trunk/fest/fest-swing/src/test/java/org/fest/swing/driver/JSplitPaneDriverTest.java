@@ -64,7 +64,7 @@ public class JSplitPaneDriverTest {
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldMoveDividerToGivenLocation(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyWindow window = MyWindow.showNew(orientation);
+    MyWindow window = MyWindow.createAndShowInEDT(orientation);
     splitPane = window.splitPane;
     int newLocation = splitPane.getDividerLocation() + 100;
     driver.moveDividerTo(splitPane, newLocation);
@@ -74,7 +74,7 @@ public class JSplitPaneDriverTest {
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyWindow window = MyWindow.showNew(orientation);
+    MyWindow window = MyWindow.createAndShowInEDT(orientation);
     splitPane = window.splitPane;
     disable(splitPane);
     assertThat(isEnabled(splitPane)).isFalse();
@@ -97,11 +97,9 @@ public class JSplitPaneDriverTest {
 
     final JSplitPane splitPane;
 
-    static MyWindow showNew(final int orientation) {
+    static MyWindow createAndShowInEDT(final int orientation) {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow(orientation);
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(orientation); }
       });
       window.display();
       return window;

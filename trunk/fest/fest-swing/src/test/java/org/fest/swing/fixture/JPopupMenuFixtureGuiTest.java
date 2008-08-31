@@ -52,7 +52,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     robot.showWindow(window, new Dimension(200, 200));
     JTextComponentFixture textBox = new JTextComponentFixture(robot, "textField");
     fixture = textBox.showPopupMenu();
@@ -79,11 +79,9 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
     

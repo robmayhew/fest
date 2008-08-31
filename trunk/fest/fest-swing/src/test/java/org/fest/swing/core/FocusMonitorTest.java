@@ -41,8 +41,7 @@ public class FocusMonitorTest {
   private MyWindow window;
   
   @BeforeMethod public void setUp() {
-    window = MyWindow.showNew();
-    window.display();
+    window = MyWindow.createAndShowInEDT();
     setFocusOn(window.button);
     monitor = FocusMonitor.addFocusMonitorTo(window.button);
     assertThat(monitor.hasFocus()).isTrue();
@@ -69,7 +68,7 @@ public class FocusMonitorTest {
     final JButton button = new JButton("Click Me");
     final JTextField textBox = new JTextField(20); 
     
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

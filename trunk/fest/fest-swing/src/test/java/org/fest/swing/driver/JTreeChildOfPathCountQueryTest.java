@@ -45,7 +45,7 @@ public class JTreeChildOfPathCountQueryTest {
   
   @BeforeMethod public void setUp() {
     childCount = 8;
-    window = MyWindow.showNew(childCount);
+    window = MyWindow.createAndShowInEDT(childCount);
   }
   
   public void shouldReturnChildCountOfTreePath() {
@@ -62,7 +62,7 @@ public class JTreeChildOfPathCountQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew(final int treeRootChildCount) {
+    static MyWindow createAndShowInEDT(final int treeRootChildCount) {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
           return new MyWindow(treeRootChildCount);

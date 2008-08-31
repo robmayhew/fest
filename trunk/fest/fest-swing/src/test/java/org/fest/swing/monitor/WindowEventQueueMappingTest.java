@@ -15,8 +15,6 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -24,10 +22,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.swing.testing.TestWindow;
-import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.ToolkitStub;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link WindowEventQueueMapping}</code>.
@@ -38,14 +41,14 @@ public class WindowEventQueueMappingTest {
 
   private EventQueue eventQueue;
   private ToolkitStub toolkit;
-  private TestWindow frame;
+  private MyWindow window;
   private WindowEventQueueMapping mapping;
   private Map<EventQueue, Map<Window, Boolean>> queueMap;
 
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
     toolkit = ToolkitStub.createNew(eventQueue);
-    frame = testFrame(toolkit);
+    window = MyWindow.createInEDT(toolkit);
     mapping = new WindowEventQueueMapping();
     queueMap = mapping.queueMap;
   }
@@ -59,12 +62,12 @@ public class WindowEventQueueMappingTest {
   }
 
   @Test public void shouldAddQueueForWindow() {
-    mapping.addQueueFor(frame);
+    mapping.addQueueFor(window);
     assertThat(queueMap).hasSize(1)
                         .keySetIncludes(eventQueue);
     Map<Window, Boolean> windowMapping = queueMap.get(eventQueue);
     assertThat(windowMapping).hasSize(1)
-                             .keySetIncludes(frame);
+                             .keySetIncludes(window);
   }
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
@@ -79,8 +82,8 @@ public class WindowEventQueueMappingTest {
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
   public void shouldRemoveComponentFromMapping() {
-    mapping.addQueueFor(frame);
-    mapping.removeMappingFor(frame);
+    mapping.addQueueFor(window);
+    mapping.removeMappingFor(window);
     assertThat(queueMap).hasSize(1)
                         .keySetIncludes(eventQueue);
     Map<Window, Boolean> windowMapping = queueMap.get(eventQueue);
@@ -91,39 +94,52 @@ public class WindowEventQueueMappingTest {
   public void shouldRemoveComponentFromAllMappings() {
     EventQueue anotherEventQueue = new EventQueue();
     Map<Window, Boolean> windowMapping = new HashMap<Window, Boolean>();
-    windowMapping.put(frame, true);
+    windowMapping.put(window, true);
     queueMap.put(anotherEventQueue, windowMapping);
-    mapping.removeMappingFor(frame);
+    mapping.removeMappingFor(window);
     assertThat(windowMapping).isEmpty();
   }
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
   public void shouldReturnWindows() {
-    TestWindow anotherFrame = testFrame(toolkit);
-    mapping.addQueueFor(frame);
-    mapping.addQueueFor(anotherFrame);
+    TestWindow anotherWindow = MyWindow.createInEDT(toolkit);
+    mapping.addQueueFor(window);
+    mapping.addQueueFor(anotherWindow);
     Collection<Window> windows = mapping.windows();
-    assertThat(windows).containsOnly(frame, anotherFrame);
+    assertThat(windows).containsOnly(window, anotherWindow);
   }
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
   public void shouldReturnEventQueues() {
     EventQueue anotherEventQueue = new EventQueue();
     ToolkitStub anotherToolkit = ToolkitStub.createNew(anotherEventQueue);
-    TestWindow anotherFrame = testFrame(anotherToolkit);
-    mapping.addQueueFor(frame);
-    mapping.addQueueFor(anotherFrame);
+    TestWindow anotherWindow = MyWindow.createInEDT(anotherToolkit);
+    mapping.addQueueFor(window);
+    mapping.addQueueFor(anotherWindow);
     Collection<EventQueue> eventQueues = mapping.eventQueues();
     assertThat(eventQueues).containsOnly(eventQueue, anotherEventQueue);
   }
 
-  private TestWindow testFrame(final Toolkit toolkit) {
-    return new TestWindow(WindowEventQueueMappingTest.class) {
-      private static final long serialVersionUID = 1L;
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      @Override public Toolkit getToolkit() {
-        return toolkit;
-      }
-    };
+    static MyWindow createInEDT(final Toolkit toolkit) {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(toolkit);
+        }
+      });
+    }
+    
+    private final Toolkit toolkit;
+
+    MyWindow(Toolkit toolkit) {
+      super(WindowEventQueueMappingTest.class);
+      this.toolkit = toolkit;
+    }
+    
+    @Override public Toolkit getToolkit() {
+      return toolkit;
+    }
   }
 }

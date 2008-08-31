@@ -45,6 +45,14 @@ public class TestDialog extends JDialog {
     return dialog;
   }
   
+  public static TestDialog createInEDT(final Frame owner) {
+    return execute(new GuiQuery<TestDialog>() {
+      protected TestDialog executeInEDT() {
+        return new TestDialog(owner);
+      }
+    });
+  }
+  
   public TestDialog(Frame owner) {
     super(owner);
     setLayout(new FlowLayout());

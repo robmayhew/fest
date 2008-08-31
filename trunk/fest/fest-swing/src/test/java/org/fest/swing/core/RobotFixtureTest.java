@@ -70,7 +70,7 @@ public class RobotFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     textFieldWithPopup = window.textFieldWithPopup;
     textFieldWithoutPopup = window.textFieldWithoutPopup;
     robot.showWindow(window); // implicitly test 'showWindow(Window)'
@@ -377,7 +377,7 @@ public class RobotFixtureTest {
     final JButton button = new JButton("Click Me");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

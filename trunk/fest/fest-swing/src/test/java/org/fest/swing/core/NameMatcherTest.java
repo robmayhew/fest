@@ -66,14 +66,14 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnTrueIfNameMatchingAndIsShowing() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     assertThat(matcher.matches(window.button)).isTrue();
     window.destroy();
   }
 
   @Test(groups = GUI) 
   public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     matcher = new NameMatcher("b", true);
     assertThat(matcher.matches(window.button)).isFalse();
     window.destroy();
@@ -98,7 +98,7 @@ public class NameMatcherTest {
 
     final JButton button = new JButton("A Button");
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

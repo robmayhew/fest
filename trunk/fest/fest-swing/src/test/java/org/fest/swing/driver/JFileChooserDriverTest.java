@@ -60,7 +60,7 @@ public class JFileChooserDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JFileChooserDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     fileChooser = window.fileChooser;
     robot.showWindow(window);
   }
@@ -173,7 +173,7 @@ public class JFileChooserDriverTest {
 
     final JFileChooser fileChooser = new JFileChooser();
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

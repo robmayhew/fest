@@ -63,7 +63,7 @@ public class JComboBoxDriverTest {
     cellReader = new JComboBoxCellReaderStub();
     driver = new JComboBoxDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     comboBox = window.comboBox;
     robot.showWindow(window);
   }
@@ -450,7 +450,7 @@ public class JComboBoxDriverTest {
 
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

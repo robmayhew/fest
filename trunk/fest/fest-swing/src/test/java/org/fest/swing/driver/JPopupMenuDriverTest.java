@@ -52,7 +52,7 @@ public class JPopupMenuDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     robot.showWindow(window);
     driver = new JPopupMenuDriver(robot);
   }
@@ -103,7 +103,7 @@ public class JPopupMenuDriverTest {
     final JMenuItem menuItem1 = new JMenuItem("First");
     final JMenuItem menuItem2 = new JMenuItem("Second");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

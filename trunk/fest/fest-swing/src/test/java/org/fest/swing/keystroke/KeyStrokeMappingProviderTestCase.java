@@ -25,12 +25,16 @@ import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.*;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestWindow;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -65,9 +69,9 @@ public abstract class KeyStrokeMappingProviderTestCase {
   
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyFrame frame = new MyFrame();
-    textArea = frame.textArea;
-    robot.showWindow(frame);
+    MyWindow window = MyWindow.createInEDT();
+    textArea = window.textArea;
+    robot.showWindow(window);
     driver = new JTextComponentDriver(robot); 
   }
   
@@ -86,7 +90,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
   final void assertCorrectTextEntered(char character, KeyStroke keyStroke) {
     driver.deleteText(textArea);
     pressInTextArea(keyStroke);
-    driver.requireText(textArea, String.valueOf(character));
+    driver.requireText(textArea, valueOf(character));
   }
   
   final void assertKeyWasPressedWithoutModifiers(KeyStroke keyStroke, int expectedKey) {
@@ -119,12 +123,18 @@ public abstract class KeyStrokeMappingProviderTestCase {
     public void remove() {}
   }
   
-  static class MyFrame extends TestWindow {
+  static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
+
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
 
     final JTextArea textArea = new JTextArea(3, 8);
     
-    MyFrame() {
+    MyWindow() {
       super(KeyStrokeMappingProvider_enTest.class);
       add(textArea);
       setPreferredSize(new Dimension(200, 200));

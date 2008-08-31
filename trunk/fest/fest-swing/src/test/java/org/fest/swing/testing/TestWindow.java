@@ -46,6 +46,14 @@ public class TestWindow extends JFrame {
     return window;
   }
   
+  public static TestWindow createInEDT(final Class<?> testClass) {
+    return execute(new GuiQuery<TestWindow>() {
+      protected TestWindow executeInEDT() {
+        return new TestWindow(testClass);
+      }
+    });
+  }
+  
   public TestWindow(Class<?> testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());

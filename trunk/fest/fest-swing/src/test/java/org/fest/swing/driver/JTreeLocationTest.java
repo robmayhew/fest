@@ -29,9 +29,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -43,13 +45,13 @@ import static org.fest.util.Arrays.array;
  */
 public class JTreeLocationTest {
 
-  private MyFrame frame;
+  private MyWindow window;
   private JTreeLocation location;
   private List<TreePath> paths;
 
   @BeforeMethod public void setUp() {
-    frame = new MyFrame(getClass());
-    frame.display(new Dimension(200, 200));
+    window = MyWindow.createInEDT();
+    window.display(new Dimension(200, 200));
     location = new JTreeLocation();
     populatePaths();
   }
@@ -66,15 +68,15 @@ public class JTreeLocationTest {
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   @Test(groups = GUI, dataProvider = "pathIndices")
   public void shouldFindLocationOfTreePath(int pathIndex) {
     TreePath path = paths.get(pathIndex);
     pause(160);
-    Point actual = location.pointAt(frame.tree, path);
-    Rectangle pathBounds = frame.tree.getPathBounds(path);
+    Point actual = location.pointAt(window.tree, path);
+    Rectangle pathBounds = window.tree.getPathBounds(path);
     Point expected = new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
     assertThat(actual).isEqualTo(expected);
   }
@@ -95,14 +97,14 @@ public class JTreeLocationTest {
   }
 
   private TreePath rootPath() {
-    DefaultTreeModel model = (DefaultTreeModel)frame.tree.getModel();
+    DefaultTreeModel model = (DefaultTreeModel)window.tree.getModel();
     return new TreePath(array(model.getRoot()));
   }
 
   private TreePath childOf(TreePath parent, int index) {
     TreeNode child = childOf(parent.getLastPathComponent(), index);
     TreePath childPath = parent.pathByAddingChild(child);
-    frame.tree.expandPath(childPath);
+    window.tree.expandPath(childPath);
     return childPath;
   }
 
@@ -110,13 +112,19 @@ public class JTreeLocationTest {
     return ((DefaultMutableTreeNode)parent).getChildAt(index);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
+
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
 
     final JTree tree = new JTree();
 
-    MyFrame(Class<?> testClass) {
-      super(testClass);
+    MyWindow() {
+      super(JTreeLocationTest.class);
       populateTree();
       tree.setPreferredSize(new Dimension(200, 200));
       add(tree);

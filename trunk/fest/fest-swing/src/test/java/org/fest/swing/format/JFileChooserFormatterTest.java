@@ -48,7 +48,7 @@ public class JFileChooserFormatterTest {
   private JFileChooserFormatter formatter;
   
   @BeforeClass public void setUp() {
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     fileChooser = window.fileChooser;
     formatter = new JFileChooserFormatter();
   }
@@ -86,11 +86,9 @@ public class JFileChooserFormatterTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

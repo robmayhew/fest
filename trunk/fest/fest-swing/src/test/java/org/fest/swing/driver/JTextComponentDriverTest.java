@@ -52,7 +52,7 @@ public class JTextComponentDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTextComponentDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     textField = window.textField;
     robot.showWindow(window);
   }
@@ -261,7 +261,7 @@ public class JTextComponentDriverTest {
 
     final JTextField textField = new JTextField("This is a test");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

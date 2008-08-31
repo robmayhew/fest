@@ -46,7 +46,7 @@ public class ParentFinderTest {
   }
 
   public void shouldReturnParentOfComponent() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     try {
       assertThat(finder.parentOf(window.textField)).isSameAs(contentPaneOf(window));
     } finally {
@@ -57,11 +57,9 @@ public class ParentFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

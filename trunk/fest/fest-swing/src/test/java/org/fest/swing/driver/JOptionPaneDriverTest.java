@@ -60,7 +60,7 @@ public class JOptionPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JOptionPaneDriver(robot);
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     robot.showWindow(window);
   }
 
@@ -281,7 +281,7 @@ public class JOptionPaneDriverTest {
 
     final JButton button = new JButton("Click me");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

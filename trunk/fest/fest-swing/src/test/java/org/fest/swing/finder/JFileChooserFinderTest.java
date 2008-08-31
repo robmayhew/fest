@@ -26,9 +26,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.testing.TestWindow;
@@ -36,7 +36,9 @@ import org.fest.swing.testing.TestWindow;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
@@ -50,12 +52,12 @@ import static org.fest.swing.util.AWT.centerOf;
 public class JFileChooserFinderTest {
 
   private Robot robot;
-  private MyFrame frame;
+  private MyWindow window;
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
-    frame = new MyFrame();
-    robot.showWindow(frame);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createInEDT();
+    robot.showWindow(window);
   }
   
   @AfterMethod public void tearDown() {
@@ -65,7 +67,7 @@ public class JFileChooserFinderTest {
   public void shouldFindFileChooser() {
     clickBrowseButton();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser().using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);
+    assertThat(found.target).isSameAs(window.fileChooser);
   }
 
   public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
@@ -76,12 +78,7 @@ public class JFileChooserFinderTest {
       }
     }.start();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser().withTimeout(5, SECONDS).using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);
-  }
-
-  private void clickBrowseButton() {
-    JButton button = frame.browseButton;
-    robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
+    assertThat(found.target).isSameAs(window.fileChooser);
   }
 
   @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
@@ -92,7 +89,7 @@ public class JFileChooserFinderTest {
   public void shouldFindFileChooserByName() {
     clickBrowseButton();
     JFileChooserFixture found = JFileChooserFinder.findFileChooser("fileChooser").using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);    
+    assertThat(found.target).isSameAs(window.fileChooser);    
   }
   
   public void shouldFindFileChooserUsingMatcher() {
@@ -103,16 +100,27 @@ public class JFileChooserFinderTest {
       }
     };
     JFileChooserFixture found = JFileChooserFinder.findFileChooser(matcher).using(robot);
-    assertThat(found.target).isSameAs(frame.fileChooser);    
+    assertThat(found.target).isSameAs(window.fileChooser);    
   }
   
-  private static class MyFrame extends TestWindow {
+  void clickBrowseButton() {
+    JButton button = window.browseButton;
+    robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
+  }
+  
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
+
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
 
     final JButton browseButton = new JButton("Browse");
     final JFileChooser fileChooser = new JFileChooser();
     
-    public MyFrame() {
+    public MyWindow() {
       super(JFileChooserFinderTest.class);
       setUp();
     }
@@ -121,7 +129,7 @@ public class JFileChooserFinderTest {
       browseButton.setName("browse");
       browseButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          fileChooser.showOpenDialog(MyFrame.this);
+          fileChooser.showOpenDialog(MyWindow.this);
         }
       });
       add(browseButton);

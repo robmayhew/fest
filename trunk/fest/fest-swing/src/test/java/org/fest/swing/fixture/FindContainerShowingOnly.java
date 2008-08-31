@@ -47,7 +47,7 @@ public class FindContainerShowingOnly {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     robot.showWindow(window, new Dimension(400, 300));
   }
 
@@ -68,11 +68,9 @@ public class FindContainerShowingOnly {
     private final MyInternalFrame notShowing = new MyInternalFrame();
     private final MyInternalFrame showing = new MyInternalFrame();
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
     

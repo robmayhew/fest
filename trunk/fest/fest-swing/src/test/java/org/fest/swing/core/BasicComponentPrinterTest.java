@@ -47,9 +47,9 @@ public class BasicComponentPrinterTest {
 
   @BeforeMethod public void setUp() {
     printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithNewAwtHierarchy();
-    window1 = MyWindow.showNew();
+    window1 = MyWindow.createAndShowInEDT();
     window1.button.setName("button1");
-    window2 = MyWindow.showNew();
+    window2 = MyWindow.createAndShowInEDT();
     window2.button.setName("button2");
   }
 
@@ -105,11 +105,9 @@ public class BasicComponentPrinterTest {
 
     final JButton button = new JButton("A button");
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

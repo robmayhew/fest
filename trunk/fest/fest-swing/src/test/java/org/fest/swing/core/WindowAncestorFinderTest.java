@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 
 /**
@@ -38,10 +39,10 @@ import static org.fest.swing.query.ComponentParentQuery.parentOf;
  */
 public class WindowAncestorFinderTest {
 
-  private MyFrame frame;
+  private MyWindow frame;
 
   @BeforeMethod public void setUp() {
-    frame = new MyFrame();
+    frame = MyWindow.createInEDT();
   }
 
   @AfterMethod public void tearDown() {
@@ -76,14 +77,20 @@ public class WindowAncestorFinderTest {
     assertThat(ancestor).isSameAs(parentOf(frame.popupMenu));
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
+
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
 
     final JButton button = new JButton("Click Me");
     final JTextField textField = new JTextField(20);
     final JPopupMenu popupMenu = new JPopupMenu();
 
-    MyFrame() {
+    MyWindow() {
       super(WindowAncestorFinderTest.class);
       add(button);
       add(textField);

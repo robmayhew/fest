@@ -48,7 +48,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     try {
       JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
       assertThat(matcher.matches(window.button)).isTrue();
@@ -66,7 +66,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTextIsNotEqualToExpected() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     try {
       JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Bye");
       assertThat(matcher.matches(window.button)).isFalse();
@@ -84,7 +84,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); } 
       });

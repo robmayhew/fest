@@ -44,7 +44,7 @@ public class JTreeSingleRowSelectedQueryTest {
   private JTree tree;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     tree = window.tree;
     window.display();
   }
@@ -93,11 +93,9 @@ public class JTreeSingleRowSelectedQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
 

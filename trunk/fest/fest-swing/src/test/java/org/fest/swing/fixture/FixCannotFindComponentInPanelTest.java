@@ -40,7 +40,7 @@ public class FixCannotFindComponentInPanelTest {
   private FrameFixture frame;
   
   @BeforeClass public void setUp() {
-    frame = new FrameFixture(MyWindow.newWindow());
+    frame = new FrameFixture(MyWindow.createInEDT());
     frame.show(new Dimension(400, 200));
   }
   
@@ -58,11 +58,9 @@ public class FixCannotFindComponentInPanelTest {
     private final JPanel panel = new JPanel();
     private final JList list = new JList();
     
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
     

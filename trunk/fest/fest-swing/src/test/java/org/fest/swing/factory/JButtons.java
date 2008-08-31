@@ -15,11 +15,14 @@
  */
 package org.fest.swing.factory;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 
 import org.fest.swing.core.GuiQuery;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.util.Arrays.isEmpty;
 
 /**
  * Understands creation of <code>{@link JButton}</code>s in the event dispatch thread.
@@ -35,9 +38,15 @@ public final class JButtons {
   }
   
   public static class JButtonFactory {
+    ActionListener[] actionListeners;
     boolean enabled;
     String name;
     String text;
+
+    public JButtonFactory withActionListeners(ActionListener... newActionListeners) {
+      actionListeners = newActionListeners;
+      return this;
+    }
     
     public JButtonFactory enabled(boolean isEnabled) {
       enabled = isEnabled;
@@ -58,6 +67,8 @@ public final class JButtons {
       return execute(new GuiQuery<JButton>() {
         protected JButton executeInEDT()  {
           JButton button = new JButton();
+          if (!isEmpty(actionListeners))
+            for (ActionListener l : actionListeners) button.addActionListener(l);
           button.setEnabled(enabled);
           button.setName(name);
           button.setText(text);

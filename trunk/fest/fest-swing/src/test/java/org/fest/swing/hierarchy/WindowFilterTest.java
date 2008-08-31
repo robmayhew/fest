@@ -16,10 +16,8 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
-import java.awt.Frame;
 import java.util.Map;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import org.testng.annotations.BeforeMethod;
@@ -29,6 +27,8 @@ import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JDialogs.dialog;
 
 /**
  * Tests for <code>{@link WindowFilter}</code>.
@@ -51,7 +51,7 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldFilterComponent() {
-    Component c = new JButton();
+    Component c = button().createInEDT();
     implictlyIgnored.put(c, true);
     filter.ignore(c);
     assertThat(ignored.keySet()).containsOnly(c);
@@ -59,17 +59,17 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldFilterOwnedWindows() {
-    TestWindow frame = new TestWindow(getClass());
-    TestDialog dialog = new TestDialog(frame);
-    implictlyIgnored.put(frame, true);
+    TestWindow window = TestWindow.createInEDT(getClass());
+    TestDialog dialog = TestDialog.createInEDT(window);
+    implictlyIgnored.put(window, true);
     implictlyIgnored.put(dialog, true);
-    filter.ignore(frame);
-    assertThat(ignored.keySet()).containsOnly(frame, dialog);
+    filter.ignore(window);
+    assertThat(ignored.keySet()).containsOnly(window, dialog);
     assertThat(implictlyIgnored.size()).isZero();
   }
   
   @Test public void shouldFilterChildrenOfSharedInvisibleFrame() {
-    JDialog dialog = new JDialog((Frame)null);
+    JDialog dialog = dialog().createInEDT();
     implictlyIgnored.put(dialog, true);
     filter.ignore(dialog.getOwner());
     assertThat(ignored.keySet()).containsOnly(dialog);
@@ -77,7 +77,7 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldUnfilter() {
-    Component c = new JButton();
+    Component c = button().createInEDT();
     ignored.put(c, true);
     implictlyIgnored.put(c, true);
     filter.recognize(c);
@@ -87,7 +87,7 @@ public class WindowFilterTest {
 
   @Test(dependsOnMethods = "shouldFilterChildrenOfSharedInvisibleFrame") 
   public void shouldUnfilterChildrenOfSharedInvisibleFrame() {
-    JDialog dialog = new JDialog((Frame)null);
+    JDialog dialog = dialog().createInEDT();
     ignored.put(dialog, true);
     implictlyIgnored.put(dialog, true);
     filter.recognize(dialog.getOwner());
@@ -96,23 +96,24 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldReturnTrueIfObjectIsFiltered() {
-    Component c = new JButton();
+    Component c = button().createInEDT();
     ignored.put(c, true);
     assertThat(filter.isIgnored(c)).isTrue();
   }
   
   @Test public void shouldReturnTrueIfWindowParentIsFiltered() {
-    Component c = new JButton();
-    TestWindow frame = new TestWindow(getClass());
-    frame.add(c);
-    ignored.put(frame, true);
+    Component c = button().createInEDT();
+    TestWindow window = TestWindow.createInEDT(getClass());
+    // TODO call in EDT
+    window.add(c);
+    ignored.put(window, true);
     assertThat(filter.isIgnored(c)).isTrue();
   }
   
   @Test public void shouldReturnTrueIfParentOfWindowIsFiltered() {
-    TestWindow frame = new TestWindow(getClass());
-    TestDialog dialog = new TestDialog(frame);
-    ignored.put(frame, true);
+    TestWindow window = TestWindow.createInEDT(getClass());
+    TestDialog dialog = TestDialog.createInEDT(window);
+    ignored.put(window, true);
     assertThat(filter.isIgnored(dialog)).isTrue();
   }
   
@@ -121,19 +122,19 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldImplicitFilter() {
-    Component c = new JButton();
+    Component c = button().createInEDT();
     filter.implicitlyIgnore(c);
     assertThat(implictlyIgnored.keySet()).containsOnly(c);
   }
   
   @Test public void shouldReturnTrueIfImplicitFiltered() {
-    Component c = new JButton();
+    Component c = button().createInEDT();
     implictlyIgnored.put(c, true);
     assertThat(filter.isImplicitlyIgnored(c)).isTrue();
   }
 
   @Test public void shouldReturnFalseIfNotImplicitFiltered() {
-    Component c = new JButton();
+    Component c = button().createInEDT();
     assertThat(filter.isImplicitlyIgnored(c)).isFalse();
   }
 }

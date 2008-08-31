@@ -53,7 +53,7 @@ public class JTableHeaderLocationTest {
   
   @BeforeMethod public void setUp() {
     location = new JTableHeaderLocation();
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     window.display();
     tableHeader = headerOf(window.table);
   }
@@ -126,11 +126,9 @@ public class JTableHeaderLocationTest {
 
     final TestTable table;
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() throws Throwable {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
 

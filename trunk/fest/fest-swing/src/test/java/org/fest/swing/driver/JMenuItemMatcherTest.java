@@ -49,7 +49,7 @@ public class JMenuItemMatcherTest {
   
   @BeforeMethod public void setUp() {
     finder = finderWithNewAwtHierarchy();
-    window = MyWindow.showNew();
+    window = MyWindow.createInEDT();
     window.display();
     matcher = new JMenuItemMatcher("Logout", "Logout");
   }
@@ -72,11 +72,9 @@ public class JMenuItemMatcherTest {
 
     final JMenuItem logoutMenuItem = new JMenuItem("Logout"); 
     
-    static MyWindow showNew() {
+    static MyWindow createInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

@@ -49,7 +49,7 @@ public class JLabelDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JLabelDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     label = window.label;
     robot.showWindow(window);
   }
@@ -86,7 +86,7 @@ public class JLabelDriverTest {
 
     final JLabel label = new JLabel("This is a test");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

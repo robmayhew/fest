@@ -70,7 +70,7 @@ public class JListDriverTest {
     cellReader = new JListCellReaderStub();
     driver = new JListDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     dragList = window.dragList;
     dropList = window.dropList;
     robot.showWindow(window);
@@ -499,7 +499,7 @@ public class JListDriverTest {
     final TestList dragList = new TestList("one", "two", "three");
     final TestList dropList = new TestList("four", "five", "six");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

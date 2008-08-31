@@ -44,7 +44,7 @@ public class JTreeCellRendererQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     window.display();
   }
 
@@ -62,7 +62,7 @@ public class JTreeCellRendererQueryTest {
 
     final JTree tree = new JTree(new Object[] { "one", "two", "three" });
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

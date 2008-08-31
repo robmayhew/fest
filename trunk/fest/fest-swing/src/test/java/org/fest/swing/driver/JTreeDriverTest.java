@@ -57,7 +57,7 @@ import static org.fest.util.Arrays.array;
 public class JTreeDriverTest {
 
   private Robot robot;
-  private MyFrame frame;
+  private MyWindow window;
   private JTree dragTree;
   private JTree dropTree;
 
@@ -66,10 +66,10 @@ public class JTreeDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTreeDriver(robot);
-    frame = new MyFrame();
-    dragTree = frame.dragTree;
-    dropTree = frame.dropTree;
-    robot.showWindow(frame);
+    window = MyWindow.createInEDT();
+    dragTree = window.dragTree;
+    dropTree = window.dropTree;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -547,14 +547,14 @@ public class JTreeDriverTest {
   public void shouldShowPopupMenuAtRow(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, 0);
-    assertThat(popupMenu).isSameAs(frame.popupMenu);
+    assertThat(popupMenu).isSameAs(window.popupMenu);
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldShowPopupMenuAtPath(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, "root");
-    assertThat(popupMenu).isSameAs(frame.popupMenu);
+    assertThat(popupMenu).isSameAs(window.popupMenu);
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -572,11 +572,17 @@ public class JTreeDriverTest {
     assertThat(driver.separator()).isEqualTo("|");
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TREE_SIZE = new Dimension(200, 100);
 
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
     final TestTree dragTree = new TestTree(nodes());
     final TestTree dropTree = new TestTree(rootOnly());
     final JPopupMenu popupMenu = new JPopupMenu();
@@ -606,7 +612,7 @@ public class JTreeDriverTest {
       return node;
     }
 
-    MyFrame() {
+    MyWindow() {
       super(JTreeDriverTest.class);
       add(decorate(dragTree));
       dragTree.addMouseListener(new Listener(popupMenu));

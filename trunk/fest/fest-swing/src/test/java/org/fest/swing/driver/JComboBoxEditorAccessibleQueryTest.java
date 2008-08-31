@@ -47,7 +47,7 @@ public class JComboBoxEditorAccessibleQueryTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     comboBox = window.comboBox;
     robot.showWindow(window);
   }
@@ -77,7 +77,7 @@ public class JComboBoxEditorAccessibleQueryTest {
 
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

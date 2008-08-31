@@ -65,7 +65,7 @@ public class JTabbedPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTabbedPaneDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     tabbedPane = window.tabbedPane;
     robot.showWindow(window);
   }
@@ -197,7 +197,7 @@ public class JTabbedPaneDriverTest {
 
     final JTabbedPane tabbedPane = new JTabbedPane();
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

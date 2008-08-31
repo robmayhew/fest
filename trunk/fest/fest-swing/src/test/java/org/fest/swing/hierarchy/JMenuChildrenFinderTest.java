@@ -59,7 +59,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnPopupMenuIfComponentIsJMenu() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createInEDT();
     Collection<Component> children = finder.nonExplicitChildrenOf(window.menu);
     try {
       assertThat(children).containsOnly(popupMenuOf(window.menu));
@@ -79,7 +79,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
           return new MyWindow();

@@ -102,7 +102,7 @@ public class ExistingHierarchyTest {
   }
   
   @Test(groups = GUI) public void shouldDisposeWindow() {
-    final MyWindow window = MyWindow.newWindow();
+    final MyWindow window = MyWindow.createInEDT();
     window.display();
     hierarchy.dispose(window);
     assertThat(disposed(window)).isTrue();
@@ -121,11 +121,9 @@ public class ExistingHierarchyTest {
 
     boolean disposed;
     
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
     

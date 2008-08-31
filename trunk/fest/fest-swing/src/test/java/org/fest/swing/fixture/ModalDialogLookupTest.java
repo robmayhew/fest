@@ -15,22 +15,25 @@
  */
 package org.fest.swing.fixture;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.finder.WindowFinder.findDialog;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestWindow;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.finder.WindowFinder.findDialog;
 
 /**
  * Tests lookup of a modal dialog. This test tries to reproduce the problem reported at
@@ -41,11 +44,11 @@ import org.testng.annotations.Test;
 public class ModalDialogLookupTest {
 
   private Robot robot;
-  private MyFrame frame;
+  private MyWindow frame;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new MyFrame();
+    frame = MyWindow.createInEDT();
     robot.showWindow(frame);
   }
   
@@ -60,13 +63,21 @@ public class ModalDialogLookupTest {
     robot.cleanUp();
   }
   
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT()  {
+          return new MyWindow();
+        }
+      });
+    }
+    
     final JButton button = new JButton("Launch");
     final TestDialog dialog = new TestDialog(this);
     
-    MyFrame() {
+    MyWindow() {
       super(ModalDialogLookupTest.class);
       button.setName("launch");
       add(button);

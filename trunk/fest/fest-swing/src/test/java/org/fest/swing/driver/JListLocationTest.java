@@ -51,7 +51,7 @@ public class JListLocationTest {
   @BeforeMethod public void setUp() {
     location = new JListLocation();
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     list = window.list;
     robot.showWindow(window);
   }
@@ -88,7 +88,7 @@ public class JListLocationTest {
 
     final TestList list = new TestList("one", "two", "three");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

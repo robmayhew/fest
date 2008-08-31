@@ -53,7 +53,7 @@ public class JMenuItemDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JMenuItemDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     menuItem = window.menuNew;
     robot.showWindow(window);
   }
@@ -76,7 +76,7 @@ public class JMenuItemDriverTest {
     final JMenu menuFile = new JMenu("File");
     final JMenuItem menuNew = new JMenuItem("New");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

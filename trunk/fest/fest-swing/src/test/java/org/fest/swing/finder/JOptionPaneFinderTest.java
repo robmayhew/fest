@@ -26,17 +26,20 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
 import org.fest.swing.testing.TestWindow;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
 
@@ -50,25 +53,25 @@ import static org.fest.swing.util.AWT.centerOf;
 public class JOptionPaneFinderTest {
 
   private Robot robot;
-  private MyFrame frame;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
-    frame = new MyFrame();
-    robot.showWindow(frame);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createInEDT();
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 
-  public void shouldFindFileChooser() {
+  public void shouldFindJOptionPane() {
     clickMessageButton();
     JOptionPaneFixture found = JOptionPaneFinder.findOptionPane().using(robot);
     assertThat(found.target).isNotNull();
   }
 
-  public void shouldFindFileChooserUsingGivenMatcher() {
+  public void shouldFindJOptionPaneUsingGivenMatcher() {
     clickMessageButton();
     GenericTypeMatcher<JOptionPane> matcher = new GenericTypeMatcher<JOptionPane>() {
       protected boolean isMatching(JOptionPane optionPane) {
@@ -79,7 +82,7 @@ public class JOptionPaneFinderTest {
     assertThat(found.target).isNotNull();
   }
 
-  public void shouldFindFileChooserBeforeGivenTimeoutExpires() {
+  public void shouldFindJOptionPaneBeforeGivenTimeoutExpires() {
     new Thread() {
       @Override public void run() {
         pause(2000);
@@ -90,22 +93,28 @@ public class JOptionPaneFinderTest {
     assertThat(found.target).isNotNull();
   }
 
-  private void clickMessageButton() {
-    JButton button = frame.messageButton;
-    robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
+  void clickMessageButton() {
+    JButton button = window.messageButton;
+    robot.click(button, centerOf(button), LEFT_BUTTON, 1);
   }
 
   @Test(groups = GUI, expectedExceptions = WaitTimedOutError.class)
-  public void shouldFailIfFileChooserNotFound() {
-    JFileChooserFinder.findFileChooser().using(robot);
+  public void shouldFailIfJOptionPaneNotFound() {
+    JOptionPaneFinder.findOptionPane().using(robot);
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
+    
     final JButton messageButton = new JButton("Message");
 
-    public MyFrame() {
+    MyWindow() {
       super(JOptionPaneFinderTest.class);
       setUp();
     }
@@ -114,7 +123,7 @@ public class JOptionPaneFinderTest {
       messageButton.setName("message");
       messageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          JOptionPane.showMessageDialog(MyFrame.this, "A message", "Hello", JOptionPane.PLAIN_MESSAGE);
+          showMessageDialog(MyWindow.this, "A message", "Hello", PLAIN_MESSAGE);
         }
       });
       add(messageButton);

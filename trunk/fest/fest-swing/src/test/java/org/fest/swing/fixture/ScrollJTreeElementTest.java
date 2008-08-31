@@ -49,7 +49,7 @@ public class ScrollJTreeElementTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     fixture = new FrameFixture(window);
     fixture.show();
   }
@@ -109,7 +109,7 @@ public class ScrollJTreeElementTest {
     final JTree dragTree = new TestTree("drag");
     final JTree dropTree = new TestTree("drop");
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

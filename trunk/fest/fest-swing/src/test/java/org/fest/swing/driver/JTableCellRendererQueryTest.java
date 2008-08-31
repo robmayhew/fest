@@ -46,7 +46,7 @@ public class JTableCellRendererQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
   }
 
   @AfterMethod public void tearDown() {
@@ -72,11 +72,9 @@ public class JTableCellRendererQueryTest {
 
     final JTable table;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

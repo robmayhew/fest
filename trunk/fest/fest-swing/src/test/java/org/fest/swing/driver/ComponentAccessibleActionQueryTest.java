@@ -47,7 +47,7 @@ public class ComponentAccessibleActionQueryTest {
 
   @BeforeMethod public void setUp() {
     action = createMock(AccessibleAction.class);
-    window = MyWindow.showNew(action);
+    window = MyWindow.createAndShowInEDT(action);
   }
 
   @AfterMethod public void tearDown() {
@@ -62,7 +62,7 @@ public class ComponentAccessibleActionQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew(final AccessibleAction action) {
+    static MyWindow createAndShowInEDT(final AccessibleAction action) {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(action); }
       });

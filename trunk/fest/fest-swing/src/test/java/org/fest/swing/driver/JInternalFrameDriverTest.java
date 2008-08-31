@@ -62,7 +62,7 @@ public class JInternalFrameDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JInternalFrameDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     internalFrame = window.internalFrame;
     desktopPane = window.desktopPane;
     robot.showWindow(window);
@@ -331,7 +331,7 @@ public class JInternalFrameDriverTest {
     final JDesktopPane desktopPane;
     final JInternalFrame internalFrame;
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

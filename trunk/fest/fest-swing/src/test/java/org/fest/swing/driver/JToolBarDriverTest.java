@@ -58,7 +58,7 @@ public class JToolBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JToolBarDriver(robot);
-    window = MyWindow.newWindow();
+    window = MyWindow.createInEDT();
     toolBar = window.toolBar;
     robot.showWindow(window);
   }
@@ -173,11 +173,9 @@ public class JToolBarDriverTest {
     final BorderLayout borderLayout = new BorderLayout();
     final JToolBar toolBar = new JToolBar();
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
 

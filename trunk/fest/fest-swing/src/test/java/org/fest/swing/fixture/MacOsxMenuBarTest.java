@@ -26,10 +26,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 
@@ -42,20 +44,17 @@ import static org.fest.swing.finder.WindowFinder.findFrame;
 public class MacOsxMenuBarTest {
   
   private Robot robot;
-  private MyFrame frame;
   private JMenuItemFixture menuItemFixture;
   
   @BeforeMethod public void setUp() {
     System.setProperty("apple.laf.useScreenMenuBar", "true");
     robot = robotWithCurrentAwtHierarchy();
-    frame = new MyFrame();
-    frame.display();
-    FrameFixture frameFixture = findFrame("myFrame").withTimeout(2000).using(robot);
+    robot.showWindow(MyWindow.createInEDT());
+    FrameFixture frameFixture = findFrame("myWindow").withTimeout(2000).using(robot);
     menuItemFixture = frameFixture.menuItem("menuItem");
   }
   
   @AfterMethod public void tearDown() {
-    frame.destroy();
     robot.cleanUp();
   }
   
@@ -71,21 +70,39 @@ public class MacOsxMenuBarTest {
     assertThat(selected[0]).isTrue();
   }
 
-  private static class MyFrame extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
+    
+    public static MyWindow createInEDT() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
+      });
+    }
 
-    MyFrame() {
+    MyWindow() {
       super(MacOsxMenuBarTest.class);
-      setName("myFrame");
+      setName("myWindow");
+      setJMenuBar(menuBar(menu(menuItem())));
+      setPreferredSize(new Dimension(200, 100));
+    }
+
+    private JMenuItem menuItem() {
       JMenuItem menuItem = new JMenuItem("Menu Item");
       menuItem.setName("menuItem");
+      return menuItem;
+    }
+    
+    private JMenu menu(JMenuItem menuItem) {
       JMenu menu = new JMenu("Menu");
       menu.setName("menu");
       menu.add(menuItem);
+      return menu;
+    }
+
+    private JMenuBar menuBar(JMenu menu) {
       JMenuBar menuBar = new JMenuBar();
       menuBar.add(menu);
-      setJMenuBar(menuBar);
-      setPreferredSize(new Dimension(200, 100));
+      return menuBar;
     }
   }
 }

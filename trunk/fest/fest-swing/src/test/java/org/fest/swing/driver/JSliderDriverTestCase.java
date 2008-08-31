@@ -59,7 +59,7 @@ public abstract class JSliderDriverTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyWindow window = MyWindow.newWindow(getClass(), orientation());
+    MyWindow window = MyWindow.createInEDT(getClass(), orientation());
     slider = window.slider;
     robot.showWindow(window);
   }
@@ -173,9 +173,9 @@ public abstract class JSliderDriverTestCase {
 
     final JSlider slider = new JSlider();
 
-    static MyWindow newWindow(final Class<? extends JSliderDriverTestCase> testClass, final int orientation) {
+    static MyWindow createInEDT(final Class<? extends JSliderDriverTestCase> testClass, final int orientation) {
       return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
+        protected MyWindow executeInEDT() { 
           return new MyWindow(testClass, orientation);
         }
       });

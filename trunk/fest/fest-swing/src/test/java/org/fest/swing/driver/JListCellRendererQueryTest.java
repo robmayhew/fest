@@ -45,7 +45,7 @@ public class JListCellRendererQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     window.display();
   }
 
@@ -73,11 +73,9 @@ public class JListCellRendererQueryTest {
 
     final JList list = new JList(new Object[] { "one", "two", "three" });
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

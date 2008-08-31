@@ -56,7 +56,7 @@ public abstract class InputEventGeneratorTestCase {
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = MyWindow.newWindow(getClass());
+    frame = MyWindow.createInEDT(getClass());
     onSetUp();
     generator = generator();
     frame.display();
@@ -144,7 +144,7 @@ public abstract class InputEventGeneratorTestCase {
 
     final JTextField textBox = new JTextField(20);
 
-    static MyWindow newWindow(final Class<? extends InputEventGeneratorTestCase> testClass) {
+    static MyWindow createInEDT(final Class<? extends InputEventGeneratorTestCase> testClass) {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(testClass); }
       });

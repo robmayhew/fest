@@ -24,7 +24,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
@@ -32,8 +31,6 @@ import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link TransientWindowListener}</code>.
@@ -50,24 +47,8 @@ public class TransientWindowListenerTest {
   @BeforeMethod public void setUp() {
     mockWindowFilter = createMock(MockWindowFilter.class);
     listener = new TransientWindowListener(mockWindowFilter);
-    parent = newTestWindow();
-    eventSource = newTestDialog(parent);
-  }
-
-  private static TestWindow newTestWindow() {
-    return execute(new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        return new TestWindow(TransientWindowListenerTest.class);
-      }
-    });
-  }
-  
-  private static TestDialog newTestDialog(final TestWindow parent) {
-    return execute(new GuiQuery<TestDialog>() {
-      protected TestDialog executeInEDT() {
-        return new TestDialog(parent);
-      }
-    });
+    parent = TestWindow.createInEDT(getClass());
+    eventSource = TestDialog.createInEDT(parent);
   }
 
   @AfterMethod public void tearDown() {

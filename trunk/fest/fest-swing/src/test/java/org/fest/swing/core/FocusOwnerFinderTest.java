@@ -16,6 +16,7 @@
 package org.fest.swing.core;
 
 import java.awt.Component;
+import java.awt.Frame;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -45,7 +46,7 @@ public class FocusOwnerFinderTest {
   private JTextField textField;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     textField = window.textBox;
   }
 
@@ -66,14 +67,30 @@ public class FocusOwnerFinderTest {
   }
 
   public void shouldFindFocusInOwnedWindow() {
-    TestDialog dialog = new TestDialog(window);
-    JButton button = new JButton("Click me");
-    dialog.add(button);
-    dialog.display();
-    setFocusOn(button);
+    MyDialog dialog = MyDialog.createAndShowInEDT(window);
+    setFocusOn(dialog.button);
     Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
-    assertThat(focusOwner).isSameAs(button);
+    assertThat(focusOwner).isSameAs(dialog.button);
     dialog.destroy();
+  }
+  
+  private static class MyDialog extends TestDialog {
+    private static final long serialVersionUID = 1L;
+    
+    final JButton button = new JButton("Click me");
+    
+    static MyDialog createAndShowInEDT(final Frame owner) {
+      MyDialog window = execute(new GuiQuery<MyDialog>() {
+        protected MyDialog executeInEDT() { return new MyDialog(owner); }
+      });
+      window.display();
+      return window;
+    }
+
+    MyDialog(Frame owner) {
+      super(owner);
+      add(button);
+    }
   }
   
   private static class MyWindow extends TestWindow {
@@ -81,7 +98,7 @@ public class FocusOwnerFinderTest {
     
     final JTextField textBox = new JTextField(20); 
     
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

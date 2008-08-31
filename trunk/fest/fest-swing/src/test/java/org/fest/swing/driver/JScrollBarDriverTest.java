@@ -55,7 +55,7 @@ public class JScrollBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JScrollBarDriver(robot);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     scrollBar = window.scrollBar;
     robot.showWindow(window);
   }
@@ -308,7 +308,7 @@ public class JScrollBarDriverTest {
 
     final JScrollBar scrollBar = new JScrollBar();
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

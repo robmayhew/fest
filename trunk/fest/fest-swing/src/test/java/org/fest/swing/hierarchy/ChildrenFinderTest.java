@@ -101,7 +101,7 @@ public class ChildrenFinderTest {
   }
 
   @Test(groups = GUI) public void shouldReturnChildrenOfContainer() {
-    MyWindow frame = MyWindow.showNew();
+    MyWindow frame = MyWindow.createAndShowInEDT();
     try {
       assertThat(finder.childrenOf(contentPaneOf(frame))).containsOnly(frame.textField);
     } finally {
@@ -112,11 +112,9 @@ public class ChildrenFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

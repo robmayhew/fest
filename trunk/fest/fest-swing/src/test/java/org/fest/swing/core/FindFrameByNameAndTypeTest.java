@@ -41,7 +41,7 @@ public class FindFrameByNameAndTypeTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     robot.showWindow(window);
   }
 
@@ -59,7 +59,7 @@ public class FindFrameByNameAndTypeTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

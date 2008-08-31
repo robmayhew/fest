@@ -49,7 +49,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     try {
       JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing("Hello");
       assertThat(matcher.matches(window.textField)).isTrue();
@@ -67,7 +67,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    MyWindow window = MyWindow.showNew();
+    MyWindow window = MyWindow.createAndShowInEDT();
     try {
       JTextComponentByTextMatcher matcher = JTextComponentByTextMatcher.withTextAndShowing("Bye");
       assertThat(matcher.matches(window.textField)).isFalse();
@@ -85,7 +85,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

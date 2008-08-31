@@ -48,7 +48,7 @@ public class BasicComponentFinderTest {
   
   @BeforeMethod public void setUp() {
     finder = (BasicComponentFinder)BasicComponentFinder.finderWithNewAwtHierarchy();
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
   }
   
   @AfterMethod public void tearDown() {
@@ -71,7 +71,7 @@ public class BasicComponentFinderTest {
   }
 
   public void shouldFindComponentByTypeAndContainer() {
-    anotherWindow = MyWindow.showNew();
+    anotherWindow = MyWindow.createAndShowInEDT();
     JButton button = finder.findByType(anotherWindow, JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -100,7 +100,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentByNameAndContainer() {
-    anotherWindow = MyWindow.showNew();
+    anotherWindow = MyWindow.createAndShowInEDT();
     anotherWindow.button.setName("anotherButton");
     Component button = finder.findByName(anotherWindow, "anotherButton");
     assertThat(button).isSameAs(anotherWindow.button);
@@ -141,7 +141,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentByNameAndTypeAndContainer() {
-    anotherWindow = MyWindow.showNew();
+    anotherWindow = MyWindow.createAndShowInEDT();
     JButton button = finder.findByName(anotherWindow, "button", JButton.class);
     assertThat(button).isSameAs(anotherWindow.button);
   }
@@ -252,7 +252,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldReturnAllMatchingComponentsInGivenRoot() {
-    anotherWindow = MyWindow.showNew();
+    anotherWindow = MyWindow.createAndShowInEDT();
     Collection<Component> found = finder.findAll(anotherWindow, new ComponentMatcher() {
       public boolean matches(Component c) {
         return c instanceof JButton;
@@ -268,11 +268,9 @@ public class BasicComponentFinderTest {
     final JTextField textField = new JTextField("A TextField");
     final JTextField anotherTextField = new JTextField("Another TextField");
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

@@ -63,7 +63,7 @@ public class JTableHeaderDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTableHeaderDriver(robot);
-    MyWindow frame = MyWindow.newWindow();
+    MyWindow frame = MyWindow.createInEDT();
     tableHeader = frame.table.getTableHeader();
     robot.showWindow(frame);
   }
@@ -151,7 +151,7 @@ public class JTableHeaderDriverTest {
 
     final TestTable table;
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

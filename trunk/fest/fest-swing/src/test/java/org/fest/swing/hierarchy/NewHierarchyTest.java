@@ -53,7 +53,7 @@ public class NewHierarchyTest {
 
   @BeforeMethod public void setUp() {
     toolkit = ToolkitStub.createNew();
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
     filter = new WindowFilter();
   }
 
@@ -123,11 +123,9 @@ public class NewHierarchyTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow showNew() {
+    static MyWindow createAndShowInEDT() {
       MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

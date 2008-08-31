@@ -81,7 +81,7 @@ public class JTableDriverTest {
     cellReader = new JTableCellReaderStub();
     driver = new JTableDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.newWindow();
+    MyWindow window = MyWindow.createInEDT();
     dragTable = window.dragTable;
     dropTable = window.dropTable;
     robot.showWindow(window);
@@ -504,7 +504,7 @@ public class JTableDriverTest {
     final TestTable dragTable = new TestTable(ROW_COUNT, COLUMN_COUNT);
     final TestTable dropTable = new TestTable(dropTableData(2, COLUMN_COUNT), columnNames(COLUMN_COUNT));
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });

@@ -19,7 +19,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.TestTable;
@@ -41,7 +40,7 @@ public class JTableSelectionQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.showNew();
+    window = MyWindow.createAndShowInEDT();
   }
   
   @AfterMethod public void tearDown() {
@@ -69,11 +68,9 @@ public class JTableSelectionQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
-    static MyWindow showNew() {
-      MyWindow window = GuiActionRunner.execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() throws Throwable {
-          return new MyWindow();
-        }
+    static MyWindow createAndShowInEDT() {
+      MyWindow window = execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() { return new MyWindow(); }
       });
       window.display();
       return window;

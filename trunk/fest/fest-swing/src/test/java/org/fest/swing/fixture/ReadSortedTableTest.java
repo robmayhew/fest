@@ -49,7 +49,7 @@ public class ReadSortedTableTest {
   private FrameFixture frame;
   
   @BeforeMethod public void setUp() {
-    frame = new FrameFixture(MyWindow.newWindow());
+    frame = new FrameFixture(MyWindow.createInEDT());
     frame.show();
   }
   
@@ -67,7 +67,7 @@ public class ReadSortedTableTest {
     
     final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>();
 
-    static MyWindow newWindow() {
+    static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });
