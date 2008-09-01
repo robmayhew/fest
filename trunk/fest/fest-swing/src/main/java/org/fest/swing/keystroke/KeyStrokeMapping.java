@@ -32,6 +32,17 @@ public class KeyStrokeMapping {
    * @param character the character corresponding to the intended <code>KeyStroke</code>.
    * @param keyCode the numeric key code for the intended <code>KeyStroke</code>.
    * @param modifiers the set of modifiers for the intended <code>KeyStroke</code>.
+   * @return the created <code>KeyStrokeMapping</code>.
+   */
+  public static KeyStrokeMapping mapping(char character, int keyCode, int modifiers) {
+    return new KeyStrokeMapping(character, keyCode, modifiers);
+  }
+  
+  /**
+   * Creates a new </code>{@link KeyStrokeMapping}</code>.
+   * @param character the character corresponding to the intended <code>KeyStroke</code>.
+   * @param keyCode the numeric key code for the intended <code>KeyStroke</code>.
+   * @param modifiers the set of modifiers for the intended <code>KeyStroke</code>.
    */
   public KeyStrokeMapping(char character, int keyCode, int modifiers) {
     this(character, KeyStroke.getKeyStroke(keyCode, modifiers));

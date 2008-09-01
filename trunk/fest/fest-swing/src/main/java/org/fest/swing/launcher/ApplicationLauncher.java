@@ -15,12 +15,12 @@
  */
 package org.fest.swing.launcher;
 
-import static org.fest.swing.util.Arrays.copyOf;
-import static org.fest.reflect.core.Reflection.staticMethod;
-import static org.fest.util.Strings.*;
-
 import org.fest.reflect.exception.ReflectionError;
 import org.fest.swing.exception.UnexpectedException;
+
+import static org.fest.reflect.core.Reflection.staticMethod;
+import static org.fest.swing.util.Arrays.copyOf;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands execution of a Java application from a class that has a "main" method.
@@ -85,7 +85,8 @@ public class ApplicationLauncher {
   }
 
   /**
-   * Specifies the arguments to pass to the "main" method.
+   * Specifies the arguments to pass to the "main" method. Please note that the arguments to pass are specific to your
+   * application. JVM-specific arguments are ignored (e.g. -Xms, -Xmx)
    * @param newArgs the arguments to pass to the "main" method.
    * @return this <code>ApplicationStarter</code>.
    * @throws NullPointerException if <code>newArgs</code> is <code>null</code>.
