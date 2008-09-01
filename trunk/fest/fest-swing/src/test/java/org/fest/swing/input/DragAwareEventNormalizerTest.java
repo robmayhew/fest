@@ -36,7 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class DragAwareEventNormalizerTest extends EventNormalizerTestCase {
 
-  private static final String START_LISTENING = "START_LISTENING";
+  private static final String START_LISTENING = "DragAwareEventNormalizer#startListening";
   
   private DragAwareEventNormalizer eventNormalizer;
   
@@ -59,7 +59,7 @@ public class DragAwareEventNormalizerTest extends EventNormalizerTestCase {
   public void shouldDisposeEventQueueWhenStopListening() {
     final DragAwareEventQueue dragAwareEventQueue = createMock(DragAwareEventQueue.class);
     eventNormalizer = new DragAwareEventNormalizer() {
-      @Override DragAwareEventQueue createDragAwareEventQueue(Toolkit toolkit, long mask) {
+      @Override DragAwareEventQueue newDragAwareEventQueue(Toolkit toolkit, long mask) {
         return dragAwareEventQueue;
       }
     };
@@ -84,7 +84,7 @@ public class DragAwareEventNormalizerTest extends EventNormalizerTestCase {
   @Test(dependsOnGroups = START_LISTENING)
   public void shouldGracefullyStopListeningIfDragAwareQueueIsNull() {
     eventNormalizer = new DragAwareEventNormalizer() {
-      @Override DragAwareEventQueue createDragAwareEventQueue(Toolkit toolkit, long mask) {
+      @Override DragAwareEventQueue newDragAwareEventQueue(Toolkit toolkit, long mask) {
         throw new RuntimeException("Thrown on purpose");
       }
     };

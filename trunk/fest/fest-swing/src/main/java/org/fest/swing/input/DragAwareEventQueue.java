@@ -15,10 +15,6 @@
  */
 package org.fest.swing.input;
 
-import static java.awt.AWTEvent.*;
-import static java.awt.event.MouseEvent.*;
-import static javax.swing.SwingUtilities.*;
-
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -26,6 +22,10 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.util.EmptyStackException;
+
+import static java.awt.AWTEvent.*;
+import static java.awt.event.MouseEvent.*;
+import static javax.swing.SwingUtilities.*;
 
 /**
  * Catches native drop target events, which are normally hidden from AWTEventListeners.
@@ -52,8 +52,7 @@ class DragAwareEventQueue extends EventQueue {
    */
   @Override public void pop() throws EmptyStackException {
     EventQueue systemEventQueue = toolkit.getSystemEventQueue();
-    if (systemEventQueue == this)
-      super.pop();
+    if (systemEventQueue == this) super.pop();
   }
 
   /**
@@ -62,7 +61,8 @@ class DragAwareEventQueue extends EventQueue {
    * @param e an instance of <code>java.awt.AWTEvent</code>
    */
   @Override protected void dispatchEvent(AWTEvent e) {
-    // TODO: implement enter/exit events TODO: change source to drag source, not mouse under
+    // TODO: implement enter/exit events 
+    // TODO: change source to drag source, not mouse under
     if (isNativeDragAndDrop(e)) {
       MouseEvent mouseEvent = (MouseEvent) e;
       Component target = getDeepestComponentAt(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());

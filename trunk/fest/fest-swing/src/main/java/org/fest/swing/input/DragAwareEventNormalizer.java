@@ -20,8 +20,13 @@ import java.awt.event.AWTEventListener;
 import java.util.EmptyStackException;
 import java.util.logging.Logger;
 
+import org.fest.swing.exception.UnexpectedException;
+
 import static java.util.logging.Level.WARNING;
-import static javax.swing.SwingUtilities.invokeAndWait;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.input.ToolkitPushDragAwereEventQueueTask.pushDragAwareEventQueueTask;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands an <code>{@link AWTEventListener}</code> which normalizes the event stream:
@@ -38,17 +43,18 @@ class DragAwareEventNormalizer extends EventNormalizer {
 
   private DragAwareEventQueue dragAwareEventQueue;
 
-  @Override void startListening(final Toolkit toolkit, AWTEventListener delegate, long mask) {
+  @Override void startListening(Toolkit toolkit, AWTEventListener delegate, long mask) {
     super.startListening(toolkit, delegate, mask);
     try {
-      dragAwareEventQueue = createDragAwareEventQueue(toolkit, mask);
-      invokeAndWait(new PushEventQueueTask(toolkit, dragAwareEventQueue));
-    } catch (Exception e) {
-      logger.log(WARNING, "Ignoring error at EventNormalizer startup", e);
+      dragAwareEventQueue = newDragAwareEventQueue(toolkit, mask);
+      execute(pushDragAwareEventQueueTask(toolkit, dragAwareEventQueue));
+    } catch (UnexpectedException e) {
+      String message = concat("Ignoring error when starting up ", DragAwareEventNormalizer.class.getName());
+      logger.log(WARNING, message, e);
     }
   }
 
-  DragAwareEventQueue createDragAwareEventQueue(Toolkit toolkit, long mask) {
+  DragAwareEventQueue newDragAwareEventQueue(Toolkit toolkit, long mask) {
     return new DragAwareEventQueue(toolkit, mask, this);
   }
 

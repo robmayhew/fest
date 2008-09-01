@@ -20,8 +20,6 @@ import java.awt.Window;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JFrame;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -30,6 +28,8 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.MapAssert.entry;
+import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.input.ComponentListenersQuery.componentListenersIn;
 
 /**
  * Tests for <code>{@link DisposedWindowMonitor}</code>.
@@ -44,7 +44,7 @@ public class DisposedWindowMonitorTest {
   
   @BeforeMethod public void setUp() {
     monitor = new DisposedWindowMonitor();
-    window = new JFrame();
+    window = frame().createInEDT();
   }
 
   public void shouldReturnIsNotDuplicateIfEventIsNotWindowEvent() {
@@ -78,7 +78,7 @@ public class DisposedWindowMonitorTest {
     assertThat(monitor.isDuplicateDispose(e)).isFalse();
     assertThat(monitor.disposedWindows).hasSize(1)
                                        .contains(entry(window, true));    
-    ComponentListener[] componentListeners = window.getComponentListeners();
+    ComponentListener[] componentListeners = componentListenersIn(window);
     assertThat(componentListeners).hasSize(1);
     assertThat(componentListeners[0]).isInstanceOf(DisposalMonitor.class);
     DisposalMonitor disposalMonitor = (DisposalMonitor)componentListeners[0];

@@ -40,31 +40,31 @@ public class LauncherWindow extends TestWindow {
 
   private static final int DEFAULT_DELAY = 10000;
 
-  private int frameLaunchDelay = DEFAULT_DELAY;
+  private int windowLaunchDelay = DEFAULT_DELAY;
   private int dialogLaunchDelay = DEFAULT_DELAY;
   
   public LauncherWindow(Class<?> testClass) {
     super(testClass);
-    add(frameLaunchButton());
+    add(windowLaunchButton());
     add(dialogLaunchButton());
   }
 
-  private JButton frameLaunchButton() {
+  private JButton windowLaunchButton() {
     JButton button = new JButton("Launch Frame");
     button.setName("launchFrame");
     button.addMouseListener(new MouseAdapter() {
       @Override public void mousePressed(MouseEvent e) {
         setVisible(false);
-        launchFrame();
+        launchWindow();
       }
     });
     return button;
   }
   
-  private void launchFrame() {
-    start(new Timer(frameLaunchDelay, new ActionListener() {
+  void launchWindow() {
+    start(new Timer(windowLaunchDelay, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        showWindow(new FrameToLaunch());
+        showWindow(new WindowToLaunch());
       }
     }));
   }
@@ -81,7 +81,7 @@ public class LauncherWindow extends TestWindow {
     return button;
   }
   
-  private void launchDialog() {
+  void launchDialog() {
     start(new Timer(dialogLaunchDelay, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         showWindow(new DialogToLaunch());
@@ -94,23 +94,23 @@ public class LauncherWindow extends TestWindow {
     timer.start();
   }
 
-  private void showWindow(Window window) {
+  void showWindow(Window window) {
     window.pack();
     window.setVisible(true);
   }
   
-  public void frameLaunchDelay(int frameLaunchDelay) {
-    this.frameLaunchDelay = frameLaunchDelay;
+  public void windowLaunchDelay(int newWindowLaunchDelay) {
+    this.windowLaunchDelay = newWindowLaunchDelay;
   }
 
-  public void dialogLaunchDelay(int dialogLaunchDelay) {
-    this.dialogLaunchDelay = dialogLaunchDelay;
+  public void dialogLaunchDelay(int newDialogLaunchDelay) {
+    this.dialogLaunchDelay = newDialogLaunchDelay;
   }
   
-  public static class FrameToLaunch extends JFrame {
+  public static class WindowToLaunch extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    public FrameToLaunch() {
+    public WindowToLaunch() {
       setName("frame");
     }
   }

@@ -35,7 +35,7 @@ class DisposalMonitor extends ComponentAdapter {
 
   @Override public void componentShown(ComponentEvent e) {
     Component c = e.getComponent();
-    c.removeComponentListener(this);
+    c.removeComponentListener(this); // we are already in EDT
     disposedWindows.remove(c);
   }
 }

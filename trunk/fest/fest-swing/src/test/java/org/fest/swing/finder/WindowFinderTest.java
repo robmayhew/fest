@@ -30,7 +30,7 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.finder.LauncherWindow.DialogToLaunch;
-import org.fest.swing.finder.LauncherWindow.FrameToLaunch;
+import org.fest.swing.finder.LauncherWindow.WindowToLaunch;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 
@@ -110,13 +110,13 @@ public class WindowFinderTest {
   public void shouldFindFrameByNameAfterLogin() {
     launchFrame();
     FrameFixture frame = WindowFinder.findFrame("frame").using(launcher.robot);
-    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
+    assertThat(frame.target).isInstanceOf(WindowToLaunch.class);
   }
 
   public void shouldFindFrameByNameAfterLoginUsingTimeUnit() {
     launchFrame();
     FrameFixture frame = WindowFinder.findFrame("frame").withTimeout(2, SECONDS).using(launcher.robot);
-    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
+    assertThat(frame.target).isInstanceOf(WindowToLaunch.class);
   }
 
   public void shouldFindFrameUsingMatcherAfterLogin() {
@@ -127,13 +127,13 @@ public class WindowFinderTest {
       }
     };
     FrameFixture frame = WindowFinder.findFrame(matcher).using(launcher.robot);
-    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
+    assertThat(frame.target).isInstanceOf(WindowToLaunch.class);
   }
 
   public void shouldFindFrameByTypeAfterLogin() {
     launchFrame();
-    FrameFixture frame = WindowFinder.findFrame(FrameToLaunch.class).using(launcher.robot);
-    assertThat(frame.target).isInstanceOf(FrameToLaunch.class);
+    FrameFixture frame = WindowFinder.findFrame(WindowToLaunch.class).using(launcher.robot);
+    assertThat(frame.target).isInstanceOf(WindowToLaunch.class);
   }
 
   private void launchFrame() {
@@ -141,7 +141,7 @@ public class WindowFinderTest {
   }
 
   private void launchFrame(int delay) {
-    launcherWindow.frameLaunchDelay(delay);
+    launcherWindow.windowLaunchDelay(delay);
     launcher.button("launchFrame").click();
   }
 

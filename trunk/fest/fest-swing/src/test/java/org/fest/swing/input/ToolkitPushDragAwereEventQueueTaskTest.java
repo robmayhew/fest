@@ -28,34 +28,35 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 /**
- * Tests for <code>{@link PushEventQueueTask}</code>.
+ * Tests for <code>{@link ToolkitPushDragAwereEventQueueTask}</code>.
  *
  * @author Alex Ruiz 
  */
 @Test
-public class PushEventQueueTaskTest {
+public class ToolkitPushDragAwereEventQueueTaskTest {
 
   private Toolkit toolkit;
-  private DragAwareEventQueue queue;
-  private PushEventQueueTask task;
+  private DragAwareEventQueue dragAwareEventQueue;
+  private EventQueue eventQueue;
+  private ToolkitPushDragAwereEventQueueTask task;
   
   @BeforeMethod public void setUp() {
     toolkit = createMock(Toolkit.class);
-    queue = new DragAwareEventQueue(toolkit, 0l, createMock(AWTEventListener.class));
-    task = new PushEventQueueTask(toolkit, queue);
+    dragAwareEventQueue = new DragAwareEventQueue(toolkit, 0L, createMock(AWTEventListener.class));
+    eventQueue = createMock(EventQueue.class);
+    task = new ToolkitPushDragAwereEventQueueTask(toolkit, dragAwareEventQueue);
   }
   
   public void shouldReplaceEventQueue() {
-    final EventQueue eventQueue = createMock(EventQueue.class);
-    new EasyMockTemplate(toolkit) {
+    new EasyMockTemplate(toolkit, eventQueue) {
       protected void expectations() {
         expect(toolkit.getSystemEventQueue()).andReturn(eventQueue);
-        eventQueue.push(queue);
+        eventQueue.push(dragAwareEventQueue);
         expectLastCall().once();
       }
 
       protected void codeToTest() {
-        task.run();
+        task.executeInEDT();
       }
     }.run();
   }

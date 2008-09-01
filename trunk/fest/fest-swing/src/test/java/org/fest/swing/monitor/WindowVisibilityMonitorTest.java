@@ -39,8 +39,8 @@ public class WindowVisibilityMonitorTest {
 
   private WindowVisibilityMonitor monitor;
   
-  private Windows windows;
   private JFrame frame;
+  private Windows windows;
 
   @BeforeMethod public void setUp() throws Exception {
     frame = createMock(JFrame.class);
@@ -52,7 +52,6 @@ public class WindowVisibilityMonitorTest {
     monitor = new WindowVisibilityMonitor(windows);
   }
 
-  
   @Test public void shouldMarkWindowAsShowingIfWindowShown() {
     new EasyMockTemplate(windows) {
       protected void expectations() {

@@ -30,7 +30,6 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
 import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestWindow.showNewInTest;
@@ -75,7 +74,6 @@ public class ScreenshotTakerTest {
 
   @Test public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
     TestWindow frame = showNewInTest(getClass());
-    pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame, imagePath);
     assertThat(read(imagePath)).hasSize(sizeOf(frame));
@@ -85,7 +83,6 @@ public class ScreenshotTakerTest {
   @Test(groups = GUI) public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
     MyWindow frame = MyWindow.createInEDT();
     frame.display();
-    pause(500);
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame.button, imagePath);
     assertThat(read(imagePath)).hasSize(sizeOf(frame.button));

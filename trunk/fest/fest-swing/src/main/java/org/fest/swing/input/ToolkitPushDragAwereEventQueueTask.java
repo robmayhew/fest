@@ -17,21 +17,29 @@ package org.fest.swing.input;
 
 import java.awt.Toolkit;
 
+import org.fest.swing.core.GuiTask;
+
 /**
- * Understands a tasks that replaces the system event queue with a <code>{@link DragAwareEventQueue}</code>.
+ * Understands a task that replaces the system event queue with a <code>{@link DragAwareEventQueue}</code>. This task
+ * should be executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-class PushEventQueueTask implements Runnable {
+class ToolkitPushDragAwereEventQueueTask extends GuiTask {
+  
   private final Toolkit toolkit;
-  private final DragAwareEventQueue dragAwareEventQueue;
+  private final DragAwareEventQueue queue;
 
-  PushEventQueueTask(Toolkit toolkit, DragAwareEventQueue dragAwareEventQueue) {
+  static ToolkitPushDragAwereEventQueueTask pushDragAwareEventQueueTask(Toolkit toolkit, DragAwareEventQueue queue) {
+    return new ToolkitPushDragAwereEventQueueTask(toolkit, queue);
+  }
+  
+  ToolkitPushDragAwereEventQueueTask(Toolkit toolkit, DragAwareEventQueue queue) {
     this.toolkit = toolkit;
-    this.dragAwareEventQueue = dragAwareEventQueue;
+    this.queue = queue;
   }
 
-  public void run() {
-    toolkit.getSystemEventQueue().push(dragAwareEventQueue);
+  protected void executeInEDT() {
+    toolkit.getSystemEventQueue().push(queue);
   }
 }
