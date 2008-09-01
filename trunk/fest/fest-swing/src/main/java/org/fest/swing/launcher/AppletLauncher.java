@@ -25,9 +25,7 @@ import org.fest.swing.applet.BasicAppletStub;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.launcher.AppletParameter.AppletParameterBuilder;
 
-import static javax.swing.SwingUtilities.invokeAndWait;
-
-import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.launcher.NewAppletViewerQuery.showAppletViewerWith;
 import static org.fest.util.Strings.*;
 
 /**
@@ -164,7 +162,7 @@ public class AppletLauncher {
   public AppletLauncher withParameters(Map<String, String> newParameters) {
     if (newParameters == null) throw new NullPointerException("The map of parameters should not be null");
     parameters.clear();
-    parameters.putAll(newParameters);
+    if (newParameters != null) parameters.putAll(newParameters);
     return this;
   }
 
@@ -178,7 +176,8 @@ public class AppletLauncher {
   public AppletLauncher withParameters(AppletParameter... newParameters) {
     if (newParameters == null) throw new NullPointerException("The array of parameters should not be null");
     parameters.clear();
-    for (AppletParameter parameter : newParameters) add(parameter);
+    if (newParameters != null)
+      for (AppletParameter parameter : newParameters) add(parameter);
     return this;
   }
 
@@ -194,24 +193,6 @@ public class AppletLauncher {
    * @return the created <code>AppletViewer</code>.
    */
   public AppletViewer start() {
-    final AppletViewer viewer = new AppletViewer(applet, parameters);
-    try {
-      invokeAndWait(new SetVisibleTask(viewer));
-    } catch (Exception e) {
-      throw unexpected(e);
-    }
-    return viewer;
-  }
-
-  private static class SetVisibleTask implements Runnable {
-    private final AppletViewer viewer;
-
-    SetVisibleTask(AppletViewer viewer) {
-      this.viewer = viewer;
-    }
-
-    public void run() {
-      viewer.setVisible(true);
-    }
+    return showAppletViewerWith(applet, parameters);
   }
 }

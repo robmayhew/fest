@@ -24,7 +24,7 @@ import java.util.WeakHashMap;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.task.ComponentAddComponentListenerTask.addComponentListenerTask;
+import static org.fest.swing.task.AddComponentListenerTask.addComponentListenerTask;
 
 /**
  * Understands the information collected by the monitors in this package.

@@ -35,37 +35,37 @@ import static org.fest.swing.testing.TestWindow.showNewInTest;
 public class WindowMetricsTest {
 
   private WindowMetrics metrics;
-  private TestWindow frame;
+  private TestWindow window;
   
   @BeforeMethod public void setUp() {
-    frame = showNewInTest(getClass());
-    metrics = new WindowMetrics(frame);
+    window = showNewInTest(getClass());
+    metrics = new WindowMetrics(window);
   }
   
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
   
   @Test public void shouldObtainInsets() {
-    assertThat(metrics.insets).isEqualTo(frame.getInsets());
+    assertThat(metrics.insets).isEqualTo(window.getInsets());
   }
   
   @Test public void shouldCalculateCenter() {
-    Insets insets = frame.getInsets();
-    int x = frame.getX() + insets.left + ((frame.getWidth() - (insets.left + insets.right)) / 2);
-    int y = frame.getY() + insets.top + ((frame.getHeight() - (insets.top + insets.bottom)) / 2);
+    Insets insets = window.getInsets();
+    int x = window.getX() + insets.left + ((window.getWidth() - (insets.left + insets.right)) / 2);
+    int y = window.getY() + insets.top + ((window.getHeight() - (insets.top + insets.bottom)) / 2);
     Point center = metrics.center();
     assertThat(center.x).isEqualTo(x);
     assertThat(center.y).isEqualTo(y);
   }
 
   @Test public void shouldAddVerticalInsets() {
-    Insets insets = frame.getInsets();
+    Insets insets = window.getInsets();
     assertThat(metrics.verticalInsets()).isEqualTo(insets.right + insets.left);
   }
 
   @Test public void shouldAddHorizontalInsets() {
-    Insets insets = frame.getInsets();
+    Insets insets = window.getInsets();
     assertThat(metrics.horizontalInsets()).isEqualTo(insets.top + insets.bottom);
   }
 }

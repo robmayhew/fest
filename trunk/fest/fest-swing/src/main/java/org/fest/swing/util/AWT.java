@@ -31,6 +31,7 @@ import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
 
@@ -63,7 +64,7 @@ public class AWT {
    */
   public static Insets insetsFrom(Container c) {
     try {
-      Insets insets = c.getInsets();
+      Insets insets = insetsOf(c);
       if (insets != null) return insets;
     } catch (Exception e) {}
     return new Insets(0, 0, 0, 0);

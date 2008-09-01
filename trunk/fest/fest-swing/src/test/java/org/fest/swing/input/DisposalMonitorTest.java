@@ -30,7 +30,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.input.ComponentListenersQuery.componentListenersIn;
-import static org.fest.swing.task.ComponentAddComponentListenerTask.addComponentListenerTask;
+import static org.fest.swing.task.AddComponentListenerTask.addComponentListenerTask;
 
 /**
  * Tests for <code>{@link DisposalMonitor}</code>.

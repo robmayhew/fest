@@ -42,22 +42,22 @@ public class WindowStatusTest {
 
   private WindowStatus status;
 
-  private TestWindow frame;
+  private TestWindow window;
   private Windows windows;
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = new TestWindow(getClass());
+    window = TestWindow.createInEDT(getClass());
     windows = createMock(Windows.class);
     status = new WindowStatus(windows);
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   @Test public void shouldMoveMouseToCenterWithFrameWidthGreaterThanHeight() {
-    frame.display();
-    Point center = new WindowMetrics(frame).center();
+    window.display();
+    Point center = new WindowMetrics(window).center();
     center.x += WindowStatus.sign();
     new EasyMockTemplate(windows) {
       @Override protected void expectations() {
@@ -65,15 +65,15 @@ public class WindowStatusTest {
       }
 
       @Override protected void codeToTest() {
-        status.checkIfReady(frame);
+        status.checkIfReady(window);
       }
     }.run();
     assertThat(mousePointerLocation()).isEqualTo(center);
   }
 
   @Test public void shouldMoveMouseToCenterWithFrameHeightGreaterThanWidth() {
-    frame.display(new Dimension(200, 400));
-    Point center = new WindowMetrics(frame).center();
+    window.display(new Dimension(200, 400));
+    Point center = new WindowMetrics(window).center();
     center.y += WindowStatus.sign();
     new EasyMockTemplate(windows) {
       @Override protected void expectations() {
@@ -81,27 +81,27 @@ public class WindowStatusTest {
       }
 
       @Override protected void codeToTest() {
-        status.checkIfReady(frame);
+        status.checkIfReady(window);
       }
     }.run();
     assertThat(mousePointerLocation()).isEqualTo(center);
   }
 
   @Test public void shouldResizeWindowToReceiveEvents() {
-    frame.display(new Dimension(0 ,0));
-    Dimension original = sizeOf(frame);
+    window.display(new Dimension(0 ,0));
+    Dimension original = sizeOf(window);
     new EasyMockTemplate(windows) {
       @Override protected void expectations() {
-        expect(windows.isShowingButNotReady(frame)).andReturn(true);
+        expect(windows.isShowingButNotReady(window)).andReturn(true);
       }
 
       @Override protected void codeToTest() {
-        status.checkIfReady(frame);
+        status.checkIfReady(window);
       }
     }.run();
     // wait till frame is resized
     pause(5000);
-    assertThat(frame.getHeight()).isGreaterThan(original.height);
+    assertThat(window.getHeight()).isGreaterThan(original.height);
   }
 
   @Test public void shouldNotCheckIfRobotIsNull() {
@@ -111,7 +111,7 @@ public class WindowStatusTest {
       @Override protected void expectations() {}
 
       @Override protected void codeToTest() {
-        status.checkIfReady(frame);
+        status.checkIfReady(window);
       }
     }.run();
     // mouse pointer should not have moved
@@ -119,7 +119,7 @@ public class WindowStatusTest {
   }
 
   private void expectFrameIsReady() {
-    expect(windows.isShowingButNotReady(frame)).andReturn(false);
+    expect(windows.isShowingButNotReady(window)).andReturn(false);
   }
 
   private Point mousePointerLocation() {

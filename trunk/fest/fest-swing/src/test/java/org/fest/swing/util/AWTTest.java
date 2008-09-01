@@ -25,7 +25,11 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
+import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
 import static org.fest.swing.testing.TestWindow.showNewInTest;
 
 /**
@@ -38,9 +42,9 @@ public class AWTTest {
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
 
   @Test public void shouldReturnCenterPosition() {
-    Component c = new JTextField();
+    Component c = textField().createInEDT();
     Dimension size = new Dimension(80, 60);
-    c.setSize(size);
+    execute(setSizeTask(c, size));
     assertThat(sizeOf(c)).isEqualTo(size);
     Point center = AWT.centerOf(c);
     assertThat(center.x).isEqualTo(40);
@@ -50,7 +54,7 @@ public class AWTTest {
   @Test public void shouldReturnInsetsFromContainer() {
     TestWindow frame = showNewInTest(getClass());
     Insets insets = AWT.insetsFrom(frame);
-    assertThat(insets).isEqualTo(frame.getInsets());
+    assertThat(insets).isEqualTo(insetsOf(frame));
     frame.destroy();
   }
 

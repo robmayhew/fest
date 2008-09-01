@@ -22,10 +22,10 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.driver.ComponentMoveTask.moveTask;
-import static org.fest.swing.driver.ComponentSetSizeTask.setSizeTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 import static org.fest.util.Strings.concat;
 

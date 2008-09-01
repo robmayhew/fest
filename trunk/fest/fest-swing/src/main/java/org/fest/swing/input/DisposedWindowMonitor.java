@@ -24,7 +24,7 @@ import java.util.WeakHashMap;
 import static java.awt.event.WindowEvent.*;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.task.ComponentAddComponentListenerTask.addComponentListenerTask;
+import static org.fest.swing.task.AddComponentListenerTask.addComponentListenerTask;
 
 /**
  * Verifies that a notification of the disposal of a <code>{@link Window}</code> is not duplicated.

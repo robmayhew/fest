@@ -15,22 +15,24 @@
  */
 package org.fest.swing.monitor;
 
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.EventQueue;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.TestWindow;
-import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.ToolkitStub;
+
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link Context}</code>.
@@ -43,13 +45,13 @@ public class ContextTest {
   private ToolkitStub toolkit;
   private WindowEventQueueMapping windowEventQueueMapping;
   private EventQueueMapping eventQueueMapping;
-  private TestWindow frame;
+  private TestWindow window;
   private Context context;
 
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
     toolkit = ToolkitStub.createNew(eventQueue);
-    frame = new TestWindow(ContextTest.class);
+    window = TestWindow.createInEDT(getClass());
     windowEventQueueMapping = createMock(WindowEventQueueMapping.class);
     eventQueueMapping = createMock(EventQueueMapping.class);
     createContext();
@@ -69,7 +71,7 @@ public class ContextTest {
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   @Test public void shouldReturnRootWindows() {
@@ -81,7 +83,7 @@ public class ContextTest {
 
       protected void codeToTest() {
         Collection<Window> rootWindows = context.rootWindows();
-        assertThat(rootWindows).contains(frame);
+        assertThat(rootWindows).contains(window);
         assertThat(rootWindows).contains(anotherFrame);
       }
     }.run();
@@ -89,18 +91,18 @@ public class ContextTest {
 
   private List<Window> frameInList() {
     List<Window> windows = new ArrayList<Window>();
-    windows.add(frame);
+    windows.add(window);
     return windows;
   }
 
   @Test public void shouldReturnStoredQueue() {
     new EasyMockTemplate(eventQueueMapping) {
       protected void expectations() {
-        expect(eventQueueMapping.storedQueueFor(frame)).andReturn(eventQueue);
+        expect(eventQueueMapping.storedQueueFor(window)).andReturn(eventQueue);
       }
 
       protected void codeToTest() {
-        EventQueue storedQueue = context.storedQueueFor(frame);
+        EventQueue storedQueue = context.storedQueueFor(window);
         assertThat(storedQueue).isSameAs(eventQueue);
       }
     }.run();
@@ -109,12 +111,12 @@ public class ContextTest {
   @Test public void shouldRemoveContext() {
     new EasyMockTemplate(windowEventQueueMapping) {
       protected void expectations() {
-        windowEventQueueMapping.removeMappingFor(frame);
+        windowEventQueueMapping.removeMappingFor(window);
         expectLastCall().once();
       }
 
       protected void codeToTest() {
-        context.removeContextFor(frame);
+        context.removeContextFor(window);
       }
     }.run();
   }
@@ -122,14 +124,14 @@ public class ContextTest {
   @Test public void shouldAddContext() {
     new EasyMockTemplate(windowEventQueueMapping, eventQueueMapping) {
       protected void expectations() {
-        windowEventQueueMapping.addQueueFor(frame);
+        windowEventQueueMapping.addQueueFor(window);
         expectLastCall().once();
-        eventQueueMapping.addQueueFor(frame);
+        eventQueueMapping.addQueueFor(window);
         expectLastCall().once();
       }
 
       protected void codeToTest() {
-        context.addContextFor(frame);
+        context.addContextFor(window);
       }
     }.run();
   }
@@ -137,11 +139,11 @@ public class ContextTest {
   @Test public void shouldReturnEventQueueForComponent() {
     new EasyMockTemplate(eventQueueMapping) {
       protected void expectations() {
-        expect(eventQueueMapping.queueFor(frame)).andReturn(eventQueue);
+        expect(eventQueueMapping.queueFor(window)).andReturn(eventQueue);
       }
 
       protected void codeToTest() {
-        EventQueue storedEventQueue = context.eventQueueFor(frame);
+        EventQueue storedEventQueue = context.eventQueueFor(window);
         assertThat(storedEventQueue).isSameAs(eventQueue);
       }
     }.run();

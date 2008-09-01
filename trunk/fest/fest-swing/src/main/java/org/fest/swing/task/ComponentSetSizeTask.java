@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.task;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -26,20 +26,30 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Alex Ruiz
  */
-class ComponentSetSizeTask extends GuiTask {
+public class ComponentSetSizeTask extends GuiTask {
 
   private final Component c;
   private final Dimension size;
 
-  static ComponentSetSizeTask setSizeTask(Component c, Dimension size) {
+  /**
+   * Creates a new <code>{@link ComponentSetSizeTask}</code>
+   * @param c the <code>Component</code> to resize.
+   * @param size the new size for the given <code>Component</code>.
+   * @return the created task.
+   */
+  public static ComponentSetSizeTask setSizeTask(Component c, Dimension size) {
     return new ComponentSetSizeTask(c, size);
   }
-  
+
   private ComponentSetSizeTask(Component c, Dimension size) {
     this.c = c;
     this.size = size;
   }
 
+  /**
+   * Sets this task's <code>{@link Dimension}</code> as the new size of this task's <code>{@link Component}</code>. This
+   * action is executed in the event dispatch thread.
+   */
   protected void executeInEDT() {
     c.setSize(size);
   }

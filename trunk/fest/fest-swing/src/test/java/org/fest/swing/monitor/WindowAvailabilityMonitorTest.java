@@ -15,10 +15,6 @@
  */
 package org.fest.swing.monitor;
 
-import static java.awt.AWTEvent.*;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -26,13 +22,19 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static java.awt.AWTEvent.*;
+import static org.easymock.classextension.EasyMock.createMock;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link WindowAvailabilityMonitor}</code>.
@@ -47,17 +49,17 @@ public class WindowAvailabilityMonitorTest {
 
   private ToolkitStub toolkit;
   private Windows windows;
-  private TestWindow frame;
+  private TestWindow window;
 
   @BeforeMethod public void setUp() throws Exception {
     toolkit = ToolkitStub.createNew();
-    frame = new TestWindow(getClass());
+    window = TestWindow.createInEDT(getClass());
     windows = createMock(Windows.class);
     monitor = new WindowAvailabilityMonitor(windows);
   }
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
   }
 
   @Test public void shouldAttachItSelfToToolkit() {
@@ -71,21 +73,21 @@ public class WindowAvailabilityMonitorTest {
   @Test public void shouldMarkSourceWindowAsReadyIfEventIsMouseEvent() {
     new EasyMockTemplate(windows) {
       protected void expectations() {
-        windows.markAsReady(frame);
+        windows.markAsReady(window);
       }
 
       protected void codeToTest() {
-        monitor.eventDispatched(mouseEvent(frame));
+        monitor.eventDispatched(mouseEvent(window));
       }
     }.run();
   }
 
   @Test public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
     final JTextField source = new JTextField();
-    frame.add(source);
+    window.add(source);
     new EasyMockTemplate(windows) {
       protected void expectations() {
-        windows.markAsReady(frame);
+        windows.markAsReady(window);
       }
 
       protected void codeToTest() {
@@ -99,7 +101,7 @@ public class WindowAvailabilityMonitorTest {
       protected void expectations() { /* should not call markAsReady */ }
 
       protected void codeToTest() {
-        monitor.eventDispatched(new KeyEvent(frame, 8, 9238, 0, 0, 'a'));
+        monitor.eventDispatched(new KeyEvent(window, 8, 9238, 0, 0, 'a'));
       }
     }.run();
   }

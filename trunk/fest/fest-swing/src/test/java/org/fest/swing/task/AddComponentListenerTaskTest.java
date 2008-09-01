@@ -1,5 +1,5 @@
 /*
- * Created on Feb 23, 2008
+ * Created on Aug 31, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,10 +13,10 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.task;
 
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.event.ComponentListener;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -26,30 +26,36 @@ import org.fest.mocks.EasyMockTemplate;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+
 /**
- * Test for <code>{@link ComponentSetSizeTask}</code>.
+ * Tests for <code>{@link AddComponentListenerTask}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class ComponentSetSizeTaskTest {
+@Test(groups = EDT_ACTION)
+public class AddComponentListenerTaskTest {
 
-  private Component c;
-  private Dimension size;
+  private Component component;
+  private ComponentListener listener;
+  private AddComponentListenerTask task;
 
-  @BeforeMethod public void setUp() throws Exception {
-    c = createMock(Component.class);
-    size = new Dimension(80, 60);
+  @BeforeMethod public void setUp() {
+    component = createMock(Component.class);
+    listener = createMock(ComponentListener.class);
+    task = new AddComponentListenerTask(component, listener);
   }
 
-  @Test public void shouldSetSize() {
-    new EasyMockTemplate(c) {
+  public void shouldAddComponentListener() {
+    new EasyMockTemplate(component) {
       protected void expectations() {
-        c.setSize(size);
-        expectLastCall();
+        component.addComponentListener(listener);
+        expectLastCall().once();
       }
 
       protected void codeToTest() {
-        ComponentSetSizeTask.setSizeTask(c, size).executeInEDT();
+        task.executeInEDT();
       }
     }.run();
   }
