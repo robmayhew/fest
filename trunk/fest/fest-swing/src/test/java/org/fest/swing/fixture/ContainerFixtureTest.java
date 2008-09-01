@@ -80,7 +80,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class ContainerFixtureTest {
 
   // TODO This class needs some serious refactoring
-  
+
   private static final Dimension PREFERRED_DIMENSION = new Dimension(100, 100);
 
   private ContainerFixture<TestWindow> fixture;
@@ -812,11 +812,6 @@ public class ContainerFixtureTest {
     return tree;
   }
 
-  private void addToWindowAndDisplay(Component c) {
-    window.add(c);
-    window.display();
-  }
-  
   private void showWindowWith(Component c) {
     add(window, c);
     window.display();
