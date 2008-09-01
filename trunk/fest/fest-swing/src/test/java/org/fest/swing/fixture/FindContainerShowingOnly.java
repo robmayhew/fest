@@ -31,6 +31,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Strings.concat;
 
@@ -56,7 +57,7 @@ public class FindContainerShowingOnly {
   }
 
   public void shouldFindOnlyVisibleContainer() {
-    window.notShowing.setVisible(false);
+    setVisible(window.notShowing, false);
     JInternalFrameFixture fixture = new JInternalFrameFixture(robot, "target");
     assertThat(fixture.target).isSameAs(window.showing);
   }
@@ -73,7 +74,7 @@ public class FindContainerShowingOnly {
         protected MyWindow executeInEDT() { return new MyWindow(); }
       });
     }
-    
+
     MyWindow() {
       super(FindContainerShowingOnly.class);
       setContentPane(desktop);

@@ -317,12 +317,8 @@ public class JInternalFrameDriverTest {
     assertThat(heightOf(internalFrame)).isEqualTo(newHeight);
   }
 
-  private static int heightOf(final JInternalFrame internalFrame) {
-    return execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
-        return internalFrame.getHeight();
-      }
-    });
+  private static int heightOf(JInternalFrame internalFrame) {
+    return sizeOf(internalFrame).height;
   }
 
   private static class MyWindow extends TestWindow {

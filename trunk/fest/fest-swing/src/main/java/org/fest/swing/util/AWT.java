@@ -31,6 +31,7 @@ import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
@@ -54,7 +55,8 @@ public class AWT {
    * @return a point at the center of the given <code>Component</code>.
    */
   public static Point centerOf(Component c) {
-    return new Point(c.getWidth() / 2, c.getHeight() / 2);
+    Dimension size = sizeOf(c);
+    return new Point(size.width / 2, size.height / 2);
   }
 
   /**

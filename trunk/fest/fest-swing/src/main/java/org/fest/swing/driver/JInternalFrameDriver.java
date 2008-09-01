@@ -37,6 +37,7 @@ import static org.fest.swing.driver.JInternalFrameSetIconTask.setIconTask;
 import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximumTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -145,7 +146,8 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param width the width that the <code>JInternalFrame</code> should have after being resized.
    */
   public void resizeWidthTo(JInternalFrame internalFrame, int width) {
-    resizeTo(internalFrame, new Dimension(width, internalFrame.getHeight()));
+    Dimension size = sizeOf(internalFrame);
+    resizeTo(internalFrame, new Dimension(width, size.height));
   }
 
   /**

@@ -101,7 +101,7 @@ public class WindowStatusTest {
     }.run();
     // wait till frame is resized
     pause(5000);
-    assertThat(window.getHeight()).isGreaterThan(original.height);
+    assertThat(sizeOf(window).height).isGreaterThan(original.height);
   }
 
   @Test public void shouldNotCheckIfRobotIsNull() {

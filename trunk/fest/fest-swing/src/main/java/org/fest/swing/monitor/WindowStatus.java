@@ -83,7 +83,8 @@ class WindowStatus {
 
   private boolean isEmptyFrame(Window w) {
     Insets insets = insetsFrom(w);
-    return insets.top + insets.bottom == w.getHeight() || insets.left + insets.right == w.getWidth();
+    Dimension windowSize = sizeOf(w);
+    return insets.top + insets.bottom == windowSize.height || insets.left + insets.right == windowSize.width;
   }
 
   private void makeLargeEnoughToReceiveEvents(Window window, WindowMetrics metrics) {

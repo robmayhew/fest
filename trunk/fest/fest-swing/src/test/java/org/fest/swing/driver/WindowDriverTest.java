@@ -34,6 +34,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
+import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -90,13 +91,13 @@ public class WindowDriverTest {
   }
 
   public void shouldShowWindow() {
-    frame.setVisible(false);
+    setVisible(frame, false);
     driver.show(frame);
     assertThat(isVisible(frame)).isTrue();
   }
 
   public void shouldShowWindowUsingGivenSize() {
-    frame.setVisible(false);
+    setVisible(frame, false);
     final Dimension newSize = new Dimension(600, 300);
     driver.show(frame, newSize);
     assertThat(isVisible(frame)).isTrue();

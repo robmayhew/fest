@@ -37,11 +37,14 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
+import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.util.Platform.*;
 
@@ -97,7 +100,7 @@ import static org.fest.swing.util.Platform.*;
     MouseClickInfo info = null;
     driver.click(c, info);
   }
-  
+
   public void shouldClickComponentUsingMouseClickInfo() {
     final MouseButton button = LEFT_BUTTON;
     final int times = 2;
@@ -112,9 +115,9 @@ import static org.fest.swing.util.Platform.*;
         driver.click(c, info);
       }
     }.run();
-    
+
   }
-  
+
   public void shouldClickComponentUsingGivenMouseButtonAndTimes() {
     final MouseButton button = LEFT_BUTTON;
     final int times = 2;
@@ -198,12 +201,12 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldPassIfSizeIsEqualToExpected() {
     Dimension size = new Dimension(10, 10);
-    c.setSize(size);
+    execute(setSizeTask(c, size));
     driver.requireSize(c, size);
   }
 
   public void shouldFailIfSizeIsNotEqualToExpected() {
-    c.setSize(new Dimension(10, 10));
+    execute(setSizeTask(c, new Dimension(10, 10)));
     try {
       driver.requireSize(c, new Dimension(20, 20));
       fail();
@@ -214,12 +217,12 @@ import static org.fest.swing.util.Platform.*;
   }
 
   public void shouldPassIfVisibleAsAnticipated() {
-    c.setVisible(true);
+    setVisible(c, true);
     driver.requireVisible(c);
   }
 
   public void shouldFailIfNotVisibleAndExpectingVisible() {
-    c.setVisible(false);
+    setVisible(c, false);
     try {
       driver.requireVisible(c);
       fail();
@@ -230,12 +233,12 @@ import static org.fest.swing.util.Platform.*;
   }
 
   public void shouldPassIfNotVisibleAsAnticipated() {
-    c.setVisible(false);
+    setVisible(c, false);
     driver.requireNotVisible(c);
   }
 
   public void shouldFailIfVisibleAndExpectingNotVisible() {
-    c.setVisible(true);
+    setVisible(c, true);
     try {
       driver.requireNotVisible(c);
       fail();
@@ -306,7 +309,7 @@ import static org.fest.swing.util.Platform.*;
   public void shouldThrowErrorIfKeyPressInfoIsNull() {
     driver.pressAndReleaseKey(c, null);
   }
-  
+
   public void shouldPressAndReleaseKeysUsingKeyPressInfo() {
     final KeyPressInfo keyPressInfo = KeyPressInfo.keyCode(VK_R).modifiers(SHIFT_MASK);
     new EasyMockTemplate(robot) {
@@ -322,7 +325,7 @@ import static org.fest.swing.util.Platform.*;
       }
     }.run();
   }
-  
+
   public void shouldPressAndReleaseKeysWithModifiers() {
     final int keyCode = VK_R;
     final int[] modifiers = { SHIFT_MASK };
@@ -360,7 +363,7 @@ import static org.fest.swing.util.Platform.*;
   public void shouldThrowErrorIfKeyArrayIsNull() {
     driver.pressAndReleaseKeys(c, (int[])null);
   }
-  
+
   public void shouldPressKey() {
     final int key = 6;
     new EasyMockTemplate(robot) {
@@ -497,7 +500,7 @@ import static org.fest.swing.util.Platform.*;
   private boolean isWindowsOrMac() {
     return isWindows() || isMacintosh();
   }
-  
+
   public void shouldNotWaitIfComponentIsReady() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -513,7 +516,7 @@ import static org.fest.swing.util.Platform.*;
       }
     }.run();
   }
-  
+
   public void shouldWaitUntilComponentIsReady() {
     new EasyMockTemplate(robot) {
       protected void expectations() {
@@ -538,7 +541,7 @@ import static org.fest.swing.util.Platform.*;
       }
     }.run();
   }
-  
+
   public void shouldReturnFalseIfJPopupMenuIsNeverVisible() {
     final JPopupMenu popupMenu = createMock(JPopupMenu.class);
     final JMenu invoker = createMock(JMenu.class);
@@ -555,5 +558,5 @@ import static org.fest.swing.util.Platform.*;
       }
     }.run();
   }
-  
+
 }
