@@ -34,6 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.FrameTitleQuery.titleOf;
 import static org.fest.util.Collections.list;
 
 /**
@@ -62,7 +63,7 @@ public class ApplicationLauncherTest {
       assertThat(e).message().contains("Unable to load class 'Hello'");
     }
   }
-  
+
   public void shouldLaunchApplicationWithoutArguments() {
     ApplicationLauncher.application(JavaApp.class).start();
     assertFrameIsShowing();
@@ -89,13 +90,13 @@ public class ApplicationLauncherTest {
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArgumentArrayIsNull() {
     String[] args = null;
-    ApplicationLauncher.application(JavaApp.class).withArgs(args).start();    
+    ApplicationLauncher.application(JavaApp.class).withArgs(args).start();
   }
-  
+
   private void assertFrameIsShowing() {
     FrameFixture frameFixture = WindowFinder.findFrame(new GenericTypeMatcher<Frame>() {
       protected boolean isMatching(Frame frame) {
-        return "Java Application".equals(frame.getTitle()) && isShowing(frame);
+        return "Java Application".equals(titleOf(frame)) && isShowing(frame);
       }
     }).using(robot);
     assertThat(frameFixture).isNotNull();
