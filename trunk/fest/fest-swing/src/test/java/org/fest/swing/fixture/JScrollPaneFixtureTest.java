@@ -15,17 +15,21 @@
  */
 package org.fest.swing.fixture;
 
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import org.testng.annotations.Test;
 
+import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.driver.ComponentDriver;
-import org.fest.swing.driver.JComponentDriver;
+import org.fest.swing.driver.JScrollPaneDriver;
 
+import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.factory.JScrollBars.scrollBar;
 import static org.fest.swing.factory.JScrollPanes.scrollPane;
 
 /**
@@ -35,12 +39,12 @@ import static org.fest.swing.factory.JScrollPanes.scrollPane;
  */
 public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScrollPane> {
 
-  private JComponentDriver driver;
+  private JScrollPaneDriver driver;
   private JScrollPane target;
   private JScrollPaneFixture fixture;
-  
+
   void onSetUp() {
-    driver = createMock(JComponentDriver.class);
+    driver = createMock(JScrollPaneDriver.class);
     target = scrollPane().withView(list().createInEDT())
                          .createInEDT();
     fixture = new JScrollPaneFixture(robot(), target);
@@ -54,15 +58,33 @@ public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScro
   }
 
   @Test public void shouldReturnHorizontalScrollBar() {
-    JScrollBarFixture scrollBar = fixture.horizontalScrollBar();
-    assertThat(scrollBar.target).isSameAs(target.getHorizontalScrollBar());
+    final JScrollBar scrollBar = scrollBar().createInEDT();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.horizontalScrollBarIn(target)).andReturn(scrollBar);
+      }
+
+      protected void codeToTest() {
+        JScrollBarFixture horizontalScrollBar = fixture.horizontalScrollBar();
+        assertThat(horizontalScrollBar.target).isSameAs(scrollBar);
+      }
+    }.run();
   }
-  
-  @Test public void shouldReturnVerticalalScrollBar() {
-    JScrollBarFixture scrollBar = fixture.verticalScrollBar();
-    assertThat(scrollBar.target).isSameAs(target.getVerticalScrollBar());
+
+  @Test public void shouldReturnVerticalScrollBar() {
+    final JScrollBar scrollBar = scrollBar().createInEDT();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.verticalScrollBarIn(target)).andReturn(scrollBar);
+      }
+
+      protected void codeToTest() {
+        JScrollBarFixture verticalScrollBar = fixture.verticalScrollBar();
+        assertThat(verticalScrollBar.target).isSameAs(scrollBar);
+      }
+    }.run();
   }
-  
+
   ComponentDriver driver() { return driver; }
   JScrollPane target() { return target; }
   JScrollPaneFixture fixture() { return fixture; }

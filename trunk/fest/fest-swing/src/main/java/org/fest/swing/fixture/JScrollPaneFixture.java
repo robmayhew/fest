@@ -18,8 +18,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import org.fest.swing.core.*;
-import org.fest.swing.driver.JComponentDriver;
-import org.fest.swing.driver.JOptionPaneDriver;
+import org.fest.swing.driver.JScrollPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
@@ -31,8 +30,8 @@ import org.fest.swing.exception.WaitTimedOutError;
  */
 public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> implements CommonComponentFixture {
 
-  private JComponentDriver driver;
-  
+  private JScrollPaneDriver driver;
+
   /**
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JScrollPane</code>.
@@ -45,10 +44,10 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
     updateDriver(newComponentDriver());
   }
 
-  final void updateDriver(JComponentDriver newDriver) {
+  final void updateDriver(JScrollPaneDriver newDriver) {
     driver = newDriver;
   }
-  
+
   /**
    * Creates a new <code>{@link JScrollPaneFixture}</code>.
    * @param robot performs simulation of user events on a <code>JScrollPane</code>.
@@ -62,18 +61,17 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
     driver = newComponentDriver();
   }
 
-  private JComponentDriver newComponentDriver() {
-    return new JOptionPaneDriver(robot);
+  private JScrollPaneDriver newComponentDriver() {
+    return new JScrollPaneDriver(robot);
   }
-  
+
   /**
    * Returns a <code>{@link JScrollBarFixture}</code> managing the horizontal <code>{@link JScrollBar}</code> of this
    * target's <code>{@link JScrollPane}</code>.
    * @return a fixture managing the horizontal <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
    */
   public JScrollBarFixture horizontalScrollBar() {
-    // TODO call in EDT
-    return scrollBarFixture(target.getHorizontalScrollBar());
+    return scrollBarFixture(driver.horizontalScrollBarIn(target));
   }
 
   /**
@@ -82,8 +80,7 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @return a fixture managing the vertical <code>JScrollBar</code> of this target's <code>JScrollPane</code>.
    */
   public JScrollBarFixture verticalScrollBar() {
-    // TODO call in EDT
-    return scrollBarFixture(target.getVerticalScrollBar());
+    return scrollBarFixture(driver.verticalScrollBarIn(target));
   }
 
   private JScrollBarFixture scrollBarFixture(JScrollBar scrollBar) {
